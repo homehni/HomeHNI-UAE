@@ -19,76 +19,81 @@ const AboutUs = () => {
 
   return (
     <div className="min-h-screen bg-white">
-      <Marquee />
-      <Header />
-      <div className="pt-20">
-        {/* Banner Image */}
-        <div className="relative w-full h-64 md:h-80 lg:h-96 overflow-hidden">
-          <img 
-            src="/lovable-uploads/538e373b-acbd-4afc-9969-4e8e6a2530ac.png" 
-            alt="About Us Banner" 
-            className="w-full h-full object-cover"
-          />
+      {/* Hero Banner with Marquee and Header */}
+      <div className="relative w-full h-64 md:h-80 lg:h-96 overflow-hidden">
+        <img 
+          src="/lovable-uploads/538e373b-acbd-4afc-9969-4e8e6a2530ac.png" 
+          alt="About Us Banner" 
+          className="w-full h-full object-cover"
+        />
+        
+        {/* Overlay for better text readability */}
+        <div className="absolute inset-0 bg-black/20"></div>
+        
+        {/* Marquee and Header positioned over the banner */}
+        <div className="absolute top-0 left-0 right-0 z-10">
+          <Marquee />
+          <Header />
         </div>
+      </div>
 
-        {/* Main Content */}
-        <div className="container mx-auto px-4 py-16">
-          <div className="max-w-4xl mx-auto">
-            {/* Introduction */}
-            <div className="mb-16">
-              <p className="text-lg text-gray-700 leading-relaxed">
-                Launched in 2005, 99acres.com, India's No. 1 property portal, deals with every aspect of the consumers' needs in the real estate industry. It is an online forum where buyers, sellers and brokers/agents can exchange information about real estate properties quickly, effectively and inexpensively. At 99acres.com, you can advertise a property, search for a property, browse through properties, build your own property microsite, and keep yourself updated with the latest news and trends making headlines in the realty sector.
+      {/* Main Content */}
+      <div className="container mx-auto px-4 py-16">
+        <div className="max-w-4xl mx-auto">
+          {/* Introduction */}
+          <div className="mb-16">
+            <p className="text-lg text-gray-700 leading-relaxed">
+              Launched in 2005, 99acres.com, India's No. 1 property portal, deals with every aspect of the consumers' needs in the real estate industry. It is an online forum where buyers, sellers and brokers/agents can exchange information about real estate properties quickly, effectively and inexpensively. At 99acres.com, you can advertise a property, search for a property, browse through properties, build your own property microsite, and keep yourself updated with the latest news and trends making headlines in the realty sector.
+            </p>
+          </div>
+
+          {/* Why Section */}
+          <div className="mb-16">
+            <div className="flex items-center mb-8">
+              <Star className="w-8 h-8 text-red-600 mr-3" />
+              <h2 className="text-3xl font-bold text-gray-900">Why 99acres.com?</h2>
+            </div>
+            <div className="space-y-6 text-gray-700">
+              <p>
+                At present, 99acres.com prides itself for having around nine lakh property listings spanning across 600+ cities in India. Of all, the website held over 5.7 lakh paid listings at the end of FY 2018-19. In addition to providing an online platform to real estate developers, brokers and property owners for listing their property for sale, purchase or rent, 99acres.com offers advertisement stints such as microsites, banners, home page links and project pages to the clients for better visibility and branding in the market.
+              </p>
+              <p>
+                With the ever-evolving online search behaviour, 99acres.com shares updated information pertinent to real estate activities, assisting prospective buyers to make informed buying decision. We make online property search easier, quicker and smarter!
               </p>
             </div>
+          </div>
 
-            {/* Why Section */}
-            <div className="mb-16">
-              <div className="flex items-center mb-8">
-                <Star className="w-8 h-8 text-red-600 mr-3" />
-                <h2 className="text-3xl font-bold text-gray-900">Why 99acres.com?</h2>
-              </div>
-              <div className="space-y-6 text-gray-700">
-                <p>
-                  At present, 99acres.com prides itself for having around nine lakh property listings spanning across 600+ cities in India. Of all, the website held over 5.7 lakh paid listings at the end of FY 2018-19. In addition to providing an online platform to real estate developers, brokers and property owners for listing their property for sale, purchase or rent, 99acres.com offers advertisement stints such as microsites, banners, home page links and project pages to the clients for better visibility and branding in the market.
-                </p>
-                <p>
-                  With the ever-evolving online search behaviour, 99acres.com shares updated information pertinent to real estate activities, assisting prospective buyers to make informed buying decision. We make online property search easier, quicker and smarter!
-                </p>
-              </div>
+          {/* Awards Section */}
+          <div className="mb-16">
+            <div className="flex items-center mb-8">
+              <Award className="w-8 h-8 text-red-600 mr-3" />
+              <h2 className="text-3xl font-bold text-gray-900">Awards & Recognitions</h2>
             </div>
-
-            {/* Awards Section */}
-            <div className="mb-16">
-              <div className="flex items-center mb-8">
-                <Award className="w-8 h-8 text-red-600 mr-3" />
-                <h2 className="text-3xl font-bold text-gray-900">Awards & Recognitions</h2>
-              </div>
-              <div className="space-y-4">
-                {awards.map((award, index) => (
-                  <div key={index} className="flex items-start">
-                    <div className="w-2 h-2 bg-red-600 rounded-full mt-3 mr-4 flex-shrink-0"></div>
-                    <p className="text-gray-700">{award}</p>
-                  </div>
-                ))}
-              </div>
+            <div className="space-y-4">
+              {awards.map((award, index) => (
+                <div key={index} className="flex items-start">
+                  <div className="w-2 h-2 bg-red-600 rounded-full mt-3 mr-4 flex-shrink-0"></div>
+                  <p className="text-gray-700">{award}</p>
+                </div>
+              ))}
             </div>
+          </div>
 
-            {/* Single Facebook Social Media Section */}
-            <div className="text-center">
-              <h3 className="text-2xl font-bold text-gray-900 mb-6">Follow us on Facebook:</h3>
-              <div className="flex justify-center">
-                <a
-                  href="https://www.facebook.com/profile.php?id=61578319572154"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="transition-transform hover:scale-110"
-                  style={{ color: "#1877F2" }}
-                >
-                  <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-                  </svg>
-                </a>
-              </div>
+          {/* Single Facebook Social Media Section */}
+          <div className="text-center">
+            <h3 className="text-2xl font-bold text-gray-900 mb-6">Follow us on Facebook:</h3>
+            <div className="flex justify-center">
+              <a
+                href="https://www.facebook.com/profile.php?id=61578319572154"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="transition-transform hover:scale-110"
+                style={{ color: "#1877F2" }}
+              >
+                <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                </svg>
+              </a>
             </div>
           </div>
         </div>
