@@ -16,7 +16,7 @@ const MobilePropertyServices = () => {
   ];
 
   return (
-    <section className="sm:hidden bg-white py-8 px-4">
+    <section className="sm:hidden bg-white pb-8 px-4">
       <div className="text-center mb-6">
         <h2 className="text-2xl font-bold text-gray-900 mb-2">Get started with</h2>
         <p className="text-gray-600">Explore real estate options in top cities</p>
