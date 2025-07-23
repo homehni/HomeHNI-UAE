@@ -1,5 +1,5 @@
 
-import { Award, Star } from 'lucide-react';
+
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Marquee from '@/components/Marquee';
