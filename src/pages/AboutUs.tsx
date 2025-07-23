@@ -1,6 +1,7 @@
 import { Award, Star } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import Marquee from '@/components/Marquee';
 
 const AboutUs = () => {
   const awards = [
@@ -18,23 +19,16 @@ const AboutUs = () => {
 
   return (
     <div className="min-h-screen bg-white">
+      <Marquee />
       <Header />
       <div className="pt-20">
-        {/* Hero Section */}
-        <div className="relative bg-gradient-to-b from-red-600 to-red-700 text-white py-16 overflow-hidden">
-          <div className="container mx-auto px-4 relative z-10">
-            <div className="text-center">
-              <div className="flex justify-center mb-6">
-                <div className="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center">
-                  <div className="text-white text-2xl font-bold">5A</div>
-                </div>
-              </div>
-              <h1 className="text-4xl md:text-5xl font-bold mb-4">About Us</h1>
-              <p className="text-xl opacity-90 max-w-2xl mx-auto">
-                India's Leading Property Portal - Connecting Dreams with Reality
-              </p>
-            </div>
-          </div>
+        {/* Banner Image */}
+        <div className="relative w-full h-64 md:h-80 lg:h-96 overflow-hidden">
+          <img 
+            src="/lovable-uploads/538e373b-acbd-4afc-9969-4e8e6a2530ac.png" 
+            alt="About Us Banner" 
+            className="w-full h-full object-cover"
+          />
         </div>
 
         {/* Main Content */}
