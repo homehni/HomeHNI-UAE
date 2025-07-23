@@ -58,7 +58,7 @@ const Header = () => {
           ? 'bg-white/95 backdrop-blur-sm shadow-md' 
           : 'bg-transparent'
       }`}>
-        <div className="container mx-auto px-4 pt-[6px]">
+        <div className="w-full px-4 lg:px-6 xl:px-8 pt-[6px]">
           <div className="flex justify-between items-center h-14">
             {/* Left section - Logo and Location (Mobile and Desktop) */}
             <div className="flex items-center space-x-4">
