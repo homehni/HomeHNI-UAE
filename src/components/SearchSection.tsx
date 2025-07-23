@@ -2,12 +2,46 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { MapPin, Search, Mic, MapPinIcon } from 'lucide-react';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Checkbox } from '@/components/ui/checkbox';
+import { MapPin, Search, Mic, MapPinIcon, ChevronDown } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 const SearchSection = () => {
   const [activeTab, setActiveTab] = useState('buy');
+  const [selectedProperties, setSelectedProperties] = useState([
+    'flat-apartment',
+    'residential-land', 
+    'serviced-apartments',
+    'independent-builder-floor',
+    'rk-studio-apartment',
+    'farm-house',
+    'independent-house-villa',
+    'other'
+  ]);
+  
+  const propertyTypes = [
+    { id: 'flat-apartment', label: 'Flat/Apartment' },
+    { id: 'residential-land', label: 'Residential Land' },
+    { id: 'serviced-apartments', label: 'Serviced Apartments' },
+    { id: 'independent-builder-floor', label: 'Independent/Builder Floor' },
+    { id: 'rk-studio-apartment', label: '1 RK/Studio Apartment' },
+    { id: 'farm-house', label: 'Farm House' },
+    { id: 'independent-house-villa', label: 'Independent House/Villa' },
+    { id: 'other', label: 'Other' }
+  ];
+  
+  const handlePropertyToggle = (propertyId: string) => {
+    setSelectedProperties(prev => 
+      prev.includes(propertyId) 
+        ? prev.filter(id => id !== propertyId)
+        : [...prev, propertyId]
+    );
+  };
+  
+  const clearAll = () => {
+    setSelectedProperties([]);
+  };
   
   const navigationTabs = [
     { id: 'buy', label: 'Buy' },
@@ -74,18 +108,54 @@ const SearchSection = () => {
                   <TabsContent value={activeTab} className="mt-0 p-6 bg-white rounded-b-lg">
                     {/* Property Type Dropdown and Search Bar - Now inline */}
                     <div className="flex flex-col sm:flex-row gap-4">
-                      <Select defaultValue="all-residential">
-                        <SelectTrigger className="w-40 h-12 border-brand-red text-brand-red font-bold text-lg">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent className="bg-white border border-gray-200 shadow-lg z-50">
-                          <SelectItem value="all-residential" className="text-brand-red text-lg font-bold">All Residential</SelectItem>
-                          <SelectItem value="apartment" className="text-brand-red text-lg">Apartment</SelectItem>
-                          <SelectItem value="villa" className="text-brand-red text-lg">Villa</SelectItem>
-                          <SelectItem value="plot" className="text-brand-red text-lg">Plot</SelectItem>
-                          <SelectItem value="office" className="text-brand-red text-lg">Office</SelectItem>
-                        </SelectContent>
-                      </Select>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <Button 
+                            variant="outline" 
+                            className="w-40 h-12 border-[#DC143C] text-[#DC143C] font-bold text-lg justify-between hover:bg-[#DC143C]/5"
+                          >
+                            All Residential
+                            <ChevronDown className="ml-2 h-4 w-4" />
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-80 p-4 bg-white border border-gray-200 shadow-lg" align="start">
+                          <div className="space-y-3">
+                            <div className="flex justify-between items-center">
+                              <span className="text-sm text-gray-600">Property Types</span>
+                              <Button 
+                                variant="ghost" 
+                                onClick={clearAll}
+                                className="text-[#DC143C] hover:text-[#DC143C] hover:bg-[#DC143C]/5 text-sm px-2 py-1 h-auto"
+                              >
+                                Clear
+                              </Button>
+                            </div>
+                            <div className="grid grid-cols-1 gap-3">
+                              {propertyTypes.map((property) => (
+                                <div key={property.id} className="flex items-center space-x-2">
+                                  <Checkbox
+                                    id={property.id}
+                                    checked={selectedProperties.includes(property.id)}
+                                    onCheckedChange={() => handlePropertyToggle(property.id)}
+                                    className="border-[#DC143C] data-[state=checked]:bg-[#DC143C] data-[state=checked]:text-white"
+                                  />
+                                  <label 
+                                    htmlFor={property.id} 
+                                    className="text-sm text-gray-700 cursor-pointer select-none"
+                                  >
+                                    {property.label}
+                                  </label>
+                                </div>
+                              ))}
+                            </div>
+                            <div className="pt-2 border-t border-gray-100">
+                              <p className="text-xs text-gray-500">
+                                Looking for commercial properties? <span className="text-[#DC143C] cursor-pointer">Click here</span>
+                              </p>
+                            </div>
+                          </div>
+                        </PopoverContent>
+                      </Popover>
                       
                       <div className="flex-1 relative">
                         <MapPin className="absolute left-3 top-3 text-brand-red" size={20} />
