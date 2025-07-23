@@ -71,7 +71,7 @@ const AboutUs = () => {
             {/* What Makes Us Different Section */}
             <div className="mb-16">
               <div className="flex items-center mb-8">
-               
+                
                 <h2 className="text-3xl font-bold text-gray-900">🛠 What Makes Us Different</h2>
               </div>
               <div className="space-y-8">
