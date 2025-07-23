@@ -118,14 +118,14 @@ const SearchSection = () => {
                             <ChevronDown className="h-4 w-4 text-gray-400" />
                           </Button>
                         </PopoverTrigger>
-                        <PopoverContent className="w-80 p-4 bg-white border border-gray-200 shadow-lg" align="start">
+                        <PopoverContent className="w-80 p-4 bg-white border border-gray-200 shadow-lg z-50" align="start">
                           <div className="space-y-3">
                             <div className="flex justify-between items-center">
                               <span className="text-sm text-gray-600">Property Types</span>
                               <Button 
                                 variant="ghost" 
                                 onClick={clearAll}
-                                className="text-[#DC143C] hover:text-[#DC143C] hover:bg-[#DC143C]/5 text-sm px-2 py-1 h-auto"
+                                className="text-blue-500 hover:text-blue-600 hover:bg-blue-50 text-sm px-2 py-1 h-auto"
                               >
                                 Clear
                               </Button>
@@ -137,7 +137,7 @@ const SearchSection = () => {
                                     id={property.id}
                                     checked={selectedProperties.includes(property.id)}
                                     onCheckedChange={() => handlePropertyToggle(property.id)}
-                                    className="border-[#DC143C] data-[state=checked]:bg-[#DC143C] data-[state=checked]:text-white"
+                                    className="border-2 border-blue-500 data-[state=checked]:bg-blue-500 data-[state=checked]:text-white data-[state=checked]:border-blue-500"
                                   />
                                   <label 
                                     htmlFor={property.id} 
@@ -150,7 +150,7 @@ const SearchSection = () => {
                             </div>
                             <div className="pt-2 border-t border-gray-100">
                               <p className="text-xs text-gray-500">
-                                Looking for commercial properties? <span className="text-[#DC143C] cursor-pointer">Click here</span>
+                                Looking for commercial properties? <span className="text-blue-500 cursor-pointer hover:underline">Click here</span>
                               </p>
                             </div>
                           </div>
