@@ -22,20 +22,22 @@ const MobilePropertyServices = () => {
         <p className="text-gray-600">Explore real estate options in top cities</p>
       </div>
       
-      <div className="grid grid-cols-2 gap-4 max-w-sm mx-auto">
-        {services.map((service, index) => (
-          <div key={index} className="relative bg-gray-50 rounded-lg p-4 flex flex-col items-center justify-center min-h-[100px] hover:bg-gray-100 transition-colors">
-            {service.hasNew && (
-              <span className="absolute -top-1 -right-1 bg-pink-500 text-white text-xs px-2 py-1 rounded-full font-medium">
-                NEW
+      <div className="overflow-x-auto scrollbar-hide">
+        <div className="flex gap-4 px-4" style={{ width: 'fit-content' }}>
+          {services.map((service, index) => (
+            <div key={index} className="relative bg-gray-50 rounded-lg p-4 flex flex-col items-center justify-center min-h-[100px] hover:bg-gray-100 transition-colors flex-shrink-0" style={{ width: 'calc((100vw - 48px) / 2)' }}>
+              {service.hasNew && (
+                <span className="absolute -top-1 -right-1 bg-pink-500 text-white text-xs px-2 py-1 rounded-full font-medium">
+                  NEW
+                </span>
+              )}
+              <service.icon className="w-8 h-8 text-blue-500 mb-2" />
+              <span className="text-sm font-medium text-gray-700 text-center leading-tight">
+                {service.label}
               </span>
-            )}
-            <service.icon className="w-8 h-8 text-blue-500 mb-2" />
-            <span className="text-sm font-medium text-gray-700 text-center leading-tight">
-              {service.label}
-            </span>
-          </div>
-        ))}
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );
