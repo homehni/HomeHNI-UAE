@@ -1,5 +1,6 @@
 
-import { MapPin, Phone, Mail, Facebook, Twitter, Instagram } from 'lucide-react';
+import { MapPin, Phone, Mail, Facebook, Twitter, Instagram, Linkedin } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const Footer = () => {
   const propertyListings = [
@@ -325,7 +326,7 @@ const Footer = () => {
         {/* Footer links and social media */}
         <div className="border-t border-gray-200 pt-6">
           <div className="flex flex-wrap justify-center gap-6 mb-6 text-sm">
-            <a href="#" className="text-gray-600 hover:text-brand-red transition-colors">About Us</a>
+            <Link to="/about-us" className="text-gray-600 hover:text-brand-red transition-colors">About Us</Link>
             <a href="#" className="text-gray-600 hover:text-brand-red transition-colors">Careers</a>
             <a href="#" className="text-gray-600 hover:text-brand-red transition-colors">Terms & Conditions</a>
             <a href="#" className="text-gray-600 hover:text-brand-red transition-colors">Privacy Policy</a>
@@ -341,9 +342,38 @@ const Footer = () => {
 
           {/* Social media icons */}
           <div className="flex justify-center space-x-6 mb-6">
-            <Facebook className="w-5 h-5 text-gray-400 hover:text-brand-red cursor-pointer transition-colors" />
-            <Twitter className="w-5 h-5 text-gray-400 hover:text-brand-red cursor-pointer transition-colors" />
-            <Instagram className="w-5 h-5 text-gray-400 hover:text-brand-red cursor-pointer transition-colors" />
+            <a 
+              href="https://www.facebook.com/profile.php?id=61578319572154" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="transition-transform hover:scale-110"
+            >
+              <Facebook className="w-5 h-5 text-[#1877F2] hover:text-[#1877F2] cursor-pointer" />
+            </a>
+            <a 
+              href="https://x.com/homehni8" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="transition-transform hover:scale-110"
+            >
+              <Twitter className="w-5 h-5 text-[#1DA1F2] hover:text-[#1DA1F2] cursor-pointer" />
+            </a>
+            <a 
+              href="https://www.instagram.com/homehni/" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="transition-transform hover:scale-110"
+            >
+              <Instagram className="w-5 h-5 text-[#E4405F] hover:text-[#E4405F] cursor-pointer" />
+            </a>
+            <a 
+              href="https://www.linkedin.com/in/home-hni-622605376/" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="transition-transform hover:scale-110"
+            >
+              <Linkedin className="w-5 h-5 text-[#0077B5] hover:text-[#0077B5] cursor-pointer" />
+            </a>
           </div>
 
           {/* Copyright */}
