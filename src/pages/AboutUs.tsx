@@ -20,17 +20,8 @@ const AboutUs = () => {
     <div className="min-h-screen bg-white">
       <Header />
       <div className="pt-20">
-        {/* Hero Section with City Skyline Background */}
+        {/* Hero Section */}
         <div className="relative bg-gradient-to-b from-red-600 to-red-700 text-white py-16 overflow-hidden">
-          {/* City Skyline Background */}
-          <div 
-            className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-40"
-            style={{
-              backgroundImage: `url('/lovable-uploads/68165188-72aa-4757-a0fa-fc2b785a86ca.png')`,
-              backgroundPosition: 'bottom center'
-            }}
-          ></div>
-          
           <div className="container mx-auto px-4 relative z-10">
             <div className="text-center">
               <div className="flex justify-center mb-6">
