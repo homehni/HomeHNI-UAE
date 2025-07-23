@@ -112,10 +112,10 @@ const SearchSection = () => {
                         <PopoverTrigger asChild>
                           <Button 
                             variant="outline" 
-                            className="w-40 h-12 border-[#DC143C] text-[#DC143C] font-bold text-lg justify-between hover:bg-[#DC143C]/5"
+                            className="w-40 h-12 border-gray-300 text-gray-700 font-medium text-sm justify-between hover:bg-gray-50 bg-white px-3"
                           >
-                            All Residential
-                            <ChevronDown className="ml-2 h-4 w-4" />
+                            <span>All Residential</span>
+                            <ChevronDown className="h-4 w-4 text-gray-400" />
                           </Button>
                         </PopoverTrigger>
                         <PopoverContent className="w-80 p-4 bg-white border border-gray-200 shadow-lg" align="start">
