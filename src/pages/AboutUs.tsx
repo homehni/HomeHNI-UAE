@@ -1,146 +1,108 @@
-
-import { useEffect } from 'react';
-import { Award, Star, Target, Users } from 'lucide-react';
+import { Award, Star } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import Marquee from '@/components/Marquee';
 
 const AboutUs = () => {
-  useEffect(() => {
-    // Scroll to top when component mounts
-    window.scrollTo(0, 0);
-  }, []);
+  const awards = [
+    "PropTech Mobile App of the Year Award 2019",
+    "99acres.com won the award for 'Personalized User Journey'",
+    "Best Mobile Appies Award 2015", 
+    "99acres.com won the award for having the 'Most Innovative Mobile App' in the real estate category",
+    "CMO ASIA Awards 2012",
+    "99acres.com was awarded the 'Most Admired Real Estate Website of the Year' at the 3rd CMO Asia Awards for excellence in the real estate segment.",
+    "BCI Awards 2012",
+    "99acres.com was recognised as the 'Best Real Estate Portal' in 2012.",
+    "Accommodation Times Awards 2012",
+    "99acres.com was announced the 'Best Online Realty Portal' by the Accommodation Times in 2012."
+  ];
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Hero Banner with Marquee and Header */}
-      <div className="relative w-full h-64 md:h-80 lg:h-96 overflow-hidden">
-        <img 
-          src="/lovable-uploads/538e373b-acbd-4afc-9969-4e8e6a2530ac.png" 
-          alt="About Us Banner" 
-          className="w-full h-full object-cover"
-        />
-        
-        {/* Overlay for better text readability */}
-        <div className="absolute inset-0 bg-black/20"></div>
-        
-        {/* Marquee and Header positioned over the banner */}
-        <div className="absolute top-0 left-0 right-0 z-10">
-          <Marquee />
-          <Header />
+      <Header />
+      <div className="pt-20">
+        {/* Hero Section with City Skyline Background */}
+        <div className="relative bg-gradient-to-b from-red-600 to-red-700 text-white py-16 overflow-hidden">
+          {/* City Skyline Background */}
+          <div 
+            className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-40"
+            style={{
+              backgroundImage: `url('/lovable-uploads/68165188-72aa-4757-a0fa-fc2b785a86ca.png')`,
+              backgroundPosition: 'bottom center'
+            }}
+          ></div>
+          
+          <div className="container mx-auto px-4 relative z-10">
+            <div className="text-center">
+              <div className="flex justify-center mb-6">
+                <div className="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center">
+                  <div className="text-white text-2xl font-bold">5A</div>
+                </div>
+              </div>
+              <h1 className="text-4xl md:text-5xl font-bold mb-4">About Us</h1>
+              <p className="text-xl opacity-90 max-w-2xl mx-auto">
+                India's Leading Property Portal - Connecting Dreams with Reality
+              </p>
+            </div>
+          </div>
         </div>
-      </div>
 
-      {/* Main Content */}
-      <div className="container mx-auto px-4 py-16">
-        <div className="max-w-4xl mx-auto">
-          {/* Introduction */}
-          <div className="mb-16">
-            <p className="text-lg text-gray-700 leading-relaxed">
-              At HomeHNI, we believe in empowering you with seamless, transparent, and direct access to premium property listings—without the middlemen. Guided by the principle of "making real estate simple for everyone", our mission is to transform the way you buy, sell, or rent by removing unnecessary barriers and fostering trust.
-            </p>
-          </div>
-
-          {/* Our Story Section */}
-          <div className="mb-16">
-            <div className="flex items-center mb-8">
-              <Star className="w-8 h-8 text-red-600 mr-3" />
-              <h2 className="text-3xl font-bold text-gray-900">🌟 Our Story</h2>
-            </div>
-            <div className="text-gray-700 leading-relaxed">
-              <p>
-                Founded by real-estate enthusiasts who were frustrated with hidden fees and confusing broker hierarchies, we set out to build a platform that puts you in control. Following in the footsteps of trailblazers like 99acres—whose portal serves millions across India—and embracing NoBroker's model of fairness and direct connection, we combine technology and user-centric design to simplify property searches.
+        {/* Main Content */}
+        <div className="container mx-auto px-4 py-16">
+          <div className="max-w-4xl mx-auto">
+            {/* Introduction */}
+            <div className="mb-16">
+              <p className="text-lg text-gray-700 leading-relaxed">
+                Launched in 2005, 99acres.com, India's No. 1 property portal, deals with every aspect of the consumers' needs in the real estate industry. It is an online forum where buyers, sellers and brokers/agents can exchange information about real estate properties quickly, effectively and inexpensively. At 99acres.com, you can advertise a property, search for a property, browse through properties, build your own property microsite, and keep yourself updated with the latest news and trends making headlines in the realty sector.
               </p>
             </div>
-          </div>
 
-          {/* What Makes Us Different Section */}
-          <div className="mb-16">
-            <div className="flex items-center mb-8">
-              <Award className="w-8 h-8 text-red-600 mr-3" />
-              <h2 className="text-3xl font-bold text-gray-900">🛠 What Makes Us Different</h2>
-            </div>
-            <div className="space-y-6">
-              <div className="bg-gray-50 p-6 rounded-lg">
-                <h3 className="text-xl font-semibold text-gray-900 mb-3">Zero Brokerage, Zero Hassle</h3>
-                <p className="text-gray-700">
-                  Enjoy a broker-free marketplace where property owners and seekers connect directly—no hidden charges, no negotiation drama.
-                </p>
+            {/* Why Section */}
+            <div className="mb-16">
+              <div className="flex items-center mb-8">
+                <Star className="w-8 h-8 text-red-600 mr-3" />
+                <h2 className="text-3xl font-bold text-gray-900">Why 99acres.com?</h2>
               </div>
-              
-              <div className="bg-gray-50 p-6 rounded-lg">
-                <h3 className="text-xl font-semibold text-gray-900 mb-3">Verified Listings Only</h3>
-                <p className="text-gray-700">
-                  Every listing is hand-reviewed to ensure accuracy, authenticity, and clarity—so you can trust what you see.
+              <div className="space-y-6 text-gray-700">
+                <p>
+                  At present, 99acres.com prides itself for having around nine lakh property listings spanning across 600+ cities in India. Of all, the website held over 5.7 lakh paid listings at the end of FY 2018-19. In addition to providing an online platform to real estate developers, brokers and property owners for listing their property for sale, purchase or rent, 99acres.com offers advertisement stints such as microsites, banners, home page links and project pages to the clients for better visibility and branding in the market.
                 </p>
-              </div>
-              
-              <div className="bg-gray-50 p-6 rounded-lg">
-                <h3 className="text-xl font-semibold text-gray-900 mb-3">Smart Tools & Transparency</h3>
-                <p className="text-gray-700">
-                  With intuitive filters, clear pricing, and rich media previews, you can find your ideal space from the comfort of your home.
-                </p>
-              </div>
-              
-              <div className="bg-gray-50 p-6 rounded-lg">
-                <h3 className="text-xl font-semibold text-gray-900 mb-3">Customer-First Service</h3>
-                <p className="text-gray-700">
-                  Our friendly support team is here to help—offering assistance without upselling or pushy sales tactics.
+                <p>
+                  With the ever-evolving online search behaviour, 99acres.com shares updated information pertinent to real estate activities, assisting prospective buyers to make informed buying decision. We make online property search easier, quicker and smarter!
                 </p>
               </div>
             </div>
-          </div>
 
-          {/* Our Vision Section */}
-          <div className="mb-16">
-            <div className="flex items-center mb-8">
-              <Target className="w-8 h-8 text-red-600 mr-3" />
-              <h2 className="text-3xl font-bold text-gray-900">🎯 Our Vision</h2>
-            </div>
-            <div className="text-gray-700 leading-relaxed">
-              <p>
-                To become India's most reliable and user-first real estate destination—where every interaction is transparent, every property is accurate, and every user feels in control.
-              </p>
-            </div>
-          </div>
-
-          {/* Join Our Community Section */}
-          <div className="mb-16">
-            <div className="flex items-center mb-8">
-              <Users className="w-8 h-8 text-red-600 mr-3" />
-              <h2 className="text-3xl font-bold text-gray-900">🤝 Join Our Community</h2>
-            </div>
-            <div className="text-gray-700 leading-relaxed">
-              <p>
-                Whether you're selling your home, hunting for a dream space, or exploring rentals, HomeHNI is built around you—no brokers, no gimmicks, just a human-centered experience.
-              </p>
-            </div>
-          </div>
-
-          {/* Why HomeHNI Section */}
-          <div className="mb-16">
-            <div className="flex items-center mb-8">
-              <Star className="w-8 h-8 text-red-600 mr-3" />
-              <h2 className="text-3xl font-bold text-gray-900">Why HomeHNI?</h2>
-            </div>
-            <div className="space-y-4">
-              <div className="flex items-start">
-                <div className="w-2 h-2 bg-red-600 rounded-full mt-3 mr-4 flex-shrink-0"></div>
-                <p className="text-gray-700">
-                  Modeled on the success of 99acres.com, a trusted name since 2005
-                </p>
+            {/* Awards Section */}
+            <div className="mb-16">
+              <div className="flex items-center mb-8">
+                <Award className="w-8 h-8 text-red-600 mr-3" />
+                <h2 className="text-3xl font-bold text-gray-900">Awards & Recognitions</h2>
               </div>
-              <div className="flex items-start">
-                <div className="w-2 h-2 bg-red-600 rounded-full mt-3 mr-4 flex-shrink-0"></div>
-                <p className="text-gray-700">
-                  Inspired by NoBroker's mission to eliminate unnecessary middlemen
-                </p>
+              <div className="space-y-4">
+                {awards.map((award, index) => (
+                  <div key={index} className="flex items-start">
+                    <div className="w-2 h-2 bg-red-600 rounded-full mt-3 mr-4 flex-shrink-0"></div>
+                    <p className="text-gray-700">{award}</p>
+                  </div>
+                ))}
               </div>
-              <div className="flex items-start">
-                <div className="w-2 h-2 bg-red-600 rounded-full mt-3 mr-4 flex-shrink-0"></div>
-                <p className="text-gray-700">
-                  Committed to delivering honest, accurate listings and empathetic support
-                </p>
+            </div>
+
+            {/* Single Facebook Social Media Section */}
+            <div className="text-center">
+              <h3 className="text-2xl font-bold text-gray-900 mb-6">Follow us on Facebook:</h3>
+              <div className="flex justify-center">
+                <a
+                  href="https://www.facebook.com/profile.php?id=61578319572154"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="transition-transform hover:scale-110"
+                  style={{ color: "#1877F2" }}
+                >
+                  <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                  </svg>
+                </a>
               </div>
             </div>
           </div>
