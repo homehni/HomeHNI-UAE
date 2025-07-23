@@ -1,4 +1,6 @@
 
+import { Link } from 'react-router-dom';
+
 const Logo = ({ 
   size = "default", 
   variant = "default" 
@@ -18,13 +20,13 @@ const Logo = ({
     : "/lovable-uploads/4ae8bc66-e5e0-4c61-88f6-cd00789ebc89.png"; // Main logo for default state
 
   return (
-    <div className="flex items-center">
+    <Link to="/" className="flex items-center">
       <img 
         src={logoSrc}
         alt="Home HNI Logo" 
-        className={`${sizeClasses[size]} w-auto transition-opacity duration-300`}
+        className={`${sizeClasses[size]} w-auto transition-opacity duration-300 hover:opacity-80`}
       />
-    </div>
+    </Link>
   );
 };
 
