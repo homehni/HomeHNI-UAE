@@ -118,39 +118,39 @@ const SearchSection = () => {
                             <ChevronDown className="h-4 w-4 text-gray-400" />
                           </Button>
                         </PopoverTrigger>
-                        <PopoverContent className="w-80 p-4 bg-white border border-gray-200 shadow-lg z-50" align="start">
-                          <div className="space-y-3">
+                        <PopoverContent className="w-96 p-6 bg-white border border-gray-200 shadow-lg z-50" align="start">
+                          <div className="space-y-4">
                             <div className="flex justify-between items-center">
-                              <span className="text-sm text-gray-600">Property Types</span>
+                              <span className="text-sm font-medium text-gray-700">Property Types</span>
                               <Button 
                                 variant="ghost" 
                                 onClick={clearAll}
-                                className="text-blue-500 hover:text-blue-600 hover:bg-blue-50 text-sm px-2 py-1 h-auto"
+                                className="text-[#DC143C] hover:text-[#DC143C] hover:bg-[#DC143C]/5 text-sm px-2 py-1 h-auto font-medium"
                               >
                                 Clear
                               </Button>
                             </div>
-                            <div className="grid grid-cols-1 gap-3">
+                            <div className="grid grid-cols-3 gap-4">
                               {propertyTypes.map((property) => (
                                 <div key={property.id} className="flex items-center space-x-2">
                                   <Checkbox
                                     id={property.id}
                                     checked={selectedProperties.includes(property.id)}
                                     onCheckedChange={() => handlePropertyToggle(property.id)}
-                                    className="border-2 border-blue-500 data-[state=checked]:bg-blue-500 data-[state=checked]:text-white data-[state=checked]:border-blue-500"
+                                    className="border-2 border-[#DC143C] data-[state=checked]:bg-[#DC143C] data-[state=checked]:text-white data-[state=checked]:border-[#DC143C] w-5 h-5"
                                   />
                                   <label 
                                     htmlFor={property.id} 
-                                    className="text-sm text-gray-700 cursor-pointer select-none"
+                                    className="text-sm text-gray-700 cursor-pointer select-none leading-tight"
                                   >
                                     {property.label}
                                   </label>
                                 </div>
                               ))}
                             </div>
-                            <div className="pt-2 border-t border-gray-100">
-                              <p className="text-xs text-gray-500">
-                                Looking for commercial properties? <span className="text-blue-500 cursor-pointer hover:underline">Click here</span>
+                            <div className="pt-3 border-t border-gray-100">
+                              <p className="text-sm text-gray-600">
+                                Looking for commercial properties? <span className="text-[#DC143C] cursor-pointer hover:underline font-medium">Click here</span>
                               </p>
                             </div>
                           </div>
