@@ -42,7 +42,7 @@ const AboutUs = () => {
       
       {/* Hero Section with new banner image merged with header/marquee */}
       <div className="pt-8">
-        <div className="relative min-h-screen overflow-hidden">
+        <div className="relative h-[50vh] overflow-hidden">
           {/* New Banner Background */}
           <div 
             className="absolute inset-0 bg-cover bg-center bg-no-repeat"
@@ -53,7 +53,7 @@ const AboutUs = () => {
           ></div>
           
           {/* Content overlay - removed "About Us" text and GA logo */}
-          <div className="relative z-10 flex items-center justify-center min-h-screen">
+          <div className="relative z-10 flex items-center justify-center h-full">
             {/* Empty content area - hero section now only shows the banner */}
           </div>
         </div>
