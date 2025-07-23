@@ -1,4 +1,3 @@
-
 import { Award, Star } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -7,7 +6,7 @@ const AboutUs = () => {
   const awards = [
     "PropTech Mobile App of the Year Award 2019",
     "99acres.com won the award for 'Personalized User Journey'",
-    "Best Mobile Appies Award 2015",
+    "Best Mobile Appies Award 2015", 
     "99acres.com won the award for having the 'Most Innovative Mobile App' in the real estate category",
     "CMO ASIA Awards 2012",
     "99acres.com was awarded the 'Most Admired Real Estate Website of the Year' at the 3rd CMO Asia Awards for excellence in the real estate segment.",
@@ -35,10 +34,8 @@ const AboutUs = () => {
           <div className="container mx-auto px-4 relative z-10">
             <div className="text-center">
               <div className="flex justify-center mb-6">
-                <div className="bg-white rounded-full p-4">
-                  <div className="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center">
-                    <div className="text-white text-2xl font-bold">5A</div>
-                  </div>
+                <div className="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center">
+                  <div className="text-white text-2xl font-bold">5A</div>
                 </div>
               </div>
               <h1 className="text-4xl md:text-5xl font-bold mb-4">About Us</h1>
