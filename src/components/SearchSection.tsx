@@ -1,0 +1,129 @@
+
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { MapPin, Search, Mic, MapPinIcon } from 'lucide-react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+
+const SearchSection = () => {
+  const [activeTab, setActiveTab] = useState('buy');
+  
+  const navigationTabs = [
+    { id: 'buy', label: 'Buy' },
+    { id: 'rent', label: 'Rent' },
+    { id: 'new-launch', label: 'New Launch' },
+    { id: 'pg', label: 'PG / Co-living' },
+    { id: 'commercial', label: 'Commercial' },
+    { id: 'plots', label: 'Plots/Land' },
+    { id: 'projects', label: 'Projects' }
+  ];
+
+  return (
+    <section className="relative">
+      {/* Hero Image Background - extends to cover marquee area */}
+      <div className="relative h-[50vh] sm:h-[60vh] bg-cover bg-no-repeat -mt-[70px] pt-[40px]" style={{
+        backgroundImage: `url(/lovable-uploads/02fc42a2-c12f-49f1-92b7-9fdee8f3a419.png)`,
+        backgroundPosition: 'center calc(50% - 2%)'
+      }}>
+        {/* Mobile Search Section - overlapping 50% at bottom of hero */}
+        <div className="sm:hidden absolute bottom-0 left-4 right-4 transform translate-y-1/2">
+          <div className="bg-white rounded-lg shadow-xl border border-gray-100 p-4">
+            <div className="relative">
+              <div className="relative flex items-center">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <input 
+                  type="text" 
+                  placeholder="Search 'Sector 150 Noida'" 
+                  className="w-full pl-10 pr-12 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-700 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+                />
+                <button className="absolute right-3 top-1/2 transform -translate-y-1/2 p-1 hover:bg-gray-100 rounded-full transition-colors">
+                  <Mic className="w-5 h-5 text-blue-500" />
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Desktop Search Section positioned to overlap image and white background */}
+        <div className="hidden sm:block absolute bottom-0 left-0 right-0 transform translate-y-1/2">
+          <div className="max-w-4xl mx-auto px-4">
+            {/* Updated to match screenshot design exactly */}
+            <div className="max-w-6xl mx-auto">
+              {/* Navigation Tabs with exact screenshot styling */}
+              <div className="bg-white rounded-t-lg shadow-xl border border-gray-100 overflow-hidden">
+                {/* Tab Navigation - matching screenshot design exactly */}
+                <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+                  <TabsList className="grid w-full grid-cols-7 bg-transparent p-0 h-auto rounded-none border-b border-gray-200">
+                    {navigationTabs.map((tab) => (
+                      <TabsTrigger
+                        key={tab.id}
+                        value={tab.id}
+                        className={`px-6 py-4 text-sm font-medium transition-all rounded-none border-b-2 border-transparent data-[state=active]:border-brand-red data-[state=active]:text-brand-red data-[state=active]:bg-brand-red/5 data-[state=active]:font-bold hover:bg-brand-red/5 ${
+                          tab.id === 'new-launch' ? 'relative' : ''
+                        }`}
+                      >
+                        {tab.label}
+                        {tab.id === 'new-launch' && (
+                          <span className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+                        )}
+                      </TabsTrigger>
+                    ))}
+                  </TabsList>
+
+                  <TabsContent value={activeTab} className="mt-0 p-6 bg-white rounded-b-lg">
+                    {/* Property Type Dropdown and Search Bar - Now inline */}
+                    <div className="flex flex-col sm:flex-row gap-4">
+                      <Select defaultValue="all-residential">
+                        <SelectTrigger className="w-40 h-12 border-brand-red text-brand-red font-bold text-lg">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent className="bg-white border border-gray-200 shadow-lg z-50">
+                          <SelectItem value="all-residential" className="text-brand-red text-lg font-bold">All Residential</SelectItem>
+                          <SelectItem value="apartment" className="text-brand-red text-lg">Apartment</SelectItem>
+                          <SelectItem value="villa" className="text-brand-red text-lg">Villa</SelectItem>
+                          <SelectItem value="plot" className="text-brand-red text-lg">Plot</SelectItem>
+                          <SelectItem value="office" className="text-brand-red text-lg">Office</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      
+                      <div className="flex-1 relative">
+                        <MapPin className="absolute left-3 top-3 text-brand-red" size={20} />
+                        <Input 
+                          placeholder="Search 'Noida'" 
+                          className="pl-10 h-12 border-brand-red text-brand-red placeholder-brand-red/60" 
+                          defaultValue="Noida" 
+                        />
+                        <div className="absolute right-3 top-3 flex gap-2">
+                          <button className="p-1 hover:bg-brand-red/10 rounded">
+                            <MapPinIcon className="w-5 h-5 text-brand-red" />
+                          </button>
+                          <button className="p-1 hover:bg-brand-red/10 rounded">
+                            <Mic className="w-5 h-5 text-brand-red" />
+                          </button>
+                        </div>
+                      </div>
+                      
+                      <Button className="h-12 px-8 bg-brand-red hover:bg-brand-red-dark text-white font-medium">
+                        Search
+                      </Button>
+                    </div>
+                  </TabsContent>
+                </Tabs>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      {/* White background section to accommodate the overlapping search */}
+      <div className="bg-white pt-4 sm:pt-16 pb-16 mx-0 px-0 py-[40px] mb-[2%]">
+        <div className="container mx-auto px-4">
+          {/* This space allows the search section to overlap properly */}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default SearchSection;
