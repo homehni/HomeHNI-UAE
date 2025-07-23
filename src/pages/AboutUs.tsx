@@ -1,6 +1,9 @@
+
 import { Award, Star } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import Marquee from '@/components/Marquee';
+import { useEffect } from 'react';
 
 const AboutUs = () => {
   const awards = [
@@ -16,33 +19,42 @@ const AboutUs = () => {
     "99acres.com was announced the 'Best Online Realty Portal' by the Accommodation Times in 2012."
   ];
 
+  useEffect(() => {
+    // Smooth scroll to top when component mounts
+    const scrollToTop = () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    };
+    
+    // Small delay to ensure page is fully loaded
+    setTimeout(scrollToTop, 100);
+  }, []);
+
   return (
     <div className="min-h-screen bg-white">
+      {/* Marquee at the very top */}
+      <Marquee />
+      
+      {/* Header overlapping with content */}
       <Header />
-      <div className="pt-20">
-        {/* Hero Section with City Skyline Background */}
-        <div className="relative bg-gradient-to-b from-red-600 to-red-700 text-white py-16 overflow-hidden">
-          {/* City Skyline Background */}
+      
+      {/* Hero Section with new banner image merged with header/marquee */}
+      <div className="pt-8">
+        <div className="relative min-h-screen overflow-hidden">
+          {/* New Banner Background */}
           <div 
-            className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-40"
+            className="absolute inset-0 bg-cover bg-center bg-no-repeat"
             style={{
-              backgroundImage: `url('/lovable-uploads/68165188-72aa-4757-a0fa-fc2b785a86ca.png')`,
-              backgroundPosition: 'bottom center'
+              backgroundImage: `url('/lovable-uploads/43d4891e-82e4-406d-9a77-308cbaa66a93.png')`,
+              backgroundPosition: 'center center'
             }}
           ></div>
           
-          <div className="container mx-auto px-4 relative z-10">
-            <div className="text-center">
-              <div className="flex justify-center mb-6">
-                <div className="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center">
-                  <div className="text-white text-2xl font-bold">5A</div>
-                </div>
-              </div>
-              <h1 className="text-4xl md:text-5xl font-bold mb-4">About Us</h1>
-              <p className="text-xl opacity-90 max-w-2xl mx-auto">
-                India's Leading Property Portal - Connecting Dreams with Reality
-              </p>
-            </div>
+          {/* Content overlay - removed "About Us" text and GA logo */}
+          <div className="relative z-10 flex items-center justify-center min-h-screen">
+            {/* Empty content area - hero section now only shows the banner */}
           </div>
         </div>
 

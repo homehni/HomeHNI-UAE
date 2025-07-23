@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { ChevronDown, HelpCircle, Settings, Menu, X, UserPlus, LogIn } from 'lucide-react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import Logo from './Logo';
 import Sidebar from './Sidebar';
 import MegaMenu from './MegaMenu';
@@ -13,6 +14,8 @@ const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isLegalFormOpen, setIsLegalFormOpen] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -31,6 +34,23 @@ const Header = () => {
     setIsLegalFormOpen(true);
   };
 
+  const handleAboutUsClick = () => {
+    if (location.pathname === '/about-us') {
+      // If already on About Us page, scroll to top smoothly
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    } else {
+      // Navigate to About Us page
+      navigate('/about-us');
+    }
+  };
+
+  const handleLogoClick = () => {
+    navigate('/');
+  };
+
   return (
     <>
       <header className={`fixed top-8 left-0 right-0 z-50 transition-all duration-500 ${
@@ -43,7 +63,9 @@ const Header = () => {
             {/* Left section - Logo and Location (Mobile and Desktop) */}
             <div className="flex items-center space-x-4">
               {/* Home HNI Logo - Show different variant based on scroll state */}
-              <Logo variant={isScrolled ? "scrolled" : "default"} />
+              <div onClick={handleLogoClick} className="cursor-pointer">
+                <Logo variant={isScrolled ? "scrolled" : "default"} />
+              </div>
 
               {/* Location Selector - Always visible */}
               <Select>
@@ -87,6 +109,13 @@ const Header = () => {
                     isScrolled ? 'text-gray-800' : 'text-white'
                   }`}>
                   Legal Services
+                </button>
+                <button 
+                  onClick={handleAboutUsClick}
+                  className={`hover:opacity-80 transition-colors duration-500 text-sm font-medium ${
+                    isScrolled ? 'text-gray-800' : 'text-white'
+                  }`}>
+                  About Us
                 </button>
               </nav>
             </div>
