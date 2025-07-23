@@ -1,5 +1,5 @@
 
-
+import { Award, Star } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Marquee from '@/components/Marquee';
@@ -71,7 +71,7 @@ const AboutUs = () => {
             {/* What Makes Us Different Section */}
             <div className="mb-16">
               <div className="flex items-center mb-8">
-               
+                <Award className="w-8 h-8 text-red-600 mr-3" />
                 <h2 className="text-3xl font-bold text-gray-900">🛠 What Makes Us Different</h2>
               </div>
               <div className="space-y-8">
@@ -97,7 +97,7 @@ const AboutUs = () => {
             {/* Our Vision Section */}
             <div className="mb-16">
               <div className="flex items-center mb-8">
-                
+                <Star className="w-8 h-8 text-red-600 mr-3" />
                 <h2 className="text-3xl font-bold text-gray-900">🎯 Our Vision</h2>
               </div>
               <p className="text-gray-700 text-lg">
@@ -108,7 +108,7 @@ const AboutUs = () => {
             {/* Join Our Community Section */}
             <div className="mb-16">
               <div className="flex items-center mb-8">
-               
+                <Award className="w-8 h-8 text-red-600 mr-3" />
                 <h2 className="text-3xl font-bold text-gray-900">🤝 Join Our Community</h2>
               </div>
               <p className="text-gray-700 text-lg">
