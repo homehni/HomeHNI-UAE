@@ -60,7 +60,9 @@ const ContactUs = () => {
               filter: 'brightness(0.7)'
             }}
           />
+          <div className="absolute inset-0 bg-black/20" />
          
+        </div>
 
         {/* Content Section */}
         <div className="container mx-auto px-4 py-16">
