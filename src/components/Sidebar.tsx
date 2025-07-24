@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { X, ChevronDown, User, UserPlus, LogIn } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useNavigate } from 'react-router-dom';
 import LegalServicesForm from './LegalServicesForm';
 
 interface SidebarProps {
@@ -12,6 +13,7 @@ interface SidebarProps {
 const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
   const [expandedSections, setExpandedSections] = useState<string[]>([]);
   const [isLegalFormOpen, setIsLegalFormOpen] = useState(false);
+  const navigate = useNavigate();
 
   const toggleSection = (section: string) => {
     setExpandedSections(prev => 
@@ -24,6 +26,11 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
   const handleLegalServicesClick = () => {
     setIsLegalFormOpen(true);
     onClose(); // Close sidebar when opening form
+  };
+
+  const handleContactUsClick = () => {
+    navigate('/contact-us');
+    onClose(); // Close sidebar when navigating
   };
 
   const menuItems = [
@@ -52,7 +59,11 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
       id: 'contact-us', 
       label: 'Contact Us', 
       hasSubmenu: true,
-      submenu: ['Customer Support', 'Sales Enquiry', 'Partnership']
+      submenu: [
+        { label: 'Customer Support', onClick: handleContactUsClick },
+        { label: 'Sales Enquiry', onClick: handleContactUsClick },
+        { label: 'Partnership', onClick: handleContactUsClick }
+      ]
     }
   ];
 
@@ -123,10 +134,11 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
                     <div className="ml-4 mt-1">
                       {item.submenu.map((subItem) => (
                         <button
-                          key={subItem}
+                          key={typeof subItem === 'string' ? subItem : subItem.label}
+                          onClick={typeof subItem === 'string' ? undefined : subItem.onClick}
                           className="w-full text-left px-4 py-2 text-sm text-gray-500 hover:bg-gray-50 hover:text-gray-700 rounded-lg transition-colors"
                         >
-                          {subItem}
+                          {typeof subItem === 'string' ? subItem : subItem.label}
                         </button>
                       ))}
                     </div>
