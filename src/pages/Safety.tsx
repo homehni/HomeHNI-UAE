@@ -8,15 +8,16 @@ const Safety = () => {
       <Marquee />
       <Header />
       
-      <main className="pt-20">
-        {/* Hero Section */}
-        <section className="relative h-96 bg-cover bg-center bg-no-repeat text-white" style={{
+      <main>
+        {/* Hero Section - Extended to cover header area */}
+        <section className="relative h-[500px] bg-cover bg-center bg-no-repeat text-white -mt-[120px] pt-[120px]" style={{
         backgroundImage: "url('/lovable-uploads/02059b14-d0f2-4231-af62-ec450cb13e82.png')"
       }}>
           <div className="absolute inset-0 bg-black/40"></div>
-          <div className="container mx-auto px-4 relative z-10">
+          <div className="container mx-auto px-4 relative z-10 pt-20">
             <div className="max-w-4xl mx-auto text-center">
-              
+              <h1 className="text-4xl md:text-5xl font-bold mb-6">Safety Guidelines</h1>
+              <p className="text-xl md:text-2xl text-white/90">Your security is our priority. Learn how to stay safe in real estate transactions.</p>
             </div>
           </div>
         </section>
