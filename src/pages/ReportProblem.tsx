@@ -136,7 +136,7 @@ const ReportProblem = () => {
                 {/* Submit Button */}
                 <Button 
                   type="submit" 
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 text-lg font-medium"
+                  className="w-full bg-brand-red hover:bg-brand-red-dark text-white py-3 text-lg font-medium"
                 >
                   Send Feedback
                 </Button>
