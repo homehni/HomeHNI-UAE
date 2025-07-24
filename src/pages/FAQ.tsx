@@ -113,7 +113,7 @@ const FAQ = () => {
       <main>
         {/* Hero Section - Extended to cover header area */}
         <section className="relative h-[500px] bg-cover bg-center bg-no-repeat text-white -mt-[120px] pt-[120px]" style={{
-          backgroundImage: "url('/lovable-uploads/02fc42a2-c12f-49f1-92b7-9fdee8f3a419.png')"
+          backgroundImage: "url('/lovable-uploads/ddda335f-1bbc-402a-befb-f6d3f4d631e6.png')"
         }}>
           <div className="absolute inset-0 bg-black/40"></div>
           <div className="container mx-auto px-4 relative z-10 pt-20">
