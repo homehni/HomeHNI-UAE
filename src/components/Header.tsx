@@ -20,8 +20,8 @@ const Header = () => {
   useEffect(() => {
     const handleScroll = () => {
       const scrollTop = window.scrollY;
-      // Account for marquee height (approximately 40px)
-      setIsScrolled(scrollTop > 140);
+      // Account for marquee height (approximately 40px) - reduced threshold for better visibility
+      setIsScrolled(scrollTop > 50);
     };
 
     handleScroll();
