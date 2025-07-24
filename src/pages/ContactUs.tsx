@@ -11,6 +11,7 @@ import * as z from 'zod';
 import { toast } from 'sonner';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import Marquee from '@/components/Marquee';
 
 const contactFormSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters." }),
@@ -48,9 +49,15 @@ const ContactUs = () => {
   };
 
   return (
-    <>
+    <div className="min-h-screen bg-white">
+      {/* Marquee at the very top */}
+      <Marquee />
+      
+      {/* Header overlapping with content */}
       <Header />
-      <main className="min-h-screen">
+      
+      {/* Main content with banner */}
+      <div className="pt-8">
         {/* Banner Section */}
         <div className="relative h-96 bg-gradient-to-r from-brand-red to-brand-maroon overflow-hidden">
           <div 
@@ -61,7 +68,6 @@ const ContactUs = () => {
             }}
           />
           <div className="absolute inset-0 bg-black/20" />
-         
         </div>
 
         {/* Content Section */}
@@ -221,9 +227,9 @@ const ContactUs = () => {
             </div>
           </div>
         </div>
-      </main>
+      </div>
       <Footer />
-    </>
+    </div>
   );
 };
 
