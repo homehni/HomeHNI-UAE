@@ -103,7 +103,7 @@ const Testimonials = () => {
           <div 
             className="absolute inset-0 bg-cover bg-center bg-no-repeat"
             style={{
-              backgroundImage: `url(/lovable-uploads/e92e33f3-73f5-4ce1-9011-5fb09b061ed9.png)`,
+              backgroundImage: `url(/lovable-uploads/3c634b9e-a35d-4208-b4f1-3e4985081321.png)`,
               filter: 'brightness(0.7)'
             }}
           />
