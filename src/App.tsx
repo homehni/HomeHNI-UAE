@@ -12,6 +12,7 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import Careers from "./pages/Careers";
 import ContactUs from "./pages/ContactUs";
 import Testimonials from "./pages/Testimonials";
+import Safety from "./pages/Safety";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -31,6 +32,7 @@ const App: React.FC = () => {
             <Route path="/careers" element={<Careers />} />
             <Route path="/contact-us" element={<ContactUs />} />
             <Route path="/testimonials" element={<Testimonials />} />
+            <Route path="/safety" element={<Safety />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
