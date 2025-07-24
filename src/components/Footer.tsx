@@ -333,7 +333,7 @@ const Footer = () => {
             <Link to="/privacy-policy" className="text-gray-600 hover:text-brand-red transition-colors">Privacy Policy</Link>
             <Link to="/testimonials" className="text-gray-600 hover:text-brand-red transition-colors">Testimonials</Link>
             <a href="#" className="text-gray-600 hover:text-brand-red transition-colors">Sitemap</a>
-            <a href="#" className="text-gray-600 hover:text-brand-red transition-colors">FAQs</a>
+            <Link to="/faq" className="text-gray-600 hover:text-brand-red transition-colors">FAQs</Link>
           </div>
 
           {/* App store badges */}
