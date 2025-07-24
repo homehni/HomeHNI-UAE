@@ -342,38 +342,38 @@ const Footer = () => {
           </div>
 
           {/* Social media icons */}
-          <div className="flex justify-center space-x-6 mb-6">
+          <div className="flex justify-center space-x-4 mb-6">
             <a 
               href="https://www.facebook.com/profile.php?id=61578319572154" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="transition-transform hover:scale-110"
+              className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center transition-all hover:bg-gray-400 hover:scale-110"
             >
-              <Facebook className="w-5 h-5 text-[#1877F2] hover:text-[#1877F2] cursor-pointer" />
+              <Facebook className="w-5 h-5 text-gray-700" />
             </a>
             <a 
               href="https://x.com/homehni8" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="transition-transform hover:scale-110"
+              className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center transition-all hover:bg-gray-400 hover:scale-110"
             >
-              <Twitter className="w-5 h-5 text-[#1DA1F2] hover:text-[#1DA1F2] cursor-pointer" />
+              <Twitter className="w-5 h-5 text-gray-700" />
             </a>
             <a 
               href="https://www.instagram.com/homehni/" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="transition-transform hover:scale-110"
+              className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center transition-all hover:bg-gray-400 hover:scale-110"
             >
-              <Instagram className="w-5 h-5 text-[#E4405F] hover:text-[#E4405F] cursor-pointer" />
+              <Instagram className="w-5 h-5 text-gray-700" />
             </a>
             <a 
               href="https://www.linkedin.com/in/home-hni-622605376/" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="transition-transform hover:scale-110"
+              className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center transition-all hover:bg-gray-400 hover:scale-110"
             >
-              <Linkedin className="w-5 h-5 text-[#0077B5] hover:text-[#0077B5] cursor-pointer" />
+              <Linkedin className="w-5 h-5 text-gray-700" />
             </a>
           </div>
 
