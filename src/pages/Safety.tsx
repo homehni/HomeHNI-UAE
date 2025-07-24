@@ -10,13 +10,13 @@ const Safety = () => {
       
       <main className="pt-20">
         {/* Hero Section */}
-        <section className="bg-gradient-to-br from-brand-red to-brand-maroon text-white py-16 lg:py-24">
-          <div className="container mx-auto px-4">
+        <section 
+          className="relative bg-cover bg-center bg-no-repeat text-white py-16 lg:py-24"
+          style={{ backgroundImage: "url('/lovable-uploads/02059b14-d0f2-4231-af62-ec450cb13e82.png')" }}
+        >
+          <div className="absolute inset-0 bg-black/40"></div>
+          <div className="container mx-auto px-4 relative z-10">
             <div className="max-w-4xl mx-auto text-center">
-              <div className="flex items-center justify-center mb-6">
-                <Shield className="w-16 h-16 mr-4" />
-                <h1 className="text-3xl md:text-5xl font-bold">Home Hni Safety Guide</h1>
-              </div>
               <div className="flex items-center justify-center text-xl md:text-2xl font-semibold">
                 <AlertTriangle className="w-8 h-8 mr-3" />
                 <span>Beware – Use Your Judgment Wisely</span>
@@ -29,6 +29,10 @@ const Safety = () => {
         <section className="py-12 lg:py-16">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
+              <div className="flex items-center mb-8">
+                <Shield className="w-12 h-12 mr-4 text-primary" />
+                <h2 className="text-2xl md:text-3xl font-bold">Home Hni Safety Guide</h2>
+              </div>
               <p className="text-lg text-muted-foreground leading-relaxed">
                 At Home Hni, we are committed to promoting safe and transparent property transactions. However, users must exercise independent judgment when dealing with property listings, sellers, or brokers. Not all claims can be independently verified on our end. Below is a safety checklist we strongly recommend reviewing before making any property decisions—whether buying, renting, or investing.
               </p>
