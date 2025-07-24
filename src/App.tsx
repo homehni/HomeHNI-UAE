@@ -21,6 +21,7 @@ import PaintingCleaning from "./pages/PaintingCleaning";
 import ReferEarn from "./pages/ReferEarn";
 import PackersMovers from "./pages/PackersMovers";
 import RentalAgreement from "./pages/RentalAgreement";
+import RentReceipts from "./pages/RentReceipts";
 import NotFound from "./pages/NotFound";
 import ScrollToTop from "./components/ScrollToTop";
 
@@ -51,6 +52,7 @@ const App: React.FC = () => {
             <Route path="/refer-earn" element={<ReferEarn />} />
             <Route path="/packers-movers" element={<PackersMovers />} />
             <Route path="/rental-agreement" element={<RentalAgreement />} />
+            <Route path="/rent-receipts" element={<RentReceipts />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

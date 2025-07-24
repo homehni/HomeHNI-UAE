@@ -40,7 +40,7 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
     { id: 'painting-cleaning', label: 'Painting & Cleaning', hasSubmenu: false, onClick: () => { navigate('/painting-cleaning'); onClose(); } },
     { id: 'packers-movers', label: 'Packers and Movers', hasSubmenu: false, onClick: () => { navigate('/packers-movers'); onClose(); } },
     { id: 'refer-earn', label: 'Refer & Earn', hasSubmenu: false, onClick: () => { navigate('/refer-earn'); onClose(); } },
-    { id: 'rent-receipts', label: 'Rent Receipts', hasSubmenu: false },
+    { id: 'rent-receipts', label: 'Rent Receipts', hasSubmenu: false, onClick: () => { navigate('/rent-receipts'); onClose(); } },
     { id: 'tenant-plans', label: 'Tenant Plans', hasSubmenu: false },
     { id: 'owner-plans', label: 'Owner Plans', hasSubmenu: false },
     { id: 'buyer-plans', label: 'Buyer Plans', hasSubmenu: false },
