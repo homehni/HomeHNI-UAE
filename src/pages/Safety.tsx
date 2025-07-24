@@ -10,7 +10,7 @@ const Safety = () => {
       
       <main className="pt-20">
         {/* Hero Section */}
-        <section className="relative bg-cover bg-center bg-no-repeat text-white py-16 lg:py-24" style={{
+        <section className="relative h-96 bg-cover bg-center bg-no-repeat text-white" style={{
         backgroundImage: "url('/lovable-uploads/02059b14-d0f2-4231-af62-ec450cb13e82.png')"
       }}>
           <div className="absolute inset-0 bg-black/40"></div>
