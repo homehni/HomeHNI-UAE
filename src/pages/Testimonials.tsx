@@ -102,8 +102,9 @@ const Testimonials = () => {
 
         {/* Testimonials Section */}
         <section className="py-16 bg-gray-50">
-          <div className="container mx-auto px-4 relative">
-            <div className="relative">
+          <div className="container mx-auto px-4">
+            {/* Desktop View - Horizontal Scroll */}
+            <div className="hidden md:block relative">
               {/* Left Arrow */}
               <Button variant="outline" size="icon" className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white shadow-lg hover:shadow-xl border-gray-200" onClick={() => scroll('left')}>
                 <ChevronLeft className="w-4 h-4" />
@@ -120,7 +121,8 @@ const Testimonials = () => {
               msOverflowStyle: 'none'
             }}>
                 <div className="flex space-x-6 pb-4">
-                  {testimonials.map((testimonial, index) => <Card key={index} className="w-[400px] flex-shrink-0 bg-white shadow-md hover:shadow-lg transition-shadow">
+                  {testimonials.map((testimonial, index) => (
+                    <Card key={index} className="w-[400px] flex-shrink-0 bg-white shadow-md hover:shadow-lg transition-shadow">
                       <CardContent className="p-6">
                         <div className="flex items-start space-x-4 mb-4">
                           <Avatar className="w-12 h-12">
@@ -136,7 +138,9 @@ const Testimonials = () => {
                               {testimonial.role}
                             </p>
                             <div className="flex space-x-1">
-                              {[...Array(testimonial.rating)].map((_, i) => <Star key={i} className="w-4 h-4 text-yellow-400" fill="currentColor" />)}
+                              {[...Array(testimonial.rating)].map((_, i) => (
+                                <Star key={i} className="w-4 h-4 text-yellow-400" fill="currentColor" />
+                              ))}
                             </div>
                           </div>
                         </div>
@@ -144,14 +148,46 @@ const Testimonials = () => {
                           "{testimonial.text}"
                         </p>
                       </CardContent>
-                    </Card>)}
+                    </Card>
+                  ))}
                 </div>
               </div>
             </div>
+
+            {/* Mobile View - Grid Layout */}
+            <div className="md:hidden grid gap-6">
+              {testimonials.slice(0, 6).map((testimonial, index) => (
+                <Card key={index} className="bg-white shadow-md">
+                  <CardContent className="p-4">
+                    <div className="flex items-start space-x-3 mb-3">
+                      <Avatar className="w-10 h-10">
+                        <AvatarFallback className="bg-brand-red text-white font-semibold text-sm">
+                          {testimonial.name.charAt(0)}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div className="flex-1 min-w-0">
+                        <h4 className="font-semibold text-gray-900 mb-1 text-sm">
+                          {testimonial.name}
+                        </h4>
+                        <p className="text-xs text-gray-500 mb-2">
+                          {testimonial.role}
+                        </p>
+                        <div className="flex space-x-1">
+                          {[...Array(testimonial.rating)].map((_, i) => (
+                            <Star key={i} className="w-3 h-3 text-yellow-400" fill="currentColor" />
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                    <p className="text-gray-700 text-xs leading-relaxed">
+                      "{testimonial.text}"
+                    </p>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
           </div>
         </section>
-
-        {/* Mobile Responsive Grid View */}
         
       </div>
       
