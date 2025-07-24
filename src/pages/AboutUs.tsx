@@ -108,7 +108,7 @@ const AboutUs = () => {
             {/* Join Our Community Section */}
             <div className="mb-16">
               <div className="flex items-center mb-8">
-                <Award className="w-8 h-8 text-red-600 mr-3" />
+                
                 <h2 className="text-3xl font-bold text-gray-900">🤝 Join Our Community</h2>
               </div>
               <p className="text-gray-700 text-lg">
