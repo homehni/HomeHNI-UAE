@@ -57,6 +57,7 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
     { id: 'testimonials', label: 'Testimonials', hasSubmenu: false, onClick: () => { navigate('/testimonials'); onClose(); } },
     { id: 'grievance-redressal', label: 'Grievance Redressal', hasSubmenu: false, onClick: () => { navigate('/grievance-redressal'); onClose(); } },
     { id: 'report-problem', label: 'Report a Problem', hasSubmenu: false, onClick: () => { navigate('/report-problem'); onClose(); } },
+    { id: 'summons-notices', label: 'Summons & Notices', hasSubmenu: false, onClick: () => { navigate('/summons-notices'); onClose(); } },
     
     { 
       id: 'contact-us', 
