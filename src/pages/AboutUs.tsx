@@ -97,7 +97,7 @@ const AboutUs = () => {
             {/* Our Vision Section */}
             <div className="mb-16">
               <div className="flex items-center mb-8">
-                <Star className="w-8 h-8 text-red-600 mr-3" />
+                
                 <h2 className="text-3xl font-bold text-gray-900">🎯 Our Vision</h2>
               </div>
               <p className="text-gray-700 text-lg">
