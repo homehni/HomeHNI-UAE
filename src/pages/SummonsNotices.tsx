@@ -97,7 +97,7 @@ const SummonsNotices = () => {
           <div 
             className="absolute inset-0 bg-cover bg-center bg-no-repeat"
             style={{
-              backgroundImage: `linear-gradient(135deg, hsl(var(--brand-red)) 0%, hsl(var(--brand-maroon)) 100%)`,
+              backgroundImage: `url('/lovable-uploads/03a7a41f-3920-4412-aec8-9d2ab24226ae.png')`,
               backgroundPosition: 'center center'
             }}
           >
