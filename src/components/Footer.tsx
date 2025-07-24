@@ -1,4 +1,3 @@
-
 import { MapPin, Phone, Mail, Facebook, Twitter, Instagram, Linkedin } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
@@ -378,7 +377,7 @@ const Footer = () => {
 
           {/* Copyright */}
           <div className="text-center text-xs text-gray-500">
-            © 2024 5 Acres Real Estate Solutions. All rights reserved. | Privacy Policy | Terms of Service
+            © 2025 Home Hni. All rights reserved.
           </div>
         </div>
       </div>

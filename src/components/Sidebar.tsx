@@ -74,10 +74,11 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
           {/* Header */}
           <div className="flex items-center justify-between p-4 border-b border-gray-200">
             <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-brand-red rounded-lg flex items-center justify-center text-white font-bold">
-                HH
-              </div>
-              <span className="font-bold text-lg text-gray-800">Home HNI</span>
+              <img 
+                src="/lovable-uploads/76edf36e-5a4c-4707-b169-fb70fe75880c.png" 
+                alt="Home HNI Logo" 
+                className="h-8 w-auto"
+              />
             </div>
             <Button variant="ghost" size="sm" onClick={onClose}>
               <X size={20} />
