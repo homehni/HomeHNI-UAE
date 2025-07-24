@@ -1,4 +1,3 @@
-
 import { useEffect } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -33,7 +32,7 @@ const TermsAndConditions = () => {
           <div 
             className="absolute inset-0 bg-cover bg-center bg-no-repeat"
             style={{
-              backgroundImage: `url('/lovable-uploads/43d4891e-82e4-406d-9a77-308cbaa66a93.png')`,
+              backgroundImage: `url('/lovable-uploads/94c2146b-79a1-4541-a959-f1f0c70611e0.png')`,
               backgroundPosition: 'center center'
             }}
           ></div>
