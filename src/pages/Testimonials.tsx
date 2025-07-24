@@ -103,8 +103,7 @@ const Testimonials = () => {
         {/* Testimonials Section */}
         <section className="py-16 bg-gray-50">
           <div className="container mx-auto px-4 relative">
-            {/* Desktop View */}
-            <div className="relative hidden md:block">
+            <div className="relative">
               {/* Left Arrow */}
               <Button variant="outline" size="icon" className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white shadow-lg hover:shadow-xl border-gray-200" onClick={() => scroll('left')}>
                 <ChevronLeft className="w-4 h-4" />
@@ -147,39 +146,6 @@ const Testimonials = () => {
                       </CardContent>
                     </Card>)}
                 </div>
-              </div>
-            </div>
-
-            {/* Mobile View */}
-            <div className="md:hidden">
-              <div className="grid gap-6">
-                {testimonials.slice(0, 6).map((testimonial, index) => (
-                  <Card key={index} className="bg-white shadow-md">
-                    <CardContent className="p-6">
-                      <div className="flex items-start space-x-4 mb-4">
-                        <Avatar className="w-12 h-12">
-                          <AvatarFallback className="bg-brand-red text-white font-semibold">
-                            {testimonial.name.charAt(0)}
-                          </AvatarFallback>
-                        </Avatar>
-                        <div className="flex-1">
-                          <h4 className="font-semibold text-gray-900 mb-1">
-                            {testimonial.name}
-                          </h4>
-                          <p className="text-sm text-gray-500 mb-2">
-                            {testimonial.role}
-                          </p>
-                          <div className="flex space-x-1">
-                            {[...Array(testimonial.rating)].map((_, i) => <Star key={i} className="w-4 h-4 text-yellow-400" fill="currentColor" />)}
-                          </div>
-                        </div>
-                      </div>
-                      <p className="text-gray-700 text-sm leading-relaxed">
-                        "{testimonial.text}"
-                      </p>
-                    </CardContent>
-                  </Card>
-                ))}
               </div>
             </div>
           </div>
