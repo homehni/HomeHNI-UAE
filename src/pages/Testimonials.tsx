@@ -1,13 +1,30 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Marquee from '@/components/Marquee';
 import { Card, CardContent } from '@/components/ui/card';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { Star } from 'lucide-react';
-import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
+import { Star, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 const Testimonials = () => {
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  const scroll = (direction: 'left' | 'right') => {
+    if (scrollRef.current) {
+      const scrollAmount = 420; // Width of card + gap
+      const currentScroll = scrollRef.current.scrollLeft;
+      const targetScroll = direction === 'left' 
+        ? currentScroll - scrollAmount 
+        : currentScroll + scrollAmount;
+      
+      scrollRef.current.scrollTo({
+        left: targetScroll,
+        behavior: 'smooth'
+      });
+    }
+  };
+
   const testimonials = [
     {
       name: "Prameet",
@@ -82,8 +99,14 @@ const Testimonials = () => {
       {/* Main content */}
       <div className="pt-8">
         {/* Hero Section */}
-        <section className="py-16 bg-gradient-to-br from-brand-red to-brand-maroon text-white">
-          <div className="container mx-auto px-4 text-center">
+        <section 
+          className="py-16 text-white relative bg-cover bg-center bg-no-repeat"
+          style={{
+            backgroundImage: "url('/lovable-uploads/6fc2303f-b869-4710-beb1-048a79e56e9b.png')"
+          }}
+        >
+          <div className="absolute inset-0 bg-black/40"></div>
+          <div className="container mx-auto px-4 text-center relative z-10">
             <h1 className="text-4xl md:text-6xl font-bold mb-6">
               🌟 What Our Clients Say
             </h1>
@@ -93,47 +116,85 @@ const Testimonials = () => {
           </div>
         </section>
 
+        {/* Section Header */}
+        <section className="py-12 bg-white">
+          <div className="container mx-auto px-4 text-center">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
+              What Our Clients Say
+            </h2>
+            <p className="text-lg text-gray-600">
+              Real experiences from our satisfied customers
+            </p>
+          </div>
+        </section>
+
         {/* Testimonials Section */}
         <section className="py-16 bg-gray-50">
-          <div className="container mx-auto px-4">
-            <ScrollArea className="w-full whitespace-nowrap rounded-md border">
-              <div className="flex w-max space-x-6 p-6">
-                {testimonials.map((testimonial, index) => (
-                  <Card key={index} className="w-80 flex-shrink-0 bg-white shadow-md hover:shadow-lg transition-shadow">
-                    <CardContent className="p-6">
-                      <div className="flex items-start space-x-4 mb-4">
-                        <Avatar className="w-12 h-12">
-                          <AvatarFallback className="bg-brand-red text-white font-semibold">
-                            {testimonial.name.charAt(0)}
-                          </AvatarFallback>
-                        </Avatar>
-                        <div className="flex-1">
-                          <h4 className="font-semibold text-gray-900 mb-1">
-                            {testimonial.name}
-                          </h4>
-                          <p className="text-sm text-gray-500 mb-2">
-                            {testimonial.role}
-                          </p>
-                          <div className="flex space-x-1">
-                            {[...Array(testimonial.rating)].map((_, i) => (
-                              <Star
-                                key={i}
-                                className="w-4 h-4 text-yellow-400"
-                                fill="currentColor"
-                              />
-                            ))}
+          <div className="container mx-auto px-4 relative">
+            <div className="relative">
+              {/* Left Arrow */}
+              <Button
+                variant="outline"
+                size="icon"
+                className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white shadow-lg hover:shadow-xl border-gray-200"
+                onClick={() => scroll('left')}
+              >
+                <ChevronLeft className="w-4 h-4" />
+              </Button>
+
+              {/* Right Arrow */}
+              <Button
+                variant="outline"
+                size="icon"
+                className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white shadow-lg hover:shadow-xl border-gray-200"
+                onClick={() => scroll('right')}
+              >
+                <ChevronRight className="w-4 h-4" />
+              </Button>
+
+              {/* Testimonials Container */}
+              <div 
+                ref={scrollRef}
+                className="overflow-x-auto scrollbar-hide px-12"
+                style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+              >
+                <div className="flex space-x-6 pb-4">
+                  {testimonials.map((testimonial, index) => (
+                    <Card key={index} className="w-[400px] flex-shrink-0 bg-white shadow-md hover:shadow-lg transition-shadow">
+                      <CardContent className="p-6">
+                        <div className="flex items-start space-x-4 mb-4">
+                          <Avatar className="w-12 h-12">
+                            <AvatarFallback className="bg-brand-red text-white font-semibold">
+                              {testimonial.name.charAt(0)}
+                            </AvatarFallback>
+                          </Avatar>
+                          <div className="flex-1">
+                            <h4 className="font-semibold text-gray-900 mb-1">
+                              {testimonial.name}
+                            </h4>
+                            <p className="text-sm text-gray-500 mb-2">
+                              {testimonial.role}
+                            </p>
+                            <div className="flex space-x-1">
+                              {[...Array(testimonial.rating)].map((_, i) => (
+                                <Star
+                                  key={i}
+                                  className="w-4 h-4 text-yellow-400"
+                                  fill="currentColor"
+                                />
+                              ))}
+                            </div>
                           </div>
                         </div>
-                      </div>
-                      <p className="text-gray-700 text-sm leading-relaxed">
-                        "{testimonial.text}"
-                      </p>
-                    </CardContent>
-                  </Card>
-                ))}
+                        <p className="text-gray-700 text-sm leading-relaxed">
+                          "{testimonial.text}"
+                        </p>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
               </div>
-              <ScrollBar orientation="horizontal" />
-            </ScrollArea>
+            </div>
           </div>
         </section>
 
