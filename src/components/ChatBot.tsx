@@ -232,25 +232,25 @@ const ChatBot = () => {
   };
 
   return (
-    <div className="fixed bottom-6 right-6 z-50">
+    <div className="fixed bottom-4 right-4 z-50 sm:bottom-6 sm:right-6">
       {!isOpen && (
         <Button
           onClick={() => setIsOpen(true)}
-          className="h-14 w-14 rounded-full bg-brand-red hover:bg-brand-maroon-dark shadow-lg hover:shadow-xl transition-all duration-300 animate-pulse"
+          className="h-12 w-12 sm:h-14 sm:w-14 rounded-full bg-brand-red hover:bg-brand-maroon-dark shadow-lg hover:shadow-xl transition-all duration-300 animate-pulse"
         >
-          <Home size={24} className="text-white" />
+          <Home size={20} className="text-white sm:w-6 sm:h-6" />
         </Button>
       )}
 
       {isOpen && (
-        <Card className="w-96 h-[500px] shadow-2xl border-0 bg-white">
-          <CardHeader className="bg-brand-red text-white p-4 rounded-t-lg">
+        <Card className="w-[calc(100vw-2rem)] max-w-96 h-[calc(100vh-8rem)] max-h-[500px] shadow-2xl border-0 bg-white sm:w-96 sm:h-[500px]">
+          <CardHeader className="bg-brand-red text-white p-3 sm:p-4 rounded-t-lg">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
-                <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center">
-                  <Home size={16} className="text-brand-red" />
+                <div className="w-6 h-6 sm:w-8 sm:h-8 bg-white rounded-full flex items-center justify-center">
+                  <Home size={12} className="text-brand-red sm:w-4 sm:h-4" />
                 </div>
-                <CardTitle className="text-lg font-semibold">Real Estate Assistant</CardTitle>
+                <CardTitle className="text-base sm:text-lg font-semibold">Real Estate Assistant</CardTitle>
               </div>
               <Button
                 variant="ghost"
@@ -264,52 +264,52 @@ const ChatBot = () => {
           </CardHeader>
 
           <CardContent className="p-0 h-full flex flex-col">
-            <div className="flex-1 overflow-y-auto p-4 space-y-3 max-h-80">
+            <div className="flex-1 overflow-y-auto p-3 sm:p-4 space-y-3 max-h-80">
               {messages.map((message) => (
                 <div key={message.id} className={`flex ${message.isBot ? 'justify-start' : 'justify-end'}`}>
                   <div
-                    className={`max-w-[80%] p-3 rounded-lg ${
+                    className={`max-w-[85%] sm:max-w-[80%] p-2 sm:p-3 rounded-lg text-sm break-words ${
                       message.isBot
                         ? 'bg-gray-100 text-gray-800'
                         : 'bg-brand-red text-white'
                     }`}
                   >
-                    <p className="text-sm">{message.text}</p>
+                    <p className="text-xs sm:text-sm leading-relaxed">{message.text}</p>
                     
                     {message.propertyCard && (
-                      <div className="mt-3 bg-white rounded-lg p-3 border">
+                      <div className="mt-2 sm:mt-3 bg-white rounded-lg p-2 sm:p-3 border">
                         <img
                           src={message.propertyCard.image}
                           alt={message.propertyCard.title}
-                          className="w-full h-32 object-cover rounded-lg mb-2"
+                          className="w-full h-24 sm:h-32 object-cover rounded-lg mb-2"
                         />
-                        <h4 className="font-semibold text-gray-800 text-sm">{message.propertyCard.title}</h4>
-                        <p className="text-brand-red font-bold text-lg">{message.propertyCard.price}</p>
+                        <h4 className="font-semibold text-gray-800 text-xs sm:text-sm leading-tight">{message.propertyCard.title}</h4>
+                        <p className="text-brand-red font-bold text-sm sm:text-lg">{message.propertyCard.price}</p>
                         <p className="text-gray-600 text-xs flex items-center mt-1">
-                          <MapPin size={12} className="mr-1" />
-                          {message.propertyCard.location}
+                          <MapPin size={10} className="mr-1 sm:w-3 sm:h-3" />
+                          <span className="truncate">{message.propertyCard.location}</span>
                         </p>
-                        <div className="flex items-center space-x-4 mt-2 text-xs text-gray-600">
+                        <div className="flex items-center space-x-2 sm:space-x-4 mt-2 text-xs text-gray-600">
                           <span className="flex items-center">
-                            <Bed size={12} className="mr-1" />
+                            <Bed size={10} className="mr-1 sm:w-3 sm:h-3" />
                             {message.propertyCard.bedrooms} BHK
                           </span>
                           <span className="flex items-center">
-                            <Bath size={12} className="mr-1" />
+                            <Bath size={10} className="mr-1 sm:w-3 sm:h-3" />
                             {message.propertyCard.bathrooms} Bath
                           </span>
                           <span className="flex items-center">
-                            <Square size={12} className="mr-1" />
+                            <Square size={10} className="mr-1 sm:w-3 sm:h-3" />
                             {message.propertyCard.area}
                           </span>
                         </div>
-                        <div className="flex space-x-2 mt-3">
-                          <Button size="sm" className="flex-1 h-8 text-xs bg-brand-red hover:bg-brand-maroon-dark">
-                            <Phone size={12} className="mr-1" />
+                        <div className="flex space-x-2 mt-2 sm:mt-3">
+                          <Button size="sm" className="flex-1 h-7 sm:h-8 text-xs bg-brand-red hover:bg-brand-maroon-dark">
+                            <Phone size={10} className="mr-1 sm:w-3 sm:h-3" />
                             Call
                           </Button>
-                          <Button size="sm" variant="outline" className="flex-1 h-8 text-xs">
-                            <Calendar size={12} className="mr-1" />
+                          <Button size="sm" variant="outline" className="flex-1 h-7 sm:h-8 text-xs">
+                            <Calendar size={10} className="mr-1 sm:w-3 sm:h-3" />
                             Visit
                           </Button>
                         </div>
@@ -317,12 +317,12 @@ const ChatBot = () => {
                     )}
 
                     {message.options && (
-                      <div className="flex flex-wrap gap-2 mt-3">
+                      <div className="flex flex-wrap gap-1 sm:gap-2 mt-2 sm:mt-3">
                         {message.options.map((option) => (
                           <Badge
                             key={option}
                             variant="outline"
-                            className="cursor-pointer hover:bg-brand-red hover:text-white transition-colors"
+                            className="cursor-pointer hover:bg-brand-red hover:text-white transition-colors text-xs px-2 py-1"
                             onClick={() => handleOptionClick(option)}
                           >
                             {option}
@@ -347,21 +347,21 @@ const ChatBot = () => {
               )}
             </div>
 
-            <div className="p-4 border-t">
+            <div className="p-3 sm:p-4 border-t">
               <div className="flex space-x-2">
                 <Input
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}
                   placeholder="Type your message..."
                   onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-                  className="flex-1"
+                  className="flex-1 text-sm"
                 />
                 <Button
                   onClick={handleSendMessage}
                   size="sm"
-                  className="bg-brand-red hover:bg-brand-maroon-dark"
+                  className="bg-brand-red hover:bg-brand-maroon-dark px-3"
                 >
-                  <Send size={16} />
+                  <Send size={14} className="sm:w-4 sm:h-4" />
                 </Button>
               </div>
             </div>
