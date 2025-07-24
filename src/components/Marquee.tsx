@@ -37,31 +37,31 @@ const Marquee = () => {
         } : {}}
       >
         <span className="text-sm font-medium px-4 drop-shadow-lg">
-          Noida: GNIDA is set to launch an online land subdivision application system to handle requests for dividing 6%, 8%, and 10% abadi plots. These plots are given to farmers whose land was taken for development projects, with the percentage referring to the share of land they get back.
+          🏠 Stay Safe with Home Hni - Your trusted partner for secure real estate transactions • Verify all documents before payment • Use escrow services for large transactions • Report suspicious activities immediately
         </span>
         <span className="text-sm font-medium px-4 drop-shadow-lg">
-          Noida: GNIDA is set to launch an online land subdivision application system to handle requests for dividing 6%, 8%, and 10% abadi plots. These plots are given to farmers whose land was taken for development projects, with the percentage referring to the share of land they get back.
+          🏠 Stay Safe with Home Hni - Your trusted partner for secure real estate transactions • Verify all documents before payment • Use escrow services for large transactions • Report suspicious activities immediately
         </span>
         <span className="text-sm font-medium px-4 drop-shadow-lg">
-          Noida: GNIDA is set to launch an online land subdivision application system to handle requests for dividing 6%, 8%, and 10% abadi plots. These plots are given to farmers whose land was taken for development projects, with the percentage referring to the share of land they get back.
+          🏠 Stay Safe with Home Hni - Your trusted partner for secure real estate transactions • Verify all documents before payment • Use escrow services for large transactions • Report suspicious activities immediately
         </span>
-         <span className="text-sm font-medium px-4 drop-shadow-lg">
-          Noida: GNIDA is set to launch an online land subdivision application system to handle requests for dividing 6%, 8%, and 10% abadi plots. These plots are given to farmers whose land was taken for development projects, with the percentage referring to the share of land they get back.
+        <span className="text-sm font-medium px-4 drop-shadow-lg">
+          🏠 Stay Safe with Home Hni - Your trusted partner for secure real estate transactions • Verify all documents before payment • Use escrow services for large transactions • Report suspicious activities immediately
         </span>
-         <span className="text-sm font-medium px-4 drop-shadow-lg">
-          Noida: GNIDA is set to launch an online land subdivision application system to handle requests for dividing 6%, 8%, and 10% abadi plots. These plots are given to farmers whose land was taken for development projects, with the percentage referring to the share of land they get back.
+        <span className="text-sm font-medium px-4 drop-shadow-lg">
+          🏠 Stay Safe with Home Hni - Your trusted partner for secure real estate transactions • Verify all documents before payment • Use escrow services for large transactions • Report suspicious activities immediately
         </span>
-         <span className="text-sm font-medium px-4 drop-shadow-lg">
-          Noida: GNIDA is set to launch an online land subdivision application system to handle requests for dividing 6%, 8%, and 10% abadi plots. These plots are given to farmers whose land was taken for development projects, with the percentage referring to the share of land they get back.
+        <span className="text-sm font-medium px-4 drop-shadow-lg">
+          🏠 Stay Safe with Home Hni - Your trusted partner for secure real estate transactions • Verify all documents before payment • Use escrow services for large transactions • Report suspicious activities immediately
         </span>
-         <span className="text-sm font-medium px-4 drop-shadow-lg">
-          Noida: GNIDA is set to launch an online land subdivision application system to handle requests for dividing 6%, 8%, and 10% abadi plots. These plots are given to farmers whose land was taken for development projects, with the percentage referring to the share of land they get back.
+        <span className="text-sm font-medium px-4 drop-shadow-lg">
+          🏠 Stay Safe with Home Hni - Your trusted partner for secure real estate transactions • Verify all documents before payment • Use escrow services for large transactions • Report suspicious activities immediately
         </span>
-         <span className="text-sm font-medium px-4 drop-shadow-lg">
-          Noida: GNIDA is set to launch an online land subdivision application system to handle requests for dividing 6%, 8%, and 10% abadi plots. These plots are given to farmers whose land was taken for development projects, with the percentage referring to the share of land they get back.
+        <span className="text-sm font-medium px-4 drop-shadow-lg">
+          🏠 Stay Safe with Home Hni - Your trusted partner for secure real estate transactions • Verify all documents before payment • Use escrow services for large transactions • Report suspicious activities immediately
         </span>
-         <span className="text-sm font-medium px-4 drop-shadow-lg">
-          Noida: GNIDA is set to launch an online land subdivision application system to handle requests for dividing 6%, 8%, and 10% abadi plots. These plots are given to farmers whose land was taken for development projects, with the percentage referring to the share of land they get back.
+        <span className="text-sm font-medium px-4 drop-shadow-lg">
+          🏠 Stay Safe with Home Hni - Your trusted partner for secure real estate transactions • Verify all documents before payment • Use escrow services for large transactions • Report suspicious activities immediately
         </span>
       </div>
     </div>
