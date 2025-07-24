@@ -93,12 +93,12 @@ const PaintingCleaning = () => {
       <Header />
       
       {/* Hero Section */}
-      <section className="relative h-64 bg-gradient-to-r from-primary/90 to-primary-glow/90 flex items-center justify-center text-center text-white">
+      <section className="relative h-64 bg-gradient-to-r from-brand-red to-brand-maroon-dark flex items-center justify-center text-center text-white">
         <div className="container mx-auto px-4">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">
+          <h1 className="text-4xl md:text-5xl font-bold mb-4 text-white">
             Painting & Cleaning Services
           </h1>
-          <p className="text-lg md:text-xl max-w-3xl mx-auto">
+          <p className="text-lg md:text-xl max-w-3xl mx-auto text-white/95">
             Transform your home with our professional painting and cleaning services. 
             Quality workmanship, trusted professionals, and guaranteed satisfaction for all your home improvement needs.
           </p>
