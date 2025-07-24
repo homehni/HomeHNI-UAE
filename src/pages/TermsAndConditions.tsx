@@ -1,3 +1,4 @@
+
 import { useEffect } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -36,8 +37,6 @@ const TermsAndConditions = () => {
               backgroundPosition: 'center center'
             }}
           ></div>
-          
-       
         </div>
 
         {/* Main Content */}
@@ -184,8 +183,7 @@ const TermsAndConditions = () => {
                   <div className="text-center">
                     <div className="text-2xl mb-2">📧</div>
                     <p className="font-medium text-gray-900">Email</p>
-                    <p className="text-gray-600">homehni8@gmail.com
-</p>
+                    <p className="text-gray-600">homehni8@gmail.com</p>
                   </div>
                   <div className="text-center">
                     <div className="text-2xl mb-2">📱</div>
@@ -195,7 +193,7 @@ const TermsAndConditions = () => {
                   <div className="text-center">
                     <div className="text-2xl mb-2">🏢</div>
                     <p className="font-medium text-gray-900">Address</p>
-                    <p className="text-gray-600">Plot No: 52 E/P </p>br> CBI Colony Sahebnagar Kalan</p>
+                    <p className="text-gray-600">Plot No: 52 E/P<br />CBI Colony Sahebnagar Kalan</p>
                   </div>
                 </div>
               </div>
