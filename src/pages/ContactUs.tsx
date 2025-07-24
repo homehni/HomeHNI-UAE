@@ -60,14 +60,7 @@ const ContactUs = () => {
               filter: 'brightness(0.7)'
             }}
           />
-          <div className="absolute inset-0 bg-black/20" />
-          <div className="relative z-10 h-full flex items-center justify-center">
-            <div className="text-center text-white">
-              <h1 className="text-5xl md:text-6xl font-bold mb-4">CONTACT US</h1>
-              <p className="text-xl md:text-2xl opacity-90">Get in touch with us</p>
-            </div>
-          </div>
-        </div>
+         
 
         {/* Content Section */}
         <div className="container mx-auto px-4 py-16">
