@@ -1,14 +1,15 @@
-User-agent: Googlebot
-Allow: /
-
-User-agent: Bingbot
-Allow: /
-
-User-agent: Twitterbot
-Allow: /
-
-User-agent: facebookexternalhit
-Allow: /
-
+# Allow all crawlers
 User-agent: *
+
+# Disallow sensitive areas
+Disallow: /admin
+Disallow: /dashboard
+Disallow: /internal-api
+Disallow: /test
+Disallow: /staging
+
+# Allow everything else
 Allow: /
+
+# Sitemap location
+Sitemap: https://homehni.com/sitemap.xml
