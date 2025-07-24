@@ -69,9 +69,7 @@ const ReportProblem = () => {
           
           {/* Hero Content */}
           <div className="relative z-10 flex items-center justify-center h-full">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white text-center tracking-wide">
-              REPORT A PROBLEM
-            </h1>
+           
           </div>
         </div>
 
