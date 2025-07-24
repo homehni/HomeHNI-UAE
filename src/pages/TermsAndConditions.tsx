@@ -38,17 +38,7 @@ const TermsAndConditions = () => {
             }}
           ></div>
           
-          {/* Content overlay */}
-          <div className="relative z-10 flex items-center justify-center h-full">
-            <div className="text-center">
-              <h1 className="text-4xl md:text-5xl font-bold text-white mb-4 drop-shadow-lg">
-                Terms & Conditions
-              </h1>
-              <p className="text-xl text-white/90 max-w-2xl mx-auto drop-shadow-md">
-                Please read these terms carefully before using our services
-              </p>
-            </div>
-          </div>
+       
         </div>
 
         {/* Main Content */}
