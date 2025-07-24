@@ -10,17 +10,13 @@ const Safety = () => {
       
       <main className="pt-20">
         {/* Hero Section */}
-        <section 
-          className="relative bg-cover bg-center bg-no-repeat text-white py-16 lg:py-24"
-          style={{ backgroundImage: "url('/lovable-uploads/02059b14-d0f2-4231-af62-ec450cb13e82.png')" }}
-        >
+        <section className="relative bg-cover bg-center bg-no-repeat text-white py-16 lg:py-24" style={{
+        backgroundImage: "url('/lovable-uploads/02059b14-d0f2-4231-af62-ec450cb13e82.png')"
+      }}>
           <div className="absolute inset-0 bg-black/40"></div>
           <div className="container mx-auto px-4 relative z-10">
             <div className="max-w-4xl mx-auto text-center">
-              <div className="flex items-center justify-center text-xl md:text-2xl font-semibold">
-                <AlertTriangle className="w-8 h-8 mr-3" />
-                <span>Beware – Use Your Judgment Wisely</span>
-              </div>
+              
             </div>
           </div>
         </section>
