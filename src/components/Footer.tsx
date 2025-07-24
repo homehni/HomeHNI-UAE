@@ -326,7 +326,7 @@ const Footer = () => {
         <div className="border-t border-gray-200 pt-6">
           <div className="flex flex-wrap justify-center gap-6 mb-6 text-sm">
             <Link to="/about-us" className="text-gray-600 hover:text-brand-red transition-colors">About Us</Link>
-            <a href="#" className="text-gray-600 hover:text-brand-red transition-colors">Careers</a>
+            <Link to="/careers" className="text-gray-600 hover:text-brand-red transition-colors">Careers</Link>
             <Link to="/terms-and-conditions" className="text-gray-600 hover:text-brand-red transition-colors">Terms & Conditions</Link>
             <Link to="/privacy-policy" className="text-gray-600 hover:text-brand-red transition-colors">Privacy Policy</Link>
             <a href="#" className="text-gray-600 hover:text-brand-red transition-colors">Testimonials</a>
