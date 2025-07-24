@@ -342,49 +342,44 @@ const Footer = () => {
           </div>
 
           {/* Social media icons */}
-          <div className="flex justify-center space-x-6 mb-6">
-            <a 
-              href="https://www.facebook.com/profile.php?id=61578319572154" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="transition-transform hover:scale-110"
-            >
-              <Facebook className="w-5 h-5 text-[#1877F2] hover:text-[#1877F2] cursor-pointer" />
-            </a>
-            <a 
-              href="https://x.com/homehni8" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="transition-transform hover:scale-110"
-            >
-              <Twitter className="w-5 h-5 text-[#1DA1F2] hover:text-[#1DA1F2] cursor-pointer" />
-            </a>
-            <a 
-              href="https://www.instagram.com/homehni/" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="transition-transform hover:scale-110"
-            >
-              <Instagram className="w-5 h-5 text-[#E4405F] hover:text-[#E4405F] cursor-pointer" />
-            </a>
-            <a 
-              href="https://www.linkedin.com/in/home-hni-622605376/" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="transition-transform hover:scale-110"
-            >
-              <Linkedin className="w-5 h-5 text-[#0077B5] hover:text-[#0077B5] cursor-pointer" />
-            </a>
-            <a 
-  href="https://www.youtube.com/@homehni" 
-  target="_blank" 
-  rel="noopener noreferrer" 
-  className="transition-transform hover:scale-110"
->
-  <Youtube className="w-5 h-5 text-[#FF0000] hover:text-[#FF0000] cursor-pointer" />
-</a>
+<div className="flex justify-center space-x-6 mb-6 [&>a]:transition-transform [&>a:hover]:scale-110 [&>a>svg]:w-5 [&>a>svg]:h-5 [&>a>svg]:cursor-pointer">
+  <a 
+    href="https://www.facebook.com/profile.php?id=61578319572154" 
+    target="_blank" 
+    rel="noopener noreferrer"
+  >
+    <Facebook className="text-[#1877F2] hover:text-[#1877F2]" />
+  </a>
+  <a 
+    href="https://x.com/homehni8" 
+    target="_blank" 
+    rel="noopener noreferrer"
+  >
+    <Twitter className="text-[#1DA1F2] hover:text-[#1DA1F2]" />
+  </a>
+  <a 
+    href="https://www.instagram.com/homehni/" 
+    target="_blank" 
+    rel="noopener noreferrer"
+  >
+    <Instagram className="text-[#E4405F] hover:text-[#E4405F]" />
+  </a>
+  <a 
+    href="https://www.linkedin.com/in/home-hni-622605376/" 
+    target="_blank" 
+    rel="noopener noreferrer"
+  >
+    <Linkedin className="text-[#0077B5] hover:text-[#0077B5]" />
+  </a>
+  <a 
+    href="https://www.youtube.com/@homehni" 
+    target="_blank" 
+    rel="noopener noreferrer"
+  >
+    <Youtube className="text-[#FF0000] hover:text-[#FF0000]" />
+  </a>
+</div>
 
-          </div>
 
           {/* Copyright */}
           <div className="text-center text-xs text-gray-500">
