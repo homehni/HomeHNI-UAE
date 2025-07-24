@@ -55,6 +55,7 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
     { id: 'corporate-enquiry', label: 'Corporate Enquiry', hasSubmenu: false },
     { id: 'blog', label: 'Blog', hasSubmenu: false },
     { id: 'testimonials', label: 'Testimonials', hasSubmenu: false, onClick: () => { navigate('/testimonials'); onClose(); } },
+    { id: 'grievance-redressal', label: 'Grievance Redressal', hasSubmenu: false, onClick: () => { navigate('/grievance-redressal'); onClose(); } },
     { id: 'nobroker-support', label: 'NoBroker Support', hasSubmenu: false },
     { 
       id: 'contact-us', 
