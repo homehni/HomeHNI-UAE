@@ -4,6 +4,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { CheckCircle, FileText, Truck, Clock, Shield, MapPin, Star, ArrowRight } from 'lucide-react';
 import Header from '@/components/Header';
+import Marquee from '@/components/Marquee';
 import Footer from '@/components/Footer';
 
 const RentalAgreement = () => {
@@ -69,10 +70,11 @@ const RentalAgreement = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <Marquee />
       <Header />
       
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-blue-50 to-indigo-100 pt-20 pb-16 overflow-hidden">
+      <section className="relative bg-gradient-to-br from-blue-50 to-indigo-100 pt-24 pb-16 overflow-hidden">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
