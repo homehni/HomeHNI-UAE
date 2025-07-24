@@ -98,23 +98,17 @@ const Testimonials = () => {
       
       {/* Main content */}
       <div className="pt-8">
-        {/* Hero Section */}
-        <section 
-          className="py-16 text-white relative bg-cover bg-center bg-no-repeat"
-          style={{
-            backgroundImage: "url('/lovable-uploads/6fc2303f-b869-4710-beb1-048a79e56e9b.png')"
-          }}
-        >
-          <div className="absolute inset-0 bg-black/40"></div>
-          <div className="container mx-auto px-4 text-center relative z-10">
-            <h1 className="text-4xl md:text-6xl font-bold mb-6">
-              🌟 What Our Clients Say
-            </h1>
-            <p className="text-xl md:text-2xl opacity-90">
-              Testimonials
-            </p>
-          </div>
-        </section>
+        {/* Hero Banner Section */}
+        <div className="relative h-96 bg-gradient-to-r from-brand-red to-brand-maroon overflow-hidden">
+          <div 
+            className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+            style={{
+              backgroundImage: `url(/lovable-uploads/e92e33f3-73f5-4ce1-9011-5fb09b061ed9.png)`,
+              filter: 'brightness(0.7)'
+            }}
+          />
+          <div className="absolute inset-0 bg-black/20" />
+        </div>
 
         {/* Section Header */}
         <section className="py-12 bg-white">
