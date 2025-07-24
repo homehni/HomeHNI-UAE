@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { X, ChevronDown, User, UserPlus, LogIn } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import LegalServicesForm from './LegalServicesForm';
 
 interface SidebarProps {
@@ -54,6 +54,7 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
     { id: 'careers', label: 'Careers', hasSubmenu: false },
     { id: 'corporate-enquiry', label: 'Corporate Enquiry', hasSubmenu: false },
     { id: 'blog', label: 'Blog', hasSubmenu: false },
+    { id: 'testimonials', label: 'Testimonials', hasSubmenu: false, onClick: () => { navigate('/testimonials'); onClose(); } },
     { id: 'nobroker-support', label: 'NoBroker Support', hasSubmenu: false },
     { 
       id: 'contact-us', 
