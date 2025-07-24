@@ -3,10 +3,8 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Marquee from '@/components/Marquee';
 import { Shield, AlertTriangle, FileText, Home, Phone } from 'lucide-react';
-
 const Safety = () => {
-  return (
-    <div className="min-h-screen bg-background">
+  return <div className="min-h-screen bg-background">
       <Marquee />
       <Header />
       
@@ -50,25 +48,12 @@ const Safety = () => {
               </div>
               
               <div className="grid gap-6 md:gap-8">
-                {[
-                  "Never send money via UPI, bank transfers, credit/debit cards to a so-called owner/landlord without meeting them in person.",
-                  "Do not pay property visit charges, gate pass fees, or token amounts over phone calls.",
-                  "If a broker is involved, ensure you speak directly with the actual property owner—preferably via video call if not in person.",
-                  "Avoid paying any part of the deal amount (rent or sale) to the broker.",
-                  "Be cautious of disputed land titles or distressed properties.",
-                  "Steer clear of schemes that promise unrealistic returns from real estate investment tied to upcoming infrastructure projects.",
-                  "Always visit the property physically and perform due diligence.",
-                  "Listings should include clear interior photos—bedrooms, bathrooms, and kitchen at the very least.",
-                  "Understand the neighbourhood before you rent or buy.",
-                  "Try to interact with neighbours to confirm that the person showing the property is its legitimate owner."
-                ].map((tip, index) => (
-                  <div key={index} className="flex items-start bg-background p-4 md:p-6 rounded-lg shadow-sm border">
+                {["Never send money via UPI, bank transfers, credit/debit cards to a so-called owner/landlord without meeting them in person.", "Do not pay property visit charges, gate pass fees, or token amounts over phone calls.", "If a broker is involved, ensure you speak directly with the actual property owner—preferably via video call if not in person.", "Avoid paying any part of the deal amount (rent or sale) to the broker.", "Be cautious of disputed land titles or distressed properties.", "Steer clear of schemes that promise unrealistic returns from real estate investment tied to upcoming infrastructure projects.", "Always visit the property physically and perform due diligence.", "Listings should include clear interior photos—bedrooms, bathrooms, and kitchen at the very least.", "Understand the neighbourhood before you rent or buy.", "Try to interact with neighbours to confirm that the person showing the property is its legitimate owner."].map((tip, index) => <div key={index} className="flex items-start bg-background p-4 md:p-6 rounded-lg shadow-sm border">
                     <div className="bg-destructive/10 text-destructive p-2 rounded-full mr-4 mt-1 flex-shrink-0">
-                      <span className="text-sm font-bold">✗</span>
+                      
                     </div>
                     <p className="text-foreground leading-relaxed">{tip}</p>
-                  </div>
-                ))}
+                  </div>)}
               </div>
             </div>
           </div>
@@ -92,22 +77,10 @@ const Safety = () => {
               <h3 className="text-xl font-semibold mb-6">Key Buyer Checks:</h3>
               
               <div className="grid gap-4 md:gap-6">
-                {[
-                  "Perform a thorough ownership check to confirm the developer or owner's credentials.",
-                  "Visit the project site in person to ensure the property exists and matches descriptions.",
-                  "Choose developers with a solid track record—review their past projects and delivery timelines.",
-                  "Watch for false or forged documents; properties with long vacancy histories may have legal issues or loans against them.",
-                  "Conduct proper legal due diligence before entering any financial agreement.",
-                  "Understand what FSI/FAR covers—common areas like lobbies, pools, terraces, and parks are usually excluded.",
-                  "Check the applicability of the Real Estate (Regulation and Development) Act (RERA) on the project in question."
-                ].map((check, index) => (
-                  <div key={index} className="flex items-start bg-primary/5 p-4 md:p-6 rounded-lg border border-primary/20">
-                    <div className="bg-primary/10 text-primary p-2 rounded-full mr-4 mt-1 flex-shrink-0">
-                      <span className="text-sm font-bold">✓</span>
-                    </div>
+                {["Perform a thorough ownership check to confirm the developer or owner's credentials.", "Visit the project site in person to ensure the property exists and matches descriptions.", "Choose developers with a solid track record—review their past projects and delivery timelines.", "Watch for false or forged documents; properties with long vacancy histories may have legal issues or loans against them.", "Conduct proper legal due diligence before entering any financial agreement.", "Understand what FSI/FAR covers—common areas like lobbies, pools, terraces, and parks are usually excluded.", "Check the applicability of the Real Estate (Regulation and Development) Act (RERA) on the project in question."].map((check, index) => <div key={index} className="flex items-start bg-primary/5 p-4 md:p-6 rounded-lg border border-primary/20">
+                    
                     <p className="text-foreground leading-relaxed">{check}</p>
-                  </div>
-                ))}
+                  </div>)}
               </div>
             </div>
           </div>
@@ -129,21 +102,12 @@ const Safety = () => {
               </p>
 
               <div className="grid gap-4 md:gap-6">
-                {[
-                  "Always visit the property and meet the landlord in person.",
-                  "NEVER pay property visit fees, gate pass charges, or advance amounts without visiting the place.",
-                  "Carefully inspect rooms—including kitchen and bathrooms—for leaks, dampness, or plumbing issues.",
-                  "Understand the local security deposit norms to avoid being overcharged.",
-                  "Verify safety, lighting, building access, and security features.",
-                  "Ensure all areas are listed and measured using standardized units."
-                ].map((step, index) => (
-                  <div key={index} className="flex items-start bg-background p-4 md:p-6 rounded-lg shadow-sm border">
+                {["Always visit the property and meet the landlord in person.", "NEVER pay property visit fees, gate pass charges, or advance amounts without visiting the place.", "Carefully inspect rooms—including kitchen and bathrooms—for leaks, dampness, or plumbing issues.", "Understand the local security deposit norms to avoid being overcharged.", "Verify safety, lighting, building access, and security features.", "Ensure all areas are listed and measured using standardized units."].map((step, index) => <div key={index} className="flex items-start bg-background p-4 md:p-6 rounded-lg shadow-sm border">
                     <div className="bg-secondary/10 text-secondary p-2 rounded-full mr-4 mt-1 flex-shrink-0">
-                      <span className="text-sm font-bold">✓</span>
+                      
                     </div>
                     <p className="text-foreground leading-relaxed">{step}</p>
-                  </div>
-                ))}
+                  </div>)}
               </div>
             </div>
           </div>
@@ -205,8 +169,6 @@ const Safety = () => {
       </main>
 
       <Footer />
-    </div>
-  );
+    </div>;
 };
-
 export default Safety;
