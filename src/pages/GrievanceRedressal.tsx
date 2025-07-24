@@ -273,7 +273,7 @@ const GrievanceRedressal = () => {
                       id="supportingDocument"
                       type="file" 
                       accept=".pdf,.jpg,.jpeg,.png,.gif"
-                      className="file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-brand-red file:text-white hover:file:bg-brand-red-dark"
+                      className="h-10 file:h-8 file:mr-4 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-brand-red file:text-white hover:file:bg-brand-red-dark file:cursor-pointer cursor-pointer"
                     />
                     <p className="text-sm text-gray-500">
                       Supported formats: PDF, JPG, PNG, JPEG, GIF (Max 2MB)
