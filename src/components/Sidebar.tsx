@@ -36,7 +36,7 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
   const menuItems = [
     { id: 'post-property', label: 'Post Your Property', hasSubmenu: false },
     { id: 'rental-agreement', label: 'Rental Agreement', hasSubmenu: false, onClick: () => { navigate('/rental-agreement'); onClose(); } },
-    { id: 'legal-services', label: 'Legal Services', hasSubmenu: false, onClick: handleLegalServicesClick },
+    { id: 'legal-services', label: 'Legal Services', hasSubmenu: false, onClick: () => { navigate('/legal-services'); onClose(); } },
     { id: 'painting-cleaning', label: 'Painting & Cleaning', hasSubmenu: false, onClick: () => { navigate('/painting-cleaning'); onClose(); } },
     { id: 'packers-movers', label: 'Packers and Movers', hasSubmenu: false, onClick: () => { navigate('/packers-movers'); onClose(); } },
     { id: 'refer-earn', label: 'Refer & Earn', hasSubmenu: false, onClick: () => { navigate('/refer-earn'); onClose(); } },
