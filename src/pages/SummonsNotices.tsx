@@ -108,12 +108,7 @@ const SummonsNotices = () => {
           {/* Hero Content */}
           <div className="relative z-10 flex items-center justify-center h-full">
             <div className="text-center text-white">
-              <h1 className="text-4xl md:text-6xl font-bold mb-4">
-                SUMMONS/NOTICES
-              </h1>
-              <p className="text-xl md:text-2xl">
-                Complaint / Status Form - Only for Law Enforcement Agencies
-              </p>
+              
             </div>
           </div>
         </div>
