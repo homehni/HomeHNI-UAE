@@ -1,4 +1,3 @@
-
 import { MapPin, Phone, Mail, Facebook, Twitter, Instagram, Linkedin } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
@@ -329,7 +328,7 @@ const Footer = () => {
             <Link to="/about-us" className="text-gray-600 hover:text-brand-red transition-colors">About Us</Link>
             <a href="#" className="text-gray-600 hover:text-brand-red transition-colors">Careers</a>
             <Link to="/terms-and-conditions" className="text-gray-600 hover:text-brand-red transition-colors">Terms & Conditions</Link>
-            <a href="#" className="text-gray-600 hover:text-brand-red transition-colors">Privacy Policy</a>
+            <Link to="/privacy-policy" className="text-gray-600 hover:text-brand-red transition-colors">Privacy Policy</Link>
             <a href="#" className="text-gray-600 hover:text-brand-red transition-colors">Testimonials</a>
             <a href="#" className="text-gray-600 hover:text-brand-red transition-colors">Sitemap</a>
             <a href="#" className="text-gray-600 hover:text-brand-red transition-colors">FAQs</a>
