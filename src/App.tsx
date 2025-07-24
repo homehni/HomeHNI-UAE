@@ -18,6 +18,7 @@ import GrievanceRedressal from "./pages/GrievanceRedressal";
 import ReportProblem from "./pages/ReportProblem";
 import SummonsNotices from "./pages/SummonsNotices";
 import PaintingCleaning from "./pages/PaintingCleaning";
+import ReferEarn from "./pages/ReferEarn";
 import NotFound from "./pages/NotFound";
 import ScrollToTop from "./components/ScrollToTop";
 
@@ -45,6 +46,7 @@ const App: React.FC = () => {
             <Route path="/report-problem" element={<ReportProblem />} />
             <Route path="/summons-notices" element={<SummonsNotices />} />
             <Route path="/painting-cleaning" element={<PaintingCleaning />} />
+            <Route path="/refer-earn" element={<ReferEarn />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
