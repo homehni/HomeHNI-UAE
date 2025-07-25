@@ -116,12 +116,7 @@ const FAQ = () => {
           backgroundImage: "url('/lovable-uploads/ddda335f-1bbc-402a-befb-f6d3f4d631e6.png')"
         }}>
           <div className="absolute inset-0 bg-black/40"></div>
-          <div className="container mx-auto px-4 relative z-10 pt-20">
-            <div className="max-w-4xl mx-auto text-center">
-              <h1 className="text-4xl md:text-5xl font-bold mb-6">🏡 Home Hni – Frequently Asked Questions</h1>
-              <p className="text-xl md:text-2xl text-white/90">Find answers to all your questions about our premium real estate platform</p>
-            </div>
-          </div>
+          
         </section>
 
         {/* FAQ Content */}
