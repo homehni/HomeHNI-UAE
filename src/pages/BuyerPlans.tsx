@@ -112,18 +112,7 @@ const BuyerPlans = () => {
           <p className="text-lg md:text-xl mb-6 max-w-3xl mx-auto">
             All plans are currently FREE for a limited time. Get expert assistance and find your dream home without paying brokerage!
           </p>
-          <div className="mb-6">
-            <p className="text-lg mb-2">For assistance call us at:</p>
-            <a href="tel:+918905552444" className="text-2xl font-bold hover:underline text-yellow-400">
-              +91-89-055-524-44
-            </a>
-          </div>
-          <Link 
-            to="/owner-plans" 
-            className="inline-block bg-white text-brand-red px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
-          >
-            Click here for Seller Plans
-          </Link>
+         
         </div>
       </section>
 
