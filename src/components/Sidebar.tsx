@@ -53,7 +53,7 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
     },
     { id: 'careers', label: 'Careers', hasSubmenu: false },
     { id: 'corporate-enquiry', label: 'Corporate Enquiry', hasSubmenu: false, onClick: () => { navigate('/corporate-enquiry'); onClose(); } },
-    { id: 'blog', label: 'Blog', hasSubmenu: false },
+    { id: 'blog', label: 'Blog', hasSubmenu: false, onClick: () => { navigate('/blog'); onClose(); } },
     { id: 'testimonials', label: 'Testimonials', hasSubmenu: false, onClick: () => { navigate('/testimonials'); onClose(); } },
     { id: 'grievance-redressal', label: 'Grievance Redressal', hasSubmenu: false, onClick: () => { navigate('/grievance-redressal'); onClose(); } },
     { id: 'report-problem', label: 'Report a Problem', hasSubmenu: false, onClick: () => { navigate('/report-problem'); onClose(); } },
