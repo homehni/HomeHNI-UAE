@@ -104,7 +104,7 @@ const OwnerPlans = () => {
       <Header />
       
       {/* Hero Section */}
-      <section className="bg-gradient-red-maroon text-white py-16 px-4">
+      <section className="gradient-red-maroon text-white py-16 px-4">
         <div className="max-w-6xl mx-auto text-center">
           <h1 className="text-3xl md:text-5xl font-bold mb-6">
             Get Tenants Quickly. Save up to ₹50,000 on Brokerage!
