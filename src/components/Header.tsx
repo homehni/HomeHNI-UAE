@@ -86,32 +86,48 @@ const Header = () => {
               </Select>
 
               {/* Desktop Navigation Links */}
-              <nav className="hidden lg:flex items-center space-x-6">
-                <MegaMenu isScrolled={isScrolled} />
-                <a href="#" className={`hover:opacity-80 transition-colors duration-500 text-sm font-medium ${
-                  isScrolled ? 'text-gray-800' : 'text-white'
-                }`}>
-                  For Tenants
-                </a>
-                <a href="#" className={`hover:opacity-80 transition-colors duration-500 text-sm font-medium ${
-                  isScrolled ? 'text-gray-800' : 'text-white'
-                }`}>
-                  For Owners
-                </a>
-                <a href="#" className={`hover:opacity-80 transition-colors duration-500 text-sm font-medium ${
-                  isScrolled ? 'text-gray-800' : 'text-white'
-                }`}>
-                  For Dealers / Builders
-                </a>
-                <button 
-                  onClick={handleLegalServicesClick}
-                  className={`hover:opacity-80 transition-colors duration-500 text-sm font-medium ${
-                    isScrolled ? 'text-gray-800' : 'text-white'
-                  }`}>
-                  Legal Services
-                </button>
-                
-              </nav>
+            <nav className="hidden lg:flex items-center space-x-6">
+  <MegaMenu isScrolled={isScrolled} />
+  
+  <a href="#" className={`hover:opacity-80 transition-colors duration-500 text-sm font-medium ${
+    isScrolled ? 'text-gray-800' : 'text-white'
+  }`}>
+    For Tenants
+  </a>
+  
+  <a href="#" className={`hover:opacity-80 transition-colors duration-500 text-sm font-medium ${
+    isScrolled ? 'text-gray-800' : 'text-white'
+  }`}>
+    For Owners
+  </a>
+  
+  <a href="#" className={`hover:opacity-80 transition-colors duration-500 text-sm font-medium ${
+    isScrolled ? 'text-gray-800' : 'text-white'
+  }`}>
+    For Dealers / Builders
+  </a>
+  
+  <button 
+    onClick={handleLegalServicesClick}
+    className={`hover:opacity-80 transition-colors duration-500 text-sm font-medium ${
+      isScrolled ? 'text-gray-800' : 'text-white'
+    }`}>
+    Legal Services
+  </button>
+
+  <a href="#" className={`hover:opacity-80 transition-colors duration-500 text-sm font-medium ${
+    isScrolled ? 'text-gray-800' : 'text-white'
+  }`}>
+    Handover Services
+  </a>
+
+  <a href="#" className={`hover:opacity-80 transition-colors duration-500 text-sm font-medium ${
+    isScrolled ? 'text-gray-800' : 'text-white'
+  }`}>
+    Property Management
+  </a>
+</nav>
+
             </div>
 
             {/* Right section - Auth, Post Property and Icons */}
