@@ -49,7 +49,7 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
       id: 'commercial-plans', 
       label: 'Commercial Plans', 
       hasSubmenu: true,
-      submenu: ['Tenants Plans','Owner Pland', 'Buyer Plans', 'Seller Plans']
+      submenu: ['Tenants Plans','Owner Plans', 'Buyer Plans', 'Seller Plans']
     },
     { id: 'careers', label: 'Careers', hasSubmenu: false },
     { id: 'corporate-enquiry', label: 'Corporate Enquiry', hasSubmenu: false, onClick: () => { navigate('/corporate-enquiry'); onClose(); } },
