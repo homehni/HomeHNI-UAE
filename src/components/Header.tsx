@@ -110,13 +110,7 @@ const Header = () => {
                   }`}>
                   Legal Services
                 </button>
-                <button 
-                  onClick={handleAboutUsClick}
-                  className={`hover:opacity-80 transition-colors duration-500 text-sm font-medium ${
-                    isScrolled ? 'text-gray-800' : 'text-white'
-                  }`}>
-                  About Us
-                </button>
+                
               </nav>
             </div>
 
@@ -124,30 +118,7 @@ const Header = () => {
             <div className="flex items-center space-x-2 sm:space-x-4">
               {/* Auth Buttons - Desktop only */}
               <div className="hidden lg:flex items-center space-x-2">
-                <Button 
-                  variant="ghost" 
-                  size="sm"
-                  className={`font-medium px-3 py-2 text-xs sm:text-sm transition-all duration-500 ${
-                    isScrolled 
-                      ? 'text-gray-800 hover:bg-gray-100' 
-                      : 'text-white hover:bg-white/10'
-                  }`}
-                >
-                  <UserPlus size={16} className="mr-1" />
-                  Sign Up
-                </Button>
-                <Button 
-                  variant="ghost" 
-                  size="sm"
-                  className={`font-medium px-3 py-2 text-xs sm:text-sm transition-all duration-500 ${
-                    isScrolled 
-                      ? 'text-gray-800 hover:bg-gray-100' 
-                      : 'text-white hover:bg-white/10'
-                  }`}
-                >
-                  <LogIn size={16} className="mr-1" />
-                  Login
-                </Button>
+                
               </div>
 
               {/* Post Property Button - Responsive sizing */}
