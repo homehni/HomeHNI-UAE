@@ -132,20 +132,22 @@ const Blog = () => {
       <Header />
       <Marquee />
       
-      {/* Hero Section */}
-      <section className="bg-gradient-to-r from-primary/10 to-primary/5 py-16">
-        <div className="container mx-auto px-4 text-center">
-          <div className="max-w-3xl mx-auto">
-            <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
-              Real Estate Insights & Tips
-            </h1>
-            <p className="text-lg text-muted-foreground mb-8">
-              Stay updated with the latest trends, tips, and insights from the real estate world. 
-              Expert advice to help you make informed property decisions.
-            </p>
+      {/* Hero Section - Only show on first page */}
+      {currentPage === 1 && (
+        <section className="bg-gradient-to-r from-primary/10 to-primary/5 py-16">
+          <div className="container mx-auto px-4">
+            <div className="text-center max-w-3xl mx-auto">
+              <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
+                Real Estate Insights & Tips
+              </h1>
+              <p className="text-lg text-muted-foreground mb-8">
+                Stay updated with the latest trends, tips, and insights from the real estate world. 
+                Expert advice to help you make informed property decisions.
+              </p>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* Blog Posts Grid */}
       <section className="py-16">
