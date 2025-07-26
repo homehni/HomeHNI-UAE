@@ -26,6 +26,7 @@ import LegalServices from "./pages/LegalServices";
 import RobotsTxt from "./pages/RobotsTxt";
 import SitemapXml from "./pages/SitemapXml";
 import OwnerPlans from "./pages/OwnerPlans";
+import BuyerPlans from "./pages/BuyerPlans";
 import NotFound from "./pages/NotFound";
 import ScrollToTop from "./components/ScrollToTop";
 
@@ -59,6 +60,7 @@ const App: React.FC = () => {
             <Route path="/rent-receipts" element={<RentReceipts />} />
             <Route path="/legal-services" element={<LegalServices />} />
             <Route path="/owner-plans" element={<OwnerPlans />} />
+            <Route path="/buyer-plans" element={<BuyerPlans />} />
             <Route path="/robots.txt" element={<RobotsTxt />} />
             <Route path="/sitemap.xml" element={<SitemapXml />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
