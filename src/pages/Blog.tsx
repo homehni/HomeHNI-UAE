@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import Marquee from '@/components/Marquee';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -129,11 +130,12 @@ const Blog = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
+      <Marquee />
       
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-primary/10 to-primary/5 py-16">
-        <div className="container mx-auto px-4">
-          <div className="text-center max-w-3xl mx-auto">
+        <div className="container mx-auto px-4 text-center">
+          <div className="max-w-3xl mx-auto">
             <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
               Real Estate Insights & Tips
             </h1>
@@ -197,16 +199,17 @@ const Blog = () => {
           {/* Pagination */}
           <Pagination className="justify-center">
             <PaginationContent>
-              <PaginationItem>
-                <PaginationPrevious 
-                  href="#"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    if (currentPage > 1) handlePageChange(currentPage - 1);
-                  }}
-                  className={currentPage === 1 ? "pointer-events-none opacity-50" : ""}
-                />
-              </PaginationItem>
+              {currentPage > 1 && (
+                <PaginationItem>
+                  <PaginationPrevious 
+                    href="#"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handlePageChange(currentPage - 1);
+                    }}
+                  />
+                </PaginationItem>
+              )}
               
               {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => {
                 if (
@@ -241,16 +244,17 @@ const Blog = () => {
                 return null;
               })}
               
-              <PaginationItem>
-                <PaginationNext 
-                  href="#"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    if (currentPage < totalPages) handlePageChange(currentPage + 1);
-                  }}
-                  className={currentPage === totalPages ? "pointer-events-none opacity-50" : ""}
-                />
-              </PaginationItem>
+              {currentPage < totalPages && (
+                <PaginationItem>
+                  <PaginationNext 
+                    href="#"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handlePageChange(currentPage + 1);
+                    }}
+                  />
+                </PaginationItem>
+              )}
             </PaginationContent>
           </Pagination>
         </div>
