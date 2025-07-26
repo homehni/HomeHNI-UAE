@@ -1,0 +1,372 @@
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
+import { 
+  Search, 
+  FileText, 
+  Truck, 
+  Paintbrush, 
+  Sparkles, 
+  Snowflake,
+  Building,
+  Users,
+  Home,
+  PhoneCall,
+  Mail,
+  MapPin,
+  CheckCircle
+} from 'lucide-react';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
+import { useToast } from '@/hooks/use-toast';
+
+const CorporateEnquiry = () => {
+  const [formData, setFormData] = useState({
+    name: '',
+    company: '',
+    phone: '',
+    email: '',
+    city: '',
+    employees: ''
+  });
+  const { toast } = useToast();
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setFormData(prev => ({
+      ...prev,
+      [e.target.name]: e.target.value
+    }));
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    toast({
+      title: "Enquiry Submitted Successfully",
+      description: "Our team will reach out with a custom offer plan for your company.",
+    });
+    // Reset form
+    setFormData({
+      name: '',
+      company: '',
+      phone: '',
+      email: '',
+      city: '',
+      employees: ''
+    });
+  };
+
+  const services = [
+    { icon: Search, title: "House Search", description: "Expert assistance in finding the perfect home" },
+    { icon: FileText, title: "Rental Agreement", description: "Professional drafting and legal compliance" },
+    { icon: Truck, title: "Packers & Movers", description: "Hassle-free relocation services" },
+    { icon: Paintbrush, title: "Home Painting", description: "Professional painting solutions" },
+    { icon: Sparkles, title: "Home Cleaning", description: "Comprehensive cleaning services" },
+    { icon: Snowflake, title: "AC Servicing", description: "Professional maintenance and repairs" }
+  ];
+
+  const workingSteps = [
+    {
+      step: "1",
+      title: "Sign Up with Us",
+      description: "Once onboarded, we'll create exclusive, customized offers tailored for your company."
+    },
+    {
+      step: "2", 
+      title: "Employees Choose Their Service",
+      description: "Through our website or app, employees can select and book services with ease."
+    },
+    {
+      step: "3",
+      title: "Unlock Offers",
+      description: "Employees simply fill in basic details and unlock exclusive discounts."
+    }
+  ];
+
+  const benefits = [
+    {
+      icon: Truck,
+      title: "Packers & Movers",
+      description: "Hassle-free relocation and on-time delivery"
+    },
+    {
+      icon: Home,
+      title: "House-hunting Assistance", 
+      description: "Buy, Sell, or Rent properties with expert help"
+    },
+    {
+      icon: Sparkles,
+      title: "Home Services",
+      description: "Cleaning, Painting, AC Services and more — on demand"
+    }
+  ];
+
+  return (
+    <div className="min-h-screen bg-background">
+      <Header />
+      
+      {/* Hero Section */}
+      <section className="pt-24 pb-16 px-4">
+        <div className="max-w-6xl mx-auto text-center">
+          <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
+            Comprehensive Corporate Solutions
+          </h1>
+          <p className="text-lg text-muted-foreground mb-8 max-w-3xl mx-auto">
+            Partner with us to receive the best prices on a wide range of professional real estate and home services — exclusively for your employees.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button size="lg" className="bg-brand-red hover:bg-brand-red-dark" onClick={() => document.getElementById('form')?.scrollIntoView()}>
+              Sign Up for Your Company
+            </Button>
+            <Button variant="outline" size="lg" onClick={() => document.getElementById('services')?.scrollIntoView()}>
+              Know More
+            </Button>
+          </div>
+        </div>
+      </section>
+
+      {/* Trusted By Section */}
+      <section className="py-16 bg-muted/30">
+        <div className="max-w-6xl mx-auto px-4 text-center">
+          <h2 className="text-2xl font-semibold text-foreground mb-8">Trusted by Leading Companies</h2>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            {[1, 2, 3, 4].map((i) => (
+              <div key={i} className="bg-card p-6 rounded-lg border border-border">
+                <div className="h-12 bg-muted rounded flex items-center justify-center">
+                  <Building className="h-6 w-6 text-muted-foreground" />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Solutions Section */}
+      <section className="py-16 px-4" id="services">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-3xl font-bold text-center text-foreground mb-12">
+            Explore Our Solutions for Your:
+          </h2>
+          
+          <div className="grid md:grid-cols-2 gap-12 mb-16">
+            {/* Employees */}
+            <div className="bg-card p-8 rounded-lg border border-border">
+              <div className="flex items-center mb-6">
+                <Users className="h-8 w-8 text-brand-red mr-3" />
+                <h3 className="text-2xl font-bold text-foreground">Employees</h3>
+              </div>
+              <ul className="space-y-3">
+                <li className="flex items-center text-muted-foreground">
+                  <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
+                  House Search Support
+                </li>
+                <li className="flex items-center text-muted-foreground">
+                  <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
+                  Rental Agreements
+                </li>
+                <li className="flex items-center text-muted-foreground">
+                  <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
+                  Packers and Movers
+                </li>
+                <li className="flex items-center text-muted-foreground">
+                  <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
+                  Home Painting
+                </li>
+                <li className="flex items-center text-muted-foreground">
+                  <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
+                  Home Cleaning
+                </li>
+                <li className="flex items-center text-muted-foreground">
+                  <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
+                  AC Servicing
+                </li>
+              </ul>
+            </div>
+
+            {/* Office Space */}
+            <div className="bg-card p-8 rounded-lg border border-border">
+              <div className="flex items-center mb-6">
+                <Building className="h-8 w-8 text-brand-red mr-3" />
+                <h3 className="text-2xl font-bold text-foreground">Office Space</h3>
+              </div>
+              <ul className="space-y-3">
+                <li className="flex items-center text-muted-foreground">
+                  <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
+                  Assistance with leasing
+                </li>
+                <li className="flex items-center text-muted-foreground">
+                  <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
+                  Customized relocation plans
+                </li>
+                <li className="flex items-center text-muted-foreground">
+                  <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
+                  Office shifting & setup
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Services Grid */}
+      <section className="py-16 bg-muted/30">
+        <div className="max-w-6xl mx-auto px-4">
+          <h2 className="text-3xl font-bold text-center text-foreground mb-12">
+            Services We Offer to Your Employees
+          </h2>
+          <div className="grid md:grid-cols-3 gap-8">
+            {services.map((service, index) => (
+              <div key={index} className="bg-card p-6 rounded-lg border border-border text-center">
+                <service.icon className="h-12 w-12 text-brand-red mx-auto mb-4" />
+                <h3 className="text-lg font-semibold text-foreground mb-2">{service.title}</h3>
+                <p className="text-muted-foreground">{service.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* How It Works */}
+      <section className="py-16 px-4">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-3xl font-bold text-center text-foreground mb-12">How It Works</h2>
+          <div className="grid md:grid-cols-3 gap-8">
+            {workingSteps.map((step, index) => (
+              <div key={index} className="text-center">
+                <div className="w-16 h-16 bg-brand-red text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">
+                  {step.step}
+                </div>
+                <h3 className="text-xl font-semibold text-foreground mb-3">{step.title}</h3>
+                <p className="text-muted-foreground">{step.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Why Use Our Corporate Solutions */}
+      <section className="py-16 bg-muted/30">
+        <div className="max-w-6xl mx-auto px-4">
+          <h2 className="text-3xl font-bold text-center text-foreground mb-12">
+            Why Use Our Corporate Solutions?
+          </h2>
+          <div className="grid md:grid-cols-3 gap-8">
+            {benefits.map((benefit, index) => (
+              <div key={index} className="bg-card p-6 rounded-lg border border-border">
+                <benefit.icon className="h-10 w-10 text-brand-red mb-4" />
+                <h3 className="text-lg font-semibold text-foreground mb-2">{benefit.title}</h3>
+                <p className="text-muted-foreground">{benefit.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Final CTA & Form */}
+      <section className="py-16 px-4" id="form">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-foreground mb-4">
+              Loved What You Saw? Let's Get Started!
+            </h2>
+          </div>
+          
+          <div className="bg-card p-8 rounded-lg border border-border">
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div className="grid md:grid-cols-2 gap-6">
+                <div>
+                  <Label htmlFor="name">Your Name *</Label>
+                  <Input
+                    id="name"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleInputChange}
+                    required
+                    className="mt-1"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="company">Company Name *</Label>
+                  <Input
+                    id="company"
+                    name="company"
+                    value={formData.company}
+                    onChange={handleInputChange}
+                    required
+                    className="mt-1"
+                  />
+                </div>
+              </div>
+              
+              <div className="grid md:grid-cols-2 gap-6">
+                <div>
+                  <Label htmlFor="phone">Phone Number *</Label>
+                  <Input
+                    id="phone"
+                    name="phone"
+                    type="tel"
+                    value={formData.phone}
+                    onChange={handleInputChange}
+                    required
+                    className="mt-1"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="email">Official Email ID *</Label>
+                  <Input
+                    id="email"
+                    name="email"
+                    type="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    required
+                    className="mt-1"
+                  />
+                </div>
+              </div>
+              
+              <div className="grid md:grid-cols-2 gap-6">
+                <div>
+                  <Label htmlFor="city">City</Label>
+                  <Input
+                    id="city"
+                    name="city"
+                    value={formData.city}
+                    onChange={handleInputChange}
+                    className="mt-1"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="employees">Number of Employees</Label>
+                  <Input
+                    id="employees"
+                    name="employees"
+                    type="number"
+                    value={formData.employees}
+                    onChange={handleInputChange}
+                    className="mt-1"
+                  />
+                </div>
+              </div>
+              
+              <div className="text-center">
+                <Button type="submit" size="lg" className="bg-brand-red hover:bg-brand-red-dark">
+                  Connect With Us
+                </Button>
+              </div>
+            </form>
+            
+            <p className="text-center text-muted-foreground mt-6">
+              Once submitted, our team will reach out with a custom offer plan for your company.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <Footer />
+    </div>
+  );
+};
+
+export default CorporateEnquiry;
