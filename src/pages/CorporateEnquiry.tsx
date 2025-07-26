@@ -19,6 +19,7 @@ import {
   CheckCircle
 } from 'lucide-react';
 import Header from '@/components/Header';
+import Marquee from '@/components/Marquee';
 import Footer from '@/components/Footer';
 import { useToast } from '@/hooks/use-toast';
 
@@ -104,6 +105,7 @@ const CorporateEnquiry = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <Marquee />
       <Header />
       
       {/* Hero Section */}
