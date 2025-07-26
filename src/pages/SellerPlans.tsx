@@ -115,24 +115,11 @@ const SellerPlans: React.FC = () => {
           <p className="text-lg md:text-xl text-white/90 mb-8 max-w-3xl mx-auto">
             All plans are FREE for a limited time. Get verified buyers and sell your property faster — without brokerage!
           </p>
-          <Link 
-            to="/buyer-plans" 
-            className="inline-flex items-center text-white underline hover:text-white/80 transition-colors text-lg"
-          >
-            Click here for Buyer Plans
-          </Link>
+         
         </div>
       </section>
 
-      {/* Support Info */}
-      <div className="bg-secondary py-4">
-        <div className="container mx-auto px-4 text-center">
-          <div className="flex items-center justify-center gap-2 text-secondary-foreground">
-            <Phone className="w-5 h-5" />
-            <span className="font-medium">For assistance call us at: +91-83-060-037-65</span>
-          </div>
-        </div>
-      </div>
+
 
       {/* Plans Section */}
       <section className="py-16 bg-background">
