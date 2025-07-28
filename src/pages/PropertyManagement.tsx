@@ -111,7 +111,7 @@ const PropertyManagement = () => {
       <Header />
       
      {/* Hero Section */}
-<section className="relative pt-32 pb-16 px-4 bg-gradient-to-br from-brand-red to-brand-red-dark text-white overflow-hidden">
+<section className="relative pt-32 pb-16 px-4 bg-red-700 text-white overflow-hidden">
   <div className="absolute inset-0 bg-black/20"></div>
   <div className="relative z-10 container mx-auto text-center">
     <div className="max-w-4xl mx-auto">
