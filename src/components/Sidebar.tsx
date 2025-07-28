@@ -69,7 +69,7 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
     {
       label: 'Commercial Buyer Plans',
       onClick: () => {
-        navigate('/commercial-buyer-plans');
+        navigate('/commercial-buyer-plan');
         onClose();
       }
     },
