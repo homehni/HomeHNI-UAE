@@ -91,7 +91,7 @@ const Header = () => {
   
   
   
-  <a href="#" className={`hover:opacity-80 transition-colors duration-500 text-sm font-medium ${
+  <a href="#" className={`hover:opacity-80 transition-colors duration-500 text-[15px] font-medium ${
     isScrolled ? 'text-gray-800' : 'text-white'
   }`}>
     For Owners
@@ -105,19 +105,19 @@ const Header = () => {
   
   <button 
     onClick={handleLegalServicesClick}
-    className={`hover:opacity-80 transition-colors duration-500 text-sm font-medium ${
+    className={`hover:opacity-80 transition-colors duration-500 text-[15px] font-medium ${
       isScrolled ? 'text-gray-800' : 'text-white'
     }`}>
     Legal Services
   </button>
 
-  <a href="/handover-services" className={`hover:opacity-80 transition-colors duration-500 text-sm font-medium ${
+  <a href="/handover-services" className={`hover:opacity-80 transition-colors duration-500 text-[15px] font-medium ${
     isScrolled ? 'text-gray-800' : 'text-white'
   }`}>
     Handover Services
   </a>
 
-  <a href="/property-management" className={`hover:opacity-80 transition-colors duration-500 text-sm font-medium ${
+  <a href="/property-management" className={`hover:opacity-80 transition-colors duration-500 text-[15px] font-medium ${
     isScrolled ? 'text-gray-800' : 'text-white'
   }`}>
     Property Management
