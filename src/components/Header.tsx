@@ -89,11 +89,7 @@ const Header = () => {
             <nav className="hidden lg:flex items-center space-x-6">
   <MegaMenu isScrolled={isScrolled} />
   
-  <a href="#" className={`hover:opacity-80 transition-colors duration-500 text-sm font-medium ${
-    isScrolled ? 'text-gray-800' : 'text-white'
-  }`}>
-    For Tenants
-  </a>
+  
   
   <a href="#" className={`hover:opacity-80 transition-colors duration-500 text-sm font-medium ${
     isScrolled ? 'text-gray-800' : 'text-white'
