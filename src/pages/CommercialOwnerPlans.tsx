@@ -158,10 +158,15 @@ const CommercialOwnerPlans = () => {
               <Button size="lg" variant="secondary" className="text-lg px-8 py-3">
                 View Plans
               </Button>
-              <Button size="lg" variant="outline" className="text-lg px-8 py-3 border-white hover:bg-white hover:text-brand-red">
-                <Phone className="w-5 h-5 mr-2" />
-                Call +91-89-059-998-88
-              </Button>
+              <Button
+  size="lg"
+  variant="outline"
+  className="text-lg px-8 py-3 border-white text-white hover:bg-white hover:text-brand-red hover:border-brand-red group"
+>
+  <Phone className="w-5 h-5 mr-2 text-white group-hover:text-brand-red" />
+  Call +91-89-059-998-88
+</Button>
+
             </div>
           </div>
         </div>
