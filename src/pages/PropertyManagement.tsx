@@ -110,26 +110,27 @@ const PropertyManagement = () => {
       <Marquee />
       <Header />
       
-      {/* Hero Section */}
-      <section className="relative pt-32 pb-16 px-4 bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 text-white overflow-hidden">
-        <div className="absolute inset-0 bg-black/20"></div>
-        <div className="relative z-10 container mx-auto text-center">
-          <div className="max-w-4xl mx-auto">
-            <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
-              🏢 Premium Property Management for HNIs & NRIs
-            </h1>
-            <p className="text-xl md:text-2xl mb-8 text-blue-100 leading-relaxed">
-              Get complete peace of mind with our expert-managed, tenant-ready, and fully maintained property solutions. Ideal for NRIs and investors.
-            </p>
-            <Button 
-              size="lg" 
-              className="bg-white text-blue-600 hover:bg-blue-50 font-semibold px-8 py-3 text-lg rounded-lg shadow-lg"
-            >
-              Talk to a Property Manager Today
-            </Button>
-          </div>
-        </div>
-      </section>
+     {/* Hero Section */}
+<section className="relative pt-32 pb-16 px-4 bg-gradient-to-br from-brand-red to-brand-red-dark text-white overflow-hidden">
+  <div className="absolute inset-0 bg-black/20"></div>
+  <div className="relative z-10 container mx-auto text-center">
+    <div className="max-w-4xl mx-auto">
+      <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
+        🏢 Premium Property Management for HNIs & NRIs
+      </h1>
+      <p className="text-xl md:text-2xl mb-8 text-red-100 leading-relaxed">
+        Get complete peace of mind with our expert-managed, tenant-ready, and fully maintained property solutions. Ideal for NRIs and investors.
+      </p>
+      <Button 
+        size="lg" 
+        className="bg-white text-brand-red hover:bg-gray-100 font-semibold px-8 py-3 text-lg rounded-lg shadow-lg"
+      >
+        Talk to a Property Manager Today
+      </Button>
+    </div>
+  </div>
+</section>
+
 
       {/* What's Included Section */}
       <section className="py-16 px-4 bg-background">
@@ -219,8 +220,8 @@ const PropertyManagement = () => {
                 <CardContent className="p-6">
                   <div className="flex items-start space-x-4">
                     <div className="flex-shrink-0">
-                      <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-                        <benefit.icon className="w-6 h-6 text-green-600" />
+                      <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
+                        <benefit.icon className="w-6 h-6 text-red-600" />
                       </div>
                     </div>
                     <div>
