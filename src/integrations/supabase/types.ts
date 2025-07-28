@@ -14,7 +14,155 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      leads: {
+        Row: {
+          created_at: string
+          id: string
+          interested_user_email: string
+          interested_user_name: string
+          interested_user_phone: string | null
+          message: string | null
+          property_id: string
+          property_owner_id: string
+          status: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          interested_user_email: string
+          interested_user_name: string
+          interested_user_phone?: string | null
+          message?: string | null
+          property_id: string
+          property_owner_id: string
+          status?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          interested_user_email?: string
+          interested_user_name?: string
+          interested_user_phone?: string | null
+          message?: string | null
+          property_id?: string
+          property_owner_id?: string
+          status?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "leads_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      properties: {
+        Row: {
+          availability_date: string | null
+          availability_type: string
+          balconies: number | null
+          bathrooms: number | null
+          bhk_type: string | null
+          carpet_area: number | null
+          city: string
+          created_at: string
+          description: string | null
+          expected_price: number
+          floor_no: number | null
+          furnishing: string | null
+          id: string
+          images: string[] | null
+          landmarks: string | null
+          listing_type: string
+          locality: string
+          maintenance_charges: number | null
+          pincode: string
+          price_negotiable: boolean | null
+          property_type: string
+          security_deposit: number | null
+          state: string
+          status: string | null
+          street_address: string | null
+          super_area: number
+          title: string
+          total_floors: number | null
+          updated_at: string
+          user_id: string
+          videos: string[] | null
+        }
+        Insert: {
+          availability_date?: string | null
+          availability_type: string
+          balconies?: number | null
+          bathrooms?: number | null
+          bhk_type?: string | null
+          carpet_area?: number | null
+          city: string
+          created_at?: string
+          description?: string | null
+          expected_price: number
+          floor_no?: number | null
+          furnishing?: string | null
+          id?: string
+          images?: string[] | null
+          landmarks?: string | null
+          listing_type: string
+          locality: string
+          maintenance_charges?: number | null
+          pincode: string
+          price_negotiable?: boolean | null
+          property_type: string
+          security_deposit?: number | null
+          state: string
+          status?: string | null
+          street_address?: string | null
+          super_area: number
+          title: string
+          total_floors?: number | null
+          updated_at?: string
+          user_id: string
+          videos?: string[] | null
+        }
+        Update: {
+          availability_date?: string | null
+          availability_type?: string
+          balconies?: number | null
+          bathrooms?: number | null
+          bhk_type?: string | null
+          carpet_area?: number | null
+          city?: string
+          created_at?: string
+          description?: string | null
+          expected_price?: number
+          floor_no?: number | null
+          furnishing?: string | null
+          id?: string
+          images?: string[] | null
+          landmarks?: string | null
+          listing_type?: string
+          locality?: string
+          maintenance_charges?: number | null
+          pincode?: string
+          price_negotiable?: boolean | null
+          property_type?: string
+          security_deposit?: number | null
+          state?: string
+          status?: string | null
+          street_address?: string | null
+          super_area?: number
+          title?: string
+          total_floors?: number | null
+          updated_at?: string
+          user_id?: string
+          videos?: string[] | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
