@@ -149,3 +149,45 @@ All colors MUST be HSL.
 .gradient-light {
   background: linear-gradient(135deg, #FEF2F2 0%, #FFFFFF 100%);
 }
+
+/* Logo Performance Optimizations */
+.logo-optimized {
+  /* Optimize image rendering */
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+  
+  /* Prevent layout shifts */
+  aspect-ratio: 1 / 1;
+  
+  /* GPU acceleration for smooth transitions */
+  transform: translateZ(0);
+  will-change: transform, opacity;
+}
+
+.logo-preload {
+  /* Critical logo styling for above-the-fold content */
+  display: block;
+  content-visibility: auto;
+}
+
+/* Responsive logo containers */
+@media (max-width: 640px) {
+  .logo-responsive {
+    max-width: 32px;
+    max-height: 32px;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+  .logo-responsive {
+    max-width: 40px;
+    max-height: 40px;
+  }
+}
+
+@media (min-width: 1025px) {
+  .logo-responsive {
+    max-width: 48px;
+    max-height: 48px;
+  }
+}
