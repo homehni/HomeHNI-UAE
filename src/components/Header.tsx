@@ -3,11 +3,13 @@ import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { ChevronDown, HelpCircle, Settings, Menu, X, UserPlus, LogIn } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useAuth } from '@/contexts/AuthContext';
 import Logo from './Logo';
 import Sidebar from './Sidebar';
 import MegaMenu from './MegaMenu';
 import LegalServicesForm from './LegalServicesForm';
 const Header = () => {
+  const { user } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -41,6 +43,14 @@ const Header = () => {
   };
   const handleLogoClick = () => {
     navigate('/');
+  };
+
+  const handlePostPropertyClick = () => {
+    if (user) {
+      navigate('/post-property');
+    } else {
+      navigate('/auth');
+    }
   };
   return <>
       <header className={`fixed top-8 left-0 right-0 z-50 transition-all duration-500 ${isScrolled ? 'bg-white/95 backdrop-blur-sm shadow-md' : 'bg-gradient-to-r from-red-800 to-red-700'}`}>
@@ -104,7 +114,12 @@ const Header = () => {
               </div>
 
               {/* Post Property Button - Responsive sizing */}
-              <Button variant="outline" size="sm" className={`font-medium px-2 sm:px-4 py-2 text-xs sm:text-sm transition-all duration-500 ${isScrolled ? 'bg-white text-brand-red border-gray-300 hover:bg-gray-50' : 'bg-white text-brand-red border-white/50 hover:bg-white/90'}`}>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={handlePostPropertyClick}
+                className={`font-medium px-2 sm:px-4 py-2 text-xs sm:text-sm transition-all duration-500 ${isScrolled ? 'bg-white text-brand-red border-gray-300 hover:bg-gray-50' : 'bg-white text-brand-red border-white/50 hover:bg-white/90'}`}
+              >
                 <span className="hidden sm:inline">Post property</span>
                 <span className="sm:hidden">Post</span>
                 <span className="ml-1 bg-green-500 text-white text-xs px-1.5 py-0.5 rounded">Free</span>

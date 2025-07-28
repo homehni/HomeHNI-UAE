@@ -5,6 +5,8 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { AuthProvider } from '@/contexts/AuthContext';
+import { ProtectedRoute } from '@/components/ProtectedRoute';
 import Index from "./pages/Index";
 import AboutUs from "./pages/AboutUs";
 import TermsAndConditions from "./pages/TermsAndConditions";
@@ -35,6 +37,11 @@ import CommercialOwnerPlans from "./pages/CommercialOwnerPlans";
 import CommercialBuyerPlan from "./pages/CommercialBuyerPlan";
 import CommercialSellerPlans from "./pages/CommercialSellerPlans";
 import Blog from "./pages/Blog";
+import { Auth } from "./pages/Auth";
+import { VerifyEmail } from "./pages/VerifyEmail";
+import { PostProperty } from "./pages/PostProperty";
+import { PropertyForm } from "./pages/PropertyForm";
+import { Dashboard } from "./pages/Dashboard";
 import NotFound from "./pages/NotFound";
 import ScrollToTop from "./components/ScrollToTop";
 
@@ -47,8 +54,9 @@ const App: React.FC = () => {
         <Toaster />
         <Sonner />
         <BrowserRouter>
-          <ScrollToTop />
-          <Routes>
+          <AuthProvider>
+            <ScrollToTop />
+            <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/about-us" element={<AboutUs />} />
             <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
@@ -77,11 +85,34 @@ const App: React.FC = () => {
           <Route path="/commercial-seller-plans" element={<CommercialSellerPlans />} />
             <Route path="/corporate-enquiry" element={<CorporateEnquiry />} />
             <Route path="/blog" element={<Blog />} />
+            
+            {/* Authentication Routes */}
+            <Route path="/auth" element={<Auth />} />
+            <Route path="/verify-email" element={<VerifyEmail />} />
+            
+            {/* Protected Routes */}
+            <Route path="/post-property" element={
+              <ProtectedRoute requireEmailVerified>
+                <PostProperty />
+              </ProtectedRoute>
+            } />
+            <Route path="/post-property/form" element={
+              <ProtectedRoute requireEmailVerified>
+                <PropertyForm />
+              </ProtectedRoute>
+            } />
+            <Route path="/dashboard" element={
+              <ProtectedRoute requireEmailVerified>
+                <Dashboard />
+              </ProtectedRoute>
+            } />
+            
             <Route path="/robots.txt" element={<RobotsTxt />} />
             <Route path="/sitemap.xml" element={<SitemapXml />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
-          </Routes>
+            </Routes>
+          </AuthProvider>
         </BrowserRouter>
       </TooltipProvider>
     </QueryClientProvider>
