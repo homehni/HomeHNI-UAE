@@ -110,9 +110,9 @@ const PropertyManagement = () => {
       <Marquee />
       <Header />
       
-     {/* Hero Section */}
+{/* Hero Section */}
 <section className="relative pt-32 pb-16 px-4 bg-red-700 text-white overflow-hidden">
-  <div className="absolute inset-0 bg-black/20"></div>
+  <div className="absolute inset-0 bg-black/10"></div> {/* lighter overlay */}
   <div className="relative z-10 container mx-auto text-center">
     <div className="max-w-4xl mx-auto">
       <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
@@ -123,13 +123,14 @@ const PropertyManagement = () => {
       </p>
       <Button 
         size="lg" 
-        className="bg-white text-brand-red hover:bg-gray-100 font-semibold px-8 py-3 text-lg rounded-lg shadow-lg"
+        className="bg-white text-red-700 hover:bg-gray-100 font-semibold px-8 py-3 text-lg rounded-lg shadow-lg"
       >
         Talk to a Property Manager Today
       </Button>
     </div>
   </div>
 </section>
+
 
 
       {/* What's Included Section */}
