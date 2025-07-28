@@ -47,12 +47,42 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
     { id: 'owner-plans', label: 'Owner Plans', hasSubmenu: false, onClick: () => { navigate('/owner-plans'); onClose(); } },
     { id: 'buyer-plans', label: 'Buyer Plans', hasSubmenu: false, onClick: () => { navigate('/buyer-plans'); onClose(); } },
     { id: 'seller-plans', label: 'Seller Plans', hasSubmenu: false, onClick: () => { navigate('/seller-plans'); onClose(); } },
-    { 
-      id: 'commercial-plans', 
-      label: 'Commercial Plans', 
-      hasSubmenu: true,
-      submenu: ['Tenants Plans','Owner Plans', 'Buyer Plans', 'Seller Plans']
+    {
+  id: 'commercial-plans',
+  label: 'Commercial Plans',
+  hasSubmenu: true,
+  submenu: [
+    {
+      label: 'Commercial Tenant Plans',
+      onClick: () => {
+        navigate('/commercial-tenant-plans');
+        onClose();
+      }
     },
+    {
+      label: 'Commercial Owner Plans',
+      onClick: () => {
+        navigate('/commercial-owner-plans');
+        onClose();
+      }
+    },
+    {
+      label: 'Commercial Buyer Plans',
+      onClick: () => {
+        navigate('/commercial-buyer-plans');
+        onClose();
+      }
+    },
+    {
+      label: 'Commercial Seller Plans',
+      onClick: () => {
+        navigate('/commercial-seller-plans');
+        onClose();
+      }
+    }
+  ]
+}
+,
     { id: 'careers', label: 'Careers', hasSubmenu: false },
     { id: 'corporate-enquiry', label: 'Corporate Enquiry', hasSubmenu: false, onClick: () => { navigate('/corporate-enquiry'); onClose(); } },
     { id: 'blog', label: 'Blog', hasSubmenu: false, onClick: () => { navigate('/blog'); onClose(); } },
