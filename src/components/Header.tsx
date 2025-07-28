@@ -111,13 +111,13 @@ const Header = () => {
     Legal Services
   </button>
 
-  <a href="#" className={`hover:opacity-80 transition-colors duration-500 text-sm font-medium ${
+  <a href="/handover-services" className={`hover:opacity-80 transition-colors duration-500 text-sm font-medium ${
     isScrolled ? 'text-gray-800' : 'text-white'
   }`}>
     Handover Services
   </a>
 
-  <a href="#" className={`hover:opacity-80 transition-colors duration-500 text-sm font-medium ${
+  <a href="/property-management" className={`hover:opacity-80 transition-colors duration-500 text-sm font-medium ${
     isScrolled ? 'text-gray-800' : 'text-white'
   }`}>
     Property Management
