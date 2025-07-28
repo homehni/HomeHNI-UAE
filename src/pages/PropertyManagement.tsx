@@ -111,25 +111,27 @@ const PropertyManagement = () => {
       <Header />
       
 {/* Hero Section */}
-<section className="relative pt-32 pb-16 px-4 bg-red-700 text-white overflow-hidden">
-  <div className="absolute inset-0 bg-black/10"></div> {/* lighter overlay */}
+<section className="relative pt-32 pb-20 px-4 md:px-8 bg-red-700 text-white overflow-hidden">
+  <div className="absolute inset-0 bg-black/10 pointer-events-none"></div> {/* light overlay */}
+  
   <div className="relative z-10 container mx-auto text-center">
     <div className="max-w-4xl mx-auto">
       <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
         🏢 Premium Property Management for HNIs & NRIs
       </h1>
       <p className="text-xl md:text-2xl mb-8 text-red-100 leading-relaxed">
-        Get complete peace of mind with our expert-managed, tenant-ready, and fully maintained property solutions. Ideal for NRIs and investors.
+        Get complete peace of mind with our expert-managed, tenant-ready, and fully maintained property solutions — ideal for NRIs, landlords, and investors.
       </p>
       <Button 
         size="lg" 
-        className="bg-white text-red-700 hover:bg-gray-100 font-semibold px-8 py-3 text-lg rounded-lg shadow-lg"
+        className="bg-white text-red-700 hover:bg-gray-100 font-semibold px-8 py-3 text-lg rounded-xl shadow-lg transition duration-300"
       >
         Talk to a Property Manager Today
       </Button>
     </div>
   </div>
 </section>
+
 
 
 
