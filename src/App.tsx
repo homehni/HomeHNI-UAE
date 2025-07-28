@@ -30,6 +30,7 @@ import SitemapXml from "./pages/SitemapXml";
 import OwnerPlans from "./pages/OwnerPlans";
 import BuyerPlans from "./pages/BuyerPlans";
 import SellerPlans from "./pages/SellerPlans";
+import CommercialOwnerPlans from "./pages/CommercialOwnerPlans";
 import CorporateEnquiry from "./pages/CorporateEnquiry";
 import Blog from "./pages/Blog";
 import NotFound from "./pages/NotFound";
@@ -69,6 +70,7 @@ const App: React.FC = () => {
             <Route path="/owner-plans" element={<OwnerPlans />} />
             <Route path="/buyer-plans" element={<BuyerPlans />} />
             <Route path="/seller-plans" element={<SellerPlans />} />
+            <Route path="/commercial-owner-plans" element={<CommercialOwnerPlans />} />
             <Route path="/corporate-enquiry" element={<CorporateEnquiry />} />
             <Route path="/blog" element={<Blog />} />
             <Route path="/robots.txt" element={<RobotsTxt />} />
