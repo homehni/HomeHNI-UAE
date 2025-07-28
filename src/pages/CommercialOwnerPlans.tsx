@@ -167,6 +167,62 @@ const CommercialOwnerPlans = () => {
         </div>
       </section>
 
+
+{/* Pricing Plans Section */}
+<section className="py-16 bg-gray-50">
+  <div className="container mx-auto px-4">
+    <div className="max-w-7xl mx-auto">
+      {/* Free Notice Banner */}
+      <div className="mb-8 text-center">
+        <span className="inline-block bg-green-100 text-green-800 px-4 py-2 rounded-full text-sm font-medium">
+          🎉 All plans are currently free of cost! Pricing will be introduced soon.
+        </span>
+      </div>
+
+      <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
+        Choose Your Commercial Owner Plan
+      </h2>
+
+      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {plans.map((plan, index) => (
+          <Card key={index} className={`relative ${plan.popular ? 'border-brand-red shadow-lg scale-105' : ''}`}>
+            {plan.popular && (
+              <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
+                <span className="bg-brand-red text-white px-4 py-1 rounded-full text-sm font-medium">
+                  Most Popular
+                </span>
+              </div>
+            )}
+            <CardHeader className="text-center">
+              <CardTitle className="text-2xl font-bold">{plan.name}</CardTitle>
+              <CardDescription className="text-xl font-semibold text-green-600">
+                Free for now
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <ul className="space-y-3 mb-6">
+                {plan.features.map((feature, idx) => (
+                  <li key={idx} className="flex items-start gap-2">
+                    <CheckCircle className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" />
+                    <span className="text-sm">{feature}</span>
+                  </li>
+                ))}
+              </ul>
+              <Button 
+                className="w-full" 
+                variant={plan.popular ? "default" : "outline"}
+              >
+                Get Started for Free
+              </Button>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+
       {/* Key Benefits Section */}
       <section className="py-16 bg-secondary/30">
         <div className="container mx-auto px-4">
@@ -191,51 +247,7 @@ const CommercialOwnerPlans = () => {
         </div>
       </section>
 
-      {/* Pricing Plans Section */}
-      <section className="py-16">
-        <div className="container mx-auto px-4">
-          <div className="max-w-7xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
-              Choose Your Commercial Owner Plan
-            </h2>
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {plans.map((plan, index) => (
-                <Card key={index} className={`relative ${plan.popular ? 'border-brand-red shadow-lg scale-105' : ''}`}>
-                  {plan.popular && (
-                    <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                      <span className="bg-brand-red text-white px-4 py-1 rounded-full text-sm font-medium">
-                        Most Popular
-                      </span>
-                    </div>
-                  )}
-                  <CardHeader className="text-center">
-                    <CardTitle className="text-2xl font-bold">{plan.name}</CardTitle>
-                    <CardDescription className="text-3xl font-bold text-brand-red">
-                      {plan.price} <span className="text-sm text-muted-foreground">+ GST</span>
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <ul className="space-y-3 mb-6">
-                      {plan.features.map((feature, idx) => (
-                        <li key={idx} className="flex items-start gap-2">
-                          <CheckCircle className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" />
-                          <span className="text-sm">{feature}</span>
-                        </li>
-                      ))}
-                    </ul>
-                    <Button 
-                      className="w-full" 
-                      variant={plan.popular ? "default" : "outline"}
-                    >
-                      Subscribe Now
-                    </Button>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
+      
 
       {/* CTA Section */}
       <section className="py-16 bg-gradient-red-maroon text-white">
