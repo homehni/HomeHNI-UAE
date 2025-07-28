@@ -1,15 +1,17 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Chrome, Home } from 'lucide-react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Chrome, Home, UserPlus, LogIn } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 export const Auth: React.FC = () => {
   const { user, signInWithGoogle } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const [activeTab, setActiveTab] = useState("signin");
 
   useEffect(() => {
     if (user) {
@@ -37,24 +39,61 @@ export const Auth: React.FC = () => {
             <Home className="h-8 w-8 text-brand-red mr-2" />
             <span className="text-2xl font-bold text-brand-red">Home HNI</span>
           </div>
-          <CardTitle className="text-2xl">Welcome Back</CardTitle>
-          <CardDescription>
-            Sign in to list your property and manage your listings
-          </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <Button 
-            onClick={handleGoogleSignIn}
-            className="w-full"
-            variant="outline"
-            size="lg"
-          >
-            <Chrome className="h-5 w-5 mr-2" />
-            Continue with Google
-          </Button>
+        <CardContent>
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="signin" className="flex items-center space-x-2">
+                <LogIn size={16} />
+                <span>Sign In</span>
+              </TabsTrigger>
+              <TabsTrigger value="signup" className="flex items-center space-x-2">
+                <UserPlus size={16} />
+                <span>Sign Up</span>
+              </TabsTrigger>
+            </TabsList>
+            
+            <TabsContent value="signin" className="space-y-4">
+              <div className="text-center">
+                <CardTitle className="text-2xl">Welcome Back</CardTitle>
+                <CardDescription className="mt-2">
+                  Sign in to access your property listings and dashboard
+                </CardDescription>
+              </div>
+              
+              <Button 
+                onClick={handleGoogleSignIn}
+                className="w-full"
+                variant="outline"
+                size="lg"
+              >
+                <Chrome className="h-5 w-5 mr-2" />
+                Continue with Google
+              </Button>
+            </TabsContent>
+            
+            <TabsContent value="signup" className="space-y-4">
+              <div className="text-center">
+                <CardTitle className="text-2xl">Create Account</CardTitle>
+                <CardDescription className="mt-2">
+                  Join Home HNI to list your property and connect with buyers
+                </CardDescription>
+              </div>
+              
+              <Button 
+                onClick={handleGoogleSignIn}
+                className="w-full"
+                variant="outline"
+                size="lg"
+              >
+                <Chrome className="h-5 w-5 mr-2" />
+                Sign up with Google
+              </Button>
+            </TabsContent>
+          </Tabs>
           
-          <div className="text-center text-sm text-muted-foreground">
-            By signing in, you agree to our Terms of Service and Privacy Policy
+          <div className="text-center text-sm text-muted-foreground mt-6">
+            By continuing, you agree to our Terms of Service and Privacy Policy
           </div>
         </CardContent>
       </Card>

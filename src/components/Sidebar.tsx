@@ -1,8 +1,11 @@
 
 import { useState } from 'react';
-import { X, ChevronDown, User, UserPlus, LogIn } from 'lucide-react';
+import { X, ChevronDown, User, UserPlus, LogIn, LogOut, Settings } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useNavigate, Link } from 'react-router-dom';
+import { useAuth } from '@/contexts/AuthContext';
+import { useToast } from '@/hooks/use-toast';
 import LegalServicesForm from './LegalServicesForm';
 
 interface SidebarProps {
@@ -14,6 +17,8 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
   const [expandedSections, setExpandedSections] = useState<string[]>([]);
   const [isLegalFormOpen, setIsLegalFormOpen] = useState(false);
   const navigate = useNavigate();
+  const { user, signOut } = useAuth();
+  const { toast } = useToast();
 
   const toggleSection = (section: string) => {
     setExpandedSections(prev => 
@@ -33,8 +38,39 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
     onClose(); // Close sidebar when navigating
   };
 
+  const handleAuthClick = () => {
+    navigate('/auth');
+    onClose();
+  };
+
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+      toast({
+        title: "Signed out successfully",
+        description: "You have been logged out of your account.",
+      });
+      onClose();
+    } catch (error) {
+      toast({
+        title: "Sign out failed",
+        description: "Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handlePostPropertyClick = () => {
+    if (user) {
+      navigate('/post-property');
+    } else {
+      navigate('/auth');
+    }
+    onClose();
+  };
+
   const menuItems = [
-    { id: 'post-property', label: 'Post Your Property', hasSubmenu: false },
+    { id: 'post-property', label: 'Post Your Property', hasSubmenu: false, onClick: handlePostPropertyClick },
     { id: 'rental-agreement', label: 'Rental Agreement', hasSubmenu: false, onClick: () => { navigate('/rental-agreement'); onClose(); } },
     { id: 'legal-services', label: 'Legal Services', hasSubmenu: false, onClick: () => { navigate('/legal-services'); onClose(); } },
     { id: 'handover-services', label: 'Handover Services', hasSubmenu: false, onClick: () => { navigate('/handover-services'); onClose(); } },
@@ -132,18 +168,64 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
             </Button>
           </div>
 
-          {/* Auth Buttons */}
+          {/* User Section */}
           <div className="p-4 border-b border-gray-200">
-            <div className="flex flex-col space-y-2">
-              <Button className="w-full bg-brand-red hover:bg-brand-maroon-dark text-white">
-                <UserPlus size={16} className="mr-2" />
-                Sign Up
-              </Button>
-              <Button variant="outline" className="w-full border-brand-red text-brand-red hover:bg-brand-red hover:text-white">
-                <LogIn size={16} className="mr-2" />
-                Login
-              </Button>
-            </div>
+            {user ? (
+              <div className="space-y-3">
+                <div className="flex items-center space-x-3">
+                  <Avatar className="h-10 w-10">
+                    <AvatarImage src={user.user_metadata?.avatar_url} alt={user.user_metadata?.full_name || user.email} />
+                    <AvatarFallback className="bg-brand-red text-white">
+                      {user.user_metadata?.full_name?.charAt(0) || user.email?.charAt(0) || 'U'}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-gray-900 truncate">
+                      {user.user_metadata?.full_name || 'User'}
+                    </p>
+                    <p className="text-sm text-gray-500 truncate">
+                      {user.email}
+                    </p>
+                  </div>
+                </div>
+                <div className="flex flex-col space-y-2">
+                  <Button 
+                    variant="outline" 
+                    className="w-full justify-start border-brand-red text-brand-red hover:bg-brand-red hover:text-white"
+                    onClick={() => { navigate('/dashboard'); onClose(); }}
+                  >
+                    <Settings size={16} className="mr-2" />
+                    Dashboard
+                  </Button>
+                  <Button 
+                    variant="ghost" 
+                    className="w-full justify-start text-gray-600 hover:text-gray-800"
+                    onClick={handleSignOut}
+                  >
+                    <LogOut size={16} className="mr-2" />
+                    Sign Out
+                  </Button>
+                </div>
+              </div>
+            ) : (
+              <div className="flex flex-col space-y-2">
+                <Button 
+                  className="w-full bg-brand-red hover:bg-brand-maroon-dark text-white"
+                  onClick={handleAuthClick}
+                >
+                  <UserPlus size={16} className="mr-2" />
+                  Sign Up
+                </Button>
+                <Button 
+                  variant="outline" 
+                  className="w-full border-brand-red text-brand-red hover:bg-brand-red hover:text-white"
+                  onClick={handleAuthClick}
+                >
+                  <LogIn size={16} className="mr-2" />
+                  Login
+                </Button>
+              </div>
+            )}
           </div>
 
           {/* Menu Items */}
