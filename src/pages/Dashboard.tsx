@@ -7,6 +7,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Building, MessageSquare, User, LogOut, Plus, Eye, Edit, Trash } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
+import Header from '@/components/Header';
+import Marquee from '@/components/Marquee';
 
 interface Property {
   id: string;
@@ -125,8 +127,10 @@ export const Dashboard: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
-      <div className="max-w-6xl mx-auto pt-20">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+      <Header />
+      <Marquee />
+      <div className="max-w-6xl mx-auto pt-20 p-4">
         {/* Header */}
         <div className="mb-8">
           <div className="flex justify-between items-center">
@@ -188,7 +192,7 @@ export const Dashboard: React.FC = () => {
           <TabsContent value="properties" className="space-y-6">
             <div className="flex justify-between items-center">
               <h2 className="text-xl font-semibold">My Properties</h2>
-              <Button onClick={() => navigate('/post-property')}>
+              <Button onClick={() => navigate('/property-form')}>
                 <Plus className="h-4 w-4 mr-2" />
                 Add New Property
               </Button>
@@ -202,7 +206,7 @@ export const Dashboard: React.FC = () => {
                   <Building className="h-12 w-12 mx-auto text-gray-400 mb-4" />
                   <h3 className="text-lg font-medium text-gray-900 mb-2">No properties listed yet</h3>
                   <p className="text-gray-500 mb-4">Start by adding your first property listing</p>
-                  <Button onClick={() => navigate('/post-property')}>
+                  <Button onClick={() => navigate('/property-form')}>
                     <Plus className="h-4 w-4 mr-2" />
                     List Your First Property
                   </Button>

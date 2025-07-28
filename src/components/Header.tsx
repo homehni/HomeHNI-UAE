@@ -51,9 +51,9 @@ const Header = () => {
 
   const handlePostPropertyClick = () => {
     if (user) {
-      navigate('/post-property');
+      navigate('/property-form');
     } else {
-      navigate('/auth');
+      navigate('/auth?redirect=property-form');
     }
   };
 

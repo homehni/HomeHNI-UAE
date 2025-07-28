@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -10,14 +10,17 @@ import { useToast } from '@/hooks/use-toast';
 export const Auth: React.FC = () => {
   const { user, signInWithGoogle } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const { toast } = useToast();
   const [activeTab, setActiveTab] = useState("signin");
 
   useEffect(() => {
     if (user) {
-      navigate('/', { replace: true });
+      const urlParams = new URLSearchParams(location.search);
+      const redirectPath = urlParams.get('redirect');
+      navigate(redirectPath ? `/${redirectPath}` : '/', { replace: true });
     }
-  }, [user, navigate]);
+  }, [user, navigate, location]);
 
   const handleGoogleSignIn = async () => {
     try {

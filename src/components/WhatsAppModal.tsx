@@ -15,7 +15,7 @@ export const WhatsAppModal: React.FC<WhatsAppModalProps> = ({
   onContinueToForm
 }) => {
   const handleWhatsAppListing = () => {
-    const whatsappUrl = "https://wa.me/918905999888?text=Hi! I want to list my property on Home HNI. Please help me get started.";
+    const whatsappUrl = "https://wa.me/918074017388?text=Hi! I want to list my property on Home HNI. Please help me get started.";
     window.open(whatsappUrl, '_blank');
     onOpenChange(false);
   };
