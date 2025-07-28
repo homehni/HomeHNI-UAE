@@ -167,24 +167,7 @@ const Header = () => {
                   </DropdownMenu>
                 ) : (
                   <div className="flex items-center space-x-2">
-                    <Button 
-                      variant="ghost" 
-                      size="sm" 
-                      onClick={handleAuthClick}
-                      className={`transition-colors duration-500 ${isScrolled ? 'text-gray-800 hover:bg-gray-100' : 'text-white hover:bg-white/10'}`}
-                    >
-                      <LogIn size={16} className="mr-2" />
-                      Sign In
-                    </Button>
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      onClick={handleAuthClick}
-                      className={`transition-all duration-500 ${isScrolled ? 'bg-white text-brand-red border-gray-300 hover:bg-gray-50' : 'bg-white text-brand-red border-white/50 hover:bg-white/90'}`}
-                    >
-                      <UserPlus size={16} className="mr-2" />
-                      Sign Up
-                    </Button>
+                    
                   </div>
                 )}
               </div>
