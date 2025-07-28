@@ -18,7 +18,7 @@ export const Auth: React.FC = () => {
     if (user) {
       const urlParams = new URLSearchParams(location.search);
       const redirectPath = urlParams.get('redirect');
-      navigate(redirectPath ? `/${redirectPath}` : '/', { replace: true });
+      navigate(redirectPath ? redirectPath : '/', { replace: true });
     }
   }, [user, navigate, location]);
 
@@ -60,7 +60,10 @@ export const Auth: React.FC = () => {
               <div className="text-center">
                 <CardTitle className="text-2xl">Welcome Back</CardTitle>
                 <CardDescription className="mt-2">
-                  Sign in to access your property listings and dashboard
+                  {location.search.includes('redirect=property-form') 
+                    ? 'Sign in to list your property and access all features'
+                    : 'Sign in to access your property listings and dashboard'
+                  }
                 </CardDescription>
               </div>
               
@@ -79,7 +82,10 @@ export const Auth: React.FC = () => {
               <div className="text-center">
                 <CardTitle className="text-2xl">Create Account</CardTitle>
                 <CardDescription className="mt-2">
-                  Join Home HNI to list your property and connect with buyers
+                  {location.search.includes('redirect=property-form') 
+                    ? 'Create an account to list your property and access all features'
+                    : 'Join Home HNI to list your property and connect with buyers'
+                  }
                 </CardDescription>
               </div>
               

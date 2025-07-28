@@ -19,6 +19,7 @@ export const PropertyForm = () => {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showWhatsAppModal, setShowWhatsAppModal] = useState(false);
+  const [fieldsFilledCount, setFieldsFilledCount] = useState(0);
 
   const [formData, setFormData] = useState({
     title: '',
@@ -43,17 +44,23 @@ export const PropertyForm = () => {
     }
   }, [user, navigate]);
 
-  // Show WhatsApp modal after user starts filling the form
+  // Show WhatsApp modal based on form interaction
   useEffect(() => {
-    const timer = setTimeout(() => {
+    if (fieldsFilledCount >= 3 && !showWhatsAppModal) {
       setShowWhatsAppModal(true);
-    }, 30000); // Show after 30 seconds
-
-    return () => clearTimeout(timer);
-  }, []);
+    }
+  }, [fieldsFilledCount, showWhatsAppModal]);
 
   const handleInputChange = (field: string, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    setFormData(prev => {
+      const newData = { ...prev, [field]: value };
+      
+      // Count non-empty fields to track form progress
+      const filledFields = Object.values(newData).filter(val => val.trim() !== '').length;
+      setFieldsFilledCount(filledFields);
+      
+      return newData;
+    });
   };
 
   const onSubmit = async (e: React.FormEvent) => {
