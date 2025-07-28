@@ -91,23 +91,24 @@ const HandoverServices = () => {
       <Marquee />
       <Header />
       
-      {/* Hero Section */}
-      <section className="pt-24 pb-16 px-4 bg-gradient-to-br from-blue-600 to-indigo-700 text-white">
-        <div className="max-w-6xl mx-auto text-center">
-          <h1 className="text-4xl md:text-6xl font-bold mb-6">
-            🏠 Premium Handover Services for Homeowners & NRIs
-          </h1>
-          <p className="text-xl md:text-2xl mb-8 text-blue-100 max-w-4xl mx-auto">
-            Make your property possession process stress-free with expert inspections, compliance checks, and document support — all managed by Home HNI.
-          </p>
-          <Button 
-            size="lg" 
-            className="bg-white text-blue-600 hover:bg-gray-100 px-8 py-3 text-lg font-semibold"
-          >
-            Schedule Handover Service
-          </Button>
-        </div>
-      </section>
+{/* Hero Section */}
+<section className="pt-32 pb-16 px-4 bg-red-700 text-white">
+  <div className="max-w-6xl mx-auto text-center">
+    <h1 className="text-4xl md:text-6xl font-bold mb-6">
+      🏠 Premium Handover Services for Homeowners & NRIs
+    </h1>
+    <p className="text-xl md:text-2xl mb-8 text-red-100 max-w-4xl mx-auto">
+      Make your property possession process stress-free with expert inspections, compliance checks, and document support — all managed by Home HNI.
+    </p>
+    <Button 
+      size="lg" 
+      className="bg-white text-red-700 hover:bg-gray-100 px-8 py-3 text-lg font-semibold"
+    >
+      Schedule Handover Service
+    </Button>
+  </div>
+</section>
+
 
       {/* Our Handover Services Section */}
       <section className="py-16 px-4">
