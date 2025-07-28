@@ -171,16 +171,17 @@ const CommercialOwnerPlans = () => {
             <Button size="lg" variant="secondary" className="text-brand-red bg-white hover:bg-gray-100">
               View Plans
             </Button>
-            <Button
+<Button
   size="lg"
   variant="outline"
-  className="text-white border-white hover:bg-white hover:text-brand-red hover:border-white group transition-all duration-300"
+  className="text-brand-red border-white hover:bg-white hover:text-brand-red transition-all duration-300"
 >
   <span className="flex items-center">
-    <Phone className="w-5 h-5 mr-2 text-white group-hover:text-brand-red transition-colors" />
+    <Phone className="w-5 h-5 mr-2 text-brand-red transition-colors" />
     Call +91-89-059-998-88
   </span>
 </Button>
+
 
           </div>
         </div>
