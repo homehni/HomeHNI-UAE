@@ -33,6 +33,7 @@ import SellerPlans from "./pages/SellerPlans";
 import CorporateEnquiry from "./pages/CorporateEnquiry";
 import CommercialOwnerPlans from "./pages/CommercialOwnerPlans";
 import CommercialBuyerPlan from "./pages/CommercialBuyerPlan";
+import CommercialSellerPlans from "./pages/CommercialSellerPlans";
 import Blog from "./pages/Blog";
 import NotFound from "./pages/NotFound";
 import ScrollToTop from "./components/ScrollToTop";
@@ -72,7 +73,8 @@ const App: React.FC = () => {
             <Route path="/buyer-plans" element={<BuyerPlans />} />
             <Route path="/seller-plans" element={<SellerPlans />} />
             <Route path="/commercial-owner-plans" element={<CommercialOwnerPlans />} />
-            <Route path="/commercial-buyer-plan" element={<CommercialBuyerPlan />} />
+          <Route path="/commercial-buyer-plan" element={<CommercialBuyerPlan />} />
+          <Route path="/commercial-seller-plans" element={<CommercialSellerPlans />} />
             <Route path="/corporate-enquiry" element={<CorporateEnquiry />} />
             <Route path="/blog" element={<Blog />} />
             <Route path="/robots.txt" element={<RobotsTxt />} />
