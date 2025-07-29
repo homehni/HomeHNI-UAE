@@ -69,10 +69,10 @@ export const MultiStepPropertyForm = () => {
     }
   }, [draft, mode, resetDraft]);
 
-  // Auto-save draft every 30 seconds
+  // Auto-save draft every 30 seconds - only when property info exists
   useEffect(() => {
     const interval = setInterval(() => {
-      if (formData.owner_name || formData.title) {
+      if (formData.title && (formData.property_type || formData.state)) {
         saveDraft(formData);
       }
     }, 30000);
@@ -90,13 +90,25 @@ export const MultiStepPropertyForm = () => {
   const handleStepData = (stepData: Partial<PropertyDraft>) => {
     const updatedData = { ...formData, ...stepData };
     setFormData(updatedData);
-    saveDraft(updatedData);
+    // Only save draft when moving to preview step or when property info exists
+    if (currentStep === 2 || updatedData.title) {
+      saveDraft(updatedData);
+    }
   };
 
   const handleNext = (stepData: Partial<PropertyDraft>) => {
     console.log('MultiStepForm: handleNext called with data:', stepData);
     console.log('MultiStepForm: Current step before:', currentStep);
-    handleStepData(stepData);
+    
+    // Update form data without auto-saving
+    const updatedData = { ...formData, ...stepData };
+    setFormData(updatedData);
+    
+    // Only save draft when moving to preview step (step 3)
+    if (currentStep === 2) {
+      saveDraft(updatedData);
+    }
+    
     setCurrentStep(prev => {
       console.log('MultiStepForm: Setting step from', prev, 'to', prev + 1);
       return prev + 1;

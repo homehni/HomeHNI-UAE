@@ -87,6 +87,11 @@ export const usePropertyDraft = (draftId?: string) => {
   const saveDraft = async (draftData: Partial<PropertyDraft>) => {
     if (!user?.id) return;
 
+    // Only save if there's meaningful data (property info exists)
+    if (!draftData.title && !draftData.property_type && !draftData.state) {
+      return;
+    }
+
     setIsSaving(true);
     const updatedDraft = { ...draft, ...draftData, user_id: user.id, status: 'draft' as const };
     
