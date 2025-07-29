@@ -90,10 +90,7 @@ export const MultiStepPropertyForm = () => {
   const handleStepData = (stepData: Partial<PropertyDraft>) => {
     const updatedData = { ...formData, ...stepData };
     setFormData(updatedData);
-    // Only save draft when moving to preview step or when property info exists
-    if (currentStep === 2 || updatedData.title) {
-      saveDraft(updatedData);
-    }
+    // Don't auto-save here - only save explicitly or on specific triggers
   };
 
   const handleNext = (stepData: Partial<PropertyDraft>) => {
