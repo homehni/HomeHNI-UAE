@@ -158,15 +158,6 @@ export const PropertyForm = () => {
                     Fill in the details below to list your property on Home HNI
                   </CardDescription>
                 </div>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={handleWhatsAppOption}
-                  className="flex items-center gap-2"
-                >
-                  <MessageCircle className="h-4 w-4 text-green-600" />
-                  List via WhatsApp
-                </Button>
               </div>
             </CardHeader>
             <CardContent className="space-y-8 p-8">
@@ -364,15 +355,6 @@ export const PropertyForm = () => {
                     className="flex-1"
                   >
                     {isSubmitting ? 'Submitting...' : 'List Property'}
-                  </Button>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={handleWhatsAppOption}
-                    className="flex items-center gap-2"
-                  >
-                    <MessageCircle className="h-4 w-4 text-green-600" />
-                    WhatsApp Instead
                   </Button>
                 </div>
               </form>
