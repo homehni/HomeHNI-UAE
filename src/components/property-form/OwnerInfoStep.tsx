@@ -11,7 +11,10 @@ import { PropertyDraft } from '@/types/propertyDraft';
 const ownerInfoSchema = z.object({
   owner_name: z.string().min(1, 'Full name is required'),
   owner_phone: z.string().min(10, 'Phone number must be at least 10 digits'),
-  owner_email: z.string().optional(),
+  owner_email: z.union([
+    z.string().email('Please enter a valid email address'),
+    z.literal('')
+  ]).optional(),
   owner_role: z.enum(['owner', 'agent', 'builder'])
 });
 
@@ -137,11 +140,6 @@ export const OwnerInfoStep = ({ data, onNext }: OwnerInfoStepProps) => {
             <Button 
               type="submit" 
               className="px-8"
-              onClick={(e) => {
-                console.log('Next button clicked');
-                e.preventDefault();
-                handleSubmit(onSubmit)();
-              }}
             >
               Next
             </Button>
