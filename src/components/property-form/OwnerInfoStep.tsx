@@ -11,9 +11,7 @@ import { PropertyDraft } from '@/types/propertyDraft';
 const ownerInfoSchema = z.object({
   owner_name: z.string().min(1, 'Full name is required'),
   owner_phone: z.string().min(10, 'Phone number must be at least 10 digits'),
-  owner_email: z.string().refine((val) => !val || z.string().email().safeParse(val).success, {
-    message: 'Please enter a valid email address'
-  }),
+  owner_email: z.string().optional().or(z.literal('').transform(() => undefined)).or(z.string().email('Please enter a valid email address')),
   owner_role: z.enum(['owner', 'agent', 'builder'])
 });
 
@@ -33,7 +31,7 @@ export const OwnerInfoStep = ({ data, onNext }: OwnerInfoStepProps) => {
     formState: { errors, isValid }
   } = useForm<OwnerInfoFormData>({
     resolver: zodResolver(ownerInfoSchema),
-    mode: 'onChange',
+    mode: 'onSubmit',
     defaultValues: {
       owner_name: data.owner_name || '',
       owner_phone: data.owner_phone || '',
@@ -47,12 +45,21 @@ export const OwnerInfoStep = ({ data, onNext }: OwnerInfoStepProps) => {
   console.log('OwnerInfoStep: Current form values:', watch());
 
   const onSubmit = (formData: OwnerInfoFormData) => {
-    console.log('OwnerInfoStep: Form submitted with data:', formData);
-    console.log('OwnerInfoStep: Calling onNext with data...');
-    onNext({
+    console.log('OwnerInfoStep: Form validation passed!');
+    console.log('OwnerInfoStep: Form data:', formData);
+    console.log('OwnerInfoStep: Form errors:', errors);
+    console.log('OwnerInfoStep: Is form valid:', isValid);
+    
+    const submitData = {
       ...formData,
       step_completed: 1
-    });
+    };
+    
+    console.log('OwnerInfoStep: Final submit data:', submitData);
+    console.log('OwnerInfoStep: Calling onNext...');
+    
+    onNext(submitData);
+    
     console.log('OwnerInfoStep: onNext called successfully');
   };
 
@@ -108,7 +115,7 @@ export const OwnerInfoStep = ({ data, onNext }: OwnerInfoStepProps) => {
               className={errors.owner_email ? 'border-destructive' : ''}
             />
             {errors.owner_email && (
-              <p className="text-sm text-destructive">{errors.owner_email.message}</p>
+              <p className="text-sm text-destructive">{String(errors.owner_email.message)}</p>
             )}
           </div>
 

@@ -61,12 +61,26 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const signOut = async () => {
     const { error } = await supabase.auth.signOut();
     if (error) {
-      // If session is already invalid (session_not_found), don't throw error
-      // The user is effectively already signed out
-      if (error.message?.includes('session_not_found') || error.message?.includes('Session not found')) {
-        console.log('Session already invalid, user is already signed out');
+      // Handle various session-related errors gracefully
+      const sessionErrors = [
+        'session_not_found',
+        'Session not found',
+        'invalid_session',
+        'Invalid session',
+        'session expired',
+        'expired'
+      ];
+      
+      const isSessionError = sessionErrors.some(errorText => 
+        error.message?.toLowerCase().includes(errorText.toLowerCase()) ||
+        error.code?.toLowerCase().includes(errorText.toLowerCase())
+      );
+      
+      if (isSessionError) {
+        console.log('Session already invalid, user is effectively signed out');
         return;
       }
+      
       console.error('Error signing out:', error);
       throw error;
     }
