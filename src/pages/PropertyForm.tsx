@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import Header from '@/components/Header';
+import Marquee from '@/components/Marquee';
 import { WhatsAppModal } from '@/components/WhatsAppModal';
 import { MessageCircle } from 'lucide-react';
 
@@ -19,7 +20,7 @@ export const PropertyForm = () => {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showWhatsAppModal, setShowWhatsAppModal] = useState(false);
-  const [fieldsFilledCount, setFieldsFilledCount] = useState(0);
+  const [modalDismissed, setModalDismissed] = useState(false);
 
   const [formData, setFormData] = useState({
     title: '',
@@ -40,27 +41,23 @@ export const PropertyForm = () => {
 
   useEffect(() => {
     if (!user) {
-      navigate('/auth?redirect=property-form');
+      navigate('/auth?redirectTo=/post-property/form');
     }
   }, [user, navigate]);
 
-  // Show WhatsApp modal based on form interaction
+  // Show WhatsApp modal after 7 seconds if not dismissed
   useEffect(() => {
-    if (fieldsFilledCount >= 3 && !showWhatsAppModal) {
-      setShowWhatsAppModal(true);
+    if (!modalDismissed) {
+      const timer = setTimeout(() => {
+        setShowWhatsAppModal(true);
+      }, 7000);
+
+      return () => clearTimeout(timer);
     }
-  }, [fieldsFilledCount, showWhatsAppModal]);
+  }, [modalDismissed]);
 
   const handleInputChange = (field: string, value: string) => {
-    setFormData(prev => {
-      const newData = { ...prev, [field]: value };
-      
-      // Count non-empty fields to track form progress
-      const filledFields = Object.values(newData).filter(val => val.trim() !== '').length;
-      setFieldsFilledCount(filledFields);
-      
-      return newData;
-    });
+    setFormData(prev => ({ ...prev, [field]: value }));
   };
 
   const onSubmit = async (e: React.FormEvent) => {
@@ -134,6 +131,12 @@ export const PropertyForm = () => {
 
   const handleContinueToForm = () => {
     setShowWhatsAppModal(false);
+    setModalDismissed(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowWhatsAppModal(false);
+    setModalDismissed(true);
   };
 
   if (!user) {
@@ -142,8 +145,9 @@ export const PropertyForm = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <Marquee />
       <Header />
-      <div className="container mx-auto p-4 pt-20">
+      <div className="container mx-auto p-4 pt-32">
         <div className="max-w-2xl mx-auto">
           <Card>
             <CardHeader>
@@ -165,8 +169,8 @@ export const PropertyForm = () => {
                 </Button>
               </div>
             </CardHeader>
-            <CardContent className="space-y-6">
-              <form onSubmit={onSubmit} className="space-y-6">
+            <CardContent className="space-y-8 p-8">
+              <form onSubmit={onSubmit} className="space-y-8">
                 <div>
                   <Label htmlFor="title">Property Title *</Label>
                   <Input
@@ -379,7 +383,7 @@ export const PropertyForm = () => {
 
       <WhatsAppModal
         open={showWhatsAppModal}
-        onOpenChange={setShowWhatsAppModal}
+        onOpenChange={handleCloseModal}
         onContinueToForm={handleContinueToForm}
       />
     </div>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { MessageCircle, FileText } from 'lucide-react';
+import { MessageCircle, FileText, X } from 'lucide-react';
 
 interface WhatsAppModalProps {
   open: boolean;
@@ -23,6 +23,17 @@ export const WhatsAppModal: React.FC<WhatsAppModalProps> = ({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
+        <div className="absolute right-4 top-4">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => onOpenChange(false)}
+            className="h-8 w-8 p-0"
+          >
+            <X className="h-4 w-4" />
+            <span className="sr-only">Close</span>
+          </Button>
+        </div>
         <DialogHeader>
           <DialogTitle className="text-center">Choose Your Listing Method</DialogTitle>
           <DialogDescription className="text-center">
