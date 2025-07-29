@@ -11,10 +11,9 @@ import { PropertyDraft } from '@/types/propertyDraft';
 const ownerInfoSchema = z.object({
   owner_name: z.string().min(1, 'Full name is required'),
   owner_phone: z.string().min(10, 'Phone number must be at least 10 digits'),
-  owner_email: z.union([
-    z.string().email('Please enter a valid email address'),
-    z.literal('')
-  ]).optional(),
+  owner_email: z.string().refine((val) => !val || z.string().email().safeParse(val).success, {
+    message: 'Please enter a valid email address'
+  }),
   owner_role: z.enum(['owner', 'agent', 'builder'])
 });
 
