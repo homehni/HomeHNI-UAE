@@ -197,7 +197,7 @@ export const Dashboard: React.FC = () => {
           <TabsContent value="properties" className="space-y-6">
             <div className="flex justify-between items-center">
               <h2 className="text-xl font-semibold">My Properties</h2>
-              <Button onClick={() => navigate('/post-property/form')}>
+              <Button onClick={() => navigate('/post-property/form?mode=new')}>
                 <Plus className="h-4 w-4 mr-2" />
                 Add New Property
               </Button>
@@ -211,7 +211,7 @@ export const Dashboard: React.FC = () => {
                   <Building className="h-12 w-12 mx-auto text-gray-400 mb-4" />
                   <h3 className="text-lg font-medium text-gray-900 mb-2">No properties listed yet</h3>
                   <p className="text-gray-500 mb-4">Start by adding your first property listing</p>
-                  <Button onClick={() => navigate('/post-property/form')}>
+                  <Button onClick={() => navigate('/post-property/form?mode=new')}>
                     <Plus className="h-4 w-4 mr-2" />
                     List Your First Property
                   </Button>
@@ -270,7 +270,7 @@ export const Dashboard: React.FC = () => {
           <TabsContent value="drafts" className="space-y-6">
             <div className="flex justify-between items-center">
               <h2 className="text-xl font-semibold">Draft Listings</h2>
-              <Button onClick={() => navigate('/post-property/form')}>
+              <Button onClick={() => navigate('/post-property/form?mode=new')}>
                 <Plus className="h-4 w-4 mr-2" />
                 Create New Listing
               </Button>
@@ -284,7 +284,7 @@ export const Dashboard: React.FC = () => {
                   <FileText className="h-12 w-12 mx-auto text-gray-400 mb-4" />
                   <h3 className="text-lg font-medium text-gray-900 mb-2">No drafts saved yet</h3>
                   <p className="text-gray-500 mb-4">Your saved property drafts will appear here</p>
-                  <Button onClick={() => navigate('/post-property/form')}>
+                  <Button onClick={() => navigate('/post-property/form?mode=new')}>
                     <Plus className="h-4 w-4 mr-2" />
                     Start New Listing
                   </Button>
@@ -317,7 +317,7 @@ export const Dashboard: React.FC = () => {
                           <Button 
                             variant="outline" 
                             size="sm"
-                            onClick={() => navigate('/post-property/form')}
+                            onClick={() => navigate(`/post-property/form?draftId=${draft.id}`)}
                           >
                             <Edit className="h-4 w-4 mr-1" />
                             Continue Editing

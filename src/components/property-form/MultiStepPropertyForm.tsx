@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { usePropertyDraft } from '@/hooks/usePropertyDraft';
 import { PropertyDraft } from '@/types/propertyDraft';
@@ -7,21 +7,29 @@ import { FormProgressBar } from './FormProgressBar';
 import { OwnerInfoStep } from './OwnerInfoStep';
 import { PropertyInfoStep } from './PropertyInfoStep';
 import { PreviewStep } from './PreviewStep';
+import { ThankYouModal } from './ThankYouModal';
 import { useToast } from '@/hooks/use-toast';
 
 export const MultiStepPropertyForm = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showThankYou, setShowThankYou] = useState(false);
+  const [searchParams] = useSearchParams();
   const { user } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
+  
+  const mode = searchParams.get('mode');
+  const draftId = searchParams.get('draftId');
+  
   const { 
     draft, 
     isSaving, 
     saveDraft, 
     clearDraft,
+    resetDraft,
     submitDraft
-  } = usePropertyDraft();
+  } = usePropertyDraft(draftId || undefined);
 
   // Initialize form data from draft or empty state
   const [formData, setFormData] = useState<PropertyDraft>({
@@ -48,13 +56,18 @@ export const MultiStepPropertyForm = () => {
     videos: []
   });
 
-  // Load draft data when available
+  // Handle fresh form vs editing
   useEffect(() => {
-    if (draft) {
+    if (mode === 'new') {
+      // Reset draft for fresh form
+      resetDraft();
+      setCurrentStep(1);
+    } else if (draft) {
+      // Load existing draft
       setFormData(draft);
       setCurrentStep(Math.min(draft.step_completed + 1, 3));
     }
-  }, [draft]);
+  }, [draft, mode, resetDraft]);
 
   // Auto-save draft every 30 seconds
   useEffect(() => {
@@ -97,8 +110,10 @@ export const MultiStepPropertyForm = () => {
     await saveDraft(formData);
     toast({
       title: "✅ Draft Saved Successfully",
-      description: "Your progress has been saved. You can continue editing anytime.",
+      description: "Draft saved successfully. You can continue editing it from your dashboard.",
     });
+    // Redirect to dashboard after saving draft
+    navigate('/dashboard');
   };
 
   const handleSubmit = async () => {
@@ -109,13 +124,7 @@ export const MultiStepPropertyForm = () => {
       const success = await submitDraft();
       
       if (success) {
-        toast({
-          title: "✅ Listing Submitted Successfully",
-          description: "Your property listing is now live and visible to potential buyers/renters.",
-        });
-        
-        // Redirect to dashboard
-        navigate('/dashboard');
+        setShowThankYou(true);
       } else {
         throw new Error('Submission failed');
       }
@@ -129,6 +138,11 @@ export const MultiStepPropertyForm = () => {
     } finally {
       setIsSubmitting(false);
     }
+  };
+
+  const handleGoToDashboard = () => {
+    setShowThankYou(false);
+    navigate('/dashboard');
   };
 
   const handleImagesChange = (images: string[]) => {
@@ -179,6 +193,12 @@ export const MultiStepPropertyForm = () => {
             isSavingDraft={isSaving}
           />
         )}
+
+        <ThankYouModal 
+          isOpen={showThankYou}
+          onClose={() => setShowThankYou(false)}
+          onGoToDashboard={handleGoToDashboard}
+        />
       </div>
     </div>
   );

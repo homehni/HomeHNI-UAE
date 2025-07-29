@@ -3,7 +3,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { PropertyDraft } from '@/types/propertyDraft';
 import { useAuth } from '@/contexts/AuthContext';
 
-export const usePropertyDraft = () => {
+export const usePropertyDraft = (draftId?: string) => {
   const [draft, setDraft] = useState<PropertyDraft | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
@@ -12,9 +12,13 @@ export const usePropertyDraft = () => {
   // Load existing draft on mount
   useEffect(() => {
     if (user?.id) {
-      loadDraft();
+      if (draftId) {
+        loadSpecificDraft(draftId);
+      } else {
+        loadDraft();
+      }
     }
-  }, [user?.id]);
+  }, [user?.id, draftId]);
 
   const loadDraft = async () => {
     if (!user?.id) return;
@@ -25,6 +29,7 @@ export const usePropertyDraft = () => {
         .from('property_drafts')
         .select('*')
         .eq('user_id', user.id)
+        .eq('status', 'draft')
         .order('updated_at', { ascending: false })
         .limit(1)
         .single();
@@ -47,6 +52,35 @@ export const usePropertyDraft = () => {
       }
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const loadSpecificDraft = async (draftId: string) => {
+    if (!user?.id) return;
+    
+    setIsLoading(true);
+    try {
+      const { data, error } = await supabase
+        .from('property_drafts')
+        .select('*')
+        .eq('id', draftId)
+        .eq('user_id', user.id)
+        .single();
+
+      if (data && !error) {
+        setDraft(data as PropertyDraft);
+      }
+    } catch (error) {
+      console.error('Error loading specific draft:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const resetDraft = () => {
+    if (user?.id) {
+      localStorage.removeItem(`propertyDraft_${user.id}`);
+      setDraft(null);
     }
   };
 
@@ -172,6 +206,8 @@ export const usePropertyDraft = () => {
     saveDraft,
     clearDraft,
     loadDraft,
+    loadSpecificDraft,
+    resetDraft,
     submitDraft
   };
 };
