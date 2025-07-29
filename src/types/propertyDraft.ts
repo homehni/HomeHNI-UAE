@@ -4,7 +4,13 @@ export interface PropertyDraft {
   step_completed: number;
   status?: 'draft' | 'submitted';
   
-  // Property Info
+  // Step 1: Owner Info
+  owner_name?: string;
+  owner_phone?: string;
+  owner_email?: string;
+  owner_role?: 'owner' | 'agent' | 'builder';
+  
+  // Step 2: Property Info
   title?: string;
   property_type?: string;
   listing_type?: 'sale' | 'rent';
@@ -28,6 +34,12 @@ export interface PropertyDraft {
 
 export interface StepData {
   step1: {
+    owner_name: string;
+    owner_phone: string;
+    owner_email: string;
+    owner_role: 'owner' | 'agent' | 'builder';
+  };
+  step2: {
     title: string;
     property_type: string;
     listing_type: 'sale' | 'rent';

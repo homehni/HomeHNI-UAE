@@ -22,9 +22,12 @@ export const FormProgressBar = ({ currentStep, totalSteps }: FormProgressBarProp
       
       <div className="flex justify-between mt-3">
         <div className={`text-xs ${currentStep >= 1 ? 'text-primary font-medium' : 'text-muted-foreground'}`}>
-          Property Details
+          Owner Info
         </div>
         <div className={`text-xs ${currentStep >= 2 ? 'text-primary font-medium' : 'text-muted-foreground'}`}>
+          Property Details
+        </div>
+        <div className={`text-xs ${currentStep >= 3 ? 'text-primary font-medium' : 'text-muted-foreground'}`}>
           Preview & Submit
         </div>
       </div>

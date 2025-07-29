@@ -164,6 +164,32 @@ export const PreviewModal = ({ isOpen, onClose, data }: PreviewModalProps) => {
             </Card>
           )}
 
+          {/* Owner Information */}
+          <Card>
+            <CardContent className="p-6">
+              <h3 className="text-lg font-semibold mb-4">Contact Information</h3>
+              <div className="space-y-2">
+                <div>
+                  <span className="text-sm font-medium">Name:</span>
+                  <span className="text-sm ml-2">{data.owner_name}</span>
+                </div>
+                <div>
+                  <span className="text-sm font-medium">Phone:</span>
+                  <span className="text-sm ml-2">{data.owner_phone}</span>
+                </div>
+                <div>
+                  <span className="text-sm font-medium">Email:</span>
+                  <span className="text-sm ml-2">{data.owner_email}</span>
+                </div>
+                <div>
+                  <span className="text-sm font-medium">Role:</span>
+                  <Badge variant="outline" className="ml-2 capitalize">
+                    {data.owner_role}
+                  </Badge>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </DialogContent>
     </Dialog>

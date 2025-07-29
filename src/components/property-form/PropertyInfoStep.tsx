@@ -333,7 +333,11 @@ export const PropertyInfoStep = ({ data, onNext, onBack, onImagesChange, onVideo
           />
 
           {/* Navigation Buttons */}
-          <div className="flex justify-end">
+          <div className="flex justify-between">
+            <Button type="button" variant="outline" onClick={onBack}>
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Back
+            </Button>
             <Button type="submit" className="px-8">
               Next
             </Button>
