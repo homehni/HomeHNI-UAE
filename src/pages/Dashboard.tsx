@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
 import { useDrafts } from '@/hooks/useDrafts';
 import { PropertyDraft } from '@/types/propertyDraft';
+import { DeleteConfirmationModal } from '@/components/DeleteConfirmationModal';
 import Header from '@/components/Header';
 import Marquee from '@/components/Marquee';
 
@@ -45,6 +46,18 @@ export const Dashboard: React.FC = () => {
   const [properties, setProperties] = useState<Property[]>([]);
   const [leads, setLeads] = useState<Lead[]>([]);
   const [loading, setLoading] = useState(true);
+  const [deleteModal, setDeleteModal] = useState<{
+    isOpen: boolean;
+    type: 'property' | 'draft';
+    id: string;
+    title: string;
+  }>({
+    isOpen: false,
+    type: 'property',
+    id: '',
+    title: ''
+  });
+  const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -101,27 +114,60 @@ export const Dashboard: React.FC = () => {
     }
   };
 
-  const deleteProperty = async (propertyId: string) => {
+  const openDeleteModal = (type: 'property' | 'draft', id: string, title: string) => {
+    setDeleteModal({
+      isOpen: true,
+      type,
+      id,
+      title
+    });
+  };
+
+  const closeDeleteModal = () => {
+    setDeleteModal({
+      isOpen: false,
+      type: 'property',
+      id: '',
+      title: ''
+    });
+  };
+
+  const handleDelete = async () => {
+    setIsDeleting(true);
     try {
-      const { error } = await supabase
-        .from('properties')
-        .delete()
-        .eq('id', propertyId);
+      if (deleteModal.type === 'property') {
+        const { error } = await supabase
+          .from('properties')
+          .delete()
+          .eq('id', deleteModal.id);
 
-      if (error) throw error;
+        if (error) throw error;
 
-      toast({
-        title: "Property deleted",
-        description: "Your property has been removed from the listing.",
-      });
-
-      fetchProperties();
+        toast({
+          title: "Property deleted",
+          description: "Your property has been removed from the listing.",
+        });
+        fetchProperties();
+      } else {
+        const success = await deleteDraft(deleteModal.id);
+        if (success) {
+          toast({
+            title: "Draft deleted",
+            description: "Your draft has been removed.",
+          });
+        } else {
+          throw new Error('Failed to delete draft');
+        }
+      }
+      closeDeleteModal();
     } catch (error) {
       toast({
         title: "Error",
-        description: "Failed to delete property. Please try again.",
+        description: `Failed to delete ${deleteModal.type}. Please try again.`,
         variant: "destructive",
       });
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -251,9 +297,9 @@ export const Dashboard: React.FC = () => {
                             <Edit className="h-4 w-4" />
                           </Button>
                           <Button 
-                            variant="outline" 
+                            variant="destructive" 
                             size="sm"
-                            onClick={() => deleteProperty(property.id)}
+                            onClick={() => openDeleteModal('property', property.id, property.title)}
                           >
                             <Trash className="h-4 w-4" />
                           </Button>
@@ -323,22 +369,9 @@ export const Dashboard: React.FC = () => {
                             Continue Editing
                           </Button>
                           <Button 
-                            variant="outline" 
+                            variant="destructive" 
                             size="sm"
-                            onClick={async () => {
-                              if (draft.id && await deleteDraft(draft.id)) {
-                                toast({
-                                  title: "Draft deleted",
-                                  description: "Your draft has been removed.",
-                                });
-                              } else {
-                                toast({
-                                  title: "Error",
-                                  description: "Failed to delete draft.",
-                                  variant: "destructive",
-                                });
-                              }
-                            }}
+                            onClick={() => openDeleteModal('draft', draft.id!, draft.title || 'Untitled Property')}
                           >
                             <Trash className="h-4 w-4" />
                           </Button>
@@ -435,6 +468,16 @@ export const Dashboard: React.FC = () => {
           </TabsContent>
         </Tabs>
       </div>
+
+      {/* Delete Confirmation Modal */}
+      <DeleteConfirmationModal
+        isOpen={deleteModal.isOpen}
+        onClose={closeDeleteModal}
+        onConfirm={handleDelete}
+        title={`Delete ${deleteModal.type === 'property' ? 'Property' : 'Draft'}`}
+        description={`Are you sure you want to delete "${deleteModal.title}"? This action cannot be undone.`}
+        isDeleting={isDeleting}
+      />
     </div>
   );
 };

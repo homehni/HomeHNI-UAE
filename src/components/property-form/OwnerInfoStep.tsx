@@ -10,8 +10,8 @@ import { PropertyDraft } from '@/types/propertyDraft';
 
 const ownerInfoSchema = z.object({
   owner_name: z.string().min(1, 'Full name is required'),
-  owner_phone: z.string().min(10, 'Valid phone number is required'),
-  owner_email: z.string().optional(),
+  owner_phone: z.string().min(10, 'Valid phone number is required').regex(/^\+?[\d\s\-\(\)]{10,15}$/, 'Please enter a valid phone number'),
+  owner_email: z.string().email('Please enter a valid email').optional().or(z.literal('')),
   owner_role: z.enum(['owner', 'agent', 'builder'])
 });
 
@@ -40,6 +40,7 @@ export const OwnerInfoStep = ({ data, onNext }: OwnerInfoStepProps) => {
   });
 
   const onSubmit = (formData: OwnerInfoFormData) => {
+    console.log('OwnerInfoStep: Form submitted with data:', formData);
     onNext({
       ...formData,
       step_completed: 1
@@ -126,7 +127,7 @@ export const OwnerInfoStep = ({ data, onNext }: OwnerInfoStepProps) => {
 
           {/* Submit Button */}
           <div className="flex justify-end">
-            <Button type="submit" className="px-8">
+            <Button type="submit" className="px-8" disabled={Object.keys(errors).length > 0}>
               Next
             </Button>
           </div>
