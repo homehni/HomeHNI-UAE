@@ -131,45 +131,8 @@ const Header = () => {
 
             </div>
 
-            {/* Right section - Auth, Post Property and Icons */}
+            {/* Right section - Post Property, Profile, and Hamburger Menu */}
             <div className="flex items-center space-x-2 sm:space-x-4">
-              {/* Auth Section - Desktop only */}
-              <div className="hidden lg:flex items-center space-x-2">
-                {user ? (
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" className={`p-2 transition-colors duration-500 ${isScrolled ? 'text-gray-800 hover:bg-gray-100' : 'text-white hover:bg-white/10'}`}>
-                        <Avatar className="h-8 w-8">
-                          <AvatarImage src={user.user_metadata?.avatar_url} alt={user.user_metadata?.full_name || user.email} />
-                          <AvatarFallback className="bg-brand-red text-white">
-                            {user.user_metadata?.full_name?.charAt(0) || user.email?.charAt(0) || 'U'}
-                          </AvatarFallback>
-                        </Avatar>
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end" className="w-56">
-                      <DropdownMenuItem onClick={() => navigate('/dashboard')}>
-                        <User className="mr-2 h-4 w-4" />
-                        <span>Dashboard</span>
-                      </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => navigate('/dashboard')}>
-                        <Settings className="mr-2 h-4 w-4" />
-                        <span>My Properties</span>
-                      </DropdownMenuItem>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem onClick={handleSignOut}>
-                        <LogOut className="mr-2 h-4 w-4" />
-                        <span>Sign out</span>
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                ) : (
-                  <div className="flex items-center space-x-2">
-                    
-                  </div>
-                )}
-              </div>
-
               {/* Post Property Button - Responsive sizing */}
               <Button 
                 variant="outline" 
@@ -182,13 +145,40 @@ const Header = () => {
                 <span className="ml-1 bg-green-500 text-white text-xs px-1.5 py-0.5 rounded">Free</span>
               </Button>
 
-              {/* Help and Settings Icons - Desktop only */}
-              <div className="hidden lg:flex items-center space-x-2">
-                <Button variant="ghost" size="sm" className={`p-2 transition-colors duration-500 ${isScrolled ? 'text-gray-800 hover:bg-gray-100' : 'text-white hover:text-white/80 hover:bg-white/10'}`}>
-                  <HelpCircle size={18} />
+              {/* Profile Avatar - Always visible for authenticated users */}
+              {user ? (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" className={`p-2 transition-colors duration-500 ${isScrolled ? 'text-gray-800 hover:bg-gray-100' : 'text-white hover:bg-white/10'}`}>
+                      <Avatar className="h-8 w-8">
+                        <AvatarImage src={user.user_metadata?.avatar_url} alt={user.user_metadata?.full_name || user.email} />
+                        <AvatarFallback className="bg-brand-red text-white">
+                          {user.user_metadata?.full_name?.charAt(0) || user.email?.charAt(0) || 'U'}
+                        </AvatarFallback>
+                      </Avatar>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-56">
+                    <DropdownMenuItem onClick={() => navigate('/dashboard')}>
+                      <User className="mr-2 h-4 w-4" />
+                      <span>Dashboard</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => navigate('/dashboard')}>
+                      <Settings className="mr-2 h-4 w-4" />
+                      <span>My Properties</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={handleSignOut}>
+                      <LogOut className="mr-2 h-4 w-4" />
+                      <span>Sign out</span>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              ) : (
+                <Button variant="ghost" size="sm" className={`p-2 transition-colors duration-500 ${isScrolled ? 'text-gray-800 hover:bg-gray-100' : 'text-white hover:bg-white/10'}`} onClick={handleAuthClick}>
+                  <User size={18} />
                 </Button>
-                
-              </div>
+              )}
 
               {/* Sidebar toggle button - Always visible */}
               <Button variant="ghost" size="sm" className={`p-2 transition-colors duration-500 ${isScrolled ? 'text-gray-800 hover:bg-gray-100' : 'text-white hover:bg-white/10'}`} onClick={() => setIsSidebarOpen(true)}>
