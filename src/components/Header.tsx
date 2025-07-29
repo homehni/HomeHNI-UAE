@@ -134,16 +134,17 @@ const Header = () => {
             {/* Right section - Post Property, Profile, and Hamburger Menu */}
             <div className="flex items-center space-x-2 sm:space-x-4">
               {/* Post Property Button - Responsive sizing */}
-              <Button 
-                variant="outline" 
-                size="sm" 
-                onClick={handlePostPropertyClick}
-                className={`font-medium px-2 sm:px-4 py-2 text-xs sm:text-sm transition-all duration-500 ${isScrolled ? 'bg-white text-brand-red border-gray-300 hover:bg-gray-50' : 'bg-white text-brand-red border-white/50 hover:bg-white/90'}`}
-              >
-                <span className="hidden sm:inline">Post property</span>
-                <span className="sm:hidden">Post</span>
-                <span className="ml-1 bg-green-500 text-white text-xs px-1.5 py-0.5 rounded">Free</span>
-              </Button>
+                         <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={handlePostPropertyClick}
+              className={`font-medium px-1.5 sm:px-3 py-1.5 text-xs sm:text-sm transition-all duration-500 ${isScrolled ? 'bg-white text-brand-red border-gray-300 hover:bg-gray-50' : 'bg-white text-brand-red border-white/50 hover:bg-white/90'}`}
+            >
+              <span className="hidden sm:inline">Post property</span>
+              <span className="sm:hidden">Post</span>
+              <span className="ml-1 bg-green-500 text-white text-[10px] px-1 py-0.5 rounded">Free</span>
+            </Button>
+
 
               {/* Profile Avatar - Only visible for authenticated users */}
               {user && (
