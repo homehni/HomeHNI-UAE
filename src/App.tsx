@@ -40,7 +40,7 @@ import Blog from "./pages/Blog";
 import { Auth } from "./pages/Auth";
 import { VerifyEmail } from "./pages/VerifyEmail";
 import { PostProperty } from "./pages/PostProperty";
-import { PropertyForm } from "./pages/PropertyForm";
+import { MultiStepPropertyForm } from "./components/property-form/MultiStepPropertyForm";
 import { Dashboard } from "./pages/Dashboard";
 import NotFound from "./pages/NotFound";
 import ScrollToTop from "./components/ScrollToTop";
@@ -98,7 +98,7 @@ const App: React.FC = () => {
             } />
             <Route path="/post-property/form" element={
               <ProtectedRoute requireEmailVerified>
-                <PropertyForm />
+                <MultiStepPropertyForm />
               </ProtectedRoute>
             } />
             <Route path="/dashboard" element={

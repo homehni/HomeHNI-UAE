@@ -163,6 +163,90 @@ export type Database = {
         }
         Relationships: []
       }
+      property_drafts: {
+        Row: {
+          balconies: number | null
+          bathrooms: number | null
+          bhk_type: string | null
+          carpet_area: number | null
+          city: string | null
+          created_at: string | null
+          description: string | null
+          expected_price: number | null
+          id: string
+          images: string[] | null
+          listing_type: string | null
+          locality: string | null
+          owner_email: string | null
+          owner_name: string | null
+          owner_phone: string | null
+          owner_role: string | null
+          pincode: string | null
+          property_type: string | null
+          state: string | null
+          step_completed: number | null
+          super_area: number | null
+          title: string | null
+          updated_at: string | null
+          user_id: string
+          videos: string[] | null
+        }
+        Insert: {
+          balconies?: number | null
+          bathrooms?: number | null
+          bhk_type?: string | null
+          carpet_area?: number | null
+          city?: string | null
+          created_at?: string | null
+          description?: string | null
+          expected_price?: number | null
+          id?: string
+          images?: string[] | null
+          listing_type?: string | null
+          locality?: string | null
+          owner_email?: string | null
+          owner_name?: string | null
+          owner_phone?: string | null
+          owner_role?: string | null
+          pincode?: string | null
+          property_type?: string | null
+          state?: string | null
+          step_completed?: number | null
+          super_area?: number | null
+          title?: string | null
+          updated_at?: string | null
+          user_id: string
+          videos?: string[] | null
+        }
+        Update: {
+          balconies?: number | null
+          bathrooms?: number | null
+          bhk_type?: string | null
+          carpet_area?: number | null
+          city?: string | null
+          created_at?: string | null
+          description?: string | null
+          expected_price?: number | null
+          id?: string
+          images?: string[] | null
+          listing_type?: string | null
+          locality?: string | null
+          owner_email?: string | null
+          owner_name?: string | null
+          owner_phone?: string | null
+          owner_role?: string | null
+          pincode?: string | null
+          property_type?: string | null
+          state?: string | null
+          step_completed?: number | null
+          super_area?: number | null
+          title?: string | null
+          updated_at?: string | null
+          user_id?: string
+          videos?: string[] | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
