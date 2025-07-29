@@ -28,9 +28,10 @@ export const OwnerInfoStep = ({ data, onNext }: OwnerInfoStepProps) => {
     handleSubmit,
     setValue,
     watch,
-    formState: { errors }
+    formState: { errors, isValid }
   } = useForm<OwnerInfoFormData>({
     resolver: zodResolver(ownerInfoSchema),
+    mode: 'onChange',
     defaultValues: {
       owner_name: data.owner_name || '',
       owner_phone: data.owner_phone || '',
@@ -39,12 +40,18 @@ export const OwnerInfoStep = ({ data, onNext }: OwnerInfoStepProps) => {
     }
   });
 
+  console.log('OwnerInfoStep: Current form errors:', errors);
+  console.log('OwnerInfoStep: Form is valid:', isValid);
+  console.log('OwnerInfoStep: Current form values:', watch());
+
   const onSubmit = (formData: OwnerInfoFormData) => {
     console.log('OwnerInfoStep: Form submitted with data:', formData);
+    console.log('OwnerInfoStep: Calling onNext with data...');
     onNext({
       ...formData,
       step_completed: 1
     });
+    console.log('OwnerInfoStep: onNext called successfully');
   };
 
   const ownerRole = watch('owner_role');
@@ -127,7 +134,11 @@ export const OwnerInfoStep = ({ data, onNext }: OwnerInfoStepProps) => {
 
           {/* Submit Button */}
           <div className="flex justify-end">
-            <Button type="submit" className="px-8" disabled={Object.keys(errors).length > 0}>
+            <Button 
+              type="submit" 
+              className="px-8"
+              onClick={() => console.log('Next button clicked')}
+            >
               Next
             </Button>
           </div>

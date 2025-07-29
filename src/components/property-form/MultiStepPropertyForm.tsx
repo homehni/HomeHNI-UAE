@@ -94,8 +94,13 @@ export const MultiStepPropertyForm = () => {
   };
 
   const handleNext = (stepData: Partial<PropertyDraft>) => {
+    console.log('MultiStepForm: handleNext called with data:', stepData);
+    console.log('MultiStepForm: Current step before:', currentStep);
     handleStepData(stepData);
-    setCurrentStep(prev => prev + 1);
+    setCurrentStep(prev => {
+      console.log('MultiStepForm: Setting step from', prev, 'to', prev + 1);
+      return prev + 1;
+    });
   };
 
   const handleBack = () => {
