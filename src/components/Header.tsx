@@ -145,8 +145,8 @@ const Header = () => {
                 <span className="ml-1 bg-green-500 text-white text-xs px-1.5 py-0.5 rounded">Free</span>
               </Button>
 
-              {/* Profile Avatar - Always visible for authenticated users */}
-              {user ? (
+              {/* Profile Avatar - Only visible for authenticated users */}
+              {user && (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button variant="ghost" className={`p-2 transition-colors duration-500 ${isScrolled ? 'text-gray-800 hover:bg-gray-100' : 'text-white hover:bg-white/10'}`}>
@@ -174,10 +174,6 @@ const Header = () => {
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
-              ) : (
-                <Button variant="ghost" size="sm" className={`p-2 transition-colors duration-500 ${isScrolled ? 'text-gray-800 hover:bg-gray-100' : 'text-white hover:bg-white/10'}`} onClick={handleAuthClick}>
-                  <User size={18} />
-                </Button>
               )}
 
               {/* Sidebar toggle button - Always visible */}
