@@ -4,7 +4,6 @@ import { useAuth } from '@/contexts/AuthContext';
 import { usePropertyDraft } from '@/hooks/usePropertyDraft';
 import { PropertyDraft } from '@/types/propertyDraft';
 import { FormProgressBar } from './FormProgressBar';
-import { OwnerInfoStep } from './OwnerInfoStep';
 import { PropertyInfoStep } from './PropertyInfoStep';
 import { PreviewStep } from './PreviewStep';
 import { ThankYouModal } from './ThankYouModal';
@@ -34,15 +33,12 @@ export const MultiStepPropertyForm = () => {
   // Initialize form data from draft or empty state
   const [formData, setFormData] = useState<PropertyDraft>({
     step_completed: 1,
-    owner_name: '',
-    owner_phone: '',
-    owner_email: '',
-    owner_role: 'owner',
+    status: 'draft',
     title: '',
     property_type: '',
     listing_type: 'sale',
     bhk_type: '',
-    bathrooms: 0,
+    bathrooms: 1,
     balconies: 0,
     super_area: 0,
     carpet_area: 0,
@@ -65,14 +61,14 @@ export const MultiStepPropertyForm = () => {
     } else if (draft) {
       // Load existing draft
       setFormData(draft);
-      setCurrentStep(Math.min(draft.step_completed + 1, 3));
+      setCurrentStep(Math.min(draft.step_completed + 1, 2));
     }
   }, [draft, mode, resetDraft]);
 
   // Auto-save draft every 30 seconds
   useEffect(() => {
     const interval = setInterval(() => {
-      if (formData.owner_name || formData.title) {
+      if (formData.title || formData.property_type || formData.images?.length > 0) {
         saveDraft(formData);
       }
     }, 30000);
@@ -169,16 +165,9 @@ export const MultiStepPropertyForm = () => {
   return (
     <div className="min-h-screen bg-background py-8 px-4">
       <div className="max-w-6xl mx-auto">
-        <FormProgressBar currentStep={currentStep} totalSteps={3} />
+        <FormProgressBar currentStep={currentStep} totalSteps={2} />
         
         {currentStep === 1 && (
-          <OwnerInfoStep
-            data={formData}
-            onNext={handleNext}
-          />
-        )}
-        
-        {currentStep === 2 && (
           <PropertyInfoStep
             data={formData}
             onNext={handleNext}
@@ -188,7 +177,7 @@ export const MultiStepPropertyForm = () => {
           />
         )}
         
-        {currentStep === 3 && (
+        {currentStep === 2 && (
           <PreviewStep
             data={formData}
             onBack={handleBack}

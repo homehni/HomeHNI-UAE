@@ -39,9 +39,6 @@ export const PreviewStep = ({
       { field: data.city, name: 'City' },
       { field: data.locality, name: 'Locality' },
       { field: data.pincode, name: 'Pincode' },
-      { field: data.owner_name, name: 'Owner Name' },
-      { field: data.owner_phone, name: 'Owner Phone' },
-      { field: data.owner_email, name: 'Owner Email' },
     ];
 
     const missingFields = requiredFields.filter(item => !item.field).map(item => item.name);
