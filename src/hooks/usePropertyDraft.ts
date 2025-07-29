@@ -54,7 +54,7 @@ export const usePropertyDraft = () => {
     if (!user?.id) return;
 
     setIsSaving(true);
-    const updatedDraft = { ...draft, ...draftData, user_id: user.id };
+    const updatedDraft = { ...draft, ...draftData, user_id: user.id, status: 'draft' as const };
     
     try {
       // Save to localStorage first (immediate backup)
@@ -87,7 +87,7 @@ export const usePropertyDraft = () => {
     } catch (error) {
       console.error('Error saving draft:', error);
       // At least we have localStorage backup
-      setDraft(updatedDraft);
+      setDraft(updatedDraft as PropertyDraft);
     } finally {
       setIsSaving(false);
     }
@@ -112,12 +112,66 @@ export const usePropertyDraft = () => {
     }
   };
 
+  const submitDraft = async (): Promise<boolean> => {
+    if (!user?.id || !draft?.id) return false;
+
+    try {
+      // Mark draft as submitted
+      const { error: draftError } = await supabase
+        .from('property_drafts')
+        .update({ status: 'submitted' })
+        .eq('id', draft.id)
+        .eq('user_id', user.id);
+
+      if (draftError) throw draftError;
+
+      // Create property record
+      const propertyData = {
+        user_id: user.id,
+        title: draft.title || '',
+        property_type: draft.property_type || '',
+        listing_type: draft.listing_type || 'sale',
+        bhk_type: draft.bhk_type || '',
+        bathrooms: draft.bathrooms || 0,
+        balconies: draft.balconies || 0,
+        super_area: draft.super_area || 0,
+        carpet_area: draft.carpet_area || 0,
+        expected_price: draft.expected_price || 0,
+        state: draft.state || '',
+        city: draft.city || '',
+        locality: draft.locality || '',
+        pincode: draft.pincode || '',
+        description: draft.description || '',
+        images: draft.images || [],
+        videos: draft.videos || [],
+        availability_type: 'immediate',
+        status: 'active'
+      };
+
+      const { error: propertyError } = await supabase
+        .from('properties')
+        .insert([propertyData]);
+
+      if (propertyError) throw propertyError;
+
+      // Clear local storage and draft state
+      localStorage.removeItem(`propertyDraft_${user.id}`);
+      setDraft(null);
+      
+      return true;
+    } catch (error) {
+      console.error('Error submitting draft:', error);
+      return false;
+    }
+  };
+
   return {
     draft,
     isLoading,
     isSaving,
     saveDraft,
     clearDraft,
-    loadDraft
+    loadDraft,
+    submitDraft
   };
 };

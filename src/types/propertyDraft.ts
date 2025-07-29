@@ -2,6 +2,7 @@ export interface PropertyDraft {
   id?: string;
   user_id?: string;
   step_completed: number;
+  status?: 'draft' | 'submitted';
   
   // Step 1: Owner Info
   owner_name?: string;

@@ -184,6 +184,7 @@ export type Database = {
           pincode: string | null
           property_type: string | null
           state: string | null
+          status: string | null
           step_completed: number | null
           super_area: number | null
           title: string | null
@@ -211,6 +212,7 @@ export type Database = {
           pincode?: string | null
           property_type?: string | null
           state?: string | null
+          status?: string | null
           step_completed?: number | null
           super_area?: number | null
           title?: string | null
@@ -238,6 +240,7 @@ export type Database = {
           pincode?: string | null
           property_type?: string | null
           state?: string | null
+          status?: string | null
           step_completed?: number | null
           super_area?: number | null
           title?: string | null

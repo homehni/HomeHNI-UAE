@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'sonner';
-import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { usePropertyDraft } from '@/hooks/usePropertyDraft';
 import { PropertyDraft } from '@/types/propertyDraft';
@@ -9,13 +7,21 @@ import { FormProgressBar } from './FormProgressBar';
 import { OwnerInfoStep } from './OwnerInfoStep';
 import { PropertyInfoStep } from './PropertyInfoStep';
 import { PreviewStep } from './PreviewStep';
+import { useToast } from '@/hooks/use-toast';
 
 export const MultiStepPropertyForm = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { user } = useAuth();
   const navigate = useNavigate();
-  const { draft, isSaving, saveDraft, clearDraft } = usePropertyDraft();
+  const { toast } = useToast();
+  const { 
+    draft, 
+    isSaving, 
+    saveDraft, 
+    clearDraft,
+    submitDraft
+  } = usePropertyDraft();
 
   // Initialize form data from draft or empty state
   const [formData, setFormData] = useState<PropertyDraft>({
@@ -87,61 +93,39 @@ export const MultiStepPropertyForm = () => {
     setCurrentStep(step);
   };
 
-  const handleSaveAsDraft = () => {
-    saveDraft(formData);
-    toast.success('Draft saved successfully!');
+  const handleSaveAsDraft = async () => {
+    await saveDraft(formData);
+    toast({
+      title: "✅ Draft Saved Successfully",
+      description: "Your progress has been saved. You can continue editing anytime.",
+    });
   };
 
   const handleSubmit = async () => {
-    if (!user?.id) {
-      toast.error('Please log in to submit your property');
-      return;
-    }
+    if (!user?.id) return;
 
     setIsSubmitting(true);
-
     try {
-      // Prepare data for final submission to properties table
-      const propertyData = {
-        user_id: user.id,
-        title: formData.title,
-        property_type: formData.property_type,
-        listing_type: formData.listing_type,
-        bhk_type: formData.bhk_type,
-        bathrooms: formData.bathrooms || 0,
-        balconies: formData.balconies || 0,
-        super_area: formData.super_area,
-        carpet_area: formData.carpet_area,
-        expected_price: formData.expected_price,
-        state: formData.state,
-        city: formData.city,
-        locality: formData.locality,
-        pincode: formData.pincode,
-        description: formData.description,
-        images: formData.images || [],
-        videos: formData.videos || [],
-        // Default values for required fields
-        availability_type: formData.listing_type === 'rent' ? 'immediate' : 'ready_to_move',
-        status: 'active'
-      };
-
-      // Submit to properties table
-      const { error } = await supabase
-        .from('properties')
-        .insert([propertyData]);
-
-      if (error) {
-        throw error;
+      const success = await submitDraft();
+      
+      if (success) {
+        toast({
+          title: "✅ Listing Submitted Successfully",
+          description: "Your property listing is now live and visible to potential buyers/renters.",
+        });
+        
+        // Redirect to dashboard
+        navigate('/dashboard');
+      } else {
+        throw new Error('Submission failed');
       }
-
-      // Clear the draft after successful submission
-      await clearDraft();
-
-      toast.success('Property listing submitted successfully!');
-      navigate('/dashboard');
     } catch (error) {
       console.error('Error submitting property:', error);
-      toast.error('Failed to submit property listing. Please try again.');
+      toast({
+        title: "❌ Submission Failed",
+        description: "Please complete all required fields before submitting.",
+        variant: "destructive"
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -189,7 +173,6 @@ export const MultiStepPropertyForm = () => {
           <PreviewStep
             data={formData}
             onBack={handleBack}
-            onEdit={handleEditStep}
             onSaveAsDraft={handleSaveAsDraft}
             onSubmit={handleSubmit}
             isSubmitting={isSubmitting}
