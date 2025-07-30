@@ -95,9 +95,11 @@ export const MultiStepPropertyForm = () => {
   const handleNext = (stepData: Partial<PropertyDraft>) => {
     console.log('MultiStepForm: handleNext called with data:', stepData);
     console.log('MultiStepForm: Current step before:', currentStep);
+    console.log('MultiStepForm: Current formData before update:', formData);
     
     // Update form data without auto-saving
     const updatedData = { ...formData, ...stepData };
+    console.log('MultiStepForm: Updated data to set:', updatedData);
     setFormData(updatedData);
     
     // Only save draft when moving to preview step (step 3)
@@ -105,10 +107,11 @@ export const MultiStepPropertyForm = () => {
       saveDraft(updatedData);
     }
     
-    setCurrentStep(prev => {
-      console.log('MultiStepForm: Setting step from', prev, 'to', prev + 1);
-      return prev + 1;
-    });
+    const nextStep = currentStep + 1;
+    console.log('MultiStepForm: Moving from step', currentStep, 'to step', nextStep);
+    setCurrentStep(nextStep);
+    
+    console.log('MultiStepForm: Step transition completed to:', nextStep);
   };
 
   const handleBack = () => {

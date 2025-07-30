@@ -10,7 +10,10 @@ import { PropertyDraft } from '@/types/propertyDraft';
 
 const ownerInfoSchema = z.object({
   owner_name: z.string().min(1, 'Full name is required'),
-  owner_phone: z.string().regex(/^\d{10,15}$/, 'Phone number must be 10-15 digits'),
+  owner_phone: z.string().min(1, 'Phone number is required').refine((val) => {
+    const cleanedPhone = val.replace(/\D/g, '');
+    return cleanedPhone.length >= 10 && cleanedPhone.length <= 15;
+  }, 'Phone number must be 10-15 digits'),
   owner_role: z.enum(['owner', 'agent', 'builder'])
 });
 
@@ -30,7 +33,7 @@ export const OwnerInfoStep = ({ data, onNext }: OwnerInfoStepProps) => {
     formState: { errors, isValid }
   } = useForm<OwnerInfoFormData>({
     resolver: zodResolver(ownerInfoSchema),
-    mode: 'onChange',
+    mode: 'onBlur',
     defaultValues: {
       owner_name: data.owner_name || '',
       owner_phone: data.owner_phone || '',
@@ -54,11 +57,14 @@ export const OwnerInfoStep = ({ data, onNext }: OwnerInfoStepProps) => {
     };
     
     console.log('OwnerInfoStep: Final submit data:', submitData);
-    console.log('OwnerInfoStep: Calling onNext...');
+    console.log('OwnerInfoStep: About to call onNext with data:', submitData);
     
-    onNext(submitData);
-    
-    console.log('OwnerInfoStep: onNext called successfully');
+    try {
+      onNext(submitData);
+      console.log('OwnerInfoStep: onNext called successfully - should move to next step');
+    } catch (error) {
+      console.error('OwnerInfoStep: Error calling onNext:', error);
+    }
   };
 
   const ownerRole = watch('owner_role');
@@ -142,11 +148,7 @@ export const OwnerInfoStep = ({ data, onNext }: OwnerInfoStepProps) => {
             <Button 
               type="submit" 
               className="px-8"
-              onClick={() => {
-                console.log('Button clicked! Form valid:', isValid);
-                console.log('Current errors:', errors);
-                console.log('Form values:', watch());
-              }}
+              disabled={!isValid}
             >
               Next
             </Button>
