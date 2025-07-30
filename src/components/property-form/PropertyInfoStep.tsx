@@ -63,10 +63,26 @@ export const PropertyInfoStep: React.FC<PropertyInfoStepProps> = ({
   // Custom validation check for button state
   const isFormValid = () => {
     const values = getValues();
-    return !!(values.title && values.propertyType && values.listingType && 
+    return !!(values.title && values.title.length >= 10 && values.propertyType && values.listingType && 
              values.superArea && values.expectedPrice && values.state && 
              values.city && values.locality && values.pincode && 
              images.length >= 3);
+  };
+
+  // Custom validation messages
+  const getCustomValidationErrors = () => {
+    const values = getValues();
+    const customErrors: string[] = [];
+
+    if (values.title && values.title.length < 10) {
+      customErrors.push('Title must be at least 10 characters long');
+    }
+
+    if (images.length < 3) {
+      customErrors.push('Please upload at least 3 property images');
+    }
+
+    return customErrors;
   };
 
   const handleBlur = () => {
@@ -307,6 +323,21 @@ export const PropertyInfoStep: React.FC<PropertyInfoStepProps> = ({
           </div>
 
           <VideoUpload video={video} onVideoChange={setVideo} />
+
+          {/* Custom validation errors */}
+          {getCustomValidationErrors().length > 0 && (
+            <div className="bg-destructive/10 border border-destructive/20 rounded-lg p-4">
+              <h4 className="text-sm font-medium text-destructive mb-2">Please fix the following issues:</h4>
+              <ul className="space-y-1">
+                {getCustomValidationErrors().map((error, index) => (
+                  <li key={index} className="text-sm text-destructive flex items-center gap-2">
+                    <span className="w-1 h-1 bg-destructive rounded-full"></span>
+                    {error}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
 
           <div className="flex justify-between pt-6">
             <Button type="button" variant="outline" onClick={onBack}>
