@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ownerInfoSchema, OwnerInfoFormData } from '@/schemas/propertyValidation';
@@ -23,14 +23,37 @@ export const OwnerInfoStep: React.FC<OwnerInfoStepProps> = ({
     handleSubmit,
     setValue,
     watch,
-    formState: { errors, isValid }
+    trigger,
+    getValues,
+    formState: { errors }
   } = useForm<OwnerInfoFormData>({
     resolver: zodResolver(ownerInfoSchema),
     defaultValues: initialData,
-    mode: 'onChange'
+    mode: 'all' // Enable validation on all events
   });
 
   const selectedRole = watch('role');
+  const formValues = watch();
+
+  // Auto-fill detection and validation
+  useEffect(() => {
+    const detectAutoFill = () => {
+      trigger(); // Trigger validation after potential auto-fill
+    };
+
+    const timer = setTimeout(detectAutoFill, 100);
+    return () => clearTimeout(timer);
+  }, [trigger]);
+
+  // Custom validation check for button state
+  const isFormValid = () => {
+    const values = getValues();
+    return !!(values.fullName && values.phoneNumber && values.email && values.role);
+  };
+
+  const handleBlur = () => {
+    trigger(); // Validate on blur to catch auto-filled values
+  };
 
   const onSubmit = (data: OwnerInfoFormData) => {
     onNext(data as OwnerInfo);
@@ -50,6 +73,9 @@ export const OwnerInfoStep: React.FC<OwnerInfoStepProps> = ({
               {...register('fullName')}
               placeholder="Enter your full name"
               className={errors.fullName ? 'border-destructive' : ''}
+              onBlur={handleBlur}
+              onInput={handleBlur}
+              autoComplete="name"
             />
             {errors.fullName && (
               <p className="text-sm text-destructive">{errors.fullName.message}</p>
@@ -60,9 +86,13 @@ export const OwnerInfoStep: React.FC<OwnerInfoStepProps> = ({
             <Label htmlFor="phoneNumber">Phone Number *</Label>
             <Input
               id="phoneNumber"
+              type="tel"
               {...register('phoneNumber')}
               placeholder="Enter your phone number"
               className={errors.phoneNumber ? 'border-destructive' : ''}
+              onBlur={handleBlur}
+              onInput={handleBlur}
+              autoComplete="tel"
             />
             {errors.phoneNumber && (
               <p className="text-sm text-destructive">{errors.phoneNumber.message}</p>
@@ -77,6 +107,9 @@ export const OwnerInfoStep: React.FC<OwnerInfoStepProps> = ({
               {...register('email')}
               placeholder="Enter your email address"
               className={errors.email ? 'border-destructive' : ''}
+              onBlur={handleBlur}
+              onInput={handleBlur}
+              autoComplete="email"
             />
             {errors.email && (
               <p className="text-sm text-destructive">{errors.email.message}</p>
@@ -111,7 +144,7 @@ export const OwnerInfoStep: React.FC<OwnerInfoStepProps> = ({
           <div className="flex justify-end pt-6">
             <Button
               type="submit"
-              disabled={!isValid}
+              disabled={!isFormValid()}
               className="bg-primary hover:bg-primary/90"
             >
               Next

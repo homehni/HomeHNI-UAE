@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { propertyInfoSchema, PropertyInfoFormData } from '@/schemas/propertyValidation';
@@ -31,7 +31,9 @@ export const PropertyInfoStep: React.FC<PropertyInfoStepProps> = ({
     handleSubmit,
     setValue,
     watch,
-    formState: { errors, isValid }
+    trigger,
+    getValues,
+    formState: { errors }
   } = useForm<PropertyInfoFormData>({
     resolver: zodResolver(propertyInfoSchema),
     defaultValues: {
@@ -39,16 +41,37 @@ export const PropertyInfoStep: React.FC<PropertyInfoStepProps> = ({
       bathrooms: initialData.bathrooms || 0,
       balconies: initialData.balconies || 0,
     },
-    mode: 'onChange'
+    mode: 'all' // Enable validation on all events
   });
 
-  React.useEffect(() => {
+  useEffect(() => {
     setValue('images', images);
-  }, [images, setValue]);
-
-  React.useEffect(() => {
     setValue('video', video);
-  }, [video, setValue]);
+    trigger(); // Re-validate when images/video change
+  }, [images, video, setValue, trigger]);
+
+  // Auto-fill detection and validation
+  useEffect(() => {
+    const detectAutoFill = () => {
+      trigger(); // Trigger validation after potential auto-fill
+    };
+
+    const timer = setTimeout(detectAutoFill, 100);
+    return () => clearTimeout(timer);
+  }, [trigger]);
+
+  // Custom validation check for button state
+  const isFormValid = () => {
+    const values = getValues();
+    return !!(values.title && values.propertyType && values.listingType && 
+             values.superArea && values.expectedPrice && values.state && 
+             values.city && values.locality && values.pincode && 
+             images.length >= 3);
+  };
+
+  const handleBlur = () => {
+    trigger(); // Validate on blur to catch auto-filled values
+  };
 
   const onSubmit = (data: PropertyInfoFormData) => {
     onNext({ ...data, images, video } as PropertyInfo);
@@ -77,6 +100,8 @@ export const PropertyInfoStep: React.FC<PropertyInfoStepProps> = ({
                 {...register('title')}
                 placeholder="Spacious 2BHK Apartment in Prime Location"
                 className={errors.title ? 'border-destructive' : ''}
+                onBlur={handleBlur}
+                onInput={handleBlur}
               />
               {errors.title && (
                 <p className="text-sm text-destructive">{errors.title.message}</p>
@@ -160,6 +185,8 @@ export const PropertyInfoStep: React.FC<PropertyInfoStepProps> = ({
                 {...register('superArea', { valueAsNumber: true })}
                 placeholder="e.g., 1200"
                 className={errors.superArea ? 'border-destructive' : ''}
+                onBlur={handleBlur}
+                onInput={handleBlur}
               />
               {errors.superArea && (
                 <p className="text-sm text-destructive">{errors.superArea.message}</p>
@@ -184,6 +211,8 @@ export const PropertyInfoStep: React.FC<PropertyInfoStepProps> = ({
                 {...register('expectedPrice', { valueAsNumber: true })}
                 placeholder="e.g., 5000000"
                 className={errors.expectedPrice ? 'border-destructive' : ''}
+                onBlur={handleBlur}
+                onInput={handleBlur}
               />
               {errors.expectedPrice && (
                 <p className="text-sm text-destructive">{errors.expectedPrice.message}</p>
@@ -197,6 +226,9 @@ export const PropertyInfoStep: React.FC<PropertyInfoStepProps> = ({
                 {...register('state')}
                 placeholder="e.g., Maharashtra"
                 className={errors.state ? 'border-destructive' : ''}
+                onBlur={handleBlur}
+                onInput={handleBlur}
+                autoComplete="address-level1"
               />
               {errors.state && (
                 <p className="text-sm text-destructive">{errors.state.message}</p>
@@ -210,6 +242,9 @@ export const PropertyInfoStep: React.FC<PropertyInfoStepProps> = ({
                 {...register('city')}
                 placeholder="e.g., Mumbai"
                 className={errors.city ? 'border-destructive' : ''}
+                onBlur={handleBlur}
+                onInput={handleBlur}
+                autoComplete="address-level2"
               />
               {errors.city && (
                 <p className="text-sm text-destructive">{errors.city.message}</p>
@@ -223,6 +258,9 @@ export const PropertyInfoStep: React.FC<PropertyInfoStepProps> = ({
                 {...register('locality')}
                 placeholder="e.g., Bandra West"
                 className={errors.locality ? 'border-destructive' : ''}
+                onBlur={handleBlur}
+                onInput={handleBlur}
+                autoComplete="address-level3"
               />
               {errors.locality && (
                 <p className="text-sm text-destructive">{errors.locality.message}</p>
@@ -236,6 +274,9 @@ export const PropertyInfoStep: React.FC<PropertyInfoStepProps> = ({
                 {...register('pincode')}
                 placeholder="e.g., 400050"
                 className={errors.pincode ? 'border-destructive' : ''}
+                onBlur={handleBlur}
+                onInput={handleBlur}
+                autoComplete="postal-code"
               />
               {errors.pincode && (
                 <p className="text-sm text-destructive">{errors.pincode.message}</p>
@@ -273,7 +314,7 @@ export const PropertyInfoStep: React.FC<PropertyInfoStepProps> = ({
             </Button>
             <Button
               type="submit"
-              disabled={!isValid}
+              disabled={!isFormValid()}
               className="bg-primary hover:bg-primary/90"
             >
               Next

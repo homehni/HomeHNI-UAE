@@ -47,12 +47,23 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
 
   const handleSubmit = () => {
     const formData = getFormData();
-    if (formData.ownerInfo && formData.propertyInfo && 
-        isStepValid(1) && isStepValid(2)) {
+    
+    // Enhanced validation before submission
+    const ownerValid = !!(formData.ownerInfo?.fullName && formData.ownerInfo?.phoneNumber && 
+                         formData.ownerInfo?.email && formData.ownerInfo?.role);
+    const propertyValid = !!(formData.propertyInfo?.title && formData.propertyInfo?.propertyType && 
+                           formData.propertyInfo?.listingType && formData.propertyInfo?.superArea && 
+                           formData.propertyInfo?.expectedPrice && formData.propertyInfo?.state && 
+                           formData.propertyInfo?.city && formData.propertyInfo?.locality && 
+                           formData.propertyInfo?.pincode);
+    
+    if (ownerValid && propertyValid && formData.ownerInfo && formData.propertyInfo) {
       onSubmit({
         ownerInfo: formData.ownerInfo as OwnerInfo,
         propertyInfo: formData.propertyInfo as PropertyInfo
       });
+    } else {
+      console.error('Form validation failed:', { ownerValid, propertyValid, formData });
     }
   };
 
