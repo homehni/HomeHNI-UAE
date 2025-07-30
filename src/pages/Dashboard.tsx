@@ -278,9 +278,8 @@ export const Dashboard: React.FC = () => {
 
         {/* Tabs */}
         <Tabs defaultValue="properties" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="properties">My Listings</TabsTrigger>
-            <TabsTrigger value="drafts">Drafts</TabsTrigger>
             <TabsTrigger value="leads">Contact Leads</TabsTrigger>
             <TabsTrigger value="profile">Profile</TabsTrigger>
           </TabsList>
@@ -366,28 +365,6 @@ export const Dashboard: React.FC = () => {
             )}
           </TabsContent>
 
-          {/* Drafts Tab */}
-          <TabsContent value="drafts" className="space-y-6">
-            <div className="flex justify-between items-center">
-              <h2 className="text-xl font-semibold">Draft Listings</h2>
-              <Button onClick={() => console.log('Create listing functionality to be implemented')}>
-                <Plus className="h-4 w-4 mr-2" />
-                Create New Listing
-              </Button>
-            </div>
-
-            <Card>
-              <CardContent className="text-center py-8">
-                <FileText className="h-12 w-12 mx-auto text-gray-400 mb-4" />
-                <h3 className="text-lg font-medium text-gray-900 mb-2">Draft functionality coming soon</h3>
-                <p className="text-gray-500 mb-4">Property draft management will be available after the new form is implemented</p>
-                <Button onClick={() => console.log('Start listing functionality to be implemented')}>
-                  <Plus className="h-4 w-4 mr-2" />
-                  Start New Listing
-                </Button>
-              </CardContent>
-            </Card>
-          </TabsContent>
 
           {/* Leads Tab */}
           <TabsContent value="leads" className="space-y-6">
