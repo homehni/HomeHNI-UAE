@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
 import { DeleteConfirmationModal } from '@/components/DeleteConfirmationModal';
 import { PropertyDetailModal } from '@/components/PropertyDetailModal';
+import { PropertyEditModal } from '@/components/PropertyEditModal';
 import Header from '@/components/Header';
 import Marquee from '@/components/Marquee';
 
@@ -68,6 +69,13 @@ export const Dashboard: React.FC = () => {
   });
   const [isDeleting, setIsDeleting] = useState(false);
   const [viewPropertyModal, setViewPropertyModal] = useState<{
+    isOpen: boolean;
+    property: Property | null;
+  }>({
+    isOpen: false,
+    property: null
+  });
+  const [editPropertyModal, setEditPropertyModal] = useState<{
     isOpen: boolean;
     property: Property | null;
   }>({
@@ -198,14 +206,21 @@ export const Dashboard: React.FC = () => {
   };
 
   const handleEditProperty = (property: Property) => {
-    // Navigate to post-property page with property data for editing
-    // We can implement this by passing property data as state
-    navigate('/post-property', { 
-      state: { 
-        editMode: true, 
-        propertyData: property 
-      } 
+    setEditPropertyModal({
+      isOpen: true,
+      property
     });
+  };
+
+  const closeEditModal = () => {
+    setEditPropertyModal({
+      isOpen: false,
+      property: null
+    });
+  };
+
+  const handlePropertyUpdated = () => {
+    fetchProperties(); // Refresh the properties list
   };
 
   if (!user) {
@@ -474,6 +489,14 @@ export const Dashboard: React.FC = () => {
         property={viewPropertyModal.property}
         isOpen={viewPropertyModal.isOpen}
         onClose={closeViewModal}
+      />
+
+      {/* Property Edit Modal */}
+      <PropertyEditModal
+        property={editPropertyModal.property}
+        isOpen={editPropertyModal.isOpen}
+        onClose={closeEditModal}
+        onPropertyUpdated={handlePropertyUpdated}
       />
     </div>
   );
