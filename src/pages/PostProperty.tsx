@@ -70,13 +70,13 @@ export const PostProperty: React.FC = () => {
         videoUrls = [videoResult.url];
       }
 
-      // Prepare property data for database
+      // Prepare property data for database with proper case conversion
       const propertyData = {
         user_id: user.id,
         title: data.propertyInfo.title,
-        property_type: data.propertyInfo.propertyType,
-        listing_type: data.propertyInfo.listingType,
-        bhk_type: data.propertyInfo.bhkType,
+        property_type: data.propertyInfo.propertyType.toLowerCase(), // Convert to lowercase
+        listing_type: data.propertyInfo.listingType.toLowerCase(), // Convert to lowercase  
+        bhk_type: data.propertyInfo.bhkType?.toLowerCase() || null, // Convert to lowercase
         bathrooms: Number(data.propertyInfo.bathrooms) || 0,
         balconies: Number(data.propertyInfo.balconies) || 0,
         super_area: Number(data.propertyInfo.superArea),
@@ -93,7 +93,7 @@ export const PostProperty: React.FC = () => {
         status: 'active'
       };
 
-      console.log('Prepared property data:', propertyData);
+      console.log('Prepared property data for database:', propertyData);
 
       toast({
         title: "Saving Property...",
