@@ -99,7 +99,7 @@ export const PropertyInfoStep: React.FC<PropertyInfoStepProps> = ({
                 id="title"
                 {...register('title')}
                 placeholder="Spacious 2BHK Apartment in Prime Location"
-                className={errors.title ? 'border-destructive' : ''}
+                className={errors.title && touchedFields.title ? 'border-destructive' : ''}
                 onBlur={handleBlur}
                 onInput={handleBlur}
               />
@@ -111,7 +111,7 @@ export const PropertyInfoStep: React.FC<PropertyInfoStepProps> = ({
             <div className="space-y-2">
               <Label>Property Type *</Label>
               <Select onValueChange={(value) => setValue('propertyType', value)}>
-                <SelectTrigger className={errors.propertyType ? 'border-destructive' : ''}>
+                <SelectTrigger className={errors.propertyType && touchedFields.propertyType ? 'border-destructive' : ''}>
                   <SelectValue placeholder="Select property type" />
                 </SelectTrigger>
                 <SelectContent>
@@ -128,7 +128,7 @@ export const PropertyInfoStep: React.FC<PropertyInfoStepProps> = ({
             <div className="space-y-2">
               <Label>Listing Type *</Label>
               <Select onValueChange={(value) => setValue('listingType', value as 'Sale' | 'Rent')}>
-                <SelectTrigger className={errors.listingType ? 'border-destructive' : ''}>
+                <SelectTrigger className={errors.listingType && touchedFields.listingType ? 'border-destructive' : ''}>
                   <SelectValue placeholder="Sale / Rent" />
                 </SelectTrigger>
                 <SelectContent>
