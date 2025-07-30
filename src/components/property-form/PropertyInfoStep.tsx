@@ -69,20 +69,62 @@ export const PropertyInfoStep: React.FC<PropertyInfoStepProps> = ({
              images.length >= 3);
   };
 
-  // Custom validation messages
-  const getCustomValidationErrors = () => {
+  // Comprehensive validation messages
+  const getAllValidationErrors = () => {
     const values = getValues();
-    const customErrors: string[] = [];
+    const allErrors: string[] = [];
 
-    if (values.title && values.title.length < 10) {
-      customErrors.push('Title must be at least 10 characters long');
+    // Title validation
+    if (!values.title) {
+      allErrors.push('Property title is required');
+    } else if (values.title.length < 10) {
+      allErrors.push('Title must be at least 10 characters long');
     }
 
+    // Property type validation
+    if (!values.propertyType) {
+      allErrors.push('Please select a property type');
+    }
+
+    // Listing type validation
+    if (!values.listingType) {
+      allErrors.push('Please select listing type (Sale or Rent)');
+    }
+
+    // Area validation
+    if (!values.superArea) {
+      allErrors.push('Super built-up area is required');
+    } else if (values.superArea <= 0) {
+      allErrors.push('Super built-up area must be greater than 0');
+    }
+
+    // Price validation
+    if (!values.expectedPrice) {
+      allErrors.push('Expected price is required');
+    } else if (values.expectedPrice <= 0) {
+      allErrors.push('Expected price must be greater than 0');
+    }
+
+    // Location validation
+    if (!values.state) {
+      allErrors.push('State is required');
+    }
+    if (!values.city) {
+      allErrors.push('City is required');
+    }
+    if (!values.locality) {
+      allErrors.push('Locality is required');
+    }
+    if (!values.pincode) {
+      allErrors.push('Pincode is required');
+    }
+
+    // Images validation
     if (images.length < 3) {
-      customErrors.push('Please upload at least 3 property images');
+      allErrors.push('Please upload at least 3 property images');
     }
 
-    return customErrors;
+    return allErrors;
   };
 
   const handleBlur = () => {
@@ -324,12 +366,12 @@ export const PropertyInfoStep: React.FC<PropertyInfoStepProps> = ({
 
           <VideoUpload video={video} onVideoChange={setVideo} />
 
-          {/* Custom validation errors */}
-          {getCustomValidationErrors().length > 0 && (
+          {/* Comprehensive validation errors */}
+          {getAllValidationErrors().length > 0 && (
             <div className="bg-destructive/10 border border-destructive/20 rounded-lg p-4">
               <h4 className="text-sm font-medium text-destructive mb-2">Please fix the following issues:</h4>
               <ul className="space-y-1">
-                {getCustomValidationErrors().map((error, index) => (
+                {getAllValidationErrors().map((error, index) => (
                   <li key={index} className="text-sm text-destructive flex items-center gap-2">
                     <span className="w-1 h-1 bg-destructive rounded-full"></span>
                     {error}
