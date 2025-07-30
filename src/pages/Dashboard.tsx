@@ -9,6 +9,7 @@ import { Building, MessageSquare, User, LogOut, Plus, Eye, Edit, Trash, FileText
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
 import { DeleteConfirmationModal } from '@/components/DeleteConfirmationModal';
+import { PropertyDetailModal } from '@/components/PropertyDetailModal';
 import Header from '@/components/Header';
 import Marquee from '@/components/Marquee';
 
@@ -17,9 +18,19 @@ interface Property {
   title: string;
   property_type: string;
   listing_type: string;
+  bhk_type?: string;
   expected_price: number;
+  super_area?: number;
+  carpet_area?: number;
+  bathrooms?: number;
+  balconies?: number;
   city: string;
   locality: string;
+  state: string;
+  pincode: string;
+  description?: string;
+  images?: string[];
+  videos?: string[];
   status: string;
   created_at: string;
 }
@@ -56,6 +67,13 @@ export const Dashboard: React.FC = () => {
     title: ''
   });
   const [isDeleting, setIsDeleting] = useState(false);
+  const [viewPropertyModal, setViewPropertyModal] = useState<{
+    isOpen: boolean;
+    property: Property | null;
+  }>({
+    isOpen: false,
+    property: null
+  });
 
   useEffect(() => {
     if (user) {
@@ -163,6 +181,31 @@ export const Dashboard: React.FC = () => {
     } finally {
       setIsDeleting(false);
     }
+  };
+
+  const handleViewProperty = (property: Property) => {
+    setViewPropertyModal({
+      isOpen: true,
+      property
+    });
+  };
+
+  const closeViewModal = () => {
+    setViewPropertyModal({
+      isOpen: false,
+      property: null
+    });
+  };
+
+  const handleEditProperty = (property: Property) => {
+    // Navigate to post-property page with property data for editing
+    // We can implement this by passing property data as state
+    navigate('/post-property', { 
+      state: { 
+        editMode: true, 
+        propertyData: property 
+      } 
+    });
   };
 
   if (!user) {
@@ -278,10 +321,18 @@ export const Dashboard: React.FC = () => {
                           </div>
                         </div>
                         <div className="flex space-x-2">
-                          <Button variant="outline" size="sm">
+                          <Button 
+                            variant="outline" 
+                            size="sm"
+                            onClick={() => handleViewProperty(property)}
+                          >
                             <Eye className="h-4 w-4" />
                           </Button>
-                          <Button variant="outline" size="sm">
+                          <Button 
+                            variant="outline" 
+                            size="sm"
+                            onClick={() => handleEditProperty(property)}
+                          >
                             <Edit className="h-4 w-4" />
                           </Button>
                           <Button 
@@ -416,6 +467,13 @@ export const Dashboard: React.FC = () => {
         title={`Delete ${deleteModal.type === 'property' ? 'Property' : 'Draft'}`}
         description={`Are you sure you want to delete "${deleteModal.title}"? This action cannot be undone.`}
         isDeleting={isDeleting}
+      />
+
+      {/* Property Detail Modal */}
+      <PropertyDetailModal
+        property={viewPropertyModal.property}
+        isOpen={viewPropertyModal.isOpen}
+        onClose={closeViewModal}
       />
     </div>
   );
