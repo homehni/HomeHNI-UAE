@@ -8,8 +8,6 @@ import { Badge } from '@/components/ui/badge';
 import { Building, MessageSquare, User, LogOut, Plus, Eye, Edit, Trash, FileText } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
-import { useDrafts } from '@/hooks/useDrafts';
-import { PropertyDraft } from '@/types/propertyDraft';
 import { DeleteConfirmationModal } from '@/components/DeleteConfirmationModal';
 import Header from '@/components/Header';
 import Marquee from '@/components/Marquee';
@@ -42,7 +40,7 @@ export const Dashboard: React.FC = () => {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { drafts, isLoading: draftsLoading, deleteDraft } = useDrafts();
+  
   const [properties, setProperties] = useState<Property[]>([]);
   const [leads, setLeads] = useState<Lead[]>([]);
   const [loading, setLoading] = useState(true);
@@ -149,15 +147,11 @@ export const Dashboard: React.FC = () => {
         });
         fetchProperties();
       } else {
-        const success = await deleteDraft(deleteModal.id);
-        if (success) {
-          toast({
-            title: "Draft deleted",
-            description: "Your draft has been removed.",
-          });
-        } else {
-          throw new Error('Failed to delete draft');
-        }
+        // Draft deletion functionality to be implemented
+        toast({
+          title: "Draft functionality coming soon",
+          description: "Draft management will be available after the new form is implemented.",
+        });
       }
       closeDeleteModal();
     } catch (error) {
@@ -243,7 +237,7 @@ export const Dashboard: React.FC = () => {
           <TabsContent value="properties" className="space-y-6">
             <div className="flex justify-between items-center">
               <h2 className="text-xl font-semibold">My Properties</h2>
-              <Button onClick={() => navigate('/post-property/form?mode=new')}>
+              <Button onClick={() => console.log('Add property functionality to be implemented')}>
                 <Plus className="h-4 w-4 mr-2" />
                 Add New Property
               </Button>
@@ -257,7 +251,7 @@ export const Dashboard: React.FC = () => {
                   <Building className="h-12 w-12 mx-auto text-gray-400 mb-4" />
                   <h3 className="text-lg font-medium text-gray-900 mb-2">No properties listed yet</h3>
                   <p className="text-gray-500 mb-4">Start by adding your first property listing</p>
-                  <Button onClick={() => navigate('/post-property/form?mode=new')}>
+                  <Button onClick={() => console.log('Add property functionality to be implemented')}>
                     <Plus className="h-4 w-4 mr-2" />
                     List Your First Property
                   </Button>
@@ -316,72 +310,23 @@ export const Dashboard: React.FC = () => {
           <TabsContent value="drafts" className="space-y-6">
             <div className="flex justify-between items-center">
               <h2 className="text-xl font-semibold">Draft Listings</h2>
-              <Button onClick={() => navigate('/post-property/form?mode=new')}>
+              <Button onClick={() => console.log('Create listing functionality to be implemented')}>
                 <Plus className="h-4 w-4 mr-2" />
                 Create New Listing
               </Button>
             </div>
 
-            {draftsLoading ? (
-              <div className="text-center py-8">Loading drafts...</div>
-            ) : drafts.length === 0 ? (
-              <Card>
-                <CardContent className="text-center py-8">
-                  <FileText className="h-12 w-12 mx-auto text-gray-400 mb-4" />
-                  <h3 className="text-lg font-medium text-gray-900 mb-2">No drafts saved yet</h3>
-                  <p className="text-gray-500 mb-4">Your saved property drafts will appear here</p>
-                  <Button onClick={() => navigate('/post-property/form?mode=new')}>
-                    <Plus className="h-4 w-4 mr-2" />
-                    Start New Listing
-                  </Button>
-                </CardContent>
-              </Card>
-            ) : (
-              <div className="grid gap-4">
-                {drafts.map((draft) => (
-                  <Card key={draft.id}>
-                    <CardContent className="p-6">
-                      <div className="flex justify-between items-start">
-                        <div className="flex-1">
-                          <div className="flex items-center gap-2 mb-2">
-                            <h3 className="text-lg font-medium text-gray-900">
-                              {draft.title || 'Untitled Property'}
-                            </h3>
-                            <Badge variant="outline">Draft</Badge>
-                          </div>
-                          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm text-gray-600">
-                            <div>Type: {draft.property_type || 'Not specified'}</div>
-                            <div>For: {draft.listing_type || 'Not specified'}</div>
-                            <div>Price: {draft.expected_price ? `₹${draft.expected_price.toLocaleString()}` : 'Not set'}</div>
-                            <div>Location: {draft.locality || 'Not specified'}, {draft.city || 'Not specified'}</div>
-                          </div>
-                          <div className="mt-2 text-xs text-gray-500">
-                            Last updated: {draft.updated_at ? new Date(draft.updated_at).toLocaleDateString() : 'Unknown'}
-                          </div>
-                        </div>
-                        <div className="flex space-x-2">
-                          <Button 
-                            variant="outline" 
-                            size="sm"
-                            onClick={() => navigate(`/post-property/form?draftId=${draft.id}`)}
-                          >
-                            <Edit className="h-4 w-4 mr-1" />
-                            Continue Editing
-                          </Button>
-                          <Button 
-                            variant="destructive" 
-                            size="sm"
-                            onClick={() => openDeleteModal('draft', draft.id!, draft.title || 'Untitled Property')}
-                          >
-                            <Trash className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            )}
+            <Card>
+              <CardContent className="text-center py-8">
+                <FileText className="h-12 w-12 mx-auto text-gray-400 mb-4" />
+                <h3 className="text-lg font-medium text-gray-900 mb-2">Draft functionality coming soon</h3>
+                <p className="text-gray-500 mb-4">Property draft management will be available after the new form is implemented</p>
+                <Button onClick={() => console.log('Start listing functionality to be implemented')}>
+                  <Plus className="h-4 w-4 mr-2" />
+                  Start New Listing
+                </Button>
+              </CardContent>
+            </Card>
           </TabsContent>
 
           {/* Leads Tab */}

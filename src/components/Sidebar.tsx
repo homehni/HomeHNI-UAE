@@ -61,11 +61,8 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
   };
 
   const handlePostPropertyClick = () => {
-    if (user) {
-      navigate('/post-property');
-    } else {
-      navigate('/auth');
-    }
+    // TODO: Implement property posting functionality
+    console.log('Post property clicked');
     onClose();
   };
 

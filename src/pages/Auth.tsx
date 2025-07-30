@@ -60,10 +60,7 @@ export const Auth: React.FC = () => {
               <div className="text-center">
                 <CardTitle className="text-2xl">Welcome Back</CardTitle>
                 <CardDescription className="mt-2">
-                  {location.search.includes('redirectTo=/post-property/form') 
-                    ? 'Sign in to list your property and access all features'
-                    : 'Sign in to access your property listings and dashboard'
-                  }
+                  Sign in to access your account and all features
                 </CardDescription>
               </div>
               
@@ -82,10 +79,7 @@ export const Auth: React.FC = () => {
               <div className="text-center">
                 <CardTitle className="text-2xl">Create Account</CardTitle>
                 <CardDescription className="mt-2">
-                  {location.search.includes('redirectTo=/post-property/form') 
-                    ? 'Create an account to list your property and access all features'
-                    : 'Join Home HNI to list your property and connect with buyers'
-                  }
+                  Join Home HNI to access all features and connect with buyers
                 </CardDescription>
               </div>
               

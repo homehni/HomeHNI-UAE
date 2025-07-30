@@ -39,8 +39,6 @@ import CommercialSellerPlans from "./pages/CommercialSellerPlans";
 import Blog from "./pages/Blog";
 import { Auth } from "./pages/Auth";
 import { VerifyEmail } from "./pages/VerifyEmail";
-import { PostProperty } from "./pages/PostProperty";
-import { MultiStepPropertyForm } from "./components/property-form/MultiStepPropertyForm";
 import { Dashboard } from "./pages/Dashboard";
 import NotFound from "./pages/NotFound";
 import ScrollToTop from "./components/ScrollToTop";
@@ -91,16 +89,6 @@ const App: React.FC = () => {
             <Route path="/verify-email" element={<VerifyEmail />} />
             
             {/* Protected Routes */}
-            <Route path="/post-property" element={
-              <ProtectedRoute requireEmailVerified>
-                <PostProperty />
-              </ProtectedRoute>
-            } />
-            <Route path="/post-property/form" element={
-              <ProtectedRoute requireEmailVerified>
-                <MultiStepPropertyForm />
-              </ProtectedRoute>
-            } />
             <Route path="/dashboard" element={
               <ProtectedRoute requireEmailVerified>
                 <Dashboard />
