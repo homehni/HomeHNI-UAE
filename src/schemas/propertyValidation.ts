@@ -1,0 +1,34 @@
+import { z } from 'zod';
+
+export const ownerInfoSchema = z.object({
+  fullName: z.string().min(2, 'Full name must be at least 2 characters'),
+  phoneNumber: z.string().min(10, 'Phone number must be at least 10 digits'),
+  email: z.string().email('Please enter a valid email address'),
+  role: z.enum(['Owner', 'Agent', 'Builder']).refine(val => val !== undefined, {
+    message: 'Please select your role',
+  }),
+});
+
+export const propertyInfoSchema = z.object({
+  title: z.string().min(10, 'Title must be at least 10 characters'),
+  propertyType: z.string().min(1, 'Please select property type'),
+  listingType: z.enum(['Sale', 'Rent']).refine(val => val !== undefined, {
+    message: 'Please select listing type',
+  }),
+  bhkType: z.string().min(1, 'Please select BHK type'),
+  bathrooms: z.number().min(0, 'Bathrooms cannot be negative'),
+  balconies: z.number().min(0, 'Balconies cannot be negative'),
+  superArea: z.number().min(1, 'Super area is required'),
+  carpetArea: z.number().optional(),
+  expectedPrice: z.number().min(1, 'Expected price is required'),
+  state: z.string().min(1, 'State is required'),
+  city: z.string().min(1, 'City is required'),
+  locality: z.string().min(1, 'Locality is required'),
+  pincode: z.string().min(6, 'Pincode must be at least 6 characters'),
+  description: z.string().optional(),
+  images: z.array(z.any()).min(3, 'Minimum 3 images required').max(10, 'Maximum 10 images allowed'),
+  video: z.any().optional(),
+});
+
+export type OwnerInfoFormData = z.infer<typeof ownerInfoSchema>;
+export type PropertyInfoFormData = z.infer<typeof propertyInfoSchema>;

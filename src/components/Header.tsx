@@ -50,8 +50,11 @@ const Header = () => {
   };
 
   const handlePostPropertyClick = () => {
-    // TODO: Implement property posting functionality
-    console.log('Post property clicked');
+    if (user) {
+      navigate('/post-property');
+    } else {
+      navigate('/auth?redirectTo=/post-property');
+    }
   };
 
   const handleSignOut = async () => {

@@ -6,7 +6,6 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from '@/contexts/AuthContext';
-import { ProtectedRoute } from '@/components/ProtectedRoute';
 import Index from "./pages/Index";
 import AboutUs from "./pages/AboutUs";
 import TermsAndConditions from "./pages/TermsAndConditions";
@@ -40,6 +39,8 @@ import Blog from "./pages/Blog";
 import { Auth } from "./pages/Auth";
 import { VerifyEmail } from "./pages/VerifyEmail";
 import { Dashboard } from "./pages/Dashboard";
+import { PostProperty } from "./pages/PostProperty";
+import { ProtectedRoute } from "@/components/ProtectedRoute";
 import NotFound from "./pages/NotFound";
 import ScrollToTop from "./components/ScrollToTop";
 
@@ -92,6 +93,12 @@ const App: React.FC = () => {
             <Route path="/dashboard" element={
               <ProtectedRoute requireEmailVerified>
                 <Dashboard />
+              </ProtectedRoute>
+            } />
+            
+            <Route path="/post-property" element={
+              <ProtectedRoute>
+                <PostProperty />
               </ProtectedRoute>
             } />
             
