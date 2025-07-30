@@ -7,6 +7,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
 import { uploadFilesToStorage, uploadSingleFile } from '@/services/fileUploadService';
 import { validatePropertySubmission } from '@/utils/propertyValidation';
+import { mapBhkType, mapPropertyType, mapListingType, validateMappedValues } from '@/utils/propertyMappings';
 
 export const PostProperty: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -42,6 +43,18 @@ export const PostProperty: React.FC = () => {
         console.warn('Validation warnings:', validation.warnings);
       }
 
+      // Validate property data mappings
+      const mappingValidation = validateMappedValues({
+        bhkType: data.propertyInfo.bhkType,
+        propertyType: data.propertyInfo.propertyType,
+        listingType: data.propertyInfo.listingType
+      });
+
+      if (!mappingValidation.isValid) {
+        console.error('Property mapping validation failed:', mappingValidation.errors);
+        throw new Error(`Invalid property data: ${mappingValidation.errors.join(', ')}`);
+      }
+
       // Upload images to storage
       toast({
         title: "Uploading Images...",
@@ -70,13 +83,13 @@ export const PostProperty: React.FC = () => {
         videoUrls = [videoResult.url];
       }
 
-      // Prepare property data for database with proper case conversion
+      // Prepare property data for database with proper mapping
       const propertyData = {
         user_id: user.id,
         title: data.propertyInfo.title,
-        property_type: data.propertyInfo.propertyType.toLowerCase(), // Convert to lowercase
-        listing_type: data.propertyInfo.listingType.toLowerCase(), // Convert to lowercase  
-        bhk_type: data.propertyInfo.bhkType?.toLowerCase() || null, // Convert to lowercase
+        property_type: mapPropertyType(data.propertyInfo.propertyType),
+        listing_type: mapListingType(data.propertyInfo.listingType),
+        bhk_type: data.propertyInfo.bhkType ? mapBhkType(data.propertyInfo.bhkType) : null,
         bathrooms: Number(data.propertyInfo.bathrooms) || 0,
         balconies: Number(data.propertyInfo.balconies) || 0,
         super_area: Number(data.propertyInfo.superArea),
