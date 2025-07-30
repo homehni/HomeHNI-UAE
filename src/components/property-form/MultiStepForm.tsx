@@ -57,13 +57,33 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
                            formData.propertyInfo?.city && formData.propertyInfo?.locality && 
                            formData.propertyInfo?.pincode);
     
-    if (ownerValid && propertyValid && formData.ownerInfo && formData.propertyInfo) {
+    // Enhanced image validation
+    const imageValid = !!(formData.propertyInfo?.images && formData.propertyInfo.images.length >= 3);
+    
+    console.log('Form validation:', { 
+      ownerValid, 
+      propertyValid, 
+      imageValid, 
+      imageCount: formData.propertyInfo?.images?.length,
+      formData 
+    });
+    
+    if (ownerValid && propertyValid && imageValid && formData.ownerInfo && formData.propertyInfo) {
       onSubmit({
         ownerInfo: formData.ownerInfo as OwnerInfo,
         propertyInfo: formData.propertyInfo as PropertyInfo
       });
     } else {
-      console.error('Form validation failed:', { ownerValid, propertyValid, formData });
+      console.error('Form validation failed:', { 
+        ownerValid, 
+        propertyValid, 
+        imageValid,
+        missingFields: {
+          owner: !ownerValid ? 'Missing owner information' : null,
+          property: !propertyValid ? 'Missing property information' : null,
+          images: !imageValid ? 'Need at least 3 images' : null
+        }
+      });
     }
   };
 

@@ -44,7 +44,8 @@ export const usePropertyForm = () => {
       case 2:
         return !!(propertyInfo.title && propertyInfo.propertyType && propertyInfo.listingType && 
                  propertyInfo.superArea && propertyInfo.expectedPrice && propertyInfo.state && 
-                 propertyInfo.city && propertyInfo.locality && propertyInfo.pincode);
+                 propertyInfo.city && propertyInfo.locality && propertyInfo.pincode &&
+                 propertyInfo.images && propertyInfo.images.length >= 3);
       default:
         return true;
     }

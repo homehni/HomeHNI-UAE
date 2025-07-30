@@ -157,9 +157,16 @@ export const PreviewStep: React.FC<PreviewStepProps> = ({
               <Button
                 onClick={handleSubmit}
                 disabled={isSubmitting}
-                className="bg-primary hover:bg-primary/90"
+                className="bg-primary hover:bg-primary/90 min-w-[140px]"
               >
-                {isSubmitting ? 'Submitting...' : 'Submit Listing'}
+                {isSubmitting ? (
+                  <div className="flex items-center gap-2">
+                    <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
+                    <span>Submitting...</span>
+                  </div>
+                ) : (
+                  'Submit Listing'
+                )}
               </Button>
             </div>
           </div>

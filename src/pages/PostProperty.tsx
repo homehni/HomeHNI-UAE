@@ -5,6 +5,8 @@ import { OwnerInfo, PropertyInfo } from '@/types/property';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
+import { uploadFilesToStorage, uploadSingleFile } from '@/services/fileUploadService';
+import { validatePropertySubmission } from '@/utils/propertyValidation';
 
 export const PostProperty: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -25,6 +27,49 @@ export const PostProperty: React.FC = () => {
     setIsSubmitting(true);
 
     try {
+      console.log('Starting property submission with data:', data);
+
+      // Comprehensive validation
+      const validation = validatePropertySubmission(data.ownerInfo, data.propertyInfo);
+      
+      if (!validation.isValid) {
+        console.error('Validation failed:', validation.errors);
+        throw new Error(`Validation failed: ${validation.errors.join(', ')}`);
+      }
+
+      // Show warnings if any
+      if (validation.warnings.length > 0) {
+        console.warn('Validation warnings:', validation.warnings);
+      }
+
+      // Upload images to storage
+      toast({
+        title: "Uploading Images...",
+        description: "Please wait while we upload your property images.",
+      });
+
+      const imageUrls = await uploadFilesToStorage(
+        data.propertyInfo.images,
+        'images',
+        user.id
+      );
+
+      // Upload video if provided
+      let videoUrls: string[] = [];
+      if (data.propertyInfo.video) {
+        toast({
+          title: "Uploading Video...",
+          description: "Please wait while we upload your property video.",
+        });
+
+        const videoResult = await uploadSingleFile(
+          data.propertyInfo.video,
+          'videos',
+          user.id
+        );
+        videoUrls = [videoResult.url];
+      }
+
       // Prepare property data for database
       const propertyData = {
         user_id: user.id,
@@ -32,19 +77,28 @@ export const PostProperty: React.FC = () => {
         property_type: data.propertyInfo.propertyType,
         listing_type: data.propertyInfo.listingType,
         bhk_type: data.propertyInfo.bhkType,
-        bathrooms: data.propertyInfo.bathrooms,
-        balconies: data.propertyInfo.balconies,
-        super_area: data.propertyInfo.superArea,
-        carpet_area: data.propertyInfo.carpetArea,
-        expected_price: data.propertyInfo.expectedPrice,
+        bathrooms: Number(data.propertyInfo.bathrooms) || 0,
+        balconies: Number(data.propertyInfo.balconies) || 0,
+        super_area: Number(data.propertyInfo.superArea),
+        carpet_area: data.propertyInfo.carpetArea ? Number(data.propertyInfo.carpetArea) : null,
+        expected_price: Number(data.propertyInfo.expectedPrice),
         state: data.propertyInfo.state,
         city: data.propertyInfo.city,
         locality: data.propertyInfo.locality,
         pincode: data.propertyInfo.pincode,
-        description: data.propertyInfo.description,
-        availability_type: 'Immediate', // Default value
+        description: data.propertyInfo.description || null,
+        images: imageUrls.map(img => img.url),
+        videos: videoUrls,
+        availability_type: 'immediate', // Fixed case sensitivity
         status: 'active'
       };
+
+      console.log('Prepared property data:', propertyData);
+
+      toast({
+        title: "Saving Property...",
+        description: "Almost done! Saving your property listing.",
+      });
 
       // Insert property into database
       const { data: property, error } = await supabase
@@ -53,11 +107,32 @@ export const PostProperty: React.FC = () => {
         .select()
         .single();
 
-      if (error) throw error;
+      if (error) {
+        console.error('Database error:', error);
+        
+        // Provide specific error messages based on error type
+        let errorMessage = "There was an error submitting your property. Please try again.";
+        
+        if (error.message.includes('availability_type')) {
+          errorMessage = "Invalid availability type. Please contact support.";
+        } else if (error.message.includes('violates check constraint')) {
+          errorMessage = "Some property details don't meet our requirements. Please check your inputs.";
+        } else if (error.message.includes('violates row-level security')) {
+          errorMessage = "Authentication error. Please log out and log back in.";
+        }
+        
+        throw new Error(errorMessage);
+      }
+
+      console.log('Property created successfully:', property);
+
+      // Store owner contact information as metadata (could be extended to separate table)
+      // For now, we'll log it for future enhancement
+      console.log('Owner contact info:', data.ownerInfo);
 
       toast({
         title: "Success!",
-        description: "Your property has been submitted successfully.",
+        description: "Your property has been submitted successfully. Redirecting to dashboard...",
       });
 
       // Redirect to dashboard after successful submission
@@ -65,11 +140,15 @@ export const PostProperty: React.FC = () => {
         navigate('/dashboard');
       }, 2000);
 
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error submitting property:', error);
+      
+      // Clean up uploaded files if property creation failed
+      // This could be enhanced with a cleanup service
+      
       toast({
         title: "Submission Failed",
-        description: "There was an error submitting your property. Please try again.",
+        description: error.message || "There was an error submitting your property. Please try again.",
         variant: "destructive"
       });
     } finally {
