@@ -33,7 +33,7 @@ export const PropertyInfoStep: React.FC<PropertyInfoStepProps> = ({
     watch,
     trigger,
     getValues,
-    formState: { errors }
+    formState: { errors, touchedFields }
   } = useForm<PropertyInfoFormData>({
     resolver: zodResolver(propertyInfoSchema),
     defaultValues: {
@@ -41,7 +41,7 @@ export const PropertyInfoStep: React.FC<PropertyInfoStepProps> = ({
       bathrooms: initialData.bathrooms || 0,
       balconies: initialData.balconies || 0,
     },
-    mode: 'all' // Enable validation on all events
+    mode: 'onTouched' // Only show errors after user interaction
   });
 
   useEffect(() => {
@@ -103,9 +103,9 @@ export const PropertyInfoStep: React.FC<PropertyInfoStepProps> = ({
                 onBlur={handleBlur}
                 onInput={handleBlur}
               />
-              {errors.title && (
-                <p className="text-sm text-destructive">{errors.title.message}</p>
-              )}
+            {errors.title && touchedFields.title && (
+              <p className="text-sm text-destructive">{errors.title.message}</p>
+            )}
             </div>
 
             <div className="space-y-2">
@@ -120,9 +120,9 @@ export const PropertyInfoStep: React.FC<PropertyInfoStepProps> = ({
                   ))}
                 </SelectContent>
               </Select>
-              {errors.propertyType && (
-                <p className="text-sm text-destructive">{errors.propertyType.message}</p>
-              )}
+            {errors.propertyType && touchedFields.propertyType && (
+              <p className="text-sm text-destructive">{errors.propertyType.message}</p>
+            )}
             </div>
 
             <div className="space-y-2">
@@ -136,9 +136,9 @@ export const PropertyInfoStep: React.FC<PropertyInfoStepProps> = ({
                   <SelectItem value="Rent">Rent</SelectItem>
                 </SelectContent>
               </Select>
-              {errors.listingType && (
-                <p className="text-sm text-destructive">{errors.listingType.message}</p>
-              )}
+            {errors.listingType && touchedFields.listingType && (
+              <p className="text-sm text-destructive">{errors.listingType.message}</p>
+            )}
             </div>
 
             <div className="space-y-2">

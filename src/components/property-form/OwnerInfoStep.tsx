@@ -25,11 +25,11 @@ export const OwnerInfoStep: React.FC<OwnerInfoStepProps> = ({
     watch,
     trigger,
     getValues,
-    formState: { errors }
+    formState: { errors, touchedFields }
   } = useForm<OwnerInfoFormData>({
     resolver: zodResolver(ownerInfoSchema),
     defaultValues: initialData,
-    mode: 'all' // Enable validation on all events
+    mode: 'onTouched' // Only show errors after user interaction
   });
 
   const selectedRole = watch('role');
@@ -77,7 +77,7 @@ export const OwnerInfoStep: React.FC<OwnerInfoStepProps> = ({
               onInput={handleBlur}
               autoComplete="name"
             />
-            {errors.fullName && (
+            {errors.fullName && touchedFields.fullName && (
               <p className="text-sm text-destructive">{errors.fullName.message}</p>
             )}
           </div>
@@ -94,7 +94,7 @@ export const OwnerInfoStep: React.FC<OwnerInfoStepProps> = ({
               onInput={handleBlur}
               autoComplete="tel"
             />
-            {errors.phoneNumber && (
+            {errors.phoneNumber && touchedFields.phoneNumber && (
               <p className="text-sm text-destructive">{errors.phoneNumber.message}</p>
             )}
           </div>
@@ -111,7 +111,7 @@ export const OwnerInfoStep: React.FC<OwnerInfoStepProps> = ({
               onInput={handleBlur}
               autoComplete="email"
             />
-            {errors.email && (
+            {errors.email && touchedFields.email && (
               <p className="text-sm text-destructive">{errors.email.message}</p>
             )}
           </div>
@@ -136,7 +136,7 @@ export const OwnerInfoStep: React.FC<OwnerInfoStepProps> = ({
                 <Label htmlFor="builder">Builder</Label>
               </div>
             </RadioGroup>
-            {errors.role && (
+            {errors.role && touchedFields.role && (
               <p className="text-sm text-destructive">{errors.role.message}</p>
             )}
           </div>
