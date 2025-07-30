@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { Building, MessageSquare, User, LogOut, Plus, Eye, Edit, Trash, FileText } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
 import { DeleteConfirmationModal } from '@/components/DeleteConfirmationModal';
 import { PropertyDetailModal } from '@/components/PropertyDetailModal';
@@ -51,7 +51,12 @@ interface Lead {
 export const Dashboard: React.FC = () => {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const { toast } = useToast();
+  
+  // Get tab from URL parameters
+  const searchParams = new URLSearchParams(location.search);
+  const initialTab = searchParams.get('tab') || 'properties';
   
   const [properties, setProperties] = useState<Property[]>([]);
   const [leads, setLeads] = useState<Lead[]>([]);
@@ -277,7 +282,7 @@ export const Dashboard: React.FC = () => {
         </div>
 
         {/* Tabs */}
-        <Tabs defaultValue="properties" className="space-y-6">
+        <Tabs defaultValue={initialTab} className="space-y-6">
           <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="properties">My Listings</TabsTrigger>
             <TabsTrigger value="leads">Contact Leads</TabsTrigger>
