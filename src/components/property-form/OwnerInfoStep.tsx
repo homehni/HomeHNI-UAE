@@ -72,7 +72,7 @@ export const OwnerInfoStep: React.FC<OwnerInfoStepProps> = ({
               id="fullName"
               {...register('fullName')}
               placeholder="Enter your full name"
-              className={errors.fullName ? 'border-destructive' : ''}
+              className={errors.fullName && touchedFields.fullName ? 'border-destructive' : ''}
               onBlur={handleBlur}
               onInput={handleBlur}
               autoComplete="name"
@@ -89,7 +89,7 @@ export const OwnerInfoStep: React.FC<OwnerInfoStepProps> = ({
               type="tel"
               {...register('phoneNumber')}
               placeholder="Enter your phone number"
-              className={errors.phoneNumber ? 'border-destructive' : ''}
+              className={errors.phoneNumber && touchedFields.phoneNumber ? 'border-destructive' : ''}
               onBlur={handleBlur}
               onInput={handleBlur}
               autoComplete="tel"
@@ -106,7 +106,7 @@ export const OwnerInfoStep: React.FC<OwnerInfoStepProps> = ({
               type="email"
               {...register('email')}
               placeholder="Enter your email address"
-              className={errors.email ? 'border-destructive' : ''}
+              className={errors.email && touchedFields.email ? 'border-destructive' : ''}
               onBlur={handleBlur}
               onInput={handleBlur}
               autoComplete="email"

@@ -184,7 +184,7 @@ export const PropertyInfoStep: React.FC<PropertyInfoStepProps> = ({
                 type="number"
                 {...register('superArea', { valueAsNumber: true })}
                 placeholder="e.g., 1200"
-                className={errors.superArea ? 'border-destructive' : ''}
+                className={errors.superArea && touchedFields.superArea ? 'border-destructive' : ''}
                 onBlur={handleBlur}
                 onInput={handleBlur}
               />
@@ -210,7 +210,7 @@ export const PropertyInfoStep: React.FC<PropertyInfoStepProps> = ({
                 type="number"
                 {...register('expectedPrice', { valueAsNumber: true })}
                 placeholder="e.g., 5000000"
-                className={errors.expectedPrice ? 'border-destructive' : ''}
+                className={errors.expectedPrice && touchedFields.expectedPrice ? 'border-destructive' : ''}
                 onBlur={handleBlur}
                 onInput={handleBlur}
               />
@@ -225,7 +225,7 @@ export const PropertyInfoStep: React.FC<PropertyInfoStepProps> = ({
                 id="state"
                 {...register('state')}
                 placeholder="e.g., Maharashtra"
-                className={errors.state ? 'border-destructive' : ''}
+                className={errors.state && touchedFields.state ? 'border-destructive' : ''}
                 onBlur={handleBlur}
                 onInput={handleBlur}
                 autoComplete="address-level1"
@@ -241,7 +241,7 @@ export const PropertyInfoStep: React.FC<PropertyInfoStepProps> = ({
                 id="city"
                 {...register('city')}
                 placeholder="e.g., Mumbai"
-                className={errors.city ? 'border-destructive' : ''}
+                className={errors.city && touchedFields.city ? 'border-destructive' : ''}
                 onBlur={handleBlur}
                 onInput={handleBlur}
                 autoComplete="address-level2"
@@ -257,7 +257,7 @@ export const PropertyInfoStep: React.FC<PropertyInfoStepProps> = ({
                 id="locality"
                 {...register('locality')}
                 placeholder="e.g., Bandra West"
-                className={errors.locality ? 'border-destructive' : ''}
+                className={errors.locality && touchedFields.locality ? 'border-destructive' : ''}
                 onBlur={handleBlur}
                 onInput={handleBlur}
                 autoComplete="address-level3"
@@ -273,7 +273,7 @@ export const PropertyInfoStep: React.FC<PropertyInfoStepProps> = ({
                 id="pincode"
                 {...register('pincode')}
                 placeholder="e.g., 400050"
-                className={errors.pincode ? 'border-destructive' : ''}
+                className={errors.pincode && touchedFields.pincode ? 'border-destructive' : ''}
                 onBlur={handleBlur}
                 onInput={handleBlur}
                 autoComplete="postal-code"
@@ -301,7 +301,7 @@ export const PropertyInfoStep: React.FC<PropertyInfoStepProps> = ({
               maxImages={10}
               minImages={3}
             />
-            {errors.images && (
+            {errors.images && touchedFields.images && (
               <p className="text-sm text-destructive">{errors.images.message}</p>
             )}
           </div>
