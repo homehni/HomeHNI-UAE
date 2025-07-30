@@ -36,7 +36,6 @@ export const MultiStepPropertyForm = () => {
     step_completed: 1,
     owner_name: '',
     owner_phone: '',
-    owner_email: '',
     owner_role: 'owner',
     title: '',
     property_type: '',

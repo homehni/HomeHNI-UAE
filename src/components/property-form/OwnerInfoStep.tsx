@@ -10,7 +10,7 @@ import { PropertyDraft } from '@/types/propertyDraft';
 
 const ownerInfoSchema = z.object({
   owner_name: z.string().min(1, 'Full name is required'),
-  owner_phone: z.string().min(10, 'Phone number must be at least 10 digits'),
+  owner_phone: z.string().regex(/^\d{10,15}$/, 'Phone number must be 10-15 digits'),
   owner_role: z.enum(['owner', 'agent', 'builder'])
 });
 
@@ -30,7 +30,7 @@ export const OwnerInfoStep = ({ data, onNext }: OwnerInfoStepProps) => {
     formState: { errors, isValid }
   } = useForm<OwnerInfoFormData>({
     resolver: zodResolver(ownerInfoSchema),
-    mode: 'onSubmit',
+    mode: 'onChange',
     defaultValues: {
       owner_name: data.owner_name || '',
       owner_phone: data.owner_phone || '',
@@ -125,11 +125,28 @@ export const OwnerInfoStep = ({ data, onNext }: OwnerInfoStepProps) => {
             </RadioGroup>
           </div>
 
+          {/* Form Debug Info */}
+          {Object.keys(errors).length > 0 && (
+            <div className="p-4 bg-destructive/10 border border-destructive/20 rounded-md">
+              <p className="text-sm text-destructive font-medium">Form Validation Errors:</p>
+              <ul className="text-sm text-destructive mt-1">
+                {Object.entries(errors).map(([key, error]) => (
+                  <li key={key}>• {key}: {error?.message}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+
           {/* Submit Button */}
           <div className="flex justify-end">
             <Button 
               type="submit" 
               className="px-8"
+              onClick={() => {
+                console.log('Button clicked! Form valid:', isValid);
+                console.log('Current errors:', errors);
+                console.log('Form values:', watch());
+              }}
             >
               Next
             </Button>
