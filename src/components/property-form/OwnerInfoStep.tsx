@@ -11,9 +11,6 @@ import { PropertyDraft } from '@/types/propertyDraft';
 const ownerInfoSchema = z.object({
   owner_name: z.string().min(1, 'Full name is required'),
   owner_phone: z.string().min(10, 'Phone number must be at least 10 digits'),
-  owner_email: z.string().refine((val) => !val || z.string().email().safeParse(val).success, {
-    message: "Please enter a valid email address"
-  }).optional(),
   owner_role: z.enum(['owner', 'agent', 'builder'])
 });
 
@@ -37,7 +34,6 @@ export const OwnerInfoStep = ({ data, onNext }: OwnerInfoStepProps) => {
     defaultValues: {
       owner_name: data.owner_name || '',
       owner_phone: data.owner_phone || '',
-      owner_email: data.owner_email || '',
       owner_role: data.owner_role || 'owner'
     }
   });
@@ -106,20 +102,6 @@ export const OwnerInfoStep = ({ data, onNext }: OwnerInfoStepProps) => {
             )}
           </div>
 
-          {/* Email Address */}
-          <div className="space-y-2">
-            <Label htmlFor="owner_email">Email Address (Optional)</Label>
-            <Input
-              id="owner_email"
-              type="email"
-              {...register('owner_email')}
-              placeholder="Enter your email address"
-              className={errors.owner_email ? 'border-destructive' : ''}
-            />
-            {errors.owner_email && (
-              <p className="text-sm text-destructive">{String(errors.owner_email.message)}</p>
-            )}
-          </div>
 
           {/* Role */}
           <div className="space-y-3">
