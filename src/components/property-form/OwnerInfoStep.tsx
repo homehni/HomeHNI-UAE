@@ -1,6 +1,7 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import { useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -30,16 +31,28 @@ export const OwnerInfoStep = ({ data, onNext }: OwnerInfoStepProps) => {
     handleSubmit,
     setValue,
     watch,
-    formState: { errors, isValid }
+    trigger,
+    formState: { errors, isValid, isDirty }
   } = useForm<OwnerInfoFormData>({
     resolver: zodResolver(ownerInfoSchema),
-    mode: 'onBlur',
+    mode: 'onChange',
+    reValidateMode: 'onChange',
     defaultValues: {
       owner_name: data.owner_name || '',
       owner_phone: data.owner_phone || '',
       owner_role: data.owner_role || 'owner'
     }
   });
+
+  // Watch form state changes
+  useEffect(() => {
+    console.log('OwnerInfoStep: Form state changed:', {
+      errors,
+      isValid,
+      isDirty,
+      values: watch()
+    });
+  }, [errors, isValid, isDirty, watch]);
 
   console.log('OwnerInfoStep: Current form errors:', errors);
   console.log('OwnerInfoStep: Form is valid:', isValid);
@@ -148,7 +161,14 @@ export const OwnerInfoStep = ({ data, onNext }: OwnerInfoStepProps) => {
             <Button 
               type="submit" 
               className="px-8"
-              disabled={!isValid}
+              onClick={(e) => {
+                console.log('OwnerInfoStep: Button clicked!', {
+                  isValid,
+                  errors,
+                  values: watch(),
+                  event: e
+                });
+              }}
             >
               Next
             </Button>
