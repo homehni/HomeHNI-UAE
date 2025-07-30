@@ -188,7 +188,7 @@ export const PropertyInfoStep: React.FC<PropertyInfoStepProps> = ({
                 onBlur={handleBlur}
                 onInput={handleBlur}
               />
-              {errors.superArea && (
+              {errors.superArea && touchedFields.superArea && (
                 <p className="text-sm text-destructive">{errors.superArea.message}</p>
               )}
             </div>
@@ -214,7 +214,7 @@ export const PropertyInfoStep: React.FC<PropertyInfoStepProps> = ({
                 onBlur={handleBlur}
                 onInput={handleBlur}
               />
-              {errors.expectedPrice && (
+              {errors.expectedPrice && touchedFields.expectedPrice && (
                 <p className="text-sm text-destructive">{errors.expectedPrice.message}</p>
               )}
             </div>
@@ -230,7 +230,7 @@ export const PropertyInfoStep: React.FC<PropertyInfoStepProps> = ({
                 onInput={handleBlur}
                 autoComplete="address-level1"
               />
-              {errors.state && (
+              {errors.state && touchedFields.state && (
                 <p className="text-sm text-destructive">{errors.state.message}</p>
               )}
             </div>
@@ -246,7 +246,7 @@ export const PropertyInfoStep: React.FC<PropertyInfoStepProps> = ({
                 onInput={handleBlur}
                 autoComplete="address-level2"
               />
-              {errors.city && (
+              {errors.city && touchedFields.city && (
                 <p className="text-sm text-destructive">{errors.city.message}</p>
               )}
             </div>
@@ -262,7 +262,7 @@ export const PropertyInfoStep: React.FC<PropertyInfoStepProps> = ({
                 onInput={handleBlur}
                 autoComplete="address-level3"
               />
-              {errors.locality && (
+              {errors.locality && touchedFields.locality && (
                 <p className="text-sm text-destructive">{errors.locality.message}</p>
               )}
             </div>
@@ -278,7 +278,7 @@ export const PropertyInfoStep: React.FC<PropertyInfoStepProps> = ({
                 onInput={handleBlur}
                 autoComplete="postal-code"
               />
-              {errors.pincode && (
+              {errors.pincode && touchedFields.pincode && (
                 <p className="text-sm text-destructive">{errors.pincode.message}</p>
               )}
             </div>
