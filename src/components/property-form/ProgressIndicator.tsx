@@ -20,40 +20,72 @@ export const ProgressIndicator: React.FC<ProgressIndicatorProps> = ({
 
   return (
     <div className="w-full mb-8">
-      <div className="flex items-center justify-between">
+      {/* Progress Bar */}
+      <div className="mb-6">
+        <div className="flex justify-between text-xs text-gray-500 mb-2">
+          <span>Step {currentStep} of {totalSteps}</span>
+          <span>{Math.round((currentStep / totalSteps) * 100)}% Complete</span>
+        </div>
+        <div className="w-full bg-gray-200 rounded-full h-2">
+          <div 
+            className="bg-gradient-to-r from-brand-red to-brand-maroon h-2 rounded-full transition-all duration-300 ease-out"
+            style={{ width: `${(currentStep / totalSteps) * 100}%` }}
+          />
+        </div>
+      </div>
+
+      {/* Step Indicators */}
+      <div className="flex items-center justify-between relative">
         {steps.map((step, index) => (
-          <div key={step.id} className="flex items-center">
-            <div className="flex flex-col items-center">
+          <React.Fragment key={step.id}>
+            <div className="flex flex-col items-center relative z-10">
               <div
                 className={`
-                  flex items-center justify-center w-10 h-10 rounded-full border-2 mb-2
+                  flex items-center justify-center w-12 h-12 rounded-full border-2 mb-3 transition-all duration-300
                   ${currentStep === step.id
-                    ? 'bg-primary border-primary text-primary-foreground'
+                    ? 'bg-brand-red border-brand-red text-white shadow-lg scale-110'
                     : completedSteps.includes(step.id)
-                    ? 'bg-primary border-primary text-primary-foreground'
-                    : 'border-muted-foreground text-muted-foreground'
+                    ? 'bg-brand-maroon border-brand-maroon text-white'
+                    : 'border-gray-300 bg-white text-gray-400'
                   }
                 `}
               >
                 {completedSteps.includes(step.id) ? (
-                  <Check className="w-5 h-5" />
+                  <Check className="w-6 h-6" />
                 ) : (
-                  <span className="text-sm font-medium">{step.id}</span>
+                  <span className="text-sm font-semibold">{step.id}</span>
                 )}
               </div>
-              <span className={`text-xs ${currentStep === step.id ? 'text-primary font-medium' : 'text-muted-foreground'}`}>
+              <span className={`
+                text-sm font-medium text-center transition-colors duration-300
+                ${currentStep === step.id 
+                  ? 'text-brand-red' 
+                  : completedSteps.includes(step.id)
+                  ? 'text-brand-maroon'
+                  : 'text-gray-500'
+                }
+              `}>
                 {step.label}
               </span>
             </div>
             {index < steps.length - 1 && (
-              <div
-                className={`
-                  flex-1 h-0.5 mx-4 mt-[-20px]
-                  ${completedSteps.includes(step.id) ? 'bg-primary' : 'bg-muted'}
-                `}
-              />
+              <div className="flex-1 h-0.5 mx-4 relative">
+                <div className="absolute inset-0 bg-gray-200 rounded-full" />
+                <div
+                  className={`
+                    absolute inset-0 rounded-full transition-all duration-500 ease-out
+                    ${completedSteps.includes(step.id) 
+                      ? 'bg-gradient-to-r from-brand-red to-brand-maroon' 
+                      : 'bg-gray-200'
+                    }
+                  `}
+                  style={{
+                    width: completedSteps.includes(step.id) ? '100%' : '0%'
+                  }}
+                />
+              </div>
             )}
-          </div>
+          </React.Fragment>
         ))}
       </div>
     </div>

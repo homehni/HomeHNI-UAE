@@ -8,6 +8,8 @@ import { useToast } from '@/hooks/use-toast';
 import { uploadFilesToStorage, uploadSingleFile } from '@/services/fileUploadService';
 import { validatePropertySubmission } from '@/utils/propertyValidation';
 import { mapBhkType, mapPropertyType, mapListingType, validateMappedValues } from '@/utils/propertyMappings';
+import Header from '@/components/Header';
+import Marquee from '@/components/Marquee';
 
 export const PostProperty: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -170,8 +172,15 @@ export const PostProperty: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      <MultiStepForm onSubmit={handleSubmit} isSubmitting={isSubmitting} />
+    <div className="min-h-screen bg-gradient-to-br from-blue-50/30 to-indigo-100/30">
+      {/* Marquee at the very top */}
+      <Marquee />
+      {/* Header overlapping with content */}
+      <Header />
+      {/* Content starts with proper spacing */}
+      <div className="pt-32">
+        <MultiStepForm onSubmit={handleSubmit} isSubmitting={isSubmitting} />
+      </div>
     </div>
   );
 };
