@@ -177,15 +177,9 @@ export const Dashboard: React.FC = () => {
       <div className="max-w-6xl mx-auto pt-32 p-4">
         {/* Header */}
         <div className="mb-8">
-          <div className="flex justify-between items-center">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-              <p className="text-gray-600">Welcome back, {user.user_metadata?.full_name || user.email}</p>
-            </div>
-            <Button onClick={handleSignOut} variant="outline">
-              <LogOut className="h-4 w-4 mr-2" />
-              Sign Out
-            </Button>
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
+            <p className="text-gray-600">Welcome back, {user.user_metadata?.full_name || user.email}</p>
           </div>
         </div>
 
@@ -237,7 +231,7 @@ export const Dashboard: React.FC = () => {
           <TabsContent value="properties" className="space-y-6">
             <div className="flex justify-between items-center">
               <h2 className="text-xl font-semibold">My Properties</h2>
-              <Button onClick={() => console.log('Add property functionality to be implemented')}>
+              <Button onClick={() => navigate('/post-property')}>
                 <Plus className="h-4 w-4 mr-2" />
                 Add New Property
               </Button>
@@ -251,7 +245,7 @@ export const Dashboard: React.FC = () => {
                   <Building className="h-12 w-12 mx-auto text-gray-400 mb-4" />
                   <h3 className="text-lg font-medium text-gray-900 mb-2">No properties listed yet</h3>
                   <p className="text-gray-500 mb-4">Start by adding your first property listing</p>
-                  <Button onClick={() => console.log('Add property functionality to be implemented')}>
+                  <Button onClick={() => navigate('/post-property')}>
                     <Plus className="h-4 w-4 mr-2" />
                     List Your First Property
                   </Button>
@@ -291,7 +285,7 @@ export const Dashboard: React.FC = () => {
                             <Edit className="h-4 w-4" />
                           </Button>
                           <Button 
-                            variant="destructive" 
+                            className="bg-brand-red hover:bg-brand-red-dark text-white"
                             size="sm"
                             onClick={() => openDeleteModal('property', property.id, property.title)}
                           >
