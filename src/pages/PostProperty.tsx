@@ -123,17 +123,31 @@ export const PostProperty: React.FC = () => {
         .single();
 
       if (error) {
-        console.error('Database error:', error);
+        console.error('Full database error object:', error);
+        console.error('Error code:', error.code);
+        console.error('Error message:', error.message);
+        console.error('Error details:', error.details);
+        console.error('Error hint:', error.hint);
         
         // Provide specific error messages based on error type
-        let errorMessage = "There was an error submitting your property. Please try again.";
+        let errorMessage = `Database error: ${error.message}`;
         
         if (error.message.includes('availability_type')) {
           errorMessage = "Invalid availability type. Please contact support.";
         } else if (error.message.includes('violates check constraint')) {
-          errorMessage = "Some property details don't meet our requirements. Please check your inputs.";
+          if (error.message.includes('property_type')) {
+            errorMessage = `Invalid property type: "${data.propertyInfo.propertyType}". Please select a valid property type.`;
+          } else if (error.message.includes('listing_type')) {
+            errorMessage = `Invalid listing type: "${data.propertyInfo.listingType}". Please select Sale or Rent.`;
+          } else if (error.message.includes('bhk_type')) {
+            errorMessage = `Invalid BHK type: "${data.propertyInfo.bhkType}". Please select a valid BHK configuration.`;
+          } else {
+            errorMessage = "Some property details don't meet our requirements. Please check your inputs.";
+          }
         } else if (error.message.includes('violates row-level security')) {
           errorMessage = "Authentication error. Please log out and log back in.";
+        } else if (error.message.includes('null value in column')) {
+          errorMessage = "Required fields are missing. Please ensure all mandatory fields are filled.";
         }
         
         throw new Error(errorMessage);
