@@ -13,7 +13,7 @@ const BuyerPlans = () => {
   const plans = [
     {
       name: "Power Plan",
-      price: "₹0",
+      price: "₹2,399 + 18% GST",
       originalPrice: "₹2,399 + 18% GST",
       color: "bg-green-500",
       icon: <Home className="w-6 h-6" />,
@@ -109,9 +109,7 @@ const BuyerPlans = () => {
           <h1 className="text-3xl md:text-5xl font-bold mb-6">
             Choose a Buyer Plan and <span className="text-yellow-400">SAVE LAKHS</span> on Brokerage
           </h1>
-          <p className="text-lg md:text-xl mb-6 max-w-3xl mx-auto">
-            All plans are currently FREE for a limited time. Get expert assistance and find your dream home without paying brokerage!
-          </p>
+          
          
         </div>
       </section>
@@ -134,9 +132,7 @@ const BuyerPlans = () => {
                     <div className="text-sm text-muted-foreground line-through">
                       Original {plan.originalPrice}
                     </div>
-                    <div className="text-sm font-medium text-green-600">
-                      Now Free – Limited Time Only
-                    </div>
+                    
                   </div>
                   <p className="text-sm text-muted-foreground mb-4">{plan.tagline}</p>
                 </CardHeader>
@@ -168,10 +164,7 @@ const BuyerPlans = () => {
       <section className="py-8 px-4 bg-yellow-50">
         <div className="max-w-4xl mx-auto text-center">
           <div className="bg-yellow-100 border border-yellow-300 rounded-lg p-6">
-            <p className="text-yellow-800 font-medium">
-              <strong>Important:</strong> All plans are currently offered at ₹0 as part of our launch offer. 
-              Pricing will be introduced soon. Subscribe early and enjoy the benefits!
-            </p>
+            
           </div>
         </div>
       </section>
