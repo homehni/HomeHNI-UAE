@@ -117,16 +117,7 @@ const OwnerPlans = () => {
       </section>
 
       {/* Disclaimer Banner */}
-      <section className="py-8 px-4 bg-yellow-50">
-        <div className="max-w-4xl mx-auto text-center">
-          <div className="bg-yellow-100 border border-yellow-300 rounded-lg p-6">
-            <p className="text-yellow-800 font-medium">
-              ⚠️ All plans are currently being offered free of cost as part of our limited-time launch offer. 
-              Pricing will be updated soon. Subscribe now and lock in your benefits!
-            </p>
-          </div>
-        </div>
-      </section>
+      
 
       {/* Customer Testimonials */}
       <section className="py-16 px-4 bg-gray-50">
