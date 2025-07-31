@@ -31,12 +31,17 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
     isStepValid
   } = usePropertyForm();
 
-  // Check if WhatsApp modal should be shown (only once per session)
+  // Check if WhatsApp modal should be shown with delay (only once per session)
   useEffect(() => {
     const hasSeenModal = sessionStorage.getItem('whatsapp-modal-shown');
     if (currentStep === 2 && !hasSeenModal) {
-      setShowWhatsAppModal(true);
-      sessionStorage.setItem('whatsapp-modal-shown', 'true');
+      // Show modal after 2.5 seconds delay
+      const timer = setTimeout(() => {
+        setShowWhatsAppModal(true);
+        sessionStorage.setItem('whatsapp-modal-shown', 'true');
+      }, 2500);
+      
+      return () => clearTimeout(timer);
     }
   }, [currentStep]);
 

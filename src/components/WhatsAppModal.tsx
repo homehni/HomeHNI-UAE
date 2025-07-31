@@ -22,7 +22,7 @@ export const WhatsAppModal: React.FC<WhatsAppModalProps> = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md animate-scale-in">
+      <DialogContent className="sm:max-w-md animate-fade-in animate-scale-in transition-all duration-300 ease-out">
         <div className="absolute right-4 top-4">
           <Button
             variant="ghost"
