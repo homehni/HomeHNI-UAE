@@ -44,6 +44,8 @@ import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { AdminRoute } from "@/components/AdminRoute";
 import { AdminLayout } from "@/components/admin/AdminLayout";
 import Admin from "./pages/Admin";
+import AdminProperties from "./pages/AdminProperties";
+import AdminUsers from "./pages/AdminUsers";
 import AdminLogin from "./pages/AdminLogin";
 import NotFound from "./pages/NotFound";
 import ScrollToTop from "./components/ScrollToTop";
@@ -108,12 +110,14 @@ const App: React.FC = () => {
             
             {/* Admin Routes */}
           <Route path="/admin/login" element={<AdminLogin />} />
-          <Route path="/admin/*" element={
+          <Route path="/admin" element={
             <AdminRoute>
               <AdminLayout />
             </AdminRoute>
           }>
             <Route index element={<Admin />} />
+            <Route path="properties" element={<AdminProperties />} />
+            <Route path="users" element={<AdminUsers />} />
           </Route>
             
             <Route path="/robots.txt" element={<RobotsTxt />} />
