@@ -92,7 +92,9 @@ const OwnerPlans = () => {
                   <Badge className={`${plan.color} text-white w-fit mx-auto mb-4`}>
                     {plan.name}
                   </Badge>
-                  
+                  <div className="mb-4">
+                    <div className="text-4xl font-bold text-brand-red">{plan.price}</div>
+                    
                     
                   </div>
                 </CardHeader>
