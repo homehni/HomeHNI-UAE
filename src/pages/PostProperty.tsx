@@ -141,9 +141,33 @@ export const PostProperty: React.FC = () => {
 
       console.log('Property created successfully:', property);
 
-      // Store owner contact information as metadata (could be extended to separate table)
-      // For now, we'll log it for future enhancement
-      console.log('Owner contact info:', data.ownerInfo);
+      // Save owner contact information to property_drafts table
+      const ownerData = {
+        user_id: user.id,
+        owner_name: data.ownerInfo.fullName,
+        owner_email: data.ownerInfo.email,
+        owner_phone: data.ownerInfo.phoneNumber,
+        owner_role: data.ownerInfo.role,
+        title: data.propertyInfo.title,
+        property_type: data.propertyInfo.propertyType,
+        listing_type: data.propertyInfo.listingType,
+        bhk_type: data.propertyInfo.bhkType,
+        state: data.propertyInfo.state,
+        city: data.propertyInfo.city,
+        locality: data.propertyInfo.locality,
+        pincode: data.propertyInfo.pincode,
+        expected_price: Number(data.propertyInfo.expectedPrice),
+        status: 'submitted'
+      };
+
+      const { error: draftError } = await supabase
+        .from('property_drafts')
+        .insert([ownerData]);
+
+      if (draftError) {
+        console.error('Error saving owner info:', draftError);
+        // Don't fail the entire submission if owner info save fails
+      }
 
       toast({
         title: "Success!",
