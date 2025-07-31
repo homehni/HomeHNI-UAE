@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { usePropertyForm } from '@/hooks/usePropertyForm';
 import { ProgressIndicator } from './ProgressIndicator';
 import { OwnerInfoStep } from './OwnerInfoStep';
 import { PropertyInfoStep } from './PropertyInfoStep';
 import { PreviewStep } from './PreviewStep';
+import { WhatsAppModal } from '@/components/WhatsAppModal';
 import { OwnerInfo, PropertyInfo } from '@/types/property';
 
 interface MultiStepFormProps {
@@ -15,6 +16,8 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
   onSubmit,
   isSubmitting = false
 }) => {
+  const [showWhatsAppModal, setShowWhatsAppModal] = useState(false);
+  
   const {
     currentStep,
     ownerInfo,
@@ -28,6 +31,15 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
     isStepValid
   } = usePropertyForm();
 
+  // Check if WhatsApp modal should be shown (only once per session)
+  useEffect(() => {
+    const hasSeenModal = sessionStorage.getItem('whatsapp-modal-shown');
+    if (currentStep === 2 && !hasSeenModal) {
+      setShowWhatsAppModal(true);
+      sessionStorage.setItem('whatsapp-modal-shown', 'true');
+    }
+  }, [currentStep]);
+
   const completedSteps = React.useMemo(() => {
     const completed: number[] = [];
     if (isStepValid(1)) completed.push(1);
@@ -38,6 +50,10 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
   const handleOwnerInfoNext = (data: OwnerInfo) => {
     updateOwnerInfo(data);
     nextStep();
+  };
+
+  const handleContinueToForm = () => {
+    setShowWhatsAppModal(false);
   };
 
   const handlePropertyInfoNext = (data: PropertyInfo) => {
@@ -141,6 +157,13 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
           </div>
         )}
       </div>
+
+      {/* WhatsApp Modal */}
+      <WhatsAppModal
+        open={showWhatsAppModal}
+        onOpenChange={setShowWhatsAppModal}
+        onContinueToForm={handleContinueToForm}
+      />
     </div>
   );
 };

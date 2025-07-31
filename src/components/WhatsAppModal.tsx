@@ -15,14 +15,14 @@ export const WhatsAppModal: React.FC<WhatsAppModalProps> = ({
   onContinueToForm
 }) => {
   const handleWhatsAppListing = () => {
-    const whatsappUrl = "https://wa.me/918074017388?text=Hi! I want to list my property on Home HNI. Please help me get started.";
+    const whatsappUrl = "https://wa.me/918074017388?text=Hi%20I%20want%20to%20list%20my%20property";
     window.open(whatsappUrl, '_blank');
     onOpenChange(false);
   };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-md animate-scale-in">
         <div className="absolute right-4 top-4">
           <Button
             variant="ghost"
@@ -35,21 +35,20 @@ export const WhatsAppModal: React.FC<WhatsAppModalProps> = ({
           </Button>
         </div>
         <DialogHeader>
-          <DialogTitle className="text-center">Quick Property Listing</DialogTitle>
+          <DialogTitle className="text-center text-xl font-bold">Tired of filling forms?</DialogTitle>
+          <DialogDescription className="text-center text-base">
+            You can list your property directly via WhatsApp!
+          </DialogDescription>
         </DialogHeader>
         
         <div className="space-y-4 text-center">
-          <p className="text-muted-foreground">
-            Tired of filling the form? Just click the button below to list your property via WhatsApp.
-          </p>
-          
           <Button 
             onClick={handleWhatsAppListing}
             className="w-full h-12"
             variant="default"
           >
             <MessageCircle className="h-5 w-5 mr-3" />
-            Post via WhatsApp
+            Submit via WhatsApp
           </Button>
         </div>
       </DialogContent>
