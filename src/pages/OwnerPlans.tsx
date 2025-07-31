@@ -17,19 +17,19 @@ const OwnerPlans = () => {
     features: ["On-call assistance", "Plan validity: 45 days", "Guaranteed tenants or 100% money-back"]
   }, {
     name: "Super Relax Plan",
-    price: "₹0",
+    price: "₹5,899 + 18% GST",
     originalPrice: "₹5,899 + 18% GST",
     color: "bg-blue-500",
     features: ["Includes everything in Relax Plan", "Property promotion on website", "Top slot listing (5x visibility)", "Personal field assistant"]
   }, {
     name: "MoneyBack Plan",
-    price: "₹0",
+    price: "₹6,999 + 18% GST",
     originalPrice: "₹6,999 + 18% GST",
     color: "bg-purple-500",
     features: ["100% money-back guarantee", "Relationship Manager (RM)", "Property shown on your behalf", "Photoshoot of your property"]
   }, {
     name: "Super MoneyBack Plan",
-    price: "₹0",
+    price: "₹10,999 + 18% GST",
     originalPrice: "₹10,999 + 18% GST",
     color: "bg-orange-500",
     features: ["Includes everything above", "Facebook marketing of your property", "Rental agreement home-delivered", "Phone number privacy"]
