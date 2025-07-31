@@ -129,9 +129,7 @@ const BuyerPlans = () => {
                   </div>
                   <div className="mb-4">
                     <div className="text-4xl font-bold text-brand-red">{plan.price}</div>
-                    <div className="text-sm text-muted-foreground line-through">
-                      Original {plan.originalPrice}
-                    </div>
+                    
                     
                   </div>
                   <p className="text-sm text-muted-foreground mb-4">{plan.tagline}</p>
