@@ -71,13 +71,13 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
 
   const menuItems = [
     { id: 'post-property', label: 'Post Your Property', hasSubmenu: false, onClick: handlePostPropertyClick },
-    { id: 'rental-agreement', label: 'Rental Agreement', hasSubmenu: false, onClick: () => { navigate('/rental-agreement'); onClose(); } },
+    // { id: 'rental-agreement', label: 'Rental Agreement', hasSubmenu: false, onClick: () => { navigate('/rental-agreement'); onClose(); } },
     { id: 'legal-services', label: 'Legal Services', hasSubmenu: false, onClick: () => { navigate('/legal-services'); onClose(); } },
     { id: 'handover-services', label: 'Handover Services', hasSubmenu: false, onClick: () => { navigate('/handover-services'); onClose(); } },
     { id: 'property-management', label: 'Property Management', hasSubmenu: false, onClick: () => { navigate('/property-management'); onClose(); } },
     { id: 'painting-cleaning', label: 'Painting & Cleaning', hasSubmenu: false, onClick: () => { navigate('/painting-cleaning'); onClose(); } },
     { id: 'packers-movers', label: 'Packers and Movers', hasSubmenu: false, onClick: () => { navigate('/packers-movers'); onClose(); } },
-    { id: 'refer-earn', label: 'Refer & Earn', hasSubmenu: false, onClick: () => { navigate('/refer-earn'); onClose(); } },
+    // { id: 'refer-earn', label: 'Refer & Earn', hasSubmenu: false, onClick: () => { navigate('/refer-earn'); onClose(); } },
     { id: 'rent-receipts', label: 'Rent Receipts', hasSubmenu: false, onClick: () => { navigate('/rent-receipts'); onClose(); } },
     { id: 'owner-plans', label: 'Owner Plans', hasSubmenu: false, onClick: () => { navigate('/owner-plans'); onClose(); } },
     { id: 'buyer-plans', label: 'Buyer Plans', hasSubmenu: false, onClick: () => { navigate('/buyer-plans'); onClose(); } },
@@ -87,13 +87,13 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
   label: 'Commercial Plans',
   hasSubmenu: true,
   submenu: [
-    {
-      label: 'Commercial Tenant Plans',
-      onClick: () => {
-        navigate('/commercial-tenant-plans');
-        onClose();
-      }
-    },
+    // {
+    //   label: 'Commercial Tenant Plans',
+    //   onClick: () => {
+    //     navigate('/commercial-tenant-plans');
+    //     onClose();
+    //   }
+    // },
     {
       label: 'Commercial Owner Plans',
       onClick: () => {
