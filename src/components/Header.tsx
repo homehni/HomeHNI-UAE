@@ -6,6 +6,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { ChevronDown, HelpCircle, Settings, Menu, X, UserPlus, LogIn, LogOut, User, MessageCircle, Users } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
+import { useAdminAuth } from '@/hooks/useAdminAuth';
 import { useToast } from '@/hooks/use-toast';
 import Logo from './Logo';
 import Sidebar from './Sidebar';
@@ -13,6 +14,7 @@ import MegaMenu from './MegaMenu';
 import LegalServicesForm from './LegalServicesForm';
 const Header = () => {
   const { user, signOut } = useAuth();
+  const { isAdmin } = useAdminAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -176,6 +178,12 @@ const Header = () => {
                       <Users className="mr-2 h-4 w-4" />
                       <span>Profile</span>
                     </DropdownMenuItem>
+                    {isAdmin && (
+                      <DropdownMenuItem onClick={() => navigate('/admin')}>
+                        <Settings className="mr-2 h-4 w-4" />
+                        <span>Admin Panel</span>
+                      </DropdownMenuItem>
+                    )}
                     <DropdownMenuSeparator />
                     <DropdownMenuItem onClick={handleSignOut}>
                       <LogOut className="mr-2 h-4 w-4" />
