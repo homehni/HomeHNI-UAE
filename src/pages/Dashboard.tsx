@@ -34,6 +34,10 @@ interface Property {
   videos?: string[];
   status: string;
   created_at: string;
+  owner_name?: string;
+  owner_email?: string;
+  owner_phone?: string;
+  owner_role?: string;
 }
 
 interface Lead {
@@ -97,14 +101,42 @@ export const Dashboard: React.FC = () => {
 
   const fetchProperties = async () => {
     try {
-      const { data, error } = await supabase
+      // Fetch properties
+      const { data: propertiesData, error: propertiesError } = await supabase
         .from('properties')
         .select('*')
         .eq('user_id', user?.id)
         .order('created_at', { ascending: false });
 
-      if (error) throw error;
-      setProperties(data || []);
+      if (propertiesError) throw propertiesError;
+
+      // Fetch property drafts for owner information
+      const { data: draftsData, error: draftsError } = await supabase
+        .from('property_drafts')
+        .select('id, owner_name, owner_email, owner_phone, owner_role')
+        .eq('user_id', user?.id);
+
+      if (draftsError) throw draftsError;
+
+      // Create a map of draft data by property fields
+      const draftMap = new Map();
+      draftsData?.forEach(draft => {
+        draftMap.set(draft.id, draft);
+      });
+
+      // Merge properties with owner information
+      const mergedProperties = propertiesData?.map(property => {
+        const draft = draftMap.get(property.id);
+        return {
+          ...property,
+          owner_name: draft?.owner_name,
+          owner_email: draft?.owner_email,
+          owner_phone: draft?.owner_phone,
+          owner_role: draft?.owner_role,
+        };
+      }) || [];
+
+      setProperties(mergedProperties);
     } catch (error) {
       console.error('Error fetching properties:', error);
     } finally {
@@ -319,26 +351,39 @@ export const Dashboard: React.FC = () => {
                   <Card key={property.id}>
                     <CardContent className="p-6">
                       <div className="flex justify-between items-start">
-                        <div className="flex-1">
-                          <h3 className="text-lg font-medium text-gray-900 mb-2">
-                            {property.title}
-                          </h3>
-                          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm text-gray-600">
-                            <div>Type: {property.property_type}</div>
-                            <div>For: {property.listing_type}</div>
-                            <div>Price: ₹{property.expected_price.toLocaleString()}</div>
-                            <div>Location: {property.locality}, {property.city}</div>
-                          </div>
-                          <div className="mt-2">
-                            <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
-                              property.status === 'active' 
-                                ? 'bg-green-100 text-green-800'
-                                : 'bg-gray-100 text-gray-800'
-                            }`}>
-                              {property.status}
-                            </span>
-                          </div>
-                        </div>
+                         <div className="flex-1">
+                           <h3 className="text-lg font-medium text-gray-900 mb-2">
+                             {property.title}
+                           </h3>
+                           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm text-gray-600 mb-2">
+                             <div>Type: {property.property_type}</div>
+                             <div>For: {property.listing_type}</div>
+                             <div>Price: ₹{property.expected_price.toLocaleString()}</div>
+                             <div>Location: {property.locality}, {property.city}</div>
+                           </div>
+                           {(property.owner_name || property.owner_email || property.owner_phone) && (
+                             <div className="bg-gray-50 p-3 rounded-lg mb-2">
+                               <h4 className="text-sm font-medium text-gray-700 mb-1">Owner Information</h4>
+                               <div className="grid grid-cols-1 md:grid-cols-3 gap-2 text-sm text-gray-600">
+                                 {property.owner_name && <div>Name: {property.owner_name}</div>}
+                                 {property.owner_email && <div>Email: {property.owner_email}</div>}
+                                 {property.owner_phone && <div>Phone: {property.owner_phone}</div>}
+                               </div>
+                               {property.owner_role && (
+                                 <div className="text-sm text-gray-600 mt-1">Role: {property.owner_role}</div>
+                               )}
+                             </div>
+                           )}
+                           <div className="mt-2">
+                             <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
+                               property.status === 'active' 
+                                 ? 'bg-green-100 text-green-800'
+                                 : 'bg-gray-100 text-gray-800'
+                             }`}>
+                               {property.status}
+                             </span>
+                           </div>
+                         </div>
                         <div className="flex space-x-2">
                           <Button 
                             variant="outline" 
