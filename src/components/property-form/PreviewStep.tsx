@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { PropertyFormData } from '@/types/property';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -22,6 +23,7 @@ export const PreviewStep: React.FC<PreviewStepProps> = ({
   isSubmitting = false
 }) => {
   const [showThankYou, setShowThankYou] = useState(false);
+  const navigate = useNavigate();
   const { ownerInfo, propertyInfo } = formData;
 
   const handleSubmit = () => {
@@ -183,7 +185,7 @@ export const PreviewStep: React.FC<PreviewStepProps> = ({
             </DialogDescription>
           </DialogHeader>
           <div className="flex justify-center pt-4">
-            <Button onClick={() => window.location.href = '/dashboard'}>
+            <Button onClick={() => navigate('/dashboard')}>
               Go to Dashboard
             </Button>
           </div>

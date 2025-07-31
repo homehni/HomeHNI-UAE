@@ -147,13 +147,8 @@ export const PostProperty: React.FC = () => {
 
       toast({
         title: "Success!",
-        description: "Your property has been submitted successfully. Redirecting to dashboard...",
+        description: "Your property has been submitted successfully.",
       });
-
-      // Redirect to dashboard after successful submission
-      setTimeout(() => {
-        navigate('/dashboard');
-      }, 2000);
 
     } catch (error: any) {
       console.error('Error submitting property:', error);
