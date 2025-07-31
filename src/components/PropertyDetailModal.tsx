@@ -11,7 +11,10 @@ import {
   Building, 
   Calendar,
   Eye,
-  X
+  X,
+  User,
+  Mail,
+  Phone
 } from 'lucide-react';
 
 interface Property {
@@ -34,6 +37,10 @@ interface Property {
   videos?: string[];
   status: string;
   created_at: string;
+  owner_name?: string;
+  owner_email?: string;
+  owner_phone?: string;
+  owner_role?: string;
 }
 
 interface PropertyDetailModalProps {
@@ -210,6 +217,52 @@ export const PropertyDetailModal: React.FC<PropertyDetailModalProps> = ({
               </div>
             </div>
           </div>
+
+          {/* Owner Information */}
+          {(property.owner_name || property.owner_email || property.owner_phone) && (
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold flex items-center">
+                <User className="h-5 w-5 mr-2 text-brand-red" />
+                Owner Information
+              </h3>
+              
+              <div className="bg-gray-50 rounded-lg p-4 space-y-3">
+                {property.owner_name && (
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Name:</span>
+                    <span className="font-medium">{property.owner_name}</span>
+                  </div>
+                )}
+                
+                {property.owner_email && (
+                  <div className="flex justify-between">
+                    <span className="text-gray-600 flex items-center">
+                      <Mail className="h-4 w-4 mr-1" />
+                      Email:
+                    </span>
+                    <span className="font-medium">{property.owner_email}</span>
+                  </div>
+                )}
+                
+                {property.owner_phone && (
+                  <div className="flex justify-between">
+                    <span className="text-gray-600 flex items-center">
+                      <Phone className="h-4 w-4 mr-1" />
+                      Phone:
+                    </span>
+                    <span className="font-medium">{property.owner_phone}</span>
+                  </div>
+                )}
+                
+                {property.owner_role && (
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Role:</span>
+                    <Badge variant="outline">{property.owner_role}</Badge>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
 
           {/* Description */}
           {property.description && (
