@@ -31,6 +31,9 @@ interface Property {
   status: string;
   created_at: string;
   rejection_reason?: string;
+  owner_name?: string;
+  owner_email?: string;
+  owner_phone?: string;
 }
 
 interface PropertyReviewModalProps {
@@ -157,6 +160,52 @@ export const PropertyReviewModal: React.FC<PropertyReviewModalProps> = ({
 
           {/* Right Column - Details */}
           <div className="space-y-6">
+            {/* Owner Information */}
+            {(property.owner_name || property.owner_email || property.owner_phone) && (
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">Property Owner</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  {property.owner_name && (
+                    <div className="flex items-start gap-3">
+                      <Home className="h-4 w-4 text-muted-foreground mt-0.5" />
+                      <div>
+                        <p className="font-medium text-sm">Name</p>
+                        <p className="text-sm text-muted-foreground">{property.owner_name}</p>
+                      </div>
+                    </div>
+                  )}
+
+                  {property.owner_email && (
+                    <>
+                      <Separator />
+                      <div className="flex items-start gap-3">
+                        <FileText className="h-4 w-4 text-muted-foreground mt-0.5" />
+                        <div>
+                          <p className="font-medium text-sm">Email</p>
+                          <p className="text-sm text-muted-foreground">{property.owner_email}</p>
+                        </div>
+                      </div>
+                    </>
+                  )}
+
+                  {property.owner_phone && (
+                    <>
+                      <Separator />
+                      <div className="flex items-start gap-3">
+                        <Calendar className="h-4 w-4 text-muted-foreground mt-0.5" />
+                        <div>
+                          <p className="font-medium text-sm">Phone</p>
+                          <p className="text-sm text-muted-foreground">{property.owner_phone}</p>
+                        </div>
+                      </div>
+                    </>
+                  )}
+                </CardContent>
+              </Card>
+            )}
+
             {/* Property Info */}
             <Card>
               <CardHeader>

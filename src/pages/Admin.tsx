@@ -23,6 +23,9 @@ interface Property {
   created_at: string;
   rejection_reason?: string;
   user_id: string;
+  owner_name?: string;
+  owner_email?: string;
+  owner_phone?: string;
 }
 
 const Admin = () => {
@@ -56,21 +59,56 @@ const Admin = () => {
 
   const fetchProperties = async () => {
     try {
-      const { data, error } = await supabase
+      const { data: propertiesData, error } = await supabase
         .from('properties')
         .select('*')
         .order('created_at', { ascending: false });
 
       if (error) throw error;
 
-      setProperties(data || []);
+      // Get owner information from property_drafts
+      const { data: draftsData, error: draftsError } = await supabase
+        .from('property_drafts')
+        .select('user_id, owner_name, owner_email, owner_phone, created_at')
+        .order('created_at', { ascending: false });
+
+      if (draftsError) throw draftsError;
+
+      // Map properties with owner information
+      const propertiesWithOwners = propertiesData?.map(property => {
+        // Find the most complete owner information for this user
+        const userDrafts = draftsData?.filter(d => d.user_id === property.user_id) || [];
+        let bestDraft = userDrafts[0]; // Start with most recent
+        
+        for (const draft of userDrafts) {
+          if (draft.owner_name && draft.owner_email && draft.owner_phone) {
+            bestDraft = draft;
+            break; // Found a complete record
+          }
+          // If current best is missing info but this one has some, use this one
+          if ((!bestDraft?.owner_name && draft.owner_name) ||
+              (!bestDraft?.owner_email && draft.owner_email) ||
+              (!bestDraft?.owner_phone && draft.owner_phone)) {
+            bestDraft = draft;
+          }
+        }
+
+        return {
+          ...property,
+          owner_name: bestDraft?.owner_name,
+          owner_email: bestDraft?.owner_email,
+          owner_phone: bestDraft?.owner_phone
+        };
+      }) || [];
+
+      setProperties(propertiesWithOwners);
       
       // Calculate stats
-      const total = data?.length || 0;
-      const pending = data?.filter(p => p.status === 'pending').length || 0;
-      const approved = data?.filter(p => p.status === 'approved').length || 0;
-      const rejected = data?.filter(p => p.status === 'rejected').length || 0;
-      const deleted = data?.filter(p => p.status === 'deleted').length || 0;
+      const total = propertiesWithOwners?.length || 0;
+      const pending = propertiesWithOwners?.filter(p => p.status === 'pending').length || 0;
+      const approved = propertiesWithOwners?.filter(p => p.status === 'approved').length || 0;
+      const rejected = propertiesWithOwners?.filter(p => p.status === 'rejected').length || 0;
+      const deleted = propertiesWithOwners?.filter(p => p.status === 'deleted').length || 0;
 
       setStats({ total, pending, approved, rejected, deleted });
     } catch (error) {

@@ -32,6 +32,9 @@ interface Property {
   created_at: string;
   rejection_reason?: string;
   user_id: string;
+  owner_name?: string;
+  owner_email?: string;
+  owner_phone?: string;
 }
 
 interface PropertyTableProps {
@@ -111,6 +114,7 @@ export const PropertyTable: React.FC<PropertyTableProps> = ({
             <TableHeader>
               <TableRow className="bg-muted/50">
                 <TableHead className="font-semibold">Property</TableHead>
+                <TableHead className="font-semibold">Owner</TableHead>
                 <TableHead className="font-semibold">Location</TableHead>
                 <TableHead className="font-semibold">Type</TableHead>
                 <TableHead className="font-semibold">Price</TableHead>
@@ -132,6 +136,19 @@ export const PropertyTable: React.FC<PropertyTableProps> = ({
                       </div>
                       <div className="text-xs text-muted-foreground">
                         {property.bhk_type}
+                      </div>
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <div className="space-y-1">
+                      <div className="font-medium text-sm truncate max-w-[150px]">
+                        {property.owner_name || 'N/A'}
+                      </div>
+                      <div className="text-xs text-muted-foreground truncate max-w-[150px]">
+                        {property.owner_email || 'N/A'}
+                      </div>
+                      <div className="text-xs text-muted-foreground">
+                        {property.owner_phone || 'N/A'}
                       </div>
                     </div>
                   </TableCell>

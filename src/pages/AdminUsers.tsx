@@ -51,7 +51,7 @@ const AdminUsers = () => {
       // Get unique user IDs
       const uniqueUserIds = [...new Set(properties?.map(p => p.user_id) || [])];
 
-      // Get user information from property_drafts (most recent submission for each user)
+      // Get user information from property_drafts for all users
       const { data: drafts, error: draftsError } = await supabase
         .from('property_drafts')
         .select('user_id, owner_name, owner_email, owner_phone, created_at')
@@ -66,27 +66,41 @@ const AdminUsers = () => {
         return acc;
       }, {} as Record<string, number>) || {};
 
-      // Create user data by getting the most recent draft info for each user
+      // Create user data by aggregating the most complete information for each user
       const usersData = uniqueUserIds.map((userId) => {
         const userDrafts = drafts?.filter(d => d.user_id === userId) || [];
-        const latestDraft = userDrafts[0]; // Most recent draft for this user
         const userProperties = properties?.filter(p => p.user_id === userId) || [];
         const firstPropertyDate = userProperties[userProperties.length - 1]?.created_at;
 
+        // Find the draft with the most complete owner information
+        let bestDraft = userDrafts[0]; // Start with most recent
+        for (const draft of userDrafts) {
+          if (draft.owner_name && draft.owner_email && draft.owner_phone) {
+            bestDraft = draft;
+            break; // Found a complete record
+          }
+          // If current best is missing info but this one has some, use this one
+          if ((!bestDraft?.owner_name && draft.owner_name) ||
+              (!bestDraft?.owner_email && draft.owner_email) ||
+              (!bestDraft?.owner_phone && draft.owner_phone)) {
+            bestDraft = draft;
+          }
+        }
+
         return {
           id: userId,
-          name: latestDraft?.owner_name || 'Unknown User',
-          email: latestDraft?.owner_email || 'Unknown Email',
-          phone: latestDraft?.owner_phone || 'N/A',
+          name: bestDraft?.owner_name || 'Not Provided',
+          email: bestDraft?.owner_email || 'Not Provided', 
+          phone: bestDraft?.owner_phone || 'Not Provided',
           created_at: firstPropertyDate || new Date().toISOString(),
           role: 'user', // All property submitters are regular users
           properties_count: propertyCountMap[userId] || 0
         };
       });
 
-      // Filter out users with no valid information
+      // Only filter out users where ALL information is missing
       const validUsers = usersData.filter(user => 
-        user.name !== 'Unknown User' || user.email !== 'Unknown Email'
+        user.name !== 'Not Provided' || user.email !== 'Not Provided' || user.phone !== 'Not Provided'
       );
 
       setUsers(validUsers);
