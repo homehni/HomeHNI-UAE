@@ -27,7 +27,7 @@ const BuyerPlans = () => {
     },
     {
       name: "Property Expert Plan",
-      price: "₹0",
+      price: "₹2,499 + 18% GST",
       originalPrice: "₹2,499 + 18% GST",
       color: "bg-blue-500",
       icon: <Users className="w-6 h-6" />,
@@ -44,7 +44,7 @@ const BuyerPlans = () => {
     },
     {
       name: "Property Expert MoneyBack Plan",
-      price: "₹0",
+      price: "₹4,999 + 18% GST",
       originalPrice: "₹4,999 + 18% GST",
       color: "bg-red-500",
       icon: <Shield className="w-6 h-6" />,
