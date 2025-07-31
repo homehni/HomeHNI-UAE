@@ -157,7 +157,7 @@ const CommercialBuyerPlan = () => {
                   <CardTitle className="text-2xl font-bold">{plan.name}</CardTitle>
                   <div className="mt-4">
                     <span className="text-3xl font-bold line-through opacity-75">{plan.originalPrice}</span>
-                    <div className="text-4xl font-bold text-green-300 mt-2">Currently FREE</div>
+                    
                   </div>
                 </CardHeader>
                 <CardContent className="p-6">
