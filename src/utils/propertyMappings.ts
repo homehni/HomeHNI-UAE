@@ -2,6 +2,7 @@
 
 export const mapBhkType = (bhkType: string): string => {
   const bhkMappings: { [key: string]: string } = {
+    'Studio': 'studio',
     '1 RK': '1rk',
     '1 BHK': '1bhk',
     '2 BHK': '2bhk', 
@@ -56,7 +57,7 @@ export const validateMappedValues = (data: {
   
   // Validate BHK type if provided
   if (data.bhkType) {
-    const validBhkTypes = ['1rk', '1bhk', '2bhk', '3bhk', '4bhk', '5bhk', '5bhk+', '6bhk', '7bhk', '8bhk', '9bhk', '10bhk'];
+    const validBhkTypes = ['studio', '1rk', '1bhk', '2bhk', '3bhk', '4bhk', '5bhk', '5bhk+', '6bhk', '7bhk', '8bhk', '9bhk', '10bhk'];
     const mappedBhk = mapBhkType(data.bhkType);
     if (!validBhkTypes.includes(mappedBhk)) {
       errors.push(`Invalid BHK type: ${data.bhkType}`);
