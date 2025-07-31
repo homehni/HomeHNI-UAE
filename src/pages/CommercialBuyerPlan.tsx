@@ -100,7 +100,7 @@ const CommercialBuyerPlan = () => {
       <section className="bg-brand-red text-white py-20 pt-32">
         <div className="container mx-auto px-4 text-center">
           <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
-            Get Expert Help to Buy or Lease Commercial Property — 
+            Get Expert Help to Buy or Lease Commercial Property 
            
           </h1>
           <p className="text-xl md:text-2xl mb-8 text-red-100">
