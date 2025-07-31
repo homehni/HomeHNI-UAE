@@ -144,9 +144,7 @@ const CommercialBuyerPlan = () => {
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-4 text-gray-900">
             Choose Your Plan
           </h2>
-          <p className="text-center text-xl text-gray-600 mb-12">
-            All plans currently <span className="text-green-600 font-bold">FREE</span> for a limited time!
-          </p>
+          
           
           <div className="grid md:grid-cols-3 gap-8 mb-8">
             {plans.map((plan, index) => <Card key={index} className={`relative overflow-hidden border-2 ${plan.popular ? 'border-yellow-500 scale-105' : 'border-gray-200'} hover:shadow-xl transition-all`}>
