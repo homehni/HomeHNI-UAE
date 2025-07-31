@@ -71,6 +71,7 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
 
   const menuItems = [
     { id: 'post-property', label: 'Post Your Property', hasSubmenu: false, onClick: handlePostPropertyClick },
+    { id: 'rental-agreement', label: 'Rental Agreement', hasSubmenu: false, onClick: () => { navigate('/rental-agreement'); onClose(); } },
     { id: 'legal-services', label: 'Legal Services', hasSubmenu: false, onClick: () => { navigate('/legal-services'); onClose(); } },
     { id: 'handover-services', label: 'Handover Services', hasSubmenu: false, onClick: () => { navigate('/handover-services'); onClose(); } },
     { id: 'property-management', label: 'Property Management', hasSubmenu: false, onClick: () => { navigate('/property-management'); onClose(); } },
@@ -78,7 +79,6 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
     { id: 'packers-movers', label: 'Packers and Movers', hasSubmenu: false, onClick: () => { navigate('/packers-movers'); onClose(); } },
     { id: 'refer-earn', label: 'Refer & Earn', hasSubmenu: false, onClick: () => { navigate('/refer-earn'); onClose(); } },
     { id: 'rent-receipts', label: 'Rent Receipts', hasSubmenu: false, onClick: () => { navigate('/rent-receipts'); onClose(); } },
-    { id: 'tenant-plans', label: 'Tenant Plans', hasSubmenu: false },
     { id: 'owner-plans', label: 'Owner Plans', hasSubmenu: false, onClick: () => { navigate('/owner-plans'); onClose(); } },
     { id: 'buyer-plans', label: 'Buyer Plans', hasSubmenu: false, onClick: () => { navigate('/buyer-plans'); onClose(); } },
     { id: 'seller-plans', label: 'Seller Plans', hasSubmenu: false, onClick: () => { navigate('/seller-plans'); onClose(); } },
@@ -120,11 +120,8 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
 ,
     { id: 'careers', label: 'Careers', hasSubmenu: false },
     { id: 'corporate-enquiry', label: 'Corporate Enquiry', hasSubmenu: false, onClick: () => { navigate('/corporate-enquiry'); onClose(); } },
-    { id: 'blog', label: 'Blog', hasSubmenu: false, onClick: () => { navigate('/blog'); onClose(); } },
-    { id: 'testimonials', label: 'Testimonials', hasSubmenu: false, onClick: () => { navigate('/testimonials'); onClose(); } },
     { id: 'grievance-redressal', label: 'Grievance Redressal', hasSubmenu: false, onClick: () => { navigate('/grievance-redressal'); onClose(); } },
     { id: 'report-problem', label: 'Report a Problem', hasSubmenu: false, onClick: () => { navigate('/report-problem'); onClose(); } },
-    { id: 'summons-notices', label: 'Summons & Notices', hasSubmenu: false, onClick: () => { navigate('/summons-notices'); onClose(); } },
     
     { 
       id: 'contact-us', 
