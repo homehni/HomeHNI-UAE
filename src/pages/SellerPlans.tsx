@@ -10,36 +10,36 @@ import Marquee from "@/components/Marquee";
 import { Link } from "react-router-dom";
 const SellerPlans: React.FC = () => {
   const plans = [{
-    name: "Relax Plan",
-    price: "₹7,499 + GST",
+    name: "Basic Plan",
+    price: "₹6,499 + GST",
     originalPrice: "₹7,499 + GST",
     description: "Get Buyers Quickly. Save Lakhs on Brokerage.",
     color: "border-green-500 bg-green-50",
-    features: ["Plan Validity: 3 Months", "Property promotion on site", "Photoshoot of your property", "Privacy of your phone number"],
+    features: ["RM + listing + basic promotion"],
     icon: <CheckCircle className="w-6 h-6 text-green-600" />
   }, {
-    name: "Super Relax Plan",
-    price: "₹13,499 + GST",
+    name: "Mid Plan",
+    price: "₹9,999 + GST",
     originalPrice: "₹13,499 + GST",
     description: "Leave your house keys and worries to us. Get buyer super-fast.",
     color: "border-blue-500 bg-blue-50",
-    features: ["All Relax Plan benefits", "Field Assistant shows property on your behalf", "Facebook marketing of your property", "Relationship Manager for follow-ups"],
+    features: ["All Basic Plan benefits", "Social boost + Field agent visits"],
     icon: <Users className="w-6 h-6 text-blue-600" />
   }, {
-    name: "MoneyBack Plan",
-    price: "₹16,499 + GST",
+    name: "Guaranteed Plan",
+    price: "₹14,999 + GST",
     originalPrice: "₹16,499 + GST",
     description: "Guaranteed buyers or Moneyback. RM for super-fast closure.",
     color: "border-purple-500 bg-purple-50",
-    features: ["Guaranteed buyer leads or refund", "Relationship Manager", "High-priority listing and social media push", "3-month validity"],
+    features: ["Guaranteed buyer leads or refund", "Professional Photoshoot"],
     icon: <Shield className="w-6 h-6 text-purple-600" />
   }, {
-    name: "Super MoneyBack Plan",
-    price: "₹20,999 + GST",
+    name: "Elite Plan",
+    price: "₹20,000 + GST",
     originalPrice: "₹20,999 + GST",
     description: "Guaranteed buyers or Moneyback. Hire Field Assistant for showing your house.",
     color: "border-orange-500 bg-orange-50",
-    features: ["Everything in MoneyBack Plan", "Dedicated Field Assistant", "Top slot property visibility", "End-to-end buyer coordination"],
+    features: ["Everything in Guaranteed Plan", "Professional Video","Branding page"],
     icon: <Zap className="w-6 h-6 text-orange-600" />
   }];
   const faqs = [{
