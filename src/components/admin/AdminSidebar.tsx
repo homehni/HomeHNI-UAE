@@ -10,6 +10,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarHeader,
+  SidebarFooter,
   useSidebar,
 } from '@/components/ui/sidebar';
 import {
@@ -18,9 +19,12 @@ import {
   Users,
   Settings,
   Shield,
+  LogOut,
 } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 import { cn } from '@/lib/utils';
+import { useAuth } from '@/contexts/AuthContext';
+import { Button } from '@/components/ui/button';
 
 const navigationItems = [
   {
@@ -48,6 +52,16 @@ const navigationItems = [
 export const AdminSidebar: React.FC = () => {
   const location = useLocation();
   const { open } = useSidebar();
+  const { signOut } = useAuth();
+
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+      window.location.href = '/admin/login';
+    } catch (error) {
+      console.error('Sign out error:', error);
+    }
+  };
 
   return (
     <Sidebar className="border-r border-border bg-card">
@@ -93,6 +107,20 @@ export const AdminSidebar: React.FC = () => {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+
+      <SidebarFooter className="border-t border-border p-4">
+        <Button
+          variant="ghost"
+          onClick={handleSignOut}
+          className={cn(
+            "w-full justify-start gap-3 text-muted-foreground hover:text-foreground hover:bg-accent",
+            !open && "justify-center"
+          )}
+        >
+          <LogOut className="h-4 w-4" />
+          {open && <span>Sign Out</span>}
+        </Button>
+      </SidebarFooter>
     </Sidebar>
   );
 };

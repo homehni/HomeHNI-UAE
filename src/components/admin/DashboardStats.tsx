@@ -6,8 +6,6 @@ import {
   CheckCircle, 
   XCircle, 
   TrendingUp,
-  Users,
-  Eye,
   AlertTriangle
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -64,30 +62,10 @@ export const DashboardStats: React.FC<DashboardStatsProps> = ({ stats }) => {
       change: '-8%',
       changeType: 'positive' as const,
     },
-    {
-      title: 'Active Users',
-      value: 2847,
-      icon: Users,
-      color: 'text-purple-600',
-      bgColor: 'bg-purple-50',
-      borderColor: 'border-purple-200',
-      change: '+23%',
-      changeType: 'positive' as const,
-    },
-    {
-      title: 'Views Today',
-      value: 12543,
-      icon: Eye,
-      color: 'text-indigo-600',
-      bgColor: 'bg-indigo-50',
-      borderColor: 'border-indigo-200',
-      change: '+7%',
-      changeType: 'positive' as const,
-    },
   ];
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6 mb-8">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
       {statItems.map((item, index) => (
         <Card 
           key={index} 
