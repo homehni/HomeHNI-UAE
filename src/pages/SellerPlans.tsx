@@ -110,8 +110,38 @@ const SellerPlans: React.FC = () => {
            
           </div>
 
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-6 max-w-7xl mx-auto">
+            {plans.map((plan, index) => <Card key={index} className={`relative ${plan.color} border-2 hover:shadow-lg transition-shadow`}>
+                <CardHeader className="pb-4">
+                  <div className="flex items-center gap-2 mb-2">
+                    {plan.icon}
+                    <CardTitle className="text-xl font-bold">{plan.name}</CardTitle>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-3xl font-bold text-foreground mb-1">{plan.price}</div>
+                    
+                   
+                  </div>
+                  <CardDescription className="text-center font-medium text-foreground/80 italic">
+                    "{plan.description}"
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <ul className="space-y-2">
+                    {plan.features.map((feature, featureIndex) => <li key={featureIndex} className="flex items-start gap-2 text-sm">
+                        <CheckCircle className="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0" />
+                        <span>{feature}</span>
+                      </li>)}
+                  </ul>
+                  <Button className="w-full" size="lg">
+                    Subscribe Now
+                  </Button>
+                </CardContent>
+              </Card>)}
+          </div>
+
           {/* Feature Comparison Table */}
-          <div className="mb-16 overflow-x-auto">
+          <div className="mt-16 overflow-x-auto">
             <div className="text-center mb-8">
               <h3 className="text-2xl font-bold text-foreground mb-2">Feature Breakdown by Plan</h3>
             </div>
@@ -256,36 +286,6 @@ const SellerPlans: React.FC = () => {
                 </tbody>
               </table>
             </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-6 max-w-7xl mx-auto">
-            {plans.map((plan, index) => <Card key={index} className={`relative ${plan.color} border-2 hover:shadow-lg transition-shadow`}>
-                <CardHeader className="pb-4">
-                  <div className="flex items-center gap-2 mb-2">
-                    {plan.icon}
-                    <CardTitle className="text-xl font-bold">{plan.name}</CardTitle>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-3xl font-bold text-foreground mb-1">{plan.price}</div>
-                    
-                   
-                  </div>
-                  <CardDescription className="text-center font-medium text-foreground/80 italic">
-                    "{plan.description}"
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <ul className="space-y-2">
-                    {plan.features.map((feature, featureIndex) => <li key={featureIndex} className="flex items-start gap-2 text-sm">
-                        <CheckCircle className="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0" />
-                        <span>{feature}</span>
-                      </li>)}
-                  </ul>
-                  <Button className="w-full" size="lg">
-                    Subscribe Now
-                  </Button>
-                </CardContent>
-              </Card>)}
           </div>
         </div>
       </section>
