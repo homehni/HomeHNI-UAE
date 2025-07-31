@@ -104,8 +104,8 @@ export const PostProperty: React.FC = () => {
         description: data.propertyInfo.description || null,
         images: imageUrls.map(img => img.url),
         videos: videoUrls,
-        availability_type: 'immediate', // Fixed case sensitivity
-        status: 'active'
+        availability_type: 'immediate',
+        status: 'pending'
       };
 
       console.log('Prepared property data for database:', propertyData);
