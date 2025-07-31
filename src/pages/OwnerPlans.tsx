@@ -11,8 +11,8 @@ import Marquee from '@/components/Marquee';
 const OwnerPlans = () => {
   const plans = [{
     name: "Relax Plan",
-  
-    originalPrice: "₹3,399 + 18% GST",
+    price: "₹3,399 + 18% GST",
+    
     color: "bg-green-500",
     features: ["On-call assistance", "Plan validity: 45 days", "Guaranteed tenants or 100% money-back"]
   }, {
