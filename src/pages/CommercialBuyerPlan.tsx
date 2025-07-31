@@ -156,7 +156,7 @@ const CommercialBuyerPlan = () => {
                 <CardHeader className={`${plan.color} text-white text-center py-8`}>
                   <CardTitle className="text-2xl font-bold">{plan.name}</CardTitle>
                   <div className="mt-4">
-                    <span className="text-3xl font-bold line-through opacity-75">{plan.originalPrice}</span>
+                    <span className="text-3xl font-bold">{plan.originalPrice}</span>
                     
                   </div>
                 </CardHeader>
