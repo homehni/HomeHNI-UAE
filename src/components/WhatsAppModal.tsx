@@ -1,6 +1,7 @@
 import React from 'react';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
+import { X } from 'lucide-react';
 const WhatsAppIcon = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
