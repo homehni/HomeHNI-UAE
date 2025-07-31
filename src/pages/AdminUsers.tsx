@@ -40,25 +40,16 @@ const AdminUsers = () => {
 
   const fetchUsers = async () => {
     try {
-      // Get all users who have submitted properties
+      // Get all properties with owner information directly from properties table
       const { data: properties, error: propertiesError } = await supabase
         .from('properties')
-        .select('user_id, created_at')
+        .select('user_id, owner_name, owner_email, owner_phone, created_at')
         .order('created_at', { ascending: false });
 
       if (propertiesError) throw propertiesError;
 
       // Get unique user IDs
       const uniqueUserIds = [...new Set(properties?.map(p => p.user_id) || [])];
-
-      // Get user information from property_drafts for all users
-      const { data: drafts, error: draftsError } = await supabase
-        .from('property_drafts')
-        .select('user_id, owner_name, owner_email, owner_phone, created_at')
-        .in('user_id', uniqueUserIds)
-        .order('created_at', { ascending: false });
-
-      if (draftsError) throw draftsError;
 
       // Get property counts for each user
       const propertyCountMap = properties?.reduce((acc, prop) => {
@@ -68,30 +59,29 @@ const AdminUsers = () => {
 
       // Create user data by aggregating the most complete information for each user
       const usersData = uniqueUserIds.map((userId) => {
-        const userDrafts = drafts?.filter(d => d.user_id === userId) || [];
         const userProperties = properties?.filter(p => p.user_id === userId) || [];
         const firstPropertyDate = userProperties[userProperties.length - 1]?.created_at;
 
-        // Find the draft with the most complete owner information
-        let bestDraft = userDrafts[0]; // Start with most recent
-        for (const draft of userDrafts) {
-          if (draft.owner_name && draft.owner_email && draft.owner_phone) {
-            bestDraft = draft;
+        // Find the property with the most complete owner information
+        let bestProperty = userProperties[0]; // Start with most recent
+        for (const property of userProperties) {
+          if (property.owner_name && property.owner_email && property.owner_phone) {
+            bestProperty = property;
             break; // Found a complete record
           }
           // If current best is missing info but this one has some, use this one
-          if ((!bestDraft?.owner_name && draft.owner_name) ||
-              (!bestDraft?.owner_email && draft.owner_email) ||
-              (!bestDraft?.owner_phone && draft.owner_phone)) {
-            bestDraft = draft;
+          if ((!bestProperty?.owner_name && property.owner_name) ||
+              (!bestProperty?.owner_email && property.owner_email) ||
+              (!bestProperty?.owner_phone && property.owner_phone)) {
+            bestProperty = property;
           }
         }
 
         return {
           id: userId,
-          name: bestDraft?.owner_name || 'Not Provided',
-          email: bestDraft?.owner_email || 'Not Provided', 
-          phone: bestDraft?.owner_phone || 'Not Provided',
+          name: bestProperty?.owner_name || 'Not Provided',
+          email: bestProperty?.owner_email || 'Not Provided', 
+          phone: bestProperty?.owner_phone || 'Not Provided',
           created_at: firstPropertyDate || new Date().toISOString(),
           role: 'user', // All property submitters are regular users
           properties_count: propertyCountMap[userId] || 0
