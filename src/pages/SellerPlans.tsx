@@ -13,7 +13,7 @@ const SellerPlans: React.FC = () => {
   const plans = [
     {
       name: "Relax Plan",
-      price: "₹0",
+      price: "₹7,499 + GST",
       originalPrice: "₹7,499 + GST",
       description: "Get Buyers Quickly. Save Lakhs on Brokerage.",
       color: "border-green-500 bg-green-50",
@@ -27,7 +27,7 @@ const SellerPlans: React.FC = () => {
     },
     {
       name: "Super Relax Plan",
-      price: "₹0",
+      price: "₹13,499 + GST",
       originalPrice: "₹13,499 + GST",
       description: "Leave your house keys and worries to us. Get buyer super-fast.",
       color: "border-blue-500 bg-blue-50",
@@ -41,7 +41,7 @@ const SellerPlans: React.FC = () => {
     },
     {
       name: "MoneyBack Plan",
-      price: "₹0",
+      price: "₹16,499 + GST",
       originalPrice: "₹16,499 + GST",
       description: "Guaranteed buyers or Moneyback. RM for super-fast closure.",
       color: "border-purple-500 bg-purple-50",
@@ -55,7 +55,7 @@ const SellerPlans: React.FC = () => {
     },
     {
       name: "Super MoneyBack Plan",
-      price: "₹0",
+      price: "₹20,999 + GST",
       originalPrice: "₹20,999 + GST",
       description: "Guaranteed buyers or Moneyback. Hire Field Assistant for showing your house.",
       color: "border-orange-500 bg-orange-50",
@@ -112,9 +112,7 @@ const SellerPlans: React.FC = () => {
           <h1 className="text-3xl md:text-5xl font-bold text-white mb-6">
             Get Buyers Quickly. SAVE LAKHS on Brokerage
           </h1>
-          <p className="text-lg md:text-xl text-white/90 mb-8 max-w-3xl mx-auto">
-            All plans are FREE for a limited time. Get verified buyers and sell your property faster — without brokerage!
-          </p>
+          
          
         </div>
       </section>
@@ -128,9 +126,7 @@ const SellerPlans: React.FC = () => {
             <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
               Seller Plans
             </h2>
-            <p className="text-lg text-muted-foreground">
-              All Plans Temporarily ₹0
-            </p>
+           
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-6 max-w-7xl mx-auto">
@@ -144,9 +140,7 @@ const SellerPlans: React.FC = () => {
                   <div className="text-center">
                     <div className="text-3xl font-bold text-foreground mb-1">{plan.price}</div>
                     <div className="text-sm text-muted-foreground line-through">{plan.originalPrice}</div>
-                    <Badge variant="secondary" className="mt-2 bg-yellow-100 text-yellow-800 border-yellow-300">
-                      Free for Limited Time
-                    </Badge>
+                   
                   </div>
                   <CardDescription className="text-center font-medium text-foreground/80 italic">
                     "{plan.description}"
