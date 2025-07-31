@@ -9,8 +9,9 @@ import { useToast } from '@/hooks/use-toast';
 
 interface User {
   id: string;
-  email: string;
   name: string;
+  email: string;
+  phone: string;
   created_at: string;
   role: string;
   properties_count: number;
@@ -39,60 +40,61 @@ const AdminUsers = () => {
 
   const fetchUsers = async () => {
     try {
-      // Fetch users with their roles and property counts
-      const { data: userRoles, error: rolesError } = await supabase
-        .from('user_roles')
-        .select(`
-          user_id,
-          role,
-          created_at
-        `);
+      // Get all users who have submitted properties
+      const { data: properties, error: propertiesError } = await supabase
+        .from('properties')
+        .select('user_id, created_at')
+        .order('created_at', { ascending: false });
 
-      if (rolesError) throw rolesError;
+      if (propertiesError) throw propertiesError;
+
+      // Get unique user IDs
+      const uniqueUserIds = [...new Set(properties?.map(p => p.user_id) || [])];
+
+      // Get user information from property_drafts (most recent submission for each user)
+      const { data: drafts, error: draftsError } = await supabase
+        .from('property_drafts')
+        .select('user_id, owner_name, owner_email, owner_phone, created_at')
+        .in('user_id', uniqueUserIds)
+        .order('created_at', { ascending: false });
+
+      if (draftsError) throw draftsError;
 
       // Get property counts for each user
-      const { data: propertyCounts, error: propError } = await supabase
-        .from('properties')
-        .select('user_id')
-        .neq('status', 'deleted');
-
-      if (propError) throw propError;
-
-      // Count properties per user
-      const propertyCountMap = propertyCounts.reduce((acc, prop) => {
+      const propertyCountMap = properties?.reduce((acc, prop) => {
         acc[prop.user_id] = (acc[prop.user_id] || 0) + 1;
         return acc;
-      }, {} as Record<string, number>);
+      }, {} as Record<string, number>) || {};
 
-      // Get user profiles using the new function
-      const { data: userProfiles, error: profilesError } = await supabase.rpc('get_user_profiles');
+      // Create user data by getting the most recent draft info for each user
+      const usersData = uniqueUserIds.map((userId) => {
+        const userDrafts = drafts?.filter(d => d.user_id === userId) || [];
+        const latestDraft = userDrafts[0]; // Most recent draft for this user
+        const userProperties = properties?.filter(p => p.user_id === userId) || [];
+        const firstPropertyDate = userProperties[userProperties.length - 1]?.created_at;
 
-      if (profilesError) {
-        console.error('Could not fetch user profiles:', profilesError);
-      }
-
-      // Combine the data
-      const usersData = userRoles.map((userRole) => {
-        const profile = userProfiles?.find((p: any) => p.id === userRole.user_id);
-        const metadata = profile?.raw_user_meta_data as any;
-        const userName = metadata?.full_name || metadata?.name || 'Unknown User';
-        
         return {
-          id: userRole.user_id,
-          email: profile?.email || 'Unknown Email',
-          name: userName,
-          created_at: userRole.created_at,
-          role: userRole.role,
-          properties_count: propertyCountMap[userRole.user_id] || 0
+          id: userId,
+          name: latestDraft?.owner_name || 'Unknown User',
+          email: latestDraft?.owner_email || 'Unknown Email',
+          phone: latestDraft?.owner_phone || 'N/A',
+          created_at: firstPropertyDate || new Date().toISOString(),
+          role: 'user', // All property submitters are regular users
+          properties_count: propertyCountMap[userId] || 0
         };
       });
 
-      setUsers(usersData);
+      // Filter out users with no valid information
+      const validUsers = usersData.filter(user => 
+        user.name !== 'Unknown User' || user.email !== 'Unknown Email'
+      );
+
+      setUsers(validUsers);
 
       // Calculate stats
-      const total = usersData.length;
-      const admins = usersData.filter(u => u.role === 'admin').length;
-      const regularUsers = usersData.filter(u => u.role === 'user').length;
+      const total = validUsers.length;
+      const admins = 0; // No admins in this list
+      const regularUsers = total;
 
       setStats({ total, admins, users: regularUsers });
     } catch (error) {
@@ -112,8 +114,9 @@ const AdminUsers = () => {
 
     if (searchTerm) {
       filtered = filtered.filter(user =>
-        user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
         user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        user.phone.toLowerCase().includes(searchTerm.toLowerCase()) ||
         user.role.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
@@ -161,7 +164,7 @@ const AdminUsers = () => {
 
         <Card className="border-border bg-card">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">Regular Users</CardTitle>
+            <CardTitle className="text-sm font-medium text-muted-foreground">Property Owners</CardTitle>
             <UserCheck className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -171,11 +174,13 @@ const AdminUsers = () => {
 
         <Card className="border-border bg-card">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">Administrators</CardTitle>
+            <CardTitle className="text-sm font-medium text-muted-foreground">Active Listings</CardTitle>
             <ShieldCheck className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-foreground">{stats.admins}</div>
+            <div className="text-2xl font-bold text-foreground">
+              {users.reduce((sum, user) => sum + user.properties_count, 0)}
+            </div>
           </CardContent>
         </Card>
       </div>
@@ -185,8 +190,8 @@ const AdminUsers = () => {
         <CardHeader className="pb-4">
           <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
             <div>
-              <CardTitle className="text-xl font-semibold text-foreground">User Accounts</CardTitle>
-              <p className="text-sm text-muted-foreground">All registered users and their details</p>
+              <CardTitle className="text-xl font-semibold text-foreground">Property Owners</CardTitle>
+              <p className="text-sm text-muted-foreground">Users who have submitted property listings</p>
             </div>
             <div className="relative w-full sm:w-64">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
@@ -204,9 +209,9 @@ const AdminUsers = () => {
             <Table>
               <TableHeader>
                 <TableRow className="border-border hover:bg-muted/50">
-                <TableHead className="text-muted-foreground font-medium">Name</TableHead>
-                <TableHead className="text-muted-foreground font-medium">Email</TableHead>
-                <TableHead className="text-muted-foreground font-medium">Role</TableHead>
+                  <TableHead className="text-muted-foreground font-medium">Name</TableHead>
+                  <TableHead className="text-muted-foreground font-medium">Email</TableHead>
+                  <TableHead className="text-muted-foreground font-medium">Phone</TableHead>
                   <TableHead className="text-muted-foreground font-medium">Properties</TableHead>
                   <TableHead className="text-muted-foreground font-medium">Joined</TableHead>
                 </TableRow>
@@ -221,10 +226,8 @@ const AdminUsers = () => {
                       <TableCell className="text-foreground">
                         {user.email}
                       </TableCell>
-                      <TableCell>
-                        <Badge variant={getRoleBadgeVariant(user.role)} className="capitalize">
-                          {user.role}
-                        </Badge>
+                      <TableCell className="text-foreground">
+                        {user.phone}
                       </TableCell>
                       <TableCell className="text-foreground">
                         {user.properties_count}
@@ -237,7 +240,7 @@ const AdminUsers = () => {
                 ) : (
                   <TableRow>
                     <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
-                      No users found
+                      No property owners found
                     </TableCell>
                   </TableRow>
                 )}
