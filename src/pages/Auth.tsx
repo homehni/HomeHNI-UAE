@@ -6,6 +6,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Chrome, Home, UserPlus, LogIn } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import Header from '@/components/Header';
+import Marquee from '@/components/Marquee';
 
 export const Auth: React.FC = () => {
   const { user, signInWithGoogle } = useAuth();
@@ -35,8 +37,14 @@ export const Auth: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
-      <Card className="w-full max-w-md">
+    <div className="min-h-screen">
+      {/* Marquee at the very top */}
+      <Marquee />
+      {/* Header overlapping with content */}
+      <Header />
+      {/* Auth content with proper spacing */}
+      <div className="pt-20 bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen flex items-center justify-center p-4">
+        <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <div className="flex items-center justify-center mb-4">
             <Home className="h-8 w-8 text-brand-red mr-2" />
@@ -99,7 +107,8 @@ export const Auth: React.FC = () => {
             By continuing, you agree to our Terms of Service and Privacy Policy
           </div>
         </CardContent>
-      </Card>
+        </Card>
+      </div>
     </div>
   );
 };
