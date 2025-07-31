@@ -1,17 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { AdminStats } from '@/components/admin/AdminStats';
+import { DashboardStats } from '@/components/admin/DashboardStats';
+import { PropertyTable } from '@/components/admin/PropertyTable';
 import { PropertyReviewModal } from '@/components/admin/PropertyReviewModal';
 import { DeleteConfirmationModal } from '@/components/DeleteConfirmationModal';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Badge } from '@/components/ui/badge';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Eye, CheckCircle, XCircle, Trash2, Search } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { format } from 'date-fns';
 
 interface Property {
   id: string;
@@ -226,184 +219,68 @@ const Admin = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-red"></div>
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
       </div>
     );
   }
 
+  const handleRejectWithProperty = (property: Property) => {
+    setSelectedProperty(property);
+    setReviewModalOpen(true);
+  };
+
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="container mx-auto px-4 py-8">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Admin Dashboard</h1>
-          <p className="text-gray-600">Manage property listings and user submissions</p>
-        </div>
-
-        <AdminStats stats={stats} />
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Property Listings</CardTitle>
-            <div className="flex flex-col sm:flex-row gap-4 mt-4">
-              <div className="relative flex-1">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-                <Input
-                  placeholder="Search by title, city, or location..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10"
-                />
-              </div>
-              <Select value={statusFilter} onValueChange={setStatusFilter}>
-                <SelectTrigger className="w-full sm:w-48">
-                  <SelectValue placeholder="Filter by status" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Status</SelectItem>
-                  <SelectItem value="pending">Pending</SelectItem>
-                  <SelectItem value="approved">Approved</SelectItem>
-                  <SelectItem value="rejected">Rejected</SelectItem>
-                  <SelectItem value="deleted">Deleted</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="overflow-x-auto">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Title</TableHead>
-                    <TableHead>Location</TableHead>
-                    <TableHead>Type</TableHead>
-                    <TableHead>Price</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Submitted</TableHead>
-                    <TableHead>Actions</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {filteredProperties.map((property) => (
-                    <TableRow key={property.id}>
-                      <TableCell className="font-medium">
-                        <div className="max-w-[200px] truncate">
-                          {property.title}
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <div className="text-sm">
-                          {property.city}, {property.state}
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <div className="text-sm">
-                          {property.property_type}
-                          <br />
-                          <span className="text-gray-500">{property.listing_type}</span>
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        ₹{property.expected_price?.toLocaleString()}
-                      </TableCell>
-                      <TableCell>
-                        <Badge className={getStatusColor(property.status)}>
-                          {property.status}
-                        </Badge>
-                      </TableCell>
-                      <TableCell>
-                        {format(new Date(property.created_at), 'MMM dd, yyyy')}
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex space-x-2">
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            onClick={() => {
-                              setSelectedProperty(property);
-                              setReviewModalOpen(true);
-                            }}
-                          >
-                            <Eye className="h-4 w-4" />
-                          </Button>
-                          
-                          {property.status === 'pending' && (
-                            <>
-                              <Button
-                                size="sm"
-                                onClick={() => handleApprove(property.id)}
-                                disabled={actionLoading}
-                              >
-                                <CheckCircle className="h-4 w-4" />
-                              </Button>
-                              
-                              <Button
-                                size="sm"
-                                variant="destructive"
-                                onClick={() => {
-                                  setSelectedProperty(property);
-                                  setReviewModalOpen(true);
-                                }}
-                                disabled={actionLoading}
-                              >
-                                <XCircle className="h-4 w-4" />
-                              </Button>
-                            </>
-                          )}
-                          
-                          {property.status !== 'deleted' && (
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              onClick={() => {
-                                setPropertyToDelete(property.id);
-                                setDeleteModalOpen(true);
-                              }}
-                              disabled={actionLoading}
-                            >
-                              <Trash2 className="h-4 w-4" />
-                            </Button>
-                          )}
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-              
-              {filteredProperties.length === 0 && (
-                <div className="text-center py-8 text-gray-500">
-                  No properties found matching your filters.
-                </div>
-              )}
-            </div>
-          </CardContent>
-        </Card>
-
-        <PropertyReviewModal
-          property={selectedProperty}
-          open={reviewModalOpen}
-          onClose={() => {
-            setReviewModalOpen(false);
-            setSelectedProperty(null);
-          }}
-          onApprove={handleApprove}
-          onReject={handleReject}
-          loading={actionLoading}
-        />
-
-        <DeleteConfirmationModal
-          isOpen={deleteModalOpen}
-          onClose={() => {
-            setDeleteModalOpen(false);
-            setPropertyToDelete(null);
-          }}
-          onConfirm={handleDelete}
-          title="Delete Property"
-          description="Are you sure you want to delete this property? This action will mark it as deleted."
-          isDeleting={actionLoading}
-        />
+    <div className="space-y-6">
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold text-foreground mb-2">Dashboard Overview</h1>
+        <p className="text-muted-foreground">Monitor and manage property listings across your platform</p>
       </div>
+
+      <DashboardStats stats={stats} />
+
+      <PropertyTable
+        properties={filteredProperties}
+        searchTerm={searchTerm}
+        onSearchChange={setSearchTerm}
+        statusFilter={statusFilter}
+        onStatusFilterChange={setStatusFilter}
+        onView={(property) => {
+          setSelectedProperty(property);
+          setReviewModalOpen(true);
+        }}
+        onApprove={handleApprove}
+        onReject={handleRejectWithProperty}
+        onDelete={(id) => {
+          setPropertyToDelete(id);
+          setDeleteModalOpen(true);
+        }}
+        actionLoading={actionLoading}
+      />
+
+      <PropertyReviewModal
+        property={selectedProperty}
+        open={reviewModalOpen}
+        onClose={() => {
+          setReviewModalOpen(false);
+          setSelectedProperty(null);
+        }}
+        onApprove={handleApprove}
+        onReject={handleReject}
+        loading={actionLoading}
+      />
+
+      <DeleteConfirmationModal
+        isOpen={deleteModalOpen}
+        onClose={() => {
+          setDeleteModalOpen(false);
+          setPropertyToDelete(null);
+        }}
+        onConfirm={handleDelete}
+        title="Delete Property"
+        description="Are you sure you want to delete this property? This action will mark it as deleted."
+        isDeleting={actionLoading}
+      />
     </div>
   );
 };

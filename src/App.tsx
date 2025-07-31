@@ -42,6 +42,7 @@ import { Dashboard } from "./pages/Dashboard";
 import { PostProperty } from "./pages/PostProperty";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { AdminRoute } from "@/components/AdminRoute";
+import { AdminLayout } from "@/components/admin/AdminLayout";
 import Admin from "./pages/Admin";
 import AdminLogin from "./pages/AdminLogin";
 import NotFound from "./pages/NotFound";
@@ -107,11 +108,13 @@ const App: React.FC = () => {
             
             {/* Admin Routes */}
           <Route path="/admin/login" element={<AdminLogin />} />
-          <Route path="/admin" element={
+          <Route path="/admin/*" element={
             <AdminRoute>
-              <Admin />
+              <AdminLayout />
             </AdminRoute>
-          } />
+          }>
+            <Route index element={<Admin />} />
+          </Route>
             
             <Route path="/robots.txt" element={<RobotsTxt />} />
             <Route path="/sitemap.xml" element={<SitemapXml />} />
