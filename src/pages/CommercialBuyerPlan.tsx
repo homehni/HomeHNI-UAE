@@ -101,7 +101,7 @@ const CommercialBuyerPlan = () => {
         <div className="container mx-auto px-4 text-center">
           <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
             Get Expert Help to Buy or Lease Commercial Property — 
-            <span className="text-yellow-400"> Absolutely Free</span> (For Now!)
+            <span className="text-yellow-400"></span> (For Now!)
           </h1>
           <p className="text-xl md:text-2xl mb-8 text-red-100">
             Trusted by 3 Lakh+ Buyers & Tenants across India
