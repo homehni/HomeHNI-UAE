@@ -83,6 +83,10 @@ export type Database = {
           listing_type: string
           locality: string
           maintenance_charges: number | null
+          owner_email: string | null
+          owner_name: string | null
+          owner_phone: string | null
+          owner_role: string | null
           pincode: string
           price_negotiable: boolean | null
           property_type: string
@@ -119,6 +123,10 @@ export type Database = {
           listing_type: string
           locality: string
           maintenance_charges?: number | null
+          owner_email?: string | null
+          owner_name?: string | null
+          owner_phone?: string | null
+          owner_role?: string | null
           pincode: string
           price_negotiable?: boolean | null
           property_type: string
@@ -155,6 +163,10 @@ export type Database = {
           listing_type?: string
           locality?: string
           maintenance_charges?: number | null
+          owner_email?: string | null
+          owner_name?: string | null
+          owner_phone?: string | null
+          owner_role?: string | null
           pincode?: string
           price_negotiable?: boolean | null
           property_type?: string

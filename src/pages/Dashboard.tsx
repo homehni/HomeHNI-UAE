@@ -101,7 +101,7 @@ export const Dashboard: React.FC = () => {
 
   const fetchProperties = async () => {
     try {
-      // Fetch properties
+      // Fetch all properties for the current user with owner information
       const { data: propertiesData, error: propertiesError } = await supabase
         .from('properties')
         .select('*')
@@ -110,44 +110,8 @@ export const Dashboard: React.FC = () => {
 
       if (propertiesError) throw propertiesError;
 
-      // Fetch property drafts for owner information
-      const { data: draftsData, error: draftsError } = await supabase
-        .from('property_drafts')
-        .select('user_id, owner_name, owner_email, owner_phone, owner_role, created_at')
-        .eq('user_id', user?.id)
-        .order('created_at', { ascending: false });
-
-      if (draftsError) throw draftsError;
-
-      // Map properties with owner information
-      const mergedProperties = propertiesData?.map(property => {
-        // Find the most complete owner information for this user
-        const userDrafts = draftsData?.filter(d => d.user_id === property.user_id) || [];
-        let bestDraft = userDrafts[0]; // Start with most recent
-        
-        for (const draft of userDrafts) {
-          if (draft.owner_name && draft.owner_email && draft.owner_phone) {
-            bestDraft = draft;
-            break; // Found a complete record
-          }
-          // If current best is missing info but this one has some, use this one
-          if ((!bestDraft?.owner_name && draft.owner_name) ||
-              (!bestDraft?.owner_email && draft.owner_email) ||
-              (!bestDraft?.owner_phone && draft.owner_phone)) {
-            bestDraft = draft;
-          }
-        }
-
-        return {
-          ...property,
-          owner_name: bestDraft?.owner_name,
-          owner_email: bestDraft?.owner_email,
-          owner_phone: bestDraft?.owner_phone,
-          owner_role: bestDraft?.owner_role,
-        };
-      }) || [];
-
-      setProperties(mergedProperties);
+      // Owner information is now stored directly in properties table
+      setProperties(propertiesData || []);
     } catch (error) {
       console.error('Error fetching properties:', error);
     } finally {

@@ -105,7 +105,12 @@ export const PostProperty: React.FC = () => {
         images: imageUrls.map(img => img.url),
         videos: videoUrls,
         availability_type: 'immediate',
-        status: 'pending'
+        status: 'pending',
+        // Add owner information directly to properties table
+        owner_name: data.ownerInfo.fullName,
+        owner_email: data.ownerInfo.email,
+        owner_phone: data.ownerInfo.phoneNumber,
+        owner_role: data.ownerInfo.role
       };
 
       console.log('Prepared property data for database:', propertyData);
