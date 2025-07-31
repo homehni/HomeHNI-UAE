@@ -97,9 +97,7 @@ const OwnerPlans = () => {
                     <div className="text-sm text-muted-foreground line-through">
                       Original {plan.originalPrice}
                     </div>
-                    <div className="text-sm font-medium text-green-600">
-                      Now Free – Limited Time
-                    </div>
+                    
                   </div>
                 </CardHeader>
                 <CardContent>
