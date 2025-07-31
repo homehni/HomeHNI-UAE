@@ -71,7 +71,6 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
 
   const menuItems = [
     { id: 'post-property', label: 'Post Your Property', hasSubmenu: false, onClick: handlePostPropertyClick },
-    { id: 'rental-agreement', label: 'Rental Agreement', hasSubmenu: false, onClick: () => { navigate('/rental-agreement'); onClose(); } },
     { id: 'legal-services', label: 'Legal Services', hasSubmenu: false, onClick: () => { navigate('/legal-services'); onClose(); } },
     { id: 'handover-services', label: 'Handover Services', hasSubmenu: false, onClick: () => { navigate('/handover-services'); onClose(); } },
     { id: 'property-management', label: 'Property Management', hasSubmenu: false, onClick: () => { navigate('/property-management'); onClose(); } },
