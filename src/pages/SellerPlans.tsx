@@ -119,7 +119,7 @@ const SellerPlans: React.FC = () => {
                   </div>
                   <div className="text-center">
                     <div className="text-3xl font-bold text-foreground mb-1">{plan.price}</div>
-                    <div className="text-sm text-muted-foreground line-through">{plan.originalPrice}</div>
+                    
                    
                   </div>
                   <CardDescription className="text-center font-medium text-foreground/80 italic">
