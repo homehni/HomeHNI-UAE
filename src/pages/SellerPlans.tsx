@@ -110,6 +110,154 @@ const SellerPlans: React.FC = () => {
            
           </div>
 
+          {/* Feature Comparison Table */}
+          <div className="mb-16 overflow-x-auto">
+            <div className="text-center mb-8">
+              <h3 className="text-2xl font-bold text-foreground mb-2">Feature Breakdown by Plan</h3>
+            </div>
+            <div className="min-w-full">
+              <table className="w-full border-collapse border border-border rounded-lg overflow-hidden">
+                <thead>
+                  <tr className="bg-secondary">
+                    <th className="border border-border p-4 text-left font-semibold">Feature</th>
+                    <th className="border border-border p-4 text-center font-semibold">Basic</th>
+                    <th className="border border-border p-4 text-center font-semibold">Mid Plan</th>
+                    <th className="border border-border p-4 text-center font-semibold">Guaranteed</th>
+                    <th className="border border-border p-4 text-center font-semibold">Elite</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr className="bg-card">
+                    <td className="border border-border p-4 font-medium">Relationship Manager</td>
+                    <td className="border border-border p-4 text-center">
+                      <CheckCircle className="w-5 h-5 text-green-600 mx-auto" />
+                    </td>
+                    <td className="border border-border p-4 text-center">
+                      <CheckCircle className="w-5 h-5 text-green-600 mx-auto" />
+                    </td>
+                    <td className="border border-border p-4 text-center">
+                      <CheckCircle className="w-5 h-5 text-green-600 mx-auto" />
+                    </td>
+                    <td className="border border-border p-4 text-center">
+                      <CheckCircle className="w-5 h-5 text-green-600 mx-auto" />
+                    </td>
+                  </tr>
+                  <tr className="bg-background">
+                    <td className="border border-border p-4 font-medium">Platform Listing</td>
+                    <td className="border border-border p-4 text-center">
+                      <CheckCircle className="w-5 h-5 text-green-600 mx-auto" />
+                    </td>
+                    <td className="border border-border p-4 text-center">
+                      <CheckCircle className="w-5 h-5 text-green-600 mx-auto" />
+                    </td>
+                    <td className="border border-border p-4 text-center">
+                      <CheckCircle className="w-5 h-5 text-green-600 mx-auto" />
+                    </td>
+                    <td className="border border-border p-4 text-center">
+                      <CheckCircle className="w-5 h-5 text-green-600 mx-auto" />
+                    </td>
+                  </tr>
+                  <tr className="bg-card">
+                    <td className="border border-border p-4 font-medium">Social Media Promotion</td>
+                    <td className="border border-border p-4 text-center">Basic (FB)</td>
+                    <td className="border border-border p-4 text-center">FB + Insta</td>
+                    <td className="border border-border p-4 text-center">FB + Insta</td>
+                    <td className="border border-border p-4 text-center">Premium Boost</td>
+                  </tr>
+                  <tr className="bg-background">
+                    <td className="border border-border p-4 font-medium">Verified Buyer Leads</td>
+                    <td className="border border-border p-4 text-center">Up to 10</td>
+                    <td className="border border-border p-4 text-center">Up to 25</td>
+                    <td className="border border-border p-4 text-center">Up to 50</td>
+                    <td className="border border-border p-4 text-center">Unlimited</td>
+                  </tr>
+                  <tr className="bg-card">
+                    <td className="border border-border p-4 font-medium">Professional Photoshoot</td>
+                    <td className="border border-border p-4 text-center">
+                      <span className="text-red-500 text-xl">✗</span>
+                    </td>
+                    <td className="border border-border p-4 text-center">
+                      <span className="text-red-500 text-xl">✗</span>
+                    </td>
+                    <td className="border border-border p-4 text-center">
+                      <CheckCircle className="w-5 h-5 text-green-600 mx-auto" />
+                    </td>
+                    <td className="border border-border p-4 text-center">
+                      <CheckCircle className="w-5 h-5 text-green-600 mx-auto" />
+                    </td>
+                  </tr>
+                  <tr className="bg-background">
+                    <td className="border border-border p-4 font-medium">On-ground Support</td>
+                    <td className="border border-border p-4 text-center">
+                      <span className="text-red-500 text-xl">✗</span>
+                    </td>
+                    <td className="border border-border p-4 text-center">
+                      <CheckCircle className="w-5 h-5 text-green-600 mx-auto" />
+                    </td>
+                    <td className="border border-border p-4 text-center">
+                      <CheckCircle className="w-5 h-5 text-green-600 mx-auto" />
+                    </td>
+                    <td className="border border-border p-4 text-center">
+                      <CheckCircle className="w-5 h-5 text-green-600 mx-auto" />
+                    </td>
+                  </tr>
+                  <tr className="bg-card">
+                    <td className="border border-border p-4 font-medium">Video Walkthrough</td>
+                    <td className="border border-border p-4 text-center">
+                      <span className="text-red-500 text-xl">✗</span>
+                    </td>
+                    <td className="border border-border p-4 text-center">
+                      <span className="text-red-500 text-xl">✗</span>
+                    </td>
+                    <td className="border border-border p-4 text-center">
+                      <span className="text-red-500 text-xl">✗</span>
+                    </td>
+                    <td className="border border-border p-4 text-center">
+                      <CheckCircle className="w-5 h-5 text-green-600 mx-auto" />
+                    </td>
+                  </tr>
+                  <tr className="bg-background">
+                    <td className="border border-border p-4 font-medium">Personal Branding Page</td>
+                    <td className="border border-border p-4 text-center">
+                      <span className="text-red-500 text-xl">✗</span>
+                    </td>
+                    <td className="border border-border p-4 text-center">
+                      <span className="text-red-500 text-xl">✗</span>
+                    </td>
+                    <td className="border border-border p-4 text-center">
+                      <span className="text-red-500 text-xl">✗</span>
+                    </td>
+                    <td className="border border-border p-4 text-center">
+                      <CheckCircle className="w-5 h-5 text-green-600 mx-auto" />
+                    </td>
+                  </tr>
+                  <tr className="bg-card">
+                    <td className="border border-border p-4 font-medium">Refund Guarantee</td>
+                    <td className="border border-border p-4 text-center">
+                      <span className="text-red-500 text-xl">✗</span>
+                    </td>
+                    <td className="border border-border p-4 text-center">
+                      <span className="text-red-500 text-xl">✗</span>
+                    </td>
+                    <td className="border border-border p-4 text-center">
+                      <CheckCircle className="w-5 h-5 text-green-600 mx-auto" />
+                    </td>
+                    <td className="border border-border p-4 text-center">
+                      <CheckCircle className="w-5 h-5 text-green-600 mx-auto" />
+                    </td>
+                  </tr>
+                  <tr className="bg-background">
+                    <td className="border border-border p-4 font-medium">Validity Period</td>
+                    <td className="border border-border p-4 text-center">3 months</td>
+                    <td className="border border-border p-4 text-center">3 months</td>
+                    <td className="border border-border p-4 text-center">3 months</td>
+                    <td className="border border-border p-4 text-center">6 months</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-6 max-w-7xl mx-auto">
             {plans.map((plan, index) => <Card key={index} className={`relative ${plan.color} border-2 hover:shadow-lg transition-shadow`}>
                 <CardHeader className="pb-4">
