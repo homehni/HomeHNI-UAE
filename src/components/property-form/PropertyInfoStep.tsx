@@ -25,6 +25,10 @@ export const PropertyInfoStep: React.FC<PropertyInfoStepProps> = ({
 }) => {
   const [images, setImages] = useState<File[]>(initialData.images || []);
   const [video, setVideo] = useState<File | undefined>(initialData.video);
+  const [statesData, setStatesData] = useState<Record<string, string[]>>({});
+  const [availableCities, setAvailableCities] = useState<string[]>([]);
+  const [selectedState, setSelectedState] = useState<string>(initialData.state || '');
+  const [selectedCity, setSelectedCity] = useState<string>(initialData.city || '');
 
   const {
     register,
@@ -44,11 +48,33 @@ export const PropertyInfoStep: React.FC<PropertyInfoStepProps> = ({
     mode: 'onTouched' // Only show errors after user interaction
   });
 
+  // Load states and cities data
+  useEffect(() => {
+    const loadStatesData = async () => {
+      try {
+        const response = await fetch('/data/india_states_cities.json');
+        const data = await response.json();
+        setStatesData(data);
+        
+        // If initial state is provided, load its cities
+        if (initialData.state && data[initialData.state]) {
+          setAvailableCities(data[initialData.state]);
+        }
+      } catch (error) {
+        console.error('Failed to load states data:', error);
+      }
+    };
+    
+    loadStatesData();
+  }, [initialData.state]);
+
   useEffect(() => {
     setValue('images', images);
     setValue('video', video);
+    setValue('state', selectedState);
+    setValue('city', selectedCity);
     trigger(); // Re-validate when images/video change
-  }, [images, video, setValue, trigger]);
+  }, [images, video, selectedState, selectedCity, setValue, trigger]);
 
   // Auto-fill detection and validation
   useEffect(() => {
@@ -278,32 +304,49 @@ export const PropertyInfoStep: React.FC<PropertyInfoStepProps> = ({
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="state">State *</Label>
-              <Input
-                id="state"
-                {...register('state')}
-                placeholder="e.g., Maharashtra"
-                className={errors.state && touchedFields.state ? 'border-destructive' : ''}
-                onBlur={handleBlur}
-                onInput={handleBlur}
-                autoComplete="address-level1"
-              />
+              <Label>State *</Label>
+              <Select 
+                value={selectedState} 
+                onValueChange={(value) => {
+                  setSelectedState(value);
+                  setSelectedCity(''); // Reset city when state changes
+                  setAvailableCities(statesData[value] || []);
+                }}
+              >
+                <SelectTrigger className={errors.state && touchedFields.state ? 'border-destructive' : ''}>
+                  <SelectValue placeholder="— Select State —" />
+                </SelectTrigger>
+                <SelectContent className="bg-background border border-border shadow-lg z-50 max-h-60 overflow-y-auto">
+                  {Object.keys(statesData).sort().map((state) => (
+                    <SelectItem key={state} value={state} className="hover:bg-accent hover:text-accent-foreground">
+                      {state}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
               {errors.state && touchedFields.state && (
                 <p className="text-sm text-destructive">{errors.state.message}</p>
               )}
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="city">City *</Label>
-              <Input
-                id="city"
-                {...register('city')}
-                placeholder="e.g., Mumbai"
-                className={errors.city && touchedFields.city ? 'border-destructive' : ''}
-                onBlur={handleBlur}
-                onInput={handleBlur}
-                autoComplete="address-level2"
-              />
+              <Label>City *</Label>
+              <Select 
+                value={selectedCity} 
+                onValueChange={setSelectedCity}
+                disabled={!selectedState || availableCities.length === 0}
+              >
+                <SelectTrigger className={errors.city && touchedFields.city ? 'border-destructive' : ''}>
+                  <SelectValue placeholder={selectedState ? "— Select City —" : "Select state first"} />
+                </SelectTrigger>
+                <SelectContent className="bg-background border border-border shadow-lg z-50 max-h-60 overflow-y-auto">
+                  {availableCities.map((city) => (
+                    <SelectItem key={city} value={city} className="hover:bg-accent hover:text-accent-foreground">
+                      {city}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
               {errors.city && touchedFields.city && (
                 <p className="text-sm text-destructive">{errors.city.message}</p>
               )}
