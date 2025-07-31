@@ -289,6 +289,15 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: Database["public"]["Enums"]["app_role"]
       }
+      get_user_profiles: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          id: string
+          email: string
+          created_at: string
+          raw_user_meta_data: Json
+        }[]
+      }
       has_role: {
         Args: {
           _user_id: string

@@ -10,6 +10,7 @@ import { useToast } from '@/hooks/use-toast';
 interface User {
   id: string;
   email: string;
+  name: string;
   created_at: string;
   role: string;
   properties_count: number;
@@ -63,14 +64,28 @@ const AdminUsers = () => {
         return acc;
       }, {} as Record<string, number>);
 
-      // Combine the data (using user ID as display since we can't access auth.users directly)
-      const usersData = userRoles.map((userRole) => ({
-        id: userRole.user_id,
-        email: `User ${userRole.user_id.slice(0, 8)}...`, // Display truncated ID for privacy
-        created_at: userRole.created_at,
-        role: userRole.role,
-        properties_count: propertyCountMap[userRole.user_id] || 0
-      }));
+      // Get user profiles using the new function
+      const { data: userProfiles, error: profilesError } = await supabase.rpc('get_user_profiles');
+
+      if (profilesError) {
+        console.error('Could not fetch user profiles:', profilesError);
+      }
+
+      // Combine the data
+      const usersData = userRoles.map((userRole) => {
+        const profile = userProfiles?.find((p: any) => p.id === userRole.user_id);
+        const metadata = profile?.raw_user_meta_data as any;
+        const userName = metadata?.full_name || metadata?.name || 'Unknown User';
+        
+        return {
+          id: userRole.user_id,
+          email: profile?.email || 'Unknown Email',
+          name: userName,
+          created_at: userRole.created_at,
+          role: userRole.role,
+          properties_count: propertyCountMap[userRole.user_id] || 0
+        };
+      });
 
       setUsers(usersData);
 
@@ -97,7 +112,8 @@ const AdminUsers = () => {
 
     if (searchTerm) {
       filtered = filtered.filter(user =>
-        user.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         user.role.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
@@ -188,8 +204,9 @@ const AdminUsers = () => {
             <Table>
               <TableHeader>
                 <TableRow className="border-border hover:bg-muted/50">
-                  <TableHead className="text-muted-foreground font-medium">User ID</TableHead>
-                  <TableHead className="text-muted-foreground font-medium">Role</TableHead>
+                <TableHead className="text-muted-foreground font-medium">Name</TableHead>
+                <TableHead className="text-muted-foreground font-medium">Email</TableHead>
+                <TableHead className="text-muted-foreground font-medium">Role</TableHead>
                   <TableHead className="text-muted-foreground font-medium">Properties</TableHead>
                   <TableHead className="text-muted-foreground font-medium">Joined</TableHead>
                 </TableRow>
@@ -199,6 +216,9 @@ const AdminUsers = () => {
                   filteredUsers.map((user) => (
                     <TableRow key={user.id} className="border-border hover:bg-muted/50">
                       <TableCell className="font-medium text-foreground">
+                        {user.name}
+                      </TableCell>
+                      <TableCell className="text-foreground">
                         {user.email}
                       </TableCell>
                       <TableCell>
@@ -216,7 +236,7 @@ const AdminUsers = () => {
                   ))
                 ) : (
                   <TableRow>
-                    <TableCell colSpan={4} className="text-center py-8 text-muted-foreground">
+                    <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
                       No users found
                     </TableCell>
                   </TableRow>
