@@ -8,98 +8,53 @@ import { Badge } from '@/components/ui/badge';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Marquee from '@/components/Marquee';
-
 const BuyerPlans = () => {
-  const plans = [
-    {
-      name: "Power Plan",
-      price: "₹2,399 + 18% GST",
-      originalPrice: "₹2,399 + 18% GST",
-      color: "bg-green-500",
-      icon: <Home className="w-6 h-6" />,
-      tagline: "Choose your dream home from lots of verified listings",
-      features: [
-        "View up to 25 property contacts",
-        "Complimentary legal consultation with experts",
-        "Loan Assistance",
-        "On-Demand Support"
-      ]
-    },
-    {
-      name: "Property Expert Plan",
-      price: "₹2,499 + 18% GST",
-      originalPrice: "₹2,499 + 18% GST",
-      color: "bg-blue-500",
-      icon: <Users className="w-6 h-6" />,
-      tagline: "Get FREE Loan Assistance + 100% Cashback on plan amount* + Property Expert",
-      features: [
-        "Dedicated Property Expert",
-        "Expert negotiates to get you the best price",
-        "Helps schedule visits and shortlists properties",
-        "FREE Loan Assistance",
-        "FREE Interior Consultation after finalizing property",
-        "View up to 50 property contacts",
-        "Complimentary legal consultation"
-      ]
-    },
-    {
-      name: "Property Expert MoneyBack Plan",
-      price: "₹4,999 + 18% GST",
-      originalPrice: "₹4,999 + 18% GST",
-      color: "bg-red-500",
-      icon: <Shield className="w-6 h-6" />,
-      tagline: "Get Guaranteed property or 100% Refund",
-      features: [
-        "Guaranteed Property or 100% Refund (T&C)",
-        "All features of Expert Plan",
-        "Dedicated Property Expert",
-        "Expert negotiates to get you the best price",
-        "FREE Loan Assistance",
-        "FREE Interior Design Consultation",
-        "View up to 50 property contacts",
-        "Expert handles everything from contact to negotiation"
-      ]
-    }
-  ];
-
-  const howItWorks = [
-    "We gather your requirements",
-    "Connect you with verified listings",
-    "Schedule property visits",
-    "Help you negotiate price",
-    "Assist in finalizing the deal",
-    "Provide city-level property expertise"
-  ];
-
-  const faqs = [
-    {
-      question: "What does a Property Expert do?",
-      answer: "Helps you shortlist, schedule visits, negotiate pricing, and close deals faster."
-    },
-    {
-      question: "How does Property Expert/Power Plan compare?",
-      answer: "Power is basic assistance. Expert Plans come with dedicated support and more features."
-    },
-    {
-      question: "What if I don't find a house after subscribing?",
-      answer: "With the MoneyBack Plan, you are eligible for a full refund if we don't deliver."
-    },
-    {
-      question: "How soon will I get a house?",
-      answer: "Most users find a property within a few days to 2 weeks, depending on availability."
-    },
-    {
-      question: "Are there hidden charges?",
-      answer: "No. The plans are 100% transparent. You pay only what's shown — currently ₹0."
-    },
-    {
-      question: "Can I pay for the plan after I find a house?",
-      answer: "For now, it's FREE. Later pricing models may change."
-    }
-  ];
-
-  return (
-    <div className="min-h-screen bg-background">
+  const plans = [{
+    name: "Power Plan",
+    price: "₹2,399 + 18% GST",
+    originalPrice: "₹2,399 + 18% GST",
+    color: "bg-green-500",
+    icon: <Home className="w-6 h-6" />,
+    tagline: "Choose your dream home from lots of verified listings",
+    features: ["View up to 25 property contacts", "Complimentary legal consultation with experts", "Loan Assistance", "On-Demand Support"]
+  }, {
+    name: "Property Expert Plan",
+    price: "₹2,499 + 18% GST",
+    originalPrice: "₹2,499 + 18% GST",
+    color: "bg-blue-500",
+    icon: <Users className="w-6 h-6" />,
+    tagline: "Get FREE Loan Assistance + 100% Cashback on plan amount* + Property Expert",
+    features: ["Dedicated Property Expert", "Expert negotiates to get you the best price", "Helps schedule visits and shortlists properties", "FREE Loan Assistance", "FREE Interior Consultation after finalizing property", "View up to 50 property contacts", "Complimentary legal consultation"]
+  }, {
+    name: "Property Expert MoneyBack Plan",
+    price: "₹4,999 + 18% GST",
+    originalPrice: "₹4,999 + 18% GST",
+    color: "bg-red-500",
+    icon: <Shield className="w-6 h-6" />,
+    tagline: "Get Guaranteed property or 100% Refund",
+    features: ["Guaranteed Property or 100% Refund (T&C)", "All features of Expert Plan", "Dedicated Property Expert", "Expert negotiates to get you the best price", "FREE Loan Assistance", "FREE Interior Design Consultation", "View up to 50 property contacts", "Expert handles everything from contact to negotiation"]
+  }];
+  const howItWorks = ["We gather your requirements", "Connect you with verified listings", "Schedule property visits", "Help you negotiate price", "Assist in finalizing the deal", "Provide city-level property expertise"];
+  const faqs = [{
+    question: "What does a Property Expert do?",
+    answer: "Helps you shortlist, schedule visits, negotiate pricing, and close deals faster."
+  }, {
+    question: "How does Property Expert/Power Plan compare?",
+    answer: "Power is basic assistance. Expert Plans come with dedicated support and more features."
+  }, {
+    question: "What if I don't find a house after subscribing?",
+    answer: "With the MoneyBack Plan, you are eligible for a full refund if we don't deliver."
+  }, {
+    question: "How soon will I get a house?",
+    answer: "Most users find a property within a few days to 2 weeks, depending on availability."
+  }, {
+    question: "Are there hidden charges?",
+    answer: "No. The plans are 100% transparent. You pay only what's shown — currently ₹0."
+  }, {
+    question: "Can I pay for the plan after I find a house?",
+    answer: "For now, it's FREE. Later pricing models may change."
+  }];
+  return <div className="min-h-screen bg-background">
       <Marquee />
       <Header />
       
@@ -118,8 +73,7 @@ const BuyerPlans = () => {
       <section className="py-16 px-4">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {plans.map((plan, index) => (
-              <Card key={index} className="relative overflow-hidden hover:shadow-lg transition-shadow border-2">
+            {plans.map((plan, index) => <Card key={index} className="relative overflow-hidden hover:shadow-lg transition-shadow border-2">
                 <CardHeader className="text-center">
                   <div className="flex items-center justify-center gap-2 mb-4">
                     <Badge className={`${plan.color} text-white`}>
@@ -136,17 +90,14 @@ const BuyerPlans = () => {
                 </CardHeader>
                 <CardContent>
                   <ul className="space-y-3 mb-6">
-                    {plan.features.map((feature, idx) => (
-                      <li key={idx} className="flex items-start gap-2">
+                    {plan.features.map((feature, idx) => <li key={idx} className="flex items-start gap-2">
                         <Check className="w-4 h-4 text-green-500 mt-1 flex-shrink-0" />
                         <span className="text-sm">{feature}</span>
-                      </li>
-                    ))}
+                      </li>)}
                   </ul>
                   <Button className="w-full">Subscribe Now</Button>
                 </CardContent>
-              </Card>
-            ))}
+              </Card>)}
           </div>
           
           {/* Plan Validity Note */}
@@ -159,13 +110,7 @@ const BuyerPlans = () => {
       </section>
 
       {/* Disclaimer Banner */}
-      <section className="py-8 px-4 bg-yellow-50">
-        <div className="max-w-4xl mx-auto text-center">
-          <div className="bg-yellow-100 border border-yellow-300 rounded-lg p-6">
-            
-          </div>
-        </div>
-      </section>
+      
 
       {/* How Our Assisted Plans Work */}
       <section className="py-16 px-4 bg-gray-50">
@@ -176,16 +121,14 @@ const BuyerPlans = () => {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {howItWorks.map((step, index) => (
-              <Card key={index} className="p-6 text-center">
+            {howItWorks.map((step, index) => <Card key={index} className="p-6 text-center">
                 <CardContent className="pt-0">
                   <div className="w-12 h-12 bg-brand-red text-white rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">
                     {index + 1}
                   </div>
                   <p className="font-medium">{step}</p>
                 </CardContent>
-              </Card>
-            ))}
+              </Card>)}
           </div>
         </div>
       </section>
@@ -195,16 +138,14 @@ const BuyerPlans = () => {
         <div className="max-w-4xl mx-auto">
           <h2 className="text-3xl font-bold text-center mb-12">Frequently Asked Questions</h2>
           <Accordion type="single" collapsible className="w-full">
-            {faqs.map((faq, index) => (
-              <AccordionItem key={index} value={`item-${index}`}>
+            {faqs.map((faq, index) => <AccordionItem key={index} value={`item-${index}`}>
                 <AccordionTrigger className="text-left">
                   {faq.question}
                 </AccordionTrigger>
                 <AccordionContent>
                   {faq.answer}
                 </AccordionContent>
-              </AccordionItem>
-            ))}
+              </AccordionItem>)}
           </Accordion>
         </div>
       </section>
@@ -222,8 +163,6 @@ const BuyerPlans = () => {
       </section>
 
       <Footer />
-    </div>
-  );
+    </div>;
 };
-
 export default BuyerPlans;
