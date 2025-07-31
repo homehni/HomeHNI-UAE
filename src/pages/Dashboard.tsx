@@ -113,26 +113,37 @@ export const Dashboard: React.FC = () => {
       // Fetch property drafts for owner information
       const { data: draftsData, error: draftsError } = await supabase
         .from('property_drafts')
-        .select('id, owner_name, owner_email, owner_phone, owner_role')
-        .eq('user_id', user?.id);
+        .select('user_id, owner_name, owner_email, owner_phone, owner_role, created_at')
+        .eq('user_id', user?.id)
+        .order('created_at', { ascending: false });
 
       if (draftsError) throw draftsError;
 
-      // Create a map of draft data by property fields
-      const draftMap = new Map();
-      draftsData?.forEach(draft => {
-        draftMap.set(draft.id, draft);
-      });
-
-      // Merge properties with owner information
+      // Map properties with owner information
       const mergedProperties = propertiesData?.map(property => {
-        const draft = draftMap.get(property.id);
+        // Find the most complete owner information for this user
+        const userDrafts = draftsData?.filter(d => d.user_id === property.user_id) || [];
+        let bestDraft = userDrafts[0]; // Start with most recent
+        
+        for (const draft of userDrafts) {
+          if (draft.owner_name && draft.owner_email && draft.owner_phone) {
+            bestDraft = draft;
+            break; // Found a complete record
+          }
+          // If current best is missing info but this one has some, use this one
+          if ((!bestDraft?.owner_name && draft.owner_name) ||
+              (!bestDraft?.owner_email && draft.owner_email) ||
+              (!bestDraft?.owner_phone && draft.owner_phone)) {
+            bestDraft = draft;
+          }
+        }
+
         return {
           ...property,
-          owner_name: draft?.owner_name,
-          owner_email: draft?.owner_email,
-          owner_phone: draft?.owner_phone,
-          owner_role: draft?.owner_role,
+          owner_name: bestDraft?.owner_name,
+          owner_email: bestDraft?.owner_email,
+          owner_phone: bestDraft?.owner_phone,
+          owner_role: bestDraft?.owner_role,
         };
       }) || [];
 
