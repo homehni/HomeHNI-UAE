@@ -115,7 +115,7 @@ const Header = () => {
   </a>
   
   <a href="#" className={`hover:opacity-80 transition-colors duration-500 text-sm font-medium ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
-    For Dealers / Builders
+    For Agents / Builders
   </a>
   
   <button onClick={handleLegalServicesClick} className={`hover:opacity-80 transition-colors duration-500 text-sm font-medium ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
