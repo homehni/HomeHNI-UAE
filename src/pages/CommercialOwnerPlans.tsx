@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
@@ -9,6 +9,86 @@ import Marquee from '@/components/Marquee';
 import { CheckCircle, Phone, Star, Shield, UserCheck, TrendingUp, Target } from 'lucide-react';
 
 const CommercialOwnerPlans = () => {
+  const [selectedPlan, setSelectedPlan] = useState('MoneyBack Plan');
+
+  const plans = [
+    { id: 'Relax Plan', name: 'Relax Plan', price: '₹3,499', gst: '+ GST' },
+    { id: 'Super Relax Plan', name: 'Super Relax Plan', price: '₹6,499', gst: '+ GST' },
+    { id: 'MoneyBack Plan', name: 'MoneyBack Plan', price: '₹7,999', gst: '+ GST', popular: true },
+    { id: 'Super MoneyBack Plan', name: 'Super MoneyBack Plan', price: '₹11,999', gst: '+ GST' }
+  ];
+
+  const planDetails = {
+    'Relax Plan': [
+      "Basic tenant matching",
+      "Standard listing visibility",
+      "Email support",
+      "Property documentation assistance",
+      "Basic market analysis"
+    ],
+    'Super Relax Plan': [
+      "Basic tenant matching",
+      "Standard listing visibility", 
+      "Email support",
+      "Property documentation assistance",
+      "Basic market analysis",
+      "Priority tenant matching",
+      "Enhanced listing visibility",
+      "Phone & email support",
+      "Complete documentation support",
+      "Detailed market analysis",
+      "Rental agreement assistance"
+    ],
+    'MoneyBack Plan': [
+      "Basic tenant matching",
+      "Standard listing visibility",
+      "Email support", 
+      "Property documentation assistance",
+      "Basic market analysis",
+      "Priority tenant matching",
+      "Enhanced listing visibility",
+      "Phone & email support",
+      "Complete documentation support",
+      "Detailed market analysis",
+      "Rental agreement assistance",
+      "Guaranteed tenant matching",
+      "Premium listing placement",
+      "Personal relationship manager",
+      "100% moneyback guarantee",
+      "Complete legal documentation",
+      "Market trend insights",
+      "Tenant verification services"
+    ],
+    'Super MoneyBack Plan': [
+      "Basic tenant matching",
+      "Standard listing visibility",
+      "Email support",
+      "Property documentation assistance", 
+      "Basic market analysis",
+      "Priority tenant matching",
+      "Enhanced listing visibility",
+      "Phone & email support",
+      "Complete documentation support",
+      "Detailed market analysis",
+      "Rental agreement assistance",
+      "Guaranteed tenant matching",
+      "Premium listing placement",
+      "Personal relationship manager",
+      "100% moneyback guarantee",
+      "Complete legal documentation",
+      "Market trend insights",
+      "Tenant verification services",
+      "Priority guaranteed matching",
+      "Maximum visibility & promotion",
+      "Dedicated relationship manager",
+      "Premium legal support",
+      "Advanced market analytics",
+      "Complete tenant verification",
+      "Rental negotiation support",
+      "Post-rental support"
+    ]
+  };
+
   const keyBenefits = [
     {
       icon: Target,
@@ -208,40 +288,70 @@ const CommercialOwnerPlans = () => {
       </section>
 
       {/* Pricing Plans Section */}
-      <section className="py-16">
+      <section className="py-16" id="pricing">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
             Choose Your Perfect Plan
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {pricingPlans.map((plan, index) => (
-              <Card key={index} className={`relative ${plan.popular ? 'border-brand-red shadow-lg scale-105' : ''}`}>
-                {plan.popular && (
-                  <Badge className="absolute -top-2 left-1/2 transform -translate-x-1/2 bg-brand-red">
-                    Most Popular
+          
+          {/* Plan Selection Buttons */}
+          <div className="flex flex-wrap justify-center gap-3 mb-12">
+            {plans.map((plan) => (
+              <Button
+                key={plan.id}
+                onClick={() => setSelectedPlan(plan.id)}
+                variant={selectedPlan === plan.id ? "default" : "outline"}
+                size="lg"
+                className={`relative ${
+                  selectedPlan === plan.id 
+                    ? "bg-brand-red text-white hover:bg-brand-red-dark" 
+                    : "bg-white text-brand-red border-brand-red hover:bg-brand-red hover:text-white"
+                } transition-all duration-300`}
+              >
+                {plan.popular && selectedPlan === plan.id && (
+                  <Badge className="absolute -top-2 -right-2 bg-white text-brand-red text-xs px-2 py-0.5">
+                    Popular
                   </Badge>
                 )}
-                <CardHeader className="text-center">
-                  <CardTitle className="text-2xl">{plan.name}</CardTitle>
-                  <div className="text-3xl font-bold text-brand-red">
-                    {plan.price} <span className="text-sm text-muted-foreground">{plan.gst}</span>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <ul className="space-y-2 mb-6">
-                    {plan.features.map((feature, idx) => (
-                      <li key={idx} className="flex items-start">
-                        <CheckCircle className="w-4 h-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
-                        <span className="text-sm">{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-                  <Button className="w-full" variant={plan.popular ? "default" : "outline"}>
-                    Subscribe Now
-                  </Button>
-                </CardContent>
-              </Card>
+                {plan.name}
+              </Button>
             ))}
+          </div>
+
+          {/* Selected Plan Details */}
+          <div className="max-w-2xl mx-auto">
+            <Card className="border-brand-red shadow-lg">
+              <CardHeader className="text-center bg-brand-red text-white">
+                <CardTitle className="text-3xl">
+                  {plans.find(p => p.id === selectedPlan)?.name}
+                </CardTitle>
+                <div className="text-4xl font-bold">
+                  {plans.find(p => p.id === selectedPlan)?.price}{' '}
+                  <span className="text-lg opacity-80">
+                    {plans.find(p => p.id === selectedPlan)?.gst}
+                  </span>
+                </div>
+              </CardHeader>
+              <CardContent className="p-8">
+                <h3 className="text-xl font-semibold mb-6 text-center">What's Included:</h3>
+                <div className="grid grid-cols-1 gap-3">
+                  {planDetails[selectedPlan]?.map((feature, index) => (
+                    <div key={index} className="flex items-start">
+                      <CheckCircle className="w-5 h-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
+                      <span className="text-sm">{feature}</span>
+                    </div>
+                  ))}
+                </div>
+                <div className="mt-8 text-center">
+                  <Button 
+                    size="lg" 
+                    className="w-full md:w-auto px-12 bg-brand-red hover:bg-brand-red-dark text-white"
+                  >
+                    Subscribe to {selectedPlan}
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </section>
