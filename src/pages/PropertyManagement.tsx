@@ -111,7 +111,7 @@ const PropertyManagement = () => {
       <Header />
       
 {/* Hero Section */}
-<section className="relative pt-32 pb-20 px-4 md:px-8 bg-red-700 text-white overflow-hidden">
+<section className="relative pt-32 pb-20 px-4 md:px-8 text-white overflow-hidden bg-cover bg-center bg-no-repeat" style={{backgroundImage: "url('/lovable-uploads/fbb0d72f-782e-49f5-bbe1-8afc1314b5f7.png')"}}>
   <div className="absolute inset-0 bg-black/10 pointer-events-none"></div> {/* light overlay */}
   
   <div className="relative z-10 container mx-auto text-center">
