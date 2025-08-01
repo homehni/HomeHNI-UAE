@@ -88,15 +88,14 @@ const SellerPlans: React.FC = () => {
       <Header />
       
       {/* Hero Section */}
-      <section className="gradient-red-maroon py-16 md:py-24">
-        <div className="container mx-auto px-4 text-center max-w-4xl">
-          <h1 className="text-3xl md:text-5xl font-bold text-white mb-6">
-            Get Buyers Quickly. SAVE LAKHS on Brokerage
-          </h1>
-          
-         
-        </div>
-      </section>
+     <section className="gradient-red-maroon py-32 md:py-48">
+  <div className="container mx-auto px-4 text-center max-w-4xl">
+    <h1 className="text-3xl md:text-5xl font-bold text-white mb-6">
+      Get Buyers Quickly. SAVE LAKHS on Brokerage
+    </h1>
+  </div>
+</section>
+
 
 
 
