@@ -93,7 +93,7 @@ const PaintingCleaning = () => {
       <Header />
       
       {/* Hero Section */}
-      <section className="relative h-64 bg-gradient-to-r from-brand-red to-brand-maroon-dark flex items-center justify-center text-center text-white pt-20">
+      <section className="relative pt-32 pb-20 px-4 md:px-8 text-white overflow-hidden bg-cover bg-center bg-no-repeat" style={{backgroundImage: "url('/lovable-uploads/fbb0d72f-782e-49f5-bbe1-8afc1314b5f7.png')"}}>
         <div className="container mx-auto px-4">
           <h1 className="text-4xl md:text-5xl font-bold mb-4 text-white drop-shadow-lg"
               style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.8)' }}>
