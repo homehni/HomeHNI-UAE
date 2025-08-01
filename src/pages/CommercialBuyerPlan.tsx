@@ -9,7 +9,7 @@ import Footer from '@/components/Footer';
 import Marquee from '@/components/Marquee';
 
 const CommercialBuyerPlan = () => {
-  const [selectedPlan, setSelectedPlan] = useState(1); // Default to Comfort plan
+  const [selectedPlan, setSelectedPlan] = useState(1); // Default to Comfort plan (Most Popular)
 
   const plans = [
     {
