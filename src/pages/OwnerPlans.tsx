@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import { Star, Check, Phone, Clock, Users, Shield, UserCheck, Globe, Camera, Lock, FileText, TrendingUp } from 'lucide-react';
+import { Star, Check, Phone } from 'lucide-react';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
@@ -9,90 +9,31 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Marquee from '@/components/Marquee';
 const OwnerPlans = () => {
-  const [selectedPlan, setSelectedPlan] = useState(0);
-
-  const plans = [
-    {
-      name: "Relax",
-      price: "₹3,399",
-      gst: "+18% GST",
-      badge: "ON CALL ASSISTANCE",
-      badgeColor: "bg-yellow-500",
-    },
-    {
-      name: "Super Relax",
-      price: "₹5,899", 
-      gst: "+18% GST",
-      badge: "HOUSE VISIT ASSISTANCE",
-      badgeColor: "bg-green-500",
-    },
-    {
-      name: "MoneyBack",
-      price: "₹6,999",
-      gst: "+18% GST", 
-      badge: "100% GUARANTEE",
-      badgeColor: "bg-red-500",
-    },
-    {
-      name: "Super MoneyBack",
-      price: "₹10,999",
-      gst: "+18% GST",
-      badge: "PERSONAL FIELD ASSISTANT", 
-      badgeColor: "bg-purple-500",
-    }
-  ];
-
-  const planDetails = [
-    // Relax plan features
-    [
-      { icon: <Clock className="w-5 h-5" />, text: "45 Days Plan Validity" },
-      { icon: <Users className="w-5 h-5" />, text: "Guaranteed Tenants Or 100% Moneyback" },
-      { icon: <UserCheck className="w-5 h-5" />, text: "Relationship Manager (RM)- Super Fast Closure" },
-      { icon: <FileText className="w-5 h-5" />, text: "Rental Agreement Home Delivered" }
-    ],
-    // Super Relax plan features (includes Relax features)
-    [
-      { icon: <Clock className="w-5 h-5" />, text: "45 Days Plan Validity" },
-      { icon: <Users className="w-5 h-5" />, text: "Guaranteed Tenants Or 100% Moneyback" },
-      { icon: <UserCheck className="w-5 h-5" />, text: "Relationship Manager (RM)- Super Fast Closure" },
-      { icon: <FileText className="w-5 h-5" />, text: "Rental Agreement Home Delivered" },
-      { icon: <TrendingUp className="w-5 h-5" />, text: "Top Slot Listing For 5x More Visibility" },
-      { icon: <Globe className="w-5 h-5" />, text: "Property Promotion On Website" },
-      { icon: <Camera className="w-5 h-5" />, text: "Photoshoot Of Your Property" },
-      { icon: <Lock className="w-5 h-5" />, text: "Privacy Of Your Phone Number" }
-    ],
-    // MoneyBack plan features (includes previous features)
-    [
-      { icon: <Clock className="w-5 h-5" />, text: "45 Days Plan Validity" },
-      { icon: <Users className="w-5 h-5" />, text: "Guaranteed Tenants Or 100% Moneyback" },
-      { icon: <UserCheck className="w-5 h-5" />, text: "Relationship Manager (RM)- Super Fast Closure" },
-      { icon: <FileText className="w-5 h-5" />, text: "Rental Agreement Home Delivered" },
-      { icon: <TrendingUp className="w-5 h-5" />, text: "Top Slot Listing For 5x More Visibility" },
-      { icon: <Globe className="w-5 h-5" />, text: "Property Promotion On Website" },
-      { icon: <Camera className="w-5 h-5" />, text: "Photoshoot Of Your Property" },
-      { icon: <Lock className="w-5 h-5" />, text: "Privacy Of Your Phone Number" },
-      { icon: <UserCheck className="w-5 h-5" />, text: "Personal Field Assistant" },
-      { icon: <Users className="w-5 h-5" />, text: "Showing Property On Your Behalf" },
-      { icon: <TrendingUp className="w-5 h-5" />, text: "Facebook Marketing Of Your Property" }
-    ],
-    // Super MoneyBack plan features (includes all previous features)
-    [
-      { icon: <Clock className="w-5 h-5" />, text: "45 Days Plan Validity" },
-      { icon: <Users className="w-5 h-5" />, text: "Guaranteed Tenants Or 100% Moneyback" },
-      { icon: <UserCheck className="w-5 h-5" />, text: "Relationship Manager (RM)- Super Fast Closure" },
-      { icon: <FileText className="w-5 h-5" />, text: "Rental Agreement Home Delivered" },
-      { icon: <TrendingUp className="w-5 h-5" />, text: "Top Slot Listing For 5x More Visibility" },
-      { icon: <Globe className="w-5 h-5" />, text: "Property Promotion On Website" },
-      { icon: <Camera className="w-5 h-5" />, text: "Photoshoot Of Your Property" },
-      { icon: <Lock className="w-5 h-5" />, text: "Privacy Of Your Phone Number" },
-      { icon: <UserCheck className="w-5 h-5" />, text: "Personal Field Assistant" },
-      { icon: <Users className="w-5 h-5" />, text: "Showing Property On Your Behalf" },
-      { icon: <TrendingUp className="w-5 h-5" />, text: "Facebook Marketing Of Your Property" },
-      { icon: <Shield className="w-5 h-5" />, text: "Premium Customer Support" },
-      { icon: <FileText className="w-5 h-5" />, text: "Legal Documentation Assistance" }
-    ]
-  ];
-
+  const plans = [{
+    name: "Basic Plan",
+    price: "₹3,399 + 18% GST",
+    
+    color: "bg-green-500",
+    features: ["On-call assistance", "Plan validity: 45 days", "Guaranteed tenants or 100% money-back"]
+  }, {
+    name: "Mid Plan",
+    price: "₹5,899 + 18% GST",
+    originalPrice: "₹5,899 + 18% GST",
+    color: "bg-blue-500",
+    features: ["Includes everything in Relax Plan", "Property promotion on website", "Top slot listing (5x visibility)", "Personal field assistant"]
+  }, {
+    name: "Elite Plan",
+    price: "₹6,999 + 18% GST",
+    originalPrice: "₹6,999 + 18% GST",
+    color: "bg-purple-500",
+    features: ["100% money-back guarantee", "Relationship Manager (RM)", "Property shown on your behalf", "Photoshoot of your property"]
+  }, {
+    name: "Elite Plan",
+    price: "₹10,999 + 18% GST",
+    originalPrice: "₹10,999 + 18% GST",
+    color: "bg-orange-500",
+    features: ["Includes everything above", "Facebook marketing of your property", "Rental agreement home-delivered", "Phone number privacy"]
+  }];
   const testimonials = [{
     text: "NoBroker's customer service was impressively prompt and friendly. Listing my flat was a memorable experience.",
     hashtag: "#ZeroBrokerage"
@@ -100,12 +41,11 @@ const OwnerPlans = () => {
     text: "The premium plan helped me get the best deal for a PG in a very short time!",
     hashtag: "#ZeroBrokerage"
   }];
-
   const faqs = [{
     question: "What will the Relationship Manager do?",
     answer: "Help you close deals faster, assist with follow-ups, and coordinate visits."
   }, {
-    question: "What about Social Media Marketing?", 
+    question: "What about Social Media Marketing?",
     answer: "We promote your property across platforms like Facebook for wider reach."
   }, {
     question: "How will my property be promoted?",
@@ -120,9 +60,7 @@ const OwnerPlans = () => {
     question: "How do I get faster closures?",
     answer: "Use our Super MoneyBack plan — with top slot listings, field assistance, and RM support."
   }];
-
-  return (
-    <div className="min-h-screen bg-background">
+  return <div className="min-h-screen bg-background">
       <Marquee />
       <Header />
       
@@ -146,84 +84,48 @@ const OwnerPlans = () => {
             </div>
             <span className="ml-2">Rated 5 Stars by Owners</span>
           </div>
+          
         </div>
       </section>
 
       {/* Pricing Plans */}
-      <section className="py-16 px-4 bg-gray-50">
-        <div className="max-w-6xl mx-auto">
-          {/* Plan Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {plans.map((plan, index) => (
-              <Card 
-                key={index} 
-                className={`relative cursor-pointer transition-all duration-200 ${
-                  selectedPlan === index ? 'ring-2 ring-brand-red bg-muted' : 'bg-card hover:shadow-md'
-                }`}
-                onClick={() => setSelectedPlan(index)}
-              >
-                <div className="absolute top-3 left-3 right-3">
-                  <Badge className={`${plan.badgeColor} text-white text-xs px-2 py-1 font-medium w-full text-center`}>
-                    {plan.badge}
+      <section className="py-16 px-4">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {plans.map((plan, index) => <Card key={index} className="relative overflow-hidden hover:shadow-lg transition-shadow">
+                <CardHeader className="text-center">
+                  <Badge className={`${plan.color} text-white w-fit mx-auto mb-4`}>
+                    {plan.name}
                   </Badge>
-                </div>
-                
-                <CardContent className="pt-16 pb-6 px-6">
-                  <h3 className="text-xl font-bold text-gray-900 mb-3">{plan.name}</h3>
-                  <div className="mb-6">
-                    <span className="text-2xl font-bold text-gray-900">{plan.price}</span>
-                    <div className="text-sm text-gray-500">{plan.gst}</div>
+                  <div className="mb-4">
+                    <div className="text-4xl font-bold text-brand-red">{plan.price}</div>
+                    
+                    
                   </div>
-                  
-                  <Button 
-                    className={`w-full ${
-                      selectedPlan === index 
-                        ? 'bg-brand-red hover:bg-brand-maroon-dark text-white' 
-                        : 'bg-transparent text-foreground border border-border hover:bg-muted'
-                    }`}
-                  >
-                    Subscribe
-                  </Button>
+                </CardHeader>
+                <CardContent>
+                  <ul className="space-y-3 mb-6">
+                    {plan.features.map((feature, idx) => <li key={idx} className="flex items-start gap-2">
+                        <Check className="w-4 h-4 text-green-500 mt-1 flex-shrink-0" />
+                        <span className="text-sm">{feature}</span>
+                      </li>)}
+                  </ul>
+                  <Button className="w-full">Subscribe</Button>
                 </CardContent>
-              </Card>
-            ))}
-          </div>
-
-          {/* Plan Details */}
-          <div className="mt-8 bg-card rounded-lg p-8 shadow-sm">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {planDetails[selectedPlan].map((detail, index) => (
-                <div key={index} className="flex items-start gap-3">
-                  <div className="text-brand-red mt-1">
-                    {detail.icon}
-                  </div>
-                  <span className="text-sm text-foreground leading-relaxed">
-                    {detail.text}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Contact Info */}
-          <div className="mt-8 text-center">
-            <p className="text-gray-600 mb-2">
-              For assistance call us at: <span className="text-brand-red font-semibold">+91-92-430-099-80</span>
-            </p>
-            <p className="text-sm text-gray-500">
-              <span className="underline cursor-pointer hover:text-gray-700">Terms & Conditions Apply</span>
-            </p>
+              </Card>)}
           </div>
         </div>
       </section>
 
+      {/* Disclaimer Banner */}
+      
+
       {/* Customer Testimonials */}
-      <section className="py-16 px-4">
+      <section className="py-16 px-4 bg-gray-50">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-3xl font-bold text-center mb-12">Customer Testimonials</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {testimonials.map((testimonial, index) => (
-              <Card key={index} className="p-6">
+            {testimonials.map((testimonial, index) => <Card key={index} className="p-6">
                 <CardContent className="pt-0">
                   <div className="flex mb-4">
                     {[1, 2, 3, 4, 5].map(star => <Star key={star} className="w-4 h-4 fill-yellow-400 text-yellow-400" />)}
@@ -231,14 +133,13 @@ const OwnerPlans = () => {
                   <p className="text-gray-700 mb-4">"{testimonial.text}"</p>
                   <p className="text-brand-red font-medium">{testimonial.hashtag}</p>
                 </CardContent>
-              </Card>
-            ))}
+              </Card>)}
           </div>
         </div>
       </section>
 
       {/* Support Callout */}
-      <section className="py-12 px-4 bg-brand-red text-primary-foreground">
+      <section className="py-12 px-4 bg-brand-red text-white">
         <div className="max-w-4xl mx-auto text-center">
           <Phone className="w-8 h-8 mx-auto mb-4" />
           <h3 className="text-2xl font-bold mb-4">Need Assistance?</h3>
@@ -254,23 +155,19 @@ const OwnerPlans = () => {
         <div className="max-w-4xl mx-auto">
           <h2 className="text-3xl font-bold text-center mb-12">Frequently Asked Questions</h2>
           <Accordion type="single" collapsible className="w-full">
-            {faqs.map((faq, index) => (
-              <AccordionItem key={index} value={`item-${index}`}>
+            {faqs.map((faq, index) => <AccordionItem key={index} value={`item-${index}`}>
                 <AccordionTrigger className="text-left">
                   {faq.question}
                 </AccordionTrigger>
                 <AccordionContent>
                   {faq.answer}
                 </AccordionContent>
-              </AccordionItem>
-            ))}
+              </AccordionItem>)}
           </Accordion>
         </div>
       </section>
 
       <Footer />
-    </div>
-  );
+    </div>;
 };
-
 export default OwnerPlans;
