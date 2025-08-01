@@ -4,8 +4,8 @@ const FeaturedProperties = () => {
   const properties = [
     {
       id: '1',
-      title: 'Modern Villa with Garden',
-      location: 'Sector 18, Gurgaon',
+      title: 'Modern Apartment with Delhi',
+      location: 'Sector 18, KK Road',
       price: '₹1.2 Cr',
       area: '1,200 sq ft',
       bedrooms: 3,
