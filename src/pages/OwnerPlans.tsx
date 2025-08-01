@@ -43,25 +43,53 @@ const OwnerPlans = () => {
   ];
 
   const planDetails = [
+    // Relax plan features
     [
       { icon: <Clock className="w-5 h-5" />, text: "45 Days Plan Validity" },
       { icon: <Users className="w-5 h-5" />, text: "Guaranteed Tenants Or 100% Moneyback" },
       { icon: <UserCheck className="w-5 h-5" />, text: "Relationship Manager (RM)- Super Fast Closure" },
       { icon: <FileText className="w-5 h-5" />, text: "Rental Agreement Home Delivered" }
     ],
+    // Super Relax plan features (includes Relax features)
     [
+      { icon: <Clock className="w-5 h-5" />, text: "45 Days Plan Validity" },
+      { icon: <Users className="w-5 h-5" />, text: "Guaranteed Tenants Or 100% Moneyback" },
+      { icon: <UserCheck className="w-5 h-5" />, text: "Relationship Manager (RM)- Super Fast Closure" },
+      { icon: <FileText className="w-5 h-5" />, text: "Rental Agreement Home Delivered" },
       { icon: <TrendingUp className="w-5 h-5" />, text: "Top Slot Listing For 5x More Visibility" },
       { icon: <Globe className="w-5 h-5" />, text: "Property Promotion On Website" },
       { icon: <Camera className="w-5 h-5" />, text: "Photoshoot Of Your Property" },
       { icon: <Lock className="w-5 h-5" />, text: "Privacy Of Your Phone Number" }
     ],
+    // MoneyBack plan features (includes previous features)
     [
+      { icon: <Clock className="w-5 h-5" />, text: "45 Days Plan Validity" },
+      { icon: <Users className="w-5 h-5" />, text: "Guaranteed Tenants Or 100% Moneyback" },
+      { icon: <UserCheck className="w-5 h-5" />, text: "Relationship Manager (RM)- Super Fast Closure" },
+      { icon: <FileText className="w-5 h-5" />, text: "Rental Agreement Home Delivered" },
+      { icon: <TrendingUp className="w-5 h-5" />, text: "Top Slot Listing For 5x More Visibility" },
+      { icon: <Globe className="w-5 h-5" />, text: "Property Promotion On Website" },
+      { icon: <Camera className="w-5 h-5" />, text: "Photoshoot Of Your Property" },
+      { icon: <Lock className="w-5 h-5" />, text: "Privacy Of Your Phone Number" },
       { icon: <UserCheck className="w-5 h-5" />, text: "Personal Field Assistant" },
       { icon: <Users className="w-5 h-5" />, text: "Showing Property On Your Behalf" },
       { icon: <TrendingUp className="w-5 h-5" />, text: "Facebook Marketing Of Your Property" }
     ],
+    // Super MoneyBack plan features (includes all previous features)
     [
-      { icon: <Shield className="w-5 h-5" />, text: "All features from previous plans included" }
+      { icon: <Clock className="w-5 h-5" />, text: "45 Days Plan Validity" },
+      { icon: <Users className="w-5 h-5" />, text: "Guaranteed Tenants Or 100% Moneyback" },
+      { icon: <UserCheck className="w-5 h-5" />, text: "Relationship Manager (RM)- Super Fast Closure" },
+      { icon: <FileText className="w-5 h-5" />, text: "Rental Agreement Home Delivered" },
+      { icon: <TrendingUp className="w-5 h-5" />, text: "Top Slot Listing For 5x More Visibility" },
+      { icon: <Globe className="w-5 h-5" />, text: "Property Promotion On Website" },
+      { icon: <Camera className="w-5 h-5" />, text: "Photoshoot Of Your Property" },
+      { icon: <Lock className="w-5 h-5" />, text: "Privacy Of Your Phone Number" },
+      { icon: <UserCheck className="w-5 h-5" />, text: "Personal Field Assistant" },
+      { icon: <Users className="w-5 h-5" />, text: "Showing Property On Your Behalf" },
+      { icon: <TrendingUp className="w-5 h-5" />, text: "Facebook Marketing Of Your Property" },
+      { icon: <Shield className="w-5 h-5" />, text: "Premium Customer Support" },
+      { icon: <FileText className="w-5 h-5" />, text: "Legal Documentation Assistance" }
     ]
   ];
 
@@ -130,7 +158,7 @@ const OwnerPlans = () => {
               <Card 
                 key={index} 
                 className={`relative cursor-pointer transition-all duration-200 ${
-                  selectedPlan === index ? 'ring-2 ring-teal-500 bg-teal-50' : 'bg-white hover:shadow-md'
+                  selectedPlan === index ? 'ring-2 ring-brand-red bg-muted' : 'bg-card hover:shadow-md'
                 }`}
                 onClick={() => setSelectedPlan(index)}
               >
@@ -149,9 +177,9 @@ const OwnerPlans = () => {
                   
                   <Button 
                     className={`w-full ${
-                      index === 0 
-                        ? 'bg-teal-600 hover:bg-teal-700 text-white' 
-                        : 'bg-transparent text-gray-700 border border-gray-300 hover:bg-gray-50'
+                      selectedPlan === index 
+                        ? 'bg-brand-red hover:bg-brand-maroon-dark text-white' 
+                        : 'bg-transparent text-foreground border border-border hover:bg-muted'
                     }`}
                   >
                     Subscribe
@@ -162,14 +190,14 @@ const OwnerPlans = () => {
           </div>
 
           {/* Plan Details */}
-          <div className="mt-8 bg-white rounded-lg p-8 shadow-sm">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="mt-8 bg-card rounded-lg p-8 shadow-sm">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {planDetails[selectedPlan].map((detail, index) => (
                 <div key={index} className="flex items-start gap-3">
-                  <div className="text-gray-600 mt-1">
+                  <div className="text-brand-red mt-1">
                     {detail.icon}
                   </div>
-                  <span className="text-sm text-gray-700 leading-relaxed">
+                  <span className="text-sm text-foreground leading-relaxed">
                     {detail.text}
                   </span>
                 </div>
@@ -210,7 +238,7 @@ const OwnerPlans = () => {
       </section>
 
       {/* Support Callout */}
-      <section className="py-12 px-4 bg-brand-red text-white">
+      <section className="py-12 px-4 bg-brand-red text-primary-foreground">
         <div className="max-w-4xl mx-auto text-center">
           <Phone className="w-8 h-8 mx-auto mb-4" />
           <h3 className="text-2xl font-bold mb-4">Need Assistance?</h3>
