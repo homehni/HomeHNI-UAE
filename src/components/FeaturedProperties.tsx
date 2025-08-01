@@ -69,6 +69,29 @@ const FeaturedProperties = () => {
       bathrooms: 3,
       image: 'photo-1568605114967-8130f3a36994',
       propertyType: 'House'
+    },
+    {
+      id: '7',
+      title: 'Modern 2BHK with City View',
+      location: 'Bandra West, Mumbai',
+      price: '₹1.5 Cr',
+      area: '1,100 sq ft',
+      bedrooms: 2,
+      bathrooms: 2,
+      image: 'photo-1512917774080-9991f1c4c750',
+      propertyType: 'Apartment',
+      isNew: true
+    },
+    {
+      id: '8',
+      title: 'Luxury Penthouse with Terrace',
+      location: 'Koramangala, Bangalore',
+      price: '₹3.2 Cr',
+      area: '2,800 sq ft',
+      bedrooms: 4,
+      bathrooms: 4,
+      image: 'photo-1613490493576-7fde63acd811',
+      propertyType: 'Penthouse'
     }
   ];
 
