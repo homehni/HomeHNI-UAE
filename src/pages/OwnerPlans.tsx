@@ -68,7 +68,7 @@ const OwnerPlans = () => {
       <section 
         className="relative text-white py-16 px-4 pt-24 bg-cover bg-center bg-no-repeat"
         style={{
-          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('/lovable-uploads/c996469f-4da3-4235-b9fc-d1152fe010e8.png')`
+          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('/lovable-uploads/fbb0d72f-782e-49f5-bbe1-8afc1314b5f7.png')`
         }}
       >
         <div className="max-w-4xl mx-auto text-center">
