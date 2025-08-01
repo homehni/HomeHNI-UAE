@@ -10,29 +10,50 @@ import Footer from '@/components/Footer';
 import Marquee from '@/components/Marquee';
 const OwnerPlans = () => {
   const plans = [{
-    name: "Relax Plan",
-    price: "₹3,399 + 18% GST",
-    
-    color: "bg-green-500",
-    features: ["On-call assistance", "Plan validity: 45 days", "Guaranteed tenants or 100% money-back"]
+    name: "Relax",
+    price: "₹3,399",
+    gst: "+18% GST",
+    badge: "ON CALL ASSISTANCE",
+    badgeColor: "bg-amber-500",
+    isPopular: true,
+    features: [
+      "45 Days Plan Validity",
+      "Top Slot Listing For 5x More Visibility",
+      "Relationship Manager (RM)- Super Fast Closure",
+      "Rental Agreement Home Delivered"
+    ]
   }, {
-    name: "Super Relax Plan",
-    price: "₹5,899 + 18% GST",
-    originalPrice: "₹5,899 + 18% GST",
-    color: "bg-blue-500",
-    features: ["Includes everything in Relax Plan", "Property promotion on website", "Top slot listing (5x visibility)", "Personal field assistant"]
+    name: "Super Relax",
+    price: "₹5,899",
+    gst: "+18% GST",
+    badge: "HOUSE VISIT ASSISTANCE",
+    badgeColor: "bg-green-500",
+    features: [
+      "Guaranteed Tenants Or 100% Moneyback",
+      "Property Promotion On Website",
+      "Photoshoot Of Your Property",
+      "Privacy Of Your Phone Number"
+    ]
   }, {
-    name: "MoneyBack Plan",
-    price: "₹6,999 + 18% GST",
-    originalPrice: "₹6,999 + 18% GST",
-    color: "bg-purple-500",
-    features: ["100% money-back guarantee", "Relationship Manager (RM)", "Property shown on your behalf", "Photoshoot of your property"]
+    name: "MoneyBack",
+    price: "₹6,999",
+    gst: "+18% GST",
+    badge: "100% GUARANTEE",
+    badgeColor: "bg-red-500",
+    features: [
+      "Personal Field Assistant",
+      "Showing Property On Your Behalf",
+      "Facebook Marketing Of Your Property"
+    ]
   }, {
-    name: "Super MoneyBack Plan",
-    price: "₹10,999 + 18% GST",
-    originalPrice: "₹10,999 + 18% GST",
-    color: "bg-orange-500",
-    features: ["Includes everything above", "Facebook marketing of your property", "Rental agreement home-delivered", "Phone number privacy"]
+    name: "Super MoneyBack",
+    price: "₹10,999",
+    gst: "+18% GST",
+    badge: "PERSONAL FIELD ASSISTANT",
+    badgeColor: "bg-purple-500",
+    features: [
+      "All features from previous plans included"
+    ]
   }];
   const testimonials = [{
     text: "NoBroker's customer service was impressively prompt and friendly. Listing my flat was a memorable experience.",
@@ -89,30 +110,52 @@ const OwnerPlans = () => {
       </section>
 
       {/* Pricing Plans */}
-      <section className="py-16 px-4">
+      <section className="py-16 px-4 bg-gray-50">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {plans.map((plan, index) => <Card key={index} className="relative overflow-hidden hover:shadow-lg transition-shadow">
-                <CardHeader className="text-center">
-                  <Badge className={`${plan.color} text-white w-fit mx-auto mb-4`}>
-                    {plan.name}
+            {plans.map((plan, index) => (
+              <Card key={index} className={`relative overflow-hidden hover:shadow-lg transition-shadow border-0 shadow-md ${plan.isPopular ? 'bg-teal-50' : 'bg-white'}`}>
+                <div className="absolute top-4 right-4">
+                  <Badge className={`${plan.badgeColor} text-white text-xs px-2 py-1 font-medium`}>
+                    {plan.badge}
                   </Badge>
+                </div>
+                <CardHeader className="text-left pt-12 pb-4">
+                  <h3 className="text-2xl font-bold text-gray-900 mb-2">{plan.name}</h3>
                   <div className="mb-4">
-                    <div className="text-4xl font-bold text-brand-red">{plan.price}</div>
-                    
-                    
+                    <span className="text-3xl font-bold text-gray-900">{plan.price}</span>
+                    <span className="text-sm text-gray-500 ml-1">{plan.gst}</span>
                   </div>
                 </CardHeader>
-                <CardContent>
-                  <ul className="space-y-3 mb-6">
-                    {plan.features.map((feature, idx) => <li key={idx} className="flex items-start gap-2">
-                        <Check className="w-4 h-4 text-green-500 mt-1 flex-shrink-0" />
-                        <span className="text-sm">{feature}</span>
-                      </li>)}
+                <CardContent className="pt-0">
+                  <ul className="space-y-3 mb-8">
+                    {plan.features.map((feature, idx) => (
+                      <li key={idx} className="flex items-start gap-3">
+                        <div className="w-5 h-5 rounded-full bg-gray-100 flex items-center justify-center mt-0.5 flex-shrink-0">
+                          <Check className="w-3 h-3 text-gray-600" />
+                        </div>
+                        <span className="text-sm text-gray-700 leading-relaxed">{feature}</span>
+                      </li>
+                    ))}
                   </ul>
-                  <Button className="w-full">Subscribe</Button>
+                  <Button 
+                    className={`w-full ${plan.isPopular ? 'bg-brand-red hover:bg-brand-red-dark text-white' : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'}`}
+                  >
+                    Subscribe
+                  </Button>
                 </CardContent>
-              </Card>)}
+              </Card>
+            ))}
+          </div>
+          
+          {/* Additional Info Section */}
+          <div className="mt-12 text-center">
+            <p className="text-gray-600 mb-4">
+              For assistance call us at: <span className="text-brand-red font-semibold">+91-92-430-099-80</span>
+            </p>
+            <p className="text-sm text-gray-500">
+              <span className="underline">Terms & Conditions Apply</span>
+            </p>
           </div>
         </div>
       </section>
