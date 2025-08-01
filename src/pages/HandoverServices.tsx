@@ -92,7 +92,7 @@ const HandoverServices = () => {
       <Header />
       
 {/* Hero Section */}
-<section className="pt-32 pb-16 px-4 bg-red-700 text-white">
+<section className="pt-32 pb-16 px-4 text-white relative bg-cover bg-center bg-no-repeat" style={{backgroundImage: "url('/lovable-uploads/fbb0d72f-782e-49f5-bbe1-8afc1314b5f7.png')"}}>
   <div className="max-w-6xl mx-auto text-center">
     <h1 className="text-4xl md:text-6xl font-bold mb-6">
       🏠 Premium Handover Services for Homeowners & NRIs
