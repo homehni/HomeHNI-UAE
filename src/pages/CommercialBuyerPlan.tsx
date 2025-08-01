@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Check, Phone, MessageCircle, Quote, Star, Target, Users, Shield, Clock, Bell, FileText, Headphones } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -7,7 +7,73 @@ import { Badge } from '@/components/ui/badge';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Marquee from '@/components/Marquee';
+
 const CommercialBuyerPlan = () => {
+  const [selectedPlan, setSelectedPlan] = useState(1); // Default to Comfort plan
+
+  const plans = [
+    {
+      name: "Power",
+      price: "₹1,999",
+      gst: "+18% GST",
+      badge: "BASIC SUPPORT",
+      badgeColor: "bg-red-600",
+    },
+    {
+      name: "Comfort", 
+      price: "₹4,999",
+      gst: "+18% GST",
+      badge: "MOST POPULAR",
+      badgeColor: "bg-yellow-500",
+    },
+    {
+      name: "MoneyBack",
+      price: "₹8,999",
+      gst: "+18% GST",
+      badge: "100% GUARANTEE",
+      badgeColor: "bg-blue-600",
+    }
+  ];
+
+  const planDetails = [
+    // Power plan features
+    [
+      { icon: <Target className="w-5 h-5" />, text: "Basic property matching" },
+      { icon: <Headphones className="w-5 h-5" />, text: "Email support" },
+      { icon: <Bell className="w-5 h-5" />, text: "Standard property alerts" },
+      { icon: <FileText className="w-5 h-5" />, text: "Basic documentation help" }
+    ],
+    // Comfort plan features (includes Power features)
+    [
+      { icon: <Target className="w-5 h-5" />, text: "Basic property matching" },
+      { icon: <Headphones className="w-5 h-5" />, text: "Email support" },
+      { icon: <Bell className="w-5 h-5" />, text: "Standard property alerts" },
+      { icon: <FileText className="w-5 h-5" />, text: "Basic documentation help" },
+      { icon: <Users className="w-5 h-5" />, text: "Priority property matching" },
+      { icon: <Shield className="w-5 h-5" />, text: "Dedicated relationship manager" },
+      { icon: <MessageCircle className="w-5 h-5" />, text: "Instant WhatsApp support" },
+      { icon: <Phone className="w-5 h-5" />, text: "Price negotiation assistance" },
+      { icon: <FileText className="w-5 h-5" />, text: "Legal documentation support" }
+    ],
+    // MoneyBack plan features (includes all previous features)
+    [
+      { icon: <Target className="w-5 h-5" />, text: "Basic property matching" },
+      { icon: <Headphones className="w-5 h-5" />, text: "Email support" },
+      { icon: <Bell className="w-5 h-5" />, text: "Standard property alerts" },
+      { icon: <FileText className="w-5 h-5" />, text: "Basic documentation help" },
+      { icon: <Users className="w-5 h-5" />, text: "Priority property matching" },
+      { icon: <Shield className="w-5 h-5" />, text: "Dedicated relationship manager" },
+      { icon: <MessageCircle className="w-5 h-5" />, text: "Instant WhatsApp support" },
+      { icon: <Phone className="w-5 h-5" />, text: "Price negotiation assistance" },
+      { icon: <FileText className="w-5 h-5" />, text: "Legal documentation support" },
+      { icon: <Target className="w-5 h-5" />, text: "Premium property matching" },
+      { icon: <Clock className="w-5 h-5" />, text: "24/7 dedicated expert" },
+      { icon: <Check className="w-5 h-5" />, text: "Guaranteed property closure" },
+      { icon: <Shield className="w-5 h-5" />, text: "Complete legal & loan assistance" },
+      { icon: <Star className="w-5 h-5" />, text: "100% money-back guarantee" }
+    ]
+  ];
+
   const benefits = [{
     title: "100% Free — Limited Time Offer",
     icon: Target
@@ -33,28 +99,7 @@ const CommercialBuyerPlan = () => {
     title: "On-Demand Support via Call or WhatsApp",
     icon: Headphones
   }];
-  const plans = [{
-    name: "Power",
-    price: "₹1,999",
-    originalPrice: "₹1,999",
-    popular: false,
-    color: "bg-red-600",
-    features: ["Basic property matching", "Email support", "Standard property alerts", "Basic documentation help"]
-  }, {
-    name: "Comfort",
-    price: "₹4,999",
-    originalPrice: "₹4,999",
-    popular: true,
-    color: "bg-yellow-500",
-    features: ["Priority property matching", "Dedicated relationship manager", "Instant WhatsApp support", "Price negotiation assistance", "Legal documentation support"]
-  }, {
-    name: "MoneyBack",
-    price: "₹8,999",
-    originalPrice: "₹8,999",
-    popular: false,
-    color: "bg-blue-600",
-    features: ["Premium property matching", "24/7 dedicated expert", "Guaranteed property closure", "Complete legal & loan assistance", "100% money-back guarantee"]
-  }];
+
   const testimonials = [{
     name: "Rajesh Kumar",
     text: "Found my perfect office space in just 2 weeks. Zero brokerage saved me ₹2 lakhs!",
@@ -68,6 +113,7 @@ const CommercialBuyerPlan = () => {
     text: "Best decision ever! Got a prime location at 20% below market rate.",
     hashtag: "#FastDeals"
   }];
+
   const faqs = [{
     question: "How much does the plan cost?",
     answer: "All our plans are currently FREE for a limited time! Normally priced from ₹1,999 to ₹8,999, but you can access expert commercial property buying assistance at no cost right now."
@@ -87,11 +133,13 @@ const CommercialBuyerPlan = () => {
     question: "Are there any hidden charges?",
     answer: "No hidden charges whatsoever! During this limited-time offer, everything is completely free. Even after the offer ends, all costs are transparently mentioned upfront with no surprises."
   }];
+
   const scrollToPricing = () => {
     document.getElementById('pricing')?.scrollIntoView({
       behavior: 'smooth'
     });
   };
+
   return <div className="min-h-screen bg-background">
       <Header />
       <Marquee />
@@ -139,44 +187,73 @@ const CommercialBuyerPlan = () => {
       </section>
 
       {/* Pricing Section */}
-      <section id="pricing" className="py-16 px-4 bg-white">
+      <section id="pricing" className="py-16 px-4 bg-gray-50">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-4 text-gray-900">
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
             Choose Your Plan
           </h2>
           
-          
-          <div className="grid md:grid-cols-3 gap-8 mb-8">
-            {plans.map((plan, index) => <Card key={index} className={`relative overflow-hidden border-2 ${plan.popular ? 'border-yellow-500 scale-105' : 'border-gray-200'} hover:shadow-xl transition-all`}>
-                {plan.popular && <Badge className="absolute top-4 right-4 bg-yellow-500 text-black font-bold">
-                    Most Popular
-                  </Badge>}
-                <CardHeader className={`${plan.color} text-white text-center py-8`}>
-                  <CardTitle className="text-2xl font-bold">{plan.name}</CardTitle>
-                  <div className="mt-4">
-                    <span className="text-3xl font-bold">{plan.originalPrice}</span>
-                    
+          {/* Plan Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {plans.map((plan, index) => (
+              <Card 
+                key={index} 
+                className={`relative cursor-pointer transition-all duration-200 ${
+                  selectedPlan === index ? 'ring-2 ring-brand-red bg-muted' : 'bg-card hover:shadow-md'
+                }`}
+                onClick={() => setSelectedPlan(index)}
+              >
+                <div className="absolute top-3 left-3 right-3">
+                  <Badge className={`${plan.badgeColor} text-white text-xs px-2 py-1 font-medium w-full text-center`}>
+                    {plan.badge}
+                  </Badge>
+                </div>
+                
+                <CardContent className="pt-16 pb-6 px-6">
+                  <h3 className="text-xl font-bold text-gray-900 mb-3">{plan.name}</h3>
+                  <div className="mb-6">
+                    <span className="text-2xl font-bold text-gray-900">{plan.price}</span>
+                    <div className="text-sm text-gray-500">{plan.gst}</div>
                   </div>
-                </CardHeader>
-                <CardContent className="p-6">
-                  <ul className="space-y-3 mb-6">
-                    {plan.features.map((feature, idx) => <li key={idx} className="flex items-start space-x-2">
-                        <Check className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" />
-                        <span className="text-gray-700">{feature}</span>
-                      </li>)}
-                  </ul>
-                  <Button className="w-full bg-gray-900 hover:bg-gray-800 text-white">
-                    Subscribe Now
+                  
+                  <Button 
+                    className={`w-full ${
+                      selectedPlan === index 
+                        ? 'bg-brand-red hover:bg-brand-maroon-dark text-white' 
+                        : 'bg-transparent text-foreground border border-border hover:bg-muted'
+                    }`}
+                  >
+                    Subscribe
                   </Button>
                 </CardContent>
-              </Card>)}
+              </Card>
+            ))}
           </div>
 
-          <div className="text-center bg-blue-50 p-6 rounded-lg">
-            <div className="flex items-center justify-center space-x-2 text-blue-800">
-              <Phone className="w-5 h-5" />
-              <span className="font-semibold">For assistance, call us at: +91-89-059-996-69</span>
+          {/* Plan Details */}
+          <div className="mt-8 bg-card rounded-lg p-8 shadow-sm">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {planDetails[selectedPlan].map((detail, index) => (
+                <div key={index} className="flex items-start gap-3">
+                  <div className="text-brand-red mt-1">
+                    {detail.icon}
+                  </div>
+                  <span className="text-sm text-foreground leading-relaxed">
+                    {detail.text}
+                  </span>
+                </div>
+              ))}
             </div>
+          </div>
+
+          {/* Contact Info */}
+          <div className="mt-8 text-center">
+            <p className="text-gray-600 mb-2">
+              For assistance call us at: <span className="text-brand-red font-semibold">+91-89-059-996-69</span>
+            </p>
+            <p className="text-sm text-gray-500">
+              <span className="underline cursor-pointer hover:text-gray-700">Terms & Conditions Apply</span>
+            </p>
           </div>
         </div>
       </section>
@@ -226,4 +303,5 @@ const CommercialBuyerPlan = () => {
       <Footer />
     </div>;
 };
+
 export default CommercialBuyerPlan;
