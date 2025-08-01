@@ -24,7 +24,7 @@ const Marquee = () => {
 
   return (
     <div 
-      className="fixed top-0 left-0 right-0 bg-brand-red text-white py-2 overflow-hidden whitespace-nowrap z-50 group"
+      className="fixed top-0 left-0 right-0 bg-[#0545a3] text-white py-2 overflow-hidden whitespace-nowrap z-50 group"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
