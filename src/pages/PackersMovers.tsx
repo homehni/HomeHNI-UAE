@@ -9,7 +9,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Marquee from '@/components/Marquee';
-import heroImage from '@/lovable-uploads/fbb0d72f-782e-49f5-bbe1-8afc1314b5f7.png';
+import heroImage from '/lovable-uploads/fbb0d72f-782e-49f5-bbe1-8afc1314b5f7.png';
 
 const PackersMovers = () => {
   const [formData, setFormData] = useState({
