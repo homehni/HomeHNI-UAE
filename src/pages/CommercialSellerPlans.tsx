@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Check, Phone, MessageCircle, Quote, Star, Camera, Shield, Globe, TrendingUp, Users, Zap, CheckCircle, Eye, Share2, FileText, Handshake } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -7,64 +7,54 @@ import { Badge } from '@/components/ui/badge';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Marquee from '@/components/Marquee';
+
 const CommercialSellerPlans = () => {
-  const plans = [{
-    name: "Basic Plan",
-    price: "₹0",
-    originalPrice: "₹2,999",
-    popular: false,
-    color: "bg-red-600",
-    features: [{
-      text: "Photoshoot of your property",
-      icon: Camera
-    }, {
-      text: "Privacy of your phone number",
-      icon: Shield
-    }, {
-      text: "Property listing on website",
-      icon: Globe
-    }, {
-      text: "Basic property promotion",
-      icon: TrendingUp
-    }, {
-      text: "Call support from our team",
-      icon: Phone
-    }]
-  }, {
-    name: "Pro Plan",
-    price: "₹0",
-    originalPrice: "₹7,999",
-    popular: true,
-    color: "bg-yellow-500",
-    features: [{
-      text: "Everything in Basic Plan",
-      icon: CheckCircle
-    }, {
-      text: "Relationship Manager (RM)",
-      icon: Users
-    }, {
-      text: "Property showings on your behalf",
-      icon: Users
-    }, {
-      text: "Premium photoshoot",
-      icon: Camera
-    }, {
-      text: "Social media marketing (FB & Insta)",
-      icon: Share2
-    }, {
-      text: "Featured listing & promotion boost",
-      icon: Zap
-    }, {
-      text: "Verified Buyer Connect",
-      icon: Shield
-    }, {
-      text: "Price negotiation support",
-      icon: Handshake
-    }, {
-      text: "Legal & documentation assistance",
-      icon: FileText
-    }]
-  }];
+  const [selectedPlan, setSelectedPlan] = useState(1); // Default to Pro Plan
+
+  const plans = [
+    {
+      name: "Basic",
+      price: "₹2,999",
+      gst: "+18% GST", 
+      badge: "ESSENTIAL FEATURES",
+      badgeColor: "bg-red-600",
+    },
+    {
+      name: "Pro",
+      price: "₹7,999",
+      gst: "+18% GST",
+      badge: "MOST POPULAR",
+      badgeColor: "bg-yellow-500",
+    }
+  ];
+
+  const planDetails = [
+    // Basic plan features
+    [
+      { icon: <Camera className="w-5 h-5" />, text: "Photoshoot of your property" },
+      { icon: <Shield className="w-5 h-5" />, text: "Privacy of your phone number" },
+      { icon: <Globe className="w-5 h-5" />, text: "Property listing on website" },
+      { icon: <TrendingUp className="w-5 h-5" />, text: "Basic property promotion" },
+      { icon: <Phone className="w-5 h-5" />, text: "Call support from our team" }
+    ],
+    // Pro plan features (includes Basic features)
+    [
+      { icon: <Camera className="w-5 h-5" />, text: "Photoshoot of your property" },
+      { icon: <Shield className="w-5 h-5" />, text: "Privacy of your phone number" },
+      { icon: <Globe className="w-5 h-5" />, text: "Property listing on website" },
+      { icon: <TrendingUp className="w-5 h-5" />, text: "Basic property promotion" },
+      { icon: <Phone className="w-5 h-5" />, text: "Call support from our team" },
+      { icon: <Users className="w-5 h-5" />, text: "Relationship Manager (RM)" },
+      { icon: <Users className="w-5 h-5" />, text: "Property showings on your behalf" },
+      { icon: <Camera className="w-5 h-5" />, text: "Premium photoshoot" },
+      { icon: <Share2 className="w-5 h-5" />, text: "Social media marketing (FB & Insta)" },
+      { icon: <Zap className="w-5 h-5" />, text: "Featured listing & promotion boost" },
+      { icon: <Shield className="w-5 h-5" />, text: "Verified Buyer Connect" },
+      { icon: <Handshake className="w-5 h-5" />, text: "Price negotiation support" },
+      { icon: <FileText className="w-5 h-5" />, text: "Legal & documentation assistance" }
+    ]
+  ];
+
   const testimonials = [{
     name: "Rajesh Kumar",
     text: "Their Relationship Manager helped me close my showroom deal in just 12 days!",
@@ -81,6 +71,7 @@ const CommercialSellerPlans = () => {
     hashtag: "#ZeroBrokerage",
     rating: 5
   }];
+
   const faqs = [{
     question: "What will the Relationship Manager handle?",
     answer: "Your dedicated Relationship Manager will handle property showings, buyer screening, price negotiations, documentation assistance, and regular updates on your property's performance and inquiries."
@@ -100,11 +91,13 @@ const CommercialSellerPlans = () => {
     question: "Can I use these services if I'm still deciding to sell?",
     answer: "Absolutely! You can list your property and gauge market interest without any commitment. Our team will provide market insights and help you make an informed decision about selling."
   }];
+
   const scrollToPricing = () => {
     document.getElementById('pricing')?.scrollIntoView({
       behavior: 'smooth'
     });
   };
+
   return <div className="min-h-screen bg-background">
       <Header />
       <Marquee />
@@ -122,8 +115,6 @@ const CommercialSellerPlans = () => {
             List your property confidently with dedicated assistance.
           </p>
           
-          
-          
           <Button onClick={scrollToPricing} size="lg" className="bg-white text-brand-red hover:bg-red-50 px-8 py-4 text-lg font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all">
             See Seller Plans
           </Button>
@@ -131,8 +122,8 @@ const CommercialSellerPlans = () => {
       </section>
 
       {/* Seller Plans Section */}
-      <section id="pricing" className="py-16 px-4 bg-white">
-        <div className="container mx-auto">
+      <section id="pricing" className="py-16 px-4 bg-gray-50">
+        <div className="max-w-6xl mx-auto">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-4 text-gray-900">
             🛍️ Commercial Seller Plans
           </h2>
@@ -140,51 +131,74 @@ const CommercialSellerPlans = () => {
             All plans currently <span className="text-green-600 font-bold">FREE</span> for a limited time!
           </p>
           
-          <div className="grid md:grid-cols-2 gap-8 mb-8 max-w-5xl mx-auto">
-            {plans.map((plan, index) => <Card key={index} className={`relative overflow-hidden border-2 ${plan.popular ? 'border-yellow-500 scale-105' : 'border-gray-200'} hover:shadow-xl transition-all`}>
-                {plan.popular && <Badge className="absolute top-4 right-4 bg-yellow-500 text-black font-bold">
-                    Most Popular
-                  </Badge>}
-                <CardHeader className={`${plan.color} text-white text-center py-8`}>
-                  <CardTitle className="text-2xl font-bold">{plan.name}</CardTitle>
-                  <div className="mt-4">
-                    <span className="text-3xl font-bold line-through opacity-75">{plan.originalPrice}</span>
-                    <div className="text-4xl font-bold text-green-300 mt-2">Currently FREE</div>
+          {/* Plan Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {plans.map((plan, index) => (
+              <Card 
+                key={index} 
+                className={`relative cursor-pointer transition-all duration-200 ${
+                  selectedPlan === index ? 'ring-2 ring-brand-red bg-muted' : 'bg-card hover:shadow-md'
+                }`}
+                onClick={() => setSelectedPlan(index)}
+              >
+                <div className="absolute top-3 left-3 right-3">
+                  <Badge className={`${plan.badgeColor} text-white text-xs px-2 py-1 font-medium w-full text-center`}>
+                    {plan.badge}
+                  </Badge>
+                </div>
+                
+                <CardContent className="pt-16 pb-6 px-6">
+                  <h3 className="text-xl font-bold text-gray-900 mb-3">{plan.name}</h3>
+                  <div className="mb-6">
+                    <span className="text-2xl font-bold text-gray-900">{plan.price}</span>
+                    <div className="text-sm text-gray-500">{plan.gst}</div>
                   </div>
-                </CardHeader>
-                <CardContent className="p-6">
-                  <ul className="space-y-3 mb-6">
-                    {plan.features.map((feature, idx) => {
-                  const IconComponent = feature.icon;
-                  return <li key={idx} className="flex items-start space-x-3">
-                          <IconComponent className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" />
-                          <span className="text-gray-700">{feature.text}</span>
-                        </li>;
-                })}
-                  </ul>
-                  <Button className="w-full bg-gray-900 hover:bg-gray-800 text-white">
-                    Get Started Now
+                  
+                  <Button 
+                    className={`w-full ${
+                      selectedPlan === index 
+                        ? 'bg-brand-red hover:bg-brand-maroon-dark text-white' 
+                        : 'bg-transparent text-foreground border border-border hover:bg-muted'
+                    }`}
+                  >
+                    Subscribe
                   </Button>
                 </CardContent>
-              </Card>)}
+              </Card>
+            ))}
           </div>
 
-          <div className="text-center bg-blue-50 p-6 rounded-lg mb-8">
-            <p className="text-gray-700 mb-4">
-              All plans are valid for 3 months. Get dedicated help, faster responses, and more visibility for your property.
-            </p>
-            <div className="flex items-center justify-center space-x-2 text-blue-800">
-              <Phone className="w-5 h-5" />
-              <span className="font-semibold">For assistance, call us at: +91-89-059-998-88</span>
+          {/* Plan Details */}
+          <div className="mt-8 bg-card rounded-lg p-8 shadow-sm">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {planDetails[selectedPlan].map((detail, index) => (
+                <div key={index} className="flex items-start gap-3">
+                  <div className="text-brand-red mt-1">
+                    {detail.icon}
+                  </div>
+                  <span className="text-sm text-foreground leading-relaxed">
+                    {detail.text}
+                  </span>
+                </div>
+              ))}
             </div>
-            <p className="text-sm text-gray-600 mt-2">📌 Terms & Conditions Apply</p>
+          </div>
+
+          {/* Contact Info */}
+          <div className="mt-8 text-center">
+            <p className="text-gray-600 mb-2">
+              For assistance call us at: <span className="text-brand-red font-semibold">+91-89-059-998-88</span>
+            </p>
+            <p className="text-sm text-gray-500">
+              <span className="underline cursor-pointer hover:text-gray-700">Terms & Conditions Apply</span>
+            </p>
           </div>
         </div>
       </section>
 
       {/* Testimonials Section */}
       <section className="py-16 px-4 bg-gray-50">
-        <div className="container mx-auto">
+        <div className="max-w-6xl mx-auto">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-gray-900">
             🌟 What Our Sellers Say
           </h2>
@@ -210,7 +224,7 @@ const CommercialSellerPlans = () => {
 
       {/* FAQ Section */}
       <section className="py-16 px-4 bg-white">
-        <div className="container mx-auto max-w-4xl">
+        <div className="max-w-4xl mx-auto">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-gray-900">
             ❓ Frequently Asked Questions
           </h2>
@@ -230,4 +244,5 @@ const CommercialSellerPlans = () => {
       <Footer />
     </div>;
 };
+
 export default CommercialSellerPlans;
