@@ -1,47 +1,97 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
-import { Star, Phone, Camera, Shield, Users, Megaphone, UserCheck, Zap, CheckCircle } from "lucide-react";
+import { Star, Phone, Camera, Shield, Users, Megaphone, UserCheck, Zap, CheckCircle, Clock, Globe, Lock, FileText, TrendingUp } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Marquee from "@/components/Marquee";
 import { Link } from "react-router-dom";
 const SellerPlans: React.FC = () => {
-  const plans = [{
-    name: "Basic Plan",
-    price: "₹6,499 + GST",
-    originalPrice: "₹7,499 + GST",
-    description: "Get Buyers Quickly. Save Lakhs on Brokerage.",
-    color: "border-green-500 bg-green-50",
-    features: ["RM + listing + basic promotion"],
-    icon: <CheckCircle className="w-6 h-6 text-green-600" />
-  }, {
-    name: "Mid Plan",
-    price: "₹9,999 + GST",
-    originalPrice: "₹13,499 + GST",
-    description: "Leave your house keys and worries to us. Get buyer super-fast.",
-    color: "border-blue-500 bg-blue-50",
-    features: ["All Basic Plan benefits", "Social boost + Field agent visits"],
-    icon: <Users className="w-6 h-6 text-blue-600" />
-  }, {
-    name: "Guaranteed Plan",
-    price: "₹14,999 + GST",
-    originalPrice: "₹16,499 + GST",
-    description: "Guaranteed buyers or Moneyback. RM for super-fast closure.",
-    color: "border-purple-500 bg-purple-50",
-    features: ["Guaranteed buyer leads or refund", "Professional Photoshoot"],
-    icon: <Shield className="w-6 h-6 text-purple-600" />
-  }, {
-    name: "Elite Plan",
-    price: "₹20,000 + GST",
-    originalPrice: "₹20,999 + GST",
-    description: "Guaranteed buyers or Moneyback. Hire Field Assistant for showing your house.",
-    color: "border-orange-500 bg-orange-50",
-    features: ["Everything in Guaranteed Plan", "Professional Video","Branding page"],
-    icon: <Zap className="w-6 h-6 text-orange-600" />
-  }];
+  const [selectedPlan, setSelectedPlan] = useState(0);
+
+  const plans = [
+    {
+      name: "Basic Plan",
+      price: "₹6,499",
+      gst: "+18% GST",
+      badge: "BASIC PROMOTION",
+      badgeColor: "bg-yellow-500",
+    },
+    {
+      name: "Mid Plan", 
+      price: "₹9,999",
+      gst: "+18% GST",
+      badge: "SOCIAL BOOST",
+      badgeColor: "bg-green-500",
+    },
+    {
+      name: "Guaranteed Plan",
+      price: "₹14,999",
+      gst: "+18% GST", 
+      badge: "100% GUARANTEE",
+      badgeColor: "bg-red-500",
+    },
+    {
+      name: "Elite Plan",
+      price: "₹20,000",
+      gst: "+18% GST",
+      badge: "PERSONAL FIELD ASSISTANT", 
+      badgeColor: "bg-purple-500",
+    }
+  ];
+
+  const planDetails = [
+    // Basic plan features
+    [
+      { icon: <Clock className="w-5 h-5" />, text: "90 Days Plan Validity" },
+      { icon: <Users className="w-5 h-5" />, text: "Guaranteed Buyers Or 100% Moneyback" },
+      { icon: <UserCheck className="w-5 h-5" />, text: "Relationship Manager (RM)- Super Fast Closure" },
+      { icon: <FileText className="w-5 h-5" />, text: "Sale Agreement Support" }
+    ],
+    // Mid plan features (includes Basic features)
+    [
+      { icon: <Clock className="w-5 h-5" />, text: "90 Days Plan Validity" },
+      { icon: <Users className="w-5 h-5" />, text: "Guaranteed Buyers Or 100% Moneyback" },
+      { icon: <UserCheck className="w-5 h-5" />, text: "Relationship Manager (RM)- Super Fast Closure" },
+      { icon: <FileText className="w-5 h-5" />, text: "Sale Agreement Support" },
+      { icon: <TrendingUp className="w-5 h-5" />, text: "Top Slot Listing For 5x More Visibility" },
+      { icon: <Globe className="w-5 h-5" />, text: "Property Promotion On Website" },
+      { icon: <Megaphone className="w-5 h-5" />, text: "Social Media Marketing" },
+      { icon: <Lock className="w-5 h-5" />, text: "Privacy Of Your Phone Number" }
+    ],
+    // Guaranteed plan features (includes previous features)
+    [
+      { icon: <Clock className="w-5 h-5" />, text: "90 Days Plan Validity" },
+      { icon: <Users className="w-5 h-5" />, text: "Guaranteed Buyers Or 100% Moneyback" },
+      { icon: <UserCheck className="w-5 h-5" />, text: "Relationship Manager (RM)- Super Fast Closure" },
+      { icon: <FileText className="w-5 h-5" />, text: "Sale Agreement Support" },
+      { icon: <TrendingUp className="w-5 h-5" />, text: "Top Slot Listing For 5x More Visibility" },
+      { icon: <Globe className="w-5 h-5" />, text: "Property Promotion On Website" },
+      { icon: <Megaphone className="w-5 h-5" />, text: "Social Media Marketing" },
+      { icon: <Lock className="w-5 h-5" />, text: "Privacy Of Your Phone Number" },
+      { icon: <UserCheck className="w-5 h-5" />, text: "Personal Field Assistant" },
+      { icon: <Users className="w-5 h-5" />, text: "Showing Property On Your Behalf" },
+      { icon: <Camera className="w-5 h-5" />, text: "Professional Photoshoot Of Your Property" }
+    ],
+    // Elite plan features (includes all previous features)
+    [
+      { icon: <Clock className="w-5 h-5" />, text: "90 Days Plan Validity" },
+      { icon: <Users className="w-5 h-5" />, text: "Guaranteed Buyers Or 100% Moneyback" },
+      { icon: <UserCheck className="w-5 h-5" />, text: "Relationship Manager (RM)- Super Fast Closure" },
+      { icon: <FileText className="w-5 h-5" />, text: "Sale Agreement Support" },
+      { icon: <TrendingUp className="w-5 h-5" />, text: "Top Slot Listing For 5x More Visibility" },
+      { icon: <Globe className="w-5 h-5" />, text: "Property Promotion On Website" },
+      { icon: <Megaphone className="w-5 h-5" />, text: "Social Media Marketing" },
+      { icon: <Lock className="w-5 h-5" />, text: "Privacy Of Your Phone Number" },
+      { icon: <UserCheck className="w-5 h-5" />, text: "Personal Field Assistant" },
+      { icon: <Users className="w-5 h-5" />, text: "Showing Property On Your Behalf" },
+      { icon: <Camera className="w-5 h-5" />, text: "Professional Photoshoot Of Your Property" },
+      { icon: <Shield className="w-5 h-5" />, text: "Premium Customer Support" },
+      { icon: <FileText className="w-5 h-5" />, text: "Legal Documentation Assistance" }
+    ]
+  ];
   const faqs = [{
     question: "What will the Relationship Manager do?",
     answer: "Help you schedule visits, follow up with buyers, and assist with negotiations and closing."
@@ -83,7 +133,8 @@ const SellerPlans: React.FC = () => {
     title: "FASTER CLOSURE",
     description: "Sell your property quickly at a fractional cost (now ₹0)."
   }];
-  return <div className="min-h-screen bg-background">
+  return (
+    <div className="min-h-screen bg-background">
       <Marquee />
       <Header />
       
@@ -100,192 +151,76 @@ const SellerPlans: React.FC = () => {
 
 
 
-      {/* Plans Section */}
-      <section className="py-16 bg-background">
-        <div className="container mx-auto px-4">
+      {/* Pricing Plans */}
+      <section className="py-16 px-4 bg-gray-50">
+        <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
               Seller Plans
             </h2>
-           
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-6 max-w-7xl mx-auto">
-            {plans.map((plan, index) => <Card key={index} className={`relative ${plan.color} border-2 hover:shadow-lg transition-shadow`}>
-                <CardHeader className="pb-4">
-                  <div className="flex items-center gap-2 mb-2">
-                    {plan.icon}
-                    <CardTitle className="text-xl font-bold">{plan.name}</CardTitle>
+          {/* Plan Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {plans.map((plan, index) => (
+              <Card 
+                key={index} 
+                className={`relative cursor-pointer transition-all duration-200 ${
+                  selectedPlan === index ? 'ring-2 ring-brand-red bg-muted' : 'bg-card hover:shadow-md'
+                }`}
+                onClick={() => setSelectedPlan(index)}
+              >
+                <div className="absolute top-3 left-3 right-3">
+                  <Badge className={`${plan.badgeColor} text-white text-xs px-2 py-1 font-medium w-full text-center`}>
+                    {plan.badge}
+                  </Badge>
+                </div>
+                
+                <CardContent className="pt-16 pb-6 px-6">
+                  <h3 className="text-xl font-bold text-gray-900 mb-3">{plan.name}</h3>
+                  <div className="mb-6">
+                    <span className="text-2xl font-bold text-gray-900">{plan.price}</span>
+                    <div className="text-sm text-gray-500">{plan.gst}</div>
                   </div>
-                  <div className="text-center">
-                    <div className="text-3xl font-bold text-foreground mb-1">{plan.price}</div>
-                    
-                   
-                  </div>
-                  <CardDescription className="text-center font-medium text-foreground/80 italic">
-                    "{plan.description}"
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <ul className="space-y-2">
-                    {plan.features.map((feature, featureIndex) => <li key={featureIndex} className="flex items-start gap-2 text-sm">
-                        <CheckCircle className="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0" />
-                        <span>{feature}</span>
-                      </li>)}
-                  </ul>
-                  <Button className="w-full" size="lg">
-                    Subscribe Now
+                  
+                  <Button 
+                    className={`w-full ${
+                      selectedPlan === index 
+                        ? 'bg-brand-red hover:bg-brand-maroon-dark text-white' 
+                        : 'bg-transparent text-foreground border border-border hover:bg-muted'
+                    }`}
+                  >
+                    Subscribe
                   </Button>
                 </CardContent>
-              </Card>)}
+              </Card>
+            ))}
           </div>
 
-          {/* Feature Comparison Table */}
-          <div className="mt-16 overflow-x-auto">
-            <div className="text-center mb-8">
-              <h3 className="text-2xl font-bold text-foreground mb-2">Feature Breakdown by Plan</h3>
+          {/* Plan Details */}
+          <div className="mt-8 bg-card rounded-lg p-8 shadow-sm">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {planDetails[selectedPlan].map((detail, index) => (
+                <div key={index} className="flex items-start gap-3">
+                  <div className="text-brand-red mt-1">
+                    {detail.icon}
+                  </div>
+                  <span className="text-sm text-foreground leading-relaxed">
+                    {detail.text}
+                  </span>
+                </div>
+              ))}
             </div>
-            <div className="min-w-full">
-              <table className="w-full border-collapse border border-border rounded-lg overflow-hidden">
-                <thead>
-                  <tr className="bg-secondary">
-                    <th className="border border-border p-4 text-left font-semibold">Feature</th>
-                    <th className="border border-border p-4 text-center font-semibold">Basic</th>
-                    <th className="border border-border p-4 text-center font-semibold">Mid Plan</th>
-                    <th className="border border-border p-4 text-center font-semibold">Guaranteed</th>
-                    <th className="border border-border p-4 text-center font-semibold">Elite</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr className="bg-card">
-                    <td className="border border-border p-4 font-medium">Relationship Manager</td>
-                    <td className="border border-border p-4 text-center">
-                      <CheckCircle className="w-5 h-5 text-green-600 mx-auto" />
-                    </td>
-                    <td className="border border-border p-4 text-center">
-                      <CheckCircle className="w-5 h-5 text-green-600 mx-auto" />
-                    </td>
-                    <td className="border border-border p-4 text-center">
-                      <CheckCircle className="w-5 h-5 text-green-600 mx-auto" />
-                    </td>
-                    <td className="border border-border p-4 text-center">
-                      <CheckCircle className="w-5 h-5 text-green-600 mx-auto" />
-                    </td>
-                  </tr>
-                  <tr className="bg-background">
-                    <td className="border border-border p-4 font-medium">Platform Listing</td>
-                    <td className="border border-border p-4 text-center">
-                      <CheckCircle className="w-5 h-5 text-green-600 mx-auto" />
-                    </td>
-                    <td className="border border-border p-4 text-center">
-                      <CheckCircle className="w-5 h-5 text-green-600 mx-auto" />
-                    </td>
-                    <td className="border border-border p-4 text-center">
-                      <CheckCircle className="w-5 h-5 text-green-600 mx-auto" />
-                    </td>
-                    <td className="border border-border p-4 text-center">
-                      <CheckCircle className="w-5 h-5 text-green-600 mx-auto" />
-                    </td>
-                  </tr>
-                  <tr className="bg-card">
-                    <td className="border border-border p-4 font-medium">Social Media Promotion</td>
-                    <td className="border border-border p-4 text-center">Basic (FB)</td>
-                    <td className="border border-border p-4 text-center">FB + Insta</td>
-                    <td className="border border-border p-4 text-center">FB + Insta</td>
-                    <td className="border border-border p-4 text-center">Premium Boost</td>
-                  </tr>
-                  <tr className="bg-background">
-                    <td className="border border-border p-4 font-medium">Verified Buyer Leads</td>
-                    <td className="border border-border p-4 text-center">Up to 10</td>
-                    <td className="border border-border p-4 text-center">Up to 25</td>
-                    <td className="border border-border p-4 text-center">Up to 50</td>
-                    <td className="border border-border p-4 text-center">Unlimited</td>
-                  </tr>
-                  <tr className="bg-card">
-                    <td className="border border-border p-4 font-medium">Professional Photoshoot</td>
-                    <td className="border border-border p-4 text-center">
-                      <span className="text-red-500 text-xl">✗</span>
-                    </td>
-                    <td className="border border-border p-4 text-center">
-                      <span className="text-red-500 text-xl">✗</span>
-                    </td>
-                    <td className="border border-border p-4 text-center">
-                      <CheckCircle className="w-5 h-5 text-green-600 mx-auto" />
-                    </td>
-                    <td className="border border-border p-4 text-center">
-                      <CheckCircle className="w-5 h-5 text-green-600 mx-auto" />
-                    </td>
-                  </tr>
-                  <tr className="bg-background">
-                    <td className="border border-border p-4 font-medium">On-ground Support</td>
-                    <td className="border border-border p-4 text-center">
-                      <span className="text-red-500 text-xl">✗</span>
-                    </td>
-                    <td className="border border-border p-4 text-center">
-                      <CheckCircle className="w-5 h-5 text-green-600 mx-auto" />
-                    </td>
-                    <td className="border border-border p-4 text-center">
-                      <CheckCircle className="w-5 h-5 text-green-600 mx-auto" />
-                    </td>
-                    <td className="border border-border p-4 text-center">
-                      <CheckCircle className="w-5 h-5 text-green-600 mx-auto" />
-                    </td>
-                  </tr>
-                  <tr className="bg-card">
-                    <td className="border border-border p-4 font-medium">Video Walkthrough</td>
-                    <td className="border border-border p-4 text-center">
-                      <span className="text-red-500 text-xl">✗</span>
-                    </td>
-                    <td className="border border-border p-4 text-center">
-                      <span className="text-red-500 text-xl">✗</span>
-                    </td>
-                    <td className="border border-border p-4 text-center">
-                      <span className="text-red-500 text-xl">✗</span>
-                    </td>
-                    <td className="border border-border p-4 text-center">
-                      <CheckCircle className="w-5 h-5 text-green-600 mx-auto" />
-                    </td>
-                  </tr>
-                  <tr className="bg-background">
-                    <td className="border border-border p-4 font-medium">Personal Branding Page</td>
-                    <td className="border border-border p-4 text-center">
-                      <span className="text-red-500 text-xl">✗</span>
-                    </td>
-                    <td className="border border-border p-4 text-center">
-                      <span className="text-red-500 text-xl">✗</span>
-                    </td>
-                    <td className="border border-border p-4 text-center">
-                      <span className="text-red-500 text-xl">✗</span>
-                    </td>
-                    <td className="border border-border p-4 text-center">
-                      <CheckCircle className="w-5 h-5 text-green-600 mx-auto" />
-                    </td>
-                  </tr>
-                  <tr className="bg-card">
-                    <td className="border border-border p-4 font-medium">Refund Guarantee</td>
-                    <td className="border border-border p-4 text-center">
-                      <span className="text-red-500 text-xl">✗</span>
-                    </td>
-                    <td className="border border-border p-4 text-center">
-                      <span className="text-red-500 text-xl">✗</span>
-                    </td>
-                    <td className="border border-border p-4 text-center">
-                      <CheckCircle className="w-5 h-5 text-green-600 mx-auto" />
-                    </td>
-                    <td className="border border-border p-4 text-center">
-                      <CheckCircle className="w-5 h-5 text-green-600 mx-auto" />
-                    </td>
-                  </tr>
-                  <tr className="bg-background">
-                    <td className="border border-border p-4 font-medium">Validity Period</td>
-                    <td className="border border-border p-4 text-center">3 months</td>
-                    <td className="border border-border p-4 text-center">3 months</td>
-                    <td className="border border-border p-4 text-center">3 months</td>
-                    <td className="border border-border p-4 text-center">6 months</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+          </div>
+
+          {/* Contact Info */}
+          <div className="mt-8 text-center">
+            <p className="text-gray-600 mb-2">
+              For assistance call us at: <span className="text-brand-red font-semibold">+91-92-430-099-80</span>
+            </p>
+            <p className="text-sm text-gray-500">
+              <span className="underline cursor-pointer hover:text-gray-700">Terms & Conditions Apply</span>
+            </p>
           </div>
         </div>
       </section>
@@ -353,6 +288,7 @@ const SellerPlans: React.FC = () => {
       </section>
 
       <Footer />
-    </div>;
+    </div>
+  );
 };
 export default SellerPlans;
