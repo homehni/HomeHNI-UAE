@@ -122,7 +122,7 @@ const PaintingCleaning = () => {
           </h1>
           <p style={{
           textShadow: '1px 1px 3px rgba(0,0,0,0.7)'
-        }} className="text-lg md:text-xl max-w-3xl mx-auto text-white drop-shadow-md text-justify">
+        }} className="text-lg md:text-xl max-w-3xl mx-auto text-white drop-shadow-md text-center">
             Transform your home with our professional painting and cleaning services. 
             Quality workmanship, trusted professionals, and guaranteed satisfaction for all your home improvement needs.
           </p>
