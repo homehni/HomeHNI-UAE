@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { Star, CheckCircle, Phone, Clock, Users, Shield, UserCheck, Globe, Camera, Lock, FileText, TrendingUp, Target } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
@@ -6,88 +8,115 @@ import { Badge } from "@/components/ui/badge";
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Marquee from '@/components/Marquee';
-import { CheckCircle, Phone, Star, Shield, UserCheck, TrendingUp, Target } from 'lucide-react';
 
 const CommercialOwnerPlans = () => {
-  const [selectedPlan, setSelectedPlan] = useState('MoneyBack Plan');
+  const [selectedPlan, setSelectedPlan] = useState(0);
 
   const plans = [
-    { id: 'Relax Plan', name: 'Relax Plan', price: '₹3,499', gst: '+ GST' },
-    { id: 'Super Relax Plan', name: 'Super Relax Plan', price: '₹6,499', gst: '+ GST' },
-    { id: 'MoneyBack Plan', name: 'MoneyBack Plan', price: '₹7,999', gst: '+ GST', popular: true },
-    { id: 'Super MoneyBack Plan', name: 'Super MoneyBack Plan', price: '₹11,999', gst: '+ GST' }
+    {
+      name: "Relax",
+      price: "₹3,499",
+      gst: "+18% GST",
+      badge: "BASIC ASSISTANCE",
+      badgeColor: "bg-yellow-500",
+    },
+    {
+      name: "Super Relax",
+      price: "₹6,499", 
+      gst: "+18% GST",
+      badge: "ENHANCED VISIBILITY",
+      badgeColor: "bg-green-500",
+    },
+    {
+      name: "MoneyBack",
+      price: "₹7,999",
+      gst: "+18% GST", 
+      badge: "100% GUARANTEE",
+      badgeColor: "bg-red-500",
+    },
+    {
+      name: "Super MoneyBack",
+      price: "₹11,999",
+      gst: "+18% GST",
+      badge: "PREMIUM ASSISTANCE", 
+      badgeColor: "bg-purple-500",
+    }
   ];
 
-  const planDetails = {
-    'Relax Plan': [
-      "Basic tenant matching",
-      "Standard listing visibility",
-      "Email support",
-      "Property documentation assistance",
-      "Basic market analysis"
+  const planDetails = [
+    // Relax plan features
+    [
+      { icon: <Clock className="w-5 h-5" />, text: "Basic tenant matching" },
+      { icon: <Users className="w-5 h-5" />, text: "Standard listing visibility" },
+      { icon: <UserCheck className="w-5 h-5" />, text: "Email support" },
+      { icon: <FileText className="w-5 h-5" />, text: "Property documentation assistance" },
+      { icon: <TrendingUp className="w-5 h-5" />, text: "Basic market analysis" }
     ],
-    'Super Relax Plan': [
-      "Basic tenant matching",
-      "Standard listing visibility", 
-      "Email support",
-      "Property documentation assistance",
-      "Basic market analysis",
-      "Priority tenant matching",
-      "Enhanced listing visibility",
-      "Phone & email support",
-      "Complete documentation support",
-      "Detailed market analysis",
-      "Rental agreement assistance"
+    // Super Relax plan features (includes Relax features)
+    [
+      { icon: <Clock className="w-5 h-5" />, text: "Basic tenant matching" },
+      { icon: <Users className="w-5 h-5" />, text: "Standard listing visibility" },
+      { icon: <UserCheck className="w-5 h-5" />, text: "Email support" },
+      { icon: <FileText className="w-5 h-5" />, text: "Property documentation assistance" },
+      { icon: <TrendingUp className="w-5 h-5" />, text: "Basic market analysis" },
+      { icon: <Target className="w-5 h-5" />, text: "Priority tenant matching" },
+      { icon: <Globe className="w-5 h-5" />, text: "Enhanced listing visibility" },
+      { icon: <Phone className="w-5 h-5" />, text: "Phone & email support" },
+      { icon: <Shield className="w-5 h-5" />, text: "Complete documentation support" },
+      { icon: <Camera className="w-5 h-5" />, text: "Detailed market analysis" },
+      { icon: <Lock className="w-5 h-5" />, text: "Rental agreement assistance" }
     ],
-    'MoneyBack Plan': [
-      "Basic tenant matching",
-      "Standard listing visibility",
-      "Email support", 
-      "Property documentation assistance",
-      "Basic market analysis",
-      "Priority tenant matching",
-      "Enhanced listing visibility",
-      "Phone & email support",
-      "Complete documentation support",
-      "Detailed market analysis",
-      "Rental agreement assistance",
-      "Guaranteed tenant matching",
-      "Premium listing placement",
-      "Personal relationship manager",
-      "100% moneyback guarantee",
-      "Complete legal documentation",
-      "Market trend insights",
-      "Tenant verification services"
+    // MoneyBack plan features (includes previous features)
+    [
+      { icon: <Clock className="w-5 h-5" />, text: "Basic tenant matching" },
+      { icon: <Users className="w-5 h-5" />, text: "Standard listing visibility" },
+      { icon: <UserCheck className="w-5 h-5" />, text: "Email support" },
+      { icon: <FileText className="w-5 h-5" />, text: "Property documentation assistance" },
+      { icon: <TrendingUp className="w-5 h-5" />, text: "Basic market analysis" },
+      { icon: <Target className="w-5 h-5" />, text: "Priority tenant matching" },
+      { icon: <Globe className="w-5 h-5" />, text: "Enhanced listing visibility" },
+      { icon: <Phone className="w-5 h-5" />, text: "Phone & email support" },
+      { icon: <Shield className="w-5 h-5" />, text: "Complete documentation support" },
+      { icon: <Camera className="w-5 h-5" />, text: "Detailed market analysis" },
+      { icon: <Lock className="w-5 h-5" />, text: "Rental agreement assistance" },
+      { icon: <CheckCircle className="w-5 h-5" />, text: "Guaranteed tenant matching" },
+      { icon: <Star className="w-5 h-5" />, text: "Premium listing placement" },
+      { icon: <UserCheck className="w-5 h-5" />, text: "Personal relationship manager" },
+      { icon: <Shield className="w-5 h-5" />, text: "100% moneyback guarantee" },
+      { icon: <FileText className="w-5 h-5" />, text: "Complete legal documentation" },
+      { icon: <TrendingUp className="w-5 h-5" />, text: "Market trend insights" },
+      { icon: <Users className="w-5 h-5" />, text: "Tenant verification services" }
     ],
-    'Super MoneyBack Plan': [
-      "Basic tenant matching",
-      "Standard listing visibility",
-      "Email support",
-      "Property documentation assistance", 
-      "Basic market analysis",
-      "Priority tenant matching",
-      "Enhanced listing visibility",
-      "Phone & email support",
-      "Complete documentation support",
-      "Detailed market analysis",
-      "Rental agreement assistance",
-      "Guaranteed tenant matching",
-      "Premium listing placement",
-      "Personal relationship manager",
-      "100% moneyback guarantee",
-      "Complete legal documentation",
-      "Market trend insights",
-      "Tenant verification services",
-      "Priority guaranteed matching",
-      "Maximum visibility & promotion",
-      "Dedicated relationship manager",
-      "Premium legal support",
-      "Advanced market analytics",
-      "Complete tenant verification",
-      "Rental negotiation support",
-      "Post-rental support"
+    // Super MoneyBack plan features (includes all previous features)
+    [
+      { icon: <Clock className="w-5 h-5" />, text: "Basic tenant matching" },
+      { icon: <Users className="w-5 h-5" />, text: "Standard listing visibility" },
+      { icon: <UserCheck className="w-5 h-5" />, text: "Email support" },
+      { icon: <FileText className="w-5 h-5" />, text: "Property documentation assistance" },
+      { icon: <TrendingUp className="w-5 h-5" />, text: "Basic market analysis" },
+      { icon: <Target className="w-5 h-5" />, text: "Priority tenant matching" },
+      { icon: <Globe className="w-5 h-5" />, text: "Enhanced listing visibility" },
+      { icon: <Phone className="w-5 h-5" />, text: "Phone & email support" },
+      { icon: <Shield className="w-5 h-5" />, text: "Complete documentation support" },
+      { icon: <Camera className="w-5 h-5" />, text: "Detailed market analysis" },
+      { icon: <Lock className="w-5 h-5" />, text: "Rental agreement assistance" },
+      { icon: <CheckCircle className="w-5 h-5" />, text: "Guaranteed tenant matching" },
+      { icon: <Star className="w-5 h-5" />, text: "Premium listing placement" },
+      { icon: <UserCheck className="w-5 h-5" />, text: "Personal relationship manager" },
+      { icon: <Shield className="w-5 h-5" />, text: "100% moneyback guarantee" },
+      { icon: <FileText className="w-5 h-5" />, text: "Complete legal documentation" },
+      { icon: <TrendingUp className="w-5 h-5" />, text: "Market trend insights" },
+      { icon: <Users className="w-5 h-5" />, text: "Tenant verification services" },
+      { icon: <Target className="w-5 h-5" />, text: "Priority guaranteed matching" },
+      { icon: <Globe className="w-5 h-5" />, text: "Maximum visibility & promotion" },
+      { icon: <UserCheck className="w-5 h-5" />, text: "Dedicated relationship manager" },
+      { icon: <Shield className="w-5 h-5" />, text: "Premium legal support" },
+      { icon: <TrendingUp className="w-5 h-5" />, text: "Advanced market analytics" },
+      { icon: <Users className="w-5 h-5" />, text: "Complete tenant verification" },
+      { icon: <Phone className="w-5 h-5" />, text: "Rental negotiation support" },
+      { icon: <Star className="w-5 h-5" />, text: "Post-rental support" }
     ]
-  };
+  ];
 
   const keyBenefits = [
     {
@@ -288,109 +317,85 @@ const CommercialOwnerPlans = () => {
       </section>
 
       {/* Pricing Plans Section */}
-      <section className="py-16" id="pricing">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
-            Choose Your Perfect Plan
-          </h2>
-          
-          {/* Plan Selection Buttons */}
-          <div className="flex flex-wrap justify-center gap-3 mb-12">
-            {plans.map((plan) => (
-              <Button
-                key={plan.id}
-                onClick={() => setSelectedPlan(plan.id)}
-                variant={selectedPlan === plan.id ? "default" : "outline"}
-                size="lg"
-                className={`relative ${
-                  selectedPlan === plan.id 
-                    ? "bg-brand-red text-white hover:bg-brand-red-dark" 
-                    : "bg-white text-brand-red border-brand-red hover:bg-brand-red hover:text-white"
-                } transition-all duration-300`}
+      <section className="py-16 px-4 bg-gray-50" id="pricing">
+        <div className="max-w-6xl mx-auto">
+          {/* Plan Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {plans.map((plan, index) => (
+              <Card 
+                key={index} 
+                className={`relative cursor-pointer transition-all duration-200 ${
+                  selectedPlan === index ? 'ring-2 ring-brand-red bg-muted' : 'bg-card hover:shadow-md'
+                }`}
+                onClick={() => setSelectedPlan(index)}
               >
-                {plan.popular && selectedPlan === plan.id && (
-                  <Badge className="absolute -top-2 -right-2 bg-white text-brand-red text-xs px-2 py-0.5">
-                    Popular
+                <div className="absolute top-3 left-3 right-3">
+                  <Badge className={`${plan.badgeColor} text-white text-xs px-2 py-1 font-medium w-full text-center`}>
+                    {plan.badge}
                   </Badge>
-                )}
-                {plan.name}
-              </Button>
+                </div>
+                
+                <CardContent className="pt-16 pb-6 px-6">
+                  <h3 className="text-xl font-bold text-gray-900 mb-3">{plan.name}</h3>
+                  <div className="mb-6">
+                    <span className="text-2xl font-bold text-gray-900">{plan.price}</span>
+                    <div className="text-sm text-gray-500">{plan.gst}</div>
+                  </div>
+                  
+                  <Button 
+                    className={`w-full ${
+                      selectedPlan === index 
+                        ? 'bg-brand-red hover:bg-brand-maroon-dark text-white' 
+                        : 'bg-transparent text-foreground border border-border hover:bg-muted'
+                    }`}
+                  >
+                    Subscribe
+                  </Button>
+                </CardContent>
+              </Card>
             ))}
           </div>
 
-          {/* Selected Plan Details */}
-          <div className="max-w-2xl mx-auto">
-            <Card className="border-brand-red shadow-lg">
-              <CardHeader className="text-center bg-brand-red text-white">
-                <CardTitle className="text-3xl">
-                  {plans.find(p => p.id === selectedPlan)?.name}
-                </CardTitle>
-                <div className="text-4xl font-bold">
-                  {plans.find(p => p.id === selectedPlan)?.price}{' '}
-                  <span className="text-lg opacity-80">
-                    {plans.find(p => p.id === selectedPlan)?.gst}
+          {/* Plan Details */}
+          <div className="mt-8 bg-card rounded-lg p-8 shadow-sm">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {planDetails[selectedPlan].map((detail, index) => (
+                <div key={index} className="flex items-start gap-3">
+                  <div className="text-brand-red mt-1">
+                    {detail.icon}
+                  </div>
+                  <span className="text-sm text-foreground leading-relaxed">
+                    {detail.text}
                   </span>
                 </div>
-              </CardHeader>
-              <CardContent className="p-8">
-                <h3 className="text-xl font-semibold mb-6 text-center">What's Included:</h3>
-                <div className="grid grid-cols-1 gap-3">
-                  {planDetails[selectedPlan]?.map((feature, index) => (
-                    <div key={index} className="flex items-start">
-                      <CheckCircle className="w-5 h-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
-                      <span className="text-sm">{feature}</span>
-                    </div>
-                  ))}
-                </div>
-                <div className="mt-8 text-center">
-                  <Button 
-                    size="lg" 
-                    className="w-full md:w-auto px-12 bg-brand-red hover:bg-brand-red-dark text-white"
-                  >
-                    Subscribe to {selectedPlan}
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
+              ))}
+            </div>
+          </div>
+
+          {/* Contact Info */}
+          <div className="mt-8 text-center">
+            <p className="text-gray-600 mb-2">
+              For assistance call us at: <span className="text-brand-red font-semibold">+91-89-059-998-88</span>
+            </p>
+            <p className="text-sm text-gray-500">
+              <span className="underline cursor-pointer hover:text-gray-700">Terms & Conditions Apply</span>
+            </p>
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-16 bg-brand-red text-white">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-6">
-            Need Help Choosing the Right Plan?
-          </h2>
-          <p className="text-xl mb-8 opacity-90">
-            Our experts are here to guide you to the perfect solution
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Phone className="w-6 h-6" />
-            <span className="text-2xl font-semibold">+91-89-059-998-88</span>
-            <Button variant="secondary" size="lg" className="text-brand-red">
-              Call Now for Plan Assistance
-            </Button>
-          </div>
-        </div>
-      </section>
-
-      {/* Testimonials Section */}
-      <section className="py-16 bg-muted/30">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
-            What Our Clients Say
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+      {/* Customer Testimonials */}
+      <section className="py-16 px-4">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-3xl font-bold text-center mb-12">Customer Testimonials</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {testimonials.map((testimonial, index) => (
-              <Card key={index}>
-                <CardContent className="pt-6">
+              <Card key={index} className="p-6">
+                <CardContent className="pt-0">
                   <div className="flex mb-4">
-                    {[...Array(testimonial.rating)].map((_, i) => (
-                      <Star key={i} className="w-5 h-5 text-yellow-400 fill-current" />
-                    ))}
+                    {[1, 2, 3, 4, 5].map(star => <Star key={star} className="w-4 h-4 fill-yellow-400 text-yellow-400" />)}
                   </div>
-                  <p className="text-muted-foreground mb-4">"{testimonial.review}"</p>
+                  <p className="text-gray-700 mb-4">"{testimonial.review}"</p>
                   <div className="flex justify-between items-center">
                     <div>
                       <p className="font-semibold">{testimonial.name}</p>
@@ -404,6 +409,18 @@ const CommercialOwnerPlans = () => {
               </Card>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Support Callout */}
+      <section className="py-12 px-4 bg-brand-red text-primary-foreground">
+        <div className="max-w-4xl mx-auto text-center">
+          <Phone className="w-8 h-8 mx-auto mb-4" />
+          <h3 className="text-2xl font-bold mb-4">Need Assistance?</h3>
+          <p className="text-lg mb-4">For assistance, call us at</p>
+          <a href="tel:+918905999888" className="text-2xl font-bold hover:underline">
+            +91-89-059-998-88
+          </a>
         </div>
       </section>
 
