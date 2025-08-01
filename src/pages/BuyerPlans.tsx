@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Star, Check, Phone, Home, Users, Shield } from 'lucide-react';
+import { Star, Check, Phone, Home, Users, Shield, Clock, UserCheck, Globe, Lock, FileText, TrendingUp, Camera } from 'lucide-react';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
@@ -9,31 +9,66 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Marquee from '@/components/Marquee';
 const BuyerPlans = () => {
-  const plans = [{
-    name: "Power Plan",
-    price: "₹2,399 + 18% GST",
-    originalPrice: "₹2,399 + 18% GST",
-    color: "bg-green-500",
-    icon: <Home className="w-6 h-6" />,
-    tagline: "Choose your dream home from lots of verified listings",
-    features: ["View up to 25 property contacts", "Complimentary legal consultation with experts", "Loan Assistance", "On-Demand Support"]
-  }, {
-    name: "Property Expert Plan",
-    price: "₹2,499 + 18% GST",
-    originalPrice: "₹2,499 + 18% GST",
-    color: "bg-blue-500",
-    icon: <Users className="w-6 h-6" />,
-    tagline: "Get FREE Loan Assistance + 100% Cashback on plan amount* + Property Expert",
-    features: ["Dedicated Property Expert", "Expert negotiates to get you the best price", "Helps schedule visits and shortlists properties", "FREE Loan Assistance", "FREE Interior Consultation after finalizing property", "View up to 50 property contacts", "Complimentary legal consultation"]
-  }, {
-    name: "Property Expert MoneyBack Plan",
-    price: "₹4,999 + 18% GST",
-    originalPrice: "₹4,999 + 18% GST",
-    color: "bg-red-500",
-    icon: <Shield className="w-6 h-6" />,
-    tagline: "Get Guaranteed property or 100% Refund",
-    features: ["Guaranteed Property or 100% Refund (T&C)", "All features of Expert Plan", "Dedicated Property Expert", "Expert negotiates to get you the best price", "FREE Loan Assistance", "FREE Interior Design Consultation", "View up to 50 property contacts", "Expert handles everything from contact to negotiation"]
-  }];
+  const [selectedPlan, setSelectedPlan] = useState(0);
+
+  const plans = [
+    {
+      name: "Power Plan",
+      price: "₹2,399",
+      gst: "+18% GST",
+      badge: "BASIC SEARCH",
+      badgeColor: "bg-yellow-500",
+    },
+    {
+      name: "Property Expert Plan", 
+      price: "₹2,499",
+      gst: "+18% GST",
+      badge: "EXPERT ASSISTANCE",
+      badgeColor: "bg-green-500",
+    },
+    {
+      name: "Property Expert MoneyBack",
+      price: "₹4,999",
+      gst: "+18% GST", 
+      badge: "100% GUARANTEE",
+      badgeColor: "bg-red-500",
+    }
+  ];
+
+  const planDetails = [
+    // Power plan features
+    [
+      { icon: <Clock className="w-5 h-5" />, text: "90 Days Plan Validity" },
+      { icon: <Home className="w-5 h-5" />, text: "View up to 25 Property Contacts" },
+      { icon: <UserCheck className="w-5 h-5" />, text: "Complimentary Legal Consultation" },
+      { icon: <FileText className="w-5 h-5" />, text: "Loan Assistance Support" }
+    ],
+    // Property Expert plan features (includes Power features)
+    [
+      { icon: <Clock className="w-5 h-5" />, text: "90 Days Plan Validity" },
+      { icon: <Home className="w-5 h-5" />, text: "View up to 50 Property Contacts" },
+      { icon: <UserCheck className="w-5 h-5" />, text: "Complimentary Legal Consultation" },
+      { icon: <FileText className="w-5 h-5" />, text: "Loan Assistance Support" },
+      { icon: <Users className="w-5 h-5" />, text: "Dedicated Property Expert" },
+      { icon: <TrendingUp className="w-5 h-5" />, text: "Expert Negotiates Best Price" },
+      { icon: <Globe className="w-5 h-5" />, text: "Helps Schedule Property Visits" },
+      { icon: <Home className="w-5 h-5" />, text: "FREE Interior Consultation" }
+    ],
+    // MoneyBack plan features (includes previous features)
+    [
+      { icon: <Clock className="w-5 h-5" />, text: "90 Days Plan Validity" },
+      { icon: <Home className="w-5 h-5" />, text: "View up to 50 Property Contacts" },
+      { icon: <UserCheck className="w-5 h-5" />, text: "Complimentary Legal Consultation" },
+      { icon: <FileText className="w-5 h-5" />, text: "Loan Assistance Support" },
+      { icon: <Users className="w-5 h-5" />, text: "Dedicated Property Expert" },
+      { icon: <TrendingUp className="w-5 h-5" />, text: "Expert Negotiates Best Price" },
+      { icon: <Globe className="w-5 h-5" />, text: "Helps Schedule Property Visits" },
+      { icon: <Home className="w-5 h-5" />, text: "FREE Interior Consultation" },
+      { icon: <Shield className="w-5 h-5" />, text: "Guaranteed Property or 100% Refund" },
+      { icon: <UserCheck className="w-5 h-5" />, text: "Expert Handles Everything" },
+      { icon: <TrendingUp className="w-5 h-5" />, text: "Priority Customer Support" }
+    ]
+  ];
   const howItWorks = ["We gather your requirements", "Connect you with verified listings", "Schedule property visits", "Help you negotiate price", "Assist in finalizing the deal", "Provide city-level property expertise"];
   const faqs = [{
     question: "What does a Property Expert do?",
@@ -54,7 +89,8 @@ const BuyerPlans = () => {
     question: "Can I pay for the plan after I find a house?",
     answer: "For now, it's FREE. Later pricing models may change."
   }];
-  return <div className="min-h-screen bg-background">
+  return (
+    <div className="min-h-screen bg-background">
       <Marquee />
       <Header />
       
@@ -70,40 +106,74 @@ const BuyerPlans = () => {
       </section>
 
       {/* Buyer Plans */}
-      <section className="py-16 px-4">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {plans.map((plan, index) => <Card key={index} className="relative overflow-hidden hover:shadow-lg transition-shadow border-2">
-                <CardHeader className="text-center">
-                  <div className="flex items-center justify-center gap-2 mb-4">
-                    <Badge className={`${plan.color} text-white`}>
-                      {plan.icon}
-                    </Badge>
-                    <h3 className="text-xl font-bold">{plan.name}</h3>
-                  </div>
-                  <div className="mb-4">
-                    <div className="text-4xl font-bold text-brand-red">{plan.price}</div>
-                    
-                    
-                  </div>
-                  <p className="text-sm text-muted-foreground mb-4">{plan.tagline}</p>
-                </CardHeader>
-                <CardContent>
-                  <ul className="space-y-3 mb-6">
-                    {plan.features.map((feature, idx) => <li key={idx} className="flex items-start gap-2">
-                        <Check className="w-4 h-4 text-green-500 mt-1 flex-shrink-0" />
-                        <span className="text-sm">{feature}</span>
-                      </li>)}
-                  </ul>
-                  <Button className="w-full">Subscribe Now</Button>
-                </CardContent>
-              </Card>)}
+      <section className="py-16 px-4 bg-gray-50">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+              Buyer Plans
+            </h2>
           </div>
-          
-          {/* Plan Validity Note */}
-          <div className="text-center mt-8">
-            <p className="text-muted-foreground">
-              All Plans are valid for 3 months. <span className="text-brand-red font-medium">T&C apply.</span>
+
+          {/* Plan Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {plans.map((plan, index) => (
+              <Card 
+                key={index} 
+                className={`relative cursor-pointer transition-all duration-200 ${
+                  selectedPlan === index ? 'ring-2 ring-brand-red bg-muted' : 'bg-card hover:shadow-md'
+                }`}
+                onClick={() => setSelectedPlan(index)}
+              >
+                <div className="absolute top-3 left-3 right-3">
+                  <Badge className={`${plan.badgeColor} text-white text-xs px-2 py-1 font-medium w-full text-center`}>
+                    {plan.badge}
+                  </Badge>
+                </div>
+                
+                <CardContent className="pt-16 pb-6 px-6">
+                  <h3 className="text-xl font-bold text-gray-900 mb-3">{plan.name}</h3>
+                  <div className="mb-6">
+                    <span className="text-2xl font-bold text-gray-900">{plan.price}</span>
+                    <div className="text-sm text-gray-500">{plan.gst}</div>
+                  </div>
+                  
+                  <Button 
+                    className={`w-full ${
+                      selectedPlan === index 
+                        ? 'bg-brand-red hover:bg-brand-maroon-dark text-white' 
+                        : 'bg-transparent text-foreground border border-border hover:bg-muted'
+                    }`}
+                  >
+                    Subscribe
+                  </Button>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+
+          {/* Plan Details */}
+          <div className="mt-8 bg-card rounded-lg p-8 shadow-sm">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {planDetails[selectedPlan].map((detail, index) => (
+                <div key={index} className="flex items-start gap-3">
+                  <div className="text-brand-red mt-1">
+                    {detail.icon}
+                  </div>
+                  <span className="text-sm text-foreground leading-relaxed">
+                    {detail.text}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Contact Info */}
+          <div className="mt-8 text-center">
+            <p className="text-gray-600 mb-2">
+              For assistance call us at: <span className="text-brand-red font-semibold">+91-92-430-099-80</span>
+            </p>
+            <p className="text-sm text-gray-500">
+              <span className="underline cursor-pointer hover:text-gray-700">Terms & Conditions Apply</span>
             </p>
           </div>
         </div>
@@ -163,6 +233,7 @@ const BuyerPlans = () => {
       </section>
 
       <Footer />
-    </div>;
+    </div>
+  );
 };
 export default BuyerPlans;
