@@ -4,7 +4,7 @@ const FeaturedProperties = () => {
   const properties = [
     {
       id: '1',
-      title: 'Luxury 3BHK Apartment in Prime Location',
+      title: 'Modern Villa with Garden',
       location: 'Sector 18, Gurgaon',
       price: '₹1.2 Cr',
       area: '1,200 sq ft',
