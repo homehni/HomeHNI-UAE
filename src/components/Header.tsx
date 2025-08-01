@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { ChevronDown, HelpCircle, Settings, Menu, X, UserPlus, LogIn, LogOut, User, MessageCircle, Users } from 'lucide-react';
+import { ChevronDown, HelpCircle, Settings, Menu, X, UserPlus, LogIn, LogOut, User, MessageCircle, Users, Heart } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
@@ -177,6 +177,10 @@ const Header = () => {
                     <DropdownMenuItem onClick={() => navigate('/dashboard?tab=profile')}>
                       <Users className="mr-2 h-4 w-4" />
                       <span>Profile</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => navigate('/dashboard?tab=interests')}>
+                      <Heart className="mr-2 h-4 w-4" />
+                      <span>My Interests</span>
                     </DropdownMenuItem>
                     {isAdmin && (
                       <DropdownMenuItem onClick={() => navigate('/admin')}>
