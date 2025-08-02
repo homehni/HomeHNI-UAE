@@ -135,7 +135,12 @@ const SellerPlans: React.FC = () => {
       <Header />
       
       {/* Hero Section */}
-    <section className="gradient-red-maroon py-20 md:py-28">
+    <section 
+      className="py-20 md:py-28 relative bg-cover bg-center bg-no-repeat"
+      style={{
+        backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('/lovable-uploads/b29385fc-1962-44ff-aab9-781b07f0458b.png')`
+      }}
+    >
   <div className="container mx-auto px-4 text-center max-w-4xl">
     <h1 className="text-3xl md:text-5xl font-bold text-white mb-6">
       Get Buyers Quickly. SAVE LAKHS on Brokerage
