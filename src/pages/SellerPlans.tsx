@@ -30,7 +30,7 @@ const SellerPlans: React.FC = () => {
       name: "Platinum Plan",
       price: "₹14,999",
       gst: "+18% GST", 
-      badge: "100% GUARANTEE",
+      badge: "EXPERT GUIDANCE",
       badgeColor: "bg-red-500",
     },
     {
@@ -46,14 +46,12 @@ const SellerPlans: React.FC = () => {
     // Basic plan features
     [
       { icon: <Clock className="w-5 h-5" />, text: "90 Days Plan Validity" },
-      { icon: <Users className="w-5 h-5" />, text: "Guaranteed Buyers Or 100% Moneyback" },
       { icon: <UserCheck className="w-5 h-5" />, text: "Relationship Manager (RM)- Super Fast Closure" },
       { icon: <FileText className="w-5 h-5" />, text: "Sale Agreement Support" }
     ],
     // Mid plan features (includes Basic features)
     [
       { icon: <Clock className="w-5 h-5" />, text: "90 Days Plan Validity" },
-      { icon: <Users className="w-5 h-5" />, text: "Guaranteed Buyers Or 100% Moneyback" },
       { icon: <UserCheck className="w-5 h-5" />, text: "Relationship Manager (RM)- Super Fast Closure" },
       { icon: <FileText className="w-5 h-5" />, text: "Sale Agreement Support" },
       { icon: <TrendingUp className="w-5 h-5" />, text: "Top Slot Listing For 5x More Visibility" },
@@ -64,7 +62,6 @@ const SellerPlans: React.FC = () => {
     // Guaranteed plan features (includes previous features)
     [
       { icon: <Clock className="w-5 h-5" />, text: "90 Days Plan Validity" },
-      { icon: <Users className="w-5 h-5" />, text: "Guaranteed Buyers Or 100% Moneyback" },
       { icon: <UserCheck className="w-5 h-5" />, text: "Relationship Manager (RM)- Super Fast Closure" },
       { icon: <FileText className="w-5 h-5" />, text: "Sale Agreement Support" },
       { icon: <TrendingUp className="w-5 h-5" />, text: "Top Slot Listing For 5x More Visibility" },
@@ -78,7 +75,6 @@ const SellerPlans: React.FC = () => {
     // Elite plan features (includes all previous features)
     [
       { icon: <Clock className="w-5 h-5" />, text: "90 Days Plan Validity" },
-      { icon: <Users className="w-5 h-5" />, text: "Guaranteed Buyers Or 100% Moneyback" },
       { icon: <UserCheck className="w-5 h-5" />, text: "Relationship Manager (RM)- Super Fast Closure" },
       { icon: <FileText className="w-5 h-5" />, text: "Sale Agreement Support" },
       { icon: <TrendingUp className="w-5 h-5" />, text: "Top Slot Listing For 5x More Visibility" },
