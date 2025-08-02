@@ -69,7 +69,7 @@ const LegalServices = () => {
       <section className="relative bg-gradient-to-br from-blue-50 to-indigo-100 pt-24 pb-16 overflow-hidden py-[120px]">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 pt-8">
               Get Hassle-Free Property
               <span className="block text-brand-red">Legal Services Across India</span>
             </h1>
