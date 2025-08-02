@@ -30,7 +30,7 @@ const BuyerPlans = () => {
       name: "Platinum Plan",
       price: "₹4,999",
       gst: "+18% GST", 
-      badge: "Exclusive Support",
+      badge: "EXCLUSIVE SUPPORT",
       badgeColor: "bg-red-500",
     }
   ];
