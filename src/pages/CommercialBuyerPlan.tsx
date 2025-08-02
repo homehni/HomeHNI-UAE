@@ -161,30 +161,7 @@ const CommercialBuyerPlan = () => {
         </div>
       </section>
 
-      {/* Benefits Section */}
-      <section className="py-20 bg-muted/30">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-4">
-            Why Choose Our Commercial Buyer Plan?
-          </h2>
-          <p className="text-center text-muted-foreground mb-12 text-lg">
-            Everything you need to find the perfect commercial property
-          </p>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {benefits.map((benefit, index) => {
-            const IconComponent = benefit.icon;
-            return <Card key={index} className="text-center p-6 hover:shadow-lg transition-shadow">
-                  <CardContent className="pt-6">
-                    <div className="w-12 h-12 bg-brand-red/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                      <IconComponent className="w-6 h-6 text-brand-red" />
-                    </div>
-                    <h3 className="font-semibold text-base text-center">{benefit.title}</h3>
-                  </CardContent>
-                </Card>;
-          })}
-          </div>
-        </div>
-      </section>
+     
 
       {/* Pricing Section */}
       <section id="pricing" className="py-16 px-4 bg-gray-50">
@@ -254,6 +231,34 @@ const CommercialBuyerPlan = () => {
             <p className="text-sm text-gray-500">
               <span className="underline cursor-pointer hover:text-gray-700">Terms & Conditions Apply</span>
             </p>
+          </div>
+        </div>
+      </section>
+
+
+
+
+     {/* Benefits Section */}
+      <section className="py-20 bg-muted/30">
+        <div className="container mx-auto px-4">
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-4">
+            Why Choose Our Commercial Buyer Plan?
+          </h2>
+          <p className="text-center text-muted-foreground mb-12 text-lg">
+            Everything you need to find the perfect commercial property
+          </p>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {benefits.map((benefit, index) => {
+            const IconComponent = benefit.icon;
+            return <Card key={index} className="text-center p-6 hover:shadow-lg transition-shadow">
+                  <CardContent className="pt-6">
+                    <div className="w-12 h-12 bg-brand-red/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <IconComponent className="w-6 h-6 text-brand-red" />
+                    </div>
+                    <h3 className="font-semibold text-base text-center">{benefit.title}</h3>
+                  </CardContent>
+                </Card>;
+          })}
           </div>
         </div>
       </section>
