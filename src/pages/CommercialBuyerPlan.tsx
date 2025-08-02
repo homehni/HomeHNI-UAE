@@ -68,7 +68,6 @@ const CommercialBuyerPlan = () => {
       { icon: <FileText className="w-5 h-5" />, text: "Legal documentation support" },
       { icon: <Target className="w-5 h-5" />, text: "Premium property matching" },
       { icon: <Clock className="w-5 h-5" />, text: "24/7 dedicated expert" },
-      { icon: <Check className="w-5 h-5" />, text: "Guaranteed property closure" },
       { icon: <Shield className="w-5 h-5" />, text: "Complete legal & loan assistance" },
     ]
   ];
