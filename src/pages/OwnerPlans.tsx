@@ -134,7 +134,7 @@ const OwnerPlans = () => {
             Get Tenants Quickly. Save up to ₹50,000 on Brokerage!
           </h1>
           <p className="text-lg md:text-xl mb-6 max-w-3xl mx-auto">
-            Trusted by 3 Lakh+ property owners like you. Choose the plan that suits you — for ₹0 during our limited-time offer!
+            Trusted by 3 Lakh+ property owners like you. Choose the plan that suits you 
           </p>
           <div className="flex items-center justify-center gap-2 mb-6">
             <div className="flex">
