@@ -6,95 +6,67 @@ import Header from '@/components/Header';
 import Marquee from '@/components/Marquee';
 import Footer from '@/components/Footer';
 import LegalServicesForm from '@/components/LegalServicesForm';
-
 const LegalServices = () => {
   const [isFormOpen, setIsFormOpen] = useState(false);
-
   const scrollToContact = () => {
     setIsFormOpen(true);
   };
-
-  const serviceHighlights = [
-    {
-      icon: FileText,
-      title: "Rental Agreement",
-      description: "Legally valid rental agreements delivered at your doorstep."
-    },
-    {
-      icon: Shield,
-      title: "Tenant Verification",
-      description: "Protect your property with police-verified tenant checks."
-    },
-    {
-      icon: Scale,
-      title: "Property Legal Assistance",
-      description: "Consult with certified legal experts before buying/selling property."
-    }
-  ];
-
-  const benefits = [
-    "No Government Office Visits",
-    "Personalised Legal Support", 
-    "Online Payment & Instant Booking",
-    "Legally Valid Documentation",
-    "Lowest Prices Guaranteed",
-    "100% Convenience, 0% Stress"
-  ];
-
-  const comingSoonServices = [
-    {
-      title: "Police Intimation",
-      description: "Hassle-free police intimation for rental properties",
-      icon: Shield
-    },
-    {
-      title: "Property Tax Filing",
-      description: "Expert assistance with property tax documentation",
-      icon: FileText
-    },
-    {
-      title: "Leave & License Agreement",
-      description: "Professional drafting of leave and license agreements",
-      icon: Scale
-    },
-    {
-      title: "Legal Document Review",
-      description: "Expert review of property-related legal documents",
-      icon: CheckCircle
-    }
-  ];
-
-  const customerReviews = [
-    {
-      name: "Rohit M.",
-      location: "Mumbai",
-      rating: 5,
-      review: "Quick & efficient service for my rental agreement! Highly recommended.",
-      avatar: "/lovable-uploads/02059b14-d0f2-4231-af62-ec450cb13e82.png"
-    },
-    {
-      name: "Neha S.",
-      location: "Delhi",
-      rating: 5,
-      review: "Professional team. Got tenant verification done in 2 days.",
-      avatar: "/lovable-uploads/02fc42a2-c12f-49f1-92b7-9fdee8f3a419.png"
-    },
-    {
-      name: "Vikas K.",
-      location: "Bangalore",
-      rating: 5,
-      review: "Legal consultation helped me close my deal confidently.",
-      avatar: "/lovable-uploads/03a7a41f-3920-4412-aec8-9d2ab24226ae.png"
-    }
-  ];
-
-  return (
-    <div className="min-h-screen bg-background">
+  const serviceHighlights = [{
+    icon: FileText,
+    title: "Rental Agreement",
+    description: "Legally valid rental agreements delivered at your doorstep."
+  }, {
+    icon: Shield,
+    title: "Tenant Verification",
+    description: "Protect your property with police-verified tenant checks."
+  }, {
+    icon: Scale,
+    title: "Property Legal Assistance",
+    description: "Consult with certified legal experts before buying/selling property."
+  }];
+  const benefits = ["No Government Office Visits", "Personalised Legal Support", "Online Payment & Instant Booking", "Legally Valid Documentation", "Lowest Prices Guaranteed", "100% Convenience, 0% Stress"];
+  const comingSoonServices = [{
+    title: "Police Intimation",
+    description: "Hassle-free police intimation for rental properties",
+    icon: Shield
+  }, {
+    title: "Property Tax Filing",
+    description: "Expert assistance with property tax documentation",
+    icon: FileText
+  }, {
+    title: "Leave & License Agreement",
+    description: "Professional drafting of leave and license agreements",
+    icon: Scale
+  }, {
+    title: "Legal Document Review",
+    description: "Expert review of property-related legal documents",
+    icon: CheckCircle
+  }];
+  const customerReviews = [{
+    name: "Rohit M.",
+    location: "Mumbai",
+    rating: 5,
+    review: "Quick & efficient service for my rental agreement! Highly recommended.",
+    avatar: "/lovable-uploads/02059b14-d0f2-4231-af62-ec450cb13e82.png"
+  }, {
+    name: "Neha S.",
+    location: "Delhi",
+    rating: 5,
+    review: "Professional team. Got tenant verification done in 2 days.",
+    avatar: "/lovable-uploads/02fc42a2-c12f-49f1-92b7-9fdee8f3a419.png"
+  }, {
+    name: "Vikas K.",
+    location: "Bangalore",
+    rating: 5,
+    review: "Legal consultation helped me close my deal confidently.",
+    avatar: "/lovable-uploads/03a7a41f-3920-4412-aec8-9d2ab24226ae.png"
+  }];
+  return <div className="min-h-screen bg-background">
       <Marquee />
       <Header />
       
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-blue-50 to-indigo-100 pt-24 pb-16 overflow-hidden">
+      <section className="relative bg-gradient-to-br from-blue-50 to-indigo-100 pt-24 pb-16 overflow-hidden py-[116px]">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
@@ -104,11 +76,7 @@ const LegalServices = () => {
             <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
               From online rental agreements to tenant verification — all at your doorstep.
             </p>
-            <Button 
-              onClick={scrollToContact}
-              size="lg" 
-              className="bg-brand-red hover:bg-brand-red-dark text-white px-8 py-3 text-lg"
-            >
+            <Button onClick={scrollToContact} size="lg" className="bg-brand-red hover:bg-brand-red-dark text-white px-8 py-3 text-lg">
               Book a Legal Service
               <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
@@ -129,8 +97,7 @@ const LegalServices = () => {
           </div>
           
           <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            {serviceHighlights.map((service, index) => (
-              <Card key={index} className="text-center p-6 hover:shadow-lg transition-shadow border-2 hover:border-brand-red/20">
+            {serviceHighlights.map((service, index) => <Card key={index} className="text-center p-6 hover:shadow-lg transition-shadow border-2 hover:border-brand-red/20">
                 <CardContent className="pt-6">
                   <div className="w-16 h-16 bg-brand-red/10 rounded-full flex items-center justify-center mx-auto mb-4">
                     <service.icon className="h-8 w-8 text-brand-red" />
@@ -138,8 +105,7 @@ const LegalServices = () => {
                   <h3 className="text-xl font-semibold mb-3">{service.title}</h3>
                   <p className="text-gray-600">{service.description}</p>
                 </CardContent>
-              </Card>
-            ))}
+              </Card>)}
           </div>
         </div>
       </section>
@@ -154,12 +120,10 @@ const LegalServices = () => {
             </div>
             
             <div className="grid md:grid-cols-2 gap-6">
-              {benefits.map((benefit, index) => (
-                <div key={index} className="flex items-center space-x-4 bg-white p-4 rounded-lg shadow-sm">
+              {benefits.map((benefit, index) => <div key={index} className="flex items-center space-x-4 bg-white p-4 rounded-lg shadow-sm">
                   <CheckCircle className="h-6 w-6 text-green-500 flex-shrink-0" />
                   <span className="text-gray-800 font-medium">{benefit}</span>
-                </div>
-              ))}
+                </div>)}
             </div>
           </div>
         </div>
@@ -174,8 +138,7 @@ const LegalServices = () => {
           </div>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
-            {comingSoonServices.map((service, index) => (
-              <Card key={index} className="text-center p-6 hover:shadow-lg transition-shadow bg-gradient-to-br from-gray-50 to-gray-100 border-dashed border-2 border-gray-300">
+            {comingSoonServices.map((service, index) => <Card key={index} className="text-center p-6 hover:shadow-lg transition-shadow bg-gradient-to-br from-gray-50 to-gray-100 border-dashed border-2 border-gray-300">
                 <CardContent className="pt-6">
                   <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center mx-auto mb-4">
                     <service.icon className="h-6 w-6 text-gray-500" />
@@ -186,8 +149,7 @@ const LegalServices = () => {
                     <span className="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full">Coming Soon</span>
                   </div>
                 </CardContent>
-              </Card>
-            ))}
+              </Card>)}
           </div>
         </div>
       </section>
@@ -201,29 +163,21 @@ const LegalServices = () => {
           </div>
           
           <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            {customerReviews.map((review, index) => (
-              <Card key={index} className="p-6">
+            {customerReviews.map((review, index) => <Card key={index} className="p-6">
                 <CardContent>
                   <div className="flex items-center mb-4">
-                    <img 
-                      src={review.avatar} 
-                      alt={review.name}
-                      className="w-12 h-12 rounded-full mr-4"
-                    />
+                    <img src={review.avatar} alt={review.name} className="w-12 h-12 rounded-full mr-4" />
                     <div>
                       <h4 className="font-semibold">{review.name}</h4>
                       <p className="text-sm text-gray-600">{review.location}</p>
                     </div>
                   </div>
                   <div className="flex mb-3">
-                    {[...Array(review.rating)].map((_, i) => (
-                      <Star key={i} className="h-4 w-4 text-yellow-400 fill-current" />
-                    ))}
+                    {[...Array(review.rating)].map((_, i) => <Star key={i} className="h-4 w-4 text-yellow-400 fill-current" />)}
                   </div>
                   <p className="text-gray-600 italic">"{review.review}"</p>
                 </CardContent>
-              </Card>
-            ))}
+              </Card>)}
           </div>
         </div>
       </section>
@@ -314,11 +268,7 @@ const LegalServices = () => {
           <p className="text-xl mb-8 opacity-90">
             Get expert legal assistance for all your property needs - anywhere in India
           </p>
-          <Button 
-            size="lg" 
-            className="bg-white text-brand-red hover:bg-gray-100 px-8 py-3 text-lg"
-            onClick={scrollToContact}
-          >
+          <Button size="lg" className="bg-white text-brand-red hover:bg-gray-100 px-8 py-3 text-lg" onClick={scrollToContact}>
             Get Started Now
             <ArrowRight className="ml-2 h-5 w-5" />
           </Button>
@@ -326,14 +276,9 @@ const LegalServices = () => {
       </section>
 
       {/* Legal Services Form Modal */}
-      <LegalServicesForm 
-        isOpen={isFormOpen} 
-        onClose={() => setIsFormOpen(false)} 
-      />
+      <LegalServicesForm isOpen={isFormOpen} onClose={() => setIsFormOpen(false)} />
 
       <Footer />
-    </div>
-  );
+    </div>;
 };
-
 export default LegalServices;
