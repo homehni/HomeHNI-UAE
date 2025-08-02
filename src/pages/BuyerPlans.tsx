@@ -13,21 +13,21 @@ const BuyerPlans = () => {
 
   const plans = [
     {
-      name: "Power Plan",
+      name: "Silver Plan",
       price: "₹2,399",
       gst: "+18% GST",
       badge: "BASIC SEARCH",
       badgeColor: "bg-yellow-500",
     },
     {
-      name: "Property Expert Plan", 
+      name: "Gold Plan", 
       price: "₹2,499",
       gst: "+18% GST",
       badge: "EXPERT ASSISTANCE",
       badgeColor: "bg-green-500",
     },
     {
-      name: "Property Expert MoneyBack",
+      name: "Platinum MoneyBack",
       price: "₹4,999",
       gst: "+18% GST", 
       badge: "100% GUARANTEE",
