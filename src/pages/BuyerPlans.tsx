@@ -27,7 +27,7 @@ const BuyerPlans = () => {
       badgeColor: "bg-green-500",
     },
     {
-      name: "Platinum MoneyBack",
+      name: "Platinum Plan",
       price: "₹4,999",
       gst: "+18% GST", 
       badge: "100% GUARANTEE",
