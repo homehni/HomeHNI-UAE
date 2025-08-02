@@ -13,28 +13,28 @@ const SellerPlans: React.FC = () => {
 
   const plans = [
     {
-      name: "Basic Plan",
+      name: "Silver Plan",
       price: "₹6,499",
       gst: "+18% GST",
       badge: "BASIC PROMOTION",
       badgeColor: "bg-yellow-500",
     },
     {
-      name: "Mid Plan", 
+      name: "Gold Plan", 
       price: "₹9,999",
       gst: "+18% GST",
       badge: "SOCIAL BOOST",
       badgeColor: "bg-green-500",
     },
     {
-      name: "Guaranteed Plan",
+      name: "Platinum Plan",
       price: "₹14,999",
       gst: "+18% GST", 
       badge: "100% GUARANTEE",
       badgeColor: "bg-red-500",
     },
     {
-      name: "Elite Plan",
+      name: "Diamond Plan",
       price: "₹20,000",
       gst: "+18% GST",
       badge: "PERSONAL FIELD ASSISTANT", 
