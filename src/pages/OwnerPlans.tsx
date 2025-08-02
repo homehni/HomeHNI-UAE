@@ -46,14 +46,12 @@ const OwnerPlans = () => {
     // Relax plan features
     [
       { icon: <Clock className="w-5 h-5" />, text: "45 Days Plan Validity" },
-      { icon: <Users className="w-5 h-5" />, text: "Guaranteed Tenants Or 100% Moneyback" },
       { icon: <UserCheck className="w-5 h-5" />, text: "Relationship Manager (RM)- Super Fast Closure" },
       { icon: <FileText className="w-5 h-5" />, text: "Rental Agreement Home Delivered" }
     ],
     // Super Relax plan features (includes Relax features)
     [
       { icon: <Clock className="w-5 h-5" />, text: "45 Days Plan Validity" },
-      { icon: <Users className="w-5 h-5" />, text: "Guaranteed Tenants Or 100% Moneyback" },
       { icon: <UserCheck className="w-5 h-5" />, text: "Relationship Manager (RM)- Super Fast Closure" },
       { icon: <FileText className="w-5 h-5" />, text: "Rental Agreement Home Delivered" },
       { icon: <TrendingUp className="w-5 h-5" />, text: "Top Slot Listing For 5x More Visibility" },
@@ -64,7 +62,6 @@ const OwnerPlans = () => {
     // MoneyBack plan features (includes previous features)
     [
       { icon: <Clock className="w-5 h-5" />, text: "45 Days Plan Validity" },
-      { icon: <Users className="w-5 h-5" />, text: "Guaranteed Tenants Or 100% Moneyback" },
       { icon: <UserCheck className="w-5 h-5" />, text: "Relationship Manager (RM)- Super Fast Closure" },
       { icon: <FileText className="w-5 h-5" />, text: "Rental Agreement Home Delivered" },
       { icon: <TrendingUp className="w-5 h-5" />, text: "Top Slot Listing For 5x More Visibility" },
@@ -78,7 +75,6 @@ const OwnerPlans = () => {
     // Super MoneyBack plan features (includes all previous features)
     [
       { icon: <Clock className="w-5 h-5" />, text: "45 Days Plan Validity" },
-      { icon: <Users className="w-5 h-5" />, text: "Guaranteed Tenants Or 100% Moneyback" },
       { icon: <UserCheck className="w-5 h-5" />, text: "Relationship Manager (RM)- Super Fast Closure" },
       { icon: <FileText className="w-5 h-5" />, text: "Rental Agreement Home Delivered" },
       { icon: <TrendingUp className="w-5 h-5" />, text: "Top Slot Listing For 5x More Visibility" },
