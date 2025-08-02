@@ -218,7 +218,10 @@ export const OwnerInfoStep: React.FC<OwnerInfoStepProps> = ({
             <h3 className="text-lg font-semibold text-foreground">Property Type</h3>
             <Tabs 
               value={selectedPropertyType} 
-              onValueChange={(value) => setValue('propertyType', value as 'Residential' | 'Commercial' | 'Land/Plot')}
+              onValueChange={(value) => {
+                setValue('propertyType', value as 'Residential' | 'Commercial' | 'Land/Plot');
+                trigger('propertyType');
+              }}
               className="w-full"
             >
               <TabsList className="grid w-full grid-cols-3">
@@ -230,7 +233,7 @@ export const OwnerInfoStep: React.FC<OwnerInfoStepProps> = ({
                 </TabsTrigger>
               </TabsList>
             </Tabs>
-            {errors.propertyType && (
+            {errors.propertyType && touchedFields.propertyType && (
               <p className="text-sm text-destructive">{errors.propertyType.message}</p>
             )}
           </div>
@@ -245,13 +248,16 @@ export const OwnerInfoStep: React.FC<OwnerInfoStepProps> = ({
                   type="button"
                   variant={selectedListingType === type ? "default" : "outline"}
                   className="h-12"
-                  onClick={() => setValue('listingType', type as any)}
+                  onClick={() => {
+                    setValue('listingType', type as any);
+                    trigger('listingType');
+                  }}
                 >
                   {type}
                 </Button>
               ))}
             </div>
-            {errors.listingType && (
+            {errors.listingType && touchedFields.listingType && (
               <p className="text-sm text-destructive">{errors.listingType.message}</p>
             )}
           </div>
@@ -277,7 +283,7 @@ export const OwnerInfoStep: React.FC<OwnerInfoStepProps> = ({
               </SelectContent>
               </Select>
             </div>
-            {errors.role && (
+            {errors.role && touchedFields.role && (
               <p className="text-sm text-destructive">{errors.role.message}</p>
             )}
           </div>
