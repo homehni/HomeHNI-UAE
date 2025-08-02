@@ -127,9 +127,7 @@ const CommercialSellerPlans = () => {
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-4 text-gray-900">
             🛍️ Commercial Seller Plans
           </h2>
-          <p className="text-center text-xl text-gray-600 mb-12">
-            All plans currently <span className="text-green-600 font-bold">FREE</span> for a limited time!
-          </p>
+      
           
           {/* Plan Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
