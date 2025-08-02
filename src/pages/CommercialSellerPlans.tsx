@@ -100,7 +100,12 @@ const CommercialSellerPlans = () => {
       <Marquee />
       
       {/* Hero Section */}
-      <section className="bg-brand-red text-white py-20 pt-32">
+      <section 
+        className="text-white py-20 pt-32 relative bg-cover bg-center bg-no-repeat"
+        style={{
+          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('/lovable-uploads/ad6e5d82-c08a-4e73-8459-edb904417654.png')`
+        }}
+      >
         <div className="container mx-auto px-4 text-center">
           <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
             🏢 Get Commercial Property Seller Support!
