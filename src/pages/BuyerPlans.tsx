@@ -30,7 +30,7 @@ const BuyerPlans = () => {
       name: "Platinum Plan",
       price: "₹4,999",
       gst: "+18% GST", 
-      badge: "100% GUARANTEE",
+      badge: "Exclusive Support",
       badgeColor: "bg-red-500",
     }
   ];
@@ -64,7 +64,6 @@ const BuyerPlans = () => {
       { icon: <TrendingUp className="w-5 h-5" />, text: "Expert Negotiates Best Price" },
       { icon: <Globe className="w-5 h-5" />, text: "Helps Schedule Property Visits" },
       { icon: <Home className="w-5 h-5" />, text: "FREE Interior Consultation" },
-      { icon: <Shield className="w-5 h-5" />, text: "Guaranteed Property or 100% Refund" },
       { icon: <UserCheck className="w-5 h-5" />, text: "Expert Handles Everything" },
       { icon: <TrendingUp className="w-5 h-5" />, text: "Priority Customer Support" }
     ]
