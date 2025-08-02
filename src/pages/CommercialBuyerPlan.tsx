@@ -131,7 +131,7 @@ const CommercialBuyerPlan = () => {
     answer: "Yes, our Comfort and MoneyBack plans include complete legal documentation support and loan processing assistance. We partner with leading legal experts and financial institutions."
   }, {
     question: "Are there any hidden charges?",
-    answer: "No hidden charges whatsoever! During this limited-time offer, everything is completely free. Even after the offer ends, all costs are transparently mentioned upfront with no surprises."
+    answer: "No hidden charges whatsoever! All costs are transparently mentioned upfront with no surprises."
   }];
 
   const scrollToPricing = () => {
