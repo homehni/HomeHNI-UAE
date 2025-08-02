@@ -64,8 +64,9 @@ export const OwnerInfoStep: React.FC<OwnerInfoStepProps> = ({
     const availableTypes = getListingTypes();
     if (selectedListingType && !availableTypes.includes(selectedListingType)) {
       setValue('listingType', undefined);
+      trigger('listingType');
     }
-  }, [selectedPropertyType, selectedListingType, setValue]);
+  }, [selectedPropertyType, selectedListingType, setValue, trigger]);
 
   // Auto-fill detection and validation
   useEffect(() => {
@@ -258,13 +259,14 @@ export const OwnerInfoStep: React.FC<OwnerInfoStepProps> = ({
           {/* Role Selection */}
           <div className="space-y-3">
             <Label>I am *</Label>
-            <Select 
-              value={selectedRole} 
-              onValueChange={(value) => {
-                setValue('role', value as 'Owner' | 'Agent' | 'Builder');
-                trigger('role'); // Trigger validation immediately
-              }}
-            >
+            <div className="w-48">
+              <Select 
+                value={selectedRole} 
+                onValueChange={(value) => {
+                  setValue('role', value as 'Owner' | 'Agent' | 'Builder');
+                  trigger('role');
+                }}
+              >
               <SelectTrigger className={errors.role ? 'border-destructive' : ''}>
                 <SelectValue placeholder="Select your role" />
               </SelectTrigger>
@@ -273,7 +275,8 @@ export const OwnerInfoStep: React.FC<OwnerInfoStepProps> = ({
                 <SelectItem value="Agent">Agent</SelectItem>
                 <SelectItem value="Builder">Builder</SelectItem>
               </SelectContent>
-            </Select>
+              </Select>
+            </div>
             {errors.role && (
               <p className="text-sm text-destructive">{errors.role.message}</p>
             )}

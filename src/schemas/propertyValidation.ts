@@ -4,17 +4,11 @@ export const ownerInfoSchema = z.object({
   fullName: z.string().min(2, 'Full name must be at least 2 characters'),
   phoneNumber: z.string().min(10, 'Phone number must be at least 10 digits'),
   email: z.string().email('Please enter a valid email address'),
-  role: z.enum(['Owner', 'Agent', 'Builder']).refine(val => val !== undefined, {
-    message: 'Please select your role',
-  }),
+  role: z.enum(['Owner', 'Agent', 'Builder']),
   city: z.string().min(1, 'Please select your city'),
   whatsappUpdates: z.boolean(),
-  propertyType: z.enum(['Residential', 'Commercial', 'Land/Plot']).refine(val => val !== undefined, {
-    message: 'Please select property type',
-  }),
-  listingType: z.enum(['Rent', 'Resale', 'PG/Hostel', 'Flatmates', 'Sale']).refine(val => val !== undefined, {
-    message: 'Please select listing type',
-  }),
+  propertyType: z.enum(['Residential', 'Commercial', 'Land/Plot']),
+  listingType: z.enum(['Rent', 'Resale', 'PG/Hostel', 'Flatmates', 'Sale']),
 });
 
 export const propertyInfoSchema = z.object({
