@@ -190,67 +190,8 @@ const PackersMovers = () => {
           </div>
         </div>
 
-        {/* Why Choose Home HNI Section */}
-        <div className="py-16 bg-gray-50">
-          <div className="container mx-auto px-4">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                Why Choose Home HNI?
-              </h2>
-              <p className="text-lg text-gray-600">
-                Experience hassle-free moving with our trusted partners
-              </p>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-              {whyChooseItems.map((item, index) => (
-                <Card key={index} className="text-center p-6 hover:shadow-lg transition-shadow">
-                  <CardContent className="pt-6">
-                    <div className="w-16 h-16 bg-brand-red/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                      <item.icon className="w-8 h-8 text-brand-red" />
-                    </div>
-                    <h3 className="text-lg font-semibold mb-3 text-gray-900">
-                      {item.title}
-                    </h3>
-                    <p className="text-gray-600">
-                      {item.description}
-                    </p>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
-        </div>
 
-        {/* Step-by-Step Process */}
-        <div className="py-16">
-          <div className="container mx-auto px-4">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                How It Works
-              </h2>
-              <p className="text-lg text-gray-600">
-                Simple steps to get your move started
-              </p>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-              {processSteps.map((step, index) => (
-                <div key={index} className="text-center">
-                  <div className="w-20 h-20 bg-brand-red rounded-full flex items-center justify-center mx-auto mb-4">
-                    <span className="text-2xl font-bold text-white">{step.step}</span>
-                  </div>
-                  <h3 className="text-lg font-semibold mb-3 text-gray-900">
-                    {step.title}
-                  </h3>
-                  <p className="text-gray-600">
-                    {step.description}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
+
 
         {/* Lead Form Section */}
         <div id="quote-form" className="py-16 bg-gray-50">
@@ -355,6 +296,73 @@ const PackersMovers = () => {
             </div>
           </div>
         </div>
+
+
+        
+
+        {/* Why Choose Home HNI Section */}
+        <div className="py-16 bg-gray-50">
+          <div className="container mx-auto px-4">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                Why Choose Home HNI?
+              </h2>
+              <p className="text-lg text-gray-600">
+                Experience hassle-free moving with our trusted partners
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+              {whyChooseItems.map((item, index) => (
+                <Card key={index} className="text-center p-6 hover:shadow-lg transition-shadow">
+                  <CardContent className="pt-6">
+                    <div className="w-16 h-16 bg-brand-red/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <item.icon className="w-8 h-8 text-brand-red" />
+                    </div>
+                    <h3 className="text-lg font-semibold mb-3 text-gray-900">
+                      {item.title}
+                    </h3>
+                    <p className="text-gray-600">
+                      {item.description}
+                    </p>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Step-by-Step Process */}
+        <div className="py-16">
+          <div className="container mx-auto px-4">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                How It Works
+              </h2>
+              <p className="text-lg text-gray-600">
+                Simple steps to get your move started
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+              {processSteps.map((step, index) => (
+                <div key={index} className="text-center">
+                  <div className="w-20 h-20 bg-brand-red rounded-full flex items-center justify-center mx-auto mb-4">
+                    <span className="text-2xl font-bold text-white">{step.step}</span>
+                  </div>
+                  <h3 className="text-lg font-semibold mb-3 text-gray-900">
+                    {step.title}
+                  </h3>
+                  <p className="text-gray-600">
+                    {step.description}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        
 
         {/* Customer Testimonials */}
         <div className="py-16">
