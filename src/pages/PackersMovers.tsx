@@ -65,7 +65,7 @@ const PackersMovers = () => {
     toast({
       title: "Thanks! Our team will reach out to you shortly.",
       description: "We've received your service request.",
-      className: "bg-white border-black text-black",
+      className: "bg-white text-black",
     });
     
     // Reset form
