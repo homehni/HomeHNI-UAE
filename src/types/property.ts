@@ -3,6 +3,10 @@ export interface OwnerInfo {
   phoneNumber: string;
   email: string;
   role: 'Owner' | 'Agent' | 'Builder';
+  city: string;
+  whatsappUpdates: boolean;
+  propertyType: 'Residential' | 'Commercial' | 'Land/Plot';
+  listingType: 'Rent' | 'Resale' | 'PG/Hostel' | 'Flatmates';
 }
 
 export interface PropertyInfo {

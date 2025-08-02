@@ -7,6 +7,14 @@ export const ownerInfoSchema = z.object({
   role: z.enum(['Owner', 'Agent', 'Builder']).refine(val => val !== undefined, {
     message: 'Please select your role',
   }),
+  city: z.string().min(1, 'Please select your city'),
+  whatsappUpdates: z.boolean(),
+  propertyType: z.enum(['Residential', 'Commercial', 'Land/Plot']).refine(val => val !== undefined, {
+    message: 'Please select property type',
+  }),
+  listingType: z.enum(['Rent', 'Resale', 'PG/Hostel', 'Flatmates']).refine(val => val !== undefined, {
+    message: 'Please select listing type',
+  }),
 });
 
 export const propertyInfoSchema = z.object({
