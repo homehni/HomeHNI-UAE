@@ -30,7 +30,7 @@ const CommercialBuyerPlan = () => {
       name: "Platinum Plan",
       price: "₹8,999",
       gst: "+18% GST",
-      badge: "100% GUARANTEE",
+      badge: "EXPERT GUIDANCE",
       badgeColor: "bg-blue-600",
     }
   ];
@@ -70,12 +70,11 @@ const CommercialBuyerPlan = () => {
       { icon: <Clock className="w-5 h-5" />, text: "24/7 dedicated expert" },
       { icon: <Check className="w-5 h-5" />, text: "Guaranteed property closure" },
       { icon: <Shield className="w-5 h-5" />, text: "Complete legal & loan assistance" },
-      { icon: <Star className="w-5 h-5" />, text: "100% money-back guarantee" }
     ]
   ];
 
   const benefits = [{
-    title: "100% Free — Limited Time Offer",
+    title: "Priority Access to Verified Listings",
     icon: Target
   }, {
     title: "Property Matchmaking with Dedicated Expert",
@@ -98,7 +97,8 @@ const CommercialBuyerPlan = () => {
   }, {
     title: "On-Demand Support via Call or WhatsApp",
     icon: Headphones
-  }];
+}];
+
 
   const testimonials = [{
     name: "Rajesh Kumar",
