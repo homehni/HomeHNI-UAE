@@ -94,9 +94,13 @@ const BuyerPlans = () => {
       <Header />
       
       {/* Hero Section */}
-      <section className="relative gradient-red-maroon text-white py-16 px-4 pt-28 bg-cover bg-center bg-no-repeat" style={{backgroundImage: 'url(/lovable-uploads/65ce32d0-061c-4934-8723-62372be4cd91.png)'}}>
-        <div className="absolute inset-0 bg-black/40"></div>
-        <div className="max-w-4xl mx-auto text-center relative z-10">
+      <section 
+        className="relative text-white py-16 px-4 pt-28 bg-cover bg-center bg-no-repeat"
+        style={{
+          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('/lovable-uploads/65ce32d0-061c-4934-8723-62372be4cd91.png')`
+        }}
+      >
+        <div className="max-w-4xl mx-auto text-center">
           <h1 className="text-3xl md:text-5xl font-bold mb-6">
             Choose a Buyer Plan and <span className="text-yellow-400">SAVE LAKHS</span> on Brokerage
           </h1>
