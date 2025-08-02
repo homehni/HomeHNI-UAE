@@ -6,12 +6,14 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Card, CardContent } from '@/components/ui/card';
+import { useToast } from '@/hooks/use-toast';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Marquee from '@/components/Marquee';
 import heroImage from '/lovable-uploads/fbb0d72f-782e-49f5-bbe1-8afc1314b5f7.png';
 
 const PackersMovers = () => {
+  const { toast } = useToast();
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -47,8 +49,34 @@ const PackersMovers = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission logic here
-    console.log('Form submitted:', formData);
+    
+    // Validate required fields
+    if (!formData.name || !formData.phone || !formData.pickupLocation || 
+        !formData.dropLocation || !formData.date || !formData.houseType) {
+      toast({
+        title: "Missing Information",
+        description: "Please fill in all required fields to get quotes.",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    // Show success message
+    toast({
+      title: "Thanks! Our team will reach out to you shortly.",
+      description: "We've received your service request.",
+      className: "bg-green-50 border-green-200 text-green-900",
+    });
+    
+    // Reset form
+    setFormData({
+      name: '',
+      phone: '',
+      pickupLocation: '',
+      dropLocation: '',
+      date: '',
+      houseType: ''
+    });
   };
 
   const whyChooseItems = [
