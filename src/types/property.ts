@@ -6,7 +6,7 @@ export interface OwnerInfo {
   city: string;
   whatsappUpdates: boolean;
   propertyType: 'Residential' | 'Commercial' | 'Land/Plot';
-  listingType: 'Rent' | 'Resale' | 'PG/Hostel' | 'Flatmates';
+  listingType: 'Rent' | 'Resale' | 'PG/Hostel' | 'Flatmates' | 'Sale';
 }
 
 export interface PropertyInfo {

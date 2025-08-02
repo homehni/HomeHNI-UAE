@@ -12,7 +12,7 @@ export const ownerInfoSchema = z.object({
   propertyType: z.enum(['Residential', 'Commercial', 'Land/Plot']).refine(val => val !== undefined, {
     message: 'Please select property type',
   }),
-  listingType: z.enum(['Rent', 'Resale', 'PG/Hostel', 'Flatmates']).refine(val => val !== undefined, {
+  listingType: z.enum(['Rent', 'Resale', 'PG/Hostel', 'Flatmates', 'Sale']).refine(val => val !== undefined, {
     message: 'Please select listing type',
   }),
 });

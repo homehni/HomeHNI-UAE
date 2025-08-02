@@ -12,6 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Switch } from '@/components/ui/switch';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
+import { MessageCircle } from 'lucide-react';
 
 interface OwnerInfoStepProps {
   initialData: Partial<OwnerInfo>;
@@ -45,6 +46,26 @@ export const OwnerInfoStep: React.FC<OwnerInfoStepProps> = ({
   const selectedListingType = watch('listingType');
   const whatsappUpdates = watch('whatsappUpdates');
   const formValues = watch();
+
+  // Get available listing types based on property type
+  const getListingTypes = () => {
+    switch (selectedPropertyType) {
+      case 'Commercial':
+        return ['Rent', 'Sale'];
+      case 'Land/Plot':
+        return ['Resale'];
+      default: // Residential
+        return ['Rent', 'Resale', 'PG/Hostel', 'Flatmates'];
+    }
+  };
+
+  // Reset listing type when property type changes
+  useEffect(() => {
+    const availableTypes = getListingTypes();
+    if (selectedListingType && !availableTypes.includes(selectedListingType)) {
+      setValue('listingType', undefined);
+    }
+  }, [selectedPropertyType, selectedListingType, setValue]);
 
   // Auto-fill detection and validation
   useEffect(() => {
@@ -178,12 +199,11 @@ export const OwnerInfoStep: React.FC<OwnerInfoStepProps> = ({
             </div>
 
             {/* WhatsApp Updates Toggle */}
-            <div className="flex items-center justify-between p-4 bg-muted/50 rounded-lg">
-              <div className="flex-1">
-                <Label className="text-sm font-medium">Get updates on WhatsApp</Label>
-                <p className="text-sm text-muted-foreground">
-                  Receive instant updates about your property listing
-                </p>
+            <div className="flex items-center gap-3">
+              <Label className="text-sm font-medium text-foreground">Get updates on</Label>
+              <div className="flex items-center gap-2">
+                <MessageCircle className="w-5 h-5 text-green-600" fill="currentColor" />
+                <span className="text-sm font-medium text-foreground">WhatsApp</span>
               </div>
               <Switch
                 checked={whatsappUpdates}
@@ -218,13 +238,13 @@ export const OwnerInfoStep: React.FC<OwnerInfoStepProps> = ({
           <div className="space-y-4">
             <h3 className="text-lg font-semibold text-foreground">I want to</h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-              {['Rent', 'Resale', 'PG/Hostel', 'Flatmates'].map((type) => (
+              {getListingTypes().map((type) => (
                 <Button
                   key={type}
                   type="button"
                   variant={selectedListingType === type ? "default" : "outline"}
                   className="h-12"
-                  onClick={() => setValue('listingType', type as 'Rent' | 'Resale' | 'PG/Hostel' | 'Flatmates')}
+                  onClick={() => setValue('listingType', type as any)}
                 >
                   {type}
                 </Button>
