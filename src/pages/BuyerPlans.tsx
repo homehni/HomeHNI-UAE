@@ -101,13 +101,13 @@ const BuyerPlans = () => {
           </h1>
 
           <p className="text-lg md:text-xl mb-6 max-w-3xl mx-auto">
-            Trusted by 3 Lakh+ property owners like you. Choose the plan that suits you — for ₹0 during our limited-time offer!
+            Trusted by 3 Lakh+ Buyers like you. Choose the plan that suits you 
           </p>
           <div className="flex items-center justify-center gap-2 mb-6">
             <div className="flex">
               {[1, 2, 3, 4, 5].map(star => <Star key={star} className="w-5 h-5 fill-yellow-400 text-yellow-400" />)}
             </div>
-            <span className="ml-2">Rated 5 Stars by Owners</span>
+            <span className="ml-2"> 5 Stars Rated</span>
           </div>
           
          
