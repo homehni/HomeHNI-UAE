@@ -79,9 +79,6 @@ const CommercialSellerPlans = () => {
     question: "How does the property get listed and promoted?",
     answer: "We'll conduct a professional photoshoot, create compelling listings across our platform, promote on social media (Facebook & Instagram), and feature your property prominently to attract genuine buyers."
   }, {
-    question: "Are the services really free right now?",
-    answer: "Yes! All our premium seller services are currently FREE for a limited time. This includes Relationship Manager support, premium photoshoot, social media marketing, and all documentation assistance."
-  }, {
     question: "Will I be charged in the future for using the platform?",
     answer: "The free period is for a limited time only. After this promotional period ends, our services will become paid. We'll notify you well in advance before any charges apply."
   }, {
