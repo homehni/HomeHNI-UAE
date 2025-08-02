@@ -13,28 +13,28 @@ const OwnerPlans = () => {
 
   const plans = [
     {
-      name: "Relax",
+      name: "Silver",
       price: "₹3,399",
       gst: "+18% GST",
       badge: "ON CALL ASSISTANCE",
       badgeColor: "bg-yellow-500",
     },
     {
-      name: "Super Relax",
+      name: "Gold",
       price: "₹5,899", 
       gst: "+18% GST",
       badge: "HOUSE VISIT ASSISTANCE",
       badgeColor: "bg-green-500",
     },
     {
-      name: "MoneyBack",
+      name: "Platinum",
       price: "₹6,999",
       gst: "+18% GST", 
       badge: "100% GUARANTEE",
       badgeColor: "bg-red-500",
     },
     {
-      name: "Super MoneyBack",
+      name: "Diamond",
       price: "₹10,999",
       gst: "+18% GST",
       badge: "PERSONAL FIELD ASSISTANT", 
