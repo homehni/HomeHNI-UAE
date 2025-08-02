@@ -6,7 +6,7 @@ import { OwnerInfo } from '@/types/property';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
@@ -258,25 +258,23 @@ export const OwnerInfoStep: React.FC<OwnerInfoStepProps> = ({
           {/* Role Selection */}
           <div className="space-y-3">
             <Label>I am *</Label>
-            <RadioGroup
-              value={selectedRole}
-              onValueChange={(value) => setValue('role', value as 'Owner' | 'Agent' | 'Builder')}
-              className="flex flex-row space-x-6"
+            <Select 
+              value={selectedRole} 
+              onValueChange={(value) => {
+                setValue('role', value as 'Owner' | 'Agent' | 'Builder');
+                trigger('role'); // Trigger validation immediately
+              }}
             >
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="Owner" id="owner" />
-                <Label htmlFor="owner">Owner</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="Agent" id="agent" />
-                <Label htmlFor="agent">Agent</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="Builder" id="builder" />
-                <Label htmlFor="builder">Builder</Label>
-              </div>
-            </RadioGroup>
-            {errors.role && touchedFields.role && (
+              <SelectTrigger className={errors.role ? 'border-destructive' : ''}>
+                <SelectValue placeholder="Select your role" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Owner">Owner</SelectItem>
+                <SelectItem value="Agent">Agent</SelectItem>
+                <SelectItem value="Builder">Builder</SelectItem>
+              </SelectContent>
+            </Select>
+            {errors.role && (
               <p className="text-sm text-destructive">{errors.role.message}</p>
             )}
           </div>
