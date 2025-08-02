@@ -30,7 +30,7 @@ const OwnerPlans = () => {
       name: "Platinum",
       price: "₹6,999",
       gst: "+18% GST", 
-      badge: "100% GUARANTEE",
+      badge: "Expert Guidance",
       badgeColor: "bg-red-500",
     },
     {
