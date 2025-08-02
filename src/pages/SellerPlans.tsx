@@ -127,7 +127,7 @@ const SellerPlans: React.FC = () => {
   }, {
     icon: <Zap className="w-8 h-8" />,
     title: "FASTER CLOSURE",
-    description: "Sell your property quickly at a fractional cost (now ₹0)."
+    description: "Sell your property quickly at a fractional cost."
   }];
   return (
     <div className="min-h-screen bg-background">
