@@ -289,9 +289,7 @@ const PackersMovers = () => {
                   </Button>
                 </form>
                 
-                <p className="text-center text-gray-600 mt-4">
-                  We'll connect you with 3 trusted movers in under 5 minutes.
-                </p>
+                
               </Card>
             </div>
           </div>
