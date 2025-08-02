@@ -66,14 +66,14 @@ const LegalServices = () => {
       <Header />
       
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-blue-50 to-indigo-100 pt-24 pb-16 overflow-hidden py-[120px]">
+      <section className="relative bg-cover bg-center bg-no-repeat pt-24 pb-16 overflow-hidden py-[120px]" style={{backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(/lovable-uploads/d1d3a477-5764-47c6-b08f-b0cad801e543.png)'}}>
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 pt-8">
+            <h1 className="text-4xl md:text-5xl font-bold text-white mb-6 pt-8">
               Get Hassle-Free Property
-              <span className="block text-brand-red">Legal Services Across India</span>
+              <span className="block text-white">Legal Services Across India</span>
             </h1>
-            <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
+            <p className="text-xl text-white mb-8 max-w-3xl mx-auto">
               From online rental agreements to tenant verification — all at your doorstep.
             </p>
             <Button onClick={scrollToContact} size="lg" className="bg-brand-red hover:bg-brand-red-dark text-white px-8 py-3 text-lg">
