@@ -120,60 +120,61 @@ export const OwnerInfoStep: React.FC<OwnerInfoStepProps> = ({
               </div>
             </div>
 
-            {/* Mobile Number with Country Code */}
-            <div className="space-y-2">
-              <Label htmlFor="phoneNumber">Mobile Number *</Label>
-              <div className="flex gap-2">
-                <Select defaultValue="+91">
-                  <SelectTrigger className="w-20">
-                    <SelectValue />
+            {/* Mobile Number and City Row */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="phoneNumber">Mobile Number *</Label>
+                <div className="flex gap-2">
+                  <Select defaultValue="+91">
+                    <SelectTrigger className="w-20">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="+91">+91</SelectItem>
+                      <SelectItem value="+1">+1</SelectItem>
+                      <SelectItem value="+44">+44</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <Input
+                    id="phoneNumber"
+                    type="tel"
+                    {...register('phoneNumber')}
+                    placeholder="Enter your mobile number"
+                    className={`flex-1 ${errors.phoneNumber && touchedFields.phoneNumber ? 'border-destructive' : ''}`}
+                    onBlur={handleBlur}
+                    onInput={handleBlur}
+                    autoComplete="tel"
+                  />
+                </div>
+                {errors.phoneNumber && touchedFields.phoneNumber && (
+                  <p className="text-sm text-destructive">{errors.phoneNumber.message}</p>
+                )}
+              </div>
+
+              <div className="space-y-2">
+                <Label>City *</Label>
+                <Select 
+                  value={watch('city')} 
+                  onValueChange={(value) => setValue('city', value)}
+                >
+                  <SelectTrigger className={errors.city && touchedFields.city ? 'border-destructive' : ''}>
+                    <SelectValue placeholder="Select your city" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="+91">+91</SelectItem>
-                    <SelectItem value="+1">+1</SelectItem>
-                    <SelectItem value="+44">+44</SelectItem>
+                    <SelectItem value="mumbai">Mumbai</SelectItem>
+                    <SelectItem value="delhi">Delhi</SelectItem>
+                    <SelectItem value="bangalore">Bangalore</SelectItem>
+                    <SelectItem value="pune">Pune</SelectItem>
+                    <SelectItem value="chennai">Chennai</SelectItem>
+                    <SelectItem value="kolkata">Kolkata</SelectItem>
+                    <SelectItem value="hyderabad">Hyderabad</SelectItem>
+                    <SelectItem value="ahmedabad">Ahmedabad</SelectItem>
                   </SelectContent>
                 </Select>
-                <Input
-                  id="phoneNumber"
-                  type="tel"
-                  {...register('phoneNumber')}
-                  placeholder="Enter your mobile number"
-                  className={`flex-1 ${errors.phoneNumber && touchedFields.phoneNumber ? 'border-destructive' : ''}`}
-                  onBlur={handleBlur}
-                  onInput={handleBlur}
-                  autoComplete="tel"
-                />
+                {errors.city && touchedFields.city && (
+                  <p className="text-sm text-destructive">{errors.city.message}</p>
+                )}
               </div>
-              {errors.phoneNumber && touchedFields.phoneNumber && (
-                <p className="text-sm text-destructive">{errors.phoneNumber.message}</p>
-              )}
-            </div>
-
-            {/* City Selection */}
-            <div className="space-y-2">
-              <Label>City *</Label>
-              <Select 
-                value={watch('city')} 
-                onValueChange={(value) => setValue('city', value)}
-              >
-                <SelectTrigger className={errors.city && touchedFields.city ? 'border-destructive' : ''}>
-                  <SelectValue placeholder="Select your city" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="mumbai">Mumbai</SelectItem>
-                  <SelectItem value="delhi">Delhi</SelectItem>
-                  <SelectItem value="bangalore">Bangalore</SelectItem>
-                  <SelectItem value="pune">Pune</SelectItem>
-                  <SelectItem value="chennai">Chennai</SelectItem>
-                  <SelectItem value="kolkata">Kolkata</SelectItem>
-                  <SelectItem value="hyderabad">Hyderabad</SelectItem>
-                  <SelectItem value="ahmedabad">Ahmedabad</SelectItem>
-                </SelectContent>
-              </Select>
-              {errors.city && touchedFields.city && (
-                <p className="text-sm text-destructive">{errors.city.message}</p>
-              )}
             </div>
 
             {/* WhatsApp Updates Toggle */}
