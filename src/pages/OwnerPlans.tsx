@@ -130,7 +130,7 @@ const OwnerPlans = () => {
         }}
       >
         <div className="max-w-4xl mx-auto text-center">
-          <h1 className="text-3xl md:text-5xl font-bold mb-6">
+          <h1 className="text-3xl md:text-5xl font-bold mb-6 pt-8">
             Get Tenants Quickly. Save up to ₹50,000 on Brokerage!
           </h1>
           <p className="text-lg md:text-xl mb-6 max-w-3xl mx-auto">
