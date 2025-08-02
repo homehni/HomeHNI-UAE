@@ -264,7 +264,12 @@ const keyBenefits = [
       <Marquee />
       
       {/* Hero Section */}
-      <section className="bg-brand-red text-white py-20 pt-32">
+      <section 
+        className="text-white py-20 pt-32 relative bg-cover bg-center bg-no-repeat"
+        style={{
+          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('/lovable-uploads/a37b9b71-093e-4303-b129-0e15546b07a8.png')`
+        }}
+      >
         <div className="container mx-auto px-4 text-center">
           <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
             Get a Commercial Tenant Fast — Save ₹50,000 on Brokerage
