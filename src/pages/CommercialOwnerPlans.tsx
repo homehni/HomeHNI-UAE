@@ -31,7 +31,7 @@ const CommercialOwnerPlans = () => {
       name: "Platinum Plan",
       price: "₹7,999",
       gst: "+18% GST", 
-      badge: "100% GUARANTEE",
+      badge: "EXPERT GUIDANCE",
       badgeColor: "bg-red-500",
     },
     {
@@ -82,7 +82,6 @@ const CommercialOwnerPlans = () => {
       { icon: <CheckCircle className="w-5 h-5" />, text: "Guaranteed tenant matching" },
       { icon: <Star className="w-5 h-5" />, text: "Premium listing placement" },
       { icon: <UserCheck className="w-5 h-5" />, text: "Personal relationship manager" },
-      { icon: <Shield className="w-5 h-5" />, text: "100% moneyback guarantee" },
       { icon: <FileText className="w-5 h-5" />, text: "Complete legal documentation" },
       { icon: <TrendingUp className="w-5 h-5" />, text: "Market trend insights" },
       { icon: <Users className="w-5 h-5" />, text: "Tenant verification services" }
@@ -103,7 +102,6 @@ const CommercialOwnerPlans = () => {
       { icon: <CheckCircle className="w-5 h-5" />, text: "Guaranteed tenant matching" },
       { icon: <Star className="w-5 h-5" />, text: "Premium listing placement" },
       { icon: <UserCheck className="w-5 h-5" />, text: "Personal relationship manager" },
-      { icon: <Shield className="w-5 h-5" />, text: "100% moneyback guarantee" },
       { icon: <FileText className="w-5 h-5" />, text: "Complete legal documentation" },
       { icon: <TrendingUp className="w-5 h-5" />, text: "Market trend insights" },
       { icon: <Users className="w-5 h-5" />, text: "Tenant verification services" },
@@ -118,33 +116,34 @@ const CommercialOwnerPlans = () => {
     ]
   ];
 
-  const keyBenefits = [
-    {
-      icon: Target,
-      title: "Guaranteed Tenant Matching",
-      description: "We find the right tenant for your commercial property"
-    },
-    {
-      icon: Shield,
-      title: "100% Moneyback Promise",
-      description: "Full refund if we don't deliver as promised"
-    },
-    {
-      icon: UserCheck,
-      title: "Personal Relationship Manager",
-      description: "Dedicated support throughout your journey"
-    },
-    {
-      icon: CheckCircle,
-      title: "Expert Rental Consultation",
-      description: "Professional guidance on pricing and market trends"
-    },
-    {
-      icon: TrendingUp,
-      title: "High-Visibility Listings & Promotions",
-      description: "Premium placement and marketing for your property"
-    }
-  ];
+const keyBenefits = [
+  {
+    icon: Target,
+    title: "Verified Tenant Connect",
+    description: "We match your property with pre-screened, high-intent tenants"
+  },
+  {
+    icon: Shield,
+    title: "Risk-Free Service",
+    description: "No hidden fees — you only pay when we deliver results"
+  },
+  {
+    icon: UserCheck,
+    title: "Personal Relationship Manager",
+    description: "Dedicated support throughout your journey"
+  },
+  {
+    icon: CheckCircle,
+    title: "Expert Rental Consultation",
+    description: "Professional guidance on pricing and market trends"
+  },
+  {
+    icon: TrendingUp,
+    title: "High-Visibility Listings & Promotions",
+    description: "Premium placement and marketing for your property"
+  }
+];
+
 
   const pricingPlans = [
     {
