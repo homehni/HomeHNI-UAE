@@ -99,7 +99,7 @@ const SellerPlans: React.FC = () => {
     answer: "Through top-listing slots, featured placements, and paid marketing."
   }, {
     question: "Are there any hidden charges?",
-    answer: "None. All charges are transparent. Currently, plans are free."
+    answer: "None. All charges are transparent."
   }, {
     question: "How do I get faster closures?",
     answer: "Subscribe to higher plans with RM & field assistance for quicker results."
@@ -278,7 +278,7 @@ const SellerPlans: React.FC = () => {
             Ready to Sell Your Property Fast and Hassle-Free?
           </h2>
           <Button size="lg" variant="secondary" className="bg-white text-primary hover:bg-white/90">
-            Get Started for Free
+            Get Started Now
           </Button>
         </div>
       </section>
