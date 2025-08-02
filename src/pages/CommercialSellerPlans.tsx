@@ -13,14 +13,14 @@ const CommercialSellerPlans = () => {
 
   const plans = [
     {
-      name: "Basic",
+      name: "Silver Plan",
       price: "₹2,999",
       gst: "+18% GST", 
       badge: "ESSENTIAL FEATURES",
       badgeColor: "bg-red-600",
     },
     {
-      name: "Pro",
+      name: "Gold Plan",
       price: "₹7,999",
       gst: "+18% GST",
       badge: "MOST POPULAR",
