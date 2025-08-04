@@ -207,7 +207,8 @@ export const OwnerInfoStep: React.FC<OwnerInfoStepProps> = ({
     defaultChecked // ✅ This makes it checked by default
     onCheckedChange={(checked) => setValue('whatsappUpdates', checked)}
   />
-</div>
+            </div>
+          </div>
 
           {/* Property Type Section */}
           <div className="space-y-4">
