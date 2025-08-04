@@ -74,13 +74,13 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
   };
 
   const steps = [
-    { icon: Home, label: 'Property Details', active: currentStep === 1 },
-    { icon: MapPin, label: 'Location Details', active: currentStep === 2 },
-    { icon: Building, label: 'Rental Details', active: currentStep === 3 },
-    { icon: Sparkles, label: 'Amenities', active: currentStep === 4 },
-    { icon: Camera, label: 'Gallery', active: currentStep === 5 },
-    { icon: FileText, label: 'Additional Information', active: currentStep === 6 },
-    { icon: Calendar, label: 'Schedule', active: currentStep === 7 },
+    { icon: Home, label: 'Property Details', active: currentStep === 2 },
+    { icon: MapPin, label: 'Location Details', active: currentStep === 3 },
+    { icon: Building, label: 'Rental Details', active: currentStep === 4 },
+    { icon: Sparkles, label: 'Amenities', active: currentStep === 5 },
+    { icon: Camera, label: 'Gallery', active: currentStep === 6 },
+    { icon: FileText, label: 'Additional Information', active: currentStep === 7 },
+    { icon: Calendar, label: 'Schedule', active: currentStep === 8 },
   ];
 
   const progressPercentage = Math.round((currentStep / totalSteps) * 100);
