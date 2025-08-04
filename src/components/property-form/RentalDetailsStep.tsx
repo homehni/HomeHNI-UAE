@@ -21,15 +21,25 @@ const rentalDetailsSchema = z.object({
   expectedPrice: z.number().min(1, 'Expected rent is required'),
   rentNegotiable: z.boolean().optional(),
   maintenanceExtra: z.boolean().optional(),
-  securityDeposit: z.number().optional(),
+  maintenanceCharges: z.number().optional(),
+  securityDeposit: z.number().min(1, 'Deposit is required'),
   depositNegotiable: z.boolean().optional(),
-  leaseDuration: z.string().optional(),
-  lockinPeriod: z.string().optional(),
-  availableFrom: z.string().optional(),
+  leaseDuration: z.string().min(1, 'Please select lease duration'),
+  lockinPeriod: z.string().min(1, 'Please select lockin period'),
+  availableFrom: z.string().min(1, 'Please select available from date'),
   idealFor: z.array(z.string()).optional(),
   superArea: z.number().min(1, 'Super area is required'),
   carpetArea: z.number().optional(),
   builtUpArea: z.number().optional(),
+}).refine((data) => {
+  // If maintenanceExtra is true, maintenanceCharges must be provided
+  if (data.maintenanceExtra && (!data.maintenanceCharges || data.maintenanceCharges <= 0)) {
+    return false;
+  }
+  return true;
+}, {
+  message: "Maintenance amount is required when Maintenance Extra is selected",
+  path: ["maintenanceCharges"],
 });
 
 type RentalDetailsForm = z.infer<typeof rentalDetailsSchema>;
@@ -52,6 +62,8 @@ export const RentalDetailsStep: React.FC<RentalDetailsStepProps> = ({
   const [customTag, setCustomTag] = useState('');
   const [selectedTags, setSelectedTags] = useState<string[]>(initialData.idealFor || []);
 
+  const [showMaintenanceInput, setShowMaintenanceInput] = useState(initialData.maintenanceExtra || false);
+
   const form = useForm<RentalDetailsForm>({
     resolver: zodResolver(rentalDetailsSchema),
     defaultValues: {
@@ -59,6 +71,7 @@ export const RentalDetailsStep: React.FC<RentalDetailsStepProps> = ({
       expectedPrice: initialData.expectedPrice || 0,
       rentNegotiable: initialData.rentNegotiable || false,
       maintenanceExtra: initialData.maintenanceExtra || false,
+      maintenanceCharges: initialData.maintenanceCharges || 0,
       securityDeposit: initialData.securityDeposit || 0,
       depositNegotiable: initialData.depositNegotiable || false,
       leaseDuration: initialData.leaseDuration || '',
@@ -210,13 +223,49 @@ export const RentalDetailsStep: React.FC<RentalDetailsStepProps> = ({
                                   <Checkbox 
                                     id="maintenanceExtra"
                                     checked={field.value}
-                                    onCheckedChange={field.onChange}
+                                    onCheckedChange={(checked) => {
+                                      field.onChange(checked);
+                                      setShowMaintenanceInput(!!checked);
+                                      if (!checked) {
+                                        form.setValue('maintenanceCharges', 0);
+                                      }
+                                    }}
                                   />
                                   <label htmlFor="maintenanceExtra" className="text-sm text-gray-600">Maintenance Extra</label>
                                 </div>
                               )}
                             />
                           </div>
+                          {showMaintenanceInput && (
+                            <div className="mt-4">
+                              <FormField
+                                control={form.control}
+                                name="maintenanceCharges"
+                                render={({ field }) => (
+                                  <FormItem>
+                                    <FormLabel className="text-sm font-medium">Maintenance Amount (₹/month)</FormLabel>
+                                    <div className="relative">
+                                      <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">₹</span>
+                                      <FormControl>
+                                        <Input 
+                                          type="text" 
+                                          placeholder="Enter maintenance amount"
+                                          className="pl-8 h-12"
+                                          {...field} 
+                                          onChange={(e) => {
+                                            const value = e.target.value.replace(/[^0-9]/g, '');
+                                            field.onChange(parseInt(value) || 0);
+                                          }}
+                                          value={field.value || ''}
+                                        />
+                                      </FormControl>
+                                    </div>
+                                    <FormMessage />
+                                  </FormItem>
+                                )}
+                              />
+                            </div>
+                          )}
                           <FormMessage />
                         </FormItem>
                       )}
