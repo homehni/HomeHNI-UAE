@@ -99,7 +99,7 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
 
       <div className="flex">
         {/* Sidebar */}
-        <div className="w-52 bg-white border-r border-gray-200 min-h-screen">
+        <div className="w-44 bg-white border-r border-gray-200 min-h-screen">
           <div className="p-6">
             <nav className="space-y-2">
               {steps.map((step, index) => {
@@ -123,9 +123,9 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
         </div>
 
         {/* Main Content */}
-        <div className="flex-1 px-10 py-6">
+        <div className="flex-1 px-12 py-6">
           <div className="w-full">
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 px-12 py-8">
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200 px-16 py-8">
               <h1 className="text-2xl font-semibold text-primary mb-6">Property Details</h1>
               
               <Form {...form}>
