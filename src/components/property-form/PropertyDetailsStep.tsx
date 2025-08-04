@@ -14,13 +14,13 @@ const propertyDetailsSchema = z.object({
   propertyType: z.string().min(1, 'Please select property type'),
   buildingType: z.string().min(1, 'Please select building type'),
   propertyAge: z.string().min(1, 'Please select property age'),
-  totalFloors: z.number().min(1, 'Total floors must be at least 1'),
-  floorNo: z.number().min(0, 'Floor number cannot be negative'),
+  totalFloors: z.union([z.number().min(1, 'Total floors must be at least 1'), z.string().min(1, 'Please select total floors')]),
+  floorNo: z.union([z.number().min(0, 'Floor number cannot be negative'), z.string().min(1, 'Please select floor')]),
   furnishingStatus: z.string().min(1, 'Please select furnishing status'),
-  parkingType: z.string().min(1, 'Please select parking type'),
+  parkingType: z.string().optional(),
   superBuiltUpArea: z.number().min(1, 'Super built up area is required'),
-  onMainRoad: z.boolean(),
-  cornerProperty: z.boolean(),
+  onMainRoad: z.boolean().optional(),
+  cornerProperty: z.boolean().optional(),
 });
 
 type PropertyDetailsFormData = z.infer<typeof propertyDetailsSchema>;
