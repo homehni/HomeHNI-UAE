@@ -21,6 +21,9 @@ export interface PropertyDetails {
   floorNo: number;
   furnishingStatus: string;
   parkingType: string;
+  superBuiltUpArea: number;
+  onMainRoad: boolean;
+  cornerProperty: boolean;
 }
 
 export interface LocationDetails {

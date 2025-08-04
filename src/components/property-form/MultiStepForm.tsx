@@ -169,6 +169,8 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
               initialData={propertyDetails}
               onNext={handlePropertyDetailsNext}
               onBack={prevStep}
+              currentStep={currentStep}
+              totalSteps={7}
             />
           </div>
         )}
