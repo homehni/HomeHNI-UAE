@@ -302,13 +302,14 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
                           <FormLabel className="text-sm font-medium">Super Built Up Area*</FormLabel>
                           <div className="relative">
                             <FormControl>
-                              <Input 
-                                type="number" 
+                              <Input
+                                type="number"
                                 placeholder="1500"
-                                className="h-12 pr-12"
-                                {...field} 
+                                className="h-12 pr-12 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
+                                {...field}
                                 onChange={(e) => field.onChange(parseInt(e.target.value) || 0)}
                               />
+
                             </FormControl>
                             <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-sm text-gray-500">
                               Sq.ft
