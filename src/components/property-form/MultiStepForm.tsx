@@ -2,7 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { usePropertyForm } from '@/hooks/usePropertyForm';
 import { ProgressIndicator } from './ProgressIndicator';
 import { OwnerInfoStep } from './OwnerInfoStep';
-import { PropertyInfoStep } from './PropertyInfoStep';
+import { PropertyDetailsStep } from './PropertyDetailsStep';
+import { LocationDetailsStep } from './LocationDetailsStep';
+import { RentalDetailsStep } from './RentalDetailsStep';
+import { AmenitiesStep } from './AmenitiesStep';
+import { GalleryStep } from './GalleryStep';
+import { AdditionalInfoStep } from './AdditionalInfoStep';
 import { PreviewStep } from './PreviewStep';
 
 import { OwnerInfo, PropertyInfo } from '@/types/property';
@@ -21,12 +26,22 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
   const {
     currentStep,
     ownerInfo,
-    propertyInfo,
+    propertyDetails,
+    locationDetails,
+    rentalDetails,
+    amenities,
+    gallery,
+    additionalInfo,
     nextStep,
     prevStep,
     goToStep,
     updateOwnerInfo,
-    updatePropertyInfo,
+    updatePropertyDetails,
+    updateLocationDetails,
+    updateRentalDetails,
+    updateAmenities,
+    updateGallery,
+    updateAdditionalInfo,
     getFormData,
     isStepValid
   } = usePropertyForm();
@@ -34,10 +49,11 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
 
   const completedSteps = React.useMemo(() => {
     const completed: number[] = [];
-    if (isStepValid(1)) completed.push(1);
-    if (isStepValid(1) && isStepValid(2)) completed.push(2);
+    for (let i = 1; i < currentStep; i++) {
+      if (isStepValid(i)) completed.push(i);
+    }
     return completed;
-  }, [isStepValid]);
+  }, [isStepValid, currentStep]);
 
   const handleOwnerInfoNext = (data: OwnerInfo) => {
     updateOwnerInfo(data);
@@ -45,8 +61,33 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
   };
 
 
-  const handlePropertyInfoNext = (data: PropertyInfo) => {
-    updatePropertyInfo(data);
+  const handlePropertyDetailsNext = (data: any) => {
+    updatePropertyDetails(data);
+    nextStep();
+  };
+
+  const handleLocationDetailsNext = (data: any) => {
+    updateLocationDetails(data);
+    nextStep();
+  };
+
+  const handleRentalDetailsNext = (data: any) => {
+    updateRentalDetails(data);
+    nextStep();
+  };
+
+  const handleAmenitiesNext = (data: any) => {
+    updateAmenities(data);
+    nextStep();
+  };
+
+  const handleGalleryNext = (data: any) => {
+    updateGallery(data);
+    nextStep();
+  };
+
+  const handleAdditionalInfoNext = (data: any) => {
+    updateAdditionalInfo(data);
     nextStep();
   };
 
@@ -56,20 +97,18 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
     // Enhanced validation before submission
     const ownerValid = !!(formData.ownerInfo?.fullName && formData.ownerInfo?.phoneNumber && 
                          formData.ownerInfo?.email && formData.ownerInfo?.role);
-    const propertyValid = !!(formData.propertyInfo?.title && formData.propertyInfo?.propertyType && 
-                           formData.propertyInfo?.listingType && formData.propertyInfo?.superArea && 
-                           formData.propertyInfo?.expectedPrice && formData.propertyInfo?.state && 
-                           formData.propertyInfo?.city && formData.propertyInfo?.locality && 
-                           formData.propertyInfo?.pincode);
+    const propertyValid = !!(formData.propertyInfo?.propertyDetails?.title && 
+                           formData.propertyInfo?.locationDetails?.state && 
+                           formData.propertyInfo?.rentalDetails?.expectedPrice);
     
     // Enhanced image validation
-    const imageValid = !!(formData.propertyInfo?.images && formData.propertyInfo.images.length >= 3);
+    const imageValid = !!(formData.propertyInfo?.gallery?.images && 
+                         formData.propertyInfo.gallery.images.length >= 3);
     
     console.log('Form validation:', { 
       ownerValid, 
       propertyValid, 
       imageValid, 
-      imageCount: formData.propertyInfo?.images?.length,
       formData 
     });
     
@@ -108,7 +147,7 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
       <div className="mb-12">
         <ProgressIndicator
           currentStep={currentStep}
-          totalSteps={3}
+          totalSteps={8}
           completedSteps={completedSteps}
         />
       </div>
@@ -126,15 +165,65 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
 
         {currentStep === 2 && (
           <div className="p-6 md:p-8">
-            <PropertyInfoStep
-              initialData={propertyInfo}
-              onNext={handlePropertyInfoNext}
+            <PropertyDetailsStep
+              initialData={propertyDetails}
+              onNext={handlePropertyDetailsNext}
               onBack={prevStep}
             />
           </div>
         )}
 
         {currentStep === 3 && (
+          <div className="p-6 md:p-8">
+            <LocationDetailsStep
+              initialData={locationDetails}
+              onNext={handleLocationDetailsNext}
+              onBack={prevStep}
+            />
+          </div>
+        )}
+
+        {currentStep === 4 && (
+          <div className="p-6 md:p-8">
+            <RentalDetailsStep
+              initialData={rentalDetails}
+              onNext={handleRentalDetailsNext}
+              onBack={prevStep}
+            />
+          </div>
+        )}
+
+        {currentStep === 5 && (
+          <div className="p-6 md:p-8">
+            <AmenitiesStep
+              initialData={amenities}
+              onNext={handleAmenitiesNext}
+              onBack={prevStep}
+            />
+          </div>
+        )}
+
+        {currentStep === 6 && (
+          <div className="p-6 md:p-8">
+            <GalleryStep
+              initialData={gallery}
+              onNext={handleGalleryNext}
+              onBack={prevStep}
+            />
+          </div>
+        )}
+
+        {currentStep === 7 && (
+          <div className="p-6 md:p-8">
+            <AdditionalInfoStep
+              initialData={additionalInfo}
+              onNext={handleAdditionalInfoNext}
+              onBack={prevStep}
+            />
+          </div>
+        )}
+
+        {currentStep === 8 && (
           <div className="p-6 md:p-8">
             <PreviewStep
               formData={getFormData()}

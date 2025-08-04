@@ -9,23 +9,68 @@ export interface OwnerInfo {
   listingType: 'Rent' | 'Resale' | 'PG/Hostel' | 'Flatmates' | 'Sale';
 }
 
-export interface PropertyInfo {
+export interface PropertyDetails {
   title: string;
   propertyType: string;
-  listingType: 'Sale' | 'Rent';
+  buildingType: string;
   bhkType: string;
   bathrooms: number;
   balconies: number;
-  superArea: number;
-  carpetArea?: number;
-  expectedPrice: number;
+  propertyAge: string;
+  totalFloors: number;
+  floorNo: number;
+  furnishingStatus: string;
+  parkingType: string;
+}
+
+export interface LocationDetails {
   state: string;
   city: string;
   locality: string;
   pincode: string;
-  description?: string;
+  societyName?: string;
+  landmark?: string;
+}
+
+export interface RentalDetails {
+  listingType: 'Sale' | 'Rent';
+  expectedPrice: number;
+  maintenanceCharges?: number;
+  securityDeposit?: number;
+  brokerageType?: string;
+  availableFrom?: string;
+  preferredTenants?: string;
+  superArea: number;
+  carpetArea?: number;
+  builtUpArea?: number;
+}
+
+export interface PropertyAmenities {
+  basicAmenities: string[];
+  societyAmenities: string[];
+  locationAdvantages: string[];
+}
+
+export interface PropertyGallery {
   images: File[];
   video?: File;
+}
+
+export interface AdditionalInfo {
+  description?: string;
+  specialFeatures: string[];
+  onMainRoad: boolean;
+  cornerProperty: boolean;
+  gatedSociety: boolean;
+}
+
+export interface PropertyInfo {
+  propertyDetails: PropertyDetails;
+  locationDetails: LocationDetails;
+  rentalDetails: RentalDetails;
+  amenities: PropertyAmenities;
+  gallery: PropertyGallery;
+  additionalInfo: AdditionalInfo;
 }
 
 export interface PropertyFormData {

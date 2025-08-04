@@ -1,6 +1,11 @@
 export { MultiStepForm } from './MultiStepForm';
 export { OwnerInfoStep } from './OwnerInfoStep';
-export { PropertyInfoStep } from './PropertyInfoStep';
+export { PropertyDetailsStep } from './PropertyDetailsStep';
+export { LocationDetailsStep } from './LocationDetailsStep';
+export { RentalDetailsStep } from './RentalDetailsStep';
+export { AmenitiesStep } from './AmenitiesStep';
+export { GalleryStep } from './GalleryStep';
+export { AdditionalInfoStep } from './AdditionalInfoStep';
 export { PreviewStep } from './PreviewStep';
 export { ProgressIndicator } from './ProgressIndicator';
 export { ImageUpload } from './ImageUpload';
