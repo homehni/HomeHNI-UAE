@@ -146,10 +146,14 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
                             </FormControl>
                             <SelectContent>
                               <SelectItem value="Co-Working">Co-Working</SelectItem>
-                              <SelectItem value="Office">Office</SelectItem>
+                              <SelectItem value="Office">Office Space</SelectItem>
                               <SelectItem value="Shop">Shop</SelectItem>
-                              <SelectItem value="Warehouse">Warehouse</SelectItem>
                               <SelectItem value="Showroom">Showroom</SelectItem>
+                              <SelectItem value="Godown">Godown/Warehouse</SelectItem>
+                              <SelectItem value="Industrial-Shed">Industrial Shed</SelectItem>
+                              <SelectItem value="Industrial-Building">Industrial Building</SelectItem>
+                              <SelectItem value="Restaurant-Cafe">Restaurant/Cafe</SelectItem>
+                              <SelectItem value="Other-Business">Other Business</SelectItem>
                             </SelectContent>
                           </Select>
                           <FormMessage />
@@ -170,10 +174,11 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
-                              <SelectItem value="Mall">Mall</SelectItem>
-                              <SelectItem value="IT Park">IT Park</SelectItem>
-                              <SelectItem value="Commercial Complex">Commercial Complex</SelectItem>
-                              <SelectItem value="Independent Building">Independent Building</SelectItem>
+                               <SelectItem value="Independent House">Independent House</SelectItem>
+                              <SelectItem value="Business Park">Business Park</SelectItem>
+                              <SelectItem value="Mall">Mall</SelectItem>                              
+                              <SelectItem value="Standalone Building">Standalone Building</SelectItem>                              
+                              <SelectItem value="Independent Shop">Independent Shop</SelectItem>
                             </SelectContent>
                           </Select>
                           <FormMessage />
@@ -209,36 +214,54 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
                       )}
                     />
 
-                    <FormField
-                      control={form.control}
-                      name="floorNo"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className="text-sm font-medium">Floor*</FormLabel>
-                          <Select onValueChange={(value) => field.onChange(parseInt(value))} defaultValue={field.value?.toString()}>
-                            <FormControl>
-                              <SelectTrigger className="h-12">
-                                <SelectValue placeholder="2" />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              <SelectItem value="0">Ground Floor</SelectItem>
-                              <SelectItem value="1">1st Floor</SelectItem>
-                              <SelectItem value="2">2nd Floor</SelectItem>
-                              <SelectItem value="3">3rd Floor</SelectItem>
-                              <SelectItem value="4">4th Floor</SelectItem>
-                              <SelectItem value="5">5th Floor</SelectItem>
-                              <SelectItem value="6">6th Floor</SelectItem>
-                              <SelectItem value="7">7th Floor</SelectItem>
-                              <SelectItem value="8">8th Floor</SelectItem>
-                              <SelectItem value="9">9th Floor</SelectItem>
-                              <SelectItem value="10">10+ Floor</SelectItem>
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+<FormField
+  control={form.control}
+  name="floorNo"
+  render={({ field }) => (
+    <FormItem>
+      <FormLabel className="text-sm font-medium">Floor*</FormLabel>
+      <Select
+        onValueChange={(value) =>
+          value === 'full' || value === 'lower' || value === 'upper' || value === '99+'
+            ? field.onChange(value)
+            : field.onChange(parseInt(value))
+        }
+        defaultValue={field.value?.toString()}
+      >
+        <FormControl>
+          <SelectTrigger className="h-12">
+            <SelectValue placeholder="Select Floor" />
+          </SelectTrigger>
+        </FormControl>
+        <SelectContent>
+          <SelectItem value="lower">Lower Basement</SelectItem>
+          <SelectItem value="upper">Upper Basement</SelectItem>
+          <SelectItem value="0">Ground Floor</SelectItem>
+          <SelectItem value="full">Full Building</SelectItem>
+          {[...Array(99)].map((_, i) => {
+            const floor = i + 1;
+            return (
+              <SelectItem key={floor} value={floor.toString()}>
+                {floor}
+                {floor === 1
+                  ? 'st'
+                  : floor === 2
+                  ? 'nd'
+                  : floor === 3
+                  ? 'rd'
+                  : 'th'}{' '}
+                Floor
+              </SelectItem>
+            );
+          })}
+          <SelectItem value="99+">99+ Floor</SelectItem>
+        </SelectContent>
+      </Select>
+      <FormMessage />
+    </FormItem>
+  )}
+/>
+
 
                     <FormField
                       control={form.control}
