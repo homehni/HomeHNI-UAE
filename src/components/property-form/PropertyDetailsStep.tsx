@@ -124,7 +124,7 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
 
         {/* Main Content */}
         <div className="flex-1 p-6">
-          <div className="max-w-6xl mx-auto">
+          <div className="w-full mx-auto">
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
               <h1 className="text-2xl font-semibold text-primary mb-6">Property Details</h1>
               
