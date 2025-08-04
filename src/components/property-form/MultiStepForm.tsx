@@ -8,6 +8,7 @@ import { RentalDetailsStep } from './RentalDetailsStep';
 import { AmenitiesStep } from './AmenitiesStep';
 import { GalleryStep } from './GalleryStep';
 import { AdditionalInfoStep } from './AdditionalInfoStep';
+import { ScheduleStep } from './ScheduleStep';
 import { PreviewStep } from './PreviewStep';
 
 import { OwnerInfo, PropertyInfo } from '@/types/property';
@@ -32,6 +33,7 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
     amenities,
     gallery,
     additionalInfo,
+    scheduleInfo,
     nextStep,
     prevStep,
     goToStep,
@@ -42,6 +44,7 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
     updateAmenities,
     updateGallery,
     updateAdditionalInfo,
+    updateScheduleInfo,
     getFormData,
     isStepValid
   } = usePropertyForm();
@@ -88,6 +91,11 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
 
   const handleAdditionalInfoNext = (data: any) => {
     updateAdditionalInfo(data);
+    nextStep();
+  };
+
+  const handleScheduleNext = (data: any) => {
+    updateScheduleInfo(data);
     nextStep();
   };
 
@@ -147,7 +155,7 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
       <div className="mb-12">
         <ProgressIndicator
           currentStep={currentStep}
-          totalSteps={8}
+          totalSteps={9}
           completedSteps={completedSteps}
         />
       </div>
@@ -230,6 +238,16 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
         )}
 
         {currentStep === 8 && (
+          <div className="p-6 md:p-8">
+            <ScheduleStep
+              initialData={scheduleInfo}
+              onNext={handleScheduleNext}
+              onBack={prevStep}
+            />
+          </div>
+        )}
+
+        {currentStep === 9 && (
           <div className="p-6 md:p-8">
             <PreviewStep
               formData={getFormData()}

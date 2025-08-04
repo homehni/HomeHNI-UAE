@@ -8,7 +8,8 @@ import {
   RentalDetails, 
   PropertyAmenities, 
   PropertyGallery, 
-  AdditionalInfo 
+  AdditionalInfo,
+  ScheduleInfo 
 } from '@/types/property';
 
 export const usePropertyForm = () => {
@@ -22,9 +23,13 @@ export const usePropertyForm = () => {
     images: []
   });
   const [additionalInfo, setAdditionalInfo] = useState<Partial<AdditionalInfo>>({});
+  const [scheduleInfo, setScheduleInfo] = useState<Partial<ScheduleInfo>>({
+    availability: 'everyday',
+    availableAllDay: true
+  });
 
   const nextStep = () => {
-    if (currentStep < 8) {
+    if (currentStep < 9) {
       setCurrentStep(currentStep + 1);
     }
   };
@@ -36,7 +41,7 @@ export const usePropertyForm = () => {
   };
 
   const goToStep = (step: number) => {
-    if (step >= 1 && step <= 8) {
+    if (step >= 1 && step <= 9) {
       setCurrentStep(step);
     }
   };
@@ -69,6 +74,10 @@ export const usePropertyForm = () => {
     setAdditionalInfo(prev => ({ ...prev, ...data }));
   };
 
+  const updateScheduleInfo = (data: Partial<ScheduleInfo>) => {
+    setScheduleInfo(prev => ({ ...prev, ...data }));
+  };
+
   const getFormData = () => ({
     ownerInfo,
     propertyInfo: {
@@ -77,7 +86,8 @@ export const usePropertyForm = () => {
       rentalDetails,
       amenities,
       gallery,
-      additionalInfo
+      additionalInfo,
+      scheduleInfo
     }
   });
 
@@ -100,6 +110,8 @@ export const usePropertyForm = () => {
         return !!(gallery.images && gallery.images.length >= 3);
       case 7:
         return true; // Additional info is optional
+      case 8:
+        return !!(scheduleInfo.availability); // Schedule step
       default:
         return true;
     }
@@ -114,6 +126,7 @@ export const usePropertyForm = () => {
     amenities,
     gallery,
     additionalInfo,
+    scheduleInfo,
     nextStep,
     prevStep,
     goToStep,
@@ -124,6 +137,7 @@ export const usePropertyForm = () => {
     updateAmenities,
     updateGallery,
     updateAdditionalInfo,
+    updateScheduleInfo,
     getFormData,
     isStepValid,
   };

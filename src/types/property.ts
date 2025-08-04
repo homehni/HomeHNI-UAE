@@ -82,6 +82,15 @@ export interface AdditionalInfo {
   secondaryNumber?: string;
 }
 
+export interface ScheduleInfo {
+  availability: 'everyday' | 'weekday' | 'weekend';
+  paintingService?: 'book' | 'decline';
+  cleaningService?: 'book' | 'decline';
+  startTime?: string;
+  endTime?: string;
+  availableAllDay?: boolean;
+}
+
 export interface PropertyInfo {
   propertyDetails: PropertyDetails;
   locationDetails: LocationDetails;
@@ -89,6 +98,7 @@ export interface PropertyInfo {
   amenities: PropertyAmenities;
   gallery: PropertyGallery;
   additionalInfo: AdditionalInfo;
+  scheduleInfo: ScheduleInfo;
 }
 
 export interface PropertyFormData {
