@@ -92,15 +92,10 @@ export const GalleryStep: React.FC<GalleryStepProps> = ({
         {/* Main Content */}
         <div className="flex-1 p-6">
           <div className="max-w-4xl">
-            <div className="bg-background rounded-lg border p-8">
-              <div className="text-center mb-8">
-                <h2 className="text-2xl font-bold text-foreground mb-2">Upload photos & videos</h2>
-                <div className="flex justify-end mb-6">
-                  <Button variant="default" className="bg-primary text-primary-foreground">
-                    Upload through phone
-                  </Button>
+              <div className="bg-background rounded-lg border p-8">
+                <div className="text-center mb-8">
+                  <h2 className="text-2xl font-bold text-foreground mb-2">Upload photos & videos</h2>
                 </div>
-              </div>
 
               <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
