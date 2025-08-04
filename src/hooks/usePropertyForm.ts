@@ -21,12 +21,7 @@ export const usePropertyForm = () => {
   const [gallery, setGallery] = useState<Partial<PropertyGallery>>({
     images: []
   });
-  const [additionalInfo, setAdditionalInfo] = useState<Partial<AdditionalInfo>>({
-    specialFeatures: [],
-    onMainRoad: false,
-    cornerProperty: false,
-    gatedSociety: false
-  });
+  const [additionalInfo, setAdditionalInfo] = useState<Partial<AdditionalInfo>>({});
 
   const nextStep = () => {
     if (currentStep < 8) {

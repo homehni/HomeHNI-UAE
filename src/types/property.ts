@@ -75,10 +75,11 @@ export interface PropertyGallery {
 
 export interface AdditionalInfo {
   description?: string;
-  specialFeatures: string[];
-  onMainRoad: boolean;
-  cornerProperty: boolean;
-  gatedSociety: boolean;
+  previousOccupancy?: string;
+  whoWillShow?: string;
+  paintingRequired?: string;
+  cleaningRequired?: string;
+  secondaryNumber?: string;
 }
 
 export interface PropertyInfo {
