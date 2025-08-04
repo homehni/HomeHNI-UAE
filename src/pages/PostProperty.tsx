@@ -47,9 +47,9 @@ export const PostProperty: React.FC = () => {
 
       // Validate property data mappings
       const mappingValidation = validateMappedValues({
-        bhkType: data.propertyInfo.bhkType,
-        propertyType: data.propertyInfo.propertyType,
-        listingType: data.propertyInfo.listingType
+        bhkType: data.propertyInfo.propertyDetails.bhkType,
+        propertyType: data.propertyInfo.propertyDetails.propertyType,
+        listingType: data.propertyInfo.rentalDetails.listingType
       });
 
       if (!mappingValidation.isValid) {
@@ -64,21 +64,21 @@ export const PostProperty: React.FC = () => {
       });
 
       const imageUrls = await uploadFilesToStorage(
-        data.propertyInfo.images,
+        data.propertyInfo.gallery.images,
         'images',
         user.id
       );
 
       // Upload video if provided
       let videoUrls: string[] = [];
-      if (data.propertyInfo.video) {
+      if (data.propertyInfo.gallery.video) {
         toast({
           title: "Uploading Video...",
           description: "Please wait while we upload your property video.",
         });
 
         const videoResult = await uploadSingleFile(
-          data.propertyInfo.video,
+          data.propertyInfo.gallery.video,
           'videos',
           user.id
         );
@@ -88,20 +88,20 @@ export const PostProperty: React.FC = () => {
       // Prepare property data for database with proper mapping
       const propertyData = {
         user_id: user.id,
-        title: data.propertyInfo.title,
-        property_type: mapPropertyType(data.propertyInfo.propertyType),
-        listing_type: mapListingType(data.propertyInfo.listingType),
-        bhk_type: data.propertyInfo.bhkType ? mapBhkType(data.propertyInfo.bhkType) : null,
-        bathrooms: Number(data.propertyInfo.bathrooms) || 0,
-        balconies: Number(data.propertyInfo.balconies) || 0,
-        super_area: Number(data.propertyInfo.superArea),
-        carpet_area: data.propertyInfo.carpetArea ? Number(data.propertyInfo.carpetArea) : null,
-        expected_price: Number(data.propertyInfo.expectedPrice),
-        state: data.propertyInfo.state,
-        city: data.propertyInfo.city,
-        locality: data.propertyInfo.locality,
-        pincode: data.propertyInfo.pincode,
-        description: data.propertyInfo.description || null,
+        title: data.propertyInfo.propertyDetails.title,
+        property_type: mapPropertyType(data.propertyInfo.propertyDetails.propertyType),
+        listing_type: mapListingType(data.propertyInfo.rentalDetails.listingType),
+        bhk_type: data.propertyInfo.propertyDetails.bhkType ? mapBhkType(data.propertyInfo.propertyDetails.bhkType) : null,
+        bathrooms: Number(data.propertyInfo.propertyDetails.bathrooms) || 0,
+        balconies: Number(data.propertyInfo.propertyDetails.balconies) || 0,
+        super_area: Number(data.propertyInfo.rentalDetails.superArea),
+        carpet_area: data.propertyInfo.rentalDetails.carpetArea ? Number(data.propertyInfo.rentalDetails.carpetArea) : null,
+        expected_price: Number(data.propertyInfo.rentalDetails.expectedPrice),
+        state: data.propertyInfo.locationDetails.state,
+        city: data.propertyInfo.locationDetails.city,
+        locality: data.propertyInfo.locationDetails.locality,
+        pincode: data.propertyInfo.locationDetails.pincode,
+        description: data.propertyInfo.additionalInfo.description || null,
         images: imageUrls.map(img => img.url),
         videos: videoUrls,
         availability_type: 'immediate',
@@ -141,11 +141,11 @@ export const PostProperty: React.FC = () => {
           errorMessage = "Invalid availability type. Please contact support.";
         } else if (error.message.includes('violates check constraint')) {
           if (error.message.includes('property_type')) {
-            errorMessage = `Invalid property type: "${data.propertyInfo.propertyType}". Please select a valid property type.`;
+            errorMessage = `Invalid property type: "${data.propertyInfo.propertyDetails.propertyType}". Please select a valid property type.`;
           } else if (error.message.includes('listing_type')) {
-            errorMessage = `Invalid listing type: "${data.propertyInfo.listingType}". Please select Sale or Rent.`;
+            errorMessage = `Invalid listing type: "${data.propertyInfo.rentalDetails.listingType}". Please select Sale or Rent.`;
           } else if (error.message.includes('bhk_type')) {
-            errorMessage = `Invalid BHK type: "${data.propertyInfo.bhkType}". Please select a valid BHK configuration.`;
+            errorMessage = `Invalid BHK type: "${data.propertyInfo.propertyDetails.bhkType}". Please select a valid BHK configuration.`;
           } else {
             errorMessage = "Some property details don't meet our requirements. Please check your inputs.";
           }
@@ -167,15 +167,15 @@ export const PostProperty: React.FC = () => {
         owner_email: data.ownerInfo.email,
         owner_phone: data.ownerInfo.phoneNumber,
         owner_role: data.ownerInfo.role,
-        title: data.propertyInfo.title,
-        property_type: data.propertyInfo.propertyType,
-        listing_type: data.propertyInfo.listingType,
-        bhk_type: data.propertyInfo.bhkType,
-        state: data.propertyInfo.state,
-        city: data.propertyInfo.city,
-        locality: data.propertyInfo.locality,
-        pincode: data.propertyInfo.pincode,
-        expected_price: Number(data.propertyInfo.expectedPrice),
+        title: data.propertyInfo.propertyDetails.title,
+        property_type: data.propertyInfo.propertyDetails.propertyType,
+        listing_type: data.propertyInfo.rentalDetails.listingType,
+        bhk_type: data.propertyInfo.propertyDetails.bhkType,
+        state: data.propertyInfo.locationDetails.state,
+        city: data.propertyInfo.locationDetails.city,
+        locality: data.propertyInfo.locationDetails.locality,
+        pincode: data.propertyInfo.locationDetails.pincode,
+        expected_price: Number(data.propertyInfo.rentalDetails.expectedPrice),
         status: 'submitted'
       };
 
