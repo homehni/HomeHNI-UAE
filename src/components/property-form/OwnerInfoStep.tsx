@@ -201,8 +201,8 @@ export const OwnerInfoStep: React.FC<OwnerInfoStepProps> = ({
 
             {/* WhatsApp Updates Toggle */}
 <div className="flex items-center gap-3">
-  <Label className="text-sm font-medium text-foreground">Get updates on</Label>
-  <span className="text-sm font-medium text-foreground">WhatsApp</span>
+  <Label className="text-base font-medium text-foreground">Get updates on WhatsApp</Label>
+  {/* <span className="text-sm font-medium text-foreground">WhatsApp</span> */}
   <Switch
     defaultChecked // ✅ This makes it checked by default
     onCheckedChange={(checked) => setValue('whatsappUpdates', checked)}
