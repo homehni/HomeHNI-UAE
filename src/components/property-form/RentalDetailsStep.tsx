@@ -68,19 +68,19 @@ export const RentalDetailsStep: React.FC<RentalDetailsStepProps> = ({
     resolver: zodResolver(rentalDetailsSchema),
     defaultValues: {
       listingType: initialData.listingType || 'Rent',
-      expectedPrice: initialData.expectedPrice || 0,
+      expectedPrice: initialData.expectedPrice || undefined,
       rentNegotiable: initialData.rentNegotiable || false,
       maintenanceExtra: initialData.maintenanceExtra || false,
-      maintenanceCharges: initialData.maintenanceCharges || 0,
-      securityDeposit: initialData.securityDeposit || 0,
+      maintenanceCharges: initialData.maintenanceCharges || undefined,
+      securityDeposit: initialData.securityDeposit || undefined,
       depositNegotiable: initialData.depositNegotiable || false,
       leaseDuration: initialData.leaseDuration || '',
       lockinPeriod: initialData.lockinPeriod || '',
       availableFrom: initialData.availableFrom || '',
       idealFor: initialData.idealFor || [],
-      superArea: initialData.superArea || 0,
-      carpetArea: initialData.carpetArea || 0,
-      builtUpArea: initialData.builtUpArea || 0,
+      superArea: initialData.superArea || undefined,
+      carpetArea: initialData.carpetArea || undefined,
+      builtUpArea: initialData.builtUpArea || undefined,
     },
   });
 
@@ -189,12 +189,11 @@ export const RentalDetailsStep: React.FC<RentalDetailsStepProps> = ({
                                   type="text" 
                                   placeholder="Enter Amount"
                                   className="pl-8 h-12"
-                                  {...field} 
-                                  onChange={(e) => {
-                                    const value = e.target.value.replace(/[^0-9]/g, '');
-                                    field.onChange(parseInt(value) || 0);
-                                  }}
-                                  value={field.value || ''}
+                                 onChange={(e) => {
+                                   const value = e.target.value.replace(/[^0-9]/g, '');
+                                   field.onChange(value ? parseInt(value) : undefined);
+                                 }}
+                                 value={field.value ? String(field.value) : ''}
                                 />
                               </FormControl>
                               <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500">/ Month</span>
@@ -251,12 +250,11 @@ export const RentalDetailsStep: React.FC<RentalDetailsStepProps> = ({
                                           type="text" 
                                           placeholder="Enter maintenance amount"
                                           className="pl-8 h-12"
-                                          {...field} 
-                                          onChange={(e) => {
-                                            const value = e.target.value.replace(/[^0-9]/g, '');
-                                            field.onChange(parseInt(value) || 0);
-                                          }}
-                                          value={field.value || ''}
+                                         onChange={(e) => {
+                                           const value = e.target.value.replace(/[^0-9]/g, '');
+                                           field.onChange(value ? parseInt(value) : undefined);
+                                         }}
+                                         value={field.value ? String(field.value) : ''}
                                         />
                                       </FormControl>
                                     </div>
@@ -287,12 +285,11 @@ export const RentalDetailsStep: React.FC<RentalDetailsStepProps> = ({
                                 type="text" 
                                 placeholder="Enter Amount"
                                 className="pl-8 h-12"
-                                {...field} 
-                                onChange={(e) => {
-                                  const value = e.target.value.replace(/[^0-9]/g, '');
-                                  field.onChange(parseInt(value) || 0);
-                                }}
-                                value={field.value || ''}
+                                 onChange={(e) => {
+                                   const value = e.target.value.replace(/[^0-9]/g, '');
+                                   field.onChange(value ? parseInt(value) : undefined);
+                                 }}
+                                 value={field.value ? String(field.value) : ''}
                               />
                             </FormControl>
                           </div>
@@ -406,9 +403,81 @@ export const RentalDetailsStep: React.FC<RentalDetailsStepProps> = ({
                     )}
                   />
 
-                  {/* Ideal For */}
-                  <div>
-                    <FormLabel className="text-sm font-medium">Ideal For</FormLabel>
+                   {/* Area Details */}
+                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                     <FormField
+                       control={form.control}
+                       name="superArea"
+                       render={({ field }) => (
+                         <FormItem>
+                           <FormLabel className="text-sm font-medium">Super Area (sq ft) *</FormLabel>
+                           <FormControl>
+                             <Input 
+                               type="text" 
+                               placeholder="Enter super area"
+                               className="h-12"
+                               onChange={(e) => {
+                                 const value = e.target.value.replace(/[^0-9]/g, '');
+                                 field.onChange(value ? parseInt(value) : undefined);
+                               }}
+                               value={field.value ? String(field.value) : ''}
+                             />
+                           </FormControl>
+                           <FormMessage />
+                         </FormItem>
+                       )}
+                     />
+
+                     <FormField
+                       control={form.control}
+                       name="carpetArea"
+                       render={({ field }) => (
+                         <FormItem>
+                           <FormLabel className="text-sm font-medium">Carpet Area (sq ft)</FormLabel>
+                           <FormControl>
+                             <Input 
+                               type="text" 
+                               placeholder="Enter carpet area"
+                               className="h-12"
+                               onChange={(e) => {
+                                 const value = e.target.value.replace(/[^0-9]/g, '');
+                                 field.onChange(value ? parseInt(value) : undefined);
+                               }}
+                               value={field.value ? String(field.value) : ''}
+                             />
+                           </FormControl>
+                           <FormMessage />
+                         </FormItem>
+                       )}
+                     />
+
+                     <FormField
+                       control={form.control}
+                       name="builtUpArea"
+                       render={({ field }) => (
+                         <FormItem>
+                           <FormLabel className="text-sm font-medium">Built-up Area (sq ft)</FormLabel>
+                           <FormControl>
+                             <Input 
+                               type="text" 
+                               placeholder="Enter built-up area"
+                               className="h-12"
+                               onChange={(e) => {
+                                 const value = e.target.value.replace(/[^0-9]/g, '');
+                                 field.onChange(value ? parseInt(value) : undefined);
+                               }}
+                               value={field.value ? String(field.value) : ''}
+                             />
+                           </FormControl>
+                           <FormMessage />
+                         </FormItem>
+                       )}
+                     />
+                   </div>
+
+                   {/* Ideal For */}
+                   <div>
+                     <FormLabel className="text-sm font-medium">Ideal For</FormLabel>
                     <div className="mt-2 space-y-4">
                       <div className="flex flex-wrap gap-2">
                         {predefinedTags.map((tag) => (
