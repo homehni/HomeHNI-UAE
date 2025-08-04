@@ -3,12 +3,12 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { LocationDetails } from '@/types/property';
-import { MapPin, Phone, Eye, CheckCircle } from 'lucide-react';
+import { Home, MapPin, Building, Sparkles, Camera, FileText, Calendar } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 
 const locationDetailsSchema = z.object({
@@ -24,12 +24,16 @@ interface LocationDetailsStepProps {
   initialData?: Partial<LocationDetails>;
   onNext: (data: LocationDetails) => void;
   onBack: () => void;
+  currentStep: number;
+  totalSteps: number;
 }
 
 export const LocationDetailsStep: React.FC<LocationDetailsStepProps> = ({
   initialData = {},
   onNext,
-  onBack
+  onBack,
+  currentStep,
+  totalSteps
 }) => {
   const [statesData, setStatesData] = useState<any>({});
   const [cities, setCities] = useState<string[]>([]);
@@ -79,97 +83,63 @@ export const LocationDetailsStep: React.FC<LocationDetailsStepProps> = ({
   };
 
   const steps = [
-    { id: 1, title: "Owner Details", completed: true },
-    { id: 2, title: "Property Details", completed: true },
-    { id: 3, title: "Location Details", completed: false, current: true },
-    { id: 4, title: "Rental Details", completed: false },
-    { id: 5, title: "Amenities", completed: false },
-    { id: 6, title: "Gallery", completed: false },
-    { id: 7, title: "Additional Info", completed: false },
+    { icon: Home, label: 'Property Details', active: currentStep === 2 },
+    { icon: MapPin, label: 'Location Details', active: currentStep === 3 },
+    { icon: Building, label: 'Rental Details', active: currentStep === 4 },
+    { icon: Sparkles, label: 'Amenities', active: currentStep === 5 },
+    { icon: Camera, label: 'Gallery', active: currentStep === 6 },
+    { icon: FileText, label: 'Additional Information', active: currentStep === 7 },
+    { icon: Calendar, label: 'Schedule', active: currentStep === 8 },
   ];
 
+  const progressPercentage = Math.round((currentStep / totalSteps) * 100);
+
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="border-b bg-card">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <h1 className="text-2xl font-bold text-foreground">Post Property for FREE</h1>
-              <div className="text-sm text-muted-foreground">
-                Step 3 of 7 • 42% Complete
-              </div>
-            </div>
-            <Button variant="outline" size="sm">
-              <Eye className="h-4 w-4 mr-2" />
-              Preview
-            </Button>
+      <div className="bg-white border-b border-gray-200 px-6 py-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-2">
+            <Home className="h-6 w-6 text-primary" />
+            <span className="text-lg font-semibold">PropertyHub</span>
+          </div>
+          <div className="flex items-center space-x-4">
+            <span className="text-sm text-gray-600">{progressPercentage}% Done</span>
+            <Button variant="outline" size="sm">Preview</Button>
           </div>
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-6">
-        <div className="flex gap-8">
-          {/* Sidebar */}
-          <div className="w-80 space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">Form Progress</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {steps.map((step) => (
-                    <div key={step.id} className="flex items-center space-x-3">
-                      <div className={`flex h-8 w-8 items-center justify-center rounded-full border-2 ${
-                        step.completed 
-                          ? 'bg-primary border-primary text-primary-foreground' 
-                          : step.current 
-                          ? 'border-primary text-primary' 
-                          : 'border-muted-foreground text-muted-foreground'
-                      }`}>
-                        {step.completed ? (
-                          <CheckCircle className="h-4 w-4" />
-                        ) : (
-                          <span className="text-sm font-medium">{step.id}</span>
-                        )}
-                      </div>
-                      <span className={`text-sm ${
-                        step.current ? 'font-medium text-foreground' : 'text-muted-foreground'
-                      }`}>
-                        {step.title}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Help Section */}
-            <Card>
-              <CardContent className="p-6">
-                <div className="flex items-start space-x-3">
-                  <Phone className="h-5 w-5 text-primary mt-1" />
-                  <div>
-                    <p className="text-sm text-muted-foreground mb-3">
-                      Don't want to fill all the details! Let us help you!
-                    </p>
-                    <Button className="w-full" size="sm">
-                      I'm interested
-                    </Button>
+      <div className="flex">
+        {/* Sidebar */}
+        <div className="w-64 bg-white border-r border-gray-200 min-h-screen">
+          <div className="p-6">
+            <nav className="space-y-2">
+              {steps.map((step, index) => {
+                const Icon = step.icon;
+                return (
+                  <div
+                    key={step.label}
+                    className={`flex items-center space-x-3 p-3 rounded-lg transition-colors ${
+                      step.active
+                        ? 'bg-primary/10 text-primary border-l-4 border-primary'
+                        : 'text-gray-600 hover:bg-gray-50'
+                    }`}
+                  >
+                    <Icon className="h-5 w-5" />
+                    <span className="text-sm font-medium">{step.label}</span>
                   </div>
-                </div>
-              </CardContent>
-            </Card>
+                );
+              })}
+            </nav>
           </div>
+        </div>
 
-          {/* Main Content */}
-          <div className="flex-1">
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-xl">Location Details</CardTitle>
-                <CardDescription>Where is your property located?</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-6">
+        {/* Main Content */}
+        <div className="flex-1 p-6">
+          <div className="max-w-4xl mx-auto">
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
+              <h1 className="text-2xl font-semibold text-primary mb-6">Location Details</h1>
                 {/* Map Section */}
                 <div className="space-y-4">
                   <h3 className="text-lg font-semibold">Mark Locality on Map</h3>
@@ -321,8 +291,7 @@ export const LocationDetailsStep: React.FC<LocationDetailsStepProps> = ({
                     </div>
                   </form>
                 </Form>
-              </CardContent>
-            </Card>
+            </div>
           </div>
         </div>
       </div>
