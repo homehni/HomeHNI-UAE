@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Home, MapPin, Building, Sparkles, Camera, FileText, Calendar, Clock } from 'lucide-react';
+import { Home, MapPin, Building, Sparkles, Camera, FileText, Calendar, Clock, PaintBucket, CheckCircle } from 'lucide-react';
 
 const scheduleSchema = z.object({
   paintingService: z.enum(['book', 'decline']).optional(),
@@ -40,14 +40,17 @@ export const ScheduleStep: React.FC<ScheduleStepProps> = ({
   onNext,
   onBack
 }) => {
+  const [paintingResponse, setPaintingResponse] = useState<'book' | 'decline' | null>(initialData.paintingService || null);
+  const [cleaningResponse, setCleaningResponse] = useState<'book' | 'decline' | null>(initialData.cleaningService || null);
+  
   const form = useForm<ScheduleFormData>({
     resolver: zodResolver(scheduleSchema),
     defaultValues: {
       paintingService: initialData.paintingService,
       cleaningService: initialData.cleaningService,
       availability: initialData.availability || 'everyday',
-      startTime: initialData.startTime || '',
-      endTime: initialData.endTime || '',
+      startTime: initialData.startTime || '09:00',
+      endTime: initialData.endTime || '18:00',
       availableAllDay: initialData.availableAllDay || false,
     },
   });
@@ -117,79 +120,131 @@ export const ScheduleStep: React.FC<ScheduleStepProps> = ({
                 {/* Service Cards */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                   {/* Painting Service */}
-                  <div className="bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-xl p-6 relative overflow-hidden">
+                  <div className="bg-gradient-to-br from-orange-50 via-yellow-50 to-amber-100 rounded-xl p-6 relative overflow-hidden border border-orange-200/50 shadow-lg">
                     <div className="relative z-10">
-                      <h3 className="text-lg font-semibold mb-2">
+                      <div className="flex items-center gap-3 mb-3">
+                        <div className="w-10 h-10 bg-orange-500 rounded-full flex items-center justify-center">
+                          <PaintBucket className="w-5 h-5 text-white" />
+                        </div>
+                        <div className="w-2 h-2 bg-orange-400 rounded-full animate-pulse"></div>
+                      </div>
+                      <h3 className="text-lg font-semibold mb-2 text-gray-800">
                         Freshly painted homes get rented out{' '}
-                        <span className="text-primary font-bold">73% faster</span>
+                        <span className="text-orange-600 font-bold">73% faster</span>
                       </h3>
-                      <p className="text-muted-foreground mb-4">
+                      <p className="text-gray-600 mb-4 text-sm">
                         Get professional painting services at the best prices
                       </p>
                       <FormField
                         control={form.control}
                         name="paintingService"
                         render={({ field }) => (
-                          <div className="flex gap-3">
-                            <Button
-                              type="button"
-                              className="bg-primary hover:bg-primary/90"
-                              variant={field.value === 'book' ? 'default' : 'outline'}
-                              onClick={() => field.onChange('book')}
-                            >
-                              Book Now
-                            </Button>
-                            <Button
-                              type="button"
-                              variant={field.value === 'decline' ? 'default' : 'outline'}
-                              onClick={() => field.onChange('decline')}
-                            >
-                              I Don't Want Painting
-                            </Button>
+                          <div className="space-y-3">
+                            {paintingResponse === 'decline' ? (
+                              <div className="flex items-center gap-2 p-3 bg-green-50 border border-green-200 rounded-lg">
+                                <CheckCircle className="w-4 h-4 text-green-600" />
+                                <span className="text-sm text-green-700 font-medium">
+                                  Your response has been captured
+                                </span>
+                              </div>
+                            ) : (
+                              <div className="flex gap-3">
+                                <Button
+                                  type="button"
+                                  size="sm"
+                                  className="bg-orange-500 hover:bg-orange-600 text-white"
+                                  variant={field.value === 'book' ? 'default' : 'outline'}
+                                  onClick={() => {
+                                    field.onChange('book');
+                                    setPaintingResponse('book');
+                                  }}
+                                >
+                                  Book Now
+                                </Button>
+                                <Button
+                                  type="button"
+                                  size="sm"
+                                  variant="outline"
+                                  className="border-gray-300 text-gray-700 hover:bg-gray-50"
+                                  onClick={() => {
+                                    field.onChange('decline');
+                                    setPaintingResponse('decline');
+                                  }}
+                                >
+                                  I Don't Want
+                                </Button>
+                              </div>
+                            )}
                           </div>
                         )}
                       />
                     </div>
-                    <div className="absolute right-4 top-4 w-20 h-20 bg-yellow-300 rounded-full opacity-50"></div>
-                    <div className="absolute right-8 bottom-4 w-16 h-16 bg-yellow-400 rounded-full opacity-30"></div>
+                    <div className="absolute right-4 top-4 w-16 h-16 bg-gradient-to-br from-orange-300 to-yellow-400 rounded-full opacity-40"></div>
+                    <div className="absolute right-8 bottom-4 w-12 h-12 bg-gradient-to-br from-yellow-300 to-orange-300 rounded-full opacity-60"></div>
                   </div>
 
                   {/* Cleaning Service */}
-                  <div className="bg-gradient-to-br from-teal-50 to-teal-100 rounded-xl p-6 relative overflow-hidden">
+                  <div className="bg-gradient-to-br from-teal-50 via-cyan-50 to-blue-100 rounded-xl p-6 relative overflow-hidden border border-teal-200/50 shadow-lg">
                     <div className="relative z-10">
-                      <h3 className="text-lg font-semibold mb-2">
+                      <div className="flex items-center gap-3 mb-3">
+                        <div className="w-10 h-10 bg-teal-500 rounded-full flex items-center justify-center">
+                          <Sparkles className="w-5 h-5 text-white" />
+                        </div>
+                        <div className="w-2 h-2 bg-teal-400 rounded-full animate-pulse"></div>
+                      </div>
+                      <h3 className="text-lg font-semibold mb-2 text-gray-800">
                         Get your house tenant-ready with{' '}
-                        <span className="text-primary font-bold">Deep Cleaning</span>
+                        <span className="text-teal-600 font-bold">Deep Cleaning</span>
                       </h3>
-                      <p className="text-muted-foreground mb-4">
+                      <p className="text-gray-600 mb-4 text-sm">
                         Trusted by 50,000+ owners
                       </p>
                       <FormField
                         control={form.control}
                         name="cleaningService"
                         render={({ field }) => (
-                          <div className="flex gap-3">
-                            <Button
-                              type="button"
-                              className="bg-primary hover:bg-primary/90"
-                              variant={field.value === 'book' ? 'default' : 'outline'}
-                              onClick={() => field.onChange('book')}
-                            >
-                              Book Now
-                            </Button>
-                            <Button
-                              type="button"
-                              variant={field.value === 'decline' ? 'default' : 'outline'}
-                              onClick={() => field.onChange('decline')}
-                            >
-                              I Don't Want Cleaning
-                            </Button>
+                          <div className="space-y-3">
+                            {cleaningResponse === 'decline' ? (
+                              <div className="flex items-center gap-2 p-3 bg-green-50 border border-green-200 rounded-lg">
+                                <CheckCircle className="w-4 h-4 text-green-600" />
+                                <span className="text-sm text-green-700 font-medium">
+                                  Your response has been captured
+                                </span>
+                              </div>
+                            ) : (
+                              <div className="flex gap-3">
+                                <Button
+                                  type="button"
+                                  size="sm"
+                                  className="bg-teal-500 hover:bg-teal-600 text-white"
+                                  variant={field.value === 'book' ? 'default' : 'outline'}
+                                  onClick={() => {
+                                    field.onChange('book');
+                                    setCleaningResponse('book');
+                                  }}
+                                >
+                                  Book Now
+                                </Button>
+                                <Button
+                                  type="button"
+                                  size="sm"
+                                  variant="outline"
+                                  className="border-gray-300 text-gray-700 hover:bg-gray-50"
+                                  onClick={() => {
+                                    field.onChange('decline');
+                                    setCleaningResponse('decline');
+                                  }}
+                                >
+                                  I Don't Want
+                                </Button>
+                              </div>
+                            )}
                           </div>
                         )}
                       />
                     </div>
-                    <div className="absolute right-4 top-4 w-20 h-20 bg-teal-300 rounded-full opacity-50"></div>
-                    <div className="absolute right-8 bottom-4 w-16 h-16 bg-teal-400 rounded-full opacity-30"></div>
+                    <div className="absolute right-4 top-4 w-16 h-16 bg-gradient-to-br from-teal-300 to-cyan-400 rounded-full opacity-40"></div>
+                    <div className="absolute right-8 bottom-4 w-12 h-12 bg-gradient-to-br from-cyan-300 to-teal-300 rounded-full opacity-60"></div>
                   </div>
                 </div>
 
@@ -237,66 +292,73 @@ export const ScheduleStep: React.FC<ScheduleStepProps> = ({
                   {/* Time Schedule */}
                   <div>
                     <h3 className="text-lg font-semibold mb-4">Select Time Schedule</h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                      <FormField
-                        control={form.control}
-                        name="startTime"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormControl>
-                              <div className="relative">
-                                <Clock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                                <Input
-                                  type="time"
-                                  placeholder="Start time"
-                                  className="pl-10"
-                                  disabled={watchAvailableAllDay}
-                                  {...field}
-                                />
-                              </div>
-                            </FormControl>
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="endTime"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormControl>
-                              <div className="relative">
-                                <Clock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                                <Input
-                                  type="time"
-                                  placeholder="End time"
-                                  className="pl-10"
-                                  disabled={watchAvailableAllDay}
-                                  {...field}
-                                />
-                              </div>
-                            </FormControl>
-                          </FormItem>
-                        )}
-                      />
-                    </div>
                     
                     <FormField
                       control={form.control}
                       name="availableAllDay"
                       render={({ field }) => (
-                        <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                        <FormItem className="flex flex-row items-start space-x-3 space-y-0 mb-4">
                           <FormControl>
                             <Checkbox
                               checked={field.value}
-                              onCheckedChange={field.onChange}
+                              onCheckedChange={(checked) => {
+                                field.onChange(checked);
+                                if (checked) {
+                                  form.setValue('startTime', '');
+                                  form.setValue('endTime', '');
+                                }
+                              }}
                             />
                           </FormControl>
-                          <FormLabel className="text-sm font-normal">
+                          <FormLabel className="text-sm font-medium cursor-pointer">
                             Available All Day
                           </FormLabel>
                         </FormItem>
                       )}
                     />
+                    
+                    {!watchAvailableAllDay && (
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <FormField
+                          control={form.control}
+                          name="startTime"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="text-sm font-medium">Start Time</FormLabel>
+                              <FormControl>
+                                <div className="relative">
+                                  <Clock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                                  <Input
+                                    type="time"
+                                    className="pl-10 h-11"
+                                    {...field}
+                                  />
+                                </div>
+                              </FormControl>
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="endTime"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="text-sm font-medium">End Time</FormLabel>
+                              <FormControl>
+                                <div className="relative">
+                                  <Clock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                                  <Input
+                                    type="time"
+                                    className="pl-10 h-11"
+                                    {...field}
+                                  />
+                                </div>
+                              </FormControl>
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                    )}
                   </div>
                 </div>
 
