@@ -255,38 +255,41 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
 />
 
 
+<FormField
+  control={form.control}
+  name="totalFloors"
+  render={({ field }) => (
+    <FormItem>
+      <FormLabel className="text-sm font-medium">Total Floors*</FormLabel>
+      <Select
+        onValueChange={(value) =>
+          value === '99+' ? field.onChange(value) : field.onChange(parseInt(value))
+        }
+        defaultValue={field.value?.toString()}
+      >
+        <FormControl>
+          <SelectTrigger className="h-12">
+            <SelectValue placeholder="Select Total Floors" />
+          </SelectTrigger>
+        </FormControl>
+        <SelectContent>
+          <SelectItem value="0">Ground</SelectItem>
+          {[...Array(99)].map((_, i) => {
+            const floor = i + 1;
+            return (
+              <SelectItem key={floor} value={floor.toString()}>
+                {floor}
+              </SelectItem>
+            );
+          })}
+          <SelectItem value="99+">99+</SelectItem>
+        </SelectContent>
+      </Select>
+      <FormMessage />
+    </FormItem>
+  )}
+/>
 
-                    <FormField
-                      control={form.control}
-                      name="totalFloors"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className="text-sm font-medium">Total Floor*</FormLabel>
-                          <Select onValueChange={(value) => field.onChange(parseInt(value))} defaultValue={field.value?.toString()}>
-                            <FormControl>
-                              <SelectTrigger className="h-12">
-                                <SelectValue placeholder="5" />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              <SelectItem value="1">1</SelectItem>
-                              <SelectItem value="2">2</SelectItem>
-                              <SelectItem value="3">3</SelectItem>
-                              <SelectItem value="4">4</SelectItem>
-                              <SelectItem value="5">5</SelectItem>
-                              <SelectItem value="6">6</SelectItem>
-                              <SelectItem value="7">7</SelectItem>
-                              <SelectItem value="8">8</SelectItem>
-                              <SelectItem value="9">9</SelectItem>
-                              <SelectItem value="10">10</SelectItem>
-                              <SelectItem value="15">15</SelectItem>
-                              <SelectItem value="20">20+</SelectItem>
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
                   </div>
 
                   {/* Super Built Up Area, Furnishing, and Parking */}
