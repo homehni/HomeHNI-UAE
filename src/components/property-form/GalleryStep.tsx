@@ -9,7 +9,7 @@ import { ImageUpload } from './ImageUpload';
 import { VideoUpload } from './VideoUpload';
 import { PropertyGallery } from '@/types/property';
 import { ProgressIndicator } from './ProgressIndicator';
-import { Home, MapPin, IndianRupee, Wifi, Camera, Plus, User } from 'lucide-react';
+import { Home, MapPin, Building, Sparkles, Camera, FileText, Calendar, Phone } from 'lucide-react';
 
 const gallerySchema = z.object({
   images: z.array(z.any()).min(3, 'Minimum 3 images required').max(10, 'Maximum 10 images allowed'),
@@ -44,14 +44,14 @@ export const GalleryStep: React.FC<GalleryStepProps> = ({
   };
 
   const sidebarSteps = [
-    { number: 1, title: "Owner Information", icon: User, completed: true },
+    { number: 1, title: "Owner Information", icon: Phone, completed: true },
     { number: 2, title: "Property Details", icon: Home, completed: true },
     { number: 3, title: "Location Details", icon: MapPin, completed: true },
-    { number: 4, title: "Rental Details", icon: IndianRupee, completed: true },
-    { number: 5, title: "Amenities", icon: Wifi, completed: true },
+    { number: 4, title: "Rental Details", icon: Building, completed: true },
+    { number: 5, title: "Amenities", icon: Sparkles, completed: true },
     { number: 6, title: "Gallery", icon: Camera, completed: false, active: true },
-    { number: 7, title: "Additional Information", icon: Plus, completed: false },
-    { number: 8, title: "Schedule", icon: Plus, completed: false },
+    { number: 7, title: "Additional Information", icon: FileText, completed: false },
+    { number: 8, title: "Schedule", icon: Calendar, completed: false },
   ];
 
   return (
