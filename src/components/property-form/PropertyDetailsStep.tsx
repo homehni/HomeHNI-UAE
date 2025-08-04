@@ -243,24 +243,17 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
             return (
               <SelectItem key={floor} value={floor.toString()}>
                 {floor}
-                {floor === 1
-                  ? 'st'
-                  : floor === 2
-                  ? 'nd'
-                  : floor === 3
-                  ? 'rd'
-                  : 'th'}{' '}
-                Floor
               </SelectItem>
             );
           })}
-          <SelectItem value="99+">99+ Floor</SelectItem>
+          <SelectItem value="99+">99+</SelectItem>
         </SelectContent>
       </Select>
       <FormMessage />
     </FormItem>
   )}
 />
+
 
 
                     <FormField
