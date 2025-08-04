@@ -38,11 +38,17 @@ export interface LocationDetails {
 export interface RentalDetails {
   listingType: 'Sale' | 'Rent';
   expectedPrice: number;
+  rentNegotiable?: boolean;
+  maintenanceExtra?: boolean;
   maintenanceCharges?: number;
   securityDeposit?: number;
+  depositNegotiable?: boolean;
+  leaseDuration?: string;
+  lockinPeriod?: string;
   brokerageType?: string;
   availableFrom?: string;
   preferredTenants?: string;
+  idealFor?: string[];
   superArea: number;
   carpetArea?: number;
   builtUpArea?: number;
