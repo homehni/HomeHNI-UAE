@@ -17,11 +17,7 @@ export const usePropertyForm = () => {
   const [propertyDetails, setPropertyDetails] = useState<Partial<PropertyDetails>>({});
   const [locationDetails, setLocationDetails] = useState<Partial<LocationDetails>>({});
   const [rentalDetails, setRentalDetails] = useState<Partial<RentalDetails>>({});
-  const [amenities, setAmenities] = useState<Partial<PropertyAmenities>>({
-    basicAmenities: [],
-    societyAmenities: [],
-    locationAdvantages: []
-  });
+  const [amenities, setAmenities] = useState<Partial<PropertyAmenities>>({});
   const [gallery, setGallery] = useState<Partial<PropertyGallery>>({
     images: []
   });

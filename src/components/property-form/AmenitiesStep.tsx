@@ -4,14 +4,24 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
-import { Checkbox } from '@/components/ui/checkbox';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Textarea } from '@/components/ui/textarea';
 import { PropertyAmenities } from '@/types/property';
 
 const amenitiesSchema = z.object({
-  basicAmenities: z.array(z.string()),
-  societyAmenities: z.array(z.string()),
-  locationAdvantages: z.array(z.string()),
+  powerBackup: z.string().optional(),
+  lift: z.string().optional(),
+  parking: z.string().optional(),
+  washrooms: z.string().optional(),
+  waterStorageFacility: z.string().optional(),
+  security: z.string().optional(),
+  wifi: z.string().optional(),
+  currentPropertyCondition: z.string().optional(),
+  currentBusiness: z.string().optional(),
+  moreSimilarUnits: z.string().optional(),
+  directionsTip: z.string().optional(),
 });
 
 interface AmenitiesStepProps {
@@ -19,25 +29,6 @@ interface AmenitiesStepProps {
   onNext: (data: PropertyAmenities) => void;
   onBack: () => void;
 }
-
-const basicAmenitiesList = [
-  'Power Backup', 'Lift', 'Reserved Parking', 'Security/Fire Alarm',
-  'Waste Disposal', 'Feng Shui/Vaastu Compliant', 'Internet/Wi-Fi Connectivity',
-  'Air Conditioning', 'Balcony', 'High Speed Elevators'
-];
-
-const societyAmenitiesList = [
-  'Swimming Pool', 'Gymnasium', 'Garden/Park', 'Community Hall',
-  'Children Play Area', 'Jogging Track', 'Party Hall', 'Fire Safety',
-  'Shopping Centre', 'Gas Pipeline', 'Laundry Service', 'Security Personnel',
-  'CCTV Security', 'Maintenance Staff', 'Power Backup', 'Visitor Parking'
-];
-
-const locationAdvantagesList = [
-  'Close to Metro Station', 'Close to School', 'Close to Hospital',
-  'Close to Market', 'Close to Railway Station', 'Close to Airport',
-  'Close to Mall', 'Close to Highway', 'Close to Bus Stop'
-];
 
 export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
   initialData = {},
@@ -47,9 +38,17 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
   const form = useForm<PropertyAmenities>({
     resolver: zodResolver(amenitiesSchema),
     defaultValues: {
-      basicAmenities: initialData.basicAmenities || [],
-      societyAmenities: initialData.societyAmenities || [],
-      locationAdvantages: initialData.locationAdvantages || [],
+      powerBackup: initialData.powerBackup || '',
+      lift: initialData.lift || '',
+      parking: initialData.parking || '',
+      washrooms: initialData.washrooms || '',
+      waterStorageFacility: initialData.waterStorageFacility || '',
+      security: initialData.security || '',
+      wifi: initialData.wifi || '',
+      currentPropertyCondition: initialData.currentPropertyCondition || '',
+      currentBusiness: initialData.currentBusiness || '',
+      moreSimilarUnits: initialData.moreSimilarUnits || '',
+      directionsTip: initialData.directionsTip || '',
     },
   });
 
@@ -57,117 +56,293 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
     onNext(data);
   };
 
-  const handleAmenityChange = (
-    amenityType: 'basicAmenities' | 'societyAmenities' | 'locationAdvantages',
-    amenity: string,
-    checked: boolean
-  ) => {
-    const currentAmenities = form.getValues(amenityType);
-    if (checked) {
-      form.setValue(amenityType, [...currentAmenities, amenity]);
-    } else {
-      form.setValue(amenityType, currentAmenities.filter(a => a !== amenity));
-    }
-  };
-
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Amenities & Features</CardTitle>
-        <CardDescription>Select the amenities available in your property</CardDescription>
+        <CardTitle>Amenities</CardTitle>
+        <CardDescription>Select the amenities and features of your property</CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-            {/* Basic Amenities */}
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Power Backup */}
+              <FormField
+                control={form.control}
+                name="powerBackup"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Power Backup *</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="full">Full Power Backup</SelectItem>
+                        <SelectItem value="partial">Partial Power Backup</SelectItem>
+                        <SelectItem value="dg-backup">DG Backup</SelectItem>
+                        <SelectItem value="no-backup">No Power Backup</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* Lift */}
+              <FormField
+                control={form.control}
+                name="lift"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Lift *</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="available">Available</SelectItem>
+                        <SelectItem value="not-available">Not Available</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* Parking */}
+              <FormField
+                control={form.control}
+                name="parking"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Parking *</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="bike">Bike Parking</SelectItem>
+                        <SelectItem value="car">Car Parking</SelectItem>
+                        <SelectItem value="both">Both</SelectItem>
+                        <SelectItem value="none">No Parking</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* Washrooms */}
+              <FormField
+                control={form.control}
+                name="washrooms"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Washroom(s) *</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="1">1</SelectItem>
+                        <SelectItem value="2">2</SelectItem>
+                        <SelectItem value="3">3</SelectItem>
+                        <SelectItem value="4">4</SelectItem>
+                        <SelectItem value="5+">5+</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* Water Storage Facility */}
+              <FormField
+                control={form.control}
+                name="waterStorageFacility"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Water Storage Facility</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="overhead-tank">Overhead Tank</SelectItem>
+                        <SelectItem value="underground-tank">Underground Tank</SelectItem>
+                        <SelectItem value="both">Both</SelectItem>
+                        <SelectItem value="borewell">Borewell</SelectItem>
+                        <SelectItem value="none">None</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* Security */}
+              <FormField
+                control={form.control}
+                name="security"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Security</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="yes">Yes</SelectItem>
+                        <SelectItem value="no">No</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* WiFi */}
+              <FormField
+                control={form.control}
+                name="wifi"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Wifi</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="available">Available</SelectItem>
+                        <SelectItem value="not-available">Not Available</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* Current Property Condition */}
+              <FormField
+                control={form.control}
+                name="currentPropertyCondition"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Current Property Condition?</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="excellent">Excellent</SelectItem>
+                        <SelectItem value="good">Good</SelectItem>
+                        <SelectItem value="average">Average</SelectItem>
+                        <SelectItem value="needs-renovation">Needs Renovation</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* Current Business */}
+              <FormField
+                control={form.control}
+                name="currentBusiness"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>What business is currently running?</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="none">None</SelectItem>
+                        <SelectItem value="retail">Retail</SelectItem>
+                        <SelectItem value="office">Office</SelectItem>
+                        <SelectItem value="restaurant">Restaurant</SelectItem>
+                        <SelectItem value="other">Other</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            {/* More Similar Units */}
             <FormField
               control={form.control}
-              name="basicAmenities"
+              name="moreSimilarUnits"
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-lg font-semibold">Basic Amenities</FormLabel>
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-4">
-                    {basicAmenitiesList.map((amenity) => (
-                      <FormItem
-                        key={amenity}
-                        className="flex flex-row items-start space-x-3 space-y-0"
-                      >
-                        <FormControl>
-                          <Checkbox
-                            checked={field.value?.includes(amenity)}
-                            onCheckedChange={(checked) =>
-                              handleAmenityChange('basicAmenities', amenity, checked as boolean)
-                            }
-                          />
-                        </FormControl>
-                        <FormLabel className="text-sm font-normal">
-                          {amenity}
-                        </FormLabel>
-                      </FormItem>
-                    ))}
-                  </div>
+                <FormItem className="space-y-3">
+                  <FormLabel>Do you have more similar units/properties available?</FormLabel>
+                  <FormControl>
+                    <RadioGroup
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                      className="flex flex-row space-x-6"
+                    >
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="no" id="no" />
+                        <FormLabel htmlFor="no">No</FormLabel>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="yes" id="yes" />
+                        <FormLabel htmlFor="yes">Yes</FormLabel>
+                      </div>
+                    </RadioGroup>
+                  </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />
 
-            {/* Society Amenities */}
+            {/* Directions Tip */}
             <FormField
               control={form.control}
-              name="societyAmenities"
+              name="directionsTip"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-lg font-semibold">Society Amenities</FormLabel>
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-4">
-                    {societyAmenitiesList.map((amenity) => (
-                      <FormItem
-                        key={amenity}
-                        className="flex flex-row items-start space-x-3 space-y-0"
-                      >
-                        <FormControl>
-                          <Checkbox
-                            checked={field.value?.includes(amenity)}
-                            onCheckedChange={(checked) =>
-                              handleAmenityChange('societyAmenities', amenity, checked as boolean)
-                            }
-                          />
-                        </FormControl>
-                        <FormLabel className="text-sm font-normal">
-                          {amenity}
-                        </FormLabel>
-                      </FormItem>
-                    ))}
+                  <FormLabel>
+                    Add Directions Tip for your tenants <span className="bg-red-500 text-white text-xs px-2 py-1 rounded">NEW</span>
+                  </FormLabel>
+                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                    <div className="flex items-start space-x-2">
+                      <div className="text-blue-600 mt-1">ℹ️</div>
+                      <div>
+                        <p className="text-sm text-blue-800">Don't want calls asking location?</p>
+                        <p className="text-sm text-blue-600">Add directions to reach using landmarks</p>
+                      </div>
+                    </div>
                   </div>
-                </FormItem>
-              )}
-            />
-
-            {/* Location Advantages */}
-            <FormField
-              control={form.control}
-              name="locationAdvantages"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-lg font-semibold">Location Advantages</FormLabel>
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-4">
-                    {locationAdvantagesList.map((amenity) => (
-                      <FormItem
-                        key={amenity}
-                        className="flex flex-row items-start space-x-3 space-y-0"
-                      >
-                        <FormControl>
-                          <Checkbox
-                            checked={field.value?.includes(amenity)}
-                            onCheckedChange={(checked) =>
-                              handleAmenityChange('locationAdvantages', amenity, checked as boolean)
-                            }
-                          />
-                        </FormControl>
-                        <FormLabel className="text-sm font-normal">
-                          {amenity}
-                        </FormLabel>
-                      </FormItem>
-                    ))}
-                  </div>
+                  <FormControl>
+                    <Textarea
+                      placeholder="Eg. Take the road opposite to Amrita College, take right after 300m..."
+                      {...field}
+                      rows={4}
+                    />
+                  </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -177,7 +352,7 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
                 Back
               </Button>
               <Button type="submit">
-                Next: Gallery
+                Save & Continue
               </Button>
             </div>
           </form>

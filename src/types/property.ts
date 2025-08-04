@@ -55,9 +55,17 @@ export interface RentalDetails {
 }
 
 export interface PropertyAmenities {
-  basicAmenities: string[];
-  societyAmenities: string[];
-  locationAdvantages: string[];
+  powerBackup?: string;
+  lift?: string;
+  parking?: string;
+  washrooms?: string;
+  waterStorageFacility?: string;
+  security?: string;
+  wifi?: string;
+  currentPropertyCondition?: string;
+  currentBusiness?: string;
+  moreSimilarUnits?: string;
+  directionsTip?: string;
 }
 
 export interface PropertyGallery {
