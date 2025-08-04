@@ -15,10 +15,10 @@ const locationDetailsSchema = z.object({
   state: z.string().min(1, 'Please select state'),
   city: z.string().min(1, 'Please select city'),
   locality: z.string().min(1, 'Please enter locality'),
-  pincode: z.string().min(6, 'Please enter valid pincode'),
-  societyName: z.string().optional(),
   landmark: z.string().optional(),
 });
+
+type LocationDetailsFormData = z.infer<typeof locationDetailsSchema>;
 
 interface LocationDetailsStepProps {
   initialData?: Partial<LocationDetails>;
@@ -38,14 +38,12 @@ export const LocationDetailsStep: React.FC<LocationDetailsStepProps> = ({
   const [statesData, setStatesData] = useState<any>({});
   const [cities, setCities] = useState<string[]>([]);
 
-  const form = useForm<LocationDetails>({
+  const form = useForm<LocationDetailsFormData>({
     resolver: zodResolver(locationDetailsSchema),
     defaultValues: {
       state: initialData.state || '',
       city: initialData.city || '',
       locality: initialData.locality || '',
-      pincode: initialData.pincode || '',
-      societyName: initialData.societyName || '',
       landmark: initialData.landmark || '',
     },
   });
@@ -78,8 +76,14 @@ export const LocationDetailsStep: React.FC<LocationDetailsStepProps> = ({
     }
   }, [selectedState, statesData, form]);
 
-  const onSubmit = (data: LocationDetails) => {
-    onNext(data);
+  const onSubmit = (data: LocationDetailsFormData) => {
+    // Convert to LocationDetails format and add missing fields as empty/default values
+    const locationData: LocationDetails = {
+      ...data,
+      pincode: initialData.pincode || '',
+      societyName: initialData.societyName || ''
+    };
+    onNext(locationData);
   };
 
   const steps = [
@@ -140,157 +144,104 @@ export const LocationDetailsStep: React.FC<LocationDetailsStepProps> = ({
           <div className="max-w-4xl mx-auto">
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
               <h1 className="text-2xl font-semibold text-primary mb-6">Location Details</h1>
-                {/* Map Section */}
-                <div className="space-y-4">
-                  <h3 className="text-lg font-semibold">Mark Locality on Map</h3>
-                  <div className="relative">
-                    <div className="h-64 bg-muted rounded-lg border-2 border-dashed border-muted-foreground/25 flex items-center justify-center">
-                      <div className="text-center">
-                        <MapPin className="h-12 w-12 text-muted-foreground mx-auto mb-2" />
-                        <p className="text-muted-foreground">Map will be loaded here</p>
-                        <p className="text-xs text-muted-foreground">Click to mark your property location</p>
-                      </div>
-                    </div>
-                    <div className="absolute top-4 right-4 bg-card border rounded-lg p-2 max-w-xs">
-                      <div className="flex items-start justify-between">
-                        <div className="text-xs">
-                          <p className="font-medium">269, Phase III, Jubilee Hills</p>
-                          <p className="text-muted-foreground">Hyderabad, Telangana 500033</p>
-                        </div>
-                        <Button variant="ghost" size="sm" className="h-4 w-4 p-0">×</Button>
-                      </div>
-                    </div>
+              <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <FormField
+                      control={form.control}
+                      name="state"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>State</FormLabel>
+                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select state" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              {Object.keys(statesData).map((state) => (
+                                <SelectItem key={state} value={state}>
+                                  {state}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="city"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>City</FormLabel>
+                          <Select 
+                            onValueChange={field.onChange} 
+                            defaultValue={field.value}
+                            disabled={!selectedState}
+                          >
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select city" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              {cities.map((city) => (
+                                <SelectItem key={city} value={city}>
+                                  {city}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
                   </div>
-                </div>
 
-                <Form {...form}>
-                  <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <FormField
-                        control={form.control}
-                        name="state"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>State</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
-                              <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Select state" />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                {Object.keys(statesData).map((state) => (
-                                  <SelectItem key={state} value={state}>
-                                    {state}
-                                  </SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <FormField
+                      control={form.control}
+                      name="locality"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Locality/Area</FormLabel>
+                          <FormControl>
+                            <Input placeholder="e.g., Sector 12, Koramangala" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
 
-                      <FormField
-                        control={form.control}
-                        name="city"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>City</FormLabel>
-                            <Select 
-                              onValueChange={field.onChange} 
-                              defaultValue={field.value}
-                              disabled={!selectedState}
-                            >
-                              <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Select city" />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                {cities.map((city) => (
-                                  <SelectItem key={city} value={city}>
-                                    {city}
-                                  </SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
+                    <FormField
+                      control={form.control}
+                      name="landmark"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Landmark (Optional)</FormLabel>
+                          <FormControl>
+                            <Input placeholder="e.g., Near Metro Station" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <FormField
-                        control={form.control}
-                        name="locality"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Locality</FormLabel>
-                            <FormControl>
-                              <Input placeholder="e.g., Sector 12, Koramangala" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-
-                      <FormField
-                        control={form.control}
-                        name="landmark"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Street/Area</FormLabel>
-                            <FormControl>
-                              <Input placeholder="e.g., Near Metro Station" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <FormField
-                        control={form.control}
-                        name="societyName"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Society Name (Optional)</FormLabel>
-                            <FormControl>
-                              <Input placeholder="e.g., Prestige Lakeside" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-
-                      <FormField
-                        control={form.control}
-                        name="pincode"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Pincode</FormLabel>
-                            <FormControl>
-                              <Input placeholder="e.g., 560034" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-
-                    <div className="flex justify-between pt-6">
-                      <Button type="button" variant="outline" onClick={onBack}>
-                        Back
-                      </Button>
-                      <Button type="submit">
-                        Save & Continue
-                      </Button>
-                    </div>
-                  </form>
-                </Form>
+                  <div className="flex justify-between pt-6">
+                    <Button type="button" variant="outline" onClick={onBack}>
+                      Back
+                    </Button>
+                    <Button type="submit">
+                      Next: Rental Details
+                    </Button>
+                  </div>
+                </form>
+              </Form>
             </div>
           </div>
         </div>
