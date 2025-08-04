@@ -342,7 +342,7 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
                       )}
                     />
 
-                    <FormField
+                    {/* <FormField
                       control={form.control}
                       name="parkingType"
                       render={({ field }) => (
@@ -365,7 +365,7 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
                           <FormMessage />
                         </FormItem>
                       )}
-                    />
+                    /> */}
                   </div>
 
                   {/* Other Features */}
