@@ -124,7 +124,7 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
 
         {/* Main Content */}
         <div className="flex-1 p-6">
-          <div className="max-w-4xl mx-auto">
+          <div className="max-w-6xl mx-auto">
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
               <h1 className="text-2xl font-semibold text-primary mb-6">Property Details</h1>
               
@@ -292,8 +292,8 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
 
                   </div>
 
-                  {/* Super Built Up Area, Furnishing, and Parking */}
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  {/* Super Built Up Area and Furnishing */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <FormField
                       control={form.control}
                       name="superBuiltUpArea"
