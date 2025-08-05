@@ -94,7 +94,7 @@ export const usePropertyForm = () => {
   const isStepValid = (step: number): boolean => {
     switch (step) {
       case 1:
-        return !!(ownerInfo.fullName && ownerInfo.phoneNumber && ownerInfo.email && ownerInfo.role &&
+        return !!(ownerInfo.phoneNumber && ownerInfo.role &&
                  ownerInfo.city && ownerInfo.propertyType && ownerInfo.listingType);
       case 2:
         return !!(propertyDetails.title && propertyDetails.propertyType && propertyDetails.bhkType && 

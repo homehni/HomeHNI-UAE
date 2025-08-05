@@ -81,7 +81,7 @@ export const OwnerInfoStep: React.FC<OwnerInfoStepProps> = ({
   // Custom validation check for button state
   const isFormValid = () => {
     const values = getValues();
-    return !!(values.fullName && values.phoneNumber && values.email && values.role && 
+    return !!(values.phoneNumber && values.role && 
              values.city && values.propertyType && values.listingType);
   };
 
@@ -106,41 +106,6 @@ export const OwnerInfoStep: React.FC<OwnerInfoStepProps> = ({
           <div className="space-y-6">
             <h3 className="text-lg font-semibold text-foreground">Personal Information</h3>
             
-            {/* Name and Email Row */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="fullName">Name *</Label>
-                <Input
-                  id="fullName"
-                  {...register('fullName')}
-                  placeholder="Enter your full name"
-                  className={errors.fullName && touchedFields.fullName ? 'border-destructive' : ''}
-                  onBlur={handleBlur}
-                  onInput={handleBlur}
-                  autoComplete="name"
-                />
-                {errors.fullName && touchedFields.fullName && (
-                  <p className="text-sm text-destructive">{errors.fullName.message}</p>
-                )}
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="email">Email *</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  {...register('email')}
-                  placeholder="Enter your email address"
-                  className={errors.email && touchedFields.email ? 'border-destructive' : ''}
-                  onBlur={handleBlur}
-                  onInput={handleBlur}
-                  autoComplete="email"
-                />
-                {errors.email && touchedFields.email && (
-                  <p className="text-sm text-destructive">{errors.email.message}</p>
-                )}
-              </div>
-            </div>
 
             {/* Mobile Number and City Row */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
