@@ -109,11 +109,11 @@ const Header = () => {
   <MegaMenu isScrolled={isScrolled} />
   
   <a href="#" className={`hover:opacity-80 transition-colors duration-500 text-sm font-medium ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
-    For Owners
+    Owners
   </a>
   
   <a href="#" className={`hover:opacity-80 transition-colors duration-500 text-sm font-medium ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
-    For Agents / Builders
+    Agents / Builders
   </a>
   
   {/* Services Dropdown */}
