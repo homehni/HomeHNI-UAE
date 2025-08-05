@@ -158,8 +158,8 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
-                              <SelectItem value="available">Available</SelectItem>
-                              <SelectItem value="not-available">Not Available</SelectItem>
+                              <SelectItem value="available">Yes</SelectItem>
+                              <SelectItem value="not-available">No</SelectItem>
                             </SelectContent>
                           </Select>
                           <FormMessage />
@@ -281,8 +281,8 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
-                              <SelectItem value="available">Available</SelectItem>
-                              <SelectItem value="not-available">Not Available</SelectItem>
+                              <SelectItem value="available">Yes</SelectItem>
+                              <SelectItem value="not-available">No</SelectItem>
                             </SelectContent>
                           </Select>
                           <FormMessage />
