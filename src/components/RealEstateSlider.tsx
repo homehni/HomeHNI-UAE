@@ -32,6 +32,9 @@ const RealEstateSlider = () => {
     }
   ];
 
+  // Create infinite loop by duplicating slides
+  const infiniteSlides = [...slides, ...slides];
+
   const scroll = (direction: 'left' | 'right') => {
     if (scrollContainerRef.current) {
       const scrollAmount = 300;
@@ -42,28 +45,29 @@ const RealEstateSlider = () => {
     }
   };
 
-  // Auto-scroll functionality
+  // Auto-scroll functionality for seamless loop
   useEffect(() => {
     if (isPaused) return;
 
     const autoScroll = () => {
       if (scrollContainerRef.current) {
         const container = scrollContainerRef.current;
-        const maxScrollLeft = container.scrollWidth - container.clientWidth;
+        const slideWidth = 208; // 192px width + 16px gap
+        const totalOriginalWidth = slides.length * slideWidth;
         
-        if (container.scrollLeft >= maxScrollLeft) {
-          // Reset to beginning when reaching the end
-          container.scrollTo({ left: 0, behavior: 'smooth' });
-        } else {
-          // Continue scrolling
-          container.scrollBy({ left: 200, behavior: 'smooth' });
+        // Smooth continuous scroll
+        container.scrollBy({ left: 1, behavior: 'auto' });
+        
+        // Reset position seamlessly when we've scrolled past the first set
+        if (container.scrollLeft >= totalOriginalWidth) {
+          container.scrollLeft = 0;
         }
       }
     };
 
-    const interval = setInterval(autoScroll, 3000);
+    const interval = setInterval(autoScroll, 20); // Much faster interval for smooth movement
     return () => clearInterval(interval);
-  }, [isPaused]);
+  }, [isPaused, slides.length]);
 
   return (
     <section className="pb-16 bg-gradient-to-br from-background to-secondary/20">
@@ -103,7 +107,7 @@ const RealEstateSlider = () => {
             onMouseEnter={() => setIsPaused(true)}
             onMouseLeave={() => setIsPaused(false)}
           >
-            {slides.map((slide, index) => (
+            {infiniteSlides.map((slide, index) => (
               <div
                 key={index}
                 className="flex-none w-48 bg-card rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow"
