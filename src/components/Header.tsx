@@ -119,12 +119,24 @@ const Header = () => {
   {/* Services Dropdown */}
   <DropdownMenu>
     <DropdownMenuTrigger asChild>
-      <button className={`flex items-center hover:opacity-80 transition-colors duration-500 text-sm font-medium ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
+      <button 
+        className={`flex items-center hover:opacity-80 transition-colors duration-500 text-sm font-medium ${isScrolled ? 'text-gray-800' : 'text-white'}`}
+        onMouseEnter={(e) => e.currentTarget.click()}
+      >
         Services
         <ChevronDown className="ml-1 h-3 w-3" />
       </button>
     </DropdownMenuTrigger>
-    <DropdownMenuContent align="start" className="w-56">
+    <DropdownMenuContent 
+      align="start" 
+      className="w-56"
+      onMouseLeave={(e) => {
+        // Close dropdown when mouse leaves
+        e.currentTarget.closest('[data-radix-dropdown-menu-content]')?.dispatchEvent(
+          new KeyboardEvent('keydown', { key: 'Escape' })
+        );
+      }}
+    >
       <DropdownMenuItem onClick={handleLegalServicesClick}>
         <span>Legal Services</span>
       </DropdownMenuItem>
