@@ -28,9 +28,6 @@ const rentalDetailsSchema = z.object({
   lockinPeriod: z.string().min(1, 'Please select lockin period'),
   availableFrom: z.string().min(1, 'Please select available from date'),
   idealFor: z.array(z.string()).optional(),
-  superArea: z.number().min(1, 'Super area is required'),
-  carpetArea: z.number().optional(),
-  builtUpArea: z.number().optional(),
 }).refine((data) => {
   // If maintenanceExtra is true, maintenanceCharges must be provided
   if (data.maintenanceExtra && (!data.maintenanceCharges || data.maintenanceCharges <= 0)) {
@@ -78,9 +75,6 @@ export const RentalDetailsStep: React.FC<RentalDetailsStepProps> = ({
       lockinPeriod: initialData.lockinPeriod || '',
       availableFrom: initialData.availableFrom || '',
       idealFor: initialData.idealFor || [],
-      superArea: initialData.superArea || undefined,
-      carpetArea: initialData.carpetArea || undefined,
-      builtUpArea: initialData.builtUpArea || undefined,
     },
   });
 
@@ -403,77 +397,6 @@ export const RentalDetailsStep: React.FC<RentalDetailsStepProps> = ({
                     )}
                   />
 
-                   {/* Area Details */}
-                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                     <FormField
-                       control={form.control}
-                       name="superArea"
-                       render={({ field }) => (
-                         <FormItem>
-                           <FormLabel className="text-sm font-medium">Super Area (sq ft) *</FormLabel>
-                           <FormControl>
-                             <Input 
-                               type="text" 
-                               placeholder="Enter super area"
-                               className="h-12"
-                               onChange={(e) => {
-                                 const value = e.target.value.replace(/[^0-9]/g, '');
-                                 field.onChange(value ? parseInt(value) : undefined);
-                               }}
-                               value={field.value ? String(field.value) : ''}
-                             />
-                           </FormControl>
-                           <FormMessage />
-                         </FormItem>
-                       )}
-                     />
-
-                     <FormField
-                       control={form.control}
-                       name="carpetArea"
-                       render={({ field }) => (
-                         <FormItem>
-                           <FormLabel className="text-sm font-medium">Carpet Area (sq ft)</FormLabel>
-                           <FormControl>
-                             <Input 
-                               type="text" 
-                               placeholder="Enter carpet area"
-                               className="h-12"
-                               onChange={(e) => {
-                                 const value = e.target.value.replace(/[^0-9]/g, '');
-                                 field.onChange(value ? parseInt(value) : undefined);
-                               }}
-                               value={field.value ? String(field.value) : ''}
-                             />
-                           </FormControl>
-                           <FormMessage />
-                         </FormItem>
-                       )}
-                     />
-
-                     <FormField
-                       control={form.control}
-                       name="builtUpArea"
-                       render={({ field }) => (
-                         <FormItem>
-                           <FormLabel className="text-sm font-medium">Built-up Area (sq ft)</FormLabel>
-                           <FormControl>
-                             <Input 
-                               type="text" 
-                               placeholder="Enter built-up area"
-                               className="h-12"
-                               onChange={(e) => {
-                                 const value = e.target.value.replace(/[^0-9]/g, '');
-                                 field.onChange(value ? parseInt(value) : undefined);
-                               }}
-                               value={field.value ? String(field.value) : ''}
-                             />
-                           </FormControl>
-                           <FormMessage />
-                         </FormItem>
-                       )}
-                     />
-                   </div>
 
                    {/* Ideal For */}
                    <div>

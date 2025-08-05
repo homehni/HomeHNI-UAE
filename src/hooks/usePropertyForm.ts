@@ -103,7 +103,7 @@ export const usePropertyForm = () => {
         return !!(locationDetails.state && locationDetails.city && locationDetails.locality && 
                  locationDetails.pincode);
       case 4:
-        return !!(rentalDetails.listingType && rentalDetails.expectedPrice && rentalDetails.superArea);
+        return !!(rentalDetails.listingType && rentalDetails.expectedPrice);
       case 5:
         return true; // Amenities are optional
       case 6:

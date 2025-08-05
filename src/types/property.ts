@@ -49,9 +49,6 @@ export interface RentalDetails {
   availableFrom?: string;
   preferredTenants?: string;
   idealFor?: string[];
-  superArea: number;
-  carpetArea?: number;
-  builtUpArea?: number;
 }
 
 export interface PropertyAmenities {

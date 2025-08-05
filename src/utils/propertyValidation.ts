@@ -29,16 +29,8 @@ export const validatePropertySubmission = (
   if (!propertyInfo.locationDetails?.pincode?.trim()) errors.push('Pincode is required');
 
   // Numerical validations
-  if (!propertyInfo.rentalDetails?.superArea || propertyInfo.rentalDetails.superArea <= 0) {
-    errors.push('Super area must be greater than 0');
-  }
-  
   if (!propertyInfo.rentalDetails?.expectedPrice || propertyInfo.rentalDetails.expectedPrice <= 0) {
     errors.push('Expected price must be greater than 0');
-  }
-
-  if (propertyInfo.rentalDetails?.carpetArea && propertyInfo.rentalDetails.carpetArea < 0) {
-    errors.push('Carpet area cannot be negative');
   }
 
   if (!propertyInfo.propertyDetails?.bathrooms || propertyInfo.propertyDetails.bathrooms < 1) {
@@ -74,12 +66,6 @@ export const validatePropertySubmission = (
     }
   }
 
-  // Area consistency validation
-  if (propertyInfo.rentalDetails?.carpetArea && propertyInfo.rentalDetails?.superArea) {
-    if (propertyInfo.rentalDetails.carpetArea > propertyInfo.rentalDetails.superArea) {
-      warnings.push('Carpet area is typically smaller than super built-up area');
-    }
-  }
 
   // Description validation
   if (propertyInfo.additionalInfo?.description && propertyInfo.additionalInfo.description.length > 1000) {
