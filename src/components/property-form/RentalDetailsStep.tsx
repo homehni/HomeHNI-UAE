@@ -271,7 +271,7 @@ export const RentalDetailsStep: React.FC<RentalDetailsStepProps> = ({
                       name="securityDeposit"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-sm font-medium">Deposit *</FormLabel>
+                          <FormLabel className="text-sm font-medium">Deposit (INR) *</FormLabel>
                           <div className="relative">
                             <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">₹</span>
                             <FormControl>
