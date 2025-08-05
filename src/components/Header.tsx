@@ -108,8 +108,6 @@ const Header = () => {
             <nav className="hidden lg:flex items-center space-x-5">
   <MegaMenu isScrolled={isScrolled} />
   
-  
-  
   <a href="#" className={`hover:opacity-80 transition-colors duration-500 text-sm font-medium ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
     For Owners
   </a>
@@ -118,17 +116,26 @@ const Header = () => {
     For Agents / Builders
   </a>
   
-  <button onClick={handleLegalServicesClick} className={`hover:opacity-80 transition-colors duration-500 text-sm font-medium ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
-    Legal Services
-  </button>
-
-  <a href="/handover-services" className={`hover:opacity-80 transition-colors duration-500 text-sm font-medium ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
-    Handover Services
-  </a>
-
-  <a href="/property-management" className={`hover:opacity-80 transition-colors duration-500 text-sm font-medium ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
-    Property Management
-  </a>
+  {/* Services Dropdown */}
+  <DropdownMenu>
+    <DropdownMenuTrigger asChild>
+      <button className={`flex items-center hover:opacity-80 transition-colors duration-500 text-sm font-medium ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
+        Services
+        <ChevronDown className="ml-1 h-3 w-3" />
+      </button>
+    </DropdownMenuTrigger>
+    <DropdownMenuContent align="start" className="w-56">
+      <DropdownMenuItem onClick={handleLegalServicesClick}>
+        <span>Legal Services</span>
+      </DropdownMenuItem>
+      <DropdownMenuItem onClick={() => navigate('/handover-services')}>
+        <span>Handover Services</span>
+      </DropdownMenuItem>
+      <DropdownMenuItem onClick={() => navigate('/property-management')}>
+        <span>Property Management</span>
+      </DropdownMenuItem>
+    </DropdownMenuContent>
+  </DropdownMenu>
             </nav>
 
             </div>
