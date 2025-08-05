@@ -2,42 +2,27 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { Checkbox } from '@/components/ui/checkbox';
 import { MapPin, Search, Mic, MapPinIcon, ChevronDown } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 const SearchSection = () => {
   const [activeTab, setActiveTab] = useState('buy');
-  const [selectedProperties, setSelectedProperties] = useState(['flat-apartment', 'residential-land', 'serviced-apartments', 'independent-builder-floor', 'rk-studio-apartment', 'farm-house', 'independent-house-villa', 'other']);
-  const propertyTypes = [{
-    id: 'flat-apartment',
-    label: 'Flat/Apartment'
-  }, {
-    id: 'residential-land',
-    label: 'Residential Land'
-  }, {
-    id: 'serviced-apartments',
-    label: 'Serviced Apartments'
-  }, {
-    id: 'independent-builder-floor',
-    label: 'Independent/Builder Floor'
-  }, {
-    id: 'rk-studio-apartment',
-    label: '1 RK/Studio Apartment'
-  }, {
-    id: 'farm-house',
-    label: 'Farm House'
-  }, {
-    id: 'independent-house-villa',
-    label: 'Independent House/Villa'
-  }, {
-    id: 'other',
-    label: 'Other'
-  }];
-  const handlePropertyToggle = (propertyId: string) => {
-    setSelectedProperties(prev => prev.includes(propertyId) ? prev.filter(id => id !== propertyId) : [...prev, propertyId]);
-  };
-  const clearAll = () => {
-    setSelectedProperties([]);
+  const [selectedCity, setSelectedCity] = useState('All Residential');
+  
+  const cities = [
+    'All Residential',
+    'Bangalore',
+    'Mumbai', 
+    'Pune',
+    'Delhi',
+    'Gurgaon',
+    'Noida',
+    'Chennai',
+    'Hyderabad',
+    'Kolkata'
+  ];
+  
+  const handleCitySelect = (city: string) => {
+    setSelectedCity(city);
   };
   const navigationTabs = [{
     id: 'buy',
@@ -104,31 +89,21 @@ const SearchSection = () => {
                       <Popover>
                         <PopoverTrigger asChild>
                           <Button variant="outline" className="w-40 h-12 border-gray-300 text-gray-700 font-medium text-sm justify-between hover:bg-gray-50 bg-white px-3">
-                            <span>All Residential</span>
+                            <span>{selectedCity}</span>
                             <ChevronDown className="h-4 w-4 text-gray-400" />
                           </Button>
                         </PopoverTrigger>
-                        <PopoverContent className="w-96 p-6 bg-white border border-gray-200 shadow-lg z-50" align="start">
-                          <div className="space-y-4">
-                            <div className="flex justify-between items-center">
-                              <span className="text-sm font-medium text-gray-700">Property Types</span>
-                              <Button variant="ghost" onClick={clearAll} className="text-[#DC143C] hover:text-[#DC143C] hover:bg-[#DC143C]/5 text-sm px-2 py-1 h-auto font-medium">
-                                Clear
-                              </Button>
-                            </div>
-                            <div className="grid grid-cols-3 gap-4">
-                              {propertyTypes.map(property => <div key={property.id} className="flex items-center space-x-2">
-                                  <Checkbox id={property.id} checked={selectedProperties.includes(property.id)} onCheckedChange={() => handlePropertyToggle(property.id)} className="border-2 border-[#DC143C] data-[state=checked]:bg-[#DC143C] data-[state=checked]:text-white data-[state=checked]:border-[#DC143C] w-5 h-5" />
-                                  <label htmlFor={property.id} className="text-sm text-gray-700 cursor-pointer select-none leading-tight">
-                                    {property.label}
-                                  </label>
-                                </div>)}
-                            </div>
-                            <div className="pt-3 border-t border-gray-100">
-                              <p className="text-sm text-gray-600">
-                                Looking for commercial properties? <span className="text-[#DC143C] cursor-pointer hover:underline font-medium">Click here</span>
-                              </p>
-                            </div>
+                        <PopoverContent className="w-48 p-0 bg-white border border-gray-200 shadow-lg z-50" align="start">
+                          <div className="py-2">
+                            {cities.map((city) => (
+                              <button
+                                key={city}
+                                onClick={() => handleCitySelect(city)}
+                                className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                              >
+                                {city}
+                              </button>
+                            ))}
                           </div>
                         </PopoverContent>
                       </Popover>
