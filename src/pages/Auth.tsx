@@ -44,7 +44,7 @@ export const Auth: React.FC = () => {
       <Header />
       {/* Auth content with proper spacing */}
       <div className="pt-20 bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen flex items-center justify-center p-4">
-        <Card className="w-full max-w-md">
+        <Card className="w-full max-w-md border-2 border-brand-red shadow-lg shadow-brand-red/20">
         <CardHeader className="text-center">
           <div className="flex items-center justify-center mb-4">
             <Home className="h-8 w-8 text-brand-red mr-2" />
