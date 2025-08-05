@@ -11,7 +11,6 @@ const SearchSection = () => {
   const cities = [
     'All Residential',
     'Flat/Apartment',
-    'Serviced Apartment', 
     'Independent Building/ Floor',
     'Farm House',
     'Villa',
