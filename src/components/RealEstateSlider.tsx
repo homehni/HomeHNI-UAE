@@ -1,8 +1,9 @@
-import { useRef } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const RealEstateSlider = () => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [isPaused, setIsPaused] = useState(false);
   
   const slides = [
     {
@@ -41,6 +42,29 @@ const RealEstateSlider = () => {
     }
   };
 
+  // Auto-scroll functionality
+  useEffect(() => {
+    if (isPaused) return;
+
+    const autoScroll = () => {
+      if (scrollContainerRef.current) {
+        const container = scrollContainerRef.current;
+        const maxScrollLeft = container.scrollWidth - container.clientWidth;
+        
+        if (container.scrollLeft >= maxScrollLeft) {
+          // Reset to beginning when reaching the end
+          container.scrollTo({ left: 0, behavior: 'smooth' });
+        } else {
+          // Continue scrolling
+          container.scrollBy({ left: 200, behavior: 'smooth' });
+        }
+      }
+    };
+
+    const interval = setInterval(autoScroll, 3000);
+    return () => clearInterval(interval);
+  }, [isPaused]);
+
   return (
     <section className="pb-16 bg-gradient-to-br from-background to-secondary/20">
       <div className="container mx-auto px-4">
@@ -76,6 +100,8 @@ const RealEstateSlider = () => {
             ref={scrollContainerRef}
             className="flex gap-4 overflow-x-auto scrollbar-hide px-4 py-4"
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+            onMouseEnter={() => setIsPaused(true)}
+            onMouseLeave={() => setIsPaused(false)}
           >
             {slides.map((slide, index) => (
               <div
