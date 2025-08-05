@@ -266,48 +266,47 @@ export const RentalDetailsStep: React.FC<RentalDetailsStepProps> = ({
 
                   {/* Deposit and Duration */}
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div className="space-y-4">
-                      <FormField
-                        control={form.control}
-                        name="securityDeposit"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel className="text-sm font-medium">Deposit *</FormLabel>
-                            <div className="relative">
-                              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">₹</span>
-                              <FormControl>
-                                <Input 
-                                  type="text" 
-                                  placeholder="Enter Amount"
-                                  className="pl-8 h-12"
-                                   onChange={(e) => {
-                                     const value = e.target.value.replace(/[^0-9]/g, '');
-                                     field.onChange(value ? parseInt(value) : undefined);
-                                   }}
-                                   value={field.value ? String(field.value) : ''}
-                                />
-                              </FormControl>
-                            </div>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      
-                      <FormField
-                        control={form.control}
-                        name="depositNegotiable"
-                        render={({ field }) => (
-                          <div className="flex items-center space-x-2">
-                            <Checkbox 
-                              id="depositNegotiable"
-                              checked={field.value}
-                              onCheckedChange={field.onChange}
-                            />
-                            <label htmlFor="depositNegotiable" className="text-sm text-gray-600">Deposit Negotiable</label>
+                    <FormField
+                      control={form.control}
+                      name="securityDeposit"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="text-sm font-medium">Deposit *</FormLabel>
+                          <div className="relative">
+                            <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">₹</span>
+                            <FormControl>
+                              <Input 
+                                type="text" 
+                                placeholder="Enter Amount"
+                                className="pl-8 h-12"
+                                 onChange={(e) => {
+                                   const value = e.target.value.replace(/[^0-9]/g, '');
+                                   field.onChange(value ? parseInt(value) : undefined);
+                                 }}
+                                 value={field.value ? String(field.value) : ''}
+                              />
+                            </FormControl>
                           </div>
-                        )}
-                      />
-                    </div>
+                          <div className="mt-2">
+                            <FormField
+                              control={form.control}
+                              name="depositNegotiable"
+                              render={({ field }) => (
+                                <div className="flex items-center space-x-2">
+                                  <Checkbox 
+                                    id="depositNegotiable"
+                                    checked={field.value}
+                                    onCheckedChange={field.onChange}
+                                  />
+                                  <label htmlFor="depositNegotiable" className="text-sm text-gray-600">Deposit Negotiable</label>
+                                </div>
+                              )}
+                            />
+                          </div>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
 
                     <FormField
                       control={form.control}
