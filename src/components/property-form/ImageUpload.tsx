@@ -8,13 +8,15 @@ interface ImageUploadProps {
   onImagesChange: (images: File[]) => void;
   maxImages: number;
   minImages: number;
+  onUploadClick?: () => void;
 }
 
 export const ImageUpload: React.FC<ImageUploadProps> = ({
   images,
   onImagesChange,
   maxImages,
-  minImages
+  minImages,
+  onUploadClick
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -33,6 +35,14 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
   const removeImage = (index: number) => {
     const newImages = images.filter((_, i) => i !== index);
     onImagesChange(newImages);
+  };
+
+  const handleUploadClick = () => {
+    if (onUploadClick) {
+      onUploadClick();
+    } else {
+      fileInputRef.current?.click();
+    }
   };
 
   const getImagePreview = (file: File): string => {
@@ -72,18 +82,10 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
           </div>
         ))}
 
-        {images.length < maxImages && (
-          <div
-            className="aspect-square rounded-lg border-2 border-dashed border-muted-foreground hover:border-primary transition-colors cursor-pointer flex flex-col items-center justify-center text-muted-foreground hover:text-primary"
-            onClick={() => fileInputRef.current?.click()}
-          >
-            <Upload className="h-8 w-8 mb-2" />
-            <span className="text-sm text-center">Add Image</span>
-          </div>
-        )}
       </div>
 
       <input
+        id="image-upload-input"
         ref={fileInputRef}
         type="file"
         accept="image/*"

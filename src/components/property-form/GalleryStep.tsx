@@ -107,7 +107,10 @@ export const GalleryStep: React.FC<GalleryStepProps> = ({
                         <FormControl>
                           <div className="space-y-6">
                             {/* Instructions section */}
-                            <div className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-12 text-center">
+                            <div 
+                              className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-12 text-center cursor-pointer hover:border-primary transition-colors hover:bg-muted/20"
+                              onClick={() => document.getElementById('image-upload-input')?.click()}
+                            >
                               <div className="flex flex-col items-center gap-4">
                                 <div className="bg-muted/50 rounded-full p-4">
                                   <Camera className="h-8 w-8 text-muted-foreground" />
