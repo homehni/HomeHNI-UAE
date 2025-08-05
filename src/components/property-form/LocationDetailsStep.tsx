@@ -237,7 +237,7 @@ export const LocationDetailsStep: React.FC<LocationDetailsStepProps> = ({
                       Back
                     </Button>
                     <Button type="submit">
-                      Next: Rental Details
+                      Save & Continue
                     </Button>
                   </div>
                 </form>
