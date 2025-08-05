@@ -47,7 +47,7 @@ const MegaMenu = ({ isScrolled }: MegaMenuProps) => {
         onMouseEnter={() => setIsOpen(true)}
         onMouseLeave={() => setIsOpen(false)}
       >
-        For Buyers
+        Buyers
         <ChevronDown size={16} className="ml-1" />
       </Button>
 
