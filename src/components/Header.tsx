@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
@@ -20,9 +20,23 @@ const Header = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isLegalFormOpen, setIsLegalFormOpen] = useState(false);
   const [isServicesDropdownOpen, setIsServicesDropdownOpen] = useState(false);
+  const servicesHoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const navigate = useNavigate();
   const location = useLocation();
   const { toast } = useToast();
+
+  const handleServicesHover = () => {
+    if (servicesHoverTimeoutRef.current) {
+      clearTimeout(servicesHoverTimeoutRef.current);
+    }
+    setIsServicesDropdownOpen(true);
+  };
+
+  const handleServicesLeave = () => {
+    servicesHoverTimeoutRef.current = setTimeout(() => {
+      setIsServicesDropdownOpen(false);
+    }, 150);
+  };
   useEffect(() => {
     const handleScroll = () => {
       const scrollTop = window.scrollY;
@@ -119,8 +133,8 @@ const Header = () => {
   
   {/* Services Dropdown */}
   <div 
-    onMouseEnter={() => setIsServicesDropdownOpen(true)}
-    onMouseLeave={() => setIsServicesDropdownOpen(false)}
+    onMouseEnter={handleServicesHover}
+    onMouseLeave={handleServicesLeave}
   >
     <DropdownMenu open={isServicesDropdownOpen} onOpenChange={setIsServicesDropdownOpen}>
       <DropdownMenuTrigger asChild>
