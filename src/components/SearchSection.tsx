@@ -10,15 +10,13 @@ const SearchSection = () => {
   
   const cities = [
     'All Residential',
-    'Bangalore',
-    'Mumbai', 
-    'Pune',
-    'Delhi',
-    'Gurgaon',
-    'Noida',
-    'Chennai',
-    'Hyderabad',
-    'Kolkata'
+    'Flat/Apartment',
+    'Serviced Apartment', 
+    'Independent Building/ Floor',
+    'Farm House',
+    'Villa',
+    'Plots',
+    'Independent House',
   ];
   
   const handleCitySelect = (city: string) => {
