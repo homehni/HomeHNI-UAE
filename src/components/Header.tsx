@@ -134,6 +134,45 @@ const Header = () => {
               <a href="#" className={`hover:opacity-80 transition-colors duration-500 text-sm font-medium ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
     Tenants
   </a>
+
+
+              <div 
+    className="relative"
+    onMouseEnter={handleServicesHover}
+    onMouseLeave={handleServicesLeave}
+  >
+    <button 
+      className={`flex items-center hover:opacity-80 transition-colors duration-500 text-sm font-medium ${isScrolled ? 'text-gray-800' : 'text-white'}`}
+    >
+      Rental
+      <ChevronDown className="ml-1 h-3 w-3" />
+    </button>
+    
+    {/* Custom Services Dropdown */}
+    {isServicesDropdownOpen && (
+      <div 
+        className="absolute top-full left-0 w-56 bg-white border border-gray-200 rounded-lg shadow-xl z-50 mt-2"
+        onMouseEnter={handleServicesHover}
+        onMouseLeave={handleServicesLeave}
+      >
+        <div className="py-2">
+          <button 
+            onClick={handleLegalServicesClick}
+            className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+          >
+           Owners
+          </button>
+          <button 
+            onClick={() => navigate('/handover-services')}
+            className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+          >
+            Tenants
+          </button>
+          
+        </div>
+      </div>
+    )}
+  </div
   
   {/* Services Dropdown */}
   <div 
