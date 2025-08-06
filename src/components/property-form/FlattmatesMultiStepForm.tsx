@@ -7,6 +7,7 @@ import { FlattmatesAmenitiesStep } from './FlattmatesAmenitiesStep';
 import { GalleryStep } from './GalleryStep';
 import { ScheduleStep } from './ScheduleStep';
 import { PreviewStep } from './PreviewStep';
+import { FlattmatesSidebar } from './FlattmatesSidebar';
 import { OwnerInfo, PropertyDetails, LocationDetails, PropertyGallery, AdditionalInfo, ScheduleInfo, FlattmatesFormData } from '@/types/property';
 
 interface FlattmatesMultiStepFormProps {
@@ -244,15 +245,22 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50/30 to-teal-100/30">
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        <div className="text-center mb-8">
-          <Badge variant="secondary" className="bg-green-100 text-green-800 px-6 py-2 text-lg font-semibold mb-4">
-            🏠 FLATMATES PROPERTY FORM
-          </Badge>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-            Find the perfect flatmate by listing your shared accommodation with detailed preferences and amenities.
-          </p>
-        </div>
+      <div className="text-center py-8">
+        <Badge variant="secondary" className="bg-green-100 text-green-800 px-6 py-2 text-lg font-semibold mb-4">
+          🏠 FLATMATES PROPERTY FORM
+        </Badge>
+        <p className="text-muted-foreground max-w-2xl mx-auto">
+          Find the perfect flatmate by listing your shared accommodation with detailed preferences and amenities.
+        </p>
+      </div>
+      
+      <div className="flex min-h-screen">
+        <FlattmatesSidebar 
+          currentStep={currentStep} 
+          completedSteps={completedSteps} 
+        />
+        
+        <div className="flex-1 p-8">
 
         {currentStep === 1 && (
           <FlattmatesPropertyDetailsStep
@@ -324,6 +332,7 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
             isSubmitting={isSubmitting}
           />
         )}
+        </div>
       </div>
     </div>
   );
