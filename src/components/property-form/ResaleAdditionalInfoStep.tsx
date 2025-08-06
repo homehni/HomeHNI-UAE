@@ -10,12 +10,10 @@ import { Input } from '@/components/ui/input';
 import { AdditionalInfo } from '@/types/property';
 
 const resaleAdditionalInfoSchema = z.object({
-  description: z.string().optional(),
-  previousOccupancy: z.string().optional(),
-  whoWillShow: z.string().optional(),
-  paintingRequired: z.string().optional(),
-  cleaningRequired: z.string().optional(),
-  secondaryNumber: z.string().optional(),
+  allotmentLetter: z.string().min(1, "Please select if you have allotment letter"),
+  saleDeedCertificate: z.string().min(1, "Please select if you have sale deed certificate"),
+  propertyTaxPaid: z.string().min(1, "Please select if you have paid property tax"),
+  occupancyCertificate: z.string().min(1, "Please select if you have occupancy certificate"),
 });
 
 type ResaleAdditionalInfoData = z.infer<typeof resaleAdditionalInfoSchema>;
@@ -34,12 +32,10 @@ export const ResaleAdditionalInfoStep: React.FC<ResaleAdditionalInfoStepProps> =
   const form = useForm<ResaleAdditionalInfoData>({
     resolver: zodResolver(resaleAdditionalInfoSchema),
     defaultValues: {
-      description: initialData.description || '',
-      previousOccupancy: initialData.previousOccupancy || '',
-      whoWillShow: initialData.whoWillShow || '',
-      paintingRequired: initialData.paintingRequired || '',
-      cleaningRequired: initialData.cleaningRequired || '',
-      secondaryNumber: initialData.secondaryNumber || '',
+      allotmentLetter: '',
+      saleDeedCertificate: '',
+      propertyTaxPaid: '',
+      occupancyCertificate: '',
     },
   });
 
@@ -57,32 +53,14 @@ export const ResaleAdditionalInfoStep: React.FC<ResaleAdditionalInfoStepProps> =
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            {/* Property Description */}
-            <FormField
-              control={form.control}
-              name="description"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-base font-medium">Property Description</FormLabel>
-                  <FormControl>
-                    <Textarea
-                      placeholder="Describe your property's key features, nearby amenities, or any special highlights that would interest buyers..."
-                      className="min-h-[120px] resize-none"
-                      {...field}
-                    />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Previous Occupancy */}
+              {/* Allotment Letter */}
               <FormField
                 control={form.control}
-                name="previousOccupancy"
+                name="allotmentLetter"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-base font-medium">Current/Previous Occupancy</FormLabel>
+                    <FormLabel className="text-base font-medium">Do You have Allotment Letter?*</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger>
@@ -90,48 +68,21 @@ export const ResaleAdditionalInfoStep: React.FC<ResaleAdditionalInfoStepProps> =
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="owner-occupied">Owner Occupied</SelectItem>
-                        <SelectItem value="family">Family</SelectItem>
-                        <SelectItem value="bachelor">Bachelor</SelectItem>
-                        <SelectItem value="vacant">Vacant</SelectItem>
-                        <SelectItem value="under-construction">Under Construction</SelectItem>
+                        <SelectItem value="yes">Yes</SelectItem>
+                        <SelectItem value="no">No</SelectItem>
                       </SelectContent>
                     </Select>
                   </FormItem>
                 )}
               />
 
-              {/* Who will show */}
+              {/* Sale Deed Certificate */}
               <FormField
                 control={form.control}
-                name="whoWillShow"
+                name="saleDeedCertificate"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-base font-medium">Who will show the property? *</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="I will show" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="owner">I will show</SelectItem>
-                        <SelectItem value="agent">Agent will show</SelectItem>
-                        <SelectItem value="caretaker">Caretaker will show</SelectItem>
-                        <SelectItem value="occupant">Current occupant will show</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </FormItem>
-                )}
-              />
-
-              {/* Painting */}
-              <FormField
-                control={form.control}
-                name="paintingRequired"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-base font-medium">Property painting status</FormLabel>
+                    <FormLabel className="text-base font-medium">Do You have Sale Deed Certificate?*</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger>
@@ -139,23 +90,21 @@ export const ResaleAdditionalInfoStep: React.FC<ResaleAdditionalInfoStepProps> =
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="recently-painted">Recently Painted</SelectItem>
-                        <SelectItem value="good-condition">Good Paint Condition</SelectItem>
-                        <SelectItem value="needs-touch-up">Needs Touch-up</SelectItem>
-                        <SelectItem value="needs-repainting">Needs Complete Repainting</SelectItem>
+                        <SelectItem value="yes">Yes</SelectItem>
+                        <SelectItem value="no">No</SelectItem>
                       </SelectContent>
                     </Select>
                   </FormItem>
                 )}
               />
 
-              {/* Cleaning */}
+              {/* Property Tax Paid */}
               <FormField
                 control={form.control}
-                name="cleaningRequired"
+                name="propertyTaxPaid"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-base font-medium">Property cleaning status</FormLabel>
+                    <FormLabel className="text-base font-medium">Have you paid Property Tax?*</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger>
@@ -163,40 +112,36 @@ export const ResaleAdditionalInfoStep: React.FC<ResaleAdditionalInfoStepProps> =
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="well-maintained">Well Maintained</SelectItem>
-                        <SelectItem value="regular-cleaning">Regular Cleaning Done</SelectItem>
-                        <SelectItem value="needs-cleaning">Needs Cleaning</SelectItem>
-                        <SelectItem value="deep-cleaning-required">Deep Cleaning Required</SelectItem>
+                        <SelectItem value="yes">Yes</SelectItem>
+                        <SelectItem value="no">No</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </FormItem>
+                )}
+              />
+
+              {/* Occupancy Certificate */}
+              <FormField
+                control={form.control}
+                name="occupancyCertificate"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-base font-medium">Do You have Occupancy Certificate?*</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="yes">Yes</SelectItem>
+                        <SelectItem value="no">No</SelectItem>
                       </SelectContent>
                     </Select>
                   </FormItem>
                 )}
               />
             </div>
-
-            {/* Secondary Number */}
-            <FormField
-              control={form.control}
-              name="secondaryNumber"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-base font-medium">Secondary Contact Number</FormLabel>
-                  <FormControl>
-                    <div className="flex">
-                      <div className="flex items-center px-3 border border-r-0 rounded-l-md bg-muted">
-                        <span className="text-sm">🇮🇳</span>
-                        <span className="ml-2 text-sm">+91</span>
-                      </div>
-                      <Input
-                        placeholder="Secondary Contact Number"
-                        className="rounded-l-none"
-                        {...field}
-                      />
-                    </div>
-                  </FormControl>
-                </FormItem>
-              )}
-            />
 
             {/* Action Buttons */}
             <div className="flex justify-between pt-6">
