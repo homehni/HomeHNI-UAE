@@ -7,7 +7,6 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
-import { FlattmatesSidebar } from './FlattmatesSidebar';
 import { 
   Key, 
   Droplets, 
@@ -115,15 +114,11 @@ export function FlattmatesAmenitiesStep({
   };
 
   return (
-    <div className="flex min-h-screen bg-background">
-      <FlattmatesSidebar currentStep={currentStep} completedSteps={completedSteps} />
-      
-      <div className="flex-1 p-8">
-        <div className="max-w-2xl mx-auto">
-          <div className="text-center mb-8">
-            <h2 className="text-2xl font-bold text-foreground mb-2">Amenities</h2>
-            <p className="text-muted-foreground">Tell us about the amenities and preferences</p>
-          </div>
+    <div className="max-w-2xl mx-auto">
+      <div className="text-center mb-8">
+        <h2 className="text-2xl font-bold text-foreground mb-2">Amenities</h2>
+        <p className="text-muted-foreground">Tell us about the amenities and preferences</p>
+      </div>
 
           <Card>
             <CardContent className="p-8">
@@ -416,8 +411,6 @@ export function FlattmatesAmenitiesStep({
               </form>
             </CardContent>
           </Card>
-        </div>
-      </div>
     </div>
   );
 }

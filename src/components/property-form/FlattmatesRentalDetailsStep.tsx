@@ -6,7 +6,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Card, CardContent } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
-import { FlattmatesSidebar } from './FlattmatesSidebar';
 import { Sofa, Car, Calendar } from 'lucide-react';
 
 interface FlattmatesRentalDetails {
@@ -65,15 +64,11 @@ export function FlattmatesRentalDetailsStep({
   };
 
   return (
-    <div className="flex min-h-screen bg-background">
-      <FlattmatesSidebar currentStep={currentStep} completedSteps={completedSteps} />
-      
-      <div className="flex-1 p-8">
-        <div className="max-w-2xl mx-auto">
-          <div className="text-center mb-8">
-            <h2 className="text-2xl font-bold text-foreground mb-2">Rental Details</h2>
-            <p className="text-muted-foreground">Set your rental expectations and terms</p>
-          </div>
+    <div className="max-w-2xl mx-auto">
+      <div className="text-center mb-8">
+        <h2 className="text-2xl font-bold text-foreground mb-2">Rental Details</h2>
+        <p className="text-muted-foreground">Set your rental expectations and terms</p>
+      </div>
 
           <Card>
             <CardContent className="p-8">
@@ -227,8 +222,6 @@ export function FlattmatesRentalDetailsStep({
               </form>
             </CardContent>
           </Card>
-        </div>
-      </div>
     </div>
   );
 }
