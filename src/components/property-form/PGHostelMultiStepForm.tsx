@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { PgHostelSidebar } from './PgHostelSidebar';
 import { PgHostelOwnerInfoStep } from './PgHostelOwnerInfoStep';
+import { PgHostelRoomTypeStep } from './PgHostelRoomTypeStep';
 import { PgHostelPropertyInfoStep } from './PgHostelPropertyInfoStep';
 import { PgHostelRoomDetailsStep } from './PgHostelRoomDetailsStep';
 import { PgHostelLocalityDetailsStep } from './PgHostelLocalityDetailsStep';
@@ -44,6 +45,13 @@ export const PGHostelMultiStepForm: React.FC<PGHostelMultiStepFormProps> = ({
     ...initialOwnerInfo
   });
 
+  const [roomTypes, setRoomTypes] = useState({
+    single: false,
+    double: false,
+    three: false,
+    four: false,
+  });
+
   const [propertyInfo, setPropertyInfo] = useState({
     propertyType: 'PG/Hostel',
     buildingType: '',
@@ -77,25 +85,34 @@ export const PGHostelMultiStepForm: React.FC<PGHostelMultiStepFormProps> = ({
   });
 
   const [pgDetails, setPgDetails] = useState({
-    roomType: 'single' as const,
-    genderPreference: 'any' as const,
-    mealOptions: 'optional' as const,
-    timingRestrictions: '',
-    houseRules: ''
+    genderPreference: 'anyone' as const,
+    preferredGuests: 'any' as const,
+    availableFrom: '',
+    foodIncluded: 'no' as const,
+    rules: {
+      noSmoking: false,
+      noGuardiansStay: false,
+      noGirlsEntry: false,
+      noDrinking: false,
+      noNonVeg: false,
+    },
+    gateClosingTime: '',
+    description: '',
   });
 
   const [amenities, setAmenities] = useState({
-    wifi: false,
-    parking: false,
-    security: false,
-    powerBackup: false,
+    laundry: '' as 'yes' | 'no' | '',
+    roomCleaning: '' as 'yes' | 'no' | '',
+    wardenFacility: '' as 'yes' | 'no' | '',
+    directionsTip: '',
+    commonTv: false,
+    mess: false,
     lift: false,
-    washrooms: false,
-    waterStorage: false,
-    laundry: false,
-    meals: false,
-    commonArea: false,
-    cleaning: false
+    refrigerator: false,
+    wifi: false,
+    cookingAllowed: false,
+    powerBackup: false,
+    parking: 'none' as 'none' | 'bike' | 'car' | 'both',
   });
 
   const [gallery, setGallery] = useState({
@@ -121,15 +138,16 @@ export const PGHostelMultiStepForm: React.FC<PGHostelMultiStepFormProps> = ({
   const completedSteps = useMemo(() => {
     const steps = [];
     if (ownerInfo.fullName && ownerInfo.email && ownerInfo.phoneNumber) steps.push(1);
-    if (propertyInfo.propertyType && propertyInfo.buildingType) steps.push(2);
-    if (roomDetails.expectedRent > 0) steps.push(3);
-    if (localityDetails.state && localityDetails.city) steps.push(4);
-    if (pgDetails.roomType) steps.push(5);
-    if (amenities.wifi !== undefined) steps.push(6);
-    if (gallery.images.length >= 3) steps.push(7);
-    if (scheduleInfo.availability) steps.push(8);
+    if (roomTypes.single || roomTypes.double || roomTypes.three || roomTypes.four) steps.push(2);
+    if (propertyInfo.propertyType && propertyInfo.buildingType) steps.push(3);
+    if (roomDetails.expectedRent > 0) steps.push(4);
+    if (localityDetails.state && localityDetails.city) steps.push(5);
+    if (pgDetails.genderPreference && pgDetails.preferredGuests) steps.push(6);
+    if (amenities.laundry !== '') steps.push(7);
+    if (gallery.images.length >= 3) steps.push(8);
+    if (scheduleInfo.availability) steps.push(9);
     return steps;
-  }, [ownerInfo, propertyInfo, roomDetails, localityDetails, pgDetails, amenities, gallery, scheduleInfo]);
+  }, [ownerInfo, roomTypes, propertyInfo, roomDetails, localityDetails, pgDetails, amenities, gallery, scheduleInfo]);
 
   // Step handlers
   const handleOwnerInfoNext = (data: any) => {
@@ -137,34 +155,39 @@ export const PGHostelMultiStepForm: React.FC<PGHostelMultiStepFormProps> = ({
     setCurrentStep(2);
   };
 
+  const handleRoomTypesNext = (data: any) => {
+    setRoomTypes(data);
+    setCurrentStep(3);
+  };
+
   const handlePropertyInfoNext = (data: any) => {
     setPropertyInfo(data);
-    setCurrentStep(3);
+    setCurrentStep(4);
   };
 
   const handleRoomDetailsNext = (data: any) => {
     setRoomDetails(data);
-    setCurrentStep(4);
+    setCurrentStep(5);
   };
 
   const handleLocalityDetailsNext = (data: any) => {
     setLocalityDetails(data);
-    setCurrentStep(5);
+    setCurrentStep(6);
   };
 
   const handlePgDetailsNext = (data: any) => {
     setPgDetails(data);
-    setCurrentStep(6);
+    setCurrentStep(7);
   };
 
   const handleAmenitiesNext = (data: any) => {
     setAmenities(data);
-    setCurrentStep(7);
+    setCurrentStep(8);
   };
 
   const handleGalleryNext = (data: any) => {
     setGallery(data);
-    setCurrentStep(8);
+    setCurrentStep(9);
   };
 
   const handleScheduleNext = (data: any) => {
@@ -188,17 +211,17 @@ export const PGHostelMultiStepForm: React.FC<PGHostelMultiStepFormProps> = ({
     },
     propertyInfo: {
       propertyDetails: {
-        title: `${pgDetails.roomType} room in PG/Hostel`,
+        title: `PG/Hostel with multiple room types`,
         propertyType: propertyInfo.propertyType,
         buildingType: propertyInfo.buildingType,
-        bhkType: pgDetails.roomType,
+        bhkType: 'Multiple',
         bathrooms: roomDetails.attachedBathroom ? 1 : 0,
         balconies: 0,
         propertyAge: propertyInfo.propertyAge,
         totalFloors: propertyInfo.totalFloors,
         floorNo: propertyInfo.floorNo,
         furnishingStatus: propertyInfo.furnishingStatus,
-        parkingType: amenities.parking ? 'Available' : 'Not Available',
+        parkingType: amenities.parking !== 'none' ? 'Available' : 'Not Available',
         superBuiltUpArea: propertyInfo.superBuiltUpArea,
         onMainRoad: propertyInfo.onMainRoad,
         cornerProperty: propertyInfo.cornerProperty
@@ -207,12 +230,12 @@ export const PGHostelMultiStepForm: React.FC<PGHostelMultiStepFormProps> = ({
       pgDetails: {
         listingType: 'PG/Hostel',
         expectedPrice: roomDetails.expectedRent,
-        roomType: pgDetails.roomType,
-        genderPreference: pgDetails.genderPreference,
-        mealOptions: pgDetails.mealOptions,
+        roomType: 'shared',
+        genderPreference: pgDetails.genderPreference === 'anyone' ? 'any' : pgDetails.genderPreference,
+        mealOptions: (pgDetails.foodIncluded as string) === 'yes' ? 'included' as const : 'not-available' as const,
         securityDeposit: roomDetails.expectedDeposit,
-        timingRestrictions: pgDetails.timingRestrictions,
-        houseRules: pgDetails.houseRules,
+        timingRestrictions: pgDetails.gateClosingTime,
+        houseRules: pgDetails.description,
         rentNegotiable: true,
         maintenanceExtra: false,
         maintenanceCharges: 0,
@@ -220,27 +243,26 @@ export const PGHostelMultiStepForm: React.FC<PGHostelMultiStepFormProps> = ({
         leaseDuration: '',
         lockinPeriod: '',
         brokerageType: '',
-        availableFrom: '',
-        preferredTenants: '',
+        availableFrom: pgDetails.availableFrom,
+        preferredTenants: pgDetails.preferredGuests,
         idealFor: []
       },
       amenities: {
-        ...amenities,
         powerBackup: amenities.powerBackup ? 'Available' : 'Not Available',
         lift: amenities.lift ? 'Available' : 'Not Available',
-        parking: amenities.parking ? 'Available' : 'Not Available',
-        washrooms: amenities.washrooms ? 'Available' : 'Not Available',
-        waterStorageFacility: amenities.waterStorage ? 'Available' : 'Not Available',
-        security: amenities.security ? 'Available' : 'Not Available',
+        parking: amenities.parking !== 'none' ? 'Available' : 'Not Available',
+        washrooms: 'Available',
+        waterStorageFacility: 'Available',
+        security: 'Available',
         wifi: amenities.wifi ? 'Available' : 'Not Available',
-        meals: amenities.meals ? 'breakfast' : 'none',
-        laundry: amenities.laundry ? 'included' : 'not-available',
-        commonArea: amenities.commonArea ? 'tv-room' : undefined,
-        cleaning: amenities.cleaning ? 'daily' : 'self',
+        meals: amenities.mess ? 'breakfast' : 'none',
+        laundry: amenities.laundry === 'yes' ? 'included' : 'not-available',
+        commonArea: amenities.commonTv ? 'tv-room' : undefined,
+        cleaning: amenities.roomCleaning === 'yes' ? 'daily' : 'self',
         currentPropertyCondition: '',
         currentBusiness: '',
         moreSimilarUnits: '',
-        directionsTip: ''
+        directionsTip: amenities.directionsTip
       },
       gallery,
       additionalInfo: {
@@ -261,6 +283,10 @@ export const PGHostelMultiStepForm: React.FC<PGHostelMultiStepFormProps> = ({
     // Validation
     if (!ownerInfo.fullName || !ownerInfo.email || !ownerInfo.phoneNumber) {
       throw new Error('Owner information is incomplete');
+    }
+    
+    if (!roomTypes.single && !roomTypes.double && !roomTypes.three && !roomTypes.four) {
+      throw new Error('At least one room type must be selected');
     }
     
     if (!propertyInfo.propertyType || !propertyInfo.buildingType) {
@@ -289,77 +315,86 @@ export const PGHostelMultiStepForm: React.FC<PGHostelMultiStepFormProps> = ({
             initialData={ownerInfo}
             onNext={handleOwnerInfoNext}
             currentStep={1}
-            totalSteps={8}
+            totalSteps={9}
           />
         )}
 
         {currentStep === 2 && (
-          <PgHostelPropertyInfoStep
-            initialData={propertyInfo}
-            onNext={handlePropertyInfoNext}
-            onBack={prevStep}
+          <PgHostelRoomTypeStep
+            initialData={roomTypes}
+            onNext={handleRoomTypesNext}
             currentStep={2}
-            totalSteps={8}
+            totalSteps={9}
           />
         )}
 
         {currentStep === 3 && (
-          <PgHostelRoomDetailsStep
-            initialData={roomDetails}
-            onNext={handleRoomDetailsNext}
+          <PgHostelPropertyInfoStep
+            initialData={propertyInfo}
+            onNext={handlePropertyInfoNext}
             onBack={prevStep}
             currentStep={3}
-            totalSteps={8}
+            totalSteps={9}
           />
         )}
 
         {currentStep === 4 && (
-          <PgHostelLocalityDetailsStep
-            initialData={localityDetails}
-            onNext={handleLocalityDetailsNext}
+          <PgHostelRoomDetailsStep
+            initialData={roomDetails}
+            onNext={handleRoomDetailsNext}
             onBack={prevStep}
             currentStep={4}
-            totalSteps={8}
+            totalSteps={9}
           />
         )}
 
         {currentStep === 5 && (
-          <PgHostelPgDetailsStep
-            initialData={pgDetails}
-            onNext={handlePgDetailsNext}
+          <PgHostelLocalityDetailsStep
+            initialData={localityDetails}
+            onNext={handleLocalityDetailsNext}
             onBack={prevStep}
             currentStep={5}
-            totalSteps={8}
+            totalSteps={9}
           />
         )}
 
         {currentStep === 6 && (
-          <PgHostelAmenitiesStep
-            initialData={amenities}
-            onNext={handleAmenitiesNext}
+          <PgHostelPgDetailsStep
+            initialData={pgDetails}
+            onNext={handlePgDetailsNext}
             onBack={prevStep}
             currentStep={6}
-            totalSteps={8}
+            totalSteps={9}
           />
         )}
 
         {currentStep === 7 && (
-          <PgHostelGalleryStep
-            initialData={gallery}
-            onNext={handleGalleryNext}
+          <PgHostelAmenitiesStep
+            initialData={amenities}
+            onNext={handleAmenitiesNext}
             onBack={prevStep}
             currentStep={7}
-            totalSteps={8}
+            totalSteps={9}
           />
         )}
 
         {currentStep === 8 && (
+          <PgHostelGalleryStep
+            initialData={gallery}
+            onNext={handleGalleryNext}
+            onBack={prevStep}
+            currentStep={8}
+            totalSteps={9}
+          />
+        )}
+
+        {currentStep === 9 && (
           <PgHostelScheduleStep
             initialData={scheduleInfo}
             onNext={handleScheduleNext}
             onBack={prevStep}
-            currentStep={8}
-            totalSteps={8}
+            currentStep={9}
+            totalSteps={9}
           />
         )}
       </div>

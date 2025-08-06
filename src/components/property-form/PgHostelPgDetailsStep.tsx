@@ -5,13 +5,23 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Cigarette, Users, UserX, Wine, UtensilsCrossed } from 'lucide-react';
 
 interface PgHostelPgDetails {
-  roomType: 'single' | 'shared' | 'dormitory';
-  genderPreference: 'male' | 'female' | 'any';
-  mealOptions: 'included' | 'optional' | 'not-available';
-  timingRestrictions?: string;
-  houseRules?: string;
+  genderPreference: 'male' | 'female' | 'anyone';
+  preferredGuests: 'student' | 'working' | 'any';
+  availableFrom: string;
+  foodIncluded: 'yes' | 'no';
+  rules: {
+    noSmoking: boolean;
+    noGuardiansStay: boolean;
+    noGirlsEntry: boolean;
+    noDrinking: boolean;
+    noNonVeg: boolean;
+  };
+  gateClosingTime: string;
+  description: string;
 }
 
 interface PgHostelPgDetailsStepProps {
@@ -30,11 +40,19 @@ export function PgHostelPgDetailsStep({
   totalSteps 
 }: PgHostelPgDetailsStepProps) {
   const [formData, setFormData] = useState<PgHostelPgDetails>({
-    roomType: 'single',
-    genderPreference: 'any',
-    mealOptions: 'not-available',
-    timingRestrictions: '',
-    houseRules: '',
+    genderPreference: 'anyone',
+    preferredGuests: 'any',
+    availableFrom: '',
+    foodIncluded: 'no',
+    rules: {
+      noSmoking: false,
+      noGuardiansStay: false,
+      noGirlsEntry: false,
+      noDrinking: false,
+      noNonVeg: false,
+    },
+    gateClosingTime: '',
+    description: '',
     ...initialData,
   });
 
@@ -46,7 +64,17 @@ export function PgHostelPgDetailsStep({
   };
 
   const isFormValid = () => {
-    return formData.roomType && formData.genderPreference && formData.mealOptions;
+    return formData.genderPreference && formData.preferredGuests && formData.availableFrom && formData.foodIncluded;
+  };
+
+  const handleRuleChange = (rule: keyof typeof formData.rules, checked: boolean) => {
+    setFormData({
+      ...formData,
+      rules: {
+        ...formData.rules,
+        [rule]: checked,
+      },
+    });
   };
 
   return (
@@ -61,32 +89,13 @@ export function PgHostelPgDetailsStep({
           <CardTitle>PG/Hostel Configuration</CardTitle>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="roomType">Room Type *</Label>
-                <Select
-                  value={formData.roomType}
-                  onValueChange={(value: 'single' | 'shared' | 'dormitory') => 
-                    setFormData({ ...formData, roomType: value })
-                  }
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select room type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="single">Single Occupancy</SelectItem>
-                    <SelectItem value="shared">Shared Room (2-3 people)</SelectItem>
-                    <SelectItem value="dormitory">Dormitory (4+ people)</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="genderPreference">Gender Preference *</Label>
+                <Label htmlFor="genderPreference">Place is available for *</Label>
                 <Select
                   value={formData.genderPreference}
-                  onValueChange={(value: 'male' | 'female' | 'any') => 
+                  onValueChange={(value: 'male' | 'female' | 'anyone') => 
                     setFormData({ ...formData, genderPreference: value })
                   }
                 >
@@ -94,60 +103,158 @@ export function PgHostelPgDetailsStep({
                     <SelectValue placeholder="Select preference" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="male">Male Only</SelectItem>
-                    <SelectItem value="female">Female Only</SelectItem>
-                    <SelectItem value="any">Any Gender</SelectItem>
+                    <SelectItem value="male">Male</SelectItem>
+                    <SelectItem value="female">Female</SelectItem>
+                    <SelectItem value="anyone">Anyone</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
 
-              <div className="space-y-2 md:col-span-2">
-                <Label htmlFor="mealOptions">Meal Options *</Label>
+              <div className="space-y-2">
+                <Label htmlFor="preferredGuests">Preferred Guests *</Label>
                 <Select
-                  value={formData.mealOptions}
-                  onValueChange={(value: 'included' | 'optional' | 'not-available') => 
-                    setFormData({ ...formData, mealOptions: value })
+                  value={formData.preferredGuests}
+                  onValueChange={(value: 'student' | 'working' | 'any') => 
+                    setFormData({ ...formData, preferredGuests: value })
                   }
                 >
                   <SelectTrigger>
-                    <SelectValue placeholder="Select meal option" />
+                    <SelectValue placeholder="Select preference" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="included">Meals Included in Rent</SelectItem>
-                    <SelectItem value="optional">Meals Available (Extra Cost)</SelectItem>
-                    <SelectItem value="not-available">No Meal Service</SelectItem>
+                    <SelectItem value="student">Student</SelectItem>
+                    <SelectItem value="working">Working Professional</SelectItem>
+                    <SelectItem value="any">Any</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="availableFrom">Available From *</Label>
+                <Input
+                  id="availableFrom"
+                  type="date"
+                  value={formData.availableFrom}
+                  onChange={(e) => setFormData({ ...formData, availableFrom: e.target.value })}
+                  placeholder="15/08/2025"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="foodIncluded">Food Included *</Label>
+                <Select
+                  value={formData.foodIncluded}
+                  onValueChange={(value: 'yes' | 'no') => 
+                    setFormData({ ...formData, foodIncluded: value })
+                  }
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select option" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="yes">Yes</SelectItem>
+                    <SelectItem value="no">No</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
             </div>
 
-            <div className="space-y-4 pt-4">
-              <div className="space-y-2">
-                <Label htmlFor="timingRestrictions">Timing Restrictions</Label>
-                <Textarea
-                  id="timingRestrictions"
-                  value={formData.timingRestrictions}
-                  onChange={(e) => setFormData({ ...formData, timingRestrictions: e.target.value })}
-                  placeholder="e.g., Entry allowed till 10 PM, No visitors after 9 PM"
-                  rows={3}
-                />
-                <p className="text-xs text-muted-foreground">
-                  Mention any timing restrictions for guests, entry/exit times, etc.
-                </p>
+            <div className="space-y-4">
+              <div>
+                <Label className="text-base font-medium">PG/Hostel Rules</Label>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-3">
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      id="noSmoking"
+                      checked={formData.rules.noSmoking}
+                      onCheckedChange={(checked) => 
+                        handleRuleChange('noSmoking', checked as boolean)
+                      }
+                    />
+                    <div className="flex items-center space-x-2">
+                      <Cigarette className="w-4 h-4 text-muted-foreground" />
+                      <Label htmlFor="noSmoking" className="text-sm">No Smoking</Label>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      id="noGuardiansStay"
+                      checked={formData.rules.noGuardiansStay}
+                      onCheckedChange={(checked) => 
+                        handleRuleChange('noGuardiansStay', checked as boolean)
+                      }
+                    />
+                    <div className="flex items-center space-x-2">
+                      <Users className="w-4 h-4 text-muted-foreground" />
+                      <Label htmlFor="noGuardiansStay" className="text-sm">No Guardians Stay</Label>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      id="noGirlsEntry"
+                      checked={formData.rules.noGirlsEntry}
+                      onCheckedChange={(checked) => 
+                        handleRuleChange('noGirlsEntry', checked as boolean)
+                      }
+                    />
+                    <div className="flex items-center space-x-2">
+                      <UserX className="w-4 h-4 text-muted-foreground" />
+                      <Label htmlFor="noGirlsEntry" className="text-sm">No Girl's Entry</Label>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      id="noDrinking"
+                      checked={formData.rules.noDrinking}
+                      onCheckedChange={(checked) => 
+                        handleRuleChange('noDrinking', checked as boolean)
+                      }
+                    />
+                    <div className="flex items-center space-x-2">
+                      <Wine className="w-4 h-4 text-muted-foreground" />
+                      <Label htmlFor="noDrinking" className="text-sm">No Drinking</Label>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center space-x-2 md:col-span-2">
+                    <Checkbox
+                      id="noNonVeg"
+                      checked={formData.rules.noNonVeg}
+                      onCheckedChange={(checked) => 
+                        handleRuleChange('noNonVeg', checked as boolean)
+                      }
+                    />
+                    <div className="flex items-center space-x-2">
+                      <UtensilsCrossed className="w-4 h-4 text-muted-foreground" />
+                      <Label htmlFor="noNonVeg" className="text-sm">No Non-Veg</Label>
+                    </div>
+                  </div>
+                </div>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="houseRules">House Rules</Label>
+                <Label htmlFor="gateClosingTime">Gate Closing Time</Label>
+                <Input
+                  id="gateClosingTime"
+                  type="time"
+                  value={formData.gateClosingTime}
+                  onChange={(e) => setFormData({ ...formData, gateClosingTime: e.target.value })}
+                  placeholder="22:00"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="description">Description</Label>
                 <Textarea
-                  id="houseRules"
-                  value={formData.houseRules}
-                  onChange={(e) => setFormData({ ...formData, houseRules: e.target.value })}
-                  placeholder="e.g., No smoking, No alcohol, Maintain cleanliness, Respect other residents"
+                  id="description"
+                  value={formData.description}
+                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                  placeholder="Provide additional details about your PG/Hostel..."
                   rows={4}
                 />
-                <p className="text-xs text-muted-foreground">
-                  List important rules and guidelines for residents
-                </p>
               </div>
             </div>
 

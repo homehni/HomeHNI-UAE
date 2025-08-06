@@ -14,6 +14,7 @@ export { VideoUpload } from './VideoUpload';
 export { PGHostelMultiStepForm } from './PGHostelMultiStepForm';
 export { PgHostelSidebar } from './PgHostelSidebar';
 export { PgHostelOwnerInfoStep } from './PgHostelOwnerInfoStep';
+export { PgHostelRoomTypeStep } from './PgHostelRoomTypeStep';
 export { PgHostelPropertyInfoStep } from './PgHostelPropertyInfoStep';
 export { PgHostelRoomDetailsStep } from './PgHostelRoomDetailsStep';
 export { PgHostelLocalityDetailsStep } from './PgHostelLocalityDetailsStep';
