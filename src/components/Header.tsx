@@ -172,7 +172,7 @@ const Header = () => {
         </div>
       </div>
     )}
-  </div
+  </div>
   
   {/* Services Dropdown */}
   <div 
