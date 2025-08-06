@@ -7,7 +7,7 @@ import { FlattmatesAmenitiesStep } from './FlattmatesAmenitiesStep';
 import { GalleryStep } from './GalleryStep';
 import { ScheduleStep } from './ScheduleStep';
 import { PreviewStep } from './PreviewStep';
-import { OwnerInfo, PropertyDetails, LocationDetails, PropertyAmenities, PropertyGallery, AdditionalInfo, ScheduleInfo, FlattmatesDetails, FlattmatesAmenities, FlattmatesFormData } from '@/types/property';
+import { OwnerInfo, PropertyDetails, LocationDetails, PropertyGallery, AdditionalInfo, ScheduleInfo, FlattmatesFormData } from '@/types/property';
 
 interface FlattmatesMultiStepFormProps {
   onSubmit: (data: FlattmatesFormData) => void;
@@ -34,21 +34,16 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
     ...initialOwnerInfo
   });
 
-  const [propertyDetails, setPropertyDetails] = useState<PropertyDetails>({
-    title: '',
-    propertyType: 'Flatmates',
-    buildingType: '',
+  const [propertyDetails, setPropertyDetails] = useState({
+    apartmentType: '',
     bhkType: '',
-    bathrooms: 0,
-    balconies: 0,
-    propertyAge: '',
-    totalFloors: 0,
     floorNo: 0,
-    furnishingStatus: '',
-    parkingType: '',
-    superBuiltUpArea: 0,
-    onMainRoad: false,
-    cornerProperty: false
+    totalFloors: 0,
+    roomType: '',
+    tenantType: '',
+    propertyAge: '',
+    facing: '',
+    builtUpArea: 0
   });
 
   const [locationDetails, setLocationDetails] = useState<LocationDetails>({
@@ -60,44 +55,31 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
     landmark: ''
   });
 
-  const [flattmatesDetails, setFlattmatesDetails] = useState<FlattmatesDetails>({
-    listingType: 'Flatmates',
-    expectedPrice: 0,
-    existingFlatmates: 1,
-    genderPreference: 'any',
-    occupation: 'any',
-    lifestylePreference: 'mixed',
-    smokingAllowed: false,
-    petsAllowed: false,
-    rentNegotiable: true,
-    maintenanceExtra: false,
-    maintenanceCharges: 0,
-    securityDeposit: 0,
-    depositNegotiable: true,
-    leaseDuration: '',
-    lockinPeriod: '',
-    brokerageType: '',
+  const [rentalDetails, setRentalDetails] = useState({
+    expectedRent: 0,
+    expectedDeposit: 0,
+    rentNegotiable: false,
+    monthlyMaintenance: '',
     availableFrom: '',
-    preferredTenants: '',
-    idealFor: []
+    furnishing: '',
+    parking: '',
+    description: ''
   });
 
-  const [amenities, setAmenities] = useState<FlattmatesAmenities>({
-    powerBackup: '',
-    lift: '',
-    parking: '',
-    washrooms: '',
-    waterStorageFacility: '',
-    security: '',
-    wifi: '',
-    currentPropertyCondition: '',
-    currentBusiness: '',
-    moreSimilarUnits: '',
+  const [amenities, setAmenities] = useState({
+    attachedBathroom: false,
+    acRoom: false,
+    balcony: false,
+    nonVegAllowed: false,
+    smokingAllowed: false,
+    drinkingAllowed: false,
+    gym: false,
+    gatedSecurity: false,
+    whoWillShow: '',
+    secondaryNumber: '',
+    waterSupply: '',
     directionsTip: '',
-    sharedKitchen: true,
-    sharedLivingRoom: true,
-    dedicatedBathroom: false,
-    sharedParking: false
+    selectedAmenities: []
   });
 
   const [gallery, setGallery] = useState<PropertyGallery>({
@@ -144,8 +126,8 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
     setCurrentStep(3);
   };
 
-  const handleFlattmatesDetailsNext = (data: any) => {
-    setFlattmatesDetails(data);
+  const handleRentalDetailsNext = (data: any) => {
+    setRentalDetails(data);
     setCompletedSteps(prev => prev.includes(3) ? prev : [...prev, 3]);
     setCurrentStep(4);
   };
@@ -172,15 +154,71 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
   const prevStep = () => setCurrentStep(prev => Math.max(prev - 1, 1));
   const goToStep = (step: number) => setCurrentStep(step);
 
-  const getFormData = () => ({
+  const getFormData = (): FlattmatesFormData => ({
     ownerInfo,
     propertyInfo: {
-      propertyDetails,
+      propertyDetails: {
+        title: `${propertyDetails.bhkType} ${propertyDetails.apartmentType} for Flatmates`,
+        propertyType: 'Flatmates',
+        buildingType: propertyDetails.apartmentType,
+        bhkType: propertyDetails.bhkType,
+        bathrooms: amenities.attachedBathroom ? 1 : 0,
+        balconies: amenities.balcony ? 1 : 0,
+        propertyAge: propertyDetails.propertyAge,
+        totalFloors: propertyDetails.totalFloors,
+        floorNo: propertyDetails.floorNo,
+        furnishingStatus: rentalDetails.furnishing,
+        parkingType: rentalDetails.parking,
+        superBuiltUpArea: propertyDetails.builtUpArea,
+        onMainRoad: false,
+        cornerProperty: false
+      },
       locationDetails,
-      flattmatesDetails,
-      amenities,
+      flattmatesDetails: {
+        listingType: 'Flatmates',
+        expectedPrice: rentalDetails.expectedRent,
+        existingFlatmates: 1,
+        genderPreference: propertyDetails.tenantType === 'Male' ? 'male' : propertyDetails.tenantType === 'Female' ? 'female' : 'any',
+        occupation: 'any',
+        lifestylePreference: 'mixed',
+        smokingAllowed: amenities.smokingAllowed,
+        petsAllowed: false,
+        rentNegotiable: rentalDetails.rentNegotiable,
+        maintenanceExtra: rentalDetails.monthlyMaintenance === 'Extra',
+        maintenanceCharges: 0,
+        securityDeposit: rentalDetails.expectedDeposit,
+        depositNegotiable: true,
+        leaseDuration: '',
+        lockinPeriod: '',
+        brokerageType: '',
+        availableFrom: rentalDetails.availableFrom,
+        preferredTenants: '',
+        idealFor: []
+      },
+      amenities: {
+        powerBackup: amenities.selectedAmenities.includes('power-backup') ? 'Yes' : 'No',
+        lift: amenities.selectedAmenities.includes('lift') ? 'Yes' : 'No',
+        parking: rentalDetails.parking,
+        washrooms: amenities.attachedBathroom ? 'Attached' : 'Common',
+        waterStorageFacility: amenities.waterSupply,
+        security: amenities.gatedSecurity ? 'Yes' : 'No',
+        wifi: '',
+        currentPropertyCondition: '',
+        currentBusiness: '',
+        moreSimilarUnits: '',
+        directionsTip: amenities.directionsTip,
+        sharedKitchen: true,
+        sharedLivingRoom: true,
+        dedicatedBathroom: amenities.attachedBathroom,
+        sharedParking: rentalDetails.parking !== 'None'
+      },
       gallery,
-      additionalInfo,
+      additionalInfo: {
+        ...additionalInfo,
+        description: rentalDetails.description,
+        whoWillShow: amenities.whoWillShow,
+        secondaryNumber: amenities.secondaryNumber
+      },
       scheduleInfo
     }
   });
@@ -193,7 +231,7 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
       throw new Error('Owner information is incomplete');
     }
     
-    if (!formData.propertyInfo.propertyDetails.title || !formData.propertyInfo.propertyDetails.bhkType) {
+    if (!formData.propertyInfo.propertyDetails.bhkType || !formData.propertyInfo.propertyDetails.buildingType) {
       throw new Error('Property details are incomplete');
     }
     
@@ -239,8 +277,8 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
 
         {currentStep === 3 && (
           <FlattmatesRentalDetailsStep
-            initialData={flattmatesDetails}
-            onNext={handleFlattmatesDetailsNext}
+            initialData={rentalDetails}
+            onNext={handleRentalDetailsNext}
             onBack={prevStep}
             currentStep={3}
             totalSteps={6}
@@ -288,151 +326,5 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
         )}
       </div>
     </div>
-  );
-};
-
-// Flatmates Details Step Component
-interface FlattmatesDetailsStepProps {
-  initialData: FlattmatesDetails;
-  onNext: (data: FlattmatesDetails) => void;
-  onBack: () => void;
-  currentStep: number;
-  totalSteps: number;
-}
-
-const FlattmatesDetailsStep: React.FC<FlattmatesDetailsStepProps> = ({
-  initialData,
-  onNext,
-  onBack,
-  currentStep,
-  totalSteps
-}) => {
-  const [formData, setFormData] = useState(initialData);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    onNext(formData);
-  };
-
-  return (
-    <form onSubmit={handleSubmit} className="max-w-4xl mx-auto">
-      <div className="bg-card rounded-lg p-8 shadow-sm">
-        <h2 className="text-2xl font-bold text-foreground mb-6">Flatmate Preferences</h2>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <label className="block text-sm font-medium mb-2">Monthly Rent Share</label>
-            <input
-              type="number"
-              value={formData.expectedPrice}
-              onChange={(e) => setFormData({...formData, expectedPrice: Number(e.target.value)})}
-              className="w-full p-3 border rounded-lg"
-              required
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium mb-2">Existing Flatmates</label>
-            <input
-              type="number"
-              min="0"
-              max="10"
-              value={formData.existingFlatmates}
-              onChange={(e) => setFormData({...formData, existingFlatmates: Number(e.target.value)})}
-              className="w-full p-3 border rounded-lg"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium mb-2">Gender Preference</label>
-            <select
-              value={formData.genderPreference}
-              onChange={(e) => setFormData({...formData, genderPreference: e.target.value as 'male' | 'female' | 'any'})}
-              className="w-full p-3 border rounded-lg"
-            >
-              <option value="any">Any</option>
-              <option value="male">Male Only</option>
-              <option value="female">Female Only</option>
-            </select>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium mb-2">Occupation Preference</label>
-            <select
-              value={formData.occupation}
-              onChange={(e) => setFormData({...formData, occupation: e.target.value as 'student' | 'working' | 'any'})}
-              className="w-full p-3 border rounded-lg"
-            >
-              <option value="any">Any</option>
-              <option value="student">Student</option>
-              <option value="working">Working Professional</option>
-            </select>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium mb-2">Lifestyle Preference</label>
-            <select
-              value={formData.lifestylePreference}
-              onChange={(e) => setFormData({...formData, lifestylePreference: e.target.value as 'social' | 'quiet' | 'mixed'})}
-              className="w-full p-3 border rounded-lg"
-            >
-              <option value="mixed">Mixed</option>
-              <option value="social">Social</option>
-              <option value="quiet">Quiet</option>
-            </select>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium mb-2">Security Deposit</label>
-            <input
-              type="number"
-              value={formData.securityDeposit}
-              onChange={(e) => setFormData({...formData, securityDeposit: Number(e.target.value)})}
-              className="w-full p-3 border rounded-lg"
-            />
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-          <div className="flex items-center">
-            <input
-              type="checkbox"
-              id="smokingAllowed"
-              checked={formData.smokingAllowed}
-              onChange={(e) => setFormData({...formData, smokingAllowed: e.target.checked})}
-              className="mr-3"
-            />
-            <label htmlFor="smokingAllowed" className="text-sm font-medium">Smoking Allowed</label>
-          </div>
-
-          <div className="flex items-center">
-            <input
-              type="checkbox"
-              id="petsAllowed"
-              checked={formData.petsAllowed}
-              onChange={(e) => setFormData({...formData, petsAllowed: e.target.checked})}
-              className="mr-3"
-            />
-            <label htmlFor="petsAllowed" className="text-sm font-medium">Pets Allowed</label>
-          </div>
-        </div>
-
-        <div className="flex justify-between mt-8">
-          <button
-            type="button"
-            onClick={onBack}
-            className="px-6 py-3 border border-border rounded-lg hover:bg-muted"
-          >
-            Back
-          </button>
-          <button
-            type="submit"
-            className="px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90"
-          >
-            Save & Continue
-          </button>
-        </div>
-      </div>
-    </form>
   );
 };
