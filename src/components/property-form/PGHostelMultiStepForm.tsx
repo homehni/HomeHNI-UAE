@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { PgHostelSidebar } from './PgHostelSidebar';
 import { PgHostelOwnerInfoStep } from './PgHostelOwnerInfoStep';
 import { PgHostelRoomTypeStep } from './PgHostelRoomTypeStep';
-import { PgHostelPropertyInfoStep } from './PgHostelPropertyInfoStep';
+
 import { PgHostelRoomDetailsStep } from './PgHostelRoomDetailsStep';
 import { PgHostelLocalityDetailsStep } from './PgHostelLocalityDetailsStep';
 import { PgHostelPgDetailsStep } from './PgHostelPgDetailsStep';
@@ -32,7 +32,9 @@ export const PGHostelMultiStepForm: React.FC<PGHostelMultiStepFormProps> = ({
   isSubmitting = false,
   initialOwnerInfo = {}
 }) => {
-  const [currentStep, setCurrentStep] = useState(1);
+  // Skip owner info if already provided
+  const hasOwnerInfo = initialOwnerInfo && Object.keys(initialOwnerInfo).length > 0;
+  const [currentStep, setCurrentStep] = useState(hasOwnerInfo ? 2 : 1);
   
   // PG/Hostel specific state
   const [ownerInfo, setOwnerInfo] = useState({
@@ -52,17 +54,6 @@ export const PGHostelMultiStepForm: React.FC<PGHostelMultiStepFormProps> = ({
     four: false,
   });
 
-  const [propertyInfo, setPropertyInfo] = useState({
-    propertyType: 'PG/Hostel',
-    buildingType: '',
-    propertyAge: '',
-    totalFloors: 0,
-    floorNo: 0,
-    furnishingStatus: '',
-    superBuiltUpArea: 0,
-    onMainRoad: false,
-    cornerProperty: false
-  });
 
   const [roomDetails, setRoomDetails] = useState({
     expectedRent: 0,
@@ -139,15 +130,14 @@ export const PGHostelMultiStepForm: React.FC<PGHostelMultiStepFormProps> = ({
     const steps = [];
     if (ownerInfo.fullName && ownerInfo.email && ownerInfo.phoneNumber) steps.push(1);
     if (roomTypes.single || roomTypes.double || roomTypes.three || roomTypes.four) steps.push(2);
-    if (propertyInfo.propertyType && propertyInfo.buildingType) steps.push(3);
-    if (roomDetails.expectedRent > 0) steps.push(4);
-    if (localityDetails.state && localityDetails.city) steps.push(5);
-    if (pgDetails.genderPreference && pgDetails.preferredGuests) steps.push(6);
-    if (amenities.laundry !== '') steps.push(7);
-    if (gallery.images.length >= 3) steps.push(8);
-    if (scheduleInfo.availability) steps.push(9);
+    if (roomDetails.expectedRent > 0) steps.push(3);
+    if (localityDetails.state && localityDetails.city) steps.push(4);
+    if (pgDetails.genderPreference && pgDetails.preferredGuests) steps.push(5);
+    if (amenities.laundry !== '') steps.push(6);
+    if (gallery.images.length >= 3) steps.push(7);
+    if (scheduleInfo.availability) steps.push(8);
     return steps;
-  }, [ownerInfo, roomTypes, propertyInfo, roomDetails, localityDetails, pgDetails, amenities, gallery, scheduleInfo]);
+  }, [ownerInfo, roomTypes, roomDetails, localityDetails, pgDetails, amenities, gallery, scheduleInfo]);
 
   // Step handlers
   const handleOwnerInfoNext = (data: any) => {
@@ -160,34 +150,29 @@ export const PGHostelMultiStepForm: React.FC<PGHostelMultiStepFormProps> = ({
     setCurrentStep(3);
   };
 
-  const handlePropertyInfoNext = (data: any) => {
-    setPropertyInfo(data);
-    setCurrentStep(4);
-  };
-
   const handleRoomDetailsNext = (data: any) => {
     setRoomDetails(data);
-    setCurrentStep(5);
+    setCurrentStep(4);
   };
 
   const handleLocalityDetailsNext = (data: any) => {
     setLocalityDetails(data);
-    setCurrentStep(6);
+    setCurrentStep(5);
   };
 
   const handlePgDetailsNext = (data: any) => {
     setPgDetails(data);
-    setCurrentStep(7);
+    setCurrentStep(6);
   };
 
   const handleAmenitiesNext = (data: any) => {
     setAmenities(data);
-    setCurrentStep(8);
+    setCurrentStep(7);
   };
 
   const handleGalleryNext = (data: any) => {
     setGallery(data);
-    setCurrentStep(9);
+    setCurrentStep(8);
   };
 
   const handleScheduleNext = (data: any) => {
@@ -196,7 +181,7 @@ export const PGHostelMultiStepForm: React.FC<PGHostelMultiStepFormProps> = ({
     handleSubmit();
   };
 
-  const prevStep = () => setCurrentStep(prev => Math.max(prev - 1, 1));
+  const prevStep = () => setCurrentStep(prev => Math.max(prev - 1, hasOwnerInfo ? 2 : 1));
 
   const getFormData = (): PGHostelFormData => ({
     ownerInfo: {
@@ -212,19 +197,19 @@ export const PGHostelMultiStepForm: React.FC<PGHostelMultiStepFormProps> = ({
     propertyInfo: {
       propertyDetails: {
         title: `PG/Hostel with multiple room types`,
-        propertyType: propertyInfo.propertyType,
-        buildingType: propertyInfo.buildingType,
+        propertyType: 'PG/Hostel',
+        buildingType: 'PG',
         bhkType: 'Multiple',
         bathrooms: roomDetails.attachedBathroom ? 1 : 0,
         balconies: 0,
-        propertyAge: propertyInfo.propertyAge,
-        totalFloors: propertyInfo.totalFloors,
-        floorNo: propertyInfo.floorNo,
-        furnishingStatus: propertyInfo.furnishingStatus,
+        propertyAge: 'New',
+        totalFloors: 1,
+        floorNo: 1,
+        furnishingStatus: 'Furnished',
         parkingType: amenities.parking !== 'none' ? 'Available' : 'Not Available',
-        superBuiltUpArea: propertyInfo.superBuiltUpArea,
-        onMainRoad: propertyInfo.onMainRoad,
-        cornerProperty: propertyInfo.cornerProperty
+        superBuiltUpArea: 1000,
+        onMainRoad: false,
+        cornerProperty: false
       },
       locationDetails: localityDetails,
       pgDetails: {
@@ -289,10 +274,6 @@ export const PGHostelMultiStepForm: React.FC<PGHostelMultiStepFormProps> = ({
       throw new Error('At least one room type must be selected');
     }
     
-    if (!propertyInfo.propertyType || !propertyInfo.buildingType) {
-      throw new Error('Property details are incomplete');
-    }
-    
     if (gallery.images.length < 3) {
       throw new Error('At least 3 images are required');
     }
@@ -310,12 +291,12 @@ export const PGHostelMultiStepForm: React.FC<PGHostelMultiStepFormProps> = ({
       
       {/* Main Content */}
       <div className="flex-1">
-        {currentStep === 1 && (
+        {!hasOwnerInfo && currentStep === 1 && (
           <PgHostelOwnerInfoStep
             initialData={ownerInfo}
             onNext={handleOwnerInfoNext}
             currentStep={1}
-            totalSteps={9}
+            totalSteps={8}
           />
         )}
 
@@ -323,78 +304,69 @@ export const PGHostelMultiStepForm: React.FC<PGHostelMultiStepFormProps> = ({
           <PgHostelRoomTypeStep
             initialData={roomTypes}
             onNext={handleRoomTypesNext}
-            currentStep={2}
-            totalSteps={9}
+            currentStep={hasOwnerInfo ? 1 : 2}
+            totalSteps={hasOwnerInfo ? 7 : 8}
           />
         )}
 
         {currentStep === 3 && (
-          <PgHostelPropertyInfoStep
-            initialData={propertyInfo}
-            onNext={handlePropertyInfoNext}
+          <PgHostelRoomDetailsStep
+            initialData={roomDetails}
+            roomTypes={roomTypes}
+            onNext={handleRoomDetailsNext}
             onBack={prevStep}
-            currentStep={3}
-            totalSteps={9}
+            currentStep={hasOwnerInfo ? 2 : 3}
+            totalSteps={hasOwnerInfo ? 7 : 8}
           />
         )}
 
         {currentStep === 4 && (
-          <PgHostelRoomDetailsStep
-            initialData={roomDetails}
-            onNext={handleRoomDetailsNext}
-            onBack={prevStep}
-            currentStep={4}
-            totalSteps={9}
-          />
-        )}
-
-        {currentStep === 5 && (
           <PgHostelLocalityDetailsStep
             initialData={localityDetails}
             onNext={handleLocalityDetailsNext}
             onBack={prevStep}
-            currentStep={5}
-            totalSteps={9}
+            currentStep={hasOwnerInfo ? 3 : 4}
+            totalSteps={hasOwnerInfo ? 7 : 8}
           />
         )}
 
-        {currentStep === 6 && (
+        {currentStep === 5 && (
           <PgHostelPgDetailsStep
             initialData={pgDetails}
             onNext={handlePgDetailsNext}
             onBack={prevStep}
-            currentStep={6}
-            totalSteps={9}
+            currentStep={hasOwnerInfo ? 4 : 5}
+            totalSteps={hasOwnerInfo ? 7 : 8}
           />
         )}
 
-        {currentStep === 7 && (
+        {currentStep === 6 && (
           <PgHostelAmenitiesStep
             initialData={amenities}
             onNext={handleAmenitiesNext}
             onBack={prevStep}
-            currentStep={7}
-            totalSteps={9}
+            currentStep={hasOwnerInfo ? 5 : 6}
+            totalSteps={hasOwnerInfo ? 7 : 8}
           />
         )}
 
-        {currentStep === 8 && (
+        {currentStep === 7 && (
           <PgHostelGalleryStep
             initialData={gallery}
             onNext={handleGalleryNext}
             onBack={prevStep}
-            currentStep={8}
-            totalSteps={9}
+            currentStep={hasOwnerInfo ? 6 : 7}
+            totalSteps={hasOwnerInfo ? 7 : 8}
           />
         )}
 
-        {currentStep === 9 && (
+        {currentStep === 8 && (
           <PgHostelScheduleStep
             initialData={scheduleInfo}
             onNext={handleScheduleNext}
             onBack={prevStep}
-            currentStep={9}
-            totalSteps={9}
+            currentStep={hasOwnerInfo ? 7 : 8}
+            totalSteps={hasOwnerInfo ? 7 : 8}
           />
         )}
       </div>

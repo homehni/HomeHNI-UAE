@@ -9,13 +9,12 @@ interface PgHostelSidebarProps {
 const steps = [
   { id: 1, title: 'Owner Info', description: 'Basic owner details' },
   { id: 2, title: 'Room Types', description: 'Available room types' },
-  { id: 3, title: 'Property Info', description: 'Property specifications' },
-  { id: 4, title: 'Room Details', description: 'Room info & amenities' },
-  { id: 5, title: 'Locality Details', description: 'Location information' },
-  { id: 6, title: 'PG Details', description: 'PG specific details' },
-  { id: 7, title: 'Amenities', description: 'Services & amenities' },
-  { id: 8, title: 'Gallery', description: 'Photos & videos' },
-  { id: 9, title: 'Schedule', description: 'Availability & schedule' },
+  { id: 3, title: 'Room Details', description: 'Room info & amenities' },
+  { id: 4, title: 'Locality Details', description: 'Location information' },
+  { id: 5, title: 'PG Details', description: 'PG specific details' },
+  { id: 6, title: 'Amenities', description: 'Services & amenities' },
+  { id: 7, title: 'Gallery', description: 'Photos & videos' },
+  { id: 8, title: 'Schedule', description: 'Availability & schedule' },
 ];
 
 export function PgHostelSidebar({ currentStep, completedSteps }: PgHostelSidebarProps) {

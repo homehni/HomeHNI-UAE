@@ -19,8 +19,16 @@ interface PgHostelRoomDetails {
   };
 }
 
+interface RoomType {
+  single: boolean;
+  double: boolean;
+  three: boolean;
+  four: boolean;
+}
+
 interface PgHostelRoomDetailsStepProps {
   initialData?: Partial<PgHostelRoomDetails>;
+  roomTypes: RoomType;
   onNext: (data: PgHostelRoomDetails) => void;
   onBack: () => void;
   currentStep: number;
@@ -29,6 +37,7 @@ interface PgHostelRoomDetailsStepProps {
 
 export function PgHostelRoomDetailsStep({ 
   initialData, 
+  roomTypes,
   onNext, 
   onBack, 
   currentStep, 
@@ -79,7 +88,12 @@ export function PgHostelRoomDetailsStep({
                 <Bed className="w-8 h-8 text-primary" />
               </div>
             </div>
-            <CardTitle className="text-2xl text-foreground">Single Room Details</CardTitle>
+            <CardTitle className="text-2xl text-foreground">
+              {roomTypes.single ? 'Single' : 
+               roomTypes.double ? 'Double' : 
+               roomTypes.three ? 'Three Sharing' : 
+               roomTypes.four ? 'Four Sharing' : 'Single'} Room Details
+            </CardTitle>
           </CardHeader>
           <CardContent className="px-0">
             <form onSubmit={handleSubmit} className="space-y-8">
