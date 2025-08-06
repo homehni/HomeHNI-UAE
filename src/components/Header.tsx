@@ -170,7 +170,7 @@ const Header = () => {
     {/* Custom Rental Dropdown */}
     {isRentalDropdownOpen && (
       <div 
-        className="absolute top-full left-0 w-56 bg-white border border-gray-200 rounded-lg shadow-xl z-50 mt-2"
+        className="absolute top-full left-0 w-32 bg-white border border-gray-200 rounded-lg shadow-xl z-50 mt-2"
         onMouseEnter={handleRentalHover}
         onMouseLeave={handleRentalLeave}
       >
