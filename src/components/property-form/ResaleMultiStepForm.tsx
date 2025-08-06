@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useSalePropertyForm } from '@/hooks/useSalePropertyForm';
 import { ProgressIndicator } from './ProgressIndicator';
-import { OwnerInfoStep } from './OwnerInfoStep';
 import { PropertyDetailsStep } from './PropertyDetailsStep';
 import { LocationDetailsStep } from './LocationDetailsStep';
 import { SaleDetailsStep } from './SaleDetailsStep';
@@ -66,10 +65,6 @@ export const ResaleMultiStepForm: React.FC<ResaleMultiStepFormProps> = ({
     return completed;
   }, [isStepValid, currentStep]);
 
-  const handleOwnerInfoNext = (data: OwnerInfo) => {
-    updateOwnerInfo(data);
-    nextStep();
-  };
 
   const handlePropertyDetailsNext = (data: any) => {
     updatePropertyDetails(data);
@@ -167,7 +162,7 @@ export const ResaleMultiStepForm: React.FC<ResaleMultiStepFormProps> = ({
       <div className="mb-12">
         <ProgressIndicator
           currentStep={currentStep}
-          totalSteps={9}
+          totalSteps={8}
           completedSteps={completedSteps}
         />
       </div>
@@ -176,38 +171,29 @@ export const ResaleMultiStepForm: React.FC<ResaleMultiStepFormProps> = ({
       <div className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden animate-scale-in">
         {currentStep === 1 && (
           <div className="p-6 md:p-8">
-            <OwnerInfoStep
-              initialData={ownerInfo}
-              onNext={handleOwnerInfoNext}
+            <PropertyDetailsStep
+              initialData={propertyDetails}
+              onNext={handlePropertyDetailsNext}
+              onBack={() => {}} // No back on first step
+              currentStep={currentStep}
+              totalSteps={8}
             />
           </div>
         )}
 
         {currentStep === 2 && (
           <div className="p-6 md:p-8">
-            <PropertyDetailsStep
-              initialData={propertyDetails}
-              onNext={handlePropertyDetailsNext}
-              onBack={prevStep}
-              currentStep={currentStep}
-              totalSteps={7}
-            />
-          </div>
-        )}
-
-        {currentStep === 3 && (
-          <div className="p-6 md:p-8">
             <LocationDetailsStep
               initialData={locationDetails}
               onNext={handleLocationDetailsNext}
               onBack={prevStep}
               currentStep={currentStep}
-              totalSteps={7}
+              totalSteps={8}
             />
           </div>
         )}
 
-        {currentStep === 4 && (
+        {currentStep === 3 && (
           <div className="p-6 md:p-8">
             <SaleDetailsStep
               initialData={saleDetails}
@@ -217,7 +203,7 @@ export const ResaleMultiStepForm: React.FC<ResaleMultiStepFormProps> = ({
           </div>
         )}
 
-        {currentStep === 5 && (
+        {currentStep === 4 && (
           <div className="p-6 md:p-8">
             <AmenitiesStep
               initialData={amenities}
@@ -227,7 +213,7 @@ export const ResaleMultiStepForm: React.FC<ResaleMultiStepFormProps> = ({
           </div>
         )}
 
-        {currentStep === 6 && (
+        {currentStep === 5 && (
           <div className="p-6 md:p-8">
             <GalleryStep
               initialData={gallery}
@@ -237,7 +223,7 @@ export const ResaleMultiStepForm: React.FC<ResaleMultiStepFormProps> = ({
           </div>
         )}
 
-        {currentStep === 7 && (
+        {currentStep === 6 && (
           <div className="p-6 md:p-8">
             <AdditionalInfoStep
               initialData={additionalInfo}
@@ -247,7 +233,7 @@ export const ResaleMultiStepForm: React.FC<ResaleMultiStepFormProps> = ({
           </div>
         )}
 
-        {currentStep === 8 && (
+        {currentStep === 7 && (
           <div className="p-6 md:p-8">
             <ScheduleStep
               initialData={scheduleInfo}
@@ -257,7 +243,7 @@ export const ResaleMultiStepForm: React.FC<ResaleMultiStepFormProps> = ({
           </div>
         )}
 
-        {currentStep === 9 && (
+        {currentStep === 8 && (
           <div className="p-6 md:p-8">
             <PreviewStep
               formData={getFormData()}
