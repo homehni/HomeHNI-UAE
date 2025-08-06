@@ -1,19 +1,29 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Badge } from '@/components/ui/badge';
-import { PropertyDetailsStep } from './PropertyDetailsStep';
-import { LocationDetailsStep } from './LocationDetailsStep';
-import { AmenitiesStep } from './AmenitiesStep';
-import { GalleryStep } from './GalleryStep';
-import { AdditionalInfoStep } from './AdditionalInfoStep';
-import { ScheduleStep } from './ScheduleStep';
-import { PreviewStep } from './PreviewStep';
-import { ProgressIndicator } from './ProgressIndicator';
-import { OwnerInfo, PropertyDetails, LocationDetails, PropertyAmenities, PropertyGallery, AdditionalInfo, ScheduleInfo, PGHostelDetails, PGHostelAmenities, PGHostelFormData } from '@/types/property';
+import { PgHostelSidebar } from './PgHostelSidebar';
+import { PgHostelOwnerInfoStep } from './PgHostelOwnerInfoStep';
+import { PgHostelPropertyInfoStep } from './PgHostelPropertyInfoStep';
+import { PgHostelRoomDetailsStep } from './PgHostelRoomDetailsStep';
+import { PgHostelLocalityDetailsStep } from './PgHostelLocalityDetailsStep';
+import { PgHostelPgDetailsStep } from './PgHostelPgDetailsStep';
+import { PgHostelAmenitiesStep } from './PgHostelAmenitiesStep';
+import { PgHostelGalleryStep } from './PgHostelGalleryStep';
+import { PgHostelScheduleStep } from './PgHostelScheduleStep';
+import { PGHostelFormData, OwnerInfo } from '@/types/property';
+
+// Define local interfaces to match the components
+interface LocalOwnerInfo {
+  fullName: string;
+  phoneNumber: string;
+  email: string;
+  role: 'Owner' | 'Agent' | 'Builder';
+  city: string;
+  whatsappUpdates: boolean;
+}
 
 interface PGHostelMultiStepFormProps {
   onSubmit: (data: PGHostelFormData) => void;
   isSubmitting?: boolean;
-  initialOwnerInfo?: Partial<OwnerInfo>;
+  initialOwnerInfo?: Partial<LocalOwnerInfo>;
 }
 
 export const PGHostelMultiStepForm: React.FC<PGHostelMultiStepFormProps> = ({
@@ -22,36 +32,42 @@ export const PGHostelMultiStepForm: React.FC<PGHostelMultiStepFormProps> = ({
   initialOwnerInfo = {}
 }) => {
   const [currentStep, setCurrentStep] = useState(1);
-  const [ownerInfo, setOwnerInfo] = useState<OwnerInfo>({
+  
+  // PG/Hostel specific state
+  const [ownerInfo, setOwnerInfo] = useState({
     fullName: '',
     phoneNumber: '',
     email: '',
-    role: 'Owner',
+    role: 'Owner' as const,
     city: '',
     whatsappUpdates: false,
-    propertyType: 'Residential',
-    listingType: 'PG/Hostel',
     ...initialOwnerInfo
   });
 
-  const [propertyDetails, setPropertyDetails] = useState<PropertyDetails>({
-    title: '',
+  const [propertyInfo, setPropertyInfo] = useState({
     propertyType: 'PG/Hostel',
     buildingType: '',
-    bhkType: '',
-    bathrooms: 0,
-    balconies: 0,
     propertyAge: '',
     totalFloors: 0,
     floorNo: 0,
     furnishingStatus: '',
-    parkingType: '',
     superBuiltUpArea: 0,
     onMainRoad: false,
     cornerProperty: false
   });
 
-  const [locationDetails, setLocationDetails] = useState<LocationDetails>({
+  const [roomDetails, setRoomDetails] = useState({
+    expectedRent: 0,
+    expectedDeposit: 0,
+    cupboard: false,
+    geyser: false,
+    tv: false,
+    ac: false,
+    bedding: false,
+    attachedBathroom: false
+  });
+
+  const [localityDetails, setLocalityDetails] = useState({
     state: '',
     city: '',
     locality: '',
@@ -60,63 +76,37 @@ export const PGHostelMultiStepForm: React.FC<PGHostelMultiStepFormProps> = ({
     landmark: ''
   });
 
-  const [pgDetails, setPgDetails] = useState<PGHostelDetails>({
-    listingType: 'PG/Hostel',
-    expectedPrice: 0,
-    roomType: 'single',
-    genderPreference: 'any',
-    mealOptions: 'optional',
-    rentNegotiable: true,
-    maintenanceExtra: false,
-    maintenanceCharges: 0,
-    securityDeposit: 0,
-    depositNegotiable: true,
-    leaseDuration: '',
-    lockinPeriod: '',
-    brokerageType: '',
-    availableFrom: '',
-    preferredTenants: '',
-    idealFor: [],
+  const [pgDetails, setPgDetails] = useState({
+    roomType: 'single' as const,
+    genderPreference: 'any' as const,
+    mealOptions: 'optional' as const,
     timingRestrictions: '',
     houseRules: ''
   });
 
-  const [amenities, setAmenities] = useState<PGHostelAmenities>({
-    powerBackup: '',
-    lift: '',
-    parking: '',
-    washrooms: '',
-    waterStorageFacility: '',
-    security: '',
-    wifi: '',
-    currentPropertyCondition: '',
-    currentBusiness: '',
-    moreSimilarUnits: '',
-    directionsTip: '',
-    meals: 'none',
-    laundry: 'not-available',
-    commonArea: 'tv-room',
-    cleaning: 'self'
+  const [amenities, setAmenities] = useState({
+    wifi: false,
+    parking: false,
+    security: false,
+    powerBackup: false,
+    lift: false,
+    washrooms: false,
+    waterStorage: false,
+    laundry: false,
+    meals: false,
+    commonArea: false,
+    cleaning: false
   });
 
-  const [gallery, setGallery] = useState<PropertyGallery>({
+  const [gallery, setGallery] = useState({
     images: [],
     video: undefined
   });
 
-  const [additionalInfo, setAdditionalInfo] = useState<AdditionalInfo>({
-    description: '',
-    previousOccupancy: '',
-    whoWillShow: '',
-    paintingRequired: '',
-    cleaningRequired: '',
-    secondaryNumber: ''
-  });
-
-  const [scheduleInfo, setScheduleInfo] = useState<ScheduleInfo>({
-    availability: 'everyday',
-    paintingService: 'decline',
-    cleaningService: 'decline',
+  const [scheduleInfo, setScheduleInfo] = useState({
+    availability: 'everyday' as const,
+    paintingService: 'decline' as const,
+    cleaningService: 'decline' as const,
     startTime: '',
     endTime: '',
     availableAllDay: true
@@ -130,64 +120,137 @@ export const PGHostelMultiStepForm: React.FC<PGHostelMultiStepFormProps> = ({
 
   const completedSteps = useMemo(() => {
     const steps = [];
-    if (propertyDetails.title && propertyDetails.bhkType) steps.push(1);
-    if (locationDetails.state && locationDetails.city) steps.push(2);
-    if (pgDetails.expectedPrice > 0) steps.push(3);
-    if (amenities.powerBackup !== '') steps.push(4);
-    if (gallery.images.length >= 3) steps.push(5);
-    if (additionalInfo.description) steps.push(6);
-    if (scheduleInfo.availability) steps.push(7);
+    if (ownerInfo.fullName && ownerInfo.email && ownerInfo.phoneNumber) steps.push(1);
+    if (propertyInfo.propertyType && propertyInfo.buildingType) steps.push(2);
+    if (roomDetails.expectedRent > 0) steps.push(3);
+    if (localityDetails.state && localityDetails.city) steps.push(4);
+    if (pgDetails.roomType) steps.push(5);
+    if (amenities.wifi !== undefined) steps.push(6);
+    if (gallery.images.length >= 3) steps.push(7);
+    if (scheduleInfo.availability) steps.push(8);
     return steps;
-  }, [propertyDetails, locationDetails, pgDetails, amenities, gallery, additionalInfo, scheduleInfo]);
+  }, [ownerInfo, propertyInfo, roomDetails, localityDetails, pgDetails, amenities, gallery, scheduleInfo]);
 
-  const handlePropertyDetailsNext = (data: PropertyDetails) => {
-    setPropertyDetails(data);
+  // Step handlers
+  const handleOwnerInfoNext = (data: any) => {
+    setOwnerInfo(data);
     setCurrentStep(2);
   };
 
-  const handleLocationDetailsNext = (data: LocationDetails) => {
-    setLocationDetails(data);
+  const handlePropertyInfoNext = (data: any) => {
+    setPropertyInfo(data);
     setCurrentStep(3);
   };
 
-  const handlePGDetailsNext = (data: PGHostelDetails) => {
-    setPgDetails(data);
+  const handleRoomDetailsNext = (data: any) => {
+    setRoomDetails(data);
     setCurrentStep(4);
   };
 
-  const handleAmenitiesNext = (data: PGHostelAmenities) => {
-    setAmenities(data);
+  const handleLocalityDetailsNext = (data: any) => {
+    setLocalityDetails(data);
     setCurrentStep(5);
   };
 
-  const handleGalleryNext = (data: PropertyGallery) => {
-    setGallery(data);
+  const handlePgDetailsNext = (data: any) => {
+    setPgDetails(data);
     setCurrentStep(6);
   };
 
-  const handleAdditionalInfoNext = (data: AdditionalInfo) => {
-    setAdditionalInfo(data);
+  const handleAmenitiesNext = (data: any) => {
+    setAmenities(data);
     setCurrentStep(7);
   };
 
-  const handleScheduleNext = (data: ScheduleInfo) => {
-    setScheduleInfo(data);
+  const handleGalleryNext = (data: any) => {
+    setGallery(data);
     setCurrentStep(8);
   };
 
-  const nextStep = () => setCurrentStep(prev => Math.min(prev + 1, 8));
-  const prevStep = () => setCurrentStep(prev => Math.max(prev - 1, 1));
-  const goToStep = (step: number) => setCurrentStep(step);
+  const handleScheduleNext = (data: any) => {
+    setScheduleInfo(data);
+    // Form complete, submit
+    handleSubmit();
+  };
 
-  const getFormData = () => ({
-    ownerInfo,
+  const prevStep = () => setCurrentStep(prev => Math.max(prev - 1, 1));
+
+  const getFormData = (): PGHostelFormData => ({
+    ownerInfo: {
+      fullName: ownerInfo.fullName,
+      phoneNumber: ownerInfo.phoneNumber,
+      email: ownerInfo.email,
+      role: ownerInfo.role,
+      city: ownerInfo.city,
+      whatsappUpdates: ownerInfo.whatsappUpdates,
+      propertyType: 'Residential',
+      listingType: 'PG/Hostel'
+    },
     propertyInfo: {
-      propertyDetails,
-      locationDetails,
-      pgDetails,
-      amenities,
+      propertyDetails: {
+        title: `${pgDetails.roomType} room in PG/Hostel`,
+        propertyType: propertyInfo.propertyType,
+        buildingType: propertyInfo.buildingType,
+        bhkType: pgDetails.roomType,
+        bathrooms: roomDetails.attachedBathroom ? 1 : 0,
+        balconies: 0,
+        propertyAge: propertyInfo.propertyAge,
+        totalFloors: propertyInfo.totalFloors,
+        floorNo: propertyInfo.floorNo,
+        furnishingStatus: propertyInfo.furnishingStatus,
+        parkingType: amenities.parking ? 'Available' : 'Not Available',
+        superBuiltUpArea: propertyInfo.superBuiltUpArea,
+        onMainRoad: propertyInfo.onMainRoad,
+        cornerProperty: propertyInfo.cornerProperty
+      },
+      locationDetails: localityDetails,
+      pgDetails: {
+        listingType: 'PG/Hostel',
+        expectedPrice: roomDetails.expectedRent,
+        roomType: pgDetails.roomType,
+        genderPreference: pgDetails.genderPreference,
+        mealOptions: pgDetails.mealOptions,
+        securityDeposit: roomDetails.expectedDeposit,
+        timingRestrictions: pgDetails.timingRestrictions,
+        houseRules: pgDetails.houseRules,
+        rentNegotiable: true,
+        maintenanceExtra: false,
+        maintenanceCharges: 0,
+        depositNegotiable: true,
+        leaseDuration: '',
+        lockinPeriod: '',
+        brokerageType: '',
+        availableFrom: '',
+        preferredTenants: '',
+        idealFor: []
+      },
+      amenities: {
+        ...amenities,
+        powerBackup: amenities.powerBackup ? 'Available' : 'Not Available',
+        lift: amenities.lift ? 'Available' : 'Not Available',
+        parking: amenities.parking ? 'Available' : 'Not Available',
+        washrooms: amenities.washrooms ? 'Available' : 'Not Available',
+        waterStorageFacility: amenities.waterStorage ? 'Available' : 'Not Available',
+        security: amenities.security ? 'Available' : 'Not Available',
+        wifi: amenities.wifi ? 'Available' : 'Not Available',
+        meals: amenities.meals ? 'breakfast' : 'none',
+        laundry: amenities.laundry ? 'included' : 'not-available',
+        commonArea: amenities.commonArea ? 'tv-room' : undefined,
+        cleaning: amenities.cleaning ? 'daily' : 'self',
+        currentPropertyCondition: '',
+        currentBusiness: '',
+        moreSimilarUnits: '',
+        directionsTip: ''
+      },
       gallery,
-      additionalInfo,
+      additionalInfo: {
+        description: '',
+        previousOccupancy: '',
+        whoWillShow: '',
+        paintingRequired: '',
+        cleaningRequired: '',
+        secondaryNumber: ''
+      },
       scheduleInfo
     }
   });
@@ -195,16 +258,16 @@ export const PGHostelMultiStepForm: React.FC<PGHostelMultiStepFormProps> = ({
   const handleSubmit = () => {
     const formData = getFormData();
     
-    // Enhanced validation
-    if (!formData.ownerInfo.fullName || !formData.ownerInfo.email || !formData.ownerInfo.phoneNumber) {
+    // Validation
+    if (!ownerInfo.fullName || !ownerInfo.email || !ownerInfo.phoneNumber) {
       throw new Error('Owner information is incomplete');
     }
     
-    if (!formData.propertyInfo.propertyDetails.title || !formData.propertyInfo.propertyDetails.bhkType) {
+    if (!propertyInfo.propertyType || !propertyInfo.buildingType) {
       throw new Error('Property details are incomplete');
     }
     
-    if (formData.propertyInfo.gallery.images.length < 3) {
+    if (gallery.images.length < 3) {
       throw new Error('At least 3 images are required');
     }
     
@@ -212,37 +275,28 @@ export const PGHostelMultiStepForm: React.FC<PGHostelMultiStepFormProps> = ({
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50/30 to-yellow-100/30">
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        <div className="text-center mb-8">
-          <Badge variant="secondary" className="bg-orange-100 text-orange-800 px-6 py-2 text-lg font-semibold mb-4">
-            🏠 PG/HOSTEL PROPERTY FORM
-          </Badge>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-            List your PG or hostel property with specialized details for student and working professional accommodation.
-          </p>
-        </div>
-
-        <ProgressIndicator 
-          currentStep={currentStep} 
-          totalSteps={8}
-          completedSteps={completedSteps}
-        />
-
+    <div className="min-h-screen bg-background flex">
+      {/* Sidebar */}
+      <PgHostelSidebar 
+        currentStep={currentStep} 
+        completedSteps={completedSteps} 
+      />
+      
+      {/* Main Content */}
+      <div className="flex-1">
         {currentStep === 1 && (
-          <PropertyDetailsStep
-            initialData={propertyDetails}
-            onNext={handlePropertyDetailsNext}
-            onBack={() => {}}
+          <PgHostelOwnerInfoStep
+            initialData={ownerInfo}
+            onNext={handleOwnerInfoNext}
             currentStep={1}
             totalSteps={8}
           />
         )}
 
         {currentStep === 2 && (
-          <LocationDetailsStep
-            initialData={locationDetails}
-            onNext={handleLocationDetailsNext}
+          <PgHostelPropertyInfoStep
+            initialData={propertyInfo}
+            onNext={handlePropertyInfoNext}
             onBack={prevStep}
             currentStep={2}
             totalSteps={8}
@@ -250,9 +304,9 @@ export const PGHostelMultiStepForm: React.FC<PGHostelMultiStepFormProps> = ({
         )}
 
         {currentStep === 3 && (
-          <PGDetailsStep
-            initialData={pgDetails}
-            onNext={handlePGDetailsNext}
+          <PgHostelRoomDetailsStep
+            initialData={roomDetails}
+            onNext={handleRoomDetailsNext}
             onBack={prevStep}
             currentStep={3}
             totalSteps={8}
@@ -260,9 +314,9 @@ export const PGHostelMultiStepForm: React.FC<PGHostelMultiStepFormProps> = ({
         )}
 
         {currentStep === 4 && (
-          <AmenitiesStep
-            initialData={amenities}
-            onNext={handleAmenitiesNext}
+          <PgHostelLocalityDetailsStep
+            initialData={localityDetails}
+            onNext={handleLocalityDetailsNext}
             onBack={prevStep}
             currentStep={4}
             totalSteps={8}
@@ -270,9 +324,9 @@ export const PGHostelMultiStepForm: React.FC<PGHostelMultiStepFormProps> = ({
         )}
 
         {currentStep === 5 && (
-          <GalleryStep
-            initialData={gallery}
-            onNext={handleGalleryNext}
+          <PgHostelPgDetailsStep
+            initialData={pgDetails}
+            onNext={handlePgDetailsNext}
             onBack={prevStep}
             currentStep={5}
             totalSteps={8}
@@ -280,163 +334,35 @@ export const PGHostelMultiStepForm: React.FC<PGHostelMultiStepFormProps> = ({
         )}
 
         {currentStep === 6 && (
-          <AdditionalInfoStep
-            initialData={additionalInfo}
-            onNext={handleAdditionalInfoNext}
+          <PgHostelAmenitiesStep
+            initialData={amenities}
+            onNext={handleAmenitiesNext}
             onBack={prevStep}
+            currentStep={6}
+            totalSteps={8}
           />
         )}
 
         {currentStep === 7 && (
-          <ScheduleStep
-            initialData={scheduleInfo}
-            onNext={handleScheduleNext}
+          <PgHostelGalleryStep
+            initialData={gallery}
+            onNext={handleGalleryNext}
             onBack={prevStep}
+            currentStep={7}
+            totalSteps={8}
           />
         )}
 
         {currentStep === 8 && (
-          <PreviewStep
-            formData={getFormData()}
+          <PgHostelScheduleStep
+            initialData={scheduleInfo}
+            onNext={handleScheduleNext}
             onBack={prevStep}
-            onEdit={goToStep}
-            onSubmit={handleSubmit}
-            isSubmitting={isSubmitting}
+            currentStep={8}
+            totalSteps={8}
           />
         )}
       </div>
     </div>
-  );
-};
-
-// PG Details Step Component
-interface PGDetailsStepProps {
-  initialData: PGHostelDetails;
-  onNext: (data: PGHostelDetails) => void;
-  onBack: () => void;
-  currentStep: number;
-  totalSteps: number;
-}
-
-const PGDetailsStep: React.FC<PGDetailsStepProps> = ({
-  initialData,
-  onNext,
-  onBack,
-  currentStep,
-  totalSteps
-}) => {
-  const [formData, setFormData] = useState(initialData);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    onNext(formData);
-  };
-
-  return (
-    <form onSubmit={handleSubmit} className="max-w-4xl mx-auto">
-      <div className="bg-card rounded-lg p-8 shadow-sm">
-        <h2 className="text-2xl font-bold text-foreground mb-6">PG/Hostel Details</h2>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <label className="block text-sm font-medium mb-2">Expected Rent (Monthly)</label>
-            <input
-              type="number"
-              value={formData.expectedPrice}
-              onChange={(e) => setFormData({...formData, expectedPrice: Number(e.target.value)})}
-              className="w-full p-3 border rounded-lg"
-              required
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium mb-2">Room Type</label>
-            <select
-              value={formData.roomType}
-              onChange={(e) => setFormData({...formData, roomType: e.target.value as 'single' | 'shared' | 'dormitory'})}
-              className="w-full p-3 border rounded-lg"
-            >
-              <option value="single">Single Room</option>
-              <option value="shared">Shared Room</option>
-              <option value="dormitory">Dormitory</option>
-            </select>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium mb-2">Gender Preference</label>
-            <select
-              value={formData.genderPreference}
-              onChange={(e) => setFormData({...formData, genderPreference: e.target.value as 'male' | 'female' | 'any'})}
-              className="w-full p-3 border rounded-lg"
-            >
-              <option value="any">Any</option>
-              <option value="male">Male Only</option>
-              <option value="female">Female Only</option>
-            </select>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium mb-2">Meal Options</label>
-            <select
-              value={formData.mealOptions}
-              onChange={(e) => setFormData({...formData, mealOptions: e.target.value as 'included' | 'optional' | 'not-available'})}
-              className="w-full p-3 border rounded-lg"
-            >
-              <option value="included">Meals Included</option>
-              <option value="optional">Meals Optional</option>
-              <option value="not-available">No Meal Service</option>
-            </select>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium mb-2">Security Deposit</label>
-            <input
-              type="number"
-              value={formData.securityDeposit}
-              onChange={(e) => setFormData({...formData, securityDeposit: Number(e.target.value)})}
-              className="w-full p-3 border rounded-lg"
-            />
-          </div>
-        </div>
-
-        <div className="mt-6">
-          <label className="block text-sm font-medium mb-2">Timing Restrictions (Optional)</label>
-          <textarea
-            value={formData.timingRestrictions}
-            onChange={(e) => setFormData({...formData, timingRestrictions: e.target.value})}
-            className="w-full p-3 border rounded-lg"
-            rows={3}
-            placeholder="e.g., Entry time: 10 PM, No visitors after 9 PM"
-          />
-        </div>
-
-        <div className="mt-6">
-          <label className="block text-sm font-medium mb-2">House Rules (Optional)</label>
-          <textarea
-            value={formData.houseRules}
-            onChange={(e) => setFormData({...formData, houseRules: e.target.value})}
-            className="w-full p-3 border rounded-lg"
-            rows={3}
-            placeholder="e.g., No smoking, No alcohol, Quiet hours after 10 PM"
-          />
-        </div>
-
-        <div className="flex justify-between mt-8">
-          <button
-            type="button"
-            onClick={onBack}
-            className="px-6 py-3 border border-border rounded-lg hover:bg-muted"
-          >
-            Back
-          </button>
-          <button
-            type="submit"
-            className="px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90"
-          >
-            Save & Continue
-          </button>
-        </div>
-      </div>
-    </form>
   );
 };

@@ -4,6 +4,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
+import { Bed, ShowerHead, Tv, Wind, Shirt, ShoppingBag, DollarSign } from 'lucide-react';
 
 interface PgHostelRoomDetails {
   expectedRent: number;
@@ -69,120 +70,164 @@ export function PgHostelRoomDetailsStep({
   };
 
   return (
-    <div className="max-w-2xl mx-auto space-y-6">
-      <div className="text-center mb-8">
-        <h2 className="text-2xl font-bold text-foreground mb-2">Room Details</h2>
-        <p className="text-muted-foreground">Pricing and room amenities</p>
+    <div className="min-h-screen bg-background">
+      <div className="max-w-4xl mx-auto p-8">
+        <Card className="border-0 shadow-none bg-transparent">
+          <CardHeader className="text-center px-0">
+            <div className="flex justify-center mb-4">
+              <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center">
+                <Bed className="w-8 h-8 text-primary" />
+              </div>
+            </div>
+            <CardTitle className="text-2xl text-foreground">Single Room Details</CardTitle>
+          </CardHeader>
+          <CardContent className="px-0">
+            <form onSubmit={handleSubmit} className="space-y-8">
+              {/* Rent and Deposit */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="space-y-2">
+                  <Label htmlFor="expectedRent" className="text-base font-medium">Expected Rent</Label>
+                  <div className="relative">
+                    <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                    <Input
+                      id="expectedRent"
+                      type="number"
+                      value={formData.expectedRent}
+                      onChange={(e) => setFormData({ ...formData, expectedRent: Number(e.target.value) })}
+                      placeholder="15000"
+                      className="pl-10 h-14 text-lg"
+                    />
+                  </div>
+                  <p className="text-sm text-muted-foreground">₹15 k</p>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="expectedDeposit" className="text-base font-medium">Expected Deposit</Label>
+                  <div className="relative">
+                    <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                    <Input
+                      id="expectedDeposit"
+                      type="number"
+                      value={formData.expectedDeposit}
+                      onChange={(e) => setFormData({ ...formData, expectedDeposit: Number(e.target.value) })}
+                      placeholder="20000"
+                      className="pl-10 h-14 text-lg"
+                    />
+                  </div>
+                  <p className="text-sm text-muted-foreground">₹20 k</p>
+                </div>
+              </div>
+
+              {/* Room Amenities */}
+              <div className="space-y-6">
+                <Label className="text-xl font-semibold">Room Amenities</Label>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+                  <div className="flex items-center space-x-3">
+                    <Checkbox
+                      id="cupboard"
+                      checked={formData.roomAmenities.cupboard}
+                      onCheckedChange={(checked) => handleAmenityChange('cupboard', checked as boolean)}
+                      className="w-5 h-5"
+                    />
+                    <div className="flex items-center space-x-2">
+                      <ShoppingBag className="w-5 h-5 text-muted-foreground" />
+                      <Label htmlFor="cupboard" className="text-base cursor-pointer">
+                        Cupboard
+                      </Label>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center space-x-3">
+                    <Checkbox
+                      id="geyser"
+                      checked={formData.roomAmenities.geyser}
+                      onCheckedChange={(checked) => handleAmenityChange('geyser', checked as boolean)}
+                      className="w-5 h-5"
+                    />
+                    <div className="flex items-center space-x-2">
+                      <ShowerHead className="w-5 h-5 text-muted-foreground" />
+                      <Label htmlFor="geyser" className="text-base cursor-pointer">
+                        Geyser
+                      </Label>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center space-x-3">
+                    <Checkbox
+                      id="tv"
+                      checked={formData.roomAmenities.tv}
+                      onCheckedChange={(checked) => handleAmenityChange('tv', checked as boolean)}
+                      className="w-5 h-5"
+                    />
+                    <div className="flex items-center space-x-2">
+                      <Tv className="w-5 h-5 text-muted-foreground" />
+                      <Label htmlFor="tv" className="text-base cursor-pointer">
+                        TV
+                      </Label>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center space-x-3">
+                    <Checkbox
+                      id="ac"
+                      checked={formData.roomAmenities.ac}
+                      onCheckedChange={(checked) => handleAmenityChange('ac', checked as boolean)}
+                      className="w-5 h-5"
+                    />
+                    <div className="flex items-center space-x-2">
+                      <Wind className="w-5 h-5 text-muted-foreground" />
+                      <Label htmlFor="ac" className="text-base cursor-pointer">
+                        AC
+                      </Label>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center space-x-3">
+                    <Checkbox
+                      id="bedding"
+                      checked={formData.roomAmenities.bedding}
+                      onCheckedChange={(checked) => handleAmenityChange('bedding', checked as boolean)}
+                      className="w-5 h-5"
+                    />
+                    <div className="flex items-center space-x-2">
+                      <Bed className="w-5 h-5 text-muted-foreground" />
+                      <Label htmlFor="bedding" className="text-base cursor-pointer">
+                        Bedding
+                      </Label>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center space-x-3">
+                    <Checkbox
+                      id="attachedBathroom"
+                      checked={formData.roomAmenities.attachedBathroom}
+                      onCheckedChange={(checked) => handleAmenityChange('attachedBathroom', checked as boolean)}
+                      className="w-5 h-5"
+                    />
+                    <div className="flex items-center space-x-2">
+                      <Shirt className="w-5 h-5 text-muted-foreground" />
+                      <Label htmlFor="attachedBathroom" className="text-base cursor-pointer">
+                        Attached Bathroom
+                      </Label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex justify-center pt-8">
+                <div className="flex gap-4">
+                  <Button type="button" variant="outline" onClick={onBack} className="px-8">
+                    Back
+                  </Button>
+                  <Button type="submit" disabled={!isFormValid()} className="px-8">
+                    Save & Continue
+                  </Button>
+                </div>
+              </div>
+            </form>
+          </CardContent>
+        </Card>
       </div>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Pricing Information</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="expectedRent">Expected Rent (₹/month) *</Label>
-                <Input
-                  id="expectedRent"
-                  type="number"
-                  value={formData.expectedRent || ''}
-                  onChange={(e) => setFormData({ ...formData, expectedRent: parseInt(e.target.value) || 0 })}
-                  placeholder="e.g. ₹15,000"
-                  min="0"
-                  required
-                />
-                <p className="text-xs text-muted-foreground">Enter monthly rent amount</p>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="expectedDeposit">Expected Deposit (₹) *</Label>
-                <Input
-                  id="expectedDeposit"
-                  type="number"
-                  value={formData.expectedDeposit || ''}
-                  onChange={(e) => setFormData({ ...formData, expectedDeposit: parseInt(e.target.value) || 0 })}
-                  placeholder="e.g. ₹20,000"
-                  min="0"
-                  required
-                />
-                <p className="text-xs text-muted-foreground">Security deposit amount</p>
-              </div>
-            </div>
-
-            <div className="space-y-4">
-              <h3 className="text-lg font-medium text-foreground">Room Amenities</h3>
-              <p className="text-sm text-muted-foreground">Select all amenities available in the room</p>
-              
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                <div className="flex items-center space-x-2">
-                  <Checkbox
-                    id="cupboard"
-                    checked={formData.roomAmenities.cupboard}
-                    onCheckedChange={(checked) => handleAmenityChange('cupboard', checked as boolean)}
-                  />
-                  <Label htmlFor="cupboard" className="text-sm">Cupboard</Label>
-                </div>
-
-                <div className="flex items-center space-x-2">
-                  <Checkbox
-                    id="geyser"
-                    checked={formData.roomAmenities.geyser}
-                    onCheckedChange={(checked) => handleAmenityChange('geyser', checked as boolean)}
-                  />
-                  <Label htmlFor="geyser" className="text-sm">Geyser</Label>
-                </div>
-
-                <div className="flex items-center space-x-2">
-                  <Checkbox
-                    id="tv"
-                    checked={formData.roomAmenities.tv}
-                    onCheckedChange={(checked) => handleAmenityChange('tv', checked as boolean)}
-                  />
-                  <Label htmlFor="tv" className="text-sm">TV</Label>
-                </div>
-
-                <div className="flex items-center space-x-2">
-                  <Checkbox
-                    id="ac"
-                    checked={formData.roomAmenities.ac}
-                    onCheckedChange={(checked) => handleAmenityChange('ac', checked as boolean)}
-                  />
-                  <Label htmlFor="ac" className="text-sm">AC</Label>
-                </div>
-
-                <div className="flex items-center space-x-2">
-                  <Checkbox
-                    id="bedding"
-                    checked={formData.roomAmenities.bedding}
-                    onCheckedChange={(checked) => handleAmenityChange('bedding', checked as boolean)}
-                  />
-                  <Label htmlFor="bedding" className="text-sm">Bedding</Label>
-                </div>
-
-                <div className="flex items-center space-x-2">
-                  <Checkbox
-                    id="attachedBathroom"
-                    checked={formData.roomAmenities.attachedBathroom}
-                    onCheckedChange={(checked) => handleAmenityChange('attachedBathroom', checked as boolean)}
-                  />
-                  <Label htmlFor="attachedBathroom" className="text-sm">Attached Bathroom</Label>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex justify-between pt-6">
-              <Button type="button" variant="outline" onClick={onBack}>
-                Back
-              </Button>
-              <Button type="submit" disabled={!isFormValid()}>
-                Save & Continue
-              </Button>
-            </div>
-          </form>
-        </CardContent>
-      </Card>
     </div>
   );
 }
