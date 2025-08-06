@@ -145,7 +145,7 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
   };
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-4xl">
+    <div className="max-w-7xl mx-auto px-4 py-8">
       {/* Page Header with Rental Badge */}
       <div className="text-center mb-8 animate-fade-in">
         <div className="flex justify-center mb-4">
