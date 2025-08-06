@@ -4,7 +4,6 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Card, CardContent } from '@/components/ui/card';
-import { FlattmatesSidebar } from './FlattmatesSidebar';
 
 interface FlattmatesPropertyDetails {
   apartmentType: string;
@@ -67,15 +66,11 @@ export function FlattmatesPropertyDetailsStep({
   };
 
   return (
-    <div className="flex min-h-screen bg-background">
-      <FlattmatesSidebar currentStep={currentStep} completedSteps={completedSteps} />
-      
-      <div className="flex-1 p-8">
-        <div className="max-w-2xl mx-auto">
-          <div className="text-center mb-8">
-            <h2 className="text-2xl font-bold text-foreground mb-2">Property Details</h2>
-            <p className="text-muted-foreground">Tell us about your property for flatmates</p>
-          </div>
+    <div className="max-w-2xl mx-auto">
+      <div className="text-center mb-8">
+        <h2 className="text-2xl font-bold text-foreground mb-2">Property Details</h2>
+        <p className="text-muted-foreground">Tell us about your property for flatmates</p>
+      </div>
 
           <Card>
             <CardContent className="p-8">
@@ -249,10 +244,8 @@ export function FlattmatesPropertyDetailsStep({
                   </Button>
                 </div>
               </form>
-            </CardContent>
-          </Card>
-        </div>
-      </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }
