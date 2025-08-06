@@ -71,8 +71,10 @@ export function PgHostelGalleryStep({
                   Upload high-quality images of rooms, common areas, amenities, and exterior
                 </p>
                 <ImageUpload
+                  images={formData.images}
                   onImagesChange={handleImagesChange}
                   maxImages={20}
+                  minImages={1}
                 />
               </div>
 
@@ -84,6 +86,7 @@ export function PgHostelGalleryStep({
                   Add a video tour to give potential residents a better view of your PG/Hostel
                 </p>
                 <VideoUpload
+                  video={formData.video}
                   onVideoChange={handleVideoChange}
                 />
               </div>
