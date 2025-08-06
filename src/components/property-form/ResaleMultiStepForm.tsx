@@ -237,7 +237,7 @@ export const ResaleMultiStepForm: React.FC<ResaleMultiStepFormProps> = ({
 
             {currentStep === 4 && (
               <ResaleAmenitiesStep
-                initialData={amenities}
+                initialData={amenities as any}
                 onNext={handleAmenitiesNext}
                 onBack={prevStep}
               />
