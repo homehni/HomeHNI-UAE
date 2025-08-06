@@ -90,6 +90,8 @@ export const OwnerInfoStep: React.FC<OwnerInfoStepProps> = ({
   };
 
   const onSubmit = (data: OwnerInfoFormData) => {
+    // Store the listing type for form routing
+    localStorage.setItem('selectedListingType', data.listingType);
     onNext(data as OwnerInfo);
   };
 
