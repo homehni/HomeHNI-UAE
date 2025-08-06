@@ -123,60 +123,61 @@ export const PGHostelMultiStepForm: React.FC<PGHostelMultiStepFormProps> = ({
   useEffect(() => {
     if (initialOwnerInfo) {
       setOwnerInfo(prev => ({ ...prev, ...initialOwnerInfo }));
+      // Mark step 1 as completed if we have owner info
+      if (hasOwnerInfo) {
+        setCompletedSteps(prev => [...prev.filter(step => step !== 1), 1]);
+      }
     }
-  }, [initialOwnerInfo]);
+  }, [initialOwnerInfo, hasOwnerInfo]);
 
-  const completedSteps = useMemo(() => {
-    const steps = [];
-    if (ownerInfo.fullName && ownerInfo.email && ownerInfo.phoneNumber) steps.push(1);
-    if (roomTypes.single || roomTypes.double || roomTypes.three || roomTypes.four) steps.push(2);
-    if (roomDetails.expectedRent > 0) steps.push(3);
-    if (localityDetails.state && localityDetails.city) steps.push(4);
-    if (pgDetails.genderPreference && pgDetails.preferredGuests) steps.push(5);
-    if (amenities.laundry !== '') steps.push(6);
-    if (gallery.images.length >= 3) steps.push(7);
-    if (scheduleInfo.availability) steps.push(8);
-    return steps;
-  }, [ownerInfo, roomTypes, roomDetails, localityDetails, pgDetails, amenities, gallery, scheduleInfo]);
+  const [completedSteps, setCompletedSteps] = useState<number[]>([]);
 
   // Step handlers
   const handleOwnerInfoNext = (data: any) => {
     setOwnerInfo(data);
+    setCompletedSteps(prev => [...prev.filter(step => step !== 1), 1]);
     setCurrentStep(2);
   };
 
   const handleRoomTypesNext = (data: any) => {
     setRoomTypes(data);
+    setCompletedSteps(prev => [...prev.filter(step => step !== 2), 2]);
     setCurrentStep(3);
   };
 
   const handleRoomDetailsNext = (data: any) => {
     setRoomDetails(data);
+    setCompletedSteps(prev => [...prev.filter(step => step !== 3), 3]);
     setCurrentStep(4);
   };
 
   const handleLocalityDetailsNext = (data: any) => {
     setLocalityDetails(data);
+    setCompletedSteps(prev => [...prev.filter(step => step !== 4), 4]);
     setCurrentStep(5);
   };
 
   const handlePgDetailsNext = (data: any) => {
     setPgDetails(data);
+    setCompletedSteps(prev => [...prev.filter(step => step !== 5), 5]);
     setCurrentStep(6);
   };
 
   const handleAmenitiesNext = (data: any) => {
     setAmenities(data);
+    setCompletedSteps(prev => [...prev.filter(step => step !== 6), 6]);
     setCurrentStep(7);
   };
 
   const handleGalleryNext = (data: any) => {
     setGallery(data);
+    setCompletedSteps(prev => [...prev.filter(step => step !== 7), 7]);
     setCurrentStep(8);
   };
 
   const handleScheduleNext = (data: any) => {
     setScheduleInfo(data);
+    setCompletedSteps(prev => [...prev.filter(step => step !== 8), 8]);
     // Form complete, submit
     handleSubmit();
   };
