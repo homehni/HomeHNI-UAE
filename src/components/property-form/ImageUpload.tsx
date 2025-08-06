@@ -82,6 +82,17 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
           </div>
         ))}
 
+        {images.length < maxImages && (
+          <div
+            className="aspect-square rounded-lg border-2 border-dashed border-border hover:border-primary cursor-pointer flex flex-col items-center justify-center space-y-2 transition-colors"
+            onClick={handleUploadClick}
+          >
+            <Upload className="h-8 w-8 text-muted-foreground" />
+            <span className="text-sm text-muted-foreground text-center">
+              Click to upload
+            </span>
+          </div>
+        )}
       </div>
 
       <input

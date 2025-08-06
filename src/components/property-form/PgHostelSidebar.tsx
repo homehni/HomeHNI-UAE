@@ -1,5 +1,5 @@
 import React from 'react';
-import { Check } from 'lucide-react';
+import { Check, User, Home, MapPin, Building2, Wifi, Camera, Calendar } from 'lucide-react';
 
 interface PgHostelSidebarProps {
   currentStep: number;
@@ -7,14 +7,14 @@ interface PgHostelSidebarProps {
 }
 
 const steps = [
-  { id: 1, title: 'Owner Info', description: 'Basic owner details' },
-  { id: 2, title: 'Room Types', description: 'Available room types' },
-  { id: 3, title: 'Room Details', description: 'Room info & amenities' },
-  { id: 4, title: 'Locality Details', description: 'Location information' },
-  { id: 5, title: 'PG Details', description: 'PG specific details' },
-  { id: 6, title: 'Amenities', description: 'Services & amenities' },
-  { id: 7, title: 'Gallery', description: 'Photos & videos' },
-  { id: 8, title: 'Schedule', description: 'Availability & schedule' },
+  { id: 1, title: 'Owner Info', description: 'Basic owner details', icon: User },
+  { id: 2, title: 'Room Types', description: 'Available room types', icon: Home },
+  { id: 3, title: 'Room Details', description: 'Room info & amenities', icon: Building2 },
+  { id: 4, title: 'Locality Details', description: 'Location information', icon: MapPin },
+  { id: 5, title: 'PG Details', description: 'PG specific details', icon: Building2 },
+  { id: 6, title: 'Amenities', description: 'Services & amenities', icon: Wifi },
+  { id: 7, title: 'Gallery', description: 'Photos & videos', icon: Camera },
+  { id: 8, title: 'Schedule', description: 'Availability & schedule', icon: Calendar },
 ];
 
 export function PgHostelSidebar({ currentStep, completedSteps }: PgHostelSidebarProps) {
@@ -42,14 +42,18 @@ export function PgHostelSidebar({ currentStep, completedSteps }: PgHostelSidebar
                   : 'bg-muted/50'
               }`}
             >
-              <div className={`flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium ${
+              <div className={`flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center ${
                 isCompleted 
                   ? 'bg-green-500 text-white'
                   : isCurrent 
                   ? 'bg-primary text-primary-foreground' 
                   : 'bg-muted-foreground/20 text-muted-foreground'
               }`}>
-                {isCompleted ? <Check className="w-4 h-4" /> : step.id}
+                {isCompleted ? (
+                  <Check className="w-4 h-4" />
+                ) : (
+                  <step.icon className="w-4 h-4" />
+                )}
               </div>
               
               <div className="flex-1 min-w-0">
