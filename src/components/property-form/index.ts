@@ -11,3 +11,5 @@ export { PreviewStep } from './PreviewStep';
 export { ProgressIndicator } from './ProgressIndicator';
 export { ImageUpload } from './ImageUpload';
 export { VideoUpload } from './VideoUpload';
+export { PGHostelMultiStepForm } from './PGHostelMultiStepForm';
+export { FlattmatesMultiStepForm } from './FlattmatesMultiStepForm';

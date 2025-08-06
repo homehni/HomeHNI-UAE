@@ -3,7 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import { OwnerInfoStep } from '@/components/property-form/OwnerInfoStep';
 import { MultiStepForm } from '@/components/property-form/MultiStepForm';
 import { ResaleMultiStepForm } from '@/components/property-form/ResaleMultiStepForm';
-import { OwnerInfo, PropertyInfo } from '@/types/property';
+import { PGHostelMultiStepForm } from '@/components/property-form/PGHostelMultiStepForm';
+import { FlattmatesMultiStepForm } from '@/components/property-form/FlattmatesMultiStepForm';
+import { OwnerInfo, PropertyInfo, PGHostelFormData, FlattmatesFormData } from '@/types/property';
 import { SalePropertyFormData, SalePropertyInfo } from '@/types/saleProperty';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
@@ -14,7 +16,7 @@ import { mapBhkType, mapPropertyType, mapListingType, validateMappedValues } fro
 import Header from '@/components/Header';
 import Marquee from '@/components/Marquee';
 
-type FormStep = 'owner-info' | 'rental-form' | 'resale-form';
+type FormStep = 'owner-info' | 'rental-form' | 'resale-form' | 'pg-hostel-form' | 'flatmates-form';
 
 export const PostProperty: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -28,15 +30,22 @@ export const PostProperty: React.FC = () => {
     setOwnerInfo(data);
     
     // Route to appropriate form based on listing type
-    if (data.listingType === 'Resale') {
-      setCurrentStep('resale-form');
-    } else {
-      // Rent, PG/Hostel, Flatmates go to rental form
-      setCurrentStep('rental-form');
+    switch (data.listingType) {
+      case 'Resale':
+        setCurrentStep('resale-form');
+        break;
+      case 'PG/Hostel':
+        setCurrentStep('pg-hostel-form');
+        break;
+      case 'Flatmates':
+        setCurrentStep('flatmates-form');
+        break;
+      default: // 'Rent'
+        setCurrentStep('rental-form');
     }
   };
 
-  const handleSubmit = async (data: { ownerInfo: OwnerInfo; propertyInfo: PropertyInfo | SalePropertyInfo }) => {
+  const handleSubmit = async (data: { ownerInfo: OwnerInfo; propertyInfo: PropertyInfo | SalePropertyInfo } | PGHostelFormData | FlattmatesFormData) => {
     if (!user) {
       toast({
         title: "Authentication Required",
@@ -65,9 +74,18 @@ export const PostProperty: React.FC = () => {
       // }
 
       // Validate property data mappings
-      const listingType = 'rentalDetails' in data.propertyInfo 
-        ? (data.propertyInfo as PropertyInfo).rentalDetails.listingType 
-        : (data.propertyInfo as SalePropertyInfo).saleDetails.listingType;
+      let listingType: string;
+      if ('rentalDetails' in data.propertyInfo) {
+        listingType = (data.propertyInfo as PropertyInfo).rentalDetails.listingType;
+      } else if ('saleDetails' in data.propertyInfo) {
+        listingType = (data.propertyInfo as SalePropertyInfo).saleDetails.listingType;
+      } else if ('pgDetails' in data.propertyInfo) {
+        listingType = (data.propertyInfo as any).pgDetails.listingType;
+      } else if ('flattmatesDetails' in data.propertyInfo) {
+        listingType = (data.propertyInfo as any).flattmatesDetails.listingType;
+      } else {
+        listingType = 'Rent'; // fallback
+      }
         
       const mappingValidation = validateMappedValues({
         bhkType: data.propertyInfo.propertyDetails.bhkType,
@@ -109,10 +127,16 @@ export const PostProperty: React.FC = () => {
       }
 
       // Prepare property data for database with proper mapping
-      const isRental = 'rentalDetails' in data.propertyInfo;
-      const priceDetails = isRental 
-        ? (data.propertyInfo as PropertyInfo).rentalDetails 
-        : (data.propertyInfo as SalePropertyInfo).saleDetails;
+      let priceDetails: any;
+      if ('rentalDetails' in data.propertyInfo) {
+        priceDetails = (data.propertyInfo as PropertyInfo).rentalDetails;
+      } else if ('saleDetails' in data.propertyInfo) {
+        priceDetails = (data.propertyInfo as SalePropertyInfo).saleDetails;
+      } else if ('pgDetails' in data.propertyInfo) {
+        priceDetails = (data.propertyInfo as any).pgDetails;
+      } else if ('flattmatesDetails' in data.propertyInfo) {
+        priceDetails = (data.propertyInfo as any).flattmatesDetails;
+      }
       
       const propertyData = {
         user_id: user.id,
@@ -189,10 +213,16 @@ export const PostProperty: React.FC = () => {
       console.log('Property created successfully:', property);
 
       // Save owner contact information to property_drafts table
-      const isRentalDraft = 'rentalDetails' in data.propertyInfo;
-      const priceDetailsDraft = isRentalDraft 
-        ? (data.propertyInfo as PropertyInfo).rentalDetails 
-        : (data.propertyInfo as SalePropertyInfo).saleDetails;
+      let priceDetailsDraft: any;
+      if ('rentalDetails' in data.propertyInfo) {
+        priceDetailsDraft = (data.propertyInfo as PropertyInfo).rentalDetails;
+      } else if ('saleDetails' in data.propertyInfo) {
+        priceDetailsDraft = (data.propertyInfo as SalePropertyInfo).saleDetails;
+      } else if ('pgDetails' in data.propertyInfo) {
+        priceDetailsDraft = (data.propertyInfo as any).pgDetails;
+      } else if ('flattmatesDetails' in data.propertyInfo) {
+        priceDetailsDraft = (data.propertyInfo as any).flattmatesDetails;
+      }
       
       const ownerData = {
         user_id: user.id,
@@ -258,6 +288,22 @@ export const PostProperty: React.FC = () => {
         return (
           <ResaleMultiStepForm 
             onSubmit={handleSubmit as (data: SalePropertyFormData) => void}
+            isSubmitting={isSubmitting}
+            initialOwnerInfo={ownerInfo || {}}
+          />
+        );
+      case 'pg-hostel-form':
+        return (
+          <PGHostelMultiStepForm 
+            onSubmit={handleSubmit as (data: PGHostelFormData) => void}
+            isSubmitting={isSubmitting}
+            initialOwnerInfo={ownerInfo || {}}
+          />
+        );
+      case 'flatmates-form':
+        return (
+          <FlattmatesMultiStepForm 
+            onSubmit={handleSubmit as (data: FlattmatesFormData) => void}
             isSubmitting={isSubmitting}
             initialOwnerInfo={ownerInfo || {}}
           />

@@ -103,6 +103,72 @@ export interface PropertyFormData {
   propertyInfo: PropertyInfo;
 }
 
+// PG/Hostel specific interfaces
+export interface PGHostelDetails extends Omit<RentalDetails, 'listingType'> {
+  listingType: 'PG/Hostel';
+  roomType: 'single' | 'shared' | 'dormitory';
+  genderPreference: 'male' | 'female' | 'any';
+  mealOptions: 'included' | 'optional' | 'not-available';
+  timingRestrictions?: string;
+  houseRules?: string;
+}
+
+export interface PGHostelAmenities extends PropertyAmenities {
+  meals?: 'breakfast' | 'lunch' | 'dinner' | 'all-meals' | 'none';
+  laundry?: 'included' | 'paid' | 'not-available';
+  commonArea?: 'tv-room' | 'study-room' | 'recreation' | 'all';
+  cleaning?: 'daily' | 'weekly' | 'self';
+}
+
+export interface PGHostelInfo {
+  propertyDetails: PropertyDetails;
+  locationDetails: LocationDetails;
+  pgDetails: PGHostelDetails;
+  amenities: PGHostelAmenities;
+  gallery: PropertyGallery;
+  additionalInfo: AdditionalInfo;
+  scheduleInfo: ScheduleInfo;
+}
+
+// Flatmates specific interfaces
+export interface FlattmatesDetails extends Omit<RentalDetails, 'listingType'> {
+  listingType: 'Flatmates';
+  existingFlatmates: number;
+  genderPreference: 'male' | 'female' | 'any';
+  occupation: 'student' | 'working' | 'any';
+  lifestylePreference: 'social' | 'quiet' | 'mixed';
+  smokingAllowed: boolean;
+  petsAllowed: boolean;
+}
+
+export interface FlattmatesAmenities extends PropertyAmenities {
+  sharedKitchen?: boolean;
+  sharedLivingRoom?: boolean;
+  dedicatedBathroom?: boolean;
+  sharedParking?: boolean;
+}
+
+export interface FlattmatesInfo {
+  propertyDetails: PropertyDetails;
+  locationDetails: LocationDetails;
+  flattmatesDetails: FlattmatesDetails;
+  amenities: FlattmatesAmenities;
+  gallery: PropertyGallery;
+  additionalInfo: AdditionalInfo;
+  scheduleInfo: ScheduleInfo;
+}
+
+// Form data interfaces
+export interface PGHostelFormData {
+  ownerInfo: OwnerInfo;
+  propertyInfo: PGHostelInfo;
+}
+
+export interface FlattmatesFormData {
+  ownerInfo: OwnerInfo;
+  propertyInfo: FlattmatesInfo;
+}
+
 export interface PropertyDraft {
   id?: string;
   userId: string;
