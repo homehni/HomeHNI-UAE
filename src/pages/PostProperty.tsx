@@ -1,9 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { MultiStepForm } from '@/components/property-form';
-import { ResaleMultiStepForm } from '@/components/property-form/resale';
 import { OwnerInfo, PropertyInfo } from '@/types/property';
-import { SalePropertyInfo } from '@/types/saleProperty';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
@@ -15,50 +13,11 @@ import Marquee from '@/components/Marquee';
 
 export const PostProperty: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [searchParams] = useSearchParams();
   const { user } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
-  
-  // Determine form type based on URL parameters or localStorage
-  const [formType, setFormType] = useState<'rent' | 'resale'>('rent');
-  
-  useEffect(() => {
-    const listingType = searchParams.get('type') || localStorage.getItem('selectedListingType');
-    if (listingType === 'Resale' || listingType === 'Sale') {
-      setFormType('resale');
-    } else {
-      setFormType('rent');
-    }
-  }, [searchParams]);
 
-  const handleRentSubmit = async (data: { ownerInfo: OwnerInfo; propertyInfo: PropertyInfo }) => {
-    await processPropertySubmission(data, 'rent');
-  };
-
-  const handleResaleSubmit = async (data: { ownerInfo: OwnerInfo; propertyInfo: SalePropertyInfo }) => {
-    // Convert SalePropertyInfo to PropertyInfo format for submission
-    const convertedData = {
-      ownerInfo: data.ownerInfo,
-      propertyInfo: {
-        propertyDetails: data.propertyInfo.propertyDetails,
-        locationDetails: data.propertyInfo.locationDetails,
-        rentalDetails: {
-          listingType: data.propertyInfo.saleDetails.listingType,
-          expectedPrice: data.propertyInfo.saleDetails.expectedPrice,
-          rentNegotiable: data.propertyInfo.saleDetails.priceNegotiable,
-          availableFrom: data.propertyInfo.saleDetails.possessionDate,
-        },
-        amenities: data.propertyInfo.amenities,
-        gallery: data.propertyInfo.gallery,
-        additionalInfo: data.propertyInfo.additionalInfo,
-        scheduleInfo: data.propertyInfo.scheduleInfo,
-      } as PropertyInfo
-    };
-    await processPropertySubmission(convertedData, 'resale');
-  };
-
-  const processPropertySubmission = async (data: { ownerInfo: OwnerInfo; propertyInfo: PropertyInfo }, submissionType: 'rent' | 'resale') => {
+  const handleSubmit = async (data: { ownerInfo: OwnerInfo; propertyInfo: PropertyInfo }) => {
     if (!user) {
       toast({
         title: "Authentication Required",
@@ -71,7 +30,7 @@ export const PostProperty: React.FC = () => {
     setIsSubmitting(true);
 
     try {
-      console.log(`Starting ${submissionType} property submission with data:`, data);
+      console.log('Starting property submission with data:', data);
 
       // Comprehensive validation
       const validation = validatePropertySubmission(data.ownerInfo, data.propertyInfo);
@@ -231,7 +190,7 @@ export const PostProperty: React.FC = () => {
 
       toast({
         title: "Success!",
-        description: `Your ${submissionType} property has been submitted successfully.`,
+        description: "Your property has been submitted successfully.",
       });
 
     } catch (error: any) {
@@ -258,11 +217,7 @@ export const PostProperty: React.FC = () => {
       <Header />
       {/* Content starts with proper spacing */}
       <div className="pt-32">
-        {formType === 'resale' ? (
-          <ResaleMultiStepForm onSubmit={handleResaleSubmit} isSubmitting={isSubmitting} />
-        ) : (
-          <MultiStepForm onSubmit={handleRentSubmit} isSubmitting={isSubmitting} />
-        )}
+        <MultiStepForm onSubmit={handleSubmit} isSubmitting={isSubmitting} />
       </div>
     </div>
   );
