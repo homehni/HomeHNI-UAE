@@ -8,10 +8,9 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { PropertyDetails } from '@/types/property';
-import { ArrowLeft, ArrowRight } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Home, MapPin, Building, Sparkles, Camera, FileText, Clock, CheckCircle } from 'lucide-react';
 
 const resalePropertyDetailsSchema = z.object({
-  title: z.string().min(10, 'Title must be at least 10 characters'),
   propertyType: z.string().min(1, 'Please select property type'),
   bhkType: z.string().min(1, 'Please select BHK type'),
   ownershipType: z.string().min(1, 'Please select ownership type'),
@@ -22,10 +21,6 @@ const resalePropertyDetailsSchema = z.object({
   floorType: z.string().min(1, 'Please select floor type'),
   floorNo: z.union([z.number().min(0, 'Floor number cannot be negative'), z.string().min(1, 'Please select floor')]),
   totalFloors: z.union([z.number().min(1, 'Total floors must be at least 1'), z.string().min(1, 'Please select total floors')]),
-  bathrooms: z.number().min(1, 'At least 1 bathroom is required'),
-  balconies: z.number().min(0, 'Balconies cannot be negative'),
-  furnishingStatus: z.string().min(1, 'Please select furnishing status'),
-  parkingType: z.string().optional(),
 });
 
 type ResalePropertyDetailsFormData = z.infer<typeof resalePropertyDetailsSchema>;
@@ -44,7 +39,6 @@ export const ResalePropertyDetailsStep: React.FC<ResalePropertyDetailsStepProps>
   const form = useForm<ResalePropertyDetailsFormData>({
     resolver: zodResolver(resalePropertyDetailsSchema),
     defaultValues: {
-      title: initialData.title || '',
       propertyType: initialData.propertyType || '',
       bhkType: initialData.bhkType || '',
       ownershipType: (initialData as any).ownershipType || '',
@@ -55,10 +49,6 @@ export const ResalePropertyDetailsStep: React.FC<ResalePropertyDetailsStepProps>
       floorType: (initialData as any).floorType || '',
       floorNo: initialData.floorNo || 0,
       totalFloors: initialData.totalFloors || 1,
-      bathrooms: initialData.bathrooms || 1,
-      balconies: initialData.balconies || 0,
-      furnishingStatus: initialData.furnishingStatus || '',
-      parkingType: initialData.parkingType || '',
     },
   });
 
@@ -68,7 +58,6 @@ export const ResalePropertyDetailsStep: React.FC<ResalePropertyDetailsStepProps>
   const onSubmit = (data: ResalePropertyDetailsFormData) => {
     onNext({
       ...initialData,
-      title: data.title,
       propertyType: data.propertyType,
       buildingType: data.propertyType, // Use propertyType as buildingType for residential
       bhkType: data.bhkType,
@@ -80,45 +69,69 @@ export const ResalePropertyDetailsStep: React.FC<ResalePropertyDetailsStepProps>
       floorType: data.floorType,
       floorNo: data.floorNo,
       totalFloors: data.totalFloors,
-      bathrooms: data.bathrooms,
-      balconies: data.balconies,
-      furnishingStatus: data.furnishingStatus,
-      parkingType: data.parkingType,
       onMainRoad,
       cornerProperty,
     } as PropertyDetails);
   };
 
+  const sidebarSteps = [
+    { number: 1, title: "Property Details", icon: Home, completed: false, active: true },
+    { number: 2, title: "Locality Details", icon: MapPin, completed: false, active: false },
+    { number: 3, title: "Resale Details", icon: Building, completed: false, active: false },
+    { number: 4, title: "Amenities", icon: Sparkles, completed: false, active: false },
+    { number: 5, title: "Gallery", icon: Camera, completed: false, active: false },
+    { number: 6, title: "Additional Information", icon: FileText, completed: false, active: false },
+    { number: 7, title: "Schedule", icon: Clock, completed: false, active: false },
+    { number: 8, title: "Preview & Submit", icon: CheckCircle, completed: false, active: false },
+  ];
+
   return (
-    <div className="space-y-8">
-      <div className="text-center">
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">Property Details</h2>
-        <p className="text-gray-600">Tell us about your property specifications</p>
+    <div className="flex max-w-7xl mx-auto">
+      {/* Sidebar */}
+      <div className="w-64 bg-background border-r min-h-screen p-6">
+        <div className="space-y-1">
+          {sidebarSteps.map((step) => (
+            <div
+              key={step.number}
+              className={`flex items-center gap-3 p-3 rounded-lg transition-colors ${
+                step.active 
+                  ? 'bg-primary/10 text-primary border-l-4 border-primary' 
+                  : step.completed 
+                    ? 'text-muted-foreground hover:text-foreground hover:bg-muted/50' 
+                    : 'text-muted-foreground'
+              }`}
+            >
+              <div className={`flex items-center justify-center w-8 h-8 rounded-full border-2 ${
+                step.active 
+                  ? 'border-primary bg-primary text-primary-foreground' 
+                  : step.completed 
+                    ? 'border-green-500 bg-green-500 text-white' 
+                    : 'border-muted-foreground'
+              }`}>
+                {step.completed ? (
+                  <CheckCircle className="w-4 h-4" />
+                ) : (
+                  <step.icon className="w-4 h-4" />
+                )}
+              </div>
+              <span className="font-medium text-sm">{step.title}</span>
+            </div>
+          ))}
+        </div>
       </div>
 
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-          {/* Property Title */}
-          <FormField
-            control={form.control}
-            name="title"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-sm font-medium">Property Title*</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="e.g., 3 BHK Apartment in Prime Location"
-                    className="h-12"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+      {/* Main Content */}
+      <div className="flex-1 p-8">
+        <div className="space-y-8">
+          <div className="text-center">
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">Property Details</h2>
+            <p className="text-gray-600">Tell us about your property specifications</p>
+          </div>
 
-          {/* Property Type and BHK Type */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+              {/* Property Type and BHK Type */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <FormField
               control={form.control}
               name="propertyType"
@@ -415,161 +428,21 @@ export const ResalePropertyDetailsStep: React.FC<ResalePropertyDetailsStepProps>
             />
           </div>
 
-          {/* Bathrooms, Balconies, Furnishing */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <FormField
-              control={form.control}
-              name="bathrooms"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-sm font-medium">Bathrooms*</FormLabel>
-                  <Select
-                    onValueChange={(value) => field.onChange(parseInt(value))}
-                    defaultValue={field.value?.toString()}
-                  >
-                    <FormControl>
-                      <SelectTrigger className="h-12">
-                        <SelectValue placeholder="Select Bathrooms" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {[...Array(10)].map((_, i) => {
-                        const count = i + 1;
-                        return (
-                          <SelectItem key={count} value={count.toString()}>
-                            {count}
-                          </SelectItem>
-                        );
-                      })}
-                      <SelectItem value="10">10+</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="balconies"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-sm font-medium">Balconies*</FormLabel>
-                  <Select
-                    onValueChange={(value) => field.onChange(parseInt(value))}
-                    defaultValue={field.value?.toString()}
-                  >
-                    <FormControl>
-                      <SelectTrigger className="h-12">
-                        <SelectValue placeholder="Select Balconies" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="0">0</SelectItem>
-                      {[...Array(10)].map((_, i) => {
-                        const count = i + 1;
-                        return (
-                          <SelectItem key={count} value={count.toString()}>
-                            {count}
-                          </SelectItem>
-                        );
-                      })}
-                      <SelectItem value="10">10+</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="furnishingStatus"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-sm font-medium">Furnishing*</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <FormControl>
-                      <SelectTrigger className="h-12">
-                        <SelectValue placeholder="Select Furnishing" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="Fully Furnished">Fully Furnished</SelectItem>
-                      <SelectItem value="Semi Furnished">Semi Furnished</SelectItem>
-                      <SelectItem value="Unfurnished">Unfurnished</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-
-          {/* Parking */}
-          <FormField
-            control={form.control}
-            name="parkingType"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-sm font-medium">Parking</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
-                  <FormControl>
-                    <SelectTrigger className="h-12">
-                      <SelectValue placeholder="Select Parking Type" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectItem value="No Parking">No Parking</SelectItem>
-                    <SelectItem value="1 Covered">1 Covered</SelectItem>
-                    <SelectItem value="2 Covered">2 Covered</SelectItem>
-                    <SelectItem value="3 Covered">3 Covered</SelectItem>
-                    <SelectItem value="1 Open">1 Open</SelectItem>
-                    <SelectItem value="2 Open">2 Open</SelectItem>
-                    <SelectItem value="3 Open">3 Open</SelectItem>
-                    <SelectItem value="1 Covered + 1 Open">1 Covered + 1 Open</SelectItem>
-                    <SelectItem value="2 Covered + 1 Open">2 Covered + 1 Open</SelectItem>
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          {/* Other Features */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-medium">Other Features</h3>
-            <div className="flex gap-4">
-              <Badge
-                variant={onMainRoad ? "default" : "outline"}
-                className="cursor-pointer px-4 py-2 text-sm"
-                onClick={() => setOnMainRoad(!onMainRoad)}
-              >
-                On Main Road
-              </Badge>
-              <Badge
-                variant={cornerProperty ? "default" : "outline"}
-                className="cursor-pointer px-4 py-2 text-sm"
-                onClick={() => setCornerProperty(!cornerProperty)}
-              >
-                Corner Property
-              </Badge>
-            </div>
-          </div>
-
-          {/* Navigation Buttons */}
-          <div className="flex justify-between pt-6">
-            <Button type="button" variant="outline" onClick={onBack} className="h-12 px-8">
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Back
-            </Button>
-            <Button type="submit" className="h-12 px-8">
-              Next Step
-              <ArrowRight className="h-4 w-4 ml-2" />
-            </Button>
-          </div>
-        </form>
-      </Form>
+              {/* Navigation Buttons */}
+              <div className="flex justify-between pt-6">
+                <Button type="button" variant="outline" onClick={onBack} className="h-12 px-8">
+                  <ArrowLeft className="h-4 w-4 mr-2" />
+                  Back
+                </Button>
+                <Button type="submit" className="h-12 px-8">
+                  Next Step
+                  <ArrowRight className="h-4 w-4 ml-2" />
+                </Button>
+              </div>
+            </form>
+          </Form>
+        </div>
+      </div>
     </div>
   );
 };
