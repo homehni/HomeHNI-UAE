@@ -42,6 +42,7 @@ export const mapPropertyType = (propertyType: string): string => {
 export const mapListingType = (listingType: string): string => {
   const listingMappings: { [key: string]: string } = {
     'Sale': 'sale',
+    'Resale': 'sale', // Map "Resale" to 'sale'
     'Rent': 'rent'
   };
   

@@ -1,38 +1,37 @@
-import React, { useState, useEffect } from 'react';
-import { usePropertyForm } from '@/hooks/usePropertyForm';
+import React, { useState } from 'react';
+import { useSalePropertyForm } from '@/hooks/useSalePropertyForm';
 import { ProgressIndicator } from './ProgressIndicator';
 import { OwnerInfoStep } from './OwnerInfoStep';
 import { PropertyDetailsStep } from './PropertyDetailsStep';
 import { LocationDetailsStep } from './LocationDetailsStep';
-import { RentalDetailsStep } from './RentalDetailsStep';
+import { SaleDetailsStep } from './SaleDetailsStep';
 import { AmenitiesStep } from './AmenitiesStep';
 import { GalleryStep } from './GalleryStep';
 import { AdditionalInfoStep } from './AdditionalInfoStep';
 import { ScheduleStep } from './ScheduleStep';
 import { PreviewStep } from './PreviewStep';
-
-import { OwnerInfo, PropertyInfo } from '@/types/property';
 import { Badge } from '@/components/ui/badge';
 
-interface MultiStepFormProps {
-  onSubmit: (data: { ownerInfo: OwnerInfo; propertyInfo: PropertyInfo }) => void;
+import { OwnerInfo } from '@/types/property';
+import { SalePropertyFormData } from '@/types/saleProperty';
+
+interface ResaleMultiStepFormProps {
+  onSubmit: (data: SalePropertyFormData) => void;
   isSubmitting?: boolean;
   initialOwnerInfo?: Partial<OwnerInfo>;
 }
 
-export const MultiStepForm: React.FC<MultiStepFormProps> = ({
+export const ResaleMultiStepForm: React.FC<ResaleMultiStepFormProps> = ({
   onSubmit,
   isSubmitting = false,
   initialOwnerInfo = {}
 }) => {
-  
-  
   const {
     currentStep,
     ownerInfo,
     propertyDetails,
     locationDetails,
-    rentalDetails,
+    saleDetails,
     amenities,
     gallery,
     additionalInfo,
@@ -43,14 +42,14 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
     updateOwnerInfo,
     updatePropertyDetails,
     updateLocationDetails,
-    updateRentalDetails,
+    updateSaleDetails,
     updateAmenities,
     updateGallery,
     updateAdditionalInfo,
     updateScheduleInfo,
     getFormData,
     isStepValid
-  } = usePropertyForm();
+  } = useSalePropertyForm();
 
   // Initialize with owner info if provided
   React.useEffect(() => {
@@ -58,7 +57,6 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
       updateOwnerInfo(initialOwnerInfo);
     }
   }, [initialOwnerInfo, updateOwnerInfo]);
-
 
   const completedSteps = React.useMemo(() => {
     const completed: number[] = [];
@@ -73,7 +71,6 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
     nextStep();
   };
 
-
   const handlePropertyDetailsNext = (data: any) => {
     updatePropertyDetails(data);
     nextStep();
@@ -84,8 +81,8 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
     nextStep();
   };
 
-  const handleRentalDetailsNext = (data: any) => {
-    updateRentalDetails(data);
+  const handleSaleDetailsNext = (data: any) => {
+    updateSaleDetails(data);
     nextStep();
   };
 
@@ -117,13 +114,13 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
                          formData.ownerInfo?.email && formData.ownerInfo?.role);
     const propertyValid = !!(formData.propertyInfo?.propertyDetails?.title && 
                            formData.propertyInfo?.locationDetails?.state && 
-                           formData.propertyInfo?.rentalDetails?.expectedPrice);
+                           formData.propertyInfo?.saleDetails?.expectedPrice);
     
     // Enhanced image validation
     const imageValid = !!(formData.propertyInfo?.gallery?.images && 
                          formData.propertyInfo.gallery.images.length >= 3);
     
-    console.log('Form validation:', { 
+    console.log('Resale form validation:', { 
       ownerValid, 
       propertyValid, 
       imageValid, 
@@ -133,10 +130,10 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
     if (ownerValid && propertyValid && imageValid && formData.ownerInfo && formData.propertyInfo) {
       onSubmit({
         ownerInfo: formData.ownerInfo as OwnerInfo,
-        propertyInfo: formData.propertyInfo as PropertyInfo
+        propertyInfo: formData.propertyInfo as any
       });
     } else {
-      console.error('Form validation failed:', { 
+      console.error('Resale form validation failed:', { 
         ownerValid, 
         propertyValid, 
         imageValid,
@@ -151,18 +148,18 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-4xl">
-      {/* Page Header with Rental Badge */}
+      {/* Page Header with Resale Badge */}
       <div className="text-center mb-8 animate-fade-in">
         <div className="flex justify-center mb-4">
-          <Badge variant="secondary" className="bg-blue-100 text-blue-700 px-4 py-2 text-sm font-medium">
-            🏠 RENTAL PROPERTY FORM
+          <Badge variant="secondary" className="bg-green-100 text-green-700 px-4 py-2 text-sm font-medium">
+            🏠 RESALE PROPERTY FORM
           </Badge>
         </div>
         <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-          List Your Property for Rent
+          List Your Property for Sale
         </h1>
         <p className="text-gray-600 text-lg">
-          Fill in the details below to list your property for rent on our platform
+          Fill in the details below to list your property for sale on our platform
         </p>
       </div>
 
@@ -212,12 +209,10 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
 
         {currentStep === 4 && (
           <div className="p-6 md:p-8">
-            <RentalDetailsStep
-              initialData={rentalDetails}
-              onNext={handleRentalDetailsNext}
+            <SaleDetailsStep
+              initialData={saleDetails}
+              onNext={handleSaleDetailsNext}
               onBack={prevStep}
-              currentStep={currentStep}
-              totalSteps={8}
             />
           </div>
         )}
