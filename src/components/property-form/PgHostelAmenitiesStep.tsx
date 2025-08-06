@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Tv, UtensilsCrossed, ArrowUp, Refrigerator, Wifi, ChefHat, Zap, Car, Plus } from 'lucide-react';
+import { Tv, UtensilsCrossed, MoveUp, Refrigerator, Wifi, ChefHat, Zap, Car, Plus } from 'lucide-react';
 
 interface PgHostelAmenities {
   // Available Services
@@ -73,7 +73,7 @@ export function PgHostelAmenitiesStep({
   const availableAmenities = [
     { key: 'commonTv', label: 'Common TV', icon: Tv },
     { key: 'mess', label: 'Mess', icon: UtensilsCrossed },
-    { key: 'lift', label: 'Lift', icon: ArrowUp },
+    { key: 'lift', label: 'Lift', icon: MoveUp },
     { key: 'refrigerator', label: 'Refrigerator', icon: Refrigerator },
     { key: 'wifi', label: 'Wifi', icon: Wifi },
     { key: 'cookingAllowed', label: 'Cooking Allowed', icon: ChefHat },
