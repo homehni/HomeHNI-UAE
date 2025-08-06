@@ -1,13 +1,12 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Badge } from '@/components/ui/badge';
-import { PropertyDetailsStep } from './PropertyDetailsStep';
+import { FlattmatesPropertyDetailsStep } from './FlattmatesPropertyDetailsStep';
 import { LocationDetailsStep } from './LocationDetailsStep';
-import { AmenitiesStep } from './AmenitiesStep';
+import { FlattmatesRentalDetailsStep } from './FlattmatesRentalDetailsStep';
+import { FlattmatesAmenitiesStep } from './FlattmatesAmenitiesStep';
 import { GalleryStep } from './GalleryStep';
-import { AdditionalInfoStep } from './AdditionalInfoStep';
 import { ScheduleStep } from './ScheduleStep';
 import { PreviewStep } from './PreviewStep';
-import { ProgressIndicator } from './ProgressIndicator';
 import { OwnerInfo, PropertyDetails, LocationDetails, PropertyAmenities, PropertyGallery, AdditionalInfo, ScheduleInfo, FlattmatesDetails, FlattmatesAmenities, FlattmatesFormData } from '@/types/property';
 
 interface FlattmatesMultiStepFormProps {
@@ -22,6 +21,7 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
   initialOwnerInfo = {}
 }) => {
   const [currentStep, setCurrentStep] = useState(1);
+  const [completedSteps, setCompletedSteps] = useState<number[]>([]);
   const [ownerInfo, setOwnerInfo] = useState<OwnerInfo>({
     fullName: '',
     phoneNumber: '',
@@ -126,57 +126,49 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
   useEffect(() => {
     if (initialOwnerInfo) {
       setOwnerInfo(prev => ({ ...prev, ...initialOwnerInfo }));
+      if (initialOwnerInfo.fullName && initialOwnerInfo.email && initialOwnerInfo.phoneNumber) {
+        setCompletedSteps(prev => prev.includes(0) ? prev : [...prev, 0]);
+      }
     }
   }, [initialOwnerInfo]);
 
-  const completedSteps = useMemo(() => {
-    const steps = [];
-    if (propertyDetails.title && propertyDetails.bhkType) steps.push(1);
-    if (locationDetails.state && locationDetails.city) steps.push(2);
-    if (flattmatesDetails.expectedPrice > 0) steps.push(3);
-    if (amenities.powerBackup !== '') steps.push(4);
-    if (gallery.images.length >= 3) steps.push(5);
-    if (additionalInfo.description) steps.push(6);
-    if (scheduleInfo.availability) steps.push(7);
-    return steps;
-  }, [propertyDetails, locationDetails, flattmatesDetails, amenities, gallery, additionalInfo, scheduleInfo]);
-
-  const handlePropertyDetailsNext = (data: PropertyDetails) => {
+  const handlePropertyDetailsNext = (data: any) => {
     setPropertyDetails(data);
+    setCompletedSteps(prev => prev.includes(1) ? prev : [...prev, 1]);
     setCurrentStep(2);
   };
 
   const handleLocationDetailsNext = (data: LocationDetails) => {
     setLocationDetails(data);
+    setCompletedSteps(prev => prev.includes(2) ? prev : [...prev, 2]);
     setCurrentStep(3);
   };
 
-  const handleFlattmatesDetailsNext = (data: FlattmatesDetails) => {
+  const handleFlattmatesDetailsNext = (data: any) => {
     setFlattmatesDetails(data);
+    setCompletedSteps(prev => prev.includes(3) ? prev : [...prev, 3]);
     setCurrentStep(4);
   };
 
-  const handleAmenitiesNext = (data: FlattmatesAmenities) => {
+  const handleAmenitiesNext = (data: any) => {
     setAmenities(data);
+    setCompletedSteps(prev => prev.includes(4) ? prev : [...prev, 4]);
     setCurrentStep(5);
   };
 
   const handleGalleryNext = (data: PropertyGallery) => {
     setGallery(data);
+    setCompletedSteps(prev => prev.includes(5) ? prev : [...prev, 5]);
     setCurrentStep(6);
-  };
-
-  const handleAdditionalInfoNext = (data: AdditionalInfo) => {
-    setAdditionalInfo(data);
-    setCurrentStep(7);
   };
 
   const handleScheduleNext = (data: ScheduleInfo) => {
     setScheduleInfo(data);
-    setCurrentStep(8);
+    setCompletedSteps(prev => prev.includes(6) ? prev : [...prev, 6]);
+    setCurrentStep(7);
   };
 
-  const nextStep = () => setCurrentStep(prev => Math.min(prev + 1, 8));
+  const nextStep = () => setCurrentStep(prev => Math.min(prev + 1, 7));
   const prevStep = () => setCurrentStep(prev => Math.max(prev - 1, 1));
   const goToStep = (step: number) => setCurrentStep(step);
 
@@ -224,19 +216,14 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
           </p>
         </div>
 
-        <ProgressIndicator 
-          currentStep={currentStep} 
-          totalSteps={8}
-          completedSteps={completedSteps}
-        />
-
         {currentStep === 1 && (
-          <PropertyDetailsStep
+          <FlattmatesPropertyDetailsStep
             initialData={propertyDetails}
             onNext={handlePropertyDetailsNext}
             onBack={() => {}}
             currentStep={1}
-            totalSteps={8}
+            totalSteps={6}
+            completedSteps={completedSteps}
           />
         )}
 
@@ -246,27 +233,29 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
             onNext={handleLocationDetailsNext}
             onBack={prevStep}
             currentStep={2}
-            totalSteps={8}
+            totalSteps={6}
           />
         )}
 
         {currentStep === 3 && (
-          <FlattmatesDetailsStep
+          <FlattmatesRentalDetailsStep
             initialData={flattmatesDetails}
             onNext={handleFlattmatesDetailsNext}
             onBack={prevStep}
             currentStep={3}
-            totalSteps={8}
+            totalSteps={6}
+            completedSteps={completedSteps}
           />
         )}
 
         {currentStep === 4 && (
-          <AmenitiesStep
+          <FlattmatesAmenitiesStep
             initialData={amenities}
             onNext={handleAmenitiesNext}
             onBack={prevStep}
             currentStep={4}
-            totalSteps={8}
+            totalSteps={6}
+            completedSteps={completedSteps}
           />
         )}
 
@@ -276,19 +265,11 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
             onNext={handleGalleryNext}
             onBack={prevStep}
             currentStep={5}
-            totalSteps={8}
+            totalSteps={6}
           />
         )}
 
         {currentStep === 6 && (
-          <AdditionalInfoStep
-            initialData={additionalInfo}
-            onNext={handleAdditionalInfoNext}
-            onBack={prevStep}
-          />
-        )}
-
-        {currentStep === 7 && (
           <ScheduleStep
             initialData={scheduleInfo}
             onNext={handleScheduleNext}
@@ -296,7 +277,7 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
           />
         )}
 
-        {currentStep === 8 && (
+        {currentStep === 7 && (
           <PreviewStep
             formData={getFormData()}
             onBack={prevStep}
