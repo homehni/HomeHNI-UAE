@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { PropertyFormRouter } from '@/components/property-form/PropertyFormRouter';
+import { OwnerInfoStep } from '@/components/property-form/OwnerInfoStep';
+import { MultiStepForm } from '@/components/property-form/MultiStepForm';
+import { ResaleMultiStepForm } from '@/components/property-form/ResaleMultiStepForm';
 import { OwnerInfo, PropertyInfo } from '@/types/property';
 import { SalePropertyFormData, SalePropertyInfo } from '@/types/saleProperty';
 import { supabase } from '@/integrations/supabase/client';
@@ -12,11 +14,27 @@ import { mapBhkType, mapPropertyType, mapListingType, validateMappedValues } fro
 import Header from '@/components/Header';
 import Marquee from '@/components/Marquee';
 
+type FormStep = 'owner-info' | 'rental-form' | 'resale-form';
+
 export const PostProperty: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [currentStep, setCurrentStep] = useState<FormStep>('owner-info');
+  const [ownerInfo, setOwnerInfo] = useState<OwnerInfo | null>(null);
   const { user } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
+
+  const handleOwnerInfoNext = (data: OwnerInfo) => {
+    setOwnerInfo(data);
+    
+    // Route to appropriate form based on listing type
+    if (data.listingType === 'Resale') {
+      setCurrentStep('resale-form');
+    } else {
+      // Rent, PG/Hostel, Flatmates go to rental form
+      setCurrentStep('rental-form');
+    }
+  };
 
   const handleSubmit = async (data: { ownerInfo: OwnerInfo; propertyInfo: PropertyInfo | SalePropertyInfo }) => {
     if (!user) {
@@ -224,6 +242,31 @@ export const PostProperty: React.FC = () => {
     }
   };
 
+  const renderCurrentStep = () => {
+    switch (currentStep) {
+      case 'owner-info':
+        return <OwnerInfoStep initialData={{}} onNext={handleOwnerInfoNext} />;
+      case 'rental-form':
+        return (
+          <MultiStepForm 
+            onSubmit={handleSubmit as (data: { ownerInfo: OwnerInfo; propertyInfo: PropertyInfo }) => void}
+            isSubmitting={isSubmitting}
+            initialOwnerInfo={ownerInfo || {}}
+          />
+        );
+      case 'resale-form':
+        return (
+          <ResaleMultiStepForm 
+            onSubmit={handleSubmit as (data: SalePropertyFormData) => void}
+            isSubmitting={isSubmitting}
+            initialOwnerInfo={ownerInfo || {}}
+          />
+        );
+      default:
+        return <OwnerInfoStep initialData={{}} onNext={handleOwnerInfoNext} />;
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50/30 to-indigo-100/30">
       {/* Marquee at the very top */}
@@ -232,7 +275,7 @@ export const PostProperty: React.FC = () => {
       <Header />
       {/* Content starts with proper spacing */}
       <div className="pt-32">
-        <PropertyFormRouter onSubmit={handleSubmit} isSubmitting={isSubmitting} />
+        {renderCurrentStep()}
       </div>
     </div>
   );
