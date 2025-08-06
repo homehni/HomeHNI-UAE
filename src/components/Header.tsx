@@ -19,11 +19,26 @@ const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isLegalFormOpen, setIsLegalFormOpen] = useState(false);
+  const [isRentalDropdownOpen, setIsRentalDropdownOpen] = useState(false);
   const [isServicesDropdownOpen, setIsServicesDropdownOpen] = useState(false);
+  const rentalHoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const servicesHoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const navigate = useNavigate();
   const location = useLocation();
   const { toast } = useToast();
+
+  const handleRentalHover = () => {
+    if (rentalHoverTimeoutRef.current) {
+      clearTimeout(rentalHoverTimeoutRef.current);
+    }
+    setIsRentalDropdownOpen(true);
+  };
+
+  const handleRentalLeave = () => {
+    rentalHoverTimeoutRef.current = setTimeout(() => {
+      setIsRentalDropdownOpen(false);
+    }, 150);
+  };
 
   const handleServicesHover = () => {
     if (servicesHoverTimeoutRef.current) {
@@ -142,8 +157,8 @@ const Header = () => {
 
               <div 
     className="relative"
-    onMouseEnter={handleServicesHover}
-    onMouseLeave={handleServicesLeave}
+    onMouseEnter={handleRentalHover}
+    onMouseLeave={handleRentalLeave}
   >
     <button 
       className={`flex items-center hover:opacity-80 transition-colors duration-500 text-sm font-medium ${isScrolled ? 'text-gray-800' : 'text-white'}`}
@@ -152,12 +167,12 @@ const Header = () => {
       <ChevronDown className="ml-1 h-3 w-3" />
     </button>
     
-    {/* Custom Services Dropdown */}
-    {isServicesDropdownOpen && (
+    {/* Custom Rental Dropdown */}
+    {isRentalDropdownOpen && (
       <div 
         className="absolute top-full left-0 w-56 bg-white border border-gray-200 rounded-lg shadow-xl z-50 mt-2"
-        onMouseEnter={handleServicesHover}
-        onMouseLeave={handleServicesLeave}
+        onMouseEnter={handleRentalHover}
+        onMouseLeave={handleRentalLeave}
       >
         <div className="py-2">
           <button 
