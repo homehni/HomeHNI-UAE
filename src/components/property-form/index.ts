@@ -15,3 +15,4 @@ export { PGHostelMultiStepForm } from './PGHostelMultiStepForm';
 export { FlattmatesMultiStepForm } from './FlattmatesMultiStepForm';
 export { ResaleMultiStepForm } from './ResaleMultiStepForm';
 export { ResalePropertyDetailsStep } from './ResalePropertyDetailsStep';
+export { ResaleSidebar } from './ResaleSidebar';

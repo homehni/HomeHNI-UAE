@@ -8,7 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { PropertyDetails } from '@/types/property';
-import { ArrowLeft, ArrowRight, Home, MapPin, Building, Sparkles, Camera, FileText, Clock, CheckCircle } from 'lucide-react';
+import { ArrowLeft, ArrowRight } from 'lucide-react';
 
 const resalePropertyDetailsSchema = z.object({
   propertyType: z.string().min(1, 'Please select property type'),
@@ -74,64 +74,17 @@ export const ResalePropertyDetailsStep: React.FC<ResalePropertyDetailsStepProps>
     } as PropertyDetails);
   };
 
-  const sidebarSteps = [
-    { number: 1, title: "Property Details", icon: Home, completed: false, active: true },
-    { number: 2, title: "Locality Details", icon: MapPin, completed: false, active: false },
-    { number: 3, title: "Resale Details", icon: Building, completed: false, active: false },
-    { number: 4, title: "Amenities", icon: Sparkles, completed: false, active: false },
-    { number: 5, title: "Gallery", icon: Camera, completed: false, active: false },
-    { number: 6, title: "Additional Information", icon: FileText, completed: false, active: false },
-    { number: 7, title: "Schedule", icon: Clock, completed: false, active: false },
-    { number: 8, title: "Preview & Submit", icon: CheckCircle, completed: false, active: false },
-  ];
-
   return (
-    <div className="flex max-w-7xl mx-auto">
-      {/* Sidebar */}
-      <div className="w-64 bg-background border-r min-h-screen p-6">
-        <div className="space-y-1">
-          {sidebarSteps.map((step) => (
-            <div
-              key={step.number}
-              className={`flex items-center gap-3 p-3 rounded-lg transition-colors ${
-                step.active 
-                  ? 'bg-primary/10 text-primary border-l-4 border-primary' 
-                  : step.completed 
-                    ? 'text-muted-foreground hover:text-foreground hover:bg-muted/50' 
-                    : 'text-muted-foreground'
-              }`}
-            >
-              <div className={`flex items-center justify-center w-8 h-8 rounded-full border-2 ${
-                step.active 
-                  ? 'border-primary bg-primary text-primary-foreground' 
-                  : step.completed 
-                    ? 'border-green-500 bg-green-500 text-white' 
-                    : 'border-muted-foreground'
-              }`}>
-                {step.completed ? (
-                  <CheckCircle className="w-4 h-4" />
-                ) : (
-                  <step.icon className="w-4 h-4" />
-                )}
-              </div>
-              <span className="font-medium text-sm">{step.title}</span>
-            </div>
-          ))}
-        </div>
+    <div className="space-y-8">
+      <div className="text-center">
+        <h2 className="text-2xl font-bold text-gray-900 mb-2">Property Details</h2>
+        <p className="text-gray-600">Tell us about your property specifications</p>
       </div>
 
-      {/* Main Content */}
-      <div className="flex-1 p-8">
-        <div className="space-y-8">
-          <div className="text-center">
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">Property Details</h2>
-            <p className="text-gray-600">Tell us about your property specifications</p>
-          </div>
-
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-              {/* Property Type and BHK Type */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          {/* Property Type and BHK Type */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <FormField
               control={form.control}
               name="propertyType"
@@ -428,21 +381,19 @@ export const ResalePropertyDetailsStep: React.FC<ResalePropertyDetailsStepProps>
             />
           </div>
 
-              {/* Navigation Buttons */}
-              <div className="flex justify-between pt-6">
-                <Button type="button" variant="outline" onClick={onBack} className="h-12 px-8">
-                  <ArrowLeft className="h-4 w-4 mr-2" />
-                  Back
-                </Button>
-                <Button type="submit" className="h-12 px-8">
-                  Next Step
-                  <ArrowRight className="h-4 w-4 ml-2" />
-                </Button>
-              </div>
-            </form>
-          </Form>
-        </div>
-      </div>
+          {/* Navigation Buttons */}
+          <div className="flex justify-between pt-6">
+            <Button type="button" variant="outline" onClick={onBack} className="h-12 px-8">
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Back
+            </Button>
+            <Button type="submit" className="h-12 px-8">
+              Next Step
+              <ArrowRight className="h-4 w-4 ml-2" />
+            </Button>
+          </div>
+        </form>
+      </Form>
     </div>
   );
 };

@@ -80,198 +80,186 @@ export const SaleDetailsStep: React.FC<SaleDetailsStepProps> = ({
     <div className="space-y-8">
       {/* Header */}
       <div className="text-center">
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">Sale Details</h2>
+        <h2 className="text-2xl font-bold text-gray-900 mb-2">Resale Details</h2>
         <p className="text-gray-600">Enter the sale-specific details for your property</p>
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
-              <span className="text-green-600 font-semibold text-sm">4</span>
-            </div>
-            Sale Information
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-6">
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-            
-            {/* Sale Price */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <Label htmlFor="expectedPrice" className="text-sm font-medium">
-                  Sale Price (₹) *
-                </Label>
-                <Input
-                  id="expectedPrice"
-                  type="number"
-                  placeholder="e.g. 5000000"
-                  {...register('expectedPrice', { valueAsNumber: true })}
-                  className="mt-1"
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        
+        {/* Sale Price */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <Label htmlFor="expectedPrice" className="text-sm font-medium">
+              Sale Price (₹) *
+            </Label>
+            <Input
+              id="expectedPrice"
+              type="number"
+              placeholder="e.g. 5000000"
+              {...register('expectedPrice', { valueAsNumber: true })}
+              className="mt-1 h-12"
                 />
-                {errors.expectedPrice && (
-                  <p className="text-red-500 text-sm mt-1">{errors.expectedPrice.message}</p>
+            {errors.expectedPrice && (
+              <p className="text-red-500 text-sm mt-1">{errors.expectedPrice.message}</p>
+            )}
+          </div>
+
+          <div>
+            <Label htmlFor="pricePerSqFt" className="text-sm font-medium">
+              Price per Sq.Ft (₹)
+            </Label>
+            <Input
+              id="pricePerSqFt"
+              type="number"
+              placeholder="e.g. 4500"
+              {...register('pricePerSqFt', { valueAsNumber: true })}
+              className="mt-1 h-12"
+            />
+          </div>
+        </div>
+
+        {/* Price Options */}
+        <div className="flex items-center space-x-2">
+          <Checkbox
+            id="priceNegotiable"
+            checked={watchedValues.priceNegotiable}
+            onCheckedChange={(checked) => setValue('priceNegotiable', checked as boolean)}
+          />
+          <Label htmlFor="priceNegotiable" className="text-sm">
+            Price Negotiable
+          </Label>
+        </div>
+
+        {/* Property Age and Registration Status */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <Label htmlFor="propertyAge" className="text-sm font-medium">
+              Property Age *
+            </Label>
+            <Select
+              value={watchedValues.propertyAge}
+              onValueChange={(value) => setValue('propertyAge', value)}
+            >
+              <SelectTrigger className="mt-1 h-12">
+                <SelectValue placeholder="Select property age" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="new_construction">New Construction</SelectItem>
+                <SelectItem value="0-1_years">0-1 Years</SelectItem>
+                <SelectItem value="1-5_years">1-5 Years</SelectItem>
+                <SelectItem value="5-10_years">5-10 Years</SelectItem>
+                <SelectItem value="10-15_years">10-15 Years</SelectItem>
+                <SelectItem value="15-20_years">15-20 Years</SelectItem>
+                <SelectItem value="20+_years">20+ Years</SelectItem>
+              </SelectContent>
+            </Select>
+            {errors.propertyAge && (
+              <p className="text-red-500 text-sm mt-1">{errors.propertyAge.message}</p>
+            )}
+          </div>
+
+          <div>
+            <Label htmlFor="registrationStatus" className="text-sm font-medium">
+              Registration Status *
+            </Label>
+            <Select
+              value={watchedValues.registrationStatus}
+              onValueChange={(value) => setValue('registrationStatus', value as 'ready_to_move' | 'under_construction')}
+            >
+              <SelectTrigger className="mt-1 h-12">
+                <SelectValue placeholder="Select status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="ready_to_move">Ready to Move</SelectItem>
+                <SelectItem value="under_construction">Under Construction</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+
+        {/* Possession Date */}
+        <div>
+          <Label className="text-sm font-medium">Possession Date</Label>
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button
+                variant="outline"
+                className={cn(
+                  "w-full justify-start text-left font-normal mt-1 h-12",
+                  !selectedDate && "text-muted-foreground"
                 )}
-              </div>
-
-              <div>
-                <Label htmlFor="pricePerSqFt" className="text-sm font-medium">
-                  Price per Sq.Ft (₹)
-                </Label>
-                <Input
-                  id="pricePerSqFt"
-                  type="number"
-                  placeholder="e.g. 4500"
-                  {...register('pricePerSqFt', { valueAsNumber: true })}
-                  className="mt-1"
-                />
-              </div>
-            </div>
-
-            {/* Price Options */}
-            <div className="flex items-center space-x-2">
-              <Checkbox
-                id="priceNegotiable"
-                checked={watchedValues.priceNegotiable}
-                onCheckedChange={(checked) => setValue('priceNegotiable', checked as boolean)}
-              />
-              <Label htmlFor="priceNegotiable" className="text-sm">
-                Price Negotiable
-              </Label>
-            </div>
-
-            {/* Property Age and Registration Status */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <Label htmlFor="propertyAge" className="text-sm font-medium">
-                  Property Age *
-                </Label>
-                <Select
-                  value={watchedValues.propertyAge}
-                  onValueChange={(value) => setValue('propertyAge', value)}
-                >
-                  <SelectTrigger className="mt-1">
-                    <SelectValue placeholder="Select property age" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="new_construction">New Construction</SelectItem>
-                    <SelectItem value="0-1_years">0-1 Years</SelectItem>
-                    <SelectItem value="1-5_years">1-5 Years</SelectItem>
-                    <SelectItem value="5-10_years">5-10 Years</SelectItem>
-                    <SelectItem value="10-15_years">10-15 Years</SelectItem>
-                    <SelectItem value="15-20_years">15-20 Years</SelectItem>
-                    <SelectItem value="20+_years">20+ Years</SelectItem>
-                  </SelectContent>
-                </Select>
-                {errors.propertyAge && (
-                  <p className="text-red-500 text-sm mt-1">{errors.propertyAge.message}</p>
-                )}
-              </div>
-
-              <div>
-                <Label htmlFor="registrationStatus" className="text-sm font-medium">
-                  Registration Status *
-                </Label>
-                <Select
-                  value={watchedValues.registrationStatus}
-                  onValueChange={(value) => setValue('registrationStatus', value as 'ready_to_move' | 'under_construction')}
-                >
-                  <SelectTrigger className="mt-1">
-                    <SelectValue placeholder="Select status" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="ready_to_move">Ready to Move</SelectItem>
-                    <SelectItem value="under_construction">Under Construction</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-
-            {/* Possession Date */}
-            <div>
-              <Label className="text-sm font-medium">Possession Date</Label>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    className={cn(
-                      "w-full justify-start text-left font-normal mt-1",
-                      !selectedDate && "text-muted-foreground"
-                    )}
-                  >
-                    <CalendarIcon className="mr-2 h-4 w-4" />
-                    {selectedDate ? format(selectedDate, "PPP") : "Select possession date"}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0">
-                  <CalendarComponent
-                    mode="single"
-                    selected={selectedDate}
-                    onSelect={setSelectedDate}
-                    disabled={(date) => date < new Date()}
-                    initialFocus
-                  />
-                </PopoverContent>
-              </Popover>
-            </div>
-
-            {/* Additional Charges */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <Label htmlFor="maintenanceCharges" className="text-sm font-medium">
-                  Monthly Maintenance (₹)
-                </Label>
-                <Input
-                  id="maintenanceCharges"
-                  type="number"
-                  placeholder="e.g. 2500"
-                  {...register('maintenanceCharges', { valueAsNumber: true })}
-                  className="mt-1"
-                />
-              </div>
-
-              <div>
-                <Label htmlFor="bookingAmount" className="text-sm font-medium">
-                  Booking Amount (₹)
-                </Label>
-                <Input
-                  id="bookingAmount"
-                  type="number"
-                  placeholder="e.g. 100000"
-                  {...register('bookingAmount', { valueAsNumber: true })}
-                  className="mt-1"
-                />
-              </div>
-            </div>
-
-            {/* Loan Availability */}
-            <div className="flex items-center space-x-2">
-              <Checkbox
-                id="homeLoanAvailable"
-                checked={watchedValues.homeLoanAvailable}
-                onCheckedChange={(checked) => setValue('homeLoanAvailable', checked as boolean)}
-              />
-              <Label htmlFor="homeLoanAvailable" className="text-sm">
-                Home Loan Available
-              </Label>
-            </div>
-
-            {/* Navigation Buttons */}
-            <div className="flex justify-between pt-6">
-              <Button type="button" variant="outline" onClick={onBack}>
-                ← Back
-              </Button>
-              <Button 
-                type="submit" 
-                disabled={!isValid}
-                className="bg-green-600 hover:bg-green-700"
               >
-                Save & Continue →
+                <CalendarIcon className="mr-2 h-4 w-4" />
+                {selectedDate ? format(selectedDate, "PPP") : "Select possession date"}
               </Button>
-            </div>
-          </form>
-        </CardContent>
-      </Card>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0">
+              <CalendarComponent
+                mode="single"
+                selected={selectedDate}
+                onSelect={setSelectedDate}
+                disabled={(date) => date < new Date()}
+                initialFocus
+              />
+            </PopoverContent>
+          </Popover>
+        </div>
+
+        {/* Additional Charges */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <Label htmlFor="maintenanceCharges" className="text-sm font-medium">
+              Monthly Maintenance (₹)
+            </Label>
+            <Input
+              id="maintenanceCharges"
+              type="number"
+              placeholder="e.g. 2500"
+              {...register('maintenanceCharges', { valueAsNumber: true })}
+              className="mt-1 h-12"
+            />
+          </div>
+
+          <div>
+            <Label htmlFor="bookingAmount" className="text-sm font-medium">
+              Booking Amount (₹)
+            </Label>
+            <Input
+              id="bookingAmount"
+              type="number"
+              placeholder="e.g. 100000"
+              {...register('bookingAmount', { valueAsNumber: true })}
+              className="mt-1 h-12"
+            />
+          </div>
+        </div>
+
+        {/* Loan Availability */}
+        <div className="flex items-center space-x-2">
+          <Checkbox
+            id="homeLoanAvailable"
+            checked={watchedValues.homeLoanAvailable}
+            onCheckedChange={(checked) => setValue('homeLoanAvailable', checked as boolean)}
+          />
+          <Label htmlFor="homeLoanAvailable" className="text-sm">
+            Home Loan Available
+          </Label>
+        </div>
+
+        {/* Navigation Buttons */}
+        <div className="flex justify-between pt-6">
+          <Button type="button" variant="outline" onClick={onBack} className="h-12 px-8">
+            ← Back
+          </Button>
+          <Button 
+            type="submit" 
+            disabled={!isValid}
+            className="bg-green-600 hover:bg-green-700 h-12 px-8"
+          >
+            Save & Continue →
+          </Button>
+        </div>
+      </form>
     </div>
   );
 };

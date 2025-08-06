@@ -167,91 +167,122 @@ export const ResaleMultiStepForm: React.FC<ResaleMultiStepFormProps> = ({
         />
       </div>
 
-      {/* Form Content in Card Layout */}
+      {/* Form Content with Consistent Sidebar Layout */}
       <div className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden animate-scale-in">
-        {currentStep === 1 && (
-          <div className="p-6 md:p-8">
-            <ResalePropertyDetailsStep
-              initialData={propertyDetails}
-              onNext={handlePropertyDetailsNext}
-              onBack={() => {}} // No back on first step
-            />
+        <div className="flex">
+          {/* Import and use shared sidebar */}
+          <div className="w-64 bg-white border-r border-gray-200 min-h-screen p-6">
+            <div className="space-y-1">
+              {[
+                { number: 1, title: "Property Details", completed: completedSteps.includes(1), active: currentStep === 1 },
+                { number: 2, title: "Location Details", completed: completedSteps.includes(2), active: currentStep === 2 },
+                { number: 3, title: "Resale Details", completed: completedSteps.includes(3), active: currentStep === 3 },
+                { number: 4, title: "Amenities", completed: completedSteps.includes(4), active: currentStep === 4 },
+                { number: 5, title: "Gallery", completed: completedSteps.includes(5), active: currentStep === 5 },
+                { number: 6, title: "Additional Information", completed: completedSteps.includes(6), active: currentStep === 6 },
+                { number: 7, title: "Schedule", completed: completedSteps.includes(7), active: currentStep === 7 },
+                { number: 8, title: "Preview & Submit", completed: completedSteps.includes(8), active: currentStep === 8 },
+              ].map((step) => (
+                <div
+                  key={step.number}
+                  className={`flex items-center gap-3 p-3 rounded-lg transition-colors ${
+                    step.active 
+                      ? 'bg-red-50 text-red-600 border-l-4 border-red-500' 
+                      : step.completed 
+                        ? 'text-green-600 bg-green-50' 
+                        : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
+                  }`}
+                >
+                  <div className={`flex items-center justify-center w-8 h-8 rounded-full border-2 ${
+                    step.active 
+                      ? 'border-red-500 bg-red-500 text-white' 
+                      : step.completed 
+                        ? 'border-green-500 bg-green-500 text-white' 
+                        : 'border-gray-300 bg-white'
+                  }`}>
+                    {step.completed ? (
+                      <span className="text-xs">✓</span>
+                    ) : (
+                      <span className="text-xs">{step.number}</span>
+                    )}
+                  </div>
+                  <span className="font-medium text-sm">{step.title}</span>
+                </div>
+              ))}
+            </div>
           </div>
-        )}
 
-        {currentStep === 2 && (
-          <div className="p-6 md:p-8">
-            <LocationDetailsStep
-              initialData={locationDetails}
-              onNext={handleLocationDetailsNext}
-              onBack={prevStep}
-              currentStep={currentStep}
-              totalSteps={8}
-            />
-          </div>
-        )}
+          {/* Main Content */}
+          <div className="flex-1 p-6 md:p-8">
+            {currentStep === 1 && (
+              <ResalePropertyDetailsStep
+                initialData={propertyDetails}
+                onNext={handlePropertyDetailsNext}
+                onBack={() => {}} // No back on first step
+              />
+            )}
 
-        {currentStep === 3 && (
-          <div className="p-6 md:p-8">
-            <SaleDetailsStep
-              initialData={saleDetails}
-              onNext={handleSaleDetailsNext}
-              onBack={prevStep}
-            />
-          </div>
-        )}
+            {currentStep === 2 && (
+              <LocationDetailsStep
+                initialData={locationDetails}
+                onNext={handleLocationDetailsNext}
+                onBack={prevStep}
+                currentStep={currentStep}
+                totalSteps={8}
+              />
+            )}
 
-        {currentStep === 4 && (
-          <div className="p-6 md:p-8">
-            <AmenitiesStep
-              initialData={amenities}
-              onNext={handleAmenitiesNext}
-              onBack={prevStep}
-            />
-          </div>
-        )}
+            {currentStep === 3 && (
+              <SaleDetailsStep
+                initialData={saleDetails}
+                onNext={handleSaleDetailsNext}
+                onBack={prevStep}
+              />
+            )}
 
-        {currentStep === 5 && (
-          <div className="p-6 md:p-8">
-            <GalleryStep
-              initialData={gallery}
-              onNext={handleGalleryNext}
-              onBack={prevStep}
-            />
-          </div>
-        )}
+            {currentStep === 4 && (
+              <AmenitiesStep
+                initialData={amenities}
+                onNext={handleAmenitiesNext}
+                onBack={prevStep}
+              />
+            )}
 
-        {currentStep === 6 && (
-          <div className="p-6 md:p-8">
-            <AdditionalInfoStep
-              initialData={additionalInfo}
-              onNext={handleAdditionalInfoNext}
-              onBack={prevStep}
-            />
-          </div>
-        )}
+            {currentStep === 5 && (
+              <GalleryStep
+                initialData={gallery}
+                onNext={handleGalleryNext}
+                onBack={prevStep}
+              />
+            )}
 
-        {currentStep === 7 && (
-          <div className="p-6 md:p-8">
-            <ScheduleStep
-              initialData={scheduleInfo}
-              onNext={handleScheduleNext}
-              onBack={prevStep}
-            />
-          </div>
-        )}
+            {currentStep === 6 && (
+              <AdditionalInfoStep
+                initialData={additionalInfo}
+                onNext={handleAdditionalInfoNext}
+                onBack={prevStep}
+              />
+            )}
 
-        {currentStep === 8 && (
-          <div className="p-6 md:p-8">
-            <PreviewStep
-              formData={getFormData()}
-              onBack={prevStep}
-              onEdit={goToStep}
-              onSubmit={handleSubmit}
-              isSubmitting={isSubmitting}
-            />
+            {currentStep === 7 && (
+              <ScheduleStep
+                initialData={scheduleInfo}
+                onNext={handleScheduleNext}
+                onBack={prevStep}
+              />
+            )}
+
+            {currentStep === 8 && (
+              <PreviewStep
+                formData={getFormData()}
+                onBack={prevStep}
+                onEdit={goToStep}
+                onSubmit={handleSubmit}
+                isSubmitting={isSubmitting}
+              />
+            )}
           </div>
-        )}
+        </div>
       </div>
 
     </div>
