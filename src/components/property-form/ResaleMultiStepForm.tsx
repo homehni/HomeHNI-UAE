@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import { useSalePropertyForm } from '@/hooks/useSalePropertyForm';
 import { ProgressIndicator } from './ProgressIndicator';
 import { ResalePropertyDetailsStep } from './ResalePropertyDetailsStep';
-import { LocationDetailsStep } from './LocationDetailsStep';
+import { ResaleLocationDetailsStep } from './ResaleLocationDetailsStep';
 import { SaleDetailsStep } from './SaleDetailsStep';
-import { AmenitiesStep } from './AmenitiesStep';
-import { GalleryStep } from './GalleryStep';
-import { AdditionalInfoStep } from './AdditionalInfoStep';
-import { ScheduleStep } from './ScheduleStep';
-import { PreviewStep } from './PreviewStep';
+import { ResaleAmenitiesStep } from './ResaleAmenitiesStep';
+import { ResaleGalleryStep } from './ResaleGalleryStep';
+import { ResaleAdditionalInfoStep } from './ResaleAdditionalInfoStep';
+import { ResaleScheduleStep } from './ResaleScheduleStep';
+import { ResalePreviewStep } from './ResalePreviewStep';
 import { Badge } from '@/components/ui/badge';
 
 import { OwnerInfo } from '@/types/property';
@@ -123,10 +123,7 @@ export const ResaleMultiStepForm: React.FC<ResaleMultiStepFormProps> = ({
     });
     
     if (ownerValid && propertyValid && imageValid && formData.ownerInfo && formData.propertyInfo) {
-      onSubmit({
-        ownerInfo: formData.ownerInfo as OwnerInfo,
-        propertyInfo: formData.propertyInfo as any
-      });
+      onSubmit(formData as SalePropertyFormData);
     } else {
       console.error('Resale form validation failed:', { 
         ownerValid, 
@@ -223,12 +220,10 @@ export const ResaleMultiStepForm: React.FC<ResaleMultiStepFormProps> = ({
             )}
 
             {currentStep === 2 && (
-              <LocationDetailsStep
+              <ResaleLocationDetailsStep
                 initialData={locationDetails}
                 onNext={handleLocationDetailsNext}
                 onBack={prevStep}
-                currentStep={currentStep}
-                totalSteps={8}
               />
             )}
 
@@ -241,7 +236,7 @@ export const ResaleMultiStepForm: React.FC<ResaleMultiStepFormProps> = ({
             )}
 
             {currentStep === 4 && (
-              <AmenitiesStep
+              <ResaleAmenitiesStep
                 initialData={amenities}
                 onNext={handleAmenitiesNext}
                 onBack={prevStep}
@@ -249,7 +244,7 @@ export const ResaleMultiStepForm: React.FC<ResaleMultiStepFormProps> = ({
             )}
 
             {currentStep === 5 && (
-              <GalleryStep
+              <ResaleGalleryStep
                 initialData={gallery}
                 onNext={handleGalleryNext}
                 onBack={prevStep}
@@ -257,7 +252,7 @@ export const ResaleMultiStepForm: React.FC<ResaleMultiStepFormProps> = ({
             )}
 
             {currentStep === 6 && (
-              <AdditionalInfoStep
+              <ResaleAdditionalInfoStep
                 initialData={additionalInfo}
                 onNext={handleAdditionalInfoNext}
                 onBack={prevStep}
@@ -265,7 +260,7 @@ export const ResaleMultiStepForm: React.FC<ResaleMultiStepFormProps> = ({
             )}
 
             {currentStep === 7 && (
-              <ScheduleStep
+              <ResaleScheduleStep
                 initialData={scheduleInfo}
                 onNext={handleScheduleNext}
                 onBack={prevStep}
@@ -273,8 +268,8 @@ export const ResaleMultiStepForm: React.FC<ResaleMultiStepFormProps> = ({
             )}
 
             {currentStep === 8 && (
-              <PreviewStep
-                formData={getFormData()}
+              <ResalePreviewStep
+                formData={getFormData() as SalePropertyFormData}
                 onBack={prevStep}
                 onEdit={goToStep}
                 onSubmit={handleSubmit}
