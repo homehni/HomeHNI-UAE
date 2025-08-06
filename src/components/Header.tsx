@@ -124,7 +124,7 @@ const Header = () => {
   <MegaMenu isScrolled={isScrolled} />
   
   <a href="#" className={`hover:opacity-80 transition-colors duration-500 text-sm font-medium ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
-    Owners
+    Sellers
   </a>
   
   <a href="#" className={`hover:opacity-80 transition-colors duration-500 text-sm font-medium ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
@@ -238,10 +238,6 @@ const Header = () => {
       </div>
     )}
   </div>
-
-                <a href="#" className={`hover:opacity-80 transition-colors duration-500 text-sm font-medium ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
-    Jobs
-  </a>
             </nav>
 
             </div>
@@ -259,9 +255,6 @@ const Header = () => {
               <span className="sm:hidden">Post</span>
               <span className="ml-1 bg-green-500 text-white text-[10px] px-1 py-0.5 rounded">Free</span>
             </Button>
-
-
-              
 
 
               {/* Profile Avatar - Only visible for authenticated users */}
