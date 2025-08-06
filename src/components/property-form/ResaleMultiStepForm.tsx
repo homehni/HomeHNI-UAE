@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useSalePropertyForm } from '@/hooks/useSalePropertyForm';
 import { ProgressIndicator } from './ProgressIndicator';
-import { PropertyDetailsStep } from './PropertyDetailsStep';
+import { ResalePropertyDetailsStep } from './ResalePropertyDetailsStep';
 import { LocationDetailsStep } from './LocationDetailsStep';
 import { SaleDetailsStep } from './SaleDetailsStep';
 import { AmenitiesStep } from './AmenitiesStep';
@@ -171,12 +171,10 @@ export const ResaleMultiStepForm: React.FC<ResaleMultiStepFormProps> = ({
       <div className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden animate-scale-in">
         {currentStep === 1 && (
           <div className="p-6 md:p-8">
-            <PropertyDetailsStep
+            <ResalePropertyDetailsStep
               initialData={propertyDetails}
               onNext={handlePropertyDetailsNext}
               onBack={() => {}} // No back on first step
-              currentStep={currentStep}
-              totalSteps={8}
             />
           </div>
         )}

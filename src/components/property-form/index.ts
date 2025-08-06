@@ -13,3 +13,5 @@ export { ImageUpload } from './ImageUpload';
 export { VideoUpload } from './VideoUpload';
 export { PGHostelMultiStepForm } from './PGHostelMultiStepForm';
 export { FlattmatesMultiStepForm } from './FlattmatesMultiStepForm';
+export { ResaleMultiStepForm } from './ResaleMultiStepForm';
+export { ResalePropertyDetailsStep } from './ResalePropertyDetailsStep';
