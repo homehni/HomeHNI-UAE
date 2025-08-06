@@ -71,19 +71,23 @@ export function PgHostelPropertyInfoStep({
       </div>
 
       <Card>
-        <CardHeader>
-          <CardTitle>Property Details</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <CardContent className="p-8">
+          <div className="text-center mb-8">
+            <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="w-8 h-8 bg-primary/20 rounded"></div>
+            </div>
+            <h3 className="text-lg font-medium text-primary mb-2">Property Details</h3>
+          </div>
+
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
                 <Label htmlFor="propertyType">Property Type *</Label>
                 <Select
                   value={formData.propertyType}
                   onValueChange={(value) => setFormData({ ...formData, propertyType: value })}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className="h-12">
                     <SelectValue placeholder="Select property type" />
                   </SelectTrigger>
                   <SelectContent>
@@ -100,7 +104,7 @@ export function PgHostelPropertyInfoStep({
                   value={formData.buildingType}
                   onValueChange={(value) => setFormData({ ...formData, buildingType: value })}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className="h-12">
                     <SelectValue placeholder="Select building type" />
                   </SelectTrigger>
                   <SelectContent>
@@ -111,14 +115,16 @@ export function PgHostelPropertyInfoStep({
                   </SelectContent>
                 </Select>
               </div>
+            </div>
 
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="space-y-2">
                 <Label htmlFor="ageOfProperty">Age of Property *</Label>
                 <Select
                   value={formData.ageOfProperty}
                   onValueChange={(value) => setFormData({ ...formData, ageOfProperty: value })}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className="h-12">
                     <SelectValue placeholder="Select age" />
                   </SelectTrigger>
                   <SelectContent>
@@ -132,30 +138,14 @@ export function PgHostelPropertyInfoStep({
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="furnishing">Furnishing *</Label>
-                <Select
-                  value={formData.furnishing}
-                  onValueChange={(value) => setFormData({ ...formData, furnishing: value })}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select furnishing" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="Fully Furnished">Fully Furnished</SelectItem>
-                    <SelectItem value="Semi Furnished">Semi Furnished</SelectItem>
-                    <SelectItem value="Unfurnished">Unfurnished</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="space-y-2">
                 <Label htmlFor="floorNo">Floor No *</Label>
                 <Input
                   id="floorNo"
                   type="number"
                   value={formData.floorNo || ''}
                   onChange={(e) => setFormData({ ...formData, floorNo: parseInt(e.target.value) || 0 })}
-                  placeholder="Enter floor number"
+                  placeholder="Enter floor"
+                  className="h-12"
                   min="0"
                   required
                 />
@@ -168,57 +158,79 @@ export function PgHostelPropertyInfoStep({
                   type="number"
                   value={formData.totalFloors || ''}
                   onChange={(e) => setFormData({ ...formData, totalFloors: parseInt(e.target.value) || 0 })}
-                  placeholder="Enter total floors"
+                  placeholder="Total floors"
+                  className="h-12"
                   min="1"
                   required
                 />
               </div>
+            </div>
 
-              <div className="space-y-2 md:col-span-2">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-2">
                 <Label htmlFor="superBuiltUpArea">Super Built Up Area (sq ft) *</Label>
                 <Input
                   id="superBuiltUpArea"
                   type="number"
                   value={formData.superBuiltUpArea || ''}
                   onChange={(e) => setFormData({ ...formData, superBuiltUpArea: parseInt(e.target.value) || 0 })}
-                  placeholder="Enter area in square feet"
+                  placeholder="Enter area in sq ft"
+                  className="h-12"
                   min="1"
                   required
                 />
               </div>
-            </div>
 
-            <div className="space-y-3 pt-4">
-              <h3 className="text-sm font-medium text-foreground">Additional Features</h3>
-              
-              <div className="flex items-center space-x-2">
-                <Checkbox
-                  id="onMainRoad"
-                  checked={formData.onMainRoad}
-                  onCheckedChange={(checked) => 
-                    setFormData({ ...formData, onMainRoad: checked as boolean })
-                  }
-                />
-                <Label htmlFor="onMainRoad" className="text-sm">On Main Road</Label>
-              </div>
-
-              <div className="flex items-center space-x-2">
-                <Checkbox
-                  id="cornerProperty"
-                  checked={formData.cornerProperty}
-                  onCheckedChange={(checked) => 
-                    setFormData({ ...formData, cornerProperty: checked as boolean })
-                  }
-                />
-                <Label htmlFor="cornerProperty" className="text-sm">Corner Property</Label>
+              <div className="space-y-2">
+                <Label htmlFor="furnishing">Furnishing *</Label>
+                <Select
+                  value={formData.furnishing}
+                  onValueChange={(value) => setFormData({ ...formData, furnishing: value })}
+                >
+                  <SelectTrigger className="h-12">
+                    <SelectValue placeholder="Select furnishing" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Fully Furnished">Fully Furnished</SelectItem>
+                    <SelectItem value="Semi Furnished">Semi Furnished</SelectItem>
+                    <SelectItem value="Unfurnished">Unfurnished</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
             </div>
 
-            <div className="flex justify-between pt-6">
-              <Button type="button" variant="outline" onClick={onBack}>
+            <div className="space-y-4">
+              <h4 className="text-base font-medium text-foreground">Other Features</h4>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="flex items-center space-x-3">
+                  <Checkbox
+                    id="onMainRoad"
+                    checked={formData.onMainRoad}
+                    onCheckedChange={(checked) => 
+                      setFormData({ ...formData, onMainRoad: checked as boolean })
+                    }
+                  />
+                  <Label htmlFor="onMainRoad" className="text-sm font-normal">On Main Road</Label>
+                </div>
+
+                <div className="flex items-center space-x-3">
+                  <Checkbox
+                    id="cornerProperty"
+                    checked={formData.cornerProperty}
+                    onCheckedChange={(checked) => 
+                      setFormData({ ...formData, cornerProperty: checked as boolean })
+                    }
+                  />
+                  <Label htmlFor="cornerProperty" className="text-sm font-normal">Corner Property</Label>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex justify-center space-x-4 pt-6">
+              <Button type="button" variant="outline" onClick={onBack} className="px-8 py-3">
                 Back
               </Button>
-              <Button type="submit" disabled={!isFormValid()}>
+              <Button type="submit" disabled={!isFormValid()} className="px-8 py-3 bg-red-500 hover:bg-red-600">
                 Save & Continue
               </Button>
             </div>
