@@ -3,13 +3,11 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Button } from '@/components/ui/button';
-
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { LocationDetails } from '@/types/property';
-import { Home, MapPin, Building, Sparkles, Camera, FileText, Calendar } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
+import { ArrowLeft, ArrowRight } from 'lucide-react';
 
 const locationDetailsSchema = z.object({
   state: z.string().min(1, 'Please select state'),
@@ -76,6 +74,11 @@ export const LocationDetailsStep: React.FC<LocationDetailsStepProps> = ({
     }
   }, [selectedState, statesData, form]);
 
+  const handleStateChange = (value: string) => {
+    form.setValue('state', value);
+    form.setValue('city', ''); // Reset city when state changes
+  };
+
   const onSubmit = (data: LocationDetailsFormData) => {
     // Convert to LocationDetails format and add missing fields as empty/default values
     const locationData: LocationDetails = {
@@ -86,166 +89,123 @@ export const LocationDetailsStep: React.FC<LocationDetailsStepProps> = ({
     onNext(locationData);
   };
 
-  const steps = [
-    { icon: Home, label: 'Property Details', active: currentStep === 2 },
-    { icon: MapPin, label: 'Location Details', active: currentStep === 3 },
-    { icon: Building, label: 'Rental Details', active: currentStep === 4 },
-    { icon: Sparkles, label: 'Amenities', active: currentStep === 5 },
-    { icon: Camera, label: 'Gallery', active: currentStep === 6 },
-    { icon: FileText, label: 'Additional Information', active: currentStep === 7 },
-    { icon: Calendar, label: 'Schedule', active: currentStep === 8 },
-  ];
-
-  const progressPercentage = Math.round((currentStep / totalSteps) * 100);
+  const stateNames = Object.keys(statesData);
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="space-y-8">
       {/* Header */}
-      <div className="bg-white border-b border-gray-200 px-6 py-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <Home className="h-6 w-6 text-primary" />
-            <span className="text-lg font-semibold">PropertyHub</span>
-          </div>
-          <div className="flex items-center space-x-4">
-            <span className="text-sm text-gray-600">{progressPercentage}% Done</span>
-            <Button variant="outline" size="sm">Preview</Button>
-          </div>
-        </div>
+      <div className="text-center">
+        <h2 className="text-2xl font-bold text-gray-900 mb-2">Location Details</h2>
+        <p className="text-gray-600">Tell us where your property is located</p>
       </div>
 
-      <div className="flex">
-        {/* Sidebar */}
-        <div className="w-64 bg-white border-r border-gray-200 min-h-screen">
-          <div className="p-6">
-            <nav className="space-y-2">
-              {steps.map((step, index) => {
-                const Icon = step.icon;
-                return (
-                  <div
-                    key={step.label}
-                    className={`flex items-center space-x-3 p-3 rounded-lg transition-colors ${
-                      step.active
-                        ? 'bg-primary/10 text-primary border-l-4 border-primary'
-                        : 'text-gray-600 hover:bg-gray-50'
-                    }`}
-                  >
-                    <Icon className="h-5 w-5" />
-                    <span className="text-sm font-medium">{step.label}</span>
-                  </div>
-                );
-              })}
-            </nav>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          {/* State and City */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <FormField
+              control={form.control}
+              name="state"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-sm font-medium">State*</FormLabel>
+                  <Select onValueChange={handleStateChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger className="h-12">
+                        <SelectValue placeholder="Select State" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {stateNames.map((state) => (
+                        <SelectItem key={state} value={state}>
+                          {state}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="city"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-sm font-medium">City*</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger className="h-12">
+                        <SelectValue placeholder="Select City" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {cities.map((city) => (
+                        <SelectItem key={city} value={city}>
+                          {city}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </div>
-        </div>
 
-        {/* Main Content */}
-        <div className="flex-1 p-6">
-          <div className="max-w-4xl mx-auto">
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
-              <h1 className="text-2xl font-semibold text-primary mb-6">Location Details</h1>
-              <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <FormField
-                      control={form.control}
-                      name="state"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>State</FormLabel>
-                          <Select onValueChange={field.onChange} defaultValue={field.value}>
-                            <FormControl>
-                              <SelectTrigger>
-                                <SelectValue placeholder="Select state" />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              {Object.keys(statesData).map((state) => (
-                                <SelectItem key={state} value={state}>
-                                  {state}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
+          {/* Locality/Area and Landmark */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <FormField
+              control={form.control}
+              name="locality"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-sm font-medium">Locality/Area*</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="e.g., Sector 12, Koramangala"
+                      className="h-12"
+                      {...field}
                     />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-                    <FormField
-                      control={form.control}
-                      name="city"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>City</FormLabel>
-                          <Select 
-                            onValueChange={field.onChange} 
-                            defaultValue={field.value}
-                            disabled={!selectedState}
-                          >
-                            <FormControl>
-                              <SelectTrigger>
-                                <SelectValue placeholder="Select city" />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              {cities.map((city) => (
-                                <SelectItem key={city} value={city}>
-                                  {city}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
+            <FormField
+              control={form.control}
+              name="landmark"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-sm font-medium">Landmark (Optional)</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="e.g., Near Metro Station"
+                      className="h-12"
+                      {...field}
                     />
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <FormField
-                      control={form.control}
-                      name="locality"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Locality/Area</FormLabel>
-                          <FormControl>
-                            <Input placeholder="e.g., Sector 12, Koramangala" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={form.control}
-                      name="landmark"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Landmark (Optional)</FormLabel>
-                          <FormControl>
-                            <Input placeholder="e.g., Near Metro Station" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-
-                  <div className="flex justify-between pt-6">
-                    <Button type="button" variant="outline" onClick={onBack}>
-                      Back
-                    </Button>
-                    <Button type="submit">
-                      Save & Continue
-                    </Button>
-                  </div>
-                </form>
-              </Form>
-            </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </div>
-        </div>
-      </div>
+
+          {/* Navigation Buttons */}
+          <div className="flex justify-between pt-6">
+            <Button type="button" variant="outline" onClick={onBack} className="h-12 px-8">
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Back
+            </Button>
+            <Button type="submit" className="h-12 px-8">
+              Save & Continue
+              <ArrowRight className="h-4 w-4 ml-2" />
+            </Button>
+          </div>
+        </form>
+      </Form>
     </div>
   );
 };
