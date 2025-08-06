@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Badge } from '@/components/ui/badge';
+import { FlattmatesSidebar } from './FlattmatesSidebar';
 import { FlattmatesPropertyDetailsStep } from './FlattmatesPropertyDetailsStep';
 import { LocationDetailsStep } from './LocationDetailsStep';
 import { FlattmatesRentalDetailsStep } from './FlattmatesRentalDetailsStep';
@@ -243,87 +244,82 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50/30 to-teal-100/30">
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        <div className="text-center mb-8">
-          <Badge variant="secondary" className="bg-green-100 text-green-800 px-6 py-2 text-lg font-semibold mb-4">
-            🏠 FLATMATES PROPERTY FORM
-          </Badge>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-            Find the perfect flatmate by listing your shared accommodation with detailed preferences and amenities.
-          </p>
+    <div className="min-h-screen bg-background">
+      <div className="flex">
+        <FlattmatesSidebar currentStep={currentStep} completedSteps={completedSteps} />
+        
+        <div className="flex-1 min-h-screen">
+          {currentStep === 1 && (
+            <FlattmatesPropertyDetailsStep
+              initialData={propertyDetails}
+              onNext={handlePropertyDetailsNext}
+              onBack={() => {}}
+              currentStep={1}
+              totalSteps={6}
+              completedSteps={completedSteps}
+            />
+          )}
+
+          {currentStep === 2 && (
+            <LocationDetailsStep
+              initialData={locationDetails}
+              onNext={handleLocationDetailsNext}
+              onBack={prevStep}
+              currentStep={2}
+              totalSteps={6}
+            />
+          )}
+
+          {currentStep === 3 && (
+            <FlattmatesRentalDetailsStep
+              initialData={rentalDetails}
+              onNext={handleRentalDetailsNext}
+              onBack={prevStep}
+              currentStep={3}
+              totalSteps={6}
+              completedSteps={completedSteps}
+            />
+          )}
+
+          {currentStep === 4 && (
+            <FlattmatesAmenitiesStep
+              initialData={amenities}
+              onNext={handleAmenitiesNext}
+              onBack={prevStep}
+              currentStep={4}
+              totalSteps={6}
+              completedSteps={completedSteps}
+            />
+          )}
+
+          {currentStep === 5 && (
+            <GalleryStep
+              initialData={gallery}
+              onNext={handleGalleryNext}
+              onBack={prevStep}
+              currentStep={5}
+              totalSteps={6}
+            />
+          )}
+
+          {currentStep === 6 && (
+            <ScheduleStep
+              initialData={scheduleInfo}
+              onNext={handleScheduleNext}
+              onBack={prevStep}
+            />
+          )}
+
+          {currentStep === 7 && (
+            <PreviewStep
+              formData={getFormData()}
+              onBack={prevStep}
+              onEdit={goToStep}
+              onSubmit={handleSubmit}
+              isSubmitting={isSubmitting}
+            />
+          )}
         </div>
-
-        {currentStep === 1 && (
-          <FlattmatesPropertyDetailsStep
-            initialData={propertyDetails}
-            onNext={handlePropertyDetailsNext}
-            onBack={() => {}}
-            currentStep={1}
-            totalSteps={6}
-            completedSteps={completedSteps}
-          />
-        )}
-
-        {currentStep === 2 && (
-          <LocationDetailsStep
-            initialData={locationDetails}
-            onNext={handleLocationDetailsNext}
-            onBack={prevStep}
-            currentStep={2}
-            totalSteps={6}
-          />
-        )}
-
-        {currentStep === 3 && (
-          <FlattmatesRentalDetailsStep
-            initialData={rentalDetails}
-            onNext={handleRentalDetailsNext}
-            onBack={prevStep}
-            currentStep={3}
-            totalSteps={6}
-            completedSteps={completedSteps}
-          />
-        )}
-
-        {currentStep === 4 && (
-          <FlattmatesAmenitiesStep
-            initialData={amenities}
-            onNext={handleAmenitiesNext}
-            onBack={prevStep}
-            currentStep={4}
-            totalSteps={6}
-            completedSteps={completedSteps}
-          />
-        )}
-
-        {currentStep === 5 && (
-          <GalleryStep
-            initialData={gallery}
-            onNext={handleGalleryNext}
-            onBack={prevStep}
-            currentStep={5}
-            totalSteps={6}
-          />
-        )}
-
-        {currentStep === 6 && (
-          <ScheduleStep
-            initialData={scheduleInfo}
-            onNext={handleScheduleNext}
-            onBack={prevStep}
-          />
-        )}
-
-        {currentStep === 7 && (
-          <PreviewStep
-            formData={getFormData()}
-            onBack={prevStep}
-            onEdit={goToStep}
-            onSubmit={handleSubmit}
-            isSubmitting={isSubmitting}
-          />
-        )}
       </div>
     </div>
   );
