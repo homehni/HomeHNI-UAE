@@ -144,6 +144,9 @@ export const ResaleMultiStepForm: React.FC<ResaleMultiStepFormProps> = ({
     <div className="container mx-auto px-4 py-8 max-w-4xl">
       {/* Page Header */}
       <div className="text-center mb-8 animate-fade-in">
+        <div className="bg-green-100 text-green-800 px-4 py-2 rounded-lg inline-block mb-4">
+          🏠 RESALE PROPERTY FORM
+        </div>
         <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
           Sell Your Property
         </h1>

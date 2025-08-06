@@ -143,6 +143,9 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
     <div className="container mx-auto px-4 py-8 max-w-4xl">
       {/* Page Header */}
       <div className="text-center mb-8 animate-fade-in">
+        <div className="bg-blue-100 text-blue-800 px-4 py-2 rounded-lg inline-block mb-4">
+          🏠 RENTAL PROPERTY FORM
+        </div>
         <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
           List Your Property
         </h1>
