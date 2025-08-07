@@ -12,7 +12,7 @@ import {
 } from '@/types/property';
 
 export const useCommercialPropertyForm = () => {
-  const [currentStep, setCurrentStep] = useState(1);
+  const [currentStep, setCurrentStep] = useState(2); // Start at Property Details step
   const [ownerInfo, setOwnerInfo] = useState<Partial<OwnerInfo>>({});
   const [propertyDetails, setPropertyDetails] = useState<Partial<CommercialPropertyDetails>>({});
   const [locationDetails, setLocationDetails] = useState<Partial<LocationDetails>>({});
@@ -34,13 +34,13 @@ export const useCommercialPropertyForm = () => {
   };
 
   const prevStep = () => {
-    if (currentStep > 1) {
+    if (currentStep > 2) { // Don't go below step 2 since we skip owner info step
       setCurrentStep(currentStep - 1);
     }
   };
 
   const goToStep = (step: number) => {
-    if (step >= 1 && step <= 9) {
+    if (step >= 2 && step <= 9) { // Valid steps are 2-9
       setCurrentStep(step);
     }
   };
@@ -92,9 +92,6 @@ export const useCommercialPropertyForm = () => {
 
   const isStepValid = (step: number): boolean => {
     switch (step) {
-      case 1:
-        return !!(ownerInfo.phoneNumber && ownerInfo.role &&
-                 ownerInfo.city && ownerInfo.propertyType && ownerInfo.listingType);
       case 2:
         return !!(propertyDetails.title && propertyDetails.propertyType && 
                  propertyDetails.spaceType && propertyDetails.furnishingStatus);

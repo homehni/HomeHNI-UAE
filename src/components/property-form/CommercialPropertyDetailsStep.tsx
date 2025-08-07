@@ -414,7 +414,7 @@ export const CommercialPropertyDetailsStep: React.FC<CommercialPropertyDetailsSt
                 type="button" 
                 variant="outline" 
                 onClick={onBack}
-                disabled={currentStep === 1}
+                disabled={true}
               >
                 Back
               </Button>
