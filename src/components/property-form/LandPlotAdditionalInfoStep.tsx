@@ -4,16 +4,19 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { AdditionalInfo } from '@/types/property';
+import { Info } from 'lucide-react';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 const additionalInfoSchema = z.object({
-  description: z.string().optional(),
-  highlights: z.string().optional(),
-  restrictions: z.string().optional(),
-  documents: z.string().optional(),
-  developmentPotential: z.string().optional(),
+  ownership: z.enum(['freehold', 'leasehold', 'cooperative_society', 'power_of_attorney']),
+  saleDeedCertificate: z.enum(['yes', 'no']),
+  encumbranceCertificate: z.enum(['yes', 'no']),
+  conversionCertificate: z.enum(['yes', 'no']),
+  reraApproved: z.enum(['yes', 'no']),
 });
 
 type AdditionalInfoForm = z.infer<typeof additionalInfoSchema>;
@@ -29,9 +32,15 @@ export const LandPlotAdditionalInfoStep: React.FC<LandPlotAdditionalInfoStepProp
   onNext,
   onBack,
 }) => {
-  const { register, handleSubmit } = useForm<AdditionalInfoForm>({
+  const { handleSubmit, setValue, formState: { errors } } = useForm<AdditionalInfoForm>({
     resolver: zodResolver(additionalInfoSchema),
-    defaultValues: initialData,
+    defaultValues: {
+      ownership: 'freehold',
+      saleDeedCertificate: 'yes',
+      encumbranceCertificate: 'yes',
+      conversionCertificate: 'yes',
+      reraApproved: 'yes',
+    }
   });
 
   return (
@@ -46,104 +55,211 @@ export const LandPlotAdditionalInfoStep: React.FC<LandPlotAdditionalInfoStepProp
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit(onNext)} className="space-y-6">
-          {/* Property Description */}
-          <div className="space-y-2">
-            <Label htmlFor="description" className="text-sm font-medium text-gray-700">
-              Plot Description
-            </Label>
-            <Textarea
-              id="description"
-              {...register('description')}
-              placeholder="Describe your land/plot, its unique features, location advantages, and what makes it special..."
-              rows={4}
-              className="w-full"
-            />
-            <p className="text-gray-500 text-xs">
-              Include details about the plot's topography, natural features, accessibility, and potential uses
-            </p>
-          </div>
+          <TooltipProvider>
+            {/* Ownership Section */}
+            <div className="space-y-4">
+              <Label className="text-sm font-medium text-gray-700">Ownership</Label>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="radio"
+                    id="ownership-freehold"
+                    name="ownership"
+                    value="freehold"
+                    onChange={() => setValue('ownership', 'freehold')}
+                    className="w-4 h-4 text-red-600"
+                    defaultChecked
+                  />
+                  <Label htmlFor="ownership-freehold" className="text-sm text-gray-700">
+                    Freehold
+                  </Label>
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <Info className="w-4 h-4 text-teal-600" />
+                    </TooltipTrigger>
+                    <TooltipContent className="bg-white border shadow-lg">
+                      <p className="text-sm">Complete ownership of the property and land</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </div>
+                
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="radio"
+                    id="ownership-leasehold"
+                    name="ownership"
+                    value="leasehold"
+                    onChange={() => setValue('ownership', 'leasehold')}
+                    className="w-4 h-4 text-red-600"
+                  />
+                  <Label htmlFor="ownership-leasehold" className="text-sm text-gray-700">
+                    Leasehold
+                  </Label>
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <Info className="w-4 h-4 text-teal-600" />
+                    </TooltipTrigger>
+                    <TooltipContent className="bg-white border shadow-lg">
+                      <p className="text-sm">Property held under a lease agreement for a specific period</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </div>
+                
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="radio"
+                    id="ownership-cooperative"
+                    name="ownership"
+                    value="cooperative_society"
+                    onChange={() => setValue('ownership', 'cooperative_society')}
+                    className="w-4 h-4 text-red-600"
+                  />
+                  <Label htmlFor="ownership-cooperative" className="text-sm text-gray-700">
+                    Co-operative Society
+                  </Label>
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <Info className="w-4 h-4 text-teal-600" />
+                    </TooltipTrigger>
+                    <TooltipContent className="bg-white border shadow-lg">
+                      <p className="text-sm">Property owned through a cooperative housing society</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </div>
+                
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="radio"
+                    id="ownership-poa"
+                    name="ownership"
+                    value="power_of_attorney"
+                    onChange={() => setValue('ownership', 'power_of_attorney')}
+                    className="w-4 h-4 text-red-600"
+                  />
+                  <Label htmlFor="ownership-poa" className="text-sm text-gray-700">
+                    Power of Attorney
+                  </Label>
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <Info className="w-4 h-4 text-teal-600" />
+                    </TooltipTrigger>
+                    <TooltipContent className="bg-white border shadow-lg">
+                      <p className="text-sm">Property transferred through Power of Attorney</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </div>
+              </div>
+            </div>
 
-          {/* Key Highlights */}
-          <div className="space-y-2">
-            <Label htmlFor="highlights" className="text-sm font-medium text-gray-700">
-              Key Highlights & Selling Points
-            </Label>
-            <Textarea
-              id="highlights"
-              {...register('highlights')}
-              placeholder="List the key selling points, unique advantages, and highlights of your plot..."
-              rows={3}
-              className="w-full"
-            />
-            <p className="text-gray-500 text-xs">
-              Example: Corner plot, near metro station, facing park, approved layout, ready for construction
-            </p>
-          </div>
+            {/* Certificate Questions */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Sale Deed Certificate */}
+              <div className="space-y-2">
+                <div className="flex items-center space-x-2">
+                  <Label className="text-sm font-medium text-gray-700">
+                    Do you have Sale Deed Certificate?
+                  </Label>
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <Info className="w-4 h-4 text-teal-600" />
+                    </TooltipTrigger>
+                    <TooltipContent className="bg-white border shadow-lg">
+                      <p className="text-sm">Legal document proving ownership of the property</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </div>
+                <Select onValueChange={(value) => setValue('saleDeedCertificate', value as any)}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-white z-50">
+                    <SelectItem value="yes">Yes</SelectItem>
+                    <SelectItem value="no">No</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
 
-          {/* Development Potential */}
-          <div className="space-y-2">
-            <Label htmlFor="developmentPotential" className="text-sm font-medium text-gray-700">
-              Development Potential & Future Prospects
-            </Label>
-            <Textarea
-              id="developmentPotential"
-              {...register('developmentPotential')}
-              placeholder="Describe the development potential, zoning details, construction possibilities, and future value prospects..."
-              rows={3}
-              className="w-full"
-            />
-            <p className="text-gray-500 text-xs">
-              Include information about permitted construction, FSI, height restrictions, and upcoming developments in the area
-            </p>
-          </div>
+              {/* Encumbrance Certificate */}
+              <div className="space-y-2">
+                <div className="flex items-center space-x-2">
+                  <Label className="text-sm font-medium text-gray-700">
+                    Do you have Encumbrance certificate?
+                  </Label>
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <Info className="w-4 h-4 text-teal-600" />
+                    </TooltipTrigger>
+                    <TooltipContent className="bg-white border shadow-lg">
+                      <p className="text-sm">Certificate showing property is free from legal dues</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </div>
+                <Select onValueChange={(value) => setValue('encumbranceCertificate', value as any)}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-white z-50">
+                    <SelectItem value="yes">Yes</SelectItem>
+                    <SelectItem value="no">No</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
 
-          {/* Legal & Restrictions */}
-          <div className="space-y-2">
-            <Label htmlFor="restrictions" className="text-sm font-medium text-gray-700">
-              Legal Information & Restrictions
-            </Label>
-            <Textarea
-              id="restrictions"
-              {...register('restrictions')}
-              placeholder="Mention any legal restrictions, easements, covenants, or special conditions..."
-              rows={3}
-              className="w-full"
-            />
-            <p className="text-gray-500 text-xs">
-              Include details about building restrictions, setback requirements, land use limitations, or community guidelines
-            </p>
-          </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Conversion Certificate */}
+              <div className="space-y-2">
+                <div className="flex items-center space-x-2">
+                  <Label className="text-sm font-medium text-gray-700">
+                    Do you have Conversion certificate?
+                  </Label>
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <Info className="w-4 h-4 text-teal-600" />
+                    </TooltipTrigger>
+                    <TooltipContent className="bg-white border shadow-lg">
+                      <p className="text-sm">Certificate for converting agricultural land to non-agricultural use</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </div>
+                <Select onValueChange={(value) => setValue('conversionCertificate', value as any)}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-white z-50">
+                    <SelectItem value="yes">Yes</SelectItem>
+                    <SelectItem value="no">No</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
 
-          {/* Available Documents */}
-          <div className="space-y-2">
-            <Label htmlFor="documents" className="text-sm font-medium text-gray-700">
-              Available Documents
-            </Label>
-            <Textarea
-              id="documents"
-              {...register('documents')}
-              placeholder="List all available documents like title deed, survey settlement, tax receipts, NOCs..."
-              rows={3}
-              className="w-full"
-            />
-            <p className="text-gray-500 text-xs">
-              Example: Clear title deed, survey settlement record, property tax receipts, RERA certificate, NOC certificates
-            </p>
-          </div>
-
-          {/* Information Guidelines */}
-          <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-            <h4 className="font-semibold text-green-900 mb-2">Tips for Writing Effective Descriptions:</h4>
-            <ul className="text-sm text-green-800 space-y-1">
-              <li>• Mention nearby landmarks, schools, hospitals, and transportation</li>
-              <li>• Highlight future development projects in the vicinity</li>
-              <li>• Include soil quality, drainage, and natural features</li>
-              <li>• Specify any architectural guidelines or community features</li>
-              <li>• Mention investment potential and growth prospects</li>
-              <li>• Be honest about any limitations or challenges</li>
-              <li>• Use specific details rather than generic statements</li>
-            </ul>
-          </div>
+              {/* RERA Approved */}
+              <div className="space-y-2">
+                <div className="flex items-center space-x-2">
+                  <Label className="text-sm font-medium text-gray-700">
+                    Is the property RERA Approved?
+                  </Label>
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <Info className="w-4 h-4 text-teal-600" />
+                    </TooltipTrigger>
+                    <TooltipContent className="bg-white border shadow-lg">
+                      <p className="text-sm">Real Estate Regulatory Authority approval for the project</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </div>
+                <Select onValueChange={(value) => setValue('reraApproved', value as any)}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-white z-50">
+                    <SelectItem value="yes">Yes</SelectItem>
+                    <SelectItem value="no">No</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+          </TooltipProvider>
 
           {/* Navigation Buttons */}
           <div className="flex justify-between pt-6">
