@@ -48,7 +48,7 @@ export const AdditionalInfoStep: React.FC<AdditionalInfoStepProps> = ({
   };
 
   return (
-    <div className="space-y-8">
+    <div className="ml-80 p-6 space-y-8">
       {/* Header */}
       <div className="text-center">
         <h2 className="text-2xl font-bold text-gray-900 mb-2">Additional Information</h2>
