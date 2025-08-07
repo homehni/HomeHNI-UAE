@@ -2,20 +2,19 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Textarea } from '@/components/ui/textarea';
-import { CommercialAmenities } from '@/types/property';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Key, Plus } from 'lucide-react';
 
 const commercialSaleAmenitiesSchema = z.object({
-  powerBackup: z.string().optional(),
-  lift: z.string().optional(),
-  parking: z.string().optional(),
-  washrooms: z.string().optional(),
+  powerBackup: z.string().min(1, 'Power backup is required'),
+  lift: z.string().min(1, 'Lift information is required'),
+  parking: z.string().min(1, 'Parking information is required'),
+  washrooms: z.string().min(1, 'Washroom information is required'),
   waterStorageFacility: z.string().optional(),
-  security: z.string().optional(),
-  wifi: z.string().optional(),
+  security: z.boolean().optional(),
   currentPropertyCondition: z.string().optional(),
   currentBusiness: z.string().optional(),
   moreSimilarUnits: z.boolean().optional(),
@@ -25,8 +24,8 @@ const commercialSaleAmenitiesSchema = z.object({
 type CommercialSaleAmenitiesForm = z.infer<typeof commercialSaleAmenitiesSchema>;
 
 interface CommercialSaleAmenitiesStepProps {
-  initialData?: Partial<CommercialAmenities>;
-  onNext: (data: Partial<CommercialAmenities>) => void;
+  initialData?: any;
+  onNext: (data: any) => void;
   onBack: () => void;
   currentStep: number;
   totalSteps: number;
@@ -47,8 +46,7 @@ export const CommercialSaleAmenitiesStep = ({
       parking: initialData?.parking || '',
       washrooms: initialData?.washrooms || '',
       waterStorageFacility: initialData?.waterStorageFacility || '',
-      security: initialData?.security || '',
-      wifi: initialData?.wifi || '',
+      security: initialData?.security === true || false,
       currentPropertyCondition: initialData?.currentPropertyCondition || '',
       currentBusiness: initialData?.currentBusiness || '',
       moreSimilarUnits: initialData?.moreSimilarUnits || false,
@@ -78,11 +76,14 @@ export const CommercialSaleAmenitiesStep = ({
               name="powerBackup"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Power Backup</FormLabel>
+                  <FormLabel className="flex items-center gap-2">
+                    <Key className="h-4 w-4" />
+                    Power Backup *
+                  </FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select power backup" />
+                        <SelectValue placeholder="Select" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -102,11 +103,14 @@ export const CommercialSaleAmenitiesStep = ({
               name="lift"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Lift/Elevator</FormLabel>
+                  <FormLabel className="flex items-center gap-2">
+                    <Key className="h-4 w-4" />
+                    Lift *
+                  </FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select lift availability" />
+                        <SelectValue placeholder="Select" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -128,11 +132,14 @@ export const CommercialSaleAmenitiesStep = ({
               name="parking"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Parking</FormLabel>
+                  <FormLabel className="flex items-center gap-2">
+                    <Key className="h-4 w-4" />
+                    Parking *
+                  </FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select parking type" />
+                        <SelectValue placeholder="Select" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -152,11 +159,14 @@ export const CommercialSaleAmenitiesStep = ({
               name="washrooms"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Washrooms</FormLabel>
+                  <FormLabel className="flex items-center gap-2">
+                    <Key className="h-4 w-4" />
+                    Washroom(s) *
+                  </FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select washroom type" />
+                        <SelectValue placeholder="Select" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -178,11 +188,14 @@ export const CommercialSaleAmenitiesStep = ({
               name="waterStorageFacility"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Water Storage</FormLabel>
+                  <FormLabel className="flex items-center gap-2">
+                    <Key className="h-4 w-4" />
+                    Water Storage Facility
+                  </FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select water storage" />
+                        <SelectValue placeholder="Select" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -201,22 +214,16 @@ export const CommercialSaleAmenitiesStep = ({
               control={form.control}
               name="security"
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Security</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select security type" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="none">No Security</SelectItem>
-                      <SelectItem value="guard">Security Guard</SelectItem>
-                      <SelectItem value="cctv">CCTV</SelectItem>
-                      <SelectItem value="both">Guard & CCTV</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
+                <FormItem className="flex flex-row items-start space-x-3 space-y-0 pt-8">
+                  <FormControl>
+                    <Checkbox
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                  <div className="space-y-1 leading-none">
+                    <FormLabel>Security</FormLabel>
+                  </div>
                 </FormItem>
               )}
             />
@@ -224,38 +231,14 @@ export const CommercialSaleAmenitiesStep = ({
 
           <FormField
             control={form.control}
-            name="wifi"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>WiFi/Internet</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select WiFi availability" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectItem value="none">No WiFi</SelectItem>
-                    <SelectItem value="available">WiFi Available</SelectItem>
-                    <SelectItem value="broadband">Broadband Ready</SelectItem>
-                    <SelectItem value="fiber">Fiber Connection</SelectItem>
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
             name="currentPropertyCondition"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Current Property Condition</FormLabel>
+                <FormLabel>Current Property Condition?</FormLabel>
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="Select condition" />
+                      <SelectValue placeholder="Select" />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
@@ -275,10 +258,52 @@ export const CommercialSaleAmenitiesStep = ({
             name="currentBusiness"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Current Business (if any)</FormLabel>
-                <FormControl>
-                  <Input placeholder="e.g., Restaurant, Office, Retail Store" {...field} />
-                </FormControl>
+                <FormLabel>What business is currently running?</FormLabel>
+                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value="none">No Business</SelectItem>
+                    <SelectItem value="restaurant">Restaurant</SelectItem>
+                    <SelectItem value="office">Office</SelectItem>
+                    <SelectItem value="retail">Retail Store</SelectItem>
+                    <SelectItem value="warehouse">Warehouse</SelectItem>
+                    <SelectItem value="manufacturing">Manufacturing</SelectItem>
+                    <SelectItem value="other">Other</SelectItem>
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="moreSimilarUnits"
+            render={({ field }) => (
+              <FormItem className="space-y-4">
+                <FormLabel>Do you have more similar units/properties available?</FormLabel>
+                <div className="flex items-center space-x-4">
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      id="no"
+                      checked={!field.value}
+                      onCheckedChange={(checked) => field.onChange(!checked)}
+                    />
+                    <label htmlFor="no" className="text-sm font-medium">No</label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      id="yes"
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                    <label htmlFor="yes" className="text-sm font-medium">Yes</label>
+                  </div>
+                </div>
                 <FormMessage />
               </FormItem>
             )}
@@ -289,7 +314,14 @@ export const CommercialSaleAmenitiesStep = ({
             name="directionsTip"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Directions/How to Reach</FormLabel>
+                <FormLabel className="flex items-center gap-2">
+                  <Plus className="h-4 w-4" />
+                  Add Directions Tip for your buyers <span className="bg-green-100 text-green-700 text-xs px-2 py-1 rounded">NEW</span>
+                </FormLabel>
+                <div className="text-sm text-gray-600 mb-2">
+                  Don't want calls asking location?<br />
+                  Add directions to reach using landmarks
+                </div>
                 <FormControl>
                   <Textarea 
                     placeholder="Provide directions to help visitors find your property easily"

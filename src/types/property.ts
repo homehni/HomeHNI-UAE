@@ -55,14 +55,9 @@ export interface PropertyAmenities {
   powerBackup?: string;
   lift?: string;
   parking?: string;
-  washrooms?: string;
   waterStorageFacility?: string;
-  security?: string;
+  security?: boolean;
   wifi?: string;
-  currentPropertyCondition?: string;
-  currentBusiness?: string;
-  moreSimilarUnits?: boolean;
-  directionsTip?: string;
 }
 
 export interface PropertyGallery {
