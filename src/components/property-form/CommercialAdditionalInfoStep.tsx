@@ -11,8 +11,8 @@ import { AdditionalInfo } from '@/types/property';
 
 const commercialAdditionalInfoSchema = z.object({
   description: z.string().optional(),
-  previousOccupancy: z.string().optional(),
-  whoWillShow: z.string().optional(),
+  previousOccupancy: z.string().min(1, 'Please select previous occupancy'),
+  whoWillShow: z.string().min(1, 'Please select who will show the property'),
   paintingRequired: z.string().optional(),
   cleaningRequired: z.string().optional(),
   secondaryNumber: z.string().optional(),
@@ -82,7 +82,7 @@ export const CommercialAdditionalInfoStep: React.FC<CommercialAdditionalInfoStep
                 name="previousOccupancy"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-sm font-medium">Previous Occupancy</FormLabel>
+                    <FormLabel className="text-sm font-medium">Previous Occupancy *</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger className="h-12">
@@ -108,7 +108,7 @@ export const CommercialAdditionalInfoStep: React.FC<CommercialAdditionalInfoStep
                 name="whoWillShow"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-sm font-medium">Who Will Show the Property</FormLabel>
+                    <FormLabel className="text-sm font-medium">Who Will Show the Property *</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger className="h-12">
