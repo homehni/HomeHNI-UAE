@@ -231,7 +231,7 @@ export const CommercialMultiStepForm: React.FC<CommercialMultiStepFormProps> = (
           onStepClick={goToStep}
         />
         
-        <div className="flex-1">
+        <div className="flex-1 ml-80 p-6">
           {renderCurrentStep()}
         </div>
       </div>
