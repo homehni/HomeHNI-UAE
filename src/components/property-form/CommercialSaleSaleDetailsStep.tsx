@@ -11,15 +11,15 @@ import { CommercialSaleDetails } from '@/types/commercialSaleProperty';
 
 const commercialSaleSaleDetailsSchema = z.object({
   listingType: z.literal('Sale'),
-  expectedPrice: z.coerce.number().min(1, 'Expected price is required'),
+  expectedPrice: z.number().min(1, 'Expected price is required'),
   priceNegotiable: z.boolean().optional(),
-  pricePerSqFt: z.coerce.number().optional(),
+  pricePerSqFt: z.number().optional(),
   possessionDate: z.string().optional(),
   propertyAge: z.string().min(1, 'Property age is required'),
   registrationStatus: z.enum(['ready_to_move', 'under_construction']),
   homeLoanAvailable: z.boolean().optional(),
-  maintenanceCharges: z.coerce.number().optional(),
-  bookingAmount: z.coerce.number().optional(),
+  maintenanceCharges: z.number().optional(),
+  bookingAmount: z.number().optional(),
   businessType: z.array(z.string()).optional(),
   operatingHours: z.string().optional(),
   restrictedActivities: z.array(z.string()).optional(),
@@ -87,7 +87,12 @@ export const CommercialSaleSaleDetailsStep = ({
                 <FormItem>
                   <FormLabel>Expected Price (₹) *</FormLabel>
                   <FormControl>
-                    <Input type="number" placeholder="e.g., 5000000" {...field} />
+                    <Input 
+                      type="number" 
+                      placeholder="e.g., 5000000" 
+                      value={field.value || ''}
+                      onChange={(e) => field.onChange(Number(e.target.value))}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -101,7 +106,12 @@ export const CommercialSaleSaleDetailsStep = ({
                 <FormItem>
                   <FormLabel>Price per Sq Ft (₹)</FormLabel>
                   <FormControl>
-                    <Input type="number" placeholder="e.g., 2500" {...field} />
+                    <Input 
+                      type="number" 
+                      placeholder="e.g., 2500" 
+                      value={field.value || ''}
+                      onChange={(e) => field.onChange(Number(e.target.value))}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -181,7 +191,12 @@ export const CommercialSaleSaleDetailsStep = ({
                 <FormItem>
                   <FormLabel>Booking Amount (₹)</FormLabel>
                   <FormControl>
-                    <Input type="number" placeholder="e.g., 500000" {...field} />
+                    <Input 
+                      type="number" 
+                      placeholder="e.g., 500000" 
+                      value={field.value || ''}
+                      onChange={(e) => field.onChange(Number(e.target.value))}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -196,7 +211,12 @@ export const CommercialSaleSaleDetailsStep = ({
               <FormItem>
                 <FormLabel>Monthly Maintenance Charges (₹)</FormLabel>
                 <FormControl>
-                  <Input type="number" placeholder="e.g., 5000" {...field} />
+                  <Input 
+                    type="number" 
+                    placeholder="e.g., 5000" 
+                    value={field.value || ''}
+                    onChange={(e) => field.onChange(Number(e.target.value))}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>

@@ -97,7 +97,7 @@ export const CommercialSaleScheduleStep = ({
               <Checkbox
                 id="availableAllDay"
                 checked={availableAllDay}
-                onCheckedChange={setAvailableAllDay}
+                onCheckedChange={(checked) => setAvailableAllDay(checked === true)}
               />
               <label
                 htmlFor="availableAllDay"

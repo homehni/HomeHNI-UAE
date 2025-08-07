@@ -149,7 +149,7 @@ export const CommercialSaleMultiStepForm = ({
       case 9:
         return (
           <CommercialSalePreviewStep
-            formData={getFormData()}
+            formData={getFormData() as any}
             onSubmit={handleSubmit}
             onBack={prevStep}
             currentStep={currentStep}

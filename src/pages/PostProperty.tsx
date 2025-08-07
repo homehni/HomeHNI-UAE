@@ -6,8 +6,10 @@ import { ResaleMultiStepForm } from '@/components/property-form/ResaleMultiStepF
 import { PGHostelMultiStepForm } from '@/components/property-form/PGHostelMultiStepForm';
 import { FlattmatesMultiStepForm } from '@/components/property-form/FlattmatesMultiStepForm';
 import { CommercialMultiStepForm } from '@/components/property-form/CommercialMultiStepForm';
+import { CommercialSaleMultiStepForm } from '@/components/property-form/CommercialSaleMultiStepForm';
 import { OwnerInfo, PropertyInfo, PGHostelFormData, FlattmatesFormData, CommercialFormData } from '@/types/property';
 import { SalePropertyFormData, SalePropertyInfo } from '@/types/saleProperty';
+import { CommercialSaleFormData } from '@/types/commercialSaleProperty';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
@@ -17,7 +19,7 @@ import { mapBhkType, mapPropertyType, mapListingType, validateMappedValues } fro
 import Header from '@/components/Header';
 import Marquee from '@/components/Marquee';
 
-type FormStep = 'owner-info' | 'rental-form' | 'resale-form' | 'pg-hostel-form' | 'flatmates-form' | 'commercial-rental-form';
+type FormStep = 'owner-info' | 'rental-form' | 'resale-form' | 'pg-hostel-form' | 'flatmates-form' | 'commercial-rental-form' | 'commercial-sale-form';
 
 export const PostProperty: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -31,8 +33,12 @@ export const PostProperty: React.FC = () => {
     setOwnerInfo(data);
     
     // Route to appropriate form based on property type and listing type
-    if (data.propertyType === 'Commercial' && data.listingType === 'Rent') {
-      setCurrentStep('commercial-rental-form');
+    if (data.propertyType === 'Commercial') {
+      if (data.listingType === 'Rent') {
+        setCurrentStep('commercial-rental-form');
+      } else if (data.listingType === 'Sale') {
+        setCurrentStep('commercial-sale-form');
+      }
     } else {
       // Route to appropriate form based on listing type for non-commercial
       switch (data.listingType) {
@@ -51,7 +57,7 @@ export const PostProperty: React.FC = () => {
     }
   };
 
-  const handleSubmit = async (data: { ownerInfo: OwnerInfo; propertyInfo: PropertyInfo | SalePropertyInfo } | PGHostelFormData | FlattmatesFormData | CommercialFormData) => {
+  const handleSubmit = async (data: { ownerInfo: OwnerInfo; propertyInfo: PropertyInfo | SalePropertyInfo } | PGHostelFormData | FlattmatesFormData | CommercialFormData | CommercialSaleFormData) => {
     if (!user) {
       toast({
         title: "Authentication Required",
@@ -318,6 +324,14 @@ export const PostProperty: React.FC = () => {
         return (
           <CommercialMultiStepForm 
             onSubmit={handleSubmit as (data: CommercialFormData) => void}
+            isSubmitting={isSubmitting}
+            initialOwnerInfo={ownerInfo || {}}
+          />
+        );
+      case 'commercial-sale-form':
+        return (
+          <CommercialSaleMultiStepForm 
+            onSubmit={handleSubmit as (data: CommercialSaleFormData) => void}
             isSubmitting={isSubmitting}
             initialOwnerInfo={ownerInfo || {}}
           />
