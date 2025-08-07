@@ -15,10 +15,10 @@ const locationDetailsSchema = z.object({
   city: z.string().min(1, 'City is required'),
   locality: z.string().min(1, 'Locality is required'),
   societyName: z.string().optional(),
-  pincode: z.string().min(6, 'Valid pincode is required').max(6),
-  landmark: z.string().optional(),
-  address: z.string().min(1, 'Address is required'),
-  nearbyPlaces: z.string().optional(),
+  // pincode: z.string().min(6, 'Valid pincode is required').max(6),
+  // landmark: z.string().optional(),
+  // address: z.string().min(1, 'Address is required'),
+  // nearbyPlaces: z.string().optional(),
 });
 
 type LocationDetailsForm = z.infer<typeof locationDetailsSchema>;
@@ -153,7 +153,7 @@ export const LandPlotLocationDetailsStep: React.FC<LandPlotLocationDetailsStepPr
           </div>
 
           {/* Pincode and Landmark */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="pincode" className="text-sm font-medium text-gray-700">
                 Pincode *
@@ -180,10 +180,10 @@ export const LandPlotLocationDetailsStep: React.FC<LandPlotLocationDetailsStepPr
                 className="w-full"
               />
             </div>
-          </div>
+          </div> */}
 
           {/* Full Address */}
-          <div className="space-y-2">
+          {/* <div className="space-y-2">
             <Label htmlFor="address" className="text-sm font-medium text-gray-700">
               Complete Address *
             </Label>
@@ -197,10 +197,10 @@ export const LandPlotLocationDetailsStep: React.FC<LandPlotLocationDetailsStepPr
             {errors.address && (
               <p className="text-red-500 text-sm">{errors.address.message}</p>
             )}
-          </div>
+          </div> */}
 
           {/* Nearby Places */}
-          <div className="space-y-2">
+          {/* <div className="space-y-2">
             <Label htmlFor="nearbyPlaces" className="text-sm font-medium text-gray-700">
               Nearby Places (Optional)
             </Label>
@@ -214,7 +214,7 @@ export const LandPlotLocationDetailsStep: React.FC<LandPlotLocationDetailsStepPr
             <p className="text-gray-500 text-xs">
               Mention important places like schools, hospitals, markets, transportation hubs nearby
             </p>
-          </div>
+          </div> */}
 
           {/* Navigation Buttons */}
           <div className="flex justify-between pt-6">
