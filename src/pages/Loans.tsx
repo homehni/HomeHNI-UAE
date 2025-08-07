@@ -27,7 +27,7 @@ const Loans = () => {
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-primary/10 to-primary/5 py-20">
         <div className="container mx-auto text-center px-[19px] py-[20px]">
-          <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-6">
+          <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-6 py-[25px]">
             Unlock Your Dream Home with Smart Financing
           </h1>
           <p className="text-xl text-muted-foreground mb-8 max-w-3xl mx-auto">
