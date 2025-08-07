@@ -47,14 +47,10 @@ export const CommercialSaleSaleDetailsStep = ({
       priceNegotiable: initialData?.priceNegotiable || false,
       pricePerSqFt: initialData?.pricePerSqFt || 0,
       possessionDate: initialData?.possessionDate || '',
-      propertyAge: initialData?.propertyAge || '',
-      registrationStatus: initialData?.registrationStatus || 'ready_to_move',
       homeLoanAvailable: initialData?.homeLoanAvailable || false,
       maintenanceCharges: initialData?.maintenanceCharges || 0,
       bookingAmount: initialData?.bookingAmount || 0,
       businessType: initialData?.businessType || [],
-      operatingHours: initialData?.operatingHours || '',
-      restrictedActivities: initialData?.restrictedActivities || [],
       gst: initialData?.gst || false,
     },
   });
@@ -115,51 +111,6 @@ export const CommercialSaleSaleDetailsStep = ({
             />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <FormField
-              control={form.control}
-              name="propertyAge"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Ownership Type *</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select property age" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="0-1">On Lease</SelectItem>
-                      <SelectItem value="1-5">Self Owned</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            {/* <FormField
-              control={form.control}
-              name="registrationStatus"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Registration Status *</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select status" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="ready_to_move">Ready to Move</SelectItem>
-                      <SelectItem value="under_construction">Under Construction</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div> */}
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <FormField
