@@ -74,6 +74,10 @@ export const CommercialSalePropertyDetailsStep = ({
     onNext(completeData);
   };
 
+  const onError = (errors: any) => {
+    console.log('Form validation errors:', errors);
+  };
+
   return (
     <div className="max-w-4xl mx-auto p-6">
       <div className="mb-8">
@@ -85,7 +89,7 @@ export const CommercialSalePropertyDetailsStep = ({
       </div>
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <form onSubmit={form.handleSubmit(onSubmit, onError)} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <FormField
               control={form.control}
