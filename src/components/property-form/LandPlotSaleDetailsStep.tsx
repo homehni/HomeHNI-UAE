@@ -64,78 +64,85 @@ export const LandPlotSaleDetailsStep: React.FC<LandPlotSaleDetailsStepProps> = (
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit(onNext)} className="space-y-6">
-          {/* Expected Price */}
-          <div className="space-y-2">
-            <Label htmlFor="expectedPrice" className="text-sm font-medium text-gray-700">
-              Expected Price *
-            </Label>
-            <div className="relative">
-              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">₹</span>
-              <Input
-                id="expectedPrice"
-                type="number"
-                {...register('expectedPrice', { valueAsNumber: true })}
-                placeholder="Enter Amount"
-                className="pl-8"
-              />
-            </div>
-            {errors.expectedPrice && (
-              <p className="text-red-500 text-sm">{errors.expectedPrice.message}</p>
-            )}
-          </div>
-
-          {/* Available From */}
-          <div className="space-y-2">
-            <Label className="text-sm font-medium text-gray-700">
-              Available From *
-            </Label>
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  className={cn(
-                    "w-full justify-start text-left font-normal",
-                    !selectedDate && "text-muted-foreground"
-                  )}
-                >
-                  <CalendarIcon className="mr-2 h-4 w-4" />
-                  {selectedDate ? format(selectedDate, "dd/MM/yyyy") : <span>dd/mm/yyyy</span>}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0" align="start">
-                <Calendar
-                  mode="single"
-                  selected={selectedDate}
-                  onSelect={(date) => setValue('availableFrom', date!)}
-                  initialFocus
-                  className="pointer-events-auto"
+          {/* Expected Price and Available From in same row */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Expected Price Column */}
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="expectedPrice" className="text-sm font-medium text-gray-700">
+                  Expected Price *
+                </Label>
+                <div className="relative">
+                  <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">₹</span>
+                  <Input
+                    id="expectedPrice"
+                    type="number"
+                    {...register('expectedPrice', { valueAsNumber: true })}
+                    placeholder="Enter Amount"
+                    className="pl-8"
+                  />
+                </div>
+                {errors.expectedPrice && (
+                  <p className="text-red-500 text-sm">{errors.expectedPrice.message}</p>
+                )}
+              </div>
+              
+              {/* Price Negotiable under Expected Price */}
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  id="priceNegotiable"
+                  onCheckedChange={(checked) => setValue('priceNegotiable', !!checked)}
                 />
-              </PopoverContent>
-            </Popover>
-            {errors.availableFrom && (
-              <p className="text-red-500 text-sm">{errors.availableFrom.message}</p>
-            )}
-          </div>
-
-          {/* Checkboxes */}
-          <div className="space-y-4">
-            <div className="flex items-center space-x-2">
-              <Checkbox
-                id="currentlyUnderLoan"
-                onCheckedChange={(checked) => setValue('currentlyUnderLoan', !!checked)}
-              />
-              <Label htmlFor="currentlyUnderLoan" className="text-sm text-gray-700">
-                Currently Under Loan
-              </Label>
+                <Label htmlFor="priceNegotiable" className="text-sm text-gray-700">
+                  Price Negotiable
+                </Label>
+              </div>
             </div>
-            <div className="flex items-center space-x-2">
-              <Checkbox
-                id="priceNegotiable"
-                onCheckedChange={(checked) => setValue('priceNegotiable', !!checked)}
-              />
-              <Label htmlFor="priceNegotiable" className="text-sm text-gray-700">
-                Price Negotiable
-              </Label>
+
+            {/* Available From Column */}
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label className="text-sm font-medium text-gray-700">
+                  Available From *
+                </Label>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className={cn(
+                        "w-full justify-start text-left font-normal",
+                        !selectedDate && "text-muted-foreground"
+                      )}
+                    >
+                      <CalendarIcon className="mr-2 h-4 w-4" />
+                      {selectedDate ? format(selectedDate, "dd/MM/yyyy") : <span>dd/mm/yyyy</span>}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={selectedDate}
+                      onSelect={(date) => setValue('availableFrom', date!)}
+                      initialFocus
+                      className="pointer-events-auto"
+                    />
+                  </PopoverContent>
+                </Popover>
+                {errors.availableFrom && (
+                  <p className="text-red-500 text-sm">{errors.availableFrom.message}</p>
+                )}
+              </div>
+              
+              {/* Currently Under Loan under Available From */}
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  id="currentlyUnderLoan"
+                  onCheckedChange={(checked) => setValue('currentlyUnderLoan', !!checked)}
+                />
+                <Label htmlFor="currentlyUnderLoan" className="text-sm text-gray-700">
+                  Currently Under Loan
+                </Label>
+              </div>
             </div>
           </div>
 
