@@ -3,11 +3,11 @@ import { Badge } from '@/components/ui/badge';
 import { useCommercialPropertyForm } from '@/hooks/useCommercialPropertyForm';
 import { CommercialSidebar } from './CommercialSidebar';
 import { CommercialPropertyDetailsStep } from './CommercialPropertyDetailsStep';
-import { LocationDetailsStep } from './LocationDetailsStep';
+import { CommercialLocationDetailsStep } from './CommercialLocationDetailsStep';
 import { CommercialRentalDetailsStep } from './CommercialRentalDetailsStep';
 import { CommercialAmenitiesStep } from './CommercialAmenitiesStep';
 import { GalleryStep } from './GalleryStep';
-import { AdditionalInfoStep } from './AdditionalInfoStep';
+import { CommercialAdditionalInfoStep } from './CommercialAdditionalInfoStep';
 import { ScheduleStep } from './ScheduleStep';
 import { PreviewStep } from './PreviewStep';
 import { OwnerInfo, CommercialFormData, CommercialPropertyDetails, LocationDetails, CommercialRentalDetails, CommercialAmenities, PropertyGallery, AdditionalInfo, ScheduleInfo } from '@/types/property';
@@ -138,7 +138,7 @@ export const CommercialMultiStepForm: React.FC<CommercialMultiStepFormProps> = (
         );
       case 3:
         return (
-          <LocationDetailsStep
+          <CommercialLocationDetailsStep
             initialData={locationDetails}
             onNext={handleLocationDetailsNext}
             onBack={prevStep}
@@ -178,7 +178,7 @@ export const CommercialMultiStepForm: React.FC<CommercialMultiStepFormProps> = (
         );
       case 7:
         return (
-          <AdditionalInfoStep
+          <CommercialAdditionalInfoStep
             initialData={additionalInfo}
             onNext={handleAdditionalInfoNext}
             onBack={prevStep}
