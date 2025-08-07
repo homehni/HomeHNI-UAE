@@ -138,12 +138,17 @@ const Architecture = () => {
       
       <div className="pt-8">
         {/* Hero Section */}
-        <section className="relative py-20 bg-gradient-to-br from-primary/10 via-white to-secondary/5">
+        <section 
+          className="relative py-20 bg-cover bg-center bg-no-repeat"
+          style={{
+            backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('/lovable-uploads/fb1225fb-5151-4ad0-9499-0a9b0a901322.png')`
+          }}
+        >
           <div className="container mx-auto px-4 text-center">
-            <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-6">
+            <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
               Innovative Architecture That Shapes the Future
             </h1>
-            <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-3xl mx-auto">
+            <p className="text-lg md:text-xl text-white/90 mb-8 max-w-3xl mx-auto">
               From residential spaces to large-scale commercial projects — we design with purpose, precision, and vision.
             </p>
             <Button size="lg" className="bg-brand-red hover:bg-brand-red-dark text-white px-8 py-3">
