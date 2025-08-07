@@ -14,20 +14,16 @@ import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Textarea } from '@/components/ui/textarea';
 
 const saleDetailsSchema = z.object({
   expectedPrice: z.number().min(1, 'Expected price is required'),
-  pricePerUnit: z.number().min(1, 'Price per unit is required'),
-  priceNegotiable: z.boolean(),
-  // possessionDate: z.string().optional(),
-  // ownershipType: z.enum(['freehold', 'leasehold', 'cooperative_society', 'power_of_attorney']),
-  // approvedBy: z.array(z.string()).optional(),
-  // clearTitles: z.boolean(),
-  // registrationCharges: z.number().optional(),
-  // stampDutyCharges: z.number().optional(),
-  // otherCharges: z.number().optional(),
-  // bookingAmount: z.number().optional(),
-  // tokenAmount: z.number().optional(),
+  availableFrom: z.date().refine((date) => date !== undefined, {
+    message: 'Available from date is required',
+  }),
+  currentlyUnderLoan: z.boolean().optional(),
+  priceNegotiable: z.boolean().optional(),
+  description: z.string().optional(),
 });
 
 type SaleDetailsForm = z.infer<typeof saleDetailsSchema>;
@@ -43,15 +39,17 @@ export const LandPlotSaleDetailsStep: React.FC<LandPlotSaleDetailsStepProps> = (
   onNext,
   onBack,
 }) => {
-  const [date, setDate] = React.useState<Date>();
-  
-  const { register, handleSubmit, formState: { errors } } = useForm<SaleDetailsForm>({
+  const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm<SaleDetailsForm>({
     resolver: zodResolver(saleDetailsSchema),
     defaultValues: {
-      ...initialData,
-      priceNegotiable: initialData.priceNegotiable ?? true,
+      expectedPrice: initialData.expectedPrice,
+      currentlyUnderLoan: false,
+      priceNegotiable: false,
+      description: '',
     }
   });
+
+  const selectedDate = watch('availableFrom');
 
 
   return (
@@ -66,82 +64,30 @@ export const LandPlotSaleDetailsStep: React.FC<LandPlotSaleDetailsStepProps> = (
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit(onNext)} className="space-y-6">
-          {/* Price Details */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="expectedPrice" className="text-sm font-medium text-gray-700">
-                Total Expected Price (₹) *
-              </Label>
+          {/* Expected Price */}
+          <div className="space-y-2">
+            <Label htmlFor="expectedPrice" className="text-sm font-medium text-gray-700">
+              Expected Price *
+            </Label>
+            <div className="relative">
+              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">₹</span>
               <Input
                 id="expectedPrice"
                 type="number"
                 {...register('expectedPrice', { valueAsNumber: true })}
-                placeholder="e.g., 5000000"
-                className="w-full"
+                placeholder="Enter Amount"
+                className="pl-8"
               />
-              {errors.expectedPrice && (
-                <p className="text-red-500 text-sm">{errors.expectedPrice.message}</p>
-              )}
             </div>
-            {/* <div className="space-y-2">
-              <Label htmlFor="pricePerUnit" className="text-sm font-medium text-gray-700">
-                Price Per Sq.Ft (₹) *
-              </Label>
-              <Input
-                id="pricePerUnit"
-                type="number"
-                {...register('pricePerUnit', { valueAsNumber: true })}
-                placeholder="e.g., 4000"
-                className="w-full"
-              />
-              {errors.pricePerUnit && (
-                <p className="text-red-500 text-sm">{errors.pricePerUnit.message}</p>
-              )}
-            </div> */}
+            {errors.expectedPrice && (
+              <p className="text-red-500 text-sm">{errors.expectedPrice.message}</p>
+            )}
           </div>
 
-          {/* Ownership Type */}
-          {/* <div className="space-y-2">
-            <Label htmlFor="ownershipType" className="text-sm font-medium text-gray-700">
-              Ownership Type *
-            </Label>
-            <Select onValueChange={(value) => setValue('ownershipType', value as any)}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select ownership type" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="freehold">Freehold</SelectItem>
-                <SelectItem value="leasehold">Leasehold</SelectItem>
-                <SelectItem value="cooperative_society">Cooperative Society</SelectItem>
-                <SelectItem value="power_of_attorney">Power of Attorney</SelectItem>
-              </SelectContent>
-            </Select>
-          </div> */}
-
-          {/* Approvals */}
-          {/* <div className="space-y-3">
+          {/* Available From */}
+          <div className="space-y-2">
             <Label className="text-sm font-medium text-gray-700">
-              Approvals (Select all that apply)
-            </Label>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-              {approvals.map((approval) => (
-                <div key={approval} className="flex items-center space-x-2">
-                  <Checkbox
-                    id={approval}
-                    onCheckedChange={(checked) => handleApprovalChange(approval, !!checked)}
-                  />
-                  <Label htmlFor={approval} className="text-sm text-gray-700">
-                    {approval}
-                  </Label>
-                </div>
-              ))}
-            </div>
-          </div> */}
-
-          {/* Possession Date */}
-          {/* <div className="space-y-2">
-            <Label className="text-sm font-medium text-gray-700">
-              Available From
+              Available From *
             </Label>
             <Popover>
               <PopoverTrigger asChild>
@@ -149,105 +95,62 @@ export const LandPlotSaleDetailsStep: React.FC<LandPlotSaleDetailsStepProps> = (
                   variant="outline"
                   className={cn(
                     "w-full justify-start text-left font-normal",
-                    !date && "text-muted-foreground"
+                    !selectedDate && "text-muted-foreground"
                   )}
                 >
                   <CalendarIcon className="mr-2 h-4 w-4" />
-                  {date ? format(date, "PPP") : <span>Select date</span>}
+                  {selectedDate ? format(selectedDate, "dd/MM/yyyy") : <span>dd/mm/yyyy</span>}
                 </Button>
               </PopoverTrigger>
               <PopoverContent className="w-auto p-0" align="start">
                 <Calendar
                   mode="single"
-                  selected={date}
-                  onSelect={handleDateSelect}
+                  selected={selectedDate}
+                  onSelect={(date) => setValue('availableFrom', date!)}
                   initialFocus
                   className="pointer-events-auto"
                 />
               </PopoverContent>
             </Popover>
-          </div> */}
-
-          {/* Additional Charges */}
-          {/* <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-gray-900">Additional Charges (Optional)</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="registrationCharges" className="text-sm font-medium text-gray-700">
-                  Registration Charges (₹)
-                </Label>
-                <Input
-                  id="registrationCharges"
-                  type="number"
-                  {...register('registrationCharges', { valueAsNumber: true })}
-                  placeholder="e.g., 50000"
-                  className="w-full"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="stampDutyCharges" className="text-sm font-medium text-gray-700">
-                  Stamp Duty Charges (₹)
-                </Label>
-                <Input
-                  id="stampDutyCharges"
-                  type="number"
-                  {...register('stampDutyCharges', { valueAsNumber: true })}
-                  placeholder="e.g., 100000"
-                  className="w-full"
-                />
-              </div>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="bookingAmount" className="text-sm font-medium text-gray-700">
-                  Booking Amount (₹)
-                </Label>
-                <Input
-                  id="bookingAmount"
-                  type="number"
-                  {...register('bookingAmount', { valueAsNumber: true })}
-                  placeholder="e.g., 100000"
-                  className="w-full"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="otherCharges" className="text-sm font-medium text-gray-700">
-                  Other Charges (₹)
-                </Label>
-                <Input
-                  id="otherCharges"
-                  type="number"
-                  {...register('otherCharges', { valueAsNumber: true })}
-                  placeholder="e.g., 25000"
-                  className="w-full"
-                />
-              </div>
-            </div>
-          </div> */}
+            {errors.availableFrom && (
+              <p className="text-red-500 text-sm">{errors.availableFrom.message}</p>
+            )}
+          </div>
 
           {/* Checkboxes */}
-          {/* <div className="space-y-4">
+          <div className="space-y-4">
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                id="currentlyUnderLoan"
+                onCheckedChange={(checked) => setValue('currentlyUnderLoan', !!checked)}
+              />
+              <Label htmlFor="currentlyUnderLoan" className="text-sm text-gray-700">
+                Currently Under Loan
+              </Label>
+            </div>
             <div className="flex items-center space-x-2">
               <Checkbox
                 id="priceNegotiable"
-                defaultChecked={initialData.priceNegotiable}
                 onCheckedChange={(checked) => setValue('priceNegotiable', !!checked)}
               />
-              <Label htmlFor="priceNegotiable" className="text-sm font-medium text-gray-700">
+              <Label htmlFor="priceNegotiable" className="text-sm text-gray-700">
                 Price Negotiable
               </Label>
             </div>
-            <div className="flex items-center space-x-2">
-              <Checkbox
-                id="clearTitles"
-                defaultChecked={initialData.clearTitles}
-                onCheckedChange={(checked) => setValue('clearTitles', !!checked)}
-              />
-              <Label htmlFor="clearTitles" className="text-sm font-medium text-gray-700">
-                Clear Titles (No legal disputes)
-              </Label>
-            </div>
-          </div> */}
+          </div>
+
+          {/* Description */}
+          <div className="space-y-2">
+            <Label htmlFor="description" className="text-sm font-medium text-gray-700">
+              Description
+            </Label>
+            <Textarea
+              id="description"
+              {...register('description')}
+              placeholder="Write a few lines about your property something which is special and makes your property stand out. Please do not mention your contact details in any format."
+              className="min-h-[100px] resize-none"
+            />
+          </div>
 
           {/* Navigation Buttons */}
           <div className="flex justify-between pt-6">
