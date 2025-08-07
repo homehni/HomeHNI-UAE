@@ -32,7 +32,7 @@ const commercialRentalDetailsSchema = z.object({
   restrictedActivities: z.array(z.string()).optional(),
   leaseTerm: z.string().optional(),
   escalationClause: z.string().optional(),
-  gst: z.boolean().optional(),
+  
 }).refine((data) => {
   if (data.maintenanceExtra && (!data.maintenanceCharges || data.maintenanceCharges <= 0)) {
     return false;
@@ -84,7 +84,7 @@ export const CommercialRentalDetailsStep: React.FC<CommercialRentalDetailsStepPr
       // restrictedActivities: initialData.restrictedActivities || [],
       leaseTerm: initialData.leaseTerm || '',
       // escalationClause: initialData.escalationClause || '',
-      gst: initialData.gst || false,
+      
     },
   });
 
@@ -199,20 +199,6 @@ export const CommercialRentalDetailsStep: React.FC<CommercialRentalDetailsStepPr
                               }}
                             />
                             <label htmlFor="maintenanceExtra" className="text-sm text-gray-600">Maintenance Extra</label>
-                          </div>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="gst"
-                        render={({ field }) => (
-                          <div className="flex items-center space-x-2">
-                            <Checkbox 
-                              id="gst"
-                              checked={field.value}
-                              onCheckedChange={field.onChange}
-                            />
-                            <label htmlFor="gst" className="text-sm text-gray-600">GST Applicable</label>
                           </div>
                         )}
                       />
