@@ -95,41 +95,6 @@ export const CommercialSaleSaleDetailsStep = ({
 
             <FormField
               control={form.control}
-              name="priceNegotiable"
-              render={({ field }) => (
-                <FormItem className="flex flex-row items-start space-x-3 space-y-0 pt-8">
-                  <FormControl>
-                    <Checkbox
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
-                  </FormControl>
-                  <div className="space-y-1 leading-none">
-                    <FormLabel>Price Negotiable</FormLabel>
-                  </div>
-                </FormItem>
-              )}
-            />
-          </div>
-
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <FormField
-              control={form.control}
-              name="possessionDate"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Possession Date *</FormLabel>
-                  <FormControl>
-                    <Input type="date" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
               name="ownershipType"
               render={({ field }) => (
                 <FormItem>
@@ -155,22 +120,39 @@ export const CommercialSaleSaleDetailsStep = ({
 
           <FormField
             control={form.control}
-            name="maintenanceCharges"
+            name="priceNegotiable"
             render={({ field }) => (
-              <FormItem>
-                <FormLabel>Monthly Maintenance Charges (₹)</FormLabel>
+              <FormItem className="flex flex-row items-start space-x-3 space-y-0">
                 <FormControl>
-                  <Input 
-                    type="number" 
-                    placeholder="e.g., 5000" 
-                    value={field.value || ''}
-                    onChange={(e) => field.onChange(Number(e.target.value))}
+                  <Checkbox
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
                   />
                 </FormControl>
-                <FormMessage />
+                <div className="space-y-1 leading-none">
+                  <FormLabel>Price Negotiable</FormLabel>
+                </div>
               </FormItem>
             )}
           />
+
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <FormField
+              control={form.control}
+              name="possessionDate"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Possession Date *</FormLabel>
+                  <FormControl>
+                    <Input type="date" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+
 
           {/* <FormField
             control={form.control}
