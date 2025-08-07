@@ -19,15 +19,15 @@ const saleDetailsSchema = z.object({
   expectedPrice: z.number().min(1, 'Expected price is required'),
   pricePerUnit: z.number().min(1, 'Price per unit is required'),
   priceNegotiable: z.boolean(),
-  possessionDate: z.string().optional(),
-  ownershipType: z.enum(['freehold', 'leasehold', 'cooperative_society', 'power_of_attorney']),
-  approvedBy: z.array(z.string()).optional(),
-  clearTitles: z.boolean(),
-  registrationCharges: z.number().optional(),
-  stampDutyCharges: z.number().optional(),
-  otherCharges: z.number().optional(),
-  bookingAmount: z.number().optional(),
-  tokenAmount: z.number().optional(),
+  // possessionDate: z.string().optional(),
+  // ownershipType: z.enum(['freehold', 'leasehold', 'cooperative_society', 'power_of_attorney']),
+  // approvedBy: z.array(z.string()).optional(),
+  // clearTitles: z.boolean(),
+  // registrationCharges: z.number().optional(),
+  // stampDutyCharges: z.number().optional(),
+  // otherCharges: z.number().optional(),
+  // bookingAmount: z.number().optional(),
+  // tokenAmount: z.number().optional(),
 });
 
 type SaleDetailsForm = z.infer<typeof saleDetailsSchema>;
@@ -113,7 +113,7 @@ export const LandPlotSaleDetailsStep: React.FC<LandPlotSaleDetailsStepProps> = (
                 <p className="text-red-500 text-sm">{errors.expectedPrice.message}</p>
               )}
             </div>
-            <div className="space-y-2">
+            {/* <div className="space-y-2">
               <Label htmlFor="pricePerUnit" className="text-sm font-medium text-gray-700">
                 Price Per Sq.Ft (₹) *
               </Label>
@@ -127,11 +127,11 @@ export const LandPlotSaleDetailsStep: React.FC<LandPlotSaleDetailsStepProps> = (
               {errors.pricePerUnit && (
                 <p className="text-red-500 text-sm">{errors.pricePerUnit.message}</p>
               )}
-            </div>
+            </div> */}
           </div>
 
           {/* Ownership Type */}
-          <div className="space-y-2">
+          {/* <div className="space-y-2">
             <Label htmlFor="ownershipType" className="text-sm font-medium text-gray-700">
               Ownership Type *
             </Label>
@@ -146,10 +146,10 @@ export const LandPlotSaleDetailsStep: React.FC<LandPlotSaleDetailsStepProps> = (
                 <SelectItem value="power_of_attorney">Power of Attorney</SelectItem>
               </SelectContent>
             </Select>
-          </div>
+          </div> */}
 
           {/* Approvals */}
-          <div className="space-y-3">
+          {/* <div className="space-y-3">
             <Label className="text-sm font-medium text-gray-700">
               Approvals (Select all that apply)
             </Label>
@@ -166,10 +166,10 @@ export const LandPlotSaleDetailsStep: React.FC<LandPlotSaleDetailsStepProps> = (
                 </div>
               ))}
             </div>
-          </div>
+          </div> */}
 
           {/* Possession Date */}
-          <div className="space-y-2">
+          {/* <div className="space-y-2">
             <Label className="text-sm font-medium text-gray-700">
               Available From
             </Label>
@@ -196,10 +196,10 @@ export const LandPlotSaleDetailsStep: React.FC<LandPlotSaleDetailsStepProps> = (
                 />
               </PopoverContent>
             </Popover>
-          </div>
+          </div> */}
 
           {/* Additional Charges */}
-          <div className="space-y-4">
+          {/* <div className="space-y-4">
             <h3 className="text-lg font-semibold text-gray-900">Additional Charges (Optional)</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
@@ -253,10 +253,10 @@ export const LandPlotSaleDetailsStep: React.FC<LandPlotSaleDetailsStepProps> = (
                 />
               </div>
             </div>
-          </div>
+          </div> */}
 
           {/* Checkboxes */}
-          <div className="space-y-4">
+          {/* <div className="space-y-4">
             <div className="flex items-center space-x-2">
               <Checkbox
                 id="priceNegotiable"
@@ -277,7 +277,7 @@ export const LandPlotSaleDetailsStep: React.FC<LandPlotSaleDetailsStepProps> = (
                 Clear Titles (No legal disputes)
               </Label>
             </div>
-          </div>
+          </div> */}
 
           {/* Navigation Buttons */}
           <div className="flex justify-between pt-6">
