@@ -15,7 +15,7 @@ const commercialSalePropertyDetailsSchema = z.object({
   propertyAge: z.string().min(1, 'Property age is required'),
   floorNo: z.string().min(1, 'Floor number is required'),
   totalFloors: z.string().min(1, 'Total floors is required'),
-  superBuiltUpArea: z.number().min(1, 'Area is required'),
+  superBuiltUpArea: z.string().min(1, 'Area is required'),
   furnishingStatus: z.string().min(1, 'Furnishing status is required'),
   powerLoad: z.string().optional(),
   ceilingHeight: z.string().optional(),
@@ -51,7 +51,7 @@ export const CommercialSalePropertyDetailsStep = ({
       propertyAge: initialData?.propertyAge || '',
       floorNo: initialData?.floorNo?.toString() || '0',
       totalFloors: initialData?.totalFloors?.toString() || '1',
-      superBuiltUpArea: initialData?.superBuiltUpArea || 0,
+      superBuiltUpArea: initialData?.superBuiltUpArea?.toString() || '',
       furnishingStatus: initialData?.furnishingStatus || '',
       powerLoad: initialData?.powerLoad || '',
       ceilingHeight: initialData?.ceilingHeight || '',
@@ -64,6 +64,7 @@ export const CommercialSalePropertyDetailsStep = ({
       ...data,
       floorNo: parseInt(data.floorNo),
       totalFloors: parseInt(data.totalFloors),
+      superBuiltUpArea: parseFloat(data.superBuiltUpArea),
       onMainRoad,
       cornerProperty,
       loadingFacility,
@@ -232,7 +233,11 @@ export const CommercialSalePropertyDetailsStep = ({
                 <FormItem>
                   <FormLabel>Super Built-up Area (sq ft) *</FormLabel>
                   <FormControl>
-                    <Input type="number" placeholder="e.g., 2000" {...field} />
+                    <Input 
+                      type="number" 
+                      placeholder="e.g., 2000" 
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -262,8 +267,6 @@ export const CommercialSalePropertyDetailsStep = ({
               )}
             />
           </div>
-
-          
 
           <div className="space-y-4">
             <h3 className="text-lg font-medium">Additional Features</h3>
