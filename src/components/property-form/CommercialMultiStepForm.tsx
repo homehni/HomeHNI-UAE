@@ -182,8 +182,6 @@ export const CommercialMultiStepForm: React.FC<CommercialMultiStepFormProps> = (
             initialData={additionalInfo}
             onNext={handleAdditionalInfoNext}
             onBack={prevStep}
-            currentStep={currentStep}
-            totalSteps={8}
           />
         );
       case 8:
@@ -192,15 +190,14 @@ export const CommercialMultiStepForm: React.FC<CommercialMultiStepFormProps> = (
             initialData={scheduleInfo}
             onNext={handleScheduleNext}
             onBack={prevStep}
-            currentStep={currentStep}
-            totalSteps={8}
           />
         );
       case 9:
         return (
           <PreviewStep
-            data={getFormData()}
+            formData={getFormData()}
             onBack={prevStep}
+            onEdit={goToStep}
             onSubmit={handleSubmit}
             isSubmitting={isSubmitting}
           />

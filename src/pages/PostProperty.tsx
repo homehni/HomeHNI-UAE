@@ -203,7 +203,7 @@ export const PostProperty: React.FC = () => {
           } else if (error.message.includes('listing_type')) {
             errorMessage = `Invalid listing type: "${listingType}". Please select Sale or Rent.`;
           } else if (error.message.includes('bhk_type')) {
-            errorMessage = `Invalid BHK type: "${data.propertyInfo.propertyDetails.bhkType}". Please select a valid BHK configuration.`;
+            errorMessage = `Invalid BHK type: "${'bhkType' in data.propertyInfo.propertyDetails ? data.propertyInfo.propertyDetails.bhkType : 'N/A'}". Please select a valid BHK configuration.`;
           } else {
             errorMessage = "Some property details don't meet our requirements. Please check your inputs.";
           }
@@ -239,7 +239,7 @@ export const PostProperty: React.FC = () => {
         title: data.propertyInfo.propertyDetails.title,
         property_type: data.propertyInfo.propertyDetails.propertyType,
         listing_type: priceDetailsDraft.listingType,
-        bhk_type: data.propertyInfo.propertyDetails.bhkType,
+        bhk_type: 'bhkType' in data.propertyInfo.propertyDetails ? data.propertyInfo.propertyDetails.bhkType : null,
         state: data.propertyInfo.locationDetails.state,
         city: data.propertyInfo.locationDetails.city,
         locality: data.propertyInfo.locationDetails.locality,
