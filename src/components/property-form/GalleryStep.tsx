@@ -45,14 +45,8 @@ export const GalleryStep: React.FC<GalleryStepProps> = ({
 
   return (
     <div className="max-w-2xl mx-auto">
-      <div className="text-center mb-8">
-        <h2 className="text-2xl font-bold text-foreground mb-2">Upload photos & videos</h2>
-        <p className="text-muted-foreground">Add photos to get 5X more responses</p>
-      </div>
-
       <Card>
         <CardContent className="p-8">
-
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
               <FormField
@@ -62,11 +56,13 @@ export const GalleryStep: React.FC<GalleryStepProps> = ({
                   <FormItem>
                     <FormControl>
                       <div className="space-y-6">
+                        {/* Upload Images Title */}
+                        <div className="text-center">
+                          <h2 className="text-xl font-semibold text-foreground mb-4">Upload Images * (Min 3, Max 10)</h2>
+                        </div>
+                        
                         {/* Instructions section */}
-                        <div 
-                          className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-12 text-center cursor-pointer hover:border-primary transition-colors hover:bg-muted/20"
-                          onClick={() => document.getElementById('image-upload-input')?.click()}
-                        >
+                        <div className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-12 text-center">
                           <div className="flex flex-col items-center gap-4">
                             <div className="bg-muted/50 rounded-full p-4">
                               <Camera className="h-8 w-8 text-muted-foreground" />
