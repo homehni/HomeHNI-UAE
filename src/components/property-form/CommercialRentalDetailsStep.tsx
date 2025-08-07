@@ -80,10 +80,10 @@ export const CommercialRentalDetailsStep: React.FC<CommercialRentalDetailsStepPr
       lockinPeriod: initialData.lockinPeriod || '',
       availableFrom: initialData.availableFrom || '',
       businessType: initialData.businessType || [],
-      operatingHours: initialData.operatingHours || '',
-      restrictedActivities: initialData.restrictedActivities || [],
+      // operatingHours: initialData.operatingHours || '',
+      // restrictedActivities: initialData.restrictedActivities || [],
       leaseTerm: initialData.leaseTerm || '',
-      escalationClause: initialData.escalationClause || '',
+      // escalationClause: initialData.escalationClause || '',
       gst: initialData.gst || false,
     },
   });
@@ -350,7 +350,7 @@ export const CommercialRentalDetailsStep: React.FC<CommercialRentalDetailsStepPr
             </div>
 
             {/* Operating Hours */}
-            <FormField
+            {/* <FormField
               control={form.control}
               name="operatingHours"
               render={({ field }) => (
@@ -373,7 +373,7 @@ export const CommercialRentalDetailsStep: React.FC<CommercialRentalDetailsStepPr
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
 
             {/* Available From */}
             <FormField
@@ -458,7 +458,7 @@ export const CommercialRentalDetailsStep: React.FC<CommercialRentalDetailsStepPr
             </div>
 
             {/* Restricted Activities */}
-            <div className="space-y-4">
+            {/* <div className="space-y-4">
               <FormLabel className="text-sm font-medium">Restricted Activities</FormLabel>
               <div className="flex flex-wrap gap-2">
                 {predefinedRestrictions.map((restriction) => (
@@ -489,10 +489,10 @@ export const CommercialRentalDetailsStep: React.FC<CommercialRentalDetailsStepPr
                   Add
                 </Button>
               </div>
-            </div>
+            </div> */}
 
             {/* Escalation Clause */}
-            <FormField
+            {/* <FormField
               control={form.control}
               name="escalationClause"
               render={({ field }) => (
@@ -508,7 +508,7 @@ export const CommercialRentalDetailsStep: React.FC<CommercialRentalDetailsStepPr
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
 
             {/* Navigation Buttons */}
             <div className="flex justify-between pt-6">
