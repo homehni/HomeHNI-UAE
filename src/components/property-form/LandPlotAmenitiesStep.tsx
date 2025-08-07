@@ -3,25 +3,22 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
+import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { LandPlotAmenities } from '@/types/landPlotProperty';
 
 const amenitiesSchema = z.object({
-  waterConnection: z.enum(['yes', 'no', 'borewell', 'municipal']),
-  electricityConnection: z.enum(['yes', 'no', 'nearby']),
-  sewerageConnection: z.enum(['yes', 'no', 'septic_tank']),
-  gasConnection: z.enum(['yes', 'no', 'pipeline']),
-  internetConnectivity: z.enum(['yes', 'no', 'fiber', 'broadband']),
-  roadConnectivity: z.enum(['excellent', 'good', 'average', 'poor']),
-  publicTransport: z.enum(['yes', 'no', 'nearby']),
-  streetLights: z.boolean(),
-  drainage: z.enum(['good', 'average', 'poor', 'none']),
-  soilType: z.enum(['black_cotton', 'red', 'alluvial', 'sandy', 'clay', 'loam']).optional(),
-  waterLevel: z.enum(['high', 'medium', 'low']).optional(),
-  floodProne: z.boolean(),
+  waterSupply: z.enum(['municipal', 'borewell', 'tank', 'none']),
+  electricityConnection: z.enum(['available', 'nearby', 'none']),
+  sewageConnection: z.enum(['connected', 'septic_tank', 'none']),
+  roadWidth: z.number().positive('Road width must be a positive number'),
+  moreSimilarUnits: z.boolean(),
+  gatedSecurity: z.boolean(),
+  directionsToProperty: z.string().optional(),
 });
 
 type AmenitiesForm = z.infer<typeof amenitiesSchema>;
@@ -37,12 +34,16 @@ export const LandPlotAmenitiesStep: React.FC<LandPlotAmenitiesStepProps> = ({
   onNext,
   onBack,
 }) => {
-  const { handleSubmit, setValue, formState: { errors } } = useForm<AmenitiesForm>({
+  const { register, handleSubmit, setValue, formState: { errors } } = useForm<AmenitiesForm>({
     resolver: zodResolver(amenitiesSchema),
     defaultValues: {
-      ...initialData,
-      streetLights: initialData.streetLights || false,
-      floodProne: initialData.floodProne || false,
+      waterSupply: 'municipal',
+      electricityConnection: 'available',
+      sewageConnection: 'connected',
+      roadWidth: 0,
+      moreSimilarUnits: false,
+      gatedSecurity: false,
+      directionsToProperty: '',
     }
   });
 
@@ -58,187 +59,163 @@ export const LandPlotAmenitiesStep: React.FC<LandPlotAmenitiesStepProps> = ({
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit(onNext)} className="space-y-6">
-          {/* Basic Utilities */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-gray-900">Basic Utilities</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label className="text-sm font-medium text-gray-700">Water Connection *</Label>
-                <Select onValueChange={(value) => setValue('waterConnection', value as any)}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select water connection" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="yes">Yes - Direct Connection</SelectItem>
-                    <SelectItem value="municipal">Municipal Supply</SelectItem>
-                    <SelectItem value="borewell">Borewell Available</SelectItem>
-                    <SelectItem value="no">No Connection</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-2">
-                <Label className="text-sm font-medium text-gray-700">Electricity Connection *</Label>
-                <Select onValueChange={(value) => setValue('electricityConnection', value as any)}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select electricity status" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="yes">Yes - Connected</SelectItem>
-                    <SelectItem value="nearby">Available Nearby</SelectItem>
-                    <SelectItem value="no">Not Available</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label className="text-sm font-medium text-gray-700">Sewerage Connection *</Label>
-                <Select onValueChange={(value) => setValue('sewerageConnection', value as any)}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select sewerage option" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="yes">Yes - Connected</SelectItem>
-                    <SelectItem value="septic_tank">Septic Tank</SelectItem>
-                    <SelectItem value="no">Not Available</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-2">
-                <Label className="text-sm font-medium text-gray-700">Gas Connection *</Label>
-                <Select onValueChange={(value) => setValue('gasConnection', value as any)}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select gas connection" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="pipeline">Pipeline Available</SelectItem>
-                    <SelectItem value="yes">LPG Connection</SelectItem>
-                    <SelectItem value="no">Not Available</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-          </div>
-
-          {/* Connectivity */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-gray-900">Connectivity</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label className="text-sm font-medium text-gray-700">Road Connectivity *</Label>
-                <Select onValueChange={(value) => setValue('roadConnectivity', value as any)}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select road connectivity" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="excellent">Excellent (Tar Road)</SelectItem>
-                    <SelectItem value="good">Good (Paved Road)</SelectItem>
-                    <SelectItem value="average">Average (Kutcha Road)</SelectItem>
-                    <SelectItem value="poor">Poor (Dirt Road)</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-2">
-                <Label className="text-sm font-medium text-gray-700">Public Transport *</Label>
-                <Select onValueChange={(value) => setValue('publicTransport', value as any)}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select transport availability" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="yes">Easily Available</SelectItem>
-                    <SelectItem value="nearby">Available Nearby</SelectItem>
-                    <SelectItem value="no">Not Available</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
+          {/* Water Supply and Electricity Connection */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
-              <Label className="text-sm font-medium text-gray-700">Internet Connectivity *</Label>
-              <Select onValueChange={(value) => setValue('internetConnectivity', value as any)}>
+              <Label className="text-sm font-medium text-gray-700">Water Supply</Label>
+              <Select onValueChange={(value) => setValue('waterSupply', value as any)}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Select internet connectivity" />
+                  <SelectValue placeholder="Select" />
                 </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="fiber">Fiber Optic Available</SelectItem>
-                  <SelectItem value="broadband">Broadband Available</SelectItem>
-                  <SelectItem value="yes">Basic Connection</SelectItem>
-                  <SelectItem value="no">Not Available</SelectItem>
+                <SelectContent className="bg-white z-50">
+                  <SelectItem value="municipal">Municipal Supply</SelectItem>
+                  <SelectItem value="borewell">Borewell</SelectItem>
+                  <SelectItem value="tank">Water Tank</SelectItem>
+                  <SelectItem value="none">None</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            
+            <div className="space-y-2">
+              <Label className="text-sm font-medium text-gray-700">Electricity Connection</Label>
+              <Select onValueChange={(value) => setValue('electricityConnection', value as any)}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select" />
+                </SelectTrigger>
+                <SelectContent className="bg-white z-50">
+                  <SelectItem value="available">Available</SelectItem>
+                  <SelectItem value="nearby">Nearby</SelectItem>
+                  <SelectItem value="none">None</SelectItem>
                 </SelectContent>
               </Select>
             </div>
           </div>
 
-          {/* Infrastructure */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-gray-900">Infrastructure</h3>
+          {/* Sewage Connection and Road Width */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
-              <Label className="text-sm font-medium text-gray-700">Drainage System *</Label>
-              <Select onValueChange={(value) => setValue('drainage', value as any)}>
+              <Label className="text-sm font-medium text-gray-700">Sewage Connection</Label>
+              <Select onValueChange={(value) => setValue('sewageConnection', value as any)}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Select drainage quality" />
+                  <SelectValue placeholder="Select" />
                 </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="good">Good - Proper Drainage</SelectItem>
-                  <SelectItem value="average">Average - Basic Drainage</SelectItem>
-                  <SelectItem value="poor">Poor - Limited Drainage</SelectItem>
-                  <SelectItem value="none">No Drainage System</SelectItem>
+                <SelectContent className="bg-white z-50">
+                  <SelectItem value="connected">Connected</SelectItem>
+                  <SelectItem value="septic_tank">Septic Tank</SelectItem>
+                  <SelectItem value="none">None</SelectItem>
                 </SelectContent>
               </Select>
             </div>
-            <div className="flex items-center space-x-2">
-              <Checkbox
-                id="streetLights"
-                onCheckedChange={(checked) => setValue('streetLights', !!checked)}
-              />
-              <Label htmlFor="streetLights" className="text-sm font-medium text-gray-700">
-                Street Lights Available
+            
+            <div className="space-y-2">
+              <Label htmlFor="roadWidth" className="text-sm font-medium text-gray-700">
+                Width of Facing Road (ft.)
               </Label>
+              <Input
+                id="roadWidth"
+                type="number"
+                {...register('roadWidth', { valueAsNumber: true })}
+                placeholder="Width of facing road"
+                className="w-full"
+              />
+              {errors.roadWidth && (
+                <p className="text-red-500 text-sm">{errors.roadWidth.message}</p>
+              )}
             </div>
           </div>
 
-          {/* Land Characteristics */}
+          {/* Similar Units Question */}
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-gray-900">Land Characteristics (Optional)</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label className="text-sm font-medium text-gray-700">Soil Type</Label>
-                <Select onValueChange={(value) => setValue('soilType', value as any)}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select soil type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="black_cotton">Black Cotton</SelectItem>
-                    <SelectItem value="red">Red Soil</SelectItem>
-                    <SelectItem value="alluvial">Alluvial</SelectItem>
-                    <SelectItem value="sandy">Sandy</SelectItem>
-                    <SelectItem value="clay">Clay</SelectItem>
-                    <SelectItem value="loam">Loam</SelectItem>
-                  </SelectContent>
-                </Select>
+            <Label className="text-sm font-medium text-gray-700">
+              Do you have more similar units/properties available?
+            </Label>
+            <div className="flex space-x-4">
+              <div className="flex items-center space-x-2">
+                <input
+                  type="radio"
+                  id="moreSimilarUnits-no"
+                  name="moreSimilarUnits"
+                  value="false"
+                  onChange={() => setValue('moreSimilarUnits', false)}
+                  className="w-4 h-4 text-red-600"
+                />
+                <Label htmlFor="moreSimilarUnits-no" className="text-sm text-gray-700">
+                  No
+                </Label>
               </div>
-              <div className="space-y-2">
-                <Label className="text-sm font-medium text-gray-700">Water Level</Label>
-                <Select onValueChange={(value) => setValue('waterLevel', value as any)}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select water level" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="high">High (0-20 feet)</SelectItem>
-                    <SelectItem value="medium">Medium (20-50 feet)</SelectItem>
-                    <SelectItem value="low">Low (50+ feet)</SelectItem>
-                  </SelectContent>
-                </Select>
+              <div className="flex items-center space-x-2">
+                <input
+                  type="radio"
+                  id="moreSimilarUnits-yes"
+                  name="moreSimilarUnits"
+                  value="true"
+                  onChange={() => setValue('moreSimilarUnits', true)}
+                  className="w-4 h-4 text-red-600"
+                />
+                <Label htmlFor="moreSimilarUnits-yes" className="text-sm text-gray-700">
+                  Yes
+                </Label>
               </div>
             </div>
+          </div>
+
+          {/* Gated Security */}
+          <div className="space-y-4">
+            <Label className="text-sm font-medium text-gray-700">
+              Gated Security
+            </Label>
+            <div className="flex space-x-4">
+              <div className="flex items-center space-x-2">
+                <input
+                  type="radio"
+                  id="gatedSecurity-no"
+                  name="gatedSecurity"
+                  value="false"
+                  onChange={() => setValue('gatedSecurity', false)}
+                  className="w-4 h-4 text-red-600"
+                />
+                <Label htmlFor="gatedSecurity-no" className="text-sm text-gray-700">
+                  No
+                </Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <input
+                  type="radio"
+                  id="gatedSecurity-yes"
+                  name="gatedSecurity"
+                  value="true"
+                  onChange={() => setValue('gatedSecurity', true)}
+                  className="w-4 h-4 text-red-600"
+                />
+                <Label htmlFor="gatedSecurity-yes" className="text-sm text-gray-700">
+                  Yes
+                </Label>
+              </div>
+            </div>
+          </div>
+
+          {/* Directions */}
+          <div className="space-y-2">
             <div className="flex items-center space-x-2">
-              <Checkbox
-                id="floodProne"
-                onCheckedChange={(checked) => setValue('floodProne', !!checked)}
-              />
-              <Label htmlFor="floodProne" className="text-sm font-medium text-gray-700">
-                Flood Prone Area
+              <Label htmlFor="directionsToProperty" className="text-sm font-medium text-gray-700">
+                Add Directions Tip for your buyers
               </Label>
+              <span className="bg-orange-100 text-orange-800 text-xs px-2 py-1 rounded-full font-semibold">
+                NEW
+              </span>
             </div>
+            <p className="text-sm text-gray-500 mb-2">
+              Don't want calls asking location?
+            </p>
+            <p className="text-sm text-gray-600 mb-3">
+              Add directions to reach using landmarks
+            </p>
+            <Textarea
+              id="directionsToProperty"
+              {...register('directionsToProperty')}
+              placeholder="Eg. Take the road opposite to Amrita College, take right after 300m..."
+              className="min-h-[100px] resize-none"
+            />
           </div>
 
           {/* Navigation Buttons */}
