@@ -14,7 +14,8 @@ const commercialSaleSaleDetailsSchema = z.object({
   expectedPrice: z.number().min(1, 'Expected price is required'),
   priceNegotiable: z.boolean().optional(),
   pricePerSqFt: z.number().optional(),
-  possessionDate: z.string().optional(),
+  possessionDate: z.string().min(1, 'Possession date is required'),
+  ownershipType: z.string().min(1, 'Ownership type is required'),
   homeLoanAvailable: z.boolean().optional(),
   maintenanceCharges: z.number().optional(),
   bookingAmount: z.number().optional(),
@@ -47,6 +48,7 @@ export const CommercialSaleSaleDetailsStep = ({
       priceNegotiable: initialData?.priceNegotiable || false,
       pricePerSqFt: initialData?.pricePerSqFt || 0,
       possessionDate: initialData?.possessionDate || '',
+      ownershipType: initialData?.ownershipType || '',
       homeLoanAvailable: initialData?.homeLoanAvailable || false,
       maintenanceCharges: initialData?.maintenanceCharges || 0,
       bookingAmount: initialData?.bookingAmount || 0,
@@ -91,7 +93,23 @@ export const CommercialSaleSaleDetailsStep = ({
               )}
             />
 
-            
+            <FormField
+              control={form.control}
+              name="priceNegotiable"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-start space-x-3 space-y-0 pt-8">
+                  <FormControl>
+                    <Checkbox
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                  <div className="space-y-1 leading-none">
+                    <FormLabel>Price Negotiable</FormLabel>
+                  </div>
+                </FormItem>
+              )}
+            />
           </div>
 
 
@@ -101,7 +119,7 @@ export const CommercialSaleSaleDetailsStep = ({
               name="possessionDate"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Possession Date</FormLabel>
+                  <FormLabel>Possession Date *</FormLabel>
                   <FormControl>
                     <Input type="date" {...field} />
                   </FormControl>
@@ -110,24 +128,29 @@ export const CommercialSaleSaleDetailsStep = ({
               )}
             />
 
-            {/* <FormField
+            <FormField
               control={form.control}
-              name="bookingAmount"
+              name="ownershipType"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Booking Amount (₹)</FormLabel>
-                  <FormControl>
-                    <Input 
-                      type="number" 
-                      placeholder="e.g., 500000" 
-                      value={field.value || ''}
-                      onChange={(e) => field.onChange(Number(e.target.value))}
-                    />
-                  </FormControl>
+                  <FormLabel>Ownership Type *</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select ownership type" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="freehold">Freehold</SelectItem>
+                      <SelectItem value="leasehold">Leasehold</SelectItem>
+                      <SelectItem value="cooperative">Cooperative Society</SelectItem>
+                      <SelectItem value="power-of-attorney">Power of Attorney</SelectItem>
+                    </SelectContent>
+                  </Select>
                   <FormMessage />
                 </FormItem>
               )}
-            /> */}
+            />
           </div>
 
           <FormField

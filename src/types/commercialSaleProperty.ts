@@ -5,7 +5,8 @@ export interface CommercialSaleDetails {
   expectedPrice: number;
   priceNegotiable?: boolean;
   pricePerSqFt?: number;
-  possessionDate?: string;
+  possessionDate: string;
+  ownershipType: string;
   propertyAge: string;
   registrationStatus: 'ready_to_move' | 'under_construction';
   homeLoanAvailable?: boolean;
