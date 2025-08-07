@@ -88,8 +88,8 @@ export const CommercialRentalDetailsStep: React.FC<CommercialRentalDetailsStepPr
     },
   });
 
-  const predefinedBusinessTypes = ['IT/Software', 'Retail', 'Restaurant/Food', 'Medical/Healthcare', 'Educational', 'Financial Services', 'Real Estate', 'Consulting'];
-  const predefinedRestrictions = ['No Loud Music', 'No Alcohol', 'No Non-Veg Food', 'No Heavy Machinery', 'No Chemical Storage'];
+  const predefinedBusinessTypes = ['Bank', 'Retail', 'ATM', 'Service Center', 'Show Room'];
+  // const predefinedRestrictions = ['No Loud Music', 'No Alcohol', 'No Non-Veg Food', 'No Heavy Machinery', 'No Chemical Storage'];
 
   const toggleBusinessType = (type: string) => {
     const newTypes = selectedBusinessTypes.includes(type)
