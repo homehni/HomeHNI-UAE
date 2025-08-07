@@ -61,19 +61,6 @@ export const GalleryStep: React.FC<GalleryStepProps> = ({
                           <h2 className="text-xl font-semibold text-foreground mb-4">Upload Images * (Min 3, Max 10)</h2>
                         </div>
                         
-                        {/* Instructions section */}
-                        <div className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-12 text-center">
-                          <div className="flex flex-col items-center gap-4">
-                            <div className="bg-muted/50 rounded-full p-4">
-                              <Camera className="h-8 w-8 text-muted-foreground" />
-                            </div>
-                            <div className="space-y-2">
-                              <p className="text-lg font-medium">Add photos to get 5X more responses.</p>
-                              <p className="text-muted-foreground">90% tenants contact on properties with photos.</p>
-                            </div>
-                          </div>
-                        </div>
-                        
                         {/* Image Upload Component */}
                         <ImageUpload
                           images={field.value || []}
