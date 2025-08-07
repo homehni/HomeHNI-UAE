@@ -48,8 +48,6 @@ export const LandPlotPropertyDetailsStep: React.FC<LandPlotPropertyDetailsStepPr
       plotArea: initialData.plotArea || undefined,
       plotLength: initialData.plotLength || undefined,
       plotWidth: initialData.plotWidth || undefined,
-      roadWidth: initialData.roadWidth || 20,
-      cornerPlot: initialData.cornerPlot || false,
       gatedCommunity: initialData.gatedCommunity || false,
     }
   });
