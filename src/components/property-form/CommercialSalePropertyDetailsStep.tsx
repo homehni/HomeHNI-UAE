@@ -275,49 +275,7 @@ export const CommercialSalePropertyDetailsStep = ({
             />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <FormField
-              control={form.control}
-              name="powerLoad"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Power Load</FormLabel>
-                  <FormControl>
-                    <Input placeholder="e.g., 50 KW" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="ceilingHeight"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Ceiling Height</FormLabel>
-                  <FormControl>
-                    <Input placeholder="e.g., 12 ft" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="entranceWidth"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Entrance Width</FormLabel>
-                  <FormControl>
-                    <Input placeholder="e.g., 8 ft" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
+          
 
           <div className="space-y-4">
             <h3 className="text-lg font-medium">Additional Features</h3>
