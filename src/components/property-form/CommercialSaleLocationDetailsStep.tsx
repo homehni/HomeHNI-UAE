@@ -1,7 +1,7 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -34,8 +34,9 @@ export const CommercialSaleLocationDetailsStep = ({
   currentStep,
   totalSteps
 }: CommercialSaleLocationDetailsStepProps) => {
-  const [statesData, setStatesData] = useState<any[]>([]);
-  const [cities, setCities] = useState<string[]>([]);
+  const [rawData, setRawData] = useState<Record<string, string[]>>({});
+  const [isLoading, setIsLoading] = useState(true);
+  const [selectedState, setSelectedState] = useState<string>(initialData?.state || '');
 
   const form = useForm<CommercialSaleLocationDetailsForm>({
     resolver: zodResolver(commercialSaleLocationDetailsSchema),
@@ -49,40 +50,65 @@ export const CommercialSaleLocationDetailsStep = ({
     },
   });
 
+  // Transform raw JSON data to the format we need
+  const statesData = useMemo(() => {
+    if (!rawData || Object.keys(rawData).length === 0) return [];
+    return Object.keys(rawData).map(stateName => ({
+      state: stateName,
+      districts: rawData[stateName]
+    }));
+  }, [rawData]);
+
+  // Get cities for selected state
+  const cities = useMemo(() => {
+    if (!selectedState || !rawData[selectedState]) return [];
+    return rawData[selectedState];
+  }, [selectedState, rawData]);
+
   useEffect(() => {
-    // Load states data from JSON file
-    fetch('/data/india_states_cities.json')
-      .then(response => response.json())
-      .then(data => {
-        setStatesData(data.states);
-      })
-      .catch(error => {
+    const loadData = async () => {
+      try {
+        setIsLoading(true);
+        console.log('Loading states data...');
+        const response = await fetch('/data/india_states_cities.json');
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        console.log('Raw data loaded:', data);
+        setRawData(data);
+      } catch (error) {
         console.error('Error loading states data:', error);
-      });
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadData();
   }, []);
 
-  useEffect(() => {
-    const selectedState = form.watch('state');
-    if (selectedState && statesData.length > 0) {
-      const state = statesData.find(s => s.state === selectedState);
-      if (state) {
-        setCities(state.districts);
-      }
-    }
-  }, [form.watch('state'), statesData]);
-
-  const handleStateChange = (value: string) => {
+  const handleStateChange = useCallback((value: string) => {
+    console.log('State changed to:', value);
+    setSelectedState(value);
     form.setValue('state', value);
     form.setValue('city', ''); // Reset city when state changes
-    const state = statesData.find(s => s.state === value);
-    if (state) {
-      setCities(state.districts);
-    }
-  };
+  }, [form]);
 
-  const onSubmit = (data: CommercialSaleLocationDetailsForm) => {
+  const onSubmit = useCallback((data: CommercialSaleLocationDetailsForm) => {
+    console.log('Form submitted with data:', data);
     onNext(data);
-  };
+  }, [onNext]);
+
+  if (isLoading) {
+    return (
+      <div className="max-w-4xl mx-auto p-6">
+        <div className="mb-8">
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">Location Details</h2>
+          <p className="text-gray-600">Loading location data...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-4xl mx-auto p-6">
