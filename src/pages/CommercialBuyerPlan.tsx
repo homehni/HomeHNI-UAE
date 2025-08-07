@@ -212,7 +212,10 @@ const CommercialBuyerPlan = () => {
           </div>
 
           {/* Plan Details */}
-          <div className="mt-8 bg-card rounded-lg p-8 shadow-sm">
+          <div className={`mt-8 rounded-lg p-8 shadow-sm ${plans[selectedPlan].badgeColor} bg-opacity-10 border border-opacity-20`} style={{
+            borderColor: plans[selectedPlan].badgeColor.replace('bg-', ''),
+            backgroundColor: plans[selectedPlan].badgeColor.replace('bg-', '') + '20'
+          }}>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {planDetails[selectedPlan].map((detail, index) => (
                 <div key={index} className="flex items-start gap-3">
