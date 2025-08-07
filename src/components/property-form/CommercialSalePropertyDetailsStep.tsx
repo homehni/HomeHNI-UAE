@@ -60,6 +60,7 @@ export const CommercialSalePropertyDetailsStep = ({
   });
 
   const onSubmit = (data: CommercialSalePropertyDetailsFormData) => {
+    console.log('Form submission data:', data);
     const completeData = {
       ...data,
       floorNo: parseInt(data.floorNo),
@@ -69,6 +70,7 @@ export const CommercialSalePropertyDetailsStep = ({
       cornerProperty,
       loadingFacility,
     };
+    console.log('Complete data to submit:', completeData);
     onNext(completeData);
   };
 
