@@ -92,7 +92,17 @@ export const CommercialPropertyDetailsStep: React.FC<CommercialPropertyDetailsSt
               control={form.control}
               name="title"
               render={({ field }) => (
-                
+                <FormItem>
+                  <FormLabel className="text-sm font-medium">Property Title*</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Enter a descriptive title for your property"
+                      className="h-12"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
               )}
             />
 
