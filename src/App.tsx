@@ -51,6 +51,7 @@ import AdminLogin from "./pages/AdminLogin";
 import NotFound from "./pages/NotFound";
 import ScrollToTop from "./components/ScrollToTop";
 import Architecture from "./pages/Architecture";
+import Interior from "./pages/Interior";
 
 const App: React.FC = () => {
   const [queryClient] = useState(() => new QueryClient({
@@ -100,6 +101,7 @@ const App: React.FC = () => {
             <Route path="/corporate-enquiry" element={<CorporateEnquiry />} />
             <Route path="/blog" element={<Blog />} />
             <Route path="/architecture" element={<Architecture />} />
+            <Route path="/interior" element={<Interior />} />
             
             {/* Authentication Routes */}
             <Route path="/auth" element={<Auth />} />
