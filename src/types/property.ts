@@ -204,7 +204,7 @@ export interface CommercialSaleAmenities {
   parking?: string;
   washrooms?: string;
   waterStorageFacility?: string;
-  security?: boolean;
+  security?: string;
   currentPropertyCondition?: string;
   currentBusiness?: string;
   moreSimilarUnits?: boolean;

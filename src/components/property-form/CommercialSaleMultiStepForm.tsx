@@ -120,16 +120,10 @@ export const CommercialSaleMultiStepForm = ({
       case 5:
         return (
           <CommercialSaleAmenitiesStep
-            initialData={{
-              ...amenities,
-              security: typeof amenities.security === 'string' ? amenities.security === 'true' : Boolean(amenities.security)
-            }}
+            initialData={amenities}
             onNext={(data) => {
               console.log('Step 5 onNext called with data:', data);
-              updateAmenities({
-                ...data,
-                security: data.security ? 'true' : 'false'
-              });
+              updateAmenities(data);
               nextStep();
             }}
             onBack={prevStep}

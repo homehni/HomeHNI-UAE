@@ -15,7 +15,7 @@ const commercialSaleAmenitiesSchema = z.object({
   parking: z.string().min(1, 'Parking information is required'),
   washrooms: z.string().min(1, 'Washroom information is required'),
   waterStorageFacility: z.string().optional(),
-  security: z.boolean().optional(),
+  security: z.string().optional(),
   currentPropertyCondition: z.string().optional(),
   currentBusiness: z.string().optional(),
   moreSimilarUnits: z.boolean().optional(),
@@ -47,7 +47,7 @@ export const CommercialSaleAmenitiesStep = ({
       parking: initialData?.parking || '',
       washrooms: initialData?.washrooms || '',
       waterStorageFacility: initialData?.waterStorageFacility || '',
-      security: Boolean(initialData?.security),
+      security: String(initialData?.security || ''),
       currentPropertyCondition: initialData?.currentPropertyCondition || '',
       currentBusiness: initialData?.currentBusiness || '',
       moreSimilarUnits: initialData?.moreSimilarUnits || false,
@@ -77,10 +77,7 @@ export const CommercialSaleAmenitiesStep = ({
               name="powerBackup"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="flex items-center gap-2">
-                    <Key className="h-4 w-4" />
-                    Power Backup *
-                  </FormLabel>
+                  <FormLabel>Power Backup *</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger>
@@ -104,10 +101,7 @@ export const CommercialSaleAmenitiesStep = ({
               name="lift"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="flex items-center gap-2">
-                    <Key className="h-4 w-4" />
-                    Lift *
-                  </FormLabel>
+                  <FormLabel>Lift *</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger>
@@ -133,10 +127,7 @@ export const CommercialSaleAmenitiesStep = ({
               name="parking"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="flex items-center gap-2">
-                    <Key className="h-4 w-4" />
-                    Parking *
-                  </FormLabel>
+                  <FormLabel>Parking *</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger>
@@ -160,10 +151,7 @@ export const CommercialSaleAmenitiesStep = ({
               name="washrooms"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="flex items-center gap-2">
-                    <Key className="h-4 w-4" />
-                    Washroom(s) *
-                  </FormLabel>
+                  <FormLabel>Washroom(s) *</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger>
@@ -189,10 +177,7 @@ export const CommercialSaleAmenitiesStep = ({
               name="waterStorageFacility"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="flex items-center gap-2">
-                    <Key className="h-4 w-4" />
-                    Water Storage Facility
-                  </FormLabel>
+                  <FormLabel>Water Storage Facility</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger>
@@ -215,71 +200,79 @@ export const CommercialSaleAmenitiesStep = ({
               control={form.control}
               name="security"
               render={({ field }) => (
-                <FormItem className="flex flex-row items-start space-x-3 space-y-0 pt-8">
-                  <FormControl>
-                    <Checkbox
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
-                  </FormControl>
-                  <div className="space-y-1 leading-none">
-                    <FormLabel>Security</FormLabel>
-                  </div>
+                <FormItem>
+                  <FormLabel>Security</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="none">No Security</SelectItem>
+                      <SelectItem value="guard">Security Guard</SelectItem>
+                      <SelectItem value="cctv">CCTV</SelectItem>
+                      <SelectItem value="both">Guard & CCTV</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
                 </FormItem>
               )}
             />
           </div>
 
-          <FormField
-            control={form.control}
-            name="currentPropertyCondition"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Current Property Condition?</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectItem value="excellent">Excellent</SelectItem>
-                    <SelectItem value="good">Good</SelectItem>
-                    <SelectItem value="average">Average</SelectItem>
-                    <SelectItem value="needs-renovation">Needs Renovation</SelectItem>
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <FormField
+              control={form.control}
+              name="currentPropertyCondition"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Current Property Condition?</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="excellent">Excellent</SelectItem>
+                      <SelectItem value="good">Good</SelectItem>
+                      <SelectItem value="average">Average</SelectItem>
+                      <SelectItem value="needs-renovation">Needs Renovation</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          <FormField
-            control={form.control}
-            name="currentBusiness"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>What business is currently running?</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectItem value="none">No Business</SelectItem>
-                    <SelectItem value="restaurant">Restaurant</SelectItem>
-                    <SelectItem value="office">Office</SelectItem>
-                    <SelectItem value="retail">Retail Store</SelectItem>
-                    <SelectItem value="warehouse">Warehouse</SelectItem>
-                    <SelectItem value="manufacturing">Manufacturing</SelectItem>
-                    <SelectItem value="other">Other</SelectItem>
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+            <FormField
+              control={form.control}
+              name="currentBusiness"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>What business is currently running?</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="none">No Business</SelectItem>
+                      <SelectItem value="restaurant">Restaurant</SelectItem>
+                      <SelectItem value="office">Office</SelectItem>
+                      <SelectItem value="retail">Retail Store</SelectItem>
+                      <SelectItem value="warehouse">Warehouse</SelectItem>
+                      <SelectItem value="manufacturing">Manufacturing</SelectItem>
+                      <SelectItem value="other">Other</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
 
           <FormField
             control={form.control}
