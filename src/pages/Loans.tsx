@@ -343,9 +343,14 @@ const Loans = () => {
             <Button size="lg" variant="secondary">
               Check Your Eligibility Now
             </Button>
-            <Button size="lg" variant="outline" className="border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-primary">
-              Get Started with Your Application
-            </Button>
+            <Button
+  size="lg"
+  variant="outline"
+  className="border-primary text-primary hover:bg-primary hover:text-white"
+>
+  Get Started with Your Application
+</Button>
+
           </div>
         </div>
       </section>
