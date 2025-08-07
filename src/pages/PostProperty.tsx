@@ -5,7 +5,8 @@ import { MultiStepForm } from '@/components/property-form/MultiStepForm';
 import { ResaleMultiStepForm } from '@/components/property-form/ResaleMultiStepForm';
 import { PGHostelMultiStepForm } from '@/components/property-form/PGHostelMultiStepForm';
 import { FlattmatesMultiStepForm } from '@/components/property-form/FlattmatesMultiStepForm';
-import { OwnerInfo, PropertyInfo, PGHostelFormData, FlattmatesFormData } from '@/types/property';
+import { CommercialMultiStepForm } from '@/components/property-form/CommercialMultiStepForm';
+import { OwnerInfo, PropertyInfo, PGHostelFormData, FlattmatesFormData, CommercialFormData } from '@/types/property';
 import { SalePropertyFormData, SalePropertyInfo } from '@/types/saleProperty';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
@@ -16,7 +17,7 @@ import { mapBhkType, mapPropertyType, mapListingType, validateMappedValues } fro
 import Header from '@/components/Header';
 import Marquee from '@/components/Marquee';
 
-type FormStep = 'owner-info' | 'rental-form' | 'resale-form' | 'pg-hostel-form' | 'flatmates-form';
+type FormStep = 'owner-info' | 'rental-form' | 'resale-form' | 'pg-hostel-form' | 'flatmates-form' | 'commercial-rental-form';
 
 export const PostProperty: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -29,23 +30,28 @@ export const PostProperty: React.FC = () => {
   const handleOwnerInfoNext = (data: OwnerInfo) => {
     setOwnerInfo(data);
     
-    // Route to appropriate form based on listing type
-    switch (data.listingType) {
-      case 'Resale':
-        setCurrentStep('resale-form');
-        break;
-      case 'PG/Hostel':
-        setCurrentStep('pg-hostel-form');
-        break;
-      case 'Flatmates':
-        setCurrentStep('flatmates-form');
-        break;
-      default: // 'Rent'
-        setCurrentStep('rental-form');
+    // Route to appropriate form based on property type and listing type
+    if (data.propertyType === 'Commercial' && data.listingType === 'Rent') {
+      setCurrentStep('commercial-rental-form');
+    } else {
+      // Route to appropriate form based on listing type for non-commercial
+      switch (data.listingType) {
+        case 'Resale':
+          setCurrentStep('resale-form');
+          break;
+        case 'PG/Hostel':
+          setCurrentStep('pg-hostel-form');
+          break;
+        case 'Flatmates':
+          setCurrentStep('flatmates-form');
+          break;
+        default: // 'Rent'
+          setCurrentStep('rental-form');
+      }
     }
   };
 
-  const handleSubmit = async (data: { ownerInfo: OwnerInfo; propertyInfo: PropertyInfo | SalePropertyInfo } | PGHostelFormData | FlattmatesFormData) => {
+  const handleSubmit = async (data: { ownerInfo: OwnerInfo; propertyInfo: PropertyInfo | SalePropertyInfo } | PGHostelFormData | FlattmatesFormData | CommercialFormData) => {
     if (!user) {
       toast({
         title: "Authentication Required",
@@ -88,7 +94,7 @@ export const PostProperty: React.FC = () => {
       }
         
       const mappingValidation = validateMappedValues({
-        bhkType: data.propertyInfo.propertyDetails.bhkType,
+        bhkType: 'bhkType' in data.propertyInfo.propertyDetails ? data.propertyInfo.propertyDetails.bhkType : 'Commercial',
         propertyType: data.propertyInfo.propertyDetails.propertyType,
         listingType: listingType
       });
@@ -143,9 +149,9 @@ export const PostProperty: React.FC = () => {
         title: data.propertyInfo.propertyDetails.title,
         property_type: mapPropertyType(data.propertyInfo.propertyDetails.propertyType),
         listing_type: mapListingType(priceDetails.listingType),
-        bhk_type: data.propertyInfo.propertyDetails.bhkType ? mapBhkType(data.propertyInfo.propertyDetails.bhkType) : null,
-        bathrooms: Number(data.propertyInfo.propertyDetails.bathrooms) || 0,
-        balconies: Number(data.propertyInfo.propertyDetails.balconies) || 0,
+        bhk_type: 'bhkType' in data.propertyInfo.propertyDetails ? mapBhkType(data.propertyInfo.propertyDetails.bhkType) : null,
+        bathrooms: 'bathrooms' in data.propertyInfo.propertyDetails ? Number(data.propertyInfo.propertyDetails.bathrooms) || 0 : 0,
+        balconies: 'balconies' in data.propertyInfo.propertyDetails ? Number(data.propertyInfo.propertyDetails.balconies) || 0 : 0,
         super_area: Number(data.propertyInfo.propertyDetails.superBuiltUpArea),
         carpet_area: null,
         expected_price: Number(priceDetails.expectedPrice),
@@ -304,6 +310,14 @@ export const PostProperty: React.FC = () => {
         return (
           <FlattmatesMultiStepForm 
             onSubmit={handleSubmit as (data: FlattmatesFormData) => void}
+            isSubmitting={isSubmitting}
+            initialOwnerInfo={ownerInfo || {}}
+          />
+        );
+      case 'commercial-rental-form':
+        return (
+          <CommercialMultiStepForm 
+            onSubmit={handleSubmit as (data: CommercialFormData) => void}
             isSubmitting={isSubmitting}
             initialOwnerInfo={ownerInfo || {}}
           />

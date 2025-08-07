@@ -178,3 +178,54 @@ export interface PropertyDraft {
   createdAt?: string;
   updatedAt?: string;
 }
+
+// Commercial specific interfaces
+export interface CommercialPropertyDetails extends Omit<PropertyDetails, 'bhkType' | 'bathrooms' | 'balconies'> {
+  spaceType: 'office' | 'retail' | 'warehouse' | 'showroom' | 'restaurant' | 'co-working';
+  powerLoad?: string;
+  ceilingHeight?: string;
+  entranceWidth?: string;
+  loadingFacility?: boolean;
+}
+
+export interface CommercialRentalDetails extends Omit<RentalDetails, 'preferredTenants' | 'idealFor' | 'listingType'> {
+  listingType: 'Rent';
+  businessType?: string[];
+  operatingHours?: string;
+  restrictedActivities?: string[];
+  leaseTerm?: string;
+  escalationClause?: string;
+  gst?: boolean;
+}
+
+export interface CommercialAmenities extends Omit<PropertyAmenities, 'currentPropertyCondition' | 'currentBusiness'> {
+  receptionArea?: boolean;
+  conferenceRoom?: boolean;
+  cafeteria?: boolean;
+  restrooms?: string;
+  hvac?: string;
+  fireSystem?: boolean;
+  cctv?: boolean;
+  internetSpeed?: string;
+  dedicatedParking?: number;
+  visitorParking?: boolean;
+  publicTransport?: boolean;
+  atm?: boolean;
+  bank?: boolean;
+  foodCourt?: boolean;
+}
+
+export interface CommercialInfo {
+  propertyDetails: CommercialPropertyDetails;
+  locationDetails: LocationDetails;
+  rentalDetails: CommercialRentalDetails;
+  amenities: CommercialAmenities;
+  gallery: PropertyGallery;
+  additionalInfo: AdditionalInfo;
+  scheduleInfo: ScheduleInfo;
+}
+
+export interface CommercialFormData {
+  ownerInfo: OwnerInfo;
+  propertyInfo: CommercialInfo;
+}
