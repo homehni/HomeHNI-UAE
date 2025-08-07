@@ -341,15 +341,9 @@ const Loans = () => {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button size="lg" variant="secondary">
-              Check Your Eligibility Now
+ Get Started with Your Application
             </Button>
-            <Button
-  size="lg"
-  variant="outline"
-  className="border-primary text-primary hover:bg-primary hover:text-white"
->
-  Get Started with Your Application
-</Button>
+
 
           </div>
         </div>
