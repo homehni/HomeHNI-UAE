@@ -45,44 +45,14 @@ export const LandPlotSaleDetailsStep: React.FC<LandPlotSaleDetailsStepProps> = (
 }) => {
   const [date, setDate] = React.useState<Date>();
   
-  const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm<SaleDetailsForm>({
+  const { register, handleSubmit, formState: { errors } } = useForm<SaleDetailsForm>({
     resolver: zodResolver(saleDetailsSchema),
     defaultValues: {
       ...initialData,
       priceNegotiable: initialData.priceNegotiable ?? true,
-      clearTitles: initialData.clearTitles ?? true,
-      ownershipType: initialData.ownershipType || 'freehold',
     }
   });
 
-  const approvals = [
-    'RERA Approved',
-    'DTCP Approved',
-    'HMDA Approved',
-    'BDA Approved',
-    'BMRDA Approved',
-    'Municipality Approved',
-    'Panchayat Approved',
-    'Revenue Department',
-    'Survey Settlement',
-    'Non-Agricultural (NA) Conversion'
-  ];
-
-  const handleApprovalChange = (approval: string, checked: boolean) => {
-    const currentApprovals = watch('approvedBy') || [];
-    if (checked) {
-      setValue('approvedBy', [...currentApprovals, approval]);
-    } else {
-      setValue('approvedBy', currentApprovals.filter(item => item !== approval));
-    }
-  };
-
-  const handleDateSelect = (selectedDate: Date | undefined) => {
-    setDate(selectedDate);
-    if (selectedDate) {
-      setValue('possessionDate', format(selectedDate, 'yyyy-MM-dd'));
-    }
-  };
 
   return (
     <Card className="w-full max-w-4xl mx-auto">
