@@ -10,7 +10,7 @@ import { Badge } from '@/components/ui/badge';
 import { CommercialPropertyDetails } from '@/types/property';
 
 const commercialSalePropertyDetailsSchema = z.object({
-  spaceType: z.enum(['office', 'retail', 'warehouse', 'showroom', 'restaurant', 'co-working']),
+  spaceType: z.enum(['office', 'retail', 'warehouse', 'showroom', 'restaurant', 'co-working', 'industrial', 'medical', 'educational']),
   buildingType: z.string().min(1, 'Building type is required'),
   propertyAge: z.string().min(1, 'Property age is required'),
   floorNo: z.string().min(1, 'Floor number is required'),

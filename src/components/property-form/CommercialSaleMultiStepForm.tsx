@@ -80,7 +80,10 @@ export const CommercialSaleMultiStepForm = ({
         return (
           <CommercialSalePropertyDetailsStep
             initialData={propertyDetails}
-            onNext={updatePropertyDetails}
+            onNext={(data) => {
+              updatePropertyDetails(data);
+              nextStep();
+            }}
             onBack={prevStep}
             currentStep={currentStep}
             totalSteps={8}

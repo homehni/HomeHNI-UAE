@@ -181,7 +181,7 @@ export interface PropertyDraft {
 
 // Commercial specific interfaces
 export interface CommercialPropertyDetails extends Omit<PropertyDetails, 'bhkType' | 'bathrooms' | 'balconies'> {
-  spaceType: 'office' | 'retail' | 'warehouse' | 'showroom' | 'restaurant' | 'co-working';
+  spaceType: 'office' | 'retail' | 'warehouse' | 'showroom' | 'restaurant' | 'co-working' | 'industrial' | 'medical' | 'educational';
   powerLoad?: string;
   ceilingHeight?: string;
   entranceWidth?: string;
