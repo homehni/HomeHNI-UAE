@@ -156,12 +156,17 @@ const Interior = () => {
       
       <div className="pt-8">
         {/* Hero Section */}
-        <section className="relative py-20 bg-gradient-to-br from-primary/10 via-white to-secondary/5">
+        <section 
+          className="relative py-20 bg-cover bg-center bg-no-repeat"
+          style={{
+            backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('/lovable-uploads/0b9bec0c-64d2-4ff5-8bdb-018ff8463e6c.png')`
+          }}
+        >
           <div className="container mx-auto px-4 text-center">
-            <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-6">
+            <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
               Curated Interiors for Inspired Living
             </h1>
-            <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-3xl mx-auto">
+            <p className="text-lg md:text-xl text-white/90 mb-8 max-w-3xl mx-auto">
               From concept to execution, we create spaces that reflect who you are — elegant, functional, and full of character.
             </p>
             <Button size="lg" className="bg-brand-red hover:bg-brand-red-dark text-white px-8 py-3">
