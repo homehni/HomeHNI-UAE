@@ -92,8 +92,8 @@ export const useCommercialSalePropertyForm = () => {
   const isStepValid = (step: number): boolean => {
     switch (step) {
       case 2:
-        return !!(propertyDetails.title && propertyDetails.spaceType && 
-                 propertyDetails.furnishingStatus);
+        return !!(propertyDetails.spaceType && propertyDetails.buildingType && 
+                 propertyDetails.furnishingStatus && propertyDetails.superBuiltUpArea);
       case 3:
         return !!(locationDetails.state && locationDetails.city && locationDetails.locality && 
                  locationDetails.pincode);
