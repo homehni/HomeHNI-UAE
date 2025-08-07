@@ -6,31 +6,25 @@ import { Label } from '@/components/ui/label';
 import { CheckCircle, Calculator, Users, Shield, Clock, TrendingUp, FileText, CreditCard } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-
 const Loans = () => {
   const [loanAmount, setLoanAmount] = useState(5000000);
   const [tenure, setTenure] = useState(20);
   const [interestRate, setInterestRate] = useState(7);
-
   const calculateEMI = () => {
     const principal = loanAmount;
     const rate = interestRate / 12 / 100;
     const time = tenure * 12;
-    
-    const emi = (principal * rate * Math.pow(1 + rate, time)) / (Math.pow(1 + rate, time) - 1);
+    const emi = principal * rate * Math.pow(1 + rate, time) / (Math.pow(1 + rate, time) - 1);
     return Math.round(emi);
   };
-
   const totalAmount = calculateEMI() * tenure * 12;
   const totalInterest = totalAmount - loanAmount;
-
-  return (
-    <div className="min-h-screen bg-background">
+  return <div className="min-h-screen bg-background">
       <Header />
       
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-primary/10 to-primary/5 py-20">
-        <div className="container mx-auto px-4 text-center">
+        <div className="container mx-auto text-center px-[19px] py-[20px]">
           <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-6">
             Unlock Your Dream Home with Smart Financing
           </h1>
@@ -195,36 +189,17 @@ const Loans = () => {
                   <div className="space-y-6">
                     <div>
                       <Label htmlFor="loanAmount">Loan Amount (₹)</Label>
-                      <Input
-                        id="loanAmount"
-                        type="number"
-                        value={loanAmount}
-                        onChange={(e) => setLoanAmount(Number(e.target.value))}
-                        className="mt-1"
-                      />
+                      <Input id="loanAmount" type="number" value={loanAmount} onChange={e => setLoanAmount(Number(e.target.value))} className="mt-1" />
                     </div>
                     
                     <div>
                       <Label htmlFor="tenure">Tenure (Years)</Label>
-                      <Input
-                        id="tenure"
-                        type="number"
-                        value={tenure}
-                        onChange={(e) => setTenure(Number(e.target.value))}
-                        className="mt-1"
-                      />
+                      <Input id="tenure" type="number" value={tenure} onChange={e => setTenure(Number(e.target.value))} className="mt-1" />
                     </div>
                     
                     <div>
                       <Label htmlFor="interestRate">Interest Rate (%)</Label>
-                      <Input
-                        id="interestRate"
-                        type="number"
-                        step="0.1"
-                        value={interestRate}
-                        onChange={(e) => setInterestRate(Number(e.target.value))}
-                        className="mt-1"
-                      />
+                      <Input id="interestRate" type="number" step="0.1" value={interestRate} onChange={e => setInterestRate(Number(e.target.value))} className="mt-1" />
                     </div>
                   </div>
                   
@@ -374,8 +349,6 @@ const Loans = () => {
       </section>
 
       <Footer />
-    </div>
-  );
+    </div>;
 };
-
 export default Loans;
