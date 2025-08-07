@@ -12,7 +12,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ScheduleInfo } from '@/types/property';
 
 const scheduleSchema = z.object({
-  availability: z.enum(['everyday', 'weekdays', 'weekends', 'by_appointment']),
+  availability: z.enum(['everyday', 'weekday', 'weekend']),
   availableAllDay: z.boolean(),
   startTime: z.string().optional(),
   endTime: z.string().optional(),
@@ -64,12 +64,11 @@ export const LandPlotScheduleStep: React.FC<LandPlotScheduleStepProps> = ({
               <SelectTrigger>
                 <SelectValue placeholder="Select your availability" />
               </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="everyday">Everyday</SelectItem>
-                <SelectItem value="weekdays">Weekdays only (Mon-Fri)</SelectItem>
-                <SelectItem value="weekends">Weekends only (Sat-Sun)</SelectItem>
-                <SelectItem value="by_appointment">By appointment only</SelectItem>
-              </SelectContent>
+                <SelectContent>
+                  <SelectItem value="everyday">Everyday</SelectItem>
+                  <SelectItem value="weekday">Weekdays only (Mon-Fri)</SelectItem>
+                  <SelectItem value="weekend">Weekends only (Sat-Sun)</SelectItem>
+                </SelectContent>
             </Select>
             {errors.availability && (
               <p className="text-red-500 text-sm">{errors.availability.message}</p>

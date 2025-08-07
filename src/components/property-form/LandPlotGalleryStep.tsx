@@ -8,7 +8,7 @@ import { VideoUpload } from './VideoUpload';
 
 interface GalleryForm {
   images: File[];
-  videos?: File[];
+  video?: File;
 }
 
 interface LandPlotGalleryStepProps {
@@ -25,19 +25,19 @@ export const LandPlotGalleryStep: React.FC<LandPlotGalleryStepProps> = ({
   const { handleSubmit, setValue, watch } = useForm<GalleryForm>({
     defaultValues: {
       images: [],
-      videos: [],
+      video: undefined,
     }
   });
 
   const images = watch('images') || [];
-  const videos = watch('videos') || [];
+  const video = watch('video');
 
   const handleImageChange = (files: File[]) => {
     setValue('images', files);
   };
 
-  const handleVideoChange = (files: File[]) => {
-    setValue('videos', files);
+  const handleVideoChange = (file: File | undefined) => {
+    setValue('video', file);
   };
 
   const onSubmit = (data: GalleryForm) => {
@@ -72,16 +72,10 @@ export const LandPlotGalleryStep: React.FC<LandPlotGalleryStepProps> = ({
             </div>
             
             <ImageUpload
+              images={images}
               onImagesChange={handleImageChange}
               maxImages={20}
-              guidelines={[
-                'Take photos during good lighting (preferably morning or evening)',
-                'Include boundary walls, gates, and corner markers',
-                'Show access road and connectivity',
-                'Capture surrounding development and landmarks',
-                'Include any existing structures or utilities',
-                'Show the plot from multiple angles'
-              ]}
+              minImages={3}
             />
             
             <div className="text-sm text-gray-600">
@@ -107,20 +101,12 @@ export const LandPlotGalleryStep: React.FC<LandPlotGalleryStepProps> = ({
             </div>
             
             <VideoUpload
+              video={video}
               onVideoChange={handleVideoChange}
-              maxVideos={3}
-              guidelines={[
-                'Record a walkthrough of the entire plot perimeter',
-                'Show access from main road to the plot',
-                'Capture surrounding infrastructure and amenities',
-                'Keep videos under 2 minutes for better viewer engagement',
-                'Record during daylight for better visibility',
-                'Ensure stable footage (avoid shaky camera)'
-              ]}
             />
             
             <div className="text-sm text-gray-600">
-              <strong>Selected Videos:</strong> {videos.length} / 3
+              <strong>Selected Video:</strong> {video ? '1 video selected' : 'No video selected'}
             </div>
           </div>
 

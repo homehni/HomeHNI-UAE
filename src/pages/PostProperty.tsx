@@ -6,10 +6,12 @@ import { ResaleMultiStepForm } from '@/components/property-form/ResaleMultiStepF
 import { PGHostelMultiStepForm } from '@/components/property-form/PGHostelMultiStepForm';
 import { FlattmatesMultiStepForm } from '@/components/property-form/FlattmatesMultiStepForm';
 import { CommercialMultiStepForm } from '@/components/property-form/CommercialMultiStepForm';
+import { LandPlotMultiStepForm } from '@/components/property-form/LandPlotMultiStepForm';
 import { CommercialSaleMultiStepForm } from '@/components/property-form/CommercialSaleMultiStepForm';
 import { OwnerInfo, PropertyInfo, PGHostelFormData, FlattmatesFormData, CommercialFormData } from '@/types/property';
 import { SalePropertyFormData, SalePropertyInfo } from '@/types/saleProperty';
 import { CommercialSaleFormData } from '@/types/commercialSaleProperty';
+import { LandPlotFormData } from '@/types/landPlotProperty';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
@@ -19,7 +21,7 @@ import { mapBhkType, mapPropertyType, mapListingType, validateMappedValues } fro
 import Header from '@/components/Header';
 import Marquee from '@/components/Marquee';
 
-type FormStep = 'owner-info' | 'rental-form' | 'resale-form' | 'pg-hostel-form' | 'flatmates-form' | 'commercial-rental-form' | 'commercial-sale-form';
+type FormStep = 'owner-info' | 'rental-form' | 'resale-form' | 'pg-hostel-form' | 'flatmates-form' | 'commercial-rental-form' | 'commercial-sale-form' | 'land-plot-form';
 
 export const PostProperty: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -43,7 +45,11 @@ export const PostProperty: React.FC = () => {
       // Route to appropriate form based on listing type for non-commercial
       switch (data.listingType) {
         case 'Resale':
-          setCurrentStep('resale-form');
+          if (data.propertyType === 'Land/Plot') {
+            setCurrentStep('land-plot-form');
+          } else {
+            setCurrentStep('resale-form');
+          }
           break;
         case 'PG/Hostel':
           setCurrentStep('pg-hostel-form');
@@ -57,7 +63,7 @@ export const PostProperty: React.FC = () => {
     }
   };
 
-  const handleSubmit = async (data: { ownerInfo: OwnerInfo; propertyInfo: PropertyInfo | SalePropertyInfo } | PGHostelFormData | FlattmatesFormData | CommercialFormData | CommercialSaleFormData) => {
+  const handleSubmit = async (data: { ownerInfo: OwnerInfo; propertyInfo: PropertyInfo | SalePropertyInfo } | PGHostelFormData | FlattmatesFormData | CommercialFormData | CommercialSaleFormData | LandPlotFormData) => {
     if (!user) {
       toast({
         title: "Authentication Required",
@@ -96,12 +102,13 @@ export const PostProperty: React.FC = () => {
       } else if ('flattmatesDetails' in data.propertyInfo) {
         listingType = (data.propertyInfo as any).flattmatesDetails.listingType;
       } else {
-        listingType = 'Rent'; // fallback
+        listingType = 'Sale'; // fallback for land plots
       }
         
       const mappingValidation = validateMappedValues({
-        bhkType: 'bhkType' in data.propertyInfo.propertyDetails ? data.propertyInfo.propertyDetails.bhkType : 'Commercial',
-        propertyType: data.propertyInfo.propertyDetails.propertyType,
+        bhkType: ('propertyDetails' in data.propertyInfo && 'bhkType' in data.propertyInfo.propertyDetails) ? data.propertyInfo.propertyDetails.bhkType : 'Commercial',
+        propertyType: ('propertyDetails' in data.propertyInfo) ? data.propertyInfo.propertyDetails.propertyType : 
+                     ('plotDetails' in data.propertyInfo) ? data.propertyInfo.plotDetails.propertyType : 'Commercial',
         listingType: listingType
       });
 
@@ -152,13 +159,21 @@ export const PostProperty: React.FC = () => {
       
       const propertyData = {
         user_id: user.id,
-        title: data.propertyInfo.propertyDetails.title,
-        property_type: mapPropertyType(data.propertyInfo.propertyDetails.propertyType),
+        title: ('propertyDetails' in data.propertyInfo) ? data.propertyInfo.propertyDetails.title : 
+               ('plotDetails' in data.propertyInfo) ? data.propertyInfo.plotDetails.title : 'Untitled',
+        property_type: mapPropertyType(('propertyDetails' in data.propertyInfo) ? 
+                                     data.propertyInfo.propertyDetails.propertyType : 
+                                     data.propertyInfo.plotDetails.propertyType),
         listing_type: mapListingType(priceDetails.listingType),
-        bhk_type: 'bhkType' in data.propertyInfo.propertyDetails ? mapBhkType(data.propertyInfo.propertyDetails.bhkType) : null,
-        bathrooms: 'bathrooms' in data.propertyInfo.propertyDetails ? Number(data.propertyInfo.propertyDetails.bathrooms) || 0 : 0,
-        balconies: 'balconies' in data.propertyInfo.propertyDetails ? Number(data.propertyInfo.propertyDetails.balconies) || 0 : 0,
-        super_area: Number(data.propertyInfo.propertyDetails.superBuiltUpArea),
+        bhk_type: ('propertyDetails' in data.propertyInfo && 'bhkType' in data.propertyInfo.propertyDetails) ? 
+                 mapBhkType(data.propertyInfo.propertyDetails.bhkType) : null,
+        bathrooms: ('propertyDetails' in data.propertyInfo && 'bathrooms' in data.propertyInfo.propertyDetails) ? 
+                  Number(data.propertyInfo.propertyDetails.bathrooms) || 0 : 0,
+        balconies: ('propertyDetails' in data.propertyInfo && 'balconies' in data.propertyInfo.propertyDetails) ? 
+                  Number(data.propertyInfo.propertyDetails.balconies) || 0 : 0,
+        super_area: ('propertyDetails' in data.propertyInfo) ? 
+                   Number(data.propertyInfo.propertyDetails.superBuiltUpArea) :
+                   ('plotDetails' in data.propertyInfo) ? Number(data.propertyInfo.plotDetails.plotArea) : 0,
         carpet_area: null,
         expected_price: Number(priceDetails.expectedPrice),
         state: data.propertyInfo.locationDetails.state,
@@ -205,11 +220,16 @@ export const PostProperty: React.FC = () => {
           errorMessage = "Invalid availability type. Please contact support.";
         } else if (error.message.includes('violates check constraint')) {
           if (error.message.includes('property_type')) {
-            errorMessage = `Invalid property type: "${data.propertyInfo.propertyDetails.propertyType}". Please select a valid property type.`;
+            const propType = ('propertyDetails' in data.propertyInfo) ? 
+                           data.propertyInfo.propertyDetails.propertyType : 
+                           data.propertyInfo.plotDetails.propertyType;
+            errorMessage = `Invalid property type: "${propType}". Please select a valid property type.`;
           } else if (error.message.includes('listing_type')) {
             errorMessage = `Invalid listing type: "${listingType}". Please select Sale or Rent.`;
           } else if (error.message.includes('bhk_type')) {
-            errorMessage = `Invalid BHK type: "${'bhkType' in data.propertyInfo.propertyDetails ? data.propertyInfo.propertyDetails.bhkType : 'N/A'}". Please select a valid BHK configuration.`;
+            const bhkType = ('propertyDetails' in data.propertyInfo && 'bhkType' in data.propertyInfo.propertyDetails) ? 
+                          data.propertyInfo.propertyDetails.bhkType : 'N/A';
+            errorMessage = `Invalid BHK type: "${bhkType}". Please select a valid BHK configuration.`;
           } else {
             errorMessage = "Some property details don't meet our requirements. Please check your inputs.";
           }
@@ -242,10 +262,13 @@ export const PostProperty: React.FC = () => {
         owner_email: data.ownerInfo.email,
         owner_phone: data.ownerInfo.phoneNumber,
         owner_role: data.ownerInfo.role,
-        title: data.propertyInfo.propertyDetails.title,
-        property_type: data.propertyInfo.propertyDetails.propertyType,
+        title: ('propertyDetails' in data.propertyInfo) ? data.propertyInfo.propertyDetails.title : 
+               data.propertyInfo.plotDetails.title,
+        property_type: ('propertyDetails' in data.propertyInfo) ? data.propertyInfo.propertyDetails.propertyType : 
+                      data.propertyInfo.plotDetails.propertyType,
         listing_type: priceDetailsDraft.listingType,
-        bhk_type: 'bhkType' in data.propertyInfo.propertyDetails ? data.propertyInfo.propertyDetails.bhkType : null,
+        bhk_type: ('propertyDetails' in data.propertyInfo && 'bhkType' in data.propertyInfo.propertyDetails) ? 
+                 data.propertyInfo.propertyDetails.bhkType : null,
         state: data.propertyInfo.locationDetails.state,
         city: data.propertyInfo.locationDetails.city,
         locality: data.propertyInfo.locationDetails.locality,
@@ -332,6 +355,14 @@ export const PostProperty: React.FC = () => {
         return (
           <CommercialSaleMultiStepForm 
             onSubmit={handleSubmit as (data: CommercialSaleFormData) => void}
+            isSubmitting={isSubmitting}
+            initialOwnerInfo={ownerInfo || {}}
+          />
+        );
+      case 'land-plot-form':
+        return (
+          <LandPlotMultiStepForm 
+            onSubmit={handleSubmit as (data: LandPlotFormData) => void}
             isSubmitting={isSubmitting}
             initialOwnerInfo={ownerInfo || {}}
           />
