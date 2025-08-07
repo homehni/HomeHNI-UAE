@@ -93,7 +93,11 @@ export const CommercialSaleMultiStepForm = ({
         return (
           <CommercialSaleLocationDetailsStep
             initialData={locationDetails}
-            onNext={updateLocationDetails}
+            onNext={(data) => {
+              console.log('Step 3 onNext called with data:', data);
+              updateLocationDetails(data);
+              nextStep();
+            }}
             onBack={prevStep}
             currentStep={currentStep}
             totalSteps={8}
@@ -103,7 +107,11 @@ export const CommercialSaleMultiStepForm = ({
         return (
           <CommercialSaleSaleDetailsStep
             initialData={saleDetails}
-            onNext={updateSaleDetails}
+            onNext={(data) => {
+              console.log('Step 4 onNext called with data:', data);
+              updateSaleDetails(data);
+              nextStep();
+            }}
             onBack={prevStep}
             currentStep={currentStep}
             totalSteps={8}
@@ -113,7 +121,11 @@ export const CommercialSaleMultiStepForm = ({
         return (
           <CommercialSaleAmenitiesStep
             initialData={amenities}
-            onNext={updateAmenities}
+            onNext={(data) => {
+              console.log('Step 5 onNext called with data:', data);
+              updateAmenities(data);
+              nextStep();
+            }}
             onBack={prevStep}
             currentStep={currentStep}
             totalSteps={8}
@@ -123,7 +135,11 @@ export const CommercialSaleMultiStepForm = ({
         return (
           <CommercialSaleGalleryStep
             initialData={gallery}
-            onNext={updateGallery}
+            onNext={(data) => {
+              console.log('Step 6 onNext called with data:', data);
+              updateGallery(data);
+              nextStep();
+            }}
             onBack={prevStep}
             currentStep={currentStep}
             totalSteps={8}
@@ -133,7 +149,11 @@ export const CommercialSaleMultiStepForm = ({
         return (
           <CommercialSaleAdditionalInfoStep
             initialData={additionalInfo}
-            onNext={updateAdditionalInfo}
+            onNext={(data) => {
+              console.log('Step 7 onNext called with data:', data);
+              updateAdditionalInfo(data);
+              nextStep();
+            }}
             onBack={prevStep}
             currentStep={currentStep}
             totalSteps={8}
@@ -143,7 +163,11 @@ export const CommercialSaleMultiStepForm = ({
         return (
           <CommercialSaleScheduleStep
             initialData={scheduleInfo}
-            onNext={updateScheduleInfo}
+            onNext={(data) => {
+              console.log('Step 8 onNext called with data:', data);
+              updateScheduleInfo(data);
+              nextStep();
+            }}
             onBack={prevStep}
             currentStep={currentStep}
             totalSteps={8}
