@@ -55,9 +55,14 @@ export interface PropertyAmenities {
   powerBackup?: string;
   lift?: string;
   parking?: string;
+  washrooms?: string;
   waterStorageFacility?: string;
-  security?: boolean;
+  security?: string;
   wifi?: string;
+  currentPropertyCondition?: string;
+  currentBusiness?: string;
+  moreSimilarUnits?: boolean;
+  directionsTip?: string;
 }
 
 export interface PropertyGallery {
@@ -193,13 +198,20 @@ export interface CommercialRentalDetails extends Omit<RentalDetails, 'preferredT
   gst?: boolean;
 }
 
-export interface CommercialAmenities extends PropertyAmenities {
+export interface CommercialSaleAmenities {
+  powerBackup?: string;
+  lift?: string;
+  parking?: string;
   washrooms?: string;
+  waterStorageFacility?: string;
+  security?: boolean;
   currentPropertyCondition?: string;
   currentBusiness?: string;
   moreSimilarUnits?: boolean;
   directionsTip?: string;
 }
+
+export interface CommercialAmenities extends PropertyAmenities {}
 
 export interface CommercialInfo {
   propertyDetails: CommercialPropertyDetails;

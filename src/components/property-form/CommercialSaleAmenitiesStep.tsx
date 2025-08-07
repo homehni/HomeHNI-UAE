@@ -7,6 +7,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Key, Plus } from 'lucide-react';
+import { CommercialSaleAmenities } from '@/types/property';
 
 const commercialSaleAmenitiesSchema = z.object({
   powerBackup: z.string().min(1, 'Power backup is required'),
@@ -24,8 +25,8 @@ const commercialSaleAmenitiesSchema = z.object({
 type CommercialSaleAmenitiesForm = z.infer<typeof commercialSaleAmenitiesSchema>;
 
 interface CommercialSaleAmenitiesStepProps {
-  initialData?: any;
-  onNext: (data: any) => void;
+  initialData?: Partial<CommercialSaleAmenities>;
+  onNext: (data: Partial<CommercialSaleAmenities>) => void;
   onBack: () => void;
   currentStep: number;
   totalSteps: number;
@@ -46,7 +47,7 @@ export const CommercialSaleAmenitiesStep = ({
       parking: initialData?.parking || '',
       washrooms: initialData?.washrooms || '',
       waterStorageFacility: initialData?.waterStorageFacility || '',
-      security: initialData?.security === true || false,
+      security: Boolean(initialData?.security),
       currentPropertyCondition: initialData?.currentPropertyCondition || '',
       currentBusiness: initialData?.currentBusiness || '',
       moreSimilarUnits: initialData?.moreSimilarUnits || false,
