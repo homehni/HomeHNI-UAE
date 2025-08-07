@@ -11,17 +11,17 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { LandPlotDetails } from '@/types/landPlotProperty';
 
 const landPlotDetailsSchema = z.object({
-  title: z.string().min(1, 'Property title is required'),
+  // title: z.string().min(1, 'Property title is required'),
   plotArea: z.number().min(1, 'Plot area is required'),
   plotAreaUnit: z.enum(['sq-ft', 'sq-yard', 'acre', 'hectare', 'bigha', 'biswa']),
   plotLength: z.number().optional(),
   plotWidth: z.number().optional(),
   boundaryWall: z.enum(['yes', 'no', 'partial']),
-  cornerPlot: z.boolean(),
-  roadFacing: z.enum(['east', 'west', 'north', 'south', 'north-east', 'north-west', 'south-east', 'south-west']),
-  roadWidth: z.number().min(1, 'Road width is required'),
-  landType: z.enum(['residential', 'commercial', 'agricultural', 'industrial', 'institutional']),
-  plotShape: z.enum(['regular', 'irregular']),
+  // cornerPlot: z.boolean(),
+  // roadFacing: z.enum(['east', 'west', 'north', 'south', 'north-east', 'north-west', 'south-east', 'south-west']),
+  // roadWidth: z.number().min(1, 'Road width is required'),
+  // landType: z.enum(['residential', 'commercial', 'agricultural', 'industrial', 'institutional']),
+  // plotShape: z.enum(['regular', 'irregular']),
   gatedCommunity: z.boolean(),
   surveyNumber: z.string().optional(),
   subDivision: z.string().optional(),
@@ -69,7 +69,7 @@ export const LandPlotPropertyDetailsStep: React.FC<LandPlotPropertyDetailsStepPr
       <CardContent>
         <form onSubmit={handleSubmit(onNext)} className="space-y-6">
           {/* Property Title */}
-          <div className="space-y-2">
+          {/* <div className="space-y-2">
             <Label htmlFor="title" className="text-sm font-medium text-gray-700">
               Property Title *
             </Label>
@@ -82,13 +82,13 @@ export const LandPlotPropertyDetailsStep: React.FC<LandPlotPropertyDetailsStepPr
             {errors.title && (
               <p className="text-red-500 text-sm">{errors.title.message}</p>
             )}
-          </div>
+          </div> */}
 
           {/* Plot Area */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="plotArea" className="text-sm font-medium text-gray-700">
-                Plot Area *
+                Plot Area (sq.ft)*
               </Label>
               <Input
                 id="plotArea"
@@ -101,7 +101,7 @@ export const LandPlotPropertyDetailsStep: React.FC<LandPlotPropertyDetailsStepPr
                 <p className="text-red-500 text-sm">{errors.plotArea.message}</p>
               )}
             </div>
-            <div className="space-y-2">
+            {/* <div className="space-y-2">
               <Label htmlFor="plotAreaUnit" className="text-sm font-medium text-gray-700">
                 Unit *
               </Label>
@@ -118,14 +118,14 @@ export const LandPlotPropertyDetailsStep: React.FC<LandPlotPropertyDetailsStepPr
                   <SelectItem value="biswa">Biswa</SelectItem>
                 </SelectContent>
               </Select>
-            </div>
+            </div> */}
           </div>
 
           {/* Plot Dimensions */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="plotLength" className="text-sm font-medium text-gray-700">
-                Plot Length (feet)
+                 Length (ft)
               </Label>
               <Input
                 id="plotLength"
@@ -137,7 +137,7 @@ export const LandPlotPropertyDetailsStep: React.FC<LandPlotPropertyDetailsStepPr
             </div>
             <div className="space-y-2">
               <Label htmlFor="plotWidth" className="text-sm font-medium text-gray-700">
-                Plot Width (feet)
+                Width (ft)
               </Label>
               <Input
                 id="plotWidth"
@@ -150,7 +150,7 @@ export const LandPlotPropertyDetailsStep: React.FC<LandPlotPropertyDetailsStepPr
           </div>
 
           {/* Land Type & Road Details */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="landType" className="text-sm font-medium text-gray-700">
                 Land Type *
@@ -188,11 +188,11 @@ export const LandPlotPropertyDetailsStep: React.FC<LandPlotPropertyDetailsStepPr
                 </SelectContent>
               </Select>
             </div>
-          </div>
+          </div> */}
 
           {/* Road Width & Boundary */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
+            {/* <div className="space-y-2">
               <Label htmlFor="roadWidth" className="text-sm font-medium text-gray-700">
                 Road Width (feet) *
               </Label>
@@ -206,7 +206,7 @@ export const LandPlotPropertyDetailsStep: React.FC<LandPlotPropertyDetailsStepPr
               {errors.roadWidth && (
                 <p className="text-red-500 text-sm">{errors.roadWidth.message}</p>
               )}
-            </div>
+            </div> */}
             <div className="space-y-2">
               <Label htmlFor="boundaryWall" className="text-sm font-medium text-gray-700">
                 Boundary Wall *
@@ -225,7 +225,7 @@ export const LandPlotPropertyDetailsStep: React.FC<LandPlotPropertyDetailsStepPr
           </div>
 
           {/* Plot Shape & Additional Info */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {/* <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="space-y-2">
               <Label htmlFor="plotShape" className="text-sm font-medium text-gray-700">
                 Plot Shape *
@@ -262,10 +262,10 @@ export const LandPlotPropertyDetailsStep: React.FC<LandPlotPropertyDetailsStepPr
                 className="w-full"
               />
             </div>
-          </div>
+          </div> */}
 
           {/* Village Name */}
-          <div className="space-y-2">
+          {/* <div className="space-y-2">
             <Label htmlFor="villageName" className="text-sm font-medium text-gray-700">
               Village Name (if applicable)
             </Label>
@@ -275,10 +275,10 @@ export const LandPlotPropertyDetailsStep: React.FC<LandPlotPropertyDetailsStepPr
               placeholder="Enter village name"
               className="w-full"
             />
-          </div>
+          </div> */}
 
           {/* Checkboxes */}
-          <div className="space-y-4">
+          {/* <div className="space-y-4">
             <div className="flex items-center space-x-2">
               <Checkbox
                 id="cornerPlot"
@@ -297,7 +297,7 @@ export const LandPlotPropertyDetailsStep: React.FC<LandPlotPropertyDetailsStepPr
                 Gated Community
               </Label>
             </div>
-          </div>
+          </div> */}
 
           {/* Navigation Buttons */}
           <div className="flex justify-between pt-6">
