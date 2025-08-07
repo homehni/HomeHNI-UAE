@@ -92,17 +92,7 @@ export const CommercialPropertyDetailsStep: React.FC<CommercialPropertyDetailsSt
               control={form.control}
               name="title"
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-sm font-medium">Property Title*</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="e.g., Modern Office Space in Business District"
-                      className="h-12"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
+                
               )}
             />
 
@@ -316,69 +306,7 @@ export const CommercialPropertyDetailsStep: React.FC<CommercialPropertyDetailsSt
               />
             </div>
 
-            {/* Commercial Specific Details */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <FormField
-                control={form.control}
-                name="powerLoad"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-sm font-medium">Power Load</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <FormControl>
-                        <SelectTrigger className="h-12">
-                          <SelectValue placeholder="Select Power Load" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="10 KW">10 KW</SelectItem>
-                        <SelectItem value="20 KW">20 KW</SelectItem>
-                        <SelectItem value="50 KW">50 KW</SelectItem>
-                        <SelectItem value="100 KW">100 KW</SelectItem>
-                        <SelectItem value="200+ KW">200+ KW</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="ceilingHeight"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-sm font-medium">Ceiling Height</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="e.g., 12 feet"
-                        className="h-12"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="entranceWidth"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-sm font-medium">Entrance Width</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="e.g., 8 feet"
-                        className="h-12"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
+            
 
             {/* Other Features */}
             <div className="space-y-4">
@@ -398,13 +326,7 @@ export const CommercialPropertyDetailsStep: React.FC<CommercialPropertyDetailsSt
                 >
                   Corner Property
                 </Badge>
-                <Badge
-                  variant={loadingFacility ? "default" : "outline"}
-                  className="cursor-pointer px-4 py-2 text-sm"
-                  onClick={() => setLoadingFacility(!loadingFacility)}
-                >
-                  Loading/Unloading Facility
-                </Badge>
+                
               </div>
             </div>
 
