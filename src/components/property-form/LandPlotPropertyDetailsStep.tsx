@@ -17,6 +17,8 @@ const landPlotDetailsSchema = z.object({
   plotLength: z.number().optional(),
   plotWidth: z.number().optional(),
   boundaryWall: z.enum(['yes', 'no', 'partial']),
+  floorsAllowed: z.number().min(1, 'Floors allowed is required'),
+  gatedProject: z.enum(['yes', 'no']),
   // cornerPlot: z.boolean(),
   // roadFacing: z.enum(['east', 'west', 'north', 'south', 'north-east', 'north-west', 'south-east', 'south-west']),
   // roadWidth: z.number().min(1, 'Road width is required'),
@@ -48,6 +50,8 @@ export const LandPlotPropertyDetailsStep: React.FC<LandPlotPropertyDetailsStepPr
       plotArea: initialData.plotArea || undefined,
       plotLength: initialData.plotLength || undefined,
       plotWidth: initialData.plotWidth || undefined,
+      floorsAllowed: undefined,
+      gatedProject: 'no',
       gatedCommunity: initialData.gatedCommunity || false,
     }
   });
@@ -222,80 +226,39 @@ export const LandPlotPropertyDetailsStep: React.FC<LandPlotPropertyDetailsStepPr
             </div>
           </div>
 
-          {/* Plot Shape & Additional Info */}
-          {/* <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {/* Floors Allowed and Gated Project */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="plotShape" className="text-sm font-medium text-gray-700">
-                Plot Shape *
+              <Label htmlFor="floorsAllowed" className="text-sm font-medium text-gray-700">
+                Floors allowed for construction
               </Label>
-              <Select onValueChange={(value) => setValue('plotShape', value as any)}>
+              <Input
+                id="floorsAllowed"
+                type="number"
+                {...register('floorsAllowed', { valueAsNumber: true })}
+                placeholder="3"
+                className="w-full"
+              />
+              {errors.floorsAllowed && (
+                <p className="text-red-500 text-sm">{errors.floorsAllowed.message}</p>
+              )}
+            </div>
+            
+            <div className="space-y-2">
+              <Label className="text-sm font-medium text-gray-700">
+                Is the Land/Plot inside a gated project?
+              </Label>
+              <Select onValueChange={(value) => setValue('gatedProject', value as any)}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Select shape" />
+                  <SelectValue placeholder="Select" />
                 </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="regular">Regular</SelectItem>
-                  <SelectItem value="irregular">Irregular</SelectItem>
+                <SelectContent className="bg-white z-50">
+                  <SelectItem value="no">No</SelectItem>
+                  <SelectItem value="yes">Yes</SelectItem>
                 </SelectContent>
               </Select>
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="surveyNumber" className="text-sm font-medium text-gray-700">
-                Survey Number
-              </Label>
-              <Input
-                id="surveyNumber"
-                {...register('surveyNumber')}
-                placeholder="e.g., 123/4"
-                className="w-full"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="subDivision" className="text-sm font-medium text-gray-700">
-                Sub Division
-              </Label>
-              <Input
-                id="subDivision"
-                {...register('subDivision')}
-                placeholder="e.g., Block A"
-                className="w-full"
-              />
-            </div>
-          </div> */}
-
-          {/* Village Name */}
-          {/* <div className="space-y-2">
-            <Label htmlFor="villageName" className="text-sm font-medium text-gray-700">
-              Village Name (if applicable)
-            </Label>
-            <Input
-              id="villageName"
-              {...register('villageName')}
-              placeholder="Enter village name"
-              className="w-full"
-            />
-          </div> */}
-
-          {/* Checkboxes */}
-          {/* <div className="space-y-4">
-            <div className="flex items-center space-x-2">
-              <Checkbox
-                id="cornerPlot"
-                onCheckedChange={(checked) => setValue('cornerPlot', !!checked)}
-              />
-              <Label htmlFor="cornerPlot" className="text-sm font-medium text-gray-700">
-                Corner Plot
-              </Label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <Checkbox
-                id="gatedCommunity"
-                onCheckedChange={(checked) => setValue('gatedCommunity', !!checked)}
-              />
-              <Label htmlFor="gatedCommunity" className="text-sm font-medium text-gray-700">
-                Gated Community
-              </Label>
-            </div>
-          </div> */}
+          </div>
 
           {/* Navigation Buttons */}
           <div className="flex justify-between pt-6">
