@@ -206,7 +206,7 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
         wifi: '',
         currentPropertyCondition: '',
         currentBusiness: '',
-        moreSimilarUnits: '',
+        moreSimilarUnits: false,
         directionsTip: amenities.directionsTip,
         sharedKitchen: true,
         sharedLivingRoom: true,

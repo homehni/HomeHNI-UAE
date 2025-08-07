@@ -247,7 +247,7 @@ export const PGHostelMultiStepForm: React.FC<PGHostelMultiStepFormProps> = ({
         cleaning: amenities.roomCleaning === 'yes' ? 'daily' : 'self',
         currentPropertyCondition: '',
         currentBusiness: '',
-        moreSimilarUnits: '',
+        moreSimilarUnits: false,
         directionsTip: amenities.directionsTip
       },
       gallery,

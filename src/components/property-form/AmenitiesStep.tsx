@@ -21,7 +21,7 @@ const amenitiesSchema = z.object({
   wifi: z.string().optional(),
   currentPropertyCondition: z.string().optional(),
   currentBusiness: z.string().optional(),
-  moreSimilarUnits: z.string().optional(),
+  moreSimilarUnits: z.boolean().optional(),
   directionsTip: z.string().optional(),
 });
 
@@ -52,7 +52,7 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
       wifi: initialData.wifi || '',
       currentPropertyCondition: initialData.currentPropertyCondition || '',
       currentBusiness: initialData.currentBusiness || '',
-      moreSimilarUnits: initialData.moreSimilarUnits || '',
+      moreSimilarUnits: initialData.moreSimilarUnits || false,
       directionsTip: initialData.directionsTip || '',
     },
   });
@@ -351,16 +351,16 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
                         <FormLabel>Do you have more similar units/properties available?</FormLabel>
                         <FormControl>
                           <RadioGroup
-                            onValueChange={field.onChange}
-                            defaultValue={field.value}
+                            onValueChange={(value) => field.onChange(value === "true")}
+                            defaultValue={field.value ? "true" : "false"}
                             className="flex flex-row space-x-6"
                           >
                             <div className="flex items-center space-x-2">
-                              <RadioGroupItem value="no" id="no" />
+                              <RadioGroupItem value="false" id="no" />
                               <FormLabel htmlFor="no">No</FormLabel>
                             </div>
                             <div className="flex items-center space-x-2">
-                              <RadioGroupItem value="yes" id="yes" />
+                              <RadioGroupItem value="true" id="yes" />
                               <FormLabel htmlFor="yes">Yes</FormLabel>
                             </div>
                           </RadioGroup>

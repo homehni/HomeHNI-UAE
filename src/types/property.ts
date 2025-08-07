@@ -61,7 +61,7 @@ export interface PropertyAmenities {
   wifi?: string;
   currentPropertyCondition?: string;
   currentBusiness?: string;
-  moreSimilarUnits?: string;
+  moreSimilarUnits?: boolean;
   directionsTip?: string;
 }
 
@@ -198,21 +198,12 @@ export interface CommercialRentalDetails extends Omit<RentalDetails, 'preferredT
   gst?: boolean;
 }
 
-export interface CommercialAmenities extends Omit<PropertyAmenities, 'currentPropertyCondition' | 'currentBusiness'> {
-  receptionArea?: boolean;
-  conferenceRoom?: boolean;
-  cafeteria?: boolean;
-  restrooms?: string;
-  hvac?: string;
-  fireSystem?: boolean;
-  cctv?: boolean;
-  internetSpeed?: string;
-  dedicatedParking?: number;
-  visitorParking?: boolean;
-  publicTransport?: boolean;
-  atm?: boolean;
-  bank?: boolean;
-  foodCourt?: boolean;
+export interface CommercialAmenities extends PropertyAmenities {
+  washrooms?: string;
+  currentPropertyCondition?: string;
+  currentBusiness?: string;
+  moreSimilarUnits?: boolean;
+  directionsTip?: string;
 }
 
 export interface CommercialInfo {
