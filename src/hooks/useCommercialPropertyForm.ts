@@ -94,7 +94,7 @@ export const useCommercialPropertyForm = () => {
     switch (step) {
       case 2:
         return !!(propertyDetails.title && propertyDetails.propertyType && 
-                 propertyDetails.spaceType && propertyDetails.furnishingStatus);
+                 propertyDetails.furnishingStatus);
       case 3:
         return !!(locationDetails.state && locationDetails.city && locationDetails.locality && 
                  locationDetails.pincode);
