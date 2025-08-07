@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { usePropertyForm } from '@/hooks/usePropertyForm';
-import { ProgressIndicator } from './ProgressIndicator';
+import { PropertySidebar } from './PropertySidebar';
 import { PropertyDetailsStep } from './PropertyDetailsStep';
 import { LocationDetailsStep } from './LocationDetailsStep';
 import { RentalDetailsStep } from './RentalDetailsStep';
@@ -11,7 +11,6 @@ import { ScheduleStep } from './ScheduleStep';
 import { PreviewStep } from './PreviewStep';
 
 import { OwnerInfo, PropertyInfo } from '@/types/property';
-import { Badge } from '@/components/ui/badge';
 
 interface MultiStepFormProps {
   onSubmit: (data: { ownerInfo: OwnerInfo; propertyInfo: PropertyInfo }) => void;
@@ -145,122 +144,107 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8">
-      {/* Page Header with Rental Badge */}
-      <div className="text-center mb-8 animate-fade-in">
-        <div className="flex justify-center mb-4">
-          <Badge variant="secondary" className="bg-blue-100 text-blue-700 px-4 py-2 text-sm font-medium">
-            🏠 RENTAL PROPERTY FORM
-          </Badge>
+    <div className="min-h-screen bg-gray-50">
+      <div className="container mx-auto">
+        <div className="bg-white shadow-sm border-b">
+          <div className="px-6 py-4">
+            <div className="flex items-center gap-2 mb-1">
+              <div className="h-2 w-2 bg-blue-500 rounded-full"></div>
+              <span className="text-sm font-medium text-blue-600 uppercase tracking-wide">
+                RENTAL PROPERTY FORM
+              </span>
+            </div>
+            <h1 className="text-2xl font-bold text-gray-900">
+              List Your Property for Rent
+            </h1>
+            <p className="text-gray-600 mt-1">
+              Step {currentStep} of 8: Fill in the details below to list your property for rent on our platform
+            </p>
+          </div>
         </div>
-        <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-          List Your Property for Rent
-        </h1>
-        <p className="text-gray-600 text-lg">
-          Fill in the details below to list your property for rent on our platform
-        </p>
+
+        <div className="flex">
+          <PropertySidebar
+            currentStep={currentStep}
+            completedSteps={completedSteps}
+            onStepClick={goToStep}
+          />
+
+          <div className="flex-1">
+            {currentStep === 1 && (
+              <PropertyDetailsStep
+                initialData={propertyDetails}
+                onNext={handlePropertyDetailsNext}
+                onBack={() => {}} // No back on first step
+                currentStep={currentStep}
+                totalSteps={8}
+              />
+            )}
+
+            {currentStep === 2 && (
+              <LocationDetailsStep
+                initialData={locationDetails}
+                onNext={handleLocationDetailsNext}
+                onBack={prevStep}
+                currentStep={currentStep}
+                totalSteps={8}
+              />
+            )}
+
+            {currentStep === 3 && (
+              <RentalDetailsStep
+                initialData={rentalDetails}
+                onNext={handleRentalDetailsNext}
+                onBack={prevStep}
+                currentStep={currentStep}
+                totalSteps={8}
+              />
+            )}
+
+            {currentStep === 4 && (
+              <AmenitiesStep
+                initialData={amenities}
+                onNext={handleAmenitiesNext}
+                onBack={prevStep}
+              />
+            )}
+
+            {currentStep === 5 && (
+              <GalleryStep
+                initialData={gallery}
+                onNext={handleGalleryNext}
+                onBack={prevStep}
+              />
+            )}
+
+            {currentStep === 6 && (
+              <AdditionalInfoStep
+                initialData={additionalInfo}
+                onNext={handleAdditionalInfoNext}
+                onBack={prevStep}
+              />
+            )}
+
+            {currentStep === 7 && (
+              <ScheduleStep
+                initialData={scheduleInfo}
+                onNext={handleScheduleNext}
+                onBack={prevStep}
+              />
+            )}
+
+            {currentStep === 8 && (
+              <PreviewStep
+                formData={getFormData()}
+                onBack={prevStep}
+                onEdit={goToStep}
+                onSubmit={handleSubmit}
+                isSubmitting={isSubmitting}
+              />
+            )}
+          </div>
+        </div>
       </div>
-
-      {/* Enhanced Progress Indicator */}
-      <div className="mb-12">
-        <ProgressIndicator
-          currentStep={currentStep}
-          totalSteps={8}
-          completedSteps={completedSteps}
-        />
-      </div>
-
-      {/* Form Content in Card Layout */}
-      <div className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden animate-scale-in">
-        {currentStep === 1 && (
-          <div className="p-6 md:p-8">
-            <PropertyDetailsStep
-              initialData={propertyDetails}
-              onNext={handlePropertyDetailsNext}
-              onBack={() => {}} // No back on first step
-              currentStep={currentStep}
-              totalSteps={8}
-            />
-          </div>
-        )}
-
-        {currentStep === 2 && (
-          <div className="p-6 md:p-8">
-            <LocationDetailsStep
-              initialData={locationDetails}
-              onNext={handleLocationDetailsNext}
-              onBack={prevStep}
-              currentStep={currentStep}
-              totalSteps={8}
-            />
-          </div>
-        )}
-
-        {currentStep === 3 && (
-          <div className="p-6 md:p-8">
-            <RentalDetailsStep
-              initialData={rentalDetails}
-              onNext={handleRentalDetailsNext}
-              onBack={prevStep}
-              currentStep={currentStep}
-              totalSteps={8}
-            />
-          </div>
-        )}
-
-        {currentStep === 4 && (
-          <div className="p-6 md:p-8">
-            <AmenitiesStep
-              initialData={amenities}
-              onNext={handleAmenitiesNext}
-              onBack={prevStep}
-            />
-          </div>
-        )}
-
-        {currentStep === 5 && (
-          <div className="p-6 md:p-8">
-            <GalleryStep
-              initialData={gallery}
-              onNext={handleGalleryNext}
-              onBack={prevStep}
-            />
-          </div>
-        )}
-
-        {currentStep === 6 && (
-          <div className="p-6 md:p-8">
-            <AdditionalInfoStep
-              initialData={additionalInfo}
-              onNext={handleAdditionalInfoNext}
-              onBack={prevStep}
-            />
-          </div>
-        )}
-
-        {currentStep === 7 && (
-          <div className="p-6 md:p-8">
-            <ScheduleStep
-              initialData={scheduleInfo}
-              onNext={handleScheduleNext}
-              onBack={prevStep}
-            />
-          </div>
-        )}
-
-        {currentStep === 8 && (
-          <div className="p-6 md:p-8">
-            <PreviewStep
-              formData={getFormData()}
-              onBack={prevStep}
-              onEdit={goToStep}
-              onSubmit={handleSubmit}
-              isSubmitting={isSubmitting}
-            />
-          </div>
-        )}
-      </div>
-
     </div>
   );
 };
