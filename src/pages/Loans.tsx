@@ -34,12 +34,8 @@ const Loans = () => {
             Get up to 90% of your property's value, transparent terms, and zero hidden fees—100% digital, entirely broker-free.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-primary hover:bg-primary/90">
-              Check Your Eligibility
-            </Button>
-            <Button size="lg" variant="outline">
-              Explore Loan Options
-            </Button>
+            <Button size="lg" className="bg-primary hover:bg-primary/90">Get Started Now</Button>
+            
           </div>
         </div>
       </section>
