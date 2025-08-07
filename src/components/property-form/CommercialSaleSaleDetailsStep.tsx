@@ -15,14 +15,10 @@ const commercialSaleSaleDetailsSchema = z.object({
   priceNegotiable: z.boolean().optional(),
   pricePerSqFt: z.number().optional(),
   possessionDate: z.string().optional(),
-  propertyAge: z.string().min(1, 'Property age is required'),
-  registrationStatus: z.enum(['ready_to_move', 'under_construction']),
   homeLoanAvailable: z.boolean().optional(),
   maintenanceCharges: z.number().optional(),
   bookingAmount: z.number().optional(),
   businessType: z.array(z.string()).optional(),
-  operatingHours: z.string().optional(),
-  restrictedActivities: z.array(z.string()).optional(),
   gst: z.boolean().optional(),
 });
 
@@ -125,7 +121,7 @@ export const CommercialSaleSaleDetailsStep = ({
               name="propertyAge"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Property Age *</FormLabel>
+                  <FormLabel>Ownership Type *</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger>
@@ -133,12 +129,8 @@ export const CommercialSaleSaleDetailsStep = ({
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="0-1">0-1 Years</SelectItem>
-                      <SelectItem value="1-5">1-5 Years</SelectItem>
-                      <SelectItem value="5-10">5-10 Years</SelectItem>
-                      <SelectItem value="10-15">10-15 Years</SelectItem>
-                      <SelectItem value="15-20">15-20 Years</SelectItem>
-                      <SelectItem value="20+">20+ Years</SelectItem>
+                      <SelectItem value="0-1">On Lease</SelectItem>
+                      <SelectItem value="1-5">Self Owned</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />
@@ -146,7 +138,7 @@ export const CommercialSaleSaleDetailsStep = ({
               )}
             />
 
-            <FormField
+            {/* <FormField
               control={form.control}
               name="registrationStatus"
               render={({ field }) => (
@@ -167,7 +159,7 @@ export const CommercialSaleSaleDetailsStep = ({
                 </FormItem>
               )}
             />
-          </div>
+          </div> */}
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <FormField
@@ -223,7 +215,7 @@ export const CommercialSaleSaleDetailsStep = ({
             )}
           />
 
-          <FormField
+          {/* <FormField
             control={form.control}
             name="operatingHours"
             render={({ field }) => (
@@ -235,7 +227,7 @@ export const CommercialSaleSaleDetailsStep = ({
                 <FormMessage />
               </FormItem>
             )}
-          />
+          /> */}
 
           <FormField
             control={form.control}
@@ -255,7 +247,7 @@ export const CommercialSaleSaleDetailsStep = ({
             )}
           />
 
-          <FormField
+          {/* <FormField
             control={form.control}
             name="restrictedActivities"
             render={({ field }) => (
@@ -271,9 +263,9 @@ export const CommercialSaleSaleDetailsStep = ({
                 <FormMessage />
               </FormItem>
             )}
-          />
+          /> */}
 
-          <div className="space-y-4">
+          {/* <div className="space-y-4">
             <h3 className="text-lg font-medium">Additional Options</h3>
             
             <FormField
@@ -329,7 +321,7 @@ export const CommercialSaleSaleDetailsStep = ({
                 </FormItem>
               )}
             />
-          </div>
+          </div> */}
 
           <div className="flex justify-between pt-6">
             <Button type="button" variant="outline" onClick={onBack}>
