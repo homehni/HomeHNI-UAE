@@ -91,24 +91,7 @@ export const CommercialSaleSaleDetailsStep = ({
               )}
             />
 
-            <FormField
-              control={form.control}
-              name="pricePerSqFt"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Price per Sq Ft (₹)</FormLabel>
-                  <FormControl>
-                    <Input 
-                      type="number" 
-                      placeholder="e.g., 2500" 
-                      value={field.value || ''}
-                      onChange={(e) => field.onChange(Number(e.target.value))}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            
           </div>
 
 
@@ -127,7 +110,7 @@ export const CommercialSaleSaleDetailsStep = ({
               )}
             />
 
-            <FormField
+            {/* <FormField
               control={form.control}
               name="bookingAmount"
               render={({ field }) => (
@@ -144,7 +127,7 @@ export const CommercialSaleSaleDetailsStep = ({
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
           </div>
 
           <FormField
