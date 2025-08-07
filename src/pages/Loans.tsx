@@ -6,6 +6,7 @@ import { Label } from '@/components/ui/label';
 import { CheckCircle, Calculator, Users, Shield, Clock, TrendingUp, FileText, CreditCard } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import Marquee from '@/components/Marquee';
 const Loans = () => {
   const [loanAmount, setLoanAmount] = useState(5000000);
   const [tenure, setTenure] = useState(20);
@@ -20,6 +21,7 @@ const Loans = () => {
   const totalAmount = calculateEMI() * tenure * 12;
   const totalInterest = totalAmount - loanAmount;
   return <div className="min-h-screen bg-background">
+      <Marquee />
       <Header />
       
       {/* Hero Section */}
