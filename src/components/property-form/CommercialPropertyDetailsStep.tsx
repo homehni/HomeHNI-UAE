@@ -11,7 +11,6 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { CommercialPropertyDetails } from '@/types/property';
 
 const commercialPropertyDetailsSchema = z.object({
-  title: z.string().min(1, 'Property title is required'),
   propertyType: z.string().min(1, 'Please select property type'),
   spaceType: z.string().min(1, 'Please select space type'),
   buildingType: z.string().min(1, 'Please select building type'),
@@ -48,7 +47,6 @@ export const CommercialPropertyDetailsStep: React.FC<CommercialPropertyDetailsSt
   const form = useForm<CommercialPropertyDetailsFormData>({
     resolver: zodResolver(commercialPropertyDetailsSchema),
     defaultValues: {
-      title: initialData.title || '',
       propertyType: initialData.propertyType || 'Commercial',
       spaceType: initialData.spaceType || '',
       buildingType: initialData.buildingType || '',
@@ -87,25 +85,6 @@ export const CommercialPropertyDetailsStep: React.FC<CommercialPropertyDetailsSt
         
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            {/* Property Title */}
-            <FormField
-              control={form.control}
-              name="title"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-sm font-medium">Property Title*</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="Enter a descriptive title for your property"
-                      className="h-12"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
             {/* Space Type and Building Type */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <FormField
