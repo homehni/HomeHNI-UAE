@@ -154,13 +154,59 @@ const AboutSidebar = () => {
 
               {active === 'services' && (
                 <>
-                  <h1 className="text-3xl font-bold text-gray-900 mb-4">Additional Services</h1>
-                  <hr className="my-4" />
-                  <p className="text-gray-700 mb-4">
-                    Explore handpicked services including Legal Assistance, Property Management, Handover
-                    Services, Loans, Architecture and Interior Design. Each service is delivered by vetted
-                    partners with clear pricing and SLAs.
-                  </p>
+                  <h1 className="text-2xl font-bold text-gray-900 mb-6">Additional Services</h1>
+                  
+                  <div className="space-y-4 text-gray-700 leading-relaxed">
+                    <p className="text-sm">
+                      Home HNI offers a complete concierge-style service for all legal, financial, and documentation needs related to luxury property transactions. From due diligence to registration, we ensure that every step is handled with the highest level of care, confidentiality, and precision—so you can focus on the bigger picture.
+                    </p>
+                    
+                    <p className="text-sm">
+                      Our trusted network of real-estate and legal experts will personally assist you in completing a seamless, end-to-end transaction for a nominal service fee. This service is available for both buyers and sellers—simply drop us a note at <a href="mailto:contact@homehni.com" className="text-blue-600 hover:underline">contact@homehni.com</a> and we will take care of the rest.
+                    </p>
+                    
+                    <p className="font-medium text-sm">We will handle the following on your behalf:</p>
+                    
+                    <ul className="space-y-3 text-sm">
+                      <li className="flex items-start">
+                        <span className="text-gray-600 mr-3 mt-1">•</span>
+                        <span>Conduct detailed legal due diligence on the property</span>
+                      </li>
+                      
+                      <li className="flex items-start">
+                        <span className="text-gray-600 mr-3 mt-1">•</span>
+                        <span>Draft and review the Sale Agreement or Lease Agreement as per legal requirements</span>
+                      </li>
+                      
+                      <li className="flex items-start">
+                        <span className="text-gray-600 mr-3 mt-1">•</span>
+                        <span>Arrange for proper stamping and registration of documents</span>
+                      </li>
+                      
+                      <li className="flex items-start">
+                        <span className="text-gray-600 mr-3 mt-1">•</span>
+                        <span>Coordinate with banks, legal advisors, and relevant authorities for approvals</span>
+                      </li>
+                      
+                      <li className="flex items-start">
+                        <span className="text-gray-600 mr-3 mt-1">•</span>
+                        <span>Schedule and manage appointments with the Sub-Registrar's office or equivalent authorities</span>
+                      </li>
+                      
+                      <li className="flex items-start">
+                        <span className="text-gray-600 mr-3 mt-1">•</span>
+                        <span>Provide full on-site assistance during the signing and registration process</span>
+                      </li>
+                    </ul>
+                    
+                    <p className="text-sm">
+                      In short—we ensure that your property transaction is secure, compliant, and completely hassle-free.
+                    </p>
+                    
+                    <p className="text-sm pb-8">
+                      To initiate your property documentation process in just a few minutes, <a href="/legal-services" className="text-blue-600 hover:underline">click here</a>.
+                    </p>
+                  </div>
                 </>
               )}
 
