@@ -212,12 +212,33 @@ const AboutSidebar = () => {
 
               {active === 'owners' && (
                 <>
-                  <h1 className="text-3xl font-bold text-gray-900 mb-4">Owners</h1>
-                  <hr className="my-4" />
-                  <p className="text-gray-700 mb-4">
-                    List your property with high-quality visibility, lead tracking, and smart marketing.
-                    Our verified processes help you attract serious buyers and tenants faster.
-                  </p>
+                  <h1 className="text-2xl font-bold text-gray-900 mb-6">Why You Should List With Us?</h1>
+                  
+                  <div className="space-y-4 text-gray-700 leading-relaxed">
+                    <p className="text-sm">
+                      Home HNI gives you direct access to serious, verified luxury property buyers—without relying on traditional brokers. This means you stay in complete control of the process, save substantial brokerage fees, and ensure your property is presented to the right audience with the discretion it deserves.
+                    </p>
+                    
+                    <p className="text-sm">
+                      Unlike many traditional agents who may show your property to unqualified buyers or prioritize other listings for higher commissions, we ensure that every enquiry is from a verified HNI buyer who meets your criteria. You can speak directly to potential buyers before arranging a visit, ensuring your time and privacy are respected. For added convenience, we can coordinate viewings on your preferred schedule, so you're only engaging with genuinely interested prospects.
+                    </p>
+                    
+                    <p className="text-sm">
+                      By eliminating brokerage, both seller and buyer save significantly—allowing more flexibility in price negotiations. In fact, our data shows that sellers often achieve 2–4% higher sale values compared to conventional channels, as buyers are more willing to pay a fair price when there's no brokerage on either side. It's a true win-win.
+                    </p>
+                    
+                    <p className="text-sm">
+                      Listing your property with Home HNI is quick and intuitive—it takes less than five minutes. Every listing is personally verified to maintain the exclusivity and quality of our platform. We also use smart, secure technology (including WhatsApp integration) to make the process smooth and effortless. If you ever need assistance, our dedicated relationship managers are just a call away.
+                    </p>
+                    
+                    <p className="text-sm">
+                      Once listed, your property will be showcased to a select, invitation-only network of serious HNI buyers, ensuring you get genuine, high-value enquiries—never random or unsolicited calls.
+                    </p>
+                    
+                    <p className="text-sm pb-8">
+                      If you have a luxury property to list, click on the 'List Your Property' button in the top right corner of the page or email us at <a href="mailto:contact@homehni.com" className="text-blue-600 hover:underline">contact@homehni.com</a> and we'll handle the rest.
+                    </p>
+                  </div>
                 </>
               )}
 
