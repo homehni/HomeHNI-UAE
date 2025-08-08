@@ -114,7 +114,7 @@ const AboutSidebar = () => {
                 <>
                   <h1 className="text-xl font-bold text-gray-900 mb-4">About Us</h1>
                   
-                  <div className="space-y-3 text-gray-700 leading-relaxed text-sm">
+                  <div className="space-y-3 text-gray-700 leading-relaxed text-sm pb-8">
                     <p className="font-medium">Welcome to Home HNI!</p>
                     
                     <p>
