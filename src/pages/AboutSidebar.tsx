@@ -69,6 +69,11 @@ const AboutSidebar = () => {
   }, [active]);
 
   const onNavClick = (id: string) => {
+    if (id === 'blog') {
+      // Redirect to blog page
+      window.location.href = '/blog';
+      return;
+    }
     setActive(id);
     const url = new URL(window.location.href);
     url.searchParams.set('tab', id);
