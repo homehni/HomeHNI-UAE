@@ -82,6 +82,7 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
     { id: 'owner-plans', label: 'Owner Plans', hasSubmenu: false, onClick: () => { navigate('/owner-plans'); onClose(); } },
     { id: 'buyer-plans', label: 'Buyer Plans', hasSubmenu: false, onClick: () => { navigate('/buyer-plans'); onClose(); } },
     { id: 'seller-plans', label: 'Seller Plans', hasSubmenu: false, onClick: () => { navigate('/seller-plans'); onClose(); } },
+    { id: 'about', label: 'About', hasSubmenu: false, onClick: () => { navigate('/about'); onClose(); } },
     {
   id: 'commercial-plans',
   label: 'Commercial Plans',

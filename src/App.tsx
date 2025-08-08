@@ -53,6 +53,7 @@ import ScrollToTop from "./components/ScrollToTop";
 import Architecture from "./pages/Architecture";
 import Interior from "./pages/Interior";
 import Loans from "./pages/Loans";
+import AboutSidebar from "./pages/AboutSidebar";
 
 const App: React.FC = () => {
   const [queryClient] = useState(() => new QueryClient({
@@ -75,6 +76,7 @@ const App: React.FC = () => {
             <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/about-us" element={<AboutUs />} />
+            <Route path="/about" element={<AboutSidebar />} />
             <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route path="/careers" element={<Careers />} />
