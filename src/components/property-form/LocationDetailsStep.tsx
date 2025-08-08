@@ -7,7 +7,8 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { LocationDetails } from '@/types/property';
-import { ArrowLeft, ArrowRight } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Home } from 'lucide-react';
+import { RentalSidebar } from './RentalSidebar';
 
 const locationDetailsSchema = z.object({
   state: z.string().min(1, 'Please select state'),
@@ -90,122 +91,145 @@ export const LocationDetailsStep: React.FC<LocationDetailsStepProps> = ({
   };
 
   const stateNames = Object.keys(statesData);
+  const progressPercentage = Math.round((currentStep / totalSteps) * 100);
 
   return (
-    <div className="ml-80 p-6 space-y-8">
+    <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="text-center">
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">Location Details</h2>
-        <p className="text-gray-600">Tell us where your property is located</p>
+      <div className="bg-white border-b border-gray-200 px-6 py-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-2">
+            <Home className="h-6 w-6 text-primary" />
+            <span className="text-lg font-semibold">PropertyHub</span>
+          </div>
+          <div className="flex items-center space-x-4">
+            <span className="text-sm text-gray-600">{progressPercentage}% Done</span>
+            <Button variant="outline" size="sm">Preview</Button>
+          </div>
+        </div>
       </div>
 
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-          {/* State and City */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <FormField
-              control={form.control}
-              name="state"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-sm font-medium">State*</FormLabel>
-                  <Select onValueChange={handleStateChange} defaultValue={field.value}>
-                    <FormControl>
-                      <SelectTrigger className="h-12">
-                        <SelectValue placeholder="Select State" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {stateNames.map((state) => (
-                        <SelectItem key={state} value={state}>
-                          {state}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+      <div className="flex">
+        {/* Sidebar */}
+        <RentalSidebar currentStep={currentStep} />
 
-            <FormField
-              control={form.control}
-              name="city"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-sm font-medium">City*</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <FormControl>
-                      <SelectTrigger className="h-12">
-                        <SelectValue placeholder="Select City" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {cities.map((city) => (
-                        <SelectItem key={city} value={city}>
-                          {city}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
+        {/* Main Content */}
+        <div className="flex-1 p-6">
+          <div className="max-w-4xl mx-auto">
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
+              <h1 className="text-2xl font-semibold text-primary mb-6">Location Details</h1>
 
-          {/* Locality/Area and Landmark */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <FormField
-              control={form.control}
-              name="locality"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-sm font-medium">Locality/Area*</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="e.g., Sector 12, Koramangala"
-                      className="h-12"
-                      {...field}
+              <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                  {/* State and City */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <FormField
+                      control={form.control}
+                      name="state"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="text-sm font-medium">State*</FormLabel>
+                          <Select onValueChange={handleStateChange} defaultValue={field.value}>
+                            <FormControl>
+                              <SelectTrigger className="h-12">
+                                <SelectValue placeholder="Select State" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              {stateNames.map((state) => (
+                                <SelectItem key={state} value={state}>
+                                  {state}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
                     />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
 
-            <FormField
-              control={form.control}
-              name="landmark"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-sm font-medium">Landmark (Optional)</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="e.g., Near Metro Station"
-                      className="h-12"
-                      {...field}
+                    <FormField
+                      control={form.control}
+                      name="city"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="text-sm font-medium">City*</FormLabel>
+                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <FormControl>
+                              <SelectTrigger className="h-12">
+                                <SelectValue placeholder="Select City" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              {cities.map((city) => (
+                                <SelectItem key={city} value={city}>
+                                  {city}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
                     />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
+                  </div>
 
-          {/* Navigation Buttons */}
-          <div className="flex justify-between pt-6">
-            <Button type="button" variant="outline" onClick={onBack} className="h-12 px-8">
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Back
-            </Button>
-            <Button type="submit" className="h-12 px-8">
-              Save & Continue
-              <ArrowRight className="h-4 w-4 ml-2" />
-            </Button>
+                  {/* Locality/Area and Landmark */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <FormField
+                      control={form.control}
+                      name="locality"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="text-sm font-medium">Locality/Area*</FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder="e.g., Sector 12, Koramangala"
+                              className="h-12"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="landmark"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="text-sm font-medium">Landmark (Optional)</FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder="e.g., Near Metro Station"
+                              className="h-12"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+
+                  {/* Navigation Buttons */}
+                  <div className="flex justify-between pt-6">
+                    <Button type="button" variant="outline" onClick={onBack} className="h-12 px-8">
+                      <ArrowLeft className="h-4 w-4 mr-2" />
+                      Back
+                    </Button>
+                    <Button type="submit" className="h-12 px-8">
+                      Save & Continue
+                      <ArrowRight className="h-4 w-4 ml-2" />
+                    </Button>
+                  </div>
+                </form>
+              </Form>
+            </div>
           </div>
-        </form>
-      </Form>
+        </div>
+      </div>
     </div>
   );
 };
