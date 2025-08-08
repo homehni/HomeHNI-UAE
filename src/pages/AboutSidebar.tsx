@@ -305,12 +305,25 @@ const AboutSidebar = () => {
 
               {active === 'team' && (
                 <>
-                  <h1 className="text-3xl font-bold text-gray-900 mb-4">Team</h1>
-                  <hr className="my-4" />
-                  <p className="text-gray-700 mb-4">
-                    Our multidisciplinary team brings deep experience in real estate, legal, and technology –
-                    all focused on improving your experience.
-                  </p>
+                  <h1 className="text-2xl font-bold text-gray-900 mb-6">The Home HNI Team</h1>
+                  
+                  <div className="space-y-4 text-gray-700 leading-relaxed">
+                    <p className="text-sm">
+                      Home HNI was founded by a team of seasoned professionals from top-tier institutions and industries—bringing together expertise in luxury real estate, technology, finance, and client relationship management.
+                    </p>
+                    
+                    <p className="text-sm">
+                      The idea for Home HNI was born out of our own experiences in high-value property transactions, where we faced unnecessary gatekeeping, lack of transparency, and middlemen charging disproportionate fees without adding real value. We saw how even in the luxury segment, deals could be slow, unorganized, and frustrating—especially when accurate information wasn't readily available.
+                    </p>
+                    
+                    <p className="text-sm">
+                      When we spoke to fellow high-net-worth individuals, we realized this wasn't just our problem—it was a recurring pain point for nearly everyone in the market. And while other real estate portals catered to the mass market or focused on helping brokers operate more efficiently, no one was truly addressing the specific needs of HNI buyers and sellers: privacy, trust, exclusivity, and efficiency.
+                    </p>
+                    
+                    <p className="text-sm pb-8">
+                      As the saying goes, necessity is the mother of invention. Home HNI is our answer—a premium, invitation-only platform that removes unnecessary intermediaries and brings absolute transparency to luxury real estate. Our vision is to create a fully efficient, information-rich marketplace where high-value property deals happen seamlessly, securely, and directly between the right people.
+                    </p>
+                  </div>
                 </>
               )}
 
