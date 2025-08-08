@@ -58,7 +58,7 @@ const SearchSection = () => {
         return;
       }
       const script = document.createElement('script');
-      script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places`;
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&region=IN&language=en-IN`;
       script.async = true;
       script.defer = true;
       script.setAttribute('data-gmaps', 'true');
@@ -72,6 +72,7 @@ const SearchSection = () => {
       const autocomplete = new (window as any).google.maps.places.Autocomplete(inputRef.current, {
         fields: ['formatted_address', 'geometry', 'name'],
         types: ['geocode'],
+        componentRestrictions: { country: 'in' },
       });
       autocomplete.addListener('place_changed', () => {
         const place = autocomplete.getPlace();
