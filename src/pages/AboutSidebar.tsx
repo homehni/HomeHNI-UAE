@@ -57,23 +57,6 @@ const AboutSidebar = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
-  // Sync active section with URL hash
-  useEffect(() => {
-    const applyHash = () => {
-      const hash = window.location.hash.replace('#', '');
-      if (hash && sections.some((s) => s.id === hash)) {
-        setActive(hash);
-      }
-    };
-
-    // Apply on load
-    applyHash();
-
-    // Listen to back/forward navigation
-    window.addEventListener('hashchange', applyHash);
-    return () => window.removeEventListener('hashchange', applyHash);
-  }, []);
-
   // Show only the selected section; scroll to top when it changes
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -133,21 +116,37 @@ const AboutSidebar = () => {
                   
                   <div className="space-y-4 text-gray-700 leading-relaxed">
                     <p className="text-lg font-medium">Welcome to Home HNI!</p>
-
-Home HNI is a premium real-estate platform designed exclusively for High Net-Worth Individuals (HNIs) to discover, buy, and sell luxury properties with complete privacy, trust, and transparency.
-
-We started Home HNI because we believe that buying or selling high-value real estate should be seamless, discreet, and free from the hassles of traditional property hunting. In today’s market, most luxury transactions still depend heavily on scattered contacts, unverified leads, and middlemen who often add unnecessary delays and costs. We are here to change that by providing a secure, invitation-only platform where verified buyers and sellers can connect directly.
-
-We have done two things to help you find or sell your perfect luxury home:
-
-Firstly, we verify every single property and member on our platform to ensure that listings are genuine, exclusive, and relevant. Our multi-step verification process ensures you’re connecting with serious, qualified parties only—no fake listings, no cold leads.
-
-Secondly, we present each property with rich, in-depth details, high-quality visuals, and precise location insights so you can evaluate it thoroughly before making a visit. Whether it’s a sea-facing penthouse in Mumbai, a heritage estate in Goa, or a designer villa in Delhi, you’ll have all the information you need to shortlist the right properties from the comfort of your home.
-
-If you’re an HNI property owner looking to list your luxury home on Home HNI, please email us at [your email] and our team will personally assist you in creating an exclusive listing.
-
-And to our buyers—happy exploring, and let us know how we can make your luxury home search even smoother!
-                  </p>
+                    
+                    <p>
+                      Home HNI is a premium real-estate platform designed exclusively for High Net-Worth Individuals (HNIs) to discover, buy, and sell luxury properties with complete privacy, trust, and transparency.
+                    </p>
+                    
+                    <p>
+                      We started Home HNI because we believe that buying or selling high-value real estate should be seamless, discreet, and free from the hassles of traditional property hunting. In today's market, most luxury transactions still depend heavily on scattered contacts, unverified leads, and middlemen who often add unnecessary delays and costs. We are here to change that by providing a secure, invitation-only platform where verified buyers and sellers can connect directly.
+                    </p>
+                    
+                    <p className="font-medium">We have done two things to help you find or sell your perfect luxury home:</p>
+                    
+                    <ul className="space-y-3 ml-4">
+                      <li className="flex items-start">
+                        <span className="text-primary font-bold mr-2">•</span>
+                        <span><strong>Firstly,</strong> we verify every single property and member on our platform to ensure that listings are genuine, exclusive, and relevant. Our multi-step verification process ensures you're connecting with serious, qualified parties only—no fake listings, no cold leads.</span>
+                      </li>
+                      
+                      <li className="flex items-start">
+                        <span className="text-primary font-bold mr-2">•</span>
+                        <span><strong>Secondly,</strong> we present each property with rich, in-depth details, high-quality visuals, and precise location insights so you can evaluate it thoroughly before making a visit. Whether it's a sea-facing penthouse in Mumbai, a heritage estate in Goa, or a designer villa in Delhi, you'll have all the information you need to shortlist the right properties from the comfort of your home.</span>
+                      </li>
+                    </ul>
+                    
+                    <p>
+                      If you're an HNI property owner looking to list your luxury home on Home HNI, please email us at <a href="mailto:contact@homehni.com" className="text-primary hover:underline">contact@homehni.com</a> and our team will personally assist you in creating an exclusive listing.
+                    </p>
+                    
+                    <p>
+                      And to our buyers—happy exploring, and let us know how we can make your luxury home search even smoother!
+                    </p>
+                  </div>
                 </>
               )}
 
