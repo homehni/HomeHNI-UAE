@@ -50,31 +50,13 @@ const AboutSidebar = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
-  // Observe section visibility to highlight current item
+  // Show only the selected section; scroll to top when it changes
   useEffect(() => {
-    sections.forEach(({ id }) => {
-      const el = document.getElementById(id);
-      if (!el) return;
-      const obs = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) setActive(id);
-          });
-        },
-        { rootMargin: '-40% 0px -50% 0px', threshold: [0.2, 0.5, 0.8] }
-      );
-      obs.observe(el);
-      observers.current[id] = obs;
-    });
-    return () => {
-      Object.values(observers.current).forEach((o) => o?.disconnect());
-      observers.current = {};
-    };
-  }, []);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [active]);
 
   const onNavClick = (id: string) => {
-    const el = document.getElementById(id);
-    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    setActive(id);
   };
 
   const NavItem = useMemo(
@@ -117,80 +99,105 @@ const AboutSidebar = () => {
 
             {/* Content */}
             <section className="md:col-span-9 lg:col-span-9 border rounded-md p-6">
-              <h1 id="about" className="text-3xl font-bold text-gray-900 mb-4">
-                About Us
-              </h1>
-              <p className="text-gray-700 leading-relaxed mb-6">
-                Welcome to HomeHNI – a trusted real estate platform focused on transparency, verified
-                listings, and a zero-brokerage approach for many of our services. Our goal is to remove
-                information asymmetry and empower owners, buyers, and tenants with smart tools.
-              </p>
+              {active === 'about' && (
+                <>
+                  <h1 className="text-3xl font-bold text-gray-900 mb-4">About Us</h1>
+                  <hr className="my-4" />
+                  <p className="text-gray-700 leading-relaxed mb-6">
+                    Welcome to HomeHNI – a trusted real estate platform focused on transparency, verified
+                    listings, and a zero-brokerage approach for many of our services. Our goal is to remove
+                    information asymmetry and empower owners, buyers, and tenants with smart tools.
+                  </p>
+                </>
+              )}
 
-              <hr className="my-8" />
+              {active === 'services' && (
+                <>
+                  <h1 className="text-3xl font-bold text-gray-900 mb-4">Additional Services</h1>
+                  <hr className="my-4" />
+                  <p className="text-gray-700 mb-4">
+                    Explore handpicked services including Legal Assistance, Property Management, Handover
+                    Services, Loans, Architecture and Interior Design. Each service is delivered by vetted
+                    partners with clear pricing and SLAs.
+                  </p>
+                </>
+              )}
 
-              <article id="services" className="scroll-mt-24">
-                <h2 className="text-2xl font-semibold text-gray-900 mb-3">Additional Services</h2>
-                <p className="text-gray-700 mb-4">
-                  Explore handpicked services including Legal Assistance, Property Management, Handover
-                  Services, Loans, Architecture and Interior Design. Each service is delivered by vetted
-                  partners with clear pricing and SLAs.
-                </p>
-              </article>
+              {active === 'owners' && (
+                <>
+                  <h1 className="text-3xl font-bold text-gray-900 mb-4">Owners</h1>
+                  <hr className="my-4" />
+                  <p className="text-gray-700 mb-4">
+                    List your property with high-quality visibility, lead tracking, and smart marketing.
+                    Our verified processes help you attract serious buyers and tenants faster.
+                  </p>
+                </>
+              )}
 
-              <article id="owners" className="scroll-mt-24 mt-10">
-                <h2 className="text-2xl font-semibold text-gray-900 mb-3">Owners</h2>
-                <p className="text-gray-700 mb-4">
-                  List your property with high-quality visibility, lead tracking, and smart marketing.
-                  Our verified processes help you attract serious buyers and tenants faster.
-                </p>
-              </article>
+              {active === 'whatsapp' && (
+                <>
+                  <h1 className="text-3xl font-bold text-gray-900 mb-4">Listing Using WhatsApp</h1>
+                  <hr className="my-4" />
+                  <p className="text-gray-700 mb-4">
+                    Share property details and photos directly on WhatsApp; our team will structure and
+                    publish the listing for you after verification.
+                  </p>
+                </>
+              )}
 
-              <article id="whatsapp" className="scroll-mt-24 mt-10">
-                <h2 className="text-2xl font-semibold text-gray-900 mb-3">Listing Using WhatsApp</h2>
-                <p className="text-gray-700 mb-4">
-                  Share property details and photos directly on WhatsApp; our team will structure and
-                  publish the listing for you after verification.
-                </p>
-              </article>
+              {active === 'tenants' && (
+                <>
+                  <h1 className="text-3xl font-bold text-gray-900 mb-4">Tenants</h1>
+                  <hr className="my-4" />
+                  <p className="text-gray-700 mb-4">
+                    Get curated options based on budget and locality preferences. Virtual tours and
+                    detailed property insights save you time and site visits.
+                  </p>
+                </>
+              )}
 
-              <article id="tenants" className="scroll-mt-24 mt-10">
-                <h2 className="text-2xl font-semibold text-gray-900 mb-3">Tenants</h2>
-                <p className="text-gray-700 mb-4">
-                  Get curated options based on budget and locality preferences. Virtual tours and
-                  detailed property insights save you time and site visits.
-                </p>
-              </article>
+              {active === 'team' && (
+                <>
+                  <h1 className="text-3xl font-bold text-gray-900 mb-4">Team</h1>
+                  <hr className="my-4" />
+                  <p className="text-gray-700 mb-4">
+                    Our multidisciplinary team brings deep experience in real estate, legal, and technology –
+                    all focused on improving your experience.
+                  </p>
+                </>
+              )}
 
-              <article id="team" className="scroll-mt-24 mt-10">
-                <h2 className="text-2xl font-semibold text-gray-900 mb-3">Team</h2>
-                <p className="text-gray-700 mb-4">
-                  Our multidisciplinary team brings deep experience in real estate, legal, and technology –
-                  all focused on improving your experience.
-                </p>
-              </article>
+              {active === 'faq' && (
+                <>
+                  <h1 className="text-3xl font-bold text-gray-900 mb-4">FAQ</h1>
+                  <hr className="my-4" />
+                  <p className="text-gray-700 mb-4">
+                    Have questions? Visit our FAQ page for quick answers on listing, verification,
+                    payments, and safety.
+                  </p>
+                </>
+              )}
 
-              <article id="faq" className="scroll-mt-24 mt-10">
-                <h2 className="text-2xl font-semibold text-gray-900 mb-3">FAQ</h2>
-                <p className="text-gray-700 mb-4">
-                  Have questions? Visit our FAQ page for quick answers on listing, verification,
-                  payments, and safety.
-                </p>
-              </article>
+              {active === 'blog' && (
+                <>
+                  <h1 className="text-3xl font-bold text-gray-900 mb-4">Our Blog</h1>
+                  <hr className="my-4" />
+                  <p className="text-gray-700 mb-4">
+                    Insights, market trends, and homeowner tips to help you make informed decisions.
+                  </p>
+                </>
+              )}
 
-              <article id="blog" className="scroll-mt-24 mt-10">
-                <h2 className="text-2xl font-semibold text-gray-900 mb-3">Our Blog</h2>
-                <p className="text-gray-700 mb-4">
-                  Insights, market trends, and homeowner tips to help you make informed decisions.
-                </p>
-              </article>
-
-              <article id="contact" className="scroll-mt-24 mt-10">
-                <h2 className="text-2xl font-semibold text-gray-900 mb-3">Contact Us</h2>
-                <p className="text-gray-700 mb-4">
-                  Need help? Reach out via our Contact page – we typically respond within one business
-                  day.
-                </p>
-              </article>
+              {active === 'contact' && (
+                <>
+                  <h1 className="text-3xl font-bold text-gray-900 mb-4">Contact Us</h1>
+                  <hr className="my-4" />
+                  <p className="text-gray-700 mb-4">
+                    Need help? Reach out via our Contact page – we typically respond within one business
+                    day.
+                  </p>
+                </>
+              )}
             </section>
           </div>
         </div>
