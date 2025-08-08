@@ -268,12 +268,38 @@ const AboutSidebar = () => {
 
               {active === 'tenants' && (
                 <>
-                  <h1 className="text-3xl font-bold text-gray-900 mb-4">Tenants</h1>
-                  <hr className="my-4" />
-                  <p className="text-gray-700 mb-4">
-                    Get curated options based on budget and locality preferences. Virtual tours and
-                    detailed property insights save you time and site visits.
-                  </p>
+                  <h1 className="text-2xl font-bold text-gray-900 mb-6">Benefits of Home HNI</h1>
+                  
+                  <div className="space-y-4 text-gray-700 leading-relaxed">
+                    <p className="text-sm">
+                      Home HNI is the most effortless, secure, and discreet way to buy or sell luxury properties—without middlemen, inflated commissions, or wasted time.
+                    </p>
+                    
+                    <p className="text-sm">
+                      We help you in three powerful ways:
+                    </p>
+                    
+                    <div className="space-y-4 text-sm">
+                      <div>
+                        <p className="font-medium mb-2">1. Verified, Direct Listings</p>
+                        <p>Every property on Home HNI is verified and listed directly by the owner or an authorized representative. This ensures complete transparency, authenticity, and zero hidden brokerage. For sellers, this means retaining the full value of your sale; for buyers, it means your budget goes entirely into your new property, not into agent fees.</p>
+                      </div>
+                      
+                      <div>
+                        <p className="font-medium mb-2">2. Complete, Curated Information</p>
+                        <p>Our listings go far beyond basic details. We provide high-quality images, in-depth property descriptions, and comprehensive insights into the location—such as nearby amenities, infrastructure, and lifestyle attractions. This allows you to shortlist properties without unnecessary site visits, saving you significant time and effort. Unlike traditional agents who might show you unsuitable options just to push a deal, Home HNI ensures every property you see matches your preferences.</p>
+                      </div>
+                      
+                      <div>
+                        <p className="font-medium mb-2">3. Full Market Transparency</p>
+                        <p>In traditional real estate, information is often withheld or selectively shared to control which properties sell first. At Home HNI, every verified listing is visible to you from the moment it's available—on a first-come, first-serve basis. There's no gatekeeping, no information asymmetry, and no manipulation of options—just a transparent, efficient marketplace.</p>
+                      </div>
+                    </div>
+                    
+                    <p className="text-sm pb-8">
+                      So, skip the traditional broker and experience the smarter way to buy or sell luxury property with Home HNI. <a href="#" className="text-blue-600 hover:underline">Click here</a> to explore our exclusive listings.
+                    </p>
+                  </div>
                 </>
               )}
 
