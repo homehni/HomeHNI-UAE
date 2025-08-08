@@ -147,7 +147,7 @@ const SearchSection = () => {
                       
                       <div className="flex-1 relative">
                          <MapPin className="absolute left-3 top-3 text-brand-red" size={20} />
-                         <Input ref={inputRef} placeholder="Search 'Noida'" className="pl-10 h-12 border-brand-red text-brand-red placeholder-brand-red/60" defaultValue="Noida" />
+                         <Input ref={inputRef} placeholder="Search 'Noida'" className="pl-10 h-12 border-brand-red text-brand-red placeholder-brand-red/60" />
                          <div className="absolute right-3 top-3 flex gap-2">
                           <button className="p-1 hover:bg-brand-red/10 rounded">
                             
