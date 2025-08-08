@@ -11,6 +11,7 @@ export { PreviewStep } from './PreviewStep';
 export { ProgressIndicator } from './ProgressIndicator';
 export { ImageUpload } from './ImageUpload';
 export { VideoUpload } from './VideoUpload';
+export { RentalSidebar } from './RentalSidebar';
 export { PGHostelMultiStepForm } from './PGHostelMultiStepForm';
 export { PgHostelSidebar } from './PgHostelSidebar';
 export { PgHostelOwnerInfoStep } from './PgHostelOwnerInfoStep';

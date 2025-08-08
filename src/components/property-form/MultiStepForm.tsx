@@ -9,6 +9,7 @@ import { GalleryStep } from './GalleryStep';
 import { AdditionalInfoStep } from './AdditionalInfoStep';
 import { ScheduleStep } from './ScheduleStep';
 import { PreviewStep } from './PreviewStep';
+import { RentalSidebar } from './RentalSidebar';
 
 import { OwnerInfo, PropertyInfo } from '@/types/property';
 import { Badge } from '@/components/ui/badge';
@@ -170,95 +171,104 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
         />
       </div>
 
-      {/* Form Content in Card Layout */}
-      <div className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden animate-scale-in">
-        {currentStep === 1 && (
-          <div className="p-6 md:p-8">
-            <PropertyDetailsStep
-              initialData={propertyDetails}
-              onNext={handlePropertyDetailsNext}
-              onBack={() => {}} // No back on first step
-              currentStep={currentStep}
-              totalSteps={8}
-            />
-          </div>
-        )}
+      {/* Two-column layout with sidebar and form content */}
+      <div className="flex bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden animate-scale-in">
+        {/* Left Sidebar */}
+        <RentalSidebar
+          currentStep={currentStep}
+          completedSteps={completedSteps}
+        />
 
-        {currentStep === 2 && (
-          <div className="p-6 md:p-8">
-            <LocationDetailsStep
-              initialData={locationDetails}
-              onNext={handleLocationDetailsNext}
-              onBack={prevStep}
-              currentStep={currentStep}
-              totalSteps={8}
-            />
-          </div>
-        )}
+        {/* Main Content Area */}
+        <div className="flex-1">
+          {currentStep === 1 && (
+            <div className="p-6 md:p-8">
+              <PropertyDetailsStep
+                initialData={propertyDetails}
+                onNext={handlePropertyDetailsNext}
+                onBack={() => {}} // No back on first step
+                currentStep={currentStep}
+                totalSteps={8}
+              />
+            </div>
+          )}
 
-        {currentStep === 3 && (
-          <div className="p-6 md:p-8">
-            <RentalDetailsStep
-              initialData={rentalDetails}
-              onNext={handleRentalDetailsNext}
-              onBack={prevStep}
-              currentStep={currentStep}
-              totalSteps={8}
-            />
-          </div>
-        )}
+          {currentStep === 2 && (
+            <div className="p-6 md:p-8">
+              <LocationDetailsStep
+                initialData={locationDetails}
+                onNext={handleLocationDetailsNext}
+                onBack={prevStep}
+                currentStep={currentStep}
+                totalSteps={8}
+              />
+            </div>
+          )}
 
-        {currentStep === 4 && (
-          <div className="p-6 md:p-8">
-            <AmenitiesStep
-              initialData={amenities}
-              onNext={handleAmenitiesNext}
-              onBack={prevStep}
-            />
-          </div>
-        )}
+          {currentStep === 3 && (
+            <div className="p-6 md:p-8">
+              <RentalDetailsStep
+                initialData={rentalDetails}
+                onNext={handleRentalDetailsNext}
+                onBack={prevStep}
+                currentStep={currentStep}
+                totalSteps={8}
+              />
+            </div>
+          )}
 
-        {currentStep === 5 && (
-          <div className="p-6 md:p-8">
-            <GalleryStep
-              initialData={gallery}
-              onNext={handleGalleryNext}
-              onBack={prevStep}
-            />
-          </div>
-        )}
+          {currentStep === 4 && (
+            <div className="p-6 md:p-8">
+              <AmenitiesStep
+                initialData={amenities}
+                onNext={handleAmenitiesNext}
+                onBack={prevStep}
+              />
+            </div>
+          )}
 
-        {currentStep === 6 && (
-          <div className="p-6 md:p-8">
-            <AdditionalInfoStep
-              initialData={additionalInfo}
-              onNext={handleAdditionalInfoNext}
-              onBack={prevStep}
-            />
-          </div>
-        )}
+          {currentStep === 5 && (
+            <div className="p-6 md:p-8">
+              <GalleryStep
+                initialData={gallery}
+                onNext={handleGalleryNext}
+                onBack={prevStep}
+              />
+            </div>
+          )}
 
-        {currentStep === 7 && (
-          <div className="p-6 md:p-8">
-            <ScheduleStep
-              initialData={scheduleInfo}
-              onNext={handleScheduleNext}
-              onBack={prevStep}
-            />
-          </div>
-        )}
+          {currentStep === 6 && (
+            <div className="p-6 md:p-8">
+              <AdditionalInfoStep
+                initialData={additionalInfo}
+                onNext={handleAdditionalInfoNext}
+                onBack={prevStep}
+              />
+            </div>
+          )}
 
-        {currentStep === 8 && (
-          <div className="p-6 md:p-8">
-            <PreviewStep
-              formData={getFormData()}
-              onBack={prevStep}
-              onEdit={goToStep}
-              onSubmit={handleSubmit}
-              isSubmitting={isSubmitting}
-            />
-          </div>
-        )}
+          {currentStep === 7 && (
+            <div className="p-6 md:p-8">
+              <ScheduleStep
+                initialData={scheduleInfo}
+                onNext={handleScheduleNext}
+                onBack={prevStep}
+              />
+            </div>
+          )}
+
+          {currentStep === 8 && (
+            <div className="p-6 md:p-8">
+              <PreviewStep
+                formData={getFormData()}
+                onBack={prevStep}
+                onEdit={goToStep}
+                onSubmit={handleSubmit}
+                isSubmitting={isSubmitting}
+              />
+            </div>
+          )}
+        </div>
       </div>
 
     </div>
