@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
@@ -7,6 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 const SearchSection = () => {
   const [activeTab, setActiveTab] = useState('buy');
   const [selectedCity, setSelectedCity] = useState('All Residential');
+  const inputRef = useRef<HTMLInputElement>(null);
   
   const cities = [
     'All Residential',
@@ -43,6 +44,45 @@ const SearchSection = () => {
     id: 'projects',
     label: 'Projects'
   }];
+  useEffect(() => {
+    const apiKey = 'AIzaSyD2rlXeHN4cm0CQD-y4YGTsob9a_27YcwY';
+
+    const loadGoogleMaps = () => new Promise<void>((resolve, reject) => {
+      if ((window as any).google?.maps?.places) {
+        resolve();
+        return;
+      }
+      const existing = document.querySelector('script[data-gmaps]') as HTMLScriptElement | null;
+      if (existing) {
+        existing.addEventListener('load', () => resolve());
+        return;
+      }
+      const script = document.createElement('script');
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places`;
+      script.async = true;
+      script.defer = true;
+      script.setAttribute('data-gmaps', 'true');
+      script.onload = () => resolve();
+      script.onerror = () => reject(new Error('Google Maps failed to load'));
+      document.head.appendChild(script);
+    });
+
+    const initAutocomplete = () => {
+      if (!inputRef.current || !(window as any).google?.maps?.places) return;
+      const autocomplete = new (window as any).google.maps.places.Autocomplete(inputRef.current, {
+        fields: ['formatted_address', 'geometry', 'name'],
+        types: ['geocode'],
+      });
+      autocomplete.addListener('place_changed', () => {
+        const place = autocomplete.getPlace();
+        const value = place?.formatted_address || place?.name || '';
+        if (inputRef.current && value) inputRef.current.value = value;
+      });
+    };
+
+    loadGoogleMaps().then(initAutocomplete).catch(console.error);
+  }, []);
+
   return <section className="relative">
       {/* Hero Image Background - extends to cover marquee area */}
       <div className="relative h-[50vh] sm:h-[60vh] bg-cover bg-no-repeat -mt-[70px] pt-[40px]" style={{
@@ -106,9 +146,9 @@ const SearchSection = () => {
                       </Popover>
                       
                       <div className="flex-1 relative">
-                        <MapPin className="absolute left-3 top-3 text-brand-red" size={20} />
-                        <Input placeholder="Search 'Noida'" className="pl-10 h-12 border-brand-red text-brand-red placeholder-brand-red/60" defaultValue="Noida" />
-                        <div className="absolute right-3 top-3 flex gap-2">
+                         <MapPin className="absolute left-3 top-3 text-brand-red" size={20} />
+                         <Input ref={inputRef} placeholder="Search 'Noida'" className="pl-10 h-12 border-brand-red text-brand-red placeholder-brand-red/60" defaultValue="Noida" />
+                         <div className="absolute right-3 top-3 flex gap-2">
                           <button className="p-1 hover:bg-brand-red/10 rounded">
                             
                           </button>
