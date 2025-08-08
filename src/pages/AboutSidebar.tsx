@@ -50,6 +50,23 @@ const AboutSidebar = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
+  // Sync active section with URL hash
+  useEffect(() => {
+    const applyHash = () => {
+      const hash = window.location.hash.replace('#', '');
+      if (hash && sections.some((s) => s.id === hash)) {
+        setActive(hash);
+      }
+    };
+
+    // Apply on load
+    applyHash();
+
+    // Listen to back/forward navigation
+    window.addEventListener('hashchange', applyHash);
+    return () => window.removeEventListener('hashchange', applyHash);
+  }, []);
+
   // Show only the selected section; scroll to top when it changes
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -57,6 +74,8 @@ const AboutSidebar = () => {
 
   const onNavClick = (id: string) => {
     setActive(id);
+    const newUrl = `${window.location.pathname}#${id}`;
+    window.history.pushState(null, '', newUrl);
   };
 
   const NavItem = useMemo(
