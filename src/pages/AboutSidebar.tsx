@@ -77,10 +77,10 @@ const AboutSidebar = () => {
         return (
           <button
             onClick={() => onNavClick(id)}
-            className={`w-full text-left px-4 py-2 rounded-md transition-colors text-sm ${
+            className={`w-full text-left px-3 py-2 transition-colors text-sm ${
               isActive
-                ? 'bg-gray-200 text-gray-900'
-                : 'hover:bg-gray-100 text-gray-700'
+                ? 'text-blue-600 font-medium'
+                : 'text-gray-700 hover:text-blue-600'
             }`}
             aria-current={isActive ? 'page' : undefined}
           >
@@ -98,9 +98,9 @@ const AboutSidebar = () => {
 
       <main className="pt-8">
         <div className="container mx-auto px-4 pt-16 pb-10">
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-6 mt-6">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 mt-6">
             {/* Sidebar */}
-            <aside className="md:col-span-3 lg:col-span-3 border rounded-md p-3 sticky top-28 h-fit bg-white">
+            <aside className="md:col-span-3 lg:col-span-2">
               <nav aria-label="About page sections" className="space-y-1">
                 {sections.map((s) => (
                   <NavItem key={s.id} id={s.id} label={s.label} />
@@ -109,41 +109,41 @@ const AboutSidebar = () => {
             </aside>
 
             {/* Content */}
-            <section className="md:col-span-9 lg:col-span-9 border rounded-md p-6">
+            <section className="md:col-span-9 lg:col-span-10 max-w-4xl">
               {active === 'about' && (
                 <>
-                  <h1 className="text-xl font-bold text-gray-900 mb-4">About Us</h1>
+                  <h1 className="text-2xl font-bold text-gray-900 mb-6">About Us</h1>
                   
-                  <div className="space-y-3 text-gray-700 leading-relaxed text-sm pb-8">
-                    <p className="font-medium">Welcome to Home HNI!</p>
+                  <div className="space-y-4 text-gray-700 leading-relaxed">
+                    <p className="font-medium text-base">Welcome to Home HNI!</p>
                     
-                    <p>
+                    <p className="text-sm">
                       Home HNI is a premium real-estate platform designed exclusively for High Net-Worth Individuals (HNIs) to discover, buy, and sell luxury properties with complete privacy, trust, and transparency.
                     </p>
                     
-                    <p>
+                    <p className="text-sm">
                       We started Home HNI because we believe that buying or selling high-value real estate should be seamless, discreet, and free from the hassles of traditional property hunting. In today's market, most luxury transactions still depend heavily on scattered contacts, unverified leads, and middlemen who often add unnecessary delays and costs. We are here to change that by providing a secure, invitation-only platform where verified buyers and sellers can connect directly.
                     </p>
                     
-                    <p className="font-medium">We have done 2 things to help you find that perfect home:</p>
+                    <p className="font-medium text-sm">We have done 2 things to help you find that perfect home:</p>
                     
-                    <ul className="space-y-2 ml-4">
+                    <ul className="space-y-3 text-sm">
                       <li className="flex items-start">
-                        <span className="text-gray-600 mr-2">•</span>
+                        <span className="text-gray-600 mr-3 mt-1">•</span>
                         <span><strong>Firstly,</strong> we have painstakingly verified each listing and made sure that these are direct owners or shared accommodation parties and there are no middlemen or brokers. We use lot of heuristics and techniques to ensure that you get a totally broker free list.</span>
                       </li>
                       
                       <li className="flex items-start">
-                        <span className="text-gray-600 mr-2">•</span>
+                        <span className="text-gray-600 mr-3 mt-1">•</span>
                         <span><strong>Secondly,</strong> we have also tried to ensure that maximum information is available to you in as easy to use format. This ensures that you get a very good idea of the property even before you visit it. Thus, you can shortlist flats sitting at the comfort of your home without actually traveling all the good and bad properties. This saves your time and effort and with a quick shortlist of 4-5 properties you can actually get a house in few hours!</span>
                       </li>
                     </ul>
                     
-                    <p>
-                      If you are a landlord interested in posting your apartments to Home HNI, please email us at <a href="mailto:contact@homehni.com" className="text-primary hover:underline">contact@homehni.com</a> and we will get in touch to help you list the property.
+                    <p className="text-sm">
+                      If you are a landlord interested in posting your apartments to Home HNI, please email us at <a href="mailto:contact@homehni.com" className="text-blue-600 hover:underline">contact@homehni.com</a> and we will get in touch to help you list the property.
                     </p>
                     
-                    <p>
+                    <p className="text-sm pb-8">
                       And tenants, happy hunting and get in touch with us to let us know how else we can help!
                     </p>
                   </div>
