@@ -90,7 +90,7 @@ const AboutSidebar = () => {
             onClick={() => onNavClick(id)}
             className={`w-full text-left px-3 py-2 mb-1 rounded-md transition-colors text-sm ${
               isActive
-                ? 'bg-gray-800 text-white font-medium'
+                ? 'bg-secondary text-secondary-foreground font-medium shadow-sm'
                 : 'text-gray-700 hover:bg-gray-200 hover:text-gray-900'
             }`}
             aria-current={isActive ? 'page' : undefined}
@@ -110,10 +110,10 @@ const AboutSidebar = () => {
       <main className="pt-24">
         <div className="container mx-auto px-4 pt-12 pb-10">
           {/* Border container wrapper */}
-          <div className="border border-gray-300 rounded-lg bg-white shadow-sm">
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-0">
+          <div className="border border-border rounded-lg bg-background shadow-sm">
+            <div className="grid grid-cols-[120px_1fr] md:grid-cols-12 gap-0">
               {/* Sidebar */}
-              <aside className="md:col-span-3 lg:col-span-2 border-r border-gray-300 bg-gray-50">
+              <aside className="border-r border-border bg-muted/30 md:col-span-3 lg:col-span-2">
                 <nav aria-label="About page sections" className="p-4">
                   {sections.map((s) => (
                     <NavItem key={s.id} id={s.id} label={s.label} />
@@ -122,10 +122,12 @@ const AboutSidebar = () => {
               </aside>
 
               {/* Content */}
+
+              {/* Content */}
               <section className="md:col-span-9 lg:col-span-10 p-6">
               {active === 'about' && (
                 <>
-                  <h1 className="text-2xl font-bold text-gray-900 mb-6">About Us</h1>
+                  <h1 className="text-2xl md:text-3xl font-bold text-foreground border-b border-border pb-3 mb-6">About Us</h1>
                   
                   <div className="space-y-4 text-gray-700 leading-relaxed">
                     <p className="font-medium text-base">Welcome to Home HNI!</p>
