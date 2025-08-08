@@ -77,10 +77,10 @@ const AboutSidebar = () => {
         return (
           <button
             onClick={() => onNavClick(id)}
-            className={`w-full text-left px-3 py-2 transition-colors text-sm ${
+            className={`w-full text-left px-3 py-2 mb-1 rounded-md transition-colors text-sm ${
               isActive
-                ? 'text-blue-600 font-medium'
-                : 'text-gray-700 hover:text-blue-600'
+                ? 'bg-gray-800 text-white font-medium'
+                : 'text-gray-700 hover:bg-gray-200 hover:text-gray-900'
             }`}
             aria-current={isActive ? 'page' : undefined}
           >
@@ -98,18 +98,20 @@ const AboutSidebar = () => {
 
       <main className="pt-8">
         <div className="container mx-auto px-4 pt-16 pb-10">
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 mt-6">
-            {/* Sidebar */}
-            <aside className="md:col-span-3 lg:col-span-2">
-              <nav aria-label="About page sections" className="space-y-1">
-                {sections.map((s) => (
-                  <NavItem key={s.id} id={s.id} label={s.label} />
-                ))}
-              </nav>
-            </aside>
+          {/* Border container wrapper */}
+          <div className="border border-gray-300 rounded-lg bg-white shadow-sm">
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-0">
+              {/* Sidebar */}
+              <aside className="md:col-span-3 lg:col-span-2 border-r border-gray-300 bg-gray-50">
+                <nav aria-label="About page sections" className="p-4">
+                  {sections.map((s) => (
+                    <NavItem key={s.id} id={s.id} label={s.label} />
+                  ))}
+                </nav>
+              </aside>
 
-            {/* Content */}
-            <section className="md:col-span-9 lg:col-span-10 max-w-4xl">
+              {/* Content */}
+              <section className="md:col-span-9 lg:col-span-10 p-6">
               {active === 'about' && (
                 <>
                   <h1 className="text-2xl font-bold text-gray-900 mb-6">About Us</h1>
@@ -237,7 +239,8 @@ const AboutSidebar = () => {
                   </p>
                 </>
               )}
-            </section>
+              </section>
+            </div>
           </div>
         </div>
       </main>
