@@ -1,7 +1,24 @@
+import React, { useEffect, useMemo, useState } from 'react';
 import PropertyCard from './PropertyCard';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
-const FeaturedProperties = () => {
-  const properties = [
+// Minimal type for featured properties
+type FeaturedProperty = {
+  id: string;
+  title: string;
+  location: string;
+  price: string;
+  area: string;
+  bedrooms: number;
+  bathrooms: number;
+  image: string;
+  propertyType: string;
+  isNew?: boolean;
+};
+
+const FeaturedProperties = ({ properties: propsProperties }: { properties?: FeaturedProperty[] }) => {
+  const properties: FeaturedProperty[] = propsProperties ?? [
     {
       id: '1',
       title: 'Modern Apartment with Delhi',
@@ -95,10 +112,30 @@ const FeaturedProperties = () => {
     }
   ];
 
+  // Compute available types dynamically so it works if properties change in the future
+  const availableTypes = useMemo(() => {
+    const set = new Set(properties.map((p) => p.propertyType).filter(Boolean));
+    return ['All', ...Array.from(set)];
+  }, [properties]);
+
+  const [activeType, setActiveType] = useState<string>('All');
+
+  // Reset filter if current type disappears due to dynamic updates
+  useEffect(() => {
+    if (activeType !== 'All' && !availableTypes.includes(activeType)) {
+      setActiveType('All');
+    }
+  }, [availableTypes, activeType]);
+
+  const filtered = useMemo(
+    () => (activeType === 'All' ? properties : properties.filter((p) => p.propertyType === activeType)),
+    [activeType, properties]
+  );
+
   return (
     <section className="py-16 bg-gray-50">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
+        <div className="text-center mb-8 md:mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
             Featured Properties
           </h2>
@@ -107,8 +144,40 @@ const FeaturedProperties = () => {
           </p>
         </div>
 
+        {/* Filter Bar */}
+        <div className="mb-6">
+          {/* Mobile: dropdown */}
+          <nav aria-label="Property type filter" className="md:hidden">
+            <Select value={activeType} onValueChange={setActiveType}>
+              <SelectTrigger aria-label="Select property type">
+                <SelectValue placeholder="All property types" />
+              </SelectTrigger>
+              <SelectContent className="z-50">
+                {availableTypes.map((type) => (
+                  <SelectItem key={type} value={type}>
+                    {type}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </nav>
+
+          {/* Desktop: horizontal tabs */}
+          <nav aria-label="Property type filter" className="hidden md:block">
+            <Tabs value={activeType} onValueChange={setActiveType}>
+              <TabsList className="w-full justify-start overflow-x-auto">
+                {availableTypes.map((type) => (
+                  <TabsTrigger key={type} value={type} className="capitalize">
+                    {type}
+                  </TabsTrigger>
+                ))}
+              </TabsList>
+            </Tabs>
+          </nav>
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {properties.map((property) => (
+          {filtered.map((property) => (
             <PropertyCard key={property.id} {...property} />
           ))}
         </div>
