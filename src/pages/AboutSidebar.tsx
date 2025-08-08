@@ -343,18 +343,54 @@ const AboutSidebar = () => {
                         General & Account Related
                       </AccordionTrigger>
                       <AccordionContent className="text-sm text-gray-700 pb-4">
-                        <div className="space-y-3">
+                        <div className="space-y-4">
                           <div>
-                            <p className="font-medium mb-1">How do I create an account on Home HNI?</p>
-                            <p>Home HNI operates on an invitation-only basis. You can request access by contacting us at contact@homehni.com with your details and property requirements.</p>
+                            <p className="font-medium mb-2">Why do I need a verified account to use Home HNI services?</p>
+                            <p>At Home HNI, our core mission is to create a trusted, invitation-only marketplace for luxury real estate. To maintain exclusivity and ensure complete authenticity, we verify each buyer and seller before granting access to our platform. This protects the privacy of our members and ensures that every interaction is with a genuine, qualified party.</p>
                           </div>
+                          
                           <div>
-                            <p className="font-medium mb-1">Is Home HNI free to use?</p>
-                            <p>Yes, browsing and connecting with property owners is completely free. We only charge a nominal service fee for our legal and documentation services if you choose to use them.</p>
+                            <p className="font-medium mb-2">How long does it take for email verification?</p>
+                            <p>Email verification is quick and seamless. Once you register, you will receive an email with a secure verification link. The process takes less than two minutes.</p>
                           </div>
+                          
                           <div>
-                            <p className="font-medium mb-1">How is my privacy protected?</p>
-                            <p>We maintain strict confidentiality protocols. Your personal information is never shared without consent, and all communications are secure and discreet.</p>
+                            <p className="font-medium mb-2">How long does it take for mobile number verification?</p>
+                            <p>Our dedicated Relationship Managers prioritize account activations. In most cases, mobile verification is completed within 4 business hours.</p>
+                          </div>
+                          
+                          <div>
+                            <p className="font-medium mb-2">How will I know if my account is verified?</p>
+                            <p>You will receive a confirmation via both email and WhatsApp/SMS as soon as your account is verified.</p>
+                          </div>
+                          
+                          <div>
+                            <p className="font-medium mb-2">Is it safe to log in via Google, Apple ID, or LinkedIn?</p>
+                            <p className="mb-2">Absolutely. At Home HNI, your privacy and data security are non-negotiable.</p>
+                            
+                            <ul className="space-y-2 text-sm ml-4">
+                              <li className="flex items-start">
+                                <span className="text-gray-600 mr-3 mt-1">•</span>
+                                <span>We never post anything on your social accounts.</span>
+                              </li>
+                              
+                              <li className="flex items-start">
+                                <span className="text-gray-600 mr-3 mt-1">•</span>
+                                <span>We only request essential details for verification.</span>
+                              </li>
+                              
+                              <li className="flex items-start">
+                                <span className="text-gray-600 mr-3 mt-1">•</span>
+                                <span>Using your social login means you don't have to remember another password.</span>
+                              </li>
+                              
+                              <li className="flex items-start">
+                                <span className="text-gray-600 mr-3 mt-1">•</span>
+                                <span>Your email will be automatically verified when you log in with a social account.</span>
+                              </li>
+                            </ul>
+                            
+                            <p className="mt-3">If you register using a social account, please ensure that you add your mobile number in your profile after login to complete your verification.</p>
                           </div>
                         </div>
                       </AccordionContent>
