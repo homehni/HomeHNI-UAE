@@ -1,8 +1,8 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import PropertyCard from './PropertyCard';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Card } from '@/components/ui/card';
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 
 // Minimal type for featured properties
 type FeaturedProperty = {
@@ -148,26 +148,31 @@ const FeaturedProperties = ({ properties: propsProperties }: { properties?: Feat
         {/* Premium Filter Bar */}
         <Card className="mb-6 border border-border/60 bg-background/60 backdrop-blur supports-[backdrop-filter]:bg-background/50 shadow-sm animate-fade-in">
           <div className="p-2 md:p-3">
-            {/* Mobile: dropdown */}
+            {/* Mobile: swipeable chips (no arrows) */}
             <nav aria-label="Property type filter" className="md:hidden">
-              <Select value={activeType} onValueChange={setActiveType}>
-                <SelectTrigger aria-label="Select property type" className="rounded-full bg-card/80 backdrop-blur supports-[backdrop-filter]:bg-card/60 border border-border/60 shadow-sm focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2">
-                  <SelectValue placeholder="All property types" />
-                </SelectTrigger>
-                <SelectContent className="z-50 bg-popover text-popover-foreground rounded-lg shadow-lg">
-                  {availableTypes.map((type) => (
-                    <SelectItem key={type} value={type}>
-                      {type}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <ToggleGroup
+                type="single"
+                value={activeType}
+                onValueChange={(v) => v && setActiveType(v)}
+                className="w-full overflow-x-auto gap-2 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+              >
+                {availableTypes.map((type) => (
+                  <ToggleGroupItem
+                    key={type}
+                    value={type}
+                    className="rounded-full px-4 py-2 text-sm bg-card/80 border border-border/60 hover-scale data-[state=on]:bg-primary data-[state=on]:text-primary-foreground data-[state=on]:shadow"
+                    aria-label={`${type} properties`}
+                  >
+                    {type}
+                  </ToggleGroupItem>
+                ))}
+              </ToggleGroup>
             </nav>
 
-            {/* Desktop: horizontal tabs */}
+            {/* Desktop: horizontal tabs with hidden scrollbar (no arrows) */}
             <nav aria-label="Property type filter" className="hidden md:block">
               <Tabs value={activeType} onValueChange={setActiveType}>
-                <TabsList className="w-full justify-start overflow-x-auto rounded-full bg-muted/60 p-1 border border-border/60 backdrop-blur supports-[backdrop-filter]:bg-muted/40 shadow-sm">
+                <TabsList className="w-full justify-start overflow-x-auto rounded-full bg-muted/60 p-1 border border-border/60 backdrop-blur supports-[backdrop-filter]:bg-muted/40 shadow-sm [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
                   {availableTypes.map((type) => (
                     <TabsTrigger
                       key={type}
