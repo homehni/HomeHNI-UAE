@@ -96,8 +96,8 @@ const AboutSidebar = () => {
       <Marquee />
       <Header />
 
-      <main className="pt-8">
-        <div className="container mx-auto px-4 pt-16 pb-10">
+      <main className="pt-16">
+        <div className="container mx-auto px-4 pt-8 pb-10">
           {/* Border container wrapper */}
           <div className="border border-gray-300 rounded-lg bg-white shadow-sm">
             <div className="grid grid-cols-1 md:grid-cols-12 gap-0">
