@@ -43,6 +43,13 @@ const AboutSidebar = () => {
       l.href = href;
       document.head.appendChild(l);
     }
+
+    // Initialize active tab from query parameter (?tab=)
+    const params = new URLSearchParams(window.location.search);
+    const tab = params.get('tab');
+    if (tab && sections.some((s) => s.id === tab)) {
+      setActive(tab);
+    }
   }, []);
 
   useEffect(() => {
@@ -74,8 +81,10 @@ const AboutSidebar = () => {
 
   const onNavClick = (id: string) => {
     setActive(id);
-    const newUrl = `${window.location.pathname}#${id}`;
-    window.history.pushState(null, '', newUrl);
+    const url = new URL(window.location.href);
+    url.searchParams.set('tab', id);
+    url.hash = '';
+    window.history.pushState(null, '', url.toString());
   };
 
   const NavItem = useMemo(
