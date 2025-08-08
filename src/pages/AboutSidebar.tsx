@@ -244,12 +244,25 @@ const AboutSidebar = () => {
 
               {active === 'whatsapp' && (
                 <>
-                  <h1 className="text-3xl font-bold text-gray-900 mb-4">Listing Using WhatsApp</h1>
-                  <hr className="my-4" />
-                  <p className="text-gray-700 mb-4">
-                    Share property details and photos directly on WhatsApp; our team will structure and
-                    publish the listing for you after verification.
-                  </p>
+                  <h1 className="text-2xl font-bold text-gray-900 mb-6">How to List Using WhatsApp?</h1>
+                  
+                  <div className="space-y-4 text-gray-700 leading-relaxed">
+                    <p className="text-sm">
+                      At Home HNI, we know that your time is valuable—and we've made listing your luxury property as simple as sending a message.
+                    </p>
+                    
+                    <p className="text-sm">
+                      No need to log in from a computer or navigate complicated forms. Just send us the property details on WhatsApp at <a href="https://wa.me/yourwhatsappnumber" className="text-blue-600 hover:underline">+91 XXXXX XXXXX</a>, and our dedicated Relationship Manager will take care of the rest.
+                    </p>
+                    
+                    <p className="text-sm">
+                      We will create your listing, verify your details, and ensure it's presented with the exclusivity and precision your property deserves. If we need additional information, our team will call you personally to complete the process.
+                    </p>
+                    
+                    <p className="text-sm pb-8">
+                      It's fast, effortless, and discreet—exactly the way luxury real estate should be.
+                    </p>
+                  </div>
                 </>
               )}
 
