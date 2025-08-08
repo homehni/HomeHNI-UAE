@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import PropertyCard from './PropertyCard';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Card } from '@/components/ui/card';
 
 // Minimal type for featured properties
 type FeaturedProperty = {
@@ -144,37 +145,43 @@ const FeaturedProperties = ({ properties: propsProperties }: { properties?: Feat
           </p>
         </div>
 
-        {/* Filter Bar */}
-        <div className="mb-6">
-          {/* Mobile: dropdown */}
-          <nav aria-label="Property type filter" className="md:hidden">
-            <Select value={activeType} onValueChange={setActiveType}>
-              <SelectTrigger aria-label="Select property type">
-                <SelectValue placeholder="All property types" />
-              </SelectTrigger>
-              <SelectContent className="z-50">
-                {availableTypes.map((type) => (
-                  <SelectItem key={type} value={type}>
-                    {type}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </nav>
+        {/* Premium Filter Bar */}
+        <Card className="mb-6 border border-border/60 bg-background/60 backdrop-blur supports-[backdrop-filter]:bg-background/50 shadow-sm animate-fade-in">
+          <div className="p-2 md:p-3">
+            {/* Mobile: dropdown */}
+            <nav aria-label="Property type filter" className="md:hidden">
+              <Select value={activeType} onValueChange={setActiveType}>
+                <SelectTrigger aria-label="Select property type" className="rounded-full bg-card/80 backdrop-blur supports-[backdrop-filter]:bg-card/60 border border-border/60 shadow-sm focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2">
+                  <SelectValue placeholder="All property types" />
+                </SelectTrigger>
+                <SelectContent className="z-50 bg-popover text-popover-foreground rounded-lg shadow-lg">
+                  {availableTypes.map((type) => (
+                    <SelectItem key={type} value={type}>
+                      {type}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </nav>
 
-          {/* Desktop: horizontal tabs */}
-          <nav aria-label="Property type filter" className="hidden md:block">
-            <Tabs value={activeType} onValueChange={setActiveType}>
-              <TabsList className="w-full justify-start overflow-x-auto">
-                {availableTypes.map((type) => (
-                  <TabsTrigger key={type} value={type} className="capitalize">
-                    {type}
-                  </TabsTrigger>
-                ))}
-              </TabsList>
-            </Tabs>
-          </nav>
-        </div>
+            {/* Desktop: horizontal tabs */}
+            <nav aria-label="Property type filter" className="hidden md:block">
+              <Tabs value={activeType} onValueChange={setActiveType}>
+                <TabsList className="w-full justify-start overflow-x-auto rounded-full bg-muted/60 p-1 border border-border/60 backdrop-blur supports-[backdrop-filter]:bg-muted/40 shadow-sm">
+                  {availableTypes.map((type) => (
+                    <TabsTrigger
+                      key={type}
+                      value={type}
+                      className="capitalize rounded-full px-4 py-2 md:px-5 md:py-2.5 transition-colors hover-scale data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow"
+                    >
+                      {type}
+                    </TabsTrigger>
+                  ))}
+                </TabsList>
+              </Tabs>
+            </nav>
+          </div>
+        </Card>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {filtered.map((property) => (
