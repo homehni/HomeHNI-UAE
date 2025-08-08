@@ -129,10 +129,10 @@ const AboutSidebar = () => {
             <section className="md:col-span-9 lg:col-span-9 border rounded-md p-6">
               {active === 'about' && (
                 <>
-                  <h1 className="text-3xl font-bold text-gray-900 mb-4">About Us</h1>
-                  <hr className="my-4" />
-                  <p className="text-gray-700 leading-relaxed mb-6">
-                   Welcome to Home HNI!
+                  <h1 className="text-3xl font-bold text-gray-900 mb-6">About Us</h1>
+                  
+                  <div className="space-y-4 text-gray-700 leading-relaxed">
+                    <p className="text-lg font-medium">Welcome to Home HNI!</p>
 
 Home HNI is a premium real-estate platform designed exclusively for High Net-Worth Individuals (HNIs) to discover, buy, and sell luxury properties with complete privacy, trust, and transparency.
 
