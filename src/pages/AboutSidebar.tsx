@@ -2,6 +2,12 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Marquee from '@/components/Marquee';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 const sections = [
   { id: 'about', label: 'About Us' },
@@ -331,43 +337,95 @@ const AboutSidebar = () => {
                 <>
                   <h1 className="text-2xl font-bold text-gray-900 mb-6">Frequently Asked Questions</h1>
                   
-                  <div className="space-y-4">
-                    <div className="bg-gray-50 rounded-lg border border-gray-200">
-                      <div className="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-100 transition-colors">
-                        <span className="font-medium text-gray-800">General & Account Related</span>
-                        <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                        </svg>
-                      </div>
-                    </div>
-                    
-                    <div className="bg-gray-50 rounded-lg border border-gray-200">
-                      <div className="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-100 transition-colors">
-                        <span className="font-medium text-gray-800">Owners Related</span>
-                        <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                        </svg>
-                      </div>
-                    </div>
-                    
-                    <div className="bg-gray-50 rounded-lg border border-gray-200">
-                      <div className="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-100 transition-colors">
-                        <span className="font-medium text-gray-800">Tenant/Seekers Related</span>
-                        <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                        </svg>
-                      </div>
-                    </div>
-                    
-                    <div className="bg-gray-50 rounded-lg border border-gray-200">
-                      <div className="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-100 transition-colors">
-                        <span className="font-medium text-gray-800">NRI Related</span>
-                        <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                        </svg>
-                      </div>
-                    </div>
-                  </div>
+                  <Accordion type="single" collapsible className="w-full space-y-4">
+                    <AccordionItem value="general" className="bg-gray-50 rounded-lg border border-gray-200 px-6">
+                      <AccordionTrigger className="text-left font-medium text-gray-800 hover:no-underline">
+                        General & Account Related
+                      </AccordionTrigger>
+                      <AccordionContent className="text-sm text-gray-700 pb-4">
+                        <div className="space-y-3">
+                          <div>
+                            <p className="font-medium mb-1">How do I create an account on Home HNI?</p>
+                            <p>Home HNI operates on an invitation-only basis. You can request access by contacting us at contact@homehni.com with your details and property requirements.</p>
+                          </div>
+                          <div>
+                            <p className="font-medium mb-1">Is Home HNI free to use?</p>
+                            <p>Yes, browsing and connecting with property owners is completely free. We only charge a nominal service fee for our legal and documentation services if you choose to use them.</p>
+                          </div>
+                          <div>
+                            <p className="font-medium mb-1">How is my privacy protected?</p>
+                            <p>We maintain strict confidentiality protocols. Your personal information is never shared without consent, and all communications are secure and discreet.</p>
+                          </div>
+                        </div>
+                      </AccordionContent>
+                    </AccordionItem>
+
+                    <AccordionItem value="owners" className="bg-gray-50 rounded-lg border border-gray-200 px-6">
+                      <AccordionTrigger className="text-left font-medium text-gray-800 hover:no-underline">
+                        Owners Related
+                      </AccordionTrigger>
+                      <AccordionContent className="text-sm text-gray-700 pb-4">
+                        <div className="space-y-3">
+                          <div>
+                            <p className="font-medium mb-1">How do I list my property?</p>
+                            <p>You can list your property by clicking "List Your Property" or sending us details via WhatsApp. Our team will verify and create your listing within 24 hours.</p>
+                          </div>
+                          <div>
+                            <p className="font-medium mb-1">What documents do I need to provide?</p>
+                            <p>Basic ownership documents, property photos, and contact details. Our team will guide you through the verification process.</p>
+                          </div>
+                          <div>
+                            <p className="font-medium mb-1">Do you charge any commission?</p>
+                            <p>No, Home HNI does not charge any brokerage or commission. You deal directly with buyers and retain 100% of your sale value.</p>
+                          </div>
+                        </div>
+                      </AccordionContent>
+                    </AccordionItem>
+
+                    <AccordionItem value="tenants" className="bg-gray-50 rounded-lg border border-gray-200 px-6">
+                      <AccordionTrigger className="text-left font-medium text-gray-800 hover:no-underline">
+                        Tenant/Seekers Related
+                      </AccordionTrigger>
+                      <AccordionContent className="text-sm text-gray-700 pb-4">
+                        <div className="space-y-3">
+                          <div>
+                            <p className="font-medium mb-1">How do I find properties in my budget?</p>
+                            <p>Use our advanced filters to search by location, budget, property type, and amenities. All listings show verified pricing with no hidden costs.</p>
+                          </div>
+                          <div>
+                            <p className="font-medium mb-1">Can I schedule property visits?</p>
+                            <p>Yes, you can contact owners directly through our platform or request our team to coordinate visits at your convenience.</p>
+                          </div>
+                          <div>
+                            <p className="font-medium mb-1">Are all properties verified?</p>
+                            <p>Yes, every property undergoes our rigorous verification process to ensure authenticity and direct owner contact.</p>
+                          </div>
+                        </div>
+                      </AccordionContent>
+                    </AccordionItem>
+
+                    <AccordionItem value="nri" className="bg-gray-50 rounded-lg border border-gray-200 px-6">
+                      <AccordionTrigger className="text-left font-medium text-gray-800 hover:no-underline">
+                        NRI Related
+                      </AccordionTrigger>
+                      <AccordionContent className="text-sm text-gray-700 pb-4">
+                        <div className="space-y-3">
+                          <div>
+                            <p className="font-medium mb-1">Can NRIs buy properties through Home HNI?</p>
+                            <p>Yes, we have extensive experience with NRI property transactions and can guide you through all legal and regulatory requirements.</p>
+                          </div>
+                          <div>
+                            <p className="font-medium mb-1">What about FEMA compliance?</p>
+                            <p>Our legal team ensures full FEMA compliance for all NRI transactions, handling all documentation and approvals required.</p>
+                          </div>
+                          <div>
+                            <p className="font-medium mb-1">Do you provide remote transaction support?</p>
+                            <p>Yes, we offer complete remote transaction support including virtual property tours, digital documentation, and power of attorney services.</p>
+                          </div>
+                        </div>
+                      </AccordionContent>
+                    </AccordionItem>
+                  </Accordion>
                 </>
               )}
 
