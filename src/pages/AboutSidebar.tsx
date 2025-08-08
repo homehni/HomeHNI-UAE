@@ -103,7 +103,7 @@ const AboutSidebar = () => {
             <div className="grid grid-cols-1 md:grid-cols-12 gap-0">
               {/* Sidebar */}
               <aside className="md:col-span-3 lg:col-span-2 border-r border-gray-300 bg-gray-50">
-                <nav aria-label="About page sections" className="p-4 mt-4">
+                <nav aria-label="About page sections" className="p-4">
                   {sections.map((s) => (
                     <NavItem key={s.id} id={s.id} label={s.label} />
                   ))}
@@ -111,7 +111,7 @@ const AboutSidebar = () => {
               </aside>
 
               {/* Content */}
-              <section className="md:col-span-9 lg:col-span-10 p-6 mt-4">
+              <section className="md:col-span-9 lg:col-span-10 p-6">
               {active === 'about' && (
                 <>
                   <h1 className="text-2xl font-bold text-gray-900 mb-6">About Us</h1>
