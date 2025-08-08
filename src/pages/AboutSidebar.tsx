@@ -86,7 +86,7 @@ const AboutSidebar = () => {
       <Header />
 
       <main className="pt-8">
-        <div className="container mx-auto px-4 py-10">
+        <div className="container mx-auto px-4 pt-16 pb-10">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
             {/* Sidebar */}
             <aside className="md:col-span-3 lg:col-span-3 border rounded-md p-3 sticky top-28 h-fit bg-white">
