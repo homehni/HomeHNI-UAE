@@ -110,6 +110,29 @@ const FeaturedProperties = ({ properties: propsProperties }: { properties?: Feat
       bathrooms: 4,
       image: 'photo-1613490493576-7fde63acd811',
       propertyType: 'Penthouse'
+    },
+    {
+      id: '9',
+      title: 'Prime Residential Plot in Gated Community',
+      location: 'Hinjewadi, Pune',
+      price: '₹60 L',
+      area: '2,400 sq ft',
+      bedrooms: 0,
+      bathrooms: 0,
+      image: 'photo-1497366216548-37526070297c',
+      propertyType: 'Plot',
+      isNew: true
+    },
+    {
+      id: '10',
+      title: 'Independent House with Private Garden',
+      location: 'Vijayanagar, Bangalore',
+      price: '₹1.7 Cr',
+      area: '1,900 sq ft',
+      bedrooms: 4,
+      bathrooms: 3,
+      image: 'photo-1568605114967-8130f3a36994',
+      propertyType: 'Independent House'
     }
   ];
 
