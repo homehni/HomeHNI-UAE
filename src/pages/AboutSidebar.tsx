@@ -112,10 +112,10 @@ const AboutSidebar = () => {
             <section className="md:col-span-9 lg:col-span-9 border rounded-md p-6">
               {active === 'about' && (
                 <>
-                  <h1 className="text-3xl font-bold text-gray-900 mb-6">About Us</h1>
+                  <h1 className="text-xl font-bold text-gray-900 mb-4">About Us</h1>
                   
-                  <div className="space-y-4 text-gray-700 leading-relaxed">
-                    <p className="text-lg font-medium">Welcome to Home HNI!</p>
+                  <div className="space-y-3 text-gray-700 leading-relaxed text-sm">
+                    <p className="font-medium">Welcome to Home HNI!</p>
                     
                     <p>
                       Home HNI is a premium real-estate platform designed exclusively for High Net-Worth Individuals (HNIs) to discover, buy, and sell luxury properties with complete privacy, trust, and transparency.
@@ -125,26 +125,26 @@ const AboutSidebar = () => {
                       We started Home HNI because we believe that buying or selling high-value real estate should be seamless, discreet, and free from the hassles of traditional property hunting. In today's market, most luxury transactions still depend heavily on scattered contacts, unverified leads, and middlemen who often add unnecessary delays and costs. We are here to change that by providing a secure, invitation-only platform where verified buyers and sellers can connect directly.
                     </p>
                     
-                    <p className="font-medium">We have done two things to help you find or sell your perfect luxury home:</p>
+                    <p className="font-medium">We have done 2 things to help you find that perfect home:</p>
                     
-                    <ul className="space-y-3 ml-4">
+                    <ul className="space-y-2 ml-4">
                       <li className="flex items-start">
-                        <span className="text-primary font-bold mr-2">•</span>
-                        <span><strong>Firstly,</strong> we verify every single property and member on our platform to ensure that listings are genuine, exclusive, and relevant. Our multi-step verification process ensures you're connecting with serious, qualified parties only—no fake listings, no cold leads.</span>
+                        <span className="text-gray-600 mr-2">•</span>
+                        <span><strong>Firstly,</strong> we have painstakingly verified each listing and made sure that these are direct owners or shared accommodation parties and there are no middlemen or brokers. We use lot of heuristics and techniques to ensure that you get a totally broker free list.</span>
                       </li>
                       
                       <li className="flex items-start">
-                        <span className="text-primary font-bold mr-2">•</span>
-                        <span><strong>Secondly,</strong> we present each property with rich, in-depth details, high-quality visuals, and precise location insights so you can evaluate it thoroughly before making a visit. Whether it's a sea-facing penthouse in Mumbai, a heritage estate in Goa, or a designer villa in Delhi, you'll have all the information you need to shortlist the right properties from the comfort of your home.</span>
+                        <span className="text-gray-600 mr-2">•</span>
+                        <span><strong>Secondly,</strong> we have also tried to ensure that maximum information is available to you in as easy to use format. This ensures that you get a very good idea of the property even before you visit it. Thus, you can shortlist flats sitting at the comfort of your home without actually traveling all the good and bad properties. This saves your time and effort and with a quick shortlist of 4-5 properties you can actually get a house in few hours!</span>
                       </li>
                     </ul>
                     
                     <p>
-                      If you're an HNI property owner looking to list your luxury home on Home HNI, please email us at <a href="mailto:contact@homehni.com" className="text-primary hover:underline">contact@homehni.com</a> and our team will personally assist you in creating an exclusive listing.
+                      If you are a landlord interested in posting your apartments to Home HNI, please email us at <a href="mailto:contact@homehni.com" className="text-primary hover:underline">contact@homehni.com</a> and we will get in touch to help you list the property.
                     </p>
                     
                     <p>
-                      And to our buyers—happy exploring, and let us know how we can make your luxury home search even smoother!
+                      And tenants, happy hunting and get in touch with us to let us know how else we can help!
                     </p>
                   </div>
                 </>
