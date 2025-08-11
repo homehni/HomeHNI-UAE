@@ -54,6 +54,7 @@ import Architecture from "./pages/Architecture";
 import Interior from "./pages/Interior";
 import Loans from "./pages/Loans";
 import AboutSidebar from "./pages/AboutSidebar";
+import PropertyDetails from "./pages/PropertyDetails";
 
 const App: React.FC = () => {
   const [queryClient] = useState(() => new QueryClient({
@@ -110,6 +111,9 @@ const App: React.FC = () => {
             {/* Authentication Routes */}
             <Route path="/auth" element={<Auth />} />
             <Route path="/verify-email" element={<VerifyEmail />} />
+            
+            {/* Property Detail Route */}
+            <Route path="/property/:id" element={<PropertyDetails />} />
             
             {/* Protected Routes */}
             <Route path="/dashboard" element={

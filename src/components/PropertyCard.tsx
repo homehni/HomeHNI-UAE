@@ -1,9 +1,8 @@
 
 import { Heart, MapPin, Bed, Bath, Square, Phone } from 'lucide-react';
-import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { PropertyDetailModal } from '@/components/PropertyDetailModal';
+import { useNavigate } from 'react-router-dom';
 
 interface PropertyCardProps {
   id: string;
@@ -30,7 +29,7 @@ const PropertyCard = ({
   propertyType,
   isNew = false
 }: PropertyCardProps) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
 
   const parsePriceToNumber = (priceStr: string) => {
     const lower = priceStr.toLowerCase();
@@ -47,7 +46,7 @@ const PropertyCard = ({
   };
 
   const parts = location.split(',').map((s) => s.trim());
-  const propertyForModal = {
+  const propertyForPage = {
     id,
     title,
     property_type: propertyType.toLowerCase().replace(/\s+/g, '_'),
@@ -61,7 +60,7 @@ const PropertyCard = ({
     state: 'N/A',
     pincode: 'N/A',
     description: undefined,
-    images: [`https://images.unsplash.com/${image}?auto=format&fit=crop&w=800&q=80`],
+    images: [`https://images.unsplash.com/${image}?auto=format&fit=crop&w=1200&q=80`],
     videos: [],
     status: 'active',
     created_at: new Date().toISOString(),
@@ -129,12 +128,11 @@ const PropertyCard = ({
             <Phone size={14} className="mr-1" />
             Contact
           </Button>
-          <Button size="sm" className="flex-1 bg-brand-maroon hover:bg-brand-maroon-dark" onClick={() => setIsOpen(true)}>
+          <Button size="sm" className="flex-1 bg-brand-maroon hover:bg-brand-maroon-dark" onClick={() => navigate(`/property/${id}`, { state: propertyForPage })}>
             View Details
           </Button>
         </div>
       </CardContent>
-      <PropertyDetailModal property={propertyForModal} isOpen={isOpen} onClose={() => setIsOpen(false)} />
     </Card>
   );
 };
