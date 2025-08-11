@@ -7,9 +7,9 @@ const Logo = ({
   variant?: "default" | "scrolled";
 }) => {
   const sizeClasses = {
-    small: "h-6",
-    default: "h-8",
-    large: "h-10"
+    small: "h-8",
+    default: "h-10",
+    large: "h-12"
   };
 
   // Use the new provided logo for all variants
