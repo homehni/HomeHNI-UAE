@@ -170,7 +170,7 @@ const FeaturedProperties = ({ properties: propsProperties }: { properties?: Feat
 
         {/* Premium Filter Bar */}
         <Card className="mb-6 border border-border/60 bg-background/60 backdrop-blur supports-[backdrop-filter]:bg-background/50 shadow-sm animate-fade-in">
-          <div className="p-2 md:p-3">
+          <div className="p-2 md:p-3 min-w-0">
             {/* Mobile: swipeable chips (no arrows) */}
             <nav aria-label="Property type filter" className="md:hidden">
               <ToggleGroup
