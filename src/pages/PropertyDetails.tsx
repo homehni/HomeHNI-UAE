@@ -1,5 +1,6 @@
 import React from 'react';
 import Header from '@/components/Header';
+import Marquee from '@/components/Marquee';
 import Footer from '@/components/Footer';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -45,6 +46,7 @@ const PropertyDetails: React.FC = () => {
   if (!property) {
     return (
       <div className="min-h-screen flex flex-col">
+        <Marquee />
         <Header />
         <main className="flex-1 container mx-auto px-4 py-12 text-center">
           <h1 className="text-2xl font-semibold mb-4">Property not found</h1>
@@ -58,6 +60,7 @@ const PropertyDetails: React.FC = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
+      <Marquee />
       <Header />
       <main className="flex-1">
         <section className="bg-gray-50 border-b">
