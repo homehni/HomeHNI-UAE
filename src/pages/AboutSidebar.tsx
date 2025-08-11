@@ -70,8 +70,8 @@ const AboutSidebar = () => {
 
   const onNavClick = (id: string) => {
     if (id === 'blog') {
-      // Redirect to blog page
-      window.location.href = '/blog';
+      // Open blog in a new tab for better UX
+      window.open('/blog', '_blank', 'noopener,noreferrer');
       return;
     }
     setActive(id);
