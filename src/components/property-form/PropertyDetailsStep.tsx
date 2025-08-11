@@ -73,7 +73,7 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
       floorNo: initialData.floorNo || 0,
       furnishingStatus: initialData.furnishingStatus || '',
       parkingType: initialData.parkingType || '',
-      superBuiltUpArea: initialData.superBuiltUpArea || 0,
+      superBuiltUpArea: initialData.superBuiltUpArea ?? undefined,
       onMainRoad: initialData.onMainRoad || false,
       cornerProperty: initialData.cornerProperty || false,
     },
@@ -330,7 +330,7 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
                                 placeholder="1500"
                                 className="h-12 pr-12 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
                                 {...field}
-                                onChange={(e) => field.onChange(parseInt(e.target.value) || 0)}
+                                onChange={(e) => field.onChange(e.target.value === '' ? undefined : parseInt(e.target.value, 10))}
                               />
 
                             </FormControl>
