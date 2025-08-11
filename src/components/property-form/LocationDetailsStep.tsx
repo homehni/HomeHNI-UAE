@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -36,7 +36,12 @@ export const LocationDetailsStep: React.FC<LocationDetailsStepProps> = ({
 }) => {
   const [statesData, setStatesData] = useState<any>({});
   const [cities, setCities] = useState<string[]>([]);
-
+  const localityInputRef = useRef<HTMLInputElement | null>(null);
+  const landmarkInputRef = useRef<HTMLInputElement | null>(null);
+  const mapContainerRef = useRef<HTMLDivElement | null>(null);
+  const mapRef = useRef<any>(null);
+  const markerRef = useRef<any>(null);
+  const [showMap, setShowMap] = useState(false);
   const form = useForm<LocationDetailsFormData>({
     resolver: zodResolver(locationDetailsSchema),
     defaultValues: {
@@ -75,11 +80,121 @@ export const LocationDetailsStep: React.FC<LocationDetailsStepProps> = ({
     }
   }, [selectedState, statesData, form]);
 
+  // Google Maps Places Autocomplete and Map preview
+  useEffect(() => {
+    const apiKey = 'AIzaSyD2rlXeHN4cm0CQD-y4YGTsob9a_27YcwY';
+
+    const loadGoogleMaps = () => new Promise<void>((resolve, reject) => {
+      if ((window as any).google?.maps?.places) {
+        resolve();
+        return;
+      }
+      const existing = document.querySelector('script[data-gmaps]') as HTMLScriptElement | null;
+      if (existing) {
+        existing.addEventListener('load', () => resolve());
+        return;
+      }
+      const script = document.createElement('script');
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&region=IN&language=en-IN`;
+      script.async = true;
+      script.defer = true;
+      script.setAttribute('data-gmaps', 'true');
+      script.onload = () => resolve();
+      script.onerror = () => reject(new Error('Google Maps failed to load'));
+      document.head.appendChild(script);
+    });
+
+    const getComponent = (components: any[], type: string) =>
+      components.find((c) => c.types?.includes(type))?.long_name as string | undefined;
+
+    const setMapTo = (lat: number, lng: number, title?: string) => {
+      const google = (window as any).google;
+      if (!google || !mapContainerRef.current) return;
+      if (!mapRef.current) {
+        mapRef.current = new google.maps.Map(mapContainerRef.current, {
+          center: { lat, lng },
+          zoom: 15,
+          mapTypeControl: false,
+          streetViewControl: false,
+          fullscreenControl: false,
+        });
+        markerRef.current = new google.maps.Marker({
+          position: { lat, lng },
+          map: mapRef.current,
+          title: title || 'Selected location',
+        });
+      } else {
+        mapRef.current.setCenter({ lat, lng });
+        if (markerRef.current) {
+          markerRef.current.setPosition({ lat, lng });
+          if (title) markerRef.current.setTitle(title);
+        } else {
+          markerRef.current = new google.maps.Marker({ position: { lat, lng }, map: mapRef.current, title });
+        }
+      }
+      setShowMap(true);
+    };
+
+    const initAutocomplete = () => {
+      const google = (window as any).google;
+      if (!google?.maps?.places) return;
+      const options = {
+        fields: ['formatted_address', 'geometry', 'name', 'address_components'],
+        types: ['geocode'],
+        componentRestrictions: { country: 'in' as const },
+      };
+
+      const attach = (el: HTMLInputElement | null, onPlace: (place: any, el: HTMLInputElement) => void) => {
+        if (!el) return;
+        const ac = new google.maps.places.Autocomplete(el, options);
+        ac.addListener('place_changed', () => {
+          const place = ac.getPlace();
+          onPlace(place, el);
+        });
+      };
+
+      attach(localityInputRef.current, (place, el) => {
+        const value = place?.formatted_address || place?.name || '';
+        if (value) {
+          el.value = value;
+          form.setValue('locality', value, { shouldValidate: true });
+        }
+        const comps = place?.address_components || [];
+        const stateCandidate = getComponent(comps, 'administrative_area_level_1');
+        const cityCandidate = getComponent(comps, 'locality') || getComponent(comps, 'administrative_area_level_2') || getComponent(comps, 'sublocality') || getComponent(comps, 'sublocality_level_1');
+        if (stateCandidate) {
+          const matchedState = Object.keys(statesData).find((s) => s.toLowerCase() === stateCandidate.toLowerCase());
+          if (matchedState) {
+            handleStateChange(matchedState);
+            const possibleCities = (statesData[matchedState] as string[]) || [];
+            const matchedCity = possibleCities.find((c) => c.toLowerCase() === (cityCandidate || '').toLowerCase());
+            if (matchedCity) {
+              form.setValue('city', matchedCity, { shouldValidate: true });
+            }
+          }
+        }
+        const loc = place?.geometry?.location;
+        if (loc) setMapTo(loc.lat(), loc.lng(), place?.name || 'Selected location');
+      });
+
+      attach(landmarkInputRef.current, (place, el) => {
+        const value = place?.formatted_address || place?.name || '';
+        if (value) {
+          el.value = value;
+          form.setValue('landmark', value, { shouldValidate: true });
+        }
+        const loc = place?.geometry?.location;
+        if (loc) setMapTo(loc.lat(), loc.lng(), place?.name || 'Selected landmark');
+      });
+    };
+
+    loadGoogleMaps().then(initAutocomplete).catch(console.error);
+  }, [statesData, form]);
+
   const handleStateChange = (value: string) => {
     form.setValue('state', value);
     form.setValue('city', ''); // Reset city when state changes
   };
-
   const onSubmit = (data: LocationDetailsFormData) => {
     // Convert to LocationDetails format and add missing fields as empty/default values
     const locationData: LocationDetails = {
@@ -187,6 +302,10 @@ export const LocationDetailsStep: React.FC<LocationDetailsStepProps> = ({
                               placeholder="e.g., Sector 12, Koramangala"
                               className="h-12"
                               {...field}
+                              ref={(el) => {
+                                field.ref(el)
+                                localityInputRef.current = el
+                              }}
                             />
                           </FormControl>
                           <FormMessage />
@@ -205,6 +324,10 @@ export const LocationDetailsStep: React.FC<LocationDetailsStepProps> = ({
                               placeholder="e.g., Near Metro Station"
                               className="h-12"
                               {...field}
+                              ref={(el) => {
+                                field.ref(el)
+                                landmarkInputRef.current = el
+                              }}
                             />
                           </FormControl>
                           <FormMessage />
@@ -212,6 +335,12 @@ export const LocationDetailsStep: React.FC<LocationDetailsStepProps> = ({
                       )}
                     />
                   </div>
+
+                  {showMap && (
+                    <div className="w-full h-64 md:h-80 rounded-lg border overflow-hidden">
+                      <div ref={mapContainerRef} className="w-full h-full" />
+                    </div>
+                  )}
 
                   {/* Navigation Buttons */}
                   <div className="flex justify-between pt-6">
