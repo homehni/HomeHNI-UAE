@@ -46,6 +46,36 @@ const PropertyCard = ({
   };
 
   const parts = location.split(',').map((s) => s.trim());
+
+  // Derive city, state and pincode from location/title
+  const cities = ['Bangalore', 'Gurgaon', 'Noida', 'Mumbai', 'Pune', 'Delhi'] as const;
+  const cityFromParts = parts[parts.length - 1] || '';
+  const detectedCity =
+    (cities.find((c) => cityFromParts.toLowerCase().includes(c.toLowerCase())) ||
+      cities.find((c) => location.toLowerCase().includes(c.toLowerCase())) ||
+      cities.find((c) => title.toLowerCase().includes(c.toLowerCase())) ||
+      'Delhi');
+
+  const cityInfoMap: Record<string, { state: string; pincode: string }> = {
+    Bangalore: { state: 'Karnataka', pincode: '560001' },
+    Gurgaon: { state: 'Haryana', pincode: '122001' },
+    Noida: { state: 'Uttar Pradesh', pincode: '201301' },
+    Mumbai: { state: 'Maharashtra', pincode: '400001' },
+    Pune: { state: 'Maharashtra', pincode: '411001' },
+    Delhi: { state: 'Delhi', pincode: '110001' },
+  };
+  const cityMeta = cityInfoMap[detectedCity] || { state: 'Delhi', pincode: '110001' };
+
+  // Provide 2-3 photos per property
+  const additionalIds = [
+    'photo-1512917774080-9991f1c4c750',
+    'photo-1568605114967-8130f3a36994',
+    'photo-1522708323590-d24dbb6b0267',
+    'photo-1613490493576-7fde63acd811',
+  ];
+  const imageIds = Array.from(new Set([image, ...additionalIds])).slice(0, 3);
+  const imagesForPage = imageIds.map((id) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=1200&q=80`);
+
   const propertyForPage = {
     id,
     title,
@@ -55,19 +85,19 @@ const PropertyCard = ({
     expected_price: parsePriceToNumber(price),
     super_area: parseAreaToNumber(area),
     bathrooms,
-    city: parts[parts.length - 1] || 'N/A',
+    city: detectedCity,
     locality: parts[0] || location,
-    state: 'N/A',
-    pincode: 'N/A',
+    state: cityMeta.state,
+    pincode: cityMeta.pincode,
     description: undefined,
-    images: [`https://images.unsplash.com/${image}?auto=format&fit=crop&w=1200&q=80`],
+    images: imagesForPage,
     videos: [],
     status: 'active',
     created_at: new Date().toISOString(),
     owner_name: undefined,
     owner_email: undefined,
     owner_phone: undefined,
-    owner_role: undefined
+    owner_role: undefined,
   };
 
   return (
