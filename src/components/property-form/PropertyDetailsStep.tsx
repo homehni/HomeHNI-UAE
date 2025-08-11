@@ -10,18 +10,41 @@ import { Badge } from '@/components/ui/badge';
 import { PropertyDetails } from '@/types/property';
 import { Home, MapPin, Building, Sparkles, Camera, FileText, Calendar, Phone } from 'lucide-react';
 
-const propertyDetailsSchema = z.object({
-  propertyType: z.string().min(1, 'Please select property type'),
-  buildingType: z.string().min(1, 'Please select building type'),
-  propertyAge: z.string().min(1, 'Please select property age'),
-  totalFloors: z.union([z.number().min(1, 'Total floors must be at least 1'), z.string().min(1, 'Please select total floors')]),
-  floorNo: z.union([z.number().min(0, 'Floor number cannot be negative'), z.string().min(1, 'Please select floor')]),
-  furnishingStatus: z.string().min(1, 'Please select furnishing status'),
-  parkingType: z.string().optional(),
-  superBuiltUpArea: z.number().min(1, 'Super built up area is required'),
-  onMainRoad: z.boolean().optional(),
-  cornerProperty: z.boolean().optional(),
-});
+const propertyDetailsSchema = z
+  .object({
+    propertyType: z.string().min(1, 'Please select property type'),
+    buildingType: z.string().min(1, 'Please select building type'),
+    propertyAge: z.string().min(1, 'Please select property age'),
+    totalFloors: z.union([
+      z.number().min(1, 'Total floors must be at least 1'),
+      z.string().min(1, 'Please select total floors')
+    ]),
+    floorNo: z.union([
+      z.number().min(0, 'Floor number cannot be negative'),
+      z.string().min(1, 'Please select floor')
+    ]),
+    furnishingStatus: z.string().min(1, 'Please select furnishing status'),
+    parkingType: z.string().optional(),
+    superBuiltUpArea: z.number().min(1, 'Super built up area is required'),
+    onMainRoad: z.boolean().optional(),
+    cornerProperty: z.boolean().optional(),
+  })
+  .refine((data) => {
+    const floor = typeof data.floorNo === 'number' ? data.floorNo : NaN;
+    const total = typeof data.totalFloors === 'number'
+      ? data.totalFloors
+      : data.totalFloors === '99+'
+        ? 100
+        : NaN;
+    // Only enforce when both are numeric values
+    if (Number.isFinite(floor) && Number.isFinite(total)) {
+      return (total as number) > (floor as number);
+    }
+    return true;
+  }, {
+    path: ['totalFloors'],
+    message: 'Total floors must be greater than Floor number',
+  });
 
 type PropertyDetailsFormData = z.infer<typeof propertyDetailsSchema>;
 
@@ -141,7 +164,7 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
                           <Select onValueChange={field.onChange} defaultValue={field.value}>
                             <FormControl>
                               <SelectTrigger className="h-12">
-                                <SelectValue placeholder="Co-Working" />
+                                <SelectValue placeholder="Select Property Type" />
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
@@ -170,7 +193,7 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
                           <Select onValueChange={field.onChange} defaultValue={field.value}>
                             <FormControl>
                               <SelectTrigger className="h-12">
-                                <SelectValue placeholder="Mall" />
+                                <SelectValue placeholder="Select Building Type" />
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
@@ -198,7 +221,7 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
                           <Select onValueChange={field.onChange} defaultValue={field.value}>
                             <FormControl>
                               <SelectTrigger className="h-12">
-                                <SelectValue placeholder="Less than a Year" />
+                                <SelectValue placeholder="Select Property Age" />
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
@@ -329,7 +352,7 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
                           <Select onValueChange={field.onChange} defaultValue={field.value}>
                             <FormControl>
                               <SelectTrigger className="h-12">
-                                <SelectValue placeholder="Semi Furnished" />
+                                <SelectValue placeholder="Select Furnishing" />
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
