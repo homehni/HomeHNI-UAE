@@ -183,7 +183,7 @@ const FeaturedProperties = ({ properties: propsProperties }: { properties?: Feat
                   <ToggleGroupItem
                     key={type}
                     value={type}
-                    className="rounded-full h-9 md:h-10 px-4 md:px-5 text-sm font-medium text-muted-foreground bg-card border border-border/60 hover-scale data-[state=on]:bg-primary data-[state=on]:text-primary-foreground data-[state=on]:font-semibold data-[state=on]:border-transparent"
+                    className="rounded-full px-4 py-2 text-sm bg-card/80 border border-border/60 hover-scale data-[state=on]:bg-primary data-[state=on]:text-primary-foreground data-[state=on]:shadow"
                     aria-label={`${type} properties`}
                   >
                     {type}
@@ -195,12 +195,12 @@ const FeaturedProperties = ({ properties: propsProperties }: { properties?: Feat
             {/* Desktop: horizontal tabs with hidden scrollbar (no arrows) */}
             <nav aria-label="Property type filter" className="hidden md:block">
               <Tabs value={activeType} onValueChange={setActiveType}>
-                <TabsList className="w-full flex flex-wrap items-center justify-start gap-2 rounded-full bg-card p-1 border border-border/60 shadow-sm overflow-hidden">
+                <TabsList className="w-full justify-start overflow-x-auto rounded-full bg-muted/60 p-1 border border-border/60 backdrop-blur supports-[backdrop-filter]:bg-muted/40 shadow-sm [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
                   {availableTypes.map((type) => (
                     <TabsTrigger
                       key={type}
                       value={type}
-                      className="capitalize rounded-full h-9 md:h-10 px-4 md:px-5 font-medium text-muted-foreground transition-colors hover-scale data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:font-semibold"
+                      className="capitalize rounded-full px-4 py-2 md:px-5 md:py-2.5 transition-colors hover-scale data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow"
                     >
                       {type}
                     </TabsTrigger>
