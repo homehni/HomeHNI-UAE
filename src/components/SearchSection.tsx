@@ -8,6 +8,7 @@ const SearchSection = () => {
   const [activeTab, setActiveTab] = useState('buy');
   const [selectedCity, setSelectedCity] = useState('All Residential');
   const inputRef = useRef<HTMLInputElement>(null);
+  const mobileInputRef = useRef<HTMLInputElement>(null);
   
   const cities = [
     'All Residential',
@@ -68,16 +69,21 @@ const SearchSection = () => {
     });
 
     const initAutocomplete = () => {
-      if (!inputRef.current || !(window as any).google?.maps?.places) return;
-      const autocomplete = new (window as any).google.maps.places.Autocomplete(inputRef.current, {
+      if (!(window as any).google?.maps?.places) return;
+      const options = {
         fields: ['formatted_address', 'geometry', 'name'],
         types: ['geocode'],
-        componentRestrictions: { country: 'in' },
-      });
-      autocomplete.addListener('place_changed', () => {
-        const place = autocomplete.getPlace();
-        const value = place?.formatted_address || place?.name || '';
-        if (inputRef.current && value) inputRef.current.value = value;
+        componentRestrictions: { country: 'in' as const },
+      };
+
+      const inputs = [inputRef.current, mobileInputRef.current].filter(Boolean) as HTMLInputElement[];
+      inputs.forEach((el) => {
+        const ac = new (window as any).google.maps.places.Autocomplete(el, options);
+        ac.addListener('place_changed', () => {
+          const place = ac.getPlace();
+          const value = place?.formatted_address || place?.name || '';
+          if (el && value) el.value = value;
+        });
       });
     };
 
@@ -96,7 +102,7 @@ const SearchSection = () => {
             <div className="relative">
               <div className="relative flex items-center">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                <input type="text" placeholder="Search 'Sector 150 Noida'" className="w-full pl-10 pr-12 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-700 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
+                <input ref={mobileInputRef} type="text" placeholder="Search 'Sector 150 Noida'" className="w-full pl-10 pr-12 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-700 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
                 <button className="absolute right-3 top-1/2 transform -translate-y-1/2 p-1 hover:bg-gray-100 rounded-full transition-colors">
                   <Mic className="w-5 h-5 text-blue-500" />
                 </button>
