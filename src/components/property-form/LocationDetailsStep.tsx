@@ -42,8 +42,6 @@ export const LocationDetailsStep: React.FC<LocationDetailsStepProps> = ({
   const mapRef = useRef<any>(null);
   const markerRef = useRef<any>(null);
   const [showMap, setShowMap] = useState(false);
-  // Store last requested location to initialize map after container mounts
-  const lastLocationRef = useRef<{ lat: number; lng: number; title?: string } | null>(null);
   const form = useForm<LocationDetailsFormData>({
     resolver: zodResolver(locationDetailsSchema),
     defaultValues: {
@@ -111,17 +109,7 @@ export const LocationDetailsStep: React.FC<LocationDetailsStepProps> = ({
 
     const setMapTo = (lat: number, lng: number, title?: string) => {
       const google = (window as any).google;
-      if (!google) return;
-      // Remember last target so we can initialize after the map container mounts
-      lastLocationRef.current = { lat, lng, title };
-
-      if (!mapContainerRef.current) {
-        // Trigger map container render first, effect below will initialize the map
-        setShowMap(true);
-        return;
-      }
-
-      // Initialize or update map immediately when container exists
+      if (!google || !mapContainerRef.current) return;
       if (!mapRef.current) {
         mapRef.current = new google.maps.Map(mapContainerRef.current, {
           center: { lat, lng },
@@ -146,36 +134,6 @@ export const LocationDetailsStep: React.FC<LocationDetailsStepProps> = ({
       }
       setShowMap(true);
     };
-
-    // Initialize the map after the container becomes visible
-    useEffect(() => {
-      const google = (window as any).google;
-      if (!showMap || !mapContainerRef.current || !lastLocationRef.current || !google) return;
-      const { lat, lng, title } = lastLocationRef.current;
-
-      if (!mapRef.current) {
-        mapRef.current = new google.maps.Map(mapContainerRef.current, {
-          center: { lat, lng },
-          zoom: 15,
-          mapTypeControl: false,
-          streetViewControl: false,
-          fullscreenControl: false,
-        });
-        markerRef.current = new google.maps.Marker({
-          position: { lat, lng },
-          map: mapRef.current,
-          title: title || 'Selected location',
-        });
-      } else {
-        mapRef.current.setCenter({ lat, lng });
-        if (markerRef.current) {
-          markerRef.current.setPosition({ lat, lng });
-          if (title) markerRef.current.setTitle(title);
-        } else {
-          markerRef.current = new google.maps.Marker({ position: { lat, lng }, map: mapRef.current, title });
-        }
-      }
-    }, [showMap]);
 
     const initAutocomplete = () => {
       const google = (window as any).google;

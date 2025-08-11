@@ -1,10 +1,7 @@
 
-import { useState, useRef, useEffect } from 'react';
 import { Home, Building, TrendingUp, MapPin, Users, ShoppingBag, Briefcase, BarChart3, Building2, PlusCircle } from 'lucide-react';
 
 const MobilePropertyServices = () => {
-  const [isPaused, setIsPaused] = useState(false);
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
   const services = [
     { icon: Home, label: 'Buy', hasNew: false },
     { icon: Building, label: 'Rent', hasNew: false },
@@ -18,32 +15,6 @@ const MobilePropertyServices = () => {
     { icon: PlusCircle, label: 'Post a property', hasNew: false }
   ];
 
-  // Duplicate services for infinite scroll effect
-  const infiniteServices = [...services, ...services];
-
-  // Auto-scroll functionality
-  useEffect(() => {
-    if (isPaused) return;
-
-    const container = scrollContainerRef.current;
-    if (!container) return;
-
-    const scrollInterval = setInterval(() => {
-      const maxScrollLeft = container.scrollWidth - container.clientWidth;
-      
-      if (container.scrollLeft >= maxScrollLeft / 2) {
-        // Reset to beginning when we've scrolled through the first set
-        container.scrollLeft = 0;
-      } else {
-        // Scroll by one item width
-        const itemWidth = container.clientWidth / 2 + 16; // item width + gap
-        container.scrollLeft += itemWidth;
-      }
-    }, 2000); // Auto-scroll every 2 seconds
-
-    return () => clearInterval(scrollInterval);
-  }, [isPaused]);
-
   return (
     <section className="sm:hidden bg-white pb-8 px-4">
       <div className="text-center mb-6">
@@ -51,15 +22,9 @@ const MobilePropertyServices = () => {
         <p className="text-gray-600">Explore real estate options in top cities</p>
       </div>
       
-      <div 
-        ref={scrollContainerRef}
-        className="overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
-        onMouseEnter={() => setIsPaused(true)}
-        onMouseLeave={() => setIsPaused(false)}
-        style={{ scrollBehavior: 'smooth' }}
-      >
+      <div className="overflow-x-auto scrollbar-hide">
         <div className="flex gap-4 px-4" style={{ width: 'fit-content' }}>
-          {infiniteServices.map((service, index) => (
+          {services.map((service, index) => (
             <div key={index} className="relative bg-gray-50 rounded-lg p-4 flex flex-col items-center justify-center min-h-[100px] hover:bg-gray-100 transition-colors flex-shrink-0" style={{ width: 'calc((100vw - 48px) / 2)' }}>
               {service.hasNew && (
                 <span className="absolute -top-1 -right-1 bg-pink-500 text-white text-xs px-2 py-1 rounded-full font-medium">

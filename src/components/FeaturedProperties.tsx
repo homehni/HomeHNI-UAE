@@ -3,7 +3,6 @@ import PropertyCard from './PropertyCard';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card } from '@/components/ui/card';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 // Minimal type for featured properties
 type FeaturedProperty = {
@@ -171,36 +170,37 @@ const FeaturedProperties = ({ properties: propsProperties }: { properties?: Feat
 
         {/* Premium Filter Bar */}
         <Card className="mb-6 border border-border/60 bg-background/60 backdrop-blur supports-[backdrop-filter]:bg-background/50 shadow-sm animate-fade-in">
-          <div className="p-2 md:p-3 w-full min-w-0 overflow-hidden">
-            {/* Mobile: dropdown filter */}
+          <div className="p-2 md:p-3">
+            {/* Mobile: swipeable chips (no arrows) */}
             <nav aria-label="Property type filter" className="md:hidden">
-              <Select value={activeType} onValueChange={setActiveType}>
-                <SelectTrigger className="w-full rounded-full bg-card/80 border border-border/60 shadow-sm backdrop-blur supports-[backdrop-filter]:bg-card/50">
-                  <SelectValue placeholder="Select property type" />
-                </SelectTrigger>
-                <SelectContent className="z-50 bg-popover/95 backdrop-blur supports-[backdrop-filter]:bg-popover/90 border border-border shadow-lg">
-                  {availableTypes.map((type) => (
-                    <SelectItem
-                      key={type}
-                      value={type}
-                      className="capitalize cursor-pointer focus:bg-accent focus:text-accent-foreground"
-                    >
-                      {type}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <ToggleGroup
+                type="single"
+                value={activeType}
+                onValueChange={(v) => v && setActiveType(v)}
+                className="w-full overflow-x-auto gap-2 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+              >
+                {availableTypes.map((type) => (
+                  <ToggleGroupItem
+                    key={type}
+                    value={type}
+                    className="rounded-full px-4 py-2 text-sm bg-card/80 border border-border/60 hover-scale data-[state=on]:bg-primary data-[state=on]:text-primary-foreground data-[state=on]:shadow"
+                    aria-label={`${type} properties`}
+                  >
+                    {type}
+                  </ToggleGroupItem>
+                ))}
+              </ToggleGroup>
             </nav>
 
             {/* Desktop: horizontal tabs with hidden scrollbar (no arrows) */}
             <nav aria-label="Property type filter" className="hidden md:block">
               <Tabs value={activeType} onValueChange={setActiveType}>
-                <TabsList className="w-full justify-start overflow-x-auto whitespace-nowrap snap-x snap-mandatory rounded-full bg-muted/60 p-1 border border-border/60 backdrop-blur supports-[backdrop-filter]:bg-muted/40 shadow-sm [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+                <TabsList className="w-full justify-start overflow-x-auto rounded-full bg-muted/60 p-1 border border-border/60 backdrop-blur supports-[backdrop-filter]:bg-muted/40 shadow-sm [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
                   {availableTypes.map((type) => (
                     <TabsTrigger
                       key={type}
                       value={type}
-                      className="shrink-0 snap-start capitalize rounded-full px-4 py-2 md:px-5 md:py-2.5 transition-colors hover-scale data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow"
+                      className="capitalize rounded-full px-4 py-2 md:px-5 md:py-2.5 transition-colors hover-scale data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow"
                     >
                       {type}
                     </TabsTrigger>
