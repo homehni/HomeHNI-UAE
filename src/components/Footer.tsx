@@ -1,8 +1,18 @@
 
 import { MapPin, Phone, Mail, Facebook, Twitter, Instagram, Linkedin } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '@/contexts/AuthContext';
 
 const Footer = () => {
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const handlePostPropertyClick = () => {
+    if (user) {
+      navigate('/post-property');
+    } else {
+      navigate('/auth?redirectTo=/post-property');
+    }
+  };
   const propertyListings = [
     {
       title: "Properties & Flats for Sale",
@@ -317,7 +327,7 @@ const Footer = () => {
           <div className="text-center">
             <h4 className="font-semibold text-gray-900 mb-2">List Your Property</h4>
             <p className="text-sm text-gray-600 mb-4">For Free, Without any brokerage.</p>
-            <button className="bg-gray-800 text-white px-6 py-2 rounded text-sm hover:bg-gray-700 transition-colors">
+            <button onClick={handlePostPropertyClick} className="bg-gray-800 text-white px-6 py-2 rounded text-sm hover:bg-gray-700 transition-colors">
               Free Posting
             </button>
           </div>
