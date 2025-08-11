@@ -195,7 +195,7 @@ const FeaturedProperties = ({ properties: propsProperties }: { properties?: Feat
             {/* Desktop: horizontal tabs with hidden scrollbar (no arrows) */}
             <nav aria-label="Property type filter" className="hidden md:block">
               <Tabs value={activeType} onValueChange={setActiveType}>
-                <TabsList className="w-full justify-start flex-wrap overflow-x-hidden rounded-full bg-muted/60 p-1 border border-border/60 backdrop-blur supports-[backdrop-filter]:bg-muted/40 shadow-sm">
+                <TabsList className="w-full justify-start overflow-x-auto rounded-full bg-muted/60 p-1 border border-border/60 backdrop-blur supports-[backdrop-filter]:bg-muted/40 shadow-sm [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
                   {availableTypes.map((type) => (
                     <TabsTrigger
                       key={type}
