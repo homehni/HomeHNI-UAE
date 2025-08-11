@@ -53,7 +53,7 @@ const MobilePropertyServices = () => {
       
       <div 
         ref={scrollContainerRef}
-        className="overflow-x-auto scrollbar-hide"
+        className="overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
         onMouseEnter={() => setIsPaused(true)}
         onMouseLeave={() => setIsPaused(false)}
         style={{ scrollBehavior: 'smooth' }}
