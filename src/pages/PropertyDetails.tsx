@@ -97,7 +97,7 @@ const PropertyDetails: React.FC = () => {
               Home / Properties / <span className="text-gray-700 font-medium">{property.title}</span>
             </nav>
             <h1 className="text-2xl md:text-3xl font-bold mb-2">{property.title}</h1>
-            <div className="flex flex-wrap items-center gap-3 text-gray-600 mx-[13px]">
+            <div className="flex flex-wrap items-center gap-3 text-gray-600 mx-[12px] my-0 py-[7px]">
               <span className="inline-flex items-center"><MapPin className="h-4 w-4 mr-1" />{property.locality}, {property.city}</span>
               <Badge variant={property.listing_type === 'sale' ? 'default' : 'secondary'}>For {property.listing_type}</Badge>
               <Badge variant={property.status === 'active' ? 'default' : 'secondary'}>{property.status}</Badge>
