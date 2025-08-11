@@ -5,7 +5,7 @@ import Footer from '@/components/Footer';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { Home, MapPin, IndianRupee, Building, Calendar, Mail, Phone, User } from 'lucide-react';
+import { Home, MapPin, IndianRupee, Calendar, Mail, Phone, User, Images, Paintbrush, Calculator, FileText, ShieldCheck, Bus, Train, Car, TrendingUp } from 'lucide-react';
 
 interface Property {
   id: string;
@@ -43,6 +43,22 @@ const PropertyDetails: React.FC = () => {
     document.title = property ? `${property.title} | Property Details` : 'Property Details';
   }, [property]);
 
+  const [descExpanded, setDescExpanded] = React.useState(false);
+  const fallbackDescription = `This beautifully maintained ${property?.bhk_type ?? ''} ${property?.property_type?.replace('_',' ') ?? 'apartment'} offers a spacious layout with abundant natural light and excellent connectivity to local conveniences. Situated in a prime locality, it features well-ventilated rooms, ample storage and proximity to schools, hospitals and public transport. A perfect choice for families looking for comfort and convenience.`;
+  const overview = [
+    { label: 'Age of Building', value: '10+ years' },
+    { label: 'Ownership Type', value: 'Self Owned' },
+    { label: 'Maintenance', value: '₹ 2.8 / Sq.Ft/M' },
+    { label: 'Flooring', value: 'Vitrified Tiles' },
+    { label: 'Builtup Area', value: `${property?.super_area ?? property?.carpet_area ?? 960} Sq.Ft` },
+    { label: 'Furnishing', value: 'Semi' },
+    { label: 'Facing', value: 'West' },
+    { label: 'Floor', value: '0/3' },
+    { label: 'Parking', value: 'Bike and Car' },
+    { label: 'Gated Security', value: 'Yes' }
+  ];
+  const amenities = ['Lift','Internet provider','Security','Park','Sewage treatment','Visitor parking'];
+
   if (!property) {
     return (
       <div className="min-h-screen flex flex-col">
@@ -78,6 +94,15 @@ const PropertyDetails: React.FC = () => {
         </section>
 
         <section className="container mx-auto px-4 py-8">
+          {/* Toolbar */}
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex gap-2">
+              <Button variant="outline" size="sm" className="inline-flex items-center"><Images className="h-4 w-4 mr-1" /> Photos</Button>
+              <Button variant="outline" size="sm" className="inline-flex items-center"><MapPin className="h-4 w-4 mr-1" /> Location</Button>
+            </div>
+            <div className="text-sm text-gray-600">{property.images?.length ?? 0} photos</div>
+          </div>
+
           {/* Gallery */}
           {property.images && property.images.length > 0 && (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
@@ -126,13 +151,85 @@ const PropertyDetails: React.FC = () => {
                 </div>
               </article>
 
+              {/* Overview */}
+              <article className="space-y-4">
+                <h2 className="text-xl font-semibold">Overview</h2>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {overview.map((o, idx) => (
+                    <div key={idx} className="rounded-lg border p-3">
+                      <div className="text-gray-600 text-sm">{o.label}</div>
+                      <div className="font-medium">{o.value}</div>
+                    </div>
+                  ))}
+                </div>
+              </article>
+
+              {/* Services */}
+              <article className="space-y-4">
+                <h2 className="text-xl font-semibold">Services</h2>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                  <div className="flex flex-col items-center gap-2 rounded-lg border p-4"><Paintbrush className="h-5 w-5 text-brand-red" /><span>Painting</span></div>
+                  <div className="flex flex-col items-center gap-2 rounded-lg border p-4"><Calculator className="h-5 w-5 text-brand-red" /><span>Estimate Cost</span></div>
+                  <div className="flex flex-col items-center gap-2 rounded-lg border p-4"><FileText className="h-5 w-5 text-brand-red" /><span>Legal Services</span></div>
+                  <div className="flex flex-col items-center gap-2 rounded-lg border p-4"><ShieldCheck className="h-5 w-5 text-brand-red" /><span>Create Agreement</span></div>
+                </div>
+              </article>
+
               {/* Description */}
-              {property.description && (
-                <article className="space-y-3">
-                  <h2 className="text-xl font-semibold">Description</h2>
-                  <p className="text-gray-700 leading-relaxed">{property.description}</p>
-                </article>
-              )}
+              <article className="space-y-3">
+                <h2 className="text-xl font-semibold">Description</h2>
+                <p className="text-gray-700 leading-relaxed">
+                  {(descExpanded ? (property.description || fallbackDescription) : (property.description || fallbackDescription).slice(0, 320))}
+                  {((property.description || fallbackDescription).length > 320) && !descExpanded && '...'}
+                </p>
+                {((property.description || fallbackDescription).length > 320) && (
+                  <Button variant="outline" size="sm" onClick={() => setDescExpanded((v) => !v)}>
+                    {descExpanded ? 'Show Less' : 'Show More'}
+                  </Button>
+                )}
+              </article>
+
+              {/* Amenities */}
+              <article className="space-y-4">
+                <h2 className="text-xl font-semibold">Amenities</h2>
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+                  {amenities.map((a) => (
+                    <div key={a} className="rounded-lg border p-3 text-center text-sm">{a}</div>
+                  ))}
+                </div>
+              </article>
+
+              {/* Neighborhood */}
+              <article className="space-y-4">
+                <h2 className="text-xl font-semibold">Neighborhood</h2>
+                <div className="w-full h-72 rounded-lg overflow-hidden border">
+                  <iframe
+                    title="map"
+                    width="100%"
+                    height="100%"
+                    loading="lazy"
+                    src={`https://www.google.com/maps?q=${encodeURIComponent(`${property.locality}, ${property.city}`)}&output=embed`}
+                  />
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm text-gray-700">
+                  <div className="space-y-2">
+                    <div className="font-medium">Transit</div>
+                    <div className="flex items-center"><Bus className="h-4 w-4 mr-2" /> Bus Stations nearby</div>
+                    <div className="flex items-center"><Train className="h-4 w-4 mr-2" /> Metro Stations nearby</div>
+                    <div className="flex items-center"><Car className="h-4 w-4 mr-2" /> Parking available</div>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="font-medium">Essentials</div>
+                    <div>Schools, Hospitals, ATMs</div>
+                    <div>Parks and Markets</div>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="font-medium">Utilities</div>
+                    <div>24x7 Water supply</div>
+                    <div>Power backup</div>
+                  </div>
+                </div>
+              </article>
 
               {/* Listed on */}
               <div className="pt-4 border-t">
