@@ -9,17 +9,7 @@ const SearchSection = () => {
   const [selectedCity, setSelectedCity] = useState('All Residential');
   const inputRef = useRef<HTMLInputElement>(null);
   const mobileInputRef = useRef<HTMLInputElement>(null);
-  
-  const cities = [
-    'All Residential',
-    'Flat/Apartment',
-    'Independent Building/ Floor',
-    'Farm House',
-    'Villa',
-    'Plots',
-    'Independent House',
-  ];
-  
+  const cities = ['All Residential', 'Flat/Apartment', 'Independent Building/ Floor', 'Farm House', 'Villa', 'Plots', 'Independent House'];
   const handleCitySelect = (city: string) => {
     setSelectedCity(city);
   };
@@ -47,7 +37,6 @@ const SearchSection = () => {
   }];
   useEffect(() => {
     const apiKey = 'AIzaSyD2rlXeHN4cm0CQD-y4YGTsob9a_27YcwY';
-
     const loadGoogleMaps = () => new Promise<void>((resolve, reject) => {
       if ((window as any).google?.maps?.places) {
         resolve();
@@ -67,17 +56,17 @@ const SearchSection = () => {
       script.onerror = () => reject(new Error('Google Maps failed to load'));
       document.head.appendChild(script);
     });
-
     const initAutocomplete = () => {
       if (!(window as any).google?.maps?.places) return;
       const options = {
         fields: ['formatted_address', 'geometry', 'name'],
         types: ['geocode'],
-        componentRestrictions: { country: 'in' as const },
+        componentRestrictions: {
+          country: 'in' as const
+        }
       };
-
       const inputs = [inputRef.current, mobileInputRef.current].filter(Boolean) as HTMLInputElement[];
-      inputs.forEach((el) => {
+      inputs.forEach(el => {
         const ac = new (window as any).google.maps.places.Autocomplete(el, options);
         ac.addListener('place_changed', () => {
           const place = ac.getPlace();
@@ -86,10 +75,8 @@ const SearchSection = () => {
         });
       });
     };
-
     loadGoogleMaps().then(initAutocomplete).catch(console.error);
   }, []);
-
   return <section className="relative">
       {/* Hero Image Background - extends to cover marquee area */}
       <div className="relative h-[50vh] sm:h-[60vh] bg-cover bg-no-repeat -mt-[70px] pt-[40px]" style={{
@@ -123,7 +110,7 @@ const SearchSection = () => {
                   <TabsList className="grid w-full grid-cols-7 bg-transparent p-0 h-auto rounded-none border-b border-gray-200">
                     {navigationTabs.map(tab => <TabsTrigger key={tab.id} value={tab.id} className={`px-6 py-4 text-sm font-medium transition-all rounded-none border-b-2 border-transparent data-[state=active]:border-brand-red data-[state=active]:text-brand-red data-[state=active]:bg-brand-red/5 data-[state=active]:font-bold hover:bg-brand-red/5 ${tab.id === 'new-launch' ? 'relative' : ''}`}>
                         {tab.label}
-                        {tab.id === 'new-launch' && <span className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full"></span>}
+                        {tab.id === 'new-launch'}
                       </TabsTrigger>)}
                   </TabsList>
 
@@ -139,15 +126,9 @@ const SearchSection = () => {
                         </PopoverTrigger>
                         <PopoverContent className="w-48 p-0 bg-white border border-gray-200 shadow-lg z-50" align="start">
                           <div className="py-2">
-                            {cities.map((city) => (
-                              <button
-                                key={city}
-                                onClick={() => handleCitySelect(city)}
-                                className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors"
-                              >
+                            {cities.map(city => <button key={city} onClick={() => handleCitySelect(city)} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
                                 {city}
-                              </button>
-                            ))}
+                              </button>)}
                           </div>
                         </PopoverContent>
                       </Popover>
