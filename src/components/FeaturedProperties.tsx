@@ -170,20 +170,20 @@ const FeaturedProperties = ({ properties: propsProperties }: { properties?: Feat
 
         {/* Premium Filter Bar */}
         <Card className="mb-6 border border-border/60 bg-background/60 backdrop-blur supports-[backdrop-filter]:bg-background/50 shadow-sm animate-fade-in">
-          <div className="p-2 md:p-3 min-w-0">
+          <div className="p-2 md:p-3 w-full min-w-0 overflow-hidden">
             {/* Mobile: swipeable chips (no arrows) */}
             <nav aria-label="Property type filter" className="md:hidden">
               <ToggleGroup
                 type="single"
                 value={activeType}
                 onValueChange={(v) => v && setActiveType(v)}
-                className="w-full overflow-x-auto gap-2 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+                className="w-full overflow-x-auto whitespace-nowrap gap-2 snap-x snap-mandatory [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
               >
                 {availableTypes.map((type) => (
                   <ToggleGroupItem
                     key={type}
                     value={type}
-                    className="rounded-full px-4 py-2 text-sm bg-card/80 border border-border/60 hover-scale data-[state=on]:bg-primary data-[state=on]:text-primary-foreground data-[state=on]:shadow"
+                    className="shrink-0 snap-start rounded-full px-4 py-2 text-sm bg-card/80 border border-border/60 hover-scale data-[state=on]:bg-primary data-[state=on]:text-primary-foreground data-[state=on]:shadow"
                     aria-label={`${type} properties`}
                   >
                     {type}
@@ -195,12 +195,12 @@ const FeaturedProperties = ({ properties: propsProperties }: { properties?: Feat
             {/* Desktop: horizontal tabs with hidden scrollbar (no arrows) */}
             <nav aria-label="Property type filter" className="hidden md:block">
               <Tabs value={activeType} onValueChange={setActiveType}>
-                <TabsList className="w-full justify-start overflow-x-auto rounded-full bg-muted/60 p-1 border border-border/60 backdrop-blur supports-[backdrop-filter]:bg-muted/40 shadow-sm [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+                <TabsList className="w-full justify-start overflow-x-auto whitespace-nowrap snap-x snap-mandatory rounded-full bg-muted/60 p-1 border border-border/60 backdrop-blur supports-[backdrop-filter]:bg-muted/40 shadow-sm [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
                   {availableTypes.map((type) => (
                     <TabsTrigger
                       key={type}
                       value={type}
-                      className="capitalize rounded-full px-4 py-2 md:px-5 md:py-2.5 transition-colors hover-scale data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow"
+                      className="shrink-0 snap-start capitalize rounded-full px-4 py-2 md:px-5 md:py-2.5 transition-colors hover-scale data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow"
                     >
                       {type}
                     </TabsTrigger>
