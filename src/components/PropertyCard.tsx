@@ -1,7 +1,9 @@
 
 import { Heart, MapPin, Bed, Bath, Square, Phone } from 'lucide-react';
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { PropertyDetailModal } from '@/components/PropertyDetailModal';
 
 interface PropertyCardProps {
   id: string;
@@ -17,6 +19,7 @@ interface PropertyCardProps {
 }
 
 const PropertyCard = ({
+  id,
   title,
   location,
   price,
@@ -27,6 +30,47 @@ const PropertyCard = ({
   propertyType,
   isNew = false
 }: PropertyCardProps) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const parsePriceToNumber = (priceStr: string) => {
+    const lower = priceStr.toLowerCase();
+    const num = parseFloat(lower.replace(/[^0-9.]/g, '')) || 0;
+    if (lower.includes('cr')) return Math.round(num * 10000000);
+    if (lower.includes('l')) return Math.round(num * 100000);
+    if (lower.includes('k')) return Math.round(num * 1000);
+    return Math.round(num);
+  };
+
+  const parseAreaToNumber = (areaStr: string) => {
+    const num = parseFloat(areaStr.replace(/[^0-9.]/g, '')) || 0;
+    return Math.round(num);
+  };
+
+  const parts = location.split(',').map((s) => s.trim());
+  const propertyForModal = {
+    id,
+    title,
+    property_type: propertyType.toLowerCase().replace(/\s+/g, '_'),
+    listing_type: 'sale',
+    bhk_type: bedrooms ? `${bedrooms} BHK` : undefined,
+    expected_price: parsePriceToNumber(price),
+    super_area: parseAreaToNumber(area),
+    bathrooms,
+    city: parts[parts.length - 1] || 'N/A',
+    locality: parts[0] || location,
+    state: 'N/A',
+    pincode: 'N/A',
+    description: undefined,
+    images: [`https://images.unsplash.com/${image}?auto=format&fit=crop&w=800&q=80`],
+    videos: [],
+    status: 'active',
+    created_at: new Date().toISOString(),
+    owner_name: undefined,
+    owner_email: undefined,
+    owner_phone: undefined,
+    owner_role: undefined
+  };
+
   return (
     <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-300 group">
       <div className="relative">
@@ -85,11 +129,12 @@ const PropertyCard = ({
             <Phone size={14} className="mr-1" />
             Contact
           </Button>
-          <Button size="sm" className="flex-1 bg-brand-maroon hover:bg-brand-maroon-dark">
+          <Button size="sm" className="flex-1 bg-brand-maroon hover:bg-brand-maroon-dark" onClick={() => setIsOpen(true)}>
             View Details
           </Button>
         </div>
       </CardContent>
+      <PropertyDetailModal property={propertyForModal} isOpen={isOpen} onClose={() => setIsOpen(false)} />
     </Card>
   );
 };
