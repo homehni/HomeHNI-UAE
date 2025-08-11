@@ -7,17 +7,17 @@ const CustomerTestimonials = () => {
     {
       name: "Rajesh Kumar",
       rating: 5,
-      text: "5 Acres is the best property site. I bought my house through them without paying any brokerage. The service was excellent and the team was very helpful."
+      text: "Home HNI is the best property site. I bought my house through them without paying any brokerage. The service was excellent and the team was very helpful."
     },
     {
       name: "Priya Sharma", 
       rating: 5,
-      text: "I sold my apartment within a month through 5 Acres. The platform made it very easy to list my property and connect with genuine buyers."
+      text: "I sold my apartment within a month through Home HNI. The platform made it very easy to list my property and connect with genuine buyers."
     },
     {
       name: "Amit Patel",
       rating: 5,
-      text: "Great experience with 5 Acres. The legal assistance they provided was very helpful. I would recommend this platform to everyone."
+      text: "Great experience with Home HNI. The legal assistance they provided was very helpful. I would recommend this platform to everyone."
     }
   ];
 
