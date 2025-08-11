@@ -10,7 +10,7 @@ const MobileAppSection = () => {
           <div className="flex justify-center lg:justify-start">
             <div className="relative">
               <img 
-                src="/lovable-uploads/c996469f-4da3-4235-b9fc-d1152fe010e8.png" 
+                src="/lovable-uploads/Mobile App Previw.png" 
                 alt="5 Acres Mobile App Screenshots"
                 className="w-full max-w-lg h-auto"
               />
