@@ -68,6 +68,14 @@ export const OwnerInfoStep: React.FC<OwnerInfoStepProps> = ({
     }
   }, [selectedPropertyType, selectedListingType, setValue, trigger]);
 
+  // Update form values when initialData changes
+  useEffect(() => {
+    if (initialData.role && initialData.role !== watch('role')) {
+      setValue('role', initialData.role);
+      trigger('role');
+    }
+  }, [initialData.role, setValue, trigger, watch]);
+
   // Auto-fill detection and validation
   useEffect(() => {
     const detectAutoFill = () => {
