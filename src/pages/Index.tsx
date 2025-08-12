@@ -1,4 +1,6 @@
 
+import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import Header from '@/components/Header';
 import Marquee from '@/components/Marquee';
 import SearchSection from '@/components/SearchSection';
@@ -15,6 +17,19 @@ import Footer from '@/components/Footer';
 import ChatBot from '@/components/ChatBot';
 
 const Index = () => {
+  const location = useLocation();
+  
+  useEffect(() => {
+    if (location.state?.scrollToSearch) {
+      setTimeout(() => {
+        const heroSearchElement = document.getElementById('hero-search');
+        if (heroSearchElement) {
+          heroSearchElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }, 100);
+    }
+  }, [location.state]);
+
   return (
     <div className="min-h-screen bg-white">
       {/* Marquee at the very top */}
