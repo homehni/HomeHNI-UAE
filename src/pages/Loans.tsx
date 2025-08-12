@@ -8,18 +8,31 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Marquee from '@/components/Marquee';
 const Loans = () => {
-  const [loanAmount, setLoanAmount] = useState(5000000);
-  const [tenure, setTenure] = useState(20);
-  const [interestRate, setInterestRate] = useState(7);
+  const [loanAmountInput, setLoanAmountInput] = useState<string>('5000000');
+  const [tenureInput, setTenureInput] = useState<string>('20');
+  const [interestRateInput, setInterestRateInput] = useState<string>('7');
+
+  const formatINR = (value: string) => {
+    if (!value) return '';
+    const num = Number(value);
+    if (!isFinite(num) || isNaN(num)) return '';
+    return new Intl.NumberFormat('en-IN').format(num);
+  };
   const calculateEMI = () => {
-    const principal = loanAmount;
-    const rate = interestRate / 12 / 100;
-    const time = tenure * 12;
-    const emi = principal * rate * Math.pow(1 + rate, time) / (Math.pow(1 + rate, time) - 1);
+    const principal = Number(loanAmountInput || 0);
+    const years = Number(tenureInput || 0);
+    const annualRate = Number(interestRateInput || 0);
+    if (principal <= 0 || years <= 0 || annualRate <= 0) return 0;
+    const rate = annualRate / 12 / 100;
+    const time = years * 12;
+    const pow = Math.pow(1 + rate, time);
+    const denominator = pow - 1;
+    if (denominator === 0) return 0;
+    const emi = principal * rate * pow / denominator;
     return Math.round(emi);
   };
-  const totalAmount = calculateEMI() * tenure * 12;
-  const totalInterest = totalAmount - loanAmount;
+  const totalAmount = calculateEMI() * Number(tenureInput || 0) * 12;
+  const totalInterest = totalAmount - Number(loanAmountInput || 0);
   return <div className="min-h-screen bg-background">
       <Marquee />
       <Header />
@@ -193,17 +206,17 @@ const Loans = () => {
                         <Input 
                           id="loanAmount" 
                           type="text" 
-                          value={loanAmount.toLocaleString('en-IN')} 
+                          value={formatINR(loanAmountInput)} 
                           onChange={(e) => {
                             const value = e.target.value.replace(/[^0-9]/g, '');
-                            setLoanAmount(Number(value) || 0);
+                            setLoanAmountInput(value);
                           }} 
                           className="pl-8" 
                           placeholder="Enter your Loan Amount"
                         />
                         <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-sm text-primary font-medium">
-                          {loanAmount >= 10000000 ? `₹ ${(loanAmount/10000000).toFixed(1)} Cr` : 
-                           loanAmount >= 100000 ? `₹ ${(loanAmount/100000).toFixed(1)} L` : ''}
+                          {Number(loanAmountInput) >= 10000000 ? `₹ ${(Number(loanAmountInput)/10000000).toFixed(1)} Cr` : 
+                           Number(loanAmountInput) >= 100000 ? `₹ ${(Number(loanAmountInput)/100000).toFixed(1)} L` : ''}
                         </span>
                       </div>
                     </div>
@@ -213,10 +226,10 @@ const Loans = () => {
                       <Input 
                         id="tenure" 
                         type="text" 
-                        value={tenure} 
+                        value={tenureInput} 
                         onChange={(e) => {
                           const value = e.target.value.replace(/[^0-9]/g, '');
-                          setTenure(Number(value) || 0);
+                          setTenureInput(value);
                         }} 
                         className="mt-1" 
                         placeholder="Enter tenure in years"
@@ -229,10 +242,10 @@ const Loans = () => {
                         id="interestRate" 
                         type="text" 
                         step="0.1" 
-                        value={interestRate} 
+                        value={interestRateInput} 
                         onChange={(e) => {
                           const value = e.target.value.replace(/[^0-9.]/g, '');
-                          setInterestRate(Number(value) || 0);
+                          setInterestRateInput(value);
                         }} 
                         className="mt-1" 
                         placeholder="Enter interest rate"
@@ -258,7 +271,7 @@ const Loans = () => {
                     </div>
                     
                     <p className="text-sm text-muted-foreground">
-                      Sample calculation: ₹50 lakhs over 20 years at 7% results in ~₹38,586 per month
+                      Sample calculation: ₹50 lakhs over 20 years at 7% results in ~₹38,765 per month
                     </p>
                   </div>
                 </div>
