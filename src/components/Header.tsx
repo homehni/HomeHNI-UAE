@@ -143,7 +143,7 @@ const Header = () => {
   <a 
     href="#" 
     onClick={(e) => { e.preventDefault(); handlePostPropertyClick('Owner'); }}
-    className={`hover:opacity-80 transition-colors duration-500 text-sm font-medium ${isScrolled ? 'text-gray-800' : 'text-white'} cursor-pointer`}
+    className={`hover:opacity-80 transition-colors duration-500 text-base font-medium ${isScrolled ? 'text-gray-800' : 'text-white'} cursor-pointer`}
   >
     Sellers
   </a>
@@ -151,7 +151,7 @@ const Header = () => {
   <a 
     href="#" 
     onClick={(e) => { e.preventDefault(); handlePostPropertyClick('Agent'); }}
-    className={`hover:opacity-80 transition-colors duration-500 text-sm font-medium ${isScrolled ? 'text-gray-800' : 'text-white'} cursor-pointer`}
+    className={`hover:opacity-80 transition-colors duration-500 text-base font-medium ${isScrolled ? 'text-gray-800' : 'text-white'} cursor-pointer`}
   >
     Agents
   </a>
@@ -159,7 +159,7 @@ const Header = () => {
                <a 
     href="#" 
     onClick={(e) => { e.preventDefault(); handlePostPropertyClick('Builder'); }}
-    className={`hover:opacity-80 transition-colors duration-500 text-sm font-medium ${isScrolled ? 'text-gray-800' : 'text-white'} cursor-pointer`}
+    className={`hover:opacity-80 transition-colors duration-500 text-base font-medium ${isScrolled ? 'text-gray-800' : 'text-white'} cursor-pointer`}
   >
     Builders
   </a>
@@ -167,7 +167,7 @@ const Header = () => {
   <a
     href="/about"
     onClick={(e) => { e.preventDefault(); navigate('/about'); }}
-    className={`hover:opacity-80 transition-colors duration-500 text-sm font-medium ${isScrolled ? 'text-gray-800' : 'text-white'}`}
+    className={`hover:opacity-80 transition-colors duration-500 text-base font-medium ${isScrolled ? 'text-gray-800' : 'text-white'}`}
   >
     About
   </a>
@@ -183,7 +183,7 @@ const Header = () => {
     onMouseLeave={handleRentalLeave}
   >
     <button 
-      className={`flex items-center hover:opacity-80 transition-colors duration-500 text-sm font-medium ${isScrolled ? 'text-gray-800' : 'text-white'}`}
+      className={`flex items-center hover:opacity-80 transition-colors duration-500 text-base font-medium ${isScrolled ? 'text-gray-800' : 'text-white'}`}
     >
       Rental
       <ChevronDown className="ml-1 h-3 w-3" />
@@ -222,7 +222,7 @@ const Header = () => {
     onMouseLeave={handleServicesLeave}
   >
     <button 
-      className={`flex items-center hover:opacity-80 transition-colors duration-500 text-sm font-medium ${isScrolled ? 'text-gray-800' : 'text-white'}`}
+      className={`flex items-center hover:opacity-80 transition-colors duration-500 text-base font-medium ${isScrolled ? 'text-gray-800' : 'text-white'}`}
     >
       Services
       <ChevronDown className="ml-1 h-3 w-3" />
