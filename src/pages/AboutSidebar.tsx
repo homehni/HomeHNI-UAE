@@ -511,8 +511,8 @@ const AboutSidebar = () => {
                           </div>
                           <div className="flex justify-between items-center">
                             <span className="text-gray-700 text-sm">Contact</span>
-                            <a href="tel:+918035263382" className="text-blue-600 hover:underline text-sm">
-                              +918035263382
+                            <a href="tel:+918074017388" className="text-blue-600 hover:underline text-sm">
+                              +91 80740 17388
                             </a>
                           </div>
                         </div>
