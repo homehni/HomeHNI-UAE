@@ -503,12 +503,12 @@ const AboutSidebar = () => {
                               homehni8@gmail.com
                             </a>
                           </div>
-                          <div className="flex justify-between items-center">
+                          {/* <div className="flex justify-between items-center">
                             <span className="text-gray-700 text-sm">Media Query</span>
                             <a href="mailto:media@homehni.com" className="text-blue-600 hover:underline text-sm">
                               media@homehni.com
                             </a>
-                          </div>
+                          </div> */}
                           <div className="flex justify-between items-center">
                             <span className="text-gray-700 text-sm">Contact</span>
                             <a href="tel:+918074017388" className="text-blue-600 hover:underline text-sm">
