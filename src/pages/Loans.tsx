@@ -199,7 +199,7 @@ const Loans = () => {
                             setLoanAmount(Number(value) || 0);
                           }} 
                           className="pl-8" 
-                          placeholder="Enter loan amount"
+                          placeholder="Enter your Loan Amount"
                         />
                         <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-sm text-primary font-medium">
                           {loanAmount >= 10000000 ? `₹ ${(loanAmount/10000000).toFixed(1)} Cr` : 
