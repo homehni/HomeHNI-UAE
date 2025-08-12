@@ -127,6 +127,7 @@ const Header = () => {
                 </SelectTrigger>
                 <SelectContent className="bg-white border border-gray-200 shadow-lg z-50">
                   <SelectItem value="all-india">All India</SelectItem>
+                  <SelectItem value="hyderabad">Hyderabad</SelectItem>
                   <SelectItem value="mumbai">Mumbai</SelectItem>
                   <SelectItem value="delhi">Delhi</SelectItem>
                   <SelectItem value="bangalore">Bangalore</SelectItem>
