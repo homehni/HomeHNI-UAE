@@ -499,8 +499,8 @@ const AboutSidebar = () => {
                         <div className="space-y-3">
                           <div className="flex justify-between items-center">
                             <span className="text-gray-700 text-sm">Write to us</span>
-                            <a href="mailto:contact@homehni.com" className="text-blue-600 hover:underline text-sm">
-                              contact@homehni.com
+                            <a href="mailto:homehni8@gmail.com" className="text-blue-600 hover:underline text-sm">
+                              homehni8@gmail.com
                             </a>
                           </div>
                           <div className="flex justify-between items-center">
