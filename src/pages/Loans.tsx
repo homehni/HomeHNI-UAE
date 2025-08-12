@@ -210,12 +210,33 @@ const Loans = () => {
                     
                     <div>
                       <Label htmlFor="tenure">Tenure (Years)</Label>
-                      <Input id="tenure" type="number" value={tenure} onChange={e => setTenure(Number(e.target.value))} className="mt-1" />
+                      <Input 
+                        id="tenure" 
+                        type="text" 
+                        value={tenure} 
+                        onChange={(e) => {
+                          const value = e.target.value.replace(/[^0-9]/g, '');
+                          setTenure(Number(value) || 0);
+                        }} 
+                        className="mt-1" 
+                        placeholder="Enter tenure in years"
+                      />
                     </div>
                     
                     <div>
                       <Label htmlFor="interestRate">Interest Rate (%)</Label>
-                      <Input id="interestRate" type="number" step="0.1" value={interestRate} onChange={e => setInterestRate(Number(e.target.value))} className="mt-1" />
+                      <Input 
+                        id="interestRate" 
+                        type="text" 
+                        step="0.1" 
+                        value={interestRate} 
+                        onChange={(e) => {
+                          const value = e.target.value.replace(/[^0-9.]/g, '');
+                          setInterestRate(Number(value) || 0);
+                        }} 
+                        className="mt-1" 
+                        placeholder="Enter interest rate"
+                      />
                     </div>
                   </div>
                   
