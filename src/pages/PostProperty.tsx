@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { OwnerInfoStep } from '@/components/property-form/OwnerInfoStep';
 import { MultiStepForm } from '@/components/property-form/MultiStepForm';
 import { ResaleMultiStepForm } from '@/components/property-form/ResaleMultiStepForm';
@@ -27,9 +27,20 @@ export const PostProperty: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [currentStep, setCurrentStep] = useState<FormStep>('owner-info');
   const [ownerInfo, setOwnerInfo] = useState<OwnerInfo | null>(null);
+  const [initialOwnerData, setInitialOwnerData] = useState<Partial<OwnerInfo>>({});
   const { user } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const { toast } = useToast();
+
+  // Extract role from URL parameters
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const role = searchParams.get('role');
+    if (role && ['Owner', 'Agent', 'Builder'].includes(role)) {
+      setInitialOwnerData({ role: role as 'Owner' | 'Agent' | 'Builder' });
+    }
+  }, [location.search]);
 
   const handleOwnerInfoNext = (data: OwnerInfo) => {
     setOwnerInfo(data);
@@ -310,7 +321,7 @@ export const PostProperty: React.FC = () => {
   const renderCurrentStep = () => {
     switch (currentStep) {
       case 'owner-info':
-        return <OwnerInfoStep initialData={{}} onNext={handleOwnerInfoNext} />;
+        return <OwnerInfoStep initialData={initialOwnerData} onNext={handleOwnerInfoNext} />;
       case 'rental-form':
         return (
           <MultiStepForm 

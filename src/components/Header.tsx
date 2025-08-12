@@ -81,11 +81,12 @@ const Header = () => {
     navigate('/');
   };
 
-  const handlePostPropertyClick = () => {
+  const handlePostPropertyClick = (role?: string) => {
+    const path = role ? `/post-property?role=${role}` : '/post-property';
     if (user) {
-      navigate('/post-property');
+      navigate(path);
     } else {
-      navigate('/auth?redirectTo=/post-property');
+      navigate(`/auth?redirectTo=${encodeURIComponent(path)}`);
     }
   };
 
@@ -141,7 +142,7 @@ const Header = () => {
   
   <a 
     href="#" 
-    onClick={(e) => { e.preventDefault(); handlePostPropertyClick(); }}
+    onClick={(e) => { e.preventDefault(); handlePostPropertyClick('Owner'); }}
     className={`hover:opacity-80 transition-colors duration-500 text-sm font-medium ${isScrolled ? 'text-gray-800' : 'text-white'} cursor-pointer`}
   >
     Sellers
@@ -149,7 +150,7 @@ const Header = () => {
   
   <a 
     href="#" 
-    onClick={(e) => { e.preventDefault(); handlePostPropertyClick(); }}
+    onClick={(e) => { e.preventDefault(); handlePostPropertyClick('Agent'); }}
     className={`hover:opacity-80 transition-colors duration-500 text-sm font-medium ${isScrolled ? 'text-gray-800' : 'text-white'} cursor-pointer`}
   >
     Agents
@@ -157,7 +158,7 @@ const Header = () => {
 
                <a 
     href="#" 
-    onClick={(e) => { e.preventDefault(); handlePostPropertyClick(); }}
+    onClick={(e) => { e.preventDefault(); handlePostPropertyClick('Builder'); }}
     className={`hover:opacity-80 transition-colors duration-500 text-sm font-medium ${isScrolled ? 'text-gray-800' : 'text-white'} cursor-pointer`}
   >
     Builders
@@ -285,10 +286,10 @@ const Header = () => {
             {/* Right section - Post Property, Profile, and Hamburger Menu */}
             <div className="flex items-center space-x-2 sm:space-x-4">
               {/* Post Property Button - Responsive sizing */}
-                         <Button 
+              <Button 
               variant="outline" 
               size="sm" 
-              onClick={handlePostPropertyClick}
+              onClick={() => handlePostPropertyClick()}
               className={`font-medium px-1.5 sm:px-3 py-1.5 text-xs sm:text-sm transition-all duration-500 ${isScrolled ? 'bg-white text-brand-red border-gray-300 hover:bg-gray-50' : 'bg-white text-brand-red border-white/50 hover:bg-white/90'}`}
             >
               <span className="hidden sm:inline">Post property</span>
