@@ -187,8 +187,25 @@ const Loans = () => {
                 <div className="grid md:grid-cols-2 gap-8">
                   <div className="space-y-6">
                     <div>
-                      <Label htmlFor="loanAmount">Loan Amount (₹)</Label>
-                      <Input id="loanAmount" type="number" value={loanAmount} onChange={e => setLoanAmount(Number(e.target.value))} className="mt-1" />
+                      <Label htmlFor="loanAmount">Loan Amount*</Label>
+                      <div className="relative mt-1">
+                        <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground">₹</span>
+                        <Input 
+                          id="loanAmount" 
+                          type="text" 
+                          value={loanAmount.toLocaleString('en-IN')} 
+                          onChange={(e) => {
+                            const value = e.target.value.replace(/[^0-9]/g, '');
+                            setLoanAmount(Number(value) || 0);
+                          }} 
+                          className="pl-8" 
+                          placeholder="Enter loan amount"
+                        />
+                        <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-sm text-primary font-medium">
+                          {loanAmount >= 10000000 ? `₹ ${(loanAmount/10000000).toFixed(1)} Cr` : 
+                           loanAmount >= 100000 ? `₹ ${(loanAmount/100000).toFixed(1)} L` : ''}
+                        </span>
+                      </div>
                     </div>
                     
                     <div>
