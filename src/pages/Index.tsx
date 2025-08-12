@@ -1,9 +1,9 @@
 
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import Header from '@/components/Header';
 import Marquee from '@/components/Marquee';
-import SearchSection from '@/components/SearchSection';
+import SearchSection, { SearchSectionRef } from '@/components/SearchSection';
 import DirectorySection from '@/components/DirectorySection';
 import MobilePropertyServices from '@/components/MobilePropertyServices';
 import RealEstateSlider from '@/components/RealEstateSlider';
@@ -18,6 +18,7 @@ import ChatBot from '@/components/ChatBot';
 
 const Index = () => {
   const location = useLocation();
+  const searchSectionRef = useRef<SearchSectionRef>(null);
   
   useEffect(() => {
     if (location.state?.scrollToSearch) {
@@ -25,6 +26,10 @@ const Index = () => {
         const heroSearchElement = document.getElementById('hero-search');
         if (heroSearchElement) {
           heroSearchElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          // Focus the search input after scrolling
+          if (searchSectionRef.current) {
+            searchSectionRef.current.focusSearchInput();
+          }
         }
       }, 100);
     }
@@ -39,7 +44,7 @@ const Index = () => {
       {/* Content starts immediately after marquee */}
       <div className="pt-8"> {/* Reduced padding to allow header overlap */}
         <div className="relative">
-          <SearchSection />
+          <SearchSection ref={searchSectionRef} />
           <DirectorySection />
         </div>
         <MobilePropertyServices />
@@ -50,7 +55,7 @@ const Index = () => {
         <Stats />
         <CustomerTestimonials />
         <MobileAppSection />
-        <Footer />
+        <Footer searchSectionRef={searchSectionRef} />
       </div>
       <ChatBot />
     </div>

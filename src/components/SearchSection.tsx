@@ -1,10 +1,14 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, forwardRef, useImperativeHandle } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { MapPin, Search, Mic, MapPinIcon, ChevronDown } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-const SearchSection = () => {
+export interface SearchSectionRef {
+  focusSearchInput: () => void;
+}
+
+const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
   const [activeTab, setActiveTab] = useState('buy');
   const [selectedCity, setSelectedCity] = useState('All Residential');
   const inputRef = useRef<HTMLInputElement>(null);
@@ -77,6 +81,21 @@ const SearchSection = () => {
     };
     loadGoogleMaps().then(initAutocomplete).catch(console.error);
   }, []);
+
+  useImperativeHandle(ref, () => ({
+    focusSearchInput: () => {
+      // Detect if mobile view (screen width < 768px)
+      const isMobile = window.innerWidth < 768;
+      const targetInput = isMobile ? mobileInputRef.current : inputRef.current;
+      
+      if (targetInput) {
+        setTimeout(() => {
+          targetInput.focus();
+        }, 300); // Small delay to ensure scroll completes
+      }
+    }
+  }));
+
   return <section id="hero-search" className="relative">
       {/* Hero Image Background - extends to cover marquee area */}
       <div className="relative h-[50vh] sm:h-[60vh] bg-cover bg-no-repeat -mt-[70px] pt-[40px]" style={{
@@ -165,5 +184,8 @@ const SearchSection = () => {
         </div>
       </div>
     </section>;
-};
+});
+
+SearchSection.displayName = 'SearchSection';
+
 export default SearchSection;

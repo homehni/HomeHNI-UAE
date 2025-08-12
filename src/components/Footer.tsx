@@ -3,7 +3,11 @@ import { MapPin, Phone, Mail, Facebook, Twitter, Instagram, Linkedin } from 'luc
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 
-const Footer = () => {
+interface FooterProps {
+  searchSectionRef?: React.RefObject<{ focusSearchInput: () => void }>;
+}
+
+const Footer = ({ searchSectionRef }: FooterProps) => {
   const { user } = useAuth();
   const navigate = useNavigate();
   
@@ -19,6 +23,10 @@ const Footer = () => {
     const heroSearchElement = document.getElementById('hero-search');
     if (heroSearchElement) {
       heroSearchElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      // Focus the search input after scrolling
+      if (searchSectionRef?.current) {
+        searchSectionRef.current.focusSearchInput();
+      }
     } else {
       // If not on home page, navigate to home page then scroll
       navigate('/', { state: { scrollToSearch: true } });
