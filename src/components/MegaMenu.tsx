@@ -39,7 +39,7 @@ const MegaMenu = ({ isScrolled }: MegaMenuProps) => {
     <div className="relative">
       <Button
         variant="ghost"
-        className={`font-medium px-3 py-2 text-sm transition-all duration-500 flex items-center ${
+        className={`font-medium px-3 py-2 text-base transition-all duration-500 flex items-center ${
           isScrolled 
             ? 'text-gray-800 hover:bg-gray-100' 
             : 'text-white hover:bg-white/10'
