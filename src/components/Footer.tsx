@@ -336,14 +336,14 @@ const Footer = () => {
         {/* Footer links and social media */}
         <div className="border-t border-gray-200 pt-6">
           <div className="flex flex-wrap justify-center gap-6 mb-6 text-sm">
-            <Link to="/about-us" className="text-gray-600 hover:text-brand-red transition-colors">About Us</Link>
+            <Link to="/about?tab=about" className="text-gray-600 hover:text-brand-red transition-colors">About Us</Link>
             <Link to="/careers" className="text-gray-600 hover:text-brand-red transition-colors">Careers</Link>
-            <Link to="/contact-us" className="text-gray-600 hover:text-brand-red transition-colors">Contact Us</Link>
+            <Link to="/about?tab=contact" className="text-gray-600 hover:text-brand-red transition-colors">Contact Us</Link>
             <Link to="/terms-and-conditions" className="text-gray-600 hover:text-brand-red transition-colors">Terms & Conditions</Link>
             <Link to="/privacy-policy" className="text-gray-600 hover:text-brand-red transition-colors">Privacy Policy</Link>
             {/* <Link to="/testimonials" className="text-gray-600 hover:text-brand-red transition-colors">Testimonials</Link> */}
             <a href="/sitemap.xml" className="text-gray-600 hover:text-brand-red transition-colors">Sitemap</a>
-            <Link to="/faq" className="text-gray-600 hover:text-brand-red transition-colors">FAQs</Link>
+            <Link to="/about?tab=faq" className="text-gray-600 hover:text-brand-red transition-colors">FAQs</Link>
           </div>
 
           {/* App store badges */}
