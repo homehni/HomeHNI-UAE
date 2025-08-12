@@ -139,15 +139,27 @@ const Header = () => {
             <nav className="hidden lg:flex items-center space-x-5">
   <MegaMenu isScrolled={isScrolled} />
   
-  <a href="#" className={`hover:opacity-80 transition-colors duration-500 text-sm font-medium ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
+  <a 
+    href="#" 
+    onClick={(e) => { e.preventDefault(); handlePostPropertyClick(); }}
+    className={`hover:opacity-80 transition-colors duration-500 text-sm font-medium ${isScrolled ? 'text-gray-800' : 'text-white'} cursor-pointer`}
+  >
     Sellers
   </a>
   
-  <a href="#" className={`hover:opacity-80 transition-colors duration-500 text-sm font-medium ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
+  <a 
+    href="#" 
+    onClick={(e) => { e.preventDefault(); handlePostPropertyClick(); }}
+    className={`hover:opacity-80 transition-colors duration-500 text-sm font-medium ${isScrolled ? 'text-gray-800' : 'text-white'} cursor-pointer`}
+  >
     Agents
   </a>
 
-               <a href="#" className={`hover:opacity-80 transition-colors duration-500 text-sm font-medium ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
+               <a 
+    href="#" 
+    onClick={(e) => { e.preventDefault(); handlePostPropertyClick(); }}
+    className={`hover:opacity-80 transition-colors duration-500 text-sm font-medium ${isScrolled ? 'text-gray-800' : 'text-white'} cursor-pointer`}
+  >
     Builders
   </a>
   
