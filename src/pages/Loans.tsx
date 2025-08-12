@@ -25,8 +25,9 @@ const Loans = () => {
       <Header />
       
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-primary/10 to-primary/5 py-20">
-        <div className="container mx-auto text-center px-[19px] py-[20px]">
+      <section className="relative py-20 bg-cover bg-center bg-no-repeat" style={{backgroundImage: "url('/lovable-uploads/bd672939-951b-4007-b092-868ec5ac81c4.png')"}}>
+        <div className="absolute inset-0 bg-black/50"></div>
+        <div className="container mx-auto text-center px-[19px] py-[20px] relative z-10">
           <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-6 py-[25px]">
             Unlock Your Dream Home with Smart Financing
           </h1>
