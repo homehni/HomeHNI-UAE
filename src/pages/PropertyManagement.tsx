@@ -149,8 +149,8 @@ const PropertyManagement = () => {
 
       {/* Right: Sticky Form */}
       <div className="lg:justify-self-end">
-        <div className="sticky top-8">
-          <Card className="w-full max-w-md rounded-xl shadow-2xl bg-background/90 backdrop-blur supports-[backdrop-filter]:bg-background/70">
+        <div className="sticky top-8 z-50">
+          <Card className="w-full max-w-md rounded-xl shadow-2xl bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/90 border border-white/20">
           <CardContent className="p-6">
             <h3 className="text-xl font-semibold text-foreground">Got a property to be managed?</h3>
             <p className="text-sm text-muted-foreground mb-4">Just fill up the form & we will take care of the rest</p>
