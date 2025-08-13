@@ -409,6 +409,12 @@ const Footer = ({ searchSectionRef }: FooterProps) => {
           <div className="text-center text-xs text-gray-500">
             © 2025 HomeHNI Private Limited | All Rights Reserved
           </div>
+
+
+           <div className="text-center text-xs text-gray-500">
+            A Product of Ranazonai Technologies, Built with 🤍 and Dedication.
+          </div>
+          
         </div>
       </div>
     </footer>
