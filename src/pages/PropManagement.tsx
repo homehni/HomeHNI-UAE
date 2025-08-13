@@ -217,7 +217,7 @@ const PropManagement = () => {
 
       {/* Mobile Form - Static below hero */}
       <section className="lg:hidden px-4 py-8 bg-background">
-        <div className="container mx-auto max-w-md">
+        <div className="container mx-auto max-w-lg">
           <Card className="w-full rounded-xl shadow-lg">
             <CardContent className="p-6">
               <h3 className="text-xl font-semibold text-foreground mb-2">Got a property to be managed?</h3>
