@@ -50,35 +50,35 @@ const PropManagement = () => {
   }];
   const comparisonData = [{
     feature: "Professional Property Management",
-    nobroker: true,
+    homeHNI: true,
     others: false
   }, {
     feature: "Dedicated Relationship Manager",
-    nobroker: true,
+    homeHNI: true,
     others: false
   }, {
     feature: "Transparent Monthly Reports",
-    nobroker: true,
+    homeHNI: true,
     others: false
   }, {
     feature: "24/7 Customer Support",
-    nobroker: true,
+    homeHNI: true,
     others: false
   }, {
     feature: "Legal Compliance & Documentation",
-    nobroker: true,
+    homeHNI: true,
     others: false
   }, {
     feature: "Verified Vendor Network",
-    nobroker: true,
+    homeHNI: true,
     others: false
   }, {
     feature: "Technology-Driven Operations",
-    nobroker: true,
+    homeHNI: true,
     others: false
   }, {
     feature: "Zero Hidden Charges",
-    nobroker: true,
+    homeHNI: true,
     others: false
   }];
   const testimonials = [{
@@ -453,59 +453,83 @@ const PropManagement = () => {
       </section>
 
       {/* Comparison Table Section */}
-      <section className="py-16 px-4 bg-background">
+      <section className="py-8 md:py-16 px-4 bg-background">
         <div className="container mx-auto">
-          <div className="grid lg:grid-cols-2 gap-16 items-start">
+          <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-start">
             <div className="w-full">
-              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-foreground mb-8 md:mb-12">
+              <h2 className="text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold text-foreground mb-6 md:mb-8 lg:mb-12">
                 HomeHNI.com vs Others: What makes us better?
               </h2>
               
-              <Card className="overflow-hidden">
+              {/* Mobile Card Layout */}
+              <div className="md:hidden space-y-4">
+                {comparisonData.map((item, index) => (
+                  <Card key={index} className="overflow-hidden">
+                    <CardContent className="p-4">
+                      <h3 className="font-semibold text-foreground mb-3 text-sm">
+                        {item.feature}
+                      </h3>
+                      <div className="space-y-3">
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm font-medium text-foreground">HomeHNI.com</span>
+                          {item.homeHNI ? (
+                            <CheckCircle className="w-5 h-5 text-green-500" />
+                          ) : (
+                            <X className="w-5 h-5 text-red-500" />
+                          )}
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm text-muted-foreground">Others</span>
+                          {item.others ? (
+                            <CheckCircle className="w-5 h-5 text-green-500" />
+                          ) : (
+                            <X className="w-5 h-5 text-red-500" />
+                          )}
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+
+              {/* Desktop Table Layout */}
+              <Card className="hidden md:block overflow-hidden">
                 <CardContent className="p-0">
-                  <div className="overflow-x-auto min-w-full">
-                    <table className="w-full">
+                  <div className="overflow-x-auto">
+                    <table className="w-full min-w-[600px]">
                       <thead>
                         <tr className="bg-slate-900 text-white">
-                          <th className="text-left p-4 font-semibold">Services</th>
-                          <th className="text-center p-4 font-semibold">
+                          <th className="text-left p-3 md:p-4 font-semibold text-sm md:text-base">Services</th>
+                          <th className="text-center p-3 md:p-4 font-semibold text-sm md:text-base">
                             <div className="flex items-center justify-center space-x-2">
                               <span>HomeHNI.com</span>
                             </div>
                           </th>
-                          <th className="text-center p-4 font-semibold">
+                          <th className="text-center p-3 md:p-4 font-semibold text-sm md:text-base">
                             Other Property Management Services in India
                           </th>
                         </tr>
                       </thead>
                       <tbody>
-                        <tr className="border-t bg-muted/30">
-                          <td className="p-4 font-medium">Professional Photoshoot of the Property</td>
-                          <td className="p-4 text-center">
-                            <CheckCircle className="w-6 h-6 text-green-500 mx-auto" />
-                          </td>
-                          <td className="p-4 text-center">
-                            <X className="w-6 h-6 text-red-500 mx-auto" />
-                          </td>
-                        </tr>
-                        <tr className="border-t">
-                          <td className="p-4 font-medium">Lifetime Tenant Search</td>
-                          <td className="p-4 text-center">
-                            <CheckCircle className="w-6 h-6 text-green-500 mx-auto" />
-                          </td>
-                          <td className="p-4 text-center">
-                            <X className="w-6 h-6 text-red-500 mx-auto" />
-                          </td>
-                        </tr>
-                        <tr className="border-t bg-muted/30">
-                          <td className="p-4 font-medium">Dedicated Property Manager and FRM</td>
-                          <td className="p-4 text-center">
-                            <CheckCircle className="w-6 h-6 text-green-500 mx-auto" />
-                          </td>
-                          <td className="p-4 text-center">
-                            <X className="w-6 h-6 text-red-500 mx-auto" />
-                          </td>
-                        </tr>
+                        {comparisonData.map((item, index) => (
+                          <tr key={index} className={`border-t ${index % 2 === 0 ? 'bg-muted/30' : ''}`}>
+                            <td className="p-3 md:p-4 font-medium text-sm md:text-base">{item.feature}</td>
+                            <td className="p-3 md:p-4 text-center">
+                              {item.homeHNI ? (
+                                <CheckCircle className="w-5 h-5 md:w-6 md:h-6 text-green-500 mx-auto" />
+                              ) : (
+                                <X className="w-5 h-5 md:w-6 md:h-6 text-red-500 mx-auto" />
+                              )}
+                            </td>
+                            <td className="p-3 md:p-4 text-center">
+                              {item.others ? (
+                                <CheckCircle className="w-5 h-5 md:w-6 md:h-6 text-green-500 mx-auto" />
+                              ) : (
+                                <X className="w-5 h-5 md:w-6 md:h-6 text-red-500 mx-auto" />
+                              )}
+                            </td>
+                          </tr>
+                        ))}
                       </tbody>
                     </table>
                   </div>
