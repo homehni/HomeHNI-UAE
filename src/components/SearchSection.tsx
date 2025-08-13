@@ -7,7 +7,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 export interface SearchSectionRef {
   focusSearchInput: () => void;
 }
-
 const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
   const [activeTab, setActiveTab] = useState('buy');
   const [selectedCity, setSelectedCity] = useState('All Residential');
@@ -81,13 +80,11 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
     };
     loadGoogleMaps().then(initAutocomplete).catch(console.error);
   }, []);
-
   useImperativeHandle(ref, () => ({
     focusSearchInput: () => {
       // Detect if mobile view (screen width < 768px)
       const isMobile = window.innerWidth < 768;
       const targetInput = isMobile ? mobileInputRef.current : inputRef.current;
-      
       if (targetInput) {
         setTimeout(() => {
           targetInput.focus();
@@ -95,7 +92,6 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
       }
     }
   }));
-
   return <section id="hero-search" className="relative">
       {/* Hero Image Background - extends to cover marquee area */}
       <div className="relative h-[50vh] sm:h-[60vh] bg-cover bg-no-repeat -mt-[70px] pt-[40px]" style={{
@@ -178,14 +174,12 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
       </div>
       
       {/* White background section to accommodate the overlapping search */}
-      <div className="bg-white pt-4 sm:pt-16 pb-16 mx-0 px-0 py-[40px] mb-[2%]">
+      <div className="bg-white pt-4 sm:pt-16 pb-16 mx-0 px-0 mb-[2%] py-[40px]">
         <div className="container mx-auto px-4">
           {/* This space allows the search section to overlap properly */}
         </div>
       </div>
     </section>;
 });
-
 SearchSection.displayName = 'SearchSection';
-
 export default SearchSection;
