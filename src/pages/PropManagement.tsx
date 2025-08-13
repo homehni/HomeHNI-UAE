@@ -465,32 +465,32 @@ const PropManagement = () => {
               <Card className="md:hidden overflow-hidden">
                 <CardContent className="p-0">
                   <div className="overflow-x-auto">
-                    <table className="w-full min-w-[500px]">
+                    <table className="w-full min-w-[320px]">
                       <thead>
                         <tr className="bg-slate-900 text-white">
-                          <th className="text-left p-2 font-semibold text-xs">Services</th>
-                          <th className="text-center p-2 font-semibold text-xs">
+                          <th className="text-left p-2 font-semibold text-xs w-1/2">Services</th>
+                          <th className="text-center p-1 font-semibold text-xs w-1/4">
                             <div className="flex items-center justify-center">
-                              <span>HomeHNI.com</span>
+                              <span className="text-[10px]">HomeHNI</span>
                             </div>
                           </th>
-                          <th className="text-center p-2 font-semibold text-xs">
-                            Other Property Management Services in India
+                          <th className="text-center p-1 font-semibold text-xs w-1/4">
+                            <span className="text-[10px]">Others</span>
                           </th>
                         </tr>
                       </thead>
                       <tbody>
                         {comparisonData.map((item, index) => (
                           <tr key={index} className={`border-t ${index % 2 === 0 ? 'bg-muted/30' : ''}`}>
-                            <td className="p-2 font-medium text-xs">{item.feature}</td>
-                            <td className="p-2 text-center">
+                            <td className="p-2 font-medium text-xs leading-tight">{item.feature}</td>
+                            <td className="p-1 text-center">
                               {item.homeHNI ? (
                                 <CheckCircle className="w-4 h-4 text-green-500 mx-auto" />
                               ) : (
                                 <X className="w-4 h-4 text-red-500 mx-auto" />
                               )}
                             </td>
-                            <td className="p-2 text-center">
+                            <td className="p-1 text-center">
                               {item.others ? (
                                 <CheckCircle className="w-4 h-4 text-green-500 mx-auto" />
                               ) : (
