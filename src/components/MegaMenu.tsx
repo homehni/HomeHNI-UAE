@@ -38,7 +38,7 @@ const MegaMenu = ({ isScrolled }: MegaMenuProps) => {
           onMouseEnter={() => setIsOpen(true)}
           onMouseLeave={() => setIsOpen(false)}
         >
-          <DropdownMenuLabel>Residential Categories</DropdownMenuLabel>
+    
           <DropdownMenuSeparator />
           {[
             'All Residential',
