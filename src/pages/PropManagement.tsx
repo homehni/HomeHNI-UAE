@@ -386,9 +386,9 @@ const PropManagement = () => {
       <section className="py-16 px-4 bg-background">
         <div className="container mx-auto">
           <div className="grid lg:grid-cols-2 gap-16 items-start">
-            <div className="max-w-3xl">
+            <div className="max-w-5xl">
               <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-12">
-                NoBroker vs Others: What makes us better?
+                HomeHNI.com vs Others: What makes us better?
               </h2>
               
               <Card className="overflow-hidden">
@@ -400,8 +400,7 @@ const PropManagement = () => {
                           <th className="text-left p-4 font-semibold">Services</th>
                           <th className="text-center p-4 font-semibold">
                             <div className="flex items-center justify-center space-x-2">
-                              
-                              <span>H.com</span>
+                              <span>HomeHNI.com</span>
                             </div>
                           </th>
                           <th className="text-center p-4 font-semibold">
