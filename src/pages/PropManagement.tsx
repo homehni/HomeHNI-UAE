@@ -271,30 +271,57 @@ const PropManagement = () => {
       </section>
 
       {/* What's in it for you Section */}
-      <section className="py-16 px-4 bg-background">
+      <section className="py-20 px-4 bg-background">
         <div className="container mx-auto">
-          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-12">
-            What's in it for you?
-          </h2>
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
+              What's in it for you?
+            </h2>
+            <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+              Our comprehensive property management services are designed to make property ownership stress-free and profitable
+            </p>
+          </div>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {services.map((service, index) => (
-              <div key={index} className="flex items-start space-x-4">
-                <div className="flex-shrink-0">
-                  <div className="w-12 h-12 bg-blue-50 rounded-lg flex items-center justify-center">
-                    <service.icon className="w-6 h-6 text-blue-600" />
+              <Card key={index} className="p-8 text-center hover:shadow-lg transition-all duration-300 border-2 hover:border-blue-200">
+                <div className="flex justify-center mb-6">
+                  <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center shadow-lg">
+                    <service.icon className="w-10 h-10 text-white" />
                   </div>
                 </div>
-                <div>
-                  <h3 className="text-lg font-semibold text-foreground mb-2">
-                    {service.title}
-                  </h3>
-                  <p className="text-muted-foreground">
-                    {service.description}
-                  </p>
-                </div>
-              </div>
+                <h3 className="text-xl font-bold text-foreground mb-4">
+                  {service.title}
+                </h3>
+                <p className="text-muted-foreground leading-relaxed">
+                  {service.description}
+                </p>
+              </Card>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Stats Section */}
+      <section className="py-16 px-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white">
+        <div className="container mx-auto">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            <div className="text-center">
+              <div className="text-4xl md:text-5xl font-bold mb-2">10K+</div>
+              <div className="text-blue-100">Properties Managed</div>
+            </div>
+            <div className="text-center">
+              <div className="text-4xl md:text-5xl font-bold mb-2">98%</div>
+              <div className="text-blue-100">Client Satisfaction</div>
+            </div>
+            <div className="text-center">
+              <div className="text-4xl md:text-5xl font-bold mb-2">5+</div>
+              <div className="text-blue-100">Years Experience</div>
+            </div>
+            <div className="text-center">
+              <div className="text-4xl md:text-5xl font-bold mb-2">24/7</div>
+              <div className="text-blue-100">Support Available</div>
+            </div>
           </div>
         </div>
       </section>
