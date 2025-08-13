@@ -218,7 +218,7 @@ const PropManagement = () => {
 
             {/* Right: Form - Sticky on Scroll */}
             <div className={`lg:justify-self-end transition-all duration-300 ${
-              isFormSticky ? 'fixed top-4 right-4 z-50' : 'relative'
+              isFormSticky ? 'fixed top-20 right-4 z-[100]' : 'relative'
             }`}>
               <Card className="w-full max-w-md rounded-xl shadow-2xl bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/90 border border-white/20">
                 <CardContent className="p-6">
