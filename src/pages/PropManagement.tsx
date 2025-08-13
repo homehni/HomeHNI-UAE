@@ -513,10 +513,10 @@ const PropManagement = () => {
       </section>
 
       {/* Stats Section */}
-      <section className="py-16 px-4 bg-slate-900 text-white">
+      <section className="py-16 px-4 bg-background">
         <div className="container mx-auto">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <div className="max-w-3xl">
+            <div className="max-w-4xl bg-slate-900 text-white rounded-2xl px-8 py-12">
               <div className="grid md:grid-cols-3 gap-8 text-center">
                 <div>
                   <div className="w-16 h-16 bg-yellow-400 rounded-lg flex items-center justify-center mx-auto mb-4">
