@@ -386,14 +386,14 @@ const PropManagement = () => {
       <section className="py-16 px-4 bg-background">
         <div className="container mx-auto">
           <div className="grid lg:grid-cols-2 gap-16 items-start">
-            <div className="max-w-5xl">
-              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-12">
+            <div className="w-full">
+              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-foreground mb-8 md:mb-12">
                 HomeHNI.com vs Others: What makes us better?
               </h2>
               
               <Card className="overflow-hidden">
                 <CardContent className="p-0">
-                  <div className="overflow-x-auto">
+                  <div className="overflow-x-auto min-w-full">
                     <table className="w-full">
                       <thead>
                         <tr className="bg-slate-900 text-white">
