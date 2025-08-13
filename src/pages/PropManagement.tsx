@@ -143,7 +143,7 @@ const PropManagement = () => {
       <Header />
       
       {/* Hero Section */}
-      <section className="relative pt-28 md:pt-32 pb-20 md:pb-32 px-4 md:px-8 text-white overflow-hidden bg-cover bg-center bg-no-repeat" style={{
+      <section className="relative pt-28 md:pt-32 pb-8 md:pb-12 px-4 md:px-8 text-white overflow-hidden bg-cover bg-center bg-no-repeat" style={{
       backgroundImage: "url('/lovable-uploads/fbb0d72f-782e-49f5-bbe1-8afc1314b5f7.png')"
     }}>
         <div className="absolute inset-0 bg-blue-900/80 pointer-events-none" />
@@ -152,12 +152,12 @@ const PropManagement = () => {
           <div className="grid lg:grid-cols-2 gap-8 items-start">
             {/* Left: Copy */}
             <div className="max-w-2xl">
-              <h1 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">
+              <h1 className="text-4xl md:text-5xl font-bold mb-4 leading-tight">
                 Comprehensive Property Management Services
                 <br className="hidden md:block" />
                 <span className="block">in Hyderabad</span>
               </h1>
-              <p className="text-lg md:text-xl text-white/90 mb-8">
+              <p className="text-lg md:text-xl text-white/90 mb-6">
                 From securing verified tenants to regular property maintenance, we handle
                 everything for you.
               </p>
@@ -165,7 +165,7 @@ const PropManagement = () => {
 
             {/* Right: Placeholder for form on desktop */}
             <div className="hidden lg:block lg:justify-self-end">
-              <div className="w-full max-w-md h-96"></div>
+              <div className="w-full max-w-md h-80"></div>
             </div>
           </div>
         </div>
