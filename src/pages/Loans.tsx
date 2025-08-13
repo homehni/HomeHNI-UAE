@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { useToast } from '@/components/ui/use-toast';
+import { useToast } from '@/hooks/use-toast';
 import { CheckCircle, Calculator, Users, Shield, Clock, TrendingUp, FileText, CreditCard } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -41,7 +41,7 @@ const Loans = () => {
       <Header />
       
       {/* Hero Section */}
-      <section className="relative pt-20 pb-56 md:pt-24 md:pb-72 bg-cover bg-center bg-no-repeat" style={{backgroundImage: "url('/lovable-uploads/bd672939-951b-4007-b092-868ec5ac81c4.png')"}}>
+      <section className="relative pt-20 pb-56 md:pt-24 md:pb-72 bg-cover bg-center bg-no-repeat" style={{backgroundImage: "url('/lovable-uploads/ecdc9986-c144-471f-8b40-aeffc8af64af.png')"}}>
         <div className="absolute inset-0 bg-black/50"></div>
         <div className="container mx-auto text-center px-[19px] py-[20px] relative z-10">
           <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 py-[25px]">
@@ -293,9 +293,11 @@ const Loans = () => {
           {/* Sticky Enquiry Form */}
           <aside className="md:col-span-1">
             <div className="md:sticky md:top-24 relative z-10">
-              <Card className="shadow-xl border bg-card">
+              <Card className="rounded-2xl shadow-2xl border bg-card/95 backdrop-blur">
                 <CardHeader>
                   <CardTitle className="text-xl">Got a property to be financed?</CardTitle>
+                  <p className="text-sm text-muted-foreground">Just fill up the form & we will take care of the rest</p>
+                  <div className="h-px bg-muted mt-2" />
                 </CardHeader>
                 <CardContent>
                   <form
