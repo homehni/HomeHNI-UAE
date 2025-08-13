@@ -130,12 +130,13 @@ const PropertyCard = ({
       </div>
       
       <CardContent className="p-4">
-        <h3 className="font-semibold text-lg mb-2 line-clamp-2">{title}</h3>
-        
-        <div className="flex items-center text-gray-600 mb-2">
-          <MapPin size={14} className="mr-1" />
-          <span className="text-sm">{location}</span>
-        </div>
+        <div className={cn(size === 'compact' ? 'min-h-28' : undefined)}>
+          <h3 className="font-semibold text-lg mb-2 line-clamp-2">{title}</h3>
+          
+          <div className="flex items-center text-gray-600 mb-2">
+            <MapPin size={14} className="mr-1" />
+            <span className="text-sm line-clamp-1">{location}</span>
+          </div>
         
         {/*
         <div className="flex justify-between items-center mb-3">
@@ -160,7 +161,7 @@ const PropertyCard = ({
           </div>
         </div>
         */}
-        
+        </div>
         <div className={cn("flex", size === 'compact' ? 'flex-col space-y-2' : 'flex-row space-x-2')}>
           <Button
             variant="outline"
