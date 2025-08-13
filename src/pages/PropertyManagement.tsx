@@ -138,6 +138,8 @@ const PropertyManagement = () => {
       <div className="max-w-2xl">
         <h1 className="text-4xl md:text-5xl font-bold mb-4 leading-tight">
           Comprehensive Property Management Services
+          <br className="hidden md:block" />
+          <span className="block">in Hyderabad</span>
         </h1>
         <p className="text-lg md:text-xl text-white/90">
           From securing verified tenants to regular property maintenance, we handle
@@ -150,7 +152,7 @@ const PropertyManagement = () => {
         <Card className="w-full max-w-md rounded-xl shadow-2xl bg-background/90 backdrop-blur supports-[backdrop-filter]:bg-background/70">
           <CardContent className="p-6">
             <h3 className="text-xl font-semibold text-foreground">Got a property to be managed?</h3>
-            <p className="text-sm text-muted-foreground mb-4">Just fill the form and we will contact you.</p>
+            <p className="text-sm text-muted-foreground mb-4">Just fill up the form & we will take care of the rest</p>
 
             <form
               className="space-y-4"
@@ -163,35 +165,45 @@ const PropertyManagement = () => {
             >
               <div className="space-y-2">
                 <Label htmlFor="pm-name">Name</Label>
-                <Input id="pm-name" name="name" placeholder="Your name" required />
+                <Input id="pm-name" name="name" placeholder="Name" required />
               </div>
 
               <div className="space-y-2">
                 <Label htmlFor="pm-phone">Phone</Label>
                 <div className="flex gap-2">
                   <Select defaultValue="+91" name="countryCode">
-                    <SelectTrigger className="w-24"><SelectValue /></SelectTrigger>
+                    <SelectTrigger className="w-28"><SelectValue /></SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="+91">+91</SelectItem>
-                      <SelectItem value="+1">+1</SelectItem>
-                      <SelectItem value="+44">+44</SelectItem>
+                      <SelectItem value="+91">🇮🇳 +91</SelectItem>
+                      <SelectItem value="+1">🇺🇸 +1</SelectItem>
+                      <SelectItem value="+44">🇬🇧 +44</SelectItem>
                     </SelectContent>
                   </Select>
-                  <Input id="pm-phone" name="phone" type="tel" placeholder="Phone number" className="flex-1" required />
+                  <Input id="pm-phone" name="phone" type="tel" placeholder="Phone Number" className="flex-1" required />
                 </div>
               </div>
 
               <div className="space-y-2">
                 <Label htmlFor="pm-email">Email</Label>
-                <Input id="pm-email" name="email" type="email" placeholder="you@example.com" />
+                <Input id="pm-email" name="email" type="email" placeholder="Email ID" />
               </div>
 
               <div className="space-y-2">
                 <Label htmlFor="pm-city">City</Label>
-                <Input id="pm-city" name="city" placeholder="City" />
+                <Select name="city">
+                  <SelectTrigger id="pm-city"><SelectValue placeholder="City" /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Hyderabad">Hyderabad</SelectItem>
+                    <SelectItem value="Bengaluru">Bengaluru</SelectItem>
+                    <SelectItem value="Mumbai">Mumbai</SelectItem>
+                    <SelectItem value="Pune">Pune</SelectItem>
+                    <SelectItem value="Chennai">Chennai</SelectItem>
+                    <SelectItem value="Delhi NCR">Delhi NCR</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
 
-              <Button type="submit" className="w-full">Talk to us today</Button>
+              <Button type="submit" className="w-full">Talk to Us Today!</Button>
             </form>
           </CardContent>
         </Card>
