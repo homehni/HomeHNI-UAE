@@ -279,17 +279,17 @@ const PropManagement = () => {
                 What's in it for you?
               </h2>
               
-              <div className="grid md:grid-cols-2 gap-8">
-                <div className="space-y-6">
+              <div className="grid md:grid-cols-2 gap-12">
+                <div className="space-y-8">
                   <div className="flex items-start space-x-4">
                     <div className="flex-shrink-0 w-16 h-16 bg-blue-50 rounded-lg flex items-center justify-center">
                       <Building2 className="w-8 h-8 text-blue-600" />
                     </div>
-                    <div>
-                      <h3 className="text-lg font-semibold text-blue-600 mb-2">
+                    <div className="flex-1">
+                      <h3 className="text-lg font-semibold text-blue-600 mb-3">
                         Premium Property Listing & Promotion
                       </h3>
-                      <p className="text-sm text-muted-foreground">
+                      <p className="text-sm text-muted-foreground leading-relaxed">
                         Boost your property's visibility by 3x with targeted, high-quality tenant reach
                       </p>
                     </div>
@@ -299,11 +299,11 @@ const PropManagement = () => {
                     <div className="flex-shrink-0 w-16 h-16 bg-blue-50 rounded-lg flex items-center justify-center">
                       <Users className="w-8 h-8 text-blue-600" />
                     </div>
-                    <div>
-                      <h3 className="text-lg font-semibold text-blue-600 mb-2">
+                    <div className="flex-1">
+                      <h3 className="text-lg font-semibold text-blue-600 mb-3">
                         Tenant Background Verification
                       </h3>
-                      <p className="text-sm text-muted-foreground">
+                      <p className="text-sm text-muted-foreground leading-relaxed">
                         Get thorough tenant background checks for secure and reliable occupancy
                       </p>
                     </div>
@@ -313,27 +313,27 @@ const PropManagement = () => {
                     <div className="flex-shrink-0 w-16 h-16 bg-blue-50 rounded-lg flex items-center justify-center">
                       <Camera className="w-8 h-8 text-blue-600" />
                     </div>
-                    <div>
-                      <h3 className="text-lg font-semibold text-blue-600 mb-2">
+                    <div className="flex-1">
+                      <h3 className="text-lg font-semibold text-blue-600 mb-3">
                         Periodic Home Inspection
                       </h3>
-                      <p className="text-sm text-muted-foreground">
+                      <p className="text-sm text-muted-foreground leading-relaxed">
                         Maintain your property's value with scheduled, professional inspections
                       </p>
                     </div>
                   </div>
                 </div>
 
-                <div className="space-y-6">
+                <div className="space-y-8">
                   <div className="flex items-start space-x-4">
                     <div className="flex-shrink-0 w-16 h-16 bg-blue-50 rounded-lg flex items-center justify-center">
                       <Clock className="w-8 h-8 text-blue-600" />
                     </div>
-                    <div>
-                      <h3 className="text-lg font-semibold text-blue-600 mb-2">
+                    <div className="flex-1">
+                      <h3 className="text-lg font-semibold text-blue-600 mb-3">
                         Lifetime Tenant Search
                       </h3>
-                      <p className="text-sm text-muted-foreground">
+                      <p className="text-sm text-muted-foreground leading-relaxed">
                         Enjoy unlimited tenant searches at a negligible cost
                       </p>
                     </div>
@@ -343,11 +343,11 @@ const PropManagement = () => {
                     <div className="flex-shrink-0 w-16 h-16 bg-blue-50 rounded-lg flex items-center justify-center">
                       <FileText className="w-8 h-8 text-blue-600" />
                     </div>
-                    <div>
-                      <h3 className="text-lg font-semibold text-blue-600 mb-2">
+                    <div className="flex-1">
+                      <h3 className="text-lg font-semibold text-blue-600 mb-3">
                         Free Rental Agreement
                       </h3>
-                      <p className="text-sm text-muted-foreground">
+                      <p className="text-sm text-muted-foreground leading-relaxed">
                         Get an e-stamped rental agreement delivered to your doorstep
                       </p>
                     </div>
@@ -357,11 +357,11 @@ const PropManagement = () => {
                     <div className="flex-shrink-0 w-16 h-16 bg-blue-50 rounded-lg flex items-center justify-center">
                       <Wrench className="w-8 h-8 text-blue-600" />
                     </div>
-                    <div>
-                      <h3 className="text-lg font-semibold text-blue-600 mb-2">
+                    <div className="flex-1">
+                      <h3 className="text-lg font-semibold text-blue-600 mb-3">
                         On-demand Repair & Maintenance Services
                       </h3>
-                      <p className="text-sm text-muted-foreground">
+                      <p className="text-sm text-muted-foreground leading-relaxed">
                         Quick, expert repair and maintenance services at your convenience
                       </p>
                     </div>
