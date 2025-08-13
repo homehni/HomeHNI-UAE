@@ -357,76 +357,6 @@ const PropManagement = () => {
         </div>
       </section>
 
-      {/* Service Tags Section */}
-      <section className="py-16 px-4 bg-background">
-        <div className="container mx-auto">
-          <div className="grid lg:grid-cols-2 gap-16 items-start">
-            <div className="max-w-3xl">
-              <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-8">
-                Property Management Services
-              </h2>
-              
-              <div className="space-y-6 mb-8">
-                <div className="flex flex-wrap gap-3">
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Property Management in India</span>
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Property Management in Bangalore</span>
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Property Management in Mumbai</span>
-                </div>
-                <div className="flex flex-wrap gap-3">
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Property Management in Pune</span>
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Property Management in Delhi</span>
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Property Management in Noida</span>
-                </div>
-                <div className="flex flex-wrap gap-3">
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Property Management in Gurgaon</span>
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Property Management in Chennai</span>
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Property Management in Navi Mumbai</span>
-                </div>
-                <div className="flex flex-wrap gap-3">
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Rent Collection Online</span>
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Rental Property Management</span>
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Rental Property Management in Bangalore</span>
-                </div>
-                <div className="flex flex-wrap gap-3">
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Tenant Management</span>
-                </div>
-              </div>
-
-              <h3 className="text-2xl md:text-3xl font-bold text-foreground mb-6">
-                Property Maintenance Services
-              </h3>
-              
-              <div className="space-y-3 mb-8">
-                <div className="flex flex-wrap gap-3">
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Property Maintenance</span>
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Property Maintenance in Bangalore</span>
-                </div>
-              </div>
-
-              <h3 className="text-2xl md:text-3xl font-bold text-foreground mb-6">
-                Property Inspection Services
-              </h3>
-              
-              <div className="space-y-3">
-                <div className="flex flex-wrap gap-3">
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Property Inspection</span>
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Commercial Property Inspection Services</span>
-                </div>
-                <div className="flex flex-wrap gap-3">
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Drone Property Inspection Services</span>
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Home Property Inspection</span>
-                </div>
-                <div className="flex flex-wrap gap-3">
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Thermal Imaging Property Inspection</span>
-                </div>
-              </div>
-            </div>
-            
-            {/* Right side spacing for sticky form */}
-            <div className="hidden lg:block"></div>
-          </div>
-        </div>
-      </section>
 
       {/* Property Management Info Section */}
       <section className="py-16 px-4 bg-muted/30">
@@ -612,6 +542,77 @@ const PropManagement = () => {
                   <p className="text-sm text-muted-foreground">
                     Really happy with the service! NoBroker rented out my property in less than a month. The tenants were well screened. They complete the needed repairs quickly while being very proactive in...
                   </p>
+                </div>
+              </div>
+            </div>
+            
+            {/* Right side spacing for sticky form */}
+            <div className="hidden lg:block"></div>
+          </div>
+        </div>
+      </section>
+
+      {/* Service Tags Section */}
+      <section className="py-16 px-4 bg-background">
+        <div className="container mx-auto">
+          <div className="grid lg:grid-cols-2 gap-16 items-start">
+            <div className="max-w-3xl">
+              <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-8">
+                Property Management Services
+              </h2>
+              
+              <div className="space-y-6 mb-8">
+                <div className="flex flex-wrap gap-3">
+                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Property Management in India</span>
+                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Property Management in Bangalore</span>
+                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Property Management in Mumbai</span>
+                </div>
+                <div className="flex flex-wrap gap-3">
+                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Property Management in Pune</span>
+                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Property Management in Delhi</span>
+                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Property Management in Noida</span>
+                </div>
+                <div className="flex flex-wrap gap-3">
+                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Property Management in Gurgaon</span>
+                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Property Management in Chennai</span>
+                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Property Management in Navi Mumbai</span>
+                </div>
+                <div className="flex flex-wrap gap-3">
+                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Rent Collection Online</span>
+                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Rental Property Management</span>
+                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Rental Property Management in Bangalore</span>
+                </div>
+                <div className="flex flex-wrap gap-3">
+                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Tenant Management</span>
+                </div>
+              </div>
+
+              <h3 className="text-2xl md:text-3xl font-bold text-foreground mb-6">
+                Property Maintenance Services
+              </h3>
+              
+              <div className="space-y-3 mb-8">
+                <div className="flex flex-wrap gap-3">
+                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Property Maintenance</span>
+                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Property Maintenance in Bangalore</span>
+                </div>
+              </div>
+
+              <h3 className="text-2xl md:text-3xl font-bold text-foreground mb-6">
+                Property Inspection Services
+              </h3>
+              
+              <div className="space-y-3">
+                <div className="flex flex-wrap gap-3">
+                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Property Inspection</span>
+                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Commercial Property Inspection Services</span>
+                </div>
+                <div className="flex flex-wrap gap-3">
+                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Drone Property Inspection Services</span>
+                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Home Property Inspection</span>
+                </div>
+                <div className="flex flex-wrap gap-3">
+                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Thermal Imaging Property Inspection</span>
                 </div>
               </div>
             </div>
