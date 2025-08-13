@@ -8,6 +8,7 @@ interface AuthContextType {
   loading: boolean;
   signInWithGoogle: () => Promise<void>;
   signInWithPassword: (email: string, password: string) => Promise<void>;
+  signUpWithEmail: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
 }
 
@@ -71,6 +72,28 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
+  const signUpWithEmail = async (email: string, password: string) => {
+    // Preserve redirectTo after email verification
+    const urlParams = new URLSearchParams(window.location.search);
+    const redirectPath = urlParams.get('redirectTo');
+    const redirectUrl = redirectPath
+      ? `${window.location.origin}/auth?redirectTo=${encodeURIComponent(redirectPath)}`
+      : `${window.location.origin}/`;
+
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        emailRedirectTo: redirectUrl,
+      },
+    });
+
+    if (error) {
+      console.error('Error signing up with email:', error);
+      throw error;
+    }
+  };
+
   const signOut = async () => {
     const { error } = await supabase.auth.signOut();
     if (error) {
@@ -106,6 +129,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       loading,
       signInWithGoogle,
       signInWithPassword,
+      signUpWithEmail,
       signOut
     }}>
       {children}
