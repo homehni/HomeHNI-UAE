@@ -9,7 +9,7 @@ import {
   Building2, Users, CreditCard, Wrench, Camera, FileText, 
   MapPin, Crown, TrendingUp, Clock, CheckCircle, Shield, Star,
   X, Plus, Minus, Globe, Shield as ShieldCheck, Headphones,
-  Smartphone, Download
+  Smartphone, Download, Home
 } from "lucide-react";
 import Marquee from "@/components/Marquee";
 import Header from "@/components/Header";
@@ -273,126 +273,83 @@ const PropManagement = () => {
       {/* What's in it for you Section */}
       <section className="py-16 px-4 bg-background">
         <div className="container mx-auto">
-          <div className="grid lg:grid-cols-2 gap-16 items-start">
-            <div className="max-w-3xl">
-              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-12">
+          <div className="grid lg:grid-cols-2 gap-8 items-start">
+            <div className="max-w-2xl pr-8">
+              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
                 What's in it for you?
               </h2>
               
-              <div className="space-y-12">
-                <div className="grid md:grid-cols-2 gap-x-16 gap-y-12">
-                  <div className="flex items-start space-x-4">
-                    <div className="flex-shrink-0">
-                      <svg width="48" height="48" viewBox="0 0 48 48" fill="none" className="text-blue-600">
-                        <path d="M12 36V16L24 8L36 16V36H28V24H20V36H12Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                        <path d="M8 20L16 14" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                        <path d="M32 14L40 20" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                      </svg>
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="text-lg font-semibold text-blue-600 mb-3">
-                        Premium Property Listing & Promotion
-                      </h3>
-                      <p className="text-sm text-muted-foreground leading-relaxed">
-                        Boost your property's visibility by 3x with targeted, high-quality tenant reach
-                      </p>
-                    </div>
+              <div className="grid grid-cols-2 gap-6">
+                <div className="space-y-3">
+                  <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                    <Home className="w-5 h-5 text-blue-600" />
                   </div>
+                  <h3 className="text-base font-semibold text-foreground">
+                    Premium Property Listing & Promotion
+                  </h3>
+                  <p className="text-sm text-muted-foreground">
+                    Boost your property's visibility by 3x with targeted, high-quality tenant reach
+                  </p>
+                </div>
 
-                  <div className="flex items-start space-x-4">
-                    <div className="flex-shrink-0">
-                      <svg width="48" height="48" viewBox="0 0 48 48" fill="none" className="text-blue-600">
-                        <circle cx="24" cy="18" r="6" stroke="currentColor" strokeWidth="2"/>
-                        <path d="M24 28C32 28 36 32 36 36V40H12V36C12 32 16 28 24 28Z" stroke="currentColor" strokeWidth="2"/>
-                        <circle cx="34" cy="14" r="4" stroke="currentColor" strokeWidth="2"/>
-                        <path d="M38 24C40 24 42 26 42 28V30H32" stroke="currentColor" strokeWidth="2"/>
-                      </svg>
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="text-lg font-semibold text-blue-600 mb-3">
-                        Lifetime Tenant Search
-                      </h3>
-                      <p className="text-sm text-muted-foreground leading-relaxed">
-                        Enjoy unlimited tenant searches at a negligible cost
-                      </p>
-                    </div>
+                <div className="space-y-3">
+                  <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                    <Users className="w-5 h-5 text-blue-600" />
                   </div>
+                  <h3 className="text-base font-semibold text-foreground">
+                    Lifetime Tenant Search
+                  </h3>
+                  <p className="text-sm text-muted-foreground">
+                    Enjoy unlimited tenant searches at a negligible cost
+                  </p>
+                </div>
 
-                  <div className="flex items-start space-x-4">
-                    <div className="flex-shrink-0">
-                      <svg width="48" height="48" viewBox="0 0 48 48" fill="none" className="text-blue-600">
-                        <circle cx="24" cy="20" r="6" stroke="currentColor" strokeWidth="2"/>
-                        <path d="M12 36C12 32 16 28 24 28C32 28 36 32 36 36" stroke="currentColor" strokeWidth="2"/>
-                        <circle cx="38" cy="16" r="4" stroke="currentColor" strokeWidth="2"/>
-                        <path d="M32 24C34 24 36 26 36 28" stroke="currentColor" strokeWidth="2"/>
-                      </svg>
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="text-lg font-semibold text-blue-600 mb-3">
-                        Tenant Background Verification
-                      </h3>
-                      <p className="text-sm text-muted-foreground leading-relaxed">
-                        Get thorough tenant background checks for secure and reliable occupancy
-                      </p>
-                    </div>
+                <div className="space-y-3">
+                  <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                    <Shield className="w-5 h-5 text-blue-600" />
                   </div>
+                  <h3 className="text-base font-semibold text-foreground">
+                    Tenant Background Verification
+                  </h3>
+                  <p className="text-sm text-muted-foreground">
+                    Get thorough tenant background checks for secure and reliable occupancy
+                  </p>
+                </div>
 
-                  <div className="flex items-start space-x-4">
-                    <div className="flex-shrink-0">
-                      <svg width="48" height="48" viewBox="0 0 48 48" fill="none" className="text-blue-600">
-                        <rect x="8" y="12" width="32" height="24" rx="2" stroke="currentColor" strokeWidth="2"/>
-                        <path d="M8 20H40" stroke="currentColor" strokeWidth="2"/>
-                        <circle cx="16" cy="28" r="2" fill="currentColor"/>
-                        <path d="M24 28H32" stroke="currentColor" strokeWidth="2"/>
-                      </svg>
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="text-lg font-semibold text-blue-600 mb-3">
-                        Free Rental Agreement
-                      </h3>
-                      <p className="text-sm text-muted-foreground leading-relaxed">
-                        Get an e-stamped rental agreement delivered to your doorstep
-                      </p>
-                    </div>
+                <div className="space-y-3">
+                  <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                    <CreditCard className="w-5 h-5 text-blue-600" />
                   </div>
+                  <h3 className="text-base font-semibold text-foreground">
+                    Free Rental Agreement
+                  </h3>
+                  <p className="text-sm text-muted-foreground">
+                    Get an e-stamped rental agreement delivered to your doorstep
+                  </p>
+                </div>
 
-                  <div className="flex items-start space-x-4">
-                    <div className="flex-shrink-0">
-                      <svg width="48" height="48" viewBox="0 0 48 48" fill="none" className="text-blue-600">
-                        <path d="M12 36V16L24 8L36 16V36H28V24H20V36H12Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                        <circle cx="34" cy="18" r="3" stroke="currentColor" strokeWidth="2"/>
-                        <path d="M32 22L34 24L38 20" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      </svg>
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="text-lg font-semibold text-blue-600 mb-3">
-                        Periodic Home Inspection
-                      </h3>
-                      <p className="text-sm text-muted-foreground leading-relaxed">
-                        Maintain your property's value with scheduled, professional inspections
-                      </p>
-                    </div>
+                <div className="space-y-3">
+                  <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                    <Camera className="w-5 h-5 text-blue-600" />
                   </div>
+                  <h3 className="text-base font-semibold text-foreground">
+                    Periodic Home Inspection
+                  </h3>
+                  <p className="text-sm text-muted-foreground">
+                    Maintain your property's value with scheduled, professional inspections
+                  </p>
+                </div>
 
-                  <div className="flex items-start space-x-4">
-                    <div className="flex-shrink-0">
-                      <svg width="48" height="48" viewBox="0 0 48 48" fill="none" className="text-blue-600">
-                        <rect x="8" y="16" width="32" height="20" rx="2" stroke="currentColor" strokeWidth="2"/>
-                        <path d="M16 20V24M24 20V24M32 20V24" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                        <path d="M12 28H36" stroke="currentColor" strokeWidth="2"/>
-                        <circle cx="20" cy="32" r="1" fill="currentColor"/>
-                        <circle cx="28" cy="32" r="1" fill="currentColor"/>
-                      </svg>
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="text-lg font-semibold text-blue-600 mb-3">
-                        On-demand Repair & Maintenance Services
-                      </h3>
-                      <p className="text-sm text-muted-foreground leading-relaxed">
-                        Quick, expert repair and maintenance services at your convenience
-                      </p>
-                    </div>
+                <div className="space-y-3">
+                  <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                    <Wrench className="w-5 h-5 text-blue-600" />
                   </div>
+                  <h3 className="text-base font-semibold text-foreground">
+                    On-demand Repair & Maintenance Services
+                  </h3>
+                  <p className="text-sm text-muted-foreground">
+                    Quick, expert repair and maintenance services at your convenience
+                  </p>
                 </div>
               </div>
             </div>
