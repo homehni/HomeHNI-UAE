@@ -13,7 +13,7 @@ const Logo = ({
   };
 
   // Use the new provided logo for all variants
-  const logoSrc = "/lovable-uploads/main logo final.png";
+  const logoSrc = "/lovable-uploads/main-logo-final.png";
 
   return (
     <div className="flex items-center">
