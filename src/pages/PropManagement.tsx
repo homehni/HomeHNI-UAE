@@ -467,46 +467,42 @@ const PropManagement = () => {
               </h2>
               
               {/* Mobile Table Layout */}
-              <Card className="md:hidden overflow-hidden">
+              <Card className="md:hidden overflow-hidden mx-0">
                 <CardContent className="p-0">
-                  <div className="overflow-x-auto">
-                    <table className="w-full min-w-[320px]">
-                      <thead>
-                        <tr className="bg-slate-900 text-white">
-                          <th className="text-left p-2 font-semibold text-xs w-1/2">Services</th>
-                          <th className="text-center p-1 font-semibold text-xs w-1/4">
-                            <div className="flex items-center justify-center">
-                              <span className="text-[10px]">HomeHNI</span>
-                            </div>
-                          </th>
-                          <th className="text-center p-1 font-semibold text-xs w-1/4">
-                            <span className="text-[10px]">Others</span>
-                          </th>
+                  <table className="w-full">
+                    <thead>
+                      <tr className="bg-slate-900 text-white">
+                        <th className="text-left py-2 px-1 font-semibold text-xs w-1/2">Services</th>
+                        <th className="text-center py-2 px-1 font-semibold text-xs w-1/4">
+                          <span className="text-[10px]">HomeHNI</span>
+                        </th>
+                        <th className="text-center py-2 px-1 font-semibold text-xs w-1/4">
+                          <span className="text-[10px]">Others</span>
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {comparisonData.map((item, index) => (
+                        <tr key={index} className={`border-t ${index % 2 === 0 ? 'bg-muted/30' : ''}`}>
+                          <td className="py-2 px-1 font-medium text-xs leading-tight">{item.feature}</td>
+                          <td className="py-2 px-1 text-center">
+                            {item.homeHNI ? (
+                              <CheckCircle className="w-3 h-3 text-green-500 mx-auto" />
+                            ) : (
+                              <X className="w-3 h-3 text-red-500 mx-auto" />
+                            )}
+                          </td>
+                          <td className="py-2 px-1 text-center">
+                            {item.others ? (
+                              <CheckCircle className="w-3 h-3 text-green-500 mx-auto" />
+                            ) : (
+                              <X className="w-3 h-3 text-red-500 mx-auto" />
+                            )}
+                          </td>
                         </tr>
-                      </thead>
-                      <tbody>
-                        {comparisonData.map((item, index) => (
-                          <tr key={index} className={`border-t ${index % 2 === 0 ? 'bg-muted/30' : ''}`}>
-                            <td className="p-2 font-medium text-xs leading-tight">{item.feature}</td>
-                            <td className="p-1 text-center">
-                              {item.homeHNI ? (
-                                <CheckCircle className="w-4 h-4 text-green-500 mx-auto" />
-                              ) : (
-                                <X className="w-4 h-4 text-red-500 mx-auto" />
-                              )}
-                            </td>
-                            <td className="p-1 text-center">
-                              {item.others ? (
-                                <CheckCircle className="w-4 h-4 text-green-500 mx-auto" />
-                              ) : (
-                                <X className="w-4 h-4 text-red-500 mx-auto" />
-                              )}
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
+                      ))}
+                    </tbody>
+                  </table>
                 </CardContent>
               </Card>
 
