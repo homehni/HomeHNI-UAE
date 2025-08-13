@@ -279,11 +279,15 @@ const PropManagement = () => {
                 What's in it for you?
               </h2>
               
-              <div className="grid md:grid-cols-2 gap-12">
-                <div className="space-y-8">
+              <div className="space-y-12">
+                <div className="grid md:grid-cols-2 gap-x-16 gap-y-12">
                   <div className="flex items-start space-x-4">
-                    <div className="flex-shrink-0 w-16 h-16 bg-blue-50 rounded-lg flex items-center justify-center">
-                      <Building2 className="w-8 h-8 text-blue-600" />
+                    <div className="flex-shrink-0">
+                      <svg width="48" height="48" viewBox="0 0 48 48" fill="none" className="text-blue-600">
+                        <path d="M12 36V16L24 8L36 16V36H28V24H20V36H12Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        <path d="M8 20L16 14" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                        <path d="M32 14L40 20" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                      </svg>
                     </div>
                     <div className="flex-1">
                       <h3 className="text-lg font-semibold text-blue-600 mb-3">
@@ -296,38 +300,13 @@ const PropManagement = () => {
                   </div>
 
                   <div className="flex items-start space-x-4">
-                    <div className="flex-shrink-0 w-16 h-16 bg-blue-50 rounded-lg flex items-center justify-center">
-                      <Users className="w-8 h-8 text-blue-600" />
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="text-lg font-semibold text-blue-600 mb-3">
-                        Tenant Background Verification
-                      </h3>
-                      <p className="text-sm text-muted-foreground leading-relaxed">
-                        Get thorough tenant background checks for secure and reliable occupancy
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start space-x-4">
-                    <div className="flex-shrink-0 w-16 h-16 bg-blue-50 rounded-lg flex items-center justify-center">
-                      <Camera className="w-8 h-8 text-blue-600" />
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="text-lg font-semibold text-blue-600 mb-3">
-                        Periodic Home Inspection
-                      </h3>
-                      <p className="text-sm text-muted-foreground leading-relaxed">
-                        Maintain your property's value with scheduled, professional inspections
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="space-y-8">
-                  <div className="flex items-start space-x-4">
-                    <div className="flex-shrink-0 w-16 h-16 bg-blue-50 rounded-lg flex items-center justify-center">
-                      <Clock className="w-8 h-8 text-blue-600" />
+                    <div className="flex-shrink-0">
+                      <svg width="48" height="48" viewBox="0 0 48 48" fill="none" className="text-blue-600">
+                        <circle cx="24" cy="18" r="6" stroke="currentColor" strokeWidth="2"/>
+                        <path d="M24 28C32 28 36 32 36 36V40H12V36C12 32 16 28 24 28Z" stroke="currentColor" strokeWidth="2"/>
+                        <circle cx="34" cy="14" r="4" stroke="currentColor" strokeWidth="2"/>
+                        <path d="M38 24C40 24 42 26 42 28V30H32" stroke="currentColor" strokeWidth="2"/>
+                      </svg>
                     </div>
                     <div className="flex-1">
                       <h3 className="text-lg font-semibold text-blue-600 mb-3">
@@ -340,8 +319,32 @@ const PropManagement = () => {
                   </div>
 
                   <div className="flex items-start space-x-4">
-                    <div className="flex-shrink-0 w-16 h-16 bg-blue-50 rounded-lg flex items-center justify-center">
-                      <FileText className="w-8 h-8 text-blue-600" />
+                    <div className="flex-shrink-0">
+                      <svg width="48" height="48" viewBox="0 0 48 48" fill="none" className="text-blue-600">
+                        <circle cx="24" cy="20" r="6" stroke="currentColor" strokeWidth="2"/>
+                        <path d="M12 36C12 32 16 28 24 28C32 28 36 32 36 36" stroke="currentColor" strokeWidth="2"/>
+                        <circle cx="38" cy="16" r="4" stroke="currentColor" strokeWidth="2"/>
+                        <path d="M32 24C34 24 36 26 36 28" stroke="currentColor" strokeWidth="2"/>
+                      </svg>
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-lg font-semibold text-blue-600 mb-3">
+                        Tenant Background Verification
+                      </h3>
+                      <p className="text-sm text-muted-foreground leading-relaxed">
+                        Get thorough tenant background checks for secure and reliable occupancy
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start space-x-4">
+                    <div className="flex-shrink-0">
+                      <svg width="48" height="48" viewBox="0 0 48 48" fill="none" className="text-blue-600">
+                        <rect x="8" y="12" width="32" height="24" rx="2" stroke="currentColor" strokeWidth="2"/>
+                        <path d="M8 20H40" stroke="currentColor" strokeWidth="2"/>
+                        <circle cx="16" cy="28" r="2" fill="currentColor"/>
+                        <path d="M24 28H32" stroke="currentColor" strokeWidth="2"/>
+                      </svg>
                     </div>
                     <div className="flex-1">
                       <h3 className="text-lg font-semibold text-blue-600 mb-3">
@@ -354,8 +357,32 @@ const PropManagement = () => {
                   </div>
 
                   <div className="flex items-start space-x-4">
-                    <div className="flex-shrink-0 w-16 h-16 bg-blue-50 rounded-lg flex items-center justify-center">
-                      <Wrench className="w-8 h-8 text-blue-600" />
+                    <div className="flex-shrink-0">
+                      <svg width="48" height="48" viewBox="0 0 48 48" fill="none" className="text-blue-600">
+                        <path d="M12 36V16L24 8L36 16V36H28V24H20V36H12Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        <circle cx="34" cy="18" r="3" stroke="currentColor" strokeWidth="2"/>
+                        <path d="M32 22L34 24L38 20" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-lg font-semibold text-blue-600 mb-3">
+                        Periodic Home Inspection
+                      </h3>
+                      <p className="text-sm text-muted-foreground leading-relaxed">
+                        Maintain your property's value with scheduled, professional inspections
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start space-x-4">
+                    <div className="flex-shrink-0">
+                      <svg width="48" height="48" viewBox="0 0 48 48" fill="none" className="text-blue-600">
+                        <rect x="8" y="16" width="32" height="20" rx="2" stroke="currentColor" strokeWidth="2"/>
+                        <path d="M16 20V24M24 20V24M32 20V24" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                        <path d="M12 28H36" stroke="currentColor" strokeWidth="2"/>
+                        <circle cx="20" cy="32" r="1" fill="currentColor"/>
+                        <circle cx="28" cy="32" r="1" fill="currentColor"/>
+                      </svg>
                     </div>
                     <div className="flex-1">
                       <h3 className="text-lg font-semibold text-blue-600 mb-3">
