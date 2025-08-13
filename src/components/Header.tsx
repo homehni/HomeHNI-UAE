@@ -175,7 +175,7 @@ const Header = () => {
   
   </a>
 
-              { <a href="/careers" className={`hover:opacity-80 transition-colors duration-500 text-sm font-medium ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
+              { <a href="/careers" className={`hover:opacity-80 transition-colors duration-500 text-base font-medium ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
     Jobs
   </a> }
 
