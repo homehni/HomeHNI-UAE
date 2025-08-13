@@ -461,36 +461,49 @@ const PropManagement = () => {
                 HomeHNI.com vs Others: What makes us better?
               </h2>
               
-              {/* Mobile Card Layout */}
-              <div className="md:hidden space-y-4">
-                {comparisonData.map((item, index) => (
-                  <Card key={index} className="overflow-hidden">
-                    <CardContent className="p-4">
-                      <h3 className="font-semibold text-foreground mb-3 text-sm">
-                        {item.feature}
-                      </h3>
-                      <div className="space-y-3">
-                        <div className="flex items-center justify-between">
-                          <span className="text-sm font-medium text-foreground">HomeHNI.com</span>
-                          {item.homeHNI ? (
-                            <CheckCircle className="w-5 h-5 text-green-500" />
-                          ) : (
-                            <X className="w-5 h-5 text-red-500" />
-                          )}
-                        </div>
-                        <div className="flex items-center justify-between">
-                          <span className="text-sm text-muted-foreground">Others</span>
-                          {item.others ? (
-                            <CheckCircle className="w-5 h-5 text-green-500" />
-                          ) : (
-                            <X className="w-5 h-5 text-red-500" />
-                          )}
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
+              {/* Mobile Table Layout */}
+              <Card className="md:hidden overflow-hidden">
+                <CardContent className="p-0">
+                  <div className="overflow-x-auto">
+                    <table className="w-full min-w-[500px]">
+                      <thead>
+                        <tr className="bg-slate-900 text-white">
+                          <th className="text-left p-2 font-semibold text-xs">Services</th>
+                          <th className="text-center p-2 font-semibold text-xs">
+                            <div className="flex items-center justify-center">
+                              <span>HomeHNI.com</span>
+                            </div>
+                          </th>
+                          <th className="text-center p-2 font-semibold text-xs">
+                            Other Property Management Services in India
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {comparisonData.map((item, index) => (
+                          <tr key={index} className={`border-t ${index % 2 === 0 ? 'bg-muted/30' : ''}`}>
+                            <td className="p-2 font-medium text-xs">{item.feature}</td>
+                            <td className="p-2 text-center">
+                              {item.homeHNI ? (
+                                <CheckCircle className="w-4 h-4 text-green-500 mx-auto" />
+                              ) : (
+                                <X className="w-4 h-4 text-red-500 mx-auto" />
+                              )}
+                            </td>
+                            <td className="p-2 text-center">
+                              {item.others ? (
+                                <CheckCircle className="w-4 h-4 text-green-500 mx-auto" />
+                              ) : (
+                                <X className="w-4 h-4 text-red-500 mx-auto" />
+                              )}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </CardContent>
+              </Card>
 
               {/* Desktop Table Layout */}
               <Card className="hidden md:block overflow-hidden">
