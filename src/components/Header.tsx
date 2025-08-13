@@ -164,17 +164,20 @@ const Header = () => {
     Builders
   </a>
   
-  {/* <a
-    href="/about"
-    onClick={(e) => { e.preventDefault(); navigate('/about'); }}
+  <a
+    href="/loans"
+    onClick={(e) => { e.preventDefault(); navigate('/loans'); }}
     className={`hover:opacity-80 transition-colors duration-500 text-base font-medium ${isScrolled ? 'text-gray-800' : 'text-white'}`}
   >
-    About
-  </a> */}
+    Loans
+  
+  
+  
+  </a>
 
-              {/* <a href="#" className={`hover:opacity-80 transition-colors duration-500 text-sm font-medium ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
-    Tenants
-  </a> */}
+              { <a href="/careers" className={`hover:opacity-80 transition-colors duration-500 text-sm font-medium ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
+    Jobs
+  </a> }
 
 
               <div 
