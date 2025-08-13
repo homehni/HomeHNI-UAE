@@ -10,7 +10,6 @@ import Marquee from "@/components/Marquee";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 const PropManagement = () => {
-  const [isFormSticky, setIsFormSticky] = useState(false);
   const services = [{
     icon: Users,
     title: "Tenant Management",
@@ -138,11 +137,6 @@ const PropManagement = () => {
       document.head.appendChild(canonical);
     }
     canonical.setAttribute('href', window.location.origin + '/prop-management');
-    const handleScroll = () => {
-      setIsFormSticky(window.scrollY > 100);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
   return <div className="min-h-screen">
       <Marquee />
@@ -221,77 +215,79 @@ const PropManagement = () => {
         </div>
       </section>
 
-      {/* Mobile Form - Fixed at bottom */}
-      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-[100] bg-white shadow-2xl border-t">
-        <div className="p-6">
-          <h3 className="text-xl font-bold text-gray-900 mb-2">Got a property to be managed?</h3>
-          <p className="text-gray-600 mb-6">Just fill up the form & we will take care of the rest</p>
+      {/* Mobile Form - Static below hero */}
+      <section className="lg:hidden px-4 py-8 bg-background">
+        <div className="container mx-auto max-w-md">
+          <Card className="w-full rounded-xl shadow-lg">
+            <CardContent className="p-6">
+              <h3 className="text-xl font-semibold text-foreground mb-2">Got a property to be managed?</h3>
+              <p className="text-sm text-muted-foreground mb-6">Just fill up the form & we will take care of the rest</p>
 
-          <form className="space-y-4" onSubmit={e => {
-            e.preventDefault();
-            toast({
-              title: "Request received",
-              description: "Our team will reach out shortly."
-            });
-            (e.currentTarget as HTMLFormElement).reset();
-          }}>
-            <Input 
-              id="pm-name-mobile" 
-              name="name" 
-              placeholder="Name" 
-              required 
-              className="h-12 bg-gray-50 border-gray-200 rounded-lg px-4" 
-            />
+              <form className="space-y-4" onSubmit={e => {
+                e.preventDefault();
+                toast({
+                  title: "Request received",
+                  description: "Our team will reach out shortly."
+                });
+                (e.currentTarget as HTMLFormElement).reset();
+              }}>
+                <Input 
+                  id="pm-name-mobile" 
+                  name="name" 
+                  placeholder="Name" 
+                  required 
+                />
 
-            <div className="flex gap-0">
-              <Select defaultValue="+91" name="countryCode">
-                <SelectTrigger className="w-24 h-12 bg-gray-50 border-gray-200 rounded-l-lg border-r-0">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="+91">🇮🇳 +91</SelectItem>
-                  <SelectItem value="+1">🇺🇸 +1</SelectItem>
-                  <SelectItem value="+44">🇬🇧 +44</SelectItem>
-                </SelectContent>
-              </Select>
-              <Input 
-                id="pm-phone-mobile" 
-                name="phone" 
-                type="tel" 
-                placeholder="Phone Number" 
-                className="flex-1 h-12 bg-gray-50 border-gray-200 rounded-r-lg border-l-0" 
-                required 
-              />
-            </div>
+                <div className="flex gap-2">
+                  <Select defaultValue="+91" name="countryCode">
+                    <SelectTrigger className="w-28">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="+91">🇮🇳 +91</SelectItem>
+                      <SelectItem value="+1">🇺🇸 +1</SelectItem>
+                      <SelectItem value="+44">🇬🇧 +44</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <Input 
+                    id="pm-phone-mobile" 
+                    name="phone" 
+                    type="tel" 
+                    placeholder="Phone Number" 
+                    className="flex-1" 
+                    required 
+                  />
+                </div>
 
-            <Input 
-              id="pm-email-mobile" 
-              name="email" 
-              type="email" 
-              placeholder="Email ID" 
-              className="h-12 bg-gray-50 border-gray-200 rounded-lg px-4" 
-            />
+                <Input 
+                  id="pm-email-mobile" 
+                  name="email" 
+                  type="email" 
+                  placeholder="Email ID" 
+                />
 
-            <Select name="city">
-              <SelectTrigger id="pm-city-mobile" className="h-12 bg-gray-50 border-gray-200 rounded-lg">
-                <SelectValue placeholder="City" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="Hyderabad">Hyderabad</SelectItem>
-                <SelectItem value="Bengaluru">Bengaluru</SelectItem>
-                <SelectItem value="Mumbai">Mumbai</SelectItem>
-                <SelectItem value="Pune">Pune</SelectItem>
-                <SelectItem value="Chennai">Chennai</SelectItem>
-                <SelectItem value="Delhi NCR">Delhi NCR</SelectItem>
-              </SelectContent>
-            </Select>
+                <Select name="city">
+                  <SelectTrigger id="pm-city-mobile">
+                    <SelectValue placeholder="City" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Hyderabad">Hyderabad</SelectItem>
+                    <SelectItem value="Bengaluru">Bengaluru</SelectItem>
+                    <SelectItem value="Mumbai">Mumbai</SelectItem>
+                    <SelectItem value="Pune">Pune</SelectItem>
+                    <SelectItem value="Chennai">Chennai</SelectItem>
+                    <SelectItem value="Delhi NCR">Delhi NCR</SelectItem>
+                  </SelectContent>
+                </Select>
 
-            <Button type="submit" className="w-full h-12 bg-teal-600 hover:bg-teal-700 text-white font-semibold rounded-lg">
-              Talk to Us Today!
-            </Button>
-          </form>
+                <Button type="submit" className="w-full">
+                  Talk to Us Today!
+                </Button>
+              </form>
+            </CardContent>
+          </Card>
         </div>
-      </div>
+      </section>
 
       {/* What's in it for you Section */}
       <section className="py-16 px-4 bg-background">
