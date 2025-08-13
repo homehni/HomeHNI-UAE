@@ -70,7 +70,7 @@ const RealEstateSlider = () => {
   }, [isPaused, slides.length]);
 
   return (
-    <section className="pb-16 bg-gradient-to-br from-background to-secondary/20">
+    <section className="pb-16 -mt-4 md:-mt-6 bg-gradient-to-br from-background to-secondary/20">
       <div className="container mx-auto px-4">
         <div className="text-center mb-8">
           <h2 className="text-3xl font-bold text-foreground mb-4">
