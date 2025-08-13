@@ -164,13 +164,13 @@ const Header = () => {
     Builders
   </a>
   
-  <a
+  {/* <a
     href="/about"
     onClick={(e) => { e.preventDefault(); navigate('/about'); }}
     className={`hover:opacity-80 transition-colors duration-500 text-base font-medium ${isScrolled ? 'text-gray-800' : 'text-white'}`}
   >
     About
-  </a>
+  </a> */}
 
               {/* <a href="#" className={`hover:opacity-80 transition-colors duration-500 text-sm font-medium ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
     Tenants
