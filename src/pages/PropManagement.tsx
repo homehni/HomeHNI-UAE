@@ -155,9 +155,9 @@ const PropManagement = () => {
         <div className="absolute inset-0 bg-blue-900/80 pointer-events-none" />
 
         <div className="relative z-10 container mx-auto">
-          <div className="grid lg:grid-cols-2 gap-8 items-start">
-            {/* Left: Copy */}
-            <div className="max-w-2xl text-center lg:text-left">
+          <div className="relative">
+            {/* Centered Content */}
+            <div className="text-center max-w-4xl mx-auto">
               <h1 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">
                 Comprehensive Property Management Services
                 <br className="hidden md:block" />
@@ -169,8 +169,8 @@ const PropManagement = () => {
               </p>
             </div>
 
-            {/* Right: Form - Sticky on Scroll */}
-            <div className={`lg:justify-self-end transition-all duration-300 ${isFormSticky ? 'fixed top-20 right-4 z-[100]' : 'relative'}`}>
+            {/* Form positioned absolutely on the right */}
+            <div className={`transition-all duration-300 ${isFormSticky ? 'fixed top-20 right-4 z-[100]' : 'absolute top-0 right-0 lg:relative lg:top-auto lg:right-auto lg:ml-auto'}`}>
               <Card className="w-full max-w-md rounded-xl shadow-2xl bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/90 border border-white/20">
                 <CardContent className="p-6 mt-4">
                   <h3 className="text-xl font-semibold text-foreground">Got a property to be managed?</h3>
