@@ -217,13 +217,13 @@ const PropManagement = () => {
 
       {/* Mobile Form - Static below hero */}
       <section className="lg:hidden px-4 py-8 bg-background">
-        <div className="container mx-auto max-w-lg">
-          <Card className="w-full rounded-xl shadow-lg">
-            <CardContent className="p-6">
-              <h3 className="text-xl font-semibold text-foreground mb-2">Got a property to be managed?</h3>
-              <p className="text-sm text-muted-foreground mb-6">Just fill up the form & we will take care of the rest</p>
+        <div className="container mx-auto max-w-xl px-4">
+          <Card className="w-full rounded-2xl shadow-xl border-0 bg-card">
+            <CardContent className="p-8">
+              <h3 className="text-2xl font-bold text-foreground mb-3">Got a property to be managed?</h3>
+              <p className="text-base text-muted-foreground mb-8">Just fill up the form & we will take care of the rest</p>
 
-              <form className="space-y-4" onSubmit={e => {
+              <form className="space-y-5" onSubmit={e => {
                 e.preventDefault();
                 toast({
                   title: "Request received",
@@ -235,15 +235,16 @@ const PropManagement = () => {
                   id="pm-name-mobile" 
                   name="name" 
                   placeholder="Name" 
+                  className="h-12 text-base bg-background"
                   required 
                 />
 
-                <div className="flex gap-2">
+                <div className="flex gap-3">
                   <Select defaultValue="+91" name="countryCode">
-                    <SelectTrigger className="w-28">
+                    <SelectTrigger className="w-32 h-12 bg-background">
                       <SelectValue />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent className="bg-background border shadow-lg">
                       <SelectItem value="+91">🇮🇳 +91</SelectItem>
                       <SelectItem value="+1">🇺🇸 +1</SelectItem>
                       <SelectItem value="+44">🇬🇧 +44</SelectItem>
@@ -254,7 +255,7 @@ const PropManagement = () => {
                     name="phone" 
                     type="tel" 
                     placeholder="Phone Number" 
-                    className="flex-1" 
+                    className="flex-1 h-12 text-base bg-background" 
                     required 
                   />
                 </div>
@@ -264,13 +265,14 @@ const PropManagement = () => {
                   name="email" 
                   type="email" 
                   placeholder="Email ID" 
+                  className="h-12 text-base bg-background"
                 />
 
                 <Select name="city">
-                  <SelectTrigger id="pm-city-mobile">
+                  <SelectTrigger id="pm-city-mobile" className="h-12 bg-background">
                     <SelectValue placeholder="City" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="bg-background border shadow-lg">
                     <SelectItem value="Hyderabad">Hyderabad</SelectItem>
                     <SelectItem value="Bengaluru">Bengaluru</SelectItem>
                     <SelectItem value="Mumbai">Mumbai</SelectItem>
@@ -280,7 +282,7 @@ const PropManagement = () => {
                   </SelectContent>
                 </Select>
 
-                <Button type="submit" className="w-full">
+                <Button type="submit" className="w-full h-12 text-base font-semibold bg-teal-600 hover:bg-teal-700 text-white mt-6">
                   Talk to Us Today!
                 </Button>
               </form>
