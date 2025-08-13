@@ -1,4 +1,3 @@
-
 import { MapPin, Phone, Mail, Facebook, Twitter, Instagram, Linkedin } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
@@ -408,7 +407,7 @@ const Footer = ({ searchSectionRef }: FooterProps) => {
 
           {/* Copyright */}
           <div className="text-center text-xs text-gray-500">
-            © 2025 HomeHNI Private Limited </span> | All Rights Reserved
+            © 2025 HomeHNI Private Limited | All Rights Reserved
           </div>
         </div>
       </div>
