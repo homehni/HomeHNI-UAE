@@ -164,7 +164,7 @@ const PropManagement = () => {
             </div>
 
             {/* Right: Form - Desktop only, hidden on mobile */}
-            <div className="hidden lg:block lg:justify-self-end">
+            <div className="hidden lg:block lg:justify-self-end sticky top-8 self-start">
               <Card className="w-full max-w-md rounded-xl shadow-2xl bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/90 border border-white/20">
                 <CardContent className="p-6 mt-4">
                   <h3 className="text-xl font-semibold text-foreground">Got a property to be managed?</h3>
