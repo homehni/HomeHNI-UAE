@@ -43,16 +43,17 @@ const Loans = () => {
       {/* Hero Section */}
       <section className="relative pt-20 pb-56 md:pt-24 md:pb-72 bg-cover bg-center bg-no-repeat" style={{backgroundImage: "url('/lovable-uploads/ecdc9986-c144-471f-8b40-aeffc8af64af.png')"}}>
         <div className="absolute inset-0 bg-black/50"></div>
-        <div className="container mx-auto text-center px-[19px] py-[20px] relative z-10">
-          <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 py-[25px]">
-            Unlock Your Dream Home with Smart Financing
-          </h1>
-          <p className="text-xl text-white/90 mb-8 max-w-3xl mx-auto">
-            Get up to 90% of your property's value, transparent terms, and zero hidden fees—100% digital, entirely broker-free.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-primary hover:bg-primary/90">Get Started Now</Button>
-            
+        <div className="container mx-auto relative z-10 px-4 py-8">
+          <div className="grid md:grid-cols-2 gap-8 items-center">
+            <div className="text-left">
+              <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">
+                Home Loans Made Easy
+              </h1>
+              <p className="text-lg md:text-xl text-white/90 max-w-2xl">
+                Compare offers from top banks. Quick approval. Zero brokerage.
+              </p>
+            </div>
+            <div className="hidden md:block" aria-hidden="true" />
           </div>
         </div>
       </section>
@@ -295,8 +296,8 @@ const Loans = () => {
             <div className="md:sticky md:top-24 relative z-10">
               <Card className="rounded-2xl shadow-2xl border bg-card/95 backdrop-blur">
                 <CardHeader>
-                  <CardTitle className="text-xl">Got a property to be financed?</CardTitle>
-                  <p className="text-sm text-muted-foreground">Just fill up the form & we will take care of the rest</p>
+                  <CardTitle className="text-xl">Apply for Home Loan</CardTitle>
+                  <p className="text-sm text-muted-foreground">Fill the form and we’ll do the rest.</p>
                   <div className="h-px bg-muted mt-2" />
                 </CardHeader>
                 <CardContent>
@@ -312,18 +313,18 @@ const Loans = () => {
                   >
                     <div className="space-y-2">
                       <Label htmlFor="name">Name</Label>
-                      <Input id="name" name="name" placeholder="Your full name" required />
+                      <Input id="name" name="name" placeholder="Full name" required />
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="phone">Phone</Label>
                       <div className="flex">
-                        <span className="inline-flex items-center px-3 border border-r-0 rounded-l-md text-sm text-muted-foreground">+91</span>
-                        <Input id="phone" name="phone" placeholder="Mobile number" inputMode="numeric" pattern="[0-9]{10}" className="rounded-l-none" required />
+                        <span className="inline-flex items-center px-3 border border-r-0 rounded-l-md text-sm text-muted-foreground">🇮🇳 +91 ▾</span>
+                        <Input id="phone" name="phone" placeholder="Enter mobile number" inputMode="numeric" pattern="[0-9]{10}" className="rounded-l-none" required />
                       </div>
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="email">Email</Label>
-                      <Input id="email" name="email" type="email" placeholder="you@example.com" required />
+                      <Input id="email" name="email" type="email" placeholder="Email address" required />
                     </div>
                     <div className="space-y-2">
                       <Label>City</Label>
@@ -341,7 +342,7 @@ const Loans = () => {
                         </SelectContent>
                       </Select>
                     </div>
-                    <Button type="submit" size="lg" className="w-full">Talk to us today</Button>
+                    <Button type="submit" size="lg" className="w-full">Get Free Consultation</Button>
                   </form>
                 </CardContent>
               </Card>
