@@ -153,7 +153,7 @@ const Loans = () => {
       <section className="relative pt-28 md:pt-32 pb-16 md:pb-24 px-4 md:px-8 text-white overflow-hidden bg-cover bg-center bg-no-repeat" style={{
         backgroundImage: "url('/lovable-uploads/fbb0d72f-782e-49f5-bbe1-8afc1314b5f7.png')"
       }}>
-        <div className="absolute inset-0 bg-green-900/80 pointer-events-none" />
+        <div className="absolute inset-0 bg-red-900/80 pointer-events-none" />
 
         <div className="relative z-10 container mx-auto">
           <div className="grid lg:grid-cols-2 gap-8 items-start">
@@ -304,7 +304,7 @@ const Loans = () => {
                   className="h-12 text-base bg-background"
                 />
 
-                <Button type="submit" className="w-full h-12 text-base font-semibold bg-green-600 hover:bg-green-700 text-white mt-6">
+                <Button type="submit" className="w-full h-12 text-base font-semibold bg-red-600 hover:bg-red-700 text-white mt-6">
                   Get Pre-Approved Now!
                 </Button>
               </form>
@@ -324,8 +324,8 @@ const Loans = () => {
               
               <div className="grid grid-cols-2 gap-6">
                 <div className="space-y-3">
-                  <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
-                    <Percent className="w-5 h-5 text-green-600" />
+                  <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
+                    <Percent className="w-5 h-5 text-red-600" />
                   </div>
                   <h3 className="text-base font-semibold text-foreground">
                     Competitive Interest Rates
@@ -336,8 +336,8 @@ const Loans = () => {
                 </div>
 
                 <div className="space-y-3">
-                  <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
-                    <Clock className="w-5 h-5 text-green-600" />
+                  <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
+                    <Clock className="w-5 h-5 text-red-600" />
                   </div>
                   <h3 className="text-base font-semibold text-foreground">
                     Quick Approval
@@ -348,8 +348,8 @@ const Loans = () => {
                 </div>
 
                 <div className="space-y-3">
-                  <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
-                    <FileText className="w-5 h-5 text-green-600" />
+                  <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
+                    <FileText className="w-5 h-5 text-red-600" />
                   </div>
                   <h3 className="text-base font-semibold text-foreground">
                     Minimal Documentation
@@ -360,8 +360,8 @@ const Loans = () => {
                 </div>
 
                 <div className="space-y-3">
-                  <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
-                    <Users className="w-5 h-5 text-green-600" />
+                  <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
+                    <Users className="w-5 h-5 text-red-600" />
                   </div>
                   <h3 className="text-base font-semibold text-foreground">
                     Dedicated Loan Advisor
@@ -372,8 +372,8 @@ const Loans = () => {
                 </div>
 
                 <div className="space-y-3">
-                  <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
-                    <Building2 className="w-5 h-5 text-green-600" />
+                  <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
+                    <Building2 className="w-5 h-5 text-red-600" />
                   </div>
                   <h3 className="text-base font-semibold text-foreground">
                     Free Property Valuation
@@ -384,8 +384,8 @@ const Loans = () => {
                 </div>
 
                 <div className="space-y-3">
-                  <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
-                    <DollarSign className="w-5 h-5 text-green-600" />
+                  <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
+                    <DollarSign className="w-5 h-5 text-red-600" />
                   </div>
                   <h3 className="text-base font-semibold text-foreground">
                     Zero Processing Fees
@@ -452,8 +452,8 @@ const Loans = () => {
                   const IconComponent = service.icon;
                   return (
                     <div key={index} className="flex gap-4 p-6 bg-card rounded-lg border">
-                      <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                        <IconComponent className="w-6 h-6 text-green-600" />
+                      <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <IconComponent className="w-6 h-6 text-red-600" />
                       </div>
                       <div>
                         <h3 className="text-lg font-semibold text-foreground mb-2">{service.title}</h3>
@@ -481,19 +481,19 @@ const Loans = () => {
               </h2>
               <div className="grid grid-cols-2 gap-8">
                 <div className="text-center">
-                  <div className="text-4xl md:text-5xl font-bold text-green-600 mb-2">₹500Cr+</div>
+                  <div className="text-4xl md:text-5xl font-bold text-red-600 mb-2">₹500Cr+</div>
                   <p className="text-muted-foreground">Loans Disbursed</p>
                 </div>
                 <div className="text-center">
-                  <div className="text-4xl md:text-5xl font-bold text-green-600 mb-2">10K+</div>
+                  <div className="text-4xl md:text-5xl font-bold text-red-600 mb-2">10K+</div>
                   <p className="text-muted-foreground">Happy Customers</p>
                 </div>
                 <div className="text-center">
-                  <div className="text-4xl md:text-5xl font-bold text-green-600 mb-2">48hrs</div>
+                  <div className="text-4xl md:text-5xl font-bold text-red-600 mb-2">48hrs</div>
                   <p className="text-muted-foreground">Average Approval Time</p>
                 </div>
                 <div className="text-center">
-                  <div className="text-4xl md:text-5xl font-bold text-green-600 mb-2">98%</div>
+                  <div className="text-4xl md:text-5xl font-bold text-red-600 mb-2">98%</div>
                   <p className="text-muted-foreground">Customer Satisfaction</p>
                 </div>
               </div>
@@ -524,14 +524,14 @@ const Loans = () => {
                     <div className="text-foreground">{item.feature}</div>
                     <div className="text-center">
                       {item.homeHNI ? (
-                        <CheckCircle className="w-4 h-4 text-green-600 mx-auto" />
+                        <CheckCircle className="w-4 h-4 text-red-600 mx-auto" />
                       ) : (
                         <X className="w-4 h-4 text-red-500 mx-auto" />
                       )}
                     </div>
                     <div className="text-center">
                       {item.others ? (
-                        <CheckCircle className="w-4 h-4 text-green-600 mx-auto" />
+                        <CheckCircle className="w-4 h-4 text-red-600 mx-auto" />
                       ) : (
                         <X className="w-4 h-4 text-red-500 mx-auto" />
                       )}
@@ -603,8 +603,8 @@ const Loans = () => {
                   const IconComponent = audience.icon;
                   return (
                     <div key={index} className="flex gap-4 p-6 bg-card rounded-lg border">
-                      <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                        <IconComponent className="w-6 h-6 text-green-600" />
+                      <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <IconComponent className="w-6 h-6 text-red-600" />
                       </div>
                       <div>
                         <h3 className="text-lg font-semibold text-foreground mb-2">{audience.title}</h3>
