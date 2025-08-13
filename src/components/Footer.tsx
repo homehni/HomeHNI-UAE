@@ -408,7 +408,7 @@ const Footer = ({ searchSectionRef }: FooterProps) => {
 
           {/* Copyright */}
           <div className="text-center text-xs text-gray-500">
-            © 2025 HomeHNI. All rights reserved.
+            © 2025 HomeHNI Private Limited </span> | All Rights Reserved
           </div>
         </div>
       </div>
