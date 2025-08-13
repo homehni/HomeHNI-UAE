@@ -133,11 +133,14 @@ const PropertyCard = ({
           <span className="text-sm">{location}</span>
         </div>
         
+        {/*
         <div className="flex justify-between items-center mb-3">
           <div className="text-2xl font-bold text-brand-red">{price}</div>
           <div className="text-sm text-gray-600">{area}</div>
         </div>
+        */}
         
+        {/*
         <div className="flex items-center space-x-4 mb-4 text-gray-600">
           <div className="flex items-center">
             <Bed size={16} className="mr-1" />
@@ -152,6 +155,7 @@ const PropertyCard = ({
             <span className="text-sm">{area}</span>
           </div>
         </div>
+        */}
         
         <div className="flex space-x-2">
           <Button variant="outline" size="sm" className="flex-1">
