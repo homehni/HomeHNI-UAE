@@ -708,35 +708,7 @@ const PropManagement = () => {
       
 
       {/* Property Management Info Section */}
-      <section className="py-16 px-4 bg-background">
-        <div className="container mx-auto">
-          <div className="max-w-4xl mx-auto prose prose-lg">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
-              Property Management in Hyderabad
-            </h2>
-            <div className="text-muted-foreground space-y-4">
-              <p>
-                Hyderabad's real estate market has witnessed tremendous growth over the past decade, 
-                making it one of India's most sought-after investment destinations. With the rise in 
-                property investments, the need for professional property management services has become 
-                more crucial than ever.
-              </p>
-              <p>
-                Our comprehensive property management services in Hyderabad are designed to take the 
-                hassle out of property ownership. Whether you're an NRI looking to manage your property 
-                from abroad, an HNI with multiple properties, or a busy professional who values time, 
-                our services ensure your property is well-maintained and profitable.
-              </p>
-              <p>
-                We understand the unique challenges of property management in Hyderabad, from dealing 
-                with local regulations to finding reliable tenants. Our experienced team handles 
-                everything from tenant verification and rent collection to maintenance and legal 
-                compliance, giving you complete peace of mind.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
+      
 
       <Footer />
     </div>;
