@@ -163,45 +163,33 @@ const PropertyManagement = () => {
                 (e.currentTarget as HTMLFormElement).reset();
               }}
             >
-              <div className="space-y-2">
-                <Label htmlFor="pm-name">Name</Label>
-                <Input id="pm-name" name="name" placeholder="Name" required />
-              </div>
+              <Input id="pm-name" name="name" placeholder="Name" required />
 
-              <div className="space-y-2">
-                <Label htmlFor="pm-phone">Phone</Label>
-                <div className="flex gap-2">
-                  <Select defaultValue="+91" name="countryCode">
-                    <SelectTrigger className="w-28"><SelectValue /></SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="+91">🇮🇳 +91</SelectItem>
-                      <SelectItem value="+1">🇺🇸 +1</SelectItem>
-                      <SelectItem value="+44">🇬🇧 +44</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <Input id="pm-phone" name="phone" type="tel" placeholder="Phone Number" className="flex-1" required />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="pm-email">Email</Label>
-                <Input id="pm-email" name="email" type="email" placeholder="Email ID" />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="pm-city">City</Label>
-                <Select name="city">
-                  <SelectTrigger id="pm-city"><SelectValue placeholder="City" /></SelectTrigger>
+              <div className="flex gap-2">
+                <Select defaultValue="+91" name="countryCode">
+                  <SelectTrigger className="w-28"><SelectValue /></SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="Hyderabad">Hyderabad</SelectItem>
-                    <SelectItem value="Bengaluru">Bengaluru</SelectItem>
-                    <SelectItem value="Mumbai">Mumbai</SelectItem>
-                    <SelectItem value="Pune">Pune</SelectItem>
-                    <SelectItem value="Chennai">Chennai</SelectItem>
-                    <SelectItem value="Delhi NCR">Delhi NCR</SelectItem>
+                    <SelectItem value="+91">🇮🇳 +91</SelectItem>
+                    <SelectItem value="+1">🇺🇸 +1</SelectItem>
+                    <SelectItem value="+44">🇬🇧 +44</SelectItem>
                   </SelectContent>
                 </Select>
+                <Input id="pm-phone" name="phone" type="tel" placeholder="Phone Number" className="flex-1" required />
               </div>
+
+              <Input id="pm-email" name="email" type="email" placeholder="Email ID" />
+
+              <Select name="city">
+                <SelectTrigger id="pm-city"><SelectValue placeholder="City" /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Hyderabad">Hyderabad</SelectItem>
+                  <SelectItem value="Bengaluru">Bengaluru</SelectItem>
+                  <SelectItem value="Mumbai">Mumbai</SelectItem>
+                  <SelectItem value="Pune">Pune</SelectItem>
+                  <SelectItem value="Chennai">Chennai</SelectItem>
+                  <SelectItem value="Delhi NCR">Delhi NCR</SelectItem>
+                </SelectContent>
+              </Select>
 
               <Button type="submit" className="w-full">Talk to Us Today!</Button>
             </form>
