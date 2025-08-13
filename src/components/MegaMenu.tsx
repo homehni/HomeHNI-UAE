@@ -39,7 +39,7 @@ const MegaMenu = ({ isScrolled }: MegaMenuProps) => {
           onMouseLeave={() => setIsOpen(false)}
         >
     
-          <DropdownMenuSeparator />
+          {/* <DropdownMenuSeparator /> */}
           {[
             'All Residential',
             'Flat / Apartment',
