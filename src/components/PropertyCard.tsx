@@ -161,12 +161,20 @@ const PropertyCard = ({
         </div>
         */}
         
-        <div className="flex space-x-2">
-          <Button variant="outline" size="sm" className="flex-1">
+        <div className={cn("flex", size === 'compact' ? 'flex-col space-y-2' : 'flex-row space-x-2')}>
+          <Button
+            variant="outline"
+            size="sm"
+            className={cn(size === 'compact' ? 'w-full' : 'flex-1')}
+          >
             <Phone size={14} className="mr-1" />
             Contact
           </Button>
-          <Button size="sm" className="flex-1 bg-brand-maroon hover:bg-brand-maroon-dark" onClick={() => navigate(`/property/${id}`, { state: propertyForPage })}>
+          <Button
+            size="sm"
+            className={cn(size === 'compact' ? 'w-full' : 'flex-1', 'bg-brand-maroon hover:bg-brand-maroon-dark')}
+            onClick={() => navigate(`/property/${id}`, { state: propertyForPage })}
+          >
             View Details
           </Button>
         </div>
