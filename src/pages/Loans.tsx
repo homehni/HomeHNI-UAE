@@ -1,403 +1,729 @@
-import React, { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { CheckCircle, Calculator, Users, Shield, Clock, TrendingUp, FileText, CreditCard } from 'lucide-react';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
-import Marquee from '@/components/Marquee';
-const Loans = () => {
-  const [loanAmountInput, setLoanAmountInput] = useState<string>('5000000');
-  const [tenureInput, setTenureInput] = useState<string>('20');
-  const [interestRateInput, setInterestRateInput] = useState<string>('7');
+import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { useToast } from "@/hooks/use-toast";
+import { Building2, Users, CreditCard, Calculator, TrendingUp, FileText, MapPin, Crown, Clock, CheckCircle, Shield, Star, X, Plus, Minus, Globe, Shield as ShieldCheck, Headphones, Smartphone, Download, Home, Percent, DollarSign } from "lucide-react";
+import Marquee from "@/components/Marquee";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 
-  const formatINR = (value: string) => {
-    if (!value) return '';
-    const num = Number(value);
-    if (!isFinite(num) || isNaN(num)) return '';
-    return new Intl.NumberFormat('en-IN').format(num);
-  };
-  const calculateEMI = () => {
-    const principal = Number(loanAmountInput || 0);
-    const years = Number(tenureInput || 0);
-    const annualRate = Number(interestRateInput || 0);
-    if (principal <= 0 || years <= 0 || annualRate <= 0) return 0;
-    const rate = annualRate / 12 / 100;
-    const time = years * 12;
-    const pow = Math.pow(1 + rate, time);
-    const denominator = pow - 1;
-    if (denominator === 0) return 0;
-    const emi = principal * rate * pow / denominator;
-    return Math.round(emi);
-  };
-  const totalAmount = calculateEMI() * Number(tenureInput || 0) * 12;
-  const totalInterest = totalAmount - Number(loanAmountInput || 0);
-  return <div className="min-h-screen bg-background">
+const Loans = () => {
+  const services = [{
+    icon: Home,
+    title: "Home Loans",
+    description: "Competitive rates for purchasing your dream home."
+  }, {
+    icon: Building2,
+    title: "Loan Against Property",
+    description: "Leverage your property for business or personal needs."
+  }, {
+    icon: Calculator,
+    title: "Balance Transfer",
+    description: "Switch to lower rates and save on EMIs."
+  }, {
+    icon: TrendingUp,
+    title: "Top-up Loans",
+    description: "Additional funding on your existing home loan."
+  }, {
+    icon: CreditCard,
+    title: "Construction Finance",
+    description: "Finance for construction and renovation projects."
+  }, {
+    icon: FileText,
+    title: "Business Loans",
+    description: "Secured business loans against property collateral."
+  }];
+
+  const targetAudience = [{
+    icon: Home,
+    title: "First-time Home Buyers",
+    description: "Looking for their dream home with best rates"
+  }, {
+    icon: TrendingUp,
+    title: "Real Estate Investors",
+    description: "Seeking investment property financing"
+  }, {
+    icon: Building2,
+    title: "Business Owners",
+    description: "Need capital for business expansion"
+  }];
+
+  const comparisonData = [{
+    feature: "Quick Loan Approval",
+    homeHNI: true,
+    others: false
+  }, {
+    feature: "Competitive Interest Rates",
+    homeHNI: true,
+    others: false
+  }, {
+    feature: "Minimal Documentation",
+    homeHNI: true,
+    others: false
+  }, {
+    feature: "Dedicated Loan Advisor",
+    homeHNI: true,
+    others: false
+  }, {
+    feature: "Free Property Valuation",
+    homeHNI: true,
+    others: false
+  }, {
+    feature: "Zero Processing Fees",
+    homeHNI: true,
+    others: false
+  }, {
+    feature: "Door-to-door Service",
+    homeHNI: true,
+    others: false
+  }, {
+    feature: "Legal & Technical Support",
+    homeHNI: true,
+    others: false
+  }];
+
+  const testimonials = [{
+    name: "Suresh Reddy",
+    role: "Home Buyer",
+    image: "/lovable-uploads/46a07bb4-9f10-4614-ad52-73dfb2de4f28.png",
+    rating: 5,
+    text: "Got my home loan approved in just 48 hours! Excellent service and competitive rates."
+  }, {
+    name: "Meera Patel",
+    role: "Business Owner",
+    image: "/lovable-uploads/5b898e4e-d9b6-4366-b58f-176fc3c8a9c3.png",
+    rating: 5,
+    text: "Loan against property helped me expand my business. Hassle-free process!"
+  }, {
+    name: "Ravi Kumar",
+    role: "Property Investor",
+    image: "/lovable-uploads/6e6c47cd-700c-49d4-bfee-85a69bb8353f.png",
+    rating: 5,
+    text: "Best loan rates in the market. Saved lakhs with their balance transfer option."
+  }];
+
+  const faqs = [{
+    question: "What types of loans do you offer?",
+    answer: "We offer home loans, loan against property, balance transfer, top-up loans, construction finance, and business loans against property."
+  }, {
+    question: "What are the interest rates?",
+    answer: "Our interest rates start from 8.5% per annum and vary based on loan type, amount, and your profile. We offer some of the most competitive rates in the market."
+  }, {
+    question: "How quick is the loan approval process?",
+    answer: "With our streamlined process and minimal documentation, loan approvals can be completed within 48-72 hours for eligible applicants."
+  }, {
+    question: "What documents are required?",
+    answer: "Basic documents include identity proof, address proof, income documents, property papers, and bank statements. Our team will guide you through the complete list."
+  }, {
+    question: "Do you charge processing fees?",
+    answer: "We offer zero processing fees on select loan products. Our team will provide complete transparency on all charges before you proceed."
+  }];
+
+  const { toast } = useToast();
+
+  useEffect(() => {
+    const title = "Home Loans & Property Loans | Home HNI";
+    document.title = title;
+    const desc = "Get instant approval on home loans, loan against property, and business loans with competitive rates and minimal documentation.";
+    let meta = document.querySelector('meta[name="description"]');
+    if (!meta) {
+      meta = document.createElement('meta');
+      meta.setAttribute('name', 'description');
+      document.head.appendChild(meta);
+    }
+    meta.setAttribute('content', desc);
+    let canonical = document.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
+    if (!canonical) {
+      canonical = document.createElement('link');
+      canonical.setAttribute('rel', 'canonical');
+      document.head.appendChild(canonical);
+    }
+    canonical.setAttribute('href', window.location.origin + '/loans');
+  }, []);
+
+  return (
+    <div className="min-h-screen">
       <Marquee />
       <Header />
       
       {/* Hero Section */}
-      <section className="relative py-20 bg-cover bg-center bg-no-repeat" style={{backgroundImage: "url('/lovable-uploads/bd672939-951b-4007-b092-868ec5ac81c4.png')"}}>
-        <div className="absolute inset-0 bg-black/50"></div>
-        <div className="container mx-auto text-center px-[19px] py-[20px] relative z-10">
-          <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 py-[25px]">
-            Unlock Your Dream Home with Smart Financing
-          </h1>
-          <p className="text-xl text-white/90 mb-8 max-w-3xl mx-auto">
-            Get up to 90% of your property's value, transparent terms, and zero hidden fees—100% digital, entirely broker-free.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-primary hover:bg-primary/90">Get Started Now</Button>
-            
-          </div>
-        </div>
-      </section>
+      <section className="relative pt-28 md:pt-32 pb-20 md:pb-32 px-4 md:px-8 text-white overflow-hidden bg-cover bg-center bg-no-repeat" style={{
+        backgroundImage: "url('/lovable-uploads/fbb0d72f-782e-49f5-bbe1-8afc1314b5f7.png')"
+      }}>
+        <div className="absolute inset-0 bg-red-900/80 pointer-events-none" />
 
-      {/* Why Choose Our Loans */}
-      <section className="py-16 bg-background">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12">Why Choose Our Loans?</h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            <Card className="text-center">
-              <CardHeader>
-                <TrendingUp className="w-12 h-12 text-primary mx-auto mb-4" />
-                <CardTitle>High Funding Ratio</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground">
-                  Secure up to 90% of the property's value via top banks and NBFCs, all in one place.
-                </p>
-              </CardContent>
-            </Card>
-            
-            <Card className="text-center">
-              <CardHeader>
-                <Shield className="w-12 h-12 text-primary mx-auto mb-4" />
-                <CardTitle>Transparent & Fee-Free</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground">
-                  No hidden processing charges—just honest, straightforward lending.
-                </p>
-              </CardContent>
-            </Card>
-            
-            <Card className="text-center">
-              <CardHeader>
-                <Users className="w-12 h-12 text-primary mx-auto mb-4" />
-                <CardTitle>Zero Brokerage</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground">
-                  Enjoy seamless access to home loans without any commission—complete digital journey.
-                </p>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </section>
-
-      {/* How It Works */}
-      <section className="py-16 bg-muted/30">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12">How It Works</h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="text-center">
-              <div className="bg-primary/10 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl font-bold text-primary">1</span>
-              </div>
-              <h3 className="text-xl font-semibold mb-3">Enter Your Details</h3>
-              <p className="text-muted-foreground">
-                Fill in basic information to get instant eligibility results.
+        <div className="relative z-10 container mx-auto">
+          <div className="grid lg:grid-cols-2 gap-8 items-start">
+            {/* Left: Copy */}
+            <div className="max-w-2xl">
+              <h1 className="text-4xl md:text-5xl font-bold mb-4 leading-tight">
+                Quick & Easy Loan Solutions
+                <br className="hidden md:block" />
+                <span className="block">for Your Property Needs</span>
+              </h1>
+              <p className="text-lg md:text-xl text-white/90 mb-6">
+                Get instant approval on home loans, property loans, and business loans
+                with competitive rates starting from 8.5% per annum.
               </p>
             </div>
-            
-            <div className="text-center">
-              <div className="bg-primary/10 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl font-bold text-primary">2</span>
-              </div>
-              <h3 className="text-xl font-semibold mb-3">Compare Offers</h3>
-              <p className="text-muted-foreground">
-                Choose from curated options with best-fit interest rates and terms.
-              </p>
-            </div>
-            
-            <div className="text-center">
-              <div className="bg-primary/10 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl font-bold text-primary">3</span>
-              </div>
-              <h3 className="text-xl font-semibold mb-3">Apply Online</h3>
-              <p className="text-muted-foreground">
-                Complete documentation and submit fully online with support every step of the way.
-              </p>
+
+            {/* Right: Placeholder for form on desktop */}
+            <div className="hidden lg:block lg:justify-self-end">
+              <div className="w-full max-w-md h-80"></div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* What You Get */}
-      <section className="py-16 bg-background">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12">What You Get</h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="flex items-start space-x-3">
-              <CheckCircle className="w-6 h-6 text-green-500 mt-1" />
-              <div>
-                <h4 className="font-semibold mb-2">Top-Notch Interest Rates</h4>
-                <p className="text-sm text-muted-foreground">
-                  Competitive floating and fixed options across multiple lenders.
-                </p>
+      {/* Sticky Form Container for Large Screens */}
+      <div className="hidden lg:block fixed top-32 right-8 z-50 w-96">
+        <Card className="w-full rounded-xl shadow-2xl bg-background border">
+          <CardContent className="p-6">
+            <h3 className="text-xl font-semibold text-foreground mb-2">Need a loan?</h3>
+            <p className="text-sm text-muted-foreground mb-4">Fill the form & get instant pre-approval</p>
+
+            <form className="space-y-4" onSubmit={e => {
+              e.preventDefault();
+              toast({
+                title: "Application received",
+                description: "Our loan expert will contact you shortly."
+              });
+              (e.currentTarget as HTMLFormElement).reset();
+            }}>
+              <Input id="loan-name" name="name" placeholder="Name" required />
+
+              <div className="flex gap-2">
+                <Select defaultValue="+91" name="countryCode">
+                  <SelectTrigger className="w-28"><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="+91">🇮🇳 +91</SelectItem>
+                    <SelectItem value="+1">🇺🇸 +1</SelectItem>
+                    <SelectItem value="+44">🇬🇧 +44</SelectItem>
+                  </SelectContent>
+                </Select>
+                <Input id="loan-phone" name="phone" type="tel" placeholder="Phone Number" className="flex-1" required />
+              </div>
+
+              <Input id="loan-email" name="email" type="email" placeholder="Email ID" />
+
+              <Select name="loanType">
+                <SelectTrigger id="loan-type"><SelectValue placeholder="Loan Type" /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="home-loan">Home Loan</SelectItem>
+                  <SelectItem value="lap">Loan Against Property</SelectItem>
+                  <SelectItem value="balance-transfer">Balance Transfer</SelectItem>
+                  <SelectItem value="top-up">Top-up Loan</SelectItem>
+                  <SelectItem value="construction">Construction Loan</SelectItem>
+                  <SelectItem value="business">Business Loan</SelectItem>
+                </SelectContent>
+              </Select>
+
+              <Input id="loan-amount" name="amount" type="number" placeholder="Loan Amount Required" />
+
+              <Button type="submit" className="w-full">Get Pre-Approved Now!</Button>
+            </form>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Mobile Form - Static below hero */}
+      <section className="lg:hidden px-4 py-8 bg-background">
+        <div className="container mx-auto max-w-xl px-4">
+          <Card className="w-full rounded-2xl shadow-xl border-0 bg-card">
+            <CardContent className="p-8">
+              <h3 className="text-2xl font-bold text-foreground mb-3">Need a loan?</h3>
+              <p className="text-base text-muted-foreground mb-8">Fill the form & get instant pre-approval</p>
+
+              <form className="space-y-5" onSubmit={e => {
+                e.preventDefault();
+                toast({
+                  title: "Application received",
+                  description: "Our loan expert will contact you shortly."
+                });
+                (e.currentTarget as HTMLFormElement).reset();
+              }}>
+                <Input 
+                  id="loan-name-mobile" 
+                  name="name" 
+                  placeholder="Name" 
+                  className="h-12 text-base bg-background"
+                  required 
+                />
+
+                <div className="flex gap-3">
+                  <Select defaultValue="+91" name="countryCode">
+                    <SelectTrigger className="w-32 h-12 bg-background">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent className="bg-background border shadow-lg">
+                      <SelectItem value="+91">🇮🇳 +91</SelectItem>
+                      <SelectItem value="+1">🇺🇸 +1</SelectItem>
+                      <SelectItem value="+44">🇬🇧 +44</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <Input 
+                    id="loan-phone-mobile" 
+                    name="phone" 
+                    type="tel" 
+                    placeholder="Phone Number" 
+                    className="flex-1 h-12 text-base bg-background" 
+                    required 
+                  />
+                </div>
+
+                <Input 
+                  id="loan-email-mobile" 
+                  name="email" 
+                  type="email" 
+                  placeholder="Email ID" 
+                  className="h-12 text-base bg-background"
+                />
+
+                <Select name="loanType">
+                  <SelectTrigger id="loan-type-mobile" className="h-12 bg-background">
+                    <SelectValue placeholder="Loan Type" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-background border shadow-lg">
+                    <SelectItem value="home-loan">Home Loan</SelectItem>
+                    <SelectItem value="lap">Loan Against Property</SelectItem>
+                    <SelectItem value="balance-transfer">Balance Transfer</SelectItem>
+                    <SelectItem value="top-up">Top-up Loan</SelectItem>
+                    <SelectItem value="construction">Construction Loan</SelectItem>
+                    <SelectItem value="business">Business Loan</SelectItem>
+                  </SelectContent>
+                </Select>
+
+                <Input 
+                  id="loan-amount-mobile" 
+                  name="amount" 
+                  type="number" 
+                  placeholder="Loan Amount Required" 
+                  className="h-12 text-base bg-background"
+                />
+
+                <Button type="submit" className="w-full h-12 text-base font-semibold bg-red-600 hover:bg-red-700 text-white mt-6">
+                  Get Pre-Approved Now!
+                </Button>
+              </form>
+            </CardContent>
+          </Card>
+        </div>
+      </section>
+
+      {/* What's in it for you Section */}
+      <section className="py-16 px-4 bg-background">
+        <div className="container mx-auto">
+          <div className="grid lg:grid-cols-2 gap-8 items-start">
+            <div className="max-w-2xl pr-8">
+              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
+                Why choose our loan services?
+              </h2>
+              
+              <div className="grid grid-cols-2 gap-6">
+                <div className="space-y-3">
+                  <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
+                    <Percent className="w-5 h-5 text-red-600" />
+                  </div>
+                  <h3 className="text-base font-semibold text-foreground">
+                    Competitive Interest Rates
+                  </h3>
+                  <p className="text-sm text-muted-foreground">
+                    Starting from 8.5% per annum with flexible repayment options
+                  </p>
+                </div>
+
+                <div className="space-y-3">
+                  <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
+                    <Clock className="w-5 h-5 text-red-600" />
+                  </div>
+                  <h3 className="text-base font-semibold text-foreground">
+                    Quick Approval
+                  </h3>
+                  <p className="text-sm text-muted-foreground">
+                    Get loan approval in just 48-72 hours with minimal documentation
+                  </p>
+                </div>
+
+                <div className="space-y-3">
+                  <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
+                    <FileText className="w-5 h-5 text-red-600" />
+                  </div>
+                  <h3 className="text-base font-semibold text-foreground">
+                    Minimal Documentation
+                  </h3>
+                  <p className="text-sm text-muted-foreground">
+                    Simple paperwork with digital documentation process
+                  </p>
+                </div>
+
+                <div className="space-y-3">
+                  <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
+                    <Users className="w-5 h-5 text-red-600" />
+                  </div>
+                  <h3 className="text-base font-semibold text-foreground">
+                    Dedicated Loan Advisor
+                  </h3>
+                  <p className="text-sm text-muted-foreground">
+                    Personal guidance throughout the loan process
+                  </p>
+                </div>
+
+                <div className="space-y-3">
+                  <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
+                    <Building2 className="w-5 h-5 text-red-600" />
+                  </div>
+                  <h3 className="text-base font-semibold text-foreground">
+                    Free Property Valuation
+                  </h3>
+                  <p className="text-sm text-muted-foreground">
+                    Professional property assessment at no extra cost
+                  </p>
+                </div>
+
+                <div className="space-y-3">
+                  <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
+                    <DollarSign className="w-5 h-5 text-red-600" />
+                  </div>
+                  <h3 className="text-base font-semibold text-foreground">
+                    Zero Processing Fees
+                  </h3>
+                  <p className="text-sm text-muted-foreground">
+                    No hidden charges or processing fees on select loan products
+                  </p>
+                </div>
               </div>
             </div>
             
-            <div className="flex items-start space-x-3">
-              <CheckCircle className="w-6 h-6 text-green-500 mt-1" />
-              <div>
-                <h4 className="font-semibold mb-2">Flexible Loan Tenure</h4>
-                <p className="text-sm text-muted-foreground">
-                  Spread your repayments comfortably over long periods—up to 30 years.
-                </p>
-              </div>
-            </div>
-            
-            <div className="flex items-start space-x-3">
-              <CheckCircle className="w-6 h-6 text-green-500 mt-1" />
-              <div>
-                <h4 className="font-semibold mb-2">Tax Benefits</h4>
-                <p className="text-sm text-muted-foreground">
-                  Enjoy appreciated deductions under Sections 24 and 80C—up to ₹3.5 lakh annually.
-                </p>
-              </div>
-            </div>
-            
-            <div className="flex items-start space-x-3">
-              <CheckCircle className="w-6 h-6 text-green-500 mt-1" />
-              <div>
-                <h4 className="font-semibold mb-2">Eligibility Calculator</h4>
-                <p className="text-sm text-muted-foreground">
-                  Estimate your EMI and see breakdown of principal vs interest using our tool.
-                </p>
-              </div>
-            </div>
+            {/* Right side spacing for sticky form */}
+            <div className="hidden lg:block"></div>
           </div>
         </div>
       </section>
 
-      {/* EMI Calculator */}
-      <section className="py-16 bg-muted/30">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12">EMI & Interest Calculator</h2>
-          <div className="max-w-4xl mx-auto">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center">
-                  <Calculator className="w-6 h-6 mr-2" />
-                  Calculate Your EMI
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid md:grid-cols-2 gap-8">
-                  <div className="space-y-6">
-                    <div>
-                      <Label htmlFor="loanAmount">Loan Amount*</Label>
-                      <div className="relative mt-1">
-                        <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground">₹</span>
-                        <Input 
-                          id="loanAmount" 
-                          type="text" 
-                          value={formatINR(loanAmountInput)} 
-                          onChange={(e) => {
-                            const value = e.target.value.replace(/[^0-9]/g, '');
-                            setLoanAmountInput(value);
-                          }} 
-                          className="pl-8" 
-                          placeholder="Enter your Loan Amount"
+      {/* Loan Services Info Section */}
+      <section className="py-16 px-4 bg-muted/30">
+        <div className="container mx-auto">
+          <div className="grid lg:grid-cols-2 gap-16 items-start">
+            <div className="max-w-3xl">
+              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
+                Comprehensive Loan Solutions
+              </h2>
+              <div className="text-muted-foreground space-y-4 text-sm leading-relaxed">
+                <p>
+                  Whether you're looking to purchase your dream home, expand your business, or leverage your 
+                  property for additional funds, our comprehensive loan solutions are designed to meet your 
+                  unique financial needs. With competitive interest rates and quick approval processes, we make 
+                  borrowing simple and stress-free.
+                </p>
+                <p>
+                  Our team of experienced loan advisors provides personalized guidance throughout the entire 
+                  process, from initial consultation to loan disbursement. We understand that every financial 
+                  situation is unique, which is why we offer flexible terms and customized solutions to help 
+                  you achieve your goals.
+                </p>
+                <p>
+                  With our digital-first approach, minimal documentation requirements, and transparent fee 
+                  structure, getting a loan has never been easier. Join thousands of satisfied customers who 
+                  have trusted us with their financial needs and experienced the difference of working with 
+                  a truly customer-centric lending partner.
+                </p>
+              </div>
+            </div>
+            
+            {/* Right side spacing for sticky form */}
+            <div className="hidden lg:block"></div>
+          </div>
+        </div>
+      </section>
+
+      {/* Loan Services */}
+      <section className="py-16 px-4 bg-background">
+        <div className="container mx-auto">
+          <div className="grid lg:grid-cols-2 gap-16 items-start">
+            <div className="max-w-3xl">
+              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
+                Our Loan Services
+              </h2>
+              <div className="grid gap-6">
+                {services.map((service, index) => {
+                  const IconComponent = service.icon;
+                  return (
+                    <div key={index} className="flex gap-4 p-6 bg-card rounded-lg border">
+                      <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <IconComponent className="w-6 h-6 text-red-600" />
+                      </div>
+                      <div>
+                        <h3 className="text-lg font-semibold text-foreground mb-2">{service.title}</h3>
+                        <p className="text-muted-foreground text-sm">{service.description}</p>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+            
+            {/* Right side spacing for sticky form */}
+            <div className="hidden lg:block"></div>
+          </div>
+        </div>
+      </section>
+
+      {/* Stats Section */}
+      <section className="py-16 px-4 bg-muted/30">
+        <div className="container mx-auto">
+          <div className="grid lg:grid-cols-2 gap-16 items-start">
+            <div className="max-w-3xl">
+              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
+                Trusted by Thousands
+              </h2>
+              <div className="grid grid-cols-2 gap-8">
+                <div className="text-center">
+                  <div className="text-4xl md:text-5xl font-bold text-red-600 mb-2">₹500Cr+</div>
+                  <p className="text-muted-foreground">Loans Disbursed</p>
+                </div>
+                <div className="text-center">
+                  <div className="text-4xl md:text-5xl font-bold text-red-600 mb-2">10K+</div>
+                  <p className="text-muted-foreground">Happy Customers</p>
+                </div>
+                <div className="text-center">
+                  <div className="text-4xl md:text-5xl font-bold text-red-600 mb-2">48hrs</div>
+                  <p className="text-muted-foreground">Average Approval Time</p>
+                </div>
+                <div className="text-center">
+                  <div className="text-4xl md:text-5xl font-bold text-red-600 mb-2">98%</div>
+                  <p className="text-muted-foreground">Customer Satisfaction</p>
+                </div>
+              </div>
+            </div>
+            
+            {/* Right side spacing for sticky form */}
+            <div className="hidden lg:block"></div>
+          </div>
+        </div>
+      </section>
+
+      {/* Comparison Table */}
+      <section className="py-16 px-4 bg-background">
+        <div className="container mx-auto">
+          <div className="grid lg:grid-cols-2 gap-16 items-start">
+            <div className="max-w-3xl">
+              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
+                Why Home HNI is Better
+              </h2>
+              <div className="bg-card rounded-xl border overflow-hidden">
+                <div className="grid grid-cols-3 gap-4 p-4 bg-muted/50 font-semibold text-sm">
+                  <div>Features</div>
+                  <div className="text-center">Home HNI</div>
+                  <div className="text-center">Others</div>
+                </div>
+                {comparisonData.map((item, index) => (
+                  <div key={index} className="grid grid-cols-3 gap-4 p-4 border-t text-sm">
+                    <div className="text-foreground">{item.feature}</div>
+                    <div className="text-center">
+                      {item.homeHNI ? (
+                        <CheckCircle className="w-4 h-4 text-red-600 mx-auto" />
+                      ) : (
+                        <X className="w-4 h-4 text-red-500 mx-auto" />
+                      )}
+                    </div>
+                    <div className="text-center">
+                      {item.others ? (
+                        <CheckCircle className="w-4 h-4 text-red-600 mx-auto" />
+                      ) : (
+                        <X className="w-4 h-4 text-red-500 mx-auto" />
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            
+            {/* Right side spacing for sticky form */}
+            <div className="hidden lg:block"></div>
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials */}
+      <section className="py-16 px-4 bg-muted/30">
+        <div className="container mx-auto">
+          <div className="grid lg:grid-cols-2 gap-16 items-start">
+            <div className="max-w-3xl">
+              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
+                What Our Customers Say
+              </h2>
+              <div className="space-y-6">
+                {testimonials.map((testimonial, index) => (
+                  <Card key={index} className="p-6">
+                    <CardContent className="p-0">
+                      <div className="flex items-start gap-4">
+                        <img 
+                          src={testimonial.image} 
+                          alt={testimonial.name}
+                          className="w-12 h-12 rounded-full object-cover"
                         />
-                        <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-sm text-primary font-medium">
-                          {Number(loanAmountInput) >= 10000000 ? `₹ ${(Number(loanAmountInput)/10000000).toFixed(1)} Cr` : 
-                           Number(loanAmountInput) >= 100000 ? `₹ ${(Number(loanAmountInput)/100000).toFixed(1)} L` : ''}
-                        </span>
+                        <div className="flex-1">
+                          <div className="flex items-center gap-1 mb-2">
+                            {[...Array(testimonial.rating)].map((_, i) => (
+                              <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                            ))}
+                          </div>
+                          <p className="text-muted-foreground text-sm mb-3">"{testimonial.text}"</p>
+                          <div>
+                            <p className="font-semibold text-sm">{testimonial.name}</p>
+                            <p className="text-xs text-muted-foreground">{testimonial.role}</p>
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                    
-                    <div>
-                      <Label htmlFor="tenure">Tenure (Years)</Label>
-                      <Input 
-                        id="tenure" 
-                        type="text" 
-                        value={tenureInput} 
-                        onChange={(e) => {
-                          const value = e.target.value.replace(/[^0-9]/g, '');
-                          setTenureInput(value);
-                        }} 
-                        className="mt-1" 
-                        placeholder="Enter tenure in years"
-                      />
-                    </div>
-                    
-                    <div>
-                      <Label htmlFor="interestRate">Interest Rate (%)</Label>
-                      <Input 
-                        id="interestRate" 
-                        type="text" 
-                        step="0.1" 
-                        value={interestRateInput} 
-                        onChange={(e) => {
-                          const value = e.target.value.replace(/[^0-9.]/g, '');
-                          setInterestRateInput(value);
-                        }} 
-                        className="mt-1" 
-                        placeholder="Enter interest rate"
-                      />
-                    </div>
-                  </div>
-                  
-                  <div className="space-y-4">
-                    <div className="bg-primary/10 p-4 rounded-lg">
-                      <h4 className="font-semibold text-lg mb-2">Monthly EMI</h4>
-                      <p className="text-2xl font-bold text-primary">₹{calculateEMI().toLocaleString()}</p>
-                    </div>
-                    
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="bg-muted p-3 rounded">
-                        <p className="text-sm text-muted-foreground">Total Amount</p>
-                        <p className="font-semibold">₹{totalAmount.toLocaleString()}</p>
-                      </div>
-                      <div className="bg-muted p-3 rounded">
-                        <p className="text-sm text-muted-foreground">Total Interest</p>
-                        <p className="font-semibold">₹{totalInterest.toLocaleString()}</p>
-                      </div>
-                    </div>
-                    
-                    <p className="text-sm text-muted-foreground">
-                      Sample calculation: ₹50 lakhs over 20 years at 7% results in ~₹38,765 per month
-                    </p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </div>
+            
+            {/* Right side spacing for sticky form */}
+            <div className="hidden lg:block"></div>
           </div>
         </div>
       </section>
 
-      {/* Eligibility & Documents */}
-      <section className="py-16 bg-background">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12">Eligibility & Documents</h2>
-          <div className="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center">
-                  <Users className="w-6 h-6 mr-2" />
-                  Eligibility Criteria
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <div className="flex justify-between">
-                  <span className="font-medium">Age Range:</span>
-                  <span>21–65 years at loan maturity</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="font-medium">Income:</span>
-                  <span>Stable income, varies by lender</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="font-medium">Credit Score:</span>
-                  <span>Preferably 750+</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="font-medium">Employment:</span>
-                  <span>Salaried, self-employed, or NRI</span>
-                </div>
-              </CardContent>
-            </Card>
+      {/* Target Audience */}
+      <section className="py-16 px-4 bg-background">
+        <div className="container mx-auto">
+          <div className="grid lg:grid-cols-2 gap-16 items-start">
+            <div className="max-w-3xl">
+              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
+                Who We Serve
+              </h2>
+              <div className="grid gap-6">
+                {targetAudience.map((audience, index) => {
+                  const IconComponent = audience.icon;
+                  return (
+                    <div key={index} className="flex gap-4 p-6 bg-card rounded-lg border">
+                      <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <IconComponent className="w-6 h-6 text-red-600" />
+                      </div>
+                      <div>
+                        <h3 className="text-lg font-semibold text-foreground mb-2">{audience.title}</h3>
+                        <p className="text-muted-foreground text-sm">{audience.description}</p>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
             
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center">
-                  <FileText className="w-6 h-6 mr-2" />
-                  Required Documents
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <ul className="space-y-2">
-                  <li className="flex items-center">
-                    <CheckCircle className="w-4 h-4 text-green-500 mr-2" />
-                    Identity proof (PAN, Aadhaar, Passport)
-                  </li>
-                  <li className="flex items-center">
-                    <CheckCircle className="w-4 h-4 text-green-500 mr-2" />
-                    Income proof (salary slips, Form 16, bank statements)
-                  </li>
-                  <li className="flex items-center">
-                    <CheckCircle className="w-4 h-4 text-green-500 mr-2" />
-                    Property proof & KYC documentation
-                  </li>
-                  <li className="flex items-center">
-                    <CheckCircle className="w-4 h-4 text-green-500 mr-2" />
-                    Additional lender-specific paperwork as required
-                  </li>
-                </ul>
-              </CardContent>
-            </Card>
+            {/* Right side spacing for sticky form */}
+            <div className="hidden lg:block"></div>
           </div>
         </div>
       </section>
 
-      {/* FAQs */}
-      <section className="py-16 bg-muted/30">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12">FAQs</h2>
-          <div className="max-w-4xl mx-auto space-y-6">
-            <Card>
-              <CardContent className="pt-6">
-                <h4 className="font-semibold mb-2">Q: Can I get a 100% home loan?</h4>
-                <p className="text-muted-foreground">
-                  A: No—most lenders offer up to 90% for properties under ₹30 lakh.
-                </p>
-              </CardContent>
-            </Card>
+      {/* FAQ Section */}
+      <section className="py-16 px-4 bg-muted/30">
+        <div className="container mx-auto">
+          <div className="grid lg:grid-cols-2 gap-16 items-start">
+            <div className="max-w-3xl">
+              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
+                Frequently Asked Questions
+              </h2>
+              <Accordion type="single" collapsible className="space-y-4">
+                {faqs.map((faq, index) => (
+                  <AccordionItem key={index} value={`item-${index}`} className="bg-card border rounded-lg px-6">
+                    <AccordionTrigger className="text-left font-semibold text-sm py-4">
+                      {faq.question}
+                    </AccordionTrigger>
+                    <AccordionContent className="text-muted-foreground text-sm pb-4">
+                      {faq.answer}
+                    </AccordionContent>
+                  </AccordionItem>
+                ))}
+              </Accordion>
+            </div>
             
-            <Card>
-              <CardContent className="pt-6">
-                <h4 className="font-semibold mb-2">Q: How long does approval take?</h4>
-                <p className="text-muted-foreground">
-                  A: The entire process is often completed digitally in just a few days. Our team expedites verification and documentation.
-                </p>
-              </CardContent>
-            </Card>
-            
-            <Card>
-              <CardContent className="pt-6">
-                <h4 className="font-semibold mb-2">Q: Are there hidden charges?</h4>
-                <p className="text-muted-foreground">
-                  A: No—our platform ensures zero brokerage and no undisclosed charges. Transparent and straightforward.
-                </p>
-              </CardContent>
-            </Card>
+            {/* Right side spacing for sticky form */}
+            <div className="hidden lg:block"></div>
           </div>
         </div>
       </section>
 
-      {/* Final CTA */}
-      <section className="py-16 bg-primary text-primary-foreground">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold mb-6">Ready to Move Your Foot Forward?</h2>
-          <p className="text-xl mb-8 opacity-90">
-            Take the next step toward homeownership with confidence—no hassle, no hidden costs, and full support.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" variant="secondary">
- Get Started with Your Application
-            </Button>
+      {/* Service Tags Section */}
+      <section className="py-16 px-4 bg-background">
+        <div className="container mx-auto">
+          <div className="grid lg:grid-cols-2 gap-16 items-start">
+            <div className="max-w-3xl">
+              <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-8">
+                Loan Services
+              </h2>
+              
+              <div className="space-y-6 mb-8">
+                <div className="flex flex-wrap gap-3">
+                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Home Loans in Hyderabad</span>
+                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Home Loans in Bangalore</span>
+                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Home Loans in Mumbai</span>
+                </div>
+                <div className="flex flex-wrap gap-3">
+                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Home Loans in Pune</span>
+                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Home Loans in Delhi</span>
+                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Home Loans in Chennai</span>
+                </div>
+                <div className="flex flex-wrap gap-3">
+                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Loan Against Property</span>
+                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Business Loans</span>
+                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Construction Loans</span>
+                </div>
+                <div className="flex flex-wrap gap-3">
+                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Balance Transfer Loans</span>
+                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Top-up Loans</span>
+                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Quick Loan Approval</span>
+                </div>
+                <div className="flex flex-wrap gap-3">
+                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Low Interest Rate Loans</span>
+                </div>
+              </div>
 
+              <h3 className="text-2xl md:text-3xl font-bold text-foreground mb-6">
+                Property Loan Services
+              </h3>
+              
+              <div className="space-y-3 mb-8">
+                <div className="flex flex-wrap gap-3">
+                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Loan Against Property in Hyderabad</span>
+                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Property Valuation Services</span>
+                </div>
+              </div>
 
+              <h3 className="text-2xl md:text-3xl font-bold text-foreground mb-6">
+                Home Loan Documentation
+              </h3>
+              
+              <div className="space-y-3">
+                <div className="flex flex-wrap gap-3">
+                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Home Loan Documents</span>
+                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Loan Processing Services</span>
+                </div>
+                <div className="flex flex-wrap gap-3">
+                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Digital Loan Application</span>
+                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Instant Loan Approval</span>
+                </div>
+                <div className="flex flex-wrap gap-3">
+                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Zero Processing Fee Loans</span>
+                </div>
+              </div>
+            </div>
+            
+            {/* Right side spacing for sticky form */}
+            <div className="hidden lg:block"></div>
           </div>
         </div>
       </section>
 
       <Footer />
-    </div>;
+    </div>
+  );
 };
+
 export default Loans;
