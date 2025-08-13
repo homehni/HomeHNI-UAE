@@ -163,57 +163,62 @@ const PropManagement = () => {
               </p>
             </div>
 
-            {/* Right: Form - Desktop only, hidden on mobile */}
-            <div className="hidden lg:block lg:justify-self-end sticky top-8 self-start">
-              <Card className="w-full max-w-md rounded-xl shadow-2xl bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/90 border border-white/20">
-                <CardContent className="p-6 mt-4">
-                  <h3 className="text-xl font-semibold text-foreground">Got a property to be managed?</h3>
-                  <p className="text-sm text-muted-foreground mb-4">Just fill up the form & we will take care of the rest</p>
-
-                  <form className="space-y-4" onSubmit={e => {
-                  e.preventDefault();
-                  toast({
-                    title: "Request received",
-                    description: "Our team will reach out shortly."
-                  });
-                  (e.currentTarget as HTMLFormElement).reset();
-                }}>
-                    <Input id="pm-name" name="name" placeholder="Name" required />
-
-                    <div className="flex gap-2">
-                      <Select defaultValue="+91" name="countryCode">
-                        <SelectTrigger className="w-28"><SelectValue /></SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="+91">🇮🇳 +91</SelectItem>
-                          <SelectItem value="+1">🇺🇸 +1</SelectItem>
-                          <SelectItem value="+44">🇬🇧 +44</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <Input id="pm-phone" name="phone" type="tel" placeholder="Phone Number" className="flex-1" required />
-                    </div>
-
-                    <Input id="pm-email" name="email" type="email" placeholder="Email ID" />
-
-                    <Select name="city">
-                      <SelectTrigger id="pm-city"><SelectValue placeholder="City" /></SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="Hyderabad">Hyderabad</SelectItem>
-                        <SelectItem value="Bengaluru">Bengaluru</SelectItem>
-                        <SelectItem value="Mumbai">Mumbai</SelectItem>
-                        <SelectItem value="Pune">Pune</SelectItem>
-                        <SelectItem value="Chennai">Chennai</SelectItem>
-                        <SelectItem value="Delhi NCR">Delhi NCR</SelectItem>
-                      </SelectContent>
-                    </Select>
-
-                    <Button type="submit" className="w-full">Talk to Us Today!</Button>
-                  </form>
-                </CardContent>
-              </Card>
+            {/* Right: Placeholder for form on desktop */}
+            <div className="hidden lg:block lg:justify-self-end">
+              <div className="w-full max-w-md h-96"></div>
             </div>
           </div>
         </div>
       </section>
+
+      {/* Sticky Form Container for Large Screens */}
+      <div className="hidden lg:block fixed top-8 right-8 z-50 w-80">
+        <Card className="w-full rounded-xl shadow-2xl bg-background border">
+          <CardContent className="p-6">
+            <h3 className="text-xl font-semibold text-foreground mb-2">Got a property to be managed?</h3>
+            <p className="text-sm text-muted-foreground mb-4">Just fill up the form & we will take care of the rest</p>
+
+            <form className="space-y-4" onSubmit={e => {
+            e.preventDefault();
+            toast({
+              title: "Request received",
+              description: "Our team will reach out shortly."
+            });
+            (e.currentTarget as HTMLFormElement).reset();
+          }}>
+              <Input id="pm-name" name="name" placeholder="Name" required />
+
+              <div className="flex gap-2">
+                <Select defaultValue="+91" name="countryCode">
+                  <SelectTrigger className="w-28"><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="+91">🇮🇳 +91</SelectItem>
+                    <SelectItem value="+1">🇺🇸 +1</SelectItem>
+                    <SelectItem value="+44">🇬🇧 +44</SelectItem>
+                  </SelectContent>
+                </Select>
+                <Input id="pm-phone" name="phone" type="tel" placeholder="Phone Number" className="flex-1" required />
+              </div>
+
+              <Input id="pm-email" name="email" type="email" placeholder="Email ID" />
+
+              <Select name="city">
+                <SelectTrigger id="pm-city"><SelectValue placeholder="City" /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Hyderabad">Hyderabad</SelectItem>
+                  <SelectItem value="Bengaluru">Bengaluru</SelectItem>
+                  <SelectItem value="Mumbai">Mumbai</SelectItem>
+                  <SelectItem value="Pune">Pune</SelectItem>
+                  <SelectItem value="Chennai">Chennai</SelectItem>
+                  <SelectItem value="Delhi NCR">Delhi NCR</SelectItem>
+                </SelectContent>
+              </Select>
+
+              <Button type="submit" className="w-full">Talk to Us Today!</Button>
+            </form>
+          </CardContent>
+        </Card>
+      </div>
 
       {/* Mobile Form - Static below hero */}
       <section className="lg:hidden px-4 py-8 bg-background">
