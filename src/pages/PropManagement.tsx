@@ -157,7 +157,7 @@ const PropManagement = () => {
         <div className="relative z-10 container mx-auto">
           <div className="grid lg:grid-cols-2 gap-8 items-start">
             {/* Left: Copy */}
-            <div className="max-w-2xl">
+            <div className="max-w-2xl text-center lg:text-left">
               <h1 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">
                 Comprehensive Property Management Services
                 <br className="hidden md:block" />
