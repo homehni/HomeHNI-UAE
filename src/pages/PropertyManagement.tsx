@@ -1,20 +1,12 @@
+import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
+import { useToast } from "@/hooks/use-toast";
 import { 
-  Building2, 
-  Users, 
-  CreditCard, 
-  Wrench, 
-  Camera, 
-  FileText, 
-  Sparkles, 
-  MapPin, 
-  Crown, 
-  TrendingUp, 
-  Clock, 
-  CheckCircle, 
-  Shield, 
-  Star 
+  Building2, Users, CreditCard, Wrench, Camera, FileText, Sparkles, MapPin, Crown, TrendingUp, Clock, CheckCircle, Shield, Star 
 } from "lucide-react";
 import Marquee from "@/components/Marquee";
 import Header from "@/components/Header";
@@ -105,29 +97,105 @@ const PropertyManagement = () => {
     }
   ];
 
+  const { toast } = useToast();
+
+  useEffect(() => {
+    const title = "Property Management Services | Home HNI";
+    document.title = title;
+    const desc = "End-to-end property management for NRIs & HNIs: tenant search, rent collection, maintenance, and inspections.";
+    let meta = document.querySelector('meta[name="description"]');
+    if (!meta) {
+      meta = document.createElement('meta');
+      meta.setAttribute('name', 'description');
+      document.head.appendChild(meta);
+    }
+    meta.setAttribute('content', desc);
+
+    let canonical = document.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
+    if (!canonical) {
+      canonical = document.createElement('link');
+      canonical.setAttribute('rel', 'canonical');
+      document.head.appendChild(canonical);
+    }
+    canonical.setAttribute('href', window.location.origin + '/property-management');
+  }, []);
+
   return (
     <div className="min-h-screen">
       <Marquee />
       <Header />
       
 {/* Hero Section */}
-<section className="relative pt-32 pb-20 px-4 md:px-8 text-white overflow-hidden bg-cover bg-center bg-no-repeat" style={{backgroundImage: "url('/lovable-uploads/fbb0d72f-782e-49f5-bbe1-8afc1314b5f7.png')"}}>
-  <div className="absolute inset-0 bg-black/10 pointer-events-none"></div> {/* light overlay */}
-  
-  <div className="relative z-10 container mx-auto text-center">
-    <div className="max-w-4xl mx-auto">
-      <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
-        🏢 Premium Property Management for HNIs & NRIs
-      </h1>
-      <p className="text-xl md:text-2xl mb-8 text-red-100 leading-relaxed">
-        Get complete peace of mind with our expert-managed, tenant-ready, and fully maintained property solutions — ideal for NRIs, landlords, and investors.
-      </p>
-      <Button 
-        size="lg" 
-        className="bg-white text-red-700 hover:bg-gray-100 font-semibold px-8 py-3 text-lg rounded-xl shadow-lg transition duration-300"
-      >
-        Talk to a Property Manager Today
-      </Button>
+<section
+  className="relative pt-28 md:pt-32 pb-10 md:pb-20 px-4 md:px-8 text-white overflow-hidden bg-cover bg-center bg-no-repeat"
+  style={{ backgroundImage: "url('/lovable-uploads/fbb0d72f-782e-49f5-bbe1-8afc1314b5f7.png')" }}
+>
+  <div className="absolute inset-0 bg-black/30 pointer-events-none" />
+
+  <div className="relative z-10 container mx-auto">
+    <div className="grid lg:grid-cols-2 gap-8 items-start">
+      {/* Left: Copy */}
+      <div className="max-w-2xl">
+        <h1 className="text-4xl md:text-5xl font-bold mb-4 leading-tight">
+          Comprehensive Property Management Services
+        </h1>
+        <p className="text-lg md:text-xl text-white/90">
+          From securing verified tenants to regular property maintenance, we handle
+          everything for you.
+        </p>
+      </div>
+
+      {/* Right: Form (scrolls with page, not sticky) */}
+      <div className="lg:justify-self-end">
+        <Card className="w-full max-w-md rounded-xl shadow-2xl bg-background/90 backdrop-blur supports-[backdrop-filter]:bg-background/70">
+          <CardContent className="p-6">
+            <h3 className="text-xl font-semibold text-foreground">Got a property to be managed?</h3>
+            <p className="text-sm text-muted-foreground mb-4">Just fill the form and we will contact you.</p>
+
+            <form
+              className="space-y-4"
+              onSubmit={(e) => {
+                e.preventDefault();
+                // Minimal handling for now – you can wire this to Supabase later
+                toast({ title: "Request received", description: "Our team will reach out shortly." });
+                (e.currentTarget as HTMLFormElement).reset();
+              }}
+            >
+              <div className="space-y-2">
+                <Label htmlFor="pm-name">Name</Label>
+                <Input id="pm-name" name="name" placeholder="Your name" required />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="pm-phone">Phone</Label>
+                <div className="flex gap-2">
+                  <Select defaultValue="+91" name="countryCode">
+                    <SelectTrigger className="w-24"><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="+91">+91</SelectItem>
+                      <SelectItem value="+1">+1</SelectItem>
+                      <SelectItem value="+44">+44</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <Input id="pm-phone" name="phone" type="tel" placeholder="Phone number" className="flex-1" required />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="pm-email">Email</Label>
+                <Input id="pm-email" name="email" type="email" placeholder="you@example.com" />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="pm-city">City</Label>
+                <Input id="pm-city" name="city" placeholder="City" />
+              </div>
+
+              <Button type="submit" className="w-full">Talk to us today</Button>
+            </form>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   </div>
 </section>
