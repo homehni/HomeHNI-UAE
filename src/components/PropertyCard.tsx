@@ -2,6 +2,8 @@
 import { Heart, MapPin, Bed, Bath, Square, Phone } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { cn } from '@/lib/utils';
+import { RECOMMENDED_CARD_WIDTH, RECOMMENDED_IMAGE_HEIGHT } from '@/constants/ui';
 import { useNavigate } from 'react-router-dom';
 
 interface PropertyCardProps {
@@ -15,6 +17,7 @@ interface PropertyCardProps {
   image: string;
   propertyType: string;
   isNew?: boolean;
+  size?: 'default' | 'compact';
 }
 
 const PropertyCard = ({
@@ -27,7 +30,8 @@ const PropertyCard = ({
   bathrooms,
   image,
   propertyType,
-  isNew = false
+  isNew = false,
+  size = 'default'
 }: PropertyCardProps) => {
   const navigate = useNavigate();
 
@@ -101,12 +105,12 @@ const PropertyCard = ({
   };
 
   return (
-    <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-300 group">
+    <Card className={cn("overflow-hidden hover:shadow-lg transition-shadow duration-300 group", size === 'compact' ? RECOMMENDED_CARD_WIDTH : undefined)}>
       <div className="relative">
         <img
           src={`https://images.unsplash.com/${image}?auto=format&fit=crop&w=400&q=80`}
           alt={title}
-          className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+          className={cn("w-full object-cover group-hover:scale-105 transition-transform duration-300", size === 'compact' ? RECOMMENDED_IMAGE_HEIGHT : 'h-48')}
         />
         <Button
           variant="ghost"
