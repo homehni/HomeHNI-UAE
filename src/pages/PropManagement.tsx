@@ -169,8 +169,8 @@ const PropManagement = () => {
               </p>
             </div>
 
-            {/* Right: Form - Sticky on Scroll for desktop, fixed below hero on mobile */}
-            <div className={`lg:justify-self-end transition-all duration-300 ${isFormSticky ? 'hidden lg:fixed lg:top-20 lg:right-4 lg:z-[100]' : 'relative'}`}>
+            {/* Right: Form - Desktop only, hidden on mobile */}
+            <div className="hidden lg:block lg:justify-self-end">
               <Card className="w-full max-w-md rounded-xl shadow-2xl bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/90 border border-white/20">
                 <CardContent className="p-6 mt-4">
                   <h3 className="text-xl font-semibold text-foreground">Got a property to be managed?</h3>
@@ -221,56 +221,54 @@ const PropManagement = () => {
         </div>
       </section>
 
-      {/* Mobile Form - Fixed below hero when sticky */}
-      {isFormSticky && (
-        <div className="lg:hidden fixed top-0 left-0 right-0 z-[100] bg-background shadow-lg border-b p-4">
-          <Card className="max-w-md mx-auto rounded-xl shadow-xl bg-background border border-border">
-            <CardContent className="p-4">
-              <h3 className="text-lg font-semibold text-foreground mb-2">Got a property to be managed?</h3>
-              <p className="text-xs text-muted-foreground mb-3">Just fill up the form & we will take care of the rest</p>
+      {/* Mobile Form - Fixed at bottom */}
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-[100] bg-background shadow-lg border-t p-4">
+        <Card className="max-w-md mx-auto rounded-xl shadow-xl bg-background border border-border">
+          <CardContent className="p-4">
+            <h3 className="text-lg font-semibold text-foreground mb-2">Got a property to be managed?</h3>
+            <p className="text-xs text-muted-foreground mb-3">Just fill up the form & we will take care of the rest</p>
 
-              <form className="space-y-3" onSubmit={e => {
-                e.preventDefault();
-                toast({
-                  title: "Request received",
-                  description: "Our team will reach out shortly."
-                });
-                (e.currentTarget as HTMLFormElement).reset();
-              }}>
-                <Input id="pm-name-mobile" name="name" placeholder="Name" required className="text-sm" />
+            <form className="space-y-3" onSubmit={e => {
+              e.preventDefault();
+              toast({
+                title: "Request received",
+                description: "Our team will reach out shortly."
+              });
+              (e.currentTarget as HTMLFormElement).reset();
+            }}>
+              <Input id="pm-name-mobile" name="name" placeholder="Name" required className="text-sm" />
 
-                <div className="flex gap-2">
-                  <Select defaultValue="+91" name="countryCode">
-                    <SelectTrigger className="w-20 text-xs"><SelectValue /></SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="+91">🇮🇳 +91</SelectItem>
-                      <SelectItem value="+1">🇺🇸 +1</SelectItem>
-                      <SelectItem value="+44">🇬🇧 +44</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <Input id="pm-phone-mobile" name="phone" type="tel" placeholder="Phone Number" className="flex-1 text-sm" required />
-                </div>
-
-                <Input id="pm-email-mobile" name="email" type="email" placeholder="Email ID" className="text-sm" />
-
-                <Select name="city">
-                  <SelectTrigger id="pm-city-mobile" className="text-sm"><SelectValue placeholder="City" /></SelectTrigger>
+              <div className="flex gap-2">
+                <Select defaultValue="+91" name="countryCode">
+                  <SelectTrigger className="w-20 text-xs"><SelectValue /></SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="Hyderabad">Hyderabad</SelectItem>
-                    <SelectItem value="Bengaluru">Bengaluru</SelectItem>
-                    <SelectItem value="Mumbai">Mumbai</SelectItem>
-                    <SelectItem value="Pune">Pune</SelectItem>
-                    <SelectItem value="Chennai">Chennai</SelectItem>
-                    <SelectItem value="Delhi NCR">Delhi NCR</SelectItem>
+                    <SelectItem value="+91">🇮🇳 +91</SelectItem>
+                    <SelectItem value="+1">🇺🇸 +1</SelectItem>
+                    <SelectItem value="+44">🇬🇧 +44</SelectItem>
                   </SelectContent>
                 </Select>
+                <Input id="pm-phone-mobile" name="phone" type="tel" placeholder="Phone Number" className="flex-1 text-sm" required />
+              </div>
 
-                <Button type="submit" className="w-full text-sm py-2">Talk to Us Today!</Button>
-              </form>
-            </CardContent>
-          </Card>
-        </div>
-      )}
+              <Input id="pm-email-mobile" name="email" type="email" placeholder="Email ID" className="text-sm" />
+
+              <Select name="city">
+                <SelectTrigger id="pm-city-mobile" className="text-sm"><SelectValue placeholder="City" /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Hyderabad">Hyderabad</SelectItem>
+                  <SelectItem value="Bengaluru">Bengaluru</SelectItem>
+                  <SelectItem value="Mumbai">Mumbai</SelectItem>
+                  <SelectItem value="Pune">Pune</SelectItem>
+                  <SelectItem value="Chennai">Chennai</SelectItem>
+                  <SelectItem value="Delhi NCR">Delhi NCR</SelectItem>
+                </SelectContent>
+              </Select>
+
+              <Button type="submit" className="w-full text-sm py-2">Talk to Us Today!</Button>
+            </form>
+          </CardContent>
+        </Card>
+      </div>
 
       {/* What's in it for you Section */}
       <section className="py-16 px-4 bg-background">
