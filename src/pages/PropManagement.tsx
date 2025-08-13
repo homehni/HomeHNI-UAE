@@ -623,29 +623,7 @@ const PropManagement = () => {
       </section>
 
       {/* Target Audience Section */}
-      <section className="py-16 px-4 bg-muted/30">
-        <div className="container mx-auto">
-          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-12 text-center">
-            Who Should Use This?
-          </h2>
-          
-          <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-            {targetAudience.map((audience, index) => <Card key={index} className="text-center hover:shadow-lg transition-shadow">
-                <CardContent className="p-8">
-                  <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <audience.icon className="w-10 h-10 text-blue-600" />
-                  </div>
-                  <h3 className="text-xl font-semibold text-foreground mb-2">
-                    {audience.title}
-                  </h3>
-                  <p className="text-muted-foreground">
-                    {audience.description}
-                  </p>
-                </CardContent>
-              </Card>)}
-          </div>
-        </div>
-      </section>
+      
 
       {/* Comparison Table Section */}
       
