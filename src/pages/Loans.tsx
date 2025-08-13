@@ -46,23 +46,76 @@ const Loans = () => {
         <div className="container mx-auto relative z-10 px-4 py-8">
           <div className="grid md:grid-cols-2 gap-8 items-center">
             <div className="text-left">
-              <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">
-                Home Loans Made Easy
+              <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white mb-4">
+                Comprehensive Property Management Services in Hyderabad
               </h1>
               <p className="text-lg md:text-xl text-white/90 max-w-2xl">
-                Compare offers from top banks. Quick approval. Zero brokerage.
+                From securing verified tenants to regular property maintenance, we handle everything for you
               </p>
             </div>
-            <div className="hidden md:block" aria-hidden="true" />
+            <div>
+              <Card className="rounded-2xl shadow-2xl border bg-card">
+                <CardHeader>
+                  <CardTitle className="text-xl">Got a property to be managed?</CardTitle>
+                  <p className="text-sm text-muted-foreground">Just fill up the form & we will take care of the rest</p>
+                  <div className="h-px bg-muted mt-2" />
+                </CardHeader>
+                <CardContent>
+                  <form
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      toast({
+                        title: 'Request received',
+                        description: 'Thanks! Our expert will contact you shortly.'
+                      });
+                    }}
+                    className="space-y-4"
+                  >
+                    <div className="space-y-2">
+                      <Label htmlFor="name">Name</Label>
+                      <Input id="name" name="name" placeholder="Name" required />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="phone">Phone</Label>
+                      <div className="flex">
+                        <span className="inline-flex items-center px-3 border border-r-0 rounded-l-md text-sm text-muted-foreground">🇮🇳 +91 ▼</span>
+                        <Input id="phone" name="phone" placeholder="Phone Number" inputMode="numeric" pattern="[0-9]{10}" className="rounded-l-none" required />
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="email">Email</Label>
+                      <Input id="email" name="email" type="email" placeholder="Email ID" required />
+                    </div>
+                    <div className="space-y-2">
+                      <Label>City</Label>
+                      <Select name="city">
+                        <SelectTrigger>
+                          <SelectValue placeholder="City" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="hyderabad">Hyderabad</SelectItem>
+                          <SelectItem value="bengaluru">Bengaluru</SelectItem>
+                          <SelectItem value="mumbai">Mumbai</SelectItem>
+                          <SelectItem value="delhi">Delhi NCR</SelectItem>
+                          <SelectItem value="chennai">Chennai</SelectItem>
+                          <SelectItem value="pune">Pune</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <Button type="submit" size="lg" className="w-full">Talk to Us Today!</Button>
+                  </form>
+                </CardContent>
+              </Card>
+            </div>
           </div>
         </div>
       </section>
 
       {/* Content with Sticky Enquiry Form */}
-      <section className="relative md:-mt-56 lg:-mt-64">
-        <div className="container mx-auto px-4 grid md:grid-cols-3 gap-6">
+      <section className="relative">
+        <div className="container mx-auto px-4">
           {/* Main content */}
-          <div className="md:col-span-2 space-y-16">
+          <div className="space-y-16">
             {/* Why Choose Our Loans */}
             <section className="py-16 bg-background">
               <div className="container mx-auto px-4">
@@ -291,63 +344,6 @@ const Loans = () => {
             </section>
           </div>
 
-          {/* Sticky Enquiry Form */}
-          <aside className="md:col-span-1">
-            <div className="md:sticky md:top-24 relative z-10">
-              <Card className="rounded-2xl shadow-2xl border bg-card/95 backdrop-blur">
-                <CardHeader>
-                  <CardTitle className="text-xl">Apply for Home Loan</CardTitle>
-                  <p className="text-sm text-muted-foreground">Fill the form and we’ll do the rest.</p>
-                  <div className="h-px bg-muted mt-2" />
-                </CardHeader>
-                <CardContent>
-                  <form
-                    onSubmit={(e) => {
-                      e.preventDefault();
-                      toast({
-                        title: 'Request received',
-                        description: 'Thanks! Our expert will contact you shortly.'
-                      });
-                    }}
-                    className="space-y-4"
-                  >
-                    <div className="space-y-2">
-                      <Label htmlFor="name">Name</Label>
-                      <Input id="name" name="name" placeholder="Full name" required />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="phone">Phone</Label>
-                      <div className="flex">
-                        <span className="inline-flex items-center px-3 border border-r-0 rounded-l-md text-sm text-muted-foreground">🇮🇳 +91 ▾</span>
-                        <Input id="phone" name="phone" placeholder="Enter mobile number" inputMode="numeric" pattern="[0-9]{10}" className="rounded-l-none" required />
-                      </div>
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="email">Email</Label>
-                      <Input id="email" name="email" type="email" placeholder="Email address" required />
-                    </div>
-                    <div className="space-y-2">
-                      <Label>City</Label>
-                      <Select name="city">
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select city" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="hyderabad">Hyderabad</SelectItem>
-                          <SelectItem value="bengaluru">Bengaluru</SelectItem>
-                          <SelectItem value="mumbai">Mumbai</SelectItem>
-                          <SelectItem value="delhi">Delhi NCR</SelectItem>
-                          <SelectItem value="chennai">Chennai</SelectItem>
-                          <SelectItem value="pune">Pune</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <Button type="submit" size="lg" className="w-full">Get Free Consultation</Button>
-                  </form>
-                </CardContent>
-              </Card>
-            </div>
-          </aside>
         </div>
       </section>
 
