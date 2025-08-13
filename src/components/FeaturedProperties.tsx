@@ -1,3 +1,4 @@
+
 import React, { useEffect, useMemo, useState } from 'react';
 import PropertyCard from './PropertyCard';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -26,10 +27,10 @@ const FeaturedProperties = ({
     id: '1',
     title: 'Modern Apartment with Delhi',
     location: 'Sector 18, KK Road',
-    // price: '₹1.2 Cr',
-    // area: '1,200 sq ft',
-    // bedrooms: 3,
-    // bathrooms: 2,
+    price: '₹1.2 Cr',
+    area: '1,200 sq ft',
+    bedrooms: 3,
+    bathrooms: 2,
     image: 'photo-1560518883-ce09059eeffa',
     propertyType: 'Apartment',
     isNew: true
