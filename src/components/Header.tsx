@@ -13,8 +13,13 @@ import Sidebar from './Sidebar';
 import MegaMenu from './MegaMenu';
 import LegalServicesForm from './LegalServicesForm';
 const Header = () => {
-  const { user, signOut } = useAuth();
-  const { isAdmin } = useAdminAuth();
+  const {
+    user,
+    signOut
+  } = useAuth();
+  const {
+    isAdmin
+  } = useAdminAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -25,28 +30,26 @@ const Header = () => {
   const servicesHoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const navigate = useNavigate();
   const location = useLocation();
-  const { toast } = useToast();
-
+  const {
+    toast
+  } = useToast();
   const handleRentalHover = () => {
     if (rentalHoverTimeoutRef.current) {
       clearTimeout(rentalHoverTimeoutRef.current);
     }
     setIsRentalDropdownOpen(true);
   };
-
   const handleRentalLeave = () => {
     rentalHoverTimeoutRef.current = setTimeout(() => {
       setIsRentalDropdownOpen(false);
     }, 150);
   };
-
   const handleServicesHover = () => {
     if (servicesHoverTimeoutRef.current) {
       clearTimeout(servicesHoverTimeoutRef.current);
     }
     setIsServicesDropdownOpen(true);
   };
-
   const handleServicesLeave = () => {
     servicesHoverTimeoutRef.current = setTimeout(() => {
       setIsServicesDropdownOpen(false);
@@ -80,7 +83,6 @@ const Header = () => {
   const handleLogoClick = () => {
     navigate('/');
   };
-
   const handlePostPropertyClick = (role?: string) => {
     const path = role ? `/post-property?role=${role}` : '/post-property';
     if (user) {
@@ -89,31 +91,28 @@ const Header = () => {
       navigate(`/auth?redirectTo=${encodeURIComponent(path)}`);
     }
   };
-
   const handleSignOut = async () => {
     try {
       await signOut();
       toast({
         title: "Signed out successfully",
-        description: "You have been logged out of your account.",
+        description: "You have been logged out of your account."
       });
       navigate('/');
     } catch (error) {
       toast({
         title: "Sign out failed",
         description: "Please try again.",
-        variant: "destructive",
+        variant: "destructive"
       });
     }
   };
-
   const handleAuthClick = () => {
     navigate('/auth');
   };
-  
+
   // Check if current page is loans page
   const isLoansPage = location.pathname === '/loans';
-
   return <>
       <header className={`fixed top-8 left-0 right-0 z-50 transition-all duration-500 ${isScrolled ? 'bg-white/95 backdrop-blur-sm shadow-md' : 'bg-gradient-to-r from-red-800 to-red-700'}`}>
         <div className="w-full px-4 lg:px-6 xl:px-8 pt-[6px]">
@@ -141,187 +140,119 @@ const Header = () => {
               </Select>
 
               {/* Desktop Navigation Links - Hidden on Loans page */}
-              {!isLoansPage && (
-            <nav className="hidden lg:flex items-center space-x-5">
+              {!isLoansPage && <nav className="hidden lg:flex items-center space-x-5">
   <MegaMenu isScrolled={isScrolled} />
   
-  <a 
-    href="#" 
-    onClick={(e) => { e.preventDefault(); handlePostPropertyClick('Owner'); }}
-    className={`hover:opacity-80 transition-colors duration-500 text-base font-medium ${isScrolled ? 'text-gray-800' : 'text-white'} cursor-pointer`}
-  >
+  <a href="#" onClick={e => {
+                e.preventDefault();
+                handlePostPropertyClick('Owner');
+              }} className={`hover:opacity-80 transition-colors duration-500 text-base font-medium ${isScrolled ? 'text-gray-800' : 'text-white'} cursor-pointer`}>
     Sellers
   </a>
   
-  <a 
-    href="#" 
-    onClick={(e) => { e.preventDefault(); handlePostPropertyClick('Agent'); }}
-    className={`hover:opacity-80 transition-colors duration-500 text-base font-medium ${isScrolled ? 'text-gray-800' : 'text-white'} cursor-pointer`}
-  >
+  <a href="#" onClick={e => {
+                e.preventDefault();
+                handlePostPropertyClick('Agent');
+              }} className={`hover:opacity-80 transition-colors duration-500 text-base font-medium ${isScrolled ? 'text-gray-800' : 'text-white'} cursor-pointer`}>
     Agents
   </a>
 
-               <a 
-    href="#" 
-    onClick={(e) => { e.preventDefault(); handlePostPropertyClick('Builder'); }}
-    className={`hover:opacity-80 transition-colors duration-500 text-base font-medium ${isScrolled ? 'text-gray-800' : 'text-white'} cursor-pointer`}
-  >
+               <a href="#" onClick={e => {
+                e.preventDefault();
+                handlePostPropertyClick('Builder');
+              }} className={`hover:opacity-80 transition-colors duration-500 text-base font-medium ${isScrolled ? 'text-gray-800' : 'text-white'} cursor-pointer`}>
     Builders
   </a>
   
 
 
 
-              <div 
-    className="relative"
-    onMouseEnter={handleRentalHover}
-    onMouseLeave={handleRentalLeave}
-  >
-    <button 
-      className={`flex items-center hover:opacity-80 transition-colors duration-500 text-base font-medium ${isScrolled ? 'text-gray-800' : 'text-white'}`}
-    >
+              <div className="relative" onMouseEnter={handleRentalHover} onMouseLeave={handleRentalLeave}>
+    <button className={`flex items-center hover:opacity-80 transition-colors duration-500 text-base font-medium ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
       Rental
       <ChevronDown className="ml-1 h-3 w-3" />
     </button>
     
     {/* Custom Rental Dropdown */}
-    {isRentalDropdownOpen && (
-      <div 
-        className="absolute top-full left-0 w-32 bg-white border border-gray-200 rounded-lg shadow-xl z-50 mt-2"
-        onMouseEnter={handleRentalHover}
-        onMouseLeave={handleRentalLeave}
-      >
+    {isRentalDropdownOpen && <div className="absolute top-full left-0 w-32 bg-white border border-gray-200 rounded-lg shadow-xl z-50 mt-2" onMouseEnter={handleRentalHover} onMouseLeave={handleRentalLeave}>
         <div className="py-2">
-          <button 
-            onClick={handleLegalServicesClick}
-            className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors"
-          >
+          <button onClick={handleLegalServicesClick} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
            Owners
           </button>
-          <button 
-            onClick={() => navigate('/handover-services')}
-            className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors"
-          >
+          <button onClick={() => navigate('/handover-services')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
             Tenants
           </button>
           
         </div>
-      </div>
-    )}
+      </div>}
   </div>
   
   {/* Services Dropdown */}
-  <div 
-    className="relative"
-    onMouseEnter={handleServicesHover}
-    onMouseLeave={handleServicesLeave}
-  >
-    <button 
-      className={`flex items-center hover:opacity-80 transition-colors duration-500 text-base font-medium ${isScrolled ? 'text-gray-800' : 'text-white'}`}
-    >
+  <div className="relative" onMouseEnter={handleServicesHover} onMouseLeave={handleServicesLeave}>
+    <button className={`flex items-center hover:opacity-80 transition-colors duration-500 text-base font-medium ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
       Services
       <ChevronDown className="ml-1 h-3 w-3" />
     </button>
     
     {/* Custom Services Dropdown */}
-    {isServicesDropdownOpen && (
-      <div 
-        className="absolute top-full left-0 w-56 bg-white border border-gray-200 rounded-lg shadow-xl z-50 mt-2"
-        onMouseEnter={handleServicesHover}
-        onMouseLeave={handleServicesLeave}
-      >
+    {isServicesDropdownOpen && <div className="absolute top-full left-0 w-56 bg-white border border-gray-200 rounded-lg shadow-xl z-50 mt-2" onMouseEnter={handleServicesHover} onMouseLeave={handleServicesLeave}>
         <div className="py-2">
-          <button 
-            onClick={handleLegalServicesClick}
-            className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors"
-          >
+          <button onClick={handleLegalServicesClick} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
             Legal Services
           </button>
-          <button 
-            onClick={() => navigate('/handover-services')}
-            className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors"
-          >
+          <button onClick={() => navigate('/handover-services')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
             Handover Services
           </button>
-          <button 
-            onClick={() => navigate('/property-management')}
-            className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors"
-          >
+          <button onClick={() => navigate('/property-management')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
             Property Management
           </button>
 
       
 
-          <button 
-            onClick={() => navigate('/architecture')}
-            className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors"
-          >
+          <button onClick={() => navigate('/architecture')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
             Architects
           </button>
 
-          <button 
-            onClick={() => navigate('/interior')}
-            className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors"
-          >
+          <button onClick={() => navigate('/interior')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
             Interior Designers
           </button>
         </div>
-      </div>
-    )}
+      </div>}
   </div>
 
-                <a
-                  href="/loans"
-                  onClick={(e) => { e.preventDefault(); navigate('/loans'); }}
-                  className={`hover:opacity-80 transition-colors duration-500 text-base font-medium ${isScrolled ? 'text-gray-800' : 'text-white'}`}
-                >
+                <a href="/loans" onClick={e => {
+                e.preventDefault();
+                navigate('/loans');
+              }} className={`hover:opacity-80 transition-colors duration-500 text-base font-medium ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
                   Loans
                 </a>
 
-              { <a href="/careers" className={`hover:opacity-80 transition-colors duration-500 text-base font-medium ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
+              {<a href="/careers" className={`hover:opacity-80 transition-colors duration-500 text-base font-medium ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
      Jobs
-  </a> }
-             </nav>
-              )}
+  </a>}
+             </nav>}
 
             </div>
 
             {/* Right section - Phone (Loans page only), Post Property, Profile, and Hamburger Menu */}
             <div className="flex items-center space-x-2 sm:space-x-4">
               {/* Phone Number - Only visible on Loans page */}
-              {isLoansPage && (
-                <a 
-                  href="tel:+919036015272" 
-                  className={`flex items-center px-3 py-2 rounded-lg border transition-all duration-500 ${
-                    isScrolled 
-                      ? 'bg-white text-red-600 border-red-200 hover:bg-red-50' 
-                      : 'bg-white/10 backdrop-blur-sm text-white border-white/30 hover:bg-white/20'
-                  }`}
-                >
+              {isLoansPage && <a href="tel:+919036015272" className={`flex items-center px-3 py-2 rounded-lg border transition-all duration-500 ${isScrolled ? 'bg-white text-red-600 border-red-200 hover:bg-red-50' : 'bg-white/10 backdrop-blur-sm text-white border-white/30 hover:bg-white/20'}`}>
                   <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"/>
+                    <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
                   </svg>
-                  <span className="font-medium text-sm">+91 90360 15272</span>
-                </a>
-              )}
+                  <span className="font-medium text-sm">+91 80740 17388</span>
+                </a>}
               {/* Post Property Button - Hidden on Loans page */}
-              {!isLoansPage && (
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  onClick={() => handlePostPropertyClick()}
-                  className={`font-medium px-1.5 sm:px-3 py-1.5 text-xs sm:text-sm transition-all duration-500 ${isScrolled ? 'bg-white text-brand-red border-gray-300 hover:bg-gray-50' : 'bg-white text-brand-red border-white/50 hover:bg-white/90'}`}
-                >
+              {!isLoansPage && <Button variant="outline" size="sm" onClick={() => handlePostPropertyClick()} className={`font-medium px-1.5 sm:px-3 py-1.5 text-xs sm:text-sm transition-all duration-500 ${isScrolled ? 'bg-white text-brand-red border-gray-300 hover:bg-gray-50' : 'bg-white text-brand-red border-white/50 hover:bg-white/90'}`}>
                   <span className="hidden sm:inline">Post property</span>
                   <span className="sm:hidden">Post</span>
                   <span className="ml-1 bg-green-500 text-white text-[10px] px-1 py-0.5 rounded">Free</span>
-                </Button>
-              )}
+                </Button>}
 
 
               {/* Profile Avatar - Only visible for authenticated users */}
-              {user && (
-                <DropdownMenu>
+              {user && <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button variant="ghost" className={`p-2 transition-colors duration-500 ${isScrolled ? 'text-gray-800 hover:bg-gray-100' : 'text-white hover:bg-white/10'}`}>
                       <Avatar className="h-8 w-8">
@@ -353,27 +284,22 @@ const Header = () => {
                       <Heart className="mr-2 h-4 w-4" />
                       <span>My Interests</span>
                     </DropdownMenuItem>
-                    {isAdmin && (
-                      <DropdownMenuItem onClick={() => navigate('/admin')}>
+                    {isAdmin && <DropdownMenuItem onClick={() => navigate('/admin')}>
                         <Settings className="mr-2 h-4 w-4" />
                         <span>Admin Panel</span>
-                      </DropdownMenuItem>
-                    )}
+                      </DropdownMenuItem>}
                     <DropdownMenuSeparator />
                     <DropdownMenuItem onClick={handleSignOut}>
                       <LogOut className="mr-2 h-4 w-4" />
                       <span>Sign out</span>
                     </DropdownMenuItem>
                   </DropdownMenuContent>
-                </DropdownMenu>
-              )}
+                </DropdownMenu>}
 
               {/* Sidebar toggle button - Hidden on Loans page */}
-              {!isLoansPage && (
-                <Button variant="ghost" size="sm" className={`p-2 transition-colors duration-500 ${isScrolled ? 'text-gray-800 hover:bg-gray-100' : 'text-white hover:bg-white/10'}`} onClick={() => setIsSidebarOpen(true)}>
+              {!isLoansPage && <Button variant="ghost" size="sm" className={`p-2 transition-colors duration-500 ${isScrolled ? 'text-gray-800 hover:bg-gray-100' : 'text-white hover:bg-white/10'}`} onClick={() => setIsSidebarOpen(true)}>
                   <Menu size={20} />
-                </Button>
-              )}
+                </Button>}
             </div>
           </div>
         </div>
