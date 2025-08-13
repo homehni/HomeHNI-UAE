@@ -53,7 +53,7 @@ import NotFound from "./pages/NotFound";
 import ScrollToTop from "./components/ScrollToTop";
 import Architecture from "./pages/Architecture";
 import Interior from "./pages/Interior";
-import Loans from "./pages/Loans";
+
 import AboutSidebar from "./pages/AboutSidebar";
 import PropertyDetails from "./pages/PropertyDetails";
 
@@ -108,7 +108,7 @@ const App: React.FC = () => {
             <Route path="/blog" element={<Blog />} />
             <Route path="/architecture" element={<Architecture />} />
             <Route path="/interior" element={<Interior />} />
-            <Route path="/loans" element={<Loans />} />
+            
             
             {/* Authentication Routes */}
             <Route path="/auth" element={<Auth />} />

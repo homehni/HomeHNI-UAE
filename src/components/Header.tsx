@@ -266,16 +266,6 @@ const Header = () => {
   </div>
 
 
-                <a
-    href="/loans"
-    onClick={(e) => { e.preventDefault(); navigate('/loans'); }}
-    className={`hover:opacity-80 transition-colors duration-500 text-base font-medium ${isScrolled ? 'text-gray-800' : 'text-white'}`}
-  >
-    Loans
-  
-  
-  
-  </a>
 
               { <a href="/careers" className={`hover:opacity-80 transition-colors duration-500 text-base font-medium ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
     Jobs
