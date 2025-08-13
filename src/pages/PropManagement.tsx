@@ -172,7 +172,7 @@ const PropManagement = () => {
             {/* Right: Form - Sticky on Scroll */}
             <div className={`lg:justify-self-end transition-all duration-300 ${isFormSticky ? 'fixed top-20 right-4 z-[100]' : 'relative'}`}>
               <Card className="w-full max-w-md rounded-xl shadow-2xl bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/90 border border-white/20">
-                <CardContent className="p-6">
+                <CardContent className="p-6 mt-4">
                   <h3 className="text-xl font-semibold text-foreground">Got a property to be managed?</h3>
                   <p className="text-sm text-muted-foreground mb-4">Just fill up the form & we will take care of the rest</p>
 
