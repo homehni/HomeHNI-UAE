@@ -312,50 +312,7 @@ const PropManagement = () => {
       </section>
 
       {/* Mobile App Section */}
-      <section className="py-16 px-4 bg-gradient-to-br from-blue-50 to-indigo-100">
-        <div className="container mx-auto">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <div className="max-w-2xl">
-              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-6">
-                Leave the stress behind!
-              </h2>
-              <p className="text-lg text-muted-foreground mb-8">
-                Manage your property seamlessly with <strong>NoBroker App</strong>
-              </p>
-              
-              <div className="space-y-4 mb-8">
-                <div className="flex items-center space-x-3">
-                  <CheckCircle className="w-5 h-5 text-green-500" />
-                  <span>Access a detailed record of all your payments</span>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <CheckCircle className="w-5 h-5 text-green-500" />
-                  <span>Instantly connect with your dedicated Relationship Manager</span>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <CheckCircle className="w-5 h-5 text-green-500" />
-                  <span>Raise service tickets for fast and efficient support</span>
-                </div>
-              </div>
-
-              <div className="flex space-x-4">
-                <Button className="flex items-center space-x-2">
-                  <Download className="w-4 h-4" />
-                  <span>Download for iOS</span>
-                </Button>
-                <Button variant="outline" className="flex items-center space-x-2">
-                  <Download className="w-4 h-4" />
-                  <span>Download for Android</span>
-                </Button>
-              </div>
-            </div>
-            
-            <div className="flex justify-center">
-              <img src="/lovable-uploads/Mobile App Preview.png" alt="Mobile App Preview showing property management features" className="max-w-sm w-full" />
-            </div>
-          </div>
-        </div>
-      </section>
+      
 
 
       {/* Property Management Info Section */}
