@@ -9,7 +9,7 @@ import {
   Building2, Users, CreditCard, Wrench, Camera, FileText, 
   MapPin, Crown, TrendingUp, Clock, CheckCircle, Shield, Star,
   X, Plus, Minus, Globe, Shield as ShieldCheck, Headphones,
-  Smartphone, Download, Home
+  Smartphone, Download
 } from "lucide-react";
 import Marquee from "@/components/Marquee";
 import Header from "@/components/Header";
@@ -218,7 +218,7 @@ const PropManagement = () => {
 
             {/* Right: Form - Sticky on Scroll */}
             <div className={`lg:justify-self-end transition-all duration-300 ${
-              isFormSticky ? 'fixed top-20 right-4 z-[100]' : 'relative'
+              isFormSticky ? 'fixed top-4 right-4 z-50' : 'relative'
             }`}>
               <Card className="w-full max-w-md rounded-xl shadow-2xl bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/90 border border-white/20">
                 <CardContent className="p-6">
@@ -273,83 +273,99 @@ const PropManagement = () => {
       {/* What's in it for you Section */}
       <section className="py-16 px-4 bg-background">
         <div className="container mx-auto">
-          <div className="grid lg:grid-cols-2 gap-8 items-start">
-            <div className="max-w-2xl pr-8">
-              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
+          <div className="grid lg:grid-cols-2 gap-16 items-start">
+            <div className="max-w-3xl">
+              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-12">
                 What's in it for you?
               </h2>
               
-              <div className="grid grid-cols-2 gap-6">
-                <div className="space-y-3">
-                  <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                    <Home className="w-5 h-5 text-blue-600" />
+              <div className="grid md:grid-cols-2 gap-8">
+                <div className="space-y-6">
+                  <div className="flex items-start space-x-4">
+                    <div className="flex-shrink-0 w-16 h-16 bg-blue-50 rounded-lg flex items-center justify-center">
+                      <Building2 className="w-8 h-8 text-blue-600" />
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-semibold text-blue-600 mb-2">
+                        Premium Property Listing & Promotion
+                      </h3>
+                      <p className="text-sm text-muted-foreground">
+                        Boost your property's visibility by 3x with targeted, high-quality tenant reach
+                      </p>
+                    </div>
                   </div>
-                  <h3 className="text-base font-semibold text-foreground">
-                    Premium Property Listing & Promotion
-                  </h3>
-                  <p className="text-sm text-muted-foreground">
-                    Boost your property's visibility by 3x with targeted, high-quality tenant reach
-                  </p>
+
+                  <div className="flex items-start space-x-4">
+                    <div className="flex-shrink-0 w-16 h-16 bg-blue-50 rounded-lg flex items-center justify-center">
+                      <Users className="w-8 h-8 text-blue-600" />
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-semibold text-blue-600 mb-2">
+                        Tenant Background Verification
+                      </h3>
+                      <p className="text-sm text-muted-foreground">
+                        Get thorough tenant background checks for secure and reliable occupancy
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start space-x-4">
+                    <div className="flex-shrink-0 w-16 h-16 bg-blue-50 rounded-lg flex items-center justify-center">
+                      <Camera className="w-8 h-8 text-blue-600" />
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-semibold text-blue-600 mb-2">
+                        Periodic Home Inspection
+                      </h3>
+                      <p className="text-sm text-muted-foreground">
+                        Maintain your property's value with scheduled, professional inspections
+                      </p>
+                    </div>
+                  </div>
                 </div>
 
-                <div className="space-y-3">
-                  <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                    <Users className="w-5 h-5 text-blue-600" />
+                <div className="space-y-6">
+                  <div className="flex items-start space-x-4">
+                    <div className="flex-shrink-0 w-16 h-16 bg-blue-50 rounded-lg flex items-center justify-center">
+                      <Clock className="w-8 h-8 text-blue-600" />
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-semibold text-blue-600 mb-2">
+                        Lifetime Tenant Search
+                      </h3>
+                      <p className="text-sm text-muted-foreground">
+                        Enjoy unlimited tenant searches at a negligible cost
+                      </p>
+                    </div>
                   </div>
-                  <h3 className="text-base font-semibold text-foreground">
-                    Lifetime Tenant Search
-                  </h3>
-                  <p className="text-sm text-muted-foreground">
-                    Enjoy unlimited tenant searches at a negligible cost
-                  </p>
-                </div>
 
-                <div className="space-y-3">
-                  <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                    <Shield className="w-5 h-5 text-blue-600" />
+                  <div className="flex items-start space-x-4">
+                    <div className="flex-shrink-0 w-16 h-16 bg-blue-50 rounded-lg flex items-center justify-center">
+                      <FileText className="w-8 h-8 text-blue-600" />
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-semibold text-blue-600 mb-2">
+                        Free Rental Agreement
+                      </h3>
+                      <p className="text-sm text-muted-foreground">
+                        Get an e-stamped rental agreement delivered to your doorstep
+                      </p>
+                    </div>
                   </div>
-                  <h3 className="text-base font-semibold text-foreground">
-                    Tenant Background Verification
-                  </h3>
-                  <p className="text-sm text-muted-foreground">
-                    Get thorough tenant background checks for secure and reliable occupancy
-                  </p>
-                </div>
 
-                <div className="space-y-3">
-                  <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                    <CreditCard className="w-5 h-5 text-blue-600" />
+                  <div className="flex items-start space-x-4">
+                    <div className="flex-shrink-0 w-16 h-16 bg-blue-50 rounded-lg flex items-center justify-center">
+                      <Wrench className="w-8 h-8 text-blue-600" />
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-semibold text-blue-600 mb-2">
+                        On-demand Repair & Maintenance Services
+                      </h3>
+                      <p className="text-sm text-muted-foreground">
+                        Quick, expert repair and maintenance services at your convenience
+                      </p>
+                    </div>
                   </div>
-                  <h3 className="text-base font-semibold text-foreground">
-                    Free Rental Agreement
-                  </h3>
-                  <p className="text-sm text-muted-foreground">
-                    Get an e-stamped rental agreement delivered to your doorstep
-                  </p>
-                </div>
-
-                <div className="space-y-3">
-                  <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                    <Camera className="w-5 h-5 text-blue-600" />
-                  </div>
-                  <h3 className="text-base font-semibold text-foreground">
-                    Periodic Home Inspection
-                  </h3>
-                  <p className="text-sm text-muted-foreground">
-                    Maintain your property's value with scheduled, professional inspections
-                  </p>
-                </div>
-
-                <div className="space-y-3">
-                  <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                    <Wrench className="w-5 h-5 text-blue-600" />
-                  </div>
-                  <h3 className="text-base font-semibold text-foreground">
-                    On-demand Repair & Maintenance Services
-                  </h3>
-                  <p className="text-sm text-muted-foreground">
-                    Quick, expert repair and maintenance services at your convenience
-                  </p>
                 </div>
               </div>
             </div>
@@ -513,10 +529,10 @@ const PropManagement = () => {
       </section>
 
       {/* Stats Section */}
-      <section className="py-16 px-4 bg-background">
+      <section className="py-16 px-4 bg-slate-900 text-white">
         <div className="container mx-auto">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <div className="max-w-4xl bg-slate-900 text-white rounded-2xl px-8 py-12">
+            <div className="max-w-3xl">
               <div className="grid md:grid-cols-3 gap-8 text-center">
                 <div>
                   <div className="w-16 h-16 bg-yellow-400 rounded-lg flex items-center justify-center mx-auto mb-4">
@@ -763,7 +779,7 @@ const PropManagement = () => {
       </section>
 
       {/* Mobile App Section */}
-      <section className="py-16 px-4 bg-gradient-to-br from-blue-50 to-indigo-100">
+      {/* <section className="py-16 px-4 bg-gradient-to-br from-blue-50 to-indigo-100">
         <div className="container mx-auto">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
@@ -815,10 +831,10 @@ const PropManagement = () => {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Testimonials Section */}
-      <section className="py-16 px-4 bg-background">
+      {/* <section className="py-16 px-4 bg-background">
         <div className="container mx-auto">
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-12 text-center">
             What Our Clients Say
@@ -850,10 +866,10 @@ const PropManagement = () => {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* FAQ Section */}
-      <section className="py-16 px-4 bg-muted/30">
+      {/* <section className="py-16 px-4 bg-muted/30">
         <div className="container mx-auto">
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-12 text-center">
             Frequently Asked Questions
@@ -874,10 +890,10 @@ const PropManagement = () => {
             </Accordion>
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Property Management Info Section */}
-      <section className="py-16 px-4 bg-background">
+      {/* <section className="py-16 px-4 bg-background">
         <div className="container mx-auto">
           <div className="max-w-4xl mx-auto prose prose-lg">
             <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
@@ -905,7 +921,7 @@ const PropManagement = () => {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
 
       <Footer />
     </div>
