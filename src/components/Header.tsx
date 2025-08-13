@@ -110,6 +110,10 @@ const Header = () => {
   const handleAuthClick = () => {
     navigate('/auth');
   };
+  
+  // Check if current page is loans page
+  const isLoansPage = location.pathname === '/loans';
+
   return <>
       <header className={`fixed top-8 left-0 right-0 z-50 transition-all duration-500 ${isScrolled ? 'bg-white/95 backdrop-blur-sm shadow-md' : 'bg-gradient-to-r from-red-800 to-red-700'}`}>
         <div className="w-full px-4 lg:px-6 xl:px-8 pt-[6px]">
@@ -136,7 +140,8 @@ const Header = () => {
                 </SelectContent>
               </Select>
 
-              {/* Desktop Navigation Links */}
+              {/* Desktop Navigation Links - Hidden on Loans page */}
+              {!isLoansPage && (
             <nav className="hidden lg:flex items-center space-x-5">
   <MegaMenu isScrolled={isScrolled} />
   
@@ -276,23 +281,26 @@ const Header = () => {
               { <a href="/careers" className={`hover:opacity-80 transition-colors duration-500 text-base font-medium ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
      Jobs
   </a> }
-            </nav>
+             </nav>
+              )}
 
             </div>
 
             {/* Right section - Post Property, Profile, and Hamburger Menu */}
             <div className="flex items-center space-x-2 sm:space-x-4">
-              {/* Post Property Button - Responsive sizing */}
-              <Button 
-              variant="outline" 
-              size="sm" 
-              onClick={() => handlePostPropertyClick()}
-              className={`font-medium px-1.5 sm:px-3 py-1.5 text-xs sm:text-sm transition-all duration-500 ${isScrolled ? 'bg-white text-brand-red border-gray-300 hover:bg-gray-50' : 'bg-white text-brand-red border-white/50 hover:bg-white/90'}`}
-            >
-              <span className="hidden sm:inline">Post property</span>
-              <span className="sm:hidden">Post</span>
-              <span className="ml-1 bg-green-500 text-white text-[10px] px-1 py-0.5 rounded">Free</span>
-            </Button>
+              {/* Post Property Button - Hidden on Loans page */}
+              {!isLoansPage && (
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={() => handlePostPropertyClick()}
+                  className={`font-medium px-1.5 sm:px-3 py-1.5 text-xs sm:text-sm transition-all duration-500 ${isScrolled ? 'bg-white text-brand-red border-gray-300 hover:bg-gray-50' : 'bg-white text-brand-red border-white/50 hover:bg-white/90'}`}
+                >
+                  <span className="hidden sm:inline">Post property</span>
+                  <span className="sm:hidden">Post</span>
+                  <span className="ml-1 bg-green-500 text-white text-[10px] px-1 py-0.5 rounded">Free</span>
+                </Button>
+              )}
 
 
               {/* Profile Avatar - Only visible for authenticated users */}
@@ -344,17 +352,19 @@ const Header = () => {
                 </DropdownMenu>
               )}
 
-              {/* Sidebar toggle button - Always visible */}
-              <Button variant="ghost" size="sm" className={`p-2 transition-colors duration-500 ${isScrolled ? 'text-gray-800 hover:bg-gray-100' : 'text-white hover:bg-white/10'}`} onClick={() => setIsSidebarOpen(true)}>
-                <Menu size={20} />
-              </Button>
+              {/* Sidebar toggle button - Hidden on Loans page */}
+              {!isLoansPage && (
+                <Button variant="ghost" size="sm" className={`p-2 transition-colors duration-500 ${isScrolled ? 'text-gray-800 hover:bg-gray-100' : 'text-white hover:bg-white/10'}`} onClick={() => setIsSidebarOpen(true)}>
+                  <Menu size={20} />
+                </Button>
+              )}
             </div>
           </div>
         </div>
       </header>
       
-      {/* Sidebar Component */}
-      <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
+      {/* Sidebar Component - Hidden on Loans page */}
+      {!isLoansPage && <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />}
       
       {/* Legal Services Form */}
       <LegalServicesForm isOpen={isLegalFormOpen} onClose={() => setIsLegalFormOpen(false)} />
