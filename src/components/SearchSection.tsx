@@ -4,7 +4,6 @@ import { Input } from '@/components/ui/input';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { MapPin, Search, Mic, MapPinIcon, ChevronDown } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-
 export interface SearchSectionRef {
   focusSearchInput: () => void;
 }
@@ -134,7 +133,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                       </TabsTrigger>)}
                   </TabsList>
 
-                  <TabsContent value={activeTab} className="mt-0 px-6 pt-6 pb-0 bg-white rounded-b-lg">
+                  <TabsContent value={activeTab} className="mt-0 p-6 bg-white rounded-b-lg">
                     {/* Property Type Dropdown and Search Bar - Now inline */}
                     <div className="flex flex-col sm:flex-row gap-4">
                       <Popover>
