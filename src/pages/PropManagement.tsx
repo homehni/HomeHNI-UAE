@@ -143,7 +143,7 @@ const PropManagement = () => {
       <Header />
       
       {/* Hero Section */}
-      <section className="relative pt-28 md:pt-32 pb-8 md:pb-12 px-4 md:px-8 text-white overflow-hidden bg-cover bg-center bg-no-repeat" style={{
+      <section className="relative pt-28 md:pt-32 pb-12 md:pb-16 px-4 md:px-8 text-white overflow-hidden bg-cover bg-center bg-no-repeat" style={{
       backgroundImage: "url('/lovable-uploads/fbb0d72f-782e-49f5-bbe1-8afc1314b5f7.png')"
     }}>
         <div className="absolute inset-0 bg-blue-900/80 pointer-events-none" />
