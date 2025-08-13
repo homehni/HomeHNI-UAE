@@ -1,216 +1,97 @@
-import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
-import { useToast } from "@/hooks/use-toast";
-import { 
-  Building2, Users, CreditCard, Wrench, Camera, FileText, Sparkles, MapPin, Crown, TrendingUp, Clock, CheckCircle, Shield, Star 
-} from "lucide-react";
+import { Building2, Users, CreditCard, Wrench, Camera, FileText, Sparkles, MapPin, Crown, TrendingUp, Clock, CheckCircle, Shield, Star } from "lucide-react";
 import Marquee from "@/components/Marquee";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-
 const PropertyManagement = () => {
-  const services = [
-    {
-      icon: Users,
-      title: "Tenant Management",
-      description: "End-to-end tenant handling: onboarding, agreements, exit."
-    },
-    {
-      icon: CreditCard,
-      title: "Rent Collection",
-      description: "Timely rent, reminders, payment tracking."
-    },
-    {
-      icon: Wrench,
-      title: "Maintenance & Repairs",
-      description: "Plumbing, electrical, cleaning, and more."
-    },
-    {
-      icon: Camera,
-      title: "Periodic Property Inspections",
-      description: "Photo/video reports delivered remotely."
-    },
-    {
-      icon: FileText,
-      title: "Legal Support",
-      description: "Lease paperwork, renewals, tax, society handling."
-    },
-    {
-      icon: Sparkles,
-      title: "Cleaning & Sanitization",
-      description: "For pre/post-tenancy handover. (Optional)"
-    }
-  ];
-
-  const targetAudience = [
-    {
-      icon: MapPin,
-      title: "NRIs",
-      description: "Looking for remote property management"
-    },
-    {
-      icon: Crown,
-      title: "HNIs",
-      description: "With multiple or high-value homes"
-    },
-    {
-      icon: TrendingUp,
-      title: "Real Estate Investors",
-      description: "Focused on ROI"
-    },
-    {
-      icon: Clock,
-      title: "Busy Landlords",
-      description: "Who want peace of mind"
-    }
-  ];
-
-  const benefits = [
-    {
-      icon: CheckCircle,
-      title: "Dedicated Property Managers",
-      description: "Personal point of contact for all property needs"
-    },
-    {
-      icon: FileText,
-      title: "Transparent Monthly Reports",
-      description: "Detailed updates on property status and finances"
-    },
-    {
-      icon: Shield,
-      title: "RERA-Compliant Legal Handling",
-      description: "All documentation and processes follow regulations"
-    },
-    {
-      icon: Users,
-      title: "Trusted Vendor Network",
-      description: "Verified professionals for all maintenance needs"
-    },
-    {
-      icon: Star,
-      title: "Tenant Replacement Guarantee",
-      description: "Quick tenant replacement if issues arise"
-    }
-  ];
-
-  const { toast } = useToast();
-
-  useEffect(() => {
-    const title = "Property Management Services | Home HNI";
-    document.title = title;
-    const desc = "End-to-end property management for NRIs & HNIs: tenant search, rent collection, maintenance, and inspections.";
-    let meta = document.querySelector('meta[name="description"]');
-    if (!meta) {
-      meta = document.createElement('meta');
-      meta.setAttribute('name', 'description');
-      document.head.appendChild(meta);
-    }
-    meta.setAttribute('content', desc);
-
-    let canonical = document.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
-    if (!canonical) {
-      canonical = document.createElement('link');
-      canonical.setAttribute('rel', 'canonical');
-      document.head.appendChild(canonical);
-    }
-    canonical.setAttribute('href', window.location.origin + '/property-management');
-  }, []);
-
-  return (
-    <div className="min-h-screen">
+  const services = [{
+    icon: Users,
+    title: "Tenant Management",
+    description: "End-to-end tenant handling: onboarding, agreements, exit."
+  }, {
+    icon: CreditCard,
+    title: "Rent Collection",
+    description: "Timely rent, reminders, payment tracking."
+  }, {
+    icon: Wrench,
+    title: "Maintenance & Repairs",
+    description: "Plumbing, electrical, cleaning, and more."
+  }, {
+    icon: Camera,
+    title: "Periodic Property Inspections",
+    description: "Photo/video reports delivered remotely."
+  }, {
+    icon: FileText,
+    title: "Legal Support",
+    description: "Lease paperwork, renewals, tax, society handling."
+  }, {
+    icon: Sparkles,
+    title: "Cleaning & Sanitization",
+    description: "For pre/post-tenancy handover. (Optional)"
+  }];
+  const targetAudience = [{
+    icon: MapPin,
+    title: "NRIs",
+    description: "Looking for remote property management"
+  }, {
+    icon: Crown,
+    title: "HNIs",
+    description: "With multiple or high-value homes"
+  }, {
+    icon: TrendingUp,
+    title: "Real Estate Investors",
+    description: "Focused on ROI"
+  }, {
+    icon: Clock,
+    title: "Busy Landlords",
+    description: "Who want peace of mind"
+  }];
+  const benefits = [{
+    icon: CheckCircle,
+    title: "Dedicated Property Managers",
+    description: "Personal point of contact for all property needs"
+  }, {
+    icon: FileText,
+    title: "Transparent Monthly Reports",
+    description: "Detailed updates on property status and finances"
+  }, {
+    icon: Shield,
+    title: "RERA-Compliant Legal Handling",
+    description: "All documentation and processes follow regulations"
+  }, {
+    icon: Users,
+    title: "Trusted Vendor Network",
+    description: "Verified professionals for all maintenance needs"
+  }, {
+    icon: Star,
+    title: "Tenant Replacement Guarantee",
+    description: "Quick tenant replacement if issues arise"
+  }];
+  return <div className="min-h-screen">
       <Marquee />
       <Header />
       
-{/* Hero Section */}
-<section
-  className="relative pt-28 md:pt-32 pb-10 md:pb-20 px-4 md:px-8 text-white overflow-hidden bg-cover bg-center bg-no-repeat"
-  style={{ backgroundImage: "url('/lovable-uploads/fbb0d72f-782e-49f5-bbe1-8afc1314b5f7.png')" }}
->
-  <div className="absolute inset-0 bg-black/30 pointer-events-none" />
-
-  <div className="relative z-10 container mx-auto">
-    <div className="grid lg:grid-cols-2 gap-8 items-start">
-      {/* Left: Copy */}
-      <div className="max-w-2xl">
-        <h1 className="text-4xl md:text-5xl font-bold mb-4 leading-tight">
-          Comprehensive Property Management Services
-          <br className="hidden md:block" />
-          <span className="block">in Hyderabad</span>
-        </h1>
-        <p className="text-lg md:text-xl text-white/90">
-          From securing verified tenants to regular property maintenance, we handle
-          everything for you.
-        </p>
-      </div>
-
-      {/* Right: Form (scrolls with page, not sticky) */}
-      <div className="lg:justify-self-end">
-        <Card className="w-full max-w-md rounded-xl shadow-2xl bg-background/90 backdrop-blur supports-[backdrop-filter]:bg-background/70">
-          <CardContent className="p-6">
-            <h3 className="text-xl font-semibold text-foreground">Got a property to be managed?</h3>
-            <p className="text-sm text-muted-foreground mb-4">Just fill up the form & we will take care of the rest</p>
-
-            <form
-              className="space-y-4"
-              onSubmit={(e) => {
-                e.preventDefault();
-                // Minimal handling for now – you can wire this to Supabase later
-                toast({ title: "Request received", description: "Our team will reach out shortly." });
-                (e.currentTarget as HTMLFormElement).reset();
-              }}
-            >
-              <div className="space-y-2">
-                <Label htmlFor="pm-name">Name</Label>
-                <Input id="pm-name" name="name" placeholder="Name" required />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="pm-phone">Phone</Label>
-                <div className="flex gap-2">
-                  <Select defaultValue="+91" name="countryCode">
-                    <SelectTrigger className="w-28"><SelectValue /></SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="+91">🇮🇳 +91</SelectItem>
-                      <SelectItem value="+1">🇺🇸 +1</SelectItem>
-                      <SelectItem value="+44">🇬🇧 +44</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <Input id="pm-phone" name="phone" type="tel" placeholder="Phone Number" className="flex-1" required />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="pm-email">Email</Label>
-                <Input id="pm-email" name="email" type="email" placeholder="Email ID" />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="pm-city">City</Label>
-                <Select name="city">
-                  <SelectTrigger id="pm-city"><SelectValue placeholder="City" /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="Hyderabad">Hyderabad</SelectItem>
-                    <SelectItem value="Bengaluru">Bengaluru</SelectItem>
-                    <SelectItem value="Mumbai">Mumbai</SelectItem>
-                    <SelectItem value="Pune">Pune</SelectItem>
-                    <SelectItem value="Chennai">Chennai</SelectItem>
-                    <SelectItem value="Delhi NCR">Delhi NCR</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <Button type="submit" className="w-full">Talk to Us Today!</Button>
-            </form>
-          </CardContent>
-        </Card>
-      </div>
+    {/* Hero Section */}
+    <section className="relative pt-32 pb-20 px-4 md:px-8 text-white overflow-hidden bg-cover bg-center bg-no-repeat" style={{
+      backgroundImage: "url('/lovable-uploads/fbb0d72f-782e-49f5-bbe1-8afc1314b5f7.png')"
+    }}>
+  <div className="absolute inset-0 bg-black/10 pointer-events-none"></div> {/* light overlay */}
+  
+  <div className="relative z-10 container mx-auto text-center">
+    <div className="max-w-4xl mx-auto">
+      <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
+        🏢 Premium Property Management for HNIs & NRIs
+      </h1>
+      <p className="text-xl md:text-2xl mb-8 text-red-100 leading-relaxed">
+        Get complete peace of mind with our expert-managed, tenant-ready, and fully maintained property solutions — ideal for NRIs, landlords, and investors.
+      </p>
+      <Button size="lg" className="bg-white text-red-700 hover:bg-gray-100 font-semibold px-8 py-3 text-lg rounded-xl shadow-lg transition duration-300">
+        Talk to a Property Manager Today
+      </Button>
     </div>
   </div>
-</section>
+    </section>
 
 
 
@@ -228,8 +109,7 @@ const PropertyManagement = () => {
           </div>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {services.map((service, index) => (
-              <Card key={index} className="h-full hover:shadow-lg transition-shadow">
+            {services.map((service, index) => <Card key={index} className="h-full hover:shadow-lg transition-shadow">
                 <CardContent className="p-6">
                   <div className="flex items-start space-x-4">
                     <div className="flex-shrink-0">
@@ -247,8 +127,7 @@ const PropertyManagement = () => {
                     </div>
                   </div>
                 </CardContent>
-              </Card>
-            ))}
+              </Card>)}
           </div>
         </div>
       </section>
@@ -266,12 +145,9 @@ const PropertyManagement = () => {
           </div>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {targetAudience.map((audience, index) => (
-              <Card key={index} className="text-center hover:shadow-lg transition-shadow">
+            {targetAudience.map((audience, index) => <Card key={index} className="text-center hover:shadow-lg transition-shadow">
                 <CardContent className="p-6">
-                  <div className="w-16 h-16 bg-brand-red/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <audience.icon className="w-8 h-8 text-brand-red" />
-                  </div>
+                  
                   <h3 className="text-lg font-semibold text-foreground mb-2">
                     {audience.title}
                   </h3>
@@ -279,8 +155,7 @@ const PropertyManagement = () => {
                     {audience.description}
                   </p>
                 </CardContent>
-              </Card>
-            ))}
+              </Card>)}
           </div>
         </div>
       </section>
@@ -298,8 +173,7 @@ const PropertyManagement = () => {
           </div>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
-            {benefits.map((benefit, index) => (
-              <Card key={index} className="hover:shadow-lg transition-shadow">
+            {benefits.map((benefit, index) => <Card key={index} className="hover:shadow-lg transition-shadow">
                 <CardContent className="p-6">
                   <div className="flex items-start space-x-4">
                     <div className="flex-shrink-0">
@@ -317,8 +191,7 @@ const PropertyManagement = () => {
                     </div>
                   </div>
                 </CardContent>
-              </Card>
-            ))}
+              </Card>)}
           </div>
         </div>
       </section>
@@ -333,10 +206,7 @@ const PropertyManagement = () => {
             <p className="text-xl mb-8 text-red-100">
               Focus on what matters. Let Home HNI take care of your property with professionalism and care.
             </p>
-            <Button 
-              size="lg" 
-              className="bg-white text-brand-red hover:bg-gray-100 font-semibold px-8 py-3 text-lg rounded-lg"
-            >
+            <Button size="lg" className="bg-white text-brand-red hover:bg-gray-100 font-semibold px-8 py-3 text-lg rounded-lg">
               Schedule a Free Consultation
             </Button>
           </div>
@@ -344,8 +214,6 @@ const PropertyManagement = () => {
       </section>
 
       <Footer />
-    </div>
-  );
+    </div>;
 };
-
 export default PropertyManagement;
