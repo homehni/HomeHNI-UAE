@@ -453,7 +453,7 @@ const PropManagement = () => {
       </section>
 
       {/* Comparison Table Section */}
-      <section className="py-8 md:py-16 px-4 bg-background">
+      <section className="py-8 md:py-16 pr-4 bg-background">
         <div className="container mx-auto">
           <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-start">
             <div className="w-full">
