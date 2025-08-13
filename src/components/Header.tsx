@@ -258,12 +258,7 @@ const Header = () => {
             Property Management
           </button>
 
-          <button 
-            onClick={() => navigate('/loans')}
-            className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors"
-          >
-            Loans
-          </button>
+      
 
           <button 
             onClick={() => navigate('/architecture')}
