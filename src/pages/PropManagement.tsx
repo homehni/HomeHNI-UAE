@@ -5,121 +5,162 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { useToast } from "@/hooks/use-toast";
-import { Building2, Users, CreditCard, Wrench, Camera, FileText, MapPin, Crown, TrendingUp, Clock, CheckCircle, Shield, Star, X, Plus, Minus, Globe, Shield as ShieldCheck, Headphones, Smartphone, Download } from "lucide-react";
+import { 
+  Building2, Users, CreditCard, Wrench, Camera, FileText, 
+  MapPin, Crown, TrendingUp, Clock, CheckCircle, Shield, Star,
+  X, Plus, Minus, Globe, Shield as ShieldCheck, Headphones,
+  Smartphone, Download
+} from "lucide-react";
 import Marquee from "@/components/Marquee";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+
 const PropManagement = () => {
   const [isFormSticky, setIsFormSticky] = useState(false);
-  const services = [{
-    icon: Users,
-    title: "Tenant Management",
-    description: "End-to-end tenant handling: onboarding, agreements, exit."
-  }, {
-    icon: CreditCard,
-    title: "Rent Collection",
-    description: "Timely rent, reminders, payment tracking."
-  }, {
-    icon: Wrench,
-    title: "Maintenance & Repairs",
-    description: "Plumbing, electrical, cleaning, and more."
-  }, {
-    icon: Camera,
-    title: "Periodic Property Inspections",
-    description: "Photo/video reports delivered remotely."
-  }, {
-    icon: FileText,
-    title: "Legal Support",
-    description: "Lease paperwork, renewals, tax, society handling."
-  }, {
-    icon: Building2,
-    title: "Property Marketing",
-    description: "Professional listing and promotion services."
-  }];
-  const targetAudience = [{
-    icon: Globe,
-    title: "NRIs",
-    description: "Looking for remote property management"
-  }, {
-    icon: Crown,
-    title: "HNIs",
-    description: "With multiple or high-value homes"
-  }, {
-    icon: TrendingUp,
-    title: "Real Estate Investors",
-    description: "Focused on ROI"
-  }];
-  const comparisonData = [{
-    feature: "Professional Property Management",
-    nobroker: true,
-    others: false
-  }, {
-    feature: "Dedicated Relationship Manager",
-    nobroker: true,
-    others: false
-  }, {
-    feature: "Transparent Monthly Reports",
-    nobroker: true,
-    others: false
-  }, {
-    feature: "24/7 Customer Support",
-    nobroker: true,
-    others: false
-  }, {
-    feature: "Legal Compliance & Documentation",
-    nobroker: true,
-    others: false
-  }, {
-    feature: "Verified Vendor Network",
-    nobroker: true,
-    others: false
-  }, {
-    feature: "Technology-Driven Operations",
-    nobroker: true,
-    others: false
-  }, {
-    feature: "Zero Hidden Charges",
-    nobroker: true,
-    others: false
-  }];
-  const testimonials = [{
-    name: "Rajesh Kumar",
-    role: "NRI Property Owner",
-    image: "/lovable-uploads/46a07bb4-9f10-4614-ad52-73dfb2de4f28.png",
-    rating: 5,
-    text: "Excellent service! They handle everything while I'm abroad. Complete peace of mind."
-  }, {
-    name: "Priya Sharma",
-    role: "Real Estate Investor",
-    image: "/lovable-uploads/5b898e4e-d9b6-4366-b58f-176fc3c8a9c3.png",
-    rating: 5,
-    text: "Professional management with transparent reporting. Highly recommended!"
-  }, {
-    name: "Amit Patel",
-    role: "HNI Client",
-    image: "/lovable-uploads/6e6c47cd-700c-49d4-bfee-85a69bb8353f.png",
-    rating: 5,
-    text: "Best property management service in Hyderabad. Worth every penny!"
-  }];
-  const faqs = [{
-    question: "What is included in property management services?",
-    answer: "Our comprehensive package includes tenant management, rent collection, maintenance & repairs, periodic inspections, legal support, and detailed monthly reporting."
-  }, {
-    question: "How do you handle tenant verification?",
-    answer: "We conduct thorough background checks including identity verification, employment verification, credit checks, and reference validation to ensure reliable tenants."
-  }, {
-    question: "What are your charges for property management?",
-    answer: "Our charges are transparent and competitive, typically 8-12% of monthly rent depending on services selected. No hidden fees or surprise costs."
-  }, {
-    question: "How often do you inspect the property?",
-    answer: "We conduct quarterly inspections with detailed photo/video reports. Emergency inspections are done as needed."
-  }, {
-    question: "Do you provide legal support?",
-    answer: "Yes, we handle all legal documentation including rental agreements, renewals, society compliance, and dispute resolution."
-  }];
-  const {
-    toast
-  } = useToast();
+
+  const services = [
+    {
+      icon: Users,
+      title: "Tenant Management",
+      description: "End-to-end tenant handling: onboarding, agreements, exit."
+    },
+    {
+      icon: CreditCard,
+      title: "Rent Collection",
+      description: "Timely rent, reminders, payment tracking."
+    },
+    {
+      icon: Wrench,
+      title: "Maintenance & Repairs",
+      description: "Plumbing, electrical, cleaning, and more."
+    },
+    {
+      icon: Camera,
+      title: "Periodic Property Inspections",
+      description: "Photo/video reports delivered remotely."
+    },
+    {
+      icon: FileText,
+      title: "Legal Support",
+      description: "Lease paperwork, renewals, tax, society handling."
+    },
+    {
+      icon: Building2,
+      title: "Property Marketing",
+      description: "Professional listing and promotion services."
+    }
+  ];
+
+  const targetAudience = [
+    {
+      icon: Globe,
+      title: "NRIs",
+      description: "Looking for remote property management"
+    },
+    {
+      icon: Crown,
+      title: "HNIs", 
+      description: "With multiple or high-value homes"
+    },
+    {
+      icon: TrendingUp,
+      title: "Real Estate Investors",
+      description: "Focused on ROI"
+    }
+  ];
+
+  const comparisonData = [
+    {
+      feature: "Professional Property Management",
+      nobroker: true,
+      others: false
+    },
+    {
+      feature: "Dedicated Relationship Manager",
+      nobroker: true,
+      others: false
+    },
+    {
+      feature: "Transparent Monthly Reports",
+      nobroker: true,
+      others: false
+    },
+    {
+      feature: "24/7 Customer Support",
+      nobroker: true,
+      others: false
+    },
+    {
+      feature: "Legal Compliance & Documentation",
+      nobroker: true,
+      others: false
+    },
+    {
+      feature: "Verified Vendor Network",
+      nobroker: true,
+      others: false
+    },
+    {
+      feature: "Technology-Driven Operations",
+      nobroker: true,
+      others: false
+    },
+    {
+      feature: "Zero Hidden Charges",
+      nobroker: true,
+      others: false
+    }
+  ];
+
+  const testimonials = [
+    {
+      name: "Rajesh Kumar",
+      role: "NRI Property Owner",
+      image: "/lovable-uploads/46a07bb4-9f10-4614-ad52-73dfb2de4f28.png",
+      rating: 5,
+      text: "Excellent service! They handle everything while I'm abroad. Complete peace of mind."
+    },
+    {
+      name: "Priya Sharma", 
+      role: "Real Estate Investor",
+      image: "/lovable-uploads/5b898e4e-d9b6-4366-b58f-176fc3c8a9c3.png",
+      rating: 5,
+      text: "Professional management with transparent reporting. Highly recommended!"
+    },
+    {
+      name: "Amit Patel",
+      role: "HNI Client",
+      image: "/lovable-uploads/6e6c47cd-700c-49d4-bfee-85a69bb8353f.png",
+      rating: 5,
+      text: "Best property management service in Hyderabad. Worth every penny!"
+    }
+  ];
+
+  const faqs = [
+    {
+      question: "What is included in property management services?",
+      answer: "Our comprehensive package includes tenant management, rent collection, maintenance & repairs, periodic inspections, legal support, and detailed monthly reporting."
+    },
+    {
+      question: "How do you handle tenant verification?",
+      answer: "We conduct thorough background checks including identity verification, employment verification, credit checks, and reference validation to ensure reliable tenants."
+    },
+    {
+      question: "What are your charges for property management?",
+      answer: "Our charges are transparent and competitive, typically 8-12% of monthly rent depending on services selected. No hidden fees or surprise costs."
+    },
+    {
+      question: "How often do you inspect the property?",
+      answer: "We conduct quarterly inspections with detailed photo/video reports. Emergency inspections are done as needed."
+    },
+    {
+      question: "Do you provide legal support?",
+      answer: "Yes, we handle all legal documentation including rental agreements, renewals, society compliance, and dispute resolution."
+    }
+  ];
+
+  const { toast } = useToast();
+
   useEffect(() => {
     const title = "Property Management Services | Home HNI";
     document.title = title;
@@ -131,6 +172,7 @@ const PropManagement = () => {
       document.head.appendChild(meta);
     }
     meta.setAttribute('content', desc);
+
     let canonical = document.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
     if (!canonical) {
       canonical = document.createElement('link');
@@ -138,20 +180,25 @@ const PropManagement = () => {
       document.head.appendChild(canonical);
     }
     canonical.setAttribute('href', window.location.origin + '/prop-management');
+
     const handleScroll = () => {
       setIsFormSticky(window.scrollY > 100);
     };
+
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-  return <div className="min-h-screen">
+
+  return (
+    <div className="min-h-screen">
       <Marquee />
       <Header />
       
       {/* Hero Section */}
-      <section className="relative pt-28 md:pt-32 pb-20 md:pb-32 px-4 md:px-8 text-white overflow-hidden bg-cover bg-center bg-no-repeat" style={{
-      backgroundImage: "url('/lovable-uploads/fbb0d72f-782e-49f5-bbe1-8afc1314b5f7.png')"
-    }}>
+      <section
+        className="relative pt-28 md:pt-32 pb-20 md:pb-32 px-4 md:px-8 text-white overflow-hidden bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: "url('/lovable-uploads/fbb0d72f-782e-49f5-bbe1-8afc1314b5f7.png')" }}
+      >
         <div className="absolute inset-0 bg-blue-900/80 pointer-events-none" />
 
         <div className="relative z-10 container mx-auto">
@@ -170,20 +217,22 @@ const PropManagement = () => {
             </div>
 
             {/* Right: Form - Sticky on Scroll */}
-            <div className={`lg:justify-self-end transition-all duration-300 ${isFormSticky ? 'fixed top-4 right-4 z-50' : 'relative'}`}>
+            <div className={`lg:justify-self-end transition-all duration-300 ${
+              isFormSticky ? 'fixed top-4 right-4 z-50' : 'relative'
+            }`}>
               <Card className="w-full max-w-md rounded-xl shadow-2xl bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/90 border border-white/20">
                 <CardContent className="p-6">
                   <h3 className="text-xl font-semibold text-foreground">Got a property to be managed?</h3>
                   <p className="text-sm text-muted-foreground mb-4">Just fill up the form & we will take care of the rest</p>
 
-                  <form className="space-y-4" onSubmit={e => {
-                  e.preventDefault();
-                  toast({
-                    title: "Request received",
-                    description: "Our team will reach out shortly."
-                  });
-                  (e.currentTarget as HTMLFormElement).reset();
-                }}>
+                  <form
+                    className="space-y-4"
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      toast({ title: "Request received", description: "Our team will reach out shortly." });
+                      (e.currentTarget as HTMLFormElement).reset();
+                    }}
+                  >
                     <Input id="pm-name" name="name" placeholder="Name" required />
 
                     <div className="flex gap-2">
@@ -367,7 +416,11 @@ const PropManagement = () => {
             </div>
             
             <div className="flex justify-center">
-              <img src="/lovable-uploads/Mobile App Preview.png" alt="Mobile App Preview showing property management features" className="max-w-sm w-full" />
+              <img 
+                src="/lovable-uploads/Mobile App Preview.png" 
+                alt="Mobile App Preview showing property management features" 
+                className="max-w-sm w-full"
+              />
             </div>
           </div>
         </div>
@@ -593,14 +646,20 @@ const PropManagement = () => {
               <div className="space-y-8">
                 <div className="bg-white rounded-lg p-6 shadow-sm">
                   <div className="flex items-center space-x-3 mb-4">
-                    <img src="/lovable-uploads/46a07bb4-9f10-4614-ad52-73dfb2de4f28.png" alt="Brajesh Kumar" className="w-12 h-12 rounded-full object-cover" />
+                    <img 
+                      src="/lovable-uploads/46a07bb4-9f10-4614-ad52-73dfb2de4f28.png" 
+                      alt="Brajesh Kumar"
+                      className="w-12 h-12 rounded-full object-cover"
+                    />
                     <div>
                       <div className="flex items-center space-x-2">
                         <h4 className="font-semibold">BRAJESH KUMAR,UK</h4>
                         <CheckCircle className="w-4 h-4 text-green-500" />
                       </div>
                       <div className="flex">
-                        {[...Array(5)].map((_, i) => <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />)}
+                        {[...Array(5)].map((_, i) => (
+                          <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                        ))}
                         <span className="text-sm text-muted-foreground ml-2">5.0</span>
                       </div>
                     </div>
@@ -612,14 +671,20 @@ const PropManagement = () => {
 
                 <div className="bg-white rounded-lg p-6 shadow-sm">
                   <div className="flex items-center space-x-3 mb-4">
-                    <img src="/lovable-uploads/5b898e4e-d9b6-4366-b58f-176fc3c8a9c3.png" alt="Naveen Sahay" className="w-12 h-12 rounded-full object-cover" />
+                    <img 
+                      src="/lovable-uploads/5b898e4e-d9b6-4366-b58f-176fc3c8a9c3.png" 
+                      alt="Naveen Sahay"
+                      className="w-12 h-12 rounded-full object-cover"
+                    />
                     <div>
                       <div className="flex items-center space-x-2">
                         <h4 className="font-semibold">NAVEEN SAHAY,USA</h4>
                         <CheckCircle className="w-4 h-4 text-green-500" />
                       </div>
                       <div className="flex">
-                        {[...Array(4)].map((_, i) => <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />)}
+                        {[...Array(4)].map((_, i) => (
+                          <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                        ))}
                         <Star className="w-4 h-4 text-gray-300" />
                         <span className="text-sm text-muted-foreground ml-2">4.5</span>
                       </div>
@@ -646,10 +711,11 @@ const PropManagement = () => {
           </h2>
           
           <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-            {targetAudience.map((audience, index) => <Card key={index} className="text-center hover:shadow-lg transition-shadow">
+            {targetAudience.map((audience, index) => (
+              <Card key={index} className="text-center hover:shadow-lg transition-shadow">
                 <CardContent className="p-8">
                   <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    
+                    <audience.icon className="w-10 h-10 text-blue-600" />
                   </div>
                   <h3 className="text-xl font-semibold text-foreground mb-2">
                     {audience.title}
@@ -658,7 +724,8 @@ const PropManagement = () => {
                     {audience.description}
                   </p>
                 </CardContent>
-              </Card>)}
+              </Card>
+            ))}
           </div>
         </div>
       </section>
@@ -683,15 +750,25 @@ const PropManagement = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {comparisonData.map((item, index) => <tr key={index} className="border-t">
+                      {comparisonData.map((item, index) => (
+                        <tr key={index} className="border-t">
                           <td className="p-4 font-medium">{item.feature}</td>
                           <td className="p-4 text-center">
-                            {item.nobroker ? <CheckCircle className="w-6 h-6 text-green-500 mx-auto" /> : <X className="w-6 h-6 text-red-500 mx-auto" />}
+                            {item.nobroker ? (
+                              <CheckCircle className="w-6 h-6 text-green-500 mx-auto" />
+                            ) : (
+                              <X className="w-6 h-6 text-red-500 mx-auto" />
+                            )}
                           </td>
                           <td className="p-4 text-center">
-                            {item.others ? <CheckCircle className="w-6 h-6 text-green-500 mx-auto" /> : <X className="w-6 h-6 text-red-500 mx-auto" />}
+                            {item.others ? (
+                              <CheckCircle className="w-6 h-6 text-green-500 mx-auto" />
+                            ) : (
+                              <X className="w-6 h-6 text-red-500 mx-auto" />
+                            )}
                           </td>
-                        </tr>)}
+                        </tr>
+                      ))}
                     </tbody>
                   </table>
                 </div>
@@ -702,7 +779,7 @@ const PropManagement = () => {
       </section>
 
       {/* Mobile App Section */}
-      <section className="py-16 px-4 bg-gradient-to-br from-blue-50 to-indigo-100">
+      {/* <section className="py-16 px-4 bg-gradient-to-br from-blue-50 to-indigo-100">
         <div className="container mx-auto">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
@@ -746,41 +823,53 @@ const PropManagement = () => {
             </div>
             
             <div className="flex justify-center">
-              <img src="/lovable-uploads/Mobile App Preview.png" alt="Mobile App Preview" className="max-w-sm w-full" />
+              <img 
+                src="/lovable-uploads/Mobile App Preview.png" 
+                alt="Mobile App Preview" 
+                className="max-w-sm w-full"
+              />
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Testimonials Section */}
-      <section className="py-16 px-4 bg-background">
+      {/* <section className="py-16 px-4 bg-background">
         <div className="container mx-auto">
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-12 text-center">
             What Our Clients Say
           </h2>
           
           <div className="grid md:grid-cols-3 gap-8">
-            {testimonials.map((testimonial, index) => <Card key={index} className="hover:shadow-lg transition-shadow">
+            {testimonials.map((testimonial, index) => (
+              <Card key={index} className="hover:shadow-lg transition-shadow">
                 <CardContent className="p-6">
                   <div className="flex items-center space-x-3 mb-4">
-                    <img src={testimonial.image} alt={testimonial.name} className="w-12 h-12 rounded-full object-cover" />
+                    <img 
+                      src={testimonial.image} 
+                      alt={testimonial.name}
+                      className="w-12 h-12 rounded-full object-cover"
+                    />
                     <div>
                       <h4 className="font-semibold">{testimonial.name}</h4>
                       <p className="text-sm text-muted-foreground">{testimonial.role}</p>
                     </div>
                   </div>
                   <div className="flex mb-3">
-                    {[...Array(testimonial.rating)].map((_, i) => <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />)}
+                    {[...Array(testimonial.rating)].map((_, i) => (
+                      <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                    ))}
                   </div>
                   <p className="text-muted-foreground">{testimonial.text}</p>
                 </CardContent>
-              </Card>)}
+              </Card>
+            ))}
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* FAQ Section */}
-      <section className="py-16 px-4 bg-muted/30">
+      {/* <section className="py-16 px-4 bg-muted/30">
         <div className="container mx-auto">
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-12 text-center">
             Frequently Asked Questions
@@ -788,21 +877,23 @@ const PropManagement = () => {
           
           <div className="max-w-3xl mx-auto">
             <Accordion type="single" collapsible className="w-full">
-              {faqs.map((faq, index) => <AccordionItem key={index} value={`item-${index}`}>
+              {faqs.map((faq, index) => (
+                <AccordionItem key={index} value={`item-${index}`}>
                   <AccordionTrigger className="text-left">
                     {faq.question}
                   </AccordionTrigger>
                   <AccordionContent>
                     {faq.answer}
                   </AccordionContent>
-                </AccordionItem>)}
+                </AccordionItem>
+              ))}
             </Accordion>
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Property Management Info Section */}
-      <section className="py-16 px-4 bg-background">
+      {/* <section className="py-16 px-4 bg-background">
         <div className="container mx-auto">
           <div className="max-w-4xl mx-auto prose prose-lg">
             <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
@@ -830,9 +921,11 @@ const PropManagement = () => {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
 
       <Footer />
-    </div>;
+    </div>
+  );
 };
+
 export default PropManagement;
