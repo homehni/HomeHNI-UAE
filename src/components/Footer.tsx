@@ -118,7 +118,7 @@ const Footer = ({
 
         {/* Services sections */}
         <div className="mb-8">
-          <h3 className="text-lg font-semibold text-gray-900 mb-6">NoBroker services</h3>
+          
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
               <h4 className="font-semibold text-gray-900 mb-4">Buy</h4>
