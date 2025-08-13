@@ -273,28 +273,432 @@ const PropManagement = () => {
       {/* What's in it for you Section */}
       <section className="py-16 px-4 bg-background">
         <div className="container mx-auto">
-          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-12">
-            What's in it for you?
-          </h2>
-          
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {services.map((service, index) => (
-              <div key={index} className="flex items-start space-x-4">
-                <div className="flex-shrink-0">
-                  <div className="w-12 h-12 bg-blue-50 rounded-lg flex items-center justify-center">
-                    <service.icon className="w-6 h-6 text-blue-600" />
+          <div className="grid lg:grid-cols-2 gap-16 items-start">
+            <div className="max-w-3xl">
+              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-12">
+                What's in it for you?
+              </h2>
+              
+              <div className="grid md:grid-cols-2 gap-8">
+                <div className="space-y-6">
+                  <div className="flex items-start space-x-4">
+                    <div className="flex-shrink-0 w-16 h-16 bg-blue-50 rounded-lg flex items-center justify-center">
+                      <Building2 className="w-8 h-8 text-blue-600" />
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-semibold text-blue-600 mb-2">
+                        Premium Property Listing & Promotion
+                      </h3>
+                      <p className="text-sm text-muted-foreground">
+                        Boost your property's visibility by 3x with targeted, high-quality tenant reach
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start space-x-4">
+                    <div className="flex-shrink-0 w-16 h-16 bg-blue-50 rounded-lg flex items-center justify-center">
+                      <Users className="w-8 h-8 text-blue-600" />
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-semibold text-blue-600 mb-2">
+                        Tenant Background Verification
+                      </h3>
+                      <p className="text-sm text-muted-foreground">
+                        Get thorough tenant background checks for secure and reliable occupancy
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start space-x-4">
+                    <div className="flex-shrink-0 w-16 h-16 bg-blue-50 rounded-lg flex items-center justify-center">
+                      <Camera className="w-8 h-8 text-blue-600" />
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-semibold text-blue-600 mb-2">
+                        Periodic Home Inspection
+                      </h3>
+                      <p className="text-sm text-muted-foreground">
+                        Maintain your property's value with scheduled, professional inspections
+                      </p>
+                    </div>
                   </div>
                 </div>
+
+                <div className="space-y-6">
+                  <div className="flex items-start space-x-4">
+                    <div className="flex-shrink-0 w-16 h-16 bg-blue-50 rounded-lg flex items-center justify-center">
+                      <Clock className="w-8 h-8 text-blue-600" />
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-semibold text-blue-600 mb-2">
+                        Lifetime Tenant Search
+                      </h3>
+                      <p className="text-sm text-muted-foreground">
+                        Enjoy unlimited tenant searches at a negligible cost
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start space-x-4">
+                    <div className="flex-shrink-0 w-16 h-16 bg-blue-50 rounded-lg flex items-center justify-center">
+                      <FileText className="w-8 h-8 text-blue-600" />
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-semibold text-blue-600 mb-2">
+                        Free Rental Agreement
+                      </h3>
+                      <p className="text-sm text-muted-foreground">
+                        Get an e-stamped rental agreement delivered to your doorstep
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start space-x-4">
+                    <div className="flex-shrink-0 w-16 h-16 bg-blue-50 rounded-lg flex items-center justify-center">
+                      <Wrench className="w-8 h-8 text-blue-600" />
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-semibold text-blue-600 mb-2">
+                        On-demand Repair & Maintenance Services
+                      </h3>
+                      <p className="text-sm text-muted-foreground">
+                        Quick, expert repair and maintenance services at your convenience
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            {/* Right side spacing for sticky form */}
+            <div className="hidden lg:block"></div>
+          </div>
+        </div>
+      </section>
+
+      {/* Mobile App Section */}
+      <section className="py-16 px-4 bg-gradient-to-br from-blue-50 to-indigo-100">
+        <div className="container mx-auto">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            <div className="max-w-2xl">
+              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-6">
+                Leave the stress behind!
+              </h2>
+              <p className="text-lg text-muted-foreground mb-8">
+                Manage your property seamlessly with <strong>NoBroker App</strong>
+              </p>
+              
+              <div className="space-y-4 mb-8">
+                <div className="flex items-center space-x-3">
+                  <CheckCircle className="w-5 h-5 text-green-500" />
+                  <span>Access a detailed record of all your payments</span>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <CheckCircle className="w-5 h-5 text-green-500" />
+                  <span>Instantly connect with your dedicated Relationship Manager</span>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <CheckCircle className="w-5 h-5 text-green-500" />
+                  <span>Raise service tickets for fast and efficient support</span>
+                </div>
+              </div>
+
+              <div className="flex space-x-4">
+                <Button className="flex items-center space-x-2">
+                  <Download className="w-4 h-4" />
+                  <span>Download for iOS</span>
+                </Button>
+                <Button variant="outline" className="flex items-center space-x-2">
+                  <Download className="w-4 h-4" />
+                  <span>Download for Android</span>
+                </Button>
+              </div>
+            </div>
+            
+            <div className="flex justify-center">
+              <img 
+                src="/lovable-uploads/Mobile App Preview.png" 
+                alt="Mobile App Preview showing property management features" 
+                className="max-w-sm w-full"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Service Tags Section */}
+      <section className="py-16 px-4 bg-background">
+        <div className="container mx-auto">
+          <div className="grid lg:grid-cols-2 gap-16 items-start">
+            <div className="max-w-3xl">
+              <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-8">
+                Property Management Services
+              </h2>
+              
+              <div className="space-y-6 mb-8">
+                <div className="flex flex-wrap gap-3">
+                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Property Management in India</span>
+                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Property Management in Bangalore</span>
+                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Property Management in Mumbai</span>
+                </div>
+                <div className="flex flex-wrap gap-3">
+                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Property Management in Pune</span>
+                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Property Management in Delhi</span>
+                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Property Management in Noida</span>
+                </div>
+                <div className="flex flex-wrap gap-3">
+                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Property Management in Gurgaon</span>
+                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Property Management in Chennai</span>
+                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Property Management in Navi Mumbai</span>
+                </div>
+                <div className="flex flex-wrap gap-3">
+                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Rent Collection Online</span>
+                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Rental Property Management</span>
+                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Rental Property Management in Bangalore</span>
+                </div>
+                <div className="flex flex-wrap gap-3">
+                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Tenant Management</span>
+                </div>
+              </div>
+
+              <h3 className="text-2xl md:text-3xl font-bold text-foreground mb-6">
+                Property Maintenance Services
+              </h3>
+              
+              <div className="space-y-3 mb-8">
+                <div className="flex flex-wrap gap-3">
+                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Property Maintenance</span>
+                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Property Maintenance in Bangalore</span>
+                </div>
+              </div>
+
+              <h3 className="text-2xl md:text-3xl font-bold text-foreground mb-6">
+                Property Inspection Services
+              </h3>
+              
+              <div className="space-y-3">
+                <div className="flex flex-wrap gap-3">
+                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Property Inspection</span>
+                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Commercial Property Inspection Services</span>
+                </div>
+                <div className="flex flex-wrap gap-3">
+                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Drone Property Inspection Services</span>
+                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Home Property Inspection</span>
+                </div>
+                <div className="flex flex-wrap gap-3">
+                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Thermal Imaging Property Inspection</span>
+                </div>
+              </div>
+            </div>
+            
+            {/* Right side spacing for sticky form */}
+            <div className="hidden lg:block"></div>
+          </div>
+        </div>
+      </section>
+
+      {/* Property Management Info Section */}
+      <section className="py-16 px-4 bg-muted/30">
+        <div className="container mx-auto">
+          <div className="grid lg:grid-cols-2 gap-16 items-start">
+            <div className="max-w-3xl">
+              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
+                Property Management in Hyderabad
+              </h2>
+              <div className="text-muted-foreground space-y-4 text-sm leading-relaxed">
+                <p>
+                  Property management services in Hyderabad have become a must for property owners who want to 
+                  manage their real estate investments efficiently. NoBroker, a trusted name in the industry, offers 
+                  comprehensive property management solutions tailored to Hyderabad's unique needs.
+                </p>
+                <p>
+                  From finding reliable tenants to handling maintenance, rent collection, and legal support, NoBroker 
+                  ensures that your property is well-managed without any hassles. Whether you own a residential or 
+                  commercial property, their professional services help you save time, reduce stress, and get maximum...
+                </p>
+                <Button variant="link" className="p-0 h-auto text-teal-600 hover:text-teal-700">
+                  Read More
+                </Button>
+              </div>
+            </div>
+            
+            {/* Right side spacing for sticky form */}
+            <div className="hidden lg:block"></div>
+          </div>
+        </div>
+      </section>
+
+      {/* Stats Section */}
+      <section className="py-16 px-4 bg-slate-900 text-white">
+        <div className="container mx-auto">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            <div className="max-w-3xl">
+              <div className="grid md:grid-cols-3 gap-8 text-center">
                 <div>
-                  <h3 className="text-lg font-semibold text-foreground mb-2">
-                    {service.title}
-                  </h3>
-                  <p className="text-muted-foreground">
-                    {service.description}
+                  <div className="w-16 h-16 bg-yellow-400 rounded-lg flex items-center justify-center mx-auto mb-4">
+                    <Building2 className="w-8 h-8 text-slate-900" />
+                  </div>
+                  <div className="text-3xl font-bold mb-2">10,000+</div>
+                  <div className="text-white/80">Properties Managed</div>
+                </div>
+                <div>
+                  <div className="w-16 h-16 bg-yellow-400 rounded-lg flex items-center justify-center mx-auto mb-4">
+                    <Users className="w-8 h-8 text-slate-900" />
+                  </div>
+                  <div className="text-3xl font-bold mb-2">5,000+</div>
+                  <div className="text-white/80">NRI Property Owners</div>
+                </div>
+                <div>
+                  <div className="w-16 h-16 bg-yellow-400 rounded-lg flex items-center justify-center mx-auto mb-4">
+                    <Globe className="w-8 h-8 text-slate-900" />
+                  </div>
+                  <div className="text-3xl font-bold mb-2">50+</div>
+                  <div className="text-white/80">Countries Served</div>
+                </div>
+              </div>
+            </div>
+            
+            {/* Right side spacing for sticky form */}
+            <div className="hidden lg:block"></div>
+          </div>
+        </div>
+      </section>
+
+      {/* Comparison Table Section */}
+      <section className="py-16 px-4 bg-background">
+        <div className="container mx-auto">
+          <div className="grid lg:grid-cols-2 gap-16 items-start">
+            <div className="max-w-3xl">
+              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-12">
+                NoBroker vs Others: What makes us better?
+              </h2>
+              
+              <Card className="overflow-hidden">
+                <CardContent className="p-0">
+                  <div className="overflow-x-auto">
+                    <table className="w-full">
+                      <thead>
+                        <tr className="bg-slate-900 text-white">
+                          <th className="text-left p-4 font-semibold">Services</th>
+                          <th className="text-center p-4 font-semibold">
+                            <div className="flex items-center justify-center space-x-2">
+                              <div className="w-6 h-6 bg-red-500 rounded-full flex items-center justify-center">
+                                <span className="text-white text-xs font-bold">NB</span>
+                              </div>
+                              <span>NoBroker.com</span>
+                            </div>
+                          </th>
+                          <th className="text-center p-4 font-semibold">
+                            Other Property Management Services in India
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr className="border-t bg-muted/30">
+                          <td className="p-4 font-medium">Professional Photoshoot of the Property</td>
+                          <td className="p-4 text-center">
+                            <CheckCircle className="w-6 h-6 text-green-500 mx-auto" />
+                          </td>
+                          <td className="p-4 text-center">
+                            <X className="w-6 h-6 text-red-500 mx-auto" />
+                          </td>
+                        </tr>
+                        <tr className="border-t">
+                          <td className="p-4 font-medium">Lifetime Tenant Search</td>
+                          <td className="p-4 text-center">
+                            <CheckCircle className="w-6 h-6 text-green-500 mx-auto" />
+                          </td>
+                          <td className="p-4 text-center">
+                            <X className="w-6 h-6 text-red-500 mx-auto" />
+                          </td>
+                        </tr>
+                        <tr className="border-t bg-muted/30">
+                          <td className="p-4 font-medium">Dedicated Property Manager and FRM</td>
+                          <td className="p-4 text-center">
+                            <CheckCircle className="w-6 h-6 text-green-500 mx-auto" />
+                          </td>
+                          <td className="p-4 text-center">
+                            <X className="w-6 h-6 text-red-500 mx-auto" />
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+            
+            {/* Right side spacing for sticky form */}
+            <div className="hidden lg:block"></div>
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials Section */}
+      <section className="py-16 px-4 bg-muted/30">
+        <div className="container mx-auto">
+          <div className="grid lg:grid-cols-2 gap-16 items-start">
+            <div className="max-w-3xl">
+              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-12">
+                Testimonials
+              </h2>
+              
+              <div className="space-y-8">
+                <div className="bg-white rounded-lg p-6 shadow-sm">
+                  <div className="flex items-center space-x-3 mb-4">
+                    <img 
+                      src="/lovable-uploads/46a07bb4-9f10-4614-ad52-73dfb2de4f28.png" 
+                      alt="Brajesh Kumar"
+                      className="w-12 h-12 rounded-full object-cover"
+                    />
+                    <div>
+                      <div className="flex items-center space-x-2">
+                        <h4 className="font-semibold">BRAJESH KUMAR,UK</h4>
+                        <CheckCircle className="w-4 h-4 text-green-500" />
+                      </div>
+                      <div className="flex">
+                        {[...Array(5)].map((_, i) => (
+                          <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                        ))}
+                        <span className="text-sm text-muted-foreground ml-2">5.0</span>
+                      </div>
+                    </div>
+                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    No broker is truly genie in the bottle when it comes to renting your apartment. I like to say thanks to my relationship manager & Field RMs who helped me close the deal. From tenant sourcing to...
+                  </p>
+                </div>
+
+                <div className="bg-white rounded-lg p-6 shadow-sm">
+                  <div className="flex items-center space-x-3 mb-4">
+                    <img 
+                      src="/lovable-uploads/5b898e4e-d9b6-4366-b58f-176fc3c8a9c3.png" 
+                      alt="Naveen Sahay"
+                      className="w-12 h-12 rounded-full object-cover"
+                    />
+                    <div>
+                      <div className="flex items-center space-x-2">
+                        <h4 className="font-semibold">NAVEEN SAHAY,USA</h4>
+                        <CheckCircle className="w-4 h-4 text-green-500" />
+                      </div>
+                      <div className="flex">
+                        {[...Array(4)].map((_, i) => (
+                          <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                        ))}
+                        <Star className="w-4 h-4 text-gray-300" />
+                        <span className="text-sm text-muted-foreground ml-2">4.5</span>
+                      </div>
+                    </div>
+                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    Really happy with the service! NoBroker rented out my property in less than a month. The tenants were well screened. They complete the needed repairs quickly while being very proactive in...
                   </p>
                 </div>
               </div>
-            ))}
+            </div>
+            
+            {/* Right side spacing for sticky form */}
+            <div className="hidden lg:block"></div>
           </div>
         </div>
       </section>
