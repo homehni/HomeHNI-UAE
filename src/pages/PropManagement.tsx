@@ -630,55 +630,7 @@ const PropManagement = () => {
       
 
       {/* Mobile App Section */}
-      <section className="py-16 px-4 bg-gradient-to-br from-blue-50 to-indigo-100">
-        <div className="container mx-auto">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-6">
-                Leave the stress behind!
-              </h2>
-              <p className="text-lg text-muted-foreground mb-8">
-                Manage your properties on the go with our mobile app. Get real-time updates, 
-                track payments, and stay connected with your property manager.
-              </p>
-              
-              <div className="space-y-4 mb-8">
-                <div className="flex items-center space-x-3">
-                  <CheckCircle className="w-5 h-5 text-green-500" />
-                  <span>Real-time property updates</span>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <CheckCircle className="w-5 h-5 text-green-500" />
-                  <span>Instant payment notifications</span>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <CheckCircle className="w-5 h-5 text-green-500" />
-                  <span>Direct communication with managers</span>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <CheckCircle className="w-5 h-5 text-green-500" />
-                  <span>Monthly reports at your fingertips</span>
-                </div>
-              </div>
-
-              <div className="flex space-x-4">
-                <Button className="flex items-center space-x-2">
-                  <Download className="w-4 h-4" />
-                  <span>Download for iOS</span>
-                </Button>
-                <Button variant="outline" className="flex items-center space-x-2">
-                  <Download className="w-4 h-4" />
-                  <span>Download for Android</span>
-                </Button>
-              </div>
-            </div>
-            
-            <div className="flex justify-center">
-              <img src="/lovable-uploads/Mobile App Preview.png" alt="Mobile App Preview" className="max-w-sm w-full" />
-            </div>
-          </div>
-        </div>
-      </section>
+      
 
       {/* Testimonials Section */}
       
