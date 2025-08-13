@@ -76,9 +76,9 @@ const RealEstateSlider = () => {
           <h2 className="text-3xl font-bold text-foreground mb-4">
             GET STARTED WITH EXPLORING REAL ESTATE OPTIONS
           </h2>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+          {/* <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
             Discover endless possibilities in real estate with our comprehensive solutions
-          </p>
+          </p> */}
         </div>
         
         <div className="relative max-w-6xl mx-auto">
