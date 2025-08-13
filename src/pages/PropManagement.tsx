@@ -648,42 +648,7 @@ const PropManagement = () => {
       </section>
 
       {/* Comparison Table Section */}
-      <section className="py-16 px-4 bg-background">
-        <div className="container mx-auto">
-          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-12 text-center">
-            NoBroker vs Others
-          </h2>
-          
-          <div className="max-w-4xl mx-auto">
-            <Card className="overflow-hidden">
-              <CardContent className="p-0">
-                <div className="overflow-x-auto">
-                  <table className="w-full">
-                    <thead>
-                      <tr className="bg-muted/50">
-                        <th className="text-left p-4 font-semibold">Features</th>
-                        <th className="text-center p-4 font-semibold text-blue-600">NoBroker</th>
-                        <th className="text-center p-4 font-semibold">Others</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {comparisonData.map((item, index) => <tr key={index} className="border-t">
-                          <td className="p-4 font-medium">{item.feature}</td>
-                          <td className="p-4 text-center">
-                            {item.nobroker ? <CheckCircle className="w-6 h-6 text-green-500 mx-auto" /> : <X className="w-6 h-6 text-red-500 mx-auto" />}
-                          </td>
-                          <td className="p-4 text-center">
-                            {item.others ? <CheckCircle className="w-6 h-6 text-green-500 mx-auto" /> : <X className="w-6 h-6 text-red-500 mx-auto" />}
-                          </td>
-                        </tr>)}
-                    </tbody>
-                  </table>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </section>
+      
 
       {/* Mobile App Section */}
       <section className="py-16 px-4 bg-gradient-to-br from-blue-50 to-indigo-100">
