@@ -41,7 +41,7 @@ const Loans = () => {
       <Header />
       
       {/* Hero Section */}
-      <section className="relative py-20 bg-cover bg-center bg-no-repeat" style={{backgroundImage: "url('/lovable-uploads/bd672939-951b-4007-b092-868ec5ac81c4.png')"}}>
+      <section className="relative pt-20 pb-56 md:pt-24 md:pb-72 bg-cover bg-center bg-no-repeat" style={{backgroundImage: "url('/lovable-uploads/bd672939-951b-4007-b092-868ec5ac81c4.png')"}}>
         <div className="absolute inset-0 bg-black/50"></div>
         <div className="container mx-auto text-center px-[19px] py-[20px] relative z-10">
           <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 py-[25px]">
@@ -58,7 +58,7 @@ const Loans = () => {
       </section>
 
       {/* Content with Sticky Enquiry Form */}
-      <section className="relative -mt-20 md:-mt-28">
+      <section className="relative md:-mt-56 lg:-mt-64">
         <div className="container mx-auto px-4 grid md:grid-cols-3 gap-6">
           {/* Main content */}
           <div className="md:col-span-2 space-y-16">
@@ -292,7 +292,7 @@ const Loans = () => {
 
           {/* Sticky Enquiry Form */}
           <aside className="md:col-span-1">
-            <div className="md:sticky md:top-24">
+            <div className="md:sticky md:top-24 relative z-10">
               <Card className="shadow-xl border bg-card">
                 <CardHeader>
                   <CardTitle className="text-xl">Got a property to be financed?</CardTitle>
