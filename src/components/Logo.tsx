@@ -13,7 +13,7 @@ const Logo = ({
   };
 
   // Use the new provided logo for all variants
-  const logoSrc = "/lovable-uploads/8c5f2ada-c5ed-4cd4-a5c2-61448821a4aa.png";
+  const logoSrc = "/lovable-uploads/main logo final.png";
 
   return (
     <div className="flex items-center">
