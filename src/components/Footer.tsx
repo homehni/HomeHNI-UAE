@@ -87,7 +87,94 @@ const Footer = ({
     rent: ["Rental Agreement", "Pay Rent", "Refer and Earn", "Packers and Movers", "Property Management in India", "Painting and Cleaning", "Rental Questions", "Rent Calculator", "Property Rental Guide", "Landlord Guide", "Tenant Guide", "Packers and Movers Guide", "Packers and Movers queries", "Home Services", "Home Services Queries", "Painting Services", "Home Painting Guide", "Home Painting Queries", "Cleaning Services", "Kitchen Cleaning Services", "Sofa Cleaning Services", "Bathroom Cleaning Services", "Full House Cleaning Services", "Home Cleaning Guide"]
   };
   return <footer className="bg-white text-gray-700 border-t">
-      
+      <div className="container mx-auto px-4 py-8">
+        {/* Main Footer Content */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-8">
+          {/* Company Info */}
+          <div className="lg:col-span-1">
+            <div className="flex items-center mb-4">
+              <img src="/lovable-uploads/main-logo-final.png" alt="Home HNI" className="h-8 w-auto" />
+            </div>
+            <p className="text-sm text-gray-600 mb-4">
+              Making real estate simple for everyone. No brokers, no hassle.
+            </p>
+            <div className="flex space-x-4">
+              <Facebook className="h-5 w-5 text-gray-500 hover:text-brand-red cursor-pointer" />
+              <Twitter className="h-5 w-5 text-gray-500 hover:text-brand-red cursor-pointer" />
+              <Instagram className="h-5 w-5 text-gray-500 hover:text-brand-red cursor-pointer" />
+              <Linkedin className="h-5 w-5 text-gray-500 hover:text-brand-red cursor-pointer" />
+            </div>
+          </div>
+
+          {/* Quick Links */}
+          <div>
+            <h3 className="font-semibold text-gray-900 mb-4">Quick Links</h3>
+            <ul className="space-y-2">
+              <li><Link to="/about-us" className="text-sm hover:text-brand-red">About Us</Link></li>
+              <li><Link to="/contact-us" className="text-sm hover:text-brand-red">Contact Us</Link></li>
+              <li><Link to="/careers" className="text-sm hover:text-brand-red">Careers</Link></li>
+              <li><Link to="/testimonials" className="text-sm hover:text-brand-red">Testimonials</Link></li>
+            </ul>
+          </div>
+
+          {/* Services */}
+          <div>
+            <h3 className="font-semibold text-gray-900 mb-4">Services</h3>
+            <ul className="space-y-2">
+              <li><button onClick={handlePostPropertyClick} className="text-sm hover:text-brand-red text-left">Post Property</button></li>
+              <li><button onClick={handleFindNowClick} className="text-sm hover:text-brand-red text-left">Find Properties</button></li>
+              <li><Link to="/legal-services" className="text-sm hover:text-brand-red">Legal Services</Link></li>
+              <li><Link to="/prop-management" className="text-sm hover:text-brand-red">Property Management</Link></li>
+            </ul>
+          </div>
+
+          {/* Legal */}
+          <div>
+            <h3 className="font-semibold text-gray-900 mb-4">Legal</h3>
+            <ul className="space-y-2">
+              <li><Link to="/terms-and-conditions" className="text-sm hover:text-brand-red">Terms & Conditions</Link></li>
+              <li><Link to="/privacy-policy" className="text-sm hover:text-brand-red">Privacy Policy</Link></li>
+              <li><Link to="/grievance-redressal" className="text-sm hover:text-brand-red">Grievance Redressal</Link></li>
+              <li><Link to="/report-problem" className="text-sm hover:text-brand-red">Report Problem</Link></li>
+            </ul>
+          </div>
+
+          {/* Contact Info */}
+          <div>
+            <h3 className="font-semibold text-gray-900 mb-4">Contact Us</h3>
+            <div className="space-y-3">
+              <div className="flex items-start">
+                <MapPin className="h-4 w-4 text-gray-500 mt-1 mr-2" />
+                <p className="text-sm">
+                  Hyderabad, Telangana, India
+                </p>
+              </div>
+              <div className="flex items-center">
+                <Phone className="h-4 w-4 text-gray-500 mr-2" />
+                <p className="text-sm">+91 90360 15272</p>
+              </div>
+              <div className="flex items-center">
+                <Mail className="h-4 w-4 text-gray-500 mr-2" />
+                <p className="text-sm">support@homehni.com</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Bottom Bar */}
+        <div className="border-t pt-6">
+          <div className="flex flex-col md:flex-row justify-between items-center">
+            <p className="text-sm text-gray-500">
+              © 2024 Home HNI. All rights reserved.
+            </p>
+            <div className="flex space-x-6 mt-4 md:mt-0">
+              <Link to="/faq" className="text-sm text-gray-500 hover:text-brand-red">FAQ</Link>
+              <Link to="/safety" className="text-sm text-gray-500 hover:text-brand-red">Safety</Link>
+              <Link to="/blog" className="text-sm text-gray-500 hover:text-brand-red">Blog</Link>
+            </div>
+          </div>
+        </div>
+      </div>
     </footer>;
 };
 export default Footer;
