@@ -403,7 +403,7 @@ const PropManagement = () => {
                               <div className="w-6 h-6 bg-red-500 rounded-full flex items-center justify-center">
                                 <span className="text-white text-xs font-bold">NB</span>
                               </div>
-                              <span>H.com</span>
+                              <span>NoBroker.com</span>
                             </div>
                           </th>
                           <th className="text-center p-4 font-semibold">
