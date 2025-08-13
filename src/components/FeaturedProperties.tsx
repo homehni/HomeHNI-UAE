@@ -184,8 +184,8 @@ const FeaturedProperties = ({
           </div>
         </Card>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 lg:gap-6 justify-items-center">
-          {filtered.map(property => <PropertyCard key={property.id} {...property} size="compact" />)}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {filtered.map(property => <PropertyCard key={property.id} {...property} />)}
         </div>
 
         <div className="text-center mt-12">

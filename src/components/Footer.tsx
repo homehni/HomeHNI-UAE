@@ -88,91 +88,119 @@ const Footer = ({
   };
   return <footer className="bg-white text-gray-700 border-t">
       <div className="container mx-auto px-4 py-8">
-        {/* Main Footer Content */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-8">
-          {/* Company Info */}
-          <div className="lg:col-span-1">
-            <div className="flex items-center mb-4">
-              <img src="/lovable-uploads/main-logo-final.png" alt="Home HNI" className="h-8 w-auto" />
-            </div>
-            <p className="text-sm text-gray-600 mb-4">
-              Making real estate simple for everyone. No brokers, no hassle.
-            </p>
-            <div className="flex space-x-4">
-              <Facebook className="h-5 w-5 text-gray-500 hover:text-brand-red cursor-pointer" />
-              <Twitter className="h-5 w-5 text-gray-500 hover:text-brand-red cursor-pointer" />
-              <Instagram className="h-5 w-5 text-gray-500 hover:text-brand-red cursor-pointer" />
-              <Linkedin className="h-5 w-5 text-gray-500 hover:text-brand-red cursor-pointer" />
-            </div>
-          </div>
+        {/* Property listings grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6 mb-8">
+          {propertyListings.map((section, index) => <div key={index}>
+              <h4 className="font-semibold text-gray-900 mb-3 text-sm">{section.title}</h4>
+              <ul className="space-y-1">
+                {section.links.map((link, linkIndex) => <li key={linkIndex}>
+                    <a href="#" className="text-xs text-gray-600 hover:text-brand-red transition-colors leading-relaxed">
+                      {link}
+                    </a>
+                  </li>)}
+              </ul>
+            </div>)}
+        </div>
 
-          {/* Quick Links */}
-          <div>
-            <h3 className="font-semibold text-gray-900 mb-4">Quick Links</h3>
-            <ul className="space-y-2">
-              <li><Link to="/about-us" className="text-sm hover:text-brand-red">About Us</Link></li>
-              <li><Link to="/contact-us" className="text-sm hover:text-brand-red">Contact Us</Link></li>
-              <li><Link to="/careers" className="text-sm hover:text-brand-red">Careers</Link></li>
-              <li><Link to="/testimonials" className="text-sm hover:text-brand-red">Testimonials</Link></li>
-            </ul>
-          </div>
+        {/* Additional city listings */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          {additionalCities.map((section, index) => <div key={index}>
+              <h4 className="font-semibold text-gray-900 mb-3 text-sm">{section.title}</h4>
+              <ul className="space-y-1">
+                {section.links.map((link, linkIndex) => <li key={linkIndex}>
+                    <a href="#" className="text-xs text-gray-600 hover:text-brand-red transition-colors leading-relaxed">
+                      {link}
+                    </a>
+                  </li>)}
+              </ul>
+            </div>)}
+        </div>
 
-          {/* Services */}
-          <div>
-            <h3 className="font-semibold text-gray-900 mb-4">Services</h3>
-            <ul className="space-y-2">
-              <li><button onClick={handlePostPropertyClick} className="text-sm hover:text-brand-red text-left">Post Property</button></li>
-              <li><button onClick={handleFindNowClick} className="text-sm hover:text-brand-red text-left">Find Properties</button></li>
-              <li><Link to="/legal-services" className="text-sm hover:text-brand-red">Legal Services</Link></li>
-              <li><Link to="/prop-management" className="text-sm hover:text-brand-red">Property Management</Link></li>
-            </ul>
-          </div>
-
-          {/* Legal */}
-          <div>
-            <h3 className="font-semibold text-gray-900 mb-4">Legal</h3>
-            <ul className="space-y-2">
-              <li><Link to="/terms-and-conditions" className="text-sm hover:text-brand-red">Terms & Conditions</Link></li>
-              <li><Link to="/privacy-policy" className="text-sm hover:text-brand-red">Privacy Policy</Link></li>
-              <li><Link to="/grievance-redressal" className="text-sm hover:text-brand-red">Grievance Redressal</Link></li>
-              <li><Link to="/report-problem" className="text-sm hover:text-brand-red">Report Problem</Link></li>
-            </ul>
-          </div>
-
-          {/* Contact Info */}
-          <div>
-            <h3 className="font-semibold text-gray-900 mb-4">Contact Us</h3>
-            <div className="space-y-3">
-              <div className="flex items-start">
-                <MapPin className="h-4 w-4 text-gray-500 mt-1 mr-2" />
-                <p className="text-sm">
-                  Hyderabad, Telangana, India
-                </p>
+        {/* Services sections */}
+        <div className="mb-8">
+          <h3 className="text-lg font-semibold text-gray-900 mb-6">NoBroker services</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div>
+              <h4 className="font-semibold text-gray-900 mb-4">Buy</h4>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+                {services.buy.map((service, index) => <a key={index} href="#" className="text-xs text-gray-600 hover:text-brand-red transition-colors">
+                    {service}
+                  </a>)}
               </div>
-              <div className="flex items-center">
-                <Phone className="h-4 w-4 text-gray-500 mr-2" />
-                <p className="text-sm">+91 90360 15272</p>
-              </div>
-              <div className="flex items-center">
-                <Mail className="h-4 w-4 text-gray-500 mr-2" />
-                <p className="text-sm">support@homehni.com</p>
+            </div>
+            <div>
+              <h4 className="font-semibold text-gray-900 mb-4">Rent</h4>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+                {services.rent.map((service, index) => <a key={index} href="#" className="text-xs text-gray-600 hover:text-brand-red transition-colors">
+                    {service}
+                  </a>)}
               </div>
             </div>
           </div>
         </div>
 
-        {/* Bottom Bar */}
-        <div className="border-t pt-6">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <p className="text-sm text-gray-500">
-              © 2024 Home HNI. All rights reserved.
-            </p>
-            <div className="flex space-x-6 mt-4 md:mt-0">
-              <Link to="/faq" className="text-sm text-gray-500 hover:text-brand-red">FAQ</Link>
-              <Link to="/safety" className="text-sm text-gray-500 hover:text-brand-red">Safety</Link>
-              <Link to="/blog" className="text-sm text-gray-500 hover:text-brand-red">Blog</Link>
-            </div>
+        {/* Call-to-action sections */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8 py-8 bg-gray-50 px-6 rounded-lg">
+          <div className="text-center">
+            <h4 className="font-semibold text-gray-900 mb-2">Find Property</h4>
+            <p className="text-sm text-gray-600 mb-4">Select from thousands of options, without brokerage.</p>
+            <button onClick={handleFindNowClick} className="bg-gray-800 text-white px-6 py-2 rounded text-sm hover:bg-gray-700 transition-colors">
+              Find Now
+            </button>
           </div>
+          <div className="text-center">
+            <h4 className="font-semibold text-gray-900 mb-2">List Your Property</h4>
+            <p className="text-sm text-gray-600 mb-4">For Free, Without any brokerage.</p>
+            <button onClick={handlePostPropertyClick} className="bg-gray-800 text-white px-6 py-2 rounded text-sm hover:bg-gray-700 transition-colors">
+              Free Posting
+            </button>
+          </div>
+        </div>
+
+        {/* Footer links and social media */}
+        <div className="border-t border-gray-200 pt-6">
+          <div className="flex flex-wrap justify-center gap-6 mb-6 text-sm">
+            <Link to="/about?tab=about" className="text-gray-600 hover:text-brand-red transition-colors">About Us</Link>
+            <Link to="/careers" className="text-gray-600 hover:text-brand-red transition-colors">Careers</Link>
+            <Link to="/about?tab=contact" className="text-gray-600 hover:text-brand-red transition-colors">Contact Us</Link>
+            <Link to="/terms-and-conditions" className="text-gray-600 hover:text-brand-red transition-colors">Terms & Conditions</Link>
+            <Link to="/privacy-policy" className="text-gray-600 hover:text-brand-red transition-colors">Privacy Policy</Link>
+            {/* <Link to="/testimonials" className="text-gray-600 hover:text-brand-red transition-colors">Testimonials</Link> */}
+            <a href="/sitemap.xml" className="text-gray-600 hover:text-brand-red transition-colors">Sitemap</a>
+            <Link to="/about?tab=faq" className="text-gray-600 hover:text-brand-red transition-colors">FAQs</Link>
+          </div>
+
+          {/* App store badges */}
+          <div className="flex justify-center gap-4 mb-6">
+            <img src="/lovable-uploads/8b28a8cb-02f0-4e86-9ba6-1845c4372e1a.png" alt="Google Play and App Store" className="h-12" />
+          </div>
+
+          {/* Social media icons */}
+          <div className="flex justify-center space-x-4 mb-6">
+            <a href="https://www.facebook.com/profile.php?id=61578319572154" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center transition-all hover:bg-gray-400 hover:scale-110">
+              <Facebook className="w-5 h-5 text-gray-700" />
+            </a>
+            <a href="https://x.com/homehni8" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center transition-all hover:bg-gray-400 hover:scale-110">
+              <Twitter className="w-5 h-5 text-gray-700" />
+            </a>
+            <a href="https://www.instagram.com/homehni/" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center transition-all hover:bg-gray-400 hover:scale-110">
+              <Instagram className="w-5 h-5 text-gray-700" />
+            </a>
+            <a href="https://www.linkedin.com/in/home-hni-622605376/" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center transition-all hover:bg-gray-400 hover:scale-110">
+              <Linkedin className="w-5 h-5 text-gray-700" />
+            </a>
+          </div>
+
+          {/* Copyright */}
+          <div className="text-center text-xs text-gray-500">
+            © 2025 HomeHNI Private Limited | All Rights Reserved
+          </div>
+
+
+           <div className="text-center text-xs text-gray-500 py-[7px]">
+            A Product of Ranazonai Technologies, Built with 🤍 and Dedication.
+          </div>
+          
         </div>
       </div>
     </footer>;

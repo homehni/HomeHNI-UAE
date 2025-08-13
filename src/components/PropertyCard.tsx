@@ -2,8 +2,6 @@
 import { Heart, MapPin, Bed, Bath, Square, Phone } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { cn } from '@/lib/utils';
-import { RECOMMENDED_CARD_WIDTH, RECOMMENDED_IMAGE_HEIGHT } from '@/constants/ui';
 import { useNavigate } from 'react-router-dom';
 
 interface PropertyCardProps {
@@ -17,7 +15,6 @@ interface PropertyCardProps {
   image: string;
   propertyType: string;
   isNew?: boolean;
-  size?: 'default' | 'compact';
 }
 
 const PropertyCard = ({
@@ -30,8 +27,7 @@ const PropertyCard = ({
   bathrooms,
   image,
   propertyType,
-  isNew = false,
-  size = 'default'
+  isNew = false
 }: PropertyCardProps) => {
   const navigate = useNavigate();
 
@@ -105,12 +101,12 @@ const PropertyCard = ({
   };
 
   return (
-    <Card className={cn("overflow-hidden hover:shadow-lg transition-shadow duration-300 group", size === 'compact' ? RECOMMENDED_CARD_WIDTH : undefined)}>
+    <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-300 group">
       <div className="relative">
         <img
           src={`https://images.unsplash.com/${image}?auto=format&fit=crop&w=400&q=80`}
           alt={title}
-          className={cn("w-full object-cover group-hover:scale-105 transition-transform duration-300", size === 'compact' ? RECOMMENDED_IMAGE_HEIGHT : 'h-48')}
+          className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
         />
         <Button
           variant="ghost"
@@ -130,22 +126,18 @@ const PropertyCard = ({
       </div>
       
       <CardContent className="p-4">
-        <div className={cn(size === 'compact' ? 'min-h-28' : undefined)}>
-          <h3 className="font-semibold text-lg mb-2 line-clamp-2">{title}</h3>
-          
-          <div className="flex items-center text-gray-600 mb-2">
-            <MapPin size={14} className="mr-1" />
-            <span className="text-sm line-clamp-1">{location}</span>
-          </div>
+        <h3 className="font-semibold text-lg mb-2 line-clamp-2">{title}</h3>
         
-        {/*
+        <div className="flex items-center text-gray-600 mb-2">
+          <MapPin size={14} className="mr-1" />
+          <span className="text-sm">{location}</span>
+        </div>
+        
         <div className="flex justify-between items-center mb-3">
           <div className="text-2xl font-bold text-brand-red">{price}</div>
           <div className="text-sm text-gray-600">{area}</div>
         </div>
-        */}
         
-        {/*
         <div className="flex items-center space-x-4 mb-4 text-gray-600">
           <div className="flex items-center">
             <Bed size={16} className="mr-1" />
@@ -160,22 +152,13 @@ const PropertyCard = ({
             <span className="text-sm">{area}</span>
           </div>
         </div>
-        */}
-        </div>
-        <div className={cn("flex", size === 'compact' ? 'flex-col space-y-2' : 'flex-row space-x-2')}>
-          <Button
-            variant="outline"
-            size="sm"
-            className={cn(size === 'compact' ? 'w-full' : 'flex-1')}
-          >
+        
+        <div className="flex space-x-2">
+          <Button variant="outline" size="sm" className="flex-1">
             <Phone size={14} className="mr-1" />
             Contact
           </Button>
-          <Button
-            size="sm"
-            className={cn(size === 'compact' ? 'w-full' : 'flex-1', 'bg-brand-maroon hover:bg-brand-maroon-dark')}
-            onClick={() => navigate(`/property/${id}`, { state: propertyForPage })}
-          >
+          <Button size="sm" className="flex-1 bg-brand-maroon hover:bg-brand-maroon-dark" onClick={() => navigate(`/property/${id}`, { state: propertyForPage })}>
             View Details
           </Button>
         </div>

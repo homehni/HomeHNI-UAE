@@ -1,12 +1,20 @@
-import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
-import { useToast } from "@/hooks/use-toast";
 import { 
-  Building2, Users, CreditCard, Wrench, Camera, FileText, Sparkles, MapPin, Crown, TrendingUp, Clock, CheckCircle, Shield, Star 
+  Building2, 
+  Users, 
+  CreditCard, 
+  Wrench, 
+  Camera, 
+  FileText, 
+  Sparkles, 
+  MapPin, 
+  Crown, 
+  TrendingUp, 
+  Clock, 
+  CheckCircle, 
+  Shield, 
+  Star 
 } from "lucide-react";
 import Marquee from "@/components/Marquee";
 import Header from "@/components/Header";
@@ -97,217 +105,35 @@ const PropertyManagement = () => {
     }
   ];
 
-  const { toast } = useToast();
-
-  useEffect(() => {
-    const title = "Property Management Services | Home HNI";
-    document.title = title;
-    const desc = "End-to-end property management for NRIs & HNIs: tenant search, rent collection, maintenance, and inspections.";
-    let meta = document.querySelector('meta[name="description"]');
-    if (!meta) {
-      meta = document.createElement('meta');
-      meta.setAttribute('name', 'description');
-      document.head.appendChild(meta);
-    }
-    meta.setAttribute('content', desc);
-
-    let canonical = document.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
-    if (!canonical) {
-      canonical = document.createElement('link');
-      canonical.setAttribute('rel', 'canonical');
-      document.head.appendChild(canonical);
-    }
-    canonical.setAttribute('href', window.location.origin + '/property-management');
-  }, []);
-
   return (
     <div className="min-h-screen">
       <Marquee />
       <Header />
       
 {/* Hero Section */}
-<section
-  className="relative pt-28 md:pt-32 pb-10 md:pb-20 px-4 md:px-8 text-white overflow-hidden bg-cover bg-center bg-no-repeat"
-  style={{ backgroundImage: "url('/lovable-uploads/fbb0d72f-782e-49f5-bbe1-8afc1314b5f7.png')" }}
->
-  <div className="absolute inset-0 bg-black/30 pointer-events-none" />
-
-  <div className="relative z-10 container mx-auto">
-    <div className="grid lg:grid-cols-2 gap-8 items-start">
-      {/* Left: Copy */}
-      <div className="max-w-2xl">
-        <h1 className="text-4xl md:text-5xl font-bold mb-4 leading-tight">
-          Comprehensive Property Management Services
-          <br className="hidden md:block" />
-          <span className="block">in Hyderabad</span>
-        </h1>
-        <p className="text-lg md:text-xl text-white/90">
-          From securing verified tenants to regular property maintenance, we handle
-          everything for you.
-        </p>
-      </div>
-
-      {/* Right: Form */}
-      <div className="lg:justify-self-end">
-        <Card className="w-full max-w-md rounded-xl shadow-2xl bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/90 border border-white/20">
-          <CardContent className="p-6">
-            <h3 className="text-xl font-semibold text-foreground">Got a property to be managed?</h3>
-            <p className="text-sm text-muted-foreground mb-4">Just fill up the form & we will take care of the rest</p>
-
-            <form
-              className="space-y-4"
-              onSubmit={(e) => {
-                e.preventDefault();
-                // Minimal handling for now – you can wire this to Supabase later
-                toast({ title: "Request received", description: "Our team will reach out shortly." });
-                (e.currentTarget as HTMLFormElement).reset();
-              }}
-            >
-              <Input id="pm-name" name="name" placeholder="Name" required />
-
-              <div className="flex gap-2">
-                <Select defaultValue="+91" name="countryCode">
-                  <SelectTrigger className="w-28"><SelectValue /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="+91">🇮🇳 +91</SelectItem>
-                    <SelectItem value="+1">🇺🇸 +1</SelectItem>
-                    <SelectItem value="+44">🇬🇧 +44</SelectItem>
-                  </SelectContent>
-                </Select>
-                <Input id="pm-phone" name="phone" type="tel" placeholder="Phone Number" className="flex-1" required />
-              </div>
-
-              <Input id="pm-email" name="email" type="email" placeholder="Email ID" />
-
-              <Select name="city">
-                <SelectTrigger id="pm-city"><SelectValue placeholder="City" /></SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Hyderabad">Hyderabad</SelectItem>
-                  <SelectItem value="Bengaluru">Bengaluru</SelectItem>
-                  <SelectItem value="Mumbai">Mumbai</SelectItem>
-                  <SelectItem value="Pune">Pune</SelectItem>
-                  <SelectItem value="Chennai">Chennai</SelectItem>
-                  <SelectItem value="Delhi NCR">Delhi NCR</SelectItem>
-                </SelectContent>
-              </Select>
-
-              <Button type="submit" className="w-full">Talk to Us Today!</Button>
-            </form>
-          </CardContent>
-        </Card>
-      </div>
+<section className="relative pt-32 pb-20 px-4 md:px-8 text-white overflow-hidden bg-cover bg-center bg-no-repeat" style={{backgroundImage: "url('/lovable-uploads/fbb0d72f-782e-49f5-bbe1-8afc1314b5f7.png')"}}>
+  <div className="absolute inset-0 bg-black/10 pointer-events-none"></div> {/* light overlay */}
+  
+  <div className="relative z-10 container mx-auto text-center">
+    <div className="max-w-4xl mx-auto">
+      <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
+        🏢 Premium Property Management for HNIs & NRIs
+      </h1>
+      <p className="text-xl md:text-2xl mb-8 text-red-100 leading-relaxed">
+        Get complete peace of mind with our expert-managed, tenant-ready, and fully maintained property solutions — ideal for NRIs, landlords, and investors.
+      </p>
+      <Button 
+        size="lg" 
+        className="bg-white text-red-700 hover:bg-gray-100 font-semibold px-8 py-3 text-lg rounded-xl shadow-lg transition duration-300"
+      >
+        Talk to a Property Manager Today
+      </Button>
     </div>
   </div>
 </section>
 
-      {/* What's in it for you Section */}
-      <section className="py-16 px-4 bg-background">
-        <div className="container mx-auto">
-          <div className="text-left mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
-              What's in it for you?
-            </h2>
-          </div>
-          
-          <div className="grid md:grid-cols-2 gap-8 max-w-6xl">
-            <div className="flex items-start space-x-4">
-              <div className="flex-shrink-0">
-                <div className="w-12 h-12 bg-red-50 rounded-lg flex items-center justify-center">
-                  <Building2 className="w-6 h-6 text-red-600" />
-                </div>
-              </div>
-              <div>
-                <h3 className="text-lg font-semibold text-foreground mb-2">
-                  Premium Property Listing & Promotion
-                </h3>
-                <p className="text-muted-foreground">
-                  Boost your property's visibility by 3x with targeted, high-quality tenant reach
-                </p>
-              </div>
-            </div>
 
-            <div className="flex items-start space-x-4">
-              <div className="flex-shrink-0">
-                <div className="w-12 h-12 bg-red-50 rounded-lg flex items-center justify-center">
-                  <Users className="w-6 h-6 text-red-600" />
-                </div>
-              </div>
-              <div>
-                <h3 className="text-lg font-semibold text-foreground mb-2">
-                  Lifetime Tenant Search
-                </h3>
-                <p className="text-muted-foreground">
-                  Enjoy unlimited tenant searches at a negligible cost
-                </p>
-              </div>
-            </div>
 
-            <div className="flex items-start space-x-4">
-              <div className="flex-shrink-0">
-                <div className="w-12 h-12 bg-red-50 rounded-lg flex items-center justify-center">
-                  <Shield className="w-6 h-6 text-red-600" />
-                </div>
-              </div>
-              <div>
-                <h3 className="text-lg font-semibold text-foreground mb-2">
-                  Tenant Background Verification
-                </h3>
-                <p className="text-muted-foreground">
-                  Get thorough tenant background checks for secure and reliable occupancy
-                </p>
-              </div>
-            </div>
-
-            <div className="flex items-start space-x-4">
-              <div className="flex-shrink-0">
-                <div className="w-12 h-12 bg-red-50 rounded-lg flex items-center justify-center">
-                  <FileText className="w-6 h-6 text-red-600" />
-                </div>
-              </div>
-              <div>
-                <h3 className="text-lg font-semibold text-foreground mb-2">
-                  Free Rental Agreement
-                </h3>
-                <p className="text-muted-foreground">
-                  Get an e-stamped rental agreement delivered to your doorstep
-                </p>
-              </div>
-            </div>
-
-            <div className="flex items-start space-x-4">
-              <div className="flex-shrink-0">
-                <div className="w-12 h-12 bg-red-50 rounded-lg flex items-center justify-center">
-                  <Camera className="w-6 h-6 text-red-600" />
-                </div>
-              </div>
-              <div>
-                <h3 className="text-lg font-semibold text-foreground mb-2">
-                  Periodic Home Inspection
-                </h3>
-                <p className="text-muted-foreground">
-                  Maintain your property's value with scheduled, professional inspections
-                </p>
-              </div>
-            </div>
-
-            <div className="flex items-start space-x-4">
-              <div className="flex-shrink-0">
-                <div className="w-12 h-12 bg-red-50 rounded-lg flex items-center justify-center">
-                  <Wrench className="w-6 h-6 text-red-600" />
-                </div>
-              </div>
-              <div>
-                <h3 className="text-lg font-semibold text-foreground mb-2">
-                  On-demand Repair & Maintenance Services
-                </h3>
-                <p className="text-muted-foreground">
-                  Quick, expert repair and maintenance services at your convenience
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* What's Included Section */}
       <section className="py-16 px-4 bg-background">
