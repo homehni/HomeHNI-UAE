@@ -458,9 +458,9 @@ const PropManagement = () => {
       </section>
 
       {/* Comparison Table Section */}
-      <section className="py-8 md:py-16 pr-4 bg-background">
-        <div className="container mx-auto">
-          <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-start">
+      <section className="py-8 md:py-16 px-2 md:px-4 bg-background">
+        <div className="container mx-auto px-0">
+          <div className="grid lg:grid-cols-2 gap-4 lg:gap-8 items-start">
             <div className="w-full">
               <h2 className="text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold text-foreground mb-6 md:mb-8 lg:mb-12">
                 HomeHNI.com vs Others: What makes us better?
