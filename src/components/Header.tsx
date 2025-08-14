@@ -124,20 +124,22 @@ const Header = () => {
                 <Logo variant={isScrolled ? "scrolled" : "default"} />
               </div>
 
-              {/* Location Selector - Always visible */}
-              <Select>
-                <SelectTrigger className={`w-28 sm:w-32 transition-all duration-500 [&>svg]:text-current ${isScrolled ? 'bg-gray-100 text-gray-800 hover:bg-gray-200 border-gray-300' : 'bg-white/20 backdrop-blur-sm text-white border-white/30 hover:bg-white/30'}`}>
-                  <SelectValue placeholder="All India" defaultValue="all-india" />
-                </SelectTrigger>
-                <SelectContent className="bg-white border border-gray-200 shadow-lg z-50">
-                  <SelectItem value="all-india">All India</SelectItem>
-                  <SelectItem value="hyderabad">Hyderabad</SelectItem>
-                  <SelectItem value="mumbai">Mumbai</SelectItem>
-                  <SelectItem value="delhi">Delhi</SelectItem>
-                  <SelectItem value="bangalore">Bangalore</SelectItem>
-                  <SelectItem value="pune">Pune</SelectItem>
-                </SelectContent>
-              </Select>
+              {/* Location Selector - Hidden on Loans page */}
+              {!isLoansPage && (
+                <Select>
+                  <SelectTrigger className={`w-28 sm:w-32 transition-all duration-500 [&>svg]:text-current ${isScrolled ? 'bg-gray-100 text-gray-800 hover:bg-gray-200 border-gray-300' : 'bg-white/20 backdrop-blur-sm text-white border-white/30 hover:bg-white/30'}`}>
+                    <SelectValue placeholder="All India" defaultValue="all-india" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-white border border-gray-200 shadow-lg z-50">
+                    <SelectItem value="all-india">All India</SelectItem>
+                    <SelectItem value="hyderabad">Hyderabad</SelectItem>
+                    <SelectItem value="mumbai">Mumbai</SelectItem>
+                    <SelectItem value="delhi">Delhi</SelectItem>
+                    <SelectItem value="bangalore">Bangalore</SelectItem>
+                    <SelectItem value="pune">Pune</SelectItem>
+                  </SelectContent>
+                </Select>
+              )}
 
               {/* Desktop Navigation Links - Hidden on Loans page */}
               {!isLoansPage && <nav className="hidden lg:flex items-center space-x-5">
