@@ -111,8 +111,9 @@ const Header = () => {
     navigate('/auth');
   };
 
-  // Check if current page is loans page
+  // Check if current page is loans or architects page
   const isLoansPage = location.pathname === '/loans';
+  const isArchitectsPage = location.pathname === '/architects';
   return <>
       <header className={`fixed top-8 left-0 right-0 z-50 transition-all duration-500 ${isScrolled ? 'bg-white/95 backdrop-blur-sm shadow-md' : 'bg-gradient-to-r from-red-800 to-red-700'}`}>
         <div className="w-full px-4 lg:px-6 xl:px-8 pt-[6px]">
@@ -124,8 +125,8 @@ const Header = () => {
                 <Logo variant={isScrolled ? "scrolled" : "default"} />
               </div>
 
-              {/* Location Selector - Hidden on Loans page */}
-              {!isLoansPage && (
+              {/* Location Selector - Hidden on Loans and Architects page */}
+              {!isLoansPage && !isArchitectsPage && (
                 <Select>
                   <SelectTrigger className={`w-28 sm:w-32 transition-all duration-500 [&>svg]:text-current ${isScrolled ? 'bg-gray-100 text-gray-800 hover:bg-gray-200 border-gray-300' : 'bg-white/20 backdrop-blur-sm text-white border-white/30 hover:bg-white/30'}`}>
                     <SelectValue placeholder="All India" defaultValue="all-india" />
@@ -141,8 +142,8 @@ const Header = () => {
                 </Select>
               )}
 
-              {/* Desktop Navigation Links - Hidden on Loans page */}
-              {!isLoansPage && <nav className="hidden lg:flex items-center space-x-5">
+              {/* Desktop Navigation Links - Hidden on Loans and Architects page */}
+              {!isLoansPage && !isArchitectsPage && <nav className="hidden lg:flex items-center space-x-5">
   <MegaMenu isScrolled={isScrolled} />
   
   <a href="#" onClick={e => {
@@ -239,15 +240,15 @@ const Header = () => {
 
             {/* Right section - Phone (Loans page only), Post Property, Profile, and Hamburger Menu */}
             <div className="flex items-center space-x-2 sm:space-x-4">
-              {/* Phone Number - Only visible on Loans page */}
-              {isLoansPage && <a href="tel:+919036015272" className={`flex items-center px-3 py-2 rounded-lg border transition-all duration-500 ${isScrolled ? 'bg-white text-red-600 border-red-200 hover:bg-red-50' : 'bg-white/10 backdrop-blur-sm text-white border-white/30 hover:bg-white/20'}`}>
+              {/* Phone Number - Only visible on Loans and Architects page */}
+              {(isLoansPage || isArchitectsPage) && <a href="tel:+919036015272" className={`flex items-center px-3 py-2 rounded-lg border transition-all duration-500 ${isScrolled ? 'bg-white text-red-600 border-red-200 hover:bg-red-50' : 'bg-white/10 backdrop-blur-sm text-white border-white/30 hover:bg-white/20'}`}>
                   <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
                   </svg>
                   <span className="font-medium text-sm">+91 80740 17388</span>
                 </a>}
-              {/* Post Property Button - Hidden on Loans page */}
-              {!isLoansPage && <Button variant="outline" size="sm" onClick={() => handlePostPropertyClick()} className={`font-medium px-1.5 sm:px-3 py-1.5 text-xs sm:text-sm transition-all duration-500 ${isScrolled ? 'bg-white text-brand-red border-gray-300 hover:bg-gray-50' : 'bg-white text-brand-red border-white/50 hover:bg-white/90'}`}>
+              {/* Post Property Button - Hidden on Loans and Architects page */}
+              {!isLoansPage && !isArchitectsPage && <Button variant="outline" size="sm" onClick={() => handlePostPropertyClick()} className={`font-medium px-1.5 sm:px-3 py-1.5 text-xs sm:text-sm transition-all duration-500 ${isScrolled ? 'bg-white text-brand-red border-gray-300 hover:bg-gray-50' : 'bg-white text-brand-red border-white/50 hover:bg-white/90'}`}>
                   <span className="hidden sm:inline">Post property</span>
                   <span className="sm:hidden">Post</span>
                   <span className="ml-1 bg-green-500 text-white text-[10px] px-1 py-0.5 rounded">Free</span>
@@ -299,8 +300,8 @@ const Header = () => {
                   </DropdownMenuContent>
                 </DropdownMenu>}
 
-              {/* Sidebar toggle button - Hidden on Loans page */}
-              {!isLoansPage && <Button variant="ghost" size="sm" className={`p-2 transition-colors duration-500 ${isScrolled ? 'text-gray-800 hover:bg-gray-100' : 'text-white hover:bg-white/10'}`} onClick={() => setIsSidebarOpen(true)}>
+              {/* Sidebar toggle button - Hidden on Loans and Architects page */}
+              {!isLoansPage && !isArchitectsPage && <Button variant="ghost" size="sm" className={`p-2 transition-colors duration-500 ${isScrolled ? 'text-gray-800 hover:bg-gray-100' : 'text-white hover:bg-white/10'}`} onClick={() => setIsSidebarOpen(true)}>
                   <Menu size={20} />
                 </Button>}
             </div>
@@ -308,8 +309,8 @@ const Header = () => {
         </div>
       </header>
       
-      {/* Sidebar Component - Hidden on Loans page */}
-      {!isLoansPage && <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />}
+      {/* Sidebar Component - Hidden on Loans and Architects page */}
+      {!isLoansPage && !isArchitectsPage && <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />}
       
       {/* Legal Services Form */}
       <LegalServicesForm isOpen={isLegalFormOpen} onClose={() => setIsLegalFormOpen(false)} />
