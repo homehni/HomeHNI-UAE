@@ -407,22 +407,7 @@ const PropertyManagement = () => {
       </section>
 
       {/* Our Property Management Services */}
-      <section className="py-16 px-4 bg-background">
-        <div className="container mx-auto">
-          <div className="grid lg:grid-cols-2 gap-16 items-start">
-            <div className="max-w-3xl">
-              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
-                Our Property Management Services
-              </h2>
-              
-              
-            </div>
-            
-            {/* Right side spacing for sticky form */}
-            <div className="hidden lg:block"></div>
-          </div>
-        </div>
-      </section>
+      
 
       {/* Trusted by Thousands Section */}
       <section className="py-16 px-4 bg-muted/30">
