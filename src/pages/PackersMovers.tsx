@@ -208,9 +208,10 @@ const PackersMovers = () => {
 
               <Input id="moving-email" name="email" type="email" placeholder="Email ID" />
 
-              <Input id="moving-from" name="movingFrom" placeholder="Moving From (City)" required />
-
-              <Input id="moving-to" name="movingTo" placeholder="Moving To (City)" required />
+              <div className="flex gap-2">
+                <Input id="moving-from" name="movingFrom" placeholder="Moving From (City)" className="flex-1" required />
+                <Input id="moving-to" name="movingTo" placeholder="Moving To (City)" className="flex-1" required />
+              </div>
 
               <Select name="serviceType">
                 <SelectTrigger id="service-type"><SelectValue placeholder="Service Type" /></SelectTrigger>
@@ -284,21 +285,22 @@ const PackersMovers = () => {
                   className="h-12 text-base bg-background"
                 />
 
-                <Input 
-                  id="moving-from-mobile" 
-                  name="movingFrom" 
-                  placeholder="Moving From (City)" 
-                  className="h-12 text-base bg-background"
-                  required 
-                />
-
-                <Input 
-                  id="moving-to-mobile" 
-                  name="movingTo" 
-                  placeholder="Moving To (City)" 
-                  className="h-12 text-base bg-background"
-                  required 
-                />
+                <div className="flex gap-3">
+                  <Input 
+                    id="moving-from-mobile" 
+                    name="movingFrom" 
+                    placeholder="Moving From (City)" 
+                    className="flex-1 h-12 text-base bg-background"
+                    required 
+                  />
+                  <Input 
+                    id="moving-to-mobile" 
+                    name="movingTo" 
+                    placeholder="Moving To (City)" 
+                    className="flex-1 h-12 text-base bg-background"
+                    required 
+                  />
+                </div>
 
                 <Select name="serviceType">
                   <SelectTrigger id="service-type-mobile" className="h-12 bg-background">
@@ -334,7 +336,7 @@ const PackersMovers = () => {
       <section className="py-16 px-4 bg-background">
         <div className="container mx-auto">
           <div className="grid lg:grid-cols-2 gap-8 items-start">
-            <div className="max-w-2xl pr-8">
+            <div className="max-w-3xl">
               <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
                 Why choose our packing & moving services?
               </h2>
