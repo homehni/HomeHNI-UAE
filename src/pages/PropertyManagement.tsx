@@ -8,7 +8,6 @@ import { useToast } from "@/hooks/use-toast";
 import { Building2, Users, CreditCard, Calculator, TrendingUp, FileText, MapPin, Crown, Clock, CheckCircle, Shield, Star, X, Plus, Minus, Globe, Shield as ShieldCheck, Headphones, Smartphone, Download, Home, UserCheck, Settings, BarChart3, Wrench } from "lucide-react";
 import Marquee from "@/components/Marquee";
 import Header from "@/components/Header";
-
 const PropertyManagement = () => {
   const services = [{
     icon: Users,
@@ -35,7 +34,6 @@ const PropertyManagement = () => {
     title: "Financial Reporting",
     description: "Detailed monthly reports and transparent accounting."
   }];
-
   const targetAudience = [{
     icon: Home,
     title: "Property Owners",
@@ -49,7 +47,6 @@ const PropertyManagement = () => {
     title: "NRI Property Owners",
     description: "Non-resident Indians needing remote property management"
   }];
-
   const comparisonData = [{
     feature: "24/7 Tenant Support",
     homeHNI: true,
@@ -83,7 +80,6 @@ const PropertyManagement = () => {
     homeHNI: true,
     others: false
   }];
-
   const testimonials = [{
     name: "Rajesh Sharma",
     role: "Property Owner",
@@ -103,7 +99,6 @@ const PropertyManagement = () => {
     rating: 5,
     text: "Professional service with excellent tenant quality. My properties are always occupied."
   }];
-
   const faqs = [{
     question: "What properties do you manage?",
     answer: "We manage residential and commercial properties including apartments, villas, offices, retail spaces, and warehouses across major Indian cities."
@@ -120,9 +115,9 @@ const PropertyManagement = () => {
     question: "How often do you provide reports?",
     answer: "Monthly financial reports are provided with rent collection status, expenses, maintenance updates, and property performance metrics."
   }];
-
-  const { toast } = useToast();
-
+  const {
+    toast
+  } = useToast();
   useEffect(() => {
     const title = "Property Management Services | Home HNI";
     document.title = title;
@@ -142,16 +137,14 @@ const PropertyManagement = () => {
     }
     canonical.setAttribute('href', window.location.origin + '/property-management');
   }, []);
-
-  return (
-    <div className="min-h-screen">
+  return <div className="min-h-screen">
       <Marquee />
       <Header />
       
       {/* Hero Section */}
       <section className="relative pt-28 md:pt-32 pb-20 md:pb-32 px-4 md:px-8 text-white overflow-hidden bg-cover bg-center bg-no-repeat" style={{
-        backgroundImage: "url('/lovable-uploads/fbb0d72f-782e-49f5-bbe1-8afc1314b5f7.png')"
-      }}>
+      backgroundImage: "url('/lovable-uploads/fbb0d72f-782e-49f5-bbe1-8afc1314b5f7.png')"
+    }}>
         <div className="absolute inset-0 bg-red-900/80 pointer-events-none" />
 
         <div className="relative z-10 container mx-auto">
@@ -185,13 +178,13 @@ const PropertyManagement = () => {
             <p className="text-sm text-muted-foreground mb-4">Just fill up the form & we will take care of the rest</p>
 
             <form className="space-y-4" onSubmit={e => {
-              e.preventDefault();
-              toast({
-                title: "Request received",
-                description: "Our property management expert will contact you shortly."
-              });
-              (e.currentTarget as HTMLFormElement).reset();
-            }}>
+            e.preventDefault();
+            toast({
+              title: "Request received",
+              description: "Our property management expert will contact you shortly."
+            });
+            (e.currentTarget as HTMLFormElement).reset();
+          }}>
               <Input id="pm-name" name="name" placeholder="Name" required />
 
               <div className="flex gap-2">
@@ -238,20 +231,14 @@ const PropertyManagement = () => {
               <p className="text-base text-muted-foreground mb-8">Just fill up the form & we will take care of the rest</p>
 
               <form className="space-y-5" onSubmit={e => {
-                e.preventDefault();
-                toast({
-                  title: "Request received",
-                  description: "Our property management expert will contact you shortly."
-                });
-                (e.currentTarget as HTMLFormElement).reset();
-              }}>
-                <Input 
-                  id="pm-name-mobile" 
-                  name="name" 
-                  placeholder="Name" 
-                  className="h-12 text-base bg-background"
-                  required 
-                />
+              e.preventDefault();
+              toast({
+                title: "Request received",
+                description: "Our property management expert will contact you shortly."
+              });
+              (e.currentTarget as HTMLFormElement).reset();
+            }}>
+                <Input id="pm-name-mobile" name="name" placeholder="Name" className="h-12 text-base bg-background" required />
 
                 <div className="flex gap-3">
                   <Select defaultValue="+91" name="countryCode">
@@ -264,23 +251,10 @@ const PropertyManagement = () => {
                       <SelectItem value="+44">UK +44</SelectItem>
                     </SelectContent>
                   </Select>
-                  <Input 
-                    id="pm-phone-mobile" 
-                    name="phone" 
-                    type="tel" 
-                    placeholder="Phone Number" 
-                    className="flex-1 h-12 text-base bg-background" 
-                    required 
-                  />
+                  <Input id="pm-phone-mobile" name="phone" type="tel" placeholder="Phone Number" className="flex-1 h-12 text-base bg-background" required />
                 </div>
 
-                <Input 
-                  id="pm-email-mobile" 
-                  name="email" 
-                  type="email" 
-                  placeholder="Email ID" 
-                  className="h-12 text-base bg-background"
-                />
+                <Input id="pm-email-mobile" name="email" type="email" placeholder="Email ID" className="h-12 text-base bg-background" />
 
                 <Select name="city">
                   <SelectTrigger id="pm-city-mobile" className="h-12 bg-background">
@@ -441,20 +415,7 @@ const PropertyManagement = () => {
                 Our Property Management Services
               </h2>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {services.map((service, index) => {
-                  const IconComponent = service.icon;
-                  return (
-                    <Card key={index} className="p-6 bg-card border hover:shadow-lg transition-shadow">
-                      <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center mb-4">
-                        <IconComponent className="w-6 h-6 text-red-600" />
-                      </div>
-                      <h3 className="text-lg font-semibold text-foreground mb-2">{service.title}</h3>
-                      <p className="text-sm text-muted-foreground">{service.description}</p>
-                    </Card>
-                  );
-                })}
-              </div>
+              
             </div>
             
             {/* Right side spacing for sticky form */}
@@ -507,25 +468,15 @@ const PropertyManagement = () => {
                   <div className="text-sm font-medium text-center text-muted-foreground">Others</div>
                 </div>
                 
-                {comparisonData.map((item, index) => (
-                  <div key={index} className="grid grid-cols-3 gap-4 py-3 border-t border-border">
+                {comparisonData.map((item, index) => <div key={index} className="grid grid-cols-3 gap-4 py-3 border-t border-border">
                     <div className="text-sm text-foreground">{item.feature}</div>
                     <div className="text-center">
-                      {item.homeHNI ? (
-                        <CheckCircle className="w-5 h-5 text-green-600 mx-auto" />
-                      ) : (
-                        <X className="w-5 h-5 text-red-500 mx-auto" />
-                      )}
+                      {item.homeHNI ? <CheckCircle className="w-5 h-5 text-green-600 mx-auto" /> : <X className="w-5 h-5 text-red-500 mx-auto" />}
                     </div>
                     <div className="text-center">
-                      {item.others ? (
-                        <CheckCircle className="w-5 h-5 text-green-600 mx-auto" />
-                      ) : (
-                        <X className="w-5 h-5 text-red-500 mx-auto" />
-                      )}
+                      {item.others ? <CheckCircle className="w-5 h-5 text-green-600 mx-auto" /> : <X className="w-5 h-5 text-red-500 mx-auto" />}
                     </div>
-                  </div>
-                ))}
+                  </div>)}
               </div>
             </div>
             
@@ -545,14 +496,9 @@ const PropertyManagement = () => {
               </h2>
               
               <div className="space-y-6">
-                {testimonials.map((testimonial, index) => (
-                  <Card key={index} className="p-6 bg-card border">
+                {testimonials.map((testimonial, index) => <Card key={index} className="p-6 bg-card border">
                     <div className="flex items-start gap-4">
-                      <img 
-                        src={testimonial.image} 
-                        alt={testimonial.name}
-                        className="w-12 h-12 rounded-full object-cover"
-                      />
+                      <img src={testimonial.image} alt={testimonial.name} className="w-12 h-12 rounded-full object-cover" />
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-2">
                           <h4 className="font-semibold text-foreground">{testimonial.name}</h4>
@@ -560,15 +506,14 @@ const PropertyManagement = () => {
                           <span className="text-sm text-muted-foreground">{testimonial.role}</span>
                         </div>
                         <div className="flex items-center gap-1 mb-2">
-                          {Array.from({ length: testimonial.rating }).map((_, i) => (
-                            <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                          ))}
+                          {Array.from({
+                        length: testimonial.rating
+                      }).map((_, i) => <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />)}
                         </div>
                         <p className="text-sm text-muted-foreground">{testimonial.text}</p>
                       </div>
                     </div>
-                  </Card>
-                ))}
+                  </Card>)}
               </div>
             </div>
             
@@ -588,16 +533,9 @@ const PropertyManagement = () => {
               </h2>
               
               <div className="flex flex-wrap gap-3">
-                {[
-                  "Tenant Management", "Rent Collection", "Property Maintenance", "Legal Compliance",
-                  "Marketing & Leasing", "Financial Reporting", "Background Verification", "Tenant Screening",
-                  "Emergency Support", "Vendor Management", "Property Inspection", "Market Analysis",
-                  "NRI Services", "Commercial Properties", "Residential Properties", "Portfolio Management"
-                ].map((tag, index) => (
-                  <span key={index} className="px-3 py-1 bg-red-100 text-red-700 rounded-full text-sm font-medium">
+                {["Tenant Management", "Rent Collection", "Property Maintenance", "Legal Compliance", "Marketing & Leasing", "Financial Reporting", "Background Verification", "Tenant Screening", "Emergency Support", "Vendor Management", "Property Inspection", "Market Analysis", "NRI Services", "Commercial Properties", "Residential Properties", "Portfolio Management"].map((tag, index) => <span key={index} className="px-3 py-1 bg-red-100 text-red-700 rounded-full text-sm font-medium">
                     {tag}
-                  </span>
-                ))}
+                  </span>)}
               </div>
             </div>
             
@@ -618,17 +556,15 @@ const PropertyManagement = () => {
               
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {targetAudience.map((audience, index) => {
-                  const IconComponent = audience.icon;
-                  return (
-                    <Card key={index} className="p-6 bg-card border text-center hover:shadow-lg transition-shadow">
+                const IconComponent = audience.icon;
+                return <Card key={index} className="p-6 bg-card border text-center hover:shadow-lg transition-shadow">
                       <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center mx-auto mb-4">
                         <IconComponent className="w-6 h-6 text-red-600" />
                       </div>
                       <h3 className="text-lg font-semibold text-foreground mb-2">{audience.title}</h3>
                       <p className="text-sm text-muted-foreground">{audience.description}</p>
-                    </Card>
-                  );
-                })}
+                    </Card>;
+              })}
               </div>
             </div>
             
@@ -648,16 +584,14 @@ const PropertyManagement = () => {
               </h2>
               
               <Accordion type="single" collapsible className="space-y-4">
-                {faqs.map((faq, index) => (
-                  <AccordionItem key={index} value={`item-${index}`} className="border border-border rounded-lg px-6">
+                {faqs.map((faq, index) => <AccordionItem key={index} value={`item-${index}`} className="border border-border rounded-lg px-6">
                     <AccordionTrigger className="text-left text-foreground hover:no-underline">
                       {faq.question}
                     </AccordionTrigger>
                     <AccordionContent className="text-muted-foreground">
                       {faq.answer}
                     </AccordionContent>
-                  </AccordionItem>
-                ))}
+                  </AccordionItem>)}
               </Accordion>
             </div>
             
@@ -676,17 +610,11 @@ const PropertyManagement = () => {
           <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
             Join thousands of satisfied property owners who trust us with their valuable investments.
           </p>
-          <Button 
-            size="lg" 
-            className="bg-white text-red-600 hover:bg-gray-100 font-semibold px-8 py-3 text-lg"
-            onClick={() => document.getElementById('pm-name')?.focus()}
-          >
+          <Button size="lg" className="bg-white text-red-600 hover:bg-gray-100 font-semibold px-8 py-3 text-lg" onClick={() => document.getElementById('pm-name')?.focus()}>
             Get Started Today
           </Button>
         </div>
       </section>
-    </div>
-  );
+    </div>;
 };
-
 export default PropertyManagement;
