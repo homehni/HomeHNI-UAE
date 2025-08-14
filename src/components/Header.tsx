@@ -306,8 +306,9 @@ const Header = () => {
                 </DropdownMenu>}
 
               {/* Sidebar toggle button - Hidden on Loans, Architects, Interior, Handover Services, Property Management, Painting Cleaning, and Packers Movers page */}
-              {!isLoansPage && !isArchitectsPage && !isInteriorPage && !isHandoverServicesPage && !isPropertyManagementPage && !isPaintingCleaningPage && !isPackersMoversPage && <Button variant="ghost" size="sm" className={`p-2 transition-colors duration-500 ${isScrolled ? 'text-gray-800 hover:bg-gray-100' : 'text-white hover:bg-white/10'}`} onClick={() => setIsSidebarOpen(true)}>
+              {!isLoansPage && !isArchitectsPage && !isInteriorPage && !isHandoverServicesPage && !isPropertyManagementPage && !isPaintingCleaningPage && !isPackersMoversPage && <Button variant="ghost" size="sm" className={`flex items-center space-x-2 p-2 transition-colors duration-500 ${isScrolled ? 'text-gray-800 hover:bg-gray-100' : 'text-white hover:bg-white/10'}`} onClick={() => setIsSidebarOpen(true)}>
                   <Menu size={20} />
+                  <span className={`text-sm font-medium ${isScrolled ? 'text-gray-800' : 'text-white'}`}>Menu</span>
                 </Button>}
             </div>
           </div>
