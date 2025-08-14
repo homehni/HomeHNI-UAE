@@ -181,8 +181,8 @@ const PropertyManagement = () => {
       <div className="hidden lg:block fixed top-32 right-8 z-50 w-96">
         <Card className="w-full rounded-xl shadow-2xl bg-background border">
           <CardContent className="p-6">
-            <h3 className="text-xl font-semibold text-foreground mb-2">Need property management?</h3>
-            <p className="text-sm text-muted-foreground mb-4">Fill the form & get a free consultation</p>
+            <h3 className="text-xl font-semibold text-foreground mb-2">Got a property to be managed?</h3>
+            <p className="text-sm text-muted-foreground mb-4">Just fill up the form & we will take care of the rest</p>
 
             <form className="space-y-4" onSubmit={e => {
               e.preventDefault();
@@ -196,11 +196,11 @@ const PropertyManagement = () => {
 
               <div className="flex gap-2">
                 <Select defaultValue="+91" name="countryCode">
-                  <SelectTrigger className="w-28"><SelectValue /></SelectTrigger>
+                  <SelectTrigger className="w-20"><SelectValue /></SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="+91">🇮🇳 +91</SelectItem>
-                    <SelectItem value="+1">🇺🇸 +1</SelectItem>
-                    <SelectItem value="+44">🇬🇧 +44</SelectItem>
+                    <SelectItem value="+91">IN +91</SelectItem>
+                    <SelectItem value="+1">US +1</SelectItem>
+                    <SelectItem value="+44">UK +44</SelectItem>
                   </SelectContent>
                 </Select>
                 <Input id="pm-phone" name="phone" type="tel" placeholder="Phone Number" className="flex-1" required />
@@ -208,30 +208,22 @@ const PropertyManagement = () => {
 
               <Input id="pm-email" name="email" type="email" placeholder="Email ID" />
 
-              <Select name="propertyType">
-                <SelectTrigger id="pm-property-type"><SelectValue placeholder="Property Type" /></SelectTrigger>
+              <Select name="city">
+                <SelectTrigger id="pm-city"><SelectValue placeholder="City" /></SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="residential">Residential</SelectItem>
-                  <SelectItem value="commercial">Commercial</SelectItem>
-                  <SelectItem value="mixed">Mixed Use</SelectItem>
+                  <SelectItem value="mumbai">Mumbai</SelectItem>
+                  <SelectItem value="delhi">Delhi</SelectItem>
+                  <SelectItem value="bangalore">Bangalore</SelectItem>
+                  <SelectItem value="pune">Pune</SelectItem>
+                  <SelectItem value="hyderabad">Hyderabad</SelectItem>
+                  <SelectItem value="chennai">Chennai</SelectItem>
+                  <SelectItem value="kolkata">Kolkata</SelectItem>
+                  <SelectItem value="ahmedabad">Ahmedabad</SelectItem>
+                  <SelectItem value="other">Other</SelectItem>
                 </SelectContent>
               </Select>
 
-              <Input id="pm-properties" name="properties" type="number" placeholder="Number of Properties" />
-
-              <Select name="currentStatus">
-                <SelectTrigger id="pm-status"><SelectValue placeholder="Current Management Status" /></SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="self-managed">Self Managed</SelectItem>
-                  <SelectItem value="other-company">Other Company</SelectItem>
-                  <SelectItem value="vacant">Vacant Property</SelectItem>
-                  <SelectItem value="new-purchase">New Purchase</SelectItem>
-                </SelectContent>
-              </Select>
-
-              <Input id="pm-location" name="location" placeholder="Property Location/City" />
-
-              <Button type="submit" className="w-full">Get Free Consultation!</Button>
+              <Button type="submit" className="w-full bg-red-600 hover:bg-red-700 text-white">Talk to Us Today!</Button>
             </form>
           </CardContent>
         </Card>
@@ -242,8 +234,8 @@ const PropertyManagement = () => {
         <div className="container mx-auto max-w-xl px-4">
           <Card className="w-full rounded-2xl shadow-xl border-0 bg-card">
             <CardContent className="p-8">
-              <h3 className="text-2xl font-bold text-foreground mb-3">Need property management?</h3>
-              <p className="text-base text-muted-foreground mb-8">Fill the form & get a free consultation</p>
+              <h3 className="text-2xl font-bold text-foreground mb-3">Got a property to be managed?</h3>
+              <p className="text-base text-muted-foreground mb-8">Just fill up the form & we will take care of the rest</p>
 
               <form className="space-y-5" onSubmit={e => {
                 e.preventDefault();
@@ -267,9 +259,9 @@ const PropertyManagement = () => {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent className="bg-background border shadow-lg">
-                      <SelectItem value="+91">🇮🇳 +91</SelectItem>
-                      <SelectItem value="+1">🇺🇸 +1</SelectItem>
-                      <SelectItem value="+44">🇬🇧 +44</SelectItem>
+                      <SelectItem value="+91">IN +91</SelectItem>
+                      <SelectItem value="+1">US +1</SelectItem>
+                      <SelectItem value="+44">UK +44</SelectItem>
                     </SelectContent>
                   </Select>
                   <Input 
@@ -290,46 +282,25 @@ const PropertyManagement = () => {
                   className="h-12 text-base bg-background"
                 />
 
-                <Select name="propertyType">
-                  <SelectTrigger id="pm-property-type-mobile" className="h-12 bg-background">
-                    <SelectValue placeholder="Property Type" />
+                <Select name="city">
+                  <SelectTrigger id="pm-city-mobile" className="h-12 bg-background">
+                    <SelectValue placeholder="City" />
                   </SelectTrigger>
                   <SelectContent className="bg-background border shadow-lg">
-                    <SelectItem value="residential">Residential</SelectItem>
-                    <SelectItem value="commercial">Commercial</SelectItem>
-                    <SelectItem value="mixed">Mixed Use</SelectItem>
+                    <SelectItem value="mumbai">Mumbai</SelectItem>
+                    <SelectItem value="delhi">Delhi</SelectItem>
+                    <SelectItem value="bangalore">Bangalore</SelectItem>
+                    <SelectItem value="pune">Pune</SelectItem>
+                    <SelectItem value="hyderabad">Hyderabad</SelectItem>
+                    <SelectItem value="chennai">Chennai</SelectItem>
+                    <SelectItem value="kolkata">Kolkata</SelectItem>
+                    <SelectItem value="ahmedabad">Ahmedabad</SelectItem>
+                    <SelectItem value="other">Other</SelectItem>
                   </SelectContent>
                 </Select>
-
-                <Input 
-                  id="pm-properties-mobile" 
-                  name="properties" 
-                  type="number" 
-                  placeholder="Number of Properties" 
-                  className="h-12 text-base bg-background"
-                />
-
-                <Select name="currentStatus">
-                  <SelectTrigger id="pm-status-mobile" className="h-12 bg-background">
-                    <SelectValue placeholder="Current Management Status" />
-                  </SelectTrigger>
-                  <SelectContent className="bg-background border shadow-lg">
-                    <SelectItem value="self-managed">Self Managed</SelectItem>
-                    <SelectItem value="other-company">Other Company</SelectItem>
-                    <SelectItem value="vacant">Vacant Property</SelectItem>
-                    <SelectItem value="new-purchase">New Purchase</SelectItem>
-                  </SelectContent>
-                </Select>
-
-                <Input 
-                  id="pm-location-mobile" 
-                  name="location" 
-                  placeholder="Property Location/City" 
-                  className="h-12 text-base bg-background"
-                />
 
                 <Button type="submit" className="w-full h-12 text-base font-semibold bg-red-600 hover:bg-red-700 text-white mt-6">
-                  Get Free Consultation!
+                  Talk to Us Today!
                 </Button>
               </form>
             </CardContent>
