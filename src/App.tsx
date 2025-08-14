@@ -24,7 +24,7 @@ import PackersMovers from "./pages/PackersMovers";
 import RentalAgreement from "./pages/RentalAgreement";
 import RentReceipts from "./pages/RentReceipts";
 import LegalServices from "./pages/LegalServices";
-import HandoverServices from "./pages/HandoverServices";
+
 import PropertyManagement from "./pages/PropertyManagement";
 import PropManagement from "./pages/PropManagement";
 import RobotsTxt from "./pages/RobotsTxt";
@@ -96,7 +96,7 @@ const App: React.FC = () => {
             <Route path="/rental-agreement" element={<RentalAgreement />} />
             <Route path="/rent-receipts" element={<RentReceipts />} />
             <Route path="/legal-services" element={<LegalServices />} />
-            <Route path="/handover-services" element={<HandoverServices />} />
+            
             <Route path="/property-management" element={<PropertyManagement />} />
             <Route path="/prop-management" element={<PropManagement />} />
             <Route path="/owner-plans" element={<OwnerPlans />} />
