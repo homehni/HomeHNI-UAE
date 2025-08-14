@@ -1,460 +1,665 @@
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
-import Header from '@/components/Header';
-import Marquee from '@/components/Marquee';
-import Footer from '@/components/Footer';
-import ChatBot from '@/components/ChatBot';
-import { Button } from '@/components/ui/button';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { useToast } from '@/hooks/use-toast';
-import { 
-  Sofa, 
-  Palette, 
-  Lightbulb, 
-  Eye, 
-  PaintBucket, 
-  Hammer, 
-  CheckCircle, 
-  ArrowRight, 
-  Users, 
-  Clock, 
-  Star, 
-  Target,
-  Sparkles,
-  Layers,
-  Wrench
-} from 'lucide-react';
-
-const consultationSchema = z.object({
-  name: z.string().min(1, 'Name is required'),
-  email: z.string().email('Valid email is required'),
-  phone: z.string().min(10, 'Valid phone number is required'),
-  spaceType: z.string().min(1, 'Please select space type'),
-  location: z.string().min(1, 'Location is required'),
-  budget: z.string().min(1, 'Please select budget range'),
-  message: z.string().optional(),
-});
-
-type ConsultationFormValues = z.infer<typeof consultationSchema>;
+import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { useToast } from "@/hooks/use-toast";
+import { Palette, Lightbulb, Eye, Sofa, Wrench, Target, Users, Clock, CheckCircle, Shield, Star, X, Plus, Minus, Crown, FileText, MapPin, DollarSign, PaintBucket, Home, Sparkles, Layers, Hammer } from "lucide-react";
+import Marquee from "@/components/Marquee";
+import Header from "@/components/Header";
 
 const Interior = () => {
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const services = [{
+    icon: Home,
+    title: "Residential Interior Design",
+    description: "Complete home makeovers from concept to execution."
+  }, {
+    icon: Sofa,
+    title: "Living Room Design",
+    description: "Create stunning spaces for relaxation and entertainment."
+  }, {
+    icon: PaintBucket,
+    title: "Kitchen & Modular Design",
+    description: "Functional and beautiful kitchen solutions."
+  }, {
+    icon: Target,
+    title: "Bedroom & Wardrobe Design",
+    description: "Personalized spaces for rest and storage."
+  }, {
+    icon: Palette,
+    title: "Office Interior Design",
+    description: "Professional workspaces that inspire productivity."
+  }, {
+    icon: Lightbulb,
+    title: "Lighting & Decor Solutions",
+    description: "Perfect ambiance with designer lighting and accessories."
+  }];
+
+  const targetAudience = [{
+    icon: Home,
+    title: "Homeowners",
+    description: "Looking to redesign their living spaces"
+  }, {
+    icon: Crown,
+    title: "Luxury Villa Owners",
+    description: "Seeking premium interior design solutions"
+  }, {
+    icon: FileText,
+    title: "Commercial Spaces",
+    description: "Need professional interior design services"
+  }];
+
+  const comparisonData = [{
+    feature: "Custom Design Solutions",
+    homeHNI: true,
+    others: false
+  }, {
+    feature: "3D Visualization",
+    homeHNI: true,
+    others: false
+  }, {
+    feature: "End-to-End Execution",
+    homeHNI: true,
+    others: false
+  }, {
+    feature: "Dedicated Project Manager",
+    homeHNI: true,
+    others: false
+  }, {
+    feature: "Quality Material Sourcing",
+    homeHNI: true,
+    others: false
+  }, {
+    feature: "Timely Project Completion",
+    homeHNI: true,
+    others: false
+  }, {
+    feature: "Post-Installation Support",
+    homeHNI: true,
+    others: false
+  }, {
+    feature: "Design Satisfaction Guarantee",
+    homeHNI: true,
+    others: false
+  }];
+
+  const testimonials = [{
+    name: "Priya Sharma",
+    role: "Homeowner",
+    image: "/lovable-uploads/46a07bb4-9f10-4614-ad52-73dfb2de4f28.png",
+    rating: 5,
+    text: "Transformed our 3BHK into a dream home! Amazing attention to detail and quality work."
+  }, {
+    name: "Rajesh Kumar",
+    role: "Villa Owner",
+    image: "/lovable-uploads/5b898e4e-d9b6-4366-b58f-176fc3c8a9c3.png",
+    rating: 5,
+    text: "Professional team with creative designs. Our villa looks absolutely stunning now!"
+  }, {
+    name: "Anita Desai",
+    role: "Business Owner",
+    image: "/lovable-uploads/6e6c47cd-700c-49d4-bfee-85a69bb8353f.png",
+    rating: 5,
+    text: "Best interior designers in the city. Office space looks modern and professional."
+  }];
+
+  const faqs = [{
+    question: "What interior design services do you offer?",
+    answer: "We offer complete interior design solutions including residential homes, villas, offices, retail spaces, restaurants, and modular kitchen & wardrobe designs."
+  }, {
+    question: "How much do your interior design services cost?",
+    answer: "Our interior design services start from ₹50,000 and vary based on project scope, space size, and design complexity. We provide detailed quotations after consultation."
+  }, {
+    question: "How long does an interior design project take?",
+    answer: "Project timelines vary from 4-12 weeks depending on the scope. We provide realistic timelines during consultation and ensure timely completion."
+  }, {
+    question: "Do you provide 3D visualizations?",
+    answer: "Yes, we provide detailed 3D visualizations and walkthroughs so you can see your space before execution. This helps in making informed design decisions."
+  }, {
+    question: "What is included in your design package?",
+    answer: "Our packages include design consultation, 3D visualization, material selection, project management, execution, and post-installation support."
+  }];
+
   const { toast } = useToast();
-  
-  const form = useForm<ConsultationFormValues>({
-    resolver: zodResolver(consultationSchema),
-    defaultValues: {
-      name: '',
-      email: '',
-      phone: '',
-      spaceType: '',
-      location: '',
-      budget: '',
-      message: '',
-    },
-  });
 
-  const onSubmit = async (values: ConsultationFormValues) => {
-    setIsSubmitting(true);
-    try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      console.log('Form submitted:', values);
-      toast({
-        title: "Design Call Scheduled!",
-        description: "We'll contact you within 24 hours to discuss your interior design needs.",
-      });
-      form.reset();
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "Something went wrong. Please try again.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsSubmitting(false);
+  useEffect(() => {
+    const title = "Interior Design Services | Home HNI";
+    document.title = title;
+    const desc = "Transform your space with expert interior design services. Residential, commercial, and luxury interior solutions with 3D visualization and end-to-end execution.";
+    let meta = document.querySelector('meta[name="description"]');
+    if (!meta) {
+      meta = document.createElement('meta');
+      meta.setAttribute('name', 'description');
+      document.head.appendChild(meta);
     }
-  };
-
-  const specialties = [
-    {
-      icon: Target,
-      title: "Interior Concept Planning & Styling",
-      description: "Unique layouts tailored to your lifestyle or brand."
-    },
-    {
-      icon: Palette,
-      title: "Material, Texture & Color Selection",
-      description: "Smart palettes that suit mood, light, and space."
-    },
-    {
-      icon: Sofa,
-      title: "Modular & Custom Furniture Design",
-      description: "Form meets function with every piece."
-    },
-    {
-      icon: Lightbulb,
-      title: "Lighting & Decor Consultation",
-      description: "Creating ambiance through layered lighting and accents."
-    },
-    {
-      icon: Eye,
-      title: "3D Interior Visualization",
-      description: "See your space before we bring it to life."
-    },
-    {
-      icon: Wrench,
-      title: "Full Turnkey Execution",
-      description: "From design boards to final installation."
+    meta.setAttribute('content', desc);
+    let canonical = document.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
+    if (!canonical) {
+      canonical = document.createElement('link');
+      canonical.setAttribute('rel', 'canonical');
+      document.head.appendChild(canonical);
     }
-  ];
-
-  const designProcess = [
-    { step: "01", title: "Discovery Call & Briefing", icon: Users },
-    { step: "02", title: "Concept Development & Moodboards", icon: Sparkles },
-    { step: "03", title: "Design Presentation + Revisions", icon: Layers },
-    { step: "04", title: "Finalization & Material Selection", icon: PaintBucket },
-    { step: "05", title: "Execution & On-Site Supervision", icon: Hammer },
-    { step: "06", title: "Styling & Handover", icon: Star }
-  ];
-
-  const whyWorkWithUs = [
-    "Personalized Designs – Never Template-Based",
-    "Honest Timelines & Budgeting",
-    "Trusted Vendor & Artisan Network",
-    "End-to-End Project Management",
-    "100% Design Satisfaction Guaranteed"
-  ];
-
-  const portfolioProjects = [
-    {
-      title: "Elegant 3BHK in Bandra",
-      subtitle: "Modern Minimalism | Completed 2024",
-      image: "/lovable-uploads/c996469f-4da3-4235-b9fc-d1152fe010e8.png"
-    },
-    {
-      title: "Luxury Villa Interior",
-      subtitle: "Contemporary Classic | Mumbai, 2023",
-      image: "/lovable-uploads/4ae8bc66-e5e0-4c61-88f6-cd00789ebc89.png"
-    },
-    {
-      title: "Corporate Office Design",
-      subtitle: "Professional & Vibrant | Delhi, 2023",
-      image: "/lovable-uploads/773d41c7-0eec-400e-a369-eaae7c40f9ca.png"
-    }
-  ];
+    canonical.setAttribute('href', window.location.origin + '/interior');
+  }, []);
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen">
       <Marquee />
       <Header />
       
-      <div className="pt-8">
-        {/* Hero Section */}
-        <section 
-          className="relative py-20 bg-cover bg-center bg-no-repeat"
-          style={{
-            backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('/lovable-uploads/0b9bec0c-64d2-4ff5-8bdb-018ff8463e6c.png')`
-          }}
-        >
-          <div className="container mx-auto px-4 text-center">
-            <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
-              Curated Interiors for Inspired Living
-            </h1>
-            <p className="text-lg md:text-xl text-white/90 mb-8 max-w-3xl mx-auto">
-              From concept to execution, we create spaces that reflect who you are — elegant, functional, and full of character.
-            </p>
-            <Button size="lg" className="bg-brand-red hover:bg-brand-red-dark text-white px-8 py-3">
-              Start Your Interior Journey
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
-          </div>
-        </section>
+      {/* Hero Section */}
+      <section className="relative pt-28 md:pt-32 pb-20 md:pb-32 px-4 md:px-8 text-white overflow-hidden bg-cover bg-center bg-no-repeat" style={{
+        backgroundImage: "url('/lovable-uploads/0b9bec0c-64d2-4ff5-8bdb-018ff8463e6c.png')"
+      }}>
+        <div className="absolute inset-0 bg-red-900/80 pointer-events-none" />
 
-        {/* About Section */}
-        <section className="py-16 bg-background">
-          <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto text-center">
-              <div className="flex items-center justify-center mb-6">
-                <Sofa className="h-8 w-8 text-brand-red mr-3" />
-                <h2 className="text-3xl md:text-4xl font-bold text-foreground">About Our Interior Design Services</h2>
+        <div className="relative z-10 container mx-auto">
+          <div className="grid lg:grid-cols-2 gap-8 items-start">
+            {/* Left: Copy */}
+            <div className="max-w-2xl">
+              <h1 className="text-4xl md:text-5xl font-bold mb-4 leading-tight">
+                Transform Your Space with
+                <br className="hidden md:block" />
+                <span className="block">Expert Interior Design</span>
+              </h1>
+              <p className="text-lg md:text-xl text-white/90 mb-6">
+                From concept to execution, we create stunning interiors that reflect your style
+                with 3D visualization and end-to-end project management.
+              </p>
+            </div>
+
+            {/* Right: Placeholder for form on desktop */}
+            <div className="hidden lg:block lg:justify-self-end">
+              <div className="w-full max-w-md h-80"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Sticky Form Container for Large Screens */}
+      <div className="hidden lg:block fixed top-32 right-8 z-50 w-96">
+        <Card className="w-full rounded-xl shadow-2xl bg-background border">
+          <CardContent className="p-6">
+            <h3 className="text-xl font-semibold text-foreground mb-2">Need interior design?</h3>
+            <p className="text-sm text-muted-foreground mb-4">Fill the form & get a free consultation</p>
+
+            <form className="space-y-4" onSubmit={e => {
+              e.preventDefault();
+              toast({
+                title: "Request received",
+                description: "Our design expert will contact you shortly."
+              });
+              (e.currentTarget as HTMLFormElement).reset();
+            }}>
+              <Input id="design-name" name="name" placeholder="Name" required />
+
+              <div className="flex gap-2">
+                <Select defaultValue="+91" name="countryCode">
+                  <SelectTrigger className="w-28"><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="+91">🇮🇳 +91</SelectItem>
+                    <SelectItem value="+1">🇺🇸 +1</SelectItem>
+                    <SelectItem value="+44">🇬🇧 +44</SelectItem>
+                  </SelectContent>
+                </Select>
+                <Input id="design-phone" name="phone" type="tel" placeholder="Phone Number" className="flex-1" required />
               </div>
-              <p className="text-lg text-muted-foreground leading-relaxed mb-6">
-                At Home HNI, we believe your interiors should tell your story — not follow a script. Whether it's a cozy home, a luxurious villa, or a high-performing office, we deliver end-to-end interior solutions that blend aesthetics, utility, and comfort.
-              </p>
-              <p className="text-lg text-muted-foreground leading-relaxed">
-                With an expert team of interior designers, stylists, and project managers, we handle every detail — from furniture to final touches.
-              </p>
-            </div>
-          </div>
-        </section>
 
-        {/* Specialties Section */}
-        <section className="py-16 bg-muted/30">
-          <div className="container mx-auto px-4">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">Our Specialties</h2>
-              <p className="text-lg text-muted-foreground">
-                We specialize in both residential and commercial interiors:
-              </p>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {specialties.map((specialty, index) => (
-                <div key={index} className="bg-background p-6 rounded-lg shadow-sm border hover:shadow-md transition-shadow">
-                  <specialty.icon className="h-12 w-12 text-brand-red mb-4" />
-                  <h3 className="text-xl font-semibold text-foreground mb-3">{specialty.title}</h3>
-                  <p className="text-muted-foreground">{specialty.description}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
+              <Input id="design-email" name="email" type="email" placeholder="Email ID" />
 
-        {/* Design Process */}
-        <section className="py-16 bg-background">
-          <div className="container mx-auto px-4">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">The Design Process</h2>
-            </div>
-            <div className="max-w-4xl mx-auto">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {designProcess.map((process, index) => (
-                  <div key={index} className="relative bg-muted/20 p-6 rounded-lg">
-                    <div className="flex items-center mb-4">
-                      <div className="bg-brand-red text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">
-                        {process.step}
-                      </div>
-                      <process.icon className="h-6 w-6 text-brand-red" />
-                    </div>
-                    <h3 className="font-semibold text-foreground">{process.title}</h3>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
+              <Select name="spaceType">
+                <SelectTrigger id="space-type"><SelectValue placeholder="Space Type" /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="home">Home Interior</SelectItem>
+                  <SelectItem value="villa">Villa Interior</SelectItem>
+                  <SelectItem value="apartment">Apartment</SelectItem>
+                  <SelectItem value="office">Office Interior</SelectItem>
+                  <SelectItem value="retail">Retail Space</SelectItem>
+                  <SelectItem value="restaurant">Restaurant</SelectItem>
+                </SelectContent>
+              </Select>
 
-        {/* Why Work With Us */}
-        <section className="py-16 bg-muted/30">
-          <div className="container mx-auto px-4">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">Why Work With Us</h2>
-            </div>
-            <div className="max-w-3xl mx-auto">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {whyWorkWithUs.map((reason, index) => (
-                  <div key={index} className="flex items-center p-4 bg-background rounded-lg shadow-sm">
-                    <CheckCircle className="h-6 w-6 text-green-600 mr-4 flex-shrink-0" />
-                    <span className="text-foreground font-medium">{reason}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
+              <Input id="design-budget" name="budget" placeholder="Budget Range (₹)" />
 
-        {/* Portfolio Section */}
-        <section className="py-16 bg-background">
-          <div className="container mx-auto px-4">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">Portfolio</h2>
-              <p className="text-lg text-muted-foreground">
-                Recent projects that showcase our design expertise
-              </p>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {portfolioProjects.map((project, index) => (
-                <div key={index} className="bg-background rounded-lg shadow-sm border overflow-hidden hover:shadow-md transition-shadow">
-                  <img 
-                    src={project.image} 
-                    alt={project.title}
-                    className="w-full h-48 object-cover"
+              <Button type="submit" className="w-full">Get Free Consultation!</Button>
+            </form>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Mobile Form - Static below hero */}
+      <section className="lg:hidden px-4 py-8 bg-background">
+        <div className="container mx-auto max-w-xl px-4">
+          <Card className="w-full rounded-2xl shadow-xl border-0 bg-card">
+            <CardContent className="p-8">
+              <h3 className="text-2xl font-bold text-foreground mb-3">Need interior design?</h3>
+              <p className="text-base text-muted-foreground mb-8">Fill the form & get a free consultation</p>
+
+              <form className="space-y-5" onSubmit={e => {
+                e.preventDefault();
+                toast({
+                  title: "Request received",
+                  description: "Our design expert will contact you shortly."
+                });
+                (e.currentTarget as HTMLFormElement).reset();
+              }}>
+                <Input 
+                  id="design-name-mobile" 
+                  name="name" 
+                  placeholder="Name" 
+                  className="h-12 text-base bg-background"
+                  required 
+                />
+
+                <div className="flex gap-3">
+                  <Select defaultValue="+91" name="countryCode">
+                    <SelectTrigger className="w-32 h-12 bg-background">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent className="bg-background border shadow-lg">
+                      <SelectItem value="+91">🇮🇳 +91</SelectItem>
+                      <SelectItem value="+1">🇺🇸 +1</SelectItem>
+                      <SelectItem value="+44">🇬🇧 +44</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <Input 
+                    id="design-phone-mobile" 
+                    name="phone" 
+                    type="tel" 
+                    placeholder="Phone Number" 
+                    className="flex-1 h-12 text-base bg-background" 
+                    required 
                   />
-                  <div className="p-6">
-                    <h3 className="text-xl font-semibold text-foreground mb-2">{project.title}</h3>
-                    <p className="text-muted-foreground">{project.subtitle}</p>
-                  </div>
                 </div>
-              ))}
-            </div>
-          </div>
-        </section>
 
-        {/* CTA Section with Form */}
-        <section className="py-16 bg-gradient-to-br from-brand-red/5 to-primary/5">
-          <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto">
-              <div className="text-center mb-12">
-                <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-                  Let's Design the Space You've Been Dreaming Of
-                </h2>
-                <p className="text-lg text-muted-foreground">
-                  Get in touch with our expert interior design team and turn your vision into reality.
+                <Input 
+                  id="design-email-mobile" 
+                  name="email" 
+                  type="email" 
+                  placeholder="Email ID" 
+                  className="h-12 text-base bg-background"
+                />
+
+                <Select name="spaceType">
+                  <SelectTrigger id="space-type-mobile" className="h-12 bg-background">
+                    <SelectValue placeholder="Space Type" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-background border shadow-lg">
+                    <SelectItem value="home">Home Interior</SelectItem>
+                    <SelectItem value="villa">Villa Interior</SelectItem>
+                    <SelectItem value="apartment">Apartment</SelectItem>
+                    <SelectItem value="office">Office Interior</SelectItem>
+                    <SelectItem value="retail">Retail Space</SelectItem>
+                    <SelectItem value="restaurant">Restaurant</SelectItem>
+                  </SelectContent>
+                </Select>
+
+                <Input 
+                  id="design-budget-mobile" 
+                  name="budget" 
+                  placeholder="Budget Range (₹)" 
+                  className="h-12 text-base bg-background"
+                />
+
+                <Button type="submit" className="w-full h-12 text-base font-semibold bg-red-600 hover:bg-red-700 text-white mt-6">
+                  Get Free Consultation!
+                </Button>
+              </form>
+            </CardContent>
+          </Card>
+        </div>
+      </section>
+
+      {/* What's in it for you Section */}
+      <section className="py-16 px-4 bg-background">
+        <div className="container mx-auto">
+          <div className="grid lg:grid-cols-2 gap-8 items-start">
+            <div className="max-w-2xl pr-8">
+              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
+                Why choose our interior design services?
+              </h2>
+              
+              <div className="grid grid-cols-2 gap-6">
+                <div className="space-y-3">
+                  <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
+                    <Target className="w-5 h-5 text-red-600" />
+                  </div>
+                  <h3 className="text-base font-semibold text-foreground">
+                    Custom Design Solutions
+                  </h3>
+                  <p className="text-sm text-muted-foreground">
+                    Personalized designs tailored to your lifestyle and preferences
+                  </p>
+                </div>
+
+                <div className="space-y-3">
+                  <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
+                    <Eye className="w-5 h-5 text-red-600" />
+                  </div>
+                  <h3 className="text-base font-semibold text-foreground">
+                    3D Visualization
+                  </h3>
+                  <p className="text-sm text-muted-foreground">
+                    See your space before execution with detailed 3D walkthroughs
+                  </p>
+                </div>
+
+                <div className="space-y-3">
+                  <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
+                    <Wrench className="w-5 h-5 text-red-600" />
+                  </div>
+                  <h3 className="text-base font-semibold text-foreground">
+                    End-to-End Execution
+                  </h3>
+                  <p className="text-sm text-muted-foreground">
+                    Complete project management from design to final installation
+                  </p>
+                </div>
+
+                <div className="space-y-3">
+                  <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
+                    <Users className="w-5 h-5 text-red-600" />
+                  </div>
+                  <h3 className="text-base font-semibold text-foreground">
+                    Expert Design Team
+                  </h3>
+                  <p className="text-sm text-muted-foreground">
+                    Experienced interior designers and project managers
+                  </p>
+                </div>
+
+                <div className="space-y-3">
+                  <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
+                    <Palette className="w-5 h-5 text-red-600" />
+                  </div>
+                  <h3 className="text-base font-semibold text-foreground">
+                    Quality Materials
+                  </h3>
+                  <p className="text-sm text-muted-foreground">
+                    Premium quality materials and furniture sourcing
+                  </p>
+                </div>
+
+                <div className="space-y-3">
+                  <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
+                    <Clock className="w-5 h-5 text-red-600" />
+                  </div>
+                  <h3 className="text-base font-semibold text-foreground">
+                    Timely Completion
+                  </h3>
+                  <p className="text-sm text-muted-foreground">
+                    Projects delivered on time with quality workmanship
+                  </p>
+                </div>
+              </div>
+            </div>
+            
+            {/* Right side spacing for sticky form */}
+            <div className="hidden lg:block"></div>
+          </div>
+        </div>
+      </section>
+
+      {/* Interior Design Services Info Section */}
+      <section className="py-16 px-4 bg-muted/30">
+        <div className="container mx-auto">
+          <div className="grid lg:grid-cols-2 gap-16 items-start">
+            <div className="max-w-3xl">
+              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
+                Comprehensive Interior Design Solutions
+              </h2>
+              <div className="text-muted-foreground space-y-4 text-sm leading-relaxed">
+                <p>
+                  Whether you're looking to redesign your home, villa, office, or commercial space, our comprehensive 
+                  interior design solutions are crafted to transform your vision into reality. From conceptual design 
+                  to final execution, we handle every aspect of your interior project.
+                </p>
+                <p>
+                  Our expert team of interior designers, architects, and project managers work closely with you to 
+                  create spaces that are not only aesthetically pleasing but also functional and sustainable. We use 
+                  the latest design software for 3D visualization, ensuring you can see and approve your design before execution.
+                </p>
+                <p>
+                  With a focus on quality materials, timely execution, and customer satisfaction, we've successfully 
+                  completed over 1000+ interior projects across residential and commercial spaces. Our services include 
+                  complete home interiors, modular kitchens, wardrobes, office interiors, retail spaces, and luxury villa designs.
                 </p>
               </div>
-              
-              <div className="bg-background p-8 rounded-lg shadow-lg border">
-                <h3 className="text-2xl font-semibold text-foreground mb-6 text-center">Schedule a Free Design Call</h3>
-                <Form {...form}>
-                  <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <FormField
-                        control={form.control}
-                        name="name"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Full Name *</FormLabel>
-                            <FormControl>
-                              <Input placeholder="Enter your full name" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      
-                      <FormField
-                        control={form.control}
-                        name="email"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Email Address *</FormLabel>
-                            <FormControl>
-                              <Input type="email" placeholder="Enter your email" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <FormField
-                        control={form.control}
-                        name="phone"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Phone Number *</FormLabel>
-                            <FormControl>
-                              <Input placeholder="Enter your phone number" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      
-                      <FormField
-                        control={form.control}
-                        name="location"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Project Location *</FormLabel>
-                            <FormControl>
-                              <Input placeholder="Enter project location" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
+              <div className="grid md:grid-cols-2 gap-6 mt-8">
+                {services.map((service, index) => (
+                  <div key={index} className="flex items-start space-x-3 p-4 bg-background rounded-lg border">
+                    <service.icon className="w-6 h-6 text-red-600 mt-1 flex-shrink-0" />
+                    <div>
+                      <h4 className="font-medium text-foreground mb-1">{service.title}</h4>
+                      <p className="text-sm text-muted-foreground">{service.description}</p>
                     </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <FormField
-                        control={form.control}
-                        name="spaceType"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Space Type *</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
-                              <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Select space type" />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                <SelectItem value="home">Home Interior</SelectItem>
-                                <SelectItem value="villa">Villa Interior</SelectItem>
-                                <SelectItem value="apartment">Apartment Interior</SelectItem>
-                                <SelectItem value="office">Office Interior</SelectItem>
-                                <SelectItem value="retail">Retail Space</SelectItem>
-                                <SelectItem value="restaurant">Restaurant Interior</SelectItem>
-                                <SelectItem value="other">Other</SelectItem>
-                              </SelectContent>
-                            </Select>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      
-                      <FormField
-                        control={form.control}
-                        name="budget"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Budget Range *</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
-                              <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Select budget range" />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                <SelectItem value="under-5l">Under ₹5 Lakhs</SelectItem>
-                                <SelectItem value="5l-15l">₹5 - ₹15 Lakhs</SelectItem>
-                                <SelectItem value="15l-30l">₹15 - ₹30 Lakhs</SelectItem>
-                                <SelectItem value="30l-50l">₹30 - ₹50 Lakhs</SelectItem>
-                                <SelectItem value="50l-plus">₹50 Lakhs+</SelectItem>
-                              </SelectContent>
-                            </Select>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-
-                    <FormField
-                      control={form.control}
-                      name="message"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Design Requirements (Optional)</FormLabel>
-                          <FormControl>
-                            <Textarea 
-                              placeholder="Tell us about your style preferences, specific requirements, or any ideas you have in mind..."
-                              className="min-h-[120px]"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <div className="text-center">
-                      <Button 
-                        type="submit" 
-                        size="lg" 
-                        disabled={isSubmitting}
-                        className="bg-brand-red hover:bg-brand-red-dark text-white px-8 py-3"
-                      >
-                        {isSubmitting ? "Scheduling..." : "Schedule Free Design Call"}
-                        {!isSubmitting && <ArrowRight className="ml-2 h-5 w-5" />}
-                      </Button>
-                    </div>
-                  </form>
-                </Form>
+                  </div>
+                ))}
               </div>
             </div>
+            
+            {/* Right side spacing for sticky form */}
+            <div className="hidden lg:block"></div>
           </div>
-        </section>
+        </div>
+      </section>
 
-        <Footer />
-      </div>
-      <ChatBot />
+      {/* Trusted by Thousands Section */}
+      <section className="py-16 px-4 bg-background">
+        <div className="container mx-auto">
+          <div className="grid lg:grid-cols-2 gap-16 items-start">
+            <div className="max-w-3xl">
+              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
+                Trusted by Thousands of Happy Clients
+              </h2>
+              
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
+                <div className="text-center">
+                  <div className="text-2xl md:text-3xl font-bold text-foreground mb-2">1000+</div>
+                  <div className="text-sm text-muted-foreground">Projects Completed</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-2xl md:text-3xl font-bold text-foreground mb-2">500+</div>
+                  <div className="text-sm text-muted-foreground">Happy Clients</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-2xl md:text-3xl font-bold text-foreground mb-2">15+</div>
+                  <div className="text-sm text-muted-foreground">Design Awards</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-2xl md:text-3xl font-bold text-foreground mb-2">98%</div>
+                  <div className="text-sm text-muted-foreground">Satisfaction Rate</div>
+                </div>
+              </div>
+
+              <p className="text-muted-foreground text-sm leading-relaxed">
+                Join thousands of satisfied clients who have transformed their spaces with our expert interior design services. 
+                From luxury homes to modern offices, we've delivered exceptional results that exceed expectations.
+              </p>
+            </div>
+            
+            {/* Right side spacing for sticky form */}
+            <div className="hidden lg:block"></div>
+          </div>
+        </div>
+      </section>
+
+      {/* Comparison Table */}
+      <section className="py-16 px-4 bg-muted/30">
+        <div className="container mx-auto">
+          <div className="grid lg:grid-cols-2 gap-16 items-start">
+            <div className="max-w-3xl">
+              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
+                Home HNI vs Others
+              </h2>
+              
+              <div className="bg-background rounded-lg overflow-hidden border">
+                <div className="grid grid-cols-3 gap-4 p-4 bg-muted font-medium text-sm">
+                  <div>Features</div>
+                  <div className="text-center">Home HNI</div>
+                  <div className="text-center">Others</div>
+                </div>
+                
+                {comparisonData.map((item, index) => (
+                  <div key={index} className="grid grid-cols-3 gap-4 p-4 border-t text-sm">
+                    <div className="text-foreground">{item.feature}</div>
+                    <div className="text-center">
+                      {item.homeHNI ? (
+                        <CheckCircle className="w-5 h-5 text-green-600 mx-auto" />
+                      ) : (
+                        <X className="w-5 h-5 text-red-500 mx-auto" />
+                      )}
+                    </div>
+                    <div className="text-center">
+                      {item.others ? (
+                        <CheckCircle className="w-5 h-5 text-green-600 mx-auto" />
+                      ) : (
+                        <X className="w-5 h-5 text-red-500 mx-auto" />
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            
+            {/* Right side spacing for sticky form */}
+            <div className="hidden lg:block"></div>
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials */}
+      <section className="py-16 px-4 bg-background">
+        <div className="container mx-auto">
+          <div className="grid lg:grid-cols-2 gap-16 items-start">
+            <div className="max-w-3xl">
+              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
+                What Our Clients Say
+              </h2>
+              
+              <div className="space-y-6">
+                {testimonials.map((testimonial, index) => (
+                  <div key={index} className="bg-muted/50 p-6 rounded-lg border">
+                    <div className="flex items-start space-x-4">
+                      <img 
+                        src={testimonial.image} 
+                        alt={testimonial.name}
+                        className="w-12 h-12 rounded-full object-cover"
+                      />
+                      <div className="flex-1">
+                        <div className="flex items-center space-x-2 mb-2">
+                          <div className="flex">
+                            {[...Array(testimonial.rating)].map((_, i) => (
+                              <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                            ))}
+                          </div>
+                        </div>
+                        <p className="text-sm text-muted-foreground mb-3">"{testimonial.text}"</p>
+                        <div>
+                          <div className="font-medium text-foreground text-sm">{testimonial.name}</div>
+                          <div className="text-xs text-muted-foreground">{testimonial.role}</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            
+            {/* Right side spacing for sticky form */}
+            <div className="hidden lg:block"></div>
+          </div>
+        </div>
+      </section>
+
+      {/* Target Audience */}
+      <section className="py-16 px-4 bg-muted/30">
+        <div className="container mx-auto">
+          <div className="grid lg:grid-cols-2 gap-16 items-start">
+            <div className="max-w-3xl">
+              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
+                Who We Serve
+              </h2>
+              
+              <div className="space-y-4">
+                {targetAudience.map((audience, index) => (
+                  <div key={index} className="flex items-center space-x-4 p-4 bg-background rounded-lg border">
+                    <audience.icon className="w-8 h-8 text-red-600" />
+                    <div>
+                      <h4 className="font-medium text-foreground">{audience.title}</h4>
+                      <p className="text-sm text-muted-foreground">{audience.description}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            
+            {/* Right side spacing for sticky form */}
+            <div className="hidden lg:block"></div>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section className="py-16 px-4 bg-background">
+        <div className="container mx-auto">
+          <div className="grid lg:grid-cols-2 gap-16 items-start">
+            <div className="max-w-3xl">
+              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
+                Frequently Asked Questions
+              </h2>
+              
+              <Accordion type="single" collapsible className="w-full">
+                {faqs.map((faq, index) => (
+                  <AccordionItem key={index} value={`item-${index}`}>
+                    <AccordionTrigger className="text-left">{faq.question}</AccordionTrigger>
+                    <AccordionContent className="text-muted-foreground">
+                      {faq.answer}
+                    </AccordionContent>
+                  </AccordionItem>
+                ))}
+              </Accordion>
+            </div>
+            
+            {/* Right side spacing for sticky form */}
+            <div className="hidden lg:block"></div>
+          </div>
+        </div>
+      </section>
+
+      {/* Service Tags */}
+      <section className="py-16 px-4 bg-muted/30">
+        <div className="container mx-auto">
+          <div className="grid lg:grid-cols-2 gap-16 items-start">
+            <div className="max-w-3xl">
+              <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-6">
+                Interior Design Keywords
+              </h2>
+              
+              <div className="flex flex-wrap gap-2">
+                {[
+                  "Interior Design", "Home Decor", "Modern Interior", "Luxury Interior", "3D Visualization",
+                  "Modular Kitchen", "Wardrobe Design", "Office Interior", "Villa Interior", "Apartment Design",
+                  "Living Room Design", "Bedroom Design", "Bathroom Design", "Contemporary Design", "Custom Furniture",
+                  "Space Planning", "Color Consultation", "Lighting Design", "Material Selection", "Project Management"
+                ].map((tag, index) => (
+                  <span 
+                    key={index} 
+                    className="px-3 py-1 bg-background text-muted-foreground text-xs rounded-full border"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+            
+            {/* Right side spacing for sticky form */}
+            <div className="hidden lg:block"></div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 };
