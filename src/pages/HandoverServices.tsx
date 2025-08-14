@@ -8,7 +8,6 @@ import { useToast } from "@/hooks/use-toast";
 import { Building2, Users, FileCheck, Search, Database, Headphones, MapPin, Crown, Clock, CheckCircle, Shield, Star, X, Plus, Minus, Globe, ShieldCheck, Home, Key, Users2, Building } from "lucide-react";
 import Marquee from "@/components/Marquee";
 import Header from "@/components/Header";
-
 const HandoverServices = () => {
   const services = [{
     icon: FileCheck,
@@ -35,7 +34,6 @@ const HandoverServices = () => {
     title: "Post-Handover Support",
     description: "Continued support for any issues or queries after property handover."
   }];
-
   const targetAudience = [{
     icon: Home,
     title: "Property Buyers",
@@ -49,7 +47,6 @@ const HandoverServices = () => {
     title: "Landlords & Tenants",
     description: "Renting or leasing properties with proper handover"
   }];
-
   const comparisonData = [{
     feature: "Complete Documentation Support",
     homeHNI: true,
@@ -83,7 +80,6 @@ const HandoverServices = () => {
     homeHNI: true,
     others: false
   }];
-
   const testimonials = [{
     name: "Priya Sharma",
     role: "Property Buyer",
@@ -103,7 +99,6 @@ const HandoverServices = () => {
     rating: 5,
     text: "Best handover service! They handled everything from documentation to utility transfers."
   }];
-
   const faqs = [{
     question: "What documents are covered in handover services?",
     answer: "We handle all property documents including sale deed, NOCs, completion certificates, possession letter, utility bills, society documents, and any other relevant paperwork."
@@ -120,9 +115,9 @@ const HandoverServices = () => {
     question: "Do you assist with utility transfers?",
     answer: "Yes, we help transfer electricity, water, gas, internet, and other utility connections from seller to buyer, ensuring seamless transition."
   }];
-
-  const { toast } = useToast();
-
+  const {
+    toast
+  } = useToast();
   useEffect(() => {
     const title = "Property Handover Services | Professional & Legal Support | Home HNI";
     document.title = title;
@@ -142,16 +137,14 @@ const HandoverServices = () => {
     }
     canonical.setAttribute('href', window.location.origin + '/handover-services');
   }, []);
-
-  return (
-    <div className="min-h-screen">
+  return <div className="min-h-screen">
       <Marquee />
       <Header />
       
       {/* Hero Section */}
       <section className="relative pt-28 md:pt-32 pb-20 md:pb-32 px-4 md:px-8 text-white overflow-hidden bg-cover bg-center bg-no-repeat" style={{
-        backgroundImage: "url('/lovable-uploads/fbb0d72f-782e-49f5-bbe1-8afc1314b5f7.png')"
-      }}>
+      backgroundImage: "url('/lovable-uploads/fbb0d72f-782e-49f5-bbe1-8afc1314b5f7.png')"
+    }}>
         <div className="absolute inset-0 bg-red-900/80 pointer-events-none" />
 
         <div className="relative z-10 container mx-auto">
@@ -185,13 +178,13 @@ const HandoverServices = () => {
             <p className="text-sm text-muted-foreground mb-4">Fill the form & get expert support</p>
 
             <form className="space-y-4" onSubmit={e => {
-              e.preventDefault();
-              toast({
-                title: "Request received",
-                description: "Our handover expert will contact you shortly."
-              });
-              (e.currentTarget as HTMLFormElement).reset();
-            }}>
+            e.preventDefault();
+            toast({
+              title: "Request received",
+              description: "Our handover expert will contact you shortly."
+            });
+            (e.currentTarget as HTMLFormElement).reset();
+          }}>
               <Input id="handover-name" name="name" placeholder="Name" required />
 
               <div className="flex gap-2">
@@ -245,20 +238,14 @@ const HandoverServices = () => {
               <p className="text-base text-muted-foreground mb-8">Fill the form & get expert support</p>
 
               <form className="space-y-5" onSubmit={e => {
-                e.preventDefault();
-                toast({
-                  title: "Request received",
-                  description: "Our handover expert will contact you shortly."
-                });
-                (e.currentTarget as HTMLFormElement).reset();
-              }}>
-                <Input 
-                  id="handover-name-mobile" 
-                  name="name" 
-                  placeholder="Name" 
-                  className="h-12 text-base bg-background"
-                  required 
-                />
+              e.preventDefault();
+              toast({
+                title: "Request received",
+                description: "Our handover expert will contact you shortly."
+              });
+              (e.currentTarget as HTMLFormElement).reset();
+            }}>
+                <Input id="handover-name-mobile" name="name" placeholder="Name" className="h-12 text-base bg-background" required />
 
                 <div className="flex gap-3">
                   <Select defaultValue="+91" name="countryCode">
@@ -271,23 +258,10 @@ const HandoverServices = () => {
                       <SelectItem value="+44">🇬🇧 +44</SelectItem>
                     </SelectContent>
                   </Select>
-                  <Input 
-                    id="handover-phone-mobile" 
-                    name="phone" 
-                    type="tel" 
-                    placeholder="Phone Number" 
-                    className="flex-1 h-12 text-base bg-background" 
-                    required 
-                  />
+                  <Input id="handover-phone-mobile" name="phone" type="tel" placeholder="Phone Number" className="flex-1 h-12 text-base bg-background" required />
                 </div>
 
-                <Input 
-                  id="handover-email-mobile" 
-                  name="email" 
-                  type="email" 
-                  placeholder="Email ID" 
-                  className="h-12 text-base bg-background"
-                />
+                <Input id="handover-email-mobile" name="email" type="email" placeholder="Email ID" className="h-12 text-base bg-background" />
 
                 <Select name="propertyType">
                   <SelectTrigger id="property-type-mobile" className="h-12 bg-background">
@@ -301,12 +275,7 @@ const HandoverServices = () => {
                   </SelectContent>
                 </Select>
 
-                <Input 
-                  id="handover-location-mobile" 
-                  name="location" 
-                  placeholder="Property Location" 
-                  className="h-12 text-base bg-background"
-                />
+                <Input id="handover-location-mobile" name="location" placeholder="Property Location" className="h-12 text-base bg-background" />
 
                 <Select name="handoverType">
                   <SelectTrigger id="handover-type-mobile" className="h-12 bg-background">
@@ -464,8 +433,7 @@ const HandoverServices = () => {
               </h2>
               
               <div className="grid gap-6">
-                {services.map((service, index) => (
-                  <Card key={index} className="p-6 hover:shadow-lg transition-shadow">
+                {services.map((service, index) => <Card key={index} className="p-6 hover:shadow-lg transition-shadow">
                     <div className="flex items-start gap-4">
                       <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center flex-shrink-0">
                         <service.icon className="w-6 h-6 text-red-600" />
@@ -475,8 +443,7 @@ const HandoverServices = () => {
                         <p className="text-muted-foreground text-sm">{service.description}</p>
                       </div>
                     </div>
-                  </Card>
-                ))}
+                  </Card>)}
               </div>
             </div>
             
@@ -540,25 +507,15 @@ const HandoverServices = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {comparisonData.map((item, index) => (
-                      <tr key={index} className="border-b">
+                    {comparisonData.map((item, index) => <tr key={index} className="border-b">
                         <td className="py-3 pr-4 text-sm text-foreground">{item.feature}</td>
                         <td className="text-center py-3 px-2">
-                          {item.homeHNI ? (
-                            <CheckCircle className="w-5 h-5 text-green-600 mx-auto" />
-                          ) : (
-                            <X className="w-5 h-5 text-red-500 mx-auto" />
-                          )}
+                          {item.homeHNI ? <CheckCircle className="w-5 h-5 text-green-600 mx-auto" /> : <X className="w-5 h-5 text-red-500 mx-auto" />}
                         </td>
                         <td className="text-center py-3 pl-2">
-                          {item.others ? (
-                            <CheckCircle className="w-5 h-5 text-green-600 mx-auto" />
-                          ) : (
-                            <X className="w-5 h-5 text-red-500 mx-auto" />
-                          )}
+                          {item.others ? <CheckCircle className="w-5 h-5 text-green-600 mx-auto" /> : <X className="w-5 h-5 text-red-500 mx-auto" />}
                         </td>
-                      </tr>
-                    ))}
+                      </tr>)}
                   </tbody>
                 </table>
               </div>
@@ -580,29 +537,21 @@ const HandoverServices = () => {
               </h2>
               
               <div className="space-y-6">
-                {testimonials.map((testimonial, index) => (
-                  <Card key={index} className="p-6">
+                {testimonials.map((testimonial, index) => <Card key={index} className="p-6">
                     <div className="flex items-start gap-4">
-                      <img 
-                        src={testimonial.image} 
-                        alt={testimonial.name}
-                        className="w-12 h-12 rounded-full object-cover"
-                      />
+                      <img src={testimonial.image} alt={testimonial.name} className="w-12 h-12 rounded-full object-cover" />
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-2">
                           <h4 className="font-semibold text-foreground">{testimonial.name}</h4>
                           <span className="text-sm text-muted-foreground">• {testimonial.role}</span>
                         </div>
                         <div className="flex items-center gap-1 mb-3">
-                          {[...Array(testimonial.rating)].map((_, i) => (
-                            <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                          ))}
+                          {[...Array(testimonial.rating)].map((_, i) => <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />)}
                         </div>
                         <p className="text-muted-foreground text-sm">{testimonial.text}</p>
                       </div>
                     </div>
-                  </Card>
-                ))}
+                  </Card>)}
               </div>
             </div>
             
@@ -622,8 +571,7 @@ const HandoverServices = () => {
               </h2>
               
               <div className="grid gap-6">
-                {targetAudience.map((audience, index) => (
-                  <Card key={index} className="p-6 hover:shadow-lg transition-shadow">
+                {targetAudience.map((audience, index) => <Card key={index} className="p-6 hover:shadow-lg transition-shadow">
                     <div className="flex items-start gap-4">
                       <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center flex-shrink-0">
                         <audience.icon className="w-6 h-6 text-red-600" />
@@ -633,8 +581,7 @@ const HandoverServices = () => {
                         <p className="text-muted-foreground text-sm">{audience.description}</p>
                       </div>
                     </div>
-                  </Card>
-                ))}
+                  </Card>)}
               </div>
             </div>
             
@@ -654,16 +601,14 @@ const HandoverServices = () => {
               </h2>
               
               <Accordion type="single" collapsible className="space-y-4">
-                {faqs.map((faq, index) => (
-                  <AccordionItem key={index} value={`item-${index}`} className="border border-border rounded-lg px-6">
+                {faqs.map((faq, index) => <AccordionItem key={index} value={`item-${index}`} className="border border-border rounded-lg px-6">
                     <AccordionTrigger className="text-left hover:no-underline py-4">
                       <span className="font-semibold text-foreground">{faq.question}</span>
                     </AccordionTrigger>
                     <AccordionContent className="pb-4 text-muted-foreground text-sm leading-relaxed">
                       {faq.answer}
                     </AccordionContent>
-                  </AccordionItem>
-                ))}
+                  </AccordionItem>)}
               </Accordion>
             </div>
             
@@ -683,20 +628,9 @@ const HandoverServices = () => {
               </h2>
               
               <div className="flex flex-wrap gap-2">
-                {[
-                  'Property Handover', 'Documentation Support', 'Legal Verification', 'Technical Inspection',
-                  'Utility Transfer', 'Digital Records', 'Post Handover Support', 'Property Possession',
-                  'Buying Handover', 'Selling Handover', 'Rental Handover', 'Mumbai Handover Services',
-                  'Delhi Property Handover', 'Bangalore Handover', 'Pune Property Services',
-                  'Chennai Handover', 'Hyderabad Property', 'Kolkata Handover Services',
-                  'Ahmedabad Property', 'Residential Handover', 'Commercial Handover', 'Industrial Property',
-                  'Property Legal Check', 'Document Verification', 'NOC Services', 'Completion Certificate',
-                  'Property Inspection', 'Handover Checklist', 'Professional Handover'
-                ].map((tag, index) => (
-                  <span key={index} className="px-3 py-1 bg-red-100 text-red-700 rounded-full text-xs font-medium">
+                {['Property Handover', 'Documentation Support', 'Legal Verification', 'Technical Inspection', 'Utility Transfer', 'Digital Records', 'Post Handover Support', 'Property Possession', 'Buying Handover', 'Selling Handover', 'Rental Handover', 'Mumbai Handover Services', 'Delhi Property Handover', 'Bangalore Handover', 'Pune Property Services', 'Chennai Handover', 'Hyderabad Property', 'Kolkata Handover Services', 'Ahmedabad Property', 'Residential Handover', 'Commercial Handover', 'Industrial Property', 'Property Legal Check', 'Document Verification', 'NOC Services', 'Completion Certificate', 'Property Inspection', 'Handover Checklist', 'Professional Handover'].map((tag, index) => <span key={index} className="px-3 py-1 bg-red-100 text-red-700 rounded-full text-xs font-medium">
                     {tag}
-                  </span>
-                ))}
+                  </span>)}
               </div>
             </div>
             
@@ -707,29 +641,7 @@ const HandoverServices = () => {
       </section>
 
       {/* Final CTA */}
-      <section className="py-16 px-4 bg-muted/30">
-        <div className="container mx-auto">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <div className="max-w-2xl">
-              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-                Ready for Professional Handover Services?
-              </h2>
-              <p className="text-muted-foreground mb-6">
-                Get expert assistance for your property handover with complete documentation 
-                support and legal verification. Contact us today!
-              </p>
-              <Button size="lg" className="bg-red-600 hover:bg-red-700 text-white">
-                Get Started Today
-              </Button>
-            </div>
-            
-            {/* Right side spacing for sticky form */}
-            <div className="hidden lg:block"></div>
-          </div>
-        </div>
-      </section>
-    </div>
-  );
+      
+    </div>;
 };
-
 export default HandoverServices;
