@@ -436,148 +436,264 @@ const Architects = () => {
         </div>
       </section>
 
-      {/* Why Choose HomeHNI */}
-      <section className="py-16 bg-blue-50">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-4">Why Choose HomeHNI Architects?</h2>
-          <p className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
-            Experience the difference with our professional architectural services and expert guidance.
-          </p>
-          
-          <div className="overflow-x-auto">
-            <table className="w-full max-w-4xl mx-auto bg-white rounded-xl shadow-lg">
-              <thead>
-                <tr className="border-b">
-                  <th className="text-left p-6 font-semibold">Features</th>
-                  <th className="text-center p-6 font-semibold text-blue-600">HomeHNI Architects</th>
-                  <th className="text-center p-6 font-semibold text-gray-500">Other Platforms</th>
-                </tr>
-              </thead>
-              <tbody>
-                {comparisonData.map((item, index) => (
-                  <tr key={index} className="border-b hover:bg-gray-50">
-                    <td className="p-6">{item.feature}</td>
-                    <td className="p-6 text-center">
-                      {item.homeHNI ? (
-                        <CheckCircle className="w-6 h-6 text-green-500 mx-auto" />
-                      ) : (
-                        <X className="w-6 h-6 text-red-500 mx-auto" />
-                      )}
-                    </td>
-                    <td className="p-6 text-center">
-                      {item.others ? (
-                        <CheckCircle className="w-6 h-6 text-green-500 mx-auto" />
-                      ) : (
-                        <X className="w-6 h-6 text-red-500 mx-auto" />
-                      )}
-                    </td>
-                  </tr>
+      {/* Our Architectural Services Section */}
+      <section className="py-16 px-4 bg-background">
+        <div className="container mx-auto">
+          <div className="grid lg:grid-cols-2 gap-16 items-start">
+            <div className="max-w-3xl">
+              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
+                Our Architectural Services
+              </h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                {services.map((service, index) => (
+                  <div key={index} className="p-4 border border-border rounded-lg bg-card hover:shadow-md transition-shadow">
+                    <service.icon className="w-8 h-8 text-red-600 mb-3" />
+                    <h3 className="text-lg font-semibold text-foreground mb-2">{service.title}</h3>
+                    <p className="text-sm text-muted-foreground">{service.description}</p>
+                  </div>
                 ))}
-              </tbody>
-            </table>
+              </div>
+            </div>
+            
+            {/* Right side spacing for sticky form */}
+            <div className="hidden lg:block"></div>
           </div>
         </div>
       </section>
 
-      {/* Testimonials */}
-      <section className="py-16">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12">What Our Clients Say</h2>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {testimonials.map((testimonial, index) => (
-              <Card key={index} className="border-0 shadow-lg">
-                <CardContent className="p-6">
-                  <div className="flex items-center mb-4">
-                    <img 
-                      src={testimonial.image} 
-                      alt={testimonial.name}
-                      className="w-12 h-12 rounded-full mr-4 object-cover"
-                    />
+      {/* Trusted by Thousands Section */}
+      <section className="py-16 px-4 bg-muted/30">
+        <div className="container mx-auto">
+          <div className="grid lg:grid-cols-2 gap-16 items-start">
+            <div className="max-w-3xl">
+              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
+                Trusted by Thousands
+              </h2>
+              <div className="grid grid-cols-2 gap-8">
+                <div className="text-center">
+                  <div className="text-3xl font-bold text-red-600 mb-2">500+</div>
+                  <p className="text-sm text-muted-foreground">Projects Completed</p>
+                </div>
+                <div className="text-center">
+                  <div className="text-3xl font-bold text-red-600 mb-2">50+</div>
+                  <p className="text-sm text-muted-foreground">Expert Architects</p>
+                </div>
+                <div className="text-center">
+                  <div className="text-3xl font-bold text-red-600 mb-2">15+</div>
+                  <p className="text-sm text-muted-foreground">Cities Covered</p>
+                </div>
+                <div className="text-center">
+                  <div className="text-3xl font-bold text-red-600 mb-2">98%</div>
+                  <p className="text-sm text-muted-foreground">Client Satisfaction</p>
+                </div>
+              </div>
+            </div>
+            
+            {/* Right side spacing for sticky form */}
+            <div className="hidden lg:block"></div>
+          </div>
+        </div>
+      </section>
+
+      {/* Comparison Table Section */}
+      <section className="py-16 px-4 bg-background">
+        <div className="container mx-auto">
+          <div className="grid lg:grid-cols-2 gap-16 items-start">
+            <div className="max-w-3xl">
+              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
+                Why Choose HomeHNI Architects?
+              </h2>
+              
+              <div className="overflow-x-auto">
+                <table className="w-full bg-card rounded-lg border border-border">
+                  <thead>
+                    <tr className="border-b border-border">
+                      <th className="text-left p-4 font-semibold text-foreground">Features</th>
+                      <th className="text-center p-4 font-semibold text-red-600">HomeHNI</th>
+                      <th className="text-center p-4 font-semibold text-muted-foreground">Others</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {comparisonData.map((item, index) => (
+                      <tr key={index} className="border-b border-border hover:bg-muted/30">
+                        <td className="p-4 text-sm text-foreground">{item.feature}</td>
+                        <td className="p-4 text-center">
+                          {item.homeHNI ? (
+                            <CheckCircle className="w-5 h-5 text-green-500 mx-auto" />
+                          ) : (
+                            <X className="w-5 h-5 text-red-500 mx-auto" />
+                          )}
+                        </td>
+                        <td className="p-4 text-center">
+                          {item.others ? (
+                            <CheckCircle className="w-5 h-5 text-green-500 mx-auto" />
+                          ) : (
+                            <X className="w-5 h-5 text-red-500 mx-auto" />
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            
+            {/* Right side spacing for sticky form */}
+            <div className="hidden lg:block"></div>
+          </div>
+        </div>
+      </section>
+
+      {/* Customer Testimonials Section */}
+      <section className="py-16 px-4 bg-muted/30">
+        <div className="container mx-auto">
+          <div className="grid lg:grid-cols-2 gap-16 items-start">
+            <div className="max-w-3xl">
+              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
+                Customer Testimonials
+              </h2>
+              
+              <div className="space-y-6">
+                {testimonials.map((testimonial, index) => (
+                  <div key={index} className="p-6 bg-card rounded-lg border border-border">
+                    <div className="flex items-center mb-4">
+                      <img 
+                        src={testimonial.image} 
+                        alt={testimonial.name}
+                        className="w-12 h-12 rounded-full mr-4 object-cover"
+                      />
+                      <div>
+                        <h4 className="font-semibold text-foreground">{testimonial.name}</h4>
+                        <p className="text-sm text-muted-foreground">{testimonial.role}</p>
+                      </div>
+                      <div className="ml-auto flex items-center">
+                        {[...Array(testimonial.rating)].map((_, i) => (
+                          <Star key={i} className="w-4 h-4 text-yellow-400 fill-current" />
+                        ))}
+                      </div>
+                    </div>
+                    <p className="text-sm text-muted-foreground italic">"{testimonial.text}"</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+            
+            {/* Right side spacing for sticky form */}
+            <div className="hidden lg:block"></div>
+          </div>
+        </div>
+      </section>
+
+      {/* Target Audience Section */}
+      <section className="py-16 px-4 bg-background">
+        <div className="container mx-auto">
+          <div className="grid lg:grid-cols-2 gap-16 items-start">
+            <div className="max-w-3xl">
+              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
+                Who We Serve
+              </h2>
+              
+              <div className="space-y-6">
+                {targetAudience.map((audience, index) => (
+                  <div key={index} className="flex items-start space-x-4 p-4 bg-card rounded-lg border border-border">
+                    <audience.icon className="w-8 h-8 text-red-600 mt-1 flex-shrink-0" />
                     <div>
-                      <h4 className="font-semibold">{testimonial.name}</h4>
-                      <p className="text-sm text-gray-600">{testimonial.role}</p>
+                      <h3 className="text-lg font-semibold text-foreground mb-2">{audience.title}</h3>
+                      <p className="text-sm text-muted-foreground">{audience.description}</p>
                     </div>
                   </div>
-                  <div className="flex items-center mb-4">
-                    {[...Array(testimonial.rating)].map((_, i) => (
-                      <Star key={i} className="w-4 h-4 text-yellow-400 fill-current" />
-                    ))}
-                  </div>
-                  <p className="text-gray-600 italic">"{testimonial.text}"</p>
-                </CardContent>
-              </Card>
-            ))}
+                ))}
+              </div>
+            </div>
+            
+            {/* Right side spacing for sticky form */}
+            <div className="hidden lg:block"></div>
           </div>
         </div>
       </section>
 
       {/* FAQ Section */}
-      <section className="py-16 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12">Frequently Asked Questions</h2>
-          
-          <div className="max-w-3xl mx-auto">
-            <Accordion type="single" collapsible>
-              {faqs.map((faq, index) => (
-                <AccordionItem key={index} value={`item-${index}`}>
-                  <AccordionTrigger className="text-left hover:text-blue-600">
-                    {faq.question}
-                  </AccordionTrigger>
-                  <AccordionContent className="text-gray-600">
-                    {faq.answer}
-                  </AccordionContent>
-                </AccordionItem>
-              ))}
-            </Accordion>
+      <section className="py-16 px-4 bg-muted/30">
+        <div className="container mx-auto">
+          <div className="grid lg:grid-cols-2 gap-16 items-start">
+            <div className="max-w-3xl">
+              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
+                Frequently Asked Questions
+              </h2>
+              
+              <Accordion type="single" collapsible className="w-full">
+                {faqs.map((faq, index) => (
+                  <AccordionItem key={index} value={`item-${index}`} className="border-b border-border">
+                    <AccordionTrigger className="text-left hover:text-red-600 text-foreground">
+                      {faq.question}
+                    </AccordionTrigger>
+                    <AccordionContent className="text-sm text-muted-foreground">
+                      {faq.answer}
+                    </AccordionContent>
+                  </AccordionItem>
+                ))}
+              </Accordion>
+            </div>
+            
+            {/* Right side spacing for sticky form */}
+            <div className="hidden lg:block"></div>
           </div>
         </div>
       </section>
 
-      {/* Contact Section */}
-      {/* <section className="py-16 bg-blue-600 text-white">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold mb-4">Ready to Start Your Dream Project?</h2>
-          <p className="text-xl mb-8 text-blue-100">
-            Connect with our expert architects today and bring your vision to life.
-          </p>
-          
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
-            <Button size="lg" className="bg-yellow-500 hover:bg-yellow-600 text-blue-900 font-semibold px-8 py-3">
-              <Smartphone className="w-5 h-5 mr-2" />
-              Call +91 80740 17388
-            </Button>
-            <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-blue-600 px-8 py-3">
-              <Download className="w-5 h-5 mr-2" />
-              Download Brochure
-            </Button>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-            <div className="flex items-center justify-center">
-              <Clock className="w-6 h-6 mr-3 text-yellow-400" />
-              <div className="text-left">
-                <p className="font-semibold">Quick Response</p>
-                <p className="text-blue-100">24-hour consultation</p>
+      {/* Service Tags Section */}
+      <section className="py-16 px-4 bg-background">
+        <div className="container mx-auto">
+          <div className="grid lg:grid-cols-2 gap-16 items-start">
+            <div className="max-w-3xl">
+              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
+                Service Tags
+              </h2>
+              
+              <div className="flex flex-wrap gap-2">
+                {[
+                  "Residential Architecture", "Commercial Design", "Interior Planning", 
+                  "3D Visualization", "Sustainable Design", "Project Management",
+                  "Building Permits", "Construction Supervision", "Renovation Services",
+                  "Space Planning", "Architectural Drawings", "Design Consultation",
+                  "Green Building", "Modern Architecture", "Traditional Design",
+                  "Cost Estimation", "Timeline Planning", "Quality Assurance"
+                ].map((tag, index) => (
+                  <span key={index} className="px-3 py-1 bg-red-100 text-red-700 text-xs rounded-full">
+                    {tag}
+                  </span>
+                ))}
               </div>
             </div>
-            <div className="flex items-center justify-center">
-              <Shield className="w-6 h-6 mr-3 text-yellow-400" />
-              <div className="text-left">
-                <p className="font-semibold">Trusted Experts</p>
-                <p className="text-blue-100">Certified architects</p>
-              </div>
-            </div>
-            <div className="flex items-center justify-center">
-              <Crown className="w-6 h-6 mr-3 text-yellow-400" />
-              <div className="text-left">
-                <p className="font-semibold">Premium Service</p>
-                <p className="text-blue-100">End-to-end support</p>
-              </div>
-            </div>
+            
+            {/* Right side spacing for sticky form */}
+            <div className="hidden lg:block"></div>
           </div>
         </div>
-      </section> */}
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-16 px-4 bg-red-600">
+        <div className="container mx-auto text-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+            Ready to Transform Your Space?
+          </h2>
+          <p className="text-lg text-red-100 mb-8 max-w-2xl mx-auto">
+            Get expert architectural consultation and bring your dream project to life with India's top architects.
+          </p>
+          
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button size="lg" className="bg-white text-red-600 hover:bg-red-50 font-semibold">
+              <Smartphone className="w-5 h-5 mr-2" />
+              Call Now: +91 80740 17388
+            </Button>
+            <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10">
+              <Download className="w-5 h-5 mr-2" />
+              Download Portfolio
+            </Button>
+          </div>
+        </div>
+      </section>
 
       
     </div>
