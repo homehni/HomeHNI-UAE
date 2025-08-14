@@ -461,53 +461,65 @@ const PackersMovers = () => {
       {/* Our Moving Services */}
       <section className="py-16 px-4 bg-background">
         <div className="container mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-              Our Packing & Moving Services
-            </h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
-              From home shifting to office relocation, we provide comprehensive moving solutions for all your needs
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {services.map((service, index) => (
-              <Card key={index} className="p-6 text-center bg-card border border-border hover:shadow-lg transition-shadow">
-                <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <service.icon className="w-8 h-8 text-red-600" />
-                </div>
-                <h3 className="text-lg font-semibold text-foreground mb-2">{service.title}</h3>
-                <p className="text-muted-foreground">{service.description}</p>
-              </Card>
-            ))}
+          <div className="grid lg:grid-cols-2 gap-16 items-start">
+            <div className="max-w-3xl">
+              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
+                Our Packing & Moving Services
+              </h2>
+              <div className="grid gap-6">
+                {services.map((service, index) => {
+                  const IconComponent = service.icon;
+                  return (
+                    <div key={index} className="flex gap-4 p-6 bg-card rounded-lg border">
+                      <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <IconComponent className="w-6 h-6 text-red-600" />
+                      </div>
+                      <div>
+                        <h3 className="text-lg font-semibold text-foreground mb-2">{service.title}</h3>
+                        <p className="text-muted-foreground text-sm">{service.description}</p>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+            
+            {/* Right side spacing for sticky form */}
+            <div className="hidden lg:block"></div>
           </div>
         </div>
       </section>
 
       {/* Trusted by Thousands */}
       <section className="py-16 px-4 bg-muted/30">
-        <div className="container mx-auto text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-12">
-            Trusted by Thousands
-          </h2>
-          
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
-            <div className="text-center">
-              <div className="text-3xl md:text-4xl font-bold text-red-600 mb-2">10,000+</div>
-              <div className="text-muted-foreground">Successful Moves</div>
+        <div className="container mx-auto">
+          <div className="grid lg:grid-cols-2 gap-16 items-start">
+            <div className="max-w-3xl">
+              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
+                Trusted by Thousands
+              </h2>
+              <div className="grid grid-cols-2 gap-8">
+                <div className="text-center">
+                  <div className="text-4xl md:text-5xl font-bold text-red-600 mb-2">10,000+</div>
+                  <p className="text-muted-foreground">Successful Moves</p>
+                </div>
+                <div className="text-center">
+                  <div className="text-4xl md:text-5xl font-bold text-red-600 mb-2">50,000+</div>
+                  <p className="text-muted-foreground">Happy Customers</p>
+                </div>
+                <div className="text-center">
+                  <div className="text-4xl md:text-5xl font-bold text-red-600 mb-2">100+</div>
+                  <p className="text-muted-foreground">Cities Covered</p>
+                </div>
+                <div className="text-center">
+                  <div className="text-4xl md:text-5xl font-bold text-red-600 mb-2">4.8★</div>
+                  <p className="text-muted-foreground">Service Rating</p>
+                </div>
+              </div>
             </div>
-            <div className="text-center">
-              <div className="text-3xl md:text-4xl font-bold text-red-600 mb-2">50,000+</div>
-              <div className="text-muted-foreground">Happy Customers</div>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl md:text-4xl font-bold text-red-600 mb-2">100+</div>
-              <div className="text-muted-foreground">Cities Covered</div>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl md:text-4xl font-bold text-red-600 mb-2">4.8★</div>
-              <div className="text-muted-foreground">Service Rating</div>
-            </div>
+            
+            {/* Right side spacing for sticky form */}
+            <div className="hidden lg:block"></div>
           </div>
         </div>
       </section>
@@ -515,38 +527,41 @@ const PackersMovers = () => {
       {/* Why Home HNI is Better */}
       <section className="py-16 px-4 bg-background">
         <div className="container mx-auto">
-          <h2 className="text-3xl md:text-4xl font-bold text-center text-foreground mb-12">
-            Why Home HNI is Better
-          </h2>
-          
-          <div className="max-w-4xl mx-auto">
-            <div className="grid grid-cols-1 gap-4">
-              <div className="grid grid-cols-3 gap-4 font-semibold text-sm bg-muted p-4 rounded-lg">
-                <div className="text-foreground">Features</div>
-                <div className="text-center text-red-600">Home HNI</div>
-                <div className="text-center text-muted-foreground">Others</div>
-              </div>
-              
-              {comparisonData.map((item, index) => (
-                <div key={index} className="grid grid-cols-3 gap-4 items-center p-4 border-b border-border">
-                  <div className="text-foreground text-sm">{item.feature}</div>
-                  <div className="text-center">
-                    {item.homeHNI ? (
-                      <CheckCircle className="w-5 h-5 text-green-500 mx-auto" />
-                    ) : (
-                      <X className="w-5 h-5 text-red-500 mx-auto" />
-                    )}
-                  </div>
-                  <div className="text-center">
-                    {item.others ? (
-                      <CheckCircle className="w-5 h-5 text-green-500 mx-auto" />
-                    ) : (
-                      <X className="w-5 h-5 text-red-500 mx-auto" />
-                    )}
-                  </div>
+          <div className="grid lg:grid-cols-2 gap-16 items-start">
+            <div className="max-w-3xl">
+              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
+                Why Home HNI is Better
+              </h2>
+              <div className="bg-card rounded-xl border overflow-hidden">
+                <div className="grid grid-cols-3 gap-4 p-4 bg-muted/50 font-semibold text-sm">
+                  <div>Features</div>
+                  <div className="text-center">Home HNI</div>
+                  <div className="text-center">Others</div>
                 </div>
-              ))}
+                {comparisonData.map((item, index) => (
+                  <div key={index} className="grid grid-cols-3 gap-4 p-4 border-t text-sm">
+                    <div className="text-foreground">{item.feature}</div>
+                    <div className="text-center">
+                      {item.homeHNI ? (
+                        <CheckCircle className="w-4 h-4 text-red-600 mx-auto" />
+                      ) : (
+                        <X className="w-4 h-4 text-red-500 mx-auto" />
+                      )}
+                    </div>
+                    <div className="text-center">
+                      {item.others ? (
+                        <CheckCircle className="w-4 h-4 text-red-600 mx-auto" />
+                      ) : (
+                        <X className="w-4 h-4 text-red-500 mx-auto" />
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
+            
+            {/* Right side spacing for sticky form */}
+            <div className="hidden lg:block"></div>
           </div>
         </div>
       </section>
@@ -554,37 +569,42 @@ const PackersMovers = () => {
       {/* Customer Testimonials */}
       <section className="py-16 px-4 bg-muted/30">
         <div className="container mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-              What Our Customers Say
-            </h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
-              Real experiences from customers who trusted us with their relocation
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {testimonials.map((testimonial, index) => (
-              <Card key={index} className="p-6 bg-card border border-border">
-                <div className="flex items-center mb-4">
-                  <img
-                    src={testimonial.image}
-                    alt={testimonial.name}
-                    className="w-12 h-12 rounded-full object-cover mr-4"
-                  />
-                  <div>
-                    <div className="font-semibold text-foreground">{testimonial.name}</div>
-                    <div className="text-sm text-muted-foreground">{testimonial.role}</div>
-                  </div>
-                  <div className="ml-auto flex">
-                    {[...Array(testimonial.rating)].map((_, i) => (
-                      <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                    ))}
-                  </div>
-                </div>
-                <p className="text-muted-foreground text-sm leading-relaxed">"{testimonial.text}"</p>
-              </Card>
-            ))}
+          <div className="grid lg:grid-cols-2 gap-16 items-start">
+            <div className="max-w-3xl">
+              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
+                What Our Customers Say
+              </h2>
+              <div className="space-y-6">
+                {testimonials.map((testimonial, index) => (
+                  <Card key={index} className="p-6">
+                    <CardContent className="p-0">
+                      <div className="flex items-start gap-4">
+                        <img 
+                          src={testimonial.image} 
+                          alt={testimonial.name}
+                          className="w-12 h-12 rounded-full object-cover"
+                        />
+                        <div className="flex-1">
+                          <div className="flex items-center gap-1 mb-2">
+                            {[...Array(testimonial.rating)].map((_, i) => (
+                              <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                            ))}
+                          </div>
+                          <p className="text-muted-foreground text-sm mb-3">"{testimonial.text}"</p>
+                          <div>
+                            <p className="font-semibold text-sm">{testimonial.name}</p>
+                            <p className="text-xs text-muted-foreground">{testimonial.role}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </div>
+            
+            {/* Right side spacing for sticky form */}
+            <div className="hidden lg:block"></div>
           </div>
         </div>
       </section>
