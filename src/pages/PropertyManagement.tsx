@@ -587,19 +587,7 @@ const PropertyManagement = () => {
       </section>
 
       {/* CTA Banner */}
-      <section className="py-16 px-4 bg-red-600">
-        <div className="container mx-auto text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-            Ready to Maximize Your Property Returns?
-          </h2>
-          <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
-            Join thousands of satisfied property owners who trust us with their valuable investments.
-          </p>
-          <Button size="lg" className="bg-white text-red-600 hover:bg-gray-100 font-semibold px-8 py-3 text-lg" onClick={() => document.getElementById('pm-name')?.focus()}>
-            Get Started Today
-          </Button>
-        </div>
-      </section>
+      
     </div>;
 };
 export default PropertyManagement;
