@@ -508,28 +508,6 @@ const PropertyManagement = () => {
         </div>
       </section>
 
-      {/* Service Tags */}
-      <section className="py-16 px-4 bg-background">
-        <div className="container mx-auto">
-          <div className="grid lg:grid-cols-2 gap-16 items-start">
-            <div className="max-w-3xl">
-              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
-                Property Management Services
-              </h2>
-              
-              <div className="flex flex-wrap gap-3">
-                {["Tenant Management", "Rent Collection", "Property Maintenance", "Legal Compliance", "Marketing & Leasing", "Financial Reporting", "Background Verification", "Tenant Screening", "Emergency Support", "Vendor Management", "Property Inspection", "Market Analysis", "NRI Services", "Commercial Properties", "Residential Properties", "Portfolio Management"].map((tag, index) => <span key={index} className="px-3 py-1 bg-red-100 text-red-700 rounded-full text-sm font-medium">
-                    {tag}
-                  </span>)}
-              </div>
-            </div>
-            
-            {/* Right side spacing for sticky form */}
-            <div className="hidden lg:block"></div>
-          </div>
-        </div>
-      </section>
-
       {/* Who We Serve */}
       <section className="py-16 px-4 bg-muted/30">
         <div className="container mx-auto">
@@ -578,6 +556,28 @@ const PropertyManagement = () => {
                     </AccordionContent>
                   </AccordionItem>)}
               </Accordion>
+            </div>
+            
+            {/* Right side spacing for sticky form */}
+            <div className="hidden lg:block"></div>
+          </div>
+        </div>
+      </section>
+
+      {/* Service Tags */}
+      <section className="py-16 px-4 bg-background">
+        <div className="container mx-auto">
+          <div className="grid lg:grid-cols-2 gap-16 items-start">
+            <div className="max-w-3xl">
+              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
+                Property Management Services
+              </h2>
+              
+              <div className="flex flex-wrap gap-3">
+                {["Tenant Management", "Rent Collection", "Property Maintenance", "Legal Compliance", "Marketing & Leasing", "Financial Reporting", "Background Verification", "Tenant Screening", "Emergency Support", "Vendor Management", "Property Inspection", "Market Analysis", "NRI Services", "Commercial Properties", "Residential Properties", "Portfolio Management"].map((tag, index) => <span key={index} className="px-3 py-1 bg-red-100 text-red-700 rounded-full text-sm font-medium">
+                    {tag}
+                  </span>)}
+              </div>
             </div>
             
             {/* Right side spacing for sticky form */}
