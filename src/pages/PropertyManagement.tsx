@@ -411,28 +411,35 @@ const PropertyManagement = () => {
 
       {/* Trusted by Thousands Section */}
       <section className="py-16 px-4 bg-muted/30">
-        <div className="container mx-auto text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-12">
-            Trusted by Thousands
-          </h2>
-          
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
-            <div className="text-center">
-              <div className="text-3xl md:text-4xl font-bold text-red-600 mb-2">5000+</div>
-              <div className="text-sm text-muted-foreground">Properties Managed</div>
+        <div className="container mx-auto">
+          <div className="grid lg:grid-cols-2 gap-16 items-start">
+            <div className="max-w-3xl">
+              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-12">
+                Trusted by Thousands
+              </h2>
+              
+              <div className="grid grid-cols-2 gap-8">
+                <div>
+                  <div className="text-3xl md:text-4xl font-bold text-red-600 mb-2">5000+</div>
+                  <div className="text-sm text-muted-foreground">Properties Managed</div>
+                </div>
+                <div>
+                  <div className="text-3xl md:text-4xl font-bold text-red-600 mb-2">₹50Cr+</div>
+                  <div className="text-sm text-muted-foreground">Monthly Rent Collected</div>
+                </div>
+                <div>
+                  <div className="text-3xl md:text-4xl font-bold text-red-600 mb-2">98%</div>
+                  <div className="text-sm text-muted-foreground">Client Satisfaction</div>
+                </div>
+                <div>
+                  <div className="text-3xl md:text-4xl font-bold text-red-600 mb-2">10+</div>
+                  <div className="text-sm text-muted-foreground">Years Experience</div>
+                </div>
+              </div>
             </div>
-            <div className="text-center">
-              <div className="text-3xl md:text-4xl font-bold text-red-600 mb-2">₹50Cr+</div>
-              <div className="text-sm text-muted-foreground">Monthly Rent Collected</div>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl md:text-4xl font-bold text-red-600 mb-2">98%</div>
-              <div className="text-sm text-muted-foreground">Client Satisfaction</div>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl md:text-4xl font-bold text-red-600 mb-2">10+</div>
-              <div className="text-sm text-muted-foreground">Years Experience</div>
-            </div>
+            
+            {/* Right side spacing for sticky form */}
+            <div className="hidden lg:block"></div>
           </div>
         </div>
       </section>
