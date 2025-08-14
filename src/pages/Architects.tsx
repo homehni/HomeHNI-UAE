@@ -8,7 +8,6 @@ import { useToast } from "@/hooks/use-toast";
 import { Building2, Users, Ruler, Palette, Home, FileText, MapPin, Crown, Clock, CheckCircle, Shield, Star, X, Plus, Minus, Globe, Shield as ShieldCheck, Headphones, Smartphone, Download, PenTool, Compass, DraftingCompass } from "lucide-react";
 import Marquee from "@/components/Marquee";
 import Header from "@/components/Header";
-
 const Architects = () => {
   const services = [{
     icon: Home,
@@ -35,7 +34,6 @@ const Architects = () => {
     title: "Project Management",
     description: "End-to-end construction supervision and management."
   }];
-
   const targetAudience = [{
     icon: Home,
     title: "Homeowners",
@@ -49,7 +47,6 @@ const Architects = () => {
     title: "Business Owners",
     description: "Designing commercial spaces that inspire productivity"
   }];
-
   const comparisonData = [{
     feature: "Personalized Design Consultation",
     homeHNI: true,
@@ -83,7 +80,6 @@ const Architects = () => {
     homeHNI: true,
     others: false
   }];
-
   const testimonials = [{
     name: "Rahul Sharma",
     role: "Homeowner",
@@ -103,7 +99,6 @@ const Architects = () => {
     rating: 5,
     text: "The office design transformed our workspace. Productivity increased significantly!"
   }];
-
   const faqs = [{
     question: "How much does architectural design cost?",
     answer: "Architectural fees typically range from 8-15% of the construction cost, depending on the project complexity and scope of services required."
@@ -120,9 +115,9 @@ const Architects = () => {
     question: "Do you work on renovation projects?",
     answer: "Yes, we specialize in renovation and remodeling projects, helping transform existing spaces with modern design solutions."
   }];
-
-  const { toast } = useToast();
-
+  const {
+    toast
+  } = useToast();
   useEffect(() => {
     const title = "Professional Architects & Architectural Services | Home HNI";
     document.title = title;
@@ -142,16 +137,14 @@ const Architects = () => {
     }
     canonical.setAttribute('href', window.location.origin + '/architects');
   }, []);
-
-  return (
-    <div className="min-h-screen">
+  return <div className="min-h-screen">
       <Marquee />
       <Header />
       
       {/* Hero Section */}
       <section className="relative pt-28 md:pt-32 pb-20 md:pb-32 px-4 md:px-8 text-white overflow-hidden bg-cover bg-center bg-no-repeat" style={{
-        backgroundImage: "url('/lovable-uploads/fbb0d72f-782e-49f5-bbe1-8afc1314b5f7.png')"
-      }}>
+      backgroundImage: "url('/lovable-uploads/fbb0d72f-782e-49f5-bbe1-8afc1314b5f7.png')"
+    }}>
         <div className="absolute inset-0 bg-red-900/80 pointer-events-none" />
 
         <div className="relative z-10 container mx-auto">
@@ -185,13 +178,13 @@ const Architects = () => {
             <p className="text-sm text-muted-foreground mb-4">Fill the form & get a free consultation</p>
 
             <form className="space-y-4" onSubmit={e => {
-              e.preventDefault();
-              toast({
-                title: "Request submitted",
-                description: "Our architects will contact you within 24 hours."
-              });
-              (e.currentTarget as HTMLFormElement).reset();
-            }}>
+            e.preventDefault();
+            toast({
+              title: "Request submitted",
+              description: "Our architects will contact you within 24 hours."
+            });
+            (e.currentTarget as HTMLFormElement).reset();
+          }}>
               <Input id="arch-name" name="name" placeholder="Name" required />
 
               <div className="flex gap-2">
@@ -237,20 +230,14 @@ const Architects = () => {
               <p className="text-base text-muted-foreground mb-8">Fill the form & get a free consultation</p>
 
               <form className="space-y-5" onSubmit={e => {
-                e.preventDefault();
-                toast({
-                  title: "Request submitted",
-                  description: "Our architects will contact you within 24 hours."
-                });
-                (e.currentTarget as HTMLFormElement).reset();
-              }}>
-                <Input 
-                  id="arch-name-mobile" 
-                  name="name" 
-                  placeholder="Name" 
-                  className="h-12 text-base bg-background"
-                  required 
-                />
+              e.preventDefault();
+              toast({
+                title: "Request submitted",
+                description: "Our architects will contact you within 24 hours."
+              });
+              (e.currentTarget as HTMLFormElement).reset();
+            }}>
+                <Input id="arch-name-mobile" name="name" placeholder="Name" className="h-12 text-base bg-background" required />
 
                 <div className="flex gap-3">
                   <Select defaultValue="+91" name="countryCode">
@@ -263,23 +250,10 @@ const Architects = () => {
                       <SelectItem value="+44">🇬🇧 +44</SelectItem>
                     </SelectContent>
                   </Select>
-                  <Input 
-                    id="arch-phone-mobile" 
-                    name="phone" 
-                    type="tel" 
-                    placeholder="Phone Number" 
-                    className="flex-1 h-12 text-base bg-background" 
-                    required 
-                  />
+                  <Input id="arch-phone-mobile" name="phone" type="tel" placeholder="Phone Number" className="flex-1 h-12 text-base bg-background" required />
                 </div>
 
-                <Input 
-                  id="arch-email-mobile" 
-                  name="email" 
-                  type="email" 
-                  placeholder="Email ID" 
-                  className="h-12 text-base bg-background"
-                />
+                <Input id="arch-email-mobile" name="email" type="email" placeholder="Email ID" className="h-12 text-base bg-background" />
 
                 <Select name="projectType">
                   <SelectTrigger id="arch-project-type-mobile" className="h-12 bg-background">
@@ -295,12 +269,7 @@ const Architects = () => {
                   </SelectContent>
                 </Select>
 
-                <Input 
-                  id="arch-location-mobile" 
-                  name="location" 
-                  placeholder="Project Location" 
-                  className="h-12 text-base bg-background"
-                />
+                <Input id="arch-location-mobile" name="location" placeholder="Project Location" className="h-12 text-base bg-background" />
 
                 <Button type="submit" className="w-full h-12 text-base font-semibold bg-red-600 hover:bg-red-700 text-white mt-6">
                   Get Free Consultation!
@@ -445,13 +414,11 @@ const Architects = () => {
                 Our Architectural Services
               </h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                {services.map((service, index) => (
-                  <div key={index} className="p-4 border border-border rounded-lg bg-card hover:shadow-md transition-shadow">
+                {services.map((service, index) => <div key={index} className="p-4 border border-border rounded-lg bg-card hover:shadow-md transition-shadow">
                     <service.icon className="w-8 h-8 text-red-600 mb-3" />
                     <h3 className="text-lg font-semibold text-foreground mb-2">{service.title}</h3>
                     <p className="text-sm text-muted-foreground">{service.description}</p>
-                  </div>
-                ))}
+                  </div>)}
               </div>
             </div>
             
@@ -514,25 +481,15 @@ const Architects = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {comparisonData.map((item, index) => (
-                      <tr key={index} className="border-b border-border hover:bg-muted/30">
+                    {comparisonData.map((item, index) => <tr key={index} className="border-b border-border hover:bg-muted/30">
                         <td className="p-4 text-sm text-foreground">{item.feature}</td>
                         <td className="p-4 text-center">
-                          {item.homeHNI ? (
-                            <CheckCircle className="w-5 h-5 text-green-500 mx-auto" />
-                          ) : (
-                            <X className="w-5 h-5 text-red-500 mx-auto" />
-                          )}
+                          {item.homeHNI ? <CheckCircle className="w-5 h-5 text-green-500 mx-auto" /> : <X className="w-5 h-5 text-red-500 mx-auto" />}
                         </td>
                         <td className="p-4 text-center">
-                          {item.others ? (
-                            <CheckCircle className="w-5 h-5 text-green-500 mx-auto" />
-                          ) : (
-                            <X className="w-5 h-5 text-red-500 mx-auto" />
-                          )}
+                          {item.others ? <CheckCircle className="w-5 h-5 text-green-500 mx-auto" /> : <X className="w-5 h-5 text-red-500 mx-auto" />}
                         </td>
-                      </tr>
-                    ))}
+                      </tr>)}
                   </tbody>
                 </table>
               </div>
@@ -554,27 +511,19 @@ const Architects = () => {
               </h2>
               
               <div className="space-y-6">
-                {testimonials.map((testimonial, index) => (
-                  <div key={index} className="p-6 bg-card rounded-lg border border-border">
+                {testimonials.map((testimonial, index) => <div key={index} className="p-6 bg-card rounded-lg border border-border">
                     <div className="flex items-center mb-4">
-                      <img 
-                        src={testimonial.image} 
-                        alt={testimonial.name}
-                        className="w-12 h-12 rounded-full mr-4 object-cover"
-                      />
+                      <img src={testimonial.image} alt={testimonial.name} className="w-12 h-12 rounded-full mr-4 object-cover" />
                       <div>
                         <h4 className="font-semibold text-foreground">{testimonial.name}</h4>
                         <p className="text-sm text-muted-foreground">{testimonial.role}</p>
                       </div>
                       <div className="ml-auto flex items-center">
-                        {[...Array(testimonial.rating)].map((_, i) => (
-                          <Star key={i} className="w-4 h-4 text-yellow-400 fill-current" />
-                        ))}
+                        {[...Array(testimonial.rating)].map((_, i) => <Star key={i} className="w-4 h-4 text-yellow-400 fill-current" />)}
                       </div>
                     </div>
                     <p className="text-sm text-muted-foreground italic">"{testimonial.text}"</p>
-                  </div>
-                ))}
+                  </div>)}
               </div>
             </div>
             
@@ -594,15 +543,13 @@ const Architects = () => {
               </h2>
               
               <div className="space-y-6">
-                {targetAudience.map((audience, index) => (
-                  <div key={index} className="flex items-start space-x-4 p-4 bg-card rounded-lg border border-border">
+                {targetAudience.map((audience, index) => <div key={index} className="flex items-start space-x-4 p-4 bg-card rounded-lg border border-border">
                     <audience.icon className="w-8 h-8 text-red-600 mt-1 flex-shrink-0" />
                     <div>
                       <h3 className="text-lg font-semibold text-foreground mb-2">{audience.title}</h3>
                       <p className="text-sm text-muted-foreground">{audience.description}</p>
                     </div>
-                  </div>
-                ))}
+                  </div>)}
               </div>
             </div>
             
@@ -622,16 +569,14 @@ const Architects = () => {
               </h2>
               
               <Accordion type="single" collapsible className="w-full">
-                {faqs.map((faq, index) => (
-                  <AccordionItem key={index} value={`item-${index}`} className="border-b border-border">
+                {faqs.map((faq, index) => <AccordionItem key={index} value={`item-${index}`} className="border-b border-border">
                     <AccordionTrigger className="text-left hover:text-red-600 text-foreground">
                       {faq.question}
                     </AccordionTrigger>
                     <AccordionContent className="text-sm text-muted-foreground">
                       {faq.answer}
                     </AccordionContent>
-                  </AccordionItem>
-                ))}
+                  </AccordionItem>)}
               </Accordion>
             </div>
             
@@ -651,18 +596,9 @@ const Architects = () => {
               </h2>
               
               <div className="flex flex-wrap gap-2">
-                {[
-                  "Residential Architecture", "Commercial Design", "Interior Planning", 
-                  "3D Visualization", "Sustainable Design", "Project Management",
-                  "Building Permits", "Construction Supervision", "Renovation Services",
-                  "Space Planning", "Architectural Drawings", "Design Consultation",
-                  "Green Building", "Modern Architecture", "Traditional Design",
-                  "Cost Estimation", "Timeline Planning", "Quality Assurance"
-                ].map((tag, index) => (
-                  <span key={index} className="px-3 py-1 bg-red-100 text-red-700 text-xs rounded-full">
+                {["Residential Architecture", "Commercial Design", "Interior Planning", "3D Visualization", "Sustainable Design", "Project Management", "Building Permits", "Construction Supervision", "Renovation Services", "Space Planning", "Architectural Drawings", "Design Consultation", "Green Building", "Modern Architecture", "Traditional Design", "Cost Estimation", "Timeline Planning", "Quality Assurance"].map((tag, index) => <span key={index} className="px-3 py-1 bg-red-100 text-red-700 text-xs rounded-full">
                     {tag}
-                  </span>
-                ))}
+                  </span>)}
               </div>
             </div>
             
@@ -673,31 +609,9 @@ const Architects = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 px-4 bg-red-600">
-        <div className="container mx-auto text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-            Ready to Transform Your Space?
-          </h2>
-          <p className="text-lg text-red-100 mb-8 max-w-2xl mx-auto">
-            Get expert architectural consultation and bring your dream project to life with India's top architects.
-          </p>
-          
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-white text-red-600 hover:bg-red-50 font-semibold">
-              <Smartphone className="w-5 h-5 mr-2" />
-              Call Now: +91 80740 17388
-            </Button>
-            <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10">
-              <Download className="w-5 h-5 mr-2" />
-              Download Portfolio
-            </Button>
-          </div>
-        </div>
-      </section>
+      
 
       
-    </div>
-  );
+    </div>;
 };
-
 export default Architects;
