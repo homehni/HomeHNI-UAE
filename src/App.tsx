@@ -20,6 +20,7 @@ import ReportProblem from "./pages/ReportProblem";
 import SummonsNotices from "./pages/SummonsNotices";
 import PaintingCleaning from "./pages/PaintingCleaning";
 import ReferEarn from "./pages/ReferEarn";
+import PackersMovers from "./pages/PackersMovers";
 import RentalAgreement from "./pages/RentalAgreement";
 import RentReceipts from "./pages/RentReceipts";
 import LegalServices from "./pages/LegalServices";
@@ -91,6 +92,7 @@ const App: React.FC = () => {
             <Route path="/summons-notices" element={<SummonsNotices />} />
             <Route path="/painting-cleaning" element={<PaintingCleaning />} />
             <Route path="/refer-earn" element={<ReferEarn />} />
+            <Route path="/packers-movers" element={<PackersMovers />} />
             <Route path="/rental-agreement" element={<RentalAgreement />} />
             <Route path="/rent-receipts" element={<RentReceipts />} />
             <Route path="/legal-services" element={<LegalServices />} />
