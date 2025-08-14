@@ -18,7 +18,7 @@ import FAQ from "./pages/FAQ";
 import GrievanceRedressal from "./pages/GrievanceRedressal";
 import ReportProblem from "./pages/ReportProblem";
 import SummonsNotices from "./pages/SummonsNotices";
-import PaintingCleaning from "./pages/PaintingCleaning";
+
 import ReferEarn from "./pages/ReferEarn";
 import PackersMovers from "./pages/PackersMovers";
 import RentalAgreement from "./pages/RentalAgreement";
@@ -90,7 +90,7 @@ const App: React.FC = () => {
             <Route path="/grievance-redressal" element={<GrievanceRedressal />} />
             <Route path="/report-problem" element={<ReportProblem />} />
             <Route path="/summons-notices" element={<SummonsNotices />} />
-            <Route path="/painting-cleaning" element={<PaintingCleaning />} />
+            
             <Route path="/refer-earn" element={<ReferEarn />} />
             <Route path="/packers-movers" element={<PackersMovers />} />
             <Route path="/rental-agreement" element={<RentalAgreement />} />
