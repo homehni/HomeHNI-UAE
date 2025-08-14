@@ -51,7 +51,7 @@ import AdminSettings from "./pages/AdminSettings";
 import AdminLogin from "./pages/AdminLogin";
 import NotFound from "./pages/NotFound";
 import ScrollToTop from "./components/ScrollToTop";
-import Architecture from "./pages/Architecture";
+
 import Interior from "./pages/Interior";
 import Loans from "./pages/Loans";
 import AboutSidebar from "./pages/AboutSidebar";
@@ -106,7 +106,7 @@ const App: React.FC = () => {
           <Route path="/commercial-seller-plans" element={<CommercialSellerPlans />} />
             <Route path="/corporate-enquiry" element={<CorporateEnquiry />} />
             <Route path="/blog" element={<Blog />} />
-            <Route path="/architecture" element={<Architecture />} />
+            
             <Route path="/interior" element={<Interior />} />
             <Route path="/loans" element={<Loans />} />
             
