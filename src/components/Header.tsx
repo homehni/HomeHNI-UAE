@@ -212,6 +212,10 @@ const Header = () => {
       
 
 
+          <button onClick={() => navigate('/architects')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+            Architects
+          </button>
+
           <button onClick={() => navigate('/interior')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
             Interior Designers
           </button>
