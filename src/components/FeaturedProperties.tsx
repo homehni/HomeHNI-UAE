@@ -127,6 +127,17 @@ const FeaturedProperties = ({
     bathrooms: 3,
     image: 'photo-1568605114967-8130f3a36994',
     propertyType: 'Independent House'
+  }, {
+    id: '11',
+    title: 'Fertile Agricultural Land with Water Source',
+    location: 'Kharif Valley, Punjab',
+    price: '₹25 L',
+    area: '5 acres',
+    bedrooms: 0,
+    bathrooms: 0,
+    image: 'photo-1497366216548-37526070297c',
+    propertyType: 'Agriculture Lands',
+    isNew: true
   }];
 
   // Compute available types dynamically so it works if properties change in the future
