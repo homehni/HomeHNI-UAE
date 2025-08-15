@@ -105,76 +105,52 @@ const PropertyCard = ({
   };
 
   return (
-    <Card className={cn("overflow-hidden hover:shadow-lg transition-shadow duration-300 group", size === 'compact' ? RECOMMENDED_CARD_WIDTH : undefined)}>
+    <Card className="overflow-hidden hover:shadow-lg transition-all duration-300 group cursor-pointer rounded-xl border-0 bg-white shadow-sm" onClick={() => navigate(`/property/${id}`, { state: propertyForPage })}>
       <div className="relative">
         <img
           src={`https://images.unsplash.com/${image}?auto=format&fit=crop&w=400&q=80`}
           alt={title}
-          className={cn("w-full object-cover group-hover:scale-105 transition-transform duration-300", size === 'compact' ? RECOMMENDED_IMAGE_HEIGHT : 'h-32')}
+          className="w-full h-32 object-cover group-hover:scale-105 transition-transform duration-300"
         />
         <Button
           variant="ghost"
           size="sm"
-          className="absolute top-2 right-2 bg-white/80 hover:bg-white text-red-500 hover:text-red-600"
+          className="absolute top-2 right-2 bg-white/90 hover:bg-white text-red-500 hover:text-red-600 h-8 w-8 p-0 rounded-full"
+          onClick={(e) => e.stopPropagation()}
         >
-          <Heart size={16} />
+          <Heart size={14} />
         </Button>
         {isNew && (
-          <div className="absolute top-2 left-2 bg-brand-maroon text-white px-2 py-1 rounded text-xs font-semibold">
+          <div className="absolute top-2 left-2 bg-red-600 text-white px-2 py-1 rounded-md text-xs font-medium">
             New
           </div>
         )}
-        <div className="absolute bottom-2 left-2 bg-brand-red text-white px-2 py-1 rounded text-xs">
+        <div className="absolute bottom-2 left-2 bg-gray-900/80 text-white px-2 py-1 rounded-md text-xs font-medium">
           {propertyType}
         </div>
       </div>
       
-      <CardContent className="p-4">
-        <div className={cn(size === 'compact' ? 'min-h-28' : undefined)}>
-          <h3 className="font-semibold text-lg mb-2 line-clamp-2">{title}</h3>
-          
-          <div className="flex items-center text-gray-600 mb-2">
-            <MapPin size={14} className="mr-1" />
-            <span className="text-sm line-clamp-1">{location}</span>
-          </div>
+      <CardContent className="p-3">
+        <h3 className="font-semibold text-sm mb-1 line-clamp-2 text-gray-900">{title}</h3>
         
-        {/*
-        <div className="flex justify-between items-center mb-3">
-          <div className="text-2xl font-bold text-brand-red">{price}</div>
-          <div className="text-sm text-gray-600">{area}</div>
+        <div className="flex items-center text-gray-500 mb-3">
+          <MapPin size={12} className="mr-1 flex-shrink-0" />
+          <span className="text-xs line-clamp-1">{location}</span>
         </div>
-        */}
         
-        {/*
-        <div className="flex items-center space-x-4 mb-4 text-gray-600">
-          <div className="flex items-center">
-            <Bed size={16} className="mr-1" />
-            <span className="text-sm">{bedrooms} BHK</span>
-          </div>
-          <div className="flex items-center">
-            <Bath size={16} className="mr-1" />
-            <span className="text-sm">{bathrooms} Bath</span>
-          </div>
-          <div className="flex items-center">
-            <Square size={16} className="mr-1" />
-            <span className="text-sm">{area}</span>
-          </div>
-        </div>
-        */}
-        </div>
-        <div className={cn("flex", size === 'compact' ? 'flex-col space-y-2' : 'flex-row space-x-2')}>
+        <div className="flex gap-2">
           <Button
             variant="outline"
             size="sm"
-            className={cn(size === 'compact' ? 'w-full' : 'flex-1')}
+            className="flex-1 h-8 text-xs border-gray-200 hover:bg-gray-50"
+            onClick={(e) => e.stopPropagation()}
           >
-            <Phone size={14} className="mr-1" />
+            <Phone size={12} className="mr-1" />
             Contact
           </Button>
           <Button
             size="sm"
-            className={cn(size === 'compact' ? 'w-full' : 'flex-1', 'bg-brand-maroon hover:bg-brand-maroon-dark')}
-            onClick={() => navigate(`/property/${id}`, { state: propertyForPage })}
+            className="flex-1 h-8 text-xs bg-red-600 hover:bg-red-700 text-white"
           >
             View Details
           </Button>
