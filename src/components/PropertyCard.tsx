@@ -110,7 +110,7 @@ const PropertyCard = ({
         <img
           src={`https://images.unsplash.com/${image}?auto=format&fit=crop&w=400&q=80`}
           alt={title}
-          className={cn("w-full object-cover group-hover:scale-105 transition-transform duration-300", size === 'compact' ? RECOMMENDED_IMAGE_HEIGHT : 'h-48')}
+          className={cn("w-full object-cover group-hover:scale-105 transition-transform duration-300", size === 'compact' ? RECOMMENDED_IMAGE_HEIGHT : 'h-32')}
         />
         <Button
           variant="ghost"
