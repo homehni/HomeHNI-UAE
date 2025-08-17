@@ -12,7 +12,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
   const [selectedCity, setSelectedCity] = useState('All Residential');
   const inputRef = useRef<HTMLInputElement>(null);
   const mobileInputRef = useRef<HTMLInputElement>(null);
-  const cities = ['All Residential', 'Flat/Apartment', 'Independent Building/ Floor', 'Farm House', 'Villa', 'Plots', 'Independent House'];
+  const cities = ['All Residential', 'Flat/Apartment', 'Independent Building/ Floor', 'Farm House', 'Villa', 'Plots', 'Independent House', 'Agriculture Lands'];
   const handleCitySelect = (city: string) => {
     setSelectedCity(city);
   };
