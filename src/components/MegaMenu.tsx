@@ -41,17 +41,17 @@ const MegaMenu = ({ isScrolled }: MegaMenuProps) => {
     
           {/* <DropdownMenuSeparator /> */}
           {[
-            'All Residential',
-            'Flat / Apartment',
-            'Independent Building/Floor',
-            'Farm House',
-            'Villa',
-            'Plots',
-            'Independent House',
-          ].map((label) => (
-            <DropdownMenuItem key={label} asChild>
-              <a href="#" className="w-full">
-                {label}
+            { label: 'All Residential', href: '/property' },
+            { label: 'Flat / Apartment', href: '/property/apartment' },
+            { label: 'Independent Building/Floor', href: '/property/independent-building' },
+            { label: 'Farm House', href: '/property/farm-house' },
+            { label: 'Villa', href: '/property/villa' },
+            { label: 'Plots', href: '/property/plots' },
+            { label: 'Independent House', href: '/property/independent-house' },
+          ].map((item) => (
+            <DropdownMenuItem key={item.label} asChild>
+              <a href={item.href} className="w-full">
+                {item.label}
               </a>
             </DropdownMenuItem>
           ))}
