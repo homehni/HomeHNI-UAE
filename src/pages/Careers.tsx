@@ -28,9 +28,6 @@ const Careers = () => {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Marquee at the very top */}
-      <Marquee />
-      
       {/* Header overlapping with content */}
       <Header />
       
