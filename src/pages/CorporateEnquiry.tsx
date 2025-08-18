@@ -140,9 +140,12 @@ const CorporateEnquiry = () => {
     <div className="min-h-screen bg-background">
       {/* Sticky Corporate Enquiry Form - Desktop Only */}
       <div className="hidden xl:block fixed right-6 top-1/2 transform -translate-y-1/2 z-40 w-80">
-        <div className="bg-white rounded-lg shadow-xl border border-gray-200 p-6">
-          <div className="mb-4">
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">Corporate Enquiry</h3>
+        <div className="bg-gradient-to-br from-white to-gray-50 rounded-2xl shadow-2xl border border-gray-100 p-6 backdrop-blur-sm">
+          <div className="text-center mb-6">
+            <div className="w-12 h-12 bg-gradient-to-br from-brand-red to-brand-red-dark rounded-full mx-auto mb-3 flex items-center justify-center">
+              <Building className="h-6 w-6 text-white" />
+            </div>
+            <h3 className="text-xl font-bold text-gray-900 mb-2">Corporate Enquiry</h3>
             <p className="text-sm text-gray-600">Get custom solutions for your company</p>
           </div>
           
