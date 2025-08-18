@@ -32,6 +32,15 @@ const CorporateEnquiry = () => {
     city: '',
     employees: ''
   });
+
+  const [stickyFormData, setStickyFormData] = useState({
+    name: '',
+    company: '',
+    phone: '',
+    email: '',
+    city: '',
+    employees: ''
+  });
   const { toast } = useToast();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -49,6 +58,30 @@ const CorporateEnquiry = () => {
     });
     // Reset form
     setFormData({
+      name: '',
+      company: '',
+      phone: '',
+      email: '',
+      city: '',
+      employees: ''
+    });
+  };
+
+  const handleStickyInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setStickyFormData(prev => ({
+      ...prev,
+      [e.target.name]: e.target.value
+    }));
+  };
+
+  const handleStickySubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    toast({
+      title: "Enquiry Submitted Successfully", 
+      description: "Our team will reach out with a custom offer plan for your company.",
+    });
+    // Reset sticky form
+    setStickyFormData({
       name: '',
       company: '',
       phone: '',
@@ -105,6 +138,82 @@ const CorporateEnquiry = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      {/* Sticky Corporate Enquiry Form - Desktop Only */}
+      <div className="hidden xl:block fixed right-6 top-1/2 transform -translate-y-1/2 z-40 w-80">
+        <div className="bg-white rounded-lg shadow-xl border border-gray-200 p-6">
+          <div className="mb-4">
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">Corporate Enquiry</h3>
+            <p className="text-sm text-gray-600">Get custom solutions for your company</p>
+          </div>
+          
+          <form onSubmit={handleStickySubmit} className="space-y-4">
+            <div>
+              <Input
+                name="name"
+                placeholder="Your Name *"
+                value={stickyFormData.name}
+                onChange={handleStickyInputChange}
+                required
+                className="text-sm"
+              />
+            </div>
+            <div>
+              <Input
+                name="company"
+                placeholder="Company Name *"
+                value={stickyFormData.company}
+                onChange={handleStickyInputChange}
+                required
+                className="text-sm"
+              />
+            </div>
+            <div>
+              <Input
+                name="phone"
+                type="tel"
+                placeholder="Phone Number *"
+                value={stickyFormData.phone}
+                onChange={handleStickyInputChange}
+                required
+                className="text-sm"
+              />
+            </div>
+            <div>
+              <Input
+                name="email"
+                type="email"
+                placeholder="Official Email *"
+                value={stickyFormData.email}
+                onChange={handleStickyInputChange}
+                required
+                className="text-sm"
+              />
+            </div>
+            <div>
+              <Input
+                name="city"
+                placeholder="City"
+                value={stickyFormData.city}
+                onChange={handleStickyInputChange}
+                className="text-sm"
+              />
+            </div>
+            <div>
+              <Input
+                name="employees"
+                type="number"
+                placeholder="Number of Employees"
+                value={stickyFormData.employees}
+                onChange={handleStickyInputChange}
+                className="text-sm"
+              />
+            </div>
+            <Button type="submit" className="w-full bg-brand-red hover:bg-brand-red-dark text-sm">
+              Submit Enquiry
+            </Button>
+          </form>
+        </div>
+      </div>
       <Marquee />
       <Header />
       
@@ -265,9 +374,82 @@ const CorporateEnquiry = () => {
         </div>
       </section>
 
+      {/* Mobile Corporate Enquiry Form */}
+      <section className="xl:hidden py-8 px-4 bg-muted/30">
+        <div className="max-w-md mx-auto">
+          <div className="bg-white rounded-lg shadow-lg border border-gray-200 p-6">
+            <div className="mb-4 text-center">
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">Corporate Enquiry</h3>
+              <p className="text-sm text-gray-600">Get custom solutions for your company</p>
+            </div>
+            
+            <form onSubmit={handleStickySubmit} className="space-y-4">
+              <div>
+                <Input
+                  name="name"
+                  placeholder="Your Name *"
+                  value={stickyFormData.name}
+                  onChange={handleStickyInputChange}
+                  required
+                />
+              </div>
+              <div>
+                <Input
+                  name="company"
+                  placeholder="Company Name *"
+                  value={stickyFormData.company}
+                  onChange={handleStickyInputChange}
+                  required
+                />
+              </div>
+              <div>
+                <Input
+                  name="phone"
+                  type="tel"
+                  placeholder="Phone Number *"
+                  value={stickyFormData.phone}
+                  onChange={handleStickyInputChange}
+                  required
+                />
+              </div>
+              <div>
+                <Input
+                  name="email"
+                  type="email"
+                  placeholder="Official Email *"
+                  value={stickyFormData.email}
+                  onChange={handleStickyInputChange}
+                  required
+                />
+              </div>
+              <div>
+                <Input
+                  name="city"
+                  placeholder="City"
+                  value={stickyFormData.city}
+                  onChange={handleStickyInputChange}
+                />
+              </div>
+              <div>
+                <Input
+                  name="employees"
+                  type="number"
+                  placeholder="Number of Employees"
+                  value={stickyFormData.employees}
+                  onChange={handleStickyInputChange}
+                />
+              </div>
+              <Button type="submit" className="w-full bg-brand-red hover:bg-brand-red-dark">
+                Submit Enquiry
+              </Button>
+            </form>
+          </div>
+        </div>
+      </section>
+
       {/* Final CTA & Form */}
       <section className="py-16 px-4" id="form">
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-4xl mx-auto xl:pr-96">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-foreground mb-4">
               Loved What You Saw? Let's Get Started!
