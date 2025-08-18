@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { Home, MapPin, IndianRupee, Calendar, Mail, Phone, User, Images, Paintbrush, Calculator, FileText, ShieldCheck, Bus, Train, Car, TrendingUp } from 'lucide-react';
+import { ContactOwnerModal } from '@/components/ContactOwnerModal';
 interface Property {
   id: string;
   title: string;
@@ -26,10 +27,7 @@ interface Property {
   videos?: string[];
   status: string;
   created_at: string;
-  owner_name?: string;
-  owner_email?: string;
-  owner_phone?: string;
-  owner_role?: string;
+  // Note: Owner contact info removed for security
 }
 const PropertyDetails: React.FC = () => {
   const {
@@ -38,6 +36,8 @@ const PropertyDetails: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const property = location.state as Property | undefined || null;
+  const [showContactModal, setShowContactModal] = React.useState(false);
+  
   React.useEffect(() => {
     document.title = property ? `${property.title} | Property Details` : 'Property Details';
   }, [property]);
@@ -232,21 +232,34 @@ const PropertyDetails: React.FC = () => {
                 <div className="text-2xl font-bold text-brand-red">₹{property.expected_price.toLocaleString()}</div>
               </div>
 
-              {(property.owner_name || property.owner_email || property.owner_phone) && <div className="border rounded-lg p-4 space-y-3">
-                  <h3 className="text-lg font-semibold flex items-center"><User className="h-5 w-5 mr-2 text-brand-red" /> Owner</h3>
-                  {property.owner_name && <div className="flex items-center"><span className="font-medium">{property.owner_name}</span></div>}
-                  {property.owner_email && <div className="flex items-center text-gray-700"><Mail className="h-4 w-4 mr-2" />{property.owner_email}</div>}
-                  {property.owner_phone && <div className="flex items-center text-gray-700"><Phone className="h-4 w-4 mr-2" />{property.owner_phone}</div>}
-                </div>}
+              <div className="border rounded-lg p-4 space-y-3">
+                <h3 className="text-lg font-semibold flex items-center"><User className="h-5 w-5 mr-2 text-brand-red" /> Contact</h3>
+                <p className="text-gray-600 text-sm">
+                  Interested in this property? Contact the owner through our secure platform.
+                </p>
+                <Button className="w-full" onClick={() => setShowContactModal(true)}>
+                  Contact Owner
+                </Button>
+              </div>
 
               <div className="flex gap-2">
                 <Button variant="outline" className="flex-1" onClick={() => navigate(-1)}>Back</Button>
-                <Button className="flex-1">Contact Owner</Button>
               </div>
             </aside>
           </div>
         </section>
       </main>
+      
+      {/* Contact Modal */}
+      {property && (
+        <ContactOwnerModal
+          isOpen={showContactModal}
+          onClose={() => setShowContactModal(false)}
+          propertyId={property.id}
+          propertyTitle={property.title}
+        />
+      )}
+      
       <Footer />
     </div>;
 };
