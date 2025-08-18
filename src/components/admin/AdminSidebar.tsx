@@ -13,6 +13,11 @@ import {
   SidebarFooter,
   useSidebar,
 } from '@/components/ui/sidebar';
+import { NavLink } from 'react-router-dom';
+import { cn } from '@/lib/utils';
+import { useAuth } from '@/contexts/AuthContext';
+import { Button } from '@/components/ui/button';
+
 import {
   LayoutDashboard,
   Building2,
@@ -20,11 +25,13 @@ import {
   Settings,
   Shield,
   LogOut,
+  BarChart3,
+  FileText,
+  MessageSquare,
+  Globe,
+  Search,
+  AlertTriangle,
 } from 'lucide-react';
-import { NavLink } from 'react-router-dom';
-import { cn } from '@/lib/utils';
-import { useAuth } from '@/contexts/AuthContext';
-import { Button } from '@/components/ui/button';
 
 const navigationItems = [
   {
@@ -41,6 +48,36 @@ const navigationItems = [
     title: 'Users',
     url: '/admin/users',
     icon: Users,
+  },
+  {
+    title: 'Analytics',
+    url: '/admin/analytics',
+    icon: BarChart3,
+  },
+  {
+    title: 'Content',
+    url: '/admin/content',
+    icon: FileText,
+  },
+  {
+    title: 'Leads',
+    url: '/admin/leads',
+    icon: MessageSquare,
+  },
+  {
+    title: 'Regions',
+    url: '/admin/regions',
+    icon: Globe,
+  },
+  {
+    title: 'SEO',
+    url: '/admin/seo',
+    icon: Search,
+  },
+  {
+    title: 'Audit Logs',
+    url: '/admin/audit',
+    icon: AlertTriangle,
   },
   {
     title: 'Settings',

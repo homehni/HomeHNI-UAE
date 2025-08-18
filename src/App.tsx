@@ -50,6 +50,12 @@ import AdminProperties from "./pages/AdminProperties";
 import AdminUsers from "./pages/AdminUsers";
 import AdminSettings from "./pages/AdminSettings";
 import AdminLogin from "./pages/AdminLogin";
+import { AdminAnalytics } from "./pages/AdminAnalytics";
+import { AdminContent } from "./pages/AdminContent";
+import { AdminLeads } from "./pages/AdminLeads";
+import { AdminRegions } from "./pages/AdminRegions";
+import { AdminSEO } from "./pages/AdminSEO";
+import { AdminAudit } from "./pages/AdminAudit";
 import NotFound from "./pages/NotFound";
 import ScrollToTop from "./components/ScrollToTop";
 
@@ -150,6 +156,12 @@ const App: React.FC = () => {
             <Route index element={<Admin />} />
             <Route path="properties" element={<AdminProperties />} />
             <Route path="users" element={<AdminUsers />} />
+            <Route path="analytics" element={<AdminAnalytics />} />
+            <Route path="content" element={<AdminContent />} />
+            <Route path="leads" element={<AdminLeads />} />
+            <Route path="regions" element={<AdminRegions />} />
+            <Route path="seo" element={<AdminSEO />} />
+            <Route path="audit" element={<AdminAudit />} />
             <Route path="settings" element={<AdminSettings />} />
           </Route>
             
