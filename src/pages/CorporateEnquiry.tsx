@@ -219,7 +219,7 @@ const CorporateEnquiry = () => {
       
       {/* Hero Section */}
       <section className="pt-24 pb-16 px-4">
-        <div className="max-w-6xl mx-auto text-center">
+        <div className="max-w-6xl mx-auto text-center xl:pr-96">
           <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
             Comprehensive Corporate Solutions
           </h1>
@@ -239,7 +239,7 @@ const CorporateEnquiry = () => {
 
       {/* Trusted By Section */}
       <section className="py-16 bg-muted/30">
-        <div className="max-w-6xl mx-auto px-4 text-center">
+        <div className="max-w-6xl mx-auto px-4 text-center xl:pr-96">
           <h2 className="text-2xl font-semibold text-foreground mb-8">Trusted by Leading Companies</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {[1, 2, 3, 4].map((i) => (
@@ -255,7 +255,7 @@ const CorporateEnquiry = () => {
 
       {/* Solutions Section */}
       <section className="py-16 px-4" id="services">
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-6xl mx-auto xl:pr-96">
           <h2 className="text-3xl font-bold text-center text-foreground mb-12">
             Explore Our Solutions for Your:
           </h2>
@@ -322,7 +322,7 @@ const CorporateEnquiry = () => {
 
       {/* Services Grid */}
       <section className="py-16 bg-muted/30">
-        <div className="max-w-6xl mx-auto px-4">
+        <div className="max-w-6xl mx-auto px-4 xl:pr-96">
           <h2 className="text-3xl font-bold text-center text-foreground mb-12">
             Services We Offer to Your Employees
           </h2>
@@ -340,7 +340,7 @@ const CorporateEnquiry = () => {
 
       {/* How It Works */}
       <section className="py-16 px-4">
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-6xl mx-auto xl:pr-96">
           <h2 className="text-3xl font-bold text-center text-foreground mb-12">How It Works</h2>
           <div className="grid md:grid-cols-3 gap-8">
             {workingSteps.map((step, index) => (
@@ -358,7 +358,7 @@ const CorporateEnquiry = () => {
 
       {/* Why Use Our Corporate Solutions */}
       <section className="py-16 bg-muted/30">
-        <div className="max-w-6xl mx-auto px-4">
+        <div className="max-w-6xl mx-auto px-4 xl:pr-96">
           <h2 className="text-3xl font-bold text-center text-foreground mb-12">
             Why Use Our Corporate Solutions?
           </h2>
