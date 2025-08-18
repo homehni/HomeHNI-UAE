@@ -38,6 +38,7 @@ import CommercialBuyerPlan from "./pages/CommercialBuyerPlan";
 import CommercialSellerPlans from "./pages/CommercialSellerPlans";
 import Blog from "./pages/Blog";
 import { Auth } from "./pages/Auth";
+import { Profile } from "./pages/Profile";
 import { VerifyEmail } from "./pages/VerifyEmail";
 import { Dashboard } from "./pages/Dashboard";
 import { PostProperty } from "./pages/PostProperty";
@@ -115,6 +116,13 @@ const App: React.FC = () => {
             {/* Authentication Routes */}
             <Route path="/auth" element={<Auth />} />
             <Route path="/verify-email" element={<VerifyEmail />} />
+            
+            {/* Profile Route */}
+            <Route path="/profile" element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            } />
             
             {/* Property Detail Route */}
             <Route path="/property/:id" element={<PropertyDetails />} />

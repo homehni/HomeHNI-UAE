@@ -68,6 +68,57 @@ export type Database = {
           },
         ]
       }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          bio: string | null
+          created_at: string
+          email_notifications: boolean | null
+          full_name: string | null
+          id: string
+          location: Json | null
+          phone: string | null
+          preferences: Json | null
+          updated_at: string
+          user_id: string
+          verification_documents: Json | null
+          verification_status: string | null
+          whatsapp_opted_in: boolean | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string
+          email_notifications?: boolean | null
+          full_name?: string | null
+          id?: string
+          location?: Json | null
+          phone?: string | null
+          preferences?: Json | null
+          updated_at?: string
+          user_id: string
+          verification_documents?: Json | null
+          verification_status?: string | null
+          whatsapp_opted_in?: boolean | null
+        }
+        Update: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string
+          email_notifications?: boolean | null
+          full_name?: string | null
+          id?: string
+          location?: Json | null
+          phone?: string | null
+          preferences?: Json | null
+          updated_at?: string
+          user_id?: string
+          verification_documents?: Json | null
+          verification_status?: string | null
+          whatsapp_opted_in?: boolean | null
+        }
+        Relationships: []
+      }
       properties: {
         Row: {
           admin_reviewed_at: string | null
@@ -410,6 +461,25 @@ export type Database = {
         Args: { _property_id: string }
         Returns: string
       }
+      get_user_profile_with_role: {
+        Args: { _user_id?: string }
+        Returns: {
+          avatar_url: string
+          bio: string
+          created_at: string
+          email_notifications: boolean
+          full_name: string
+          id: string
+          location: Json
+          phone: string
+          preferences: Json
+          role: Database["public"]["Enums"]["app_role"]
+          updated_at: string
+          user_id: string
+          verification_status: string
+          whatsapp_opted_in: boolean
+        }[]
+      }
       get_user_profiles: {
         Args: Record<PropertyKey, never>
         Returns: {
@@ -430,9 +500,16 @@ export type Database = {
         }
         Returns: boolean
       }
+      update_user_role: {
+        Args: {
+          _new_role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: undefined
+      }
     }
     Enums: {
-      app_role: "admin" | "user"
+      app_role: "admin" | "user" | "buyer" | "seller"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -560,7 +637,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      app_role: ["admin", "user"],
+      app_role: ["admin", "user", "buyer", "seller"],
     },
   },
 } as const

@@ -1,14 +1,18 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
+import { getCurrentUserProfile, type UserProfile } from '@/services/profileService';
 
 interface AuthContextType {
   user: User | null;
   session: Session | null;
+  profile: UserProfile | null;
   loading: boolean;
   signInWithGoogle: () => Promise<void>;
   signInWithPassword: (email: string, password: string) => Promise<void>;
+  signUpWithPassword: (email: string, password: string, fullName?: string) => Promise<void>;
   signOut: () => Promise<void>;
+  refreshProfile: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -16,7 +20,24 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
+  const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
+
+  // Load profile when user changes
+  const loadUserProfile = async (user: User | null) => {
+    if (!user) {
+      setProfile(null);
+      return;
+    }
+
+    try {
+      const userProfile = await getCurrentUserProfile();
+      setProfile(userProfile);
+    } catch (error) {
+      console.error('Error loading user profile:', error);
+      setProfile(null);
+    }
+  };
 
   useEffect(() => {
     // Set up auth state listener
@@ -25,6 +46,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setSession(session);
         setUser(session?.user ?? null);
         setLoading(false);
+        
+        // Load profile after setting user (use setTimeout to avoid potential conflicts)
+        if (session?.user) {
+          setTimeout(() => {
+            loadUserProfile(session.user);
+          }, 0);
+        } else {
+          setProfile(null);
+        }
       }
     );
 
@@ -33,6 +63,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setSession(session);
       setUser(session?.user ?? null);
       setLoading(false);
+      
+      // Load profile for initial session
+      if (session?.user) {
+        setTimeout(() => {
+          loadUserProfile(session.user);
+        }, 0);
+      }
     });
 
     return () => subscription.unsubscribe();
@@ -71,6 +108,32 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
+  const signUpWithPassword = async (email: string, password: string, fullName?: string) => {
+    const redirectUrl = `${window.location.origin}/`;
+    
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        emailRedirectTo: redirectUrl,
+        data: {
+          full_name: fullName,
+        }
+      }
+    });
+    
+    if (error) {
+      console.error('Error signing up:', error);
+      throw error;
+    }
+  };
+
+  const refreshProfile = async () => {
+    if (user) {
+      await loadUserProfile(user);
+    }
+  };
+
   const signOut = async () => {
     const { error } = await supabase.auth.signOut();
     if (error) {
@@ -103,10 +166,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     <AuthContext.Provider value={{
       user,
       session,
+      profile,
       loading,
       signInWithGoogle,
       signInWithPassword,
-      signOut
+      signUpWithPassword,
+      signOut,
+      refreshProfile
     }}>
       {children}
     </AuthContext.Provider>
