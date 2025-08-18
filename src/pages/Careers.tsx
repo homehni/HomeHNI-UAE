@@ -1,10 +1,18 @@
 
 import { useEffect } from 'react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
+import { useToast } from '@/hooks/use-toast';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Marquee from '@/components/Marquee';
 
 const Careers = () => {
+  const { toast } = useToast();
+
   useEffect(() => {
     // Smooth scroll to top when component mounts
     const scrollToTop = () => {
@@ -39,9 +47,152 @@ const Careers = () => {
           ></div>
         </div>
 
+        {/* Sticky Form Container for Large Screens */}
+        <div className="hidden lg:block fixed top-32 right-8 z-50 w-96">
+          <Card className="w-full rounded-xl shadow-2xl bg-background border">
+            <CardContent className="p-6">
+              <h3 className="text-xl font-semibold text-foreground mb-2">Apply for a Position</h3>
+              <p className="text-sm text-muted-foreground mb-4">Submit your application today</p>
+
+              <form className="space-y-4" onSubmit={e => {
+                e.preventDefault();
+                toast({
+                  title: "Application submitted",
+                  description: "We will review your application and get back to you soon."
+                });
+                (e.currentTarget as HTMLFormElement).reset();
+              }}>
+                <Input id="career-name" name="name" placeholder="Full Name" required />
+
+                <div className="flex gap-2">
+                  <Select defaultValue="+91" name="countryCode">
+                    <SelectTrigger className="w-28"><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="+91">🇮🇳 +91</SelectItem>
+                      <SelectItem value="+1">🇺🇸 +1</SelectItem>
+                      <SelectItem value="+44">🇬🇧 +44</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <Input id="career-phone" name="phone" type="tel" placeholder="Phone Number" className="flex-1" required />
+                </div>
+
+                <Input id="career-email" name="email" type="email" placeholder="Email ID" required />
+
+                <Select name="position">
+                  <SelectTrigger id="position"><SelectValue placeholder="Position of Interest" /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="sales-consultant">Real Estate Sales Consultant</SelectItem>
+                    <SelectItem value="marketing-executive">Digital Marketing Executive</SelectItem>
+                    <SelectItem value="fullstack-developer">Full Stack Developer</SelectItem>
+                    <SelectItem value="legal-executive">Legal Documentation Executive</SelectItem>
+                    <SelectItem value="other">Other Position</SelectItem>
+                  </SelectContent>
+                </Select>
+
+                <Input id="career-experience" name="experience" placeholder="Years of Experience" />
+
+                <Textarea id="career-message" name="message" placeholder="Brief message about why you'd be a great fit" rows={3} />
+
+                <Button type="submit" className="w-full">Submit Application</Button>
+              </form>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Mobile Form - Static below hero */}
+        <section className="lg:hidden px-4 py-8 bg-background">
+          <div className="container mx-auto max-w-xl px-4">
+            <Card className="w-full rounded-2xl shadow-xl border-0 bg-card">
+              <CardContent className="p-8">
+                <h3 className="text-2xl font-bold text-foreground mb-3">Apply for a Position</h3>
+                <p className="text-base text-muted-foreground mb-8">Submit your application today</p>
+
+                <form className="space-y-5" onSubmit={e => {
+                  e.preventDefault();
+                  toast({
+                    title: "Application submitted",
+                    description: "We will review your application and get back to you soon."
+                  });
+                  (e.currentTarget as HTMLFormElement).reset();
+                }}>
+                  <Input 
+                    id="career-name-mobile" 
+                    name="name" 
+                    placeholder="Full Name" 
+                    className="h-12 text-base bg-background"
+                    required 
+                  />
+
+                  <div className="flex gap-3">
+                    <Select defaultValue="+91" name="countryCode">
+                      <SelectTrigger className="w-32 h-12 bg-background">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent className="bg-background border shadow-lg">
+                        <SelectItem value="+91">🇮🇳 +91</SelectItem>
+                        <SelectItem value="+1">🇺🇸 +1</SelectItem>
+                        <SelectItem value="+44">🇬🇧 +44</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <Input 
+                      id="career-phone-mobile" 
+                      name="phone" 
+                      type="tel" 
+                      placeholder="Phone Number" 
+                      className="flex-1 h-12 text-base bg-background" 
+                      required 
+                    />
+                  </div>
+
+                  <Input 
+                    id="career-email-mobile" 
+                    name="email" 
+                    type="email" 
+                    placeholder="Email ID" 
+                    className="h-12 text-base bg-background"
+                    required 
+                  />
+
+                  <Select name="position">
+                    <SelectTrigger id="position-mobile" className="h-12 bg-background">
+                      <SelectValue placeholder="Position of Interest" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-background border shadow-lg">
+                      <SelectItem value="sales-consultant">Real Estate Sales Consultant</SelectItem>
+                      <SelectItem value="marketing-executive">Digital Marketing Executive</SelectItem>
+                      <SelectItem value="fullstack-developer">Full Stack Developer</SelectItem>
+                      <SelectItem value="legal-executive">Legal Documentation Executive</SelectItem>
+                      <SelectItem value="other">Other Position</SelectItem>
+                    </SelectContent>
+                  </Select>
+
+                  <Input 
+                    id="career-experience-mobile" 
+                    name="experience" 
+                    placeholder="Years of Experience" 
+                    className="h-12 text-base bg-background"
+                  />
+
+                  <Textarea 
+                    id="career-message-mobile" 
+                    name="message" 
+                    placeholder="Brief message about why you'd be a great fit" 
+                    rows={4}
+                    className="text-base bg-background"
+                  />
+
+                  <Button type="submit" className="w-full h-12 text-base font-semibold bg-red-600 hover:bg-red-700 text-white mt-6">
+                    Submit Application
+                  </Button>
+                </form>
+              </CardContent>
+            </Card>
+          </div>
+        </section>
+
         {/* Main Content */}
         <div className="container mx-auto px-4 py-16">
-          <div className="max-w-4xl mx-auto">
+          <div className="max-w-4xl mx-auto lg:mr-[420px]">{/* Add margin for desktop form */}
             
             {/* Header Section */}
             <section className="mb-12 text-center">
