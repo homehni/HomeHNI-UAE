@@ -192,7 +192,7 @@ const Careers = () => {
 
         {/* Main Content */}
         <div className="container mx-auto px-4 py-16">
-          <div className="max-w-4xl mx-auto lg:mr-[420px]">{/* Add margin for desktop form */}
+          <div className="max-w-4xl mx-auto lg:pr-[420px]">{/* Add padding for desktop form */}
             
             {/* Header Section */}
             <section className="mb-12 text-center">
