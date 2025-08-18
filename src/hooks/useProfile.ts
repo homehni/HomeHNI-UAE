@@ -66,7 +66,7 @@ export const useProfile = () => {
   };
 
   // Update role
-  const changeRole = async (newRole: 'buyer' | 'seller') => {
+  const changeRole = async (newRole: 'buyer' | 'seller' | 'consultant') => {
     if (!user || !profile) return;
 
     setUpdating(true);

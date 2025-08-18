@@ -18,7 +18,7 @@ export const RoleSelectionModal: React.FC<RoleSelectionModalProps> = ({
 }) => {
   const { user, refreshProfile } = useAuth();
   const { toast } = useToast();
-  const [selectedRole, setSelectedRole] = useState<'buyer' | 'seller' | null>(null);
+  const [selectedRole, setSelectedRole] = useState<'buyer' | 'seller' | 'consultant' | null>(null);
   const [isUpdating, setIsUpdating] = useState(false);
 
   const handleRoleSelect = async () => {
@@ -49,15 +49,15 @@ export const RoleSelectionModal: React.FC<RoleSelectionModalProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={() => {}}>
-      <DialogContent className="sm:max-w-2xl" onInteractOutside={(e) => e.preventDefault()}>
+      <DialogContent className="sm:max-w-5xl" onInteractOutside={(e) => e.preventDefault()}>
         <DialogHeader>
           <DialogTitle className="text-center">Welcome to HomeHNI!</DialogTitle>
           <DialogDescription className="text-center">
-            Let's set up your account. Are you here to buy/rent or sell/rent out properties?
+            Let's set up your account. Choose your role to get started with HomeHNI.
           </DialogDescription>
         </DialogHeader>
         
-        <div className="grid md:grid-cols-2 gap-4 mt-6">
+        <div className="grid md:grid-cols-3 gap-4 mt-6">
           <Card 
             className={`cursor-pointer transition-all hover:shadow-md ${
               selectedRole === 'buyer' ? 'ring-2 ring-primary' : ''
@@ -106,6 +106,32 @@ export const RoleSelectionModal: React.FC<RoleSelectionModalProps> = ({
                 <li>• Manage inquiries and leads</li>
                 <li>• Schedule property visits</li>
                 <li>• Get verified seller badge</li>
+              </ul>
+            </CardContent>
+          </Card>
+
+          <Card 
+            className={`cursor-pointer transition-all hover:shadow-md ${
+              selectedRole === 'consultant' ? 'ring-2 ring-primary' : ''
+            }`}
+            onClick={() => setSelectedRole('consultant')}
+          >
+            <CardHeader className="text-center">
+              <div className="flex justify-center mb-2">
+                <Building2 className="h-12 w-12 text-primary" />
+              </div>
+              <CardTitle>I'm a Property Professional</CardTitle>
+              <CardDescription>
+                Real estate agent, broker, or consultant managing properties
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="text-sm text-muted-foreground">
+              <ul className="space-y-2">
+                <li>• Manage multiple property listings</li>
+                <li>• Professional profile showcase</li>
+                <li>• Client ratings and reviews</li>
+                <li>• Analytics and lead management</li>
+                <li>• Bulk property uploads</li>
               </ul>
             </CardContent>
           </Card>
