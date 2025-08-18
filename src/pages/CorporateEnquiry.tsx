@@ -139,7 +139,7 @@ const CorporateEnquiry = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Sticky Corporate Enquiry Form - Desktop Only */}
-      <div className="hidden xl:block fixed right-6 top-1/2 transform -translate-y-1/3 z-40 w-80">
+      <div className="hidden xl:block fixed right-6 top-1/2 transform -translate-y-[22%] z-40 w-80">
         <div className="bg-gradient-to-br from-white to-gray-50 rounded-2xl shadow-2xl border border-gray-100 p-6 backdrop-blur-sm">
           <div className="text-center mb-6">
             <div className="w-12 h-12 bg-gradient-to-br from-brand-red to-brand-red-dark rounded-full mx-auto mb-3 flex items-center justify-center">
