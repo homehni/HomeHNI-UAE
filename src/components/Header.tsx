@@ -184,7 +184,7 @@ const Header = () => {
     {/* Custom Rental Dropdown */}
     {isRentalDropdownOpen && <div className="absolute top-full left-0 w-32 bg-white border border-gray-200 rounded-lg shadow-xl z-50 mt-2" onMouseEnter={handleRentalHover} onMouseLeave={handleRentalLeave}>
         <div className="py-2">
-          <button onClick={handleLegalServicesClick} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+          <button onClick={() => handlePostPropertyClick('Owner')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
            Owners
           </button>
           <button onClick={() => navigate('/handover-services')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
