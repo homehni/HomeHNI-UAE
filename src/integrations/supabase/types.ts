@@ -59,6 +59,13 @@ export type Database = {
             referencedRelation: "properties"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "leads_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "public_properties"
+            referencedColumns: ["id"]
+          },
         ]
       }
       properties: {
@@ -294,7 +301,105 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      public_properties: {
+        Row: {
+          availability_date: string | null
+          availability_type: string | null
+          balconies: number | null
+          bathrooms: number | null
+          bhk_type: string | null
+          carpet_area: number | null
+          city: string | null
+          created_at: string | null
+          description: string | null
+          expected_price: number | null
+          floor_no: number | null
+          furnishing: string | null
+          id: string | null
+          images: string[] | null
+          landmarks: string | null
+          listing_type: string | null
+          locality: string | null
+          maintenance_charges: number | null
+          pincode: string | null
+          price_negotiable: boolean | null
+          property_type: string | null
+          security_deposit: number | null
+          state: string | null
+          status: string | null
+          street_address: string | null
+          super_area: number | null
+          title: string | null
+          total_floors: number | null
+          updated_at: string | null
+          videos: string[] | null
+        }
+        Insert: {
+          availability_date?: string | null
+          availability_type?: string | null
+          balconies?: number | null
+          bathrooms?: number | null
+          bhk_type?: string | null
+          carpet_area?: number | null
+          city?: string | null
+          created_at?: string | null
+          description?: string | null
+          expected_price?: number | null
+          floor_no?: number | null
+          furnishing?: string | null
+          id?: string | null
+          images?: string[] | null
+          landmarks?: string | null
+          listing_type?: string | null
+          locality?: string | null
+          maintenance_charges?: number | null
+          pincode?: string | null
+          price_negotiable?: boolean | null
+          property_type?: string | null
+          security_deposit?: number | null
+          state?: string | null
+          status?: string | null
+          street_address?: string | null
+          super_area?: number | null
+          title?: string | null
+          total_floors?: number | null
+          updated_at?: string | null
+          videos?: string[] | null
+        }
+        Update: {
+          availability_date?: string | null
+          availability_type?: string | null
+          balconies?: number | null
+          bathrooms?: number | null
+          bhk_type?: string | null
+          carpet_area?: number | null
+          city?: string | null
+          created_at?: string | null
+          description?: string | null
+          expected_price?: number | null
+          floor_no?: number | null
+          furnishing?: string | null
+          id?: string | null
+          images?: string[] | null
+          landmarks?: string | null
+          listing_type?: string | null
+          locality?: string | null
+          maintenance_charges?: number | null
+          pincode?: string | null
+          price_negotiable?: boolean | null
+          property_type?: string | null
+          security_deposit?: number | null
+          state?: string | null
+          status?: string | null
+          street_address?: string | null
+          super_area?: number | null
+          title?: string | null
+          total_floors?: number | null
+          updated_at?: string | null
+          videos?: string[] | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       get_current_user_role: {
