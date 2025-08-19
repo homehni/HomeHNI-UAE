@@ -269,7 +269,6 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
             currentStep={1}
             totalSteps={6}
             completedSteps={completedSteps}
-            hideSidebar={true}
           />
         )}
 
