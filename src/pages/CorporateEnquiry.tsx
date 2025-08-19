@@ -125,7 +125,7 @@ const CorporateEnquiry = () => {
   }];
   return <div className="min-h-screen bg-background">
       {/* Sticky Corporate Enquiry Form - Desktop Only */}
-      <div className="hidden xl:block fixed top-32 right-6 z-50 w-96">
+      <div className="hidden xl:block fixed top-80 right-6 z-50 w-96">
         <div className="bg-gradient-to-br from-white to-gray-50 rounded-2xl shadow-2xl border border-gray-100 p-6 backdrop-blur-sm">
           <div className="text-center mb-6">
             <div className="w-12 h-12 bg-gradient-to-br from-brand-red to-brand-red-dark rounded-full mx-auto mb-3 flex items-center justify-center">
@@ -344,7 +344,7 @@ const CorporateEnquiry = () => {
 
       {/* Corporate Services Footer */}
       <section className="py-16 bg-muted/30 border-t">
-        <div className="max-w-6xl mx-auto px-4">
+        <div className="max-w-4xl mx-auto px-4 xl:pr-96">
           <div className="space-y-12">
             {/* Employee Services Section */}
             <div>
