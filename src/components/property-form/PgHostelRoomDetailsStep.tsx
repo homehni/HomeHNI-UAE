@@ -106,7 +106,7 @@ export function PgHostelRoomDetailsStep({
                     type="number"
                     value={formData.expectedRent}
                     onChange={(e) => setFormData({ ...formData, expectedRent: Number(e.target.value) })}
-                    placeholder="Enter monthly rent amount (e.g., 15000)"
+                    placeholder="Monthly rent in ₹"
                     className="h-14 text-lg"
                   />
                 </div>
@@ -117,7 +117,7 @@ export function PgHostelRoomDetailsStep({
                     type="number"
                     value={formData.expectedDeposit}
                     onChange={(e) => setFormData({ ...formData, expectedDeposit: Number(e.target.value) })}
-                    placeholder="Enter security deposit amount (e.g., 30000)"
+                    placeholder="Security deposit in ₹"
                     className="h-14 text-lg"
                   />
                 </div>
