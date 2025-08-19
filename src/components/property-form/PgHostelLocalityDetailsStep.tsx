@@ -9,8 +9,6 @@ interface PgHostelLocalityDetails {
   state: string;
   city: string;
   locality: string;
-  pincode: string;
-  societyName?: string;
   landmark?: string;
 }
 
@@ -33,8 +31,6 @@ export function PgHostelLocalityDetailsStep({
     state: '',
     city: '',
     locality: '',
-    pincode: '',
-    societyName: '',
     landmark: '',
     ...initialData,
   });
@@ -72,8 +68,7 @@ export function PgHostelLocalityDetailsStep({
   const isFormValid = () => {
     return formData.state && 
            formData.city && 
-           formData.locality && 
-           formData.pincode;
+           formData.locality;
   };
 
   return (
@@ -139,29 +134,6 @@ export function PgHostelLocalityDetailsStep({
                   onChange={(e) => setFormData({ ...formData, locality: e.target.value })}
                   placeholder="Enter locality/area"
                   required
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="pincode">Pincode *</Label>
-                <Input
-                  id="pincode"
-                  value={formData.pincode}
-                  onChange={(e) => setFormData({ ...formData, pincode: e.target.value })}
-                  placeholder="Enter pincode"
-                  pattern="[0-9]{6}"
-                  maxLength={6}
-                  required
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="societyName">Society/Building Name</Label>
-                <Input
-                  id="societyName"
-                  value={formData.societyName}
-                  onChange={(e) => setFormData({ ...formData, societyName: e.target.value })}
-                  placeholder="Enter society or building name"
                 />
               </div>
 
