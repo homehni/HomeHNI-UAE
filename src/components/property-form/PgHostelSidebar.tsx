@@ -19,7 +19,7 @@ const steps = [
 
 export function PgHostelSidebar({ currentStep, completedSteps }: PgHostelSidebarProps) {
   return (
-    <div className="w-80 bg-card border-r border-border p-6">
+    <div className="hidden lg:block w-80 bg-card border-r border-border p-6">
       <div className="mb-8">
         <h2 className="text-xl font-semibold text-foreground mb-2">List Your PG/Hostel</h2>
         <p className="text-sm text-muted-foreground">Complete all steps to list your property</p>
