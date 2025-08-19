@@ -528,9 +528,26 @@ export type Database = {
       }
     }
     Functions: {
+      create_property_lead: {
+        Args: {
+          interested_user_email: string
+          interested_user_name: string
+          interested_user_phone?: string
+          message?: string
+          property_id: string
+        }
+        Returns: string
+      }
       get_current_user_role: {
         Args: Record<PropertyKey, never>
         Returns: Database["public"]["Enums"]["app_role"]
+      }
+      get_property_contact_info: {
+        Args: { property_id: string }
+        Returns: {
+          contact_message: string
+          owner_name: string
+        }[]
       }
       get_property_owner: {
         Args: { _property_id: string }

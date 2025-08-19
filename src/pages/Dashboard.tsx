@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
-import { Building, MessageSquare, User, LogOut, Plus, Eye, Edit, Trash, FileText } from 'lucide-react';
+import { Building, MessageSquare, User, LogOut, Plus, Eye, Edit, Trash, FileText, Shield } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
 import { DeleteConfirmationModal } from '@/components/DeleteConfirmationModal';
@@ -16,6 +16,7 @@ import Marquee from '@/components/Marquee';
 
 interface Property {
   id: string;
+  user_id: string; // Added for ownership check
   title: string;
   property_type: string;
   listing_type: string;
@@ -327,28 +328,32 @@ export const Dashboard: React.FC = () => {
                     <CardContent className="p-6">
                       <div className="flex justify-between items-start">
                          <div className="flex-1">
-                           <h3 className="text-lg font-medium text-gray-900 mb-2">
-                             {property.title}
-                           </h3>
-                           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm text-gray-600 mb-2">
-                             <div>Type: {property.property_type}</div>
-                             <div>For: {property.listing_type}</div>
-                             <div>Price: ₹{property.expected_price.toLocaleString()}</div>
-                             <div>Location: {property.locality}, {property.city}</div>
-                           </div>
-                           {(property.owner_name || property.owner_email || property.owner_phone) && (
-                             <div className="bg-gray-50 p-3 rounded-lg mb-2">
-                               <h4 className="text-sm font-medium text-gray-700 mb-1">Owner Information</h4>
-                               <div className="grid grid-cols-1 md:grid-cols-3 gap-2 text-sm text-gray-600">
-                                 {property.owner_name && <div>Name: {property.owner_name}</div>}
-                                 {property.owner_email && <div>Email: {property.owner_email}</div>}
-                                 {property.owner_phone && <div>Phone: {property.owner_phone}</div>}
-                               </div>
-                               {property.owner_role && (
-                                 <div className="text-sm text-gray-600 mt-1">Role: {property.owner_role}</div>
-                               )}
-                             </div>
-                           )}
+                            <h3 className="text-lg font-medium text-gray-900 mb-2">
+                              {property.title}
+                            </h3>
+                            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm text-gray-600 mb-2">
+                              <div>Type: {property.property_type}</div>
+                              <div>For: {property.listing_type}</div>
+                              <div>Price: ₹{property.expected_price.toLocaleString()}</div>
+                              <div>Location: {property.locality}, {property.city}</div>
+                            </div>
+                            {/* Show owner information only to the property owner (for their own listings) */}
+                            {user && property.user_id === user.id && (property.owner_name || property.owner_email || property.owner_phone) && (
+                              <div className="bg-blue-50 p-3 rounded-lg mb-2 border border-blue-200">
+                                <h4 className="text-sm font-medium text-blue-700 mb-1 flex items-center">
+                                  <Shield className="h-4 w-4 mr-1" />
+                                  Your Contact Information (Private)
+                                </h4>
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-2 text-sm text-blue-600">
+                                  {property.owner_name && <div>Name: {property.owner_name}</div>}
+                                  {property.owner_email && <div>Email: {property.owner_email}</div>}
+                                  {property.owner_phone && <div>Phone: {property.owner_phone}</div>}
+                                </div>
+                                {property.owner_role && (
+                                  <div className="text-sm text-blue-600 mt-1">Role: {property.owner_role}</div>
+                                )}
+                              </div>
+                            )}
                            <div className="mt-2">
                              <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
                                property.status === 'active' 

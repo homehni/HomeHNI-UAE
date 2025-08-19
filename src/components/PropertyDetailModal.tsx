@@ -12,10 +12,9 @@ import {
   Calendar,
   Eye,
   X,
-  User,
-  Mail,
-  Phone
+  Shield
 } from 'lucide-react';
+import { SecureContactForm } from './SecureContactForm';
 
 interface Property {
   id: string;
@@ -37,10 +36,7 @@ interface Property {
   videos?: string[];
   status: string;
   created_at: string;
-  owner_name?: string;
-  owner_email?: string;
-  owner_phone?: string;
-  owner_role?: string;
+  // Note: owner contact fields removed for security
 }
 
 interface PropertyDetailModalProps {
@@ -218,51 +214,20 @@ export const PropertyDetailModal: React.FC<PropertyDetailModalProps> = ({
             </div>
           </div>
 
-          {/* Owner Information */}
-          {(property.owner_name || property.owner_email || property.owner_phone) && (
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold flex items-center">
-                <User className="h-5 w-5 mr-2 text-brand-red" />
-                Owner Information
-              </h3>
-              
-              <div className="bg-gray-50 rounded-lg p-4 space-y-3">
-                {property.owner_name && (
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Name:</span>
-                    <span className="font-medium">{property.owner_name}</span>
-                  </div>
-                )}
-                
-                {property.owner_email && (
-                  <div className="flex justify-between">
-                    <span className="text-gray-600 flex items-center">
-                      <Mail className="h-4 w-4 mr-1" />
-                      Email:
-                    </span>
-                    <span className="font-medium">{property.owner_email}</span>
-                  </div>
-                )}
-                
-                {property.owner_phone && (
-                  <div className="flex justify-between">
-                    <span className="text-gray-600 flex items-center">
-                      <Phone className="h-4 w-4 mr-1" />
-                      Phone:
-                    </span>
-                    <span className="font-medium">{property.owner_phone}</span>
-                  </div>
-                )}
-                
-                {property.owner_role && (
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Role:</span>
-                    <Badge variant="outline">{property.owner_role}</Badge>
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
+          {/* Secure Contact Form */}
+          <div className="space-y-4 bg-gradient-to-r from-green-50 to-blue-50 rounded-lg p-6 border border-green-200">
+            <h3 className="text-lg font-semibold flex items-center text-green-800">
+              <Shield className="h-5 w-5 mr-2" />
+              Contact Property Owner
+            </h3>
+            <p className="text-sm text-gray-600 mb-4">
+              Send a secure inquiry to the property owner. Your contact information will be shared only with them.
+            </p>
+            <SecureContactForm 
+              propertyId={property.id}
+              propertyTitle={property.title}
+            />
+          </div>
 
           {/* Description */}
           {property.description && (
