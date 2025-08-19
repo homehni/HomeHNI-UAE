@@ -116,7 +116,15 @@ export const ResaleLocationDetailsStep: React.FC<ResaleLocationDetailsStepProps>
               {/* Pincode */}
               <FormField control={form.control} name="pincode" render={({
               field
-            }) => {}} />
+            }) => (
+                <FormItem>
+                  <FormLabel>Pincode *</FormLabel>
+                  <FormControl>
+                    <Input placeholder="e.g., 560001" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )} />
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
