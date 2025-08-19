@@ -8,7 +8,6 @@ import { useToast } from "@/hooks/use-toast";
 import { Building2, Users, CreditCard, Calculator, TrendingUp, FileText, MapPin, Crown, Clock, CheckCircle, Shield, Star, X, Plus, Minus, Globe, Shield as ShieldCheck, Headphones, Smartphone, Download, Home, Percent, DollarSign } from "lucide-react";
 import Marquee from "@/components/Marquee";
 import Header from "@/components/Header";
-import Footer from "@/components/Footer";
 
 
 const Loans = () => {
@@ -722,7 +721,7 @@ const Loans = () => {
         </div>
       </section>
 
-      <Footer />
+      
     </div>
   );
 };
