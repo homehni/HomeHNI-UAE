@@ -242,6 +242,51 @@ export type Database = {
         }
         Relationships: []
       }
+      property_audit_log: {
+        Row: {
+          changed_at: string | null
+          changed_by: string | null
+          id: string
+          new_status: string
+          old_status: string | null
+          property_id: string
+          reason: string | null
+        }
+        Insert: {
+          changed_at?: string | null
+          changed_by?: string | null
+          id?: string
+          new_status: string
+          old_status?: string | null
+          property_id: string
+          reason?: string | null
+        }
+        Update: {
+          changed_at?: string | null
+          changed_by?: string | null
+          id?: string
+          new_status?: string
+          old_status?: string | null
+          property_id?: string
+          reason?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "property_audit_log_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "property_audit_log_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "public_properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       property_drafts: {
         Row: {
           balconies: number | null
@@ -326,6 +371,36 @@ export type Database = {
           updated_at?: string | null
           user_id?: string
           videos?: string[] | null
+        }
+        Relationships: []
+      }
+      user_role_audit_log: {
+        Row: {
+          changed_at: string | null
+          changed_by: string | null
+          id: string
+          new_role: Database["public"]["Enums"]["app_role"]
+          old_role: Database["public"]["Enums"]["app_role"] | null
+          reason: string | null
+          user_id: string
+        }
+        Insert: {
+          changed_at?: string | null
+          changed_by?: string | null
+          id?: string
+          new_role: Database["public"]["Enums"]["app_role"]
+          old_role?: Database["public"]["Enums"]["app_role"] | null
+          reason?: string | null
+          user_id: string
+        }
+        Update: {
+          changed_at?: string | null
+          changed_by?: string | null
+          id?: string
+          new_role?: Database["public"]["Enums"]["app_role"]
+          old_role?: Database["public"]["Enums"]["app_role"] | null
+          reason?: string | null
+          user_id?: string
         }
         Relationships: []
       }
@@ -501,10 +576,16 @@ export type Database = {
         Returns: boolean
       }
       update_user_role: {
-        Args: {
-          _new_role: Database["public"]["Enums"]["app_role"]
-          _user_id: string
-        }
+        Args:
+          | {
+              _new_role: Database["public"]["Enums"]["app_role"]
+              _reason?: string
+              _user_id: string
+            }
+          | {
+              _new_role: Database["public"]["Enums"]["app_role"]
+              _user_id: string
+            }
         Returns: undefined
       }
     }

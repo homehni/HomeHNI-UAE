@@ -8,6 +8,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Eye, CheckCircle, XCircle, Trash2, Search, MoreHorizontal } from 'lucide-react';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
+import { SecureDataMask } from './SecureDataMask';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -144,11 +145,19 @@ export const PropertyTable: React.FC<PropertyTableProps> = ({
                       <div className="font-medium text-sm truncate max-w-[150px]">
                         {property.owner_name || 'N/A'}
                       </div>
-                      <div className="text-xs text-muted-foreground truncate max-w-[150px]">
-                        {property.owner_email || 'N/A'}
+                      <div className="text-xs truncate max-w-[150px]">
+                        <SecureDataMask 
+                          data={property.owner_email || ''} 
+                          type="email"
+                          className="text-xs"
+                        />
                       </div>
-                      <div className="text-xs text-muted-foreground">
-                        {property.owner_phone || 'N/A'}
+                      <div className="text-xs">
+                        <SecureDataMask 
+                          data={property.owner_phone || ''} 
+                          type="phone"
+                          className="text-xs"
+                        />
                       </div>
                     </div>
                   </TableCell>
