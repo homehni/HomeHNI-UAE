@@ -139,7 +139,7 @@ export function FlattmatesAmenitiesStep({
                         <Switch
                           id="attachedBathroom"
                           checked={formData.attachedBathroom}
-                          onCheckedChange={(checked) => setFormData({ ...formData, attachedBathroom: checked })}
+                          onCheckedChange={(checked) => setFormData(prev => ({ ...prev, attachedBathroom: checked }))}
                         />
                         <span className={`text-sm ${formData.attachedBathroom ? 'text-foreground' : 'text-muted-foreground'}`}>
                           Yes
@@ -158,7 +158,7 @@ export function FlattmatesAmenitiesStep({
                         <Switch
                           id="acRoom"
                           checked={formData.acRoom}
-                          onCheckedChange={(checked) => setFormData({ ...formData, acRoom: checked })}
+                          onCheckedChange={(checked) => setFormData(prev => ({ ...prev, acRoom: checked }))}
                         />
                         <span className={`text-sm ${formData.acRoom ? 'text-foreground' : 'text-muted-foreground'}`}>
                           Yes
@@ -179,7 +179,7 @@ export function FlattmatesAmenitiesStep({
                       <Switch
                         id="balcony"
                         checked={formData.balcony}
-                        onCheckedChange={(checked) => setFormData({ ...formData, balcony: checked })}
+                        onCheckedChange={(checked) => setFormData(prev => ({ ...prev, balcony: checked }))}
                       />
                       <span className={`text-sm ${formData.balcony ? 'text-foreground' : 'text-muted-foreground'}`}>
                         Yes
@@ -204,7 +204,7 @@ export function FlattmatesAmenitiesStep({
                         <Switch
                           id="nonVegAllowed"
                           checked={formData.nonVegAllowed}
-                          onCheckedChange={(checked) => setFormData({ ...formData, nonVegAllowed: checked })}
+                          onCheckedChange={(checked) => setFormData(prev => ({ ...prev, nonVegAllowed: checked }))}
                         />
                         <span className={`text-sm ${formData.nonVegAllowed ? 'text-foreground' : 'text-muted-foreground'}`}>
                           Yes
@@ -223,7 +223,7 @@ export function FlattmatesAmenitiesStep({
                         <Switch
                           id="smokingAllowed"
                           checked={formData.smokingAllowed}
-                          onCheckedChange={(checked) => setFormData({ ...formData, smokingAllowed: checked })}
+                          onCheckedChange={(checked) => setFormData(prev => ({ ...prev, smokingAllowed: checked }))}
                         />
                         <span className={`text-sm ${formData.smokingAllowed ? 'text-foreground' : 'text-muted-foreground'}`}>
                           Yes
@@ -244,7 +244,7 @@ export function FlattmatesAmenitiesStep({
                       <Switch
                         id="drinkingAllowed"
                         checked={formData.drinkingAllowed}
-                        onCheckedChange={(checked) => setFormData({ ...formData, drinkingAllowed: checked })}
+                        onCheckedChange={(checked) => setFormData(prev => ({ ...prev, drinkingAllowed: checked }))}
                       />
                       <span className={`text-sm ${formData.drinkingAllowed ? 'text-foreground' : 'text-muted-foreground'}`}>
                         Yes
@@ -271,7 +271,7 @@ export function FlattmatesAmenitiesStep({
                         <Switch
                           id="gym"
                           checked={formData.gym}
-                          onCheckedChange={(checked) => setFormData({ ...formData, gym: checked })}
+                          onCheckedChange={(checked) => setFormData(prev => ({ ...prev, gym: checked }))}
                         />
                         <span className={`text-sm ${formData.gym ? 'text-foreground' : 'text-muted-foreground'}`}>
                           Yes
@@ -291,7 +291,7 @@ export function FlattmatesAmenitiesStep({
                         <Switch
                           id="gatedSecurity"
                           checked={formData.gatedSecurity}
-                          onCheckedChange={(checked) => setFormData({ ...formData, gatedSecurity: checked })}
+                          onCheckedChange={(checked) => setFormData(prev => ({ ...prev, gatedSecurity: checked }))}
                         />
                         <span className={`text-sm ${formData.gatedSecurity ? 'text-foreground' : 'text-muted-foreground'}`}>
                           Yes
@@ -309,7 +309,7 @@ export function FlattmatesAmenitiesStep({
                       </Label>
                       <Select
                         value={formData.whoWillShow}
-                        onValueChange={(value) => setFormData({ ...formData, whoWillShow: value })}
+                        onValueChange={(value) => setFormData(prev => ({ ...prev, whoWillShow: value }))}
                       >
                         <SelectTrigger className="h-12">
                           <SelectValue placeholder="Select" />
@@ -330,7 +330,7 @@ export function FlattmatesAmenitiesStep({
                       </Label>
                       <Select
                         value={formData.waterSupply}
-                        onValueChange={(value) => setFormData({ ...formData, waterSupply: value })}
+                        onValueChange={(value) => setFormData(prev => ({ ...prev, waterSupply: value }))}
                       >
                         <SelectTrigger className="h-12">
                           <SelectValue placeholder="Select" />
@@ -355,7 +355,7 @@ export function FlattmatesAmenitiesStep({
                         id="secondaryNumber"
                         type="tel"
                         value={formData.secondaryNumber}
-                        onChange={(e) => setFormData({ ...formData, secondaryNumber: e.target.value })}
+                        onChange={(e) => setFormData(prev => ({ ...prev, secondaryNumber: e.target.value }))}
                         placeholder="Secondary Number"
                         className="h-12 flex-1"
                       />
@@ -374,7 +374,7 @@ export function FlattmatesAmenitiesStep({
                     </p>
                     <Textarea
                       value={formData.directionsTip}
-                      onChange={(e) => setFormData({ ...formData, directionsTip: e.target.value })}
+                      onChange={(e) => setFormData(prev => ({ ...prev, directionsTip: e.target.value }))}
                       placeholder="Eg. Take the road opposite to Amrita College, take right after 300m..."
                       rows={3}
                     />
