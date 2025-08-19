@@ -48,7 +48,7 @@ const Careers = () => {
         </div>
 
         {/* Sticky Form Container for Large Screens */}
-        <div className="hidden lg:block fixed top-32 right-8 z-50 w-96">
+        <div className="hidden lg:block fixed top-32 right-4 z-50 w-[420px]">
           <Card className="w-full rounded-xl shadow-2xl bg-background border">
             <CardContent className="p-6">
               <h3 className="text-xl font-semibold text-foreground mb-2">Apply for a Position</h3>
