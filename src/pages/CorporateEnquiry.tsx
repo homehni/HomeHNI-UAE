@@ -124,31 +124,8 @@ const CorporateEnquiry = () => {
     description: "Cleaning, Painting, AC Services and more — on demand"
   }];
   return <div className="min-h-screen bg-background">
-      <Marquee />
-      <Header />
-      
-      {/* Hero Section */}
-      <section className="pt-32 pb-24 px-4">
-        <div className="max-w-6xl mx-auto text-center xl:pr-96">
-          <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
-            Comprehensive Corporate Solutions
-          </h1>
-          <p className="text-lg text-muted-foreground mb-8 max-w-3xl mx-auto">
-            Partner with us to receive the best prices on a wide range of professional real estate and home services — exclusively for your employees.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-brand-red hover:bg-brand-red-dark" onClick={() => document.getElementById('form')?.scrollIntoView()}>
-              Sign Up for Your Company
-            </Button>
-            <Button variant="outline" size="lg" onClick={() => document.getElementById('services')?.scrollIntoView()}>
-              Know More
-            </Button>
-          </div>
-        </div>
-      </section>
-
       {/* Sticky Corporate Enquiry Form - Desktop Only */}
-      <div className="hidden xl:block sticky top-6 float-right mr-6 z-50 w-96 -mt-24">
+      <div className="hidden xl:block fixed top-80 right-6 z-50 w-96">
         <div className="bg-gradient-to-br from-white to-gray-50 rounded-2xl shadow-2xl border border-gray-100 p-6 backdrop-blur-sm">
           <div className="text-center mb-6">
             <div className="w-12 h-12 bg-gradient-to-br from-brand-red to-brand-red-dark rounded-full mx-auto mb-3 flex items-center justify-center">
@@ -177,6 +154,28 @@ const CorporateEnquiry = () => {
           </form>
         </div>
       </div>
+      <Marquee />
+      <Header />
+      
+      {/* Hero Section */}
+      <section className="pt-32 pb-24 px-4">
+        <div className="max-w-6xl mx-auto text-center xl:pr-96">
+          <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
+            Comprehensive Corporate Solutions
+          </h1>
+          <p className="text-lg text-muted-foreground mb-8 max-w-3xl mx-auto">
+            Partner with us to receive the best prices on a wide range of professional real estate and home services — exclusively for your employees.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button size="lg" className="bg-brand-red hover:bg-brand-red-dark" onClick={() => document.getElementById('form')?.scrollIntoView()}>
+              Sign Up for Your Company
+            </Button>
+            <Button variant="outline" size="lg" onClick={() => document.getElementById('services')?.scrollIntoView()}>
+              Know More
+            </Button>
+          </div>
+        </div>
+      </section>
 
       {/* Trusted By Section */}
       <section className="py-16 bg-muted/30">
