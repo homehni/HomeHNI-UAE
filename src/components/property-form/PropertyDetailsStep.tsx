@@ -114,7 +114,7 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
             <span className="text-lg font-semibold">PropertyHub</span>
           </div>
           <div className="flex items-center space-x-4">
-            <span className="text-sm text-gray-600">{progressPercentage}% Done</span>
+            <span className="hidden md:block text-sm text-gray-600">{progressPercentage}% Done</span>
             <Button variant="outline" size="sm">Preview</Button>
           </div>
         </div>
