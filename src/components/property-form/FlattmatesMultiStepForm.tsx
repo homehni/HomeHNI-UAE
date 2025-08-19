@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { FlattmatesPropertyDetailsStep } from './FlattmatesPropertyDetailsStep';
-import { LocationDetailsStep } from './LocationDetailsStep';
+import { FlattmatesLocationDetailsStep } from './FlattmatesLocationDetailsStep';
 import { FlattmatesRentalDetailsStep } from './FlattmatesRentalDetailsStep';
 import { FlattmatesAmenitiesStep } from './FlattmatesAmenitiesStep';
 import { GalleryStep } from './GalleryStep';
@@ -273,12 +273,10 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
         )}
 
         {currentStep === 2 && (
-          <LocationDetailsStep
+          <FlattmatesLocationDetailsStep
             initialData={locationDetails}
             onNext={handleLocationDetailsNext}
             onBack={prevStep}
-            currentStep={2}
-            totalSteps={6}
           />
         )}
 
