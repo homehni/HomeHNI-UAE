@@ -59,6 +59,21 @@ interface FlattmatesAmenitiesStepProps {
   completedSteps: number[];
 }
 
+const amenitiesList = [
+  { key: 'lift', label: 'Lift', icon: MoveUp },
+  { key: 'swimming-pool', label: 'Swimming Pool', icon: Waves },
+  { key: 'club-house', label: 'Club House', icon: Building },
+  { key: 'power-backup', label: 'Power Backup', icon: Zap },
+  { key: 'park', label: 'Park', icon: TreePine },
+  { key: 'shopping-center', label: 'Shopping Center', icon: ShoppingBag },
+  { key: 'house-keeping', label: 'House Keeping', icon: Users },
+  { key: 'intercom', label: 'Intercom', icon: Phone },
+  { key: 'gas-pipeline', label: 'Gas Pipeline', icon: Fuel },
+  { key: 'sewage-treatment', label: 'Sewage Treatment Plant', icon: Recycle },
+  { key: 'visitor-parking', label: 'Visitor Parking', icon: Car },
+  { key: 'fire-safety', label: 'Fire Safety', icon: ShieldCheck },
+];
+
 export function FlattmatesAmenitiesStep({ 
   initialData, 
   onNext, 
@@ -83,21 +98,6 @@ export function FlattmatesAmenitiesStep({
     selectedAmenities: [],
     ...initialData,
   });
-
-  const amenitiesList = [
-    { key: 'lift', label: 'Lift', icon: MoveUp },
-    { key: 'swimming-pool', label: 'Swimming Pool', icon: Waves },
-    { key: 'club-house', label: 'Club House', icon: Building },
-    { key: 'power-backup', label: 'Power Backup', icon: Zap },
-    { key: 'park', label: 'Park', icon: TreePine },
-    { key: 'shopping-center', label: 'Shopping Center', icon: ShoppingBag },
-    { key: 'house-keeping', label: 'House Keeping', icon: Users },
-    { key: 'intercom', label: 'Intercom', icon: Phone },
-    { key: 'gas-pipeline', label: 'Gas Pipeline', icon: Fuel },
-    { key: 'sewage-treatment', label: 'Sewage Treatment Plant', icon: Recycle },
-    { key: 'visitor-parking', label: 'Visitor Parking', icon: Car },
-    { key: 'fire-safety', label: 'Fire Safety', icon: ShieldCheck },
-  ];
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
