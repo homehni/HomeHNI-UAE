@@ -15,7 +15,7 @@ const resalePropertyDetailsSchema = z.object({
   bhkType: z.string().min(1, 'Please select BHK type'),
   ownershipType: z.string().min(1, 'Please select ownership type'),
   builtUpArea: z.number().min(1, 'Built up area is required'),
-  carpetArea: z.number().optional(),
+  carpetArea: z.number().min(1, 'Carpet area must be greater than 0').optional(),
   propertyAge: z.string().min(1, 'Please select property age'),
   facing: z.string().min(1, 'Please select facing direction'),
   floorType: z.string().min(1, 'Please select floor type'),
@@ -42,8 +42,8 @@ export const ResalePropertyDetailsStep: React.FC<ResalePropertyDetailsStepProps>
       propertyType: initialData.propertyType || '',
       bhkType: initialData.bhkType || '',
       ownershipType: (initialData as any).ownershipType || '',
-      builtUpArea: initialData.superBuiltUpArea || 0,
-      carpetArea: (initialData as any).carpetArea || 0,
+      builtUpArea: initialData.superBuiltUpArea || undefined,
+      carpetArea: (initialData as any).carpetArea || undefined,
       propertyAge: initialData.propertyAge || '',
       facing: (initialData as any).facing || '',
       floorType: (initialData as any).floorType || '',
@@ -178,10 +178,17 @@ export const ResalePropertyDetailsStep: React.FC<ResalePropertyDetailsStepProps>
                     <FormControl>
                       <Input
                         type="number"
-                        placeholder="1200"
+                        placeholder="Enter Built Up Area"
                         className="h-12 pr-12"
                         {...field}
-                        onChange={(e) => field.onChange(parseInt(e.target.value) || 0)}
+                        onChange={(e) => {
+                          const value = parseInt(e.target.value);
+                          if (isNaN(value) || value < 0) {
+                            field.onChange(undefined);
+                          } else {
+                            field.onChange(value);
+                          }
+                        }}
                       />
                     </FormControl>
                     <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-sm text-gray-500">
@@ -203,10 +210,17 @@ export const ResalePropertyDetailsStep: React.FC<ResalePropertyDetailsStepProps>
                     <FormControl>
                       <Input
                         type="number"
-                        placeholder="1000"
+                        placeholder="Enter Carpet Area"
                         className="h-12 pr-12"
                         {...field}
-                        onChange={(e) => field.onChange(parseInt(e.target.value) || 0)}
+                        onChange={(e) => {
+                          const value = parseInt(e.target.value);
+                          if (isNaN(value) || value < 0) {
+                            field.onChange(undefined);
+                          } else {
+                            field.onChange(value);
+                          }
+                        }}
                       />
                     </FormControl>
                     <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-sm text-gray-500">
