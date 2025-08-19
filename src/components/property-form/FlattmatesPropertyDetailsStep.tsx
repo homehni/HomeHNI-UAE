@@ -8,8 +8,8 @@ import { Card, CardContent } from '@/components/ui/card';
 interface FlattmatesPropertyDetails {
   apartmentType: string;
   bhkType: string;
-  floorNo: number;
-  totalFloors: number;
+  floorNo: number | string;
+  totalFloors: number | string;
   roomType: string;
   tenantType: string;
   propertyAge: string;
@@ -55,10 +55,13 @@ export function FlattmatesPropertyDetailsStep({
   };
 
   const isFormValid = () => {
+    const isFloorValid = formData.floorNo !== 0 && formData.floorNo !== '' && formData.floorNo !== null && formData.floorNo !== undefined;
+    const isTotalFloorsValid = formData.totalFloors !== 0 && formData.totalFloors !== '' && formData.totalFloors !== null && formData.totalFloors !== undefined;
+    
     return formData.apartmentType && 
            formData.bhkType && 
-           formData.floorNo > 0 &&
-           formData.totalFloors > 0 &&
+           isFloorValid &&
+           isTotalFloorsValid &&
            formData.roomType &&
            formData.tenantType &&
            formData.propertyAge &&
@@ -115,30 +118,64 @@ export function FlattmatesPropertyDetailsStep({
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="floorNo">Floor *</Label>
-                    <Input
-                      id="floorNo"
-                      type="number"
-                      value={formData.floorNo || ''}
-                      onChange={(e) => setFormData({ ...formData, floorNo: parseInt(e.target.value) || 0 })}
-                      placeholder="38"
-                      className="h-12"
-                      min="0"
-                      required
-                    />
+                    <Select
+                      value={formData.floorNo?.toString()}
+                      onValueChange={(value) => {
+                        if (value === 'lower' || value === 'upper' || value === '99+') {
+                          setFormData({ ...formData, floorNo: value as any });
+                        } else {
+                          setFormData({ ...formData, floorNo: parseInt(value) });
+                        }
+                      }}
+                    >
+                      <SelectTrigger className="h-12">
+                        <SelectValue placeholder="Select floor" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="lower">Lower Basement</SelectItem>
+                        <SelectItem value="upper">Upper Basement</SelectItem>
+                        <SelectItem value="0">Ground Floor</SelectItem>
+                        {[...Array(99)].map((_, i) => {
+                          const floor = i + 1;
+                          return (
+                            <SelectItem key={floor} value={floor.toString()}>
+                              {floor}
+                            </SelectItem>
+                          );
+                        })}
+                        <SelectItem value="99+">99+</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
 
                   <div className="space-y-2">
                     <Label htmlFor="totalFloors">Total Floor *</Label>
-                    <Input
-                      id="totalFloors"
-                      type="number"
-                      value={formData.totalFloors || ''}
-                      onChange={(e) => setFormData({ ...formData, totalFloors: parseInt(e.target.value) || 0 })}
-                      placeholder="69"
-                      className="h-12"
-                      min="1"
-                      required
-                    />
+                    <Select
+                      value={formData.totalFloors?.toString()}
+                      onValueChange={(value) => {
+                        if (value === '99+') {
+                          setFormData({ ...formData, totalFloors: value as any });
+                        } else {
+                          setFormData({ ...formData, totalFloors: parseInt(value) });
+                        }
+                      }}
+                    >
+                      <SelectTrigger className="h-12">
+                        <SelectValue placeholder="Select total floors" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="0">Ground</SelectItem>
+                        {[...Array(99)].map((_, i) => {
+                          const floor = i + 1;
+                          return (
+                            <SelectItem key={floor} value={floor.toString()}>
+                              {floor}
+                            </SelectItem>
+                          );
+                        })}
+                        <SelectItem value="99+">99+</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
                 </div>
 
