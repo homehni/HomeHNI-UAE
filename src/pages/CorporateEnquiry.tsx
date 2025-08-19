@@ -342,8 +342,57 @@ const CorporateEnquiry = () => {
         </div>
       </section>
 
-      {/* Final CTA & Form */}
-      
+      {/* Corporate Services Footer */}
+      <section className="py-16 bg-muted/30 border-t">
+        <div className="max-w-6xl mx-auto px-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div>
+              <h4 className="font-semibold text-foreground mb-4">Employee Services</h4>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li><a href="#" className="hover:text-foreground">House Search Support</a></li>
+                <li><a href="#" className="hover:text-foreground">Rental Agreements</a></li>
+                <li><a href="#" className="hover:text-foreground">Packers & Movers</a></li>
+                <li><a href="#" className="hover:text-foreground">Home Services</a></li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="font-semibold text-foreground mb-4">Office Solutions</h4>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li><a href="#" className="hover:text-foreground">Office Leasing</a></li>
+                <li><a href="#" className="hover:text-foreground">Corporate Relocation</a></li>
+                <li><a href="#" className="hover:text-foreground">Office Setup</a></li>
+                <li><a href="#" className="hover:text-foreground">Facility Management</a></li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="font-semibold text-foreground mb-4">Corporate Benefits</h4>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li><a href="#" className="hover:text-foreground">Exclusive Discounts</a></li>
+                <li><a href="#" className="hover:text-foreground">Priority Support</a></li>
+                <li><a href="#" className="hover:text-foreground">Custom Packages</a></li>
+                <li><a href="#" className="hover:text-foreground">Bulk Services</a></li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="font-semibold text-foreground mb-4">Support</h4>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li><a href="#" className="hover:text-foreground">Account Management</a></li>
+                <li><a href="#" className="hover:text-foreground">24/7 Support</a></li>
+                <li><a href="#" className="hover:text-foreground">Training & Onboarding</a></li>
+                <li><a href="#" className="hover:text-foreground">Analytics & Reports</a></li>
+              </ul>
+            </div>
+          </div>
+          
+          <div className="mt-12 pt-8 border-t border-border text-center">
+            <p className="text-sm text-muted-foreground">
+              © 2024 Home HNI. All rights reserved. | 
+              <a href="/privacy-policy" className="hover:text-foreground ml-1">Privacy Policy</a> | 
+              <a href="/terms-and-conditions" className="hover:text-foreground ml-1">Terms & Conditions</a>
+            </p>
+          </div>
+        </div>
+      </section>
 
     </div>;
 };
