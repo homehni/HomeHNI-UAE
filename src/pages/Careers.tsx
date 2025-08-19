@@ -1,4 +1,3 @@
-
 import { useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -9,10 +8,10 @@ import { useToast } from '@/hooks/use-toast';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Marquee from '@/components/Marquee';
-
 const Careers = () => {
-  const { toast } = useToast();
-
+  const {
+    toast
+  } = useToast();
   useEffect(() => {
     // Smooth scroll to top when component mounts
     const scrollToTop = () => {
@@ -21,13 +20,11 @@ const Careers = () => {
         behavior: 'smooth'
       });
     };
-    
+
     // Small delay to ensure page is fully loaded
     setTimeout(scrollToTop, 100);
   }, []);
-
-  return (
-    <div className="min-h-screen bg-white">
+  return <div className="min-h-screen bg-white">
       {/* Marquee at the very top */}
       <Marquee />
       
@@ -38,13 +35,10 @@ const Careers = () => {
       <div className="pt-8">
         <div className="relative h-[50vh] overflow-hidden">
           {/* Banner Background */}
-          <div 
-            className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-            style={{
-              backgroundImage: `url('/lovable-uploads/b97275ad-b157-4783-8b5b-198d7c905011.png')`,
-              backgroundPosition: 'center center'
-            }}
-          ></div>
+          <div className="absolute inset-0 bg-cover bg-center bg-no-repeat" style={{
+          backgroundImage: `url('/lovable-uploads/b97275ad-b157-4783-8b5b-198d7c905011.png')`,
+          backgroundPosition: 'center center'
+        }}></div>
         </div>
 
         {/* Sticky Form Container for Large Screens */}
@@ -55,13 +49,13 @@ const Careers = () => {
               <p className="text-sm text-muted-foreground mb-4">Submit your application today</p>
 
               <form className="space-y-4" onSubmit={e => {
-                e.preventDefault();
-                toast({
-                  title: "Application submitted",
-                  description: "We will review your application and get back to you soon."
-                });
-                (e.currentTarget as HTMLFormElement).reset();
-              }}>
+              e.preventDefault();
+              toast({
+                title: "Application submitted",
+                description: "We will review your application and get back to you soon."
+              });
+              (e.currentTarget as HTMLFormElement).reset();
+            }}>
                 <Input id="career-name" name="name" placeholder="Full Name" required />
 
                 <div className="flex gap-2">
@@ -89,7 +83,7 @@ const Careers = () => {
                   </SelectContent>
                 </Select>
 
-                <Input id="career-experience" name="experience" placeholder="Years of Experience" />
+                
 
                 <Textarea id="career-message" name="message" placeholder="Brief message about why you'd be a great fit" rows={3} />
 
@@ -108,20 +102,14 @@ const Careers = () => {
                 <p className="text-base text-muted-foreground mb-8">Submit your application today</p>
 
                 <form className="space-y-5" onSubmit={e => {
-                  e.preventDefault();
-                  toast({
-                    title: "Application submitted",
-                    description: "We will review your application and get back to you soon."
-                  });
-                  (e.currentTarget as HTMLFormElement).reset();
-                }}>
-                  <Input 
-                    id="career-name-mobile" 
-                    name="name" 
-                    placeholder="Full Name" 
-                    className="h-12 text-base bg-background"
-                    required 
-                  />
+                e.preventDefault();
+                toast({
+                  title: "Application submitted",
+                  description: "We will review your application and get back to you soon."
+                });
+                (e.currentTarget as HTMLFormElement).reset();
+              }}>
+                  <Input id="career-name-mobile" name="name" placeholder="Full Name" className="h-12 text-base bg-background" required />
 
                   <div className="flex gap-3">
                     <Select defaultValue="+91" name="countryCode">
@@ -134,24 +122,10 @@ const Careers = () => {
                         <SelectItem value="+44">🇬🇧 +44</SelectItem>
                       </SelectContent>
                     </Select>
-                    <Input 
-                      id="career-phone-mobile" 
-                      name="phone" 
-                      type="tel" 
-                      placeholder="Phone Number" 
-                      className="flex-1 h-12 text-base bg-background" 
-                      required 
-                    />
+                    <Input id="career-phone-mobile" name="phone" type="tel" placeholder="Phone Number" className="flex-1 h-12 text-base bg-background" required />
                   </div>
 
-                  <Input 
-                    id="career-email-mobile" 
-                    name="email" 
-                    type="email" 
-                    placeholder="Email ID" 
-                    className="h-12 text-base bg-background"
-                    required 
-                  />
+                  <Input id="career-email-mobile" name="email" type="email" placeholder="Email ID" className="h-12 text-base bg-background" required />
 
                   <Select name="position">
                     <SelectTrigger id="position-mobile" className="h-12 bg-background">
@@ -166,20 +140,9 @@ const Careers = () => {
                     </SelectContent>
                   </Select>
 
-                  <Input 
-                    id="career-experience-mobile" 
-                    name="experience" 
-                    placeholder="Years of Experience" 
-                    className="h-12 text-base bg-background"
-                  />
+                  <Input id="career-experience-mobile" name="experience" placeholder="Years of Experience" className="h-12 text-base bg-background" />
 
-                  <Textarea 
-                    id="career-message-mobile" 
-                    name="message" 
-                    placeholder="Brief message about why you'd be a great fit" 
-                    rows={4}
-                    className="text-base bg-background"
-                  />
+                  <Textarea id="career-message-mobile" name="message" placeholder="Brief message about why you'd be a great fit" rows={4} className="text-base bg-background" />
 
                   <Button type="submit" className="w-full h-12 text-base font-semibold bg-red-600 hover:bg-red-700 text-white mt-6">
                     Submit Application
@@ -350,11 +313,11 @@ const Careers = () => {
 
             <div className="mt-12 pt-8 border-t border-gray-200 text-center">
               <p className="text-sm text-gray-500">
-                Last updated: {new Date().toLocaleDateString('en-US', { 
-                  year: 'numeric', 
-                  month: 'long', 
-                  day: 'numeric' 
-                })}
+                Last updated: {new Date().toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+              })}
               </p>
             </div>
           </div>
@@ -362,8 +325,6 @@ const Careers = () => {
       </div>
       
       <Footer />
-    </div>
-  );
+    </div>;
 };
-
 export default Careers;
