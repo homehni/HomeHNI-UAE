@@ -11,10 +11,12 @@ const resaleLocationSchema = z.object({
   state: z.string().min(1, 'State is required'),
   city: z.string().min(1, 'City is required'),
   locality: z.string().min(1, 'Locality is required'),
-  pincode: z.string().min(6, 'Valid pincode is required').max(6, 'Valid pincode is required'),
   societyName: z.string().optional(),
   landmark: z.string().optional()
 });
+
+type ResaleLocationData = z.infer<typeof resaleLocationSchema>;
+
 interface ResaleLocationDetailsStepProps {
   initialData?: Partial<LocationDetails>;
   onNext: (data: LocationDetails) => void;
@@ -30,13 +32,12 @@ export const ResaleLocationDetailsStep: React.FC<ResaleLocationDetailsStepProps>
 }) => {
   const [statesCities, setStatesCities] = useState<StateCity>({});
   const [selectedState, setSelectedState] = useState<string>(initialData.state || '');
-  const form = useForm<LocationDetails>({
+  const form = useForm<ResaleLocationData>({
     resolver: zodResolver(resaleLocationSchema),
     defaultValues: {
       state: initialData.state || '',
       city: initialData.city || '',
       locality: initialData.locality || '',
-      pincode: initialData.pincode || '',
       societyName: initialData.societyName || '',
       landmark: initialData.landmark || ''
     }
@@ -44,8 +45,13 @@ export const ResaleLocationDetailsStep: React.FC<ResaleLocationDetailsStepProps>
   useEffect(() => {
     fetch('/data/india_states_cities.json').then(response => response.json()).then(data => setStatesCities(data)).catch(error => console.error('Error loading states and cities:', error));
   }, []);
-  const onSubmit = (data: LocationDetails) => {
-    onNext(data);
+  const onSubmit = (data: ResaleLocationData) => {
+    // Add pincode as empty string to match LocationDetails interface
+    const locationData: LocationDetails = {
+      ...data,
+      pincode: ''
+    };
+    onNext(locationData);
   };
   const handleStateChange = (state: string) => {
     setSelectedState(state);
@@ -113,21 +119,6 @@ export const ResaleLocationDetailsStep: React.FC<ResaleLocationDetailsStepProps>
                     <FormMessage />
                   </FormItem>} />
 
-              {/* Pincode */}
-              <FormField control={form.control} name="pincode" render={({
-              field
-            }) => (
-                <FormItem>
-                  <FormLabel>Pincode *</FormLabel>
-                  <FormControl>
-                    <Input placeholder="e.g., 560001" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )} />
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Society Name */}
               <FormField control={form.control} name="societyName" render={({
               field
@@ -138,7 +129,9 @@ export const ResaleLocationDetailsStep: React.FC<ResaleLocationDetailsStepProps>
                     </FormControl>
                     <FormMessage />
                   </FormItem>} />
+            </div>
 
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Landmark */}
               <FormField control={form.control} name="landmark" render={({
               field
