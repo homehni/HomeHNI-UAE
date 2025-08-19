@@ -11,7 +11,6 @@ const resaleLocationSchema = z.object({
   state: z.string().min(1, 'State is required'),
   city: z.string().min(1, 'City is required'),
   locality: z.string().min(1, 'Locality is required'),
-  societyName: z.string().optional(),
   landmark: z.string().optional()
 });
 
@@ -38,7 +37,6 @@ export const ResaleLocationDetailsStep: React.FC<ResaleLocationDetailsStepProps>
       state: initialData.state || '',
       city: initialData.city || '',
       locality: initialData.locality || '',
-      societyName: initialData.societyName || '',
       landmark: initialData.landmark || ''
     }
   });
@@ -46,10 +44,11 @@ export const ResaleLocationDetailsStep: React.FC<ResaleLocationDetailsStepProps>
     fetch('/data/india_states_cities.json').then(response => response.json()).then(data => setStatesCities(data)).catch(error => console.error('Error loading states and cities:', error));
   }, []);
   const onSubmit = (data: ResaleLocationData) => {
-    // Add pincode as empty string to match LocationDetails interface
+    // Add pincode and societyName as empty strings to match LocationDetails interface
     const locationData: LocationDetails = {
       ...data,
-      pincode: ''
+      pincode: '',
+      societyName: ''
     };
     onNext(locationData);
   };
@@ -119,19 +118,6 @@ export const ResaleLocationDetailsStep: React.FC<ResaleLocationDetailsStepProps>
                     <FormMessage />
                   </FormItem>} />
 
-              {/* Society Name */}
-              <FormField control={form.control} name="societyName" render={({
-              field
-            }) => <FormItem>
-                    <FormLabel>Society/Building Name</FormLabel>
-                    <FormControl>
-                      <Input placeholder="e.g., Park View Apartments" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>} />
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Landmark */}
               <FormField control={form.control} name="landmark" render={({
               field
