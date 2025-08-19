@@ -8,7 +8,7 @@ import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Calendar, CalendarIcon } from 'lucide-react';
+import { Calendar, CalendarIcon, ArrowLeft, ArrowRight } from 'lucide-react';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Calendar as CalendarComponent } from '@/components/ui/calendar';
 import { cn } from '@/lib/utils';
@@ -249,14 +249,16 @@ export const SaleDetailsStep: React.FC<SaleDetailsStepProps> = ({
         {/* Navigation Buttons */}
         <div className="flex justify-between pt-6">
           <Button type="button" variant="outline" onClick={onBack} className="h-12 px-8">
-            ← Back
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Back
           </Button>
           <Button 
             type="submit" 
             disabled={!isValid}
-            className="bg-green-600 hover:bg-green-700 h-12 px-8"
+            className="h-12 px-8"
           >
-            Save & Continue →
+            Save & Continue
+            <ArrowRight className="ml-2 h-4 w-4" />
           </Button>
         </div>
       </form>
