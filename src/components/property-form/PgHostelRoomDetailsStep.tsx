@@ -101,33 +101,25 @@ export function PgHostelRoomDetailsStep({
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div className="space-y-2">
                   <Label htmlFor="expectedRent" className="text-base font-medium">Expected Rent</Label>
-                  <div className="relative">
-                    <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-                    <Input
-                      id="expectedRent"
-                      type="number"
-                      value={formData.expectedRent}
-                      onChange={(e) => setFormData({ ...formData, expectedRent: Number(e.target.value) })}
-                      placeholder="15000"
-                      className="pl-10 h-14 text-lg"
-                    />
-                  </div>
-                  <p className="text-sm text-muted-foreground">₹15 k</p>
+                  <Input
+                    id="expectedRent"
+                    type="number"
+                    value={formData.expectedRent}
+                    onChange={(e) => setFormData({ ...formData, expectedRent: Number(e.target.value) })}
+                    placeholder="Enter monthly rent amount (e.g., 15000)"
+                    className="h-14 text-lg"
+                  />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="expectedDeposit" className="text-base font-medium">Expected Deposit</Label>
-                  <div className="relative">
-                    <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-                    <Input
-                      id="expectedDeposit"
-                      type="number"
-                      value={formData.expectedDeposit}
-                      onChange={(e) => setFormData({ ...formData, expectedDeposit: Number(e.target.value) })}
-                      placeholder="20000"
-                      className="pl-10 h-14 text-lg"
-                    />
-                  </div>
-                  <p className="text-sm text-muted-foreground">₹20 k</p>
+                  <Input
+                    id="expectedDeposit"
+                    type="number"
+                    value={formData.expectedDeposit}
+                    onChange={(e) => setFormData({ ...formData, expectedDeposit: Number(e.target.value) })}
+                    placeholder="Enter security deposit amount (e.g., 30000)"
+                    className="h-14 text-lg"
+                  />
                 </div>
               </div>
 
