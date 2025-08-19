@@ -215,7 +215,7 @@ const CorporateEnquiry = () => {
       <Header />
       
       {/* Hero Section */}
-      <section className="pt-24 pb-16 px-4">
+      <section className="pt-32 pb-24 px-4">
         <div className="max-w-6xl mx-auto text-center xl:pr-96">
           <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
             Comprehensive Corporate Solutions
