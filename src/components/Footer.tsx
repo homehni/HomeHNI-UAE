@@ -158,6 +158,27 @@ const Footer = ({
           </div>
         </div>
 
+        {/* Original Services sections */}
+        <div className="mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div>
+              <h4 className="font-semibold text-gray-900 mb-4">Buy</h4>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+                {services.buy.map((service, index) => <a key={index} href="#" className="text-xs text-gray-600 hover:text-brand-red transition-colors">
+                    {service}
+                  </a>)}
+              </div>
+            </div>
+            <div>
+              <h4 className="font-semibold text-gray-900 mb-4">Rent</h4>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+                {services.rent.map((service, index) => <a key={index} href="#" className="text-xs text-gray-600 hover:text-brand-red transition-colors">
+                    {service}
+                  </a>)}
+              </div>
+            </div>
+          </div>
+        </div>
 
         {/* Call-to-action sections */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8 py-8 bg-gray-50 px-6 rounded-lg">
