@@ -127,44 +127,47 @@ export function FlattmatesAmenitiesStep({
                 <div className="space-y-4">
                   <h3 className="text-lg font-semibold text-foreground">Room Details</h3>
                   
-                  <div className="flex items-center justify-between p-4 border rounded-lg">
-                    <Label htmlFor="attachedBathroom" className="text-base font-medium">
-                      Attached Bathroom *
-                    </Label>
-                    <div className="flex items-center space-x-2">
-                      <span className={`text-sm ${!formData.attachedBathroom ? 'text-foreground' : 'text-muted-foreground'}`}>
-                        No
-                      </span>
-                      <Switch
-                        id="attachedBathroom"
-                        checked={formData.attachedBathroom}
-                        onCheckedChange={(checked) => setFormData({ ...formData, attachedBathroom: checked })}
-                      />
-                      <span className={`text-sm ${formData.attachedBathroom ? 'text-foreground' : 'text-muted-foreground'}`}>
-                        Yes
-                      </span>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="flex items-center justify-between p-4 border rounded-lg">
+                      <Label htmlFor="attachedBathroom" className="text-base font-medium">
+                        Attached Bathroom *
+                      </Label>
+                      <div className="flex items-center space-x-2">
+                        <span className={`text-sm ${!formData.attachedBathroom ? 'text-foreground' : 'text-muted-foreground'}`}>
+                          No
+                        </span>
+                        <Switch
+                          id="attachedBathroom"
+                          checked={formData.attachedBathroom}
+                          onCheckedChange={(checked) => setFormData({ ...formData, attachedBathroom: checked })}
+                        />
+                        <span className={`text-sm ${formData.attachedBathroom ? 'text-foreground' : 'text-muted-foreground'}`}>
+                          Yes
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center justify-between p-4 border rounded-lg">
+                      <Label htmlFor="acRoom" className="text-base font-medium">
+                        AC Room *
+                      </Label>
+                      <div className="flex items-center space-x-2">
+                        <span className={`text-sm ${!formData.acRoom ? 'text-foreground' : 'text-muted-foreground'}`}>
+                          No
+                        </span>
+                        <Switch
+                          id="acRoom"
+                          checked={formData.acRoom}
+                          onCheckedChange={(checked) => setFormData({ ...formData, acRoom: checked })}
+                        />
+                        <span className={`text-sm ${formData.acRoom ? 'text-foreground' : 'text-muted-foreground'}`}>
+                          Yes
+                        </span>
+                      </div>
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-between p-4 border rounded-lg">
-                    <Label htmlFor="acRoom" className="text-base font-medium">
-                      AC Room *
-                    </Label>
-                    <div className="flex items-center space-x-2">
-                      <span className={`text-sm ${!formData.acRoom ? 'text-foreground' : 'text-muted-foreground'}`}>
-                        No
-                      </span>
-                      <Switch
-                        id="acRoom"
-                        checked={formData.acRoom}
-                        onCheckedChange={(checked) => setFormData({ ...formData, acRoom: checked })}
-                      />
-                      <span className={`text-sm ${formData.acRoom ? 'text-foreground' : 'text-muted-foreground'}`}>
-                        Yes
-                      </span>
-                    </div>
-                  </div>
-
+                  {/* Balcony - Single field, can be full width */}
                   <div className="flex items-center justify-between p-4 border rounded-lg">
                     <Label htmlFor="balcony" className="text-base font-medium">
                       Balcony
@@ -189,44 +192,47 @@ export function FlattmatesAmenitiesStep({
                 <div className="space-y-4">
                   <h3 className="text-lg font-semibold text-foreground">Flatmate Preference</h3>
                   
-                  <div className="flex items-center justify-between p-4 border rounded-lg">
-                    <Label htmlFor="nonVegAllowed" className="text-base font-medium">
-                      Non-Veg Allowed *
-                    </Label>
-                    <div className="flex items-center space-x-2">
-                      <span className={`text-sm ${!formData.nonVegAllowed ? 'text-foreground' : 'text-muted-foreground'}`}>
-                        No
-                      </span>
-                      <Switch
-                        id="nonVegAllowed"
-                        checked={formData.nonVegAllowed}
-                        onCheckedChange={(checked) => setFormData({ ...formData, nonVegAllowed: checked })}
-                      />
-                      <span className={`text-sm ${formData.nonVegAllowed ? 'text-foreground' : 'text-muted-foreground'}`}>
-                        Yes
-                      </span>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="flex items-center justify-between p-4 border rounded-lg">
+                      <Label htmlFor="nonVegAllowed" className="text-base font-medium">
+                        Non-Veg Allowed *
+                      </Label>
+                      <div className="flex items-center space-x-2">
+                        <span className={`text-sm ${!formData.nonVegAllowed ? 'text-foreground' : 'text-muted-foreground'}`}>
+                          No
+                        </span>
+                        <Switch
+                          id="nonVegAllowed"
+                          checked={formData.nonVegAllowed}
+                          onCheckedChange={(checked) => setFormData({ ...formData, nonVegAllowed: checked })}
+                        />
+                        <span className={`text-sm ${formData.nonVegAllowed ? 'text-foreground' : 'text-muted-foreground'}`}>
+                          Yes
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center justify-between p-4 border rounded-lg">
+                      <Label htmlFor="smokingAllowed" className="text-base font-medium">
+                        Smoking Allowed
+                      </Label>
+                      <div className="flex items-center space-x-2">
+                        <span className={`text-sm ${!formData.smokingAllowed ? 'text-foreground' : 'text-muted-foreground'}`}>
+                          No
+                        </span>
+                        <Switch
+                          id="smokingAllowed"
+                          checked={formData.smokingAllowed}
+                          onCheckedChange={(checked) => setFormData({ ...formData, smokingAllowed: checked })}
+                        />
+                        <span className={`text-sm ${formData.smokingAllowed ? 'text-foreground' : 'text-muted-foreground'}`}>
+                          Yes
+                        </span>
+                      </div>
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-between p-4 border rounded-lg">
-                    <Label htmlFor="smokingAllowed" className="text-base font-medium">
-                      Smoking Allowed
-                    </Label>
-                    <div className="flex items-center space-x-2">
-                      <span className={`text-sm ${!formData.smokingAllowed ? 'text-foreground' : 'text-muted-foreground'}`}>
-                        No
-                      </span>
-                      <Switch
-                        id="smokingAllowed"
-                        checked={formData.smokingAllowed}
-                        onCheckedChange={(checked) => setFormData({ ...formData, smokingAllowed: checked })}
-                      />
-                      <span className={`text-sm ${formData.smokingAllowed ? 'text-foreground' : 'text-muted-foreground'}`}>
-                        Yes
-                      </span>
-                    </div>
-                  </div>
-
+                  {/* Drinking Allowed - Single field */}
                   <div className="flex items-center justify-between p-4 border rounded-lg">
                     <Label htmlFor="drinkingAllowed" className="text-base font-medium">
                       Drinking Allowed
@@ -251,67 +257,94 @@ export function FlattmatesAmenitiesStep({
                 <div className="space-y-4">
                   <h3 className="text-lg font-semibold text-foreground">Additional Details for maximum visibility</h3>
                   
-                  <div className="flex items-center justify-between p-4 border rounded-lg">
-                    <Label htmlFor="gym" className="text-base font-medium flex items-center space-x-2">
-                      <Dumbbell className="w-4 h-4" />
-                      <span>Gym *</span>
-                    </Label>
-                    <div className="flex items-center space-x-2">
-                      <span className={`text-sm ${!formData.gym ? 'text-foreground' : 'text-muted-foreground'}`}>
-                        No
-                      </span>
-                      <Switch
-                        id="gym"
-                        checked={formData.gym}
-                        onCheckedChange={(checked) => setFormData({ ...formData, gym: checked })}
-                      />
-                      <span className={`text-sm ${formData.gym ? 'text-foreground' : 'text-muted-foreground'}`}>
-                        Yes
-                      </span>
+                  {/* Gym and Gated Security */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="flex items-center justify-between p-4 border rounded-lg">
+                      <Label htmlFor="gym" className="text-base font-medium flex items-center space-x-2">
+                        <Dumbbell className="w-4 h-4" />
+                        <span>Gym *</span>
+                      </Label>
+                      <div className="flex items-center space-x-2">
+                        <span className={`text-sm ${!formData.gym ? 'text-foreground' : 'text-muted-foreground'}`}>
+                          No
+                        </span>
+                        <Switch
+                          id="gym"
+                          checked={formData.gym}
+                          onCheckedChange={(checked) => setFormData({ ...formData, gym: checked })}
+                        />
+                        <span className={`text-sm ${formData.gym ? 'text-foreground' : 'text-muted-foreground'}`}>
+                          Yes
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center justify-between p-4 border rounded-lg">
+                      <Label htmlFor="gatedSecurity" className="text-base font-medium flex items-center space-x-2">
+                        <Shield className="w-4 h-4" />
+                        <span>Gated Security *</span>
+                      </Label>
+                      <div className="flex items-center space-x-2">
+                        <span className={`text-sm ${!formData.gatedSecurity ? 'text-foreground' : 'text-muted-foreground'}`}>
+                          No
+                        </span>
+                        <Switch
+                          id="gatedSecurity"
+                          checked={formData.gatedSecurity}
+                          onCheckedChange={(checked) => setFormData({ ...formData, gatedSecurity: checked })}
+                        />
+                        <span className={`text-sm ${formData.gatedSecurity ? 'text-foreground' : 'text-muted-foreground'}`}>
+                          Yes
+                        </span>
+                      </div>
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-between p-4 border rounded-lg">
-                    <Label htmlFor="gatedSecurity" className="text-base font-medium flex items-center space-x-2">
-                      <Shield className="w-4 h-4" />
-                      <span>Gated Security *</span>
-                    </Label>
-                    <div className="flex items-center space-x-2">
-                      <span className={`text-sm ${!formData.gatedSecurity ? 'text-foreground' : 'text-muted-foreground'}`}>
-                        No
-                      </span>
-                      <Switch
-                        id="gatedSecurity"
-                        checked={formData.gatedSecurity}
-                        onCheckedChange={(checked) => setFormData({ ...formData, gatedSecurity: checked })}
-                      />
-                      <span className={`text-sm ${formData.gatedSecurity ? 'text-foreground' : 'text-muted-foreground'}`}>
-                        Yes
-                      </span>
+                  {/* Who will show and Water Supply */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="whoWillShow" className="flex items-center space-x-2">
+                        <Key className="w-4 h-4" />
+                        <span>Who will show the property? *</span>
+                      </Label>
+                      <Select
+                        value={formData.whoWillShow}
+                        onValueChange={(value) => setFormData({ ...formData, whoWillShow: value })}
+                      >
+                        <SelectTrigger className="h-12">
+                          <SelectValue placeholder="Select" />
+                        </SelectTrigger>
+                        <SelectContent className="bg-background border shadow-lg z-50">
+                          <SelectItem value="Owner">I will show</SelectItem>
+                          <SelectItem value="Agent">Agent will show</SelectItem>
+                          <SelectItem value="Tenant">Current tenant will show</SelectItem>
+                          <SelectItem value="Neighbor">Neighbor will show</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="waterSupply" className="flex items-center space-x-2">
+                        <Droplets className="w-4 h-4" />
+                        <span>Water Supply</span>
+                      </Label>
+                      <Select
+                        value={formData.waterSupply}
+                        onValueChange={(value) => setFormData({ ...formData, waterSupply: value })}
+                      >
+                        <SelectTrigger className="h-12">
+                          <SelectValue placeholder="Select" />
+                        </SelectTrigger>
+                        <SelectContent className="bg-background border shadow-lg z-50">
+                          <SelectItem value="Municipal">Municipal Corporation</SelectItem>
+                          <SelectItem value="Borewell">Borewell</SelectItem>
+                          <SelectItem value="Both">Both</SelectItem>
+                        </SelectContent>
+                      </Select>
                     </div>
                   </div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="whoWillShow" className="flex items-center space-x-2">
-                      <Key className="w-4 h-4" />
-                      <span>Who will show the property? *</span>
-                    </Label>
-                    <Select
-                      value={formData.whoWillShow}
-                      onValueChange={(value) => setFormData({ ...formData, whoWillShow: value })}
-                    >
-                      <SelectTrigger className="h-12">
-                        <SelectValue placeholder="Select" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="Owner">I will show</SelectItem>
-                        <SelectItem value="Agent">Agent will show</SelectItem>
-                        <SelectItem value="Tenant">Current tenant will show</SelectItem>
-                        <SelectItem value="Neighbor">Neighbor will show</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-
+                  {/* Secondary Number - Full width */}
                   <div className="space-y-2">
                     <Label htmlFor="secondaryNumber">Secondary Number</Label>
                     <div className="flex space-x-2">
@@ -329,26 +362,7 @@ export function FlattmatesAmenitiesStep({
                     </div>
                   </div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="waterSupply" className="flex items-center space-x-2">
-                      <Droplets className="w-4 h-4" />
-                      <span>Water Supply</span>
-                    </Label>
-                    <Select
-                      value={formData.waterSupply}
-                      onValueChange={(value) => setFormData({ ...formData, waterSupply: value })}
-                    >
-                      <SelectTrigger className="h-12">
-                        <SelectValue placeholder="Select" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="Municipal">Municipal Corporation</SelectItem>
-                        <SelectItem value="Borewell">Borewell</SelectItem>
-                        <SelectItem value="Both">Both</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-
+                  {/* Directions Tip - Full width */}
                   <div className="space-y-4 p-4 bg-blue-50 rounded-lg border border-blue-200">
                     <div className="flex items-center space-x-2">
                       <Plus className="w-5 h-5 text-primary" />
