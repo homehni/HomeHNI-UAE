@@ -168,7 +168,7 @@ export const ResaleMultiStepForm: React.FC<ResaleMultiStepFormProps> = ({
       <div className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden animate-scale-in">
         <div className="flex">
           {/* Import and use shared sidebar */}
-          <div className="w-64 bg-white border-r border-gray-200 min-h-screen p-6">
+          <div className="hidden lg:block w-64 bg-white border-r border-gray-200 min-h-screen p-6">
             <div className="space-y-1">
               {[
                 { number: 1, title: "Property Details", completed: completedSteps.includes(1), active: currentStep === 1 },
