@@ -82,7 +82,7 @@ export function FlattmatesPropertyDetailsStep({
                     onValueChange={(value) => setFormData({ ...formData, apartmentType: value })}
                   >
                     <SelectTrigger className="h-12">
-                      <SelectValue placeholder="Independent House/Villa" />
+                      <SelectValue placeholder="Select apartment type" />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="Independent House">Independent House</SelectItem>
@@ -100,7 +100,7 @@ export function FlattmatesPropertyDetailsStep({
                     onValueChange={(value) => setFormData({ ...formData, bhkType: value })}
                   >
                     <SelectTrigger className="h-12">
-                      <SelectValue placeholder="3 BHK" />
+                      <SelectValue placeholder="Select BHK configuration" />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="1 BHK">1 BHK</SelectItem>
@@ -149,7 +149,7 @@ export function FlattmatesPropertyDetailsStep({
                     onValueChange={(value) => setFormData({ ...formData, roomType: value })}
                   >
                     <SelectTrigger className="h-12">
-                      <SelectValue placeholder="Single Room" />
+                      <SelectValue placeholder="Select room sharing type" />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="Single Room">Single Room</SelectItem>
@@ -165,7 +165,7 @@ export function FlattmatesPropertyDetailsStep({
                     onValueChange={(value) => setFormData({ ...formData, tenantType: value })}
                   >
                     <SelectTrigger className="h-12">
-                      <SelectValue placeholder="Male" />
+                      <SelectValue placeholder="Select preferred tenant gender" />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="Male">Male</SelectItem>
@@ -182,7 +182,7 @@ export function FlattmatesPropertyDetailsStep({
                     onValueChange={(value) => setFormData({ ...formData, propertyAge: value })}
                   >
                     <SelectTrigger className="h-12">
-                      <SelectValue placeholder="5 to 10 year" />
+                      <SelectValue placeholder="Select property age range" />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="Under Construction">Under Construction</SelectItem>
@@ -201,7 +201,7 @@ export function FlattmatesPropertyDetailsStep({
                     onValueChange={(value) => setFormData({ ...formData, facing: value })}
                   >
                     <SelectTrigger className="h-12">
-                      <SelectValue placeholder="North-West" />
+                      <SelectValue placeholder="Select property facing direction" />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="North">North</SelectItem>
