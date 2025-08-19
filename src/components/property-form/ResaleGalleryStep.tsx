@@ -73,23 +73,6 @@ export const ResaleGalleryStep: React.FC<ResaleGalleryStepProps> = ({
                         </div>
                       </div>
 
-                      {/* Upload Instructions */}
-                      <div 
-                        className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-12 text-center cursor-pointer hover:border-primary transition-colors hover:bg-muted/20"
-                        onClick={() => document.getElementById('image-upload-input')?.click()}
-                      >
-                        <div className="flex flex-col items-center gap-4">
-                          <div className="bg-muted/50 rounded-full p-4">
-                            <Camera className="h-8 w-8 text-muted-foreground" />
-                          </div>
-                          <div className="space-y-2">
-                            <p className="text-lg font-medium">Add photos to attract more buyers</p>
-                            <p className="text-muted-foreground">Properties with photos get 5X more responses</p>
-                            <p className="text-sm text-muted-foreground">Upload 3-15 high-quality photos</p>
-                          </div>
-                        </div>
-                      </div>
-                      
                       {/* Image Upload Component */}
                       <ImageUpload
                         images={field.value || []}
