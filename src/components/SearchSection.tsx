@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, forwardRef, useImperativeHandle } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
@@ -8,13 +9,30 @@ export interface SearchSectionRef {
   focusSearchInput: () => void;
 }
 const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('buy');
   const [selectedCity, setSelectedCity] = useState('All Residential');
+  const [searchQuery, setSearchQuery] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
   const mobileInputRef = useRef<HTMLInputElement>(null);
   const cities = ['All Residential', 'Flat/Apartment', 'Independent Building/ Floor', 'Farm House', 'Villa', 'Plots', 'Independent House', 'Agriculture Lands'];
   const handleCitySelect = (city: string) => {
     setSelectedCity(city);
+  };
+
+  const handleSearch = () => {
+    const params = new URLSearchParams({
+      type: activeTab,
+      propertyType: selectedCity,
+      location: searchQuery
+    });
+    navigate(`/search?${params.toString()}`);
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      handleSearch();
+    }
   };
   const navigationTabs = [{
     id: 'buy',
@@ -104,7 +122,15 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
             <div className="relative">
               <div className="relative flex items-center">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                <input ref={mobileInputRef} type="text" placeholder="Search 'Sector 150 Noida'" className="w-full pl-10 pr-12 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-700 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
+                <input 
+                  ref={mobileInputRef} 
+                  type="text" 
+                  placeholder="Search 'Sector 150 Noida'" 
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onKeyPress={handleKeyPress}
+                  className="w-full pl-10 pr-12 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-700 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+                />
                 <button className="absolute right-3 top-1/2 transform -translate-y-1/2 p-1 hover:bg-gray-100 rounded-full transition-colors">
                   <Mic className="w-5 h-5 text-blue-500" />
                 </button>
@@ -150,7 +176,14 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                       
                       <div className="flex-1 relative">
                          <MapPin className="absolute left-3 top-3 text-brand-red" size={20} />
-                         <Input ref={inputRef} placeholder="Search 'Noida'" className="pl-10 h-12 border-brand-red text-brand-red placeholder-brand-red/60" />
+                         <Input 
+                           ref={inputRef} 
+                           placeholder="Search 'Noida'" 
+                           value={searchQuery}
+                           onChange={(e) => setSearchQuery(e.target.value)}
+                           onKeyPress={handleKeyPress}
+                           className="pl-10 h-12 border-brand-red text-brand-red placeholder-brand-red/60" 
+                         />
                          <div className="absolute right-3 top-3 flex gap-2">
                           <button className="p-1 hover:bg-brand-red/10 rounded">
                             
@@ -161,7 +194,10 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                         </div>
                       </div>
                       
-                      <Button className="h-12 px-8 bg-brand-red hover:bg-brand-red-dark text-white font-medium">
+                      <Button 
+                        onClick={handleSearch}
+                        className="h-12 px-8 bg-brand-red hover:bg-brand-red-dark text-white font-medium"
+                      >
                         Search
                       </Button>
                     </div>

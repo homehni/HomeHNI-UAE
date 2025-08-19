@@ -16,7 +16,7 @@ interface PropertyCardProps {
   image: string;
   propertyType: string;
   isNew?: boolean;
-  size?: 'default' | 'compact';
+  size?: 'default' | 'compact' | 'large';
 }
 
 const PropertyCard = ({
@@ -109,7 +109,9 @@ const PropertyCard = ({
         <img
           src={`https://images.unsplash.com/${image}?auto=format&fit=crop&w=400&q=80`}
           alt={title}
-          className="w-full h-32 object-cover group-hover:scale-105 transition-transform duration-300"
+          className={`w-full object-cover group-hover:scale-105 transition-transform duration-300 ${
+            size === 'large' ? 'h-48' : 'h-32'
+          }`}
         />
         <Button
           variant="ghost"
