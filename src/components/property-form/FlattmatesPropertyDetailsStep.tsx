@@ -78,44 +78,48 @@ export function FlattmatesPropertyDetailsStep({
           <Card>
             <CardContent className="p-8">
               <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="space-y-2">
-                  <Label htmlFor="apartmentType">Apartment Type *</Label>
-                  <Select
-                    value={formData.apartmentType}
-                    onValueChange={(value) => setFormData({ ...formData, apartmentType: value })}
-                  >
-                    <SelectTrigger className="h-12">
-                      <SelectValue placeholder="Select apartment type" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="Independent House">Independent House</SelectItem>
-                      <SelectItem value="Villa">Villa</SelectItem>
-                      <SelectItem value="Apartment">Apartment</SelectItem>
-                      <SelectItem value="Builder Floor">Builder Floor</SelectItem>
-                    </SelectContent>
-                  </Select>
+                {/* Apartment Type and BHK Type */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="apartmentType">Apartment Type *</Label>
+                    <Select
+                      value={formData.apartmentType}
+                      onValueChange={(value) => setFormData({ ...formData, apartmentType: value })}
+                    >
+                      <SelectTrigger className="h-12">
+                        <SelectValue placeholder="Select apartment type" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Independent House">Independent House</SelectItem>
+                        <SelectItem value="Villa">Villa</SelectItem>
+                        <SelectItem value="Apartment">Apartment</SelectItem>
+                        <SelectItem value="Builder Floor">Builder Floor</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="bhkType">BHK Type *</Label>
+                    <Select
+                      value={formData.bhkType}
+                      onValueChange={(value) => setFormData({ ...formData, bhkType: value })}
+                    >
+                      <SelectTrigger className="h-12">
+                        <SelectValue placeholder="Select BHK configuration" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="1 BHK">1 BHK</SelectItem>
+                        <SelectItem value="2 BHK">2 BHK</SelectItem>
+                        <SelectItem value="3 BHK">3 BHK</SelectItem>
+                        <SelectItem value="4 BHK">4 BHK</SelectItem>
+                        <SelectItem value="5+ BHK">5+ BHK</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
                 </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="bhkType">BHK Type *</Label>
-                  <Select
-                    value={formData.bhkType}
-                    onValueChange={(value) => setFormData({ ...formData, bhkType: value })}
-                  >
-                    <SelectTrigger className="h-12">
-                      <SelectValue placeholder="Select BHK configuration" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="1 BHK">1 BHK</SelectItem>
-                      <SelectItem value="2 BHK">2 BHK</SelectItem>
-                      <SelectItem value="3 BHK">3 BHK</SelectItem>
-                      <SelectItem value="4 BHK">4 BHK</SelectItem>
-                      <SelectItem value="5+ BHK">5+ BHK</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
+                {/* Floor and Total Floors */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="floorNo">Floor *</Label>
                     <Select
@@ -179,80 +183,87 @@ export function FlattmatesPropertyDetailsStep({
                   </div>
                 </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="roomType">Room Type *</Label>
-                  <Select
-                    value={formData.roomType}
-                    onValueChange={(value) => setFormData({ ...formData, roomType: value })}
-                  >
-                    <SelectTrigger className="h-12">
-                      <SelectValue placeholder="Select room sharing type" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="Single Room">Single Room</SelectItem>
-                      <SelectItem value="Shared Room">Shared Room</SelectItem>
-                    </SelectContent>
-                  </Select>
+                {/* Room Type and Tenant Type */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="roomType">Room Type *</Label>
+                    <Select
+                      value={formData.roomType}
+                      onValueChange={(value) => setFormData({ ...formData, roomType: value })}
+                    >
+                      <SelectTrigger className="h-12">
+                        <SelectValue placeholder="Select room sharing type" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Single Room">Single Room</SelectItem>
+                        <SelectItem value="Shared Room">Shared Room</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="tenantType">Tenant Type *</Label>
+                    <Select
+                      value={formData.tenantType}
+                      onValueChange={(value) => setFormData({ ...formData, tenantType: value })}
+                    >
+                      <SelectTrigger className="h-12">
+                        <SelectValue placeholder="Select preferred tenant gender" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Male">Male</SelectItem>
+                        <SelectItem value="Female">Female</SelectItem>
+                        <SelectItem value="Any">Any</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
                 </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="tenantType">Tenant Type *</Label>
-                  <Select
-                    value={formData.tenantType}
-                    onValueChange={(value) => setFormData({ ...formData, tenantType: value })}
-                  >
-                    <SelectTrigger className="h-12">
-                      <SelectValue placeholder="Select preferred tenant gender" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="Male">Male</SelectItem>
-                      <SelectItem value="Female">Female</SelectItem>
-                      <SelectItem value="Any">Any</SelectItem>
-                    </SelectContent>
-                  </Select>
+                {/* Property Age and Facing */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="propertyAge">Property Age *</Label>
+                    <Select
+                      value={formData.propertyAge}
+                      onValueChange={(value) => setFormData({ ...formData, propertyAge: value })}
+                    >
+                      <SelectTrigger className="h-12">
+                        <SelectValue placeholder="Select property age range" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Under Construction">Under Construction</SelectItem>
+                        <SelectItem value="0-1 Year">0-1 Year</SelectItem>
+                        <SelectItem value="1-5 Years">1-5 Years</SelectItem>
+                        <SelectItem value="5-10 Years">5-10 Years</SelectItem>
+                        <SelectItem value="10+ Years">10+ Years</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="facing">Facing</Label>
+                    <Select
+                      value={formData.facing}
+                      onValueChange={(value) => setFormData({ ...formData, facing: value })}
+                    >
+                      <SelectTrigger className="h-12">
+                        <SelectValue placeholder="Select property facing direction" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="North">North</SelectItem>
+                        <SelectItem value="South">South</SelectItem>
+                        <SelectItem value="East">East</SelectItem>
+                        <SelectItem value="West">West</SelectItem>
+                        <SelectItem value="North-East">North-East</SelectItem>
+                        <SelectItem value="North-West">North-West</SelectItem>
+                        <SelectItem value="South-East">South-East</SelectItem>
+                        <SelectItem value="South-West">South-West</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
                 </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="propertyAge">Property Age *</Label>
-                  <Select
-                    value={formData.propertyAge}
-                    onValueChange={(value) => setFormData({ ...formData, propertyAge: value })}
-                  >
-                    <SelectTrigger className="h-12">
-                      <SelectValue placeholder="Select property age range" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="Under Construction">Under Construction</SelectItem>
-                      <SelectItem value="0-1 Year">0-1 Year</SelectItem>
-                      <SelectItem value="1-5 Years">1-5 Years</SelectItem>
-                      <SelectItem value="5-10 Years">5-10 Years</SelectItem>
-                      <SelectItem value="10+ Years">10+ Years</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="facing">Facing</Label>
-                  <Select
-                    value={formData.facing}
-                    onValueChange={(value) => setFormData({ ...formData, facing: value })}
-                  >
-                    <SelectTrigger className="h-12">
-                      <SelectValue placeholder="Select property facing direction" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="North">North</SelectItem>
-                      <SelectItem value="South">South</SelectItem>
-                      <SelectItem value="East">East</SelectItem>
-                      <SelectItem value="West">West</SelectItem>
-                      <SelectItem value="North-East">North-East</SelectItem>
-                      <SelectItem value="North-West">North-West</SelectItem>
-                      <SelectItem value="South-East">South-East</SelectItem>
-                      <SelectItem value="South-West">South-West</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
+                {/* Built Up Area - keeping full width as it's important */}
                 <div className="space-y-2">
                   <Label htmlFor="builtUpArea">Built Up Area *</Label>
                   <div className="relative">
