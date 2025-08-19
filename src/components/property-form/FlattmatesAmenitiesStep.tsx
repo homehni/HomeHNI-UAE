@@ -398,27 +398,38 @@ export function FlattmatesAmenitiesStep({
                 <div className="space-y-4">
                   <h3 className="text-lg font-semibold text-foreground">Select the available amenities</h3>
                   
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                     {amenitiesList.map((amenity) => {
                       const IconComponent = amenity.icon;
                       const isSelected = formData.selectedAmenities.includes(amenity.key);
                       
                       return (
-                        <div
+                        <label
                           key={amenity.key}
-                          className={`p-3 border rounded-lg cursor-pointer transition-colors ${
+                          className={`flex items-center space-x-3 p-3 border rounded-lg cursor-pointer transition-all hover:bg-muted/50 ${
                             isSelected 
-                              ? 'border-primary bg-primary/5' 
-                              : 'border-border hover:border-primary/50'
+                              ? 'border-primary bg-primary/5 shadow-sm' 
+                              : 'border-border'
                           }`}
-                          onClick={() => handleAmenityToggle(amenity.key)}
                         >
-                          <div className="flex items-center space-x-2">
-                            <Checkbox checked={isSelected} />
-                            <IconComponent className="w-4 h-4 text-muted-foreground" />
-                            <span className="text-sm">{amenity.label}</span>
+                          <input
+                            type="checkbox"
+                            checked={isSelected}
+                            onChange={() => handleAmenityToggle(amenity.key)}
+                            className="sr-only"
+                          />
+                          <div className={`w-4 h-4 border-2 rounded flex items-center justify-center ${
+                            isSelected ? 'border-primary bg-primary' : 'border-muted-foreground'
+                          }`}>
+                            {isSelected && (
+                              <svg className="w-3 h-3 text-primary-foreground" fill="currentColor" viewBox="0 0 20 20">
+                                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                              </svg>
+                            )}
                           </div>
-                        </div>
+                          <IconComponent className="w-4 h-4 text-muted-foreground" />
+                          <span className="text-sm font-medium">{amenity.label}</span>
+                        </label>
                       );
                     })}
                   </div>
