@@ -50,7 +50,7 @@ export const CommercialSaleSidebar = ({ currentStep, completedSteps, onStepClick
   };
 
   return (
-    <div className="w-80 bg-white p-6 border-r border-gray-200 overflow-y-auto">
+    <div className="hidden lg:block w-80 bg-white p-6 border-r border-gray-200 overflow-y-auto">
       <div className="mb-8">
         <h2 className="text-2xl font-bold text-gray-900 mb-2">Commercial Sale</h2>
         <p className="text-gray-600">List your commercial property for sale</p>
