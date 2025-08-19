@@ -1,5 +1,5 @@
 import React from 'react';
-import { Building, MapPin, DollarSign, Sparkles, Camera, FileText, Calendar } from 'lucide-react';
+import { Building, MapPin, IndianRupee, Sparkles, Camera, FileText, Calendar } from 'lucide-react';
 
 interface CommercialSidebarProps {
   currentStep: number;
@@ -27,7 +27,7 @@ export const CommercialSidebar: React.FC<CommercialSidebarProps> = ({
     },
     { 
       id: 4, 
-      icon: DollarSign, 
+      icon: IndianRupee, 
       label: 'Rental Details', 
       description: 'Rent, deposit, lease terms' 
     },
