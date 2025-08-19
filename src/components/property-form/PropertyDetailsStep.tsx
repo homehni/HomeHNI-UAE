@@ -121,8 +121,8 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
       </div>
 
       <div className="flex">
-        {/* Sidebar */}
-        <div className="w-52 bg-white border-r border-gray-200 min-h-screen">
+        {/* Sidebar - Hidden on mobile */}
+        <div className="hidden lg:block w-52 bg-white border-r border-gray-200 min-h-screen">
           <div className="p-6">
             <nav className="space-y-2">
               {steps.map((step, index) => {
