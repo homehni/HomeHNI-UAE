@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { useSearchParams, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -10,115 +10,27 @@ import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import PropertyCard from '@/components/PropertyCard';
-import { MapPin, Filter, Grid3X3, List, Map, SortAsc, SortDesc, Bookmark, Share2 } from 'lucide-react';
+import { MapPin, Filter, Grid3X3, List, Map, Bookmark, Share2, Mic, X } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import PropertyTools from '@/components/PropertyTools';
-
-interface SearchFilters {
-  propertyType: string[];
-  bhkType: string[];
-  budget: [number, number];
-  locality: string[];
-  furnished: string[];
-  availability: string[];
-  construction: string[];
-}
+import { useRealTimeSearch } from '@/hooks/useRealTimeSearch';
 
 const PropertySearch = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
-  
-  // Get initial values from URL params
-  const initialLocation = searchParams.get('location') || '';
-  const initialType = searchParams.get('type') || 'buy';
-  const initialPropertyType = searchParams.get('propertyType') || 'All Residential';
-  
-  const [activeTab, setActiveTab] = useState(initialType);
-  const [location, setLocation] = useState(initialLocation);
-  const [sortBy, setSortBy] = useState('relevance');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [showMap, setShowMap] = useState(false);
   
-  const [filters, setFilters] = useState<SearchFilters>({
-    propertyType: initialPropertyType === 'All Residential' ? [] : [initialPropertyType],
-    bhkType: [],
-    budget: [0, 10000000],
-    locality: [],
-    furnished: [],
-    availability: [],
-    construction: []
-  });
-  
-  // Mock property data - In real app, this would come from API
-  const mockProperties = [
-    {
-      id: '1',
-      title: '3 BHK Apartment in Sector 150, Noida',
-      location: 'Sector 150, Noida',
-      price: '₹85 Lakh',
-      area: '1200 sq ft',
-      bedrooms: 3,
-      bathrooms: 2,
-      image: 'photo-1512917774080-9991f1c4c750',
-      propertyType: 'Flat/Apartment'
-    },
-    {
-      id: '2', 
-      title: '2 BHK Independent House in Gurgaon',
-      location: 'Sector 45, Gurgaon',
-      price: '₹1.2 Crore',
-      area: '1000 sq ft',
-      bedrooms: 2,
-      bathrooms: 2,
-      image: 'photo-1568605114967-8130f3a36994',
-      propertyType: 'Independent House'
-    },
-    {
-      id: '3',
-      title: '4 BHK Villa in Whitefield, Bangalore',
-      location: 'Whitefield, Bangalore',
-      price: '₹2.5 Crore',
-      area: '2500 sq ft',
-      bedrooms: 4,
-      bathrooms: 3,
-      image: 'photo-1522708323590-d24dbb6b0267',
-      propertyType: 'Villa'
-    },
-    {
-      id: '4',
-      title: '1 BHK Flat in Andheri, Mumbai',
-      location: 'Andheri West, Mumbai',
-      price: '₹75 Lakh',
-      area: '650 sq ft',
-      bedrooms: 1,
-      bathrooms: 1,
-      image: 'photo-1613490493576-7fde63acd811',
-      propertyType: 'Flat/Apartment'
-    },
-    {
-      id: '5',
-      title: '3 BHK Independent Floor in Sector 62, Noida',
-      location: 'Sector 62, Noida',
-      price: '₹95 Lakh',
-      area: '1400 sq ft',
-      bedrooms: 3,
-      bathrooms: 2,
-      image: 'photo-1512917774080-9991f1c4c750',
-      propertyType: 'Independent Building/Floor'
-    },
-    {
-      id: '6',
-      title: '2 BHK Apartment in Koramangala, Bangalore',
-      location: 'Koramangala, Bangalore',
-      price: '₹1.1 Crore',
-      area: '1100 sq ft',
-      bedrooms: 2,
-      bathrooms: 2,
-      image: 'photo-1568605114967-8130f3a36994',
-      propertyType: 'Flat/Apartment'
-    }
-  ];
+  const {
+    filters,
+    activeTab,
+    setActiveTab,
+    filteredProperties,
+    updateFilter,
+    clearAllFilters,
+    availableLocalities,
+    isLoading
+  } = useRealTimeSearch();
 
   const propertyTypes = [
     'All Residential',
@@ -135,24 +47,6 @@ const PropertySearch = () => {
   const availabilityOptions = ['Ready to Move', 'Under Construction'];
   const constructionOptions = ['New Project', '1-5 Years Old', '5-10 Years Old', '10+ Years Old'];
 
-  const handleFilterChange = (filterType: keyof SearchFilters, value: any) => {
-    setFilters(prev => ({
-      ...prev,
-      [filterType]: value
-    }));
-  };
-
-  const clearAllFilters = () => {
-    setFilters({
-      propertyType: [],
-      bhkType: [],
-      budget: [0, 10000000],
-      locality: [],
-      furnished: [],
-      availability: [],
-      construction: []
-    });
-  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -175,20 +69,32 @@ const PropertySearch = () => {
               </TabsList>
             </Tabs>
 
-            {/* Location Search */}
+            {/* Location Search with real-time functionality */}
             <div className="flex-1 flex gap-2">
               <div className="relative flex-1">
                 <MapPin className="absolute left-3 top-3 text-brand-red" size={20} />
                 <Input 
-                  value={location}
-                  onChange={(e) => setLocation(e.target.value)}
-                  placeholder="Search location..." 
-                  className="pl-10 h-12 border-brand-red"
+                  value={filters.location}
+                  onChange={(e) => updateFilter('location', e.target.value)}
+                  placeholder="Search 'Noida, Gurgaon, Mumbai'..." 
+                  className="pl-10 pr-20 h-12 border-brand-red"
                 />
+                <div className="absolute right-3 top-3 flex items-center gap-2">
+                  {filters.location && (
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => updateFilter('location', '')}
+                      className="h-6 w-6 p-0 hover:bg-brand-red/10"
+                    >
+                      <X size={14} />
+                    </Button>
+                  )}
+                  <Button variant="ghost" size="sm" className="h-6 w-6 p-0 hover:bg-brand-red/10">
+                    <Mic size={14} className="text-brand-red" />
+                  </Button>
+                </div>
               </div>
-              <Button className="h-12 px-6 bg-brand-red hover:bg-brand-red-dark">
-                Search
-              </Button>
             </div>
 
             {/* View Controls */}
@@ -239,15 +145,49 @@ const PropertySearch = () => {
                   <div className="space-y-3">
                     <Slider
                       value={filters.budget}
-                      onValueChange={(value) => handleFilterChange('budget', value)}
-                      max={20000000}
+                      onValueChange={(value) => updateFilter('budget', value)}
+                      max={50000000}
                       min={0}
-                      step={100000}
+                      step={500000}
                       className="w-full"
                     />
                     <div className="flex justify-between text-sm text-gray-600">
-                      <span>₹{(filters.budget[0] / 100000).toFixed(1)}L</span>
-                      <span>₹{(filters.budget[1] / 100000).toFixed(1)}L</span>
+                      <span>₹{filters.budget[0] === 0 ? '0' : (filters.budget[0] / 100000).toFixed(1) + 'L'}</span>
+                      <span>₹{filters.budget[1] >= 10000000 ? (filters.budget[1] / 10000000).toFixed(1) + 'Cr' : (filters.budget[1] / 100000).toFixed(1) + 'L'}</span>
+                    </div>
+                    <div className="grid grid-cols-2 gap-2 mt-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => updateFilter('budget', [0, 5000000])}
+                        className="text-xs"
+                      >
+                        Under 50L
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => updateFilter('budget', [5000000, 10000000])}
+                        className="text-xs"
+                      >
+                        50L-1Cr
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => updateFilter('budget', [10000000, 20000000])}
+                        className="text-xs"
+                      >
+                        1-2Cr
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => updateFilter('budget', [20000000, 50000000])}
+                        className="text-xs"
+                      >
+                        2Cr+
+                      </Button>
                     </div>
                   </div>
                 </div>
@@ -265,9 +205,9 @@ const PropertySearch = () => {
                           checked={filters.propertyType.includes(type)}
                           onCheckedChange={(checked) => {
                             if (checked) {
-                              handleFilterChange('propertyType', [...filters.propertyType, type]);
+                              updateFilter('propertyType', [...filters.propertyType, type]);
                             } else {
-                              handleFilterChange('propertyType', filters.propertyType.filter(t => t !== type));
+                              updateFilter('propertyType', filters.propertyType.filter(t => t !== type));
                             }
                           }}
                         />
@@ -292,9 +232,9 @@ const PropertySearch = () => {
                         size="sm"
                         onClick={() => {
                           if (filters.bhkType.includes(bhk)) {
-                            handleFilterChange('bhkType', filters.bhkType.filter(b => b !== bhk));
+                            updateFilter('bhkType', filters.bhkType.filter(b => b !== bhk));
                           } else {
-                            handleFilterChange('bhkType', [...filters.bhkType, bhk]);
+                            updateFilter('bhkType', [...filters.bhkType, bhk]);
                           }
                         }}
                         className="text-xs"
@@ -318,9 +258,9 @@ const PropertySearch = () => {
                           checked={filters.furnished.includes(option)}
                           onCheckedChange={(checked) => {
                             if (checked) {
-                              handleFilterChange('furnished', [...filters.furnished, option]);
+                              updateFilter('furnished', [...filters.furnished, option]);
                             } else {
-                              handleFilterChange('furnished', filters.furnished.filter(f => f !== option));
+                              updateFilter('furnished', filters.furnished.filter(f => f !== option));
                             }
                           }}
                         />
@@ -345,9 +285,63 @@ const PropertySearch = () => {
                           checked={filters.availability.includes(option)}
                           onCheckedChange={(checked) => {
                             if (checked) {
-                              handleFilterChange('availability', [...filters.availability, option]);
+                              updateFilter('availability', [...filters.availability, option]);
                             } else {
-                              handleFilterChange('availability', filters.availability.filter(a => a !== option));
+                              updateFilter('availability', filters.availability.filter(a => a !== option));
+                            }
+                          }}
+                        />
+                        <label htmlFor={option} className="text-sm text-gray-700 cursor-pointer">
+                          {option}
+                        </label>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <Separator />
+
+                {/* Locality Filter - Dynamic based on available properties */}
+                <div>
+                  <h4 className="font-semibold mb-3">Locality</h4>
+                  <div className="max-h-32 overflow-y-auto space-y-2">
+                    {availableLocalities.slice(0, 8).map((locality) => (
+                      <div key={locality} className="flex items-center space-x-2">
+                        <Checkbox
+                          id={locality}
+                          checked={filters.locality.includes(locality)}
+                          onCheckedChange={(checked) => {
+                            if (checked) {
+                              updateFilter('locality', [...filters.locality, locality]);
+                            } else {
+                              updateFilter('locality', filters.locality.filter(l => l !== locality));
+                            }
+                          }}
+                        />
+                        <label htmlFor={locality} className="text-sm text-gray-700 cursor-pointer">
+                          {locality}
+                        </label>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <Separator />
+
+                {/* Age of Property Filter */}
+                <div>
+                  <h4 className="font-semibold mb-3">Age of Property</h4>
+                  <div className="space-y-2">
+                    {constructionOptions.map((option) => (
+                      <div key={option} className="flex items-center space-x-2">
+                        <Checkbox
+                          id={option}
+                          checked={filters.construction.includes(option)}
+                          onCheckedChange={(checked) => {
+                            if (checked) {
+                              updateFilter('construction', [...filters.construction, option]);
+                            } else {
+                              updateFilter('construction', filters.construction.filter(c => c !== option));
                             }
                           }}
                         />
@@ -368,15 +362,20 @@ const PropertySearch = () => {
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
               <div>
                 <h1 className="text-2xl font-bold text-gray-900">
-                  Properties {activeTab === 'buy' ? 'for Sale' : 'for Rent'} in {location || 'All Locations'}
+                  Properties {activeTab === 'buy' ? 'for Sale' : 'for Rent'} in {filters.location || 'All Locations'}
                 </h1>
                 <p className="text-gray-600 mt-1">
-                  {mockProperties.length} results found
+                  {isLoading ? 'Searching...' : `${filteredProperties.length} results found`}
+                  {filters.location && (
+                    <span className="ml-2 text-brand-red">
+                      • Real-time results for "{filters.location}"
+                    </span>
+                  )}
                 </p>
               </div>
               
               <div className="flex items-center gap-4">
-                <Select value={sortBy} onValueChange={setSortBy}>
+                <Select value={filters.sortBy} onValueChange={(value) => updateFilter('sortBy', value)}>
                   <SelectTrigger className="w-48">
                     <SelectValue placeholder="Sort by" />
                   </SelectTrigger>
@@ -385,7 +384,7 @@ const PropertySearch = () => {
                     <SelectItem value="price-low">Price: Low to High</SelectItem>
                     <SelectItem value="price-high">Price: High to Low</SelectItem>
                     <SelectItem value="newest">Newest First</SelectItem>
-                    <SelectItem value="area">Area</SelectItem>
+                    <SelectItem value="area">Area: Large to Small</SelectItem>
                   </SelectContent>
                 </Select>
                 
@@ -396,17 +395,43 @@ const PropertySearch = () => {
               </div>
             </div>
 
-            {/* Active Filters */}
-            {(filters.propertyType.length > 0 || filters.bhkType.length > 0 || filters.furnished.length > 0) && (
+            {/* Active Filters - Show all active filters */}
+            {(filters.propertyType.length > 0 || 
+              filters.bhkType.length > 0 || 
+              filters.furnished.length > 0 || 
+              filters.availability.length > 0 ||
+              filters.locality.length > 0 ||
+              filters.construction.length > 0 ||
+              filters.budget[0] > 0 || 
+              filters.budget[1] < 50000000) && (
               <div className="flex flex-wrap gap-2 mb-6">
+                <div className="flex items-center text-sm text-gray-600 mr-2">
+                  <Filter size={14} className="mr-1" />
+                  Active filters:
+                </div>
+                
+                {/* Budget filter badge */}
+                {(filters.budget[0] > 0 || filters.budget[1] < 50000000) && (
+                  <Badge variant="secondary" className="flex items-center gap-1">
+                    ₹{filters.budget[0] === 0 ? '0' : (filters.budget[0] / 100000).toFixed(0) + 'L'} - 
+                    ₹{filters.budget[1] >= 10000000 ? (filters.budget[1] / 10000000).toFixed(1) + 'Cr' : (filters.budget[1] / 100000).toFixed(0) + 'L'}
+                    <button 
+                      onClick={() => updateFilter('budget', [0, 50000000])}
+                      className="ml-1 hover:bg-gray-300 rounded-full p-0.5"
+                    >
+                      <X size={12} />
+                    </button>
+                  </Badge>
+                )}
+                
                 {filters.propertyType.map((type) => (
                   <Badge key={type} variant="secondary" className="flex items-center gap-1">
                     {type}
                     <button 
-                      onClick={() => handleFilterChange('propertyType', filters.propertyType.filter(t => t !== type))}
+                      onClick={() => updateFilter('propertyType', filters.propertyType.filter(t => t !== type))}
                       className="ml-1 hover:bg-gray-300 rounded-full p-0.5"
                     >
-                      ×
+                      <X size={12} />
                     </button>
                   </Badge>
                 ))}
@@ -414,38 +439,88 @@ const PropertySearch = () => {
                   <Badge key={bhk} variant="secondary" className="flex items-center gap-1">
                     {bhk}
                     <button 
-                      onClick={() => handleFilterChange('bhkType', filters.bhkType.filter(b => b !== bhk))}
+                      onClick={() => updateFilter('bhkType', filters.bhkType.filter(b => b !== bhk))}
                       className="ml-1 hover:bg-gray-300 rounded-full p-0.5"
                     >
-                      ×
+                      <X size={12} />
                     </button>
                   </Badge>
                 ))}
+                {filters.furnished.map((furnished) => (
+                  <Badge key={furnished} variant="secondary" className="flex items-center gap-1">
+                    {furnished}
+                    <button 
+                      onClick={() => updateFilter('furnished', filters.furnished.filter(f => f !== furnished))}
+                      className="ml-1 hover:bg-gray-300 rounded-full p-0.5"
+                    >
+                      <X size={12} />
+                    </button>
+                  </Badge>
+                ))}
+                {filters.locality.map((locality) => (
+                  <Badge key={locality} variant="secondary" className="flex items-center gap-1">
+                    {locality}
+                    <button 
+                      onClick={() => updateFilter('locality', filters.locality.filter(l => l !== locality))}
+                      className="ml-1 hover:bg-gray-300 rounded-full p-0.5"
+                    >
+                      <X size={12} />
+                    </button>
+                  </Badge>
+                ))}
+                
+                <Button
+                  variant="ghost" 
+                  size="sm"
+                  onClick={clearAllFilters}
+                  className="text-brand-red hover:bg-brand-red/10"
+                >
+                  Clear All
+                </Button>
               </div>
             )}
 
-            {/* Properties Grid/List */}
-            <div className={`grid gap-6 ${
-              viewMode === 'grid' 
-                ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3' 
-                : 'grid-cols-1'
-            }`}>
-              {mockProperties.map((property) => (
-                <PropertyCard
-                  key={property.id}
-                  id={property.id}
-                  title={property.title}
-                  location={property.location}
-                  price={property.price}
-                  area={property.area}
-                  bedrooms={property.bedrooms}
-                  bathrooms={property.bathrooms}
-                  image={property.image}
-                  propertyType={property.propertyType}
-                  size={viewMode === 'list' ? 'large' : 'default'}
-                />
-              ))}
-            </div>
+            {/* Properties Grid/List - Real-time results */}
+            {isLoading ? (
+              <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+                {[1, 2, 3, 4, 5, 6].map((i) => (
+                  <div key={i} className="bg-gray-100 animate-pulse rounded-lg h-80"></div>
+                ))}
+              </div>
+            ) : filteredProperties.length > 0 ? (
+              <div className={`grid gap-6 ${
+                viewMode === 'grid' 
+                  ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3' 
+                  : 'grid-cols-1'
+              }`}>
+                {filteredProperties.map((property) => (
+                  <PropertyCard
+                    key={property.id}
+                    id={property.id}
+                    title={property.title}
+                    location={property.location}
+                    price={property.price}
+                    area={property.area}
+                    bedrooms={property.bedrooms}
+                    bathrooms={property.bathrooms}
+                    image={property.image}
+                    propertyType={property.propertyType}
+                    size={viewMode === 'list' ? 'large' : 'default'}
+                  />
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-16">
+                <div className="text-6xl mb-4">🏠</div>
+                <h3 className="text-xl font-semibold text-gray-600 mb-2">No properties found</h3>
+                <p className="text-gray-500 mb-4">
+                  Try adjusting your search criteria or location
+                </p>
+                <Button onClick={clearAllFilters} variant="outline">
+                  Clear All Filters
+                </Button>
+              </div>
+            )}
 
             {/* Pagination */}
             <div className="flex justify-center mt-12">

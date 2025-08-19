@@ -23,8 +23,8 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
   const handleSearch = () => {
     const params = new URLSearchParams({
       type: activeTab,
-      propertyType: selectedCity,
-      location: searchQuery
+      propertyType: selectedCity === 'All Residential' ? '' : selectedCity,
+      location: searchQuery.trim()
     });
     navigate(`/search?${params.toString()}`);
   };
