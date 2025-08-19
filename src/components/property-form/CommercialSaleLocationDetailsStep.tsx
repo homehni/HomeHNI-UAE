@@ -13,7 +13,6 @@ const commercialSaleLocationDetailsSchema = z.object({
   city: z.string().min(1, 'City is required'),
   locality: z.string().min(1, 'Locality is required'),
   landmark: z.string().optional(),
-  pincode: z.string().min(6, 'Valid pincode is required').max(6, 'Pincode must be 6 digits'),
   societyName: z.string().optional(),
 });
 
@@ -45,7 +44,6 @@ export const CommercialSaleLocationDetailsStep = ({
       city: initialData?.city || '',
       locality: initialData?.locality || '',
       landmark: initialData?.landmark || '',
-      pincode: initialData?.pincode || '',
       societyName: initialData?.societyName || '',
     },
   });
@@ -174,43 +172,15 @@ export const CommercialSaleLocationDetailsStep = ({
             />
           </div>
 
-          <FormField
-            control={form.control}
-            name="locality"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Locality/Area *</FormLabel>
-                <FormControl>
-                  <Input placeholder="e.g., Connaught Place, MG Road" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="landmark"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Landmark (Optional)</FormLabel>
-                <FormControl>
-                  <Input placeholder="e.g., Near Metro Station, Opposite Mall" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <FormField
               control={form.control}
-              name="pincode"
+              name="locality"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Pincode *</FormLabel>
+                  <FormLabel>Locality/Area *</FormLabel>
                   <FormControl>
-                    <Input placeholder="e.g., 110001" {...field} />
+                    <Input placeholder="e.g., Connaught Place, MG Road" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -219,18 +189,32 @@ export const CommercialSaleLocationDetailsStep = ({
 
             <FormField
               control={form.control}
-              name="societyName"
+              name="landmark"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Building/Complex Name (Optional)</FormLabel>
+                  <FormLabel>Landmark (Optional)</FormLabel>
                   <FormControl>
-                    <Input placeholder="e.g., Business Plaza, Commercial Complex" {...field} />
+                    <Input placeholder="e.g., Near Metro Station, Opposite Mall" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
           </div>
+
+          <FormField
+            control={form.control}
+            name="societyName"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Building/Complex Name (Optional)</FormLabel>
+                <FormControl>
+                  <Input placeholder="e.g., Business Plaza, Commercial Complex" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
           <div className="flex justify-between pt-6">
             <Button type="button" variant="outline" onClick={onBack}>
