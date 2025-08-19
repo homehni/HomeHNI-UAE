@@ -246,7 +246,7 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
           completedSteps={completedSteps} 
         />
         
-        <div className="flex-1 p-8">
+        <div className="flex-1 p-4 lg:p-8">
         {currentStep === 1 && (
           <FlattmatesPropertyDetailsStep
             initialData={propertyDetails}
