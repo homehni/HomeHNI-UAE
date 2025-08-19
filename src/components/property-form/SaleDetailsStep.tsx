@@ -53,14 +53,14 @@ export const SaleDetailsStep: React.FC<SaleDetailsStepProps> = ({
   } = useForm<SaleDetailsForm>({
     resolver: zodResolver(saleDetailsSchema),
     defaultValues: {
-      expectedPrice: initialData.expectedPrice || 0,
+      expectedPrice: initialData.expectedPrice || undefined,
       priceNegotiable: initialData.priceNegotiable ?? true,
       propertyAge: initialData.propertyAge || '',
       registrationStatus: initialData.registrationStatus || 'ready_to_move',
       homeLoanAvailable: initialData.homeLoanAvailable ?? true,
-      maintenanceCharges: initialData.maintenanceCharges || 0,
-      pricePerSqFt: initialData.pricePerSqFt || 0,
-      bookingAmount: initialData.bookingAmount || 0,
+      maintenanceCharges: initialData.maintenanceCharges || undefined,
+      pricePerSqFt: initialData.pricePerSqFt || undefined,
+      bookingAmount: initialData.bookingAmount || undefined,
     },
     mode: 'onChange'
   });
