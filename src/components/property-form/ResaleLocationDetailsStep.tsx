@@ -11,7 +11,7 @@ const resaleLocationSchema = z.object({
   state: z.string().min(1, 'State is required'),
   city: z.string().min(1, 'City is required'),
   locality: z.string().min(1, 'Locality is required'),
-  pincode: z.string().min(6, 'Valid pincode is required').max(6, 'Valid pincode is required'),
+  // pincode: z.string().min(6, 'Valid pincode is required').max(6, 'Valid pincode is required'),
   societyName: z.string().optional(),
   landmark: z.string().optional()
 });
@@ -36,7 +36,7 @@ export const ResaleLocationDetailsStep: React.FC<ResaleLocationDetailsStepProps>
       state: initialData.state || '',
       city: initialData.city || '',
       locality: initialData.locality || '',
-      pincode: initialData.pincode || '',
+      // pincode: initialData.pincode || '',
       societyName: initialData.societyName || '',
       landmark: initialData.landmark || ''
     }
@@ -114,7 +114,7 @@ export const ResaleLocationDetailsStep: React.FC<ResaleLocationDetailsStepProps>
                   </FormItem>} />
 
               {/* Pincode */}
-              <FormField control={form.control} name="pincode" render={({
+              {/* <FormField control={form.control} name="pincode" render={({
               field
             }) => (
                 <FormItem>
@@ -124,7 +124,7 @@ export const ResaleLocationDetailsStep: React.FC<ResaleLocationDetailsStepProps>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
-              )} />
+              )} /> */}
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
