@@ -13,7 +13,6 @@ const commercialLocationDetailsSchema = z.object({
   city: z.string().min(1, 'Please select a city'),
   locality: z.string().min(1, 'Locality is required'),
   landmark: z.string().optional(),
-  pincode: z.string().min(6, 'Enter valid pincode').max(6, 'Enter valid pincode'),
 });
 
 type CommercialLocationDetailsForm = z.infer<typeof commercialLocationDetailsSchema>;
@@ -43,7 +42,6 @@ export const CommercialLocationDetailsStep: React.FC<CommercialLocationDetailsSt
       city: initialData.city || '',
       locality: initialData.locality || '',
       landmark: initialData.landmark || '',
-      pincode: initialData.pincode || '',
     },
   });
 
@@ -176,30 +174,6 @@ export const CommercialLocationDetailsStep: React.FC<CommercialLocationDetailsSt
                 )}
               />
             </div>
-
-            {/* Pincode */}
-            <FormField
-              control={form.control}
-              name="pincode"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-sm font-medium">Pincode *</FormLabel>
-                  <FormControl>
-                    <Input 
-                      placeholder="Enter pincode"
-                      className="h-12"
-                      maxLength={6}
-                      onChange={(e) => {
-                        const value = e.target.value.replace(/[^0-9]/g, '');
-                        field.onChange(value);
-                      }}
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
 
             {/* Navigation Buttons */}
             <div className="flex justify-between pt-6">
