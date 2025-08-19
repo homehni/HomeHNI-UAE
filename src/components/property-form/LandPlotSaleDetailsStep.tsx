@@ -50,6 +50,7 @@ export const LandPlotSaleDetailsStep: React.FC<LandPlotSaleDetailsStepProps> = (
   });
 
   const selectedDate = watch('availableFrom');
+  const [isDatePickerOpen, setIsDatePickerOpen] = React.useState(false);
 
 
   return (
@@ -105,7 +106,7 @@ export const LandPlotSaleDetailsStep: React.FC<LandPlotSaleDetailsStepProps> = (
                 <Label className="text-sm font-medium text-gray-700">
                   Available From *
                 </Label>
-                <Popover>
+                <Popover open={isDatePickerOpen} onOpenChange={setIsDatePickerOpen}>
                   <PopoverTrigger asChild>
                     <Button
                       variant="outline"
@@ -122,7 +123,10 @@ export const LandPlotSaleDetailsStep: React.FC<LandPlotSaleDetailsStepProps> = (
                     <Calendar
                       mode="single"
                       selected={selectedDate}
-                      onSelect={(date) => setValue('availableFrom', date!)}
+                      onSelect={(date) => {
+                        setValue('availableFrom', date!);
+                        setIsDatePickerOpen(false);
+                      }}
                       initialFocus
                       className="pointer-events-auto"
                     />
