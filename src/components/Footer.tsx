@@ -86,7 +86,6 @@ const Footer = ({
     buy: ["Property Legal Services", "Interiors", "Sale Agreement", "NoBroker For NRI's", "New Builder Project", "Loan against Mutual fund", "Loan Liability Balance Transfer", "Home Loan Eligibility Calculator", "Apply Home Loan", "Compare Home Loan Interest", "Property Buyers Forum", "Property Buyers Guide", "Property Seller Guide", "Home Loan Guide", "Home Loan Queries", "Home Renovation Guide", "Home Renovation Queries", "Interior Design Tips", "Interior Design Queries", "NRI Real Estate Guide", "NRI Real Estate Queries", "Readinsite Vastu Guide", "Personal Loan Guide", "Personal Loan Queries"],
     rent: ["Rental Agreement", "Pay Rent", "Refer and Earn", "Packers and Movers", "Property Management in India", "Painting and Cleaning", "Rental Questions", "Rent Calculator", "Property Rental Guide", "Landlord Guide", "Tenant Guide", "Packers and Movers Guide", "Packers and Movers queries", "Home Services", "Home Services Queries", "Painting Services", "Home Painting Guide", "Home Painting Queries", "Cleaning Services", "Kitchen Cleaning Services", "Sofa Cleaning Services", "Bathroom Cleaning Services", "Full House Cleaning Services", "Home Cleaning Guide"]
   };
-
   const loanServices = {
     loanServices: ["Home Loans in Hyderabad", "Home Loans in Bangalore", "Home Loans in Mumbai", "Home Loans in Pune", "Home Loans in Delhi", "Home Loans in Chennai", "Loan Against Property", "Business Loans", "Construction Loans", "Balance Transfer Loans", "Top-up Loans", "Quick Loan Approval", "Low Interest Rate Loans"],
     propertyLoanServices: ["Loan Against Property in Hyderabad", "Property Valuation Services"],
@@ -124,38 +123,7 @@ const Footer = ({
 
         {/* Loan Services sections */}
         <div className="mb-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div>
-              <h4 className="font-semibold text-gray-900 mb-4 text-lg">Loan Services</h4>
-              <div className="flex flex-wrap gap-2">
-                {loanServices.loanServices.map((service, index) => (
-                  <span key={index} className="px-3 py-1 bg-gray-100 rounded-full text-xs text-gray-700 hover:bg-gray-200 transition-colors cursor-pointer">
-                    {service}
-                  </span>
-                ))}
-              </div>
-            </div>
-            <div>
-              <h4 className="font-semibold text-gray-900 mb-4 text-lg">Property Loan Services</h4>
-              <div className="flex flex-wrap gap-2">
-                {loanServices.propertyLoanServices.map((service, index) => (
-                  <span key={index} className="px-3 py-1 bg-gray-100 rounded-full text-xs text-gray-700 hover:bg-gray-200 transition-colors cursor-pointer">
-                    {service}
-                  </span>
-                ))}
-              </div>
-            </div>
-            <div>
-              <h4 className="font-semibold text-gray-900 mb-4 text-lg">Home Loan Documentation</h4>
-              <div className="flex flex-wrap gap-2">
-                {loanServices.homeLoanDocumentation.map((service, index) => (
-                  <span key={index} className="px-3 py-1 bg-gray-100 rounded-full text-xs text-gray-700 hover:bg-gray-200 transition-colors cursor-pointer">
-                    {service}
-                  </span>
-                ))}
-              </div>
-            </div>
-          </div>
+          
         </div>
 
         {/* Original Services sections */}
