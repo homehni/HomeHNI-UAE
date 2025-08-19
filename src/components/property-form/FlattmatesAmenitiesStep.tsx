@@ -403,7 +403,7 @@ export function FlattmatesAmenitiesStep({
                           <div className="flex items-center space-x-2">
                             <Checkbox
                               checked={isSelected}
-                              onChange={() => handleAmenityToggle(amenity.key)}
+                              onCheckedChange={() => handleAmenityToggle(amenity.key)}
                             />
                             <IconComponent className="w-4 h-4 text-muted-foreground" />
                             <span className="text-sm">{amenity.label}</span>
