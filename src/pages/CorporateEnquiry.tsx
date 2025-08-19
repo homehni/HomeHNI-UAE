@@ -345,42 +345,49 @@ const CorporateEnquiry = () => {
       {/* Corporate Services Footer */}
       <section className="py-16 bg-muted/30 border-t">
         <div className="max-w-6xl mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="space-y-12">
+            {/* Employee Services Section */}
             <div>
-              <h4 className="font-semibold text-foreground mb-4">Employee Services</h4>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><a href="#" className="hover:text-foreground">House Search Support</a></li>
-                <li><a href="#" className="hover:text-foreground">Rental Agreements</a></li>
-                <li><a href="#" className="hover:text-foreground">Packers & Movers</a></li>
-                <li><a href="#" className="hover:text-foreground">Home Services</a></li>
-              </ul>
+              <h3 className="text-2xl font-bold text-foreground mb-6">Employee Services</h3>
+              <div className="flex flex-wrap gap-3">
+                <span className="px-4 py-2 bg-muted rounded-full text-sm text-foreground hover:bg-muted/80 cursor-pointer transition-colors">House Search in Mumbai</span>
+                <span className="px-4 py-2 bg-muted rounded-full text-sm text-foreground hover:bg-muted/80 cursor-pointer transition-colors">House Search in Delhi</span>
+                <span className="px-4 py-2 bg-muted rounded-full text-sm text-foreground hover:bg-muted/80 cursor-pointer transition-colors">House Search in Bangalore</span>
+                <span className="px-4 py-2 bg-muted rounded-full text-sm text-foreground hover:bg-muted/80 cursor-pointer transition-colors">House Search in Pune</span>
+                <span className="px-4 py-2 bg-muted rounded-full text-sm text-foreground hover:bg-muted/80 cursor-pointer transition-colors">House Search in Hyderabad</span>
+                <span className="px-4 py-2 bg-muted rounded-full text-sm text-foreground hover:bg-muted/80 cursor-pointer transition-colors">House Search in Chennai</span>
+                <span className="px-4 py-2 bg-muted rounded-full text-sm text-foreground hover:bg-muted/80 cursor-pointer transition-colors">Rental Agreements</span>
+                <span className="px-4 py-2 bg-muted rounded-full text-sm text-foreground hover:bg-muted/80 cursor-pointer transition-colors">Packers & Movers</span>
+                <span className="px-4 py-2 bg-muted rounded-full text-sm text-foreground hover:bg-muted/80 cursor-pointer transition-colors">Home Painting Services</span>
+                <span className="px-4 py-2 bg-muted rounded-full text-sm text-foreground hover:bg-muted/80 cursor-pointer transition-colors">Home Cleaning Services</span>
+                <span className="px-4 py-2 bg-muted rounded-full text-sm text-foreground hover:bg-muted/80 cursor-pointer transition-colors">AC Servicing</span>
+              </div>
             </div>
+
+            {/* Corporate Office Solutions Section */}
             <div>
-              <h4 className="font-semibold text-foreground mb-4">Office Solutions</h4>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><a href="#" className="hover:text-foreground">Office Leasing</a></li>
-                <li><a href="#" className="hover:text-foreground">Corporate Relocation</a></li>
-                <li><a href="#" className="hover:text-foreground">Office Setup</a></li>
-                <li><a href="#" className="hover:text-foreground">Facility Management</a></li>
-              </ul>
+              <h3 className="text-2xl font-bold text-foreground mb-6">Corporate Office Solutions</h3>
+              <div className="flex flex-wrap gap-3">
+                <span className="px-4 py-2 bg-muted rounded-full text-sm text-foreground hover:bg-muted/80 cursor-pointer transition-colors">Office Leasing in Mumbai</span>
+                <span className="px-4 py-2 bg-muted rounded-full text-sm text-foreground hover:bg-muted/80 cursor-pointer transition-colors">Corporate Relocation Services</span>
+                <span className="px-4 py-2 bg-muted rounded-full text-sm text-foreground hover:bg-muted/80 cursor-pointer transition-colors">Office Setup & Design</span>
+                <span className="px-4 py-2 bg-muted rounded-full text-sm text-foreground hover:bg-muted/80 cursor-pointer transition-colors">Facility Management</span>
+                <span className="px-4 py-2 bg-muted rounded-full text-sm text-foreground hover:bg-muted/80 cursor-pointer transition-colors">Commercial Property Valuation</span>
+              </div>
             </div>
+
+            {/* Corporate Benefits & Support Section */}
             <div>
-              <h4 className="font-semibold text-foreground mb-4">Corporate Benefits</h4>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><a href="#" className="hover:text-foreground">Exclusive Discounts</a></li>
-                <li><a href="#" className="hover:text-foreground">Priority Support</a></li>
-                <li><a href="#" className="hover:text-foreground">Custom Packages</a></li>
-                <li><a href="#" className="hover:text-foreground">Bulk Services</a></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold text-foreground mb-4">Support</h4>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><a href="#" className="hover:text-foreground">Account Management</a></li>
-                <li><a href="#" className="hover:text-foreground">24/7 Support</a></li>
-                <li><a href="#" className="hover:text-foreground">Training & Onboarding</a></li>
-                <li><a href="#" className="hover:text-foreground">Analytics & Reports</a></li>
-              </ul>
+              <h3 className="text-2xl font-bold text-foreground mb-6">Corporate Benefits & Support</h3>
+              <div className="flex flex-wrap gap-3">
+                <span className="px-4 py-2 bg-muted rounded-full text-sm text-foreground hover:bg-muted/80 cursor-pointer transition-colors">Exclusive Corporate Discounts</span>
+                <span className="px-4 py-2 bg-muted rounded-full text-sm text-foreground hover:bg-muted/80 cursor-pointer transition-colors">Priority Customer Support</span>
+                <span className="px-4 py-2 bg-muted rounded-full text-sm text-foreground hover:bg-muted/80 cursor-pointer transition-colors">Custom Service Packages</span>
+                <span className="px-4 py-2 bg-muted rounded-full text-sm text-foreground hover:bg-muted/80 cursor-pointer transition-colors">Bulk Service Orders</span>
+                <span className="px-4 py-2 bg-muted rounded-full text-sm text-foreground hover:bg-muted/80 cursor-pointer transition-colors">Employee Training & Onboarding</span>
+                <span className="px-4 py-2 bg-muted rounded-full text-sm text-foreground hover:bg-muted/80 cursor-pointer transition-colors">Analytics & Reporting</span>
+                <span className="px-4 py-2 bg-muted rounded-full text-sm text-foreground hover:bg-muted/80 cursor-pointer transition-colors">Dedicated Account Manager</span>
+              </div>
             </div>
           </div>
           
