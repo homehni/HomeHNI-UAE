@@ -261,7 +261,6 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
         />
         
         <div className="flex-1 p-8">
-
         {currentStep === 1 && (
           <FlattmatesPropertyDetailsStep
             initialData={propertyDetails}
@@ -270,6 +269,7 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
             currentStep={1}
             totalSteps={6}
             completedSteps={completedSteps}
+            hideSidebar={true}
           />
         )}
 
