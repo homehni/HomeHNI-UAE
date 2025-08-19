@@ -345,7 +345,6 @@ const CorporateEnquiry = () => {
       {/* Final CTA & Form */}
       
 
-      <Footer />
     </div>;
 };
 export default CorporateEnquiry;
