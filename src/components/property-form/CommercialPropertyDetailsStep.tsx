@@ -255,7 +255,7 @@ export const CommercialPropertyDetailsStep: React.FC<CommercialPropertyDetailsSt
                       <FormControl>
                         <Input
                           type="number"
-                          placeholder="1500"
+                          placeholder="Enter your Super Built up Area"
                           className="h-12 pr-12"
                           {...field}
                           onChange={(e) => field.onChange(parseInt(e.target.value) || 0)}
