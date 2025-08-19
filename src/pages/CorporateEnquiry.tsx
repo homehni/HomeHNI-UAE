@@ -139,7 +139,7 @@ const CorporateEnquiry = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Sticky Corporate Enquiry Form - Desktop Only */}
-      <div className="hidden xl:block fixed top-32 right-6 z-50 w-80">
+      <div className="hidden xl:block fixed top-32 right-6 z-50 w-96">
         <div className="bg-gradient-to-br from-white to-gray-50 rounded-2xl shadow-2xl border border-gray-100 p-6 backdrop-blur-sm">
           <div className="text-center mb-6">
             <div className="w-12 h-12 bg-gradient-to-br from-brand-red to-brand-red-dark rounded-full mx-auto mb-3 flex items-center justify-center">
@@ -150,7 +150,7 @@ const CorporateEnquiry = () => {
           </div>
           
           <form onSubmit={handleStickySubmit} className="space-y-4">
-            <div>
+            <div className="grid grid-cols-2 gap-3">
               <Input
                 name="name"
                 placeholder="Your Name *"
@@ -159,8 +159,6 @@ const CorporateEnquiry = () => {
                 required
                 className="text-sm"
               />
-            </div>
-            <div>
               <Input
                 name="company"
                 placeholder="Company Name *"
@@ -170,7 +168,7 @@ const CorporateEnquiry = () => {
                 className="text-sm"
               />
             </div>
-            <div>
+            <div className="grid grid-cols-2 gap-3">
               <Input
                 name="phone"
                 type="tel"
@@ -180,8 +178,6 @@ const CorporateEnquiry = () => {
                 required
                 className="text-sm"
               />
-            </div>
-            <div>
               <Input
                 name="email"
                 type="email"
@@ -192,7 +188,7 @@ const CorporateEnquiry = () => {
                 className="text-sm"
               />
             </div>
-            <div>
+            <div className="grid grid-cols-2 gap-3">
               <Input
                 name="city"
                 placeholder="City"
@@ -200,8 +196,6 @@ const CorporateEnquiry = () => {
                 onChange={handleStickyInputChange}
                 className="text-sm"
               />
-            </div>
-            <div>
               <Input
                 name="employees"
                 type="number"
