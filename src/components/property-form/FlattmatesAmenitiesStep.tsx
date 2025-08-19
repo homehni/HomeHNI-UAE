@@ -400,11 +400,10 @@ export function FlattmatesAmenitiesStep({
                           }`}
                           onClick={() => handleAmenityToggle(amenity.key)}
                         >
-                          <div className="flex items-center space-x-2">
-                            <Checkbox
-                              checked={isSelected}
-                              onCheckedChange={() => handleAmenityToggle(amenity.key)}
-                            />
+                           <div className="flex items-center space-x-2">
+                             <Checkbox
+                               checked={isSelected}
+                             />
                             <IconComponent className="w-4 h-4 text-muted-foreground" />
                             <span className="text-sm">{amenity.label}</span>
                           </div>
