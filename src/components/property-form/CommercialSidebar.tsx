@@ -78,7 +78,7 @@ export const CommercialSidebar: React.FC<CommercialSidebarProps> = ({
   };
 
   return (
-    <div className="w-72 bg-white border-r border-gray-200 min-h-screen">
+    <div className="hidden lg:block w-72 bg-white border-r border-gray-200 min-h-screen">
       <div className="p-6">
         <div className="mb-6">
           <h2 className="text-lg font-semibold text-gray-900">Commercial Property Listing</h2>
