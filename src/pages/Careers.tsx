@@ -324,7 +324,6 @@ const Careers = () => {
         </div>
       </div>
       
-      <Footer />
     </div>;
 };
 export default Careers;
