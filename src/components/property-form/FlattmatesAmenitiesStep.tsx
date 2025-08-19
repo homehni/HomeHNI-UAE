@@ -143,7 +143,7 @@ export function FlattmatesAmenitiesStep({
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="flex items-center justify-between p-4 border rounded-lg">
                       <Label htmlFor="attachedBathroom" className="text-base font-medium">
-                        Attached Bathroom *
+                        Attached Bathroom
                       </Label>
                       <div className="flex items-center space-x-2">
                         <span className={`text-sm ${!formData.attachedBathroom ? 'text-foreground' : 'text-muted-foreground'}`}>
@@ -162,7 +162,7 @@ export function FlattmatesAmenitiesStep({
 
                     <div className="flex items-center justify-between p-4 border rounded-lg">
                       <Label htmlFor="acRoom" className="text-base font-medium">
-                        AC Room *
+                        AC Room
                       </Label>
                       <div className="flex items-center space-x-2">
                         <span className={`text-sm ${!formData.acRoom ? 'text-foreground' : 'text-muted-foreground'}`}>
@@ -208,7 +208,7 @@ export function FlattmatesAmenitiesStep({
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="flex items-center justify-between p-4 border rounded-lg">
                       <Label htmlFor="nonVegAllowed" className="text-base font-medium">
-                        Non-Veg Allowed *
+                        Non-Veg Allowed
                       </Label>
                       <div className="flex items-center space-x-2">
                         <span className={`text-sm ${!formData.nonVegAllowed ? 'text-foreground' : 'text-muted-foreground'}`}>
@@ -275,7 +275,7 @@ export function FlattmatesAmenitiesStep({
                     <div className="flex items-center justify-between p-4 border rounded-lg">
                       <Label htmlFor="gym" className="text-base font-medium flex items-center space-x-2">
                         <Dumbbell className="w-4 h-4" />
-                        <span>Gym *</span>
+                        <span>Gym</span>
                       </Label>
                       <div className="flex items-center space-x-2">
                         <span className={`text-sm ${!formData.gym ? 'text-foreground' : 'text-muted-foreground'}`}>
@@ -295,7 +295,7 @@ export function FlattmatesAmenitiesStep({
                     <div className="flex items-center justify-between p-4 border rounded-lg">
                       <Label htmlFor="gatedSecurity" className="text-base font-medium flex items-center space-x-2">
                         <Shield className="w-4 h-4" />
-                        <span>Gated Security *</span>
+                        <span>Gated Security</span>
                       </Label>
                       <div className="flex items-center space-x-2">
                         <span className={`text-sm ${!formData.gatedSecurity ? 'text-foreground' : 'text-muted-foreground'}`}>
@@ -316,10 +316,10 @@ export function FlattmatesAmenitiesStep({
                    {/* Who will show and Water Supply */}
                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                      <div className="space-y-2">
-                       <Label htmlFor="whoWillShow" className="flex items-center space-x-2">
-                         <Key className="w-4 h-4" />
-                         <span>Who will show the property? *</span>
-                       </Label>
+                        <Label htmlFor="whoWillShow" className="flex items-center space-x-2">
+                          <Key className="w-4 h-4" />
+                          <span>Who will show the property?</span>
+                        </Label>
                        <Select
                          value={formData.whoWillShow}
                          onValueChange={handleInputChange('whoWillShow')}

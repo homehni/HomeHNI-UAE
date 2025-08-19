@@ -56,11 +56,7 @@ export function FlattmatesRentalDetailsStep({
   };
 
   const isFormValid = () => {
-    return formData.expectedRent > 0 && 
-           formData.expectedDeposit > 0 &&
-           formData.availableFrom &&
-           formData.furnishing &&
-           formData.parking;
+    return true; // All fields are now optional
   };
 
   return (
@@ -76,7 +72,7 @@ export function FlattmatesRentalDetailsStep({
                 {/* Expected Rent and Expected Deposit */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="expectedRent">Expected Rent *</Label>
+                    <Label htmlFor="expectedRent">Expected Rent</Label>
                     <div className="relative">
                       <span className="absolute left-4 top-1/2 transform -translate-y-1/2 text-muted-foreground">
                         ₹
@@ -89,7 +85,6 @@ export function FlattmatesRentalDetailsStep({
                         placeholder="Enter Amount"
                         className="h-12 pl-8 pr-20"
                         min="1"
-                        required
                       />
                       <span className="absolute right-4 top-1/2 transform -translate-y-1/2 text-muted-foreground">
                         / Month
@@ -98,7 +93,7 @@ export function FlattmatesRentalDetailsStep({
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="expectedDeposit">Expected Deposit *</Label>
+                    <Label htmlFor="expectedDeposit">Expected Deposit</Label>
                     <div className="relative">
                       <span className="absolute left-4 top-1/2 transform -translate-y-1/2 text-muted-foreground">
                         ₹
@@ -111,7 +106,6 @@ export function FlattmatesRentalDetailsStep({
                         placeholder="Enter Amount"
                         className="h-12 pl-8"
                         min="0"
-                        required
                       />
                     </div>
                   </div>
@@ -151,7 +145,7 @@ export function FlattmatesRentalDetailsStep({
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="availableFrom">Available From *</Label>
+                    <Label htmlFor="availableFrom">Available From</Label>
                     <div className="relative">
                       <Input
                         id="availableFrom"
@@ -159,7 +153,6 @@ export function FlattmatesRentalDetailsStep({
                         value={formData.availableFrom}
                         onChange={(e) => setFormData({ ...formData, availableFrom: e.target.value })}
                         className="h-12 pr-12"
-                        required
                       />
                       <Calendar className="absolute right-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                     </div>
@@ -169,7 +162,7 @@ export function FlattmatesRentalDetailsStep({
                 {/* Furnishing and Parking */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="furnishing">Furnishing *</Label>
+                    <Label htmlFor="furnishing">Furnishing</Label>
                     <div className="relative">
                       <Select
                         value={formData.furnishing}
@@ -189,7 +182,7 @@ export function FlattmatesRentalDetailsStep({
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="parking">Parking *</Label>
+                    <Label htmlFor="parking">Parking</Label>
                     <div className="relative">
                       <Select
                         value={formData.parking}
@@ -226,7 +219,7 @@ export function FlattmatesRentalDetailsStep({
                   <Button type="button" variant="outline" onClick={onBack}>
                     Back
                   </Button>
-                  <Button type="submit" disabled={!isFormValid()}>
+                  <Button type="submit">
                     Save & Continue
                   </Button>
                 </div>

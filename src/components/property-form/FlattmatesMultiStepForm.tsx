@@ -226,20 +226,6 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
 
   const handleSubmit = () => {
     const formData = getFormData();
-    
-    // Enhanced validation
-    if (!formData.ownerInfo.fullName || !formData.ownerInfo.email || !formData.ownerInfo.phoneNumber) {
-      throw new Error('Owner information is incomplete');
-    }
-    
-    if (!formData.propertyInfo.propertyDetails.bhkType || !formData.propertyInfo.propertyDetails.buildingType) {
-      throw new Error('Property details are incomplete');
-    }
-    
-    if (formData.propertyInfo.gallery.images.length < 3) {
-      throw new Error('At least 3 images are required');
-    }
-    
     onSubmit(formData);
   };
 

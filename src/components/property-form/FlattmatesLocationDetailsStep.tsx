@@ -11,9 +11,9 @@ import { LocationDetails } from '@/types/property';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 
 const locationDetailsSchema = z.object({
-  state: z.string().min(1, 'Please select state'),
-  city: z.string().min(1, 'Please select city'),
-  locality: z.string().min(1, 'Please enter locality'),
+  state: z.string().optional(),
+  city: z.string().optional(),
+  locality: z.string().optional(),
   landmark: z.string().optional(),
 });
 
@@ -196,7 +196,10 @@ export const FlattmatesLocationDetailsStep: React.FC<FlattmatesLocationDetailsSt
   const onSubmit = (data: LocationDetailsFormData) => {
     // Convert to LocationDetails format and add missing fields as empty/default values
     const locationData: LocationDetails = {
-      ...data,
+      state: data.state || '',
+      city: data.city || '',
+      locality: data.locality || '',
+      landmark: data.landmark || '',
       pincode: initialData.pincode || '',
       societyName: initialData.societyName || ''
     };
@@ -220,7 +223,7 @@ export const FlattmatesLocationDetailsStep: React.FC<FlattmatesLocationDetailsSt
                 name="state"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-sm font-medium">State*</FormLabel>
+                    <FormLabel className="text-sm font-medium">State</FormLabel>
                     <Select onValueChange={handleStateChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger className="h-12">
@@ -245,7 +248,7 @@ export const FlattmatesLocationDetailsStep: React.FC<FlattmatesLocationDetailsSt
                 name="city"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-sm font-medium">City*</FormLabel>
+                    <FormLabel className="text-sm font-medium">City</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger className="h-12">
@@ -273,7 +276,7 @@ export const FlattmatesLocationDetailsStep: React.FC<FlattmatesLocationDetailsSt
                 name="locality"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-sm font-medium">Locality/Area*</FormLabel>
+                    <FormLabel className="text-sm font-medium">Locality/Area</FormLabel>
                     <FormControl>
                       <Input
                         placeholder="e.g., Sector 12, Koramangala"

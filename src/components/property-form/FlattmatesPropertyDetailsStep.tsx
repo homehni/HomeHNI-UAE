@@ -55,17 +55,7 @@ export function FlattmatesPropertyDetailsStep({
   };
 
   const isFormValid = () => {
-    const isFloorValid = formData.floorNo !== 0 && formData.floorNo !== '' && formData.floorNo !== null && formData.floorNo !== undefined;
-    const isTotalFloorsValid = formData.totalFloors !== 0 && formData.totalFloors !== '' && formData.totalFloors !== null && formData.totalFloors !== undefined;
-    
-    return formData.apartmentType && 
-           formData.bhkType && 
-           isFloorValid &&
-           isTotalFloorsValid &&
-           formData.roomType &&
-           formData.tenantType &&
-           formData.propertyAge &&
-           formData.builtUpArea > 0;
+    return true; // All fields are now optional
   };
 
   return (
@@ -81,7 +71,7 @@ export function FlattmatesPropertyDetailsStep({
                 {/* Apartment Type and BHK Type */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="apartmentType">Apartment Type *</Label>
+                    <Label htmlFor="apartmentType">Apartment Type</Label>
                     <Select
                       value={formData.apartmentType}
                       onValueChange={(value) => setFormData({ ...formData, apartmentType: value })}
@@ -99,7 +89,7 @@ export function FlattmatesPropertyDetailsStep({
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="bhkType">BHK Type *</Label>
+                    <Label htmlFor="bhkType">BHK Type</Label>
                     <Select
                       value={formData.bhkType}
                       onValueChange={(value) => setFormData({ ...formData, bhkType: value })}
@@ -121,7 +111,7 @@ export function FlattmatesPropertyDetailsStep({
                 {/* Floor and Total Floors */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="floorNo">Floor *</Label>
+                    <Label htmlFor="floorNo">Floor</Label>
                     <Select
                       value={formData.floorNo?.toString()}
                       onValueChange={(value) => {
@@ -153,7 +143,7 @@ export function FlattmatesPropertyDetailsStep({
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="totalFloors">Total Floor *</Label>
+                    <Label htmlFor="totalFloors">Total Floor</Label>
                     <Select
                       value={formData.totalFloors?.toString()}
                       onValueChange={(value) => {
@@ -186,7 +176,7 @@ export function FlattmatesPropertyDetailsStep({
                 {/* Room Type and Tenant Type */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="roomType">Room Type *</Label>
+                    <Label htmlFor="roomType">Room Type</Label>
                     <Select
                       value={formData.roomType}
                       onValueChange={(value) => setFormData({ ...formData, roomType: value })}
@@ -202,7 +192,7 @@ export function FlattmatesPropertyDetailsStep({
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="tenantType">Tenant Type *</Label>
+                    <Label htmlFor="tenantType">Tenant Type</Label>
                     <Select
                       value={formData.tenantType}
                       onValueChange={(value) => setFormData({ ...formData, tenantType: value })}
@@ -222,7 +212,7 @@ export function FlattmatesPropertyDetailsStep({
                 {/* Property Age and Facing */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="propertyAge">Property Age *</Label>
+                    <Label htmlFor="propertyAge">Property Age</Label>
                     <Select
                       value={formData.propertyAge}
                       onValueChange={(value) => setFormData({ ...formData, propertyAge: value })}
@@ -265,7 +255,7 @@ export function FlattmatesPropertyDetailsStep({
 
                 {/* Built Up Area - keeping full width as it's important */}
                 <div className="space-y-2">
-                  <Label htmlFor="builtUpArea">Built Up Area *</Label>
+                  <Label htmlFor="builtUpArea">Built Up Area</Label>
                   <div className="relative">
                     <Input
                       id="builtUpArea"
@@ -275,7 +265,6 @@ export function FlattmatesPropertyDetailsStep({
                       placeholder="Enter area"
                       className="h-12 pr-16"
                       min="1"
-                      required
                     />
                     <span className="absolute right-4 top-1/2 transform -translate-y-1/2 text-muted-foreground">
                       Sq.ft
@@ -287,7 +276,7 @@ export function FlattmatesPropertyDetailsStep({
                   <Button type="button" variant="outline" onClick={onBack}>
                     Back
                   </Button>
-                  <Button type="submit" disabled={!isFormValid()}>
+                  <Button type="submit">
                     Save & Continue
                   </Button>
                 </div>
