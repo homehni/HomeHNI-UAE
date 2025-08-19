@@ -258,7 +258,7 @@ export const CommercialPropertyDetailsStep: React.FC<CommercialPropertyDetailsSt
                           placeholder="Enter your Super Built up Area"
                           className="h-12 pr-12"
                           {...field}
-                          onChange={(e) => field.onChange(parseInt(e.target.value) || 0)}
+                          onChange={(e) => field.onChange(e.target.value ? parseInt(e.target.value) : undefined)}
                         />
                       </FormControl>
                       <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-sm text-gray-500">
