@@ -344,7 +344,7 @@ const CorporateEnquiry = () => {
 
       {/* Corporate Services Footer */}
       <section className="py-16 bg-muted/30 border-t">
-        <div className="max-w-6xl mx-auto px-4">
+        <div className="max-w-4xl mx-auto px-4">
           <div className="space-y-12">
             {/* Employee Services Section */}
             <div>
