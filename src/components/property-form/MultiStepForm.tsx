@@ -70,39 +70,50 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
 
 
 
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   const handlePropertyDetailsNext = (data: any) => {
     updatePropertyDetails(data);
     nextStep();
+    scrollToTop();
   };
 
   const handleLocationDetailsNext = (data: any) => {
     updateLocationDetails(data);
     nextStep();
+    scrollToTop();
   };
 
   const handleRentalDetailsNext = (data: any) => {
     updateRentalDetails(data);
     nextStep();
+    scrollToTop();
   };
 
   const handleAmenitiesNext = (data: any) => {
     updateAmenities(data);
     nextStep();
+    scrollToTop();
   };
 
   const handleGalleryNext = (data: any) => {
     updateGallery(data);
     nextStep();
+    scrollToTop();
   };
 
   const handleAdditionalInfoNext = (data: any) => {
     updateAdditionalInfo(data);
     nextStep();
+    scrollToTop();
   };
 
   const handleScheduleNext = (data: any) => {
     updateScheduleInfo(data);
     nextStep();
+    scrollToTop();
   };
 
   const handleSubmit = () => {

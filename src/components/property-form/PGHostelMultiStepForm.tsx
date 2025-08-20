@@ -132,47 +132,58 @@ export const PGHostelMultiStepForm: React.FC<PGHostelMultiStepFormProps> = ({
 
   const [completedSteps, setCompletedSteps] = useState<number[]>([]);
 
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   // Step handlers
   const handleOwnerInfoNext = (data: any) => {
     setOwnerInfo(data);
     setCompletedSteps(prev => [...prev.filter(step => step !== 1), 1]);
     setCurrentStep(2);
+    scrollToTop();
   };
 
   const handleRoomTypesNext = (data: any) => {
     setRoomTypes(data);
     setCompletedSteps(prev => [...prev.filter(step => step !== 2), 2]);
     setCurrentStep(3);
+    scrollToTop();
   };
 
   const handleRoomDetailsNext = (data: any) => {
     setRoomDetails(data);
     setCompletedSteps(prev => [...prev.filter(step => step !== 3), 3]);
     setCurrentStep(4);
+    scrollToTop();
   };
 
   const handleLocalityDetailsNext = (data: any) => {
     setLocalityDetails(data);
     setCompletedSteps(prev => [...prev.filter(step => step !== 4), 4]);
     setCurrentStep(5);
+    scrollToTop();
   };
 
   const handlePgDetailsNext = (data: any) => {
     setPgDetails(data);
     setCompletedSteps(prev => [...prev.filter(step => step !== 5), 5]);
     setCurrentStep(6);
+    scrollToTop();
   };
 
   const handleAmenitiesNext = (data: any) => {
     setAmenities(data);
     setCompletedSteps(prev => [...prev.filter(step => step !== 6), 6]);
     setCurrentStep(7);
+    scrollToTop();
   };
 
   const handleGalleryNext = (data: any) => {
     setGallery(data);
     setCompletedSteps(prev => [...prev.filter(step => step !== 7), 7]);
     setCurrentStep(8);
+    scrollToTop();
   };
 
   const handleScheduleNext = (data: any) => {

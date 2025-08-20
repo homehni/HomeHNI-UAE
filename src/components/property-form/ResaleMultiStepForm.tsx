@@ -66,39 +66,50 @@ export const ResaleMultiStepForm: React.FC<ResaleMultiStepFormProps> = ({
   }, [isStepValid, currentStep]);
 
 
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   const handlePropertyDetailsNext = (data: any) => {
     updatePropertyDetails(data);
     nextStep();
+    scrollToTop();
   };
 
   const handleLocationDetailsNext = (data: any) => {
     updateLocationDetails(data);
     nextStep();
+    scrollToTop();
   };
 
   const handleSaleDetailsNext = (data: any) => {
     updateSaleDetails(data);
     nextStep();
+    scrollToTop();
   };
 
   const handleAmenitiesNext = (data: any) => {
     updateAmenities(data);
     nextStep();
+    scrollToTop();
   };
 
   const handleGalleryNext = (data: any) => {
     updateGallery(data);
     nextStep();
+    scrollToTop();
   };
 
   const handleAdditionalInfoNext = (data: any) => {
     updateAdditionalInfo(data);
     nextStep();
+    scrollToTop();
   };
 
   const handleScheduleNext = (data: any) => {
     updateScheduleInfo(data);
     nextStep();
+    scrollToTop();
   };
 
   const handleSubmit = () => {

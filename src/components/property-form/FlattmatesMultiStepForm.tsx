@@ -115,40 +115,50 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
     }
   }, [initialOwnerInfo]);
 
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   const handlePropertyDetailsNext = (data: any) => {
     setPropertyDetails(data);
     setCompletedSteps(prev => prev.includes(1) ? prev : [...prev, 1]);
     setCurrentStep(2);
+    scrollToTop();
   };
 
   const handleLocationDetailsNext = (data: LocationDetails) => {
     setLocationDetails(data);
     setCompletedSteps(prev => prev.includes(2) ? prev : [...prev, 2]);
     setCurrentStep(3);
+    scrollToTop();
   };
 
   const handleRentalDetailsNext = (data: any) => {
     setRentalDetails(data);
     setCompletedSteps(prev => prev.includes(3) ? prev : [...prev, 3]);
     setCurrentStep(4);
+    scrollToTop();
   };
 
   const handleAmenitiesNext = (data: any) => {
     setAmenities(data);
     setCompletedSteps(prev => prev.includes(4) ? prev : [...prev, 4]);
     setCurrentStep(5);
+    scrollToTop();
   };
 
   const handleGalleryNext = (data: PropertyGallery) => {
     setGallery(data);
     setCompletedSteps(prev => prev.includes(5) ? prev : [...prev, 5]);
     setCurrentStep(6);
+    scrollToTop();
   };
 
   const handleScheduleNext = (data: ScheduleInfo) => {
     setScheduleInfo(data);
     setCompletedSteps(prev => prev.includes(6) ? prev : [...prev, 6]);
     setCurrentStep(7);
+    scrollToTop();
   };
 
   const nextStep = () => setCurrentStep(prev => Math.min(prev + 1, 7));

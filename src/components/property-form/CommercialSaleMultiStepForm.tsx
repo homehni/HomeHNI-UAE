@@ -74,6 +74,10 @@ export const CommercialSaleMultiStepForm = ({
     await onSubmit(formData);
   };
 
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   const renderCurrentStep = () => {
     switch (currentStep) {
       case 2:
@@ -83,6 +87,7 @@ export const CommercialSaleMultiStepForm = ({
             onNext={(data) => {
               updatePropertyDetails(data);
               nextStep();
+              scrollToTop();
             }}
             onBack={prevStep}
             currentStep={currentStep}
@@ -97,6 +102,7 @@ export const CommercialSaleMultiStepForm = ({
               console.log('Step 3 onNext called with data:', data);
               updateLocationDetails(data);
               nextStep();
+              scrollToTop();
             }}
             onBack={prevStep}
             currentStep={currentStep}
@@ -111,6 +117,7 @@ export const CommercialSaleMultiStepForm = ({
               console.log('Step 4 onNext called with data:', data);
               updateSaleDetails(data);
               nextStep();
+              scrollToTop();
             }}
             onBack={prevStep}
             currentStep={currentStep}
@@ -125,6 +132,7 @@ export const CommercialSaleMultiStepForm = ({
               console.log('Step 5 onNext called with data:', data);
               updateAmenities(data);
               nextStep();
+              scrollToTop();
             }}
             onBack={prevStep}
             currentStep={currentStep}
@@ -139,6 +147,7 @@ export const CommercialSaleMultiStepForm = ({
               console.log('Step 6 onNext called with data:', data);
               updateGallery(data);
               nextStep();
+              scrollToTop();
             }}
             onBack={prevStep}
             currentStep={currentStep}
@@ -153,6 +162,7 @@ export const CommercialSaleMultiStepForm = ({
               console.log('Step 7 onNext called with data:', data);
               updateAdditionalInfo(data);
               nextStep();
+              scrollToTop();
             }}
             onBack={prevStep}
             currentStep={currentStep}
@@ -167,6 +177,7 @@ export const CommercialSaleMultiStepForm = ({
               console.log('Step 8 onNext called with data:', data);
               updateScheduleInfo(data);
               nextStep();
+              scrollToTop();
             }}
             onBack={prevStep}
             currentStep={currentStep}

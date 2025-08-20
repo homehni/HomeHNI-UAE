@@ -65,40 +65,51 @@ export const CommercialMultiStepForm: React.FC<CommercialMultiStepFormProps> = (
     return completed;
   }, [currentStep, isStepValid]);
 
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   // Step handlers
   const handlePropertyDetailsNext = (data: CommercialPropertyDetails) => {
     updatePropertyDetails(data);
     nextStep();
+    scrollToTop();
   };
 
   const handleLocationDetailsNext = (data: LocationDetails) => {
     updateLocationDetails(data);
     nextStep();
+    scrollToTop();
   };
 
   const handleRentalDetailsNext = (data: CommercialRentalDetails) => {
     updateRentalDetails(data);
     nextStep();
+    scrollToTop();
   };
 
   const handleAmenitiesNext = (data: CommercialAmenities) => {
     updateAmenities(data);
     nextStep();
+    scrollToTop();
   };
 
   const handleGalleryNext = (data: PropertyGallery) => {
     updateGallery(data);
     nextStep();
+    scrollToTop();
   };
 
   const handleAdditionalInfoNext = (data: AdditionalInfo) => {
     updateAdditionalInfo(data);
     nextStep();
+    scrollToTop();
   };
 
   const handleScheduleNext = (data: ScheduleInfo) => {
     updateScheduleInfo(data);
     nextStep();
+    scrollToTop();
   };
 
   const handleSubmit = () => {
