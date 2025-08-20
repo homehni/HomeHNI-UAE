@@ -102,7 +102,7 @@ export const OwnerInfoStep: React.FC<OwnerInfoStepProps> = ({
   };
 
   return (
-    <div className="relative w-full max-w-4xl mx-auto">
+    <div className="relative w-full max-w-4xl mx-auto mb-8">
       {/* Top Left Corner Decoration */}
       <div className="absolute top-0 left-0 w-16 h-16 z-10">
         <div className="w-full h-full border-l-8 border-t-8 border-brand-red"></div>
