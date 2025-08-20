@@ -104,13 +104,13 @@ export const OwnerInfoStep: React.FC<OwnerInfoStepProps> = ({
   return (
     <div className="relative w-full max-w-4xl mx-auto">
       {/* Top Left Corner Decoration */}
-      <div className="absolute -top-2 -left-2 w-12 h-12 z-10">
-        <div className="w-full h-full border-l-4 border-t-4 border-yellow-400 rounded-tl-lg"></div>
+      <div className="absolute top-0 left-0 w-16 h-16 z-10">
+        <div className="w-full h-full border-l-4 border-t-4 border-brand-red rounded-tl-2xl"></div>
       </div>
       
       {/* Bottom Right Corner Decoration */}
-      <div className="absolute -bottom-2 -right-2 w-12 h-12 z-10">
-        <div className="w-full h-full border-r-4 border-b-4 border-yellow-400 rounded-br-lg"></div>
+      <div className="absolute bottom-0 right-0 w-16 h-16 z-10">
+        <div className="w-full h-full border-r-4 border-b-4 border-brand-red rounded-br-2xl"></div>
       </div>
 
       <Card className="w-full border border-muted rounded-2xl shadow-lg bg-card/80 backdrop-blur-sm">
