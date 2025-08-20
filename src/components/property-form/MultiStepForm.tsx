@@ -71,7 +71,7 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
 
 
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 150, behavior: 'smooth' });
   };
 
   const handlePropertyDetailsNext = (data: any) => {

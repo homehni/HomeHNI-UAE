@@ -65,7 +65,7 @@ export const LandPlotMultiStepForm: React.FC<LandPlotMultiStepFormProps> = ({
   }, [isStepValid, currentStep]);
 
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 150, behavior: 'smooth' });
   };
 
   const handlePlotDetailsNext = (data: any) => {

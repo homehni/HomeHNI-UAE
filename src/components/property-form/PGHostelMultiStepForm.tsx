@@ -133,7 +133,7 @@ export const PGHostelMultiStepForm: React.FC<PGHostelMultiStepFormProps> = ({
   const [completedSteps, setCompletedSteps] = useState<number[]>([]);
 
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 150, behavior: 'smooth' });
   };
 
   // Step handlers

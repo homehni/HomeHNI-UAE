@@ -75,7 +75,7 @@ export const CommercialSaleMultiStepForm = ({
   };
 
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 150, behavior: 'smooth' });
   };
 
   const renderCurrentStep = () => {

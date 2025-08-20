@@ -66,7 +66,7 @@ export const CommercialMultiStepForm: React.FC<CommercialMultiStepFormProps> = (
   }, [currentStep, isStepValid]);
 
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 150, behavior: 'smooth' });
   };
 
   // Step handlers
