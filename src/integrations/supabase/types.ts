@@ -528,6 +528,10 @@ export type Database = {
       }
     }
     Functions: {
+      assign_admin_role_by_email: {
+        Args: { _email: string }
+        Returns: undefined
+      }
       create_property_lead: {
         Args: {
           interested_user_email: string
