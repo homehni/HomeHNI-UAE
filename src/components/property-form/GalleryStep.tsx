@@ -59,7 +59,7 @@ export const GalleryStep: React.FC<GalleryStepProps> = ({
   const form = useForm({
     resolver: zodResolver(gallerySchema),
     defaultValues: {
-      images: {
+      images: initialData.categorizedImages || {
         bathroom: [],
         bedroom: [],
         hall: [],
@@ -86,6 +86,7 @@ export const GalleryStep: React.FC<GalleryStepProps> = ({
     
     const propertyGalleryData: PropertyGallery = {
       images: allImages,
+      categorizedImages: data.images, // Store categorized structure
       video: data.video
     };
     onNext(propertyGalleryData);

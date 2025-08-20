@@ -77,6 +77,7 @@ export interface CategorizedImages {
 
 export interface PropertyGallery {
   images: File[];
+  categorizedImages?: CategorizedImages;
   video?: File;
 }
 
