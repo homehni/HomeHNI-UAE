@@ -19,7 +19,8 @@ export const Auth: React.FC = () => {
   const { toast } = useToast();
   const [activeTab, setActiveTab] = useState("signin");
   const [showRoleModal, setShowRoleModal] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
+  const [showSignInPassword, setShowSignInPassword] = useState(false);
+  const [showSignUpPassword, setShowSignUpPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   
   const [signInForm, setSignInForm] = useState({ email: '', password: '' });
@@ -175,7 +176,7 @@ export const Auth: React.FC = () => {
                       <div className="relative">
                         <Input
                           id="signin-password"
-                          type={showPassword ? "text" : "password"}
+                          type={showSignInPassword ? "text" : "password"}
                           value={signInForm.password}
                           onChange={(e) => setSignInForm({...signInForm, password: e.target.value})}
                           placeholder="Enter your password"
@@ -187,9 +188,9 @@ export const Auth: React.FC = () => {
                           variant="ghost"
                           size="sm"
                           className="absolute right-3 top-3 h-6 w-6 p-0 hover:bg-gray-100"
-                          onClick={() => setShowPassword(!showPassword)}
+                          onClick={() => setShowSignInPassword(!showSignInPassword)}
                         >
-                          {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                          {showSignInPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                         </Button>
                       </div>
                     </div>
@@ -259,7 +260,7 @@ export const Auth: React.FC = () => {
                       <div className="relative">
                         <Input
                           id="signup-password"
-                          type={showPassword ? "text" : "password"}
+                          type={showSignUpPassword ? "text" : "password"}
                           value={signUpForm.password}
                           onChange={(e) => setSignUpForm({...signUpForm, password: e.target.value})}
                           placeholder="Create a password (min 6 characters)"
@@ -271,9 +272,9 @@ export const Auth: React.FC = () => {
                           variant="ghost"
                           size="sm"
                           className="absolute right-3 top-3 h-6 w-6 p-0 hover:bg-gray-100"
-                          onClick={() => setShowPassword(!showPassword)}
+                          onClick={() => setShowSignUpPassword(!showSignUpPassword)}
                         >
-                          {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                          {showSignUpPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                         </Button>
                       </div>
                     </div>
