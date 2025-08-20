@@ -54,24 +54,6 @@ export const ResaleGalleryStep: React.FC<ResaleGalleryStepProps> = ({
                 <FormItem>
                   <FormControl>
                     <div className="space-y-6">
-                      {/* Photo Tips */}
-                      <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
-                        <div className="flex items-start gap-3">
-                          <div className="bg-blue-100 rounded-full p-2">
-                            <ImageIcon className="h-5 w-5 text-blue-600" />
-                          </div>
-                          <div>
-                            <h3 className="font-semibold text-blue-900 mb-2">Photo Tips for Better Response</h3>
-                            <ul className="text-sm text-blue-800 space-y-1">
-                              <li>• Take photos during good lighting (preferably daylight)</li>
-                              <li>• Include living room, bedrooms, kitchen, and bathrooms</li>
-                              <li>• Capture the balcony and external building view</li>
-                              <li>• Show amenities like parking, security, or garden areas</li>
-                              <li>• Avoid blurry or dark images</li>
-                            </ul>
-                          </div>
-                        </div>
-                      </div>
 
                       {/* Image Upload Component */}
                       <ImageUpload
