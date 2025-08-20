@@ -207,7 +207,7 @@ const Footer = ({
 
 
            <div className="text-center text-xs text-gray-500 py-[7px]">
-            A Product of Ranazonai Technologies, Built with 🤍 and Dedication.
+            A Product of <a href="https://ranazonai.com/" target="_blank" rel="noopener noreferrer" className="hover:text-brand-red transition-colors">Ranazonai Technologies</a>, Built with 🤍 and Dedication.
           </div>
           
         </div>
