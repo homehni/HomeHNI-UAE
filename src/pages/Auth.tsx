@@ -12,6 +12,7 @@ import { RoleSelectionModal } from '@/components/RoleSelectionModal';
 import Header from '@/components/Header';
 import Marquee from '@/components/Marquee';
 
+// Auth component with separate password visibility states
 export const Auth: React.FC = () => {
   const { user, profile, signInWithGoogle, signInWithPassword, signUpWithPassword } = useAuth();
   const navigate = useNavigate();
