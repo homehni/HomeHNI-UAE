@@ -139,54 +139,64 @@ const PropertySearch = () => {
                 </div>
               </CardHeader>
               <CardContent className="space-y-6">
-                {/* Budget Filter */}
+                 {/* Budget Filter */}
                 <div>
                   <h4 className="font-semibold mb-3">Budget</h4>
                   <div className="space-y-3">
-                    <Slider
-                      value={filters.budget}
-                      onValueChange={(value) => updateFilter('budget', value)}
-                      max={50000000}
-                      min={0}
-                      step={500000}
-                      className="w-full"
-                    />
-                    <div className="flex justify-between text-sm text-gray-600">
-                      <span>₹{filters.budget[0] === 0 ? '0' : (filters.budget[0] / 100000).toFixed(1) + 'L'}</span>
-                      <span>₹{filters.budget[1] >= 10000000 ? (filters.budget[1] / 10000000).toFixed(1) + 'Cr' : (filters.budget[1] / 100000).toFixed(1) + 'L'}</span>
+                    <div className="relative">
+                      <Slider
+                        value={filters.budget}
+                        onValueChange={(value) => updateFilter('budget', value)}
+                        max={100000000}
+                        min={0}
+                        step={500000}
+                        className="w-full"
+                      />
                     </div>
-                    <div className="grid grid-cols-2 gap-2 mt-2">
+                    <div className="flex justify-between text-sm font-medium text-foreground">
+                      <span>₹{filters.budget[0] === 0 ? '0' : filters.budget[0] >= 10000000 ? (filters.budget[0] / 10000000).toFixed(filters.budget[0] % 10000000 === 0 ? 0 : 1) + ' Cr' : (filters.budget[0] / 100000).toFixed(filters.budget[0] % 100000 === 0 ? 0 : 1) + ' L'}</span>
+                      <span>₹{filters.budget[1] >= 100000000 ? '5+ Cr' : filters.budget[1] >= 10000000 ? (filters.budget[1] / 10000000).toFixed(filters.budget[1] % 10000000 === 0 ? 0 : 1) + ' Cr' : (filters.budget[1] / 100000).toFixed(filters.budget[1] % 100000 === 0 ? 0 : 1) + ' L'}</span>
+                    </div>
+                    <div className="grid grid-cols-3 gap-2 mt-3">
                       <Button
-                        variant="outline"
+                        variant={filters.budget[0] === 0 && filters.budget[1] === 5000000 ? "default" : "outline"}
                         size="sm"
                         onClick={() => updateFilter('budget', [0, 5000000])}
-                        className="text-xs"
+                        className="text-xs h-8"
                       >
                         Under 50L
                       </Button>
                       <Button
-                        variant="outline"
+                        variant={filters.budget[0] === 5000000 && filters.budget[1] === 10000000 ? "default" : "outline"}
                         size="sm"
                         onClick={() => updateFilter('budget', [5000000, 10000000])}
-                        className="text-xs"
+                        className="text-xs h-8"
                       >
                         50L-1Cr
                       </Button>
                       <Button
-                        variant="outline"
+                        variant={filters.budget[0] === 10000000 && filters.budget[1] === 20000000 ? "default" : "outline"}
                         size="sm"
                         onClick={() => updateFilter('budget', [10000000, 20000000])}
-                        className="text-xs"
+                        className="text-xs h-8"
                       >
                         1-2Cr
                       </Button>
                       <Button
-                        variant="outline"
+                        variant={filters.budget[0] === 20000000 && filters.budget[1] === 50000000 ? "default" : "outline"}
                         size="sm"
                         onClick={() => updateFilter('budget', [20000000, 50000000])}
-                        className="text-xs"
+                        className="text-xs h-8"
                       >
-                        2Cr+
+                        2-5Cr
+                      </Button>
+                      <Button
+                        variant={filters.budget[0] === 50000000 && filters.budget[1] === 100000000 ? "default" : "outline"}
+                        size="sm"
+                        onClick={() => updateFilter('budget', [50000000, 100000000])}
+                        className="text-xs h-8"
+                      >
+                        5Cr+
                       </Button>
                     </div>
                   </div>
