@@ -5,14 +5,39 @@ import { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { ImageUpload } from './ImageUpload';
+import { CategorizedImageUpload } from './CategorizedImageUpload';
 import { VideoUpload } from './VideoUpload';
 import { PropertyGallery } from '@/types/property';
 import { ProgressIndicator } from './ProgressIndicator';
 import { Home, MapPin, Building, Sparkles, Camera, FileText, Calendar, Phone } from 'lucide-react';
 
+// Define a local type for our form data
+type GalleryFormData = {
+  images: {
+    bathroom: File[];
+    bedroom: File[];
+    hall: File[];
+    kitchen: File[];
+    frontView: File[];
+    balcony: File[];
+    others: File[];
+  };
+  video?: File;
+};
+
 const gallerySchema = z.object({
-  images: z.array(z.any()).min(3, 'Minimum 3 images required').max(10, 'Maximum 10 images allowed'),
+  images: z.object({
+    bathroom: z.array(z.any()).default([]),
+    bedroom: z.array(z.any()).default([]),
+    hall: z.array(z.any()).default([]),
+    kitchen: z.array(z.any()).default([]),
+    frontView: z.array(z.any()).default([]),
+    balcony: z.array(z.any()).default([]),
+    others: z.array(z.any()).default([])
+  }).refine((data) => {
+    const totalImages = Object.values(data).reduce((sum, arr) => sum + (arr?.length || 0), 0);
+    return totalImages >= 3;
+  }, { message: 'Minimum 3 total images required across all categories' }),
   video: z.any().optional(),
 });
 
@@ -31,16 +56,39 @@ export const GalleryStep: React.FC<GalleryStepProps> = ({
   currentStep = 6,
   totalSteps = 8
 }) => {
-  const form = useForm<PropertyGallery>({
+  const form = useForm({
     resolver: zodResolver(gallerySchema),
     defaultValues: {
-      images: initialData.images || [],
+      images: {
+        bathroom: [],
+        bedroom: [],
+        hall: [],
+        kitchen: [],
+        frontView: [],
+        balcony: [],
+        others: Array.isArray(initialData.images) ? initialData.images : []
+      },
       video: initialData.video,
     },
   });
 
-  const onSubmit = (data: PropertyGallery) => {
-    onNext(data);
+  const onSubmit = (data: any) => {
+    // Convert categorized images to flat array for backward compatibility
+    const allImages = [
+      ...data.images.bathroom,
+      ...data.images.bedroom,
+      ...data.images.hall,
+      ...data.images.kitchen,
+      ...data.images.frontView,
+      ...data.images.balcony,
+      ...data.images.others
+    ];
+    
+    const propertyGalleryData: PropertyGallery = {
+      images: allImages,
+      video: data.video
+    };
+    onNext(propertyGalleryData);
   };
 
   return (
@@ -57,15 +105,16 @@ export const GalleryStep: React.FC<GalleryStepProps> = ({
                       <div className="space-y-6">
                         {/* Upload Images Title */}
                         <div className="text-center">
-                          <h2 className="text-xl font-semibold text-foreground mb-4">Upload Images * (Min 3, Max 10)</h2>
+                          <h2 className="text-xl font-semibold text-foreground mb-4">Upload Property Images by Category</h2>
+                          <p className="text-sm text-muted-foreground">Organize your property photos by room type for better presentation</p>
                         </div>
                         
-                        {/* Image Upload Component */}
-                        <ImageUpload
-                          images={field.value || []}
+                        {/* Categorized Image Upload Component */}
+                        <CategorizedImageUpload
+                          images={field.value as any}
                           onImagesChange={field.onChange}
-                          maxImages={10}
-                          minImages={3}
+                          maxImagesPerCategory={5}
+                          minTotalImages={3}
                         />
                       </div>
                     </FormControl>

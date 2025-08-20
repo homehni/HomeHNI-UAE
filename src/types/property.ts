@@ -65,6 +65,16 @@ export interface PropertyAmenities {
   directionsTip?: string;
 }
 
+export interface CategorizedImages {
+  bathroom: File[];
+  bedroom: File[];
+  hall: File[];
+  kitchen: File[];
+  frontView: File[];
+  balcony: File[];
+  others: File[];
+}
+
 export interface PropertyGallery {
   images: File[];
   video?: File;
