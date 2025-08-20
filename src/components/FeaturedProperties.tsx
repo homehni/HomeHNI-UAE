@@ -23,6 +23,8 @@ const FeaturedProperties = ({
 }: {
   properties?: FeaturedProperty[];
 }) => {
+  const [showAll, setShowAll] = useState(false);
+  
   const properties: FeaturedProperty[] = propsProperties ?? [{
     id: '1',
     title: 'Modern Apartment with Delhi',
@@ -138,6 +140,90 @@ const FeaturedProperties = ({
     image: 'photo-1497366216548-37526070297c',
     propertyType: 'Agriculture Lands',
     isNew: true
+  }, {
+    id: '12',
+    title: 'Luxury Studio Apartment with Pool',
+    location: 'Powai, Mumbai',
+    price: '₹85 L',
+    area: '650 sq ft',
+    bedrooms: 1,
+    bathrooms: 1,
+    image: 'photo-1560518883-ce09059eeffa',
+    propertyType: 'Apartment',
+    isNew: true
+  }, {
+    id: '13',
+    title: 'Commercial Space in IT Park',
+    location: 'HITEC City, Hyderabad',
+    price: '₹55 L',
+    area: '1,000 sq ft',
+    bedrooms: 0,
+    bathrooms: 2,
+    image: 'photo-1497366216548-37526070297c',
+    propertyType: 'Commercial'
+  }, {
+    id: '14',
+    title: 'Duplex House with Garden',
+    location: 'Jubilee Hills, Hyderabad',
+    price: '₹2.8 Cr',
+    area: '3,200 sq ft',
+    bedrooms: 5,
+    bathrooms: 4,
+    image: 'photo-1568605114967-8130f3a36994',
+    propertyType: 'House',
+    isNew: true
+  }, {
+    id: '15',
+    title: 'Affordable 1BHK Near Metro',
+    location: 'Dwarka, Delhi',
+    price: '₹45 L',
+    area: '550 sq ft',
+    bedrooms: 1,
+    bathrooms: 1,
+    image: 'photo-1512917774080-9991f1c4c750',
+    propertyType: 'Apartment'
+  }, {
+    id: '16',
+    title: 'Farmhouse with Orchard',
+    location: 'Lonavala, Maharashtra',
+    price: '₹1.2 Cr',
+    area: '2 acres',
+    bedrooms: 3,
+    bathrooms: 2,
+    image: 'photo-1497366216548-37526070297c',
+    propertyType: 'Agriculture Lands'
+  }, {
+    id: '17',
+    title: 'Modern 4BHK with Amenities',
+    location: 'New Town, Kolkata',
+    price: '₹1.1 Cr',
+    area: '1,600 sq ft',
+    bedrooms: 4,
+    bathrooms: 3,
+    image: 'photo-1522708323590-d24dbb6b0267',
+    propertyType: 'Apartment',
+    isNew: true
+  }, {
+    id: '18',
+    title: 'Warehouse Space with Loading Dock',
+    location: 'Manesar, Gurgaon',
+    price: '₹75 L',
+    area: '5,000 sq ft',
+    bedrooms: 0,
+    bathrooms: 2,
+    image: 'photo-1497366216548-37526070297c',
+    propertyType: 'Commercial'
+  }, {
+    id: '19',
+    title: 'Sea View Apartment with Balcony',
+    location: 'Marine Drive, Mumbai',
+    price: '₹4.5 Cr',
+    area: '1,800 sq ft',
+    bedrooms: 3,
+    bathrooms: 3,
+    image: 'photo-1560518883-ce09059eeffa',
+    propertyType: 'Apartment',
+    isNew: true
   }];
 
   // Compute available types dynamically so it works if properties change in the future
@@ -154,6 +240,16 @@ const FeaturedProperties = ({
     }
   }, [availableTypes, activeType]);
   const filtered = useMemo(() => activeType === 'All' ? properties : properties.filter(p => p.propertyType === activeType), [activeType, properties]);
+  
+  // Show only first 11 properties initially, all when showAll is true
+  const displayedProperties = useMemo(() => {
+    return showAll ? filtered : filtered.slice(0, 11);
+  }, [filtered, showAll]);
+
+  const handleViewAllClick = () => {
+    setShowAll(!showAll);
+  };
+
   return <section className="py-16 bg-gray-50">
       <div className="container mx-auto px-4">
         <div className="text-center mb-8 md:mb-12">
@@ -196,14 +292,19 @@ const FeaturedProperties = ({
         </Card>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 lg:gap-6 justify-items-center">
-          {filtered.map(property => <PropertyCard key={property.id} {...property} size="compact" />)}
+          {displayedProperties.map(property => <PropertyCard key={property.id} {...property} size="compact" />)}
         </div>
 
-        <div className="text-center mt-12">
-          <button className="bg-brand-red hover:bg-brand-red-dark text-white px-8 py-3 rounded-lg font-semibold transition-colors">
-            View All Properties
-          </button>
-        </div>
+        {filtered.length > 11 && (
+          <div className="text-center mt-12">
+            <button 
+              onClick={handleViewAllClick}
+              className="bg-brand-red hover:bg-brand-red-dark text-white px-8 py-3 rounded-lg font-semibold transition-colors"
+            >
+              {showAll ? 'Show Less' : 'View All Properties'}
+            </button>
+          </div>
+        )}
       </div>
     </section>;
 };
