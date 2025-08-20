@@ -48,6 +48,7 @@ const MegaMenu = ({ isScrolled }: MegaMenuProps) => {
             'Villa',
             'Plots',
             'Independent House',
+            'Agricultural Lands',
           ].map((label) => (
             <DropdownMenuItem key={label} asChild>
               <a href="#" className="w-full">
