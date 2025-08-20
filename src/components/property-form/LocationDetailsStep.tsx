@@ -8,7 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { LocationDetails } from '@/types/property';
 import { ArrowLeft, ArrowRight, Home } from 'lucide-react';
-import { RentalSidebar } from './RentalSidebar';
+
 
 const locationDetailsSchema = z.object({
   state: z.string().min(1, 'Please select state'),
@@ -206,33 +206,10 @@ export const LocationDetailsStep: React.FC<LocationDetailsStepProps> = ({
   };
 
   const stateNames = Object.keys(statesData);
-  const progressPercentage = Math.round((currentStep / totalSteps) * 100);
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <div className="bg-white border-b border-gray-200 px-6 py-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <Home className="h-6 w-6 text-primary" />
-            <span className="text-lg font-semibold">PropertyHub</span>
-          </div>
-          <div className="flex items-center space-x-4">
-            <span className="text-sm text-gray-600">{progressPercentage}% Done</span>
-            <Button variant="outline" size="sm">Preview</Button>
-          </div>
-        </div>
-      </div>
-
-      <div className="flex">
-        {/* Sidebar */}
-        <RentalSidebar currentStep={currentStep} />
-
-        {/* Main Content */}
-        <div className="flex-1 p-6">
-          <div className="max-w-4xl mx-auto">
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
-              <h1 className="text-2xl font-semibold text-primary mb-6">Location Details</h1>
+    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
+      <h1 className="text-2xl font-semibold text-primary mb-6">Location Details</h1>
 
               <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -355,10 +332,6 @@ export const LocationDetailsStep: React.FC<LocationDetailsStepProps> = ({
                   </div>
                 </form>
               </Form>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   );
 };

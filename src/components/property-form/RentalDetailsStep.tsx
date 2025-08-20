@@ -80,17 +80,6 @@ export const RentalDetailsStep: React.FC<RentalDetailsStepProps> = ({
 
   const predefinedTags = ['Bank', 'Service Center', 'Show Room', 'ATM', 'Retail'];
 
-  const steps = [
-    { icon: Home, label: 'Property Details', active: currentStep === 2 },
-    { icon: MapPin, label: 'Location Details', active: currentStep === 3 },
-    { icon: Building, label: 'Rental Details', active: currentStep === 4 },
-    { icon: Sparkles, label: 'Amenities', active: currentStep === 5 },
-    { icon: Camera, label: 'Gallery', active: currentStep === 6 },
-    { icon: FileText, label: 'Additional Information', active: currentStep === 7 },
-    { icon: CalendarStep, label: 'Schedule', active: currentStep === 8 },
-  ];
-
-  const progressPercentage = Math.round((currentStep / totalSteps) * 100);
 
   const toggleTag = (tag: string) => {
     const newTags = selectedTags.includes(tag)
@@ -119,51 +108,8 @@ export const RentalDetailsStep: React.FC<RentalDetailsStepProps> = ({
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <div className="bg-white border-b border-gray-200 px-6 py-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <Home className="h-6 w-6 text-primary" />
-            <span className="text-lg font-semibold">PropertyHub</span>
-          </div>
-          <div className="flex items-center space-x-4">
-            <span className="text-sm text-gray-600">{progressPercentage}% Done</span>
-            <Button variant="outline" size="sm">Preview</Button>
-          </div>
-        </div>
-      </div>
-
-      <div className="flex">
-        {/* Sidebar */}
-        <div className="w-64 bg-white border-r border-gray-200 min-h-screen">
-          <div className="p-6">
-            <nav className="space-y-2">
-              {steps.map((step, index) => {
-                const Icon = step.icon;
-                return (
-                  <div
-                    key={step.label}
-                    className={`flex items-center space-x-3 p-3 rounded-lg transition-colors ${
-                      step.active
-                        ? 'bg-primary/10 text-primary border-l-4 border-primary'
-                        : 'text-gray-600 hover:bg-gray-50'
-                    }`}
-                  >
-                    <Icon className="h-5 w-5" />
-                    <span className="text-sm font-medium">{step.label}</span>
-                  </div>
-                );
-              })}
-            </nav>
-          </div>
-        </div>
-
-        {/* Main Content */}
-        <div className="flex-1 p-6">
-          <div className="max-w-4xl mx-auto">
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
-              <h1 className="text-2xl font-semibold text-primary mb-6">Provide rental details about your property</h1>
+    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
+      <h1 className="text-2xl font-semibold text-primary mb-6">Provide rental details about your property</h1>
               
               <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -467,12 +413,8 @@ export const RentalDetailsStep: React.FC<RentalDetailsStepProps> = ({
                       Save & Continue
                     </Button>
                   </div>
-                </form>
-              </Form>
-            </div>
-          </div>
-        </div>
-      </div>
+                  </form>
+                </Form>
     </div>
   );
 };

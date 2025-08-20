@@ -61,60 +61,12 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
     onNext(data);
   };
 
-  const sidebarSteps = [
-    { number: 1, title: "Owner Information", icon: Phone, completed: true },
-    { number: 2, title: "Property Details", icon: Home, completed: true },
-    { number: 3, title: "Location Details", icon: MapPin, completed: true },
-    { number: 4, title: "Rental Details", icon: Building, completed: true },
-    { number: 5, title: "Amenities", icon: Sparkles, completed: false, active: true },
-    { number: 6, title: "Gallery", icon: Camera, completed: false },
-    { number: 7, title: "Additional Information", icon: FileText, completed: false },
-    { number: 8, title: "Schedule", icon: Calendar, completed: false },
-  ];
-
   return (
-    <div className="min-h-screen bg-muted/30">
-      {/* Header with Progress */}
-      <div className="bg-background border-b p-4">
-        <div className="max-w-7xl mx-auto">
-          <ProgressIndicator 
-            currentStep={currentStep} 
-            totalSteps={totalSteps}
-            completedSteps={[1, 2, 3, 4]}
-          />
-        </div>
+    <div className="bg-background rounded-lg border p-8">
+      <div className="text-center mb-8">
+        <h2 className="text-2xl font-bold text-foreground mb-2">Amenities</h2>
+        <p className="text-muted-foreground">Select the amenities and features of your property</p>
       </div>
-
-      <div className="flex max-w-7xl mx-auto">
-        {/* Sidebar */}
-        <div className="w-64 bg-background border-r min-h-screen p-6">
-          <div className="space-y-1">
-            {sidebarSteps.map((step) => (
-              <div
-                key={step.number}
-                className={`flex items-center gap-3 p-3 rounded-lg transition-colors ${
-                  step.active 
-                    ? 'bg-primary/10 text-primary border-l-4 border-primary' 
-                    : step.completed 
-                    ? 'text-muted-foreground hover:bg-muted/50' 
-                    : 'text-muted-foreground/60'
-                }`}
-              >
-                <step.icon className="h-5 w-5" />
-                <span className="text-sm font-medium">{step.title}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Main Content */}
-        <div className="flex-1 p-6">
-          <div className="max-w-4xl">
-            <div className="bg-background rounded-lg border p-8">
-              <div className="text-center mb-8">
-                <h2 className="text-2xl font-bold text-foreground mb-2">Amenities</h2>
-                <p className="text-muted-foreground">Select the amenities and features of your property</p>
-              </div>
 
               <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -408,12 +360,8 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
                       Save & Continue
                     </Button>
                   </div>
-                </form>
-              </Form>
-            </div>
-          </div>
-        </div>
-      </div>
+                  </form>
+                </Form>
     </div>
   );
 };
