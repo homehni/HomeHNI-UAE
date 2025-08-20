@@ -43,6 +43,7 @@ export const SaleDetailsStep: React.FC<SaleDetailsStepProps> = ({
   const [selectedDate, setSelectedDate] = React.useState<Date | undefined>(
     initialData.possessionDate ? new Date(initialData.possessionDate) : undefined
   );
+  const [isCalendarOpen, setIsCalendarOpen] = React.useState(false);
 
   const {
     register,
@@ -180,7 +181,7 @@ export const SaleDetailsStep: React.FC<SaleDetailsStepProps> = ({
         {/* Possession Date */}
         <div>
           <Label className="text-sm font-medium">Possession Date</Label>
-          <Popover>
+          <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
             <PopoverTrigger asChild>
               <Button
                 variant="outline"
@@ -193,13 +194,17 @@ export const SaleDetailsStep: React.FC<SaleDetailsStepProps> = ({
                 {selectedDate ? format(selectedDate, "PPP") : "Select possession date"}
               </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-auto p-0">
+            <PopoverContent className="w-auto p-0" align="start">
               <CalendarComponent
                 mode="single"
                 selected={selectedDate}
-                onSelect={setSelectedDate}
+                onSelect={(date) => {
+                  setSelectedDate(date);
+                  setIsCalendarOpen(false); // Close popover after date selection
+                }}
                 disabled={(date) => date < new Date()}
                 initialFocus
+                className={cn("p-3 pointer-events-auto")}
               />
             </PopoverContent>
           </Popover>
