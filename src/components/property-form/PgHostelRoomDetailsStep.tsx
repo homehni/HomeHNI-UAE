@@ -44,8 +44,8 @@ export function PgHostelRoomDetailsStep({
   totalSteps 
 }: PgHostelRoomDetailsStepProps) {
   const [formData, setFormData] = useState<PgHostelRoomDetails>({
-    expectedRent: 0,
-    expectedDeposit: 0,
+    expectedRent: initialData?.expectedRent || undefined,
+    expectedDeposit: initialData?.expectedDeposit || undefined,
     roomAmenities: {
       cupboard: false,
       geyser: false,
@@ -104,9 +104,9 @@ export function PgHostelRoomDetailsStep({
                   <Input
                     id="expectedRent"
                     type="number"
-                    value={formData.expectedRent}
-                    onChange={(e) => setFormData({ ...formData, expectedRent: Number(e.target.value) })}
-                    placeholder="Monthly rent in ₹"
+                    value={formData.expectedRent || ''}
+                    onChange={(e) => setFormData({ ...formData, expectedRent: e.target.value ? Number(e.target.value) : undefined })}
+                    placeholder="Enter monthly rent amount"
                     className="h-14 text-lg"
                   />
                 </div>
@@ -115,9 +115,9 @@ export function PgHostelRoomDetailsStep({
                   <Input
                     id="expectedDeposit"
                     type="number"
-                    value={formData.expectedDeposit}
-                    onChange={(e) => setFormData({ ...formData, expectedDeposit: Number(e.target.value) })}
-                    placeholder="Security deposit in ₹"
+                    value={formData.expectedDeposit || ''}
+                    onChange={(e) => setFormData({ ...formData, expectedDeposit: e.target.value ? Number(e.target.value) : undefined })}
+                    placeholder="Enter security deposit amount"
                     className="h-14 text-lg"
                   />
                 </div>
