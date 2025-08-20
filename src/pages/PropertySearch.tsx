@@ -12,6 +12,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import PropertyCard from '@/components/PropertyCard';
 import { MapPin, Filter, Grid3X3, List, Map, Bookmark, Share2, Mic, X } from 'lucide-react';
 import Header from '@/components/Header';
+import Marquee from '@/components/Marquee';
 import Footer from '@/components/Footer';
 import PropertyTools from '@/components/PropertyTools';
 import { useRealTimeSearch } from '@/hooks/useRealTimeSearch';
@@ -50,6 +51,8 @@ const PropertySearch = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      {/* Marquee at the very top */}
+      <Marquee />
       <Header />
       
       {/* Search Header */}
