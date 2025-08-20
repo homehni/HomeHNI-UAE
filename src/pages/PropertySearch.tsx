@@ -158,7 +158,7 @@ const PropertySearch = () => {
                     </div>
                     <div className="flex justify-between text-sm font-medium text-foreground">
                       <span>₹{filters.budget[0] === 0 ? '0' : filters.budget[0] >= 10000000 ? (filters.budget[0] / 10000000).toFixed(filters.budget[0] % 10000000 === 0 ? 0 : 1) + ' Cr' : (filters.budget[0] / 100000).toFixed(filters.budget[0] % 100000 === 0 ? 0 : 1) + ' L'}</span>
-                      <span>₹{filters.budget[1] >= 100000000 ? '5+ Cr' : filters.budget[1] >= 10000000 ? (filters.budget[1] / 10000000).toFixed(filters.budget[1] % 10000000 === 0 ? 0 : 1) + ' Cr' : (filters.budget[1] / 100000).toFixed(filters.budget[1] % 100000 === 0 ? 0 : 1) + ' L'}</span>
+                      <span>₹{filters.budget[1] >= 100000000 ? '10Cr +' : filters.budget[1] >= 10000000 ? (filters.budget[1] / 10000000).toFixed(filters.budget[1] % 10000000 === 0 ? 0 : 1) + ' Cr' : (filters.budget[1] / 100000).toFixed(filters.budget[1] % 100000 === 0 ? 0 : 1) + ' L'}</span>
                     </div>
                     <div className="grid grid-cols-3 gap-2 mt-3">
                       <Button
