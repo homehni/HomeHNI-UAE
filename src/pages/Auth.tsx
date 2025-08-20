@@ -161,15 +161,16 @@ export const Auth: React.FC = () => {
                   <form onSubmit={handleEmailSignIn} className="space-y-5">
                     <div className="space-y-2">
                       <Label htmlFor="signin-email" className="text-sm font-medium text-gray-700">Email</Label>
-                      <Input
-                        id="signin-email"
-                        type="email"
-                        value={signInForm.email}
-                        onChange={(e) => setSignInForm({...signInForm, email: e.target.value})}
-                        placeholder="Enter your email"
-                        required
-                        className="h-12 rounded-xl border-gray-200 focus:border-brand-red focus:ring-brand-red/20"
-                      />
+                        <Input
+                          id="signin-email"
+                          type="email"
+                          value={signInForm.email}
+                          onChange={(e) => setSignInForm({...signInForm, email: e.target.value})}
+                          placeholder="Enter your email"
+                          required
+                          autoComplete="email"
+                          className="h-12 rounded-xl border-gray-200 focus:border-brand-red focus:ring-brand-red/20"
+                        />
                     </div>
                     
                     <div className="space-y-2">
@@ -182,6 +183,7 @@ export const Auth: React.FC = () => {
                           onChange={(e) => setSignInForm({...signInForm, password: e.target.value})}
                           placeholder="Enter your password"
                           required
+                          autoComplete="current-password"
                           className="h-12 rounded-xl border-gray-200 focus:border-brand-red focus:ring-brand-red/20 pr-12"
                         />
                         <Button
@@ -239,6 +241,7 @@ export const Auth: React.FC = () => {
                         onChange={(e) => setSignUpForm({...signUpForm, fullName: e.target.value})}
                         placeholder="Enter your full name"
                         required
+                        autoComplete="name"
                         className="h-12 rounded-xl border-gray-200 focus:border-brand-red focus:ring-brand-red/20"
                       />
                     </div>
@@ -252,6 +255,7 @@ export const Auth: React.FC = () => {
                         onChange={(e) => setSignUpForm({...signUpForm, email: e.target.value})}
                         placeholder="Enter your email"
                         required
+                        autoComplete="email"
                         className="h-12 rounded-xl border-gray-200 focus:border-brand-red focus:ring-brand-red/20"
                       />
                     </div>
@@ -266,6 +270,7 @@ export const Auth: React.FC = () => {
                           onChange={(e) => setSignUpForm({...signUpForm, password: e.target.value})}
                           placeholder="Create a password (min 6 characters)"
                           required
+                          autoComplete="new-password"
                           className="h-12 rounded-xl border-gray-200 focus:border-brand-red focus:ring-brand-red/20 pr-12"
                         />
                         <Button
@@ -290,6 +295,7 @@ export const Auth: React.FC = () => {
                           onChange={(e) => setSignUpForm({...signUpForm, confirmPassword: e.target.value})}
                           placeholder="Confirm your password"
                           required
+                          autoComplete="new-password"
                           className="h-12 rounded-xl border-gray-200 focus:border-brand-red focus:ring-brand-red/20 pr-12"
                         />
                         <Button
