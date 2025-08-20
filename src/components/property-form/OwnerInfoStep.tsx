@@ -102,13 +102,13 @@ export const OwnerInfoStep: React.FC<OwnerInfoStepProps> = ({
   };
 
   return (
-    <Card className="w-full max-w-4xl mx-auto">
-      <CardHeader>
-        <CardTitle className="text-center text-primary text-2xl font-bold">
+    <Card className="w-full max-w-4xl mx-auto border-2 border-brand-red/20 shadow-lg bg-gradient-to-br from-background to-muted/20">
+      <CardHeader className="pb-6">
+        <CardTitle className="text-center text-brand-red text-2xl font-bold">
           Start Posting Your Ad For FREE
         </CardTitle>
       </CardHeader>
-      <CardContent>
+      <CardContent className="px-8 pb-8">
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
           {/* Personal Information Section */}
           <div className="space-y-6">
@@ -121,7 +121,7 @@ export const OwnerInfoStep: React.FC<OwnerInfoStepProps> = ({
                 <Label htmlFor="phoneNumber">Mobile Number *</Label>
                 <div className="flex gap-2">
                   <Select defaultValue="+91">
-                    <SelectTrigger className="w-20">
+                    <SelectTrigger className="w-20 h-12 rounded-xl border-2 border-brand-red/30 focus:border-brand-red focus:ring-2 focus:ring-brand-red/20">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -135,7 +135,7 @@ export const OwnerInfoStep: React.FC<OwnerInfoStepProps> = ({
                     type="tel"
                     {...register('phoneNumber')}
                     placeholder="Enter your mobile number"
-                    className={`flex-1 ${errors.phoneNumber && touchedFields.phoneNumber ? 'border-destructive' : ''}`}
+                    className={`flex-1 h-12 rounded-xl border-2 border-brand-red/30 focus:border-brand-red focus:ring-2 focus:ring-brand-red/20 ${errors.phoneNumber && touchedFields.phoneNumber ? 'border-destructive' : ''}`}
                     onBlur={handleBlur}
                     onInput={handleBlur}
                     autoComplete="tel"
@@ -152,7 +152,7 @@ export const OwnerInfoStep: React.FC<OwnerInfoStepProps> = ({
                   value={watch('city')} 
                   onValueChange={(value) => setValue('city', value)}
                 >
-                  <SelectTrigger className={errors.city && touchedFields.city ? 'border-destructive' : ''}>
+                  <SelectTrigger className={`h-12 rounded-xl border-2 border-brand-red/30 focus:border-brand-red focus:ring-2 focus:ring-brand-red/20 ${errors.city && touchedFields.city ? 'border-destructive' : ''}`}>
                     <SelectValue placeholder="Select your city" />
                   </SelectTrigger>
                   <SelectContent>
@@ -194,10 +194,10 @@ export const OwnerInfoStep: React.FC<OwnerInfoStepProps> = ({
               }}
               className="w-full"
             >
-              <TabsList className="grid w-full grid-cols-3">
-                <TabsTrigger value="Residential">Residential</TabsTrigger>
-                <TabsTrigger value="Commercial">Commercial</TabsTrigger>
-                <TabsTrigger value="Land/Plot" className="relative">
+              <TabsList className="grid w-full grid-cols-3 h-12 bg-muted/30 rounded-xl border-2 border-brand-red/20">
+                <TabsTrigger value="Residential" className="rounded-lg data-[state=active]:bg-brand-red data-[state=active]:text-white">Residential</TabsTrigger>
+                <TabsTrigger value="Commercial" className="rounded-lg data-[state=active]:bg-brand-red data-[state=active]:text-white">Commercial</TabsTrigger>
+                <TabsTrigger value="Land/Plot" className="relative rounded-lg data-[state=active]:bg-brand-red data-[state=active]:text-white">
                   Land/Plot
                   <Badge variant="secondary" className="ml-2 text-xs">New</Badge>
                 </TabsTrigger>
@@ -217,7 +217,11 @@ export const OwnerInfoStep: React.FC<OwnerInfoStepProps> = ({
                   key={type}
                   type="button"
                   variant={selectedListingType === type ? "default" : "outline"}
-                  className="h-12"
+                  className={`h-12 rounded-xl border-2 transition-all duration-200 ${
+                    selectedListingType === type 
+                      ? 'bg-brand-red border-brand-red text-white shadow-lg hover:bg-brand-red/90' 
+                      : 'border-brand-red/30 text-brand-red hover:bg-brand-red/10 hover:border-brand-red'
+                  }`}
                   onClick={() => {
                     setValue('listingType', type as any);
                     trigger('listingType');
@@ -243,7 +247,7 @@ export const OwnerInfoStep: React.FC<OwnerInfoStepProps> = ({
                   trigger('role');
                 }}
               >
-              <SelectTrigger className={errors.role ? 'border-destructive' : ''}>
+              <SelectTrigger className={`h-12 rounded-xl border-2 border-brand-red/30 focus:border-brand-red focus:ring-2 focus:ring-brand-red/20 ${errors.role ? 'border-destructive' : ''}`}>
                 <SelectValue placeholder="Select your role" />
               </SelectTrigger>
               <SelectContent>
@@ -262,7 +266,7 @@ export const OwnerInfoStep: React.FC<OwnerInfoStepProps> = ({
             <Button
               type="submit"
               disabled={!isFormValid()}
-              className="bg-primary hover:bg-primary/90 px-8 py-3 text-lg font-semibold"
+              className="bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-gray-900 font-bold px-8 py-3 text-lg rounded-xl border-2 border-yellow-400 shadow-lg hover:shadow-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
               size="lg"
             >
               Start Posting Your Ad For FREE
