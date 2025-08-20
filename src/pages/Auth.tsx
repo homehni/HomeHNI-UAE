@@ -121,44 +121,31 @@ export const Auth: React.FC = () => {
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl"></div>
         
         <div className="relative flex items-center justify-center p-4 min-h-screen">
-          <Card className="w-full max-w-md backdrop-blur-sm bg-white/95 border border-gray-200/50 shadow-2xl shadow-black/10 rounded-2xl animate-fade-in">
-            <CardHeader className="text-center pb-6 pt-8">
-              <div className="flex items-center justify-center mb-6">
-                <div className="p-3 bg-gradient-to-br from-brand-red to-brand-red-dark rounded-2xl shadow-lg">
-                  <Home className="h-10 w-10 text-white" />
-                </div>
-              </div>
-              <div className="space-y-2">
-                <h1 className="text-3xl font-bold bg-gradient-to-r from-brand-red to-brand-red-dark bg-clip-text text-transparent">
-                  Home HNI
-                </h1>
-                <p className="text-sm text-muted-foreground">Your premium property partner</p>
-              </div>
-            </CardHeader>
-            <CardContent className="px-8 pb-8">
+          <Card className="w-full max-w-2xl backdrop-blur-md bg-white/90 border-2 border-white/20 shadow-2xl shadow-brand-red/10 rounded-3xl animate-fade-in hover:shadow-3xl hover:shadow-brand-red/20 transition-all duration-500 transform hover:scale-[1.02]">
+            <CardContent className="px-12 py-10">
               <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-                <TabsList className="grid w-full grid-cols-2 mb-6 bg-gray-100/80 p-1 rounded-xl">
-                  <TabsTrigger value="signin" className="flex items-center space-x-2 rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm">
-                    <LogIn size={16} />
+                <TabsList className="grid w-full grid-cols-2 mb-8 bg-gradient-to-r from-gray-100 to-gray-50 p-1.5 rounded-2xl h-14 shadow-inner">
+                  <TabsTrigger value="signin" className="flex items-center space-x-2 rounded-xl data-[state=active]:bg-white data-[state=active]:shadow-lg data-[state=active]:text-brand-red font-medium transition-all duration-300 h-11">
+                    <LogIn size={18} />
                     <span>Sign In</span>
                   </TabsTrigger>
-                  <TabsTrigger value="signup" className="flex items-center space-x-2 rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm">
-                    <UserPlus size={16} />
+                  <TabsTrigger value="signup" className="flex items-center space-x-2 rounded-xl data-[state=active]:bg-white data-[state=active]:shadow-lg data-[state=active]:text-brand-red font-medium transition-all duration-300 h-11">
+                    <UserPlus size={18} />
                     <span>Sign Up</span>
                   </TabsTrigger>
                 </TabsList>
                 
-                <TabsContent value="signin" className="space-y-6">
-                  <div className="text-center">
-                    <CardTitle className="text-2xl font-semibold text-gray-800">Welcome Back</CardTitle>
-                    <CardDescription className="mt-2 text-gray-600">
+                <TabsContent value="signin" className="space-y-8 animate-fade-in">
+                  <div className="text-center space-y-3">
+                    <CardTitle className="text-3xl font-bold bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent">Welcome Back</CardTitle>
+                    <CardDescription className="text-base text-gray-600">
                       Sign in to access your account and all features
                     </CardDescription>
                   </div>
                   
-                  <form onSubmit={handleEmailSignIn} className="space-y-5">
-                    <div className="space-y-2">
-                      <Label htmlFor="signin-email" className="text-sm font-medium text-gray-700">Email</Label>
+                  <form onSubmit={handleEmailSignIn} className="space-y-6">
+                    <div className="space-y-3">
+                      <Label htmlFor="signin-email" className="text-sm font-semibold text-gray-700">Email Address</Label>
                       <Input
                         id="signin-email"
                         type="email"
@@ -166,12 +153,12 @@ export const Auth: React.FC = () => {
                         onChange={(e) => setSignInForm({...signInForm, email: e.target.value})}
                         placeholder="Enter your email"
                         required
-                        className="h-12 rounded-xl border-gray-200 focus:border-brand-red focus:ring-brand-red/20"
+                        className="h-14 rounded-2xl border-2 border-gray-200 focus:border-brand-red focus:ring-4 focus:ring-brand-red/10 text-base transition-all duration-300 hover:border-gray-300"
                       />
                     </div>
                     
-                    <div className="space-y-2">
-                      <Label htmlFor="signin-password" className="text-sm font-medium text-gray-700">Password</Label>
+                    <div className="space-y-3">
+                      <Label htmlFor="signin-password" className="text-sm font-semibold text-gray-700">Password</Label>
                       <div className="relative">
                         <Input
                           id="signin-password"
@@ -180,156 +167,160 @@ export const Auth: React.FC = () => {
                           onChange={(e) => setSignInForm({...signInForm, password: e.target.value})}
                           placeholder="Enter your password"
                           required
-                          className="h-12 rounded-xl border-gray-200 focus:border-brand-red focus:ring-brand-red/20 pr-12"
+                          className="h-14 rounded-2xl border-2 border-gray-200 focus:border-brand-red focus:ring-4 focus:ring-brand-red/10 pr-14 text-base transition-all duration-300 hover:border-gray-300"
                         />
                         <Button
                           type="button"
                           variant="ghost"
                           size="sm"
-                          className="absolute right-3 top-3 h-6 w-6 p-0 hover:bg-gray-100"
+                          className="absolute right-4 top-4 h-6 w-6 p-0 hover:bg-gray-100 rounded-lg"
                           onClick={() => setShowPassword(!showPassword)}
                         >
-                          {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                          {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                         </Button>
                       </div>
                     </div>
 
-                    <Button type="submit" className="w-full h-12 rounded-xl bg-gradient-to-r from-brand-red to-brand-red-dark hover:shadow-lg transition-all duration-200" size="lg">
+                    <Button type="submit" className="w-full h-14 rounded-2xl bg-gradient-to-r from-brand-red via-brand-red to-brand-red-dark hover:shadow-xl hover:shadow-brand-red/25 transition-all duration-300 text-base font-semibold transform hover:scale-[1.02]" size="lg">
                       Sign In
                     </Button>
                   </form>
 
-                  <div className="relative">
+                  <div className="relative my-8">
                     <div className="absolute inset-0 flex items-center">
-                      <span className="w-full border-t border-gray-200" />
+                      <span className="w-full border-t-2 border-gray-200" />
                     </div>
-                    <div className="relative flex justify-center text-xs uppercase">
-                      <span className="bg-white px-4 text-gray-500 font-medium">Or continue with</span>
+                    <div className="relative flex justify-center text-sm uppercase">
+                      <span className="bg-white px-6 text-gray-500 font-semibold">Or continue with</span>
                     </div>
                   </div>
                   
                   <Button 
                     onClick={handleGoogleSignIn}
-                    className="w-full h-12 rounded-xl border-2 hover:bg-gray-50 transition-all duration-200"
+                    className="w-full h-14 rounded-2xl border-2 border-gray-200 hover:bg-gray-50 hover:border-gray-300 transition-all duration-300 text-base font-semibold transform hover:scale-[1.02]"
                     variant="outline"
                     size="lg"
                   >
-                    <Chrome className="h-5 w-5 mr-3 text-red-500" />
+                    <Chrome className="h-6 w-6 mr-3 text-red-500" />
                     Continue with Google
                   </Button>
                 </TabsContent>
                 
-                <TabsContent value="signup" className="space-y-6">
-                  <div className="text-center">
-                    <CardTitle className="text-2xl font-semibold text-gray-800">Create Account</CardTitle>
-                    <CardDescription className="mt-2 text-gray-600">
+                <TabsContent value="signup" className="space-y-8 animate-fade-in">
+                  <div className="text-center space-y-3">
+                    <CardTitle className="text-3xl font-bold bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent">Create Account</CardTitle>
+                    <CardDescription className="text-base text-gray-600">
                       Join Home HNI to start your property journey
                     </CardDescription>
                   </div>
                   
-                  <form onSubmit={handleEmailSignUp} className="space-y-5">
-                    <div className="space-y-2">
-                      <Label htmlFor="signup-name" className="text-sm font-medium text-gray-700">Full Name</Label>
-                      <Input
-                        id="signup-name"
-                        type="text"
-                        value={signUpForm.fullName}
-                        onChange={(e) => setSignUpForm({...signUpForm, fullName: e.target.value})}
-                        placeholder="Enter your full name"
-                        required
-                        className="h-12 rounded-xl border-gray-200 focus:border-brand-red focus:ring-brand-red/20"
-                      />
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="signup-email" className="text-sm font-medium text-gray-700">Email</Label>
-                      <Input
-                        id="signup-email"
-                        type="email"
-                        value={signUpForm.email}
-                        onChange={(e) => setSignUpForm({...signUpForm, email: e.target.value})}
-                        placeholder="Enter your email"
-                        required
-                        className="h-12 rounded-xl border-gray-200 focus:border-brand-red focus:ring-brand-red/20"
-                      />
-                    </div>
-                    
-                    <div className="space-y-2">
-                      <Label htmlFor="signup-password" className="text-sm font-medium text-gray-700">Password</Label>
-                      <div className="relative">
+                  <form onSubmit={handleEmailSignUp} className="space-y-6">
+                    <div className="grid grid-cols-1 gap-6">
+                      <div className="space-y-3">
+                        <Label htmlFor="signup-name" className="text-sm font-semibold text-gray-700">Full Name</Label>
                         <Input
-                          id="signup-password"
-                          type={showPassword ? "text" : "password"}
-                          value={signUpForm.password}
-                          onChange={(e) => setSignUpForm({...signUpForm, password: e.target.value})}
-                          placeholder="Create a password (min 6 characters)"
+                          id="signup-name"
+                          type="text"
+                          value={signUpForm.fullName}
+                          onChange={(e) => setSignUpForm({...signUpForm, fullName: e.target.value})}
+                          placeholder="Enter your full name"
                           required
-                          className="h-12 rounded-xl border-gray-200 focus:border-brand-red focus:ring-brand-red/20 pr-12"
+                          className="h-14 rounded-2xl border-2 border-gray-200 focus:border-brand-red focus:ring-4 focus:ring-brand-red/10 text-base transition-all duration-300 hover:border-gray-300"
                         />
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          size="sm"
-                          className="absolute right-3 top-3 h-6 w-6 p-0 hover:bg-gray-100"
-                          onClick={() => setShowPassword(!showPassword)}
-                        >
-                          {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                        </Button>
+                      </div>
+                      
+                      <div className="space-y-3">
+                        <Label htmlFor="signup-email" className="text-sm font-semibold text-gray-700">Email Address</Label>
+                        <Input
+                          id="signup-email"
+                          type="email"
+                          value={signUpForm.email}
+                          onChange={(e) => setSignUpForm({...signUpForm, email: e.target.value})}
+                          placeholder="Enter your email"
+                          required
+                          className="h-14 rounded-2xl border-2 border-gray-200 focus:border-brand-red focus:ring-4 focus:ring-brand-red/10 text-base transition-all duration-300 hover:border-gray-300"
+                        />
+                      </div>
+                      
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="space-y-3">
+                          <Label htmlFor="signup-password" className="text-sm font-semibold text-gray-700">Password</Label>
+                          <div className="relative">
+                            <Input
+                              id="signup-password"
+                              type={showPassword ? "text" : "password"}
+                              value={signUpForm.password}
+                              onChange={(e) => setSignUpForm({...signUpForm, password: e.target.value})}
+                              placeholder="Min 6 characters"
+                              required
+                              className="h-14 rounded-2xl border-2 border-gray-200 focus:border-brand-red focus:ring-4 focus:ring-brand-red/10 pr-14 text-base transition-all duration-300 hover:border-gray-300"
+                            />
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="sm"
+                              className="absolute right-4 top-4 h-6 w-6 p-0 hover:bg-gray-100 rounded-lg"
+                              onClick={() => setShowPassword(!showPassword)}
+                            >
+                              {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                            </Button>
+                          </div>
+                        </div>
+
+                        <div className="space-y-3">
+                          <Label htmlFor="signup-confirm-password" className="text-sm font-semibold text-gray-700">Confirm Password</Label>
+                          <div className="relative">
+                            <Input
+                              id="signup-confirm-password"
+                              type={showConfirmPassword ? "text" : "password"}
+                              value={signUpForm.confirmPassword}
+                              onChange={(e) => setSignUpForm({...signUpForm, confirmPassword: e.target.value})}
+                              placeholder="Confirm password"
+                              required
+                              className="h-14 rounded-2xl border-2 border-gray-200 focus:border-brand-red focus:ring-4 focus:ring-brand-red/10 pr-14 text-base transition-all duration-300 hover:border-gray-300"
+                            />
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="sm"
+                              className="absolute right-4 top-4 h-6 w-6 p-0 hover:bg-gray-100 rounded-lg"
+                              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                            >
+                              {showConfirmPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                            </Button>
+                          </div>
+                        </div>
                       </div>
                     </div>
 
-                    <div className="space-y-2">
-                      <Label htmlFor="signup-confirm-password" className="text-sm font-medium text-gray-700">Confirm Password</Label>
-                      <div className="relative">
-                        <Input
-                          id="signup-confirm-password"
-                          type={showConfirmPassword ? "text" : "password"}
-                          value={signUpForm.confirmPassword}
-                          onChange={(e) => setSignUpForm({...signUpForm, confirmPassword: e.target.value})}
-                          placeholder="Confirm your password"
-                          required
-                          className="h-12 rounded-xl border-gray-200 focus:border-brand-red focus:ring-brand-red/20 pr-12"
-                        />
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          size="sm"
-                          className="absolute right-3 top-3 h-6 w-6 p-0 hover:bg-gray-100"
-                          onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                        >
-                          {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                        </Button>
-                      </div>
-                    </div>
-
-                    <Button type="submit" className="w-full h-12 rounded-xl bg-gradient-to-r from-brand-red to-brand-red-dark hover:shadow-lg transition-all duration-200" size="lg">
+                    <Button type="submit" className="w-full h-14 rounded-2xl bg-gradient-to-r from-brand-red via-brand-red to-brand-red-dark hover:shadow-xl hover:shadow-brand-red/25 transition-all duration-300 text-base font-semibold transform hover:scale-[1.02]" size="lg">
                       Create Account
                     </Button>
                   </form>
 
-                  <div className="relative">
+                  <div className="relative my-8">
                     <div className="absolute inset-0 flex items-center">
-                      <span className="w-full border-t border-gray-200" />
+                      <span className="w-full border-t-2 border-gray-200" />
                     </div>
-                    <div className="relative flex justify-center text-xs uppercase">
-                      <span className="bg-white px-4 text-gray-500 font-medium">Or continue with</span>
+                    <div className="relative flex justify-center text-sm uppercase">
+                      <span className="bg-white px-6 text-gray-500 font-semibold">Or continue with</span>
                     </div>
                   </div>
                   
                   <Button 
                     onClick={handleGoogleSignIn}
-                    className="w-full h-12 rounded-xl border-2 hover:bg-gray-50 transition-all duration-200"
+                    className="w-full h-14 rounded-2xl border-2 border-gray-200 hover:bg-gray-50 hover:border-gray-300 transition-all duration-300 text-base font-semibold transform hover:scale-[1.02]"
                     variant="outline"
                     size="lg"
                   >
-                    <Chrome className="h-5 w-5 mr-3 text-red-500" />
+                    <Chrome className="h-6 w-6 mr-3 text-red-500" />
                     Sign up with Google
                   </Button>
                 </TabsContent>
               </Tabs>
               
-              <div className="text-center text-xs text-gray-500 mt-8 pt-6 border-t border-gray-100">
-                By continuing, you agree to our <span className="text-brand-red hover:underline cursor-pointer">Terms of Service</span> and <span className="text-brand-red hover:underline cursor-pointer">Privacy Policy</span>
+              <div className="text-center text-sm text-gray-500 mt-10 pt-8 border-t-2 border-gray-100">
+                By continuing, you agree to our <span className="text-brand-red hover:underline cursor-pointer font-medium transition-colors">Terms of Service</span> and <span className="text-brand-red hover:underline cursor-pointer font-medium transition-colors">Privacy Policy</span>
               </div>
             </CardContent>
           </Card>
