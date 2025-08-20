@@ -721,57 +721,6 @@ const Loans = () => {
         </div>
       </section>
 
-      {/* Loan Services Footer */}
-      <section className="py-16 bg-muted/30 border-t">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <div>
-              <h4 className="font-semibold text-foreground mb-4">Home Loans</h4>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><a href="#" className="hover:text-foreground">New Home Loans</a></li>
-                <li><a href="#" className="hover:text-foreground">Pre-Approved Loans</a></li>
-                <li><a href="#" className="hover:text-foreground">Home Loan Rates</a></li>
-                <li><a href="#" className="hover:text-foreground">EMI Calculator</a></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold text-foreground mb-4">Property Loans</h4>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><a href="#" className="hover:text-foreground">Loan Against Property</a></li>
-                <li><a href="#" className="hover:text-foreground">Commercial Property Loans</a></li>
-                <li><a href="#" className="hover:text-foreground">Plot Purchase Loans</a></li>
-                <li><a href="#" className="hover:text-foreground">Property Valuation</a></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold text-foreground mb-4">Business Loans</h4>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><a href="#" className="hover:text-foreground">Secured Business Loans</a></li>
-                <li><a href="#" className="hover:text-foreground">Working Capital Loans</a></li>
-                <li><a href="#" className="hover:text-foreground">Equipment Financing</a></li>
-                <li><a href="#" className="hover:text-foreground">Business Expansion</a></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold text-foreground mb-4">Other Services</h4>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><a href="#" className="hover:text-foreground">Balance Transfer</a></li>
-                <li><a href="#" className="hover:text-foreground">Top-up Loans</a></li>
-                <li><a href="#" className="hover:text-foreground">Construction Finance</a></li>
-                <li><a href="#" className="hover:text-foreground">Legal Documentation</a></li>
-              </ul>
-            </div>
-          </div>
-          
-          <div className="mt-12 pt-8 border-t border-border text-center">
-            <p className="text-sm text-muted-foreground">
-              © 2024 Home HNI. All rights reserved. | 
-              <a href="/privacy-policy" className="hover:text-foreground ml-1">Privacy Policy</a> | 
-              <a href="/terms-and-conditions" className="hover:text-foreground ml-1">Terms & Conditions</a>
-            </p>
-          </div>
-        </div>
-      </section>
       
     </div>
   );
