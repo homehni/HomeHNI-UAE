@@ -44,9 +44,8 @@ export const GalleryStep: React.FC<GalleryStepProps> = ({
   };
 
   return (
-    <div className="max-w-2xl mx-auto">
-      <Card>
-        <CardContent className="p-8">
+    <Card>
+      <CardContent className="p-8">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
               <FormField
@@ -104,7 +103,6 @@ export const GalleryStep: React.FC<GalleryStepProps> = ({
             </form>
           </Form>
         </CardContent>
-      </Card>
-    </div>
+    </Card>
   );
 };
