@@ -119,7 +119,7 @@ export const OwnerInfoStep: React.FC<OwnerInfoStepProps> = ({
             Start Posting Your Ad For FREE
           </CardTitle>
         </CardHeader>
-      <CardContent>
+      <CardContent className="mb-6">
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
           {/* Personal Information Section */}
           <div className="space-y-6">
