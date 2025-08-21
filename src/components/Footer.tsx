@@ -202,7 +202,7 @@ const Footer = ({
 
           {/* Copyright */}
           <div className="text-center text-xs text-gray-500">
-            © 2025 HomeHNI Pvt. Ltd. | All Rights Reserved
+            © 2025 Home HNI Pvt. Ltd. | All Rights Reserved
           </div>
 
 
