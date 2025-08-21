@@ -208,19 +208,63 @@ const Interior = () => {
 
               <Input id="design-email" name="email" type="email" placeholder="Email ID" />
 
-              <Select name="spaceType">
-                <SelectTrigger id="space-type"><SelectValue placeholder="Space Type" /></SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="home">Home Interior</SelectItem>
-                  <SelectItem value="villa">Villa Interior</SelectItem>
-                  <SelectItem value="apartment">Apartment</SelectItem>
-                  <SelectItem value="office">Office Interior</SelectItem>
-                  <SelectItem value="retail">Retail Space</SelectItem>
-                  <SelectItem value="restaurant">Restaurant</SelectItem>
-                </SelectContent>
-              </Select>
+              <div className="flex gap-2">
+                <Select name="spaceType">
+                  <SelectTrigger id="space-type" className="flex-1"><SelectValue placeholder="Space Type" /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="home">Home Interior</SelectItem>
+                    <SelectItem value="villa">Villa Interior</SelectItem>
+                    <SelectItem value="apartment">Apartment</SelectItem>
+                    <SelectItem value="office">Office Interior</SelectItem>
+                    <SelectItem value="retail">Retail Space</SelectItem>
+                    <SelectItem value="restaurant">Restaurant</SelectItem>
+                  </SelectContent>
+                </Select>
+                <Input id="design-budget" name="budget" placeholder="Budget Range (₹)" className="flex-1" />
+              </div>
 
-              <Input id="design-budget" name="budget" placeholder="Budget Range (₹)" />
+              <div className="flex gap-2">
+                <Select name="country">
+                  <SelectTrigger id="design-country" className="flex-1"><SelectValue placeholder="Country" /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="india">India</SelectItem>
+                    <SelectItem value="usa">United States</SelectItem>
+                    <SelectItem value="uk">United Kingdom</SelectItem>
+                    <SelectItem value="canada">Canada</SelectItem>
+                    <SelectItem value="australia">Australia</SelectItem>
+                  </SelectContent>
+                </Select>
+                <Select name="state">
+                  <SelectTrigger id="design-state" className="flex-1"><SelectValue placeholder="State" /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="andhra-pradesh">Andhra Pradesh</SelectItem>
+                    <SelectItem value="karnataka">Karnataka</SelectItem>
+                    <SelectItem value="tamil-nadu">Tamil Nadu</SelectItem>
+                    <SelectItem value="telangana">Telangana</SelectItem>
+                    <SelectItem value="maharashtra">Maharashtra</SelectItem>
+                    <SelectItem value="gujarat">Gujarat</SelectItem>
+                    <SelectItem value="rajasthan">Rajasthan</SelectItem>
+                    <SelectItem value="delhi">Delhi</SelectItem>
+                    <SelectItem value="west-bengal">West Bengal</SelectItem>
+                    <SelectItem value="uttar-pradesh">Uttar Pradesh</SelectItem>
+                  </SelectContent>
+                </Select>
+                <Select name="city">
+                  <SelectTrigger id="design-city" className="flex-1"><SelectValue placeholder="City" /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="bangalore">Bangalore</SelectItem>
+                    <SelectItem value="hyderabad">Hyderabad</SelectItem>
+                    <SelectItem value="chennai">Chennai</SelectItem>
+                    <SelectItem value="mumbai">Mumbai</SelectItem>
+                    <SelectItem value="pune">Pune</SelectItem>
+                    <SelectItem value="delhi">Delhi</SelectItem>
+                    <SelectItem value="kolkata">Kolkata</SelectItem>
+                    <SelectItem value="ahmedabad">Ahmedabad</SelectItem>
+                    <SelectItem value="jaipur">Jaipur</SelectItem>
+                    <SelectItem value="lucknow">Lucknow</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
 
               <Button type="submit" className="w-full">Get Free Consultation!</Button>
             </form>
@@ -281,26 +325,76 @@ const Interior = () => {
                   className="h-12 text-base bg-background"
                 />
 
-                <Select name="spaceType">
-                  <SelectTrigger id="space-type-mobile" className="h-12 bg-background">
-                    <SelectValue placeholder="Space Type" />
-                  </SelectTrigger>
-                  <SelectContent className="bg-background border shadow-lg">
-                    <SelectItem value="home">Home Interior</SelectItem>
-                    <SelectItem value="villa">Villa Interior</SelectItem>
-                    <SelectItem value="apartment">Apartment</SelectItem>
-                    <SelectItem value="office">Office Interior</SelectItem>
-                    <SelectItem value="retail">Retail Space</SelectItem>
-                    <SelectItem value="restaurant">Restaurant</SelectItem>
-                  </SelectContent>
-                </Select>
+                <div className="flex gap-3">
+                  <Select name="spaceType">
+                    <SelectTrigger id="space-type-mobile" className="flex-1 h-12 bg-background">
+                      <SelectValue placeholder="Space Type" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-background border shadow-lg">
+                      <SelectItem value="home">Home Interior</SelectItem>
+                      <SelectItem value="villa">Villa Interior</SelectItem>
+                      <SelectItem value="apartment">Apartment</SelectItem>
+                      <SelectItem value="office">Office Interior</SelectItem>
+                      <SelectItem value="retail">Retail Space</SelectItem>
+                      <SelectItem value="restaurant">Restaurant</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <Input 
+                    id="design-budget-mobile" 
+                    name="budget" 
+                    placeholder="Budget Range (₹)" 
+                    className="flex-1 h-12 text-base bg-background"
+                  />
+                </div>
 
-                <Input 
-                  id="design-budget-mobile" 
-                  name="budget" 
-                  placeholder="Budget Range (₹)" 
-                  className="h-12 text-base bg-background"
-                />
+                <div className="flex gap-3">
+                  <Select name="country">
+                    <SelectTrigger id="design-country-mobile" className="flex-1 h-12 bg-background">
+                      <SelectValue placeholder="Country" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-background border shadow-lg">
+                      <SelectItem value="india">India</SelectItem>
+                      <SelectItem value="usa">United States</SelectItem>
+                      <SelectItem value="uk">United Kingdom</SelectItem>
+                      <SelectItem value="canada">Canada</SelectItem>
+                      <SelectItem value="australia">Australia</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <Select name="state">
+                    <SelectTrigger id="design-state-mobile" className="flex-1 h-12 bg-background">
+                      <SelectValue placeholder="State" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-background border shadow-lg">
+                      <SelectItem value="andhra-pradesh">Andhra Pradesh</SelectItem>
+                      <SelectItem value="karnataka">Karnataka</SelectItem>
+                      <SelectItem value="tamil-nadu">Tamil Nadu</SelectItem>
+                      <SelectItem value="telangana">Telangana</SelectItem>
+                      <SelectItem value="maharashtra">Maharashtra</SelectItem>
+                      <SelectItem value="gujarat">Gujarat</SelectItem>
+                      <SelectItem value="rajasthan">Rajasthan</SelectItem>
+                      <SelectItem value="delhi">Delhi</SelectItem>
+                      <SelectItem value="west-bengal">West Bengal</SelectItem>
+                      <SelectItem value="uttar-pradesh">Uttar Pradesh</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <Select name="city">
+                    <SelectTrigger id="design-city-mobile" className="flex-1 h-12 bg-background">
+                      <SelectValue placeholder="City" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-background border shadow-lg">
+                      <SelectItem value="bangalore">Bangalore</SelectItem>
+                      <SelectItem value="hyderabad">Hyderabad</SelectItem>
+                      <SelectItem value="chennai">Chennai</SelectItem>
+                      <SelectItem value="mumbai">Mumbai</SelectItem>
+                      <SelectItem value="pune">Pune</SelectItem>
+                      <SelectItem value="delhi">Delhi</SelectItem>
+                      <SelectItem value="kolkata">Kolkata</SelectItem>
+                      <SelectItem value="ahmedabad">Ahmedabad</SelectItem>
+                      <SelectItem value="jaipur">Jaipur</SelectItem>
+                      <SelectItem value="lucknow">Lucknow</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
 
                 <Button type="submit" className="w-full h-12 text-base font-semibold bg-red-600 hover:bg-red-700 text-white mt-6">
                   Get Free Consultation!
