@@ -1,10 +1,11 @@
 
 import { useState } from 'react';
-import { X, ChevronDown, User, UserPlus, LogIn, LogOut, Settings } from 'lucide-react';
+import { X, ChevronDown, User, UserPlus, LogIn, LogOut, Settings, Shield } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
+import { useAdminAuth } from '@/hooks/useAdminAuth';
 import { useToast } from '@/hooks/use-toast';
 import LegalServicesForm from './LegalServicesForm';
 
@@ -18,6 +19,7 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
   const [isLegalFormOpen, setIsLegalFormOpen] = useState(false);
   const navigate = useNavigate();
   const { user, signOut } = useAuth();
+  const { isAdmin, loading: adminLoading } = useAdminAuth();
   const { toast } = useToast();
 
   const toggleSection = (section: string) => {
@@ -38,8 +40,13 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
     onClose(); // Close sidebar when navigating
   };
 
-  const handleAuthClick = () => {
+const handleAuthClick = () => {
     navigate('/auth');
+    onClose();
+  };
+
+  const handleAdminLoginClick = () => {
+    navigate('/admin/auth');
     onClose();
   };
 
@@ -165,7 +172,7 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
             </Button>
           </div>
 
-          {/* User Section */}
+{/* User Section */}
           <div className="p-4 border-b border-gray-200">
             {user ? (
               <div className="space-y-3">
@@ -183,6 +190,11 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
                     <p className="text-sm text-gray-500 truncate">
                       {user.email}
                     </p>
+                    {!adminLoading && isAdmin && (
+                      <p className="text-xs font-medium text-green-600 truncate">
+                        Logged in as Admin
+                      </p>
+                    )}
                   </div>
                 </div>
                 <div className="flex flex-col space-y-2">
@@ -194,6 +206,16 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
                     <Settings size={16} className="mr-2" />
                     Dashboard
                   </Button>
+                  {!adminLoading && isAdmin && (
+                    <Button 
+                      variant="outline" 
+                      className="w-full justify-start border-green-600 text-green-600 hover:bg-green-600 hover:text-white"
+                      onClick={() => { navigate('/admin'); onClose(); }}
+                    >
+                      <Shield size={16} className="mr-2" />
+                      Admin Dashboard
+                    </Button>
+                  )}
                   <Button 
                     variant="ghost" 
                     className="w-full justify-start text-gray-600 hover:text-gray-800"
@@ -220,6 +242,14 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
                 >
                   <LogIn size={16} className="mr-2" />
                   Login
+                </Button>
+                <Button 
+                  variant="outline" 
+                  className="w-full border-orange-600 text-orange-600 hover:bg-orange-600 hover:text-white"
+                  onClick={handleAdminLoginClick}
+                >
+                  <Shield size={16} className="mr-2" />
+                  Admin Login
                 </Button>
               </div>
             )}
