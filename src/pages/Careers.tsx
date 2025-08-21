@@ -114,7 +114,7 @@ const Careers = () => {
                 <Input id="career-email" name="email" type="email" placeholder="Email ID" required />
 
                 <div className="flex gap-2">
-                  <Select defaultValue="India" name="country">
+                  <Select name="country">
                     <SelectTrigger className="flex-1"><SelectValue placeholder="Country" /></SelectTrigger>
                     <SelectContent>
                       <SelectItem value="India">India</SelectItem>
@@ -200,7 +200,7 @@ const Careers = () => {
                   <Input id="career-email-mobile" name="email" type="email" placeholder="Email ID" className="h-12 text-base bg-background" required />
 
                   <div className="flex gap-3">
-                    <Select defaultValue="India" name="country">
+                    <Select name="country">
                       <SelectTrigger className="flex-1 h-12 bg-background">
                         <SelectValue placeholder="Country" />
                       </SelectTrigger>
