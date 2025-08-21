@@ -241,9 +241,9 @@ const FeaturedProperties = ({
   }, [availableTypes, activeType]);
   const filtered = useMemo(() => activeType === 'All' ? properties : properties.filter(p => p.propertyType === activeType), [activeType, properties]);
   
-  // Show only first 11 properties initially, all when showAll is true
+  // Show only first 20 properties initially, all when showAll is true
   const displayedProperties = useMemo(() => {
-    return showAll ? filtered : filtered.slice(0, 11);
+    return showAll ? filtered : filtered.slice(0, 20);
   }, [filtered, showAll]);
 
   const handleViewAllClick = () => {
@@ -291,11 +291,11 @@ const FeaturedProperties = ({
           </div>
         </Card>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 lg:gap-3 justify-items-center">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-1 lg:gap-2 justify-items-center">
           {displayedProperties.map(property => <PropertyCard key={property.id} {...property} size="compact" />)}
         </div>
 
-        {filtered.length > 11 && (
+        {filtered.length > 20 && (
           <div className="text-center mt-12">
             <button 
               onClick={handleViewAllClick}
