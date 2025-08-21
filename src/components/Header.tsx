@@ -145,8 +145,8 @@ const Header = () => {
                 <Logo variant={isScrolled ? "scrolled" : "default"} />
               </div>
 
-              {/* Location Selector - Hidden on Architects, Interior, Painting Cleaning, and Packers Movers page */}
-              {!isArchitectsPage && !isInteriorPage && !isPaintingCleaningPage && !isPackersMoversPage && (
+              {/* Location Selector - Hidden on Interior, Painting Cleaning, and Packers Movers page */}
+              {!isInteriorPage && !isPaintingCleaningPage && !isPackersMoversPage && (
                 <Select>
                   <SelectTrigger className={`w-28 sm:w-32 transition-all duration-500 [&>svg]:text-current ${isScrolled ? 'bg-gray-100 text-gray-800 hover:bg-gray-200 border-gray-300' : 'bg-white/20 backdrop-blur-sm text-white border-white/30 hover:bg-white/30'}`}>
                     <SelectValue placeholder="All India" defaultValue="all-india" />
@@ -162,8 +162,8 @@ const Header = () => {
                 </Select>
               )}
 
-              {/* Desktop Navigation Links - Hidden on Architects, Interior, Painting Cleaning, and Packers Movers page */}
-              {!isArchitectsPage && !isInteriorPage && !isPaintingCleaningPage && !isPackersMoversPage && <nav className="hidden lg:flex items-center space-x-5">
+              {/* Desktop Navigation Links - Hidden on Interior, Painting Cleaning, and Packers Movers page */}
+              {!isInteriorPage && !isPaintingCleaningPage && !isPackersMoversPage && <nav className="hidden lg:flex items-center space-x-5">
   <MegaMenu isScrolled={isScrolled} />
   
   <a href="#" onClick={e => {
@@ -267,8 +267,8 @@ const Header = () => {
                   </svg>
                   <span className="font-medium text-sm">+91 80740 17388</span>
                 </a>}
-               {/* Post Property Button - Hidden on Architects, Interior, Painting Cleaning, and Packers Movers page */}
-               {!isArchitectsPage && !isInteriorPage && !isPaintingCleaningPage && !isPackersMoversPage && <Button variant="outline" size="sm" onClick={() => handlePostPropertyClick()} className={`font-medium px-1.5 sm:px-3 py-1.5 text-xs sm:text-sm transition-all duration-500 ${isScrolled ? 'bg-white text-brand-red border-gray-300 hover:bg-gray-50' : 'bg-white text-brand-red border-white/50 hover:bg-white/90'}`}>
+               {/* Post Property Button - Hidden on Interior, Painting Cleaning, and Packers Movers page */}
+               {!isInteriorPage && !isPaintingCleaningPage && !isPackersMoversPage && <Button variant="outline" size="sm" onClick={() => handlePostPropertyClick()} className={`font-medium px-1.5 sm:px-3 py-1.5 text-xs sm:text-sm transition-all duration-500 ${isScrolled ? 'bg-white text-brand-red border-gray-300 hover:bg-gray-50' : 'bg-white text-brand-red border-white/50 hover:bg-white/90'}`}>
                   <span className="hidden sm:inline">Post property</span>
                   <span className="sm:hidden">Post</span>
                   <span className="ml-1 bg-green-500 text-white text-[10px] px-1 py-0.5 rounded">Free</span>
@@ -324,8 +324,8 @@ const Header = () => {
                   </DropdownMenuContent>
                 </DropdownMenu>}
 
-               {/* Sidebar toggle button - Hidden on Architects, Interior, Painting Cleaning, and Packers Movers page */}
-               {!isArchitectsPage && !isInteriorPage && !isPaintingCleaningPage && !isPackersMoversPage && <Button variant="ghost" size="sm" className={`flex items-center space-x-2 p-2 transition-colors duration-500 ${isScrolled ? 'text-gray-800 hover:bg-gray-100' : 'text-white hover:bg-white/10'}`} onClick={() => setIsSidebarOpen(true)}>
+               {/* Sidebar toggle button - Hidden on Interior, Painting Cleaning, and Packers Movers page */}
+               {!isInteriorPage && !isPaintingCleaningPage && !isPackersMoversPage && <Button variant="ghost" size="sm" className={`flex items-center space-x-2 p-2 transition-colors duration-500 ${isScrolled ? 'text-gray-800 hover:bg-gray-100' : 'text-white hover:bg-white/10'}`} onClick={() => setIsSidebarOpen(true)}>
                   <Menu size={20} />
                   <span className={`text-sm font-medium ${isScrolled ? 'text-gray-800' : 'text-white'}`}>Menu</span>
                 </Button>}
@@ -334,8 +334,8 @@ const Header = () => {
         </div>
       </header>
       
-        {/* Sidebar Component - Hidden on Architects, Interior, Painting Cleaning, and Packers Movers page */}
-        {!isArchitectsPage && !isInteriorPage && !isPaintingCleaningPage && !isPackersMoversPage && <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />}
+        {/* Sidebar Component - Hidden on Interior, Painting Cleaning, and Packers Movers page */}
+        {!isInteriorPage && !isPaintingCleaningPage && !isPackersMoversPage && <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />}
       
       {/* Legal Services Form */}
       <LegalServicesForm isOpen={isLegalFormOpen} onClose={() => setIsLegalFormOpen(false)} />
