@@ -48,10 +48,7 @@ export const PGHostelMultiStepForm: React.FC<PGHostelMultiStepFormProps> = ({
   });
 
   const [roomTypes, setRoomTypes] = useState({
-    single: false,
-    double: false,
-    three: false,
-    four: false,
+    selectedType: '' as 'single' | 'double' | 'three' | 'four' | '',
   });
 
 

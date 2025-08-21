@@ -20,10 +20,7 @@ interface PgHostelRoomDetails {
 }
 
 interface RoomType {
-  single: boolean;
-  double: boolean;
-  three: boolean;
-  four: boolean;
+  selectedType: 'single' | 'double' | 'three' | 'four' | '';
 }
 
 interface PgHostelRoomDetailsStepProps {
@@ -89,10 +86,10 @@ export function PgHostelRoomDetailsStep({
               </div>
             </div>
             <CardTitle className="text-2xl text-foreground">
-              {roomTypes.single ? 'Single' : 
-               roomTypes.double ? 'Double' : 
-               roomTypes.three ? 'Three Sharing' : 
-               roomTypes.four ? 'Four Sharing' : 'Single'} Room Details
+              {roomTypes.selectedType === 'single' ? 'Single' : 
+               roomTypes.selectedType === 'double' ? 'Double' : 
+               roomTypes.selectedType === 'three' ? 'Three Sharing' : 
+               roomTypes.selectedType === 'four' ? 'Four Sharing' : 'Single'} Room Details
             </CardTitle>
           </CardHeader>
           <CardContent className="px-0">
