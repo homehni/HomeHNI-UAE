@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -9,9 +9,50 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Marquee from '@/components/Marquee';
 const Careers = () => {
+  const [statesData, setStatesData] = useState<any>(null);
+  const [selectedState, setSelectedState] = useState("");
+  const [selectedStateDesktop, setSelectedStateDesktop] = useState("");
+  const [cities, setCities] = useState<string[]>([]);
+  const [citiesDesktop, setCitiesDesktop] = useState<string[]>([]);
+
   const {
     toast
   } = useToast();
+
+  // Load states and cities data
+  useEffect(() => {
+    const loadStatesData = async () => {
+      try {
+        const response = await fetch('/data/india_states_cities.json');
+        const data = await response.json();
+        setStatesData(data);
+      } catch (error) {
+        console.error('Failed to load states data:', error);
+      }
+    };
+    loadStatesData();
+  }, []);
+
+  // Update cities when state changes (mobile)
+  useEffect(() => {
+    if (statesData && selectedState) {
+      const cities = statesData[selectedState];
+      setCities(cities || []);
+    } else {
+      setCities([]);
+    }
+  }, [selectedState, statesData]);
+
+  // Update cities when state changes (desktop)
+  useEffect(() => {
+    if (statesData && selectedStateDesktop) {
+      const cities = statesData[selectedStateDesktop];
+      setCitiesDesktop(cities || []);
+    } else {
+      setCitiesDesktop([]);
+    }
+  }, [selectedStateDesktop, statesData]);
+
   useEffect(() => {
     // Smooth scroll to top when component mounts
     const scrollToTop = () => {
@@ -72,6 +113,40 @@ const Careers = () => {
 
                 <Input id="career-email" name="email" type="email" placeholder="Email ID" required />
 
+                <div className="flex gap-2">
+                  <Select defaultValue="India" name="country">
+                    <SelectTrigger className="flex-1"><SelectValue placeholder="Country" /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="India">India</SelectItem>
+                      <SelectItem value="USA">USA</SelectItem>
+                      <SelectItem value="UK">UK</SelectItem>
+                      <SelectItem value="Other">Other</SelectItem>
+                    </SelectContent>
+                  </Select>
+
+                  <Select name="state" onValueChange={setSelectedStateDesktop}>
+                    <SelectTrigger className="flex-1"><SelectValue placeholder="State" /></SelectTrigger>
+                    <SelectContent>
+                      {statesData && Object.keys(statesData).map((state: string) => (
+                        <SelectItem key={state} value={state}>
+                          {state}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+
+                  <Select name="city">
+                    <SelectTrigger className="flex-1"><SelectValue placeholder="City" /></SelectTrigger>
+                    <SelectContent>
+                      {citiesDesktop.map((city: string) => (
+                        <SelectItem key={city} value={city}>
+                          {city}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
                 <Select name="position">
                   <SelectTrigger id="position"><SelectValue placeholder="Position of Interest" /></SelectTrigger>
                   <SelectContent>
@@ -126,6 +201,46 @@ const Careers = () => {
                   </div>
 
                   <Input id="career-email-mobile" name="email" type="email" placeholder="Email ID" className="h-12 text-base bg-background" required />
+
+                  <div className="flex gap-3">
+                    <Select defaultValue="India" name="country">
+                      <SelectTrigger className="flex-1 h-12 bg-background">
+                        <SelectValue placeholder="Country" />
+                      </SelectTrigger>
+                      <SelectContent className="bg-background border shadow-lg">
+                        <SelectItem value="India">India</SelectItem>
+                        <SelectItem value="USA">USA</SelectItem>
+                        <SelectItem value="UK">UK</SelectItem>
+                        <SelectItem value="Other">Other</SelectItem>
+                      </SelectContent>
+                    </Select>
+
+                    <Select name="state" onValueChange={setSelectedState}>
+                      <SelectTrigger className="flex-1 h-12 bg-background">
+                        <SelectValue placeholder="State" />
+                      </SelectTrigger>
+                      <SelectContent className="bg-background border shadow-lg">
+                        {statesData && Object.keys(statesData).map((state: string) => (
+                          <SelectItem key={state} value={state}>
+                            {state}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+
+                    <Select name="city">
+                      <SelectTrigger className="flex-1 h-12 bg-background">
+                        <SelectValue placeholder="City" />
+                      </SelectTrigger>
+                      <SelectContent className="bg-background border shadow-lg">
+                        {cities.map((city: string) => (
+                          <SelectItem key={city} value={city}>
+                            {city}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
 
                   <Select name="position">
                     <SelectTrigger id="position-mobile" className="h-12 bg-background">
