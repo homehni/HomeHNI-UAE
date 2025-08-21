@@ -160,7 +160,7 @@ const Careers = () => {
 
                 
 
-                <Textarea id="career-message" name="message" placeholder="Brief message about why you'd be a great fit" rows={3} />
+                <Textarea id="career-message" name="message" placeholder="Brief message about why you'd be a great fit" rows={2} />
 
                 <Button type="submit" className="w-full">Submit Application</Button>
               </form>
