@@ -8,9 +8,9 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { LocationDetails } from '@/types/property';
 const resaleLocationSchema = z.object({
-  state: z.string().min(1, 'State is required'),
-  city: z.string().min(1, 'City is required'),
-  locality: z.string().min(1, 'Locality is required'),
+  state: z.string().optional(),
+  city: z.string().optional(),
+  locality: z.string().optional(),
   landmark: z.string().optional()
 });
 
@@ -44,9 +44,12 @@ export const ResaleLocationDetailsStep: React.FC<ResaleLocationDetailsStepProps>
     fetch('/data/india_states_cities.json').then(response => response.json()).then(data => setStatesCities(data)).catch(error => console.error('Error loading states and cities:', error));
   }, []);
   const onSubmit = (data: ResaleLocationData) => {
-    // Add pincode and societyName as empty strings to match LocationDetails interface
+    // Add required fields with defaults to match LocationDetails interface
     const locationData: LocationDetails = {
-      ...data,
+      state: data.state || '',
+      city: data.city || '',
+      locality: data.locality || '',
+      landmark: data.landmark || '',
       pincode: '',
       societyName: ''
     };
@@ -71,7 +74,7 @@ export const ResaleLocationDetailsStep: React.FC<ResaleLocationDetailsStepProps>
               <FormField control={form.control} name="state" render={({
               field
             }) => <FormItem>
-                    <FormLabel>State *</FormLabel>
+                    <FormLabel>State</FormLabel>
                     <Select onValueChange={handleStateChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger>
@@ -91,7 +94,7 @@ export const ResaleLocationDetailsStep: React.FC<ResaleLocationDetailsStepProps>
               <FormField control={form.control} name="city" render={({
               field
             }) => <FormItem>
-                    <FormLabel>City *</FormLabel>
+                    <FormLabel>City</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger>
@@ -111,7 +114,7 @@ export const ResaleLocationDetailsStep: React.FC<ResaleLocationDetailsStepProps>
               <FormField control={form.control} name="locality" render={({
               field
             }) => <FormItem>
-                    <FormLabel>Locality/Area *</FormLabel>
+                    <FormLabel>Locality/Area</FormLabel>
                     <FormControl>
                       <Input placeholder="e.g., Koramangala, Bandra West" {...field} />
                     </FormControl>

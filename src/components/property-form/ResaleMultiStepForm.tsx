@@ -115,37 +115,11 @@ export const ResaleMultiStepForm: React.FC<ResaleMultiStepFormProps> = ({
   const handleSubmit = () => {
     const formData = getFormData();
     
-    // Enhanced validation before submission
-    const ownerValid = !!(formData.ownerInfo?.fullName && formData.ownerInfo?.phoneNumber && 
-                         formData.ownerInfo?.email && formData.ownerInfo?.role);
-    const propertyValid = !!(formData.propertyInfo?.propertyDetails?.title && 
-                           formData.propertyInfo?.locationDetails?.state && 
-                           formData.propertyInfo?.saleDetails?.expectedPrice);
+    // Submit form without validation - all fields are now optional
+    console.log('Resale form submitted with data:', formData);
     
-    // Enhanced image validation
-    const imageValid = !!(formData.propertyInfo?.gallery?.images && 
-                         formData.propertyInfo.gallery.images.length >= 3);
-    
-    console.log('Resale form validation:', { 
-      ownerValid, 
-      propertyValid, 
-      imageValid, 
-      formData 
-    });
-    
-    if (ownerValid && propertyValid && imageValid && formData.ownerInfo && formData.propertyInfo) {
+    if (formData.ownerInfo && formData.propertyInfo) {
       onSubmit(formData as SalePropertyFormData);
-    } else {
-      console.error('Resale form validation failed:', { 
-        ownerValid, 
-        propertyValid, 
-        imageValid,
-        missingFields: {
-          owner: !ownerValid ? 'Missing owner information' : null,
-          property: !propertyValid ? 'Missing property information' : null,
-          images: !imageValid ? 'Need at least 3 images' : null
-        }
-      });
     }
   };
 

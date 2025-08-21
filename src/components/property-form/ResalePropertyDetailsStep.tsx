@@ -11,16 +11,16 @@ import { PropertyDetails } from '@/types/property';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 
 const resalePropertyDetailsSchema = z.object({
-  propertyType: z.string().min(1, 'Please select property type'),
-  bhkType: z.string().min(1, 'Please select BHK type'),
-  ownershipType: z.string().min(1, 'Please select ownership type'),
-  builtUpArea: z.number().min(1, 'Built up area is required'),
-  carpetArea: z.number().min(1, 'Carpet area must be greater than 0').optional(),
-  propertyAge: z.string().min(1, 'Please select property age'),
-  facing: z.string().min(1, 'Please select facing direction'),
-  floorType: z.string().min(1, 'Please select floor type'),
-  floorNo: z.union([z.number().min(0, 'Floor number cannot be negative'), z.string().min(1, 'Please select floor')]),
-  totalFloors: z.union([z.number().min(1, 'Total floors must be at least 1'), z.string().min(1, 'Please select total floors')]),
+  propertyType: z.string().optional(),
+  bhkType: z.string().optional(),
+  ownershipType: z.string().optional(),
+  builtUpArea: z.number().optional(),
+  carpetArea: z.number().optional(),
+  propertyAge: z.string().optional(),
+  facing: z.string().optional(),
+  floorType: z.string().optional(),
+  floorNo: z.union([z.number(), z.string()]).optional(),
+  totalFloors: z.union([z.number(), z.string()]).optional(),
 });
 
 type ResalePropertyDetailsFormData = z.infer<typeof resalePropertyDetailsSchema>;
@@ -90,7 +90,7 @@ export const ResalePropertyDetailsStep: React.FC<ResalePropertyDetailsStepProps>
               name="propertyType"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-sm font-medium">Property Type*</FormLabel>
+                  <FormLabel className="text-sm font-medium">Property Type</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger className="h-12">
@@ -117,7 +117,7 @@ export const ResalePropertyDetailsStep: React.FC<ResalePropertyDetailsStepProps>
               name="bhkType"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-sm font-medium">BHK Type*</FormLabel>
+                  <FormLabel className="text-sm font-medium">BHK Type</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger className="h-12">
@@ -147,7 +147,7 @@ export const ResalePropertyDetailsStep: React.FC<ResalePropertyDetailsStepProps>
             name="ownershipType"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-sm font-medium">Ownership Type*</FormLabel>
+                <FormLabel className="text-sm font-medium">Ownership Type</FormLabel>
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
                     <SelectTrigger className="h-12">
@@ -173,7 +173,7 @@ export const ResalePropertyDetailsStep: React.FC<ResalePropertyDetailsStepProps>
               name="builtUpArea"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-sm font-medium">Built Up Area*</FormLabel>
+                  <FormLabel className="text-sm font-medium">Built Up Area</FormLabel>
                   <div className="relative">
                     <FormControl>
                       <Input
@@ -240,7 +240,7 @@ export const ResalePropertyDetailsStep: React.FC<ResalePropertyDetailsStepProps>
               name="propertyAge"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-sm font-medium">Property Age*</FormLabel>
+                  <FormLabel className="text-sm font-medium">Property Age</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger className="h-12">
@@ -268,7 +268,7 @@ export const ResalePropertyDetailsStep: React.FC<ResalePropertyDetailsStepProps>
               name="facing"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-sm font-medium">Facing*</FormLabel>
+                  <FormLabel className="text-sm font-medium">Facing</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger className="h-12">
@@ -299,7 +299,7 @@ export const ResalePropertyDetailsStep: React.FC<ResalePropertyDetailsStepProps>
               name="floorType"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-sm font-medium">Floor Type*</FormLabel>
+                  <FormLabel className="text-sm font-medium">Floor Type</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger className="h-12">
@@ -325,7 +325,7 @@ export const ResalePropertyDetailsStep: React.FC<ResalePropertyDetailsStepProps>
               name="floorNo"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-sm font-medium">Floor*</FormLabel>
+                  <FormLabel className="text-sm font-medium">Floor</FormLabel>
                   <Select
                     onValueChange={(value) =>
                       value === 'lower' || value === 'upper' || value === '99+'
@@ -364,7 +364,7 @@ export const ResalePropertyDetailsStep: React.FC<ResalePropertyDetailsStepProps>
               name="totalFloors"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-sm font-medium">Total Floor*</FormLabel>
+                  <FormLabel className="text-sm font-medium">Total Floor</FormLabel>
                   <Select
                     onValueChange={(value) =>
                       value === '99+' ? field.onChange(value) : field.onChange(parseInt(value))

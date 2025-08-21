@@ -10,9 +10,11 @@ import { PropertyGallery } from '@/types/property';
 import { Camera, ImageIcon } from 'lucide-react';
 
 const resaleGallerySchema = z.object({
-  images: z.array(z.any()).min(3, 'Minimum 3 images required').max(15, 'Maximum 15 images allowed'),
+  images: z.array(z.any()).optional(),
   video: z.any().optional(),
 });
+
+type ResaleGalleryFormData = z.infer<typeof resaleGallerySchema>;
 
 interface ResaleGalleryStepProps {
   initialData?: Partial<PropertyGallery>;
@@ -25,7 +27,7 @@ export const ResaleGalleryStep: React.FC<ResaleGalleryStepProps> = ({
   onNext,
   onBack,
 }) => {
-  const form = useForm<PropertyGallery>({
+  const form = useForm<ResaleGalleryFormData>({
     resolver: zodResolver(resaleGallerySchema),
     defaultValues: {
       images: initialData.images || [],
@@ -33,8 +35,12 @@ export const ResaleGalleryStep: React.FC<ResaleGalleryStepProps> = ({
     },
   });
 
-  const onSubmit = (data: PropertyGallery) => {
-    onNext(data);
+  const onSubmit = (data: ResaleGalleryFormData) => {
+    const galleryData: PropertyGallery = {
+      images: data.images || [],
+      video: data.video,
+    };
+    onNext(galleryData);
   };
 
   return (
@@ -60,7 +66,7 @@ export const ResaleGalleryStep: React.FC<ResaleGalleryStepProps> = ({
                         images={field.value || []}
                         onImagesChange={field.onChange}
                         maxImages={15}
-                        minImages={3}
+                        minImages={0}
                       />
                     </div>
                   </FormControl>

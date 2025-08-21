@@ -102,7 +102,7 @@ export const ResaleAmenitiesStep: React.FC<ResaleAmenitiesStepProps> = ({
                 name="bathrooms"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Bathroom(s)*</FormLabel>
+                    <FormLabel>Bathroom(s)</FormLabel>
                     <div className="flex items-center space-x-2">
                       <Button
                         type="button"
@@ -231,7 +231,7 @@ export const ResaleAmenitiesStep: React.FC<ResaleAmenitiesStepProps> = ({
                 name="gym"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Gym*</FormLabel>
+                    <FormLabel>Gym</FormLabel>
                     <div className="flex space-x-2">
                       <Button
                         type="button"
@@ -263,7 +263,7 @@ export const ResaleAmenitiesStep: React.FC<ResaleAmenitiesStepProps> = ({
                 name="gatedSecurity"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Gated Security*</FormLabel>
+                    <FormLabel>Gated Security</FormLabel>
                     <div className="flex space-x-2">
                       <Button
                         type="button"
@@ -298,7 +298,7 @@ export const ResaleAmenitiesStep: React.FC<ResaleAmenitiesStepProps> = ({
                 name="whoWillShow"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Who will show the property?*</FormLabel>
+                    <FormLabel>Who will show the property?</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger>

@@ -95,29 +95,8 @@ export const useSalePropertyForm = () => {
   });
 
   const isStepValid = (step: number): boolean => {
-    switch (step) {
-      case 1:
-        return !!(ownerInfo.phoneNumber && ownerInfo.role &&
-                 ownerInfo.city && ownerInfo.propertyType && ownerInfo.listingType);
-      case 2:
-        return !!(propertyDetails.title && propertyDetails.propertyType && propertyDetails.bhkType && 
-                 propertyDetails.bathrooms && propertyDetails.furnishingStatus);
-      case 3:
-        return !!(locationDetails.state && locationDetails.city && locationDetails.locality && 
-                 locationDetails.pincode);
-      case 4:
-        return !!(saleDetails.listingType && saleDetails.expectedPrice);
-      case 5:
-        return true; // Amenities are optional
-      case 6:
-        return !!(gallery.images && gallery.images.length >= 3);
-      case 7:
-        return true; // Additional info is optional
-      case 8:
-        return !!(scheduleInfo.availability); // Schedule step
-      default:
-        return true;
-    }
+    // All steps are now optional - users can progress regardless of field completion
+    return true;
   };
 
   return {

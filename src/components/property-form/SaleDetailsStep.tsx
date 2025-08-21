@@ -16,11 +16,11 @@ import { format } from 'date-fns';
 import { SaleDetails } from '@/types/saleProperty';
 
 const saleDetailsSchema = z.object({
-  expectedPrice: z.number().min(1, 'Price is required'),
+  expectedPrice: z.number().optional(),
   priceNegotiable: z.boolean().optional(),
   possessionDate: z.string().optional(),
-  propertyAge: z.string().min(1, 'Property age is required'),
-  registrationStatus: z.enum(['ready_to_move', 'under_construction']),
+  propertyAge: z.string().optional(),
+  registrationStatus: z.enum(['ready_to_move', 'under_construction']).optional(),
   homeLoanAvailable: z.boolean().optional(),
   maintenanceCharges: z.number().optional(),
   pricePerSqFt: z.number().optional(),
@@ -70,9 +70,16 @@ export const SaleDetailsStep: React.FC<SaleDetailsStepProps> = ({
 
   const onSubmit = (data: SaleDetailsForm) => {
     const saleData: SaleDetails = {
-      ...data,
       listingType: 'Sale',
+      expectedPrice: data.expectedPrice || 0,
+      priceNegotiable: data.priceNegotiable,
       possessionDate: selectedDate ? selectedDate.toISOString().split('T')[0] : undefined,
+      propertyAge: data.propertyAge,
+      registrationStatus: data.registrationStatus || 'ready_to_move',
+      homeLoanAvailable: data.homeLoanAvailable,
+      maintenanceCharges: data.maintenanceCharges,
+      pricePerSqFt: data.pricePerSqFt,
+      bookingAmount: data.bookingAmount,
     };
     onNext(saleData);
   };
@@ -91,7 +98,7 @@ export const SaleDetailsStep: React.FC<SaleDetailsStepProps> = ({
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <Label htmlFor="expectedPrice" className="text-sm font-medium">
-              Sale Price (₹) *
+              Sale Price (₹)
             </Label>
             <Input
               id="expectedPrice"
@@ -135,7 +142,7 @@ export const SaleDetailsStep: React.FC<SaleDetailsStepProps> = ({
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <Label htmlFor="propertyAge" className="text-sm font-medium">
-              Property Age *
+              Property Age
             </Label>
             <Select
               value={watchedValues.propertyAge}
@@ -161,7 +168,7 @@ export const SaleDetailsStep: React.FC<SaleDetailsStepProps> = ({
 
           <div>
             <Label htmlFor="registrationStatus" className="text-sm font-medium">
-              Registration Status *
+              Registration Status
             </Label>
             <Select
               value={watchedValues.registrationStatus}
@@ -259,7 +266,6 @@ export const SaleDetailsStep: React.FC<SaleDetailsStepProps> = ({
           </Button>
           <Button 
             type="submit" 
-            disabled={!isValid}
             className="h-12 px-8"
           >
             Save & Continue

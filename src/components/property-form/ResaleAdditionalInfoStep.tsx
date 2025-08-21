@@ -10,10 +10,10 @@ import { Input } from '@/components/ui/input';
 import { AdditionalInfo } from '@/types/property';
 
 const resaleAdditionalInfoSchema = z.object({
-  allotmentLetter: z.string().min(1, "Please select if you have allotment letter"),
-  saleDeedCertificate: z.string().min(1, "Please select if you have sale deed certificate"),
-  propertyTaxPaid: z.string().min(1, "Please select if you have paid property tax"),
-  occupancyCertificate: z.string().min(1, "Please select if you have occupancy certificate"),
+  allotmentLetter: z.string().optional(),
+  saleDeedCertificate: z.string().optional(),
+  propertyTaxPaid: z.string().optional(),
+  occupancyCertificate: z.string().optional(),
 });
 
 type ResaleAdditionalInfoData = z.infer<typeof resaleAdditionalInfoSchema>;
@@ -60,7 +60,7 @@ export const ResaleAdditionalInfoStep: React.FC<ResaleAdditionalInfoStepProps> =
                 name="allotmentLetter"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-base font-medium">Do You have Allotment Letter?*</FormLabel>
+                    <FormLabel className="text-base font-medium">Do You have Allotment Letter?</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger>
@@ -82,7 +82,7 @@ export const ResaleAdditionalInfoStep: React.FC<ResaleAdditionalInfoStepProps> =
                 name="saleDeedCertificate"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-base font-medium">Do You have Sale Deed Certificate?*</FormLabel>
+                    <FormLabel className="text-base font-medium">Do You have Sale Deed Certificate?</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger>
@@ -104,7 +104,7 @@ export const ResaleAdditionalInfoStep: React.FC<ResaleAdditionalInfoStepProps> =
                 name="propertyTaxPaid"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-base font-medium">Have you paid Property Tax?*</FormLabel>
+                    <FormLabel className="text-base font-medium">Have you paid Property Tax?</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger>
@@ -126,7 +126,7 @@ export const ResaleAdditionalInfoStep: React.FC<ResaleAdditionalInfoStepProps> =
                 name="occupancyCertificate"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-base font-medium">Do You have Occupancy Certificate?*</FormLabel>
+                    <FormLabel className="text-base font-medium">Do You have Occupancy Certificate?</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger>

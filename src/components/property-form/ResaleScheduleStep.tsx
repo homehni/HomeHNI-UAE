@@ -9,7 +9,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Clock, Calendar, Eye, CheckCircle } from 'lucide-react';
 
 const resaleScheduleSchema = z.object({
-  availability: z.enum(['everyday', 'weekday', 'weekend']),
+  availability: z.enum(['everyday', 'weekday', 'weekend']).optional(),
   startTime: z.string().optional(),
   endTime: z.string().optional(),
   availableAllDay: z.boolean().optional(),
