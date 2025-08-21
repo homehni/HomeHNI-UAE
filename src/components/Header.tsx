@@ -202,7 +202,7 @@ const Header = () => {
           <button onClick={() => handlePostPropertyClick('Owner')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
            Owners
           </button>
-          <button onClick={() => navigate('/handover-services')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+          <button onClick={() => handlePostPropertyClick('Tenant')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
             Tenants
           </button>
           
