@@ -41,10 +41,6 @@ export const LandPlotGalleryStep: React.FC<LandPlotGalleryStepProps> = ({
   };
 
   const onSubmit = (data: GalleryForm) => {
-    if (data.images.length < 3) {
-      alert('Please upload at least 3 images of your land/plot');
-      return;
-    }
     onNext(data);
   };
 
@@ -55,7 +51,7 @@ export const LandPlotGalleryStep: React.FC<LandPlotGalleryStepProps> = ({
           Photos & Videos
         </CardTitle>
         <p className="text-gray-600">
-          Upload high-quality photos and videos of your land/plot. Minimum 3 photos required.
+          Upload high-quality photos and videos of your land/plot (optional).
         </p>
       </CardHeader>
       <CardContent>
@@ -64,10 +60,10 @@ export const LandPlotGalleryStep: React.FC<LandPlotGalleryStepProps> = ({
           <div className="space-y-4">
             <div>
               <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                Plot Images * (Minimum 3 required)
+                Plot Images (Optional)
               </h3>
               <p className="text-sm text-gray-600 mb-4">
-                Upload clear photos showing different angles of your plot, boundaries, access road, and surrounding area.
+                Upload clear photos showing different angles of your plot, boundaries, access road, and surrounding area (optional).
               </p>
             </div>
             
@@ -75,18 +71,12 @@ export const LandPlotGalleryStep: React.FC<LandPlotGalleryStepProps> = ({
               images={images}
               onImagesChange={handleImageChange}
               maxImages={20}
-              minImages={3}
+              minImages={0}
             />
             
             <div className="text-sm text-gray-600">
-              <strong>Selected Images:</strong> {images.length} / 20 (Minimum 3 required)
+              <strong>Selected Images:</strong> {images.length} / 20
             </div>
-            
-            {images.length < 3 && (
-              <p className="text-red-500 text-sm">
-                Please upload at least 3 images to proceed
-              </p>
-            )}
           </div>
 
           {/* Video Upload Section */}
@@ -136,7 +126,6 @@ export const LandPlotGalleryStep: React.FC<LandPlotGalleryStepProps> = ({
             <Button 
               type="submit" 
               className="bg-red-600 hover:bg-red-700 text-white"
-              disabled={images.length < 3}
             >
               Next: Additional Information
             </Button>

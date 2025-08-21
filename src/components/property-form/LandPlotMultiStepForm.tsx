@@ -112,39 +112,7 @@ export const LandPlotMultiStepForm: React.FC<LandPlotMultiStepFormProps> = ({
 
   const handleSubmit = () => {
     const formData = getFormData();
-    
-    // Enhanced validation before submission
-    const ownerValid = !!(formData.ownerInfo?.fullName && formData.ownerInfo?.phoneNumber && 
-                         formData.ownerInfo?.email && formData.ownerInfo?.role);
-    const plotValid = !!(formData.propertyInfo?.plotDetails?.title && 
-                        formData.propertyInfo?.locationDetails?.state && 
-                        formData.propertyInfo?.saleDetails?.expectedPrice);
-    
-    // Enhanced image validation
-    const imageValid = !!(formData.propertyInfo?.gallery?.images && 
-                         formData.propertyInfo.gallery.images.length >= 3);
-    
-    console.log('Land plot form validation:', { 
-      ownerValid, 
-      plotValid, 
-      imageValid, 
-      formData 
-    });
-    
-    if (ownerValid && plotValid && imageValid && formData.ownerInfo && formData.propertyInfo) {
-      onSubmit(formData as LandPlotFormData);
-    } else {
-      console.error('Land plot form validation failed:', { 
-        ownerValid, 
-        plotValid, 
-        imageValid,
-        missingFields: {
-          owner: !ownerValid ? 'Missing owner information' : null,
-          plot: !plotValid ? 'Missing plot information' : null,
-          images: !imageValid ? 'Need at least 3 images' : null
-        }
-      });
-    }
+    onSubmit(formData as LandPlotFormData);
   };
 
   return (

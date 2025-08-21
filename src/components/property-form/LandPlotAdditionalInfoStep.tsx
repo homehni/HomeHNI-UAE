@@ -10,11 +10,11 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { AdditionalInfo } from '@/types/property';
 
 const additionalInfoSchema = z.object({
-  ownership: z.enum(['freehold', 'leasehold', 'cooperative_society', 'power_of_attorney']),
-  saleDeedCertificate: z.enum(['yes', 'no']),
-  encumbranceCertificate: z.enum(['yes', 'no']),
-  conversionCertificate: z.enum(['yes', 'no']),
-  reraApproved: z.enum(['yes', 'no']),
+  ownership: z.enum(['freehold', 'leasehold', 'cooperative_society', 'power_of_attorney']).optional(),
+  saleDeedCertificate: z.enum(['yes', 'no']).optional(),
+  encumbranceCertificate: z.enum(['yes', 'no']).optional(),
+  conversionCertificate: z.enum(['yes', 'no']).optional(),
+  reraApproved: z.enum(['yes', 'no']).optional(),
 });
 
 type AdditionalInfoForm = z.infer<typeof additionalInfoSchema>;

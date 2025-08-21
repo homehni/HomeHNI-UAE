@@ -118,25 +118,7 @@ export const useLandPlotPropertyForm = () => {
   });
 
   const isStepValid = (step: number): boolean => {
-    switch (step) {
-      case 1:
-        return !!(plotDetails.title && plotDetails.plotArea && plotDetails.landType);
-      case 2:
-        return !!(locationDetails.state && locationDetails.city && locationDetails.locality && 
-                 locationDetails.pincode);
-      case 3:
-        return !!(saleDetails.expectedPrice && saleDetails.pricePerUnit);
-      case 4:
-        return true; // Amenities are optional
-      case 5:
-        return !!(gallery.images && gallery.images.length >= 3);
-      case 6:
-        return true; // Additional info is optional
-      case 7:
-        return !!(scheduleInfo.availability);
-      default:
-        return true;
-    }
+    return true; // All steps are optional
   };
 
   return {

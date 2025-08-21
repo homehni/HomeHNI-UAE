@@ -17,10 +17,8 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Textarea } from '@/components/ui/textarea';
 
 const saleDetailsSchema = z.object({
-  expectedPrice: z.number().min(1, 'Expected price is required'),
-  availableFrom: z.date().refine((date) => date !== undefined, {
-    message: 'Available from date is required',
-  }),
+  expectedPrice: z.number().optional(),
+  availableFrom: z.date().optional(),
   currentlyUnderLoan: z.boolean().optional(),
   priceNegotiable: z.boolean().optional(),
   description: z.string().optional(),
@@ -71,7 +69,7 @@ export const LandPlotSaleDetailsStep: React.FC<LandPlotSaleDetailsStepProps> = (
             <div className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="expectedPrice" className="text-sm font-medium text-gray-700">
-                  Expected Price *
+                  Expected Price
                 </Label>
                 <div className="relative">
                   <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">₹</span>
@@ -104,7 +102,7 @@ export const LandPlotSaleDetailsStep: React.FC<LandPlotSaleDetailsStepProps> = (
             <div className="space-y-4">
               <div className="space-y-2">
                 <Label className="text-sm font-medium text-gray-700">
-                  Available From *
+                  Available From
                 </Label>
                 <Popover open={isDatePickerOpen} onOpenChange={setIsDatePickerOpen}>
                   <PopoverTrigger asChild>

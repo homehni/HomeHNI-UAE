@@ -11,14 +11,10 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { LandPlotLocationDetails } from '@/types/landPlotProperty';
 
 const locationDetailsSchema = z.object({
-  state: z.string().min(1, 'State is required'),
-  city: z.string().min(1, 'City is required'),
-  locality: z.string().min(1, 'Locality is required'),
+  state: z.string().optional(),
+  city: z.string().optional(),
+  locality: z.string().optional(),
   societyName: z.string().optional(),
-  // pincode: z.string().min(6, 'Valid pincode is required').max(6),
-  // landmark: z.string().optional(),
-  // address: z.string().min(1, 'Address is required'),
-  // nearbyPlaces: z.string().optional(),
 });
 
 type LocationDetailsForm = z.infer<typeof locationDetailsSchema>;
@@ -83,7 +79,7 @@ export const LandPlotLocationDetailsStep: React.FC<LandPlotLocationDetailsStepPr
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="state" className="text-sm font-medium text-gray-700">
-                State *
+                State
               </Label>
               <Select onValueChange={(value) => setValue('state', value)}>
                 <SelectTrigger>
@@ -103,7 +99,7 @@ export const LandPlotLocationDetailsStep: React.FC<LandPlotLocationDetailsStepPr
             </div>
             <div className="space-y-2">
               <Label htmlFor="city" className="text-sm font-medium text-gray-700">
-                City *
+                City
               </Label>
               <Select onValueChange={(value) => setValue('city', value)} disabled={!selectedState}>
                 <SelectTrigger>
@@ -127,7 +123,7 @@ export const LandPlotLocationDetailsStep: React.FC<LandPlotLocationDetailsStepPr
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="locality" className="text-sm font-medium text-gray-700">
-                Locality/Area *
+                Locality/Area
               </Label>
               <Input
                 id="locality"

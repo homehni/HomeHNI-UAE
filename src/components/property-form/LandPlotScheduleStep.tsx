@@ -12,8 +12,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ScheduleInfo } from '@/types/property';
 
 const scheduleSchema = z.object({
-  availability: z.enum(['everyday', 'weekday', 'weekend']),
-  availableAllDay: z.boolean(),
+  availability: z.enum(['everyday', 'weekday', 'weekend']).optional(),
+  availableAllDay: z.boolean().optional(),
   startTime: z.string().optional(),
   endTime: z.string().optional(),
   scheduleInstructions: z.string().optional(),
@@ -58,7 +58,7 @@ export const LandPlotScheduleStep: React.FC<LandPlotScheduleStepProps> = ({
           {/* Availability */}
           <div className="space-y-2">
             <Label htmlFor="availability" className="text-sm font-medium text-gray-700">
-              When are you available for site visits? *
+              When are you available for site visits?
             </Label>
             <Select onValueChange={(value) => setValue('availability', value as any)}>
               <SelectTrigger>

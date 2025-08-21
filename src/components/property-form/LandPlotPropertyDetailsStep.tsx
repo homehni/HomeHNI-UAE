@@ -11,20 +11,14 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { LandPlotDetails } from '@/types/landPlotProperty';
 
 const landPlotDetailsSchema = z.object({
-  // title: z.string().min(1, 'Property title is required'),
-  plotArea: z.number().min(1, 'Plot area is required'),
-  plotAreaUnit: z.enum(['sq-ft', 'sq-yard', 'acre', 'hectare', 'bigha', 'biswa']),
+  plotArea: z.number().optional(),
+  plotAreaUnit: z.enum(['sq-ft', 'sq-yard', 'acre', 'hectare', 'bigha', 'biswa']).optional(),
   plotLength: z.number().optional(),
   plotWidth: z.number().optional(),
-  boundaryWall: z.enum(['yes', 'no', 'partial']),
-  floorsAllowed: z.number().min(1, 'Floors allowed is required'),
-  gatedProject: z.enum(['yes', 'no']),
-  // cornerPlot: z.boolean(),
-  // roadFacing: z.enum(['east', 'west', 'north', 'south', 'north-east', 'north-west', 'south-east', 'south-west']),
-  // roadWidth: z.number().min(1, 'Road width is required'),
-  // landType: z.enum(['residential', 'commercial', 'agricultural', 'industrial', 'institutional']),
-  // plotShape: z.enum(['regular', 'irregular']),
-  gatedCommunity: z.boolean(),
+  boundaryWall: z.enum(['yes', 'no', 'partial']).optional(),
+  floorsAllowed: z.number().optional(),
+  gatedProject: z.enum(['yes', 'no']).optional(),
+  gatedCommunity: z.boolean().optional(),
   surveyNumber: z.string().optional(),
   subDivision: z.string().optional(),
   villageName: z.string().optional(),
@@ -90,7 +84,7 @@ export const LandPlotPropertyDetailsStep: React.FC<LandPlotPropertyDetailsStepPr
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="plotArea" className="text-sm font-medium text-gray-700">
-                Plot Area (sq.ft)*
+                Plot Area (sq.ft)
               </Label>
               <Input
                 id="plotArea"
@@ -211,7 +205,7 @@ export const LandPlotPropertyDetailsStep: React.FC<LandPlotPropertyDetailsStepPr
             </div> */}
             <div className="space-y-2">
               <Label htmlFor="boundaryWall" className="text-sm font-medium text-gray-700">
-                Boundary Wall *
+                Boundary Wall
               </Label>
               <Select onValueChange={(value) => setValue('boundaryWall', value as any)}>
                 <SelectTrigger>
