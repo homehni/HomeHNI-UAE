@@ -143,7 +143,7 @@ const PropertyCard = ({
           <Button
             variant="outline"
             size="sm"
-            className="flex-1 h-7 text-xs border-gray-200 hover:bg-gray-50"
+            className="w-16 h-7 text-xs border-gray-200 hover:bg-gray-50"
             onClick={(e) => e.stopPropagation()}
           >
             <Phone size={10} className="mr-1" />
