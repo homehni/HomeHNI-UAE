@@ -236,7 +236,7 @@ const ChatBot = () => {
       {!isOpen && (
         <Button
           onClick={() => setIsOpen(true)}
-          className="h-12 w-12 sm:h-14 sm:w-14 rounded-full bg-brand-red hover:bg-brand-maroon-dark shadow-lg hover:shadow-xl transition-all duration-300 animate-pulse"
+          className="h-12 w-12 sm:h-14 sm:w-14 rounded-full bg-brand-red hover:bg-brand-maroon-dark shadow-lg hover:shadow-xl transition-all duration-300"
         >
           <Home size={20} className="text-white sm:w-6 sm:h-6" />
         </Button>
