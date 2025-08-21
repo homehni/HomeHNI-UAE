@@ -282,7 +282,9 @@ const FeaturedProperties = ({
     isNew: element.content.isNew || false
   }));
 
-  const properties: FeaturedProperty[] = propsProperties ?? (cmsProperties.length > 0 ? cmsProperties : defaultProperties);
+  const properties: FeaturedProperty[] = propsProperties ?? (
+    cmsProperties.length >= defaultProperties.length ? cmsProperties : defaultProperties
+  );
 
   // Compute available types dynamically so it works if properties change in the future
   const availableTypes = useMemo(() => {
