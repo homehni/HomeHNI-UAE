@@ -32,9 +32,9 @@ export const PGHostelMultiStepForm: React.FC<PGHostelMultiStepFormProps> = ({
   isSubmitting = false,
   initialOwnerInfo = {}
 }) => {
-  // Skip owner info if already provided
+  // Skip owner info - start from room types
   const hasOwnerInfo = initialOwnerInfo && Object.keys(initialOwnerInfo).length > 0;
-  const [currentStep, setCurrentStep] = useState(hasOwnerInfo ? 2 : 1);
+  const [currentStep, setCurrentStep] = useState(2);
   
   // PG/Hostel specific state
   const [ownerInfo, setOwnerInfo] = useState({
@@ -193,7 +193,7 @@ export const PGHostelMultiStepForm: React.FC<PGHostelMultiStepFormProps> = ({
     handleSubmit();
   };
 
-  const prevStep = () => setCurrentStep(prev => Math.max(prev - 1, hasOwnerInfo ? 2 : 1));
+  const prevStep = () => setCurrentStep(prev => Math.max(prev - 1, 2));
 
   const getFormData = (): PGHostelFormData => ({
     ownerInfo: {
@@ -276,20 +276,6 @@ export const PGHostelMultiStepForm: React.FC<PGHostelMultiStepFormProps> = ({
 
   const handleSubmit = () => {
     const formData = getFormData();
-    
-    // Validation
-    if (!ownerInfo.fullName || !ownerInfo.email || !ownerInfo.phoneNumber) {
-      throw new Error('Owner information is incomplete');
-    }
-    
-    if (!roomTypes.single && !roomTypes.double && !roomTypes.three && !roomTypes.four) {
-      throw new Error('At least one room type must be selected');
-    }
-    
-    if (gallery.images.length < 3) {
-      throw new Error('At least 3 images are required');
-    }
-    
     onSubmit(formData);
   };
 
@@ -316,8 +302,8 @@ export const PGHostelMultiStepForm: React.FC<PGHostelMultiStepFormProps> = ({
           <PgHostelRoomTypeStep
             initialData={roomTypes}
             onNext={handleRoomTypesNext}
-            currentStep={hasOwnerInfo ? 1 : 2}
-            totalSteps={hasOwnerInfo ? 7 : 8}
+            currentStep={1}
+            totalSteps={7}
           />
         )}
 
@@ -327,8 +313,8 @@ export const PGHostelMultiStepForm: React.FC<PGHostelMultiStepFormProps> = ({
             roomTypes={roomTypes}
             onNext={handleRoomDetailsNext}
             onBack={prevStep}
-            currentStep={hasOwnerInfo ? 2 : 3}
-            totalSteps={hasOwnerInfo ? 7 : 8}
+            currentStep={2}
+            totalSteps={7}
           />
         )}
 
@@ -337,8 +323,8 @@ export const PGHostelMultiStepForm: React.FC<PGHostelMultiStepFormProps> = ({
             initialData={localityDetails}
             onNext={handleLocalityDetailsNext}
             onBack={prevStep}
-            currentStep={hasOwnerInfo ? 3 : 4}
-            totalSteps={hasOwnerInfo ? 7 : 8}
+            currentStep={3}
+            totalSteps={7}
           />
         )}
 
@@ -347,8 +333,8 @@ export const PGHostelMultiStepForm: React.FC<PGHostelMultiStepFormProps> = ({
             initialData={pgDetails}
             onNext={handlePgDetailsNext}
             onBack={prevStep}
-            currentStep={hasOwnerInfo ? 4 : 5}
-            totalSteps={hasOwnerInfo ? 7 : 8}
+            currentStep={4}
+            totalSteps={7}
           />
         )}
 
@@ -357,8 +343,8 @@ export const PGHostelMultiStepForm: React.FC<PGHostelMultiStepFormProps> = ({
             initialData={amenities}
             onNext={handleAmenitiesNext}
             onBack={prevStep}
-            currentStep={hasOwnerInfo ? 5 : 6}
-            totalSteps={hasOwnerInfo ? 7 : 8}
+            currentStep={5}
+            totalSteps={7}
           />
         )}
 
@@ -367,8 +353,8 @@ export const PGHostelMultiStepForm: React.FC<PGHostelMultiStepFormProps> = ({
             initialData={gallery}
             onNext={handleGalleryNext}
             onBack={prevStep}
-            currentStep={hasOwnerInfo ? 6 : 7}
-            totalSteps={hasOwnerInfo ? 7 : 8}
+            currentStep={6}
+            totalSteps={7}
           />
         )}
 
@@ -377,8 +363,8 @@ export const PGHostelMultiStepForm: React.FC<PGHostelMultiStepFormProps> = ({
             initialData={scheduleInfo}
             onNext={handleScheduleNext}
             onBack={prevStep}
-            currentStep={hasOwnerInfo ? 7 : 8}
-            totalSteps={hasOwnerInfo ? 7 : 8}
+            currentStep={7}
+            totalSteps={7}
           />
         )}
       </div>

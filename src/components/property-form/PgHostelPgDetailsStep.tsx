@@ -64,7 +64,7 @@ export function PgHostelPgDetailsStep({
   };
 
   const isFormValid = () => {
-    return formData.genderPreference && formData.preferredGuests && formData.availableFrom && formData.foodIncluded;
+    return true;
   };
 
   const handleRuleChange = (rule: keyof typeof formData.rules, checked: boolean) => {
@@ -92,7 +92,7 @@ export function PgHostelPgDetailsStep({
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="genderPreference">Place is available for *</Label>
+                <Label htmlFor="genderPreference">Place is available for</Label>
                 <Select
                   value={formData.genderPreference}
                   onValueChange={(value: 'male' | 'female' | 'anyone') => 
@@ -111,7 +111,7 @@ export function PgHostelPgDetailsStep({
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="preferredGuests">Preferred Guests *</Label>
+                <Label htmlFor="preferredGuests">Preferred Guests</Label>
                 <Select
                   value={formData.preferredGuests}
                   onValueChange={(value: 'student' | 'working' | 'any') => 
@@ -130,7 +130,7 @@ export function PgHostelPgDetailsStep({
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="availableFrom">Available From *</Label>
+                <Label htmlFor="availableFrom">Available From</Label>
                 <Input
                   id="availableFrom"
                   type="date"
@@ -141,7 +141,7 @@ export function PgHostelPgDetailsStep({
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="foodIncluded">Food Included *</Label>
+                <Label htmlFor="foodIncluded">Food Included</Label>
                 <Select
                   value={formData.foodIncluded}
                   onValueChange={(value: 'yes' | 'no') => 
@@ -262,7 +262,7 @@ export function PgHostelPgDetailsStep({
               <Button type="button" variant="outline" onClick={onBack}>
                 Back
               </Button>
-              <Button type="submit" disabled={!isFormValid()}>
+              <Button type="submit">
                 Save & Continue
               </Button>
             </div>

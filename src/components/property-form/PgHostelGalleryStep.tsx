@@ -38,7 +38,7 @@ export function PgHostelGalleryStep({
   };
 
   const isFormValid = () => {
-    return formData.images.length > 0;
+    return true;
   };
 
   const handleImagesChange = (images: File[]) => {
@@ -65,7 +65,7 @@ export function PgHostelGalleryStep({
             <div className="space-y-4">
               <div>
                 <h3 className="text-lg font-medium text-foreground mb-2">
-                  Property Images *
+                  Property Images
                 </h3>
                 <p className="text-sm text-muted-foreground mb-4">
                   Upload high-quality images of rooms, common areas, amenities, and exterior
@@ -74,7 +74,7 @@ export function PgHostelGalleryStep({
                   images={formData.images}
                   onImagesChange={handleImagesChange}
                   maxImages={20}
-                  minImages={1}
+                  minImages={0}
                 />
               </div>
 
@@ -107,7 +107,7 @@ export function PgHostelGalleryStep({
               <Button type="button" variant="outline" onClick={onBack}>
                 Back
               </Button>
-              <Button type="submit" disabled={!isFormValid()}>
+              <Button type="submit">
                 Save & Continue
               </Button>
             </div>

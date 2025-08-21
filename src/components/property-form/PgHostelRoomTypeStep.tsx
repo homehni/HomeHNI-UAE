@@ -41,7 +41,7 @@ export function PgHostelRoomTypeStep({
   };
 
   const isFormValid = () => {
-    return formData.single || formData.double || formData.three || formData.four;
+    return true;
   };
 
   const handleRoomTypeChange = (roomType: keyof PgHostelRoomType, checked: boolean) => {
@@ -121,12 +121,8 @@ export function PgHostelRoomTypeStep({
               })}
             </div>
 
-            {!isFormValid() && (
-              <p className="text-sm text-destructive">Please select at least one room type</p>
-            )}
-
             <div className="flex justify-end pt-6">
-              <Button type="submit" disabled={!isFormValid()}>
+              <Button type="submit">
                 Save & Continue
               </Button>
             </div>

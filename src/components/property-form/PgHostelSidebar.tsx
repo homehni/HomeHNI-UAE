@@ -7,14 +7,13 @@ interface PgHostelSidebarProps {
 }
 
 const steps = [
-  { id: 1, title: 'Owner Info', description: 'Basic owner details', icon: User },
-  { id: 2, title: 'Room Types', description: 'Available room types', icon: Home },
-  { id: 3, title: 'Room Details', description: 'Room info & amenities', icon: Building2 },
-  { id: 4, title: 'Locality Details', description: 'Location information', icon: MapPin },
-  { id: 5, title: 'PG Details', description: 'PG specific details', icon: Building2 },
-  { id: 6, title: 'Amenities', description: 'Services & amenities', icon: Wifi },
-  { id: 7, title: 'Gallery', description: 'Photos & videos', icon: Camera },
-  { id: 8, title: 'Schedule', description: 'Availability & schedule', icon: Calendar },
+  { id: 1, title: 'Room Types', description: 'Available room types', icon: Home },
+  { id: 2, title: 'Room Details', description: 'Room info & amenities', icon: Building2 },
+  { id: 3, title: 'Locality Details', description: 'Location information', icon: MapPin },
+  { id: 4, title: 'PG Details', description: 'PG specific details', icon: Building2 },
+  { id: 5, title: 'Amenities', description: 'Services & amenities', icon: Wifi },
+  { id: 6, title: 'Gallery', description: 'Photos & videos', icon: Camera },
+  { id: 7, title: 'Schedule', description: 'Availability & schedule', icon: Calendar },
 ];
 
 export function PgHostelSidebar({ currentStep, completedSteps }: PgHostelSidebarProps) {

@@ -66,9 +66,7 @@ export function PgHostelLocalityDetailsStep({
   };
 
   const isFormValid = () => {
-    return formData.state && 
-           formData.city && 
-           formData.locality;
+    return true;
   };
 
   return (
@@ -86,7 +84,7 @@ export function PgHostelLocalityDetailsStep({
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="state">State *</Label>
+                <Label htmlFor="state">State</Label>
                 <Select
                   value={formData.state}
                   onValueChange={(value) => {
@@ -107,7 +105,7 @@ export function PgHostelLocalityDetailsStep({
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="city">City *</Label>
+                <Label htmlFor="city">City</Label>
                 <Select
                   value={formData.city}
                   onValueChange={(value) => setFormData({ ...formData, city: value })}
@@ -127,13 +125,12 @@ export function PgHostelLocalityDetailsStep({
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="locality">Locality *</Label>
+                <Label htmlFor="locality">Locality</Label>
                 <Input
                   id="locality"
                   value={formData.locality}
                   onChange={(e) => setFormData({ ...formData, locality: e.target.value })}
                   placeholder="Enter locality/area"
-                  required
                 />
               </div>
 
@@ -152,7 +149,7 @@ export function PgHostelLocalityDetailsStep({
               <Button type="button" variant="outline" onClick={onBack}>
                 Back
               </Button>
-              <Button type="submit" disabled={!isFormValid()}>
+              <Button type="submit">
                 Save & Continue
               </Button>
             </div>
