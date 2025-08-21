@@ -277,7 +277,7 @@ const HandoverServices = () => {
       <section className="lg:hidden px-4 py-8 bg-background">
         <div className="container mx-auto max-w-xl px-4">
           <Card className="w-full rounded-2xl shadow-xl border-0 bg-card">
-            <CardContent className="p-8">
+            <CardContent className="p-8 border-2 border-primary">
               <h3 className="text-2xl font-bold text-foreground mb-3">Need handover assistance?</h3>
               <p className="text-base text-muted-foreground mb-8">Fill the form & get expert support</p>
 
