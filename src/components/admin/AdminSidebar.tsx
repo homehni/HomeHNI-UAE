@@ -139,22 +139,20 @@ const AdminSidebar = () => {
               <SidebarMenu className="space-y-1">
                 {items.map((item) => (
                   <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton asChild>
-                      <NavLink
-                        to={item.url}
-                        end={item.url === '/admin'}
-                        className={({ isActive }) =>
-                          `flex items-center px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
-                            isActive
-                              ? 'bg-brand-red text-white shadow-sm'
-                              : 'text-gray-900 hover:bg-gray-100 hover:text-brand-red'
-                          }`
-                        }
-                      >
-                        <item.icon className="h-4 w-4 mr-3 flex-shrink-0" />
-                        <span className="truncate">{item.title}</span>
-                      </NavLink>
-                    </SidebarMenuButton>
+                    <NavLink
+                      to={item.url}
+                      end={item.url === '/admin'}
+                      className={({ isActive }) =>
+                        `flex items-center px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                          isActive
+                            ? 'bg-primary text-primary-foreground shadow-sm'
+                            : 'text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground'
+                        }`
+                      }
+                    >
+                      <item.icon className="h-4 w-4 mr-3 flex-shrink-0" />
+                      <span className="truncate">{item.title}</span>
+                    </NavLink>
                   </SidebarMenuItem>
                 ))}
               </SidebarMenu>
