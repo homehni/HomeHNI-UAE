@@ -249,37 +249,39 @@ const Loans = () => {
 
               <Input id="loan-email" name="email" type="email" placeholder="Email ID" />
 
-              <Select defaultValue="India" name="country">
-                <SelectTrigger><SelectValue placeholder="Country" /></SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="India">India</SelectItem>
-                  <SelectItem value="USA">USA</SelectItem>
-                  <SelectItem value="UK">UK</SelectItem>
-                  <SelectItem value="Other">Other</SelectItem>
-                </SelectContent>
-              </Select>
+              <div className="flex gap-2">
+                <Select defaultValue="India" name="country">
+                  <SelectTrigger className="flex-1"><SelectValue placeholder="Country" /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="India">India</SelectItem>
+                    <SelectItem value="USA">USA</SelectItem>
+                    <SelectItem value="UK">UK</SelectItem>
+                    <SelectItem value="Other">Other</SelectItem>
+                  </SelectContent>
+                </Select>
 
-              <Select name="state" onValueChange={setSelectedStateDesktop}>
-                <SelectTrigger><SelectValue placeholder="State" /></SelectTrigger>
-                <SelectContent>
-                  {statesData?.states?.map((state: any) => (
-                    <SelectItem key={state.state} value={state.state}>
-                      {state.state}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+                <Select name="state" onValueChange={setSelectedStateDesktop}>
+                  <SelectTrigger className="flex-1"><SelectValue placeholder="State" /></SelectTrigger>
+                  <SelectContent>
+                    {statesData?.states?.map((state: any) => (
+                      <SelectItem key={state.state} value={state.state}>
+                        {state.state}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
 
-              <Select name="city">
-                <SelectTrigger><SelectValue placeholder="City" /></SelectTrigger>
-                <SelectContent>
-                  {citiesDesktop.map((city: string) => (
-                    <SelectItem key={city} value={city}>
-                      {city}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+                <Select name="city">
+                  <SelectTrigger className="flex-1"><SelectValue placeholder="City" /></SelectTrigger>
+                  <SelectContent>
+                    {citiesDesktop.map((city: string) => (
+                      <SelectItem key={city} value={city}>
+                        {city}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
 
               <Select name="loanType">
                 <SelectTrigger id="loan-type"><SelectValue placeholder="Loan Type" /></SelectTrigger>
@@ -354,43 +356,45 @@ const Loans = () => {
                   className="h-12 text-base bg-background"
                 />
 
-                <Select defaultValue="India" name="country">
-                  <SelectTrigger className="h-12 bg-background">
-                    <SelectValue placeholder="Country" />
-                  </SelectTrigger>
-                  <SelectContent className="bg-background border shadow-lg">
-                    <SelectItem value="India">India</SelectItem>
-                    <SelectItem value="USA">USA</SelectItem>
-                    <SelectItem value="UK">UK</SelectItem>
-                    <SelectItem value="Other">Other</SelectItem>
-                  </SelectContent>
-                </Select>
+                <div className="flex gap-3">
+                  <Select defaultValue="India" name="country">
+                    <SelectTrigger className="flex-1 h-12 bg-background">
+                      <SelectValue placeholder="Country" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-background border shadow-lg">
+                      <SelectItem value="India">India</SelectItem>
+                      <SelectItem value="USA">USA</SelectItem>
+                      <SelectItem value="UK">UK</SelectItem>
+                      <SelectItem value="Other">Other</SelectItem>
+                    </SelectContent>
+                  </Select>
 
-                <Select name="state" onValueChange={setSelectedState}>
-                  <SelectTrigger className="h-12 bg-background">
-                    <SelectValue placeholder="State" />
-                  </SelectTrigger>
-                  <SelectContent className="bg-background border shadow-lg">
-                    {statesData?.states?.map((state: any) => (
-                      <SelectItem key={state.state} value={state.state}>
-                        {state.state}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                  <Select name="state" onValueChange={setSelectedState}>
+                    <SelectTrigger className="flex-1 h-12 bg-background">
+                      <SelectValue placeholder="State" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-background border shadow-lg">
+                      {statesData?.states?.map((state: any) => (
+                        <SelectItem key={state.state} value={state.state}>
+                          {state.state}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
 
-                <Select name="city">
-                  <SelectTrigger className="h-12 bg-background">
-                    <SelectValue placeholder="City" />
-                  </SelectTrigger>
-                  <SelectContent className="bg-background border shadow-lg">
-                    {cities.map((city: string) => (
-                      <SelectItem key={city} value={city}>
-                        {city}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                  <Select name="city">
+                    <SelectTrigger className="flex-1 h-12 bg-background">
+                      <SelectValue placeholder="City" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-background border shadow-lg">
+                      {cities.map((city: string) => (
+                        <SelectItem key={city} value={city}>
+                          {city}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
 
                 <Select name="loanType">
                   <SelectTrigger id="loan-type-mobile" className="h-12 bg-background">
