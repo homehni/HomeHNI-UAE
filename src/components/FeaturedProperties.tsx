@@ -191,7 +191,7 @@ const FeaturedProperties = ({
     bedrooms: 3,
     bathrooms: 2,
     image: 'photo-1497366216548-37526070297c',
-    propertyType: 'Agriculture Lands'
+    propertyType: 'Farm House'
   }, {
     id: '17',
     title: 'Modern 4BHK with Amenities',
