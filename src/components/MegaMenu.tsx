@@ -43,7 +43,7 @@ const MegaMenu = ({ isScrolled }: MegaMenuProps) => {
           {[
             'All Residential',
             'Flat / Apartment',
-            'Independent Building/Floor',
+            'Commercial Building',
             'Farm House',
             'Villa',
             'Plots',
