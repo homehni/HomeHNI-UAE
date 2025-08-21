@@ -17,16 +17,16 @@ const Marquee = () => {
       >
         {/* Repeated Content for Continuous Scroll */}
         <span className="text-sm font-medium px-4 drop-shadow-lg">
-          🏠 Stay Safe with Home Hni - Your trusted partner for secure real estate transactions • Verify all documents before payment • Use escrow services for large transactions • Report suspicious activities immediately
+          🏠 Stay Safe with Home HNI - Your trusted partner for secure real estate transactions • Verify all documents before payment • Use escrow services for large transactions • Report suspicious activities immediately
         </span>
         <span className="text-sm font-medium px-4 drop-shadow-lg">
-          🏠 Stay Safe with Home Hni - Your trusted partner for secure real estate transactions • Verify all documents before payment • Use escrow services for large transactions • Report suspicious activities immediately
+          🏠 Stay Safe with Home HNI - Your trusted partner for secure real estate transactions • Verify all documents before payment • Use escrow services for large transactions • Report suspicious activities immediately
         </span>
         <span className="text-sm font-medium px-4 drop-shadow-lg">
-          🏠 Stay Safe with Home Hni - Your trusted partner for secure real estate transactions • Verify all documents before payment • Use escrow services for large transactions • Report suspicious activities immediately
+          🏠 Stay Safe with Home HNI - Your trusted partner for secure real estate transactions • Verify all documents before payment • Use escrow services for large transactions • Report suspicious activities immediately
         </span>
         <span className="text-sm font-medium px-4 drop-shadow-lg">
-          🏠 Stay Safe with Home Hni - Your trusted partner for secure real estate transactions • Verify all documents before payment • Use escrow services for large transactions • Report suspicious activities immediately
+          🏠 Stay Safe with Home HNI - Your trusted partner for secure real estate transactions • Verify all documents before payment • Use escrow services for large transactions • Report suspicious activities immediately
         </span>
       </div>
     </div>
