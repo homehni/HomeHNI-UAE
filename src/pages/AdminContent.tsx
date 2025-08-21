@@ -634,7 +634,7 @@ export const AdminContent: React.FC = () => {
                 Website Elements
               </CardTitle>
               <CardDescription>
-                Manage all editable content on your website including featured properties, headlines, and more
+                Manage all editable website content including section headers, text content, images, and CTAs
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -649,7 +649,9 @@ export const AdminContent: React.FC = () => {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {contentElements.map((element) => (
+                  {contentElements
+                    .filter(element => element.element_type !== 'featured_property')
+                    .map((element) => (
                     <TableRow key={element.id}>
                       <TableCell>
                         <div>
@@ -886,7 +888,6 @@ export const AdminContent: React.FC = () => {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="featured_property">Featured Property</SelectItem>
                     <SelectItem value="section_content">Section Header</SelectItem>
                     <SelectItem value="text">Text Content</SelectItem>
                     <SelectItem value="image">Image</SelectItem>
