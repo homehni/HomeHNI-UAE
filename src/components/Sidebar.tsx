@@ -141,13 +141,13 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
       {/* Overlay */}
       {isOpen && (
         <div 
-          className="fixed inset-0 bg-transparent z-40"
+          className="fixed inset-0 bg-transparent z-[60]"
           onClick={onClose}
         />
       )}
       
       {/* Sidebar */}
-      <div className={`fixed top-0 right-0 h-full w-80 bg-white z-50 transform transition-transform duration-300 ${
+      <div className={`fixed top-0 right-0 h-full w-80 bg-white z-[70] transform transition-transform duration-300 ${
         isOpen ? 'translate-x-0' : 'translate-x-full'
       }`}>
         <div className="flex flex-col h-full">
