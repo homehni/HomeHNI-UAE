@@ -89,6 +89,54 @@ export type Database = {
         }
         Relationships: []
       }
+      content_elements: {
+        Row: {
+          content: Json
+          created_at: string
+          created_by: string | null
+          element_key: string
+          element_type: string
+          id: string
+          images: string[] | null
+          is_active: boolean | null
+          page_location: string | null
+          section_location: string | null
+          sort_order: number | null
+          title: string | null
+          updated_at: string
+        }
+        Insert: {
+          content?: Json
+          created_at?: string
+          created_by?: string | null
+          element_key: string
+          element_type: string
+          id?: string
+          images?: string[] | null
+          is_active?: boolean | null
+          page_location?: string | null
+          section_location?: string | null
+          sort_order?: number | null
+          title?: string | null
+          updated_at?: string
+        }
+        Update: {
+          content?: Json
+          created_at?: string
+          created_by?: string | null
+          element_key?: string
+          element_type?: string
+          id?: string
+          images?: string[] | null
+          is_active?: boolean | null
+          page_location?: string | null
+          section_location?: string | null
+          sort_order?: number | null
+          title?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       content_pages: {
         Row: {
           content: Json | null

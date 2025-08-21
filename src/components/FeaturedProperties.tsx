@@ -4,6 +4,8 @@ import PropertyCard from './PropertyCard';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { contentElementsService, ContentElement } from '@/services/contentElementsService';
+import { supabase } from '@/integrations/supabase/client';
 
 // Minimal type for featured properties
 type FeaturedProperty = {
@@ -24,207 +26,59 @@ const FeaturedProperties = ({
   properties?: FeaturedProperty[];
 }) => {
   const [showAll, setShowAll] = useState(false);
+  const [contentElements, setContentElements] = useState<ContentElement[]>([]);
+  const [sectionHeader, setSectionHeader] = useState<ContentElement | null>(null);
   
-  const properties: FeaturedProperty[] = propsProperties ?? [{
-    id: '1',
-    title: 'Modern Apartment with Delhi',
-    location: 'Sector 18, KK Road',
-    price: '₹1.2 Cr',
-    area: '1,200 sq ft',
-    bedrooms: 3,
-    bathrooms: 2,
-    image: 'photo-1560518883-ce09059eeffa',
-    propertyType: 'Apartment',
-    isNew: true
-  }, {
-    id: '2',
-    title: 'Modern Villa with Garden',
-    location: 'DLF Phase 3, Gurgaon',
-    price: '₹2.5 Cr',
-    area: '2,400 sq ft',
-    bedrooms: 4,
-    bathrooms: 3,
-    image: 'photo-1613490493576-7fde63acd811',
-    propertyType: 'Villa'
-  }, {
-    id: '3',
-    title: 'Affordable 2BHK in IT Hub',
-    location: 'Electronic City, Bangalore',
-    price: '₹75 L',
-    area: '950 sq ft',
-    bedrooms: 2,
-    bathrooms: 2,
-    image: 'photo-1512917774080-9991f1c4c750',
-    propertyType: 'Apartment'
-  }, {
-    id: '4',
-    title: 'Premium Office Space',
-    location: 'Cyber City, Gurgaon',
-    price: '₹45 L',
-    area: '800 sq ft',
-    bedrooms: 0,
-    bathrooms: 1,
-    image: 'photo-1497366216548-37526070297c',
-    propertyType: 'Commercial',
-    isNew: true
-  }, {
-    id: '5',
-    title: 'Spacious 3BHK with Balcony',
-    location: 'Whitefield, Bangalore',
-    price: '₹95 L',
-    area: '1,350 sq ft',
-    bedrooms: 3,
-    bathrooms: 2,
-    image: 'photo-1522708323590-d24dbb6b0267',
-    propertyType: 'Apartment'
-  }, {
-    id: '6',
-    title: 'Independent House with Parking',
-    location: 'Sector 15, Noida',
-    price: '₹1.8 Cr',
-    area: '1,800 sq ft',
-    bedrooms: 4,
-    bathrooms: 3,
-    image: 'photo-1568605114967-8130f3a36994',
-    propertyType: 'House'
-  }, {
-    id: '7',
-    title: 'Modern 2BHK with City View',
-    location: 'Bandra West, Mumbai',
-    price: '₹1.5 Cr',
-    area: '1,100 sq ft',
-    bedrooms: 2,
-    bathrooms: 2,
-    image: 'photo-1512917774080-9991f1c4c750',
-    propertyType: 'Apartment',
-    isNew: true
-  }, {
-    id: '8',
-    title: 'Luxury Penthouse with Terrace',
-    location: 'Koramangala, Bangalore',
-    price: '₹3.2 Cr',
-    area: '2,800 sq ft',
-    bedrooms: 4,
-    bathrooms: 4,
-    image: 'photo-1613490493576-7fde63acd811',
-    propertyType: 'Penthouse'
-  }, {
-    id: '9',
-    title: 'Prime Residential Plot in Gated Community',
-    location: 'Hinjewadi, Pune',
-    price: '₹60 L',
-    area: '2,400 sq ft',
-    bedrooms: 0,
-    bathrooms: 0,
-    image: 'photo-1497366216548-37526070297c',
-    propertyType: 'Plot',
-    isNew: true
-  }, {
-    id: '10',
-    title: 'Independent House with Private Garden',
-    location: 'Vijayanagar, Bangalore',
-    price: '₹1.7 Cr',
-    area: '1,900 sq ft',
-    bedrooms: 4,
-    bathrooms: 3,
-    image: 'photo-1568605114967-8130f3a36994',
-    propertyType: 'Independent House'
-  }, {
-    id: '11',
-    title: 'Fertile Agricultural Land with Water Source',
-    location: 'Kharif Valley, Punjab',
-    price: '₹25 L',
-    area: '5 acres',
-    bedrooms: 0,
-    bathrooms: 0,
-    image: 'photo-1497366216548-37526070297c',
-    propertyType: 'Agriculture Lands',
-    isNew: true
-  }, {
-    id: '12',
-    title: 'Luxury Studio Apartment with Pool',
-    location: 'Powai, Mumbai',
-    price: '₹85 L',
-    area: '650 sq ft',
-    bedrooms: 1,
-    bathrooms: 1,
-    image: 'photo-1560518883-ce09059eeffa',
-    propertyType: 'Apartment',
-    isNew: true
-  }, {
-    id: '13',
-    title: 'Commercial Space in IT Park',
-    location: 'HITEC City, Hyderabad',
-    price: '₹55 L',
-    area: '1,000 sq ft',
-    bedrooms: 0,
-    bathrooms: 2,
-    image: 'photo-1497366216548-37526070297c',
-    propertyType: 'Commercial'
-  }, {
-    id: '14',
-    title: 'Duplex House with Garden',
-    location: 'Jubilee Hills, Hyderabad',
-    price: '₹2.8 Cr',
-    area: '3,200 sq ft',
-    bedrooms: 5,
-    bathrooms: 4,
-    image: 'photo-1568605114967-8130f3a36994',
-    propertyType: 'House',
-    isNew: true
-  }, {
-    id: '15',
-    title: 'Affordable 1BHK Near Metro',
-    location: 'Dwarka, Delhi',
-    price: '₹45 L',
-    area: '550 sq ft',
-    bedrooms: 1,
-    bathrooms: 1,
-    image: 'photo-1512917774080-9991f1c4c750',
-    propertyType: 'Apartment'
-  }, {
-    id: '16',
-    title: 'Farmhouse with Orchard',
-    location: 'Lonavala, Maharashtra',
-    price: '₹1.2 Cr',
-    area: '2 acres',
-    bedrooms: 3,
-    bathrooms: 2,
-    image: 'photo-1497366216548-37526070297c',
-    propertyType: 'Farm House'
-  }, {
-    id: '17',
-    title: 'Modern 4BHK with Amenities',
-    location: 'New Town, Kolkata',
-    price: '₹1.1 Cr',
-    area: '1,600 sq ft',
-    bedrooms: 4,
-    bathrooms: 3,
-    image: 'photo-1522708323590-d24dbb6b0267',
-    propertyType: 'Apartment',
-    isNew: true
-  }, {
-    id: '18',
-    title: 'Warehouse Space with Loading Dock',
-    location: 'Manesar, Gurgaon',
-    price: '₹75 L',
-    area: '5,000 sq ft',
-    bedrooms: 0,
-    bathrooms: 2,
-    image: 'photo-1497366216548-37526070297c',
-    propertyType: 'Commercial'
-  }, {
-    id: '19',
-    title: 'Sea View Apartment with Balcony',
-    location: 'Marine Drive, Mumbai',
-    price: '₹4.5 Cr',
-    area: '1,800 sq ft',
-    bedrooms: 3,
-    bathrooms: 3,
-    image: 'photo-1560518883-ce09059eeffa',
-    propertyType: 'Apartment',
-    isNew: true
-  }];
+  // Fetch content from database
+  useEffect(() => {
+    const fetchContent = async () => {
+      try {
+        const [featuredProps, headerContent] = await Promise.all([
+          contentElementsService.getFeaturedProperties(),
+          contentElementsService.getSectionContent('homepage', 'featured_properties', 'featured_properties_header')
+        ]);
+        setContentElements(featuredProps);
+        setSectionHeader(headerContent);
+      } catch (error) {
+        console.error('Error fetching featured properties:', error);
+      }
+    };
+
+    fetchContent();
+
+    // Set up real-time subscription
+    const channel = supabase
+      .channel('featured-properties-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'content_elements',
+          filter: 'page_location=eq.homepage'
+        },
+        () => fetchContent()
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, []);
+
+  // Convert content elements to properties format
+  const properties: FeaturedProperty[] = propsProperties ?? contentElements.map(element => ({
+    id: element.id,
+    title: element.title || '',
+    location: element.content.location || '',
+    price: element.content.price || '',
+    area: element.content.area || '',
+    bedrooms: element.content.bedrooms || 0,
+    bathrooms: element.content.bathrooms || 0,
+    image: element.content.image || '',
+    propertyType: element.content.propertyType || '',
+    isNew: element.content.isNew || false
+  }));
 
   // Compute available types dynamically so it works if properties change in the future
   const availableTypes = useMemo(() => {
@@ -254,10 +108,10 @@ const FeaturedProperties = ({
       <div className="container mx-auto px-4">
         <div className="text-center mb-8 md:mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            Featured Properties
+            {sectionHeader?.content?.heading || 'Featured Properties'}
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto text-center">
-            Discover our handpicked selection of premium properties across India's top cities
+            {sectionHeader?.content?.description || 'Discover our handpicked selection of premium properties across India\'s top cities'}
           </p>
         </div>
 

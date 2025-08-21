@@ -8,6 +8,7 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
 import { Separator } from '@/components/ui/separator';
+import { Textarea } from '@/components/ui/textarea';
 import { 
   Table, 
   TableBody, 
@@ -44,12 +45,15 @@ import {
   Globe,
   Clock,
   User,
-  ExternalLink
+  ExternalLink,
+  Home,
+  Layout
 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { RichTextEditor } from '@/components/RichTextEditor';
 import { ImageUpload } from '@/components/ImageUpload';
+import { contentElementsService, ContentElement } from '@/services/contentElementsService';
 
 interface ContentPage {
   id: string;
@@ -81,11 +85,14 @@ export const AdminContent: React.FC = () => {
   const [contentPages, setContentPages] = useState<ContentPage[]>([]);
   const [selectedPage, setSelectedPage] = useState<ContentPage | null>(null);
   const [pageSections, setPageSections] = useState<PageSection[]>([]);
+  const [contentElements, setContentElements] = useState<ContentElement[]>([]);
   const [loading, setLoading] = useState(true);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [sheetOpen, setSheetOpen] = useState(false);
+  const [elementDialogOpen, setElementDialogOpen] = useState(false);
   const [editingPage, setEditingPage] = useState<ContentPage | null>(null);
   const [editingSection, setEditingSection] = useState<PageSection | null>(null);
+  const [editingElement, setEditingElement] = useState<ContentElement | null>(null);
   const { toast } = useToast();
 
   const [pageForm, setPageForm] = useState({
@@ -101,12 +108,34 @@ export const AdminContent: React.FC = () => {
   });
 
   const [sectionForm, setSectionForm] = useState({
-    section_type: 'text',
+    section_type: 'content',
     content: '',
     sort_order: 0,
     is_active: true,
     images: [] as string[]
   });
+
+  const [elementForm, setElementForm] = useState({
+    element_type: 'text',
+    element_key: '',
+    title: '',
+    content: '{}',
+    page_location: 'homepage',
+    section_location: '',
+    sort_order: 0,
+    is_active: true,
+    images: [] as string[]
+  });
+
+  // Fetch content elements
+  const fetchContentElements = useCallback(async () => {
+    try {
+      const elements = await contentElementsService.getAllContentElements();
+      setContentElements(elements);
+    } catch (error) {
+      console.error('Error fetching content elements:', error);
+    }
+  }, []);
 
   // Fetch content pages
   const fetchContentPages = useCallback(async () => {
@@ -149,6 +178,7 @@ export const AdminContent: React.FC = () => {
   // Real-time subscriptions
   useEffect(() => {
     fetchContentPages();
+    fetchContentElements();
 
     // Subscribe to content_pages changes
     const pagesChannel = supabase
@@ -172,11 +202,21 @@ export const AdminContent: React.FC = () => {
       )
       .subscribe();
 
+    // Subscribe to content_elements changes
+    const elementsChannel = supabase
+      .channel('content_elements_changes')
+      .on('postgres_changes',
+        { event: '*', schema: 'public', table: 'content_elements' },
+        () => fetchContentElements()
+      )
+      .subscribe();
+
     return () => {
       supabase.removeChannel(pagesChannel);
       supabase.removeChannel(sectionsChannel);
+      supabase.removeChannel(elementsChannel);
     };
-  }, [fetchContentPages, fetchPageSections, selectedPage]);
+  }, [fetchContentPages, fetchPageSections, fetchContentElements, selectedPage]);
 
   // Generate slug from title
   const generateSlug = (title: string) => {
@@ -200,6 +240,68 @@ export const AdminContent: React.FC = () => {
   // Handle section form changes
   const handleSectionFormChange = (field: string, value: any) => {
     setSectionForm(prev => ({ ...prev, [field]: value }));
+  };
+
+  // Handle element form changes
+  const handleElementFormChange = (field: string, value: any) => {
+    setElementForm(prev => ({ ...prev, [field]: value }));
+  };
+
+  // Create/Update element
+  const handleSaveElement = async () => {
+    try {
+      let contentData;
+      try {
+        contentData = JSON.parse(elementForm.content);
+      } catch {
+        contentData = { text: elementForm.content };
+      }
+
+      const elementData = {
+        element_type: elementForm.element_type,
+        element_key: elementForm.element_key,
+        title: elementForm.title,
+        content: contentData,
+        page_location: elementForm.page_location,
+        section_location: elementForm.section_location,
+        sort_order: elementForm.sort_order,
+        is_active: elementForm.is_active,
+        images: elementForm.images
+      };
+
+      if (editingElement) {
+        await contentElementsService.updateContentElement(editingElement.id, elementData);
+        toast({ title: "Success", description: "Element updated successfully" });
+      } else {
+        await contentElementsService.createContentElement(elementData);
+        toast({ title: "Success", description: "Element created successfully" });
+      }
+
+      setElementDialogOpen(false);
+      resetElementForm();
+    } catch (error) {
+      console.error('Error saving element:', error);
+      toast({
+        title: "Error",
+        description: "Failed to save element",
+        variant: "destructive"
+      });
+    }
+  };
+
+  // Delete element
+  const handleDeleteElement = async (elementId: string) => {
+    try {
+      await contentElementsService.deleteContentElement(elementId);
+      toast({ title: "Success", description: "Element deleted successfully" });
+    } catch (error) {
+      console.error('Error deleting element:', error);
+      toast({
+        title: "Error",
+        description: "Failed to delete element",
+        variant: "destructive"
+      });
+    }
   };
 
   // Create/Update page
@@ -358,7 +460,7 @@ export const AdminContent: React.FC = () => {
 
   const resetSectionForm = () => {
     setSectionForm({
-      section_type: 'text',
+      section_type: 'content',
       content: '',
       sort_order: pageSections.length,
       is_active: true,
@@ -367,10 +469,48 @@ export const AdminContent: React.FC = () => {
     setEditingSection(null);
   };
 
+  const resetElementForm = () => {
+    setElementForm({
+      element_type: 'text',
+      element_key: '',
+      title: '',
+      content: '{}',
+      page_location: 'homepage',
+      section_location: '',
+      sort_order: 0,
+      is_active: true,
+      images: []
+    });
+    setEditingElement(null);
+  };
+
   // Handle create page
   const handleCreatePage = () => {
     resetPageForm();
     setDialogOpen(true);
+  };
+
+  // Handle create element
+  const handleCreateElement = () => {
+    resetElementForm();
+    setElementDialogOpen(true);
+  };
+
+  // Handle edit element
+  const handleEditElement = (element: ContentElement) => {
+    setEditingElement(element);
+    setElementForm({
+      element_type: element.element_type,
+      element_key: element.element_key,
+      title: element.title || '',
+      content: JSON.stringify(element.content, null, 2),
+      page_location: element.page_location || 'homepage',
+      section_location: element.section_location || '',
+      sort_order: element.sort_order,
+      is_active: element.is_active,
+      images: element.images || []
+    });
+    setElementDialogOpen(true);
   };
 
   // Handle edit page
@@ -454,25 +594,48 @@ export const AdminContent: React.FC = () => {
         <div>
           <h1 className="text-3xl font-bold text-foreground mb-2">Content Management</h1>
           <p className="text-muted-foreground">
-            Manage website content, pages, and sections in real-time
+            Manage website content, pages, sections, and live elements in real-time
           </p>
         </div>
-        <Button onClick={handleCreatePage}>
-          <Plus className="h-4 w-4 mr-2" />
-          Create Page
-        </Button>
+        <div className="flex gap-2">
+          <Button onClick={handleCreateElement} variant="outline">
+            <Plus className="h-4 w-4 mr-2" />
+            Add Element
+          </Button>
+          <Button onClick={handleCreatePage}>
+            <Plus className="h-4 w-4 mr-2" />
+            Create Page
+          </Button>
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Pages List */}
-        <div className="lg:col-span-2">
+      <Tabs defaultValue="elements" className="space-y-4">
+        <TabsList className="grid w-full grid-cols-3">
+          <TabsTrigger value="elements" className="flex items-center gap-2">
+            <Layout className="h-4 w-4" />
+            Website Elements
+          </TabsTrigger>
+          <TabsTrigger value="pages" className="flex items-center gap-2">
+            <FileText className="h-4 w-4" />
+            Pages
+          </TabsTrigger>
+          <TabsTrigger value="sections" className="flex items-center gap-2">
+            <Settings className="h-4 w-4" />
+            Sections
+          </TabsTrigger>
+        </TabsList>
+
+        {/* Website Elements Tab */}
+        <TabsContent value="elements">
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <FileText className="h-5 w-5" />
-                Content Pages
+                <Layout className="h-5 w-5" />
+                Website Elements
               </CardTitle>
-              <CardDescription>Manage all your website pages</CardDescription>
+              <CardDescription>
+                Manage all editable content on your website including featured properties, headlines, and more
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <Table>
@@ -480,51 +643,49 @@ export const AdminContent: React.FC = () => {
                   <TableRow>
                     <TableHead>Title</TableHead>
                     <TableHead>Type</TableHead>
+                    <TableHead>Location</TableHead>
                     <TableHead>Status</TableHead>
-                    <TableHead>Updated</TableHead>
                     <TableHead className="text-right">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {contentPages.map((page) => (
-                    <TableRow key={page.id}>
+                  {contentElements.map((element) => (
+                    <TableRow key={element.id}>
                       <TableCell>
                         <div>
-                          <div className="font-medium">{page.title}</div>
-                          <div className="text-sm text-muted-foreground">/{page.slug}</div>
+                          <div className="font-medium">{element.title || 'Untitled'}</div>
+                          <div className="text-sm text-muted-foreground">{element.element_key}</div>
                         </div>
                       </TableCell>
-                      <TableCell>{getTypeBadge(page.page_type)}</TableCell>
-                      <TableCell>{getStatusBadge(page.is_published)}</TableCell>
-                      <TableCell>{new Date(page.updated_at).toLocaleDateString()}</TableCell>
+                      <TableCell>
+                        <Badge variant="outline">{element.element_type}</Badge>
+                      </TableCell>
+                      <TableCell>
+                        <div className="text-sm">
+                          <div>{element.page_location}</div>
+                          {element.section_location && (
+                            <div className="text-muted-foreground">{element.section_location}</div>
+                          )}
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <Badge variant={element.is_active ? "default" : "secondary"}>
+                          {element.is_active ? "Active" : "Inactive"}
+                        </Badge>
+                      </TableCell>
                       <TableCell className="text-right">
                         <div className="flex items-center justify-end gap-2">
                           <Button
                             variant="ghost"
                             size="sm"
-                            onClick={() => window.open(`/preview/${page.slug}`, '_blank')}
-                            title="Preview Page"
-                          >
-                            <ExternalLink className="h-4 w-4" />
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => handleViewPage(page)}
-                          >
-                            <Eye className="h-4 w-4" />
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => handleEditPage(page)}
+                            onClick={() => handleEditElement(element)}
                           >
                             <Edit className="h-4 w-4" />
                           </Button>
                           <Button
                             variant="ghost"
                             size="sm"
-                            onClick={() => handleDeletePage(page.id)}
+                            onClick={() => handleDeleteElement(element.id)}
                           >
                             <Trash2 className="h-4 w-4" />
                           </Button>
@@ -536,10 +697,89 @@ export const AdminContent: React.FC = () => {
               </Table>
             </CardContent>
           </Card>
-        </div>
+        </TabsContent>
 
-        {/* Page Sections */}
-        <div>
+        {/* Pages Tab */}
+        <TabsContent value="pages">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Pages List */}
+            <div className="lg:col-span-3">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <FileText className="h-5 w-5" />
+                    Content Pages
+                  </CardTitle>
+                  <CardDescription>Manage all your website pages</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Title</TableHead>
+                        <TableHead>Type</TableHead>
+                        <TableHead>Status</TableHead>
+                        <TableHead>Updated</TableHead>
+                        <TableHead className="text-right">Actions</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {contentPages.map((page) => (
+                        <TableRow key={page.id}>
+                          <TableCell>
+                            <div>
+                              <div className="font-medium">{page.title}</div>
+                              <div className="text-sm text-muted-foreground">/{page.slug}</div>
+                            </div>
+                          </TableCell>
+                          <TableCell>{getTypeBadge(page.page_type)}</TableCell>
+                          <TableCell>{getStatusBadge(page.is_published)}</TableCell>
+                          <TableCell>{new Date(page.updated_at).toLocaleDateString()}</TableCell>
+                          <TableCell className="text-right">
+                            <div className="flex items-center justify-end gap-2">
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => window.open(`/preview/${page.slug}`, '_blank')}
+                                title="Preview Page"
+                              >
+                                <ExternalLink className="h-4 w-4" />
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => handleViewPage(page)}
+                              >
+                                <Eye className="h-4 w-4" />
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => handleEditPage(page)}
+                              >
+                                <Edit className="h-4 w-4" />
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => handleDeletePage(page.id)}
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </div>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </TabsContent>
+
+        {/* Sections Tab */}
+        <TabsContent value="sections">
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
@@ -614,13 +854,162 @@ export const AdminContent: React.FC = () => {
                 </>
               ) : (
                 <p className="text-muted-foreground text-center py-8">
-                  Select a page from the table to manage its sections
+                  Select a page from the Pages tab to manage its sections
                 </p>
               )}
             </CardContent>
           </Card>
-        </div>
-      </div>
+        </TabsContent>
+      </Tabs>
+
+      {/* Create/Edit Element Dialog */}
+      <Dialog open={elementDialogOpen} onOpenChange={setElementDialogOpen}>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>
+              {editingElement ? 'Edit Element' : 'Create New Element'}
+            </DialogTitle>
+            <DialogDescription>
+              {editingElement ? 'Update the element content and settings' : 'Create a new editable element for your website'}
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="space-y-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="element_type">Element Type *</Label>
+                <Select 
+                  value={elementForm.element_type} 
+                  onValueChange={(value) => handleElementFormChange('element_type', value)}
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="featured_property">Featured Property</SelectItem>
+                    <SelectItem value="section_content">Section Header</SelectItem>
+                    <SelectItem value="text">Text Content</SelectItem>
+                    <SelectItem value="image">Image</SelectItem>
+                    <SelectItem value="button">Button/CTA</SelectItem>
+                    <SelectItem value="hero_text">Hero Text</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="element_key">Element Key *</Label>
+                <Input
+                  id="element_key"
+                  value={elementForm.element_key}
+                  onChange={(e) => handleElementFormChange('element_key', e.target.value)}
+                  placeholder="unique_element_key"
+                />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="element_title">Title</Label>
+              <Input
+                id="element_title"
+                value={elementForm.title}
+                onChange={(e) => handleElementFormChange('title', e.target.value)}
+                placeholder="Element title"
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="page_location">Page Location</Label>
+                <Select 
+                  value={elementForm.page_location} 
+                  onValueChange={(value) => handleElementFormChange('page_location', value)}
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="homepage">Homepage</SelectItem>
+                    <SelectItem value="about">About Page</SelectItem>
+                    <SelectItem value="services">Services</SelectItem>
+                    <SelectItem value="contact">Contact</SelectItem>
+                    <SelectItem value="blog">Blog</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="section_location">Section Location</Label>
+                <Input
+                  id="section_location"
+                  value={elementForm.section_location}
+                  onChange={(e) => handleElementFormChange('section_location', e.target.value)}
+                  placeholder="featured_properties, hero, etc."
+                />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="element_content">Content (JSON)</Label>
+              <Textarea
+                id="element_content"
+                value={elementForm.content}
+                onChange={(e) => handleElementFormChange('content', e.target.value)}
+                placeholder='{"text": "Content here", "price": "₹1.2 Cr", "location": "Delhi"}'
+                rows={6}
+                className="font-mono text-sm"
+              />
+              <p className="text-xs text-muted-foreground">
+                For properties: {"{"}"location", "price", "area", "bedrooms", "bathrooms", "image", "propertyType"{"}"}
+              </p>
+            </div>
+
+            <div className="space-y-2">
+              <Label>Images</Label>
+              <ImageUpload
+                existingImages={elementForm.images}
+                onImageUploaded={(url) => 
+                  handleElementFormChange('images', [...elementForm.images, url])
+                }
+                onImageRemoved={(url) => 
+                  handleElementFormChange('images', elementForm.images.filter(img => img !== url))
+                }
+                maxImages={5}
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="sort_order">Sort Order</Label>
+                <Input
+                  id="sort_order"
+                  type="number"
+                  value={elementForm.sort_order}
+                  onChange={(e) => handleElementFormChange('sort_order', parseInt(e.target.value) || 0)}
+                />
+              </div>
+
+              <div className="flex items-center justify-between pt-6">
+                <Label htmlFor="element_active">Active</Label>
+                <Switch
+                  id="element_active"
+                  checked={elementForm.is_active}
+                  onCheckedChange={(checked) => handleElementFormChange('is_active', checked)}
+                />
+              </div>
+            </div>
+          </div>
+          
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setElementDialogOpen(false)}>
+              Cancel
+            </Button>
+            <Button onClick={handleSaveElement}>
+              <Save className="h-4 w-4 mr-2" />
+              {editingElement ? 'Update' : 'Create'} Element
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       {/* Create/Edit Page Dialog */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
@@ -803,7 +1192,7 @@ export const AdminContent: React.FC = () => {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="text">Text Content</SelectItem>
+                    <SelectItem value="content">Text Content</SelectItem>
                     <SelectItem value="hero">Hero Section</SelectItem>
                     <SelectItem value="gallery">Image Gallery</SelectItem>
                     <SelectItem value="cta">Call to Action</SelectItem>
