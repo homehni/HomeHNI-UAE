@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -8,15 +8,12 @@ import { useToast } from '@/hooks/use-toast';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Marquee from '@/components/Marquee';
-import SearchSection, { SearchSectionRef } from '@/components/SearchSection';
-import DirectorySection from '@/components/DirectorySection';
 const Careers = () => {
   const [statesData, setStatesData] = useState<any>(null);
   const [selectedState, setSelectedState] = useState("");
   const [selectedStateDesktop, setSelectedStateDesktop] = useState("");
   const [cities, setCities] = useState<string[]>([]);
   const [citiesDesktop, setCitiesDesktop] = useState<string[]>([]);
-  const searchSectionRef = useRef<SearchSectionRef>(null);
 
   const {
     toast
@@ -75,15 +72,9 @@ const Careers = () => {
       {/* Header overlapping with content */}
       <Header />
       
-      {/* Content starts immediately after marquee */}
+      {/* Hero Section with banner image merged with header/marquee */}
       <div className="pt-8">
-        <div className="relative">
-          <SearchSection ref={searchSectionRef} />
-          <DirectorySection />
-        </div>
-
-        {/* Hero Section with banner image */}
-        <div className="relative h-[50vh] overflow-hidden mt-8">
+        <div className="relative h-[50vh] overflow-hidden">
           {/* Banner Background */}
           <div className="absolute inset-0 bg-cover bg-center bg-no-repeat" style={{
           backgroundImage: `url('/lovable-uploads/b97275ad-b157-4783-8b5b-198d7c905011.png')`,
