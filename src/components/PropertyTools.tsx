@@ -52,7 +52,7 @@ const PropertyTools = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {tools.map((tool) => (
-            <Card key={tool.id} className="hover:shadow-lg transition-all duration-300 cursor-pointer group">
+            <Card key={tool.id} className="hover:shadow-lg transition-all duration-300 cursor-pointer group border-2 border-primary">
               <CardContent className="p-6 text-center">
                 <div className={`w-16 h-16 ${tool.color} rounded-lg flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300`}>
                   <tool.icon className="w-8 h-8" />

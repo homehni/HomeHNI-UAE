@@ -121,7 +121,7 @@ export const SecurePropertySearch: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Search Filters */}
-      <Card>
+      <Card className="border-2 border-primary">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Filter className="h-5 w-5" />
@@ -228,7 +228,7 @@ export const SecurePropertySearch: React.FC = () => {
       </Card>
 
       {/* Security Notice */}
-      <Card className="border-green-200 bg-green-50">
+      <Card className="border-green-200 bg-green-50 border-2 border-primary">
         <CardContent className="p-4">
           <div className="flex items-start gap-2">
             <Shield className="h-5 w-5 text-green-600 mt-0.5" />
@@ -249,7 +249,7 @@ export const SecurePropertySearch: React.FC = () => {
           <p className="text-muted-foreground mt-4">Loading secure properties...</p>
         </div>
       ) : properties.length === 0 ? (
-        <Card>
+        <Card className="border-2 border-primary">
           <CardContent className="text-center py-12">
             <AlertTriangle className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
             <h3 className="text-lg font-medium mb-2">No Properties Found</h3>
@@ -259,7 +259,7 @@ export const SecurePropertySearch: React.FC = () => {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {properties.map((property) => (
-            <Card key={property.id} className="overflow-hidden">
+            <Card key={property.id} className="overflow-hidden border-2 border-primary">
               <div className="aspect-video bg-muted">
                 {property.images && property.images.length > 0 ? (
                   <img 

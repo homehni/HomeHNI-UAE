@@ -104,7 +104,7 @@ const PropertyCard = ({
   };
 
   return (
-    <Card className="w-48 overflow-hidden card-border hover-lift cursor-pointer bg-white" onClick={() => navigate(`/property/${id}`, { state: propertyForPage })}>
+    <Card className="w-48 overflow-hidden card-border hover-lift cursor-pointer bg-white border-2 border-primary" onClick={() => navigate(`/property/${id}`, { state: propertyForPage })}>
       <div className="relative">
         <div className="h-24 overflow-hidden">
           <img

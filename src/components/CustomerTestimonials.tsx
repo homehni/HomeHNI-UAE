@@ -31,7 +31,7 @@ const CustomerTestimonials = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
           {/* Video Section */}
           <div className="flex justify-center lg:justify-start">
-            <Card className="bg-gray-50 border-gray-200 w-full max-w-md">
+            <Card className="bg-gray-50 border-2 border-primary w-full max-w-md">
               <CardContent className="p-8 flex flex-col items-center justify-center min-h-[300px]">
                 <div className="w-16 h-16 bg-brand-red rounded-full flex items-center justify-center mb-4 cursor-pointer hover:bg-brand-red-light transition-colors">
                   <Play className="w-8 h-8 text-white ml-1" fill="currentColor" />
@@ -46,7 +46,7 @@ const CustomerTestimonials = () => {
           {/* Testimonials Section */}
           <div className="space-y-4">
             {testimonials.map((testimonial, index) => (
-              <Card key={index} className="bg-gray-50 border-gray-200">
+              <Card key={index} className="bg-gray-50 border-2 border-primary">
                 <CardContent className="p-6">
                   <div className="flex items-start space-x-4">
                     {/* Avatar */}

@@ -81,7 +81,7 @@ export const PropertyTable: React.FC<PropertyTableProps> = ({
   };
 
   return (
-    <Card className="w-full">
+    <Card className="w-full border-2 border-primary">
       <CardHeader className="pb-4">
         <CardTitle className="text-lg font-semibold">Property Listings</CardTitle>
         <div className="flex flex-col sm:flex-row gap-4 mt-4">
