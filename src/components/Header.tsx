@@ -169,21 +169,21 @@ const Header = () => {
   <a href="#" onClick={e => {
                 e.preventDefault();
                 handlePostPropertyClick('Owner');
-              }} className={`hover:opacity-80 transition-colors duration-500 text-base font-medium ${isScrolled ? 'text-gray-800' : 'text-white'} cursor-pointer`}>
+              }} className={`hover:opacity-80 transition-colors duration-500 text-base font-medium uppercase ${isScrolled ? 'text-gray-800' : 'text-white'} cursor-pointer`}>
     Sellers
   </a>
   
   <a href="#" onClick={e => {
                 e.preventDefault();
                 handlePostPropertyClick('Agent');
-              }} className={`hover:opacity-80 transition-colors duration-500 text-base font-medium ${isScrolled ? 'text-gray-800' : 'text-white'} cursor-pointer`}>
+              }} className={`hover:opacity-80 transition-colors duration-500 text-base font-medium uppercase ${isScrolled ? 'text-gray-800' : 'text-white'} cursor-pointer`}>
     Agents
   </a>
 
                <a href="#" onClick={e => {
                 e.preventDefault();
                 handlePostPropertyClick('Builder');
-              }} className={`hover:opacity-80 transition-colors duration-500 text-base font-medium ${isScrolled ? 'text-gray-800' : 'text-white'} cursor-pointer`}>
+              }} className={`hover:opacity-80 transition-colors duration-500 text-base font-medium uppercase ${isScrolled ? 'text-gray-800' : 'text-white'} cursor-pointer`}>
     Builders
   </a>
   
@@ -191,7 +191,7 @@ const Header = () => {
 
 
               <div className="relative" onMouseEnter={handleRentalHover} onMouseLeave={handleRentalLeave}>
-    <button className={`flex items-center hover:opacity-80 transition-colors duration-500 text-base font-medium ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
+    <button className={`flex items-center hover:opacity-80 transition-colors duration-500 text-base font-medium uppercase ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
       Rental
       <ChevronDown className="ml-1 h-3 w-3" />
     </button>
@@ -212,7 +212,7 @@ const Header = () => {
   
   {/* Services Dropdown */}
   <div className="relative" onMouseEnter={handleServicesHover} onMouseLeave={handleServicesLeave}>
-    <button className={`flex items-center hover:opacity-80 transition-colors duration-500 text-base font-medium ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
+    <button className={`flex items-center hover:opacity-80 transition-colors duration-500 text-base font-medium uppercase ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
       Services
       <ChevronDown className="ml-1 h-3 w-3" />
     </button>
@@ -247,11 +247,11 @@ const Header = () => {
                 <a href="/loans" onClick={e => {
                 e.preventDefault();
                 navigate('/loans');
-              }} className={`hover:opacity-80 transition-colors duration-500 text-base font-medium ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
+              }} className={`hover:opacity-80 transition-colors duration-500 text-base font-medium uppercase ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
                   Loans
                 </a>
 
-              {<a href="/careers" className={`hover:opacity-80 transition-colors duration-500 text-base font-medium ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
+              {<a href="/careers" className={`hover:opacity-80 transition-colors duration-500 text-base font-medium uppercase ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
      Jobs
   </a>}
              </nav>}
