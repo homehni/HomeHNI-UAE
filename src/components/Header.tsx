@@ -26,6 +26,7 @@ const Header = () => {
   const [isLegalFormOpen, setIsLegalFormOpen] = useState(false);
   const [isRentalDropdownOpen, setIsRentalDropdownOpen] = useState(false);
   const [isServicesDropdownOpen, setIsServicesDropdownOpen] = useState(false);
+  const [statesData, setStatesData] = useState<Record<string, string[]>>({});
   const rentalHoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const servicesHoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const navigate = useNavigate();
@@ -64,6 +65,20 @@ const Header = () => {
     handleScroll();
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Load states data
+  useEffect(() => {
+    const fetchStatesData = async () => {
+      try {
+        const response = await fetch('/data/india_states_cities.json');
+        const data = await response.json();
+        setStatesData(data);
+      } catch (error) {
+        console.error('Error fetching states data:', error);
+      }
+    };
+    fetchStatesData();
   }, []);
   const handleLegalServicesClick = () => {
     setIsLegalFormOpen(true);
@@ -139,11 +154,11 @@ const Header = () => {
                   </SelectTrigger>
                   <SelectContent className="bg-white border border-gray-200 shadow-lg z-50">
                     <SelectItem value="all-india">All India</SelectItem>
-                    <SelectItem value="hyderabad">Hyderabad</SelectItem>
-                    <SelectItem value="mumbai">Mumbai</SelectItem>
-                    <SelectItem value="delhi">Delhi</SelectItem>
-                    <SelectItem value="bangalore">Bangalore</SelectItem>
-                    <SelectItem value="pune">Pune</SelectItem>
+                    {Object.keys(statesData).sort().map((state) => (
+                      <SelectItem key={state} value={state.toLowerCase().replace(/\s+/g, '-')}>
+                        {state}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               )}
