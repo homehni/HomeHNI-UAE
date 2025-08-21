@@ -65,7 +65,7 @@ export function PgHostelRoomDetailsStep({
   };
 
   const isFormValid = () => {
-    return formData.expectedRent > 0 && formData.expectedDeposit >= 0;
+    return true;
   };
 
   const handleAmenityChange = (amenity: keyof typeof formData.roomAmenities, checked: boolean) => {
@@ -225,7 +225,7 @@ export function PgHostelRoomDetailsStep({
                   <Button type="button" variant="outline" onClick={onBack} className="px-8">
                     Back
                   </Button>
-                  <Button type="submit" disabled={!isFormValid()} className="px-8">
+                  <Button type="submit" className="px-8">
                     Save & Continue
                   </Button>
                 </div>
