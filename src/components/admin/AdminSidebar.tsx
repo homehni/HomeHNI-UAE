@@ -118,7 +118,7 @@ const AdminSidebar = () => {
   }, {} as Record<string, typeof navigationItems>);
 
   return (
-    <Sidebar className="w-64 border-r bg-white">
+    <Sidebar collapsible="none" className="w-64 border-r bg-white text-gray-900">
       <div className="p-4 border-b bg-white">
         <div className="flex items-center space-x-2">
           <Logo size="small" />
