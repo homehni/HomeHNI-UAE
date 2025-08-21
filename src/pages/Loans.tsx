@@ -147,8 +147,8 @@ const Loans = () => {
   // Update cities when state changes (mobile)
   useEffect(() => {
     if (statesData && selectedState) {
-      const state = statesData.states.find((s: any) => s.state === selectedState);
-      setCities(state ? state.cities : []);
+      const cities = statesData[selectedState];
+      setCities(cities || []);
     } else {
       setCities([]);
     }
@@ -157,8 +157,8 @@ const Loans = () => {
   // Update cities when state changes (desktop)
   useEffect(() => {
     if (statesData && selectedStateDesktop) {
-      const state = statesData.states.find((s: any) => s.state === selectedStateDesktop);
-      setCitiesDesktop(state ? state.cities : []);
+      const cities = statesData[selectedStateDesktop];
+      setCitiesDesktop(cities || []);
     } else {
       setCitiesDesktop([]);
     }
@@ -263,9 +263,9 @@ const Loans = () => {
                 <Select name="state" onValueChange={setSelectedStateDesktop}>
                   <SelectTrigger className="flex-1"><SelectValue placeholder="State" /></SelectTrigger>
                   <SelectContent>
-                    {statesData?.states?.map((state: any) => (
-                      <SelectItem key={state.state} value={state.state}>
-                        {state.state}
+                    {statesData && Object.keys(statesData).map((state: string) => (
+                      <SelectItem key={state} value={state}>
+                        {state}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -374,9 +374,9 @@ const Loans = () => {
                       <SelectValue placeholder="State" />
                     </SelectTrigger>
                     <SelectContent className="bg-background border shadow-lg">
-                      {statesData?.states?.map((state: any) => (
-                        <SelectItem key={state.state} value={state.state}>
-                          {state.state}
+                      {statesData && Object.keys(statesData).map((state: string) => (
+                        <SelectItem key={state} value={state}>
+                          {state}
                         </SelectItem>
                       ))}
                     </SelectContent>
