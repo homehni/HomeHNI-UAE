@@ -1,0 +1,105 @@
+/* Rich Text Editor Styles */
+.ql-toolbar {
+  border-top: 1px solid hsl(var(--border)) !important;
+  border-left: 1px solid hsl(var(--border)) !important;
+  border-right: 1px solid hsl(var(--border)) !important;
+  border-bottom: none !important;
+  background: hsl(var(--background)) !important;
+}
+
+.ql-container {
+  border-bottom: 1px solid hsl(var(--border)) !important;
+  border-left: 1px solid hsl(var(--border)) !important;
+  border-right: 1px solid hsl(var(--border)) !important;
+  border-top: none !important;
+  background: hsl(var(--background)) !important;
+}
+
+.ql-editor {
+  color: hsl(var(--foreground)) !important;
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.ql-editor p {
+  margin-bottom: 0.5em;
+}
+
+.ql-editor.ql-blank::before {
+  color: hsl(var(--muted-foreground)) !important;
+  font-style: normal !important;
+}
+
+/* Toolbar button styles */
+.ql-toolbar .ql-picker-label {
+  color: hsl(var(--foreground)) !important;
+}
+
+.ql-toolbar .ql-picker-options {
+  background: hsl(var(--background)) !important;
+  border: 1px solid hsl(var(--border)) !important;
+}
+
+.ql-toolbar .ql-picker-item {
+  color: hsl(var(--foreground)) !important;
+}
+
+.ql-toolbar .ql-picker-item:hover {
+  background: hsl(var(--accent)) !important;
+}
+
+.ql-toolbar button {
+  color: hsl(var(--muted-foreground)) !important;
+}
+
+.ql-toolbar button:hover {
+  color: hsl(var(--foreground)) !important;
+}
+
+.ql-toolbar button.ql-active {
+  color: hsl(var(--primary)) !important;
+}
+
+/* Custom scrollbar for editor */
+.ql-editor::-webkit-scrollbar {
+  width: 8px;
+}
+
+.ql-editor::-webkit-scrollbar-track {
+  background: hsl(var(--muted));
+}
+
+.ql-editor::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted-foreground));
+  border-radius: 4px;
+}
+
+.ql-editor::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--foreground));
+}
+
+/* Dark mode specific adjustments */
+.dark .ql-toolbar .ql-stroke {
+  stroke: hsl(var(--muted-foreground)) !important;
+}
+
+.dark .ql-toolbar .ql-fill {
+  fill: hsl(var(--muted-foreground)) !important;
+}
+
+.dark .ql-toolbar button:hover .ql-stroke {
+  stroke: hsl(var(--foreground)) !important;
+}
+
+.dark .ql-toolbar button:hover .ql-fill {
+  fill: hsl(var(--foreground)) !important;
+}
+
+.dark .ql-toolbar button.ql-active .ql-stroke {
+  stroke: hsl(var(--primary)) !important;
+}
+
+.dark .ql-toolbar button.ql-active .ql-fill {
+  fill: hsl(var(--primary)) !important;
+}
