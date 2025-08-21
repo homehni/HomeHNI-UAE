@@ -17,7 +17,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Textarea } from '@/components/ui/textarea';
 
 const saleDetailsSchema = z.object({
-  expectedPrice: z.number().optional(),
+  expectedPrice: z.number().optional().or(z.nan()).transform(val => isNaN(val) ? undefined : val),
   availableFrom: z.date().optional(),
   currentlyUnderLoan: z.boolean().optional(),
   priceNegotiable: z.boolean().optional(),

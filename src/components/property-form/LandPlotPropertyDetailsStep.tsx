@@ -11,12 +11,12 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { LandPlotDetails } from '@/types/landPlotProperty';
 
 const landPlotDetailsSchema = z.object({
-  plotArea: z.number().optional(),
+  plotArea: z.number().optional().or(z.nan()).transform(val => isNaN(val) ? undefined : val),
   plotAreaUnit: z.enum(['sq-ft', 'sq-yard', 'acre', 'hectare', 'bigha', 'biswa']).optional(),
-  plotLength: z.number().optional(),
-  plotWidth: z.number().optional(),
+  plotLength: z.number().optional().or(z.nan()).transform(val => isNaN(val) ? undefined : val),
+  plotWidth: z.number().optional().or(z.nan()).transform(val => isNaN(val) ? undefined : val),
   boundaryWall: z.enum(['yes', 'no', 'partial']).optional(),
-  floorsAllowed: z.number().optional(),
+  floorsAllowed: z.number().optional().or(z.nan()).transform(val => isNaN(val) ? undefined : val),
   gatedProject: z.enum(['yes', 'no']).optional(),
   gatedCommunity: z.boolean().optional(),
   surveyNumber: z.string().optional(),
