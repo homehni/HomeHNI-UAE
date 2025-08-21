@@ -139,7 +139,7 @@ const PropertyCard = ({
           <span className="text-xs line-clamp-1">{location}</span>
         </div>
         
-        <div className="flex gap-1 mt-auto">
+        <div className="flex gap-2 mt-auto">
           <Button
             variant="outline"
             size="sm"
