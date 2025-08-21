@@ -91,26 +91,8 @@ export const useCommercialPropertyForm = () => {
   });
 
   const isStepValid = (step: number): boolean => {
-    switch (step) {
-      case 2:
-        return !!(propertyDetails.title && propertyDetails.propertyType && 
-                 propertyDetails.furnishingStatus);
-      case 3:
-        return !!(locationDetails.state && locationDetails.city && locationDetails.locality && 
-                 locationDetails.pincode);
-      case 4:
-        return !!(rentalDetails.listingType && rentalDetails.expectedPrice);
-      case 5:
-        return true; // Amenities are optional
-      case 6:
-        return !!(gallery.images && gallery.images.length >= 3);
-      case 7:
-        return true; // Additional info is optional
-      case 8:
-        return !!(scheduleInfo.availability); // Schedule step
-      default:
-        return true;
-    }
+    // All steps are now optional - always return true
+    return true;
   };
 
   return {

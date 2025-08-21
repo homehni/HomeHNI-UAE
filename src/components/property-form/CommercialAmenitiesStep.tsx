@@ -10,10 +10,10 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { CommercialAmenities } from '@/types/property';
 
 const commercialAmenitiesSchema = z.object({
-  powerBackup: z.string().min(1, "Power Backup is required"),
-  lift: z.string().min(1, "Lift is required"),
-  parking: z.string().min(1, "Parking is required"),
-  washrooms: z.string().min(1, "Washroom(s) is required"),
+  powerBackup: z.string().optional(),
+  lift: z.string().optional(),
+  parking: z.string().optional(),
+  washrooms: z.string().optional(),
   waterStorageFacility: z.string().optional(),
   security: z.string().optional(),
   currentPropertyCondition: z.string().optional(),
@@ -73,7 +73,7 @@ export const CommercialAmenitiesStep: React.FC<CommercialAmenitiesStepProps> = (
                   name="powerBackup"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-sm font-medium">Power Backup *</FormLabel>
+                      <FormLabel className="text-sm font-medium">Power Backup</FormLabel>
                       <Select onValueChange={field.onChange} defaultValue={field.value}>
                         <FormControl>
                           <SelectTrigger className="h-12">
@@ -97,7 +97,7 @@ export const CommercialAmenitiesStep: React.FC<CommercialAmenitiesStepProps> = (
                   name="lift"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-sm font-medium">Lift *</FormLabel>
+                      <FormLabel className="text-sm font-medium">Lift</FormLabel>
                       <Select onValueChange={field.onChange} defaultValue={field.value}>
                         <FormControl>
                           <SelectTrigger className="h-12">
@@ -121,7 +121,7 @@ export const CommercialAmenitiesStep: React.FC<CommercialAmenitiesStepProps> = (
                   name="parking"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-sm font-medium">Parking *</FormLabel>
+                      <FormLabel className="text-sm font-medium">Parking</FormLabel>
                       <Select onValueChange={field.onChange} defaultValue={field.value}>
                         <FormControl>
                           <SelectTrigger className="h-12">
@@ -146,7 +146,7 @@ export const CommercialAmenitiesStep: React.FC<CommercialAmenitiesStepProps> = (
                   name="washrooms"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-sm font-medium">Washroom(s) *</FormLabel>
+                      <FormLabel className="text-sm font-medium">Washroom(s)</FormLabel>
                       <Select onValueChange={field.onChange} defaultValue={field.value}>
                         <FormControl>
                           <SelectTrigger className="h-12">

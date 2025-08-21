@@ -17,31 +17,22 @@ import { cn } from '@/lib/utils';
 import { CommercialRentalDetails } from '@/types/property';
 
 const commercialRentalDetailsSchema = z.object({
-  listingType: z.enum(['Rent']),
-  expectedPrice: z.number().min(1, 'Expected rent is required'),
+  listingType: z.enum(['Rent']).optional(),
+  expectedPrice: z.number().optional(),
   rentNegotiable: z.boolean().optional(),
   maintenanceExtra: z.boolean().optional(),
   maintenanceCharges: z.number().optional(),
-  securityDeposit: z.number().min(1, 'Deposit is required'),
+  securityDeposit: z.number().optional(),
   depositNegotiable: z.boolean().optional(),
-  leaseDuration: z.string().min(1, 'Please select lease duration'),
-  lockinPeriod: z.string().min(1, 'Please select lockin period'),
-  availableFrom: z.string().min(1, 'Please select available from date'),
+  leaseDuration: z.string().optional(),
+  lockinPeriod: z.string().optional(),
+  availableFrom: z.string().optional(),
   businessType: z.array(z.string()).optional(),
   operatingHours: z.string().optional(),
   restrictedActivities: z.array(z.string()).optional(),
   leaseTerm: z.string().optional(),
   escalationClause: z.string().optional(),
-  
-}).refine((data) => {
-  if (data.maintenanceExtra && (!data.maintenanceCharges || data.maintenanceCharges <= 0)) {
-    return false;
-  }
-  return true;
-}, {
-  message: "Maintenance amount is required when Maintenance Extra is selected",
-  path: ["maintenanceCharges"],
-});
+}).optional();
 
 type CommercialRentalDetailsForm = z.infer<typeof commercialRentalDetailsSchema>;
 
@@ -126,12 +117,12 @@ export const CommercialRentalDetailsStep: React.FC<CommercialRentalDetailsStepPr
   };
 
   const onSubmit = (data: CommercialRentalDetailsForm) => {
-    const rentalData: CommercialRentalDetails = {
+    const rentalData = {
       ...data,
       businessType: selectedBusinessTypes,
       restrictedActivities: selectedRestrictions,
     };
-    onNext(rentalData);
+    onNext(rentalData as CommercialRentalDetails);
   };
 
   return (
@@ -148,7 +139,7 @@ export const CommercialRentalDetailsStep: React.FC<CommercialRentalDetailsStepPr
                 name="expectedPrice"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-sm font-medium">Expected Rent *</FormLabel>
+                    <FormLabel className="text-sm font-medium">Expected Rent</FormLabel>
                     <div className="flex items-center space-x-4">
                       <div className="flex-1 relative">
                         <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">₹</span>
@@ -245,7 +236,7 @@ export const CommercialRentalDetailsStep: React.FC<CommercialRentalDetailsStepPr
                 name="securityDeposit"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-sm font-medium">Security Deposit (INR) *</FormLabel>
+                    <FormLabel className="text-sm font-medium">Security Deposit (INR)</FormLabel>
                     <div className="relative">
                       <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">₹</span>
                       <FormControl>
@@ -370,7 +361,7 @@ export const CommercialRentalDetailsStep: React.FC<CommercialRentalDetailsStepPr
                 
                 return (
                   <FormItem className="flex flex-col">
-                    <FormLabel className="text-sm font-medium">Available From *</FormLabel>
+                    <FormLabel className="text-sm font-medium">Available From</FormLabel>
                     <Popover open={open} onOpenChange={setOpen}>
                       <PopoverTrigger asChild>
                       <FormControl>

@@ -11,14 +11,14 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { CommercialPropertyDetails } from '@/types/property';
 
 const commercialPropertyDetailsSchema = z.object({
-  propertyType: z.string().min(1, 'Please select property type'),
-  spaceType: z.string().min(1, 'Please select space type'),
-  buildingType: z.string().min(1, 'Please select building type'),
-  propertyAge: z.string().min(1, 'Please select property age'),
-  totalFloors: z.union([z.number().min(1, 'Total floors must be at least 1'), z.string().min(1, 'Please select total floors')]),
-  floorNo: z.union([z.number().min(0, 'Floor number cannot be negative'), z.string().min(1, 'Please select floor')]),
-  furnishingStatus: z.string().min(1, 'Please select furnishing status'),
-  superBuiltUpArea: z.number().min(1, 'Super built up area is required').optional(),
+  propertyType: z.string().optional(),
+  spaceType: z.string().optional(),
+  buildingType: z.string().optional(),
+  propertyAge: z.string().optional(),
+  totalFloors: z.union([z.number(), z.string()]).optional(),
+  floorNo: z.union([z.number(), z.string()]).optional(),
+  furnishingStatus: z.string().optional(),
+  superBuiltUpArea: z.number().optional(),
   powerLoad: z.string().optional(),
   ceilingHeight: z.string().optional(),
   entranceWidth: z.string().optional(),
@@ -92,7 +92,7 @@ export const CommercialPropertyDetailsStep: React.FC<CommercialPropertyDetailsSt
                 name="spaceType"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-sm font-medium">Space Type*</FormLabel>
+                    <FormLabel className="text-sm font-medium">Space Type</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger className="h-12">
@@ -118,7 +118,7 @@ export const CommercialPropertyDetailsStep: React.FC<CommercialPropertyDetailsSt
                 name="buildingType"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-sm font-medium">Building Type*</FormLabel>
+                    <FormLabel className="text-sm font-medium">Building Type</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger className="h-12">
@@ -147,7 +147,7 @@ export const CommercialPropertyDetailsStep: React.FC<CommercialPropertyDetailsSt
                 name="propertyAge"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-sm font-medium">Age of Property*</FormLabel>
+                    <FormLabel className="text-sm font-medium">Age of Property</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger className="h-12">
@@ -172,7 +172,7 @@ export const CommercialPropertyDetailsStep: React.FC<CommercialPropertyDetailsSt
                 name="floorNo"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-sm font-medium">Floor*</FormLabel>
+                    <FormLabel className="text-sm font-medium">Floor</FormLabel>
                     <Select
                       onValueChange={(value) =>
                         value === 'full' || value === 'lower' || value === 'upper' || value === '99+'
@@ -212,7 +212,7 @@ export const CommercialPropertyDetailsStep: React.FC<CommercialPropertyDetailsSt
                 name="totalFloors"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-sm font-medium">Total Floors*</FormLabel>
+                    <FormLabel className="text-sm font-medium">Total Floors</FormLabel>
                     <Select
                       onValueChange={(value) =>
                         value === '99+' ? field.onChange(value) : field.onChange(parseInt(value))
@@ -250,7 +250,7 @@ export const CommercialPropertyDetailsStep: React.FC<CommercialPropertyDetailsSt
                 name="superBuiltUpArea"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-sm font-medium">Super Built Up Area*</FormLabel>
+                    <FormLabel className="text-sm font-medium">Super Built Up Area</FormLabel>
                     <div className="relative">
                       <FormControl>
                         <Input
@@ -275,7 +275,7 @@ export const CommercialPropertyDetailsStep: React.FC<CommercialPropertyDetailsSt
                 name="furnishingStatus"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-sm font-medium">Furnishing*</FormLabel>
+                    <FormLabel className="text-sm font-medium">Furnishing</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger className="h-12">

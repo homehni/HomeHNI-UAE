@@ -115,23 +115,7 @@ export const CommercialMultiStepForm: React.FC<CommercialMultiStepFormProps> = (
   const handleSubmit = () => {
     const formData = getFormData();
     
-    // Basic validation
-    if (!formData.ownerInfo.fullName || !formData.ownerInfo.phoneNumber) {
-      console.error('Owner information is incomplete');
-      return;
-    }
-
-    if (!formData.propertyInfo.propertyDetails.title || !formData.propertyInfo.propertyDetails.spaceType) {
-      console.error('Property details are incomplete');
-      return;
-    }
-
-    if (!formData.propertyInfo.gallery.images || formData.propertyInfo.gallery.images.length === 0) {
-      console.error('At least one image is required');
-      return;
-    }
-
-    // Call onSubmit with properly typed data
+    // No validation required - all fields are optional
     onSubmit(formData as CommercialFormData);
   };
 

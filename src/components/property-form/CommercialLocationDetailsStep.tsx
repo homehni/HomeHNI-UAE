@@ -9,9 +9,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { LocationDetails } from '@/types/property';
 
 const commercialLocationDetailsSchema = z.object({
-  state: z.string().min(1, 'Please select a state'),
-  city: z.string().min(1, 'Please select a city'),
-  locality: z.string().min(1, 'Locality is required'),
+  state: z.string().optional(),
+  city: z.string().optional(),
+  locality: z.string().optional(),
   landmark: z.string().optional(),
 });
 
@@ -90,7 +90,7 @@ export const CommercialLocationDetailsStep: React.FC<CommercialLocationDetailsSt
                 name="state"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-sm font-medium">State *</FormLabel>
+                    <FormLabel className="text-sm font-medium">State</FormLabel>
                     <Select onValueChange={handleStateChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger className="h-12">
@@ -115,7 +115,7 @@ export const CommercialLocationDetailsStep: React.FC<CommercialLocationDetailsSt
                 name="city"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-sm font-medium">City *</FormLabel>
+                    <FormLabel className="text-sm font-medium">City</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger className="h-12">
@@ -143,7 +143,7 @@ export const CommercialLocationDetailsStep: React.FC<CommercialLocationDetailsSt
                 name="locality"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-sm font-medium">Locality/Area *</FormLabel>
+                    <FormLabel className="text-sm font-medium">Locality/Area</FormLabel>
                     <FormControl>
                       <Input 
                         placeholder="Enter locality or area name"
