@@ -210,7 +210,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
       </div>
       
       {/* White background section to accommodate the overlapping search */}
-      <div className="bg-white pt-4 sm:pt-16 pb-8 mx-0 px-0 mb-4 py-[10px]">
+      <div className="bg-white pt-4 sm:pt-16 pb-8 mx-0 px-0 mb-4 py-[6px]">
         <div className="container mx-auto px-4">
           {/* This space allows the search section to overlap properly */}
         </div>
