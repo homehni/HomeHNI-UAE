@@ -1,0 +1,194 @@
+import { useState, useEffect, useCallback } from 'react';
+import { User, Session } from '@supabase/supabase-js';
+import { supabase } from '@/integrations/supabase/client';
+import { useToast } from '@/hooks/use-toast';
+
+export type UserRole = 'buyer' | 'seller' | 'agent' | 'builder' | 'admin' | 'superadmin';
+
+interface AuthState {
+  user: User | null;
+  session: Session | null;
+  userRole: UserRole | null;
+  loading: boolean;
+}
+
+export const useAuth = () => {
+  const [authState, setAuthState] = useState<AuthState>({
+    user: null,
+    session: null,
+    userRole: null,
+    loading: true,
+  });
+  const { toast } = useToast();
+
+  const fetchUserRole = useCallback(async (userId: string): Promise<UserRole | null> => {
+    try {
+      const { data, error } = await supabase
+        .rpc('get_current_user_role');
+      
+      if (error) {
+        console.error('Error fetching user role:', error);
+        return null;
+      }
+      
+      return data as UserRole;
+    } catch (error) {
+      console.error('Error in fetchUserRole:', error);
+      return null;
+    }
+  }, []);
+
+  const updateAuthState = useCallback(async (session: Session | null) => {
+    if (session?.user) {
+      const role = await fetchUserRole(session.user.id);
+      setAuthState({
+        user: session.user,
+        session: session,
+        userRole: role,
+        loading: false,
+      });
+    } else {
+      setAuthState({
+        user: null,
+        session: null,
+        userRole: null,
+        loading: false,
+      });
+    }
+  }, [fetchUserRole]);
+
+  useEffect(() => {
+    // Set up auth state listener
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      async (event, session) => {
+        await updateAuthState(session);
+      }
+    );
+
+    // Get initial session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      updateAuthState(session);
+    });
+
+    return () => subscription.unsubscribe();
+  }, [updateAuthState]);
+
+  const signIn = async (email: string, password: string) => {
+    try {
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      if (error) {
+        toast({
+          title: "Sign In Failed",
+          description: error.message,
+          variant: "destructive",
+        });
+        return { error };
+      }
+
+      toast({
+        title: "Welcome Back!",
+        description: "You have successfully signed in.",
+      });
+      return { error: null };
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'An unexpected error occurred';
+      toast({
+        title: "Sign In Error",
+        description: message,
+        variant: "destructive",
+      });
+      return { error: { message } };
+    }
+  };
+
+  const signUp = async (email: string, password: string, fullName?: string) => {
+    try {
+      const redirectUrl = `${window.location.origin}/`;
+      
+      const { error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          emailRedirectTo: redirectUrl,
+          data: fullName ? { full_name: fullName } : undefined,
+        }
+      });
+
+      if (error) {
+        toast({
+          title: "Sign Up Failed",
+          description: error.message,
+          variant: "destructive",
+        });
+        return { error };
+      }
+
+      toast({
+        title: "Account Created!",
+        description: "Please check your email to verify your account.",
+      });
+      return { error: null };
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'An unexpected error occurred';
+      toast({
+        title: "Sign Up Error",
+        description: message,
+        variant: "destructive",
+      });
+      return { error: { message } };
+    }
+  };
+
+  const signOut = async () => {
+    try {
+      const { error } = await supabase.auth.signOut();
+      
+      if (error) {
+        toast({
+          title: "Sign Out Failed",
+          description: error.message,
+          variant: "destructive",
+        });
+        return { error };
+      }
+
+      toast({
+        title: "Signed Out",
+        description: "You have been successfully signed out.",
+      });
+      return { error: null };
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'An unexpected error occurred';
+      toast({
+        title: "Sign Out Error",
+        description: message,
+        variant: "destructive",
+      });
+      return { error: { message } };
+    }
+  };
+
+  const isAdmin = () => {
+    return authState.userRole === 'admin' || authState.userRole === 'superadmin';
+  };
+
+  const isSuperAdmin = () => {
+    return authState.userRole === 'superadmin';
+  };
+
+  return {
+    user: authState.user,
+    session: authState.session,
+    userRole: authState.userRole,
+    loading: authState.loading,
+    signIn,
+    signUp,
+    signOut,
+    isAdmin,
+    isSuperAdmin,
+  };
+};

@@ -43,9 +43,10 @@ import { VerifyEmail } from "./pages/VerifyEmail";
 import { Dashboard } from "./pages/Dashboard";
 import { PostProperty } from "./pages/PostProperty";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
-import { AdminRoute } from "@/components/AdminRoute";
-import { AdminLayout } from "@/components/admin/AdminLayout";
-import Admin from "./pages/Admin";
+import AdminAuth from "./pages/AdminAuth";
+import AdminProtectedRoute from "@/components/AdminProtectedRoute";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import AdminLayout from "@/components/admin/AdminLayout";
 import AdminProperties from "./pages/AdminProperties";
 import AdminUsers from "./pages/AdminUsers";
 import AdminSettings from "./pages/AdminSettings";
@@ -148,24 +149,22 @@ const App: React.FC = () => {
               </ProtectedRoute>
             } />
             
-            {/* Admin Routes */}
-          <Route path="/admin/login" element={<AdminLogin />} />
-          <Route path="/admin" element={
-            <AdminRoute>
-              <AdminLayout />
-            </AdminRoute>
-          }>
-            <Route index element={<Admin />} />
-            <Route path="properties" element={<AdminProperties />} />
-            <Route path="users" element={<AdminUsers />} />
-            <Route path="analytics" element={<AdminAnalytics />} />
-            <Route path="content" element={<AdminContent />} />
-            <Route path="leads" element={<AdminLeads />} />
-            <Route path="regions" element={<AdminRegions />} />
-            <Route path="seo" element={<AdminSEO />} />
-            <Route path="audit" element={<AdminAudit />} />
-            <Route path="settings" element={<AdminSettings />} />
-          </Route>
+            {/* Admin Routes - Updated */}
+            <Route path="/admin/auth" element={<AdminAuth />} />
+            <Route path="/admin" element={
+              <AdminProtectedRoute>
+                <AdminLayout />
+              </AdminProtectedRoute>
+            }>
+              <Route index element={<AdminDashboard />} />
+              <Route path="users" element={<AdminUsers />} />
+              <Route path="analytics" element={<AdminAnalytics />} />
+              <Route path="content" element={<AdminContent />} />
+              <Route path="leads" element={<AdminLeads />} />
+              <Route path="regions" element={<AdminRegions />} />
+              <Route path="security" element={<AdminAudit />} />
+              <Route path="settings" element={<AdminSettings />} />
+            </Route>
             
             <Route path="/robots.txt" element={<RobotsTxt />} />
             <Route path="/sitemap.xml" element={<SitemapXml />} />

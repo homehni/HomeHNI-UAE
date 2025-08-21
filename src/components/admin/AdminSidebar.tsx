@@ -1,5 +1,20 @@
-import React from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, NavLink } from 'react-router-dom';
+import {
+  BarChart3,
+  Users,
+  Home,
+  Settings,
+  FileText,
+  MessageSquare,
+  MapPin,
+  Shield,
+  Star,
+  Globe,
+  Menu,
+  Building2,
+  TrendingUp,
+  Calendar,
+} from 'lucide-react';
 import {
   Sidebar,
   SidebarContent,
@@ -9,155 +24,142 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarHeader,
-  SidebarFooter,
+  SidebarTrigger,
   useSidebar,
 } from '@/components/ui/sidebar';
-import { NavLink } from 'react-router-dom';
-import { cn } from '@/lib/utils';
-import { useAuth } from '@/contexts/AuthContext';
-import { Button } from '@/components/ui/button';
-
-import {
-  LayoutDashboard,
-  Building2,
-  Users,
-  Settings,
-  Shield,
-  LogOut,
-  BarChart3,
-  FileText,
-  MessageSquare,
-  Globe,
-  Search,
-  AlertTriangle,
-} from 'lucide-react';
+import Logo from '@/components/Logo';
 
 const navigationItems = [
   {
     title: 'Overview',
     url: '/admin',
-    icon: LayoutDashboard,
+    icon: BarChart3,
+    group: 'Main',
   },
   {
-    title: 'Properties',
-    url: '/admin/properties',
-    icon: Building2,
-  },
-  {
-    title: 'Users',
+    title: 'User Management',
     url: '/admin/users',
     icon: Users,
+    group: 'Main',
   },
   {
     title: 'Analytics',
     url: '/admin/analytics',
-    icon: BarChart3,
+    icon: TrendingUp,
+    group: 'Main',
   },
   {
-    title: 'Content',
-    url: '/admin/content',
-    icon: FileText,
+    title: 'Listings Management',
+    url: '/admin/listings',
+    icon: Building2,
+    group: 'Content',
   },
   {
-    title: 'Leads',
+    title: 'Lead Management',
     url: '/admin/leads',
     icon: MessageSquare,
+    group: 'Content',
   },
   {
-    title: 'Regions',
-    url: '/admin/regions',
+    title: 'Featured Properties',
+    url: '/admin/featured-properties',
+    icon: Star,
+    group: 'Content',
+  },
+  {
+    title: 'Page Management',
+    url: '/admin/pages',
+    icon: FileText,
+    group: 'Website',
+  },
+  {
+    title: 'Website Content',
+    url: '/admin/content',
     icon: Globe,
+    group: 'Website',
   },
   {
-    title: 'SEO',
-    url: '/admin/seo',
-    icon: Search,
+    title: 'Regions & Localization',
+    url: '/admin/regions',
+    icon: MapPin,
+    group: 'Configuration',
   },
   {
-    title: 'Audit Logs',
-    url: '/admin/audit',
-    icon: AlertTriangle,
+    title: 'Security & Audit',
+    url: '/admin/security',
+    icon: Shield,
+    group: 'Configuration',
   },
   {
     title: 'Settings',
     url: '/admin/settings',
     icon: Settings,
+    group: 'Configuration',
   },
 ];
 
-export const AdminSidebar: React.FC = () => {
+const AdminSidebar = () => {
   const location = useLocation();
-  const { open } = useSidebar();
-  const { signOut } = useAuth();
+  const currentPath = location.pathname;
 
-  const handleSignOut = async () => {
-    try {
-      await signOut();
-      window.location.href = '/admin/login';
-    } catch (error) {
-      console.error('Sign out error:', error);
+  const isActive = (path: string) => {
+    if (path === '/admin') {
+      return currentPath === '/admin';
     }
+    return currentPath.startsWith(path);
   };
 
+  const groupedItems = navigationItems.reduce((acc, item) => {
+    if (!acc[item.group]) {
+      acc[item.group] = [];
+    }
+    acc[item.group].push(item);
+    return acc;
+  }, {} as Record<string, typeof navigationItems>);
+
   return (
-    <Sidebar className="border-r border-border bg-card">
-      <SidebarHeader className="border-b border-border p-4">
-        <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-            <Shield className="h-5 w-5" />
+    <Sidebar className="w-64 border-r">
+      <div className="p-4 border-b">
+        <div className="flex items-center space-x-2">
+          <Logo size="small" />
+          <div>
+            <h2 className="font-bold text-lg text-gray-900">Admin Portal</h2>
+            <p className="text-xs text-gray-600">Real Estate Platform</p>
           </div>
-          {open && (
-            <div>
-              <h2 className="text-lg font-semibold text-foreground">Admin Panel</h2>
-              <p className="text-sm text-muted-foreground">HomeHNI Dashboard</p>
-            </div>
-          )}
         </div>
-      </SidebarHeader>
+      </div>
 
       <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupLabel>Navigation</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {navigationItems.map((item) => (
-                <SidebarMenuItem key={item.url}>
-                  <SidebarMenuButton
-                    asChild
-                    className={cn(
-                      "w-full transition-colors hover:bg-accent hover:text-accent-foreground",
-                      location.pathname === item.url && "bg-accent text-accent-foreground font-medium"
-                    )}
-                  >
-                    <NavLink
-                      to={item.url}
-                      className="flex items-center gap-3 px-3 py-2 rounded-md"
-                    >
-                      <item.icon className="h-4 w-4" />
-                      {open && <span>{item.title}</span>}
-                    </NavLink>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
+        {Object.entries(groupedItems).map(([groupName, items]) => (
+          <SidebarGroup key={groupName}>
+            <SidebarGroupLabel>{groupName}</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {items.map((item) => (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton asChild>
+                      <NavLink
+                        to={item.url}
+                        end={item.url === '/admin'}
+                        className={({ isActive }) =>
+                          isActive
+                            ? 'bg-brand-red text-white font-medium hover:bg-brand-maroon-dark'
+                            : 'hover:bg-gray-100 text-gray-700'
+                        }
+                      >
+                        <item.icon className="h-4 w-4" />
+                        <span>{item.title}</span>
+                      </NavLink>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        ))}
       </SidebarContent>
-
-      <SidebarFooter className="border-t border-border p-4">
-        <Button
-          variant="ghost"
-          onClick={handleSignOut}
-          className={cn(
-            "w-full justify-start gap-3 text-muted-foreground hover:text-foreground hover:bg-accent",
-            !open && "justify-center"
-          )}
-        >
-          <LogOut className="h-4 w-4" />
-          {open && <span>Sign Out</span>}
-        </Button>
-      </SidebarFooter>
     </Sidebar>
   );
 };
+
+export default AdminSidebar;
