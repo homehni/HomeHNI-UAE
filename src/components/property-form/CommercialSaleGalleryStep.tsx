@@ -23,11 +23,6 @@ export const CommercialSaleGalleryStep = ({
   const [video, setVideo] = useState<File | undefined>(initialData?.video);
 
   const handleNext = () => {
-    if (images.length < 3) {
-      alert('Please upload at least 3 images');
-      return;
-    }
-    
     onNext({
       images,
       video
@@ -46,8 +41,8 @@ export const CommercialSaleGalleryStep = ({
 
       <div className="space-y-8">
         <div>
-          <h3 className="text-lg font-medium mb-4">Property Images *</h3>
-          <p className="text-gray-600 mb-4">Upload at least 3 high-quality images</p>
+          <h3 className="text-lg font-medium mb-4">Property Images</h3>
+          <p className="text-gray-600 mb-4">Upload images of your property</p>
           <ImageUpload
             images={images}
             onImagesChange={setImages}

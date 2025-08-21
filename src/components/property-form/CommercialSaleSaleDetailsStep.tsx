@@ -10,12 +10,12 @@ import { Textarea } from '@/components/ui/textarea';
 import { CommercialSaleDetails } from '@/types/commercialSaleProperty';
 
 const commercialSaleSaleDetailsSchema = z.object({
-  listingType: z.literal('Sale'),
-  expectedPrice: z.number().min(1, 'Expected price is required'),
+  listingType: z.literal('Sale').optional(),
+  expectedPrice: z.number().optional(),
   priceNegotiable: z.boolean().optional(),
   pricePerSqFt: z.number().optional(),
-  possessionDate: z.string().min(1, 'Possession date is required'),
-  ownershipType: z.string().min(1, 'Ownership type is required'),
+  possessionDate: z.string().optional(),
+  ownershipType: z.string().optional(),
   homeLoanAvailable: z.boolean().optional(),
   maintenanceCharges: z.number().optional(),
   bookingAmount: z.number().optional(),
@@ -79,7 +79,7 @@ export const CommercialSaleSaleDetailsStep = ({
               name="expectedPrice"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Expected Price (₹) *</FormLabel>
+                  <FormLabel>Expected Price (₹)</FormLabel>
                   <FormControl>
                     <Input 
                       type="number" 
@@ -98,7 +98,7 @@ export const CommercialSaleSaleDetailsStep = ({
               name="ownershipType"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Ownership Type *</FormLabel>
+                  <FormLabel>Ownership Type</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger>
@@ -143,7 +143,7 @@ export const CommercialSaleSaleDetailsStep = ({
               name="possessionDate"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Possession Date *</FormLabel>
+                  <FormLabel>Possession Date</FormLabel>
                   <FormControl>
                     <Input type="date" {...field} />
                   </FormControl>

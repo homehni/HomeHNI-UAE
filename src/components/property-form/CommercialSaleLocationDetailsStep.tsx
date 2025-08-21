@@ -9,9 +9,9 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { LocationDetails } from '@/types/property';
 
 const commercialSaleLocationDetailsSchema = z.object({
-  state: z.string().min(1, 'State is required'),
-  city: z.string().min(1, 'City is required'),
-  locality: z.string().min(1, 'Locality is required'),
+  state: z.string().optional(),
+  city: z.string().optional(),
+  locality: z.string().optional(),
   landmark: z.string().optional(),
   societyName: z.string().optional(),
 });
@@ -126,7 +126,7 @@ export const CommercialSaleLocationDetailsStep = ({
               name="state"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>State *</FormLabel>
+                  <FormLabel>State</FormLabel>
                   <Select onValueChange={handleStateChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger>
@@ -151,7 +151,7 @@ export const CommercialSaleLocationDetailsStep = ({
               name="city"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>City *</FormLabel>
+                  <FormLabel>City</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger>
@@ -178,7 +178,7 @@ export const CommercialSaleLocationDetailsStep = ({
               name="locality"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Locality/Area *</FormLabel>
+                  <FormLabel>Locality/Area</FormLabel>
                   <FormControl>
                     <Input placeholder="e.g., Connaught Place, MG Road" {...field} />
                   </FormControl>

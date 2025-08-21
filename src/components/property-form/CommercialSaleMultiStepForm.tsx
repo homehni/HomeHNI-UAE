@@ -65,12 +65,6 @@ export const CommercialSaleMultiStepForm = ({
 
   const handleSubmit = async () => {
     const formData = getFormData();
-    
-    if (!formData.propertyInfo.propertyDetails.title || !formData.propertyInfo.saleDetails.expectedPrice) {
-      alert('Please fill in all required fields');
-      return;
-    }
-
     await onSubmit(formData);
   };
 

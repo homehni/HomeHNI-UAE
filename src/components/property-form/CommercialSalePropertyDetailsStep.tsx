@@ -10,13 +10,13 @@ import { Badge } from '@/components/ui/badge';
 import { CommercialPropertyDetails } from '@/types/property';
 
 const commercialSalePropertyDetailsSchema = z.object({
-  spaceType: z.enum(['office', 'retail', 'warehouse', 'showroom', 'restaurant', 'co-working', 'industrial', 'medical', 'educational']),
-  buildingType: z.string().min(1, 'Building type is required'),
-  propertyAge: z.string().min(1, 'Property age is required'),
-  floorNo: z.string().min(1, 'Floor number is required'),
-  totalFloors: z.string().min(1, 'Total floors is required'),
-  superBuiltUpArea: z.string().min(1, 'Area is required'),
-  furnishingStatus: z.string().min(1, 'Furnishing status is required'),
+  spaceType: z.enum(['office', 'retail', 'warehouse', 'showroom', 'restaurant', 'co-working', 'industrial', 'medical', 'educational']).optional(),
+  buildingType: z.string().optional(),
+  propertyAge: z.string().optional(),
+  floorNo: z.string().optional(),
+  totalFloors: z.string().optional(),
+  superBuiltUpArea: z.string().optional(),
+  furnishingStatus: z.string().optional(),
   powerLoad: z.string().optional(),
   ceilingHeight: z.string().optional(),
   entranceWidth: z.string().optional(),
@@ -96,7 +96,7 @@ export const CommercialSalePropertyDetailsStep = ({
               name="spaceType"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Space Type *</FormLabel>
+                  <FormLabel>Space Type</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger>
@@ -125,7 +125,7 @@ export const CommercialSalePropertyDetailsStep = ({
               name="buildingType"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Building Type *</FormLabel>
+                  <FormLabel>Building Type</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger>
@@ -153,7 +153,7 @@ export const CommercialSalePropertyDetailsStep = ({
               name="propertyAge"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Property Age *</FormLabel>
+                  <FormLabel>Property Age</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger>
@@ -179,7 +179,7 @@ export const CommercialSalePropertyDetailsStep = ({
               name="floorNo"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Floor Number *</FormLabel>
+                  <FormLabel>Floor Number</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger>
@@ -209,7 +209,7 @@ export const CommercialSalePropertyDetailsStep = ({
               name="totalFloors"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Total Floors *</FormLabel>
+                  <FormLabel>Total Floors</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger>
@@ -237,7 +237,7 @@ export const CommercialSalePropertyDetailsStep = ({
               name="superBuiltUpArea"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Super Built-up Area (sq ft) *</FormLabel>
+                  <FormLabel>Super Built-up Area (sq ft)</FormLabel>
                   <FormControl>
                     <Input 
                       type="number" 
@@ -255,7 +255,7 @@ export const CommercialSalePropertyDetailsStep = ({
               name="furnishingStatus"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Furnishing Status *</FormLabel>
+                  <FormLabel>Furnishing Status</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger>

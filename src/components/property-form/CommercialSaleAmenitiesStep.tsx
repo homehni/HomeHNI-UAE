@@ -10,10 +10,10 @@ import { Key, Plus } from 'lucide-react';
 import { CommercialSaleAmenities } from '@/types/property';
 
 const commercialSaleAmenitiesSchema = z.object({
-  powerBackup: z.string().min(1, 'Power backup is required'),
-  lift: z.string().min(1, 'Lift information is required'),
-  parking: z.string().min(1, 'Parking information is required'),
-  washrooms: z.string().min(1, 'Washroom information is required'),
+  powerBackup: z.string().optional(),
+  lift: z.string().optional(),
+  parking: z.string().optional(),
+  washrooms: z.string().optional(),
   waterStorageFacility: z.string().optional(),
   security: z.string().optional(),
   currentPropertyCondition: z.string().optional(),
@@ -77,7 +77,7 @@ export const CommercialSaleAmenitiesStep = ({
               name="powerBackup"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Power Backup *</FormLabel>
+                  <FormLabel>Power Backup</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger>
@@ -101,7 +101,7 @@ export const CommercialSaleAmenitiesStep = ({
               name="lift"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Lift *</FormLabel>
+                  <FormLabel>Lift</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger>
@@ -127,7 +127,7 @@ export const CommercialSaleAmenitiesStep = ({
               name="parking"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Parking *</FormLabel>
+                  <FormLabel>Parking</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger>
@@ -151,7 +151,7 @@ export const CommercialSaleAmenitiesStep = ({
               name="washrooms"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Washroom(s) *</FormLabel>
+                  <FormLabel>Washroom(s)</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger>
