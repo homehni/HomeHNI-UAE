@@ -23,14 +23,11 @@ export const useAuth = () => {
 
   const fetchUserRole = useCallback(async (userId: string): Promise<UserRole | null> => {
     try {
-      const { data, error } = await supabase
-        .rpc('get_current_user_role');
-      
+      const { data, error } = await supabase.rpc('get_current_user_role');
       if (error) {
         console.error('Error fetching user role:', error);
         return null;
       }
-      
       return data as UserRole;
     } catch (error) {
       console.error('Error in fetchUserRole:', error);
@@ -38,40 +35,49 @@ export const useAuth = () => {
     }
   }, []);
 
-  const updateAuthState = useCallback(async (session: Session | null) => {
-    if (session?.user) {
-      const role = await fetchUserRole(session.user.id);
-      setAuthState({
-        user: session.user,
-        session: session,
-        userRole: role,
-        loading: false,
-      });
-    } else {
-      setAuthState({
-        user: null,
-        session: null,
-        userRole: null,
-        loading: false,
-      });
-    }
-  }, [fetchUserRole]);
-
+  // Do NOT perform Supabase calls inside the auth callback to avoid deadlocks
   useEffect(() => {
-    // Set up auth state listener
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        await updateAuthState(session);
-      }
-    );
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      // Sync state immediately
+      setAuthState((prev) => ({
+        ...prev,
+        user: session?.user ?? null,
+        session: session ?? null,
+        loading: true,
+      }));
 
-    // Get initial session
+      // Defer role fetching to the next tick to avoid blocking the callback
+      if (session?.user) {
+        setTimeout(async () => {
+          const role = await fetchUserRole(session.user.id);
+          setAuthState({
+            user: session.user,
+            session,
+            userRole: role,
+            loading: false,
+          });
+        }, 0);
+      } else {
+        // No session
+        setAuthState({ user: null, session: null, userRole: null, loading: false });
+      }
+    });
+
+    // Initialize from existing session
     supabase.auth.getSession().then(({ data: { session } }) => {
-      updateAuthState(session);
+      setAuthState((prev) => ({ ...prev, user: session?.user ?? null, session: session ?? null, loading: true }));
+      if (session?.user) {
+        // Fetch role outside of callback
+        fetchUserRole(session.user.id).then((role) => {
+          setAuthState({ user: session.user, session, userRole: role, loading: false });
+        });
+      } else {
+        setAuthState({ user: null, session: null, userRole: null, loading: false });
+      }
     });
 
     return () => subscription.unsubscribe();
-  }, [updateAuthState]);
+  }, [fetchUserRole]);
 
   const signIn = async (email: string, password: string) => {
     try {
