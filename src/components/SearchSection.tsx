@@ -155,7 +155,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                       </TabsTrigger>)}
                   </TabsList>
 
-                  <TabsContent value={activeTab} className="mt-0 p-6 bg-white rounded-b-lg">
+                  <TabsContent value={activeTab} className="mt-0 px-6 py-4 bg-white rounded-b-lg">
                     {/* Property Type Dropdown and Search Bar - Now inline */}
                     <div className="flex flex-col sm:flex-row gap-4">
                       <Popover>
