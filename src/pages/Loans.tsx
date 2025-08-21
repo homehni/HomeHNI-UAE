@@ -283,19 +283,21 @@ const Loans = () => {
                 </Select>
               </div>
 
-              <Select name="loanType">
-                <SelectTrigger id="loan-type"><SelectValue placeholder="Loan Type" /></SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="home-loan">Home Loan</SelectItem>
-                  <SelectItem value="lap">Loan Against Property</SelectItem>
-                  <SelectItem value="balance-transfer">Balance Transfer</SelectItem>
-                  <SelectItem value="top-up">Top-up Loan</SelectItem>
-                  <SelectItem value="construction">Construction Loan</SelectItem>
-                  <SelectItem value="business">Business Loan</SelectItem>
-                </SelectContent>
-              </Select>
+              <div className="flex gap-2">
+                <Select name="loanType">
+                  <SelectTrigger className="flex-1"><SelectValue placeholder="Loan Type" /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="home-loan">Home Loan</SelectItem>
+                    <SelectItem value="lap">Loan Against Property</SelectItem>
+                    <SelectItem value="balance-transfer">Balance Transfer</SelectItem>
+                    <SelectItem value="top-up">Top-up Loan</SelectItem>
+                    <SelectItem value="construction">Construction Loan</SelectItem>
+                    <SelectItem value="business">Business Loan</SelectItem>
+                  </SelectContent>
+                </Select>
 
-              <Input id="loan-amount" name="amount" type="number" placeholder="Loan Amount Required" />
+                <Input id="loan-amount" name="amount" type="number" placeholder="Loan Amount Required" className="flex-1" />
+              </div>
 
               <Button type="submit" className="w-full">Get Pre-Approved Now!</Button>
             </form>
@@ -396,27 +398,29 @@ const Loans = () => {
                   </Select>
                 </div>
 
-                <Select name="loanType">
-                  <SelectTrigger id="loan-type-mobile" className="h-12 bg-background">
-                    <SelectValue placeholder="Loan Type" />
-                  </SelectTrigger>
-                  <SelectContent className="bg-background border shadow-lg">
-                    <SelectItem value="home-loan">Home Loan</SelectItem>
-                    <SelectItem value="lap">Loan Against Property</SelectItem>
-                    <SelectItem value="balance-transfer">Balance Transfer</SelectItem>
-                    <SelectItem value="top-up">Top-up Loan</SelectItem>
-                    <SelectItem value="construction">Construction Loan</SelectItem>
-                    <SelectItem value="business">Business Loan</SelectItem>
-                  </SelectContent>
-                </Select>
+                <div className="flex gap-3">
+                  <Select name="loanType">
+                    <SelectTrigger className="flex-1 h-12 bg-background">
+                      <SelectValue placeholder="Loan Type" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-background border shadow-lg">
+                      <SelectItem value="home-loan">Home Loan</SelectItem>
+                      <SelectItem value="lap">Loan Against Property</SelectItem>
+                      <SelectItem value="balance-transfer">Balance Transfer</SelectItem>
+                      <SelectItem value="top-up">Top-up Loan</SelectItem>
+                      <SelectItem value="construction">Construction Loan</SelectItem>
+                      <SelectItem value="business">Business Loan</SelectItem>
+                    </SelectContent>
+                  </Select>
 
-                <Input 
-                  id="loan-amount-mobile" 
-                  name="amount" 
-                  type="number" 
-                  placeholder="Loan Amount Required" 
-                  className="h-12 text-base bg-background"
-                />
+                  <Input 
+                    id="loan-amount-mobile" 
+                    name="amount" 
+                    type="number" 
+                    placeholder="Loan Amount Required" 
+                    className="flex-1 h-12 text-base bg-background"
+                  />
+                </div>
 
                 <Button type="submit" className="w-full h-12 text-base font-semibold bg-red-600 hover:bg-red-700 text-white mt-6">
                   Get Pre-Approved Now!
