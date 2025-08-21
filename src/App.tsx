@@ -66,6 +66,7 @@ import Loans from "./pages/Loans";
 import AboutSidebar from "./pages/AboutSidebar";
 import PropertyDetails from "./pages/PropertyDetails";
 import PropertySearch from "./pages/PropertySearch";
+import PagePreview from "./pages/PagePreview";
 
 const App: React.FC = () => {
   const [queryClient] = useState(() => new QueryClient({
@@ -135,6 +136,9 @@ const App: React.FC = () => {
             {/* Property Routes */}
             <Route path="/property/:id" element={<PropertyDetails />} />
             <Route path="/search" element={<PropertySearch />} />
+            
+            {/* Preview Routes */}
+            <Route path="/preview/:slug" element={<PagePreview />} />
             
             {/* Protected Routes */}
             <Route path="/dashboard" element={

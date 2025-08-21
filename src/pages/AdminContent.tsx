@@ -43,7 +43,8 @@ import {
   Tag,
   Globe,
   Clock,
-  User
+  User,
+  ExternalLink
 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
@@ -498,6 +499,14 @@ export const AdminContent: React.FC = () => {
                       <TableCell>{new Date(page.updated_at).toLocaleDateString()}</TableCell>
                       <TableCell className="text-right">
                         <div className="flex items-center justify-end gap-2">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => window.open(`/preview/${page.slug}`, '_blank')}
+                            title="Preview Page"
+                          >
+                            <ExternalLink className="h-4 w-4" />
+                          </Button>
                           <Button
                             variant="ghost"
                             size="sm"
