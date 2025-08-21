@@ -57,6 +57,8 @@ import { AdminLeads } from "./pages/AdminLeads";
 import { AdminRegions } from "./pages/AdminRegions";
 import { AdminSEO } from "./pages/AdminSEO";
 import { AdminAudit } from "./pages/AdminAudit";
+import { AdminFeaturedProperties } from "./pages/AdminFeaturedProperties";
+import { AdminPageManagement } from "./pages/AdminPageManagement";
 import NotFound from "./pages/NotFound";
 import ScrollToTop from "./components/ScrollToTop";
 
@@ -163,11 +165,15 @@ const App: React.FC = () => {
               <Route index element={<AdminDashboard />} />
               <Route path="users" element={<AdminUsers />} />
               <Route path="analytics" element={<AdminAnalytics />} />
-              <Route path="content" element={<AdminContent />} />
+              <Route path="listings" element={<AdminProperties />} />
               <Route path="leads" element={<AdminLeads />} />
+              <Route path="featured-properties" element={<AdminFeaturedProperties />} />
+              <Route path="pages" element={<AdminPageManagement />} />
+              <Route path="content" element={<AdminContent />} />
               <Route path="regions" element={<AdminRegions />} />
               <Route path="security" element={<AdminAudit />} />
               <Route path="settings" element={<AdminSettings />} />
+              <Route path="seo" element={<AdminSEO />} />
             </Route>
             
             <Route path="/robots.txt" element={<RobotsTxt />} />
