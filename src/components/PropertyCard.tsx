@@ -104,13 +104,15 @@ const PropertyCard = ({
   };
 
   return (
-    <Card className="overflow-hidden hover:shadow-lg transition-all duration-300 group cursor-pointer rounded-xl border-0 bg-white shadow-sm" onClick={() => navigate(`/property/${id}`, { state: propertyForPage })}>
+    <Card className="w-48 overflow-hidden hover:shadow-lg transition-all duration-300 group cursor-pointer rounded-xl border-0 bg-white shadow-sm" onClick={() => navigate(`/property/${id}`, { state: propertyForPage })}>
       <div className="relative">
-        <img
-          src={`https://images.unsplash.com/${image}?auto=format&fit=crop&w=400&q=80`}
-          alt={title}
-          className="w-full h-32 object-cover group-hover:scale-105 transition-transform duration-300"
-        />
+        <div className="h-32 overflow-hidden">
+          <img
+            src={`https://images.unsplash.com/${image}?auto=format&fit=crop&w=400&q=80`}
+            alt={title}
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+          />
+        </div>
         <Button
           variant="ghost"
           size="sm"
