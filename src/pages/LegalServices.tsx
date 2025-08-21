@@ -138,7 +138,7 @@ const LegalServices = () => {
           </div>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
-            {comingSoonServices.map((service, index) => <Card key={index} className="text-center p-6 hover:shadow-lg transition-shadow bg-gradient-to-br from-gray-50 to-gray-100 border-dashed border-2 border-gray-300">
+            {comingSoonServices.map((service, index) => <Card key={index} className="text-center p-6 hover:shadow-lg transition-shadow bg-gradient-to-br from-gray-50 to-gray-100 border-2 border-primary">
                 <CardContent className="pt-6">
                   <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center mx-auto mb-4">
                     <service.icon className="h-6 w-6 text-gray-500" />
