@@ -106,7 +106,7 @@ const PropertyCard = ({
   return (
     <Card className="w-48 overflow-hidden hover:shadow-lg transition-all duration-300 group cursor-pointer rounded-xl border-0 bg-white shadow-sm" onClick={() => navigate(`/property/${id}`, { state: propertyForPage })}>
       <div className="relative">
-        <div className="h-32 overflow-hidden">
+        <div className="h-24 overflow-hidden">
           <img
             src={`https://images.unsplash.com/${image}?auto=format&fit=crop&w=400&q=80`}
             alt={title}
@@ -131,27 +131,27 @@ const PropertyCard = ({
         </div>
       </div>
       
-      <CardContent className="p-4">
-        <h3 className="font-semibold text-sm mb-2 line-clamp-2 text-gray-900">{title} - online only</h3>
+      <CardContent className="p-3">
+        <h3 className="font-semibold text-xs mb-1 line-clamp-2 text-gray-900">{title} - online only</h3>
         
-        <div className="flex items-center text-gray-500 mb-3">
-          <MapPin size={12} className="mr-1 flex-shrink-0" />
+        <div className="flex items-center text-gray-500 mb-2">
+          <MapPin size={10} className="mr-1 flex-shrink-0" />
           <span className="text-xs line-clamp-1">{location}</span>
         </div>
         
-        <div className="flex gap-2 mt-auto">
+        <div className="flex gap-1 mt-auto">
           <Button
             variant="outline"
             size="sm"
-            className="flex-1 h-8 text-xs border-gray-200 hover:bg-gray-50"
+            className="flex-1 h-7 text-xs border-gray-200 hover:bg-gray-50"
             onClick={(e) => e.stopPropagation()}
           >
-            <Phone size={12} className="mr-1" />
+            <Phone size={10} className="mr-1" />
             Contact
           </Button>
           <Button
             size="sm"
-            className="flex-1 h-8 text-xs bg-red-600 hover:bg-red-700 text-white"
+            className="flex-1 h-7 text-xs bg-red-600 hover:bg-red-700 text-white"
           >
             View Details
           </Button>
