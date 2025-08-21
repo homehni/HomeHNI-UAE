@@ -61,14 +61,6 @@ const RealEstateSlider = () => {
   }, [isPaused, slides.length]);
   return <section className="pb-4 -mt-4 md:-mt-6 bg-gradient-to-br from-background to-secondary/20">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-4">
-          <h2 className="text-3xl font-bold text-foreground mb-2 py-0">Recommended Properties
-        </h2>
-          {/* <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Discover endless possibilities in real estate with our comprehensive solutions
-           </p> */}
-        </div>
-        
         <div className="relative max-w-6xl mx-auto">
           {/* Navigation Buttons */}
           <button onClick={() => scroll('left')} className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-background/80 hover:bg-background text-foreground p-2 rounded-full shadow-lg transition-colors" aria-label="Scroll left">
