@@ -436,75 +436,73 @@ const Careers = () => {
         </div>
       </div>
 
-      {/* Loan Services Footer Section */}
-      <section className="py-16 px-4 bg-muted/30">
+      {/* Career Services Footer Section */}
+      <section className="py-16 px-4 bg-background">
         <div className="container mx-auto">
-          <div className="grid lg:grid-cols-3 gap-12 items-start">
-            
-            {/* Loan Services Column */}
-            <div className="space-y-6">
-              <h3 className="text-xl font-bold text-foreground mb-6">
-                Loan Services
-              </h3>
+          <div className="grid lg:grid-cols-2 gap-16 items-start">
+            <div className="max-w-3xl">
+              <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-8">
+                Career Opportunities
+              </h2>
               
-              <div className="space-y-3">
+              <div className="space-y-6 mb-8">
                 <div className="flex flex-wrap gap-3">
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Home Loans</span>
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Loan Against Property</span>
+                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Sales Consultant Jobs</span>
+                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Marketing Executive Roles</span>
+                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Developer Positions</span>
                 </div>
                 <div className="flex flex-wrap gap-3">
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Balance Transfer</span>
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Top-up Loans</span>
+                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Real Estate Careers</span>
+                  <span className="px-4 py-2 bg-muted rounded-full text-sm">PropTech Jobs</span>
+                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Legal Executive Roles</span>
                 </div>
                 <div className="flex flex-wrap gap-3">
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Construction Finance</span>
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Business Loans</span>
+                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Remote Work Opportunities</span>
+                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Hybrid Work Culture</span>
+                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Flexible Schedule</span>
+                </div>
+                <div className="flex flex-wrap gap-3">
+                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Career Growth</span>
+                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Performance Based Incentives</span>
                 </div>
               </div>
-            </div>
 
-            {/* Property Loan Services Column */}
-            <div className="space-y-6">
-              <h3 className="text-xl font-bold text-foreground mb-6">
-                Property Loan Services
+              <h3 className="text-2xl md:text-3xl font-bold text-foreground mb-6">
+                Work Culture & Benefits
               </h3>
               
-              <div className="space-y-3">
+              <div className="space-y-3 mb-8">
                 <div className="flex flex-wrap gap-3">
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Quick Approval Process</span>
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Competitive Interest Rates</span>
+                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Innovation-Driven Environment</span>
+                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Professional Development</span>
                 </div>
                 <div className="flex flex-wrap gap-3">
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Minimal Documentation</span>
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Free Property Valuation</span>
-                </div>
-                <div className="flex flex-wrap gap-3">
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Door-to-door Service</span>
+                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Health Insurance</span>
+                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Performance Bonuses</span>
                 </div>
               </div>
-            </div>
 
-            {/* Home Loan Documentation Column */}
-            <div className="space-y-6">
-              <h3 className="text-xl font-bold text-foreground mb-6">
-                Home Loan Documentation
+              <h3 className="text-2xl md:text-3xl font-bold text-foreground mb-6">
+                Application Process
               </h3>
               
               <div className="space-y-3">
                 <div className="flex flex-wrap gap-3">
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Home Loan Documents</span>
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Loan Processing Services</span>
+                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Quick Application</span>
+                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Online Interview Process</span>
                 </div>
                 <div className="flex flex-wrap gap-3">
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Digital Loan Application</span>
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Instant Loan Approval</span>
+                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Fast Hiring Process</span>
+                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Immediate Joining</span>
                 </div>
                 <div className="flex flex-wrap gap-3">
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Zero Processing Fee Loans</span>
+                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Equal Opportunity Employer</span>
                 </div>
               </div>
             </div>
             
+            {/* Right side spacing for sticky form */}
+            <div className="hidden lg:block"></div>
           </div>
         </div>
       </section>
