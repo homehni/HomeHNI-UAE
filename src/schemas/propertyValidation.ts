@@ -1,12 +1,12 @@
 import { z } from 'zod';
 
 export const ownerInfoSchema = z.object({
-  phoneNumber: z.string().min(10, 'Phone number must be at least 10 digits'),
-  role: z.enum(['Owner', 'Agent', 'Builder']),
-  city: z.string().min(1, 'Please select your city'),
-  whatsappUpdates: z.boolean(),
-  propertyType: z.enum(['Residential', 'Commercial', 'Land/Plot']),
-  listingType: z.enum(['Rent', 'Resale', 'PG/Hostel', 'Flatmates', 'Sale']),
+  phoneNumber: z.string().optional(),
+  role: z.enum(['Owner', 'Agent', 'Builder']).optional(),
+  city: z.string().optional(),
+  whatsappUpdates: z.boolean().optional(),
+  propertyType: z.enum(['Residential', 'Commercial', 'Land/Plot']).optional(),
+  listingType: z.enum(['Rent', 'Resale', 'PG/Hostel', 'Flatmates', 'Sale']).optional(),
 });
 
 export const propertyInfoSchema = z.object({

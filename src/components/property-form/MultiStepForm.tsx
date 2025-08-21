@@ -119,40 +119,16 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
   const handleSubmit = () => {
     const formData = getFormData();
     
-    // Enhanced validation before submission
-    const ownerValid = !!(formData.ownerInfo?.fullName && formData.ownerInfo?.phoneNumber && 
-                         formData.ownerInfo?.email && formData.ownerInfo?.role);
-    const propertyValid = !!(formData.propertyInfo?.propertyDetails?.title && 
-                           formData.propertyInfo?.locationDetails?.state && 
-                           formData.propertyInfo?.rentalDetails?.expectedPrice);
+    console.log('Form submission with optional validation:', { formData });
     
-    // Enhanced image validation
-    const imageValid = !!(formData.propertyInfo?.gallery?.images && 
-                         formData.propertyInfo.gallery.images.length >= 3);
-    
-    console.log('Form validation:', { 
-      ownerValid, 
-      propertyValid, 
-      imageValid, 
-      formData 
-    });
-    
-    if (ownerValid && propertyValid && imageValid && formData.ownerInfo && formData.propertyInfo) {
+    // Since all fields are now optional, we can submit with any data
+    if (formData.ownerInfo && formData.propertyInfo) {
       onSubmit({
         ownerInfo: formData.ownerInfo as OwnerInfo,
         propertyInfo: formData.propertyInfo as PropertyInfo
       });
     } else {
-      console.error('Form validation failed:', { 
-        ownerValid, 
-        propertyValid, 
-        imageValid,
-        missingFields: {
-          owner: !ownerValid ? 'Missing owner information' : null,
-          property: !propertyValid ? 'Missing property information' : null,
-          images: !imageValid ? 'Need at least 3 images' : null
-        }
-      });
+      console.error('Form data structure is invalid');
     }
   };
 
