@@ -211,17 +211,62 @@ const HandoverServices = () => {
                 </SelectContent>
               </Select>
 
-              <Input id="handover-location" name="location" placeholder="Property Location" />
+              <div className="flex gap-2">
+                <Input id="handover-location" name="location" placeholder="Property Location" className="flex-1" />
+                <Select name="handoverType">
+                  <SelectTrigger id="handover-type" className="w-40"><SelectValue placeholder="Handover Type" /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="buying">Buying Property</SelectItem>
+                    <SelectItem value="selling">Selling Property</SelectItem>
+                    <SelectItem value="rental">Rental Handover</SelectItem>
+                    <SelectItem value="possession">New Possession</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
 
-              <Select name="handoverType">
-                <SelectTrigger id="handover-type"><SelectValue placeholder="Handover Type" /></SelectTrigger>
+              <Select name="country">
+                <SelectTrigger id="handover-country"><SelectValue placeholder="Country" /></SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="buying">Buying Property</SelectItem>
-                  <SelectItem value="selling">Selling Property</SelectItem>
-                  <SelectItem value="rental">Rental Handover</SelectItem>
-                  <SelectItem value="possession">New Possession</SelectItem>
+                  <SelectItem value="india">India</SelectItem>
+                  <SelectItem value="usa">United States</SelectItem>
+                  <SelectItem value="uk">United Kingdom</SelectItem>
+                  <SelectItem value="canada">Canada</SelectItem>
+                  <SelectItem value="australia">Australia</SelectItem>
                 </SelectContent>
               </Select>
+
+              <div className="flex gap-2">
+                <Select name="state">
+                  <SelectTrigger id="handover-state" className="flex-1"><SelectValue placeholder="State" /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="andhra-pradesh">Andhra Pradesh</SelectItem>
+                    <SelectItem value="karnataka">Karnataka</SelectItem>
+                    <SelectItem value="tamil-nadu">Tamil Nadu</SelectItem>
+                    <SelectItem value="telangana">Telangana</SelectItem>
+                    <SelectItem value="maharashtra">Maharashtra</SelectItem>
+                    <SelectItem value="gujarat">Gujarat</SelectItem>
+                    <SelectItem value="rajasthan">Rajasthan</SelectItem>
+                    <SelectItem value="delhi">Delhi</SelectItem>
+                    <SelectItem value="west-bengal">West Bengal</SelectItem>
+                    <SelectItem value="uttar-pradesh">Uttar Pradesh</SelectItem>
+                  </SelectContent>
+                </Select>
+                <Select name="city">
+                  <SelectTrigger id="handover-city" className="flex-1"><SelectValue placeholder="City" /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="bangalore">Bangalore</SelectItem>
+                    <SelectItem value="hyderabad">Hyderabad</SelectItem>
+                    <SelectItem value="chennai">Chennai</SelectItem>
+                    <SelectItem value="mumbai">Mumbai</SelectItem>
+                    <SelectItem value="pune">Pune</SelectItem>
+                    <SelectItem value="delhi">Delhi</SelectItem>
+                    <SelectItem value="kolkata">Kolkata</SelectItem>
+                    <SelectItem value="ahmedabad">Ahmedabad</SelectItem>
+                    <SelectItem value="jaipur">Jaipur</SelectItem>
+                    <SelectItem value="lucknow">Lucknow</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
 
               <Button type="submit" className="w-full">Get Expert Assistance!</Button>
             </form>
@@ -275,19 +320,70 @@ const HandoverServices = () => {
                   </SelectContent>
                 </Select>
 
-                <Input id="handover-location-mobile" name="location" placeholder="Property Location" className="h-12 text-base bg-background" />
+                <div className="flex gap-3">
+                  <Input id="handover-location-mobile" name="location" placeholder="Property Location" className="flex-1 h-12 text-base bg-background" />
+                  <Select name="handoverType">
+                    <SelectTrigger id="handover-type-mobile" className="w-40 h-12 bg-background">
+                      <SelectValue placeholder="Handover Type" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-background border shadow-lg">
+                      <SelectItem value="buying">Buying Property</SelectItem>
+                      <SelectItem value="selling">Selling Property</SelectItem>
+                      <SelectItem value="rental">Rental Handover</SelectItem>
+                      <SelectItem value="possession">New Possession</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
 
-                <Select name="handoverType">
-                  <SelectTrigger id="handover-type-mobile" className="h-12 bg-background">
-                    <SelectValue placeholder="Handover Type" />
+                <Select name="country">
+                  <SelectTrigger id="handover-country-mobile" className="h-12 bg-background">
+                    <SelectValue placeholder="Country" />
                   </SelectTrigger>
                   <SelectContent className="bg-background border shadow-lg">
-                    <SelectItem value="buying">Buying Property</SelectItem>
-                    <SelectItem value="selling">Selling Property</SelectItem>
-                    <SelectItem value="rental">Rental Handover</SelectItem>
-                    <SelectItem value="possession">New Possession</SelectItem>
+                    <SelectItem value="india">India</SelectItem>
+                    <SelectItem value="usa">United States</SelectItem>
+                    <SelectItem value="uk">United Kingdom</SelectItem>
+                    <SelectItem value="canada">Canada</SelectItem>
+                    <SelectItem value="australia">Australia</SelectItem>
                   </SelectContent>
                 </Select>
+
+                <div className="flex gap-3">
+                  <Select name="state">
+                    <SelectTrigger id="handover-state-mobile" className="flex-1 h-12 bg-background">
+                      <SelectValue placeholder="State" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-background border shadow-lg">
+                      <SelectItem value="andhra-pradesh">Andhra Pradesh</SelectItem>
+                      <SelectItem value="karnataka">Karnataka</SelectItem>
+                      <SelectItem value="tamil-nadu">Tamil Nadu</SelectItem>
+                      <SelectItem value="telangana">Telangana</SelectItem>
+                      <SelectItem value="maharashtra">Maharashtra</SelectItem>
+                      <SelectItem value="gujarat">Gujarat</SelectItem>
+                      <SelectItem value="rajasthan">Rajasthan</SelectItem>
+                      <SelectItem value="delhi">Delhi</SelectItem>
+                      <SelectItem value="west-bengal">West Bengal</SelectItem>
+                      <SelectItem value="uttar-pradesh">Uttar Pradesh</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <Select name="city">
+                    <SelectTrigger id="handover-city-mobile" className="flex-1 h-12 bg-background">
+                      <SelectValue placeholder="City" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-background border shadow-lg">
+                      <SelectItem value="bangalore">Bangalore</SelectItem>
+                      <SelectItem value="hyderabad">Hyderabad</SelectItem>
+                      <SelectItem value="chennai">Chennai</SelectItem>
+                      <SelectItem value="mumbai">Mumbai</SelectItem>
+                      <SelectItem value="pune">Pune</SelectItem>
+                      <SelectItem value="delhi">Delhi</SelectItem>
+                      <SelectItem value="kolkata">Kolkata</SelectItem>
+                      <SelectItem value="ahmedabad">Ahmedabad</SelectItem>
+                      <SelectItem value="jaipur">Jaipur</SelectItem>
+                      <SelectItem value="lucknow">Lucknow</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
 
                 <Button type="submit" className="w-full h-12 text-base font-semibold bg-red-600 hover:bg-red-700 text-white mt-6">
                   Get Expert Assistance!
