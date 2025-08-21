@@ -11,6 +11,12 @@ import Header from "@/components/Header";
 
 
 const Loans = () => {
+  const [statesData, setStatesData] = useState<any>(null);
+  const [selectedState, setSelectedState] = useState("");
+  const [selectedStateDesktop, setSelectedStateDesktop] = useState("");
+  const [cities, setCities] = useState<string[]>([]);
+  const [citiesDesktop, setCitiesDesktop] = useState<string[]>([]);
+
   const services = [{
     icon: Home,
     title: "Home Loans",
@@ -124,6 +130,40 @@ const Loans = () => {
 
   const { toast } = useToast();
 
+  // Load states and cities data
+  useEffect(() => {
+    const loadStatesData = async () => {
+      try {
+        const response = await fetch('/data/india_states_cities.json');
+        const data = await response.json();
+        setStatesData(data);
+      } catch (error) {
+        console.error('Failed to load states data:', error);
+      }
+    };
+    loadStatesData();
+  }, []);
+
+  // Update cities when state changes (mobile)
+  useEffect(() => {
+    if (statesData && selectedState) {
+      const state = statesData.states.find((s: any) => s.state === selectedState);
+      setCities(state ? state.cities : []);
+    } else {
+      setCities([]);
+    }
+  }, [selectedState, statesData]);
+
+  // Update cities when state changes (desktop)
+  useEffect(() => {
+    if (statesData && selectedStateDesktop) {
+      const state = statesData.states.find((s: any) => s.state === selectedStateDesktop);
+      setCitiesDesktop(state ? state.cities : []);
+    } else {
+      setCitiesDesktop([]);
+    }
+  }, [selectedStateDesktop, statesData]);
+
   useEffect(() => {
     const title = "Home Loans & Property Loans | Home HNI";
     document.title = title;
@@ -209,6 +249,38 @@ const Loans = () => {
 
               <Input id="loan-email" name="email" type="email" placeholder="Email ID" />
 
+              <Select defaultValue="India" name="country">
+                <SelectTrigger><SelectValue placeholder="Country" /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="India">India</SelectItem>
+                  <SelectItem value="USA">USA</SelectItem>
+                  <SelectItem value="UK">UK</SelectItem>
+                  <SelectItem value="Other">Other</SelectItem>
+                </SelectContent>
+              </Select>
+
+              <Select name="state" onValueChange={setSelectedStateDesktop}>
+                <SelectTrigger><SelectValue placeholder="State" /></SelectTrigger>
+                <SelectContent>
+                  {statesData?.states?.map((state: any) => (
+                    <SelectItem key={state.state} value={state.state}>
+                      {state.state}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+
+              <Select name="city">
+                <SelectTrigger><SelectValue placeholder="City" /></SelectTrigger>
+                <SelectContent>
+                  {citiesDesktop.map((city: string) => (
+                    <SelectItem key={city} value={city}>
+                      {city}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+
               <Select name="loanType">
                 <SelectTrigger id="loan-type"><SelectValue placeholder="Loan Type" /></SelectTrigger>
                 <SelectContent>
@@ -281,6 +353,44 @@ const Loans = () => {
                   placeholder="Email ID" 
                   className="h-12 text-base bg-background"
                 />
+
+                <Select defaultValue="India" name="country">
+                  <SelectTrigger className="h-12 bg-background">
+                    <SelectValue placeholder="Country" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-background border shadow-lg">
+                    <SelectItem value="India">India</SelectItem>
+                    <SelectItem value="USA">USA</SelectItem>
+                    <SelectItem value="UK">UK</SelectItem>
+                    <SelectItem value="Other">Other</SelectItem>
+                  </SelectContent>
+                </Select>
+
+                <Select name="state" onValueChange={setSelectedState}>
+                  <SelectTrigger className="h-12 bg-background">
+                    <SelectValue placeholder="State" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-background border shadow-lg">
+                    {statesData?.states?.map((state: any) => (
+                      <SelectItem key={state.state} value={state.state}>
+                        {state.state}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+
+                <Select name="city">
+                  <SelectTrigger className="h-12 bg-background">
+                    <SelectValue placeholder="City" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-background border shadow-lg">
+                    {cities.map((city: string) => (
+                      <SelectItem key={city} value={city}>
+                        {city}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
 
                 <Select name="loanType">
                   <SelectTrigger id="loan-type-mobile" className="h-12 bg-background">
