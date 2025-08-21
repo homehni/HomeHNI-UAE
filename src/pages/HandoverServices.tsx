@@ -224,18 +224,17 @@ const HandoverServices = () => {
                 </Select>
               </div>
 
-              <Select name="country">
-                <SelectTrigger id="handover-country"><SelectValue placeholder="Country" /></SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="india">India</SelectItem>
-                  <SelectItem value="usa">United States</SelectItem>
-                  <SelectItem value="uk">United Kingdom</SelectItem>
-                  <SelectItem value="canada">Canada</SelectItem>
-                  <SelectItem value="australia">Australia</SelectItem>
-                </SelectContent>
-              </Select>
-
               <div className="flex gap-2">
+                <Select name="country">
+                  <SelectTrigger id="handover-country" className="flex-1"><SelectValue placeholder="Country" /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="india">India</SelectItem>
+                    <SelectItem value="usa">United States</SelectItem>
+                    <SelectItem value="uk">United Kingdom</SelectItem>
+                    <SelectItem value="canada">Canada</SelectItem>
+                    <SelectItem value="australia">Australia</SelectItem>
+                  </SelectContent>
+                </Select>
                 <Select name="state">
                   <SelectTrigger id="handover-state" className="flex-1"><SelectValue placeholder="State" /></SelectTrigger>
                   <SelectContent>
@@ -335,20 +334,19 @@ const HandoverServices = () => {
                   </Select>
                 </div>
 
-                <Select name="country">
-                  <SelectTrigger id="handover-country-mobile" className="h-12 bg-background">
-                    <SelectValue placeholder="Country" />
-                  </SelectTrigger>
-                  <SelectContent className="bg-background border shadow-lg">
-                    <SelectItem value="india">India</SelectItem>
-                    <SelectItem value="usa">United States</SelectItem>
-                    <SelectItem value="uk">United Kingdom</SelectItem>
-                    <SelectItem value="canada">Canada</SelectItem>
-                    <SelectItem value="australia">Australia</SelectItem>
-                  </SelectContent>
-                </Select>
-
                 <div className="flex gap-3">
+                  <Select name="country">
+                    <SelectTrigger id="handover-country-mobile" className="flex-1 h-12 bg-background">
+                      <SelectValue placeholder="Country" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-background border shadow-lg">
+                      <SelectItem value="india">India</SelectItem>
+                      <SelectItem value="usa">United States</SelectItem>
+                      <SelectItem value="uk">United Kingdom</SelectItem>
+                      <SelectItem value="canada">Canada</SelectItem>
+                      <SelectItem value="australia">Australia</SelectItem>
+                    </SelectContent>
+                  </Select>
                   <Select name="state">
                     <SelectTrigger id="handover-state-mobile" className="flex-1 h-12 bg-background">
                       <SelectValue placeholder="State" />
