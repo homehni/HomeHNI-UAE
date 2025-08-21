@@ -17,26 +17,17 @@ import { RentalDetails } from '@/types/property';
 import { Home, MapPin, Building, Sparkles, Camera, FileText, Calendar as CalendarStep } from 'lucide-react';
 
 const rentalDetailsSchema = z.object({
-  listingType: z.enum(['Sale', 'Rent']),
-  expectedPrice: z.number().min(1, 'Expected rent is required'),
+  listingType: z.enum(['Sale', 'Rent']).optional(),
+  expectedPrice: z.number().optional(),
   rentNegotiable: z.boolean().optional(),
   maintenanceExtra: z.boolean().optional(),
   maintenanceCharges: z.number().optional(),
-  securityDeposit: z.number().min(1, 'Deposit is required'),
+  securityDeposit: z.number().optional(),
   depositNegotiable: z.boolean().optional(),
-  leaseDuration: z.string().min(1, 'Please select lease duration'),
-  lockinPeriod: z.string().min(1, 'Please select lockin period'),
-  availableFrom: z.string().min(1, 'Please select available from date'),
+  leaseDuration: z.string().optional(),
+  lockinPeriod: z.string().optional(),
+  availableFrom: z.string().optional(),
   idealFor: z.array(z.string()).optional(),
-}).refine((data) => {
-  // If maintenanceExtra is true, maintenanceCharges must be provided
-  if (data.maintenanceExtra && (!data.maintenanceCharges || data.maintenanceCharges <= 0)) {
-    return false;
-  }
-  return true;
-}, {
-  message: "Maintenance amount is required when Maintenance Extra is selected",
-  path: ["maintenanceCharges"],
 });
 
 type RentalDetailsForm = z.infer<typeof rentalDetailsSchema>;
@@ -101,7 +92,16 @@ export const RentalDetailsStep: React.FC<RentalDetailsStepProps> = ({
   const onSubmit = (data: RentalDetailsForm) => {
     // Convert form data to RentalDetails format
     const rentalData: RentalDetails = {
-      ...data,
+      listingType: data.listingType || 'Rent',
+      expectedPrice: data.expectedPrice || 0,
+      rentNegotiable: data.rentNegotiable || false,
+      maintenanceExtra: data.maintenanceExtra || false,
+      maintenanceCharges: data.maintenanceCharges || 0,
+      securityDeposit: data.securityDeposit || 0,
+      depositNegotiable: data.depositNegotiable || false,
+      leaseDuration: data.leaseDuration || '',
+      lockinPeriod: data.lockinPeriod || '',
+      availableFrom: data.availableFrom || '',
       idealFor: selectedTags,
     };
     onNext(rentalData);
@@ -120,7 +120,7 @@ export const RentalDetailsStep: React.FC<RentalDetailsStepProps> = ({
                       name="expectedPrice"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-sm font-medium">Expected Rent *</FormLabel>
+                          <FormLabel className="text-sm font-medium">Expected Rent</FormLabel>
                           <div className="flex items-center space-x-4">
                             <div className="flex-1 relative">
                               <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">₹</span>
@@ -217,7 +217,7 @@ export const RentalDetailsStep: React.FC<RentalDetailsStepProps> = ({
                       name="securityDeposit"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-sm font-medium">Deposit Amount (INR) *</FormLabel>
+                          <FormLabel className="text-sm font-medium">Deposit Amount (INR)</FormLabel>
                           <div className="relative">
                             <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">₹</span>
                             <FormControl>
@@ -312,7 +312,7 @@ export const RentalDetailsStep: React.FC<RentalDetailsStepProps> = ({
                       
                       return (
                         <FormItem className="flex flex-col">
-                          <FormLabel className="text-sm font-medium">Available From *</FormLabel>
+                          <FormLabel className="text-sm font-medium">Available From</FormLabel>
                           <Popover open={open} onOpenChange={setOpen}>
                             <PopoverTrigger asChild>
                             <FormControl>

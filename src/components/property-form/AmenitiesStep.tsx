@@ -77,7 +77,7 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
                       name="powerBackup"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Power Backup *</FormLabel>
+                          <FormLabel>Power Backup</FormLabel>
                           <Select onValueChange={field.onChange} defaultValue={field.value}>
                             <FormControl>
                               <SelectTrigger>
@@ -102,7 +102,7 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
                       name="lift"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Lift *</FormLabel>
+                          <FormLabel>Lift</FormLabel>
                           <Select onValueChange={field.onChange} defaultValue={field.value}>
                             <FormControl>
                               <SelectTrigger>
@@ -125,7 +125,7 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
                       name="parking"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Parking *</FormLabel>
+                          <FormLabel>Parking</FormLabel>
                           <Select onValueChange={field.onChange} defaultValue={field.value}>
                             <FormControl>
                               <SelectTrigger>
@@ -150,7 +150,7 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
                       name="washrooms"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Washroom(s) *</FormLabel>
+                          <FormLabel>Washroom(s)</FormLabel>
                           <Select onValueChange={field.onChange} defaultValue={field.value}>
                             <FormControl>
                               <SelectTrigger>

@@ -106,7 +106,7 @@ export const AdditionalInfoStep: React.FC<AdditionalInfoStepProps> = ({
               name="whoWillShow"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-sm font-medium">Who will show the property?*</FormLabel>
+                  <FormLabel className="text-sm font-medium">Who will show the property?</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger className="h-12">

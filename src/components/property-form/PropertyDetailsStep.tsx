@@ -10,41 +10,18 @@ import { Badge } from '@/components/ui/badge';
 import { PropertyDetails } from '@/types/property';
 import { Phone } from 'lucide-react';
 
-const propertyDetailsSchema = z
-  .object({
-    propertyType: z.string().min(1, 'Please select property type'),
-    buildingType: z.string().min(1, 'Please select building type'),
-    propertyAge: z.string().min(1, 'Please select property age'),
-    totalFloors: z.union([
-      z.number().min(1, 'Total floors must be at least 1'),
-      z.string().min(1, 'Please select total floors')
-    ]),
-    floorNo: z.union([
-      z.number().min(0, 'Floor number cannot be negative'),
-      z.string().min(1, 'Please select floor')
-    ]),
-    furnishingStatus: z.string().min(1, 'Please select furnishing status'),
-    parkingType: z.string().optional(),
-    superBuiltUpArea: z.number().min(1, 'Super built up area is required'),
-    onMainRoad: z.boolean().optional(),
-    cornerProperty: z.boolean().optional(),
-  })
-  .refine((data) => {
-    const floor = typeof data.floorNo === 'number' ? data.floorNo : NaN;
-    const total = typeof data.totalFloors === 'number'
-      ? data.totalFloors
-      : data.totalFloors === '99+'
-        ? 100
-        : NaN;
-    // Only enforce when both are numeric values
-    if (Number.isFinite(floor) && Number.isFinite(total)) {
-      return (total as number) > (floor as number);
-    }
-    return true;
-  }, {
-    path: ['totalFloors'],
-    message: 'Total floors must be greater than Floor number',
-  });
+const propertyDetailsSchema = z.object({
+  propertyType: z.string().optional(),
+  buildingType: z.string().optional(),
+  propertyAge: z.string().optional(),
+  totalFloors: z.union([z.number(), z.string()]).optional(),
+  floorNo: z.union([z.number(), z.string()]).optional(),
+  furnishingStatus: z.string().optional(),
+  parkingType: z.string().optional(),
+  superBuiltUpArea: z.number().optional(),
+  onMainRoad: z.boolean().optional(),
+  cornerProperty: z.boolean().optional(),
+});
 
 type PropertyDetailsFormData = z.infer<typeof propertyDetailsSchema>;
 
@@ -105,7 +82,7 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
               name="propertyType"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-sm font-medium">Property Type*</FormLabel>
+                  <FormLabel className="text-sm font-medium">Property Type</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger className="h-12">
@@ -134,7 +111,7 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
               name="buildingType"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-sm font-medium">Building Type*</FormLabel>
+                  <FormLabel className="text-sm font-medium">Building Type</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger className="h-12">
@@ -162,7 +139,7 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
               name="propertyAge"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-sm font-medium">Age of Property*</FormLabel>
+                  <FormLabel className="text-sm font-medium">Age of Property</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger className="h-12">
@@ -187,7 +164,7 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
               name="floorNo"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-sm font-medium">Floor*</FormLabel>
+                  <FormLabel className="text-sm font-medium">Floor</FormLabel>
                   <Select
                     onValueChange={(value) =>
                       value === 'full' || value === 'lower' || value === 'upper' || value === '99+'
@@ -227,7 +204,7 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
               name="totalFloors"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-sm font-medium">Total Floors*</FormLabel>
+                  <FormLabel className="text-sm font-medium">Total Floors</FormLabel>
                   <Select
                     onValueChange={(value) =>
                       value === '99+' ? field.onChange(value) : field.onChange(parseInt(value))
@@ -265,7 +242,7 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
               name="superBuiltUpArea"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-sm font-medium">Super Built Up Area*</FormLabel>
+                  <FormLabel className="text-sm font-medium">Super Built Up Area</FormLabel>
                   <div className="relative">
                     <FormControl>
                       <Input
@@ -290,7 +267,7 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
               name="furnishingStatus"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-sm font-medium">Furnishing*</FormLabel>
+                  <FormLabel className="text-sm font-medium">Furnishing</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger className="h-12">

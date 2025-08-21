@@ -34,10 +34,7 @@ const gallerySchema = z.object({
     frontView: z.array(z.any()).default([]),
     balcony: z.array(z.any()).default([]),
     others: z.array(z.any()).default([])
-  }).refine((data) => {
-    const totalImages = Object.values(data).reduce((sum, arr) => sum + (arr?.length || 0), 0);
-    return totalImages >= 3;
-  }, { message: 'Minimum 3 total images required across all categories' }),
+  }),
   video: z.any().optional(),
 });
 
