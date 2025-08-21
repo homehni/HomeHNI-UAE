@@ -131,15 +131,15 @@ const PropertyCard = ({
         </div>
       </div>
       
-      <CardContent className="p-3">
-        <h3 className="font-semibold text-sm mb-1 line-clamp-2 text-gray-900">{title} - online only</h3>
+      <CardContent className="p-4">
+        <h3 className="font-semibold text-sm mb-2 line-clamp-2 text-gray-900">{title} - online only</h3>
         
         <div className="flex items-center text-gray-500 mb-3">
           <MapPin size={12} className="mr-1 flex-shrink-0" />
           <span className="text-xs line-clamp-1">{location}</span>
         </div>
         
-        <div className="flex gap-2">
+        <div className="flex gap-2 mt-auto">
           <Button
             variant="outline"
             size="sm"
