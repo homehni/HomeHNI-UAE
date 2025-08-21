@@ -36,25 +36,25 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
   };
   const navigationTabs = [{
     id: 'buy',
-    label: 'Buy'
+    label: 'BUY'
   }, {
     id: 'rent',
-    label: 'Rent'
+    label: 'RENT'
   }, {
     id: 'new-launch',
-    label: 'New Launch'
+    label: 'NEW LAUNCH'
   }, {
     id: 'pg',
-    label: 'PG / Co-living'
+    label: 'PG / CO-LIVING'
   }, {
     id: 'commercial',
-    label: 'Commercial'
+    label: 'COMMERCIAL'
   }, {
     id: 'plots',
-    label: 'Plots/Land'
+    label: 'PLOTS/LAND'
   }, {
     id: 'projects',
-    label: 'Projects'
+    label: 'PROJECTS'
   }];
   useEffect(() => {
     const apiKey = 'AIzaSyD2rlXeHN4cm0CQD-y4YGTsob9a_27YcwY';
