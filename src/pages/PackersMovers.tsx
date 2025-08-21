@@ -213,18 +213,19 @@ const PackersMovers = () => {
                 <Input id="moving-to" name="movingTo" placeholder="Moving To (City)" className="flex-1" required />
               </div>
 
-              <Select name="serviceType">
-                <SelectTrigger id="service-type"><SelectValue placeholder="Service Type" /></SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="home-shifting">Home Shifting</SelectItem>
-                  <SelectItem value="office-relocation">Office Relocation</SelectItem>
-                  <SelectItem value="interstate-moving">Interstate Moving</SelectItem>
-                  <SelectItem value="packing-services">Packing Services</SelectItem>
-                  <SelectItem value="vehicle-transport">Vehicle Transportation</SelectItem>
-                </SelectContent>
-              </Select>
-
-              <Input id="moving-date" name="movingDate" type="date" placeholder="Preferred Moving Date" />
+              <div className="flex gap-2">
+                <Select name="serviceType">
+                  <SelectTrigger id="service-type" className="flex-1"><SelectValue placeholder="Service Type" /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="home-shifting">Home Shifting</SelectItem>
+                    <SelectItem value="office-relocation">Office Relocation</SelectItem>
+                    <SelectItem value="interstate-moving">Interstate Moving</SelectItem>
+                    <SelectItem value="packing-services">Packing Services</SelectItem>
+                    <SelectItem value="vehicle-transport">Vehicle Transportation</SelectItem>
+                  </SelectContent>
+                </Select>
+                <Input id="moving-date" name="movingDate" type="date" placeholder="Preferred Moving Date" className="flex-1" />
+              </div>
 
               <Button type="submit" className="w-full">Get Free Quote!</Button>
             </form>
@@ -302,26 +303,27 @@ const PackersMovers = () => {
                   />
                 </div>
 
-                <Select name="serviceType">
-                  <SelectTrigger id="service-type-mobile" className="h-12 bg-background">
-                    <SelectValue placeholder="Service Type" />
-                  </SelectTrigger>
-                  <SelectContent className="bg-background border shadow-lg">
-                    <SelectItem value="home-shifting">Home Shifting</SelectItem>
-                    <SelectItem value="office-relocation">Office Relocation</SelectItem>
-                    <SelectItem value="interstate-moving">Interstate Moving</SelectItem>
-                    <SelectItem value="packing-services">Packing Services</SelectItem>
-                    <SelectItem value="vehicle-transport">Vehicle Transportation</SelectItem>
-                  </SelectContent>
-                </Select>
-
-                <Input 
-                  id="moving-date-mobile" 
-                  name="movingDate" 
-                  type="date" 
-                  placeholder="Preferred Moving Date" 
-                  className="h-12 text-base bg-background"
-                />
+                <div className="flex gap-3">
+                  <Select name="serviceType">
+                    <SelectTrigger id="service-type-mobile" className="flex-1 h-12 bg-background">
+                      <SelectValue placeholder="Service Type" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-background border shadow-lg">
+                      <SelectItem value="home-shifting">Home Shifting</SelectItem>
+                      <SelectItem value="office-relocation">Office Relocation</SelectItem>
+                      <SelectItem value="interstate-moving">Interstate Moving</SelectItem>
+                      <SelectItem value="packing-services">Packing Services</SelectItem>
+                      <SelectItem value="vehicle-transport">Vehicle Transportation</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <Input 
+                    id="moving-date-mobile" 
+                    name="movingDate" 
+                    type="date" 
+                    placeholder="Preferred Moving Date" 
+                    className="flex-1 h-12 text-base bg-background"
+                  />
+                </div>
 
                 <Button type="submit" className="w-full h-12 text-base font-semibold bg-red-600 hover:bg-red-700 text-white mt-6">
                   Get Free Quote!
