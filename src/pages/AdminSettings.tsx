@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -21,6 +22,32 @@ import { useToast } from '@/hooks/use-toast';
 const AdminSettings = () => {
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
+  
+  useEffect(() => {
+    // Set up real-time subscription for platform settings
+    const channel = supabase
+      .channel('settings-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'platform_settings'
+        },
+        () => {
+          // Refetch settings when they change
+          toast({
+            title: 'Settings Updated',
+            description: 'Settings have been updated by another admin',
+          });
+        }
+      )
+      .subscribe();
+    
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [toast]);
 
   // Mock settings state - in a real app, this would come from a database
   const [settings, setSettings] = useState({

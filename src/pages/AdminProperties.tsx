@@ -44,6 +44,26 @@ const AdminProperties = () => {
 
   useEffect(() => {
     fetchProperties();
+    
+    // Set up real-time subscription
+    const channel = supabase
+      .channel('properties-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'properties'
+        },
+        () => {
+          fetchProperties();
+        }
+      )
+      .subscribe();
+    
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, []);
 
   useEffect(() => {

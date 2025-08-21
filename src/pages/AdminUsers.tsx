@@ -32,6 +32,42 @@ const AdminUsers = () => {
 
   useEffect(() => {
     fetchUsers();
+    
+    // Set up real-time subscriptions
+    const propertiesChannel = supabase
+      .channel('properties-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'properties'
+        },
+        () => {
+          fetchUsers();
+        }
+      )
+      .subscribe();
+    
+    const profilesChannel = supabase
+      .channel('profiles-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'profiles'
+        },
+        () => {
+          fetchUsers();
+        }
+      )
+      .subscribe();
+    
+    return () => {
+      supabase.removeChannel(propertiesChannel);
+      supabase.removeChannel(profilesChannel);
+    };
   }, []);
 
   useEffect(() => {

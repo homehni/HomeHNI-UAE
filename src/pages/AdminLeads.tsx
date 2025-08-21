@@ -70,6 +70,26 @@ export const AdminLeads: React.FC = () => {
 
   useEffect(() => {
     fetchLeads();
+    
+    // Set up real-time subscription
+    const channel = supabase
+      .channel('leads-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'leads'
+        },
+        () => {
+          fetchLeads();
+        }
+      )
+      .subscribe();
+    
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, []);
 
   useEffect(() => {

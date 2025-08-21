@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
@@ -120,6 +121,100 @@ export const AdminAudit: React.FC = () => {
   useEffect(() => {
     filterLogs();
   }, [auditLogs, searchTerm, severityFilter, resourceFilter]);
+  
+  useEffect(() => {
+    // Set up real-time subscriptions for audit logs
+    const auditChannel = supabase
+      .channel('audit-logs-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'audit_logs'
+        },
+        (payload) => {
+          // Add new audit log to the list in real-time
+          const newLog: AuditLog = {
+            id: payload.new.id,
+            action: payload.new.action,
+            user: payload.new.user_id || 'System',
+            userRole: 'system',
+            resource: payload.new.table_name || 'Unknown',
+            resourceId: payload.new.record_id || '',
+            details: JSON.stringify(payload.new.new_values || {}),
+            ipAddress: payload.new.ip_address?.toString() || 'Unknown',
+            userAgent: payload.new.user_agent || 'Unknown',
+            timestamp: payload.new.created_at,
+            severity: 'low'
+          };
+          setAuditLogs(prev => [newLog, ...prev]);
+        }
+      )
+      .subscribe();
+    
+    const propertyAuditChannel = supabase
+      .channel('property-audit-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'property_audit_log'
+        },
+        (payload) => {
+          const newLog: AuditLog = {
+            id: payload.new.id,
+            action: `Property Status: ${payload.new.old_status} → ${payload.new.new_status}`,
+            user: payload.new.changed_by || 'System',
+            userRole: 'admin',
+            resource: 'Property',
+            resourceId: payload.new.property_id,
+            details: payload.new.reason || 'Property status changed',
+            ipAddress: 'Internal',
+            userAgent: 'System',
+            timestamp: payload.new.changed_at,
+            severity: payload.new.new_status === 'rejected' ? 'medium' : 'low'
+          };
+          setAuditLogs(prev => [newLog, ...prev]);
+        }
+      )
+      .subscribe();
+    
+    const userRoleAuditChannel = supabase
+      .channel('user-role-audit-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'user_role_audit_log'
+        },
+        (payload) => {
+          const newLog: AuditLog = {
+            id: payload.new.id,
+            action: `Role Changed: ${payload.new.old_role} → ${payload.new.new_role}`,
+            user: payload.new.changed_by || 'System',
+            userRole: 'admin',
+            resource: 'User',
+            resourceId: payload.new.user_id,
+            details: payload.new.reason || 'User role changed',
+            ipAddress: 'Internal',
+            userAgent: 'System',
+            timestamp: payload.new.changed_at,
+            severity: payload.new.new_role === 'admin' ? 'critical' : 'medium'
+          };
+          setAuditLogs(prev => [newLog, ...prev]);
+        }
+      )
+      .subscribe();
+    
+    return () => {
+      supabase.removeChannel(auditChannel);
+      supabase.removeChannel(propertyAuditChannel);
+      supabase.removeChannel(userRoleAuditChannel);
+    };
+  }, []);
 
   const filterLogs = () => {
     let filtered = auditLogs;

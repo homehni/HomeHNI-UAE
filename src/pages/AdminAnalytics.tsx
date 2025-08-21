@@ -26,6 +26,74 @@ export const AdminAnalytics: React.FC = () => {
 
   useEffect(() => {
     fetchAnalytics();
+    
+    // Set up real-time subscriptions for analytics data
+    const propertiesChannel = supabase
+      .channel('analytics-properties')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'properties'
+        },
+        () => {
+          fetchAnalytics();
+        }
+      )
+      .subscribe();
+    
+    const leadsChannel = supabase
+      .channel('analytics-leads')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'leads'
+        },
+        () => {
+          fetchAnalytics();
+        }
+      )
+      .subscribe();
+    
+    const profilesChannel = supabase
+      .channel('analytics-profiles')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'profiles'
+        },
+        () => {
+          fetchAnalytics();
+        }
+      )
+      .subscribe();
+    
+    const rolesChannel = supabase
+      .channel('analytics-roles')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'user_roles'
+        },
+        () => {
+          fetchAnalytics();
+        }
+      )
+      .subscribe();
+    
+    return () => {
+      supabase.removeChannel(propertiesChannel);
+      supabase.removeChannel(leadsChannel);
+      supabase.removeChannel(profilesChannel);
+      supabase.removeChannel(rolesChannel);
+    };
   }, []);
 
   const fetchAnalytics = async () => {

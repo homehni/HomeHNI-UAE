@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -101,6 +102,32 @@ export const AdminSEO: React.FC = () => {
   });
 
   const { toast } = useToast();
+  
+  useEffect(() => {
+    // Set up real-time subscription for content pages (for SEO data)
+    const channel = supabase
+      .channel('seo-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'content_pages'
+        },
+        () => {
+          // Notify when SEO data changes
+          toast({
+            title: 'SEO Data Updated',
+            description: 'SEO settings have been updated by another admin',
+          });
+        }
+      )
+      .subscribe();
+    
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [toast]);
 
   const handleSaveMetaTags = () => {
     setMetaTags(prev => prev.map(meta => 
