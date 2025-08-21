@@ -97,7 +97,7 @@ const LegalServices = () => {
           </div>
           
           <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            {serviceHighlights.map((service, index) => <Card key={index} className="text-center p-6 hover:shadow-lg transition-shadow border-2 hover:border-brand-red/20">
+            {serviceHighlights.map((service, index) => <Card key={index} className="text-center p-6 hover:shadow-lg transition-shadow border-2 border-primary hover:border-brand-red/20">
                 <CardContent className="pt-6">
                   <div className="w-16 h-16 bg-brand-red/10 rounded-full flex items-center justify-center mx-auto mb-4">
                     <service.icon className="h-8 w-8 text-brand-red" />
