@@ -12,12 +12,12 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { LandPlotAmenities } from '@/types/landPlotProperty';
 
 const amenitiesSchema = z.object({
-  waterSupply: z.enum(['municipal', 'borewell', 'tank', 'none']),
-  electricityConnection: z.enum(['available', 'nearby', 'none']),
-  sewageConnection: z.enum(['connected', 'septic_tank', 'none']),
-  roadWidth: z.number().positive('Road width must be a positive number'),
-  moreSimilarUnits: z.boolean(),
-  gatedSecurity: z.boolean(),
+  waterSupply: z.enum(['municipal', 'borewell', 'tank', 'none']).optional(),
+  electricityConnection: z.enum(['available', 'nearby', 'none']).optional(),
+  sewageConnection: z.enum(['connected', 'septic_tank', 'none']).optional(),
+  roadWidth: z.number().optional().or(z.nan()).transform(val => isNaN(val) ? undefined : val),
+  moreSimilarUnits: z.boolean().optional(),
+  gatedSecurity: z.boolean().optional(),
   directionsToProperty: z.string().optional(),
 });
 
