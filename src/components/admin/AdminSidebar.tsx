@@ -118,8 +118,8 @@ const AdminSidebar = () => {
   }, {} as Record<string, typeof navigationItems>);
 
   return (
-    <Sidebar className="w-64 border-r">
-      <div className="p-4 border-b">
+    <Sidebar className="w-64 border-r bg-white">
+      <div className="p-4 border-b bg-white">
         <div className="flex items-center space-x-2">
           <Logo size="small" />
           <div>
@@ -129,12 +129,14 @@ const AdminSidebar = () => {
         </div>
       </div>
 
-      <SidebarContent>
+      <SidebarContent className="bg-white">
         {Object.entries(groupedItems).map(([groupName, items]) => (
-          <SidebarGroup key={groupName}>
-            <SidebarGroupLabel>{groupName}</SidebarGroupLabel>
+          <SidebarGroup key={groupName} className="px-3 py-2">
+            <SidebarGroupLabel className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2 px-2">
+              {groupName}
+            </SidebarGroupLabel>
             <SidebarGroupContent>
-              <SidebarMenu>
+              <SidebarMenu className="space-y-1">
                 {items.map((item) => (
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton asChild>
@@ -142,13 +144,15 @@ const AdminSidebar = () => {
                         to={item.url}
                         end={item.url === '/admin'}
                         className={({ isActive }) =>
-                          isActive
-                            ? 'bg-brand-red text-white font-medium hover:bg-brand-maroon-dark'
-                            : 'hover:bg-gray-100 text-gray-700'
+                          `flex items-center px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                            isActive
+                              ? 'bg-brand-red text-white shadow-sm'
+                              : 'text-gray-900 hover:bg-gray-100 hover:text-brand-red'
+                          }`
                         }
                       >
-                        <item.icon className="h-4 w-4" />
-                        <span>{item.title}</span>
+                        <item.icon className="h-4 w-4 mr-3 flex-shrink-0" />
+                        <span className="truncate">{item.title}</span>
                       </NavLink>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
