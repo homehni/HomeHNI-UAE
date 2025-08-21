@@ -10,23 +10,21 @@ export const ownerInfoSchema = z.object({
 });
 
 export const propertyInfoSchema = z.object({
-  title: z.string().min(10, 'Title must be at least 10 characters'),
-  propertyType: z.string().min(1, 'Please select property type'),
-  listingType: z.enum(['Sale', 'Rent']).refine(val => val !== undefined, {
-    message: 'Please select listing type',
-  }),
-  bhkType: z.string().min(1, 'Please select BHK type'),
-  bathrooms: z.number().min(0, 'Bathrooms cannot be negative'),
-  balconies: z.number().min(0, 'Balconies cannot be negative'),
-  superArea: z.number().min(1, 'Super area is required'),
+  title: z.string().optional(),
+  propertyType: z.string().optional(),
+  listingType: z.enum(['Sale', 'Rent']).optional(),
+  bhkType: z.string().optional(),
+  bathrooms: z.number().optional(),
+  balconies: z.number().optional(),
+  superArea: z.number().optional(),
   carpetArea: z.number().optional(),
-  expectedPrice: z.number().min(1, 'Expected price is required'),
-  state: z.string().min(1, 'State is required'),
-  city: z.string().min(1, 'City is required'),
-  locality: z.string().min(1, 'Locality is required'),
-  pincode: z.string().min(6, 'Pincode must be at least 6 characters'),
+  expectedPrice: z.number().optional(),
+  state: z.string().optional(),
+  city: z.string().optional(),
+  locality: z.string().optional(),
+  pincode: z.string().optional(),
   description: z.string().optional(),
-  images: z.array(z.any()).min(3, 'Minimum 3 images required').max(10, 'Maximum 10 images allowed'),
+  images: z.array(z.any()).optional(),
   video: z.any().optional(),
 });
 
