@@ -271,7 +271,7 @@ const FeaturedProperties = ({
                   <SelectValue placeholder="Select property type" />
                 </SelectTrigger>
                 <SelectContent className="bg-background border border-border/60 shadow-lg z-50 rounded-lg">
-                  {availableTypes.map(type => <SelectItem key={type} value={type} className="cursor-pointer hover:bg-muted focus:bg-muted rounded-md">
+                  {availableTypes.map(type => <SelectItem key={type} value={type} className="cursor-pointer hover:bg-muted focus:bg-muted rounded-md uppercase">
                       {type}
                     </SelectItem>)}
                 </SelectContent>
@@ -282,7 +282,7 @@ const FeaturedProperties = ({
             <nav aria-label="Property type filter" className="hidden md:block">
               <Tabs value={activeType} onValueChange={setActiveType}>
                 <TabsList className="w-full justify-start overflow-x-auto rounded-full bg-muted/60 p-1 border border-border/60 backdrop-blur supports-[backdrop-filter]:bg-muted/40 shadow-sm [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
-                  {availableTypes.map(type => <TabsTrigger key={type} value={type} className="capitalize rounded-full px-4 py-2 md:px-5 md:py-2.5 transition-colors hover-scale data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow">
+                  {availableTypes.map(type => <TabsTrigger key={type} value={type} className="uppercase rounded-full px-4 py-2 md:px-5 md:py-2.5 transition-colors hover-scale data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow">
                       {type}
                     </TabsTrigger>)}
                 </TabsList>
