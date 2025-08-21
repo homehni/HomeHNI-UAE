@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback, useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Skeleton } from '@/components/ui/skeleton';
 import {
   Users,
   Building2,
@@ -12,9 +13,11 @@ import {
   Clock,
   CheckCircle,
   AlertCircle,
+  RefreshCw,
 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 interface DashboardStats {
   totalUsers: number;
@@ -34,89 +37,142 @@ interface RecentActivity {
 }
 
 const AdminDashboard = () => {
-  const [stats, setStats] = useState<DashboardStats>({
-    totalUsers: 0,
-    totalProperties: 0,
-    totalLeads: 0,
-    pendingProperties: 0,
-    newLeads: 0,
-    monthlyGrowth: 0,
-  });
-  const [recentActivity, setRecentActivity] = useState<RecentActivity[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
+  const queryClient = useQueryClient();
 
-  useEffect(() => {
-    fetchDashboardData();
+  // Optimized data fetching with React Query and caching
+  const fetchDashboardStats = useCallback(async () => {
+    const [usersResult, propertiesResult, leadsResult] = await Promise.all([
+      supabase.from('profiles').select('id', { count: 'exact' }),
+      supabase.from('properties').select('id, status', { count: 'exact' }),
+      supabase.from('leads').select('id, status, created_at', { count: 'exact' }),
+    ]);
+
+    if (usersResult.error) throw usersResult.error;
+    if (propertiesResult.error) throw propertiesResult.error;
+    if (leadsResult.error) throw leadsResult.error;
+
+    const pendingProperties = propertiesResult.data?.filter(p => p.status === 'pending').length || 0;
+    const newLeads = leadsResult.data?.filter(l => l.status === 'new').length || 0;
+
+    return {
+      totalUsers: usersResult.count || 0,
+      totalProperties: propertiesResult.count || 0,
+      totalLeads: leadsResult.count || 0,
+      pendingProperties,
+      newLeads,
+      monthlyGrowth: 12.5, // Mock data - replace with real calculation
+    };
   }, []);
 
-  const fetchDashboardData = async () => {
-    try {
-      // Fetch dashboard statistics
-      const [usersResult, propertiesResult, leadsResult] = await Promise.all([
-        supabase.from('profiles').select('id', { count: 'exact' }),
-        supabase.from('properties').select('id, status', { count: 'exact' }),
-        supabase.from('leads').select('id, status, created_at', { count: 'exact' }),
-      ]);
+  // React Query for caching and background refetching
+  const { 
+    data: stats = {
+      totalUsers: 0,
+      totalProperties: 0,
+      totalLeads: 0,
+      pendingProperties: 0,
+      newLeads: 0,
+      monthlyGrowth: 0,
+    }, 
+    isLoading,
+    error,
+    refetch 
+  } = useQuery({
+    queryKey: ['admin-dashboard-stats'],
+    queryFn: fetchDashboardStats,
+    staleTime: 30000, // Consider data fresh for 30 seconds
+    gcTime: 300000, // Keep in cache for 5 minutes
+    refetchInterval: 60000, // Auto-refetch every minute
+    refetchOnWindowFocus: true,
+    retry: 2,
+  });
 
-      if (usersResult.error) throw usersResult.error;
-      if (propertiesResult.error) throw propertiesResult.error;
-      if (leadsResult.error) throw leadsResult.error;
-
-      const pendingProperties = propertiesResult.data?.filter(p => p.status === 'pending').length || 0;
-      const newLeads = leadsResult.data?.filter(l => l.status === 'new').length || 0;
-
-      setStats({
-        totalUsers: usersResult.count || 0,
-        totalProperties: propertiesResult.count || 0,
-        totalLeads: leadsResult.count || 0,
-        pendingProperties,
-        newLeads,
-        monthlyGrowth: 12.5, // Mock data - replace with real calculation
-      });
-
-      // Mock recent activity data
-      setRecentActivity([
-        {
-          id: '1',
-          type: 'user_registered',
-          description: 'New user registered',
-          timestamp: '2 hours ago',
-          user: 'john.doe@example.com',
-        },
-        {
-          id: '2',
-          type: 'property_listed',
-          description: 'New property listing submitted',
-          timestamp: '4 hours ago',
-          user: 'agent.smith@example.com',
-        },
-        {
-          id: '3',
-          type: 'lead_generated',
-          description: 'New lead for luxury apartment',
-          timestamp: '6 hours ago',
-        },
-        {
-          id: '4',
-          type: 'property_approved',
-          description: 'Property listing approved',
-          timestamp: '1 day ago',
-          user: 'admin',
-        },
-      ]);
-
-    } catch (error) {
+  // Handle errors
+  useEffect(() => {
+    if (error) {
       console.error('Error fetching dashboard data:', error);
       toast({
         title: 'Error Loading Dashboard',
         description: 'Failed to load dashboard statistics.',
         variant: 'destructive',
       });
-    } finally {
-      setIsLoading(false);
     }
-  };
+  }, [error, toast]);
+
+  // Mock recent activity data - in a real app, this would also use React Query
+  const recentActivity = useMemo(() => [
+    {
+      id: '1',
+      type: 'user_registered' as const,
+      description: 'New user registered',
+      timestamp: '2 hours ago',
+      user: 'john.doe@example.com',
+    },
+    {
+      id: '2',
+      type: 'property_listed' as const,
+      description: 'New property listing submitted',
+      timestamp: '4 hours ago',
+      user: 'agent.smith@example.com',
+    },
+    {
+      id: '3',
+      type: 'lead_generated' as const,
+      description: 'New lead for luxury apartment',
+      timestamp: '6 hours ago',
+    },
+    {
+      id: '4',
+      type: 'property_approved' as const,
+      description: 'Property listing approved',
+      timestamp: '1 day ago',
+      user: 'admin',
+    },
+  ], []);
+
+  // Real-time subscriptions for live updates
+  useEffect(() => {
+    const channels = [
+      supabase
+        .channel('admin-dashboard-properties')
+        .on('postgres_changes', 
+          { event: '*', schema: 'public', table: 'properties' },
+          () => {
+            queryClient.invalidateQueries({ queryKey: ['admin-dashboard-stats'] });
+          }
+        )
+        .subscribe(),
+
+      supabase
+        .channel('admin-dashboard-profiles')
+        .on('postgres_changes', 
+          { event: '*', schema: 'public', table: 'profiles' },
+          () => {
+            queryClient.invalidateQueries({ queryKey: ['admin-dashboard-stats'] });
+          }
+        )
+        .subscribe(),
+
+      supabase
+        .channel('admin-dashboard-leads')
+        .on('postgres_changes', 
+          { event: '*', schema: 'public', table: 'leads' },
+          () => {
+            queryClient.invalidateQueries({ queryKey: ['admin-dashboard-stats'] });
+          }
+        )
+        .subscribe()
+    ];
+
+    return () => {
+      channels.forEach(channel => supabase.removeChannel(channel));
+    };
+  }, [queryClient]);
+
+  const handleRefresh = useCallback(() => {
+    refetch();
+  }, [refetch]);
 
   const getActivityIcon = (type: RecentActivity['type']) => {
     switch (type) {
@@ -184,17 +240,68 @@ const AdminDashboard = () => {
   if (isLoading) {
     return (
       <div className="space-y-6">
+        {/* Header Skeleton */}
+        <div className="flex justify-between items-center">
+          <div>
+            <Skeleton className="h-8 w-64 mb-2" />
+            <Skeleton className="h-4 w-96" />
+          </div>
+          <Skeleton className="h-9 w-20" />
+        </div>
+        
+        {/* Stats Cards Skeleton */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {[...Array(4)].map((_, i) => (
             <Card key={i}>
               <CardContent className="p-6">
-                <div className="animate-pulse">
-                  <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
-                  <div className="h-8 bg-gray-200 rounded w-1/2"></div>
+                <div className="flex items-center">
+                  <Skeleton className="h-12 w-12 rounded-lg" />
+                  <div className="ml-4 space-y-2">
+                    <Skeleton className="h-4 w-20" />
+                    <Skeleton className="h-6 w-16" />
+                  </div>
                 </div>
               </CardContent>
             </Card>
           ))}
+        </div>
+        
+        {/* Lower section skeleton */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <Card>
+            <CardHeader>
+              <Skeleton className="h-6 w-40" />
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {[...Array(2)].map((_, i) => (
+                <div key={i} className="flex items-center justify-between p-3 border rounded-lg">
+                  <div className="space-y-2">
+                    <Skeleton className="h-4 w-32" />
+                    <Skeleton className="h-3 w-24" />
+                  </div>
+                  <Skeleton className="h-8 w-16" />
+                </div>
+              ))}
+            </CardContent>
+          </Card>
+          
+          <Card>
+            <CardHeader>
+              <Skeleton className="h-6 w-32" />
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {[...Array(4)].map((_, i) => (
+                <div key={i} className="flex items-start space-x-3">
+                  <Skeleton className="h-4 w-4 mt-1" />
+                  <div className="space-y-1 flex-1">
+                    <Skeleton className="h-4 w-full" />
+                    <Skeleton className="h-3 w-20" />
+                    <Skeleton className="h-3 w-16" />
+                  </div>
+                </div>
+              ))}
+            </CardContent>
+          </Card>
         </div>
       </div>
     );
@@ -203,11 +310,22 @@ const AdminDashboard = () => {
   return (
     <div className="space-y-6">
       {/* Welcome Header */}
-      <div>
-        <h1 className="text-3xl font-bold text-gray-900">Dashboard Overview</h1>
-        <p className="text-gray-600 mt-1">
-          Welcome back! Here's what's happening with your platform.
-        </p>
+      <div className="flex justify-between items-center">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900">Dashboard Overview</h1>
+          <p className="text-gray-600 mt-1">
+            Welcome back! Here's what's happening with your platform.
+          </p>
+        </div>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={handleRefresh}
+          className="flex items-center gap-2"
+        >
+          <RefreshCw className="h-4 w-4" />
+          Refresh
+        </Button>
       </div>
 
       {/* Stats Cards */}
