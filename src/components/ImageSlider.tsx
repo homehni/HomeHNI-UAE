@@ -46,7 +46,7 @@ const ImageSlider = () => {
   }, []);
 
   return (
-    <div className="relative h-[30vh] overflow-hidden">
+    <div className="relative h-32 overflow-hidden">
       {slides.map((slide, index) => (
         <div
           key={slide.id}
