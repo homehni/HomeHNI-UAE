@@ -149,7 +149,7 @@ const Header = () => {
               {!isArchitectsPage && !isInteriorPage && !isHandoverServicesPage && !isPropertyManagementPage && !isPaintingCleaningPage && !isPackersMoversPage && !isCareersPage && (
                 <Select>
                   <SelectTrigger className={`w-28 sm:w-32 transition-all duration-500 [&>svg]:text-current ${isScrolled ? 'bg-gray-100 text-gray-800 hover:bg-gray-200 border-gray-300' : 'bg-white/20 backdrop-blur-sm text-white border-white/30 hover:bg-white/30'}`}>
-                    <SelectValue placeholder="All India" defaultValue="all-india" />
+                    <SelectValue placeholder="Country" defaultValue="all-india" />
                   </SelectTrigger>
                   <SelectContent className="bg-white border border-gray-200 shadow-lg z-50">
                     <SelectItem value="all-india">All India</SelectItem>
