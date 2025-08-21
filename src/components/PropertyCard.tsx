@@ -104,7 +104,7 @@ const PropertyCard = ({
   };
 
   return (
-    <Card className="w-48 overflow-hidden hover:shadow-lg transition-all duration-300 group cursor-pointer rounded-xl border-0 bg-white shadow-sm" onClick={() => navigate(`/property/${id}`, { state: propertyForPage })}>
+    <Card className="w-48 overflow-hidden card-border hover-lift cursor-pointer bg-white" onClick={() => navigate(`/property/${id}`, { state: propertyForPage })}>
       <div className="relative">
         <div className="h-24 overflow-hidden">
           <img
@@ -132,18 +132,18 @@ const PropertyCard = ({
       </div>
       
       <CardContent className="p-3">
-        <h3 className="font-semibold text-xs mb-1 line-clamp-2 text-gray-900">{title} - online only</h3>
+        <h3 className="font-semibold text-xs mb-1 line-clamp-2 text-gray-900 text-uniform">{title} - online only</h3>
         
         <div className="flex items-center text-gray-500 mb-2">
           <MapPin size={10} className="mr-1 flex-shrink-0" />
-          <span className="text-xs line-clamp-1">{location}</span>
+          <span className="text-xs line-clamp-1 text-uniform">{location}</span>
         </div>
         
         <div className="flex gap-2 mt-auto">
           <Button
             variant="outline"
             size="sm"
-            className="w-16 h-7 text-xs border-gray-200 hover:bg-gray-50 px-1"
+            className="w-16 h-7 text-xs border-gray-200 hover:bg-gray-50 px-1 card-border"
             onClick={(e) => e.stopPropagation()}
           >
             <Phone size={8} className="mr-0.5" />

@@ -220,10 +220,10 @@ const Loans = () => {
 
       {/* Sticky Form Container for Large Screens */}
       <div className="hidden lg:block fixed top-32 right-8 z-40 w-96">
-        <Card className="w-full rounded-xl shadow-2xl bg-background border">
+        <Card className="w-full card-border bg-background">
           <CardContent className="p-6">
-            <h3 className="text-xl font-semibold text-foreground mb-2">Need a loan?</h3>
-            <p className="text-sm text-muted-foreground mb-4">Fill the form & get instant pre-approval</p>
+            <h3 className="text-xl font-semibold text-foreground mb-2 text-uniform-center">Need a loan?</h3>
+            <p className="text-sm text-muted-foreground mb-4 text-uniform-center">Fill the form & get instant pre-approval</p>
 
             <form className="space-y-4" onSubmit={e => {
               e.preventDefault();
@@ -308,10 +308,10 @@ const Loans = () => {
       {/* Mobile Form - Static below hero */}
       <section className="lg:hidden px-4 py-8 bg-background">
         <div className="container mx-auto max-w-xl px-4">
-          <Card className="w-full rounded-2xl shadow-xl border-0 bg-card">
+          <Card className="w-full card-border bg-card">
             <CardContent className="p-8">
-              <h3 className="text-2xl font-bold text-foreground mb-3">Need a loan?</h3>
-              <p className="text-base text-muted-foreground mb-8">Fill the form & get instant pre-approval</p>
+              <h3 className="text-2xl font-bold text-foreground mb-3 text-uniform-center">Need a loan?</h3>
+              <p className="text-base text-muted-foreground mb-8 text-uniform-center">Fill the form & get instant pre-approval</p>
 
               <form className="space-y-5" onSubmit={e => {
                 e.preventDefault();

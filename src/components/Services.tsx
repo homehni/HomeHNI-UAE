@@ -35,9 +35,9 @@ const Services = () => {
   ];
 
   return (
-    <section className="py-16 bg-white">
+    <section className="py-16 bg-white section-separator">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
+        <div className="text-uniform-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
             Our Services
           </h2>
@@ -48,12 +48,14 @@ const Services = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {services.map((service, index) => (
-            <div key={index} className="text-center p-6 rounded-lg hover:shadow-lg transition-shadow group">
-              <div className="w-16 h-16 bg-gradient-to-br from-brand-red to-brand-maroon rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
-                <service.icon className="w-8 h-8 text-white" />
+            <div key={index} className="card-border card-border-accent hover-lift p-6 bg-white">
+              <div className="text-uniform-center">
+                <div className="w-16 h-16 bg-gradient-to-br from-brand-red to-brand-maroon rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                  <service.icon className="w-8 h-8 text-white" />
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-3">{service.title}</h3>
+                <p className="text-gray-600 text-uniform">{service.description}</p>
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">{service.title}</h3>
-              <p className="text-gray-600 leading-relaxed">{service.description}</p>
             </div>
           ))}
         </div>

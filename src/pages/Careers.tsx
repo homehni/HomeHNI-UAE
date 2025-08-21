@@ -84,10 +84,10 @@ const Careers = () => {
 
         {/* Sticky Form Container for Large Screens */}
         <div className="hidden lg:block fixed top-32 right-4 z-50 w-[420px]">
-          <Card className="w-full rounded-xl shadow-2xl bg-background border">
+          <Card className="w-full card-border bg-background">
             <CardContent className="p-6">
-              <h3 className="text-xl font-semibold text-foreground mb-2">Apply for a Position</h3>
-              <p className="text-sm text-muted-foreground mb-4">Submit your application today</p>
+              <h3 className="text-xl font-semibold text-foreground mb-2 text-uniform-center">Apply for a Position</h3>
+              <p className="text-sm text-muted-foreground mb-4 text-uniform-center">Submit your application today</p>
 
               <form className="space-y-4" onSubmit={e => {
               e.preventDefault();
@@ -170,11 +170,11 @@ const Careers = () => {
 
         {/* Mobile Form - Static below hero */}
         <section className="lg:hidden px-4 py-8 bg-background">
-          <div className="container mx-auto max-w-xl px-4">
-            <Card className="w-full rounded-2xl shadow-xl border-0 bg-card">
-              <CardContent className="p-8">
-                <h3 className="text-2xl font-bold text-foreground mb-3">Apply for a Position</h3>
-                <p className="text-base text-muted-foreground mb-8">Submit your application today</p>
+        <div className="container mx-auto max-w-xl px-4">
+          <Card className="w-full card-border bg-card">
+            <CardContent className="p-8">
+              <h3 className="text-2xl font-bold text-foreground mb-3 text-uniform-center">Apply for a Position</h3>
+              <p className="text-base text-muted-foreground mb-8 text-uniform-center">Submit your application today</p>
 
                 <form className="space-y-5" onSubmit={e => {
                 e.preventDefault();
@@ -273,48 +273,48 @@ const Careers = () => {
           <div className="max-w-4xl mx-auto lg:pr-[420px]">{/* Add padding for desktop form */}
             
             {/* Header Section */}
-            <section className="mb-12 text-center">
-              <h1 className="text-4xl font-bold text-gray-900 mb-4">Careers at HomeHNI</h1>
-              <p className="text-xl text-gray-600 mb-6">Shape the Future of High-Value Real Estate with Us</p>
-              <p className="text-gray-700 leading-relaxed">
+            <section className="mb-12 section-separator pt-8">
+              <h1 className="text-4xl font-bold text-gray-900 mb-4 text-uniform-center">Careers at HomeHNI</h1>
+              <p className="text-xl text-gray-600 mb-6 text-uniform-center">Shape the Future of High-Value Real Estate with Us</p>
+              <p className="text-gray-700 text-uniform mb-4">
                 At HomeHNI, we are redefining how High-Net-Worth Individuals (HNIs) experience real estate. With technology, transparency, and trust at our core, we're building India's most intelligent platform for premium property discovery and transactions.
               </p>
-              <p className="text-gray-700 leading-relaxed mt-4">
+              <p className="text-gray-700 text-uniform">
                 If you're passionate about innovation, problem-solving, and creating real impact in the luxury property space — we want you on our team.
               </p>
             </section>
 
             {/* Why Work with HomeHNI */}
-            <section className="mb-12">
+            <section className="mb-12 section-separator pt-8">
               <div className="flex items-center mb-6">
                 <h2 className="text-2xl font-bold text-gray-900">🔍 Why Work with HomeHNI?</h2>
               </div>
               
               <div className="grid md:grid-cols-2 gap-6">
-                <div className="bg-blue-50 p-6 rounded-lg">
-                  <h3 className="font-semibold text-blue-800 mb-3">✅ Innovation-Driven Culture</h3>
-                  <p className="text-blue-700 leading-relaxed">
+                <div className="card-border-accent hover-lift p-6 bg-blue-50">
+                  <h3 className="font-semibold text-blue-800 mb-3 text-uniform-center">✅ Innovation-Driven Culture</h3>
+                  <p className="text-blue-700 text-uniform">
                     We don't just follow trends—we set them. You'll work on cutting-edge real estate tech tools, customer experience automation, and intelligent listing algorithms.
                   </p>
                 </div>
                 
-                <div className="bg-green-50 p-6 rounded-lg">
-                  <h3 className="font-semibold text-green-800 mb-3">✅ Real Impact, Real Growth</h3>
-                  <p className="text-green-700 leading-relaxed">
+                <div className="card-border-accent hover-lift p-6 bg-green-50">
+                  <h3 className="font-semibold text-green-800 mb-3 text-uniform-center">✅ Real Impact, Real Growth</h3>
+                  <p className="text-green-700 text-uniform">
                     Your work directly influences how clients make high-value property decisions. From day one, you'll have ownership and autonomy.
                   </p>
                 </div>
                 
-                <div className="bg-purple-50 p-6 rounded-lg">
-                  <h3 className="font-semibold text-purple-800 mb-3">✅ Work with the Best Minds</h3>
-                  <p className="text-purple-700 leading-relaxed">
+                <div className="card-border-accent hover-lift p-6 bg-purple-50">
+                  <h3 className="font-semibold text-purple-800 mb-3 text-uniform-center">✅ Work with the Best Minds</h3>
+                  <p className="text-purple-700 text-uniform">
                     Collaborate with experienced professionals from top startups, proptech companies, and the real estate industry.
                   </p>
                 </div>
                 
-                <div className="bg-yellow-50 p-6 rounded-lg">
-                  <h3 className="font-semibold text-yellow-800 mb-3">✅ Flexible and Hybrid Opportunities</h3>
-                  <p className="text-yellow-700 leading-relaxed">
+                <div className="card-border-accent hover-lift p-6 bg-yellow-50">
+                  <h3 className="font-semibold text-yellow-800 mb-3 text-uniform-center">✅ Flexible and Hybrid Opportunities</h3>
+                  <p className="text-yellow-700 text-uniform">
                     We believe in productivity over presence. Enjoy flexible working hours, remote options, and a performance-focused environment.
                   </p>
                 </div>
@@ -322,42 +322,42 @@ const Careers = () => {
             </section>
 
             {/* Current Openings */}
-            <section className="mb-12">
+            <section className="mb-12 section-separator pt-8">
               <div className="flex items-center mb-6">
                 <h2 className="text-2xl font-bold text-gray-900">🌟 Current Openings</h2>
               </div>
               
               <div className="space-y-8">
-                <div className="border border-gray-200 rounded-lg p-6">
-                  <h3 className="text-xl font-semibold text-gray-900 mb-3">1. Real Estate Sales Consultant – HNI Segment</h3>
-                  <div className="space-y-2 text-gray-700">
+                <div className="card-border hover-lift p-6 bg-white">
+                  <h3 className="text-xl font-semibold text-gray-900 mb-3 text-uniform">1. Real Estate Sales Consultant – HNI Segment</h3>
+                  <div className="space-y-2 text-gray-700 text-uniform">
                     <p><strong>Location:</strong> Mumbai / Bangalore / Delhi NCR</p>
                     <p><strong>Experience:</strong> 3+ years in luxury real estate sales</p>
                     <p><strong>Role:</strong> Build relationships with HNI clients, conduct virtual/onsite property tours, and drive premium property transactions.</p>
                   </div>
                 </div>
                 
-                <div className="border border-gray-200 rounded-lg p-6">
-                  <h3 className="text-xl font-semibold text-gray-900 mb-3">2. Digital Marketing Executive</h3>
-                  <div className="space-y-2 text-gray-700">
+                <div className="card-border hover-lift p-6 bg-white">
+                  <h3 className="text-xl font-semibold text-gray-900 mb-3 text-uniform">2. Digital Marketing Executive</h3>
+                  <div className="space-y-2 text-gray-700 text-uniform">
                     <p><strong>Location:</strong> Remote</p>
                     <p><strong>Experience:</strong> 2–4 years (Real Estate or PropTech preferred)</p>
                     <p><strong>Role:</strong> Plan, execute, and optimize paid ad campaigns, SEO, content marketing, and email automation for lead generation.</p>
                   </div>
                 </div>
                 
-                <div className="border border-gray-200 rounded-lg p-6">
-                  <h3 className="text-xl font-semibold text-gray-900 mb-3">3. Full Stack Developer (React + Node.js)</h3>
-                  <div className="space-y-2 text-gray-700">
+                <div className="card-border hover-lift p-6 bg-white">
+                  <h3 className="text-xl font-semibold text-gray-900 mb-3 text-uniform">3. Full Stack Developer (React + Node.js)</h3>
+                  <div className="space-y-2 text-gray-700 text-uniform">
                     <p><strong>Location:</strong> Hybrid (Bangalore Preferred)</p>
                     <p><strong>Experience:</strong> 2–5 years</p>
                     <p><strong>Role:</strong> Build scalable, high-performance web platforms and tools for real estate discovery, agent dashboards, and user engagement.</p>
                   </div>
                 </div>
                 
-                <div className="border border-gray-200 rounded-lg p-6">
-                  <h3 className="text-xl font-semibold text-gray-900 mb-3">4. Legal Documentation Executive</h3>
-                  <div className="space-y-2 text-gray-700">
+                <div className="card-border hover-lift p-6 bg-white">
+                  <h3 className="text-xl font-semibold text-gray-900 mb-3 text-uniform">4. Legal Documentation Executive</h3>
+                  <div className="space-y-2 text-gray-700 text-uniform">
                     <p><strong>Location:</strong> Remote / Onsite</p>
                     <p><strong>Experience:</strong> 1–3 years in property law or legal drafting</p>
                     <p><strong>Role:</strong> Assist clients with sale agreements, title checks, and document review services for property transactions.</p>

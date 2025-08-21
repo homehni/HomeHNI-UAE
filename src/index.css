@@ -139,6 +139,48 @@ All colors MUST be HSL.
   .hover\:bg-brand-maroon-dark:hover {
     background-color: hsl(var(--brand-maroon-dark));
   }
+
+  /* Consistent Text Alignment */
+  .text-uniform {
+    text-align: left;
+    line-height: 1.6;
+  }
+
+  .text-uniform-center {
+    text-align: center;
+    line-height: 1.6;
+  }
+
+  /* Consistent Border System */
+  .card-border {
+    border: 1px solid hsl(var(--border));
+    border-radius: 0.75rem;
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  }
+
+  .card-border-accent {
+    border: 1px solid hsl(var(--brand-red) / 0.2);
+    border-radius: 0.75rem;
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  }
+
+  .section-separator {
+    border-top: 1px solid hsl(var(--border));
+  }
+
+  .form-border {
+    border: 1px solid hsl(var(--input));
+    border-radius: 0.5rem;
+  }
+
+  .hover-lift {
+    transition: all 0.3s ease;
+  }
+
+  .hover-lift:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px 0 rgb(0 0 0 / 0.15);
+  }
 }
 
 /* Custom gradients */
