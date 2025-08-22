@@ -69,6 +69,7 @@ import AboutSidebar from "./pages/AboutSidebar";
 import PropertyDetails from "./pages/PropertyDetails";
 import PropertySearch from "./pages/PropertySearch";
 import PagePreview from "./pages/PagePreview";
+import DynamicPage from "./pages/DynamicPage";
 
 const App: React.FC = () => {
   const [queryClient] = useState(() => new QueryClient({
@@ -178,6 +179,10 @@ const App: React.FC = () => {
             
             <Route path="/robots.txt" element={<RobotsTxt />} />
             <Route path="/sitemap.xml" element={<SitemapXml />} />
+            
+            {/* Dynamic page route - must be before catch-all */}
+            <Route path="/:slug" element={<DynamicPage />} />
+            
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
             </Routes>
