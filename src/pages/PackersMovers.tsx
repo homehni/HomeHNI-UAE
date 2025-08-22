@@ -432,7 +432,7 @@ const PackersMovers = () => {
               <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
                 Comprehensive Moving Solutions
               </h2>
-              <div className="text-muted-foreground space-y-4 text-sm leading-relaxed">
+              <div className="text-muted-foreground space-y-4 text-sm leading-relaxed text-justify">
                 <p>
                   Whether you're relocating your home, shifting your office, or moving to a different city, 
                   our comprehensive packing and moving solutions are designed to make your relocation 
