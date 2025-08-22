@@ -39,23 +39,48 @@ const AdminProperties = () => {
   const [propertyToDelete, setPropertyToDelete] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
+  const [newPropertyCount, setNewPropertyCount] = useState(0);
+  const [lastViewedTime, setLastViewedTime] = useState<string>(new Date().toISOString());
 
   const { toast } = useToast();
 
   useEffect(() => {
     fetchProperties();
     
-    // Set up real-time subscription
+    // Set up real-time subscription for property changes
     const channel = supabase
       .channel('properties-changes')
       .on(
         'postgres_changes',
         {
-          event: '*',
+          event: 'INSERT',
           schema: 'public',
           table: 'properties'
         },
-        () => {
+        (payload) => {
+          const newProperty = payload.new as Property;
+          
+          // Show real-time notification for new property submission
+          toast({
+            title: '🎉 New Property Submitted!',
+            description: `"${newProperty.title}" by ${newProperty.owner_name || 'Unknown'} needs review`,
+            duration: 6000,
+          });
+          
+          // Update property count and refresh list
+          setNewPropertyCount(prev => prev + 1);
+          fetchProperties();
+        }
+      )
+      .on(
+        'postgres_changes',
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'properties'
+        },
+        (payload) => {
+          // Refresh list for updates (status changes, etc.)
           fetchProperties();
         }
       )
@@ -64,7 +89,7 @@ const AdminProperties = () => {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, []);
+  }, [toast]);
 
   useEffect(() => {
     filterProperties();
@@ -232,8 +257,28 @@ const AdminProperties = () => {
   return (
     <div className="space-y-6">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-foreground mb-2">Properties Management</h1>
-        <p className="text-muted-foreground">Review, approve, reject, and manage all property listings</p>
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-foreground mb-2">Properties Management</h1>
+            <p className="text-muted-foreground">Review, approve, reject, and manage all property listings</p>
+          </div>
+          {newPropertyCount > 0 && (
+            <div className="flex items-center gap-3">
+              <div className="bg-red-100 text-red-800 px-4 py-2 rounded-full text-sm font-medium animate-pulse">
+                {newPropertyCount} new propert{newPropertyCount === 1 ? 'y' : 'ies'} submitted!
+              </div>
+              <button
+                onClick={() => {
+                  setNewPropertyCount(0);
+                  setLastViewedTime(new Date().toISOString());
+                }}
+                className="text-sm text-muted-foreground hover:text-foreground underline"
+              >
+                Mark as viewed
+              </button>
+            </div>
+          )}
+        </div>
       </div>
 
       <PropertyTable
