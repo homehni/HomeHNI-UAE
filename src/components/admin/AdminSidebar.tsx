@@ -61,12 +61,6 @@ const navigationItems = [
     group: 'Content',
   },
   {
-    title: 'Featured Properties',
-    url: '/admin/featured-properties',
-    icon: Star,
-    group: 'Content',
-  },
-  {
     title: 'Website CMS',
     url: '/admin/website-cms',
     icon: Menu,

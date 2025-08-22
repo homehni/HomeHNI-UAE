@@ -57,7 +57,6 @@ import { AdminLeads } from "./pages/AdminLeads";
 import { AdminRegions } from "./pages/AdminRegions";
 import { AdminSEO } from "./pages/AdminSEO";
 import { AdminAudit } from "./pages/AdminAudit";
-import { AdminFeaturedProperties } from "./pages/AdminFeaturedProperties";
 import { AdminPageManagement } from "./pages/AdminPageManagement";
 import { AdminWebsiteCMS } from "./pages/AdminWebsiteCMS";
 import NotFound from "./pages/NotFound";
@@ -169,7 +168,6 @@ const App: React.FC = () => {
               <Route path="analytics" element={<AdminAnalytics />} />
               <Route path="listings" element={<AdminProperties />} />
               <Route path="leads" element={<AdminLeads />} />
-              <Route path="featured-properties" element={<AdminFeaturedProperties />} />
               <Route path="website-cms" element={<AdminWebsiteCMS />} />
               <Route path="regions" element={<AdminRegions />} />
               <Route path="security" element={<AdminAudit />} />
