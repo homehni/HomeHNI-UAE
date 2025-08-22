@@ -106,139 +106,280 @@ const PropertyDetails: React.FC = () => {
           </div>
         </section>
 
-        <section className="container mx-auto py-8 px-[27px]">
-          {/* Image Gallery */}
-          {property.images && property.images.length > 0 && (
-            <PropertyImageGallery 
-              images={property.images} 
-              propertyTitle={property.title}
-            />
-          )}
+        <section className="container mx-auto py-8 px-4 lg:px-8">
+          <div className="max-w-7xl mx-auto border-2 border-brand-red shadow-lg">
+            {/* Image Gallery */}
+            {property.images && property.images.length > 0 && (
+              <div className="mb-8">
+                <PropertyImageGallery 
+                  images={property.images} 
+                  propertyTitle={property.title}
+                />
+              </div>
+            )}
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Left: details */}
-            <div className="lg:col-span-2 space-y-8">
-              {/* Property Details */}
-              <article className="space-y-4">
-                <h2 className="text-xl font-semibold flex items-center"><Home className="h-5 w-5 mr-2 text-brand-red" />Property Details</h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="flex justify-between border-b pb-2"><span className="text-gray-600">Type</span><span className="font-medium capitalize">{property.property_type.replace('_', ' ')}</span></div>
-                  {property.bhk_type && <div className="flex justify-between border-b pb-2"><span className="text-gray-600">BHK</span><span className="font-medium">{property.bhk_type}</span></div>}
-                  {property.super_area && <div className="flex justify-between border-b pb-2"><span className="text-gray-600">Super Area</span><span className="font-medium">{property.super_area} sqft</span></div>}
-                  {property.carpet_area && <div className="flex justify-between border-b pb-2"><span className="text-gray-600">Carpet Area</span><span className="font-medium">{property.carpet_area} sqft</span></div>}
-                  {property.bathrooms !== undefined && <div className="flex justify-between border-b pb-2"><span className="text-gray-600">Bathrooms</span><span className="font-medium">{property.bathrooms}</span></div>}
-                  {property.balconies !== undefined && <div className="flex justify-between border-b pb-2"><span className="text-gray-600">Balconies</span><span className="font-medium">{property.balconies}</span></div>}
-                </div>
-              </article>
-
-              {/* Location */}
-              <article className="space-y-4">
-                <h2 className="text-xl font-semibold flex items-center"><MapPin className="h-5 w-5 mr-2 text-brand-red" />Location</h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="flex justify-between border-b pb-2"><span className="text-gray-600">City</span><span className="font-medium">{property.city}</span></div>
-                  <div className="flex justify-between border-b pb-2"><span className="text-gray-600">Locality</span><span className="font-medium">{property.locality}</span></div>
-                  <div className="flex justify-between border-b pb-2"><span className="text-gray-600">State</span><span className="font-medium">{property.state}</span></div>
-                  <div className="flex justify-between border-b pb-2"><span className="text-gray-600">Pincode</span><span className="font-medium">{property.pincode}</span></div>
-                </div>
-              </article>
-
-              {/* Overview */}
-              <article className="space-y-4">
-                <h2 className="text-xl font-semibold">Overview</h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {overview.map((o, idx) => <div key={idx} className="rounded-lg border p-3">
-                      <div className="text-gray-600 text-sm">{o.label}</div>
-                      <div className="font-medium">{o.value}</div>
-                    </div>)}
-                </div>
-              </article>
-
-              {/* Services */}
-              <article className="space-y-4">
-                <h2 className="text-xl font-semibold">Services</h2>
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                  <div className="flex flex-col items-center gap-2 rounded-lg border p-4"><Paintbrush className="h-5 w-5 text-brand-red" /><span>Painting</span></div>
-                  <div className="flex flex-col items-center gap-2 rounded-lg border p-4"><Calculator className="h-5 w-5 text-brand-red" /><span>Estimate Cost</span></div>
-                  <div className="flex flex-col items-center gap-2 rounded-lg border p-4"><FileText className="h-5 w-5 text-brand-red" /><span>Legal Services</span></div>
-                  <div className="flex flex-col items-center gap-2 rounded-lg border p-4"><ShieldCheck className="h-5 w-5 text-brand-red" /><span>Create Agreement</span></div>
-                </div>
-              </article>
-
-              {/* Description */}
-              <article className="space-y-3">
-                <h2 className="text-xl font-semibold">Description</h2>
-                <p className="text-gray-700 leading-relaxed">
-                  {descExpanded ? property.description || fallbackDescription : (property.description || fallbackDescription).slice(0, 320)}
-                  {(property.description || fallbackDescription).length > 320 && !descExpanded && '...'}
-                </p>
-                {(property.description || fallbackDescription).length > 320 && <Button variant="outline" size="sm" onClick={() => setDescExpanded(v => !v)}>
-                    {descExpanded ? 'Show Less' : 'Show More'}
-                  </Button>}
-              </article>
-
-              {/* Amenities */}
-              <article className="space-y-4">
-                <h2 className="text-xl font-semibold">Amenities</h2>
-                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-                  {amenities.map(a => <div key={a} className="rounded-lg border p-3 text-center text-sm">{a}</div>)}
-                </div>
-              </article>
-
-              {/* Neighborhood */}
-              <article className="space-y-4">
-                <h2 className="text-xl font-semibold">Neighborhood</h2>
-                <div className="w-full h-72 rounded-lg overflow-hidden border">
-                  <iframe title="map" width="100%" height="100%" loading="lazy" src={`https://www.google.com/maps?q=${encodeURIComponent(`${property.locality}, ${property.city}`)}&output=embed`} />
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm text-gray-700">
-                  <div className="space-y-2">
-                    <div className="font-medium">Transit</div>
-                    <div className="flex items-center"><Bus className="h-4 w-4 mr-2" /> Bus Stations nearby</div>
-                    <div className="flex items-center"><Train className="h-4 w-4 mr-2" /> Metro Stations nearby</div>
-                    <div className="flex items-center"><Car className="h-4 w-4 mr-2" /> Parking available</div>
-                  </div>
-                  <div className="space-y-2">
-                    <div className="font-medium">Essentials</div>
-                    <div>Schools, Hospitals, ATMs</div>
-                    <div>Parks and Markets</div>
-                  </div>
-                  <div className="space-y-2">
-                    <div className="font-medium">Utilities</div>
-                    <div>24x7 Water supply</div>
-                    <div>Power backup</div>
+            <div className="grid grid-cols-1 xl:grid-cols-4 gap-8">
+              {/* Left: Main Details */}
+              <div className="xl:col-span-3 space-y-6">
+                {/* Property Details Card */}
+                <div className="bg-card rounded-xl border shadow-sm p-6">
+                  <h2 className="text-2xl font-bold mb-6 flex items-center">
+                    <Home className="h-6 w-6 mr-3 text-brand-red" />
+                    Property Details
+                  </h2>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-4">
+                      <div className="flex justify-between items-center py-2 border-b border-border">
+                        <span className="text-muted-foreground">Type</span>
+                        <span className="font-semibold capitalize">{property.property_type.replace('_', ' ')}</span>
+                      </div>
+                      {property.bhk_type && (
+                        <div className="flex justify-between items-center py-2 border-b border-border">
+                          <span className="text-muted-foreground">BHK</span>
+                          <span className="font-semibold">{property.bhk_type}</span>
+                        </div>
+                      )}
+                      {property.super_area && (
+                        <div className="flex justify-between items-center py-2 border-b border-border">
+                          <span className="text-muted-foreground">Super Area</span>
+                          <span className="font-semibold">{property.super_area} sqft</span>
+                        </div>
+                      )}
+                    </div>
+                    <div className="space-y-4">
+                      {property.carpet_area && (
+                        <div className="flex justify-between items-center py-2 border-b border-border">
+                          <span className="text-muted-foreground">Carpet Area</span>
+                          <span className="font-semibold">{property.carpet_area} sqft</span>
+                        </div>
+                      )}
+                      {property.bathrooms !== undefined && (
+                        <div className="flex justify-between items-center py-2 border-b border-border">
+                          <span className="text-muted-foreground">Bathrooms</span>
+                          <span className="font-semibold">{property.bathrooms}</span>
+                        </div>
+                      )}
+                      {property.balconies !== undefined && (
+                        <div className="flex justify-between items-center py-2 border-b border-border">
+                          <span className="text-muted-foreground">Balconies</span>
+                          <span className="font-semibold">{property.balconies}</span>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
-              </article>
 
-              {/* Listed on */}
-              <div className="pt-4 border-t">
-                <div className="flex items-center text-sm text-gray-500">
-                  <Calendar className="h-4 w-4 mr-2" /> Listed on {new Date(property.created_at).toLocaleDateString()}
+                {/* Location Card */}
+                <div className="bg-card rounded-xl border shadow-sm p-6">
+                  <h2 className="text-2xl font-bold mb-6 flex items-center">
+                    <MapPin className="h-6 w-6 mr-3 text-brand-red" />
+                    Location
+                  </h2>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-4">
+                      <div className="flex justify-between items-center py-2 border-b border-border">
+                        <span className="text-muted-foreground">City</span>
+                        <span className="font-semibold">{property.city}</span>
+                      </div>
+                      <div className="flex justify-between items-center py-2 border-b border-border">
+                        <span className="text-muted-foreground">Locality</span>
+                        <span className="font-semibold">{property.locality}</span>
+                      </div>
+                    </div>
+                    <div className="space-y-4">
+                      <div className="flex justify-between items-center py-2 border-b border-border">
+                        <span className="text-muted-foreground">State</span>
+                        <span className="font-semibold">{property.state}</span>
+                      </div>
+                      <div className="flex justify-between items-center py-2 border-b border-border">
+                        <span className="text-muted-foreground">Pincode</span>
+                        <span className="font-semibold">{property.pincode}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Overview Card */}
+                <div className="bg-card rounded-xl border shadow-sm p-6">
+                  <h2 className="text-2xl font-bold mb-6">Overview</h2>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {overview.map((o, idx) => (
+                      <div key={idx} className="bg-muted/30 rounded-lg p-4 hover:bg-muted/50 transition-colors">
+                        <div className="text-muted-foreground text-sm mb-1">{o.label}</div>
+                        <div className="font-semibold">{o.value}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Services Card */}
+                <div className="bg-card rounded-xl border shadow-sm p-6">
+                  <h2 className="text-2xl font-bold mb-6">Services</h2>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                    <div className="flex flex-col items-center gap-3 bg-muted/30 rounded-lg p-4 hover:bg-muted/50 transition-colors cursor-pointer">
+                      <Paintbrush className="h-8 w-8 text-brand-red" />
+                      <span className="text-sm font-medium">Painting</span>
+                    </div>
+                    <div className="flex flex-col items-center gap-3 bg-muted/30 rounded-lg p-4 hover:bg-muted/50 transition-colors cursor-pointer">
+                      <Calculator className="h-8 w-8 text-brand-red" />
+                      <span className="text-sm font-medium">Estimate Cost</span>
+                    </div>
+                    <div className="flex flex-col items-center gap-3 bg-muted/30 rounded-lg p-4 hover:bg-muted/50 transition-colors cursor-pointer">
+                      <FileText className="h-8 w-8 text-brand-red" />
+                      <span className="text-sm font-medium">Legal Services</span>
+                    </div>
+                    <div className="flex flex-col items-center gap-3 bg-muted/30 rounded-lg p-4 hover:bg-muted/50 transition-colors cursor-pointer">
+                      <ShieldCheck className="h-8 w-8 text-brand-red" />
+                      <span className="text-sm font-medium">Create Agreement</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Description Card */}
+                <div className="bg-card rounded-xl border shadow-sm p-6">
+                  <h2 className="text-2xl font-bold mb-4">Description</h2>
+                  <p className="text-muted-foreground leading-relaxed mb-4">
+                    {descExpanded ? property.description || fallbackDescription : (property.description || fallbackDescription).slice(0, 320)}
+                    {(property.description || fallbackDescription).length > 320 && !descExpanded && '...'}
+                  </p>
+                  {(property.description || fallbackDescription).length > 320 && (
+                    <Button variant="outline" size="sm" onClick={() => setDescExpanded(v => !v)}>
+                      {descExpanded ? 'Show Less' : 'Show More'}
+                    </Button>
+                  )}
+                </div>
+
+                {/* Amenities Card */}
+                <div className="bg-card rounded-xl border shadow-sm p-6">
+                  <h2 className="text-2xl font-bold mb-6">Amenities</h2>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+                    {amenities.map(a => (
+                      <div key={a} className="bg-muted/30 rounded-lg p-3 text-center text-sm font-medium hover:bg-muted/50 transition-colors">
+                        {a}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Neighborhood Card */}
+                <div className="bg-card rounded-xl border shadow-sm p-6">
+                  <h2 className="text-2xl font-bold mb-6">Neighborhood</h2>
+                  <div className="w-full h-80 rounded-xl overflow-hidden border mb-6">
+                    <iframe 
+                      title="map" 
+                      width="100%" 
+                      height="100%" 
+                      loading="lazy" 
+                      src={`https://www.google.com/maps?q=${encodeURIComponent(`${property.locality}, ${property.city}`)}&output=embed`} 
+                    />
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                    <div className="space-y-3">
+                      <div className="font-bold text-lg">Transit</div>
+                      <div className="space-y-2 text-muted-foreground">
+                        <div className="flex items-center gap-2">
+                          <Bus className="h-4 w-4" />
+                          <span>Bus Stations nearby</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Train className="h-4 w-4" />
+                          <span>Metro Stations nearby</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Car className="h-4 w-4" />
+                          <span>Parking available</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="space-y-3">
+                      <div className="font-bold text-lg">Essentials</div>
+                      <div className="space-y-1 text-muted-foreground">
+                        <div>Schools, Hospitals, ATMs</div>
+                        <div>Parks and Markets</div>
+                      </div>
+                    </div>
+                    <div className="space-y-3">
+                      <div className="font-bold text-lg">Utilities</div>
+                      <div className="space-y-1 text-muted-foreground">
+                        <div>24x7 Water supply</div>
+                        <div>Power backup</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Listed on */}
+                <div className="pt-6 border-t border-border">
+                  <div className="flex items-center text-sm text-muted-foreground">
+                    <Calendar className="h-4 w-4 mr-2" />
+                    Listed on {new Date(property.created_at).toLocaleDateString()}
+                  </div>
                 </div>
               </div>
+
+              {/* Right: Sticky Sidebar */}
+              <aside className="xl:col-span-1">
+                <div className="sticky top-8 space-y-6">
+                  {/* Price Card */}
+                  <div className="bg-card rounded-xl border shadow-lg p-6">
+                    <div className="text-center">
+                      <div className="text-3xl font-bold text-brand-red mb-2">
+                        ₹{property.expected_price.toLocaleString()}
+                      </div>
+                      <div className="text-muted-foreground text-sm">
+                        {property.listing_type === 'sale' ? 'Total Price' : 'Monthly Rent'}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Contact Card */}
+                  <div className="bg-card rounded-xl border shadow-lg p-6 space-y-4">
+                    <h3 className="text-xl font-bold flex items-center">
+                      <User className="h-5 w-5 mr-2 text-brand-red" />
+                      Contact Owner
+                    </h3>
+                    <p className="text-muted-foreground text-sm">
+                      Interested in this property? Contact the owner through our secure platform.
+                    </p>
+                    <Button 
+                      className="w-full" 
+                      size="lg"
+                      onClick={() => setShowContactModal(true)}
+                    >
+                      Get Owner Details
+                    </Button>
+                  </div>
+
+                  {/* Quick Actions */}
+                  <div className="bg-card rounded-xl border shadow-lg p-6 space-y-4">
+                    <h3 className="text-lg font-semibold">Quick Actions</h3>
+                    <div className="space-y-2">
+                      <Button variant="outline" className="w-full justify-start" size="sm">
+                        <TrendingUp className="h-4 w-4 mr-2" />
+                        Schedule Visit
+                      </Button>
+                      <Button variant="outline" className="w-full justify-start" size="sm">
+                        <Calculator className="h-4 w-4 mr-2" />
+                        EMI Calculator
+                      </Button>
+                      <Button variant="outline" className="w-full justify-start" size="sm">
+                        <FileText className="h-4 w-4 mr-2" />
+                        Legal Check
+                      </Button>
+                    </div>
+                  </div>
+
+                  {/* Back Button */}
+                  <Button 
+                    variant="outline" 
+                    className="w-full" 
+                    onClick={() => navigate(-1)}
+                  >
+                    ← Back to Search
+                  </Button>
+                </div>
+              </aside>
             </div>
-
-            {/* Right: price and owner */}
-            <aside className="space-y-6">
-              <div className="border rounded-lg p-4">
-                <h3 className="text-lg font-semibold mb-3 flex items-center"><IndianRupee className="h-5 w-5 mr-2 text-brand-red" /> Price</h3>
-                <div className="text-2xl font-bold text-brand-red">₹{property.expected_price.toLocaleString()}</div>
-              </div>
-
-              <div className="border rounded-lg p-4 space-y-3">
-                <h3 className="text-lg font-semibold flex items-center"><User className="h-5 w-5 mr-2 text-brand-red" /> Contact</h3>
-                <p className="text-gray-600 text-sm">
-                  Interested in this property? Contact the owner through our secure platform.
-                </p>
-                <Button className="w-full" onClick={() => setShowContactModal(true)}>
-                  Contact Owner
-                </Button>
-              </div>
-
-              <div className="flex gap-2">
-                <Button variant="outline" className="flex-1" onClick={() => navigate(-1)}>Back</Button>
-              </div>
-            </aside>
           </div>
         </section>
       </main>
