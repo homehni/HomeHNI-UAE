@@ -222,6 +222,7 @@ const PackersMovers = () => {
                     <SelectItem value="interstate-moving">Interstate Moving</SelectItem>
                     <SelectItem value="packing-services">Packing Services</SelectItem>
                     <SelectItem value="vehicle-transport">Vehicle Transportation</SelectItem>
+                    <SelectItem value="other">Others</SelectItem>
                   </SelectContent>
                 </Select>
                 <Input id="moving-date" name="movingDate" type="date" placeholder="Preferred Moving Date" className="flex-1" />
