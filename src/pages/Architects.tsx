@@ -473,7 +473,7 @@ const Architects = () => {
                 Comprehensive Architectural Solutions
               </h2>
               <div className="text-muted-foreground space-y-4 text-sm leading-relaxed">
-                <p>
+                <p className="text-justify">
                   Whether you're planning to build your dream home, design a commercial space, or renovate your 
                   existing property, our team of experienced architects is here to bring your vision to life. 
                   With expertise in residential, commercial, and sustainable design, we deliver innovative 
