@@ -244,11 +244,22 @@ const DynamicPage: React.FC = () => {
         return <MobileAppSection key={section.id} />;
         
       default:
+        // Handle custom content sections
         return (
           <section key={section.id} className="py-8 bg-white">
             <div className="container mx-auto px-4">
-              <div className="text-center">
-                <p className="text-gray-500">Unknown section type: {section_type}</p>
+              <div className="max-w-4xl mx-auto">
+                {content.title && (
+                  <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6 text-center">
+                    {content.title}
+                  </h2>
+                )}
+                <div 
+                  className="prose prose-lg prose-gray max-w-none"
+                  dangerouslySetInnerHTML={{ 
+                    __html: formatContent(content.html || content.content || content) 
+                  }}
+                />
               </div>
             </div>
           </section>
