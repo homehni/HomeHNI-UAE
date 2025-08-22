@@ -928,26 +928,268 @@ export const AdminWebsiteCMS: React.FC = () => {
                         items={pageSections.map(s => s.id)}
                         strategy={verticalListSortingStrategy}
                       >
-                        <div className="space-y-2 max-h-60 overflow-y-auto">
+                        <div className="space-y-3 max-h-96 overflow-y-auto">
                           {pageSections.map((section) => (
                             <SortableItem key={section.id} id={section.id}>
-                              <div className="flex items-center justify-between p-2 bg-muted rounded">
-                                <div className="flex-1">
-                                  <div className="font-medium text-sm capitalize">
-                                    {section.section_type.replace('-', ' ')}
+                              <Collapsible>
+                                <div className="border rounded-lg p-3 bg-card">
+                                  <div className="flex items-center justify-between mb-2">
+                                    <div className="flex items-center gap-2">
+                                      <CollapsibleTrigger asChild>
+                                        <Button variant="ghost" size="sm" className="p-0 h-auto">
+                                          <ChevronRight className="h-4 w-4" />
+                                        </Button>
+                                      </CollapsibleTrigger>
+                                      <div className="flex-1">
+                                        <div className="font-medium text-sm capitalize">
+                                          {section.section_type.replace('-', ' ')}
+                                        </div>
+                                        <div className="text-xs text-muted-foreground">
+                                          {section.is_custom ? 'Custom Section' : `Template: ${section.template_id}`}
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <Button
+                                      size="sm"
+                                      variant="ghost"
+                                      onClick={() => removeSection(section.id)}
+                                    >
+                                      <Trash2 className="w-3 h-3" />
+                                    </Button>
                                   </div>
-                                  <div className="text-xs text-muted-foreground">
-                                    {section.is_custom ? 'Custom Section' : `Template: ${section.template_id}`}
-                                  </div>
+
+                                  <CollapsibleContent className="space-y-3">
+                                    {/* Content Editor based on section type */}
+                                    {section.section_type === 'hero-search' && (
+                                      <div className="space-y-3">
+                                        <div>
+                                          <Label className="text-xs">Hero Title</Label>
+                                          <Input
+                                            value={section.content.title || ''}
+                                            onChange={(e) => updateSectionContent(section.id, {
+                                              ...section.content,
+                                              title: e.target.value
+                                            })}
+                                            placeholder="Enter hero title"
+                                            className="text-sm"
+                                          />
+                                        </div>
+                                        <div>
+                                          <Label className="text-xs">Subtitle</Label>
+                                          <Textarea
+                                            value={section.content.subtitle || ''}
+                                            onChange={(e) => updateSectionContent(section.id, {
+                                              ...section.content,
+                                              subtitle: e.target.value
+                                            })}
+                                            placeholder="Enter subtitle"
+                                            rows={2}
+                                            className="text-sm"
+                                          />
+                                        </div>
+                                        <div>
+                                          <Label className="text-xs">Primary CTA Text</Label>
+                                          <Input
+                                            value={section.content.primaryCTA || ''}
+                                            onChange={(e) => updateSectionContent(section.id, {
+                                              ...section.content,
+                                              primaryCTA: e.target.value
+                                            })}
+                                            placeholder="Button text"
+                                            className="text-sm"
+                                          />
+                                        </div>
+                                      </div>
+                                    )}
+
+                                    {section.section_type === 'services' && (
+                                      <div className="space-y-3">
+                                        <div>
+                                          <Label className="text-xs">Section Title</Label>
+                                          <Input
+                                            value={section.content.title || ''}
+                                            onChange={(e) => updateSectionContent(section.id, {
+                                              ...section.content,
+                                              title: e.target.value
+                                            })}
+                                            placeholder="Enter section title"
+                                            className="text-sm"
+                                          />
+                                        </div>
+                                        <div>
+                                          <Label className="text-xs">Section Subtitle</Label>
+                                          <Input
+                                            value={section.content.subtitle || ''}
+                                            onChange={(e) => updateSectionContent(section.id, {
+                                              ...section.content,
+                                              subtitle: e.target.value
+                                            })}
+                                            placeholder="Enter subtitle"
+                                            className="text-sm"
+                                          />
+                                        </div>
+                                        {section.content.services?.map((service, idx) => (
+                                          <div key={idx} className="border rounded p-2 space-y-2">
+                                            <Label className="text-xs">Service {idx + 1}</Label>
+                                            <Input
+                                              value={service.title || ''}
+                                              onChange={(e) => {
+                                                const newServices = [...(section.content.services || [])];
+                                                newServices[idx] = { ...service, title: e.target.value };
+                                                updateSectionContent(section.id, {
+                                                  ...section.content,
+                                                  services: newServices
+                                                });
+                                              }}
+                                              placeholder="Service title"
+                                              className="text-sm"
+                                            />
+                                            <Textarea
+                                              value={service.description || ''}
+                                              onChange={(e) => {
+                                                const newServices = [...(section.content.services || [])];
+                                                newServices[idx] = { ...service, description: e.target.value };
+                                                updateSectionContent(section.id, {
+                                                  ...section.content,
+                                                  services: newServices
+                                                });
+                                              }}
+                                              placeholder="Service description"
+                                              rows={2}
+                                              className="text-sm"
+                                            />
+                                          </div>
+                                        ))}
+                                      </div>
+                                    )}
+
+                                    {section.section_type === 'testimonials' && (
+                                      <div className="space-y-3">
+                                        <div>
+                                          <Label className="text-xs">Section Title</Label>
+                                          <Input
+                                            value={section.content.title || ''}
+                                            onChange={(e) => updateSectionContent(section.id, {
+                                              ...section.content,
+                                              title: e.target.value
+                                            })}
+                                            placeholder="Enter section title"
+                                            className="text-sm"
+                                          />
+                                        </div>
+                                        {section.content.testimonials?.map((testimonial, idx) => (
+                                          <div key={idx} className="border rounded p-2 space-y-2">
+                                            <Label className="text-xs">Testimonial {idx + 1}</Label>
+                                            <Input
+                                              value={testimonial.name || ''}
+                                              onChange={(e) => {
+                                                const newTestimonials = [...(section.content.testimonials || [])];
+                                                newTestimonials[idx] = { ...testimonial, name: e.target.value };
+                                                updateSectionContent(section.id, {
+                                                  ...section.content,
+                                                  testimonials: newTestimonials
+                                                });
+                                              }}
+                                              placeholder="Customer name"
+                                              className="text-sm"
+                                            />
+                                            <Textarea
+                                              value={testimonial.text || ''}
+                                              onChange={(e) => {
+                                                const newTestimonials = [...(section.content.testimonials || [])];
+                                                newTestimonials[idx] = { ...testimonial, text: e.target.value };
+                                                updateSectionContent(section.id, {
+                                                  ...section.content,
+                                                  testimonials: newTestimonials
+                                                });
+                                              }}
+                                              placeholder="Testimonial text"
+                                              rows={3}
+                                              className="text-sm"
+                                            />
+                                          </div>
+                                        ))}
+                                      </div>
+                                    )}
+
+                                    {section.section_type === 'mobile-app' && (
+                                      <div className="space-y-3">
+                                        <div>
+                                          <Label className="text-xs">App Section Title</Label>
+                                          <Input
+                                            value={section.content.title || ''}
+                                            onChange={(e) => updateSectionContent(section.id, {
+                                              ...section.content,
+                                              title: e.target.value
+                                            })}
+                                            placeholder="Enter app section title"
+                                            className="text-sm"
+                                          />
+                                        </div>
+                                        <div>
+                                          <Label className="text-xs">Description</Label>
+                                          <Textarea
+                                            value={section.content.description || ''}
+                                            onChange={(e) => updateSectionContent(section.id, {
+                                              ...section.content,
+                                              description: e.target.value
+                                            })}
+                                            placeholder="App description"
+                                            rows={3}
+                                            className="text-sm"
+                                          />
+                                        </div>
+                                        <div>
+                                          <Label className="text-xs">App Image</Label>
+                                          <ImageUpload
+                                            existingImages={section.content.appImage ? [section.content.appImage] : []}
+                                            onImageUploaded={(url) => updateSectionContent(section.id, {
+                                              ...section.content,
+                                              appImage: url
+                                            })}
+                                            onImageRemoved={() => updateSectionContent(section.id, {
+                                              ...section.content,
+                                              appImage: ''
+                                            })}
+                                            maxImages={1}
+                                          />
+                                        </div>
+                                      </div>
+                                    )}
+
+                                    {/* Custom Content Editor */}
+                                    {section.is_custom && (
+                                      <div className="space-y-3">
+                                        <div>
+                                          <Label className="text-xs">Custom Content</Label>
+                                          <RichTextEditor
+                                            value={section.content.html || ''}
+                                            onChange={(html) => updateSectionContent(section.id, {
+                                              ...section.content,
+                                              html
+                                            })}
+                                          />
+                                        </div>
+                                         <div>
+                                           <Label className="text-xs">Section Images</Label>
+                                           <ImageUpload
+                                             existingImages={section.content.image ? [section.content.image] : []}
+                                             onImageUploaded={(url) => updateSectionContent(section.id, {
+                                               ...section.content,
+                                               image: url
+                                             })}
+                                             onImageRemoved={() => updateSectionContent(section.id, {
+                                               ...section.content,
+                                               image: ''
+                                             })}
+                                             maxImages={1}
+                                           />
+                                         </div>
+                                      </div>
+                                    )}
+                                  </CollapsibleContent>
                                 </div>
-                                <Button
-                                  size="sm"
-                                  variant="ghost"
-                                  onClick={() => removeSection(section.id)}
-                                >
-                                  <Trash2 className="w-3 h-3" />
-                                </Button>
-                              </div>
+                              </Collapsible>
                             </SortableItem>
                           ))}
                         </div>
