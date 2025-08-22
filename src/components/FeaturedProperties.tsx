@@ -26,18 +26,59 @@ const FeaturedProperties = ({
   properties?: FeaturedProperty[];
 }) => {
   const [showAll, setShowAll] = useState(false);
-  const [contentElements, setContentElements] = useState<ContentElement[]>([]);
+  const [featuredProperties, setFeaturedProperties] = useState<FeaturedProperty[]>([]);
   const [sectionHeader, setSectionHeader] = useState<ContentElement | null>(null);
   
-  // Fetch content from database
+  // Fetch real featured properties from database
   useEffect(() => {
     const fetchContent = async () => {
       try {
-        const [featuredProps, headerContent] = await Promise.all([
-          contentElementsService.getFeaturedProperties(),
-          contentElementsService.getSectionContent('homepage', 'featured_properties', 'featured_properties_header')
-        ]);
-        setContentElements(featuredProps);
+        // Get featured properties from actual database
+        const { data: featuredPropsData, error: featuredError } = await supabase
+          .from('featured_properties')
+          .select(`
+            id,
+            sort_order,
+            is_active,
+            properties!inner (
+              id,
+              title,
+              city,
+              locality,
+              state,
+              expected_price,
+              super_area,
+              bhk_type,
+              bathrooms,
+              property_type,
+              images,
+              status
+            )
+          `)
+          .eq('is_active', true)
+          .eq('properties.status', 'approved')
+          .order('sort_order');
+        
+        if (featuredError) throw featuredError;
+        
+        // Transform to FeaturedProperty format
+        const transformedProperties = (featuredPropsData || []).map(item => ({
+          id: item.properties.id,
+          title: item.properties.title,
+          location: `${item.properties.locality}, ${item.properties.city}`,
+          price: `₹${(item.properties.expected_price / 100000).toFixed(1)}L`,
+          area: `${item.properties.super_area} sq ft`,
+          bedrooms: parseInt(item.properties.bhk_type?.replace(/[^\d]/g, '') || '0'),
+          bathrooms: item.properties.bathrooms || 0,
+          image: item.properties.images?.[0] || 'photo-1560518883-ce09059eeffa',
+          propertyType: item.properties.property_type?.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase()) || 'Property',
+          isNew: false
+        }));
+
+        setFeaturedProperties(transformedProperties);
+
+        // Get header content
+        const headerContent = await contentElementsService.getSectionContent('homepage', 'featured_properties', 'featured_properties_header');
         setSectionHeader(headerContent);
       } catch (error) {
         console.error('Error fetching featured properties:', error);
@@ -46,23 +87,36 @@ const FeaturedProperties = ({
 
     fetchContent();
 
-    // Set up real-time subscription
-    const channel = supabase
-      .channel('featured-properties-changes')
+    // Set up real-time subscriptions for both tables
+    const propertiesChannel = supabase
+      .channel('properties-realtime')
       .on(
         'postgres_changes',
         {
           event: '*',
           schema: 'public',
-          table: 'content_elements',
-          filter: 'page_location=eq.homepage'
+          table: 'properties'
+        },
+        () => fetchContent()
+      )
+      .subscribe();
+      
+    const featuredChannel = supabase
+      .channel('featured-properties-realtime')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'featured_properties'
         },
         () => fetchContent()
       )
       .subscribe();
 
     return () => {
-      supabase.removeChannel(channel);
+      supabase.removeChannel(propertiesChannel);
+      supabase.removeChannel(featuredChannel);
     };
   }, []);
 
@@ -268,22 +322,9 @@ const FeaturedProperties = ({
     isNew: true
   }];
 
-  // Use CMS data if available, otherwise fall back to default properties
-  const cmsProperties = contentElements.map(element => ({
-    id: element.id,
-    title: element.title || '',
-    location: element.content.location || '',
-    price: element.content.price || '',
-    area: element.content.area || '',
-    bedrooms: element.content.bedrooms || 0,
-    bathrooms: element.content.bathrooms || 0,
-    image: element.content.image || '',
-    propertyType: element.content.propertyType || '',
-    isNew: element.content.isNew || false
-  }));
-
+  // Use real database properties if available, otherwise fall back to default
   const properties: FeaturedProperty[] = propsProperties ?? (
-    cmsProperties.length >= defaultProperties.length ? cmsProperties : defaultProperties
+    featuredProperties.length > 0 ? featuredProperties : defaultProperties
   );
 
   // Compute available types dynamically so it works if properties change in the future
