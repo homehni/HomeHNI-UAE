@@ -216,6 +216,9 @@ export const AdminWebsiteCMS: React.FC = () => {
     is_active: true
   });
 
+  // Live homepage friendly form state
+  const [liveContentForm, setLiveContentForm] = useState<any>({});
+
   // Drag and drop sensors
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -471,18 +474,34 @@ export const AdminWebsiteCMS: React.FC = () => {
       sort_order: section.sort_order,
       is_active: section.is_active
     });
+    // Prepare friendly form for live homepage sections
+    if (section.page_id === 'live-homepage') {
+      try {
+        const parsed = typeof section.content === 'string' ? JSON.parse(section.content) : (section.content || {});
+        setLiveContentForm(parsed || {});
+      } catch {
+        setLiveContentForm({});
+      }
+    } else {
+      setLiveContentForm({});
+    }
     setSectionDialog(true);
   };
 
   const handleSaveSection = async () => {
     try {
       let contentData;
-      try {
-        contentData = typeof sectionForm.content === 'string' 
-          ? JSON.parse(sectionForm.content) 
-          : sectionForm.content;
-      } catch {
-        contentData = { text: sectionForm.content };
+      if (editingSection && editingSection.page_id === 'live-homepage') {
+        // Use friendly form content for live homepage sections
+        contentData = liveContentForm || {};
+      } else {
+        try {
+          contentData = typeof sectionForm.content === 'string' 
+            ? JSON.parse(sectionForm.content) 
+            : sectionForm.content;
+        } catch {
+          contentData = { text: sectionForm.content };
+        }
       }
 
       if (editingSection && editingSection.page_id === 'live-homepage') {
@@ -1191,19 +1210,219 @@ export const AdminWebsiteCMS: React.FC = () => {
             </div>
 
             <div>
-              <Label htmlFor="section_content">Section Content (JSON Format)</Label>
-              <div className="mt-2">
-                <Textarea
-                  id="section_content"
-                  value={typeof sectionForm.content === 'string' ? sectionForm.content : JSON.stringify(sectionForm.content, null, 2)}
-                  onChange={(e) => setSectionForm(prev => ({ ...prev, content: e.target.value }))}
-                  placeholder='{"title": "Section Title", "subtitle": "Section Description"}'
-                  className="min-h-[200px] font-mono"
-                />
-              </div>
-              <p className="text-xs text-gray-500 mt-1">
-                Enter JSON content for this section. Example: {"{"}"title": "Our Services", "subtitle": "Complete real estate solutions"{"}"} 
-              </p>
+              {editingSection?.page_id === 'live-homepage' ? (
+                <div className="space-y-4">
+                  {/* Hero Search */}
+                  {sectionForm.section_type === 'hero_search' && (
+                    <>
+                      <div>
+                        <Label>Background Image URL</Label>
+                        <Input
+                          value={liveContentForm.background_image_url || ''}
+                          onChange={(e) => setLiveContentForm((prev: any) => ({ ...prev, background_image_url: e.target.value }))}
+                          placeholder="/lovable-uploads/hero.jpg"
+                        />
+                      </div>
+                      <div>
+                        <Label>Search Placeholder</Label>
+                        <Input
+                          value={liveContentForm.placeholder || ''}
+                          onChange={(e) => setLiveContentForm((prev: any) => ({ ...prev, placeholder: e.target.value }))}
+                          placeholder="Search 'Noida'"
+                        />
+                      </div>
+                    </>
+                  )}
+
+                  {/* Services */}
+                  {sectionForm.section_type === 'services' && (
+                    <>
+                      <div>
+                        <Label>Title</Label>
+                        <Input
+                          value={liveContentForm.title || ''}
+                          onChange={(e) => setLiveContentForm((prev: any) => ({ ...prev, title: e.target.value }))}
+                          placeholder="Our Services"
+                        />
+                      </div>
+                      <div>
+                        <Label>Subtitle</Label>
+                        <Input
+                          value={liveContentForm.subtitle || ''}
+                          onChange={(e) => setLiveContentForm((prev: any) => ({ ...prev, subtitle: e.target.value }))}
+                          placeholder="Comprehensive real estate solutions"
+                        />
+                      </div>
+                      <div>
+                        <Label>Items (one per line: Title|Description)</Label>
+                        <Textarea
+                          value={(liveContentForm.items || []).map((i: any) => `${i.title || ''}|${i.description || ''}`).join('\n')}
+                          onChange={(e) => {
+                            const lines = e.target.value.split('\n').filter(Boolean);
+                            const items = lines.map(l => {
+                              const [t, d] = l.split('|');
+                              return { title: (t || '').trim(), description: (d || '').trim() };
+                            });
+                            setLiveContentForm((prev: any) => ({ ...prev, items }));
+                          }}
+                          placeholder={"Property Search|Find your perfect property"}
+                          className="min-h-[120px]"
+                        />
+                      </div>
+                    </>
+                  )}
+
+                  {/* Why Use */}
+                  {sectionForm.section_type === 'why_use' && (
+                    <>
+                      <div>
+                        <Label>Title</Label>
+                        <Input
+                          value={liveContentForm.title || ''}
+                          onChange={(e) => setLiveContentForm((prev: any) => ({ ...prev, title: e.target.value }))}
+                          placeholder="Why Use Home HNI"
+                        />
+                      </div>
+                      <div>
+                        <Label>Top Services (one per line: Title|Badge)</Label>
+                        <Textarea
+                          value={(liveContentForm.topServices || []).map((i: any) => `${i.title || ''}|${i.badge || ''}`).join('\n')}
+                          onChange={(e) => {
+                            const lines = e.target.value.split('\n').filter(Boolean);
+                            const topServices = lines.map(l => {
+                              const [t, b] = l.split('|');
+                              return { title: (t || '').trim(), badge: (b || '').trim() || undefined };
+                            });
+                            setLiveContentForm((prev: any) => ({ ...prev, topServices }));
+                          }}
+                          placeholder={"Builder Projects|New"}
+                          className="min-h-[100px]"
+                        />
+                      </div>
+                      <div>
+                        <Label>Benefits (one per line: Title|Description)</Label>
+                        <Textarea
+                          value={(liveContentForm.benefits || []).map((i: any) => `${i.title || ''}|${i.description || ''}`).join('\n')}
+                          onChange={(e) => {
+                            const lines = e.target.value.split('\n').filter(Boolean);
+                            const benefits = lines.map(l => {
+                              const [t, d] = l.split('|');
+                              return { title: (t || '').trim(), description: (d || '').trim() };
+                            });
+                            setLiveContentForm((prev: any) => ({ ...prev, benefits }));
+                          }}
+                          placeholder={"Avoid Brokers|We directly connect you to verified owners"}
+                          className="min-h-[120px]"
+                        />
+                      </div>
+                    </>
+                  )}
+
+                  {/* Stats */}
+                  {sectionForm.section_type === 'stats' && (
+                    <div>
+                      <Label>Stats (one per line: Number|Label)</Label>
+                      <Textarea
+                        value={(liveContentForm.items || []).map((i: any) => `${i.number || ''}|${i.label || ''}`).join('\n')}
+                        onChange={(e) => {
+                          const lines = e.target.value.split('\n').filter(Boolean);
+                          const items = lines.map(l => {
+                            const [n, lbl] = l.split('|');
+                            return { number: (n || '').trim(), label: (lbl || '').trim() };
+                          });
+                          setLiveContentForm((prev: any) => ({ ...prev, items }));
+                        }}
+                        placeholder={"50,000+|Properties Listed"}
+                        className="min-h-[120px]"
+                      />
+                    </div>
+                  )}
+
+                  {/* Testimonials */}
+                  {sectionForm.section_type === 'testimonials' && (
+                    <div>
+                      <Label>Testimonials (one per line: Name|Rating 1-5|Text)</Label>
+                      <Textarea
+                        value={(liveContentForm.items || []).map((i: any) => `${i.name || ''}|${i.rating || 5}|${i.text || ''}`).join('\n')}
+                        onChange={(e) => {
+                          const lines = e.target.value.split('\n').filter(Boolean);
+                          const items = lines.map(l => {
+                            const [name, rating, text] = l.split('|');
+                            return { name: (name || '').trim(), rating: Math.max(1, Math.min(5, parseInt((rating || '5').trim()) || 5)), text: (text || '').trim() };
+                          });
+                          setLiveContentForm((prev: any) => ({ ...prev, items }));
+                        }}
+                        placeholder={"Rajesh Kumar|5|Great platform!"}
+                        className="min-h-[140px]"
+                      />
+                    </div>
+                  )}
+
+                  {/* Mobile App */}
+                  {sectionForm.section_type === 'mobile_app' && (
+                    <>
+                      <div>
+                        <Label>Title</Label>
+                        <Input
+                          value={liveContentForm.title || ''}
+                          onChange={(e) => setLiveContentForm((prev: any) => ({ ...prev, title: e.target.value }))}
+                          placeholder="Find A New Home On The Go"
+                        />
+                      </div>
+                      <div>
+                        <Label>Description</Label>
+                        <Textarea
+                          value={liveContentForm.description || ''}
+                          onChange={(e) => setLiveContentForm((prev: any) => ({ ...prev, description: e.target.value }))}
+                          placeholder="Download our app and discover properties..."
+                        />
+                      </div>
+                      <div>
+                        <Label>Image URL</Label>
+                        <Input
+                          value={liveContentForm.image_url || ''}
+                          onChange={(e) => setLiveContentForm((prev: any) => ({ ...prev, image_url: e.target.value }))}
+                          placeholder="/lovable-uploads/homeAppPromotion.png"
+                        />
+                      </div>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <Label>Google Play Link</Label>
+                          <Input
+                            value={liveContentForm.play_link || ''}
+                            onChange={(e) => setLiveContentForm((prev: any) => ({ ...prev, play_link: e.target.value }))}
+                            placeholder="https://play.google.com/..."
+                          />
+                        </div>
+                        <div>
+                          <Label>App Store Link</Label>
+                          <Input
+                            value={liveContentForm.appstore_link || ''}
+                            onChange={(e) => setLiveContentForm((prev: any) => ({ ...prev, appstore_link: e.target.value }))}
+                            placeholder="https://apps.apple.com/..."
+                          />
+                        </div>
+                      </div>
+                    </>
+                  )}
+                </div>
+              ) : (
+                <>
+                  <Label htmlFor="section_content">Section Content (JSON Format)</Label>
+                  <div className="mt-2">
+                    <Textarea
+                      id="section_content"
+                      value={typeof sectionForm.content === 'string' ? sectionForm.content : JSON.stringify(sectionForm.content, null, 2)}
+                      onChange={(e) => setSectionForm(prev => ({ ...prev, content: e.target.value }))}
+                      placeholder='{"title": "Section Title", "subtitle": "Section Description"}'
+                      className="min-h-[200px] font-mono"
+                    />
+                  </div>
+                  <p className="text-xs text-gray-500 mt-1">
+                    Enter JSON content for this section. Example: {"{"}"title": "Our Services", "subtitle": "Complete real estate solutions"{"}"}
+                  </p>
+                </>
+              )}
             </div>
           </div>
 
