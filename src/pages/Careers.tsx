@@ -130,10 +130,10 @@ const Careers = () => {
         {/* Sticky Form Container for Large Screens */}
         <div className="hidden lg:block fixed top-32 right-4 z-50 w-[420px]">
           <Card className="w-full rounded-xl shadow-2xl bg-background border-2 border-primary">
-            <CardContent className="p-6">
-              <h3 className="text-xl font-semibold text-foreground mb-2 text-uniform-center">Apply for a Position</h3>
+            <CardContent className="p-4">
+              <h3 className="text-xl font-semibold text-foreground mb-1 text-uniform-center">Apply for a Position</h3>
 
-              <form className="space-y-4" onSubmit={e => {
+              <form className="space-y-3" onSubmit={e => {
               e.preventDefault();
               toast({
                 title: "Application submitted",
@@ -259,10 +259,10 @@ const Careers = () => {
         <section className="lg:hidden px-4 py-8 bg-background">
         <div className="container mx-auto max-w-xl px-4">
           <Card className="w-full rounded-2xl shadow-xl border-2 border-primary bg-card">
-            <CardContent className="p-8">
-              <h3 className="text-2xl font-bold text-foreground mb-3 text-uniform-center">Apply for a Position</h3>
+            <CardContent className="p-6">
+              <h3 className="text-2xl font-bold text-foreground mb-2 text-uniform-center">Apply for a Position</h3>
 
-                <form className="space-y-5" onSubmit={e => {
+                <form className="space-y-4" onSubmit={e => {
                 e.preventDefault();
                 toast({
                   title: "Application submitted",
