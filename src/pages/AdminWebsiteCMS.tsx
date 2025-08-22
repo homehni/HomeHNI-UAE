@@ -223,8 +223,8 @@ export const AdminWebsiteCMS: React.FC = () => {
     'landing': [
       { sectionType: 'hero-search', templateId: 'modern' },
       { sectionType: 'services', templateId: 'grid-4' },
-      { sectionType: 'stats', templateId: 'standard' },
-      { sectionType: 'testimonials', templateId: 'standard' }
+      { sectionType: 'stats', templateId: 'default' },
+      { sectionType: 'testimonials', templateId: 'default' }
     ],
     'service': [
       { sectionType: 'hero-search', templateId: 'minimal' },
