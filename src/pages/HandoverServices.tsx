@@ -212,6 +212,7 @@ const HandoverServices = () => {
                   <SelectItem value="plots">Plots</SelectItem>
                   <SelectItem value="commercial-building">Commercial Building/House</SelectItem>
                   <SelectItem value="agricultural">Agricultural Lands</SelectItem>
+                  <SelectItem value="other">Others</SelectItem>
                 </SelectContent>
               </Select>
 
@@ -224,6 +225,7 @@ const HandoverServices = () => {
                     <SelectItem value="selling">Selling Property</SelectItem>
                     <SelectItem value="rental">Rental Handover</SelectItem>
                     <SelectItem value="possession">New Possession</SelectItem>
+                    <SelectItem value="other">Others</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -334,6 +336,7 @@ const HandoverServices = () => {
                       <SelectItem value="selling">Selling Property</SelectItem>
                       <SelectItem value="rental">Rental Handover</SelectItem>
                       <SelectItem value="possession">New Possession</SelectItem>
+                      <SelectItem value="other">Others</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
