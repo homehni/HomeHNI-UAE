@@ -8,6 +8,7 @@ interface PropertyInfoData {
   propertyAddress: string;
   propertyType: string;
   ownershipStatus: string;
+  surveyNo?: string;
 }
 
 interface PropertyInformationStepProps {
@@ -47,19 +48,36 @@ const PropertyInformationStep = ({ data, onChange }: PropertyInformationStepProp
       </div>
 
       <div className="space-y-6">
-        <div>
-          <Label htmlFor="propertyAddress" className="text-sm font-medium text-gray-700 mb-2 flex items-center">
-            <MapPin className="h-4 w-4 mr-2" />
-            Property Address or Location
-          </Label>
-          <Input
-            id="propertyAddress"
-            type="text"
-            placeholder="Enter the property address or area"
-            value={data.propertyAddress}
-            onChange={(e) => onChange({ propertyAddress: e.target.value })}
-            className="mt-1"
-          />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <Label htmlFor="propertyAddress" className="text-sm font-medium text-gray-700 mb-2 flex items-center">
+              <MapPin className="h-4 w-4 mr-2" />
+              Property Address or Location
+            </Label>
+            <Input
+              id="propertyAddress"
+              type="text"
+              placeholder="Enter the property address or area"
+              value={data.propertyAddress}
+              onChange={(e) => onChange({ propertyAddress: e.target.value })}
+              className="mt-1"
+            />
+          </div>
+
+          <div>
+            <Label htmlFor="surveyNo" className="text-sm font-medium text-gray-700 mb-2 flex items-center">
+              <MapPin className="h-4 w-4 mr-2" />
+              Survey No.
+            </Label>
+            <Input
+              id="surveyNo"
+              type="text"
+              placeholder="Enter the survey number"
+              value={data.surveyNo || ''}
+              onChange={(e) => onChange({ surveyNo: e.target.value })}
+              className="mt-1"
+            />
+          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

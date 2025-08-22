@@ -24,6 +24,7 @@ interface FormData {
     propertyAddress: string;
     propertyType: string;
     ownershipStatus: string;
+    surveyNo?: string;
   };
   legalQuery: {
     assistanceNeeded: string[];
@@ -56,6 +57,7 @@ const LegalServicesForm = ({ isOpen, onClose }: LegalServicesFormProps) => {
       propertyAddress: '',
       propertyType: '',
       ownershipStatus: '',
+      surveyNo: '',
     },
     legalQuery: {
       assistanceNeeded: [],
