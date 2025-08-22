@@ -179,7 +179,7 @@ const PaintingCleaning = () => {
 
       {/* Sticky Form Container for Large Screens */}
       <div className="hidden lg:block fixed top-32 right-8 z-50 w-96">
-        <Card className="w-full rounded-xl shadow-2xl bg-background border">
+        <Card className="w-full rounded-xl shadow-2xl bg-background border-2 border-primary">
           <CardContent className="p-6">
             <h3 className="text-xl font-semibold text-foreground mb-2">Need painting or cleaning?</h3>
             <p className="text-sm text-muted-foreground mb-4">Fill the form & get instant quote</p>
@@ -278,8 +278,8 @@ const PaintingCleaning = () => {
       {/* Mobile Form - Static below hero */}
       <section className="lg:hidden px-4 py-8 bg-background">
         <div className="container mx-auto max-w-xl px-4">
-          <Card className="w-full rounded-2xl shadow-xl border-0 bg-card">
-            <CardContent className="p-8 border-2 border-primary">
+          <Card className="w-full rounded-2xl shadow-xl border-2 border-primary bg-card">
+            <CardContent className="p-8">
               <h3 className="text-2xl font-bold text-foreground mb-3">Need painting or cleaning?</h3>
               <p className="text-base text-muted-foreground mb-8">Fill the form & get instant quote</p>
 
