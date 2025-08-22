@@ -929,10 +929,6 @@ export const AdminWebsiteCMS: React.FC = () => {
             {previewMode ? <Pause className="h-4 w-4 mr-2" /> : <Play className="h-4 w-4 mr-2" />}
             {previewMode ? "Edit Mode" : "Preview Mode"}
           </Button>
-          <Button onClick={handleCreatePage}>
-            <Plus className="h-4 w-4 mr-2" />
-            Create Page
-          </Button>
         </div>
       </div>
 
@@ -979,8 +975,8 @@ export const AdminWebsiteCMS: React.FC = () => {
 
       <Tabs defaultValue="structure" className="w-full">
         <TabsList>
-          <TabsTrigger value="structure">Page Structure</TabsTrigger>
-          <TabsTrigger value="pages">Pages</TabsTrigger>
+          <TabsTrigger value="structure">Website Structure</TabsTrigger>
+          <TabsTrigger value="pages">Create/Manage Pages</TabsTrigger>
           <TabsTrigger value="versions">Version History</TabsTrigger>
         </TabsList>
 
@@ -1187,69 +1183,88 @@ export const AdminWebsiteCMS: React.FC = () => {
 
         <TabsContent value="pages" className="space-y-4">
           <Card>
-            <CardHeader>
-              <CardTitle>All Pages</CardTitle>
-              <CardDescription>Manage individual pages and their content</CardDescription>
+            <CardHeader className="flex flex-row items-center justify-between">
+              <div>
+                <CardTitle>Create & Manage Pages</CardTitle>
+                <CardDescription>Create new pages with normal form interface (not JSON). Use this section to create actual pages for your website.</CardDescription>
+              </div>
+              <Button onClick={handleCreatePage} className="bg-green-600 hover:bg-green-700 text-white">
+                <Plus className="h-4 w-4 mr-2" />
+                Create New Page
+              </Button>
             </CardHeader>
             <CardContent>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Page</TableHead>
-                    <TableHead>Type</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Sections</TableHead>
-                    <TableHead>Updated</TableHead>
-                    <TableHead>Actions</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {pages.map((page) => (
-                    <TableRow key={page.id}>
-                      <TableCell>
-                        <div>
-                          <div className="font-medium">{page.title}</div>
-                          <div className="text-sm text-muted-foreground">/{page.slug}</div>
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <Badge variant="outline">{page.page_type}</Badge>
-                      </TableCell>
-                      <TableCell>
-                        <Badge variant={page.is_published ? "default" : "secondary"}>
-                          {page.is_published ? "Published" : "Draft"}
-                        </Badge>
-                      </TableCell>
-                      <TableCell>{page.sections?.length || 0}</TableCell>
-                      <TableCell>{new Date(page.updated_at).toLocaleDateString()}</TableCell>
-                      <TableCell>
-                        <div className="flex items-center gap-2">
-                          <Button variant="ghost" size="sm" onClick={() => handleEditPage(page)}>
-                            <Edit className="h-4 w-4" />
-                          </Button>
-                          <Button 
-                            variant="ghost" 
-                            size="sm"
-                            onClick={() => {
-                              fetchVersions(page.id, 'page');
-                              setVersionDialog(true);
-                            }}
-                          >
-                            <History className="h-4 w-4" />
-                          </Button>
-                          {page.is_published && (
-                            <Button variant="ghost" size="sm" asChild>
-                              <a href={`/${page.slug}`} target="_blank">
-                                <Globe className="h-4 w-4" />
-                              </a>
-                            </Button>
-                          )}
-                        </div>
-                      </TableCell>
+              {pages.filter(p => p.id !== 'live-homepage').length === 0 ? (
+                <div className="text-center py-12 text-muted-foreground border-2 border-dashed border-gray-300 rounded-lg">
+                  <FileText className="h-16 w-16 mx-auto mb-4 opacity-50" />
+                  <p className="text-xl font-medium mb-2">No pages created yet</p>
+                  <p className="text-sm mb-6">Click the green "Create New Page" button above to add your first page with a normal form interface.</p>
+                  <Button onClick={handleCreatePage} className="bg-green-600 hover:bg-green-700 text-white">
+                    <Plus className="h-4 w-4 mr-2" />
+                    Create Your First Page
+                  </Button>
+                </div>
+              ) : (
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Page</TableHead>
+                      <TableHead>Type</TableHead>
+                      <TableHead>Status</TableHead>
+                      <TableHead>Updated</TableHead>
+                      <TableHead>Actions</TableHead>
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+                  </TableHeader>
+                  <TableBody>
+                    {pages.filter(p => p.id !== 'live-homepage').map((page) => (
+                      <TableRow key={page.id}>
+                        <TableCell>
+                          <div className="flex items-center gap-2">
+                            <FileText className="h-4 w-4 text-muted-foreground" />
+                            <div>
+                              <div className="font-medium">{page.title}</div>
+                              <div className="text-sm text-muted-foreground">/{page.slug}</div>
+                            </div>
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <Badge variant="outline">{page.page_type}</Badge>
+                        </TableCell>
+                        <TableCell>
+                          <Badge variant={page.is_published ? "default" : "secondary"}>
+                            {page.is_published ? "Published" : "Draft"}
+                          </Badge>
+                        </TableCell>
+                        <TableCell>{new Date(page.updated_at).toLocaleDateString()}</TableCell>
+                        <TableCell>
+                          <div className="flex items-center gap-2">
+                            <Button variant="ghost" size="sm" onClick={() => handleEditPage(page)}>
+                              <Edit className="h-4 w-4" />
+                            </Button>
+                            <Button 
+                              variant="ghost" 
+                              size="sm"
+                              onClick={() => {
+                                fetchVersions(page.id, 'page');
+                                setVersionDialog(true);
+                              }}
+                            >
+                              <History className="h-4 w-4" />
+                            </Button>
+                            {page.is_published && (
+                              <Button variant="ghost" size="sm" asChild>
+                                <a href={`/${page.slug}`} target="_blank">
+                                  <Globe className="h-4 w-4" />
+                                </a>
+                              </Button>
+                            )}
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              )}
             </CardContent>
           </Card>
         </TabsContent>
