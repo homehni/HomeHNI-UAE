@@ -1386,7 +1386,7 @@ export const AdminWebsiteCMS: React.FC = () => {
             </div>
           </div>
 
-          <div className="mt-4">
+          <div className="mt-4 pb-24">
             <Label htmlFor="content">Page Content</Label>
             <div className="mt-2">
               <RichTextEditor
@@ -1397,11 +1397,11 @@ export const AdminWebsiteCMS: React.FC = () => {
             </div>
           </div>
 
-          <DialogFooter>
+          <DialogFooter className="sticky bottom-0 left-0 right-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-t mt-4 py-3">
             <Button variant="outline" onClick={() => setPageDialog(false)}>
               Cancel
             </Button>
-            <Button onClick={handleSavePage}>
+            <Button onClick={handleSavePage} className="bg-green-600 hover:bg-green-700">
               <Save className="h-4 w-4 mr-2" />
               Save Page
             </Button>

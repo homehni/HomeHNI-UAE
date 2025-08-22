@@ -505,7 +505,7 @@ export const AdminPageManagement: React.FC = () => {
             </DialogDescription>
           </DialogHeader>
           
-          <div className="space-y-4">
+          <div className="space-y-4 pb-24">
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="title">Page Title *</Label>
@@ -621,11 +621,11 @@ export const AdminPageManagement: React.FC = () => {
             </div>
           </div>
           
-          <DialogFooter>
+          <DialogFooter className="sticky bottom-0 left-0 right-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-t mt-4 py-3">
             <Button variant="outline" onClick={() => setDialogOpen(false)}>
               Cancel
             </Button>
-            <Button onClick={handleSave}>
+            <Button onClick={handleSave} className="bg-green-600 hover:bg-green-700">
               {editingPage ? 'Update' : 'Create'}
             </Button>
           </DialogFooter>
