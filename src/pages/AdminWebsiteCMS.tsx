@@ -207,6 +207,10 @@ export const AdminWebsiteCMS: React.FC = () => {
     page_type: 'page',
     is_published: false
   });
+  
+  // New page with sections integration
+  const [includeExistingSections, setIncludeExistingSections] = useState(false);
+  const [selectedSectionTemplates, setSelectedSectionTemplates] = useState<string[]>([]);
 
   const [sectionForm, setSectionForm] = useState({
     section_type: 'content',
@@ -649,6 +653,8 @@ export const AdminWebsiteCMS: React.FC = () => {
       page_type: 'page',
       is_published: false
     });
+    setIncludeExistingSections(false);
+    setSelectedSectionTemplates([]);
     setPageDialog(true);
   };
 
@@ -722,14 +728,59 @@ export const AdminWebsiteCMS: React.FC = () => {
       } else {
         // Include created_by for RLS policies if present
         pageData.created_by = user?.id ?? null;
-        const { error } = await supabase
+        const { data: newPage, error } = await supabase
           .from('content_pages')
           .insert([pageData])
-          .select();
+          .select()
+          .single();
         if (error) throw error;
-        toast({ title: "Success", description: "Page created successfully" });
+
+        // If includeExistingSections is enabled, create sections from selected templates
+        if (includeExistingSections && selectedSectionTemplates.length > 0) {
+          const sectionsToCreate = selectedSectionTemplates.map((sectionId, index) => {
+            const template = Object.values(sectionTemplates)
+              .flat()
+              .find((t: any) => t.id === sectionId);
+            
+            if (!template) return null;
+
+            // Determine section type based on template category
+            let sectionType = 'content';
+            Object.entries(sectionTemplates).forEach(([category, templates]: [string, any[]]) => {
+              if (templates.find((t: any) => t.id === sectionId)) {
+                sectionType = category.replace('-', '_');
+              }
+            });
+
+            return {
+              page_id: newPage.id,
+              section_type: sectionType,
+              content: template.content,
+              sort_order: index,
+              is_active: true
+            };
+          }).filter(Boolean);
+
+          if (sectionsToCreate.length > 0) {
+            const { error: sectionsError } = await supabase
+              .from('page_sections')
+              .insert(sectionsToCreate);
+
+            if (sectionsError) throw sectionsError;
+          }
+
+          toast({ 
+            title: "Success", 
+            description: `Page created with ${sectionsToCreate.length} sections` 
+          });
+        } else {
+          toast({ title: "Success", description: "Page created successfully" });
+        }
       }
 
+      // Reset states
+      setIncludeExistingSections(false);
+      setSelectedSectionTemplates([]);
       setPageDialog(false);
     } catch (error: any) {
       console.error('Error saving page:', error);
@@ -1622,6 +1673,20 @@ export const AdminWebsiteCMS: React.FC = () => {
                 />
                 <Label htmlFor="published">Published</Label>
               </div>
+
+              {/* New option for including existing sections */}
+              {!editingPage && (
+                <div className="flex items-center space-x-2 bg-blue-50 p-3 rounded-lg border-l-4 border-blue-400">
+                  <Switch
+                    id="includeExistingSections"
+                    checked={includeExistingSections}
+                    onCheckedChange={setIncludeExistingSections}
+                  />
+                  <Label htmlFor="includeExistingSections" className="text-blue-800 font-medium">
+                    Include existing section templates
+                  </Label>
+                </div>
+              )}
             </div>
 
             <div className="space-y-4">
@@ -1656,6 +1721,85 @@ export const AdminWebsiteCMS: React.FC = () => {
               </div>
             </div>
           </div>
+
+          {/* Section Template Selection - Only show when creating new page and toggle is enabled */}
+          {!editingPage && includeExistingSections && (
+            <div className="mt-6 border-t pt-6">
+              <div className="mb-4">
+                <Label className="text-lg font-semibold text-blue-800">Select Section Templates</Label>
+                <p className="text-sm text-gray-600 mt-1">Choose from existing section templates to add to your new page</p>
+              </div>
+
+              <div className="space-y-6 max-h-96 overflow-y-auto">
+                {Object.entries(sectionTemplates).map(([category, templates]) => (
+                  <div key={category}>
+                    <h3 className="font-semibold text-gray-800 mb-3 capitalize">
+                      {category.replace('-', ' ')} Templates
+                    </h3>
+                    <div className="grid grid-cols-2 gap-3">
+                      {templates.map((template: any) => {
+                        const isSelected = selectedSectionTemplates.includes(template.id);
+                        return (
+                          <Card 
+                            key={template.id}
+                            className={`cursor-pointer transition-all hover:shadow-md ${
+                              isSelected ? 'ring-2 ring-blue-500 bg-blue-50' : ''
+                            }`}
+                            onClick={() => {
+                              setSelectedSectionTemplates(prev => 
+                                isSelected 
+                                  ? prev.filter(id => id !== template.id)
+                                  : [...prev, template.id]
+                              );
+                            }}
+                          >
+                            <CardContent className="p-3">
+                              <div className="flex items-start justify-between">
+                                <div className="flex-1">
+                                  <div className="font-medium text-sm text-gray-900">
+                                    {template.name}
+                                  </div>
+                                  <div className="text-xs text-gray-600 mt-1">
+                                    {template.preview}
+                                  </div>
+                                </div>
+                                {isSelected && (
+                                  <div className="text-blue-500">
+                                    <Eye className="h-4 w-4" />
+                                  </div>
+                                )}
+                              </div>
+                            </CardContent>
+                          </Card>
+                        );
+                      })}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Selected sections summary */}
+              {selectedSectionTemplates.length > 0 && (
+                <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded-lg">
+                  <div className="text-sm font-medium text-green-800 mb-2">
+                    Selected Sections ({selectedSectionTemplates.length}):
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {selectedSectionTemplates.map(sectionId => {
+                      const template = Object.values(sectionTemplates)
+                        .flat()
+                        .find((t: any) => t.id === sectionId);
+                      return template ? (
+                        <Badge key={sectionId} variant="secondary" className="text-xs">
+                          {template.name}
+                        </Badge>
+                      ) : null;
+                    })}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
 
           <div className="mt-4 pb-24">
             <Label htmlFor="content">Page Content</Label>
