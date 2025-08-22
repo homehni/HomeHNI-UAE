@@ -40,7 +40,9 @@ const PropertySearch = () => {
     'Independent House',
     'Villa',
     'Plots',
-    'Farm House'
+    'Farm House',
+    'Industrial Space/Building',
+    'Commercial Space/Building'
   ];
 
   const bhkTypes = ['1 RK', '1 BHK', '2 BHK', '3 BHK', '4 BHK', '5+ BHK'];
