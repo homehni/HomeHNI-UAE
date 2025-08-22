@@ -24,6 +24,7 @@ interface ContentPage {
 const DynamicPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
   const [page, setPage] = useState<ContentPage | null>(null);
+  const [sections, setSections] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
 
@@ -48,6 +49,19 @@ const DynamicPage: React.FC = () => {
           setNotFound(true);
         } else {
           setPage(data);
+          // Fetch sections for this page
+          const { data: secs, error: secErr } = await supabase
+            .from('page_sections')
+            .select('*')
+            .eq('page_id', data.id)
+            .eq('is_active', true)
+            .order('sort_order');
+          if (secErr) {
+            console.error('Error fetching sections:', secErr);
+            setSections([]);
+          } else {
+            setSections(secs || []);
+          }
         }
       } catch (error) {
         console.error('Error fetching page:', error);
@@ -169,14 +183,108 @@ const DynamicPage: React.FC = () => {
                     }}
                   />
                 </div>
-              </article>
-            </div>
-          </div>
-        </div>
 
-        <Footer />
-      </div>
-    </>
+                {/* Page Sections */}
+                {sections.length > 0 && (
+                  <div className="mt-16 space-y-16">
+                    {sections.map((s, idx) => (
+                      <section key={s.id || idx} className="w-full" aria-label={s.section_type}>
+                        {s.section_type === 'hero-search' && (
+                          <div className="bg-card rounded-xl p-8 text-center shadow-sm">
+                            <h2 className="text-3xl font-bold text-foreground">{s.content?.title || 'Welcome'}</h2>
+                            {s.content?.subtitle && (
+                              <p className="mt-2 text-muted-foreground">{s.content.subtitle}</p>
+                            )}
+                            <div className="mt-6 flex items-center justify-center gap-4">
+                              {s.content?.primaryCTA && (
+                                <a href="#search" className="inline-block px-5 py-2 rounded-md bg-primary text-primary-foreground">
+                                  {s.content.primaryCTA}
+                                </a>
+                              )}
+                              {s.content?.secondaryCTA && (
+                                <a href="#post" className="inline-block px-5 py-2 rounded-md border border-input">
+                                  {s.content.secondaryCTA}
+                                </a>
+                              )}
+                            </div>
+                          </div>
+                        )}
+
+                        {s.section_type === 'services' && (
+                          <div>
+                            {s.content?.title && (
+                              <h2 className="text-2xl font-semibold text-foreground mb-2">{s.content.title}</h2>
+                            )}
+                            {s.content?.subtitle && (
+                              <p className="text-muted-foreground mb-6">{s.content.subtitle}</p>
+                            )}
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                              {(s.content?.services || []).map((srv: any, i: number) => (
+                                <div key={i} className="border rounded-lg p-4 bg-card">
+                                  <div className="font-medium text-foreground">{srv.title}</div>
+                                  {srv.description && (
+                                    <p className="text-muted-foreground text-sm mt-1">{srv.description}</p>
+                                  )}
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+
+                        {s.section_type === 'stats' && (
+                          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                            {(s.content?.stats || []).map((st: any, i: number) => (
+                              <div key={i} className="border rounded-lg p-4 text-center bg-card">
+                                <div className="text-2xl font-bold text-foreground">{st.number}</div>
+                                <div className="text-muted-foreground text-sm mt-1">{st.label}</div>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+
+                        {s.section_type === 'testimonials' && (
+                          <div>
+                            {s.content?.title && (
+                              <h2 className="text-2xl font-semibold text-foreground mb-4">{s.content.title}</h2>
+                            )}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                              {(s.content?.testimonials || []).map((t: any, i: number) => (
+                                <blockquote key={i} className="border rounded-lg p-4 bg-card">
+                                  <p className="text-foreground">“{t.text}”</p>
+                                  <footer className="mt-2 text-sm text-muted-foreground">— {t.name}{t.location ? `, ${t.location}` : ''}</footer>
+                                </blockquote>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+
+                        {s.section_type === 'mobile-app' && (
+                          <div className="grid md:grid-cols-2 gap-8 items-center border rounded-lg p-6 bg-card">
+                            <div>
+                              <h2 className="text-2xl font-semibold text-foreground">{s.content?.title || 'Mobile App'}</h2>
+                              {s.content?.description && (
+                                <p className="text-muted-foreground mt-2">{s.content.description}</p>
+                              )}
+                            </div>
+                            {s.content?.appImage && (
+                              <img
+                                src={s.content.appImage}
+                                alt={s.content?.title ? `${s.content.title} app preview` : 'App preview'}
+                                loading="lazy"
+                                className="w-full h-auto rounded-md"
+                              />
+                            )}
+                          </div>
+                        )}
+
+                        {s.section_type === 'content' && s.content?.html && (
+                          <div className="prose max-w-none" dangerouslySetInnerHTML={{ __html: s.content.html }} />
+                        )}
+                      </section>
+                    ))}
+                  </div>
+                )}
+
   );
 };
 
