@@ -207,9 +207,7 @@ const Careers = () => {
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-gray-700">Resume/CV</label>
                   {!resumeFile ? (
-                    <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-gray-400 transition-colors">
-                      <Upload className="h-6 w-6 text-gray-400 mx-auto mb-2" />
-                      <p className="text-sm text-gray-600 mb-2">Upload your resume</p>
+                    <div className="flex items-center gap-2 p-2 border border-gray-300 rounded-lg hover:border-gray-400 transition-colors">
                       <input
                         type="file"
                         accept=".pdf,.doc,.docx"
@@ -222,10 +220,12 @@ const Careers = () => {
                         variant="outline"
                         size="sm"
                         onClick={() => document.getElementById('resume-upload')?.click()}
+                        className="flex items-center gap-1 text-xs h-8"
                       >
+                        <Upload className="h-3 w-3" />
                         Choose File
                       </Button>
-                      <p className="text-xs text-gray-500 mt-1">PDF, DOC, DOCX (Max 5MB)</p>
+                      <span className="text-xs text-gray-500">PDF, DOC, DOCX (Max 5MB)</span>
                     </div>
                   ) : (
                     <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
