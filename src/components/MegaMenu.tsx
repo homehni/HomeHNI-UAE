@@ -41,14 +41,14 @@ const MegaMenu = ({ isScrolled }: MegaMenuProps) => {
     
           {/* <DropdownMenuSeparator /> */}
           {[
-            'All Residential',
+            // 'All Residential',
             'Flat / Apartment',
-            'Commercial Building',
-            'Farm House',
-            'Villa',
-            'Plots',
+            // 'Commercial Building',
             'Independent House',
-            'Agricultural Lands',
+            // 'Villa',
+            'Land/ Plots',
+            // 'Independent House',
+            'Commercial Space',
           ].map((label) => (
             <DropdownMenuItem key={label} asChild>
               <a href="#" className="w-full">
