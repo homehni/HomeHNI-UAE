@@ -128,6 +128,61 @@ export const PostProperty: React.FC = () => {
         throw new Error(`Invalid property data: ${mappingValidation.errors.join(', ')}`);
       }
 
+      // Validate using centralized validator before uploads
+      const expectedPriceValue = ('rentalDetails' in data.propertyInfo)
+        ? (data.propertyInfo as PropertyInfo).rentalDetails.expectedPrice
+        : ('saleDetails' in data.propertyInfo)
+          ? (data.propertyInfo as SalePropertyInfo).saleDetails.expectedPrice
+          : ('pgDetails' in data.propertyInfo)
+            ? (data.propertyInfo as any).pgDetails.expectedPrice
+            : ('flattmatesDetails' in data.propertyInfo)
+              ? (data.propertyInfo as any).flattmatesDetails.expectedPrice
+              : undefined;
+
+      const normalizedPropertyInfo = {
+        propertyDetails: {
+          title: ('propertyDetails' in data.propertyInfo) ? data.propertyInfo.propertyDetails.title : 
+                 ('plotDetails' in data.propertyInfo) ? data.propertyInfo.plotDetails.title : '',
+          propertyType: ('propertyDetails' in data.propertyInfo) ? data.propertyInfo.propertyDetails.propertyType : 
+                       ('plotDetails' in data.propertyInfo) ? data.propertyInfo.plotDetails.propertyType : '',
+          superBuiltUpArea: ('propertyDetails' in data.propertyInfo) ? Number(data.propertyInfo.propertyDetails.superBuiltUpArea) :
+                           ('plotDetails' in data.propertyInfo) ? Number((data.propertyInfo as any).plotDetails.plotArea) : 0,
+          bathrooms: ('propertyDetails' in data.propertyInfo && 'bathrooms' in data.propertyInfo.propertyDetails) ? Number(data.propertyInfo.propertyDetails.bathrooms) : 0,
+          balconies: ('propertyDetails' in data.propertyInfo && 'balconies' in data.propertyInfo.propertyDetails) ? Number(data.propertyInfo.propertyDetails.balconies) : 0,
+        },
+        locationDetails: {
+          state: (data.propertyInfo as any).locationDetails?.state || '',
+          city: (data.propertyInfo as any).locationDetails?.city || '',
+          locality: (data.propertyInfo as any).locationDetails?.locality || '',
+          pincode: (data.propertyInfo as any).locationDetails?.pincode || '',
+        },
+        rentalDetails: {
+          expectedPrice: Number(expectedPriceValue),
+          listingType: listingType as any,
+        },
+        additionalInfo: {
+          description: (data.propertyInfo as any).additionalInfo?.description || '',
+        },
+        gallery: (data.propertyInfo as any).gallery || { images: [], video: null }
+      } as any;
+
+      const validation = validatePropertySubmission(
+        data.ownerInfo as any,
+        normalizedPropertyInfo as any,
+        user.id
+      );
+
+      if (!validation.isValid) {
+        console.error('Validation failed:', validation.errors);
+        toast({
+          title: 'Submission Failed',
+          description: validation.errors.slice(0, 3).join(' | '),
+          variant: 'destructive'
+        });
+        setIsSubmitting(false);
+        return;
+      }
+
       // Upload images to storage
       toast({
         title: "Uploading Images...",
@@ -138,6 +193,7 @@ export const PostProperty: React.FC = () => {
         data.propertyInfo.gallery.images,
         'images',
         user.id
+      );
       );
 
       // Upload video if provided
@@ -168,6 +224,11 @@ export const PostProperty: React.FC = () => {
         priceDetails = (data.propertyInfo as any).flattmatesDetails;
       }
       
+      // Hard validation to avoid DB errors
+      if (!priceDetails || priceDetails.expectedPrice === undefined || !Number.isFinite(Number(priceDetails.expectedPrice))) {
+        throw new Error('Expected price is required and must be a valid number.');
+      }
+      
       const propertyData = {
         user_id: user.id,
         title: ('propertyDetails' in data.propertyInfo) ? data.propertyInfo.propertyDetails.title : 
@@ -175,7 +236,7 @@ export const PostProperty: React.FC = () => {
         property_type: mapPropertyType(('propertyDetails' in data.propertyInfo) ? 
                                      data.propertyInfo.propertyDetails.propertyType : 
                                      data.propertyInfo.plotDetails.propertyType),
-        listing_type: mapListingType(priceDetails.listingType),
+        listing_type: mapListingType(listingType),
         bhk_type: ('propertyDetails' in data.propertyInfo && 'bhkType' in data.propertyInfo.propertyDetails) ? 
                  mapBhkType(data.propertyInfo.propertyDetails.bhkType) : null,
         bathrooms: ('propertyDetails' in data.propertyInfo && 'bathrooms' in data.propertyInfo.propertyDetails) ? 
@@ -247,7 +308,11 @@ export const PostProperty: React.FC = () => {
         } else if (error.message.includes('violates row-level security')) {
           errorMessage = "Authentication error. Please log out and log back in.";
         } else if (error.message.includes('null value in column')) {
-          errorMessage = "Required fields are missing. Please ensure all mandatory fields are filled.";
+          const match = error.message.match(/null value in column \"([^\"]+)\"/i);
+          const column = match?.[1];
+          errorMessage = column
+            ? `Missing required field: ${column.replace(/_/g, ' ')}. Please fill it and try again.`
+            : "Required fields are missing. Please ensure all mandatory fields are filled.";
         }
         
         throw new Error(errorMessage);
