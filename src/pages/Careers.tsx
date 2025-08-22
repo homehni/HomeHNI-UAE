@@ -132,7 +132,6 @@ const Careers = () => {
           <Card className="w-full card-border bg-background border-2 border-primary">
             <CardContent className="p-6">
               <h3 className="text-xl font-semibold text-foreground mb-2 text-uniform-center">Apply for a Position</h3>
-              <p className="text-sm text-muted-foreground mb-4 text-uniform-center">Submit your application today</p>
 
               <form className="space-y-4" onSubmit={e => {
               e.preventDefault();
@@ -262,7 +261,6 @@ const Careers = () => {
           <Card className="w-full card-border bg-card border-2 border-primary">
             <CardContent className="p-8">
               <h3 className="text-2xl font-bold text-foreground mb-3 text-uniform-center">Apply for a Position</h3>
-              <p className="text-base text-muted-foreground mb-8 text-uniform-center">Submit your application today</p>
 
                 <form className="space-y-5" onSubmit={e => {
                 e.preventDefault();
