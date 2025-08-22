@@ -187,38 +187,70 @@ export const AdminPageManagement: React.FC = () => {
     }
 
     try {
+      // Check if slug already exists (only for new pages or changed slugs)
+      if (!editingPage || (editingPage && editingPage.slug !== formData.slug)) {
+        const { data: existingPage } = await supabase
+          .from('content_pages')
+          .select('id')
+          .eq('slug', formData.slug)
+          .single();
+        
+        if (existingPage) {
+          toast({
+            title: 'Error',
+            description: 'A page with this slug already exists',
+            variant: 'destructive'
+          });
+          return;
+        }
+      }
+
       const pageData = {
-        title: formData.title,
-        slug: formData.slug,
-        content: formData.content,
-        meta_title: formData.meta_title || null,
-        meta_description: formData.meta_description || null,
-        meta_keywords: formData.meta_keywords ? formData.meta_keywords.split(',').map(k => k.trim()) : null,
+        title: formData.title.trim(),
+        slug: formData.slug.trim(),
+        content: formData.content.trim() || null,
+        meta_title: formData.meta_title.trim() || null,
+        meta_description: formData.meta_description.trim() || null,
+        meta_keywords: formData.meta_keywords 
+          ? formData.meta_keywords.split(',').map(k => k.trim()).filter(k => k) 
+          : null,
         page_type: formData.page_type,
         is_published: formData.is_published
       };
 
+      console.log('Saving page data:', pageData);
+
       if (editingPage) {
         // Update existing page
-        const { error } = await supabase
+        const { data, error } = await supabase
           .from('content_pages')
           .update(pageData)
-          .eq('id', editingPage.id);
+          .eq('id', editingPage.id)
+          .select();
 
-        if (error) throw error;
+        if (error) {
+          console.error('Update error:', error);
+          throw error;
+        }
         
+        console.log('Update successful:', data);
         toast({
           title: 'Success',
           description: 'Page updated successfully'
         });
       } else {
         // Create new page
-        const { error } = await supabase
+        const { data, error } = await supabase
           .from('content_pages')
-          .insert(pageData);
+          .insert([pageData])
+          .select();
 
-        if (error) throw error;
+        if (error) {
+          console.error('Insert error:', error);
+          throw error;
+        }
         
+        console.log('Insert successful:', data);
         toast({
           title: 'Success',
           description: 'Page created successfully'
@@ -227,11 +259,17 @@ export const AdminPageManagement: React.FC = () => {
       
       setDialogOpen(false);
       fetchPages();
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error saving page:', error);
+      
+      let errorMessage = 'Failed to save page';
+      if (error?.message) {
+        errorMessage = error.message;
+      }
+      
       toast({
         title: 'Error',
-        description: 'Failed to save page',
+        description: errorMessage,
         variant: 'destructive'
       });
     }
