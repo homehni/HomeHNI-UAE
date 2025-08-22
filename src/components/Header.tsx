@@ -26,9 +26,11 @@ const Header = () => {
   const [isLegalFormOpen, setIsLegalFormOpen] = useState(false);
   const [isRentalDropdownOpen, setIsRentalDropdownOpen] = useState(false);
   const [isServicesDropdownOpen, setIsServicesDropdownOpen] = useState(false);
+  const [isSellersDropdownOpen, setIsSellersDropdownOpen] = useState(false);
   const [statesData, setStatesData] = useState<Record<string, string[]>>({});
   const rentalHoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const servicesHoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const sellersHoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const navigate = useNavigate();
   const location = useLocation();
   const {
@@ -54,6 +56,17 @@ const Header = () => {
   const handleServicesLeave = () => {
     servicesHoverTimeoutRef.current = setTimeout(() => {
       setIsServicesDropdownOpen(false);
+    }, 150);
+  };
+  const handleSellersHover = () => {
+    if (sellersHoverTimeoutRef.current) {
+      clearTimeout(sellersHoverTimeoutRef.current);
+    }
+    setIsSellersDropdownOpen(true);
+  };
+  const handleSellersLeave = () => {
+    sellersHoverTimeoutRef.current = setTimeout(() => {
+      setIsSellersDropdownOpen(false);
     }, 150);
   };
   useEffect(() => {
@@ -166,26 +179,25 @@ const Header = () => {
               {<nav className="hidden lg:flex items-center space-x-5">
   <MegaMenu isScrolled={isScrolled} />
   
-  <a href="#" onClick={e => {
-                e.preventDefault();
-                handlePostPropertyClick('Owner');
-              }} className={`hover:opacity-80 transition-colors duration-500 text-base font-medium uppercase ${isScrolled ? 'text-gray-800' : 'text-white'} cursor-pointer`}>
-    Sellers
-  </a>
-  
-  <a href="#" onClick={e => {
-                e.preventDefault();
-                handlePostPropertyClick('Agent');
-              }} className={`hover:opacity-80 transition-colors duration-500 text-base font-medium uppercase ${isScrolled ? 'text-gray-800' : 'text-white'} cursor-pointer`}>
-    Agents
-  </a>
-
-               <a href="#" onClick={e => {
-                e.preventDefault();
-                handlePostPropertyClick('Builder');
-              }} className={`hover:opacity-80 transition-colors duration-500 text-base font-medium uppercase ${isScrolled ? 'text-gray-800' : 'text-white'} cursor-pointer`}>
-    Builders
-  </a>
+  {/* Sellers Dropdown */}
+  <div className="relative" onMouseEnter={handleSellersHover} onMouseLeave={handleSellersLeave}>
+    <button className={`flex items-center hover:opacity-80 transition-colors duration-500 text-base font-medium uppercase ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
+      Sellers
+      <ChevronDown className="ml-1 h-3 w-3" />
+    </button>
+    
+    {/* Custom Sellers Dropdown */}
+    {isSellersDropdownOpen && <div className="absolute top-full left-0 w-32 bg-white border border-gray-200 rounded-lg shadow-xl z-[100] mt-2" onMouseEnter={handleSellersHover} onMouseLeave={handleSellersLeave}>
+        <div className="py-2">
+          <button onClick={() => handlePostPropertyClick('Agent')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+            Agents
+          </button>
+          <button onClick={() => handlePostPropertyClick('Builder')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+            Builders
+          </button>
+        </div>
+      </div>}
+  </div>
   
 
 
