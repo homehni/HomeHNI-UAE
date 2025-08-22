@@ -154,29 +154,35 @@ export const AdminFeaturedProperties: React.FC = () => {
   };
 
   const filterProperties = () => {
-    // Show ALL properties, not just featured ones
-    let filtered = properties;
+    // Show ONLY properties that are in featured_properties (mirrors homepage)
+    const featuredIds = new Set(featuredProperties.map(fp => fp.property_id));
+    let filtered = properties.filter(p => featuredIds.has(p.id));
 
     if (searchTerm) {
+      const term = searchTerm.toLowerCase();
       filtered = filtered.filter(property =>
-        property.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        property.locality.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        property.city.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        property.property_type.toLowerCase().includes(searchTerm.toLowerCase())
+        property.title.toLowerCase().includes(term) ||
+        property.locality.toLowerCase().includes(term) ||
+        property.city.toLowerCase().includes(term) ||
+        property.property_type.toLowerCase().includes(term)
       );
     }
 
+    // map for quick access to featured meta (status/sort_order)
+    const featuredRecords = featuredProperties.reduce((acc, fp) => {
+      acc[fp.property_id] = fp;
+      return acc;
+    }, {} as Record<string, FeaturedPropertyRecord>);
+
     if (statusFilter !== 'all') {
-      const featuredRecords = featuredProperties.reduce((acc, fp) => {
-        acc[fp.property_id] = fp;
-        return acc;
-      }, {} as Record<string, FeaturedPropertyRecord>);
-      
       filtered = filtered.filter(property => {
         const featuredRecord = featuredRecords[property.id];
         return statusFilter === 'active' ? featuredRecord?.is_active : !featuredRecord?.is_active;
       });
     }
+
+    // Sort by sort_order to exactly match homepage order
+    filtered.sort((a, b) => (featuredRecords[a.id]?.sort_order ?? 0) - (featuredRecords[b.id]?.sort_order ?? 0));
 
     setFilteredProperties(filtered);
   };
@@ -341,15 +347,15 @@ export const AdminFeaturedProperties: React.FC = () => {
 
       <Card>
         <CardHeader>
-          <CardTitle>All Properties Management</CardTitle>
-          <CardDescription>Manage all properties with live editing and featuring options</CardDescription>
+          <CardTitle>Homepage Featured List</CardTitle>
+          <CardDescription>This matches the Featured Properties on the homepage</CardDescription>
           
           {/* Filters */}
           <div className="flex gap-4 mt-4">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
               <Input
-                placeholder="Search properties..."
+                placeholder="Search featured properties..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="pl-10 max-w-sm"
