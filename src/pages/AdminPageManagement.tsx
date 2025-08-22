@@ -187,38 +187,57 @@ export const AdminPageManagement: React.FC = () => {
     }
 
     try {
-      // Check if slug already exists (only for new pages or changed slugs)
-      if (!editingPage || (editingPage && editingPage.slug !== formData.slug)) {
-        const { data: existingPage } = await supabase
-          .from('content_pages')
-          .select('id')
-          .eq('slug', formData.slug)
-          .single();
-        
-        if (existingPage) {
-          toast({
-            title: 'Error',
-            description: 'A page with this slug already exists',
-            variant: 'destructive'
-          });
-          return;
+      const slug = formData.slug.trim();
+
+      // Check if slug already exists (exclude current page when editing)
+      const { data: existing, error: existingErr } = await supabase
+        .from('content_pages')
+        .select('id')
+        .eq('slug', slug)
+        .maybeSingle();
+
+      if (existing && (!editingPage || existing.id !== editingPage.id)) {
+        toast({
+          title: 'Error',
+          description: 'A page with this slug already exists',
+          variant: 'destructive'
+        });
+        return;
+      }
+
+      // Normalize content: try JSON else keep as string
+      let contentValue: any = formData.content;
+      if (typeof contentValue === 'string') {
+        const trimmed = contentValue.trim();
+        if (trimmed) {
+          try {
+            if (trimmed.startsWith('{') || trimmed.startsWith('[')) {
+              contentValue = JSON.parse(trimmed);
+            } else {
+              contentValue = trimmed;
+            }
+          } catch {
+            contentValue = trimmed;
+          }
+        } else {
+          contentValue = null;
         }
       }
 
-      const pageData = {
+      const { data: { user } } = await supabase.auth.getUser();
+
+      const pageData: any = {
         title: formData.title.trim(),
-        slug: formData.slug.trim(),
-        content: formData.content.trim() || null,
+        slug,
+        content: contentValue,
         meta_title: formData.meta_title.trim() || null,
         meta_description: formData.meta_description.trim() || null,
-        meta_keywords: formData.meta_keywords 
-          ? formData.meta_keywords.split(',').map(k => k.trim()).filter(k => k) 
+        meta_keywords: formData.meta_keywords
+          ? formData.meta_keywords.split(',').map(k => k.trim()).filter(Boolean)
           : null,
         page_type: formData.page_type,
         is_published: formData.is_published
       };
-
-      console.log('Saving page data:', pageData);
 
       if (editingPage) {
         // Update existing page
@@ -228,50 +247,28 @@ export const AdminPageManagement: React.FC = () => {
           .eq('id', editingPage.id)
           .select();
 
-        if (error) {
-          console.error('Update error:', error);
-          throw error;
-        }
-        
-        console.log('Update successful:', data);
-        toast({
-          title: 'Success',
-          description: 'Page updated successfully'
-        });
+        if (error) throw error;
+
+        toast({ title: 'Success', description: 'Page updated successfully' });
       } else {
-        // Create new page
+        // Include created_by for RLS policies if present
+        pageData.created_by = user?.id ?? null;
         const { data, error } = await supabase
           .from('content_pages')
           .insert([pageData])
           .select();
 
-        if (error) {
-          console.error('Insert error:', error);
-          throw error;
-        }
-        
-        console.log('Insert successful:', data);
-        toast({
-          title: 'Success',
-          description: 'Page created successfully'
-        });
+        if (error) throw error;
+
+        toast({ title: 'Success', description: 'Page created successfully' });
       }
-      
+
       setDialogOpen(false);
       fetchPages();
     } catch (error: any) {
       console.error('Error saving page:', error);
-      
-      let errorMessage = 'Failed to save page';
-      if (error?.message) {
-        errorMessage = error.message;
-      }
-      
-      toast({
-        title: 'Error',
-        description: errorMessage,
-        variant: 'destructive'
-      });
+      let errorMessage = error?.message || 'Failed to save page';
+      toast({ title: 'Error', description: errorMessage, variant: 'destructive' });
     }
   };
 

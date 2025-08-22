@@ -642,13 +642,39 @@ export const AdminWebsiteCMS: React.FC = () => {
 
   const handleSavePage = async () => {
     try {
-      const pageData = {
-        title: pageForm.title,
-        slug: pageForm.slug || generateSlug(pageForm.title),
-        content: pageForm.content,
-        meta_title: pageForm.meta_title || null,
-        meta_description: pageForm.meta_description || null,
-        meta_keywords: pageForm.meta_keywords ? pageForm.meta_keywords.split(',').map(k => k.trim()) : null,
+      if (!pageForm.title) {
+        toast({ title: "Error", description: "Please provide a page title", variant: "destructive" });
+        return;
+      }
+
+      // Normalize content: try JSON, otherwise keep as string/null
+      let contentValue: any = pageForm.content;
+      if (typeof contentValue === 'string') {
+        const trimmed = contentValue.trim();
+        if (trimmed) {
+          try {
+            if (trimmed.startsWith('{') || trimmed.startsWith('[')) {
+              contentValue = JSON.parse(trimmed);
+            } else {
+              contentValue = trimmed; // treat as rich text/HTML string
+            }
+          } catch {
+            contentValue = trimmed; // keep as string if JSON parse fails
+          }
+        } else {
+          contentValue = null;
+        }
+      }
+
+      const { data: { user } } = await supabase.auth.getUser();
+
+      const pageData: any = {
+        title: pageForm.title.trim(),
+        slug: (pageForm.slug || generateSlug(pageForm.title)).trim(),
+        content: contentValue,
+        meta_title: pageForm.meta_title?.trim() || null,
+        meta_description: pageForm.meta_description?.trim() || null,
+        meta_keywords: pageForm.meta_keywords ? pageForm.meta_keywords.split(',').map(k => k.trim()).filter(Boolean) : null,
         page_type: pageForm.page_type,
         is_published: pageForm.is_published
       };
@@ -656,19 +682,19 @@ export const AdminWebsiteCMS: React.FC = () => {
       if (editingPage) {
         // Save version before updating
         await saveVersion(editingPage.id, 'page', editingPage, 'Page updated');
-        
         const { error } = await supabase
           .from('content_pages')
           .update(pageData)
           .eq('id', editingPage.id);
-
         if (error) throw error;
         toast({ title: "Success", description: "Page updated successfully" });
       } else {
+        // Include created_by for RLS policies if present
+        pageData.created_by = user?.id ?? null;
         const { error } = await supabase
           .from('content_pages')
-          .insert(pageData);
-
+          .insert([pageData])
+          .select();
         if (error) throw error;
         toast({ title: "Success", description: "Page created successfully" });
       }
@@ -678,7 +704,7 @@ export const AdminWebsiteCMS: React.FC = () => {
       console.error('Error saving page:', error);
       toast({
         title: "Error",
-        description: error.message || "Failed to save page",
+        description: error?.message || "Failed to save page",
         variant: "destructive"
       });
     }
