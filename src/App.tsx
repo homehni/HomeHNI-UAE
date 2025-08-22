@@ -170,8 +170,6 @@ const App: React.FC = () => {
               <Route path="listings" element={<AdminProperties />} />
               <Route path="leads" element={<AdminLeads />} />
               <Route path="featured-properties" element={<AdminFeaturedProperties />} />
-              <Route path="pages" element={<AdminPageManagement />} />
-              <Route path="content" element={<AdminContent />} />
               <Route path="website-cms" element={<AdminWebsiteCMS />} />
               <Route path="regions" element={<AdminRegions />} />
               <Route path="security" element={<AdminAudit />} />

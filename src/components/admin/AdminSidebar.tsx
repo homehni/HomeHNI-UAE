@@ -67,18 +67,6 @@ const navigationItems = [
     group: 'Content',
   },
   {
-    title: 'Page Management',
-    url: '/admin/pages',
-    icon: FileText,
-    group: 'Website',
-  },
-  {
-    title: 'Website Content',
-    url: '/admin/content',
-    icon: Globe,
-    group: 'Website',
-  },
-  {
     title: 'Website CMS',
     url: '/admin/website-cms',
     icon: Menu,
