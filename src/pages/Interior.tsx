@@ -503,7 +503,7 @@ const Interior = () => {
               <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
                 Comprehensive Interior Design Solutions
               </h2>
-              <div className="text-muted-foreground space-y-4 text-sm leading-relaxed">
+              <div className="text-muted-foreground space-y-4 text-sm leading-relaxed text-justify">
                 <p>
                   Whether you're looking to redesign your home, villa, office, or commercial space, our comprehensive 
                   interior design solutions are crafted to transform your vision into reality. From conceptual design 
