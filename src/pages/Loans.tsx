@@ -293,6 +293,7 @@ const Loans = () => {
                     <SelectItem value="top-up">Top-up Loan</SelectItem>
                     <SelectItem value="construction">Construction Loan</SelectItem>
                     <SelectItem value="business">Business Loan</SelectItem>
+                    <SelectItem value="other">Others</SelectItem>
                   </SelectContent>
                 </Select>
 
