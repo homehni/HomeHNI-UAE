@@ -218,6 +218,24 @@ export const AdminWebsiteCMS: React.FC = () => {
   // Live homepage friendly form state
   const [liveContentForm, setLiveContentForm] = useState<any>({});
 
+  // Page templates - defines default sections for each page type
+  const pageTemplates = {
+    'landing': [
+      { sectionType: 'hero-search', templateId: 'modern' },
+      { sectionType: 'services', templateId: 'grid-4' },
+      { sectionType: 'stats', templateId: 'default' },
+      { sectionType: 'testimonials', templateId: 'default' }
+    ],
+    'service': [
+      { sectionType: 'hero-search', templateId: 'minimal' },
+      { sectionType: 'services', templateId: 'grid-6' }
+    ],
+    'blog': [
+      { sectionType: 'hero-search', templateId: 'minimal' }
+    ],
+    'page': [] // Static pages have no default sections
+  };
+
   // Predefined templates for visual CMS
   const sectionTemplates = {
     'hero-search': [
@@ -581,6 +599,24 @@ export const AdminWebsiteCMS: React.FC = () => {
     }
   };
 
+  // Open unified creator for new page
+  const openNewPageCreator = () => {
+    // Reset form for new page
+    setPageForm({
+      title: '',
+      slug: '',
+      content: '',
+      meta_title: '',
+      meta_description: '',
+      meta_keywords: '',
+      page_type: 'page',
+      is_published: false
+    });
+    setPageSections([]);
+    setEditingPage(null);
+    setShowUnifiedCreator(true);
+  };
+
   const updatePageWithSections = async () => {
     if (!editingPage) return;
     try {
@@ -692,6 +728,45 @@ export const AdminWebsiteCMS: React.FC = () => {
       console.error('Error deleting page:', e);
       toast({ title: 'Error', description: 'Failed to delete page', variant: 'destructive' });
     }
+  };
+
+  // Apply page template sections
+  const applyPageTemplate = (pageType: string) => {
+    const template = pageTemplates[pageType];
+    if (!template || template.length === 0) {
+      // For pages with no template, keep existing sections
+      return;
+    }
+
+    // Create sections from template
+    const templateSections = template.map((item, index) => {
+      const sectionTemplate = sectionTemplates[item.sectionType]?.find(t => t.id === item.templateId);
+      if (!sectionTemplate) return null;
+
+      return {
+        id: `temp-${Date.now()}-${index}`,
+        section_type: item.sectionType,
+        template_id: item.templateId,
+        content: sectionTemplate.content,
+        sort_order: index,
+        is_custom: false
+      };
+    }).filter(Boolean);
+
+    // Keep any custom sections that were added manually
+    const customSections = pageSections.filter(section => section.is_custom);
+    
+    // Combine template sections with custom sections
+    setPageSections([...templateSections, ...customSections.map((section, index) => ({
+      ...section,
+      sort_order: templateSections.length + index
+    }))]);
+  };
+
+  // Handle page type change
+  const handlePageTypeChange = (value: string) => {
+    setPageForm(prev => ({ ...prev, page_type: value }));
+    applyPageTemplate(value);
   };
 
   // Add section template to current page sections
@@ -860,7 +935,7 @@ export const AdminWebsiteCMS: React.FC = () => {
             </p>
           </div>
           <Button 
-            onClick={() => setShowUnifiedCreator(true)}
+            onClick={openNewPageCreator}
             className="bg-brand-red hover:bg-brand-red/90 text-white"
           >
             <Plus className="w-4 h-4 mr-2" />
@@ -980,7 +1055,7 @@ export const AdminWebsiteCMS: React.FC = () => {
                     <Label htmlFor="pageType">Page Type</Label>
                     <Select 
                       value={pageForm.page_type} 
-                      onValueChange={(value) => setPageForm(prev => ({ ...prev, page_type: value }))}
+                      onValueChange={handlePageTypeChange}
                     >
                       <SelectTrigger>
                         <SelectValue />
