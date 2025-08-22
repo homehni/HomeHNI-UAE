@@ -24,7 +24,7 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Plus, Edit, Trash2, Star, Search, Eye } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { PropertyEditModal } from '@/components/PropertyEditModal';
+import { EnhancedPropertyEditModal } from '@/components/EnhancedPropertyEditModal';
 import { PropertyDetailModal } from '@/components/PropertyDetailModal';
 
 interface Property {
@@ -154,11 +154,8 @@ export const AdminFeaturedProperties: React.FC = () => {
   };
 
   const filterProperties = () => {
-    // Get properties that are featured
-    const featuredPropertyIds = featuredProperties.map(fp => fp.property_id);
-    const featuredPropertiesList = properties.filter(p => featuredPropertyIds.includes(p.id));
-    
-    let filtered = featuredPropertiesList;
+    // Show ALL properties, not just featured ones
+    let filtered = properties;
 
     if (searchTerm) {
       filtered = filtered.filter(property =>
@@ -315,7 +312,7 @@ export const AdminFeaturedProperties: React.FC = () => {
             <CardTitle className="text-sm font-medium text-muted-foreground">Total Properties</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-foreground">{filteredProperties.length}</div>
+            <div className="text-3xl font-bold text-foreground">{properties.length}</div>
           </CardContent>
         </Card>
         
@@ -344,8 +341,8 @@ export const AdminFeaturedProperties: React.FC = () => {
 
       <Card>
         <CardHeader>
-          <CardTitle>Featured Properties Management</CardTitle>
-          <CardDescription>Manage properties displayed on the homepage</CardDescription>
+          <CardTitle>All Properties Management</CardTitle>
+          <CardDescription>Manage all properties with live editing and featuring options</CardDescription>
           
           {/* Filters */}
           <div className="flex gap-4 mt-4">
@@ -386,6 +383,7 @@ export const AdminFeaturedProperties: React.FC = () => {
             <TableBody>
               {filteredProperties.map((property) => {
                 const featuredRecord = featuredProperties.find(fp => fp.property_id === property.id);
+                const isFeatured = !!featuredRecord;
                 return (
                   <TableRow key={property.id}>
                     <TableCell>
@@ -400,10 +398,12 @@ export const AdminFeaturedProperties: React.FC = () => {
                         <div>
                           <div className="font-medium flex items-center gap-2">
                             {property.title}
-                            <Badge variant="outline" className="text-xs">
-                              <Star className="h-3 w-3 mr-1" />
-                              Featured
-                            </Badge>
+                            {isFeatured && (
+                              <Badge variant="outline" className="text-xs">
+                                <Star className="h-3 w-3 mr-1" />
+                                Featured
+                              </Badge>
+                            )}
                           </div>
                           <div className="text-sm text-muted-foreground">
                             {property.bhk_type} • {property.super_area} sq ft
@@ -430,14 +430,25 @@ export const AdminFeaturedProperties: React.FC = () => {
                       </div>
                     </TableCell>
                     <TableCell>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => toggleFeaturedStatus(property.id)}
-                        className={featuredRecord?.is_active ? 'text-green-600' : 'text-red-600'}
-                      >
-                        {featuredRecord?.is_active ? 'Active' : 'Inactive'}
-                      </Button>
+                      {isFeatured ? (
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => toggleFeaturedStatus(property.id)}
+                          className={featuredRecord?.is_active ? 'text-green-600' : 'text-red-600'}
+                        >
+                          {featuredRecord?.is_active ? 'Active' : 'Inactive'}
+                        </Button>
+                      ) : (
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleSelectProperty(property.id)}
+                          className="text-blue-600"
+                        >
+                          Add to Featured
+                        </Button>
+                      )}
                     </TableCell>
                     <TableCell>
                       <div className="flex items-center gap-2">
@@ -447,13 +458,15 @@ export const AdminFeaturedProperties: React.FC = () => {
                         <Button variant="ghost" size="sm" onClick={() => handleEditProperty(property)}>
                           <Edit className="h-4 w-4" />
                         </Button>
-                        <Button 
-                          variant="ghost" 
-                          size="sm" 
-                          onClick={() => handleRemoveFeatured(property.id)}
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
+                        {isFeatured && (
+                          <Button 
+                            variant="ghost" 
+                            size="sm" 
+                            onClick={() => handleRemoveFeatured(property.id)}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        )}
                       </div>
                     </TableCell>
                   </TableRow>
@@ -524,8 +537,8 @@ export const AdminFeaturedProperties: React.FC = () => {
         </DialogContent>
       </Dialog>
 
-      {/* Property Edit Modal */}
-      <PropertyEditModal
+      {/* Enhanced Property Edit Modal */}
+      <EnhancedPropertyEditModal
         property={editPropertyModal.property}
         isOpen={editPropertyModal.isOpen}
         onClose={() => setEditPropertyModal({ isOpen: false, property: null })}
