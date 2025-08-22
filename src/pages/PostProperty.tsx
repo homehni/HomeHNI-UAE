@@ -103,7 +103,12 @@ export const PostProperty: React.FC = () => {
       // }
 
       // Validate property data mappings
-      let listingType: string;
+      let listingType: string = 'Sale'; // Default fallback
+      
+      // Debug logging to identify undefined values
+      console.log('Form data structure:', Object.keys(data.propertyInfo));
+      console.log('Property info object:', data.propertyInfo);
+      
       if ('rentalDetails' in data.propertyInfo) {
         listingType = (data.propertyInfo as PropertyInfo).rentalDetails.listingType;
       } else if ('saleDetails' in data.propertyInfo) {
@@ -112,15 +117,19 @@ export const PostProperty: React.FC = () => {
         listingType = (data.propertyInfo as any).pgDetails.listingType;
       } else if ('flattmatesDetails' in data.propertyInfo) {
         listingType = (data.propertyInfo as any).flattmatesDetails.listingType;
-      } else {
-        listingType = 'Sale'; // fallback for land plots
+      } else if ('commercialDetails' in data.propertyInfo) {
+        listingType = (data.propertyInfo as any).commercialDetails.listingType || 'Rent';
+      } else if ('commercialSaleDetails' in data.propertyInfo) {
+        listingType = (data.propertyInfo as any).commercialSaleDetails.listingType || 'Sale';
       }
+      
+      console.log('Extracted listing type:', listingType);
         
       const mappingValidation = validateMappedValues({
-        bhkType: ('propertyDetails' in data.propertyInfo && 'bhkType' in data.propertyInfo.propertyDetails) ? data.propertyInfo.propertyDetails.bhkType : 'Commercial',
+        bhkType: ('propertyDetails' in data.propertyInfo && 'bhkType' in data.propertyInfo.propertyDetails) ? data.propertyInfo.propertyDetails.bhkType : null,
         propertyType: ('propertyDetails' in data.propertyInfo) ? data.propertyInfo.propertyDetails.propertyType : 
                      ('plotDetails' in data.propertyInfo) ? data.propertyInfo.plotDetails.propertyType : 'Commercial',
-        listingType: listingType
+        listingType: listingType || 'Sale'
       });
 
       if (!mappingValidation.isValid) {

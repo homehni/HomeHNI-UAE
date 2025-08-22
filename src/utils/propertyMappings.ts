@@ -17,6 +17,7 @@ export const mapBhkType = (bhkType: string): string => {
     '10 BHK': '10bhk'
   };
   
+  if (!bhkType) return '';
   return bhkMappings[bhkType] || bhkType.toLowerCase().replace(/\s+/g, '');
 };
 
@@ -36,6 +37,7 @@ export const mapPropertyType = (propertyType: string): string => {
     'Showroom': 'showroom'
   };
   
+  if (!propertyType) return 'commercial';
   return propertyMappings[propertyType] || propertyType.toLowerCase().replace(/\s+/g, '_');
 };
 
@@ -46,6 +48,7 @@ export const mapListingType = (listingType: string): string => {
     'Rent': 'rent'
   };
   
+  if (!listingType) return 'sale';
   return listingMappings[listingType] || listingType.toLowerCase();
 };
 
