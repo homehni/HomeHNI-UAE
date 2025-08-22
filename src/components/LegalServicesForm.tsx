@@ -31,7 +31,9 @@ interface FormData {
     issueDescription: string;
   };
   fileUpload: {
-    files: File[];
+    salesDeed: File[];
+    ror: File[];
+    naksha: File[];
   };
   consultationPreferences: {
     mode: string;
@@ -61,7 +63,9 @@ const LegalServicesForm = ({ isOpen, onClose }: LegalServicesFormProps) => {
       issueDescription: '',
     },
     fileUpload: {
-      files: [],
+      salesDeed: [],
+      ror: [],
+      naksha: [],
     },
     consultationPreferences: {
       mode: '',
