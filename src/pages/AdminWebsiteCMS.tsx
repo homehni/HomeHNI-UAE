@@ -228,42 +228,51 @@ export const AdminWebsiteCMS: React.FC = () => {
   const fetchData = useCallback(async () => {
     setLoading(true);
     try {
-      // Fetch pages
+      // Fetch live homepage components
+      const { data: liveComponents, error: componentsError } = await supabase
+        .from('content_elements')
+        .select('*')
+        .eq('page_location', 'live_homepage')
+        .order('sort_order');
+
+      if (componentsError) throw componentsError;
+
+      // Fetch regular pages (non-homepage)
       const { data: pagesData, error: pagesError } = await supabase
         .from('content_pages')
         .select('*')
+        .neq('slug', 'home') // Exclude any homepage entries
         .order('updated_at', { ascending: false });
 
       if (pagesError) throw pagesError;
 
-      // Fetch sections for all pages
-      const { data: sectionsData, error: sectionsError } = await supabase
-        .from('page_sections')
-        .select('*')
-        .order('sort_order');
-
-      if (sectionsError) throw sectionsError;
-
-      // Fetch blocks for all sections
-      const { data: blocksData, error: blocksError } = await supabase
-        .from('content_blocks')
-        .select('*')
-        .order('sort_order');
-
-      if (blocksError) throw blocksError;
-
-      // Organize data hierarchically
-      const pagesWithSections = pagesData?.map(page => ({
-        ...page,
-        sections: sectionsData?.filter(section => section.page_id === page.id).map(section => ({
-          ...section,
-          blocks: blocksData?.filter(block => block.section_id === section.id) || []
+      setPages(pagesData || []);
+      
+      // Store live components as a special "homepage" entry for UI
+      const liveHomepage: ContentPage = {
+        id: 'live-homepage',
+        title: 'Live Homepage (Current Site)',
+        slug: '',
+        content: {},
+        is_published: true,
+        page_type: 'live',
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        sections: liveComponents?.map(component => ({
+          id: component.id,
+          page_id: 'live-homepage',
+          section_type: component.element_type,
+          content: component.content,
+          sort_order: component.sort_order,
+          is_active: component.is_active,
+          created_at: component.created_at,
+          updated_at: component.updated_at,
+          blocks: []
         })) || []
-      })) || [];
+      };
 
-      setPages(pagesWithSections);
-      setSections(sectionsData || []);
-      setBlocks(blocksData || []);
+      setPages([liveHomepage, ...(pagesData || [])]);
+      
     } catch (error) {
       console.error('Error fetching data:', error);
       toast({
@@ -454,35 +463,71 @@ export const AdminWebsiteCMS: React.FC = () => {
     setSectionDialog(true);
   };
 
+  const handleEditSection = (section: PageSection) => {
+    setEditingSection(section);
+    setSectionForm({
+      section_type: section.section_type,
+      content: typeof section.content === 'string' ? section.content : JSON.stringify(section.content, null, 2),
+      sort_order: section.sort_order,
+      is_active: section.is_active
+    });
+    setSectionDialog(true);
+  };
+
   const handleSaveSection = async () => {
-    if (!selectedPage) return;
-
     try {
-      const sectionData = {
-        page_id: selectedPage.id,
-        section_type: sectionForm.section_type,
-        content: sectionForm.content,
-        sort_order: sectionForm.sort_order,
-        is_active: sectionForm.is_active
-      };
+      let contentData;
+      try {
+        contentData = typeof sectionForm.content === 'string' 
+          ? JSON.parse(sectionForm.content) 
+          : sectionForm.content;
+      } catch {
+        contentData = { text: sectionForm.content };
+      }
 
-      if (editingSection) {
-        await saveVersion(editingSection.id, 'section', editingSection, 'Section updated');
+      if (editingSection && editingSection.page_id === 'live-homepage') {
+        // Update live homepage component in content_elements
+        await saveVersion(editingSection.id, 'element', editingSection, 'Live component updated');
         
         const { error } = await supabase
-          .from('page_sections')
-          .update(sectionData)
+          .from('content_elements')
+          .update({
+            content: contentData,
+            is_active: sectionForm.is_active,
+            sort_order: sectionForm.sort_order
+          })
           .eq('id', editingSection.id);
 
         if (error) throw error;
-        toast({ title: "Success", description: "Section updated successfully" });
-      } else {
-        const { error } = await supabase
-          .from('page_sections')
-          .insert(sectionData);
+        toast({ title: "Success", description: "Live homepage section updated successfully" });
+      } else if (selectedPage && selectedPage.id !== 'live-homepage') {
+        // Regular page section handling
+        const sectionData = {
+          page_id: selectedPage.id,
+          section_type: sectionForm.section_type,
+          content: contentData,
+          sort_order: sectionForm.sort_order,
+          is_active: sectionForm.is_active
+        };
 
-        if (error) throw error;
-        toast({ title: "Success", description: "Section created successfully" });
+        if (editingSection) {
+          await saveVersion(editingSection.id, 'section', editingSection, 'Section updated');
+          
+          const { error } = await supabase
+            .from('page_sections')
+            .update(sectionData)
+            .eq('id', editingSection.id);
+
+          if (error) throw error;
+          toast({ title: "Success", description: "Section updated successfully" });
+        } else {
+          const { error } = await supabase
+            .from('page_sections')
+            .insert(sectionData);
+
+          if (error) throw error;
+          toast({ title: "Success", description: "Section created successfully" });
+        }
       }
 
       setSectionDialog(false);
@@ -673,8 +718,17 @@ export const AdminWebsiteCMS: React.FC = () => {
                               )}
                               <FileText className="h-4 w-4" />
                               <div>
-                                <h4 className="font-medium">{page.title}</h4>
-                                <p className="text-sm text-muted-foreground">/{page.slug}</p>
+                                <h4 className="font-medium flex items-center gap-2">
+                                  {page.title}
+                                  {page.id === 'live-homepage' && (
+                                    <Badge variant="default" className="text-xs bg-green-600">
+                                      🔴 LIVE
+                                    </Badge>
+                                  )}
+                                </h4>
+                                <p className="text-sm text-muted-foreground">
+                                  {page.id === 'live-homepage' ? 'Current website homepage' : `/${page.slug}`}
+                                </p>
                               </div>
                               <Badge variant={page.is_published ? "default" : "secondary"}>
                                 {page.is_published ? "Published" : "Draft"}
@@ -758,14 +812,19 @@ export const AdminWebsiteCMS: React.FC = () => {
                                                   {section.blocks?.length || 0} blocks
                                                 </Badge>
                                               </div>
-                                              <div className="flex items-center gap-1" onClick={(e) => e.stopPropagation()}>
-                                                <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
-                                                  <Edit className="h-3 w-3" />
-                                                </Button>
-                                                <Button variant="ghost" size="sm" className="h-6 w-6 p-0 text-red-600 hover:text-red-800">
-                                                  <Trash2 className="h-3 w-3" />
-                                                </Button>
-                                              </div>
+                                               <div className="flex items-center gap-1" onClick={(e) => e.stopPropagation()}>
+                                                 <Button 
+                                                   variant="ghost" 
+                                                   size="sm" 
+                                                   className="h-6 w-6 p-0"
+                                                   onClick={() => handleEditSection(section)}
+                                                 >
+                                                   <Edit className="h-3 w-3" />
+                                                 </Button>
+                                                 <Button variant="ghost" size="sm" className="h-6 w-6 p-0 text-red-600 hover:text-red-800">
+                                                   <Trash2 className="h-3 w-3" />
+                                                 </Button>
+                                               </div>
                                             </div>
                                           </CollapsibleTrigger>
                                           
