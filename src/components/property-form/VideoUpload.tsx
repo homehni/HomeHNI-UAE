@@ -66,7 +66,7 @@ export const VideoUpload: React.FC<VideoUploadProps> = ({
         </div>
       ) : (
         <div
-          className="aspect-video rounded-lg border-2 border-dashed border-muted-foreground hover:border-primary transition-colors cursor-pointer flex flex-col items-center justify-center text-muted-foreground hover:text-primary"
+          className="h-48 rounded-lg border-2 border-dashed border-muted-foreground hover:border-primary transition-colors cursor-pointer flex flex-col items-center justify-center text-muted-foreground hover:text-primary"
           onClick={() => fileInputRef.current?.click()}
         >
           <Video className="h-12 w-12 mb-4" />
