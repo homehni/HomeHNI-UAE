@@ -649,124 +649,175 @@ export const AdminWebsiteCMS: React.FC = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {pages.map((page) => (
-                  <Collapsible
-                    key={page.id}
-                    open={expandedPages.has(page.id)}
-                    onOpenChange={() => togglePageExpansion(page.id)}
-                  >
-                    <div className="border rounded-lg p-4">
-                      <CollapsibleTrigger asChild>
-                        <div className="flex items-center justify-between cursor-pointer">
-                          <div className="flex items-center gap-3">
-                            {expandedPages.has(page.id) ? (
-                              <ChevronDown className="h-4 w-4" />
-                            ) : (
-                              <ChevronRight className="h-4 w-4" />
-                            )}
-                            <FileText className="h-4 w-4" />
-                            <div>
-                              <h4 className="font-medium">{page.title}</h4>
-                              <p className="text-sm text-muted-foreground">/{page.slug}</p>
+                {pages.length === 0 ? (
+                  <div className="text-center py-8 text-muted-foreground">
+                    <Layout className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                    <p className="text-lg font-medium mb-2">No content pages found</p>
+                    <p className="text-sm">Start by creating your first page or check if data is loading correctly.</p>
+                  </div>
+                ) : (
+                  pages.map((page) => (
+                    <Collapsible
+                      key={page.id}
+                      open={expandedPages.has(page.id)}
+                      onOpenChange={() => togglePageExpansion(page.id)}
+                    >
+                      <div className="border rounded-lg p-4 hover:bg-gray-50 transition-colors">
+                        <CollapsibleTrigger asChild>
+                          <div className="flex items-center justify-between cursor-pointer">
+                            <div className="flex items-center gap-3">
+                              {expandedPages.has(page.id) ? (
+                                <ChevronDown className="h-4 w-4" />
+                              ) : (
+                                <ChevronRight className="h-4 w-4" />
+                              )}
+                              <FileText className="h-4 w-4" />
+                              <div>
+                                <h4 className="font-medium">{page.title}</h4>
+                                <p className="text-sm text-muted-foreground">/{page.slug}</p>
+                              </div>
+                              <Badge variant={page.is_published ? "default" : "secondary"}>
+                                {page.is_published ? "Published" : "Draft"}
+                              </Badge>
+                              <Badge variant="outline" className="text-xs">
+                                {page.sections?.length || 0} sections
+                              </Badge>
                             </div>
-                            <Badge variant={page.is_published ? "default" : "secondary"}>
-                              {page.is_published ? "Published" : "Draft"}
-                            </Badge>
-                          </div>
-                          <div className="flex items-center gap-2">
-                            <Button 
-                              variant="ghost" 
-                              size="sm"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleCreateSection(page.id);
-                              }}
-                            >
-                              <Plus className="h-4 w-4" />
-                            </Button>
-                            <Button 
-                              variant="ghost" 
-                              size="sm"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleEditPage(page);
-                              }}
-                            >
-                              <Edit className="h-4 w-4" />
-                            </Button>
-                            {page.is_published && (
-                              <Button variant="ghost" size="sm" asChild>
-                                <a href={`/${page.slug}`} target="_blank">
-                                  <Globe className="h-4 w-4" />
-                                </a>
+                            <div className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
+                              <Button 
+                                variant="outline" 
+                                size="sm"
+                                onClick={() => handleCreateSection(page.id)}
+                              >
+                                <Plus className="h-4 w-4 mr-1" />
+                                Add Section
                               </Button>
+                              <Button 
+                                variant="ghost" 
+                                size="sm"
+                                onClick={() => handleEditPage(page)}
+                              >
+                                <Edit className="h-4 w-4" />
+                              </Button>
+                              {page.is_published && (
+                                <Button variant="ghost" size="sm" asChild>
+                                  <a 
+                                    href={page.slug === 'home' ? '/' : `/${page.slug}`} 
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                  >
+                                    <Globe className="h-4 w-4" />
+                                  </a>
+                                </Button>
+                              )}
+                            </div>
+                          </div>
+                        </CollapsibleTrigger>
+                        
+                        <CollapsibleContent className="mt-4">
+                          <div className="ml-6 space-y-2">
+                            {page.sections && page.sections.length > 0 ? (
+                              <DndContext 
+                                sensors={sensors}
+                                collisionDetection={closestCenter}
+                                onDragEnd={(event) => handleDragEnd(event, 'section')}
+                              >
+                                <SortableContext 
+                                  items={page.sections?.map(s => s.id) || []}
+                                  strategy={verticalListSortingStrategy}
+                                >
+                                  {page.sections?.map((section) => (
+                                    <SortableItem key={section.id} id={section.id}>
+                                      <Collapsible
+                                        open={expandedSections.has(section.id)}
+                                        onOpenChange={() => toggleSectionExpansion(section.id)}
+                                      >
+                                        <div className="border-l-2 border-blue-200 pl-4 py-2 bg-blue-50 rounded-r">
+                                          <CollapsibleTrigger asChild>
+                                            <div className="flex items-center justify-between cursor-pointer">
+                                              <div className="flex items-center gap-2">
+                                                {expandedSections.has(section.id) ? (
+                                                  <ChevronDown className="h-3 w-3" />
+                                                ) : (
+                                                  <ChevronRight className="h-3 w-3" />
+                                                )}
+                                                <Layout className="h-3 w-3" />
+                                                <div>
+                                                  <span className="text-sm font-medium capitalize">{section.section_type.replace('_', ' ')}</span>
+                                                  <p className="text-xs text-gray-600">
+                                                    {section.content?.title || section.content?.subtitle || 'No title'}
+                                                  </p>
+                                                </div>
+                                                <Badge 
+                                                  variant={section.is_active ? "default" : "secondary"} 
+                                                  className="text-xs"
+                                                >
+                                                  {section.is_active ? "Active" : "Inactive"}
+                                                </Badge>
+                                                <Badge variant="outline" className="text-xs">
+                                                  {section.blocks?.length || 0} blocks
+                                                </Badge>
+                                              </div>
+                                              <div className="flex items-center gap-1" onClick={(e) => e.stopPropagation()}>
+                                                <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
+                                                  <Edit className="h-3 w-3" />
+                                                </Button>
+                                                <Button variant="ghost" size="sm" className="h-6 w-6 p-0 text-red-600 hover:text-red-800">
+                                                  <Trash2 className="h-3 w-3" />
+                                                </Button>
+                                              </div>
+                                            </div>
+                                          </CollapsibleTrigger>
+                                          
+                                          <CollapsibleContent className="mt-2">
+                                            <div className="ml-4 space-y-1">
+                                              {section.blocks && section.blocks.length > 0 ? (
+                                                section.blocks?.map((block) => (
+                                                  <div key={block.id} className="flex items-center justify-between gap-2 p-2 bg-white rounded border">
+                                                    <div className="flex items-center gap-2">
+                                                      <ImageIcon className="h-3 w-3" />
+                                                      <span className="text-xs font-medium">{block.block_type}</span>
+                                                      <Badge 
+                                                        variant={block.is_active ? "default" : "secondary"} 
+                                                        className="text-xs"
+                                                      >
+                                                        {block.is_active ? "Active" : "Inactive"}
+                                                      </Badge>
+                                                    </div>
+                                                    <div className="flex gap-1">
+                                                      <Button variant="ghost" size="sm" className="h-5 w-5 p-0">
+                                                        <Edit className="h-3 w-3" />
+                                                      </Button>
+                                                      <Button variant="ghost" size="sm" className="h-5 w-5 p-0 text-red-600">
+                                                        <Trash2 className="h-3 w-3" />
+                                                      </Button>
+                                                    </div>
+                                                  </div>
+                                                ))
+                                              ) : (
+                                                <div className="text-xs text-gray-500 p-2 bg-gray-50 rounded">
+                                                  No content blocks - click to add content
+                                                </div>
+                                              )}
+                                            </div>
+                                          </CollapsibleContent>
+                                        </div>
+                                      </Collapsible>
+                                    </SortableItem>
+                                  ))}
+                                </SortableContext>
+                              </DndContext>
+                            ) : (
+                              <div className="text-sm text-gray-500 p-4 bg-gray-50 rounded">
+                                No sections found. Click "Add Section" to create content sections for this page.
+                              </div>
                             )}
                           </div>
-                        </div>
-                      </CollapsibleTrigger>
-                      
-                      <CollapsibleContent className="mt-4">
-                        <div className="ml-6 space-y-2">
-                          <DndContext 
-                            sensors={sensors}
-                            collisionDetection={closestCenter}
-                            onDragEnd={(event) => handleDragEnd(event, 'section')}
-                          >
-                            <SortableContext 
-                              items={page.sections?.map(s => s.id) || []}
-                              strategy={verticalListSortingStrategy}
-                            >
-                              {page.sections?.map((section) => (
-                                <SortableItem key={section.id} id={section.id}>
-                                  <Collapsible
-                                    open={expandedSections.has(section.id)}
-                                    onOpenChange={() => toggleSectionExpansion(section.id)}
-                                  >
-                                    <div className="border-l-2 border-blue-200 pl-4 py-2">
-                                      <CollapsibleTrigger asChild>
-                                        <div className="flex items-center justify-between cursor-pointer">
-                                          <div className="flex items-center gap-2">
-                                            {expandedSections.has(section.id) ? (
-                                              <ChevronDown className="h-3 w-3" />
-                                            ) : (
-                                              <ChevronRight className="h-3 w-3" />
-                                            )}
-                                            <Layout className="h-3 w-3" />
-                                            <span className="text-sm font-medium">{section.section_type}</span>
-                                            <Badge variant="outline" className="text-xs">
-                                              {section.blocks?.length || 0} blocks
-                                            </Badge>
-                                          </div>
-                                          <Button variant="ghost" size="sm">
-                                            <Edit className="h-3 w-3" />
-                                          </Button>
-                                        </div>
-                                      </CollapsibleTrigger>
-                                      
-                                      <CollapsibleContent className="mt-2">
-                                        <div className="ml-4 space-y-1">
-                                          {section.blocks?.map((block) => (
-                                            <div key={block.id} className="flex items-center gap-2 p-2 bg-gray-50 rounded">
-                                              <ImageIcon className="h-3 w-3" />
-                                              <span className="text-xs">{block.block_type}</span>
-                                              <Badge variant="outline" className="text-xs">
-                                                {block.is_active ? "Active" : "Inactive"}
-                                              </Badge>
-                                            </div>
-                                          ))}
-                                        </div>
-                                      </CollapsibleContent>
-                                    </div>
-                                  </Collapsible>
-                                </SortableItem>
-                              ))}
-                            </SortableContext>
-                          </DndContext>
-                        </div>
-                      </CollapsibleContent>
-                    </div>
-                  </Collapsible>
-                ))}
+                        </CollapsibleContent>
+                      </div>
+                    </Collapsible>
+                  ))
+                )}
               </div>
             </CardContent>
           </Card>
@@ -1015,6 +1066,95 @@ export const AdminWebsiteCMS: React.FC = () => {
           <DialogFooter>
             <Button variant="outline" onClick={() => setVersionDialog(false)}>
               Close
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Create/Edit Section Dialog */}
+      <Dialog open={sectionDialog} onOpenChange={setSectionDialog}>
+        <DialogContent className="max-w-3xl">
+          <DialogHeader>
+            <DialogTitle>
+              {editingSection ? "Edit Section" : "Create New Section"}
+            </DialogTitle>
+            <DialogDescription>
+              {editingSection ? "Update section content and settings" : "Add a new content section to the page"}
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="grid grid-cols-1 gap-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="section_type">Section Type</Label>
+                <Select 
+                  value={sectionForm.section_type} 
+                  onValueChange={(value) => setSectionForm(prev => ({ ...prev, section_type: value }))}
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="hero_search">Hero Search</SelectItem>
+                    <SelectItem value="directory">Directory</SelectItem>
+                    <SelectItem value="featured_properties">Featured Properties</SelectItem>
+                    <SelectItem value="services">Services</SelectItem>
+                    <SelectItem value="why_use">Why Use</SelectItem>
+                    <SelectItem value="stats">Statistics</SelectItem>
+                    <SelectItem value="testimonials">Testimonials</SelectItem>
+                    <SelectItem value="mobile_app">Mobile App</SelectItem>
+                    <SelectItem value="content">General Content</SelectItem>
+                    <SelectItem value="banner">Banner</SelectItem>
+                    <SelectItem value="cta">Call to Action</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div>
+                <Label htmlFor="sort_order">Sort Order</Label>
+                <Input
+                  id="sort_order"
+                  type="number"
+                  value={sectionForm.sort_order}
+                  onChange={(e) => setSectionForm(prev => ({ ...prev, sort_order: parseInt(e.target.value) || 0 }))}
+                  min="0"
+                />
+              </div>
+            </div>
+
+            <div className="flex items-center space-x-2">
+              <Switch
+                id="section_active"
+                checked={sectionForm.is_active}
+                onCheckedChange={(checked) => setSectionForm(prev => ({ ...prev, is_active: checked }))}
+              />
+              <Label htmlFor="section_active">Active Section</Label>
+            </div>
+
+            <div>
+              <Label htmlFor="section_content">Section Content (JSON Format)</Label>
+              <div className="mt-2">
+                <Textarea
+                  id="section_content"
+                  value={typeof sectionForm.content === 'string' ? sectionForm.content : JSON.stringify(sectionForm.content, null, 2)}
+                  onChange={(e) => setSectionForm(prev => ({ ...prev, content: e.target.value }))}
+                  placeholder='{"title": "Section Title", "subtitle": "Section Description"}'
+                  className="min-h-[200px] font-mono"
+                />
+              </div>
+              <p className="text-xs text-gray-500 mt-1">
+                Enter JSON content for this section. Example: {"{"}"title": "Our Services", "subtitle": "Complete real estate solutions"{"}"} 
+              </p>
+            </div>
+          </div>
+
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setSectionDialog(false)}>
+              Cancel
+            </Button>
+            <Button onClick={handleSaveSection}>
+              <Save className="h-4 w-4 mr-2" />
+              Save Section
             </Button>
           </DialogFooter>
         </DialogContent>
