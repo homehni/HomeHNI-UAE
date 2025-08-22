@@ -16,15 +16,15 @@ import { format } from 'date-fns';
 import { SaleDetails } from '@/types/saleProperty';
 
 const saleDetailsSchema = z.object({
-  expectedPrice: z.number().optional(),
+  expectedPrice: z.union([z.number(), z.nan(), z.undefined()]).optional().transform(val => isNaN(val as number) ? undefined : val),
   priceNegotiable: z.boolean().optional(),
   possessionDate: z.string().optional(),
   propertyAge: z.string().optional(),
   registrationStatus: z.enum(['ready_to_move', 'under_construction']).optional(),
   homeLoanAvailable: z.boolean().optional(),
-  maintenanceCharges: z.number().optional(),
-  pricePerSqFt: z.number().optional(),
-  bookingAmount: z.number().optional(),
+  maintenanceCharges: z.union([z.number(), z.nan(), z.undefined()]).optional().transform(val => isNaN(val as number) ? undefined : val),
+  pricePerSqFt: z.union([z.number(), z.nan(), z.undefined()]).optional().transform(val => isNaN(val as number) ? undefined : val),
+  bookingAmount: z.union([z.number(), z.nan(), z.undefined()]).optional().transform(val => isNaN(val as number) ? undefined : val),
 });
 
 type SaleDetailsForm = z.infer<typeof saleDetailsSchema>;
@@ -71,7 +71,7 @@ export const SaleDetailsStep: React.FC<SaleDetailsStepProps> = ({
   const onSubmit = (data: SaleDetailsForm) => {
     const saleData: SaleDetails = {
       listingType: 'Sale',
-      expectedPrice: data.expectedPrice || 0,
+      expectedPrice: data.expectedPrice,
       priceNegotiable: data.priceNegotiable,
       possessionDate: selectedDate ? selectedDate.toISOString().split('T')[0] : undefined,
       propertyAge: data.propertyAge,
@@ -98,7 +98,7 @@ export const SaleDetailsStep: React.FC<SaleDetailsStepProps> = ({
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <Label htmlFor="expectedPrice" className="text-sm font-medium">
-              Sale Price (₹)
+              Sale Price (₹) <span className="text-muted-foreground">(Optional)</span>
             </Label>
             <Input
               id="expectedPrice"
@@ -114,7 +114,7 @@ export const SaleDetailsStep: React.FC<SaleDetailsStepProps> = ({
 
           <div>
             <Label htmlFor="pricePerSqFt" className="text-sm font-medium">
-              Price per Sq.Ft (₹)
+              Price per Sq.Ft (₹) <span className="text-muted-foreground">(Optional)</span>
             </Label>
             <Input
               id="pricePerSqFt"
@@ -221,7 +221,7 @@ export const SaleDetailsStep: React.FC<SaleDetailsStepProps> = ({
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <Label htmlFor="maintenanceCharges" className="text-sm font-medium">
-              Monthly Maintenance (₹)
+              Monthly Maintenance (₹) <span className="text-muted-foreground">(Optional)</span>
             </Label>
             <Input
               id="maintenanceCharges"
@@ -234,7 +234,7 @@ export const SaleDetailsStep: React.FC<SaleDetailsStepProps> = ({
 
           <div>
             <Label htmlFor="bookingAmount" className="text-sm font-medium">
-              Booking Amount (₹)
+              Booking Amount (₹) <span className="text-muted-foreground">(Optional)</span>
             </Label>
             <Input
               id="bookingAmount"
