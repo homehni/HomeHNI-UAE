@@ -218,6 +218,7 @@ const Interior = () => {
                     <SelectItem value="office">Office Interior</SelectItem>
                     <SelectItem value="retail">Retail Space</SelectItem>
                     <SelectItem value="restaurant">Restaurant</SelectItem>
+                    <SelectItem value="other">Others</SelectItem>
                   </SelectContent>
                 </Select>
                 <Input id="design-budget" name="budget" placeholder="Budget Range (₹)" className="flex-1" />
