@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
+import { Upload, FileText, X } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Marquee from '@/components/Marquee';
@@ -14,10 +15,54 @@ const Careers = () => {
   const [selectedStateDesktop, setSelectedStateDesktop] = useState("");
   const [cities, setCities] = useState<string[]>([]);
   const [citiesDesktop, setCitiesDesktop] = useState<string[]>([]);
+  const [resumeFile, setResumeFile] = useState<File | null>(null);
+  const [resumeFileMobile, setResumeFileMobile] = useState<File | null>(null);
 
-  const {
-    toast
-  } = useToast();
+  const { toast } = useToast();
+
+  const handleResumeUpload = (file: File | null, isMobile: boolean = false) => {
+    if (file) {
+      // Validate file type
+      const allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+      if (!allowedTypes.includes(file.type)) {
+        toast({
+          title: "Invalid file type",
+          description: "Please upload a PDF or Word document.",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      // Validate file size (5MB limit)
+      if (file.size > 5 * 1024 * 1024) {
+        toast({
+          title: "File too large",
+          description: "Please upload a file smaller than 5MB.",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      if (isMobile) {
+        setResumeFileMobile(file);
+      } else {
+        setResumeFile(file);
+      }
+      
+      toast({
+        title: "Resume uploaded",
+        description: `${file.name} has been selected.`
+      });
+    }
+  };
+
+  const removeResume = (isMobile: boolean = false) => {
+    if (isMobile) {
+      setResumeFileMobile(null);
+    } else {
+      setResumeFile(null);
+    }
+  };
 
   // Load states and cities data
   useEffect(() => {
@@ -158,6 +203,52 @@ const Careers = () => {
                   </SelectContent>
                 </Select>
 
+                {/* Resume Upload */}
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-gray-700">Resume/CV</label>
+                  {!resumeFile ? (
+                    <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-gray-400 transition-colors">
+                      <Upload className="h-6 w-6 text-gray-400 mx-auto mb-2" />
+                      <p className="text-sm text-gray-600 mb-2">Upload your resume</p>
+                      <input
+                        type="file"
+                        accept=".pdf,.doc,.docx"
+                        onChange={(e) => e.target.files?.[0] && handleResumeUpload(e.target.files[0])}
+                        className="hidden"
+                        id="resume-upload"
+                      />
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => document.getElementById('resume-upload')?.click()}
+                      >
+                        Choose File
+                      </Button>
+                      <p className="text-xs text-gray-500 mt-1">PDF, DOC, DOCX (Max 5MB)</p>
+                    </div>
+                  ) : (
+                    <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                      <div className="flex items-center space-x-3">
+                        <FileText className="h-5 w-5 text-gray-400" />
+                        <div>
+                          <p className="text-sm font-medium text-gray-700">{resumeFile.name}</p>
+                          <p className="text-xs text-gray-500">{(resumeFile.size / 1024 / 1024).toFixed(2)} MB</p>
+                        </div>
+                      </div>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => removeResume()}
+                        className="text-red-500 hover:text-red-700"
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  )}
+                </div>
+
 
                 <Button type="submit" className="w-full">Submit Application</Button>
               </form>
@@ -253,6 +344,52 @@ const Careers = () => {
                   </Select>
 
                   <Input id="career-experience-mobile" name="experience" placeholder="Years of Experience" className="h-12 text-base bg-background" />
+
+                  {/* Resume Upload - Mobile */}
+                  <div className="space-y-3">
+                    <label className="block text-sm font-medium text-gray-700">Resume/CV</label>
+                    {!resumeFileMobile ? (
+                      <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-gray-400 transition-colors">
+                        <Upload className="h-8 w-8 text-gray-400 mx-auto mb-3" />
+                        <p className="text-base text-gray-600 mb-3">Upload your resume</p>
+                        <input
+                          type="file"
+                          accept=".pdf,.doc,.docx"
+                          onChange={(e) => e.target.files?.[0] && handleResumeUpload(e.target.files[0], true)}
+                          className="hidden"
+                          id="resume-upload-mobile"
+                        />
+                        <Button
+                          type="button"
+                          variant="outline"
+                          onClick={() => document.getElementById('resume-upload-mobile')?.click()}
+                          className="h-12"
+                        >
+                          Choose File
+                        </Button>
+                        <p className="text-sm text-gray-500 mt-2">PDF, DOC, DOCX (Max 5MB)</p>
+                      </div>
+                    ) : (
+                      <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                        <div className="flex items-center space-x-3">
+                          <FileText className="h-6 w-6 text-gray-400" />
+                          <div>
+                            <p className="text-base font-medium text-gray-700">{resumeFileMobile.name}</p>
+                            <p className="text-sm text-gray-500">{(resumeFileMobile.size / 1024 / 1024).toFixed(2)} MB</p>
+                          </div>
+                        </div>
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => removeResume(true)}
+                          className="text-red-500 hover:text-red-700"
+                        >
+                          <X className="h-5 w-5" />
+                        </Button>
+                      </div>
+                    )}
+                  </div>
 
                   
 
