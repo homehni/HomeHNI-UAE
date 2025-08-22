@@ -1,9 +1,11 @@
 
 import { Play, Star } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
+import { useCMSContent } from '@/hooks/useCMSContent';
 
 const CustomerTestimonials = () => {
-  const testimonials = [
+  const { content: cmsContent } = useCMSContent('testimonials');
+  const defaultTestimonials = [
     {
       name: "Rajesh Kumar",
       rating: 5,
@@ -21,11 +23,13 @@ const CustomerTestimonials = () => {
     }
   ];
 
+  const testimonials = cmsContent?.content?.testimonials || defaultTestimonials;
+
   return (
     <section className="py-16 bg-white text-black">
       <div className="container mx-auto px-4">
         <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
-          Our Customers Loves us
+          {cmsContent?.content?.title || 'Our Customers Loves us'}
         </h2>
         
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-6xl mx-auto">

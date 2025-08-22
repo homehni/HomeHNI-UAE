@@ -1,7 +1,9 @@
 
 import { Download } from 'lucide-react';
+import { useCMSContent } from '@/hooks/useCMSContent';
 
 const MobileAppSection = () => {
+  const { content: cmsContent } = useCMSContent('mobile-app');
   return (
     <section className="py-16 bg-gray-50">
       <div className="container mx-auto px-4">
@@ -10,7 +12,7 @@ const MobileAppSection = () => {
           <div className="flex justify-center lg:justify-start">
             <div className="relative">
               <img 
-                src="/lovable-uploads/homeAppPromotion.png" 
+                src={cmsContent?.content?.appImage || "/lovable-uploads/homeAppPromotion.png"}
                 alt="5 Acres Mobile App Screenshots"
                 loading="lazy"
                 className="w-full max-w-lg h-auto"
@@ -21,12 +23,11 @@ const MobileAppSection = () => {
           {/* Content Section */}
           <div className="text-center lg:text-left">
             <h2 className="text-3xl md:text-4xl font-bold text-black mb-6">
-              Find A New Home On The Go
+              {cmsContent?.content?.title || 'Find A New Home On The Go'}
             </h2>
             
             <p className="text-gray-600 text-lg mb-8 leading-relaxed">
-              Download our app and discover properties anytime, anywhere. Get 
-              instant notifications for new listings that match your preferences.
+              {cmsContent?.content?.description || 'Download our app and discover properties anytime, anywhere. Get instant notifications for new listings that match your preferences.'}
             </p>
 
             {/* Download Buttons */}

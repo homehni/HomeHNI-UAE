@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { MapPin, Search, Mic, MapPinIcon, ChevronDown } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useCMSContent } from '@/hooks/useCMSContent';
 export interface SearchSectionRef {
   focusSearchInput: () => void;
 }
@@ -15,6 +16,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
   const [searchQuery, setSearchQuery] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
   const mobileInputRef = useRef<HTMLInputElement>(null);
+  const { content: cmsContent } = useCMSContent('hero-search');
   const cities = ['All Residential', 'Flat/Apartment', 'Independent Building/ Floor', 'Farm House', 'Villa', 'Plots', 'Independent House', 'Agriculture Lands'];
   const handleCitySelect = (city: string) => {
     setSelectedCity(city);
@@ -113,7 +115,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
   return <section id="hero-search" className="relative">
       {/* Hero Image Background - extends to cover marquee area */}
       <div className="relative h-[50vh] sm:h-[60vh] bg-cover bg-no-repeat -mt-[70px] pt-[40px]" style={{
-      backgroundImage: `url(/lovable-uploads/02fc42a2-c12f-49f1-92b7-9fdee8f3a419.png)`,
+      backgroundImage: `url(${cmsContent?.content?.heroImage || '/lovable-uploads/02fc42a2-c12f-49f1-92b7-9fdee8f3a419.png'})`,
       backgroundPosition: 'center calc(50% - 2%)'
     }}>
         {/* Mobile Search Section - overlapping 50% at bottom of hero */}

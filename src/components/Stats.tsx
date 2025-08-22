@@ -1,8 +1,10 @@
 
 import { Home, Users, Building, Award } from 'lucide-react';
+import { useCMSContent } from '@/hooks/useCMSContent';
 
 const Stats = () => {
-  const stats = [
+  const { content: cmsContent } = useCMSContent('stats');
+  const defaultStats = [
     {
       icon: Home,
       number: '50,000+',
@@ -28,6 +30,8 @@ const Stats = () => {
       color: 'text-brand-maroon'
     }
   ];
+
+  const stats = cmsContent?.content?.stats || defaultStats;
 
   return (
     <section className="py-16 gradient-red-maroon">
