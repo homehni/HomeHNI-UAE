@@ -1,0 +1,1 @@
+UPDATE content_elements SET is_active = true WHERE element_key = 'property_1';
