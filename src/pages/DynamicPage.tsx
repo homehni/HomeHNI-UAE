@@ -255,11 +255,7 @@ const DynamicPage: React.FC = () => {
                   </h2>
                 )}
                 <div 
-                  className="prose prose-gray max-w-none [&>*]:!text-inherit [&>h1]:!text-inherit [&>h2]:!text-inherit [&>h3]:!text-inherit [&>h4]:!text-inherit [&>h5]:!text-inherit [&>h6]:!text-inherit [&>p]:!text-inherit"
-                  style={{ 
-                    fontSize: 'inherit',
-                    lineHeight: 'inherit'
-                  }}
+                  className="prose prose-lg prose-gray max-w-none"
                   dangerouslySetInnerHTML={{ 
                     __html: formatContent(content.html || content.content || content) 
                   }}
@@ -297,7 +293,7 @@ const DynamicPage: React.FC = () => {
         <Header />
         
         {/* Main Content */}
-        <div className="pt-8">
+        <div className="pt-32 md:pt-36">
           {sections.length > 0 ? (
             // Render page sections
             <div>
