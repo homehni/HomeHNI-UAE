@@ -189,6 +189,9 @@ const Header = () => {
     {/* Custom Sellers Dropdown */}
     {isSellersDropdownOpen && <div className="absolute top-full left-0 w-32 bg-white border border-gray-200 rounded-lg shadow-xl z-[100] mt-2" onMouseEnter={handleSellersHover} onMouseLeave={handleSellersLeave}>
         <div className="py-2">
+          <button onClick={() => handlePostPropertyClick('Owner')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+            Owners
+          </button>
           <button onClick={() => handlePostPropertyClick('Agent')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
             Agents
           </button>
