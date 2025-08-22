@@ -609,6 +609,29 @@ export const AdminWebsiteCMS: React.FC = () => {
       .trim();
   };
 
+  // Ensure slug is unique by appending -2, -3, ... if needed
+  const ensureUniqueSlug = async (baseSlug: string, excludeId?: string) => {
+    let slug = baseSlug;
+    let counter = 1;
+    // loop until a unique slug is found
+    // safeguard: max 50 iterations
+    // eslint-disable-next-line no-constant-condition
+    while (true && counter < 50) {
+      const { data } = await supabase
+        .from('content_pages')
+        .select('id')
+        .eq('slug', slug)
+        .maybeSingle();
+
+      if (!data || (excludeId && data.id === excludeId)) {
+        return slug;
+      }
+      counter += 1;
+      slug = `${baseSlug}-${counter}`;
+    }
+    return `${baseSlug}-${Date.now()}`; // ultimate fallback
+  };
+
   // Handle page operations
   const handleCreatePage = () => {
     setEditingPage(null);
@@ -647,6 +670,10 @@ export const AdminWebsiteCMS: React.FC = () => {
         return;
       }
 
+      // Determine unique slug
+      const baseSlug = (pageForm.slug || generateSlug(pageForm.title)).trim();
+      const uniqueSlug = await ensureUniqueSlug(baseSlug, editingPage?.id);
+
       // Normalize content: try JSON, otherwise keep as string/null
       let contentValue: any = pageForm.content;
       if (typeof contentValue === 'string') {
@@ -670,7 +697,7 @@ export const AdminWebsiteCMS: React.FC = () => {
 
       const pageData: any = {
         title: pageForm.title.trim(),
-        slug: (pageForm.slug || generateSlug(pageForm.title)).trim(),
+        slug: uniqueSlug,
         content: contentValue,
         meta_title: pageForm.meta_title?.trim() || null,
         meta_description: pageForm.meta_description?.trim() || null,

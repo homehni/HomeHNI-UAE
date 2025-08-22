@@ -146,6 +146,25 @@ export const AdminPageManagement: React.FC = () => {
       .trim();
   };
 
+  // Ensure unique slug by appending -2, -3, ... if needed
+  const ensureUniqueSlug = async (baseSlug: string, excludeId?: string) => {
+    let slug = baseSlug;
+    let counter = 1;
+    while (counter < 50) {
+      const { data } = await supabase
+        .from('content_pages')
+        .select('id')
+        .eq('slug', slug)
+        .maybeSingle();
+
+      if (!data || (excludeId && data.id === excludeId)) return slug;
+
+      counter += 1;
+      slug = `${baseSlug}-${counter}`;
+    }
+    return `${baseSlug}-${Date.now()}`;
+  };
+
   const handleCreate = () => {
     setEditingPage(null);
     setFormData({
@@ -187,23 +206,8 @@ export const AdminPageManagement: React.FC = () => {
     }
 
     try {
-      const slug = formData.slug.trim();
-
-      // Check if slug already exists (exclude current page when editing)
-      const { data: existing, error: existingErr } = await supabase
-        .from('content_pages')
-        .select('id')
-        .eq('slug', slug)
-        .maybeSingle();
-
-      if (existing && (!editingPage || existing.id !== editingPage.id)) {
-        toast({
-          title: 'Error',
-          description: 'A page with this slug already exists',
-          variant: 'destructive'
-        });
-        return;
-      }
+      const base = formData.slug.trim();
+      const slug = await ensureUniqueSlug(base || generateSlug(formData.title), editingPage?.id);
 
       // Normalize content: try JSON else keep as string
       let contentValue: any = formData.content;
