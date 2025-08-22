@@ -204,10 +204,14 @@ const HandoverServices = () => {
               <Select name="propertyType">
                 <SelectTrigger id="property-type"><SelectValue placeholder="Property Type" /></SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="residential">Residential</SelectItem>
-                  <SelectItem value="commercial">Commercial</SelectItem>
-                  <SelectItem value="industrial">Industrial</SelectItem>
-                  <SelectItem value="agricultural">Agricultural</SelectItem>
+                  <SelectItem value="residential">All Residential</SelectItem>
+                  <SelectItem value="flats">Flat/Apartment</SelectItem>
+                  <SelectItem value="independent-building">Independent Building/Floor</SelectItem>
+                  <SelectItem value="farm-house">Farm House</SelectItem>
+                  <SelectItem value="villa">Villa</SelectItem>
+                  <SelectItem value="plots">Plots</SelectItem>
+                  <SelectItem value="commercial-building">Commercial Building/House</SelectItem>
+                  <SelectItem value="agricultural">Agricultural Lands</SelectItem>
                 </SelectContent>
               </Select>
 
