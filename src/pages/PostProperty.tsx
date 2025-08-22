@@ -194,7 +194,6 @@ export const PostProperty: React.FC = () => {
         'images',
         user.id
       );
-      );
 
       // Upload video if provided
       let videoUrls: string[] = [];
