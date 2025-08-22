@@ -674,24 +674,29 @@ const PackersMovers = () => {
       {/* Service Tags */}
       <section className="py-12 px-4 bg-background border-t border-border">
         <div className="container mx-auto">
-          <div className="text-center mb-8">
-            <h3 className="text-xl font-semibold text-foreground mb-4">Our Services</h3>
-            <div className="flex flex-wrap justify-center gap-2 max-w-4xl mx-auto">
-              {[
-                "Packers and Movers", "Home Shifting", "Office Relocation", "Interstate Moving",
-                "Local Moving", "Packing Services", "Vehicle Transportation", "Household Shifting",
-                "Corporate Relocation", "Furniture Moving", "Bike Transportation", "Car Transportation",
-                "Safe Moving", "Professional Packers", "Moving Company", "Relocation Services",
-                "Storage Solutions", "Unpacking Services", "Moving Insurance", "Affordable Moving"
-              ].map((tag, index) => (
-                <span
-                  key={index}
-                  className="px-3 py-1 bg-muted text-muted-foreground text-sm rounded-full border border-border"
-                >
-                  {tag}
-                </span>
-              ))}
+          <div className="grid lg:grid-cols-2 gap-16 items-start">
+            <div className="max-w-3xl">
+              <h3 className="text-xl font-semibold text-foreground mb-4">Our Services</h3>
+              <div className="flex flex-wrap gap-2">
+                {[
+                  "Packers and Movers", "Home Shifting", "Office Relocation", "Interstate Moving",
+                  "Local Moving", "Packing Services", "Vehicle Transportation", "Household Shifting",
+                  "Corporate Relocation", "Furniture Moving", "Bike Transportation", "Car Transportation",
+                  "Safe Moving", "Professional Packers", "Moving Company", "Relocation Services",
+                  "Storage Solutions", "Unpacking Services", "Moving Insurance", "Affordable Moving"
+                ].map((tag, index) => (
+                  <span
+                    key={index}
+                    className="px-3 py-1 bg-muted text-muted-foreground text-sm rounded-full border border-border"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
             </div>
+            
+            {/* Right side spacing for sticky form */}
+            <div className="hidden lg:block"></div>
           </div>
         </div>
       </section>
