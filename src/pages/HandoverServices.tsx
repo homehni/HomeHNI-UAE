@@ -494,7 +494,7 @@ const HandoverServices = () => {
               <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
                 Comprehensive Handover Solutions
               </h2>
-              <div className="text-muted-foreground space-y-4 text-sm leading-relaxed">
+              <div className="text-muted-foreground space-y-4 text-sm leading-relaxed text-justify">
                 <p>
                   Whether you're buying your first home, selling an investment property, or managing rental 
                   handovers, our comprehensive handover services ensure every detail is handled professionally. 
