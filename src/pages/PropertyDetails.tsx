@@ -5,7 +5,7 @@ import Footer from '@/components/Footer';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { Home, MapPin, IndianRupee, Calendar, Mail, Phone, User, Images, Paintbrush, Calculator, FileText, ShieldCheck, Bus, Train, Car, TrendingUp, Building2 } from 'lucide-react';
+import { Home, MapPin, IndianRupee, Calendar, Mail, Phone, User, Images, Paintbrush, Calculator, FileText, ShieldCheck, Bus, Train, Car, TrendingUp } from 'lucide-react';
 import { ContactOwnerModal } from '@/components/ContactOwnerModal';
 import { PropertyImageGallery } from '@/components/PropertyImageGallery';
 interface Property {
@@ -106,142 +106,17 @@ const PropertyDetails: React.FC = () => {
           </div>
         </section>
 
-        {/* Similar Properties Section */}
-        <section className="bg-gray-50 py-6">
-          <div className="container mx-auto px-4">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-semibold">Similar Properties in {property.city}</h2>
-              <Button variant="outline" size="sm" className="text-primary">
-                View All
-              </Button>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {[1,2,3].map((i) => (
-                <div key={i} className="bg-white rounded-lg p-3 shadow-sm">
-                  <div className="aspect-video bg-gray-200 rounded mb-2"></div>
-                  <h3 className="font-medium text-sm mb-1">2 BHK in {property.locality}</h3>
-                  <p className="text-xs text-gray-600">₹{(property.expected_price * 0.9).toLocaleString()}</p>
-                  <p className="text-xs text-gray-500">{property.super_area || 1200} sqft</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
+        <section className="container mx-auto py-8 px-[27px]">
+          {/* Image Gallery */}
+          {property.images && property.images.length > 0 && (
+            <PropertyImageGallery 
+              images={property.images} 
+              propertyTitle={property.title}
+            />
+          )}
 
-        {/* Main Property Details */}
-        <section className="bg-black text-white">
-          <div className="container mx-auto px-4 py-8">
-            {/* Property Header */}
-            <div className="flex items-center justify-between mb-6">
-              <div>
-                <h1 className="text-2xl font-bold mb-2">{property.title}</h1>
-                <p className="text-gray-300">{property.locality}, {property.city}</p>
-              </div>
-              <div className="text-right">
-                <div className="text-3xl font-bold text-primary">₹{property.expected_price.toLocaleString()}</div>
-                <div className="text-sm text-gray-300">
-                  {property.listing_type === 'rent' ? 'Rent' : 'Price'}
-                </div>
-              </div>
-            </div>
-
-            {/* Two Column Layout */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-              {/* Left: Image Gallery */}
-              <div className="lg:col-span-2">
-                {property.images && property.images.length > 0 && (
-                  <PropertyImageGallery 
-                    images={property.images} 
-                    propertyTitle={property.title}
-                  />
-                )}
-              </div>
-
-              {/* Right: Property Details Sidebar */}
-              <div className="bg-white text-black rounded-lg p-6">
-                {/* Key Specs */}
-                <div className="grid grid-cols-3 gap-4 mb-6">
-                  <div className="text-center">
-                    <div className="text-2xl font-bold text-primary">₹{property.expected_price.toLocaleString()}</div>
-                    <div className="text-xs text-gray-600">Rent</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-2xl font-bold">₹{Math.round(property.expected_price * 0.1).toLocaleString()}</div>
-                    <div className="text-xs text-gray-600">Deposit</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-2xl font-bold">{property.super_area || property.carpet_area || 1200}</div>
-                    <div className="text-xs text-gray-600">Sq.Ft</div>
-                  </div>
-                </div>
-
-                {/* Property Features with Icons */}
-                <div className="space-y-4 mb-6">
-                  <div className="flex items-center gap-3">
-                    <Home className="h-5 w-5 text-gray-600" />
-                    <span className="font-medium">{property.bhk_type || '2 BHK'}</span>
-                    <span className="ml-auto text-gray-600 capitalize">{property.property_type?.replace('_', ' ')}</span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <User className="h-5 w-5 text-gray-600" />
-                    <span className="font-medium">Preferred Tenant</span>
-                    <span className="ml-auto text-gray-600">Family</span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <Calendar className="h-5 w-5 text-gray-600" />
-                    <span className="font-medium">Availability</span>
-                    <span className="ml-auto text-gray-600">Immediately</span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <Car className="h-5 w-5 text-gray-600" />
-                    <span className="font-medium">Parking</span>
-                    <span className="ml-auto text-gray-600">Bike and Car</span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <Building2 className="h-5 w-5 text-gray-600" />
-                    <span className="font-medium">Building Age</span>
-                    <span className="ml-auto text-gray-600">5-10 Years</span>
-                  </div>
-                </div>
-
-                {/* Contact Button */}
-                <Button 
-                  className="w-full mb-4 bg-primary hover:bg-primary/90" 
-                  size="lg"
-                  onClick={() => setShowContactModal(true)}
-                >
-                  Get Owner Details
-                </Button>
-
-                {/* Additional Actions */}
-                <div className="flex gap-2">
-                  <Button variant="outline" size="sm" className="flex-1">
-                    <TrendingUp className="h-4 w-4 mr-1" />
-                    Save
-                  </Button>
-                  <Button variant="outline" size="sm" className="flex-1">
-                    Share
-                  </Button>
-                </div>
-
-                {/* Report Issues */}
-                <div className="mt-4 pt-4 border-t text-center">
-                  <p className="text-xs text-gray-500 mb-2">Report what was not correct in this property</p>
-                  <div className="flex gap-2 justify-center">
-                    <Button variant="ghost" size="sm" className="text-xs">Listed by Broker</Button>
-                    <Button variant="ghost" size="sm" className="text-xs">Rented Out</Button>
-                    <Button variant="ghost" size="sm" className="text-xs">Wrong Info</Button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Property Details Sections */}
-        <section className="container mx-auto px-4 py-8">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Left: Detailed Information */}
+            {/* Left: details */}
             <div className="lg:col-span-2 space-y-8">
               {/* Property Details */}
               <article className="space-y-4">
@@ -343,56 +218,25 @@ const PropertyDetails: React.FC = () => {
               </div>
             </div>
 
-            {/* Right: Additional Info */}
+            {/* Right: price and owner */}
             <aside className="space-y-6">
-              <div className="border rounded-lg p-6">
-                <h3 className="text-lg font-semibold mb-4">Property Overview</h3>
-                <div className="space-y-3">
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Property Type</span>
-                    <span className="font-medium capitalize">{property.property_type?.replace('_', ' ')}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Furnishing</span>
-                    <span className="font-medium">Semi Furnished</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Flooring</span>
-                    <span className="font-medium">Vitrified Tiles</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Water Supply</span>
-                    <span className="font-medium">24x7</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Gym</span>
-                    <span className="font-medium">Available</span>
-                  </div>
-                </div>
+              <div className="border rounded-lg p-4">
+                <h3 className="text-lg font-semibold mb-3 flex items-center"><IndianRupee className="h-5 w-5 mr-2 text-brand-red" /> Price</h3>
+                <div className="text-2xl font-bold text-brand-red">₹{property.expected_price.toLocaleString()}</div>
               </div>
 
-              <div className="border rounded-lg p-6">
-                <h3 className="text-lg font-semibold mb-4">Locality Info</h3>
-                <div className="space-y-3">
-                  <div className="flex items-center gap-2">
-                    <Bus className="h-4 w-4 text-gray-600" />
-                    <span className="text-sm">2 Bus stops nearby</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Train className="h-4 w-4 text-gray-600" />
-                    <span className="text-sm">Metro station 1.5 km</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Building2 className="h-4 w-4 text-gray-600" />
-                    <span className="text-sm">3 Schools nearby</span>
-                  </div>
-                </div>
+              <div className="border rounded-lg p-4 space-y-3">
+                <h3 className="text-lg font-semibold flex items-center"><User className="h-5 w-5 mr-2 text-brand-red" /> Contact</h3>
+                <p className="text-gray-600 text-sm">
+                  Interested in this property? Contact the owner through our secure platform.
+                </p>
+                <Button className="w-full" onClick={() => setShowContactModal(true)}>
+                  Contact Owner
+                </Button>
               </div>
 
               <div className="flex gap-2">
-                <Button variant="outline" className="flex-1" onClick={() => navigate(-1)}>
-                  Back to Search
-                </Button>
+                <Button variant="outline" className="flex-1" onClick={() => navigate(-1)}>Back</Button>
               </div>
             </aside>
           </div>

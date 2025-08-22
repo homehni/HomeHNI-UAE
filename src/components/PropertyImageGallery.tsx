@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Images, MapPin } from 'lucide-react';
+import { Images } from 'lucide-react';
 import { PropertyImageModal } from './PropertyImageModal';
 
 interface PropertyImageGalleryProps {
@@ -32,14 +32,11 @@ export const PropertyImageGallery: React.FC<PropertyImageGalleryProps> = ({
       {/* Toolbar */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex gap-2">
-          <Button variant="outline" size="sm" className="inline-flex items-center bg-white/10 border-white/20 text-white hover:bg-white/20">
+          <Button variant="outline" size="sm" className="inline-flex items-center">
             <Images className="h-4 w-4 mr-1" /> Photos
           </Button>
-          <Button variant="outline" size="sm" className="inline-flex items-center bg-white/10 border-white/20 text-white hover:bg-white/20">
-            <MapPin className="h-4 w-4 mr-1" /> Location
-          </Button>
         </div>
-        <div className="text-sm text-gray-300">{images.length} photos</div>
+        <div className="text-sm text-gray-600">{images.length} photos</div>
       </div>
 
       {/* Gallery Grid */}
