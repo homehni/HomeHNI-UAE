@@ -72,6 +72,42 @@ const Footer = ({
     title: "Bank Auction Properties for Sale in Pune",
     links: []
   }];
+  const handleLinkClick = (linkText: string) => {
+    // Extract location and property type information from the link text
+    const searchParams = new URLSearchParams();
+    
+    // Determine search type based on link content
+    if (linkText.toLowerCase().includes('rent')) {
+      searchParams.set('type', 'rent');
+    } else if (linkText.toLowerCase().includes('sale') || linkText.toLowerCase().includes('buy')) {
+      searchParams.set('type', 'buy');
+    }
+    
+    // Extract location if mentioned
+    const locationKeywords = ['bangalore', 'mumbai', 'delhi', 'pune', 'chennai', 'hyderabad', 'noida', 'gurgaon'];
+    const foundLocation = locationKeywords.find(keyword => 
+      linkText.toLowerCase().includes(keyword)
+    );
+    
+    if (foundLocation) {
+      searchParams.set('location', foundLocation);
+    }
+    
+    // Extract property type
+    if (linkText.toLowerCase().includes('flat') || linkText.toLowerCase().includes('apartment')) {
+      searchParams.set('propertyType', 'Flat/Apartment');
+    } else if (linkText.toLowerCase().includes('villa')) {
+      searchParams.set('propertyType', 'Villa');
+    } else if (linkText.toLowerCase().includes('plot')) {
+      searchParams.set('propertyType', 'Plots');
+    } else if (linkText.toLowerCase().includes('independent house')) {
+      searchParams.set('propertyType', 'Independent House');
+    }
+    
+    // Navigate to search page with parameters
+    navigate(`/search?${searchParams.toString()}`);
+  };
+  
   const additionalCities = [{
     title: "Flats for Sale in Hyderabad",
     links: ["Flats for Sale in Banjara Hills", "Flats for Sale in Jubilee Hills", "Flats for Sale in Madhapur", "Flats for Sale in Kukatpally Housing Board Colony", "Flats for Sale in Gachibowli", "Flats for Sale in Secrbowl", "Flats for Sale in Kukatpally", "Flats for Sale in Miyapur", "Flats for Sale in Himaya Nagar", "Flats for Sale in Ameerpet", "Flats for Sale in Hyderabad Below 65 Lakhs", "Flats for Sale in Hyderabad Below 50 Lakhs", "Flats for Sale Below 50 Lakhs in Hyderabad", "Flats for Sale Below 70 Lakhs in Hyderabad", "Flats for Sale Below 80 Lakhs in Hyderabad", "Flats for Sale Below 90 Lakhs in Hyderabad", "Properties for Sale in Hyderabad"]
@@ -99,9 +135,9 @@ const Footer = ({
               <h4 className="font-semibold text-gray-900 mb-3 text-sm">{section.title}</h4>
               <ul className="space-y-1">
                 {section.links.map((link, linkIndex) => <li key={linkIndex}>
-                    <a href="#" className="text-xs text-gray-600 hover:text-brand-red transition-colors leading-relaxed">
+                    <button onClick={() => handleLinkClick(link)} className="text-xs text-gray-600 hover:text-brand-red transition-colors leading-relaxed text-left">
                       {link}
-                    </a>
+                    </button>
                   </li>)}
               </ul>
             </div>)}
@@ -113,9 +149,9 @@ const Footer = ({
               <h4 className="font-semibold text-gray-900 mb-3 text-sm">{section.title}</h4>
               <ul className="space-y-1">
                 {section.links.map((link, linkIndex) => <li key={linkIndex}>
-                    <a href="#" className="text-xs text-gray-600 hover:text-brand-red transition-colors leading-relaxed">
+                    <button onClick={() => handleLinkClick(link)} className="text-xs text-gray-600 hover:text-brand-red transition-colors leading-relaxed text-left">
                       {link}
-                    </a>
+                    </button>
                   </li>)}
               </ul>
             </div>)}
@@ -132,17 +168,17 @@ const Footer = ({
             <div>
               <h4 className="font-semibold text-gray-900 mb-4">Buy</h4>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
-                {services.buy.map((service, index) => <a key={index} href="#" className="text-xs text-gray-600 hover:text-brand-red transition-colors">
+                {services.buy.map((service, index) => <button key={index} onClick={() => handleLinkClick(service)} className="text-xs text-gray-600 hover:text-brand-red transition-colors text-left">
                     {service}
-                  </a>)}
+                  </button>)}
               </div>
             </div>
             <div>
               <h4 className="font-semibold text-gray-900 mb-4">Rent</h4>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
-                {services.rent.map((service, index) => <a key={index} href="#" className="text-xs text-gray-600 hover:text-brand-red transition-colors">
+                {services.rent.map((service, index) => <button key={index} onClick={() => handleLinkClick(service)} className="text-xs text-gray-600 hover:text-brand-red transition-colors text-left">
                     {service}
-                  </a>)}
+                  </button>)}
               </div>
             </div>
           </div>
