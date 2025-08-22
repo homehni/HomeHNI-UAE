@@ -479,13 +479,13 @@ const Architects = () => {
                   With expertise in residential, commercial, and sustainable design, we deliver innovative 
                   architectural solutions that blend functionality with aesthetic appeal.
                 </p>
-                <p>
+                <p className="text-justify">
                   Our comprehensive services include conceptual design, detailed architectural drawings, 
                   3D visualization, interior planning, and project management. We work closely with you 
                   throughout the entire process, from initial consultation to final construction, ensuring 
                   your project exceeds expectations while staying within budget and timeline.
                 </p>
-                <p>
+                <p className="text-justify">
                   With a portfolio of 500+ successful projects across India, our architects specialize in 
                   creating spaces that are not only visually stunning but also highly functional and 
                   environmentally conscious. Trust us to transform your architectural dreams into reality.
