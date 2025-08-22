@@ -2,6 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
 import { getCurrentUserProfile, type UserProfile } from '@/services/profileService';
+import { AuditService } from '@/services/auditService';
 
 interface AuthContextType {
   user: User | null;
@@ -47,7 +48,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setUser(session?.user ?? null);
         setLoading(false);
         
-        // Load profile after setting user (use setTimeout to avoid potential conflicts)
+        // Defer any Supabase calls/logging to avoid deadlocks
+        setTimeout(() => {
+          if (event === 'SIGNED_IN') {
+            AuditService.logAuthEvent('User Login Success', session?.user?.email ?? undefined, true);
+          }
+          if (event === 'SIGNED_OUT') {
+            AuditService.logAuthEvent('User Logout', undefined, true);
+          }
+        }, 0);
+        
+        // Load profile after setting user (deferred)
         if (session?.user) {
           setTimeout(() => {
             loadUserProfile(session.user);
@@ -104,8 +115,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     
     if (error) {
       console.error('Error signing in with password:', error);
+      try {
+        await AuditService.logAuthEvent('User Login Failed', email, false, error.message);
+      } catch (e) {
+        console.warn('Failed to log login failure');
+      }
       throw error;
     }
+    // Success will be logged by onAuthStateChange (SIGNED_IN)
   };
 
   const signUpWithPassword = async (email: string, password: string, fullName?: string) => {
