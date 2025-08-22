@@ -161,8 +161,10 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
       {/* Form Content with Sidebar Layout */}
       <div className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden animate-scale-in">
         <div className="flex">
-          {/* Sidebar - Hidden on mobile, visible on desktop */}
-          <RentalSidebar currentStep={currentStep} />
+          {/* Sidebar - Hidden on mobile and tablet, visible on desktop */}
+          <div className="hidden lg:block">
+            <RentalSidebar currentStep={currentStep} />
+          </div>
           
           {/* Main Content */}
           <div className="flex-1">
