@@ -225,6 +225,10 @@ export const AdminWebsiteCMS: React.FC = () => {
   // Live homepage friendly form state
   const [liveContentForm, setLiveContentForm] = useState<any>({});
 
+  // Section Management states
+  const [selectedSections, setSelectedSections] = useState<string[]>([]);
+  const [showSectionPageCreator, setShowSectionPageCreator] = useState(false);
+
   // Predefined templates for visual CMS
   const sectionTemplates = {
     'hero-search': [
@@ -737,6 +741,101 @@ export const AdminWebsiteCMS: React.FC = () => {
     }
   };
 
+  // Handle creating page with selected sections
+  const handleCreatePageWithSections = async () => {
+    try {
+      if (!pageForm.title) {
+        toast({ title: "Error", description: "Please provide a page title", variant: "destructive" });
+        return;
+      }
+
+      // Create the page first
+      const baseSlug = (pageForm.slug || generateSlug(pageForm.title)).trim();
+      const uniqueSlug = await ensureUniqueSlug(baseSlug);
+
+      const pageData = {
+        title: pageForm.title.trim(),
+        slug: uniqueSlug,
+        content: {},
+        meta_title: pageForm.meta_title?.trim() || null,
+        meta_description: pageForm.meta_description?.trim() || null,
+        meta_keywords: pageForm.meta_keywords?.split(',').map((k: string) => k.trim()).filter(Boolean) || null,
+        page_type: pageForm.page_type,
+        is_published: pageForm.is_published
+      };
+
+      const { data: newPage, error: pageError } = await supabase
+        .from('content_pages')
+        .insert([pageData])
+        .select()
+        .single();
+
+      if (pageError) throw pageError;
+
+      // Now create sections for each selected template
+      const sectionsToCreate = selectedSections.map((sectionId, index) => {
+        const template = Object.values(sectionTemplates)
+          .flat()
+          .find((t: any) => t.id === sectionId);
+        
+        if (!template) return null;
+
+        // Determine section type based on template category
+        let sectionType = 'content';
+        Object.entries(sectionTemplates).forEach(([category, templates]: [string, any[]]) => {
+          if (templates.find((t: any) => t.id === sectionId)) {
+            sectionType = category.replace('-', '_');
+          }
+        });
+
+        return {
+          page_id: newPage.id,
+          section_type: sectionType,
+          content: template.content,
+          sort_order: index,
+          is_active: true
+        };
+      }).filter(Boolean);
+
+      if (sectionsToCreate.length > 0) {
+        const { error: sectionsError } = await supabase
+          .from('page_sections')
+          .insert(sectionsToCreate);
+
+        if (sectionsError) throw sectionsError;
+      }
+
+      toast({
+        title: "Success",
+        description: `Page "${pageForm.title}" created with ${sectionsToCreate.length} sections`,
+      });
+
+      // Reset states
+      setShowSectionPageCreator(false);
+      setSelectedSections([]);
+      setPageForm({
+        title: '',
+        slug: '',
+        content: '',
+        meta_title: '',
+        meta_description: '',
+        meta_keywords: '',
+        page_type: 'page',
+        is_published: false
+      });
+
+      // Refresh data
+      fetchData();
+    } catch (error: any) {
+      console.error('Error creating page with sections:', error);
+      toast({
+        title: "Error",
+        description: error.message || "Failed to create page with sections",
+        variant: "destructive"
+      });
+    }
+  };
+
   // Handle section operations
   const handleCreateSection = (pageId: string) => {
     setEditingSection(null);
@@ -1004,6 +1103,7 @@ export const AdminWebsiteCMS: React.FC = () => {
         <TabsList>
           <TabsTrigger value="structure">Website Structure</TabsTrigger>
           <TabsTrigger value="pages">Create/Manage Pages</TabsTrigger>
+          <TabsTrigger value="sections">Section Management</TabsTrigger>
           <TabsTrigger value="versions">Version History</TabsTrigger>
         </TabsList>
 
@@ -1292,6 +1392,144 @@ export const AdminWebsiteCMS: React.FC = () => {
                   </TableBody>
                 </Table>
               )}
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="sections" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <div className="flex flex-row items-center justify-between">
+                <div>
+                  <CardTitle className="flex items-center gap-2">
+                    <Layout className="h-5 w-5" />
+                    Section Management
+                  </CardTitle>
+                  <CardDescription>Select from pre-existing section templates and add them to new pages</CardDescription>
+                </div>
+                <Button 
+                  onClick={() => {
+                    if (selectedSections.length === 0) {
+                      toast({
+                        title: "No sections selected",
+                        description: "Please select at least one section template to create a page",
+                        variant: "destructive"
+                      });
+                      return;
+                    }
+                    setShowSectionPageCreator(true);
+                  }}
+                  disabled={selectedSections.length === 0}
+                  className="bg-blue-600 hover:bg-blue-700 text-white"
+                >
+                  <Plus className="h-4 w-4 mr-2" />
+                  Create Page with Selected Sections ({selectedSections.length})
+                </Button>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {/* Selection Controls */}
+                <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg">
+                  <div className="text-sm font-medium">Quick Actions:</div>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    const allSectionIds = Object.values(sectionTemplates).flat().map((template: any) => template.id);
+                    setSelectedSections(allSectionIds);
+                  }}
+                >
+                  Select All
+                </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setSelectedSections([])}
+                  >
+                    Clear Selection
+                  </Button>
+                </div>
+
+                {/* Section Categories */}
+                <div className="space-y-6">
+                  {Object.entries(sectionTemplates).map(([category, templates]: [string, any[]]) => (
+                    <div key={category} className="space-y-3">
+                      <h3 className="text-lg font-semibold capitalize text-gray-800">
+                        {category.replace('-', ' ')} Sections
+                      </h3>
+                      
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {templates.map((template: any) => {
+                          const isSelected = selectedSections.includes(template.id);
+                          return (
+                            <Card 
+                              key={template.id}
+                              className={`cursor-pointer transition-all hover:shadow-md ${
+                                isSelected ? 'ring-2 ring-blue-500 bg-blue-50' : ''
+                              }`}
+                              onClick={() => {
+                                setSelectedSections(prev => 
+                                  isSelected 
+                                    ? prev.filter(id => id !== template.id)
+                                    : [...prev, template.id]
+                                );
+                              }}
+                            >
+                              <CardHeader className="pb-3">
+                                <div className="flex items-start justify-between">
+                                  <CardTitle className="text-sm font-medium text-blue-600">
+                                    {template.name}
+                                  </CardTitle>
+                                  <div className="flex gap-1">
+                                    {isSelected && (
+                                      <Badge variant="default" className="text-xs">
+                                        Selected
+                                      </Badge>
+                                    )}
+                                  </div>
+                                </div>
+                                <CardDescription className="text-xs">
+                                  {template.preview}
+                                </CardDescription>
+                              </CardHeader>
+                              <CardContent className="pt-0">
+                                <div className="text-xs text-gray-600 bg-gray-100 p-2 rounded">
+                                  <div className="font-medium mb-1">Content Preview:</div>
+                                  <div className="truncate">
+                                    {template.content?.title || template.content?.heading || 'Dynamic content section'}
+                                  </div>
+                                </div>
+                              </CardContent>
+                            </Card>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Selected sections summary */}
+                {selectedSections.length > 0 && (
+                  <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                    <div className="text-sm font-medium text-blue-800 mb-2">
+                      Selected Sections ({selectedSections.length}):
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      {selectedSections.map(sectionId => {
+                        const template = Object.values(sectionTemplates)
+                          .flat()
+                          .find((t: any) => t.id === sectionId);
+                        return template ? (
+                          <Badge key={sectionId} variant="secondary" className="text-xs">
+                            {template.name}
+                          </Badge>
+                        ) : null;
+                      })}
+                    </div>
+                  </div>
+                )}
+              </div>
             </CardContent>
           </Card>
         </TabsContent>
@@ -1823,6 +2061,103 @@ export const AdminWebsiteCMS: React.FC = () => {
             >
               <Globe className="h-4 w-4 mr-2" />
               Yes, Publish Now
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Section Page Creator Dialog */}
+      <Dialog open={showSectionPageCreator} onOpenChange={setShowSectionPageCreator}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Layout className="h-5 w-5" />
+              Create Page with Selected Sections
+            </DialogTitle>
+            <DialogDescription>
+              Create a new page using the {selectedSections.length} selected section templates
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-4 py-4">
+            <div>
+              <Label htmlFor="pageTitle">Page Title</Label>
+              <Input
+                id="pageTitle"
+                value={pageForm.title}
+                onChange={(e) => setPageForm(prev => ({ ...prev, title: e.target.value }))}
+                placeholder="Enter page title"
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="pageSlug">Page Slug (URL)</Label>
+              <Input
+                id="pageSlug"
+                value={pageForm.slug}
+                onChange={(e) => setPageForm(prev => ({ ...prev, slug: e.target.value }))}
+                placeholder="auto-generated from title"
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="pageMetaTitle">Meta Title (SEO)</Label>
+              <Input
+                id="pageMetaTitle"
+                value={pageForm.meta_title}
+                onChange={(e) => setPageForm(prev => ({ ...prev, meta_title: e.target.value }))}
+                placeholder="SEO title for search engines"
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="pageMetaDescription">Meta Description</Label>
+              <Textarea
+                id="pageMetaDescription"
+                value={pageForm.meta_description}
+                onChange={(e) => setPageForm(prev => ({ ...prev, meta_description: e.target.value }))}
+                placeholder="Brief description for search engines (max 160 characters)"
+              />
+            </div>
+
+            <div className="flex items-center space-x-2">
+              <Switch
+                id="publish"
+                checked={pageForm.is_published}
+                onCheckedChange={(checked) => setPageForm(prev => ({ ...prev, is_published: checked }))}
+              />
+              <Label htmlFor="publish">Publish immediately</Label>
+            </div>
+
+            {/* Preview selected sections */}
+            <div className="bg-gray-50 border rounded-lg p-4">
+              <Label className="text-sm font-medium">Selected Sections Preview:</Label>
+              <div className="mt-2 space-y-2">
+                {selectedSections.map(sectionId => {
+                  const template = Object.values(sectionTemplates)
+                    .flat()
+                    .find((t: any) => t.id === sectionId);
+                  return template ? (
+                    <div key={sectionId} className="flex justify-between items-center bg-white p-2 rounded text-sm">
+                      <span className="font-medium">{template.name}</span>
+                      <Badge variant="outline">{template.id}</Badge>
+                    </div>
+                  ) : null;
+                })}
+              </div>
+            </div>
+          </div>
+
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowSectionPageCreator(false)}>
+              Cancel
+            </Button>
+            <Button 
+              onClick={handleCreatePageWithSections}
+              className="bg-green-600 hover:bg-green-700 text-white"
+            >
+              <Save className="h-4 w-4 mr-2" />
+              Create Page ({selectedSections.length} sections)
             </Button>
           </DialogFooter>
         </DialogContent>
