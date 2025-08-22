@@ -1274,7 +1274,7 @@ export const AdminWebsiteCMS: React.FC = () => {
 
       {/* Create/Edit Page Dialog */}
       <Dialog open={pageDialog} onOpenChange={setPageDialog}>
-        <DialogContent className="max-w-4xl">
+        <DialogContent className="max-w-4xl max-h-[85vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>
               {editingPage ? "Edit Page" : "Create New Page"}
