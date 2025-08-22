@@ -184,6 +184,12 @@ export const AdminWebsiteCMS: React.FC = () => {
   const [editingSection, setEditingSection] = useState<PageSection | null>(null);
   const [editingBlock, setEditingBlock] = useState<ContentBlock | null>(null);
   
+  // Visual CMS states
+  const [showPublishDialog, setShowPublishDialog] = useState(false);
+  const [pendingChanges, setPendingChanges] = useState<any>(null);
+  const [selectedTemplate, setSelectedTemplate] = useState<string>('');
+  const [showTemplateSelector, setShowTemplateSelector] = useState(false);
+  
   // Expansion states
   const [expandedPages, setExpandedPages] = useState<Set<string>>(new Set());
   const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set());
@@ -218,6 +224,231 @@ export const AdminWebsiteCMS: React.FC = () => {
 
   // Live homepage friendly form state
   const [liveContentForm, setLiveContentForm] = useState<any>({});
+
+  // Predefined templates for visual CMS
+  const sectionTemplates = {
+    'hero-search': [
+      {
+        id: 'modern',
+        name: 'Modern Search Hero',
+        preview: 'Clean design with centered search and CTA buttons',
+        content: {
+          title: 'Find Your Perfect Property',
+          subtitle: 'Discover thousands of properties across India with zero brokerage',
+          searchPlaceholder: 'Search by city, locality, or landmark',
+          primaryCTA: 'Search Properties',
+          secondaryCTA: 'Post Your Property Free'
+        }
+      },
+      {
+        id: 'minimal',
+        name: 'Minimal Hero',
+        preview: 'Simple and clean with focus on search',
+        content: {
+          title: 'Property Search Made Simple',
+          subtitle: 'Browse verified properties without any hidden charges',
+          searchPlaceholder: 'Enter location to search',
+          primaryCTA: 'Find Properties',
+          secondaryCTA: 'List Your Property'
+        }
+      }
+    ],
+    'services': [
+      {
+        id: 'grid-4',
+        name: '4 Service Grid',
+        preview: 'Four main services in a grid layout',
+        content: {
+          title: 'Our Services',
+          subtitle: 'Comprehensive real estate solutions',
+          services: [
+            {
+              icon: 'Home',
+              title: 'Buy Property',
+              description: 'Find your dream home from thousands of verified listings'
+            },
+            {
+              icon: 'Building',
+              title: 'Rent Property', 
+              description: 'Discover rental properties that match your budget and preferences'
+            },
+            {
+              icon: 'Upload',
+              title: 'Sell Property',
+              description: 'List your property and connect with genuine buyers'
+            },
+            {
+              icon: 'Users',
+              title: 'Property Management',
+              description: 'Professional property management services'
+            }
+          ]
+        }
+      },
+      {
+        id: 'grid-6',
+        name: '6 Service Grid',
+        preview: 'Six services with additional options',
+        content: {
+          title: 'Complete Real Estate Services',
+          subtitle: 'Everything you need for property transactions',
+          services: [
+            {
+              icon: 'Home',
+              title: 'Buy Property',
+              description: 'Find your dream home'
+            },
+            {
+              icon: 'Building',
+              title: 'Rent Property',
+              description: 'Rental solutions'
+            },
+            {
+              icon: 'Upload',
+              title: 'Sell Property',
+              description: 'List your property'
+            },
+            {
+              icon: 'FileText',
+              title: 'Legal Services',
+              description: 'Property documentation'
+            },
+            {
+              icon: 'Calculator',
+              title: 'Home Loans',
+              description: 'Financing solutions'
+            },
+            {
+              icon: 'Shield',
+              title: 'Property Verification',
+              description: 'Verified listings'
+            }
+          ]
+        }
+      }
+    ],
+    'stats': [
+      {
+        id: 'standard',
+        name: 'Standard Stats',
+        preview: 'Four key statistics with icons',
+        content: {
+          stats: [
+            { icon: 'Home', number: '50,000+', label: 'Properties Listed', color: 'text-brand-red' },
+            { icon: 'Users', number: '1,00,000+', label: 'Happy Customers', color: 'text-brand-maroon' },
+            { icon: 'Building', number: '25+', label: 'Cities Covered', color: 'text-brand-red' },
+            { icon: 'Award', number: '500+', label: 'Awards Won', color: 'text-brand-maroon' }
+          ]
+        }
+      },
+      {
+        id: 'enhanced',
+        name: 'Enhanced Stats',
+        preview: 'Extended statistics with more metrics',
+        content: {
+          stats: [
+            { icon: 'Home', number: '75,000+', label: 'Properties Listed', color: 'text-brand-red' },
+            { icon: 'Users', number: '2,00,000+', label: 'Happy Customers', color: 'text-brand-maroon' },
+            { icon: 'Building', number: '50+', label: 'Cities Covered', color: 'text-brand-red' },
+            { icon: 'Award', number: '1000+', label: 'Successful Deals', color: 'text-brand-maroon' },
+            { icon: 'Shield', number: '100%', label: 'Verified Properties', color: 'text-brand-red' },
+            { icon: 'Clock', number: '24/7', label: 'Customer Support', color: 'text-brand-maroon' }
+          ]
+        }
+      }
+    ],
+    'testimonials': [
+      {
+        id: 'standard',
+        name: 'Standard Testimonials',
+        preview: 'Customer reviews with video section',
+        content: {
+          title: 'Our Customers Love us',
+          testimonials: [
+            {
+              name: "Rajesh Kumar",
+              rating: 5,
+              text: "Home HNI is the best property site. I bought my house through them without paying any brokerage. The service was excellent and the team was very helpful."
+            },
+            {
+              name: "Priya Sharma",
+              rating: 5,
+              text: "I sold my apartment within a month through Home HNI. The platform made it very easy to list my property and connect with genuine buyers."
+            },
+            {
+              name: "Amit Patel",
+              rating: 5,
+              text: "Great experience with Home HNI. The legal assistance they provided was very helpful. I would recommend this platform to everyone."
+            }
+          ]
+        }
+      },
+      {
+        id: 'detailed',
+        name: 'Detailed Testimonials',
+        preview: 'Extended customer stories with more details',
+        content: {
+          title: 'Success Stories from Our Customers',
+          testimonials: [
+            {
+              name: "Rajesh Kumar",
+              location: "Mumbai",
+              rating: 5,
+              text: "Found my dream home in just 2 weeks! The zero brokerage policy saved me ₹2 lakhs. Highly recommended!"
+            },
+            {
+              name: "Priya Sharma",
+              location: "Delhi",
+              rating: 5,
+              text: "Sold my property within a month. The legal documentation support was excellent."
+            },
+            {
+              name: "Amit Patel",
+              location: "Bangalore",
+              rating: 5,
+              text: "Best property portal in India. Genuine buyers and sellers, verified properties."
+            },
+            {
+              name: "Sunita Reddy",
+              location: "Hyderabad",
+              rating: 5,
+              text: "The customer support team guided me through the entire process. Very professional!"
+            }
+          ]
+        }
+      }
+    ],
+    'mobile-app': [
+      {
+        id: 'standard',
+        name: 'Standard App Promotion',
+        preview: 'Mobile app download with store buttons',
+        content: {
+          title: 'Find A New Home On The Go',
+          description: 'Download our app and discover properties anytime, anywhere. Get instant notifications for new listings that match your preferences.',
+          appImage: '/lovable-uploads/homeAppPromotion.png'
+        }
+      },
+      {
+        id: 'feature-rich',
+        name: 'Feature Rich Promotion',
+        preview: 'Detailed app features and benefits',
+        content: {
+          title: 'Your Property Search Companion',
+          description: 'Experience the future of property search with our mobile app. Get real-time notifications, save favorites, and connect with property owners instantly.',
+          features: [
+            'Real-time property notifications',
+            'Save and organize favorites',
+            'Direct contact with owners',
+            'Virtual property tours',
+            'Mortgage calculator',
+            'Location-based search'
+          ],
+          appImage: '/lovable-uploads/homeAppPromotion.png'
+        }
+      }
+    ]
+  };
 
   // Drag and drop sensors
   const sensors = useSensors(
@@ -482,44 +713,34 @@ export const AdminWebsiteCMS: React.FC = () => {
       } catch {
         setLiveContentForm({});
       }
+      setShowTemplateSelector(true);
     } else {
       setLiveContentForm({});
+      setShowTemplateSelector(false);
     }
     setSectionDialog(true);
   };
 
   const handleSaveSection = async () => {
+    // Show publish dialog for live homepage sections
+    if (editingSection && editingSection.page_id === 'live-homepage') {
+      setPendingChanges(liveContentForm);
+      setShowPublishDialog(true);
+      return;
+    }
+
+    // Regular section save logic for non-live sections
     try {
       let contentData;
-      if (editingSection && editingSection.page_id === 'live-homepage') {
-        // Use friendly form content for live homepage sections
-        contentData = liveContentForm || {};
-      } else {
-        try {
-          contentData = typeof sectionForm.content === 'string' 
-            ? JSON.parse(sectionForm.content) 
-            : sectionForm.content;
-        } catch {
-          contentData = { text: sectionForm.content };
-        }
+      try {
+        contentData = typeof sectionForm.content === 'string' 
+          ? JSON.parse(sectionForm.content) 
+          : sectionForm.content;
+      } catch {
+        contentData = { text: sectionForm.content };
       }
 
-      if (editingSection && editingSection.page_id === 'live-homepage') {
-        // Update live homepage component in content_elements
-        await saveVersion(editingSection.id, 'element', editingSection, 'Live component updated');
-        
-        const { error } = await supabase
-          .from('content_elements')
-          .update({
-            content: contentData,
-            is_active: sectionForm.is_active,
-            sort_order: sectionForm.sort_order
-          })
-          .eq('id', editingSection.id);
-
-        if (error) throw error;
-        toast({ title: "Success", description: "Live homepage section updated successfully" });
-      } else if (selectedPage && selectedPage.id !== 'live-homepage') {
+      if (selectedPage && selectedPage.id !== 'live-homepage') {
         // Regular page section handling
         const sectionData = {
           page_id: selectedPage.id,
@@ -555,6 +776,43 @@ export const AdminWebsiteCMS: React.FC = () => {
       toast({
         title: "Error",
         description: error.message || "Failed to save section",
+        variant: "destructive"
+      });
+    }
+  };
+
+  // Handle publishing live changes
+  const handlePublishLiveChanges = async () => {
+    try {
+      if (editingSection && pendingChanges) {
+        await saveVersion(editingSection.id, 'element', editingSection, 'Live component updated');
+        
+        const { error } = await supabase
+          .from('content_elements')
+          .update({
+            content: pendingChanges,
+            is_active: sectionForm.is_active,
+            sort_order: sectionForm.sort_order
+          })
+          .eq('id', editingSection.id);
+
+        if (error) throw error;
+        
+        toast({ 
+          title: "✅ Published Live!", 
+          description: "Your changes are now visible on the website instantly",
+          duration: 5000
+        });
+        
+        setShowPublishDialog(false);
+        setSectionDialog(false);
+        setPendingChanges(null);
+      }
+    } catch (error: any) {
+      console.error('Error publishing live changes:', error);
+      toast({
+        title: "Error",
+        description: error.message || "Failed to publish changes",
         variant: "destructive"
       });
     }
@@ -1430,9 +1688,67 @@ export const AdminWebsiteCMS: React.FC = () => {
             <Button variant="outline" onClick={() => setSectionDialog(false)}>
               Cancel
             </Button>
-            <Button onClick={handleSaveSection}>
-              <Save className="h-4 w-4 mr-2" />
-              Save Section
+            {editingSection?.page_id === 'live-homepage' ? (
+              <Button onClick={handleSaveSection} className="bg-green-600 hover:bg-green-700">
+                <Globe className="h-4 w-4 mr-2" />
+                Publish Live Changes
+              </Button>
+            ) : (
+              <Button onClick={handleSaveSection}>
+                <Save className="h-4 w-4 mr-2" />
+                Save Section
+              </Button>
+            )}
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Publish Live Changes Confirmation Dialog */}
+      <Dialog open={showPublishDialog} onOpenChange={setShowPublishDialog}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Globe className="h-5 w-5 text-green-600" />
+              Publish Live Changes?
+            </DialogTitle>
+            <DialogDescription>
+              This will instantly update your live website. Visitors will see the changes immediately.
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-4 py-4">
+            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+              <div className="flex items-start gap-3">
+                <div className="text-yellow-600">⚠️</div>
+                <div className="text-sm">
+                  <p className="font-medium text-yellow-800 mb-1">Live Website Update</p>
+                  <p className="text-yellow-700">
+                    These changes will be visible to all website visitors immediately. Make sure the content is ready for publication.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {pendingChanges && (
+              <div className="bg-gray-50 border rounded-lg p-4">
+                <Label className="text-sm font-medium text-gray-700">Preview of Changes:</Label>
+                <div className="mt-2 text-sm bg-white p-3 rounded border font-mono text-gray-600 max-h-32 overflow-y-auto">
+                  {JSON.stringify(pendingChanges, null, 2)}
+                </div>
+              </div>
+            )}
+          </div>
+
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowPublishDialog(false)}>
+              Cancel
+            </Button>
+            <Button 
+              onClick={handlePublishLiveChanges}
+              className="bg-green-600 hover:bg-green-700 text-white"
+            >
+              <Globe className="h-4 w-4 mr-2" />
+              Yes, Publish Now
             </Button>
           </DialogFooter>
         </DialogContent>
