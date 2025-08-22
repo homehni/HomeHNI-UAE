@@ -23,7 +23,7 @@ const PropertyInformationStep = ({ data, onChange }: PropertyInformationStepProp
     'Farm House',
     'Villa',
     'Plots',
-    'Independent House'
+    'Independent House',
     'Agricultural Lands'
   ];
 
