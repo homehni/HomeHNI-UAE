@@ -4,6 +4,7 @@ import { Helmet } from 'react-helmet';
 import { supabase } from '@/integrations/supabase/client';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import Marquee from '@/components/Marquee';
 import { Loader2 } from 'lucide-react';
 
 interface ContentPage {
@@ -57,15 +58,31 @@ const DynamicPage: React.FC = () => {
     };
 
     fetchPage();
+
+    // Smooth scroll to top when component mounts
+    const scrollToTop = () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    };
+    
+    // Small delay to ensure page is fully loaded
+    setTimeout(scrollToTop, 100);
   }, [slug]);
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <div className="text-center space-y-4">
-          <Loader2 className="h-8 w-8 animate-spin mx-auto text-primary" />
-          <p className="text-sm text-muted-foreground">Loading page...</p>
+      <div className="min-h-screen bg-white">
+        <Marquee />
+        <Header />
+        <div className="pt-32 flex items-center justify-center">
+          <div className="text-center space-y-4">
+            <Loader2 className="h-8 w-8 animate-spin mx-auto text-primary" />
+            <p className="text-sm text-muted-foreground">Loading page...</p>
+          </div>
         </div>
+        <Footer />
       </div>
     );
   }
@@ -102,38 +119,60 @@ const DynamicPage: React.FC = () => {
         <link rel="canonical" href={`${window.location.origin}/${page.slug}`} />
       </Helmet>
 
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen bg-white">
+        {/* Marquee at the very top */}
+        <Marquee />
+        
+        {/* Header overlapping with content */}
         <Header />
         
-        <main className="container mx-auto px-4 py-8">
-          <article className="max-w-4xl mx-auto">
-            <header className="mb-8">
-              <h1 className="text-4xl font-bold text-foreground mb-4">
-                {page.title}
-              </h1>
-              {page.page_type && (
-                <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
-                  <span className="bg-primary/10 text-primary px-2 py-1 rounded-md capitalize">
-                    {page.page_type}
-                  </span>
-                  <span>•</span>
-                  <time dateTime={page.updated_at}>
-                    Updated {new Date(page.updated_at).toLocaleDateString()}
-                  </time>
-                </div>
-              )}
-            </header>
+        {/* Main Content */}
+        <div className="pt-8">
+          <div className="container mx-auto px-4 py-16">
+            <div className="max-w-4xl mx-auto">
+              <article className="space-y-8">
+                {/* Page Header */}
+                <header className="text-center space-y-4">
+                  <h1 className="text-4xl md:text-5xl font-bold text-gray-900 leading-tight">
+                    {page.title}
+                  </h1>
+                  
+                  {(page.page_type || page.updated_at) && (
+                    <div className="flex items-center justify-center gap-4 text-sm text-gray-600">
+                      {page.page_type && (
+                        <span className="bg-primary/10 text-primary px-3 py-1 rounded-full capitalize font-medium">
+                          {page.page_type}
+                        </span>
+                      )}
+                      {page.updated_at && (
+                        <>
+                          <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
+                          <time dateTime={page.updated_at} className="text-gray-500">
+                            Updated {new Date(page.updated_at).toLocaleDateString()}
+                          </time>
+                        </>
+                      )}
+                    </div>
+                  )}
+                </header>
 
-            <div className="prose prose-lg max-w-none">
-              <div 
-                className="content-area"
-                dangerouslySetInnerHTML={{ 
-                  __html: formatContent(page.content) 
-                }}
-              />
+                {/* Page Content */}
+                <div className="prose prose-lg prose-gray max-w-none">
+                  <div 
+                    className="content-area space-y-6 text-gray-700 leading-relaxed"
+                    style={{
+                      lineHeight: '1.8',
+                      fontSize: '16px'
+                    }}
+                    dangerouslySetInnerHTML={{ 
+                      __html: formatContent(page.content) 
+                    }}
+                  />
+                </div>
+              </article>
             </div>
-          </article>
-        </main>
+          </div>
+        </div>
 
         <Footer />
       </div>
