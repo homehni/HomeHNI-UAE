@@ -52,6 +52,32 @@ const Admin = () => {
 
   useEffect(() => {
     fetchProperties();
+
+    // Realtime subscription for dashboard overview
+    const channel = supabase
+      .channel('properties-changes-dashboard')
+      .on(
+        'postgres_changes',
+        { event: 'INSERT', schema: 'public', table: 'properties' },
+        (payload) => {
+          const p = payload.new as any;
+          toast({
+            title: 'New Property Submitted',
+            description: `${p?.title || 'New listing'} submitted and awaiting review`,
+          });
+          fetchProperties();
+        }
+      )
+      .on(
+        'postgres_changes',
+        { event: 'UPDATE', schema: 'public', table: 'properties' },
+        () => fetchProperties()
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, []);
 
   useEffect(() => {
