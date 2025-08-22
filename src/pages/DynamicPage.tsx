@@ -246,7 +246,7 @@ const DynamicPage: React.FC = () => {
       default:
         // Handle custom content sections
         return (
-          <section key={section.id} className="py-8 bg-white">
+          <section key={section.id} className="py-8 bg-white relative z-10">
             <div className="container mx-auto px-4">
               <div className="max-w-4xl mx-auto">
                 {content.title && (
@@ -255,7 +255,11 @@ const DynamicPage: React.FC = () => {
                   </h2>
                 )}
                 <div 
-                  className="prose prose-lg prose-gray max-w-none"
+                  className="prose prose-gray max-w-none [&>*]:!text-inherit [&>h1]:!text-inherit [&>h2]:!text-inherit [&>h3]:!text-inherit [&>h4]:!text-inherit [&>h5]:!text-inherit [&>h6]:!text-inherit [&>p]:!text-inherit"
+                  style={{ 
+                    fontSize: 'inherit',
+                    lineHeight: 'inherit'
+                  }}
                   dangerouslySetInnerHTML={{ 
                     __html: formatContent(content.html || content.content || content) 
                   }}
