@@ -89,6 +89,47 @@ export type Database = {
         }
         Relationships: []
       }
+      content_blocks: {
+        Row: {
+          block_type: string
+          content: Json
+          created_at: string | null
+          id: string
+          is_active: boolean | null
+          section_id: string | null
+          sort_order: number
+          updated_at: string | null
+        }
+        Insert: {
+          block_type: string
+          content?: Json
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          section_id?: string | null
+          sort_order?: number
+          updated_at?: string | null
+        }
+        Update: {
+          block_type?: string
+          content?: Json
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          section_id?: string | null
+          sort_order?: number
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "content_blocks_section_id_fkey"
+            columns: ["section_id"]
+            isOneToOne: false
+            referencedRelation: "page_sections"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       content_elements: {
         Row: {
           content: Json
@@ -179,6 +220,39 @@ export type Database = {
           slug?: string
           title?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      content_versions: {
+        Row: {
+          content_data: Json
+          content_id: string
+          content_type: string
+          created_at: string | null
+          created_by: string | null
+          description: string | null
+          id: string
+          version_number: number
+        }
+        Insert: {
+          content_data: Json
+          content_id: string
+          content_type: string
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          version_number?: number
+        }
+        Update: {
+          content_data?: Json
+          content_id?: string
+          content_type?: string
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          version_number?: number
         }
         Relationships: []
       }

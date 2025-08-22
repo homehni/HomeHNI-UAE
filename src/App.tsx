@@ -59,6 +59,7 @@ import { AdminSEO } from "./pages/AdminSEO";
 import { AdminAudit } from "./pages/AdminAudit";
 import { AdminFeaturedProperties } from "./pages/AdminFeaturedProperties";
 import { AdminPageManagement } from "./pages/AdminPageManagement";
+import { AdminWebsiteCMS } from "./pages/AdminWebsiteCMS";
 import NotFound from "./pages/NotFound";
 import ScrollToTop from "./components/ScrollToTop";
 
@@ -171,6 +172,7 @@ const App: React.FC = () => {
               <Route path="featured-properties" element={<AdminFeaturedProperties />} />
               <Route path="pages" element={<AdminPageManagement />} />
               <Route path="content" element={<AdminContent />} />
+              <Route path="website-cms" element={<AdminWebsiteCMS />} />
               <Route path="regions" element={<AdminRegions />} />
               <Route path="security" element={<AdminAudit />} />
               <Route path="settings" element={<AdminSettings />} />

@@ -79,6 +79,12 @@ const navigationItems = [
     group: 'Website',
   },
   {
+    title: 'Website CMS',
+    url: '/admin/website-cms',
+    icon: Menu,
+    group: 'Website',
+  },
+  {
     title: 'Regions & Localization',
     url: '/admin/regions',
     icon: MapPin,
