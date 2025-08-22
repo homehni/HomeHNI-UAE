@@ -211,6 +211,7 @@ const Architects = () => {
                     <SelectItem value="interior">Interior Design</SelectItem>
                     <SelectItem value="3d-visualization">3D Visualization</SelectItem>
                     <SelectItem value="project-management">Project Management</SelectItem>
+                    <SelectItem value="other">Others</SelectItem>
                   </SelectContent>
                 </Select>
                 <Input id="arch-location" name="location" placeholder="Project Location" className="flex-1" />
