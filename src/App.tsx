@@ -4,7 +4,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from '@/contexts/AuthContext';
 import Index from "./pages/Index";
 import AboutUs from "./pages/AboutUs";
@@ -168,6 +168,7 @@ const App: React.FC = () => {
               <Route path="analytics" element={<AdminAnalytics />} />
               <Route path="listings" element={<AdminProperties />} />
               <Route path="leads" element={<AdminLeads />} />
+              <Route path="featured-properties" element={<Navigate to="/admin/listings" replace />} />
               <Route path="website-cms" element={<AdminWebsiteCMS />} />
               <Route path="regions" element={<AdminRegions />} />
               <Route path="security" element={<AdminAudit />} />
