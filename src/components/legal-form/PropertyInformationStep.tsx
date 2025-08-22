@@ -17,17 +17,23 @@ interface PropertyInformationStepProps {
 
 const PropertyInformationStep = ({ data, onChange }: PropertyInformationStepProps) => {
   const propertyTypes = [
+    'All Residentail',
     'Flat/Apartment',
-    'Independent House',
-    'Land/Plot',
-    'Commercial Space'
+    'Independent Building/ Floor',
+    'Farm House',
+    'Villa',
+    'Plots',
+    'Independent House'
+    'Agricultural Lands'
   ];
 
   const ownershipStatuses = [
     'Owner',
     'Buyer',
     'Tenant',
-    'Legal Heir'
+    'Corporate Ownership',
+    'Freehold Ownership',
+    'Leasehold Ownership'
   ];
 
   return (
