@@ -533,6 +533,167 @@ export const AdminWebsiteCMS: React.FC = () => {
     return uniqueSlug;
   };
 
+  // Handlers: edit, preview, delete, and save updates for pages
+  const loadPageForEditing = async (page: ContentPage) => {
+    try {
+      if (page.page_type === 'live') {
+        toast({
+          title: 'Not supported',
+          description: 'Editing the live homepage is managed elsewhere.',
+          variant: 'destructive',
+        });
+        return;
+      }
+      setEditingPage(page);
+      setPageForm({
+        title: page.title || '',
+        slug: page.slug || '',
+        content: page.content || '',
+        meta_title: page.meta_title || '',
+        meta_description: page.meta_description || '',
+        meta_keywords: Array.isArray(page.meta_keywords) ? page.meta_keywords.join(', ') : (page.meta_keywords as any) || '',
+        page_type: page.page_type || 'page',
+        is_published: page.is_published ?? false,
+      });
+
+      const { data: sectionsData, error } = await supabase
+        .from('page_sections')
+        .select('*')
+        .eq('page_id', page.id)
+        .order('sort_order');
+
+      if (error) throw error;
+
+      setPageSections(
+        (sectionsData || []).map((s: any) => ({
+          id: s.id,
+          section_type: s.section_type,
+          content: s.content || {},
+          sort_order: typeof s.sort_order === 'number' ? s.sort_order : 0,
+          is_custom: true,
+        }))
+      );
+
+      setShowUnifiedCreator(true);
+    } catch (err) {
+      console.error('Error loading page for editing:', err);
+      toast({ title: 'Error', description: 'Failed to load page for editing', variant: 'destructive' });
+    }
+  };
+
+  const updatePageWithSections = async () => {
+    if (!editingPage) return;
+    try {
+      const { error: pageError } = await supabase
+        .from('content_pages')
+        .update({
+          title: pageForm.title,
+          slug: pageForm.slug || (await ensureUniqueSlug(generateSlug(pageForm.title))),
+          content: pageForm.content,
+          meta_title: pageForm.meta_title,
+          meta_description: pageForm.meta_description,
+          meta_keywords: pageForm.meta_keywords ? pageForm.meta_keywords.split(',').map((k: string) => k.trim()) : [],
+          page_type: pageForm.page_type,
+          is_published: pageForm.is_published,
+          updated_at: new Date().toISOString(),
+        })
+        .eq('id', editingPage.id);
+
+      if (pageError) throw pageError;
+
+      const { data: existing, error: existingErr } = await supabase
+        .from('page_sections')
+        .select('id')
+        .eq('page_id', editingPage.id);
+      if (existingErr) throw existingErr;
+
+      const existingIds = new Set((existing || []).map((s: any) => s.id));
+      const currentIds = new Set(pageSections.filter(s => !String(s.id).startsWith('temp-')).map(s => s.id));
+
+      const toDelete = [...existingIds].filter(id => !currentIds.has(id));
+      if (toDelete.length) {
+        const { error: delErr } = await supabase.from('page_sections').delete().in('id', toDelete);
+        if (delErr) throw delErr;
+      }
+
+      const newSections = pageSections.filter(s => String(s.id).startsWith('temp-')).map(s => ({
+        page_id: editingPage.id,
+        section_type: s.section_type,
+        content: s.content,
+        sort_order: s.sort_order,
+        is_active: true,
+      }));
+      if (newSections.length) {
+        const { error: insertErr } = await supabase.from('page_sections').insert(newSections);
+        if (insertErr) throw insertErr;
+      }
+
+      const updates = pageSections
+        .filter(s => !String(s.id).startsWith('temp-'))
+        .map(s =>
+          supabase
+            .from('page_sections')
+            .update({
+              section_type: s.section_type,
+              content: s.content,
+              sort_order: s.sort_order,
+              is_active: true,
+            })
+            .eq('id', s.id)
+        );
+      if (updates.length) {
+        const results = await Promise.all(updates);
+        const anyErr = results.find((r: any) => r && r.error);
+        if (anyErr && anyErr.error) throw anyErr.error;
+      }
+
+      toast({ title: 'Saved', description: 'Page updated successfully' });
+      setShowUnifiedCreator(false);
+      setEditingPage(null);
+      setPageSections([]);
+      await fetchData();
+    } catch (err) {
+      console.error('Error updating page:', err);
+      toast({ title: 'Error', description: 'Failed to save changes', variant: 'destructive' });
+    }
+  };
+
+  const handlePreviewPage = (page: ContentPage) => {
+    const url = page.page_type === 'live' ? '/' : `/${page.slug || ''}`;
+    window.open(url, '_blank', 'noopener');
+  };
+
+  const handleDeletePage = async (page: ContentPage) => {
+    if (page.page_type === 'live') return;
+    const ok = window.confirm(`Delete page "${page.title}"? This cannot be undone.`);
+    if (!ok) return;
+    try {
+      const { data: secIds, error: secErr } = await supabase
+        .from('page_sections')
+        .select('id')
+        .eq('page_id', page.id);
+      if (secErr) throw secErr;
+      if (secIds && secIds.length) {
+        const { error: delSecErr } = await supabase
+          .from('page_sections')
+          .delete()
+          .in('id', secIds.map((s: any) => s.id));
+        if (delSecErr) throw delSecErr;
+      }
+      const { error: pageDelErr } = await supabase
+        .from('content_pages')
+        .delete()
+        .eq('id', page.id);
+      if (pageDelErr) throw pageDelErr;
+
+      toast({ title: 'Deleted', description: 'Page deleted successfully' });
+      await fetchData();
+    } catch (e) {
+      console.error('Error deleting page:', e);
+      toast({ title: 'Error', description: 'Failed to delete page', variant: 'destructive' });
+    }
+  };
+
   // Add section template to current page sections
   const addSectionTemplate = (sectionType: string, templateId: string) => {
     const template = sectionTemplates[sectionType]?.find(t => t.id === templateId);
@@ -759,14 +920,14 @@ export const AdminWebsiteCMS: React.FC = () => {
                     </TableCell>
                     <TableCell>
                       <div className="flex space-x-2">
-                        <Button variant="outline" size="sm">
+                        <Button variant="outline" size="sm" onClick={() => loadPageForEditing(page)} disabled={page.page_type === 'live'}>
                           <Edit className="w-4 h-4" />
                         </Button>
-                        <Button variant="outline" size="sm">
+                        <Button variant="outline" size="sm" onClick={() => handlePreviewPage(page)}>
                           <Eye className="w-4 h-4" />
                         </Button>
                         {page.page_type !== 'live' && (
-                          <Button variant="outline" size="sm">
+                          <Button variant="outline" size="sm" onClick={() => handleDeletePage(page)}>
                             <Trash2 className="w-4 h-4" />
                           </Button>
                         )}
@@ -783,9 +944,9 @@ export const AdminWebsiteCMS: React.FC = () => {
         <Dialog open={showUnifiedCreator} onOpenChange={setShowUnifiedCreator}>
           <DialogContent className="max-w-6xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
-              <DialogTitle>Create New Page + Sections</DialogTitle>
+              <DialogTitle>{editingPage ? 'Edit Page + Sections' : 'Create New Page + Sections'}</DialogTitle>
               <DialogDescription>
-                Create a new page and add sections with templates or custom content
+                {editingPage ? 'Update this page and manage its sections' : 'Create a new page and add sections with templates or custom content'}
               </DialogDescription>
             </DialogHeader>
 
@@ -1201,11 +1362,11 @@ export const AdminWebsiteCMS: React.FC = () => {
             </div>
 
             <DialogFooter>
-              <Button variant="outline" onClick={() => setShowUnifiedCreator(false)}>
+              <Button variant="outline" onClick={() => { setShowUnifiedCreator(false); setEditingPage(null); }}>
                 Cancel
               </Button>
-              <Button onClick={createPageWithSections} disabled={!pageForm.title.trim()}>
-                Create Page {pageSections.length > 0 && `+ ${pageSections.length} Sections`}
+              <Button onClick={editingPage ? updatePageWithSections : createPageWithSections} disabled={!pageForm.title.trim()}>
+                {editingPage ? 'Save Changes' : `Create Page${pageSections.length > 0 ? ` + ${pageSections.length} Sections` : ''}`}
               </Button>
             </DialogFooter>
           </DialogContent>
