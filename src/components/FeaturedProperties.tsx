@@ -322,9 +322,11 @@ const FeaturedProperties = ({
     isNew: true
   }];
 
-  // Use real database properties if available, otherwise fall back to default
+  // Use real database properties if available, otherwise merge with defaults to preserve the original 19
   const properties: FeaturedProperty[] = propsProperties ?? (
-    featuredProperties.length > 0 ? featuredProperties : defaultProperties
+    featuredProperties.length > 0
+      ? Array.from(new Map([...defaultProperties, ...featuredProperties].map(p => [p.id, p])).values())
+      : defaultProperties
   );
 
   // Compute available types dynamically so it works if properties change in the future
