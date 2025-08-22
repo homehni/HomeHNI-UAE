@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Eye, CheckCircle, XCircle, Trash2, Search, MoreHorizontal, Star } from 'lucide-react';
+import { Eye, CheckCircle, XCircle, Trash2, Search, MoreHorizontal } from 'lucide-react';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
 import { SecureDataMask } from './SecureDataMask';
@@ -48,7 +48,6 @@ interface PropertyTableProps {
   onApprove: (id: string) => void;
   onReject: (property: Property) => void;
   onDelete: (id: string) => void;
-  onPublish?: (id: string) => void;
   actionLoading: boolean;
 }
 
@@ -62,7 +61,6 @@ export const PropertyTable: React.FC<PropertyTableProps> = ({
   onApprove,
   onReject,
   onDelete,
-  onPublish,
   actionLoading,
 }) => {
   const getStatusBadge = (status: string) => {
@@ -221,19 +219,6 @@ export const PropertyTable: React.FC<PropertyTableProps> = ({
                             <XCircle className="h-4 w-4" />
                           </Button>
                         </>
-                      )}
-
-                      {property.status === 'approved' && onPublish && (
-                        <Button
-                          size="sm"
-                          variant="ghost"
-                          onClick={() => onPublish(property.id)}
-                          disabled={actionLoading}
-                          className="h-8 w-8 p-0 hover:bg-yellow-50 hover:text-yellow-600"
-                          title="Publish to Featured Properties"
-                        >
-                          <Star className="h-4 w-4" />
-                        </Button>
                       )}
                       
                       <DropdownMenu>

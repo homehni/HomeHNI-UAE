@@ -241,59 +241,6 @@ const AdminProperties = () => {
     }
   };
 
-  const handlePublish = async (propertyId: string) => {
-    setActionLoading(true);
-    try {
-      // Check if already featured
-      const { data: existingFeatured, error: checkError } = await supabase
-        .from('featured_properties')
-        .select('id')
-        .eq('property_id', propertyId)
-        .eq('is_active', true)
-        .single();
-
-      if (checkError && checkError.code !== 'PGRST116') { // PGRST116 is "not found"
-        throw checkError;
-      }
-
-      if (existingFeatured) {
-        toast({
-          title: 'Already Featured',
-          description: 'This property is already in the Featured Properties section',
-          variant: 'destructive'
-        });
-        return;
-      }
-
-      // Add to featured properties
-      const { error } = await supabase
-        .from('featured_properties')
-        .insert({
-          property_id: propertyId,
-          is_active: true,
-          sort_order: 0
-        });
-
-      if (error) throw error;
-
-      toast({
-        title: 'Success',
-        description: 'Property published to Featured Properties section'
-      });
-
-      fetchProperties();
-    } catch (error) {
-      console.error('Error publishing property:', error);
-      toast({
-        title: 'Error',
-        description: 'Failed to publish property to Featured Properties',
-        variant: 'destructive'
-      });
-    } finally {
-      setActionLoading(false);
-    }
-  };
-
   const handleRejectWithProperty = (property: Property) => {
     setSelectedProperty(property);
     setReviewModalOpen(true);
@@ -350,7 +297,6 @@ const AdminProperties = () => {
           setPropertyToDelete(id);
           setDeleteModalOpen(true);
         }}
-        onPublish={handlePublish}
         actionLoading={actionLoading}
       />
 
