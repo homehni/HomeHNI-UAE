@@ -614,53 +614,60 @@ const PackersMovers = () => {
       {/* Who We Serve */}
       <section className="py-16 px-4 bg-background">
         <div className="container mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-              Who We Serve
-            </h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
-              Our moving services cater to diverse relocation needs across different customer segments
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-            {targetAudience.map((audience, index) => (
-              <div key={index} className="text-center p-6 bg-card rounded-lg border border-border">
-                <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <audience.icon className="w-8 h-8 text-red-600" />
-                </div>
-                <h3 className="text-lg font-semibold text-foreground mb-2">{audience.title}</h3>
-                <p className="text-muted-foreground">{audience.description}</p>
+          <div className="grid lg:grid-cols-2 gap-16 items-start">
+            <div className="max-w-3xl">
+              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
+                Who We Serve
+              </h2>
+              <div className="grid gap-6">
+                {targetAudience.map((audience, index) => {
+                  const IconComponent = audience.icon;
+                  return (
+                    <div key={index} className="flex gap-4 p-6 bg-card rounded-lg border">
+                      <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <IconComponent className="w-6 h-6 text-red-600" />
+                      </div>
+                      <div>
+                        <h3 className="text-lg font-semibold text-foreground mb-2">{audience.title}</h3>
+                        <p className="text-muted-foreground text-sm">{audience.description}</p>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
-            ))}
+            </div>
+            
+            {/* Right side spacing for sticky form */}
+            <div className="hidden lg:block"></div>
           </div>
         </div>
       </section>
 
       {/* FAQ Section */}
       <section className="py-16 px-4 bg-muted/30">
-        <div className="container mx-auto max-w-3xl">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-              Frequently Asked Questions
-            </h2>
-            <p className="text-muted-foreground">
-              Get answers to common questions about our packing and moving services
-            </p>
+        <div className="container mx-auto">
+          <div className="grid lg:grid-cols-2 gap-16 items-start">
+            <div className="max-w-3xl">
+              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
+                Frequently Asked Questions
+              </h2>
+              <Accordion type="single" collapsible className="space-y-4">
+                {faqs.map((faq, index) => (
+                  <AccordionItem key={index} value={`item-${index}`} className="bg-card border rounded-lg px-6">
+                    <AccordionTrigger className="text-left font-semibold text-sm py-4">
+                      {faq.question}
+                    </AccordionTrigger>
+                    <AccordionContent className="text-muted-foreground text-sm pb-4">
+                      {faq.answer}
+                    </AccordionContent>
+                  </AccordionItem>
+                ))}
+              </Accordion>
+            </div>
+            
+            {/* Right side spacing for sticky form */}
+            <div className="hidden lg:block"></div>
           </div>
-
-          <Accordion type="single" collapsible className="space-y-4">
-            {faqs.map((faq, index) => (
-              <AccordionItem key={index} value={`item-${index}`} className="bg-card border border-border rounded-lg px-6">
-                <AccordionTrigger className="text-left font-semibold text-foreground hover:no-underline">
-                  {faq.question}
-                </AccordionTrigger>
-                <AccordionContent className="text-muted-foreground">
-                  {faq.answer}
-                </AccordionContent>
-              </AccordionItem>
-            ))}
-          </Accordion>
         </div>
       </section>
 
