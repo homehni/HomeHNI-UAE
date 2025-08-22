@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { Home, MapPin, IndianRupee, Calendar, Mail, Phone, User, Images, Paintbrush, Calculator, FileText, ShieldCheck, Bus, Train, Car, TrendingUp } from 'lucide-react';
 import { ContactOwnerModal } from '@/components/ContactOwnerModal';
+import { PropertyImageGallery } from '@/components/PropertyImageGallery';
 interface Property {
   id: string;
   title: string;
@@ -106,21 +107,13 @@ const PropertyDetails: React.FC = () => {
         </section>
 
         <section className="container mx-auto py-8 px-[27px]">
-          {/* Toolbar */}
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex gap-2">
-              <Button variant="outline" size="sm" className="inline-flex items-center"><Images className="h-4 w-4 mr-1" /> Photos</Button>
-              <Button variant="outline" size="sm" className="inline-flex items-center"><MapPin className="h-4 w-4 mr-1" /> Location</Button>
-            </div>
-            <div className="text-sm text-gray-600">{property.images?.length ?? 0} photos</div>
-          </div>
-
-          {/* Gallery */}
-          {property.images && property.images.length > 0 && <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
-              {property.images.slice(0, 6).map((image, i) => <div key={i} className="aspect-video bg-gray-100 rounded-lg overflow-hidden">
-                  <img src={image} alt={`Property image ${i + 1}`} className="w-full h-full object-cover" />
-                </div>)}
-            </div>}
+          {/* Image Gallery */}
+          {property.images && property.images.length > 0 && (
+            <PropertyImageGallery 
+              images={property.images} 
+              propertyTitle={property.title}
+            />
+          )}
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Left: details */}
