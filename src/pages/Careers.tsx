@@ -419,33 +419,33 @@ const Careers = () => {
             {/* Why Work with HomeHNI */}
             <section className="mb-12 section-separator pt-8">
               <div className="flex items-center mb-6">
-                <h2 className="text-2xl font-bold text-gray-900">🔍 Why Work with HomeHNI?</h2>
+                <h2 className="text-2xl font-bold text-gray-900">Why Work with HomeHNI?</h2>
               </div>
               
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="card-border-accent hover-lift p-6 bg-blue-50">
-                  <h3 className="font-semibold text-blue-800 mb-3 text-uniform-center">✅ Innovation-Driven Culture</h3>
+                  <h3 className="font-semibold text-blue-800 mb-3 text-uniform-center">Innovation-Driven Culture</h3>
                   <p className="text-blue-700 text-uniform">
                     We don't just follow trends—we set them. You'll work on cutting-edge real estate tech tools, customer experience automation, and intelligent listing algorithms.
                   </p>
                 </div>
                 
                 <div className="card-border-accent hover-lift p-6 bg-green-50">
-                  <h3 className="font-semibold text-green-800 mb-3 text-uniform-center">✅ Real Impact, Real Growth</h3>
+                  <h3 className="font-semibold text-green-800 mb-3 text-uniform-center">Real Impact, Real Growth</h3>
                   <p className="text-green-700 text-uniform">
                     Your work directly influences how clients make high-value property decisions. From day one, you'll have ownership and autonomy.
                   </p>
                 </div>
                 
                 <div className="card-border-accent hover-lift p-6 bg-purple-50">
-                  <h3 className="font-semibold text-purple-800 mb-3 text-uniform-center">✅ Work with the Best Minds</h3>
+                  <h3 className="font-semibold text-purple-800 mb-3 text-uniform-center">Work with the Best Minds</h3>
                   <p className="text-purple-700 text-uniform">
                     Collaborate with experienced professionals from top startups, proptech companies, and the real estate industry.
                   </p>
                 </div>
                 
                 <div className="card-border-accent hover-lift p-6 bg-yellow-50">
-                  <h3 className="font-semibold text-yellow-800 mb-3 text-uniform-center">✅ Flexible and Hybrid Opportunities</h3>
+                  <h3 className="font-semibold text-yellow-800 mb-3 text-uniform-center">Flexible and Hybrid Opportunities</h3>
                   <p className="text-yellow-700 text-uniform">
                     We believe in productivity over presence. Enjoy flexible working hours, remote options, and a performance-focused environment.
                   </p>
@@ -456,7 +456,7 @@ const Careers = () => {
             {/* Current Openings */}
             <section className="mb-12 section-separator pt-8">
               <div className="flex items-center mb-6">
-                <h2 className="text-2xl font-bold text-gray-900">🌟 Current Openings</h2>
+                <h2 className="text-2xl font-bold text-gray-900">Current Openings</h2>
               </div>
               
               <div className="space-y-8">
@@ -501,7 +501,7 @@ const Careers = () => {
             {/* Life at HomeHNI */}
             <section className="mb-12">
               <div className="flex items-center mb-6">
-                <h2 className="text-2xl font-bold text-gray-900">🚀 Life at HomeHNI</h2>
+                <h2 className="text-2xl font-bold text-gray-900"> Life at HomeHNI</h2>
               </div>
               
               <div className="bg-gray-50 p-6 rounded-lg">
@@ -527,7 +527,7 @@ const Careers = () => {
               
               <div className="bg-blue-50 border-l-4 border-blue-500 p-6 rounded-r-lg mt-6">
                 <p className="text-blue-800 font-medium italic">
-                  💬 "At HomeHNI, you're not just another employee—you're an owner of your work, your ideas, and your journey."<br />
+                  "At HomeHNI, you're not just another employee—you're an owner of your work, your ideas, and your journey."<br />
                   <span className="text-sm">– Team HomeHNI</span>
                 </p>
               </div>
@@ -536,20 +536,20 @@ const Careers = () => {
             {/* Don't See Your Role Listed */}
             <section className="mb-12">
               <div className="flex items-center mb-6">
-                <h2 className="text-2xl font-bold text-gray-900">💼 Don't See Your Role Listed?</h2>
+                <h2 className="text-2xl font-bold text-gray-900">Don't See Your Role Listed?</h2>
               </div>
               <p className="text-gray-700 mb-4 leading-relaxed">
                 We're always looking for passionate thinkers and doers!
               </p>
               <p className="text-gray-700 leading-relaxed">
-                📧 Email us your CV at <strong>careers@homehni.com</strong> with a brief note on why you'd be a great fit.
+                Email us your CV at <strong>careers@homehni.com</strong> with a brief note on why you'd be a great fit.
               </p>
             </section>
 
             {/* Join the HomeHNI Journey */}
             <section className="mb-12">
               <div className="flex items-center mb-6">
-                <h2 className="text-2xl font-bold text-gray-900">✨ Join the HomeHNI Journey</h2>
+                <h2 className="text-2xl font-bold text-gray-900">Join the HomeHNI Journey</h2>
               </div>
               <div className="bg-gradient-to-r from-brand-red to-red-600 text-white p-8 rounded-lg text-center">
                 <p className="text-lg leading-relaxed">
