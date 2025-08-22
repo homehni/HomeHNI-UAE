@@ -98,14 +98,14 @@ const FileUploadStep = ({ data, onChange }: FileUploadStepProps) => {
     const files = data[category] || [];
 
     return (
-      <div className="space-y-4">
-        <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-gray-400 transition-colors">
-          <Upload className="h-8 w-8 text-gray-400 mx-auto mb-3" />
-          <p className="text-sm font-medium text-gray-700 mb-2">
-            Upload {categoryData.label}
+      <div className="space-y-3">
+        <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-gray-400 transition-colors">
+          <Upload className="h-6 w-6 text-gray-400 mx-auto mb-2" />
+          <p className="text-xs font-medium text-gray-700 mb-1">
+            {categoryData.label}
           </p>
-          <p className="text-xs text-gray-500 mb-3">
-            PDF, JPG, PNG, DOC, DOCX (Max 10MB)
+          <p className="text-xs text-gray-500 mb-2">
+            PDF, JPG, PNG, DOC
           </p>
           <input
             type="file"
@@ -119,24 +119,25 @@ const FileUploadStep = ({ data, onChange }: FileUploadStepProps) => {
             type="button"
             variant="outline"
             size="sm"
+            className="text-xs h-7 px-2"
             onClick={() => document.getElementById(`file-upload-${category}`)?.click()}
           >
             Select Files
           </Button>
-          <p className="text-xs text-gray-500 mt-2">
-            {files.length}/{maxFilesPerCategory} files uploaded
+          <p className="text-xs text-gray-500 mt-1">
+            {files.length}/{maxFilesPerCategory} files
           </p>
         </div>
 
         {files.length > 0 && (
-          <div className="space-y-2">
+          <div className="space-y-1">
             {files.map((file, index) => (
-              <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                <div className="flex items-center space-x-3">
-                  <File className="h-4 w-4 text-gray-400" />
-                  <div>
-                    <p className="text-sm font-medium text-gray-700">{file.name}</p>
-                    <p className="text-xs text-gray-500">{formatFileSize(file.size)}</p>
+              <div key={index} className="flex items-center justify-between p-2 bg-gray-50 rounded text-xs">
+                <div className="flex items-center space-x-2 min-w-0 flex-1">
+                  <File className="h-3 w-3 text-gray-400 flex-shrink-0" />
+                  <div className="min-w-0 flex-1">
+                    <p className="font-medium text-gray-700 truncate">{file.name}</p>
+                    <p className="text-gray-500">{formatFileSize(file.size)}</p>
                   </div>
                 </div>
                 <Button
@@ -144,9 +145,9 @@ const FileUploadStep = ({ data, onChange }: FileUploadStepProps) => {
                   variant="ghost"
                   size="sm"
                   onClick={() => removeFile(category, index)}
-                  className="text-red-500 hover:text-red-700"
+                  className="text-red-500 hover:text-red-700 h-6 w-6 p-0 flex-shrink-0"
                 >
-                  <X className="h-4 w-4" />
+                  <X className="h-3 w-3" />
                 </Button>
               </div>
             ))}
@@ -166,12 +167,12 @@ const FileUploadStep = ({ data, onChange }: FileUploadStepProps) => {
         <p className="text-gray-600">Upload property documents in organized categories</p>
       </div>
 
-      <div className="space-y-8">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {categories.map((category) => (
-          <div key={category.key} className="space-y-3">
-            <Label className="text-lg font-semibold text-gray-900 flex items-center">
-              <category.icon className="h-5 w-5 mr-2 text-brand-red" />
-              {category.label}
+          <div key={category.key} className="space-y-2">
+            <Label className="text-sm font-semibold text-gray-900 flex items-center justify-center">
+              <category.icon className="h-4 w-4 mr-1 text-brand-red" />
+              <span className="text-center">{category.label}</span>
             </Label>
             <CategoryUpload category={category.key} />
           </div>
