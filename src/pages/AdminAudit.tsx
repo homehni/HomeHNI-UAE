@@ -26,6 +26,7 @@ import {
   DialogHeader, 
   DialogTitle 
 } from '@/components/ui/dialog';
+import { AuditTestPanel } from '@/components/admin/AuditTestPanel';
 import { AlertTriangle, User, FileText, Settings, Eye, Download } from 'lucide-react';
 
 interface AuditLog {
@@ -43,73 +44,8 @@ interface AuditLog {
 }
 
 export const AdminAudit: React.FC = () => {
-  const [auditLogs, setAuditLogs] = useState<AuditLog[]>([
-    {
-      id: '1',
-      action: 'Property Approved',
-      user: 'admin@homehni.com',
-      userRole: 'admin',
-      resource: 'Property',
-      resourceId: 'prop_123',
-      details: 'Property "Luxury Apartment in Mumbai" approved for listing',
-      ipAddress: '192.168.1.1',
-      userAgent: 'Mozilla/5.0...',
-      timestamp: new Date(Date.now() - 30000).toISOString(),
-      severity: 'low'
-    },
-    {
-      id: '2',
-      action: 'User Role Changed',
-      user: 'admin@homehni.com',
-      userRole: 'admin',
-      resource: 'User',
-      resourceId: 'user_456',
-      details: 'Changed user role from buyer to consultant',
-      ipAddress: '192.168.1.1',
-      userAgent: 'Mozilla/5.0...',
-      timestamp: new Date(Date.now() - 120000).toISOString(),
-      severity: 'medium'
-    },
-    {
-      id: '3',
-      action: 'Login Attempt Failed',
-      user: 'unknown@test.com',
-      userRole: 'unknown',
-      resource: 'Authentication',
-      resourceId: 'auth_fail_789',
-      details: 'Multiple failed login attempts detected',
-      ipAddress: '203.0.113.1',
-      userAgent: 'curl/7.68.0',
-      timestamp: new Date(Date.now() - 180000).toISOString(),
-      severity: 'high'
-    },
-    {
-      id: '4',
-      action: 'Data Export',
-      user: 'admin@homehni.com',
-      userRole: 'admin',
-      resource: 'System',
-      resourceId: 'export_001',
-      details: 'Exported user data for compliance audit',
-      ipAddress: '192.168.1.1',
-      userAgent: 'Mozilla/5.0...',
-      timestamp: new Date(Date.now() - 300000).toISOString(),
-      severity: 'critical'
-    },
-    {
-      id: '5',
-      action: 'Property Deleted',
-      user: 'admin@homehni.com',
-      userRole: 'admin',
-      resource: 'Property',
-      resourceId: 'prop_789',
-      details: 'Deleted property listing for policy violation',
-      ipAddress: '192.168.1.1',
-      userAgent: 'Mozilla/5.0...',
-      timestamp: new Date(Date.now() - 450000).toISOString(),
-      severity: 'medium'
-    }
-  ]);
+  const [auditLogs, setAuditLogs] = useState<AuditLog[]>([]);
+  const [loading, setLoading] = useState(true);
 
   const [filteredLogs, setFilteredLogs] = useState<AuditLog[]>(auditLogs);
   const [searchTerm, setSearchTerm] = useState('');
@@ -118,14 +54,107 @@ export const AdminAudit: React.FC = () => {
   const [selectedLog, setSelectedLog] = useState<AuditLog | null>(null);
   const [viewDialogOpen, setViewDialogOpen] = useState(false);
 
+  // Load initial audit logs from database
+  const loadAuditLogs = async () => {
+    try {
+      setLoading(true);
+      
+      // Fetch audit logs
+      const { data: auditData, error: auditError } = await supabase
+        .from('audit_logs')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(100);
+
+      if (auditError) throw auditError;
+
+      // Transform database logs to component format
+      const logs: AuditLog[] = await Promise.all(
+        (auditData || []).map(async (log) => {
+          let userEmail = 'System';
+          let userRole = 'system';
+
+          // Try to get user email from auth.users if user_id exists
+          if (log.user_id) {
+            try {
+              const { data: profile } = await supabase
+                .from('profiles')
+                .select('full_name')
+                .eq('user_id', log.user_id)
+                .single();
+              
+              if (profile?.full_name) {
+                userEmail = profile.full_name;
+              }
+
+              // Get user role
+              const { data: roleData } = await supabase
+                .from('user_roles')
+                .select('role')
+                .eq('user_id', log.user_id)
+                .single();
+              
+              if (roleData?.role) {
+                userRole = roleData.role;
+              }
+            } catch (error) {
+              console.warn('Could not fetch user details:', error);
+            }
+          }
+
+          // Determine severity based on action
+          let severity: 'low' | 'medium' | 'high' | 'critical' = 'low';
+          
+          if (log.action.toLowerCase().includes('deleted') || 
+              log.action.toLowerCase().includes('failed') ||
+              log.action.toLowerCase().includes('unauthorized')) {
+            severity = 'high';
+          } else if (log.action.toLowerCase().includes('admin') ||
+                     log.action.toLowerCase().includes('export') ||
+                     log.action.toLowerCase().includes('critical')) {
+            severity = 'critical';
+          } else if (log.action.toLowerCase().includes('role') ||
+                     log.action.toLowerCase().includes('status') ||
+                     log.action.toLowerCase().includes('updated')) {
+            severity = 'medium';
+          }
+
+          return {
+            id: log.id,
+            action: log.action,
+            user: userEmail,
+            userRole: userRole,
+            resource: log.table_name || 'System',
+            resourceId: log.record_id || '',
+            details: log.new_values ? JSON.stringify(log.new_values, null, 2) : 'No details available',
+            ipAddress: log.ip_address?.toString() || 'Unknown',
+            userAgent: log.user_agent || 'Unknown',
+            timestamp: log.created_at,
+            severity
+          };
+        })
+      );
+
+      setAuditLogs(logs);
+    } catch (error) {
+      console.error('Error loading audit logs:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadAuditLogs();
+  }, []);
+
   useEffect(() => {
     filterLogs();
   }, [auditLogs, searchTerm, severityFilter, resourceFilter]);
   
   useEffect(() => {
-    // Set up real-time subscriptions for audit logs
+    // Set up comprehensive real-time subscriptions
     const auditChannel = supabase
-      .channel('audit-logs-changes')
+      .channel('comprehensive-audit-logs')
       .on(
         'postgres_changes',
         {
@@ -133,86 +162,199 @@ export const AdminAudit: React.FC = () => {
           schema: 'public',
           table: 'audit_logs'
         },
-        (payload) => {
-          // Add new audit log to the list in real-time
+        async (payload) => {
+          console.log('New audit log received:', payload);
+          
+          let userEmail = 'System';
+          let userRole = 'system';
+
+          // Get user details if user_id exists
+          if (payload.new.user_id) {
+            try {
+              const { data: profile } = await supabase
+                .from('profiles')
+                .select('full_name')
+                .eq('user_id', payload.new.user_id)
+                .single();
+              
+              if (profile?.full_name) {
+                userEmail = profile.full_name;
+              }
+
+              const { data: roleData } = await supabase
+                .from('user_roles')
+                .select('role')
+                .eq('user_id', payload.new.user_id)
+                .single();
+              
+              if (roleData?.role) {
+                userRole = roleData.role;
+              }
+            } catch (error) {
+              console.warn('Could not fetch user details for real-time event:', error);
+            }
+          }
+
+          // Determine severity
+          let severity: 'low' | 'medium' | 'high' | 'critical' = 'low';
+          
+          if (payload.new.action.toLowerCase().includes('deleted') || 
+              payload.new.action.toLowerCase().includes('failed') ||
+              payload.new.action.toLowerCase().includes('unauthorized')) {
+            severity = 'high';
+          } else if (payload.new.action.toLowerCase().includes('admin') ||
+                     payload.new.action.toLowerCase().includes('export') ||
+                     payload.new.action.toLowerCase().includes('critical')) {
+            severity = 'critical';
+          } else if (payload.new.action.toLowerCase().includes('role') ||
+                     payload.new.action.toLowerCase().includes('status') ||
+                     payload.new.action.toLowerCase().includes('updated')) {
+            severity = 'medium';
+          }
+
           const newLog: AuditLog = {
             id: payload.new.id,
             action: payload.new.action,
-            user: payload.new.user_id || 'System',
-            userRole: 'system',
-            resource: payload.new.table_name || 'Unknown',
+            user: userEmail,
+            userRole: userRole,
+            resource: payload.new.table_name || 'System',
             resourceId: payload.new.record_id || '',
-            details: JSON.stringify(payload.new.new_values || {}),
+            details: payload.new.new_values ? JSON.stringify(payload.new.new_values, null, 2) : 'No details available',
             ipAddress: payload.new.ip_address?.toString() || 'Unknown',
             userAgent: payload.new.user_agent || 'Unknown',
             timestamp: payload.new.created_at,
+            severity
+          };
+          
+          setAuditLogs(prev => [newLog, ...prev.slice(0, 99)]); // Keep only 100 most recent
+        }
+      )
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'properties'
+        },
+        async (payload) => {
+          console.log('New property created:', payload);
+          
+          const newLog: AuditLog = {
+            id: `prop-${payload.new.id}`,
+            action: 'Property Created',
+            user: 'User',
+            userRole: 'user',
+            resource: 'Property',
+            resourceId: payload.new.id,
+            details: `New property: ${payload.new.title}`,
+            ipAddress: 'Real-time',
+            userAgent: 'System',
+            timestamp: payload.new.created_at,
             severity: 'low'
           };
-          setAuditLogs(prev => [newLog, ...prev]);
+          
+          setAuditLogs(prev => [newLog, ...prev.slice(0, 99)]);
         }
       )
-      .subscribe();
-    
-    const propertyAuditChannel = supabase
-      .channel('property-audit-changes')
       .on(
         'postgres_changes',
         {
-          event: 'INSERT',
+          event: 'UPDATE',
           schema: 'public',
-          table: 'property_audit_log'
+          table: 'properties'
         },
-        (payload) => {
+        async (payload) => {
+          console.log('Property updated:', payload);
+          
           const newLog: AuditLog = {
-            id: payload.new.id,
-            action: `Property Status: ${payload.new.old_status} → ${payload.new.new_status}`,
-            user: payload.new.changed_by || 'System',
-            userRole: 'admin',
+            id: `prop-update-${payload.new.id}`,
+            action: `Property Updated`,
+            user: 'User',
+            userRole: 'user',
             resource: 'Property',
-            resourceId: payload.new.property_id,
-            details: payload.new.reason || 'Property status changed',
-            ipAddress: 'Internal',
+            resourceId: payload.new.id,
+            details: `Property updated: ${payload.new.title}`,
+            ipAddress: 'Real-time',
             userAgent: 'System',
-            timestamp: payload.new.changed_at,
-            severity: payload.new.new_status === 'rejected' ? 'medium' : 'low'
+            timestamp: new Date().toISOString(),
+            severity: 'low'
           };
-          setAuditLogs(prev => [newLog, ...prev]);
+          
+          setAuditLogs(prev => [newLog, ...prev.slice(0, 99)]);
         }
       )
-      .subscribe();
-    
-    const userRoleAuditChannel = supabase
-      .channel('user-role-audit-changes')
       .on(
         'postgres_changes',
         {
           event: 'INSERT',
           schema: 'public',
-          table: 'user_role_audit_log'
+          table: 'profiles'
         },
-        (payload) => {
+        async (payload) => {
+          console.log('New user profile created:', payload);
+          
           const newLog: AuditLog = {
-            id: payload.new.id,
-            action: `Role Changed: ${payload.new.old_role} → ${payload.new.new_role}`,
-            user: payload.new.changed_by || 'System',
-            userRole: 'admin',
+            id: `profile-${payload.new.id}`,
+            action: 'New User Registered',
+            user: payload.new.full_name || 'New User',
+            userRole: 'user',
             resource: 'User',
             resourceId: payload.new.user_id,
-            details: payload.new.reason || 'User role changed',
-            ipAddress: 'Internal',
+            details: `New user registered: ${payload.new.full_name}`,
+            ipAddress: 'Real-time',
             userAgent: 'System',
-            timestamp: payload.new.changed_at,
-            severity: payload.new.new_role === 'admin' ? 'critical' : 'medium'
+            timestamp: payload.new.created_at,
+            severity: 'low'
           };
-          setAuditLogs(prev => [newLog, ...prev]);
+          
+          setAuditLogs(prev => [newLog, ...prev.slice(0, 99)]);
+        }
+      )
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'user_roles'
+        },
+        async (payload) => {
+          console.log('User role changed:', payload);
+          
+          let action = 'User Role Modified';
+          const newData = payload.new as any;
+          const oldData = payload.old as any;
+          
+          if (payload.eventType === 'INSERT') {
+            action = `Role Assigned: ${newData?.role || 'Unknown'}`;
+          } else if (payload.eventType === 'UPDATE') {
+            action = `Role Changed: ${oldData?.role || 'Unknown'} → ${newData?.role || 'Unknown'}`;
+          } else if (payload.eventType === 'DELETE') {
+            action = `Role Removed: ${oldData?.role || 'Unknown'}`;
+          }
+          
+          const resourceId: string = (payload.new as any)?.user_id || (payload.old as any)?.user_id || '';
+          
+          const newLog: AuditLog = {
+            id: `role-${Date.now()}`,
+            action: action,
+            user: 'Admin',
+            userRole: 'admin',
+            resource: 'User',
+            resourceId: resourceId,
+            details: `User role modification`,
+            ipAddress: 'Real-time',
+            userAgent: 'System',
+            timestamp: new Date().toISOString(),
+            severity: ((payload.new as any)?.role === 'admin' || (payload.old as any)?.role === 'admin') ? 'critical' : 'medium'
+          };
+          
+          setAuditLogs(prev => [newLog, ...prev.slice(0, 99)]);
         }
       )
       .subscribe();
-    
+
     return () => {
       supabase.removeChannel(auditChannel);
-      supabase.removeChannel(propertyAuditChannel);
-      supabase.removeChannel(userRoleAuditChannel);
     };
   }, []);
 
@@ -302,12 +444,25 @@ export const AdminAudit: React.FC = () => {
     }).length
   };
 
+  if (loading) {
+    return (
+      <div className="space-y-6">
+        <div className="flex items-center justify-center p-8">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+            <p className="text-muted-foreground">Loading audit logs...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-foreground mb-2">Audit Logs</h1>
-          <p className="text-muted-foreground">Monitor system activities and security events</p>
+          <h1 className="text-3xl font-bold text-foreground mb-2">Security & Audit</h1>
+          <p className="text-muted-foreground">Real-time monitoring of system activities and security events</p>
         </div>
         <Button onClick={handleExportLogs}>
           <Download className="h-4 w-4 mr-2" />
@@ -354,7 +509,10 @@ export const AdminAudit: React.FC = () => {
         </Card>
       </div>
 
-      <Card>
+      {/* Add test panel for demonstration */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-2">
+          <Card>
         <CardHeader>
           <CardTitle>Activity Logs</CardTitle>
           <CardDescription>System activities and security events</CardDescription>
@@ -458,6 +616,13 @@ export const AdminAudit: React.FC = () => {
           </Table>
         </CardContent>
       </Card>
+      </div>
+      
+      {/* Test Panel */}
+      <div className="lg:col-span-1">
+        <AuditTestPanel />
+      </div>
+    </div>
 
       {/* Log Details Dialog */}
       <Dialog open={viewDialogOpen} onOpenChange={setViewDialogOpen}>

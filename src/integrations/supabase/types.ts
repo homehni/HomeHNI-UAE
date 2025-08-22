@@ -999,6 +999,30 @@ export type Database = {
         }
         Returns: boolean
       }
+      log_audit_event: {
+        Args: {
+          p_action: string
+          p_ip_address?: unknown
+          p_new_values?: Json
+          p_old_values?: Json
+          p_record_id: string
+          p_table_name: string
+          p_user_agent?: string
+          p_user_id?: string
+        }
+        Returns: undefined
+      }
+      log_auth_event: {
+        Args: {
+          p_details?: string
+          p_event_type: string
+          p_ip_address?: unknown
+          p_success?: boolean
+          p_user_agent?: string
+          p_user_email?: string
+        }
+        Returns: undefined
+      }
       update_user_role: {
         Args:
           | {
