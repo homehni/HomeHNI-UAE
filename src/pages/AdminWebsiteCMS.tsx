@@ -173,10 +173,8 @@ export const AdminWebsiteCMS: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [previewMode, setPreviewMode] = useState(false);
   
-  // Dialog states
-  const [pageDialog, setPageDialog] = useState(false);
-  const [sectionDialog, setSectionDialog] = useState(false);
-  const [blockDialog, setBlockDialog] = useState(false);
+  // Unified CMS states
+  const [showUnifiedCreator, setShowUnifiedCreator] = useState(false);
   const [versionDialog, setVersionDialog] = useState(false);
   
   // Editing states
@@ -196,7 +194,7 @@ export const AdminWebsiteCMS: React.FC = () => {
 
   const { toast } = useToast();
 
-  // Form states
+  // Unified form states for page + sections creation
   const [pageForm, setPageForm] = useState({
     title: '',
     slug: '',
@@ -207,31 +205,18 @@ export const AdminWebsiteCMS: React.FC = () => {
     page_type: 'page',
     is_published: false
   });
-  
-  // New page with sections integration
-  const [includeExistingSections, setIncludeExistingSections] = useState(false);
-  const [selectedSectionTemplates, setSelectedSectionTemplates] = useState<string[]>([]);
 
-  const [sectionForm, setSectionForm] = useState({
-    section_type: 'content',
-    content: '',
-    sort_order: 0,
-    is_active: true
-  });
-
-  const [blockForm, setBlockForm] = useState({
-    block_type: 'text',
-    content: '{}',
-    sort_order: 0,
-    is_active: true
-  });
+  const [pageSections, setPageSections] = useState<Array<{
+    id: string;
+    section_type: string;
+    template_id?: string;
+    content: any;
+    sort_order: number;
+    is_custom: boolean;
+  }>>([]);
 
   // Live homepage friendly form state
   const [liveContentForm, setLiveContentForm] = useState<any>({});
-
-  // Section Management states
-  const [selectedSections, setSelectedSections] = useState<string[]>([]);
-  const [showSectionPageCreator, setShowSectionPageCreator] = useState(false);
 
   // Predefined templates for visual CMS
   const sectionTemplates = {
@@ -500,370 +485,151 @@ export const AdminWebsiteCMS: React.FC = () => {
         page_type: 'live',
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
-        sections: liveComponents?.map(component => ({
-          id: component.id,
-          page_id: 'live-homepage',
-          section_type: component.element_type,
-          content: component.content,
-          sort_order: component.sort_order,
-          is_active: component.is_active,
-          created_at: component.created_at,
-          updated_at: component.updated_at,
-          blocks: []
-        })) || []
+        sections: []
       };
 
-      setPages([liveHomepage, ...(pagesData || [])]);
-      
+      setPages(prev => [liveHomepage, ...pagesData || []]);
+
     } catch (error) {
-      console.error('Error fetching data:', error);
+      console.error('Error fetching CMS data:', error);
       toast({
-        title: "Error",
-        description: "Failed to fetch content data",
-        variant: "destructive"
+        title: 'Error',
+        description: 'Failed to load CMS data',
+        variant: 'destructive',
       });
     } finally {
       setLoading(false);
     }
   }, [toast]);
 
-  // Fetch versions for a specific content item
-  const fetchVersions = async (contentId: string, contentType: string) => {
-    try {
-      const { data, error } = await supabase
-        .from('content_versions')
-        .select('*')
-        .eq('content_id', contentId)
-        .eq('content_type', contentType)
-        .order('version_number', { ascending: false });
-
-      if (error) throw error;
-      setVersions(data || []);
-    } catch (error) {
-      console.error('Error fetching versions:', error);
-    }
-  };
-
-  // Real-time subscriptions
-  useEffect(() => {
-    fetchData();
-
-    const pagesChannel = supabase
-      .channel('cms_pages_changes')
-      .on('postgres_changes', 
-        { event: '*', schema: 'public', table: 'content_pages' },
-        () => fetchData()
-      )
-      .subscribe();
-
-    const sectionsChannel = supabase
-      .channel('cms_sections_changes')
-      .on('postgres_changes',
-        { event: '*', schema: 'public', table: 'page_sections' },
-        () => fetchData()
-      )
-      .subscribe();
-
-    const blocksChannel = supabase
-      .channel('cms_blocks_changes')
-      .on('postgres_changes',
-        { event: '*', schema: 'public', table: 'content_blocks' },
-        () => fetchData()
-      )
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(pagesChannel);
-      supabase.removeChannel(sectionsChannel);
-      supabase.removeChannel(blocksChannel);
-    };
-  }, [fetchData]);
-
-  // Save version before making changes
-  const saveVersion = async (contentId: string, contentType: string, contentData: any, description?: string) => {
-    try {
-      // Get current version number
-      const { data: existingVersions } = await supabase
-        .from('content_versions')
-        .select('version_number')
-        .eq('content_id', contentId)
-        .eq('content_type', contentType)
-        .order('version_number', { ascending: false })
-        .limit(1);
-
-      const newVersionNumber = existingVersions?.[0]?.version_number ? existingVersions[0].version_number + 1 : 1;
-
-      await supabase
-        .from('content_versions')
-        .insert({
-          content_id: contentId,
-          content_type: contentType,
-          content_data: contentData,
-          version_number: newVersionNumber,
-          description: description || `Version ${newVersionNumber}`
-        });
-    } catch (error) {
-      console.error('Error saving version:', error);
-    }
-  };
-
-  // Generate slug from title
-  const generateSlug = (title: string) => {
+  // Utility functions
+  const generateSlug = (title: string): string => {
     return title
       .toLowerCase()
-      .replace(/[^a-z0-9 -]/g, '')
+      .replace(/[^a-z0-9\s-]/g, '')
       .replace(/\s+/g, '-')
       .replace(/-+/g, '-')
       .trim();
   };
 
-  // Ensure slug is unique by appending -2, -3, ... if needed
-  const ensureUniqueSlug = async (baseSlug: string, excludeId?: string) => {
-    let slug = baseSlug;
+  const ensureUniqueSlug = async (slug: string): Promise<string> => {
+    let uniqueSlug = slug;
     let counter = 1;
-    // loop until a unique slug is found
-    // safeguard: max 50 iterations
-    // eslint-disable-next-line no-constant-condition
-    while (true && counter < 50) {
-      const { data } = await supabase
+
+    while (true) {
+      const { data: existingPages } = await supabase
         .from('content_pages')
-        .select('id')
-        .eq('slug', slug)
-        .maybeSingle();
+        .select('slug')
+        .eq('slug', uniqueSlug);
 
-      if (!data || (excludeId && data.id === excludeId)) {
-        return slug;
+      if (!existingPages || existingPages.length === 0) {
+        break;
       }
-      counter += 1;
-      slug = `${baseSlug}-${counter}`;
+
+      counter++;
+      uniqueSlug = `${slug}-${counter}`;
     }
-    return `${baseSlug}-${Date.now()}`; // ultimate fallback
+
+    return uniqueSlug;
   };
 
-  // Handle page operations
-  const handleCreatePage = () => {
-    setEditingPage(null);
-    setPageForm({
-      title: '',
-      slug: '',
-      content: '',
-      meta_title: '',
-      meta_description: '',
-      meta_keywords: '',
-      page_type: 'page',
-      is_published: false
-    });
-    setIncludeExistingSections(false);
-    setSelectedSectionTemplates([]);
-    setPageDialog(true);
+  // Add section template to current page sections
+  const addSectionTemplate = (sectionType: string, templateId: string) => {
+    const template = sectionTemplates[sectionType]?.find(t => t.id === templateId);
+    if (!template) return;
+
+    const newSection = {
+      id: `temp-${Date.now()}`,
+      section_type: sectionType,
+      template_id: templateId,
+      content: template.content,
+      sort_order: pageSections.length,
+      is_custom: false
+    };
+
+    setPageSections(prev => [...prev, newSection]);
   };
 
-  const handleEditPage = (page: ContentPage) => {
-    setEditingPage(page);
-    setPageForm({
-      title: page.title,
-      slug: page.slug,
-      content: typeof page.content === 'string' ? page.content : JSON.stringify(page.content, null, 2),
-      meta_title: page.meta_title || '',
-      meta_description: page.meta_description || '',
-      meta_keywords: page.meta_keywords?.join(', ') || '',
-      page_type: page.page_type,
-      is_published: page.is_published
-    });
-    setPageDialog(true);
+  // Add custom section
+  const addCustomSection = (sectionType: string) => {
+    const newSection = {
+      id: `temp-${Date.now()}`,
+      section_type: sectionType,
+      content: {},
+      sort_order: pageSections.length,
+      is_custom: true
+    };
+
+    setPageSections(prev => [...prev, newSection]);
   };
 
-  const handleSavePage = async () => {
-    try {
-      if (!pageForm.title) {
-        toast({ title: "Error", description: "Please provide a page title", variant: "destructive" });
-        return;
-      }
+  // Remove section from page
+  const removeSection = (sectionId: string) => {
+    setPageSections(prev => prev.filter(s => s.id !== sectionId));
+  };
 
-      // Determine unique slug
-      const baseSlug = (pageForm.slug || generateSlug(pageForm.title)).trim();
-      const uniqueSlug = await ensureUniqueSlug(baseSlug, editingPage?.id);
+  // Update section content
+  const updateSectionContent = (sectionId: string, content: any) => {
+    setPageSections(prev => prev.map(section => 
+      section.id === sectionId ? { ...section, content } : section
+    ));
+  };
 
-      // Normalize content: try JSON, otherwise keep as string/null
-      let contentValue: any = pageForm.content;
-      if (typeof contentValue === 'string') {
-        const trimmed = contentValue.trim();
-        if (trimmed) {
-          try {
-            if (trimmed.startsWith('{') || trimmed.startsWith('[')) {
-              contentValue = JSON.parse(trimmed);
-            } else {
-              contentValue = trimmed; // treat as rich text/HTML string
-            }
-          } catch {
-            contentValue = trimmed; // keep as string if JSON parse fails
-          }
-        } else {
-          contentValue = null;
-        }
-      }
-
-      const { data: { user } } = await supabase.auth.getUser();
-
-      const pageData: any = {
-        title: pageForm.title.trim(),
-        slug: uniqueSlug,
-        content: contentValue,
-        meta_title: pageForm.meta_title?.trim() || null,
-        meta_description: pageForm.meta_description?.trim() || null,
-        meta_keywords: pageForm.meta_keywords ? pageForm.meta_keywords.split(',').map(k => k.trim()).filter(Boolean) : null,
-        page_type: pageForm.page_type,
-        is_published: pageForm.is_published
-      };
-
-      if (editingPage) {
-        // Save version before updating
-        await saveVersion(editingPage.id, 'page', editingPage, 'Page updated');
-        const { error } = await supabase
-          .from('content_pages')
-          .update(pageData)
-          .eq('id', editingPage.id);
-        if (error) throw error;
-        toast({ title: "Success", description: "Page updated successfully" });
-      } else {
-        // Include created_by for RLS policies if present
-        pageData.created_by = user?.id ?? null;
-        const { data: newPage, error } = await supabase
-          .from('content_pages')
-          .insert([pageData])
-          .select()
-          .single();
-        if (error) throw error;
-
-        // If includeExistingSections is enabled, create sections from selected templates
-        if (includeExistingSections && selectedSectionTemplates.length > 0) {
-          const sectionsToCreate = selectedSectionTemplates.map((sectionId, index) => {
-            const template = Object.values(sectionTemplates)
-              .flat()
-              .find((t: any) => t.id === sectionId);
-            
-            if (!template) return null;
-
-            // Determine section type based on template category
-            let sectionType = 'content';
-            Object.entries(sectionTemplates).forEach(([category, templates]: [string, any[]]) => {
-              if (templates.find((t: any) => t.id === sectionId)) {
-                sectionType = category.replace('-', '_');
-              }
-            });
-
-            return {
-              page_id: newPage.id,
-              section_type: sectionType,
-              content: template.content,
-              sort_order: index,
-              is_active: true
-            };
-          }).filter(Boolean);
-
-          if (sectionsToCreate.length > 0) {
-            const { error: sectionsError } = await supabase
-              .from('page_sections')
-              .insert(sectionsToCreate);
-
-            if (sectionsError) throw sectionsError;
-          }
-
-          toast({ 
-            title: "Success", 
-            description: `Page created with ${sectionsToCreate.length} sections` 
-          });
-        } else {
-          toast({ title: "Success", description: "Page created successfully" });
-        }
-      }
-
-      // Reset states
-      setIncludeExistingSections(false);
-      setSelectedSectionTemplates([]);
-      setPageDialog(false);
-    } catch (error: any) {
-      console.error('Error saving page:', error);
+  // Create page with sections
+  const createPageWithSections = async () => {
+    if (!pageForm.title.trim()) {
       toast({
-        title: "Error",
-        description: error?.message || "Failed to save page",
-        variant: "destructive"
+        title: 'Error',
+        description: 'Page title is required',
+        variant: 'destructive',
       });
+      return;
     }
-  };
 
-  // Handle creating page with selected sections
-  const handleCreatePageWithSections = async () => {
     try {
-      if (!pageForm.title) {
-        toast({ title: "Error", description: "Please provide a page title", variant: "destructive" });
-        return;
-      }
-
+      const slug = await ensureUniqueSlug(generateSlug(pageForm.title));
+      
       // Create the page first
-      const baseSlug = (pageForm.slug || generateSlug(pageForm.title)).trim();
-      const uniqueSlug = await ensureUniqueSlug(baseSlug);
-
-      const pageData = {
-        title: pageForm.title.trim(),
-        slug: uniqueSlug,
-        content: {},
-        meta_title: pageForm.meta_title?.trim() || null,
-        meta_description: pageForm.meta_description?.trim() || null,
-        meta_keywords: pageForm.meta_keywords?.split(',').map((k: string) => k.trim()).filter(Boolean) || null,
-        page_type: pageForm.page_type,
-        is_published: pageForm.is_published
-      };
-
-      const { data: newPage, error: pageError } = await supabase
+      const { data: page, error: pageError } = await supabase
         .from('content_pages')
-        .insert([pageData])
+        .insert({
+          title: pageForm.title,
+          slug,
+          content: pageForm.content,
+          meta_title: pageForm.meta_title,
+          meta_description: pageForm.meta_description,
+          meta_keywords: pageForm.meta_keywords ? pageForm.meta_keywords.split(',').map(k => k.trim()) : [],
+          page_type: pageForm.page_type,
+          is_published: pageForm.is_published
+        })
         .select()
         .single();
 
       if (pageError) throw pageError;
 
-      // Now create sections for each selected template
-      const sectionsToCreate = selectedSections.map((sectionId, index) => {
-        const template = Object.values(sectionTemplates)
-          .flat()
-          .find((t: any) => t.id === sectionId);
-        
-        if (!template) return null;
-
-        // Determine section type based on template category
-        let sectionType = 'content';
-        Object.entries(sectionTemplates).forEach(([category, templates]: [string, any[]]) => {
-          if (templates.find((t: any) => t.id === sectionId)) {
-            sectionType = category.replace('-', '_');
-          }
-        });
-
-        return {
-          page_id: newPage.id,
-          section_type: sectionType,
-          content: template.content,
-          sort_order: index,
+      // Create sections if any
+      if (pageSections.length > 0) {
+        const sectionsData = pageSections.map(section => ({
+          page_id: page.id,
+          section_type: section.section_type,
+          content: section.content,
+          sort_order: section.sort_order,
           is_active: true
-        };
-      }).filter(Boolean);
+        }));
 
-      if (sectionsToCreate.length > 0) {
         const { error: sectionsError } = await supabase
           .from('page_sections')
-          .insert(sectionsToCreate);
+          .insert(sectionsData);
 
         if (sectionsError) throw sectionsError;
       }
 
       toast({
-        title: "Success",
-        description: `Page "${pageForm.title}" created with ${sectionsToCreate.length} sections`,
+        title: 'Success',
+        description: `Page "${pageForm.title}" created successfully with ${pageSections.length} sections`,
       });
 
-      // Reset states
-      setShowSectionPageCreator(false);
-      setSelectedSections([]);
+      // Reset form
       setPageForm({
         title: '',
         slug: '',
@@ -874,1438 +640,335 @@ export const AdminWebsiteCMS: React.FC = () => {
         page_type: 'page',
         is_published: false
       });
-
+      setPageSections([]);
+      setShowUnifiedCreator(false);
+      
       // Refresh data
       fetchData();
-    } catch (error: any) {
-      console.error('Error creating page with sections:', error);
+      
+    } catch (error) {
+      console.error('Error creating page:', error);
       toast({
-        title: "Error",
-        description: error.message || "Failed to create page with sections",
-        variant: "destructive"
+        title: 'Error',
+        description: 'Failed to create page',
+        variant: 'destructive',
       });
     }
   };
 
-  // Handle section operations
-  const handleCreateSection = (pageId: string) => {
-    setEditingSection(null);
-    setSectionForm({
-      section_type: 'content',
-      content: '',
-      sort_order: sections.filter(s => s.page_id === pageId).length,
-      is_active: true
-    });
-    setSelectedPage(pages.find(p => p.id === pageId) || null);
-    setSectionDialog(true);
-  };
-
-  const handleEditSection = (section: PageSection) => {
-    setEditingSection(section);
-    setSectionForm({
-      section_type: section.section_type,
-      content: typeof section.content === 'string' ? section.content : JSON.stringify(section.content, null, 2),
-      sort_order: section.sort_order,
-      is_active: section.is_active
-    });
-    // Prepare friendly form for live homepage sections
-    if (section.page_id === 'live-homepage') {
-      try {
-        const parsed = typeof section.content === 'string' ? JSON.parse(section.content) : (section.content || {});
-        setLiveContentForm(parsed || {});
-      } catch {
-        setLiveContentForm({});
-      }
-      setShowTemplateSelector(true);
-    } else {
-      setLiveContentForm({});
-      setShowTemplateSelector(false);
-    }
-    setSectionDialog(true);
-  };
-
-  const handleSaveSection = async () => {
-    // Show publish dialog for live homepage sections
-    if (editingSection && editingSection.page_id === 'live-homepage') {
-      setPendingChanges(liveContentForm);
-      setShowPublishDialog(true);
-      return;
-    }
-
-    // Regular section save logic for non-live sections
-    try {
-      let contentData;
-      try {
-        contentData = typeof sectionForm.content === 'string' 
-          ? JSON.parse(sectionForm.content) 
-          : sectionForm.content;
-      } catch {
-        contentData = { text: sectionForm.content };
-      }
-
-      if (selectedPage && selectedPage.id !== 'live-homepage') {
-        // Regular page section handling
-        const sectionData = {
-          page_id: selectedPage.id,
-          section_type: sectionForm.section_type,
-          content: contentData,
-          sort_order: sectionForm.sort_order,
-          is_active: sectionForm.is_active
-        };
-
-        if (editingSection) {
-          await saveVersion(editingSection.id, 'section', editingSection, 'Section updated');
-          
-          const { error } = await supabase
-            .from('page_sections')
-            .update(sectionData)
-            .eq('id', editingSection.id);
-
-          if (error) throw error;
-          toast({ title: "Success", description: "Section updated successfully" });
-        } else {
-          const { error } = await supabase
-            .from('page_sections')
-            .insert(sectionData);
-
-          if (error) throw error;
-          toast({ title: "Success", description: "Section created successfully" });
-        }
-      }
-
-      setSectionDialog(false);
-    } catch (error: any) {
-      console.error('Error saving section:', error);
-      toast({
-        title: "Error",
-        description: error.message || "Failed to save section",
-        variant: "destructive"
-      });
-    }
-  };
-
-  // Handle publishing live changes
-  const handlePublishLiveChanges = async () => {
-    try {
-      if (editingSection && pendingChanges) {
-        await saveVersion(editingSection.id, 'element', editingSection, 'Live component updated');
-        
-        const { error } = await supabase
-          .from('content_elements')
-          .update({
-            content: pendingChanges,
-            is_active: sectionForm.is_active,
-            sort_order: sectionForm.sort_order
-          })
-          .eq('id', editingSection.id);
-
-        if (error) throw error;
-        
-        toast({ 
-          title: "✅ Published Live!", 
-          description: "Your changes are now visible on the website instantly",
-          duration: 5000
-        });
-        
-        setShowPublishDialog(false);
-        setSectionDialog(false);
-        setPendingChanges(null);
-      }
-    } catch (error: any) {
-      console.error('Error publishing live changes:', error);
-      toast({
-        title: "Error",
-        description: error.message || "Failed to publish changes",
-        variant: "destructive"
-      });
-    }
-  };
-
-  // Handle drag and drop for reordering
-  const handleDragEnd = async (event: DragEndEvent, type: 'section' | 'block', parentId?: string) => {
+  // Handle drag and drop for sections
+  const handleSectionDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
-
     if (!over || active.id === over.id) return;
 
-    if (type === 'section' && selectedPage) {
-      const oldIndex = sections.findIndex(s => s.id === active.id && s.page_id === selectedPage.id);
-      const newIndex = sections.findIndex(s => s.id === over.id && s.page_id === selectedPage.id);
-      
-      const pageSections = sections.filter(s => s.page_id === selectedPage.id);
-      const newOrder = arrayMove(pageSections, oldIndex, newIndex);
-      
-      // Update sort orders in database
-      for (let i = 0; i < newOrder.length; i++) {
-        await supabase
-          .from('page_sections')
-          .update({ sort_order: i })
-          .eq('id', newOrder[i].id);
-      }
-    } else if (type === 'block' && parentId) {
-      const sectionBlocks = blocks.filter(b => b.section_id === parentId);
-      const oldIndex = sectionBlocks.findIndex(b => b.id === active.id);
-      const newIndex = sectionBlocks.findIndex(b => b.id === over.id);
-      
-      const newOrder = arrayMove(sectionBlocks, oldIndex, newIndex);
-      
-      // Update sort orders in database
-      for (let i = 0; i < newOrder.length; i++) {
-        await supabase
-          .from('content_blocks')
-          .update({ sort_order: i })
-          .eq('id', newOrder[i].id);
-      }
-    }
+    const oldIndex = pageSections.findIndex(section => section.id === active.id);
+    const newIndex = pageSections.findIndex(section => section.id === over.id);
 
-    fetchData(); // Refresh data
+    const reorderedSections = arrayMove(pageSections, oldIndex, newIndex).map((section, index) => ({
+      ...section,
+      sort_order: index
+    }));
+
+    setPageSections(reorderedSections);
   };
 
-  // Toggle expansion states
-  const togglePageExpansion = (pageId: string) => {
-    const newExpanded = new Set(expandedPages);
-    if (newExpanded.has(pageId)) {
-      newExpanded.delete(pageId);
-    } else {
-      newExpanded.add(pageId);
-    }
-    setExpandedPages(newExpanded);
-  };
+  // Initialize data
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
-  const toggleSectionExpansion = (sectionId: string) => {
-    const newExpanded = new Set(expandedSections);
-    if (newExpanded.has(sectionId)) {
-      newExpanded.delete(sectionId);
-    } else {
-      newExpanded.add(sectionId);
+  // Auto-generate slug from title
+  useEffect(() => {
+    if (pageForm.title && !pageForm.slug) {
+      setPageForm(prev => ({ 
+        ...prev, 
+        slug: generateSlug(pageForm.title) 
+      }));
     }
-    setExpandedSections(newExpanded);
-  };
-
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-      </div>
-    );
-  }
+  }, [pageForm.title]);
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-foreground mb-2">Website Content Management</h1>
-          <p className="text-muted-foreground">
-            Comprehensive CMS for managing all website content with real-time updates
-          </p>
-        </div>
-        <div className="flex gap-2">
-          <Button
-            variant={previewMode ? "default" : "outline"}
-            onClick={() => setPreviewMode(!previewMode)}
+    <div className="min-h-screen bg-background p-8">
+      <div className="mx-auto max-w-7xl space-y-8">
+        {/* Header */}
+        <div className="flex justify-between items-center">
+          <div>
+            <h1 className="text-4xl font-bold text-foreground">Website CMS</h1>
+            <p className="text-muted-foreground mt-2">
+              Create and manage website pages with integrated sections
+            </p>
+          </div>
+          <Button 
+            onClick={() => setShowUnifiedCreator(true)}
+            className="bg-brand-red hover:bg-brand-red/90 text-white"
           >
-            {previewMode ? <Pause className="h-4 w-4 mr-2" /> : <Play className="h-4 w-4 mr-2" />}
-            {previewMode ? "Edit Mode" : "Preview Mode"}
+            <Plus className="w-4 h-4 mr-2" />
+            Create Page + Sections
           </Button>
         </div>
-      </div>
 
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        {/* Page Management Table */}
         <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium text-muted-foreground">Total Pages</CardTitle>
+          <CardHeader>
+            <CardTitle>All Pages</CardTitle>
+            <CardDescription>
+              Manage your website pages and their sections
+            </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold">{pages.length}</div>
-          </CardContent>
-        </Card>
-        
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium text-muted-foreground">Published</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold text-green-600">
-              {pages.filter(p => p.is_published).length}
-            </div>
-          </CardContent>
-        </Card>
-        
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium text-muted-foreground">Total Sections</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold text-blue-600">{sections.length}</div>
-          </CardContent>
-        </Card>
-        
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium text-muted-foreground">Content Blocks</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold text-purple-600">{blocks.length}</div>
-          </CardContent>
-        </Card>
-      </div>
-
-      <Tabs defaultValue="structure" className="w-full">
-        <TabsList>
-          <TabsTrigger value="structure">Website Structure</TabsTrigger>
-          <TabsTrigger value="pages">Create/Manage Pages</TabsTrigger>
-          <TabsTrigger value="sections">Section Management</TabsTrigger>
-          <TabsTrigger value="versions">Version History</TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="structure" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Layout className="h-5 w-5" />
-                Website Structure
-              </CardTitle>
-              <CardDescription>
-                Manage your website's hierarchical content structure with drag-and-drop reordering
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {pages.length === 0 ? (
-                  <div className="text-center py-8 text-muted-foreground">
-                    <Layout className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                    <p className="text-lg font-medium mb-2">No content pages found</p>
-                    <p className="text-sm">Start by creating your first page or check if data is loading correctly.</p>
-                  </div>
-                ) : (
-                  pages.map((page) => (
-                    <Collapsible
-                      key={page.id}
-                      open={expandedPages.has(page.id)}
-                      onOpenChange={() => togglePageExpansion(page.id)}
-                    >
-                      <div className="border rounded-lg p-4 hover:bg-gray-50 transition-colors">
-                        <CollapsibleTrigger asChild>
-                          <div className="flex items-center justify-between cursor-pointer">
-                            <div className="flex items-center gap-3">
-                              {expandedPages.has(page.id) ? (
-                                <ChevronDown className="h-4 w-4" />
-                              ) : (
-                                <ChevronRight className="h-4 w-4" />
-                              )}
-                              <FileText className="h-4 w-4" />
-                              <div>
-                                <h4 className="font-medium flex items-center gap-2">
-                                  {page.title}
-                                  {page.id === 'live-homepage' && (
-                                    <Badge variant="default" className="text-xs bg-green-600">
-                                      🔴 LIVE
-                                    </Badge>
-                                  )}
-                                </h4>
-                                <p className="text-sm text-muted-foreground">
-                                  {page.id === 'live-homepage' ? 'Current website homepage' : `/${page.slug}`}
-                                </p>
-                              </div>
-                              <Badge variant={page.is_published ? "default" : "secondary"}>
-                                {page.is_published ? "Published" : "Draft"}
-                              </Badge>
-                              <Badge variant="outline" className="text-xs">
-                                {page.sections?.length || 0} sections
-                              </Badge>
-                            </div>
-                            <div className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
-                              <Button 
-                                variant="outline" 
-                                size="sm"
-                                onClick={() => handleCreateSection(page.id)}
-                              >
-                                <Plus className="h-4 w-4 mr-1" />
-                                Add Section
-                              </Button>
-                              <Button 
-                                variant="ghost" 
-                                size="sm"
-                                onClick={() => handleEditPage(page)}
-                              >
-                                <Edit className="h-4 w-4" />
-                              </Button>
-                              {page.is_published && (
-                                <Button variant="ghost" size="sm" asChild>
-                                  <a 
-                                    href={page.slug === 'home' ? '/' : `/${page.slug}`} 
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                  >
-                                    <Globe className="h-4 w-4" />
-                                  </a>
-                                </Button>
-                              )}
-                            </div>
-                          </div>
-                        </CollapsibleTrigger>
-                        
-                        <CollapsibleContent className="mt-4">
-                          <div className="ml-6 space-y-2">
-                            {page.sections && page.sections.length > 0 ? (
-                              <DndContext 
-                                sensors={sensors}
-                                collisionDetection={closestCenter}
-                                onDragEnd={(event) => handleDragEnd(event, 'section')}
-                              >
-                                <SortableContext 
-                                  items={page.sections?.map(s => s.id) || []}
-                                  strategy={verticalListSortingStrategy}
-                                >
-                                  {page.sections?.map((section) => (
-                                    <SortableItem key={section.id} id={section.id}>
-                                      <Collapsible
-                                        open={expandedSections.has(section.id)}
-                                        onOpenChange={() => toggleSectionExpansion(section.id)}
-                                      >
-                                        <div className="border-l-2 border-blue-200 pl-4 py-2 bg-blue-50 rounded-r">
-                                          <CollapsibleTrigger asChild>
-                                            <div className="flex items-center justify-between cursor-pointer">
-                                              <div className="flex items-center gap-2">
-                                                {expandedSections.has(section.id) ? (
-                                                  <ChevronDown className="h-3 w-3" />
-                                                ) : (
-                                                  <ChevronRight className="h-3 w-3" />
-                                                )}
-                                                <Layout className="h-3 w-3" />
-                                                <div>
-                                                  <span className="text-sm font-medium capitalize">{section.section_type.replace('_', ' ')}</span>
-                                                  <p className="text-xs text-gray-600">
-                                                    {section.content?.title || section.content?.subtitle || 'No title'}
-                                                  </p>
-                                                </div>
-                                                <Badge 
-                                                  variant={section.is_active ? "default" : "secondary"} 
-                                                  className="text-xs"
-                                                >
-                                                  {section.is_active ? "Active" : "Inactive"}
-                                                </Badge>
-                                                <Badge variant="outline" className="text-xs">
-                                                  {section.blocks?.length || 0} blocks
-                                                </Badge>
-                                              </div>
-                                               <div className="flex items-center gap-1" onClick={(e) => e.stopPropagation()}>
-                                                 <Button 
-                                                   variant="ghost" 
-                                                   size="sm" 
-                                                   className="h-6 w-6 p-0"
-                                                   onClick={() => handleEditSection(section)}
-                                                 >
-                                                   <Edit className="h-3 w-3" />
-                                                 </Button>
-                                                 <Button variant="ghost" size="sm" className="h-6 w-6 p-0 text-red-600 hover:text-red-800">
-                                                   <Trash2 className="h-3 w-3" />
-                                                 </Button>
-                                               </div>
-                                            </div>
-                                          </CollapsibleTrigger>
-                                          
-                                          <CollapsibleContent className="mt-2">
-                                            <div className="ml-4 space-y-1">
-                                              {section.blocks && section.blocks.length > 0 ? (
-                                                section.blocks?.map((block) => (
-                                                  <div key={block.id} className="flex items-center justify-between gap-2 p-2 bg-white rounded border">
-                                                    <div className="flex items-center gap-2">
-                                                      <ImageIcon className="h-3 w-3" />
-                                                      <span className="text-xs font-medium">{block.block_type}</span>
-                                                      <Badge 
-                                                        variant={block.is_active ? "default" : "secondary"} 
-                                                        className="text-xs"
-                                                      >
-                                                        {block.is_active ? "Active" : "Inactive"}
-                                                      </Badge>
-                                                    </div>
-                                                    <div className="flex gap-1">
-                                                      <Button variant="ghost" size="sm" className="h-5 w-5 p-0">
-                                                        <Edit className="h-3 w-3" />
-                                                      </Button>
-                                                      <Button variant="ghost" size="sm" className="h-5 w-5 p-0 text-red-600">
-                                                        <Trash2 className="h-3 w-3" />
-                                                      </Button>
-                                                    </div>
-                                                  </div>
-                                                ))
-                                              ) : (
-                                                <div className="text-xs text-gray-500 p-2 bg-gray-50 rounded">
-                                                  No content blocks - click to add content
-                                                </div>
-                                              )}
-                                            </div>
-                                          </CollapsibleContent>
-                                        </div>
-                                      </Collapsible>
-                                    </SortableItem>
-                                  ))}
-                                </SortableContext>
-                              </DndContext>
-                            ) : (
-                              <div className="text-sm text-gray-500 p-4 bg-gray-50 rounded">
-                                No sections found. Click "Add Section" to create content sections for this page.
-                              </div>
-                            )}
-                          </div>
-                        </CollapsibleContent>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Title</TableHead>
+                  <TableHead>Slug</TableHead>
+                  <TableHead>Type</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead>Sections</TableHead>
+                  <TableHead>Last Updated</TableHead>
+                  <TableHead>Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {pages.map((page) => (
+                  <TableRow key={page.id}>
+                    <TableCell className="font-medium">{page.title}</TableCell>
+                    <TableCell>
+                      {page.slug ? (
+                        <Badge variant="outline">{page.slug}</Badge>
+                      ) : (
+                        <span className="text-muted-foreground">Live Homepage</span>
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      <Badge variant={page.page_type === 'live' ? 'default' : 'secondary'}>
+                        {page.page_type === 'live' ? 'Live' : page.page_type}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>
+                      <Badge variant={page.is_published ? 'default' : 'secondary'}>
+                        {page.is_published ? 'Published' : 'Draft'}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>
+                      <Badge variant="outline">
+                        {page.sections?.length || 0} sections
+                      </Badge>
+                    </TableCell>
+                    <TableCell>
+                      {new Date(page.updated_at).toLocaleDateString()}
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex space-x-2">
+                        <Button variant="outline" size="sm">
+                          <Edit className="w-4 h-4" />
+                        </Button>
+                        <Button variant="outline" size="sm">
+                          <Eye className="w-4 h-4" />
+                        </Button>
+                        {page.page_type !== 'live' && (
+                          <Button variant="outline" size="sm">
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                        )}
                       </div>
-                    </Collapsible>
-                  ))
-                )}
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </CardContent>
+        </Card>
 
-        <TabsContent value="pages" className="space-y-4">
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between">
-              <div>
-                <CardTitle>Create & Manage Pages</CardTitle>
-                <CardDescription>Create new pages with normal form interface (not JSON). Use this section to create actual pages for your website.</CardDescription>
-              </div>
-              <Button onClick={handleCreatePage} className="bg-green-600 hover:bg-green-700 text-white">
-                <Plus className="h-4 w-4 mr-2" />
-                Create New Page
-              </Button>
-            </CardHeader>
-            <CardContent>
-              {pages.filter(p => p.id !== 'live-homepage').length === 0 ? (
-                <div className="text-center py-12 text-muted-foreground border-2 border-dashed border-gray-300 rounded-lg">
-                  <FileText className="h-16 w-16 mx-auto mb-4 opacity-50" />
-                  <p className="text-xl font-medium mb-2">No pages created yet</p>
-                  <p className="text-sm mb-6">Click the green "Create New Page" button above to add your first page with a normal form interface.</p>
-                  <Button onClick={handleCreatePage} className="bg-green-600 hover:bg-green-700 text-white">
-                    <Plus className="h-4 w-4 mr-2" />
-                    Create Your First Page
-                  </Button>
-                </div>
-              ) : (
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Page</TableHead>
-                      <TableHead>Type</TableHead>
-                      <TableHead>Status</TableHead>
-                      <TableHead>Updated</TableHead>
-                      <TableHead>Actions</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {pages.filter(p => p.id !== 'live-homepage').map((page) => (
-                      <TableRow key={page.id}>
-                        <TableCell>
-                          <div className="flex items-center gap-2">
-                            <FileText className="h-4 w-4 text-muted-foreground" />
-                            <div>
-                              <div className="font-medium">{page.title}</div>
-                              <div className="text-sm text-muted-foreground">/{page.slug}</div>
-                            </div>
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          <Badge variant="outline">{page.page_type}</Badge>
-                        </TableCell>
-                        <TableCell>
-                          <Badge variant={page.is_published ? "default" : "secondary"}>
-                            {page.is_published ? "Published" : "Draft"}
-                          </Badge>
-                        </TableCell>
-                        <TableCell>{new Date(page.updated_at).toLocaleDateString()}</TableCell>
-                        <TableCell>
-                          <div className="flex items-center gap-2">
-                            <Button variant="ghost" size="sm" onClick={() => handleEditPage(page)}>
-                              <Edit className="h-4 w-4" />
-                            </Button>
-                            <Button 
-                              variant="ghost" 
-                              size="sm"
-                              onClick={() => {
-                                fetchVersions(page.id, 'page');
-                                setVersionDialog(true);
-                              }}
-                            >
-                              <History className="h-4 w-4" />
-                            </Button>
-                            {page.is_published && (
-                              <Button variant="ghost" size="sm" asChild>
-                                <a href={`/${page.slug}`} target="_blank">
-                                  <Globe className="h-4 w-4" />
-                                </a>
-                              </Button>
-                            )}
-                          </div>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              )}
-            </CardContent>
-          </Card>
-        </TabsContent>
+        {/* Unified Page + Sections Creator Dialog */}
+        <Dialog open={showUnifiedCreator} onOpenChange={setShowUnifiedCreator}>
+          <DialogContent className="max-w-6xl max-h-[90vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle>Create New Page + Sections</DialogTitle>
+              <DialogDescription>
+                Create a new page and add sections with templates or custom content
+              </DialogDescription>
+            </DialogHeader>
 
-        <TabsContent value="sections" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <div className="flex flex-row items-center justify-between">
-                <div>
-                  <CardTitle className="flex items-center gap-2">
-                    <Layout className="h-5 w-5" />
-                    Section Management
-                  </CardTitle>
-                  <CardDescription>Select from pre-existing section templates and add them to new pages</CardDescription>
-                </div>
-                <Button 
-                  onClick={() => {
-                    if (selectedSections.length === 0) {
-                      toast({
-                        title: "No sections selected",
-                        description: "Please select at least one section template to create a page",
-                        variant: "destructive"
-                      });
-                      return;
-                    }
-                    setShowSectionPageCreator(true);
-                  }}
-                  disabled={selectedSections.length === 0}
-                  className="bg-blue-600 hover:bg-blue-700 text-white"
-                >
-                  <Plus className="h-4 w-4 mr-2" />
-                  Create Page with Selected Sections ({selectedSections.length})
-                </Button>
-              </div>
-            </CardHeader>
-            <CardContent>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* Page Details */}
               <div className="space-y-4">
-                {/* Selection Controls */}
-                <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg">
-                  <div className="text-sm font-medium">Quick Actions:</div>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => {
-                    const allSectionIds = Object.values(sectionTemplates).flat().map((template: any) => template.id);
-                    setSelectedSections(allSectionIds);
-                  }}
-                >
-                  Select All
-                </Button>
+                <h3 className="text-lg font-semibold">Page Details</h3>
+                
+                <div className="space-y-4">
+                  <div>
+                    <Label htmlFor="title">Page Title *</Label>
+                    <Input
+                      id="title"
+                      value={pageForm.title}
+                      onChange={(e) => setPageForm(prev => ({ ...prev, title: e.target.value }))}
+                      placeholder="Enter page title"
+                    />
+                  </div>
+
+                  <div>
+                    <Label htmlFor="slug">URL Slug</Label>
+                    <Input
+                      id="slug"
+                      value={pageForm.slug}
+                      onChange={(e) => setPageForm(prev => ({ ...prev, slug: e.target.value }))}
+                      placeholder="auto-generated-slug"
+                    />
+                  </div>
+
+                  <div>
+                    <Label htmlFor="pageType">Page Type</Label>
+                    <Select 
+                      value={pageForm.page_type} 
+                      onValueChange={(value) => setPageForm(prev => ({ ...prev, page_type: value }))}
+                    >
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="page">Static Page</SelectItem>
+                        <SelectItem value="blog">Blog Post</SelectItem>
+                        <SelectItem value="service">Service Page</SelectItem>
+                        <SelectItem value="landing">Landing Page</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div>
+                    <Label htmlFor="metaTitle">Meta Title (SEO)</Label>
+                    <Input
+                      id="metaTitle"
+                      value={pageForm.meta_title}
+                      onChange={(e) => setPageForm(prev => ({ ...prev, meta_title: e.target.value }))}
+                      placeholder="SEO optimized title"
+                    />
+                  </div>
+
+                  <div>
+                    <Label htmlFor="metaDescription">Meta Description (SEO)</Label>
+                    <Textarea
+                      id="metaDescription"
+                      value={pageForm.meta_description}
+                      onChange={(e) => setPageForm(prev => ({ ...prev, meta_description: e.target.value }))}
+                      placeholder="Brief description for search engines"
+                      rows={3}
+                    />
+                  </div>
+
+                  <div>
+                    <Label htmlFor="metaKeywords">Meta Keywords (SEO)</Label>
+                    <Input
+                      id="metaKeywords"
+                      value={pageForm.meta_keywords}
+                      onChange={(e) => setPageForm(prev => ({ ...prev, meta_keywords: e.target.value }))}
+                      placeholder="keyword1, keyword2, keyword3"
+                    />
+                  </div>
+
+                  <div className="flex items-center space-x-2">
+                    <Switch
+                      id="published"
+                      checked={pageForm.is_published}
+                      onCheckedChange={(checked) => setPageForm(prev => ({ ...prev, is_published: checked }))}
+                    />
+                    <Label htmlFor="published">Publish immediately</Label>
+                  </div>
+                </div>
+              </div>
+
+              {/* Sections Builder */}
+              <div className="space-y-4">
+                <div className="flex justify-between items-center">
+                  <h3 className="text-lg font-semibold">Page Sections</h3>
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => setSelectedSections([])}
+                    onClick={() => addCustomSection('content')}
                   >
-                    Clear Selection
+                    <Plus className="w-4 h-4 mr-1" />
+                    Add Custom Section
                   </Button>
                 </div>
 
-                {/* Section Categories */}
-                <div className="space-y-6">
-                  {Object.entries(sectionTemplates).map(([category, templates]: [string, any[]]) => (
-                    <div key={category} className="space-y-3">
-                      <h3 className="text-lg font-semibold capitalize text-gray-800">
-                        {category.replace('-', ' ')} Sections
-                      </h3>
-                      
-                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {templates.map((template: any) => {
-                          const isSelected = selectedSections.includes(template.id);
-                          return (
-                            <Card 
-                              key={template.id}
-                              className={`cursor-pointer transition-all hover:shadow-md ${
-                                isSelected ? 'ring-2 ring-blue-500 bg-blue-50' : ''
-                              }`}
-                              onClick={() => {
-                                setSelectedSections(prev => 
-                                  isSelected 
-                                    ? prev.filter(id => id !== template.id)
-                                    : [...prev, template.id]
-                                );
-                              }}
+                {/* Section Templates */}
+                <div className="space-y-4">
+                  {Object.entries(sectionTemplates).map(([sectionType, templates]) => (
+                    <div key={sectionType} className="border rounded-lg p-4">
+                      <h4 className="font-medium mb-2 capitalize">{sectionType.replace('-', ' ')} Templates</h4>
+                      <div className="grid grid-cols-1 gap-2">
+                        {templates.map((template) => (
+                          <div key={template.id} className="flex items-center justify-between p-2 border rounded">
+                            <div>
+                              <div className="font-medium text-sm">{template.name}</div>
+                              <div className="text-xs text-muted-foreground">{template.preview}</div>
+                            </div>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => addSectionTemplate(sectionType, template.id)}
                             >
-                              <CardHeader className="pb-3">
-                                <div className="flex items-start justify-between">
-                                  <CardTitle className="text-sm font-medium text-blue-600">
-                                    {template.name}
-                                  </CardTitle>
-                                  <div className="flex gap-1">
-                                    {isSelected && (
-                                      <Badge variant="default" className="text-xs">
-                                        Selected
-                                      </Badge>
-                                    )}
-                                  </div>
-                                </div>
-                                <CardDescription className="text-xs">
-                                  {template.preview}
-                                </CardDescription>
-                              </CardHeader>
-                              <CardContent className="pt-0">
-                                <div className="text-xs text-gray-600 bg-gray-100 p-2 rounded">
-                                  <div className="font-medium mb-1">Content Preview:</div>
-                                  <div className="truncate">
-                                    {template.content?.title || template.content?.heading || 'Dynamic content section'}
-                                  </div>
-                                </div>
-                              </CardContent>
-                            </Card>
-                          );
-                        })}
+                              Add
+                            </Button>
+                          </div>
+                        ))}
                       </div>
                     </div>
                   ))}
                 </div>
 
-                {/* Selected sections summary */}
-                {selectedSections.length > 0 && (
-                  <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                    <div className="text-sm font-medium text-blue-800 mb-2">
-                      Selected Sections ({selectedSections.length}):
-                    </div>
-                    <div className="flex flex-wrap gap-2">
-                      {selectedSections.map(sectionId => {
-                        const template = Object.values(sectionTemplates)
-                          .flat()
-                          .find((t: any) => t.id === sectionId);
-                        return template ? (
-                          <Badge key={sectionId} variant="secondary" className="text-xs">
-                            {template.name}
-                          </Badge>
-                        ) : null;
-                      })}
-                    </div>
-                  </div>
-                )}
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="versions" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <History className="h-5 w-5" />
-                Version History
-              </CardTitle>
-              <CardDescription>Track changes and restore previous versions</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="text-center text-muted-foreground py-8">
-                Select a content item to view its version history
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-      </Tabs>
-
-      {/* Create/Edit Page Dialog */}
-      <Dialog open={pageDialog} onOpenChange={setPageDialog}>
-        <DialogContent className="max-w-4xl max-h-[85vh] overflow-y-auto">
-          <DialogHeader className="flex items-start justify-between gap-4">
-            <div>
-              <DialogTitle>
-                {editingPage ? "Edit Page" : "Create New Page"}
-              </DialogTitle>
-              <DialogDescription>
-                {editingPage ? "Update page content and settings" : "Create a new page for your website"}
-              </DialogDescription>
-            </div>
-            <Button onClick={handleSavePage} className="bg-green-600 hover:bg-green-700 text-white" size="sm">
-              <Save className="h-4 w-4 mr-2" />
-              {editingPage ? 'Update' : 'Create'}
-            </Button>
-          </DialogHeader>
-
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-4">
-              <div>
-                <Label htmlFor="title">Page Title</Label>
-                <Input
-                  id="title"
-                  value={pageForm.title}
-                  onChange={(e) => setPageForm(prev => ({ 
-                    ...prev, 
-                    title: e.target.value,
-                    slug: !editingPage ? generateSlug(e.target.value) : prev.slug
-                  }))}
-                  placeholder="Enter page title"
-                />
-              </div>
-
-              <div>
-                <Label htmlFor="slug">URL Slug</Label>
-                <Input
-                  id="slug"
-                  value={pageForm.slug}
-                  onChange={(e) => setPageForm(prev => ({ ...prev, slug: e.target.value }))}
-                  placeholder="page-url-slug"
-                />
-              </div>
-
-              <div>
-                <Label htmlFor="page_type">Page Type</Label>
-                <Select 
-                  value={pageForm.page_type} 
-                  onValueChange={(value) => setPageForm(prev => ({ ...prev, page_type: value }))}
-                >
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="page">Page</SelectItem>
-                    <SelectItem value="landing">Landing Page</SelectItem>
-                    <SelectItem value="blog">Blog</SelectItem>
-                    <SelectItem value="legal">Legal</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="flex items-center space-x-2">
-                <Switch
-                  id="published"
-                  checked={pageForm.is_published}
-                  onCheckedChange={(checked) => setPageForm(prev => ({ ...prev, is_published: checked }))}
-                />
-                <Label htmlFor="published">Published</Label>
-              </div>
-
-              {/* New option for including existing sections */}
-              {!editingPage && (
-                <div className="flex items-center space-x-2 bg-blue-50 p-3 rounded-lg border-l-4 border-blue-400">
-                  <Switch
-                    id="includeExistingSections"
-                    checked={includeExistingSections}
-                    onCheckedChange={setIncludeExistingSections}
-                  />
-                  <Label htmlFor="includeExistingSections" className="text-blue-800 font-medium">
-                    Include existing section templates
-                  </Label>
-                </div>
-              )}
-            </div>
-
-            <div className="space-y-4">
-              <div>
-                <Label htmlFor="meta_title">SEO Title</Label>
-                <Input
-                  id="meta_title"
-                  value={pageForm.meta_title}
-                  onChange={(e) => setPageForm(prev => ({ ...prev, meta_title: e.target.value }))}
-                  placeholder="SEO optimized title"
-                />
-              </div>
-
-              <div>
-                <Label htmlFor="meta_description">Meta Description</Label>
-                <Textarea
-                  id="meta_description"
-                  value={pageForm.meta_description}
-                  onChange={(e) => setPageForm(prev => ({ ...prev, meta_description: e.target.value }))}
-                  placeholder="Brief description for search engines"
-                />
-              </div>
-
-              <div>
-                <Label htmlFor="meta_keywords">Keywords</Label>
-                <Input
-                  id="meta_keywords"
-                  value={pageForm.meta_keywords}
-                  onChange={(e) => setPageForm(prev => ({ ...prev, meta_keywords: e.target.value }))}
-                  placeholder="keyword1, keyword2, keyword3"
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Section Template Selection - Only show when creating new page and toggle is enabled */}
-          {!editingPage && includeExistingSections && (
-            <div className="mt-6 border-t pt-6">
-              <div className="mb-4">
-                <Label className="text-lg font-semibold text-blue-800">Select Section Templates</Label>
-                <p className="text-sm text-gray-600 mt-1">Choose from existing section templates to add to your new page</p>
-              </div>
-
-              <div className="space-y-6 max-h-96 overflow-y-auto">
-                {Object.entries(sectionTemplates).map(([category, templates]) => (
-                  <div key={category}>
-                    <h3 className="font-semibold text-gray-800 mb-3 capitalize">
-                      {category.replace('-', ' ')} Templates
-                    </h3>
-                    <div className="grid grid-cols-2 gap-3">
-                      {templates.map((template: any) => {
-                        const isSelected = selectedSectionTemplates.includes(template.id);
-                        return (
-                          <Card 
-                            key={template.id}
-                            className={`cursor-pointer transition-all hover:shadow-md ${
-                              isSelected ? 'ring-2 ring-blue-500 bg-blue-50' : ''
-                            }`}
-                            onClick={() => {
-                              setSelectedSectionTemplates(prev => 
-                                isSelected 
-                                  ? prev.filter(id => id !== template.id)
-                                  : [...prev, template.id]
-                              );
-                            }}
-                          >
-                            <CardContent className="p-3">
-                              <div className="flex items-start justify-between">
+                {/* Current Page Sections */}
+                {pageSections.length > 0 && (
+                  <div className="space-y-2">
+                    <h4 className="font-medium">Added Sections ({pageSections.length})</h4>
+                    <DndContext
+                      sensors={sensors}
+                      collisionDetection={closestCenter}
+                      onDragEnd={handleSectionDragEnd}
+                    >
+                      <SortableContext
+                        items={pageSections.map(s => s.id)}
+                        strategy={verticalListSortingStrategy}
+                      >
+                        <div className="space-y-2 max-h-60 overflow-y-auto">
+                          {pageSections.map((section) => (
+                            <SortableItem key={section.id} id={section.id}>
+                              <div className="flex items-center justify-between p-2 bg-muted rounded">
                                 <div className="flex-1">
-                                  <div className="font-medium text-sm text-gray-900">
-                                    {template.name}
+                                  <div className="font-medium text-sm capitalize">
+                                    {section.section_type.replace('-', ' ')}
                                   </div>
-                                  <div className="text-xs text-gray-600 mt-1">
-                                    {template.preview}
+                                  <div className="text-xs text-muted-foreground">
+                                    {section.is_custom ? 'Custom Section' : `Template: ${section.template_id}`}
                                   </div>
                                 </div>
-                                {isSelected && (
-                                  <div className="text-blue-500">
-                                    <Eye className="h-4 w-4" />
-                                  </div>
-                                )}
+                                <Button
+                                  size="sm"
+                                  variant="ghost"
+                                  onClick={() => removeSection(section.id)}
+                                >
+                                  <Trash2 className="w-3 h-3" />
+                                </Button>
                               </div>
-                            </CardContent>
-                          </Card>
-                        );
-                      })}
-                    </div>
+                            </SortableItem>
+                          ))}
+                        </div>
+                      </SortableContext>
+                    </DndContext>
                   </div>
-                ))}
-              </div>
-
-              {/* Selected sections summary */}
-              {selectedSectionTemplates.length > 0 && (
-                <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded-lg">
-                  <div className="text-sm font-medium text-green-800 mb-2">
-                    Selected Sections ({selectedSectionTemplates.length}):
-                  </div>
-                  <div className="flex flex-wrap gap-2">
-                    {selectedSectionTemplates.map(sectionId => {
-                      const template = Object.values(sectionTemplates)
-                        .flat()
-                        .find((t: any) => t.id === sectionId);
-                      return template ? (
-                        <Badge key={sectionId} variant="secondary" className="text-xs">
-                          {template.name}
-                        </Badge>
-                      ) : null;
-                    })}
-                  </div>
-                </div>
-              )}
-            </div>
-          )}
-
-          <div className="mt-4 pb-24">
-            <Label htmlFor="content">Page Content</Label>
-            <div className="mt-2">
-              <RichTextEditor
-                value={pageForm.content}
-                onChange={(value) => setPageForm(prev => ({ ...prev, content: value }))}
-                height="300px"
-              />
-            </div>
-          </div>
-
-          <DialogFooter className="sticky bottom-0 left-0 right-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-t mt-4 py-3">
-            <Button variant="outline" onClick={() => setPageDialog(false)}>
-              Cancel
-            </Button>
-            <Button onClick={handleSavePage} className="bg-green-600 hover:bg-green-700">
-              <Save className="h-4 w-4 mr-2" />
-              Save Page
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-
-      {/* Version History Dialog */}
-      <Dialog open={versionDialog} onOpenChange={setVersionDialog}>
-        <DialogContent className="max-w-2xl">
-          <DialogHeader>
-            <DialogTitle>Version History</DialogTitle>
-            <DialogDescription>
-              View and restore previous versions of this content
-            </DialogDescription>
-          </DialogHeader>
-
-          <div className="space-y-4 max-h-96 overflow-y-auto">
-            {versions.map((version) => (
-              <div key={version.id} className="border rounded-lg p-4">
-                <div className="flex items-center justify-between mb-2">
-                  <div>
-                    <Badge variant="outline">Version {version.version_number}</Badge>
-                    <span className="ml-2 text-sm text-muted-foreground">
-                      {new Date(version.created_at).toLocaleString()}
-                    </span>
-                  </div>
-                  <Button variant="outline" size="sm">
-                    Restore
-                  </Button>
-                </div>
-                {version.description && (
-                  <p className="text-sm text-muted-foreground">{version.description}</p>
                 )}
               </div>
-            ))}
-          </div>
-
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setVersionDialog(false)}>
-              Close
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-
-      {/* Create/Edit Section Dialog */}
-      <Dialog open={sectionDialog} onOpenChange={setSectionDialog}>
-        <DialogContent className="max-w-3xl">
-          <DialogHeader>
-            <DialogTitle>
-              {editingSection ? "Edit Section" : "Create New Section"}
-            </DialogTitle>
-            <DialogDescription>
-              {editingSection ? "Update section content and settings" : "Add a new content section to the page"}
-            </DialogDescription>
-          </DialogHeader>
-
-          <div className="grid grid-cols-1 gap-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <Label htmlFor="section_type">Section Type</Label>
-                <Select 
-                  value={sectionForm.section_type} 
-                  onValueChange={(value) => setSectionForm(prev => ({ ...prev, section_type: value }))}
-                >
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="hero_search">Hero Search</SelectItem>
-                    <SelectItem value="directory">Directory</SelectItem>
-                    <SelectItem value="featured_properties">Featured Properties</SelectItem>
-                    <SelectItem value="services">Services</SelectItem>
-                    <SelectItem value="why_use">Why Use</SelectItem>
-                    <SelectItem value="stats">Statistics</SelectItem>
-                    <SelectItem value="testimonials">Testimonials</SelectItem>
-                    <SelectItem value="mobile_app">Mobile App</SelectItem>
-                    <SelectItem value="content">General Content</SelectItem>
-                    <SelectItem value="banner">Banner</SelectItem>
-                    <SelectItem value="cta">Call to Action</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div>
-                <Label htmlFor="sort_order">Sort Order</Label>
-                <Input
-                  id="sort_order"
-                  type="number"
-                  value={sectionForm.sort_order}
-                  onChange={(e) => setSectionForm(prev => ({ ...prev, sort_order: parseInt(e.target.value) || 0 }))}
-                  min="0"
-                />
-              </div>
             </div>
 
-            <div className="flex items-center space-x-2">
-              <Switch
-                id="section_active"
-                checked={sectionForm.is_active}
-                onCheckedChange={(checked) => setSectionForm(prev => ({ ...prev, is_active: checked }))}
-              />
-              <Label htmlFor="section_active">Active Section</Label>
-            </div>
-
-            <div>
-              {editingSection?.page_id === 'live-homepage' ? (
-                <div className="space-y-4">
-                  {/* Hero Search */}
-                  {sectionForm.section_type === 'hero_search' && (
-                    <>
-                      <div>
-                        <Label>Background Image URL</Label>
-                        <Input
-                          value={liveContentForm.background_image_url || ''}
-                          onChange={(e) => setLiveContentForm((prev: any) => ({ ...prev, background_image_url: e.target.value }))}
-                          placeholder="/lovable-uploads/hero.jpg"
-                        />
-                      </div>
-                      <div>
-                        <Label>Search Placeholder</Label>
-                        <Input
-                          value={liveContentForm.placeholder || ''}
-                          onChange={(e) => setLiveContentForm((prev: any) => ({ ...prev, placeholder: e.target.value }))}
-                          placeholder="Search 'Noida'"
-                        />
-                      </div>
-                    </>
-                  )}
-
-                  {/* Services */}
-                  {sectionForm.section_type === 'services' && (
-                    <>
-                      <div>
-                        <Label>Title</Label>
-                        <Input
-                          value={liveContentForm.title || ''}
-                          onChange={(e) => setLiveContentForm((prev: any) => ({ ...prev, title: e.target.value }))}
-                          placeholder="Our Services"
-                        />
-                      </div>
-                      <div>
-                        <Label>Subtitle</Label>
-                        <Input
-                          value={liveContentForm.subtitle || ''}
-                          onChange={(e) => setLiveContentForm((prev: any) => ({ ...prev, subtitle: e.target.value }))}
-                          placeholder="Comprehensive real estate solutions"
-                        />
-                      </div>
-                      <div>
-                        <Label>Items (one per line: Title|Description)</Label>
-                        <Textarea
-                          value={(liveContentForm.items || []).map((i: any) => `${i.title || ''}|${i.description || ''}`).join('\n')}
-                          onChange={(e) => {
-                            const lines = e.target.value.split('\n').filter(Boolean);
-                            const items = lines.map(l => {
-                              const [t, d] = l.split('|');
-                              return { title: (t || '').trim(), description: (d || '').trim() };
-                            });
-                            setLiveContentForm((prev: any) => ({ ...prev, items }));
-                          }}
-                          placeholder={"Property Search|Find your perfect property"}
-                          className="min-h-[120px]"
-                        />
-                      </div>
-                    </>
-                  )}
-
-                  {/* Why Use */}
-                  {sectionForm.section_type === 'why_use' && (
-                    <>
-                      <div>
-                        <Label>Title</Label>
-                        <Input
-                          value={liveContentForm.title || ''}
-                          onChange={(e) => setLiveContentForm((prev: any) => ({ ...prev, title: e.target.value }))}
-                          placeholder="Why Use Home HNI"
-                        />
-                      </div>
-                      <div>
-                        <Label>Top Services (one per line: Title|Badge)</Label>
-                        <Textarea
-                          value={(liveContentForm.topServices || []).map((i: any) => `${i.title || ''}|${i.badge || ''}`).join('\n')}
-                          onChange={(e) => {
-                            const lines = e.target.value.split('\n').filter(Boolean);
-                            const topServices = lines.map(l => {
-                              const [t, b] = l.split('|');
-                              return { title: (t || '').trim(), badge: (b || '').trim() || undefined };
-                            });
-                            setLiveContentForm((prev: any) => ({ ...prev, topServices }));
-                          }}
-                          placeholder={"Builder Projects|New"}
-                          className="min-h-[100px]"
-                        />
-                      </div>
-                      <div>
-                        <Label>Benefits (one per line: Title|Description)</Label>
-                        <Textarea
-                          value={(liveContentForm.benefits || []).map((i: any) => `${i.title || ''}|${i.description || ''}`).join('\n')}
-                          onChange={(e) => {
-                            const lines = e.target.value.split('\n').filter(Boolean);
-                            const benefits = lines.map(l => {
-                              const [t, d] = l.split('|');
-                              return { title: (t || '').trim(), description: (d || '').trim() };
-                            });
-                            setLiveContentForm((prev: any) => ({ ...prev, benefits }));
-                          }}
-                          placeholder={"Avoid Brokers|We directly connect you to verified owners"}
-                          className="min-h-[120px]"
-                        />
-                      </div>
-                    </>
-                  )}
-
-                  {/* Stats */}
-                  {sectionForm.section_type === 'stats' && (
-                    <div>
-                      <Label>Stats (one per line: Number|Label)</Label>
-                      <Textarea
-                        value={(liveContentForm.items || []).map((i: any) => `${i.number || ''}|${i.label || ''}`).join('\n')}
-                        onChange={(e) => {
-                          const lines = e.target.value.split('\n').filter(Boolean);
-                          const items = lines.map(l => {
-                            const [n, lbl] = l.split('|');
-                            return { number: (n || '').trim(), label: (lbl || '').trim() };
-                          });
-                          setLiveContentForm((prev: any) => ({ ...prev, items }));
-                        }}
-                        placeholder={"50,000+|Properties Listed"}
-                        className="min-h-[120px]"
-                      />
-                    </div>
-                  )}
-
-                  {/* Testimonials */}
-                  {sectionForm.section_type === 'testimonials' && (
-                    <div>
-                      <Label>Testimonials (one per line: Name|Rating 1-5|Text)</Label>
-                      <Textarea
-                        value={(liveContentForm.items || []).map((i: any) => `${i.name || ''}|${i.rating || 5}|${i.text || ''}`).join('\n')}
-                        onChange={(e) => {
-                          const lines = e.target.value.split('\n').filter(Boolean);
-                          const items = lines.map(l => {
-                            const [name, rating, text] = l.split('|');
-                            return { name: (name || '').trim(), rating: Math.max(1, Math.min(5, parseInt((rating || '5').trim()) || 5)), text: (text || '').trim() };
-                          });
-                          setLiveContentForm((prev: any) => ({ ...prev, items }));
-                        }}
-                        placeholder={"Rajesh Kumar|5|Great platform!"}
-                        className="min-h-[140px]"
-                      />
-                    </div>
-                  )}
-
-                  {/* Mobile App */}
-                  {sectionForm.section_type === 'mobile_app' && (
-                    <>
-                      <div>
-                        <Label>Title</Label>
-                        <Input
-                          value={liveContentForm.title || ''}
-                          onChange={(e) => setLiveContentForm((prev: any) => ({ ...prev, title: e.target.value }))}
-                          placeholder="Find A New Home On The Go"
-                        />
-                      </div>
-                      <div>
-                        <Label>Description</Label>
-                        <Textarea
-                          value={liveContentForm.description || ''}
-                          onChange={(e) => setLiveContentForm((prev: any) => ({ ...prev, description: e.target.value }))}
-                          placeholder="Download our app and discover properties..."
-                        />
-                      </div>
-                      <div>
-                        <Label>Image URL</Label>
-                        <Input
-                          value={liveContentForm.image_url || ''}
-                          onChange={(e) => setLiveContentForm((prev: any) => ({ ...prev, image_url: e.target.value }))}
-                          placeholder="/lovable-uploads/homeAppPromotion.png"
-                        />
-                      </div>
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <Label>Google Play Link</Label>
-                          <Input
-                            value={liveContentForm.play_link || ''}
-                            onChange={(e) => setLiveContentForm((prev: any) => ({ ...prev, play_link: e.target.value }))}
-                            placeholder="https://play.google.com/..."
-                          />
-                        </div>
-                        <div>
-                          <Label>App Store Link</Label>
-                          <Input
-                            value={liveContentForm.appstore_link || ''}
-                            onChange={(e) => setLiveContentForm((prev: any) => ({ ...prev, appstore_link: e.target.value }))}
-                            placeholder="https://apps.apple.com/..."
-                          />
-                        </div>
-                      </div>
-                    </>
-                  )}
-                </div>
-              ) : (
-                <>
-                  <Label htmlFor="section_content">Section Content (JSON Format)</Label>
-                  <div className="mt-2">
-                    <Textarea
-                      id="section_content"
-                      value={typeof sectionForm.content === 'string' ? sectionForm.content : JSON.stringify(sectionForm.content, null, 2)}
-                      onChange={(e) => setSectionForm(prev => ({ ...prev, content: e.target.value }))}
-                      placeholder='{"title": "Section Title", "subtitle": "Section Description"}'
-                      className="min-h-[200px] font-mono"
-                    />
-                  </div>
-                  <p className="text-xs text-gray-500 mt-1">
-                    Enter JSON content for this section. Example: {"{"}"title": "Our Services", "subtitle": "Complete real estate solutions"{"}"}
-                  </p>
-                </>
-              )}
-            </div>
-          </div>
-
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setSectionDialog(false)}>
-              Cancel
-            </Button>
-            {editingSection?.page_id === 'live-homepage' ? (
-              <Button onClick={handleSaveSection} className="bg-green-600 hover:bg-green-700">
-                <Globe className="h-4 w-4 mr-2" />
-                Publish Live Changes
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setShowUnifiedCreator(false)}>
+                Cancel
               </Button>
-            ) : (
-              <Button onClick={handleSaveSection}>
-                <Save className="h-4 w-4 mr-2" />
-                Save Section
+              <Button onClick={createPageWithSections} disabled={!pageForm.title.trim()}>
+                Create Page {pageSections.length > 0 && `+ ${pageSections.length} Sections`}
               </Button>
-            )}
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-
-      {/* Publish Live Changes Confirmation Dialog */}
-      <Dialog open={showPublishDialog} onOpenChange={setShowPublishDialog}>
-        <DialogContent className="max-w-md">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
-              <Globe className="h-5 w-5 text-green-600" />
-              Publish Live Changes?
-            </DialogTitle>
-            <DialogDescription>
-              This will instantly update your live website. Visitors will see the changes immediately.
-            </DialogDescription>
-          </DialogHeader>
-
-          <div className="space-y-4 py-4">
-            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-              <div className="flex items-start gap-3">
-                <div className="text-yellow-600">⚠️</div>
-                <div className="text-sm">
-                  <p className="font-medium text-yellow-800 mb-1">Live Website Update</p>
-                  <p className="text-yellow-700">
-                    These changes will be visible to all website visitors immediately. Make sure the content is ready for publication.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {pendingChanges && (
-              <div className="bg-gray-50 border rounded-lg p-4">
-                <Label className="text-sm font-medium text-gray-700">Preview of Changes:</Label>
-                <div className="mt-2 text-sm bg-white p-3 rounded border font-mono text-gray-600 max-h-32 overflow-y-auto">
-                  {JSON.stringify(pendingChanges, null, 2)}
-                </div>
-              </div>
-            )}
-          </div>
-
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setShowPublishDialog(false)}>
-              Cancel
-            </Button>
-            <Button 
-              onClick={handlePublishLiveChanges}
-              className="bg-green-600 hover:bg-green-700 text-white"
-            >
-              <Globe className="h-4 w-4 mr-2" />
-              Yes, Publish Now
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-
-      {/* Section Page Creator Dialog */}
-      <Dialog open={showSectionPageCreator} onOpenChange={setShowSectionPageCreator}>
-        <DialogContent className="max-w-2xl">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
-              <Layout className="h-5 w-5" />
-              Create Page with Selected Sections
-            </DialogTitle>
-            <DialogDescription>
-              Create a new page using the {selectedSections.length} selected section templates
-            </DialogDescription>
-          </DialogHeader>
-
-          <div className="space-y-4 py-4">
-            <div>
-              <Label htmlFor="pageTitle">Page Title</Label>
-              <Input
-                id="pageTitle"
-                value={pageForm.title}
-                onChange={(e) => setPageForm(prev => ({ ...prev, title: e.target.value }))}
-                placeholder="Enter page title"
-              />
-            </div>
-
-            <div>
-              <Label htmlFor="pageSlug">Page Slug (URL)</Label>
-              <Input
-                id="pageSlug"
-                value={pageForm.slug}
-                onChange={(e) => setPageForm(prev => ({ ...prev, slug: e.target.value }))}
-                placeholder="auto-generated from title"
-              />
-            </div>
-
-            <div>
-              <Label htmlFor="pageMetaTitle">Meta Title (SEO)</Label>
-              <Input
-                id="pageMetaTitle"
-                value={pageForm.meta_title}
-                onChange={(e) => setPageForm(prev => ({ ...prev, meta_title: e.target.value }))}
-                placeholder="SEO title for search engines"
-              />
-            </div>
-
-            <div>
-              <Label htmlFor="pageMetaDescription">Meta Description</Label>
-              <Textarea
-                id="pageMetaDescription"
-                value={pageForm.meta_description}
-                onChange={(e) => setPageForm(prev => ({ ...prev, meta_description: e.target.value }))}
-                placeholder="Brief description for search engines (max 160 characters)"
-              />
-            </div>
-
-            <div className="flex items-center space-x-2">
-              <Switch
-                id="publish"
-                checked={pageForm.is_published}
-                onCheckedChange={(checked) => setPageForm(prev => ({ ...prev, is_published: checked }))}
-              />
-              <Label htmlFor="publish">Publish immediately</Label>
-            </div>
-
-            {/* Preview selected sections */}
-            <div className="bg-gray-50 border rounded-lg p-4">
-              <Label className="text-sm font-medium">Selected Sections Preview:</Label>
-              <div className="mt-2 space-y-2">
-                {selectedSections.map(sectionId => {
-                  const template = Object.values(sectionTemplates)
-                    .flat()
-                    .find((t: any) => t.id === sectionId);
-                  return template ? (
-                    <div key={sectionId} className="flex justify-between items-center bg-white p-2 rounded text-sm">
-                      <span className="font-medium">{template.name}</span>
-                      <Badge variant="outline">{template.id}</Badge>
-                    </div>
-                  ) : null;
-                })}
-              </div>
-            </div>
-          </div>
-
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setShowSectionPageCreator(false)}>
-              Cancel
-            </Button>
-            <Button 
-              onClick={handleCreatePageWithSections}
-              className="bg-green-600 hover:bg-green-700 text-white"
-            >
-              <Save className="h-4 w-4 mr-2" />
-              Create Page ({selectedSections.length} sections)
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      </div>
     </div>
   );
 };
