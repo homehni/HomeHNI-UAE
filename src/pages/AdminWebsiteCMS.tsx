@@ -1290,13 +1290,19 @@ export const AdminWebsiteCMS: React.FC = () => {
       {/* Create/Edit Page Dialog */}
       <Dialog open={pageDialog} onOpenChange={setPageDialog}>
         <DialogContent className="max-w-4xl max-h-[85vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle>
-              {editingPage ? "Edit Page" : "Create New Page"}
-            </DialogTitle>
-            <DialogDescription>
-              {editingPage ? "Update page content and settings" : "Create a new page for your website"}
-            </DialogDescription>
+          <DialogHeader className="flex items-start justify-between gap-4">
+            <div>
+              <DialogTitle>
+                {editingPage ? "Edit Page" : "Create New Page"}
+              </DialogTitle>
+              <DialogDescription>
+                {editingPage ? "Update page content and settings" : "Create a new page for your website"}
+              </DialogDescription>
+            </div>
+            <Button onClick={handleSavePage} className="bg-green-600 hover:bg-green-700 text-white" size="sm">
+              <Save className="h-4 w-4 mr-2" />
+              {editingPage ? 'Update' : 'Create'}
+            </Button>
           </DialogHeader>
 
           <div className="grid grid-cols-2 gap-4">

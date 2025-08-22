@@ -496,13 +496,18 @@ export const AdminPageManagement: React.FC = () => {
       {/* Create/Edit Dialog */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle>
-              {editingPage ? 'Edit Page' : 'Create New Page'}
-            </DialogTitle>
-            <DialogDescription>
-              {editingPage ? 'Update the page information' : 'Create a new page for your website'}
-            </DialogDescription>
+          <DialogHeader className="flex items-start justify-between gap-4">
+            <div>
+              <DialogTitle>
+                {editingPage ? 'Edit Page' : 'Create New Page'}
+              </DialogTitle>
+              <DialogDescription>
+                {editingPage ? 'Update the page information' : 'Create a new page for your website'}
+              </DialogDescription>
+            </div>
+            <Button onClick={handleSave} className="bg-green-600 hover:bg-green-700" size="sm">
+              {editingPage ? 'Update' : 'Create'}
+            </Button>
           </DialogHeader>
           
           <div className="space-y-4 pb-24">
