@@ -200,13 +200,6 @@ const EMICalculatorModal: React.FC<EMICalculatorModalProps> = ({
               </div>
             </div>
 
-            {/* Check Eligibility Button */}
-            <div className="text-center">
-              <Button size="lg" className="px-8">
-                Check Eligibility
-              </Button>
-            </div>
-
             {/* Banks */}
             <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
               {banks.map((bank, index) => (
