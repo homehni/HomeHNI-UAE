@@ -110,7 +110,7 @@ const AboutSidebar = () => {
       <main className="pt-24">
         <div className="container mx-auto px-4 pt-12 pb-10">
           {/* Border container wrapper */}
-          <div className="border border-border rounded-lg bg-background shadow-sm">
+          <div className="card-border-red hover-lift bg-background shadow-sm">
             <div className="grid grid-cols-[120px_1fr] md:grid-cols-12 gap-0">
               {/* Sidebar */}
               <aside className="border-r border-border bg-muted/30 md:col-span-3 lg:col-span-2">
