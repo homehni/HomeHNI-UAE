@@ -110,9 +110,9 @@ export const contentElementsService = {
       .eq('section_location', sectionLocation)
       .eq('element_key', elementKey)
       .eq('is_active', true)
-      .single();
+      .maybeSingle();
     
     if (error) return null;
-    return data as ContentElement;
+    return data as ContentElement | null;
   }
 };

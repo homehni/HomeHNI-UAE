@@ -4,7 +4,8 @@ import { PropertyTable } from '@/components/admin/PropertyTable';
 import { PropertyReviewModal } from '@/components/admin/PropertyReviewModal';
 import { DeleteConfirmationModal } from '@/components/DeleteConfirmationModal';
 import { useToast } from '@/hooks/use-toast';
-
+import { mapBhkType, mapPropertyType, mapListingType } from '@/utils/propertyMappings';
+ 
 // Property submission interface for new table
 interface PropertySubmission {
   id: string;
@@ -227,15 +228,21 @@ const AdminProperties = () => {
         throw new Error('Approval requires an authenticated admin user.');
       }
 
+      // Map values to satisfy DB CHECK constraints
+      const mappedPropertyType = mapPropertyType(payload.property_type || payload.propertyType || '');
+      const mappedListingType = mapListingType(payload.listing_type || payload.listingType || '');
+      const mappedBhkRaw = mapBhkType(payload.bhk_type || payload.bhkType || '');
+      const bhkValue = mappedBhkRaw && mappedBhkRaw.trim().length > 0 ? mappedBhkRaw : null;
+
       // Insert into main properties table for homepage display
       const { data: insertedProperty, error: insertError } = await supabase
         .from('properties')
         .insert({
           user_id: userIdToAssign,
           title: submission.title || payload.title || 'Untitled Property',
-          property_type: payload.property_type || 'Unknown',
-          listing_type: payload.listing_type || 'Unknown',
-          bhk_type: payload.bhk_type || '',
+          property_type: mappedPropertyType,
+          listing_type: mappedListingType,
+          bhk_type: bhkValue,
           furnishing: payload.furnishing ? (['unfurnished','semi-furnished','semi furnished','furnished'].includes(String(payload.furnishing).toLowerCase()) ? String(payload.furnishing).toLowerCase().replace(' ','-') : null) : null,
           availability_type: payload.availability_type || 'immediate',
           state: submission.state || payload.state || '',
@@ -274,8 +281,11 @@ const AdminProperties = () => {
       const { data: existingElements } = await supabase
         .from('content_elements')
         .select('element_key')
+        .eq('page_location', 'homepage')
+        .eq('section_location', 'featured_properties')
+        .eq('element_type', 'featured_property')
         .like('element_key', 'property_%')
-        .order('element_key');
+        .order('sort_order', { ascending: true });
 
       // Find the highest property number
       let nextPropertyNumber = 20; // Start from property_20
