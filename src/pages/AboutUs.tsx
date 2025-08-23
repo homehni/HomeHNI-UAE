@@ -75,19 +75,19 @@ const AboutUs = () => {
                 <h2 className="text-3xl font-bold text-gray-900">🛠 What Makes Us Different</h2>
               </div>
               <div className="space-y-8">
-                <div>
+                <div className="card-border-red hover-lift p-6 bg-white">
                   <h3 className="text-xl font-semibold text-gray-900 mb-3">Zero Brokerage, Zero Hassle</h3>
                   <p className="text-gray-700">Enjoy a broker-free marketplace where property owners and seekers connect directly—no hidden charges, no negotiation drama.</p>
                 </div>
-                <div>
+                <div className="card-border-blue hover-lift p-6 bg-white">
                   <h3 className="text-xl font-semibold text-gray-900 mb-3">Verified Listings Only</h3>
                   <p className="text-gray-700">Every listing is hand-reviewed to ensure accuracy, authenticity, and clarity—so you can trust what you see.</p>
                 </div>
-                <div>
+                <div className="card-border-green hover-lift p-6 bg-white">
                   <h3 className="text-xl font-semibold text-gray-900 mb-3">Smart Tools & Transparency</h3>
                   <p className="text-gray-700">With intuitive filters, clear pricing, and rich media previews, you can find your ideal space from the comfort of your home.</p>
                 </div>
-                <div>
+                <div className="card-border-purple hover-lift p-6 bg-white">
                   <h3 className="text-xl font-semibold text-gray-900 mb-3">Customer-First Service</h3>
                   <p className="text-gray-700">Our friendly support team is here to help—offering assistance without upselling or pushy sales tactics.</p>
                 </div>
