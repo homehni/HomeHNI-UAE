@@ -257,8 +257,8 @@ export const PostProperty: React.FC = () => {
         balconies: ('propertyDetails' in data.propertyInfo && 'balconies' in data.propertyInfo.propertyDetails) ? 
                   Number(data.propertyInfo.propertyDetails.balconies) || 0 : 0,
         super_area: ('propertyDetails' in data.propertyInfo) ? 
-                   Number(data.propertyInfo.propertyDetails.superBuiltUpArea) :
-                   ('plotDetails' in data.propertyInfo) ? Number(data.propertyInfo.plotDetails.plotArea) : 0,
+                   (Number(data.propertyInfo.propertyDetails.superBuiltUpArea) || 0) :
+                   (('plotDetails' in data.propertyInfo) ? (Number(data.propertyInfo.plotDetails.plotArea) || 0) : 0),
         carpet_area: null,
         expected_price: safeExpectedPrice,
         state: data.propertyInfo.locationDetails.state || 'Unknown',
