@@ -741,6 +741,42 @@ export type Database = {
         }
         Relationships: []
       }
+      property_submissions: {
+        Row: {
+          city: string | null
+          created_at: string
+          id: string
+          payload: Json
+          state: string | null
+          status: string
+          title: string | null
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          city?: string | null
+          created_at?: string
+          id?: string
+          payload?: Json
+          state?: string | null
+          status?: string
+          title?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          city?: string | null
+          created_at?: string
+          id?: string
+          payload?: Json
+          state?: string | null
+          status?: string
+          title?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       regions: {
         Row: {
           code: string
