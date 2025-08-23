@@ -73,6 +73,7 @@ import PropertyDetails from "./pages/PropertyDetails";
 import PropertySearch from "./pages/PropertySearch";
 import PagePreview from "./pages/PagePreview";
 import DynamicPage from "./pages/DynamicPage";
+import DeveloperPage from "./pages/DeveloperPage";
 
 const App: React.FC = () => {
   const [queryClient] = useState(() => new QueryClient({
@@ -145,6 +146,9 @@ const App: React.FC = () => {
             {/* Property Routes */}
             <Route path="/property/:id" element={<PropertyDetails />} />
             <Route path="/search" element={<PropertySearch />} />
+            
+            {/* Developer Routes */}
+            <Route path="/developer/:developerId" element={<DeveloperPage />} />
             
             {/* Preview Routes */}
             <Route path="/preview/:slug" element={<PagePreview />} />

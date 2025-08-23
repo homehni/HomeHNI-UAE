@@ -1,30 +1,69 @@
 import { useRef, useEffect, useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import prestigeGroupLogo from '@/assets/prestige-group-logo.jpg';
+import godrejPropertiesLogo from '@/assets/godrej-properties-logo.jpg';
+import ramkyGroupLogo from '@/assets/ramky-group-logo.jpg';
+import brigadeGroupLogo from '@/assets/brigade-group-logo.jpg';
+import aparnaConstructionsLogo from '@/assets/aparna-constructions-logo.jpg';
+import aliensGroupLogo from '@/assets/aliens-group-logo.jpg';
 const RealEstateSlider = () => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [isPaused, setIsPaused] = useState(false);
-  const slides = [{
-    image: '/lovable-uploads/beee2872-8a8a-4331-9d4f-3d88ac1c9948.png',
-    title: 'Invest in Real Estate'
-  }, {
-    image: '/lovable-uploads/4668a80f-108d-4ef0-929c-b21403b6fdaa.png',
-    title: 'Sell/Rent your property'
-  }, {
-    image: '/lovable-uploads/981bce75-81a9-4afe-a63a-3efc7448e319.png',
-    title: 'Plots/Land'
-  }, {
-    image: '/lovable-uploads/e491693e-a750-42b7-bdf6-cdff47be335b.png',
-    title: 'Explore Insights'
-  }, {
-    image: '/lovable-uploads/982cdd16-c759-4f19-9526-09591d45d1d7.png',
-    title: 'PG and co-living'
-  }, {
-    image: '/lovable-uploads/adbf8e36-1860-4c28-9fa4-778552598b4b.png',
-    title: 'Buying commercial spaces'
-  }];
+  const navigate = useNavigate();
 
-  // Create infinite loop by duplicating slides
-  const infiniteSlides = [...slides, ...slides];
+  const companies = [
+    {
+      id: 'prestige-group',
+      name: 'Prestige Group',
+      logo: prestigeGroupLogo,
+      rank: 1,
+      highlights: 'Large-scale mixed-use projects, strong presence across South India'
+    },
+    {
+      id: 'godrej-properties',
+      name: 'Godrej Properties',
+      logo: godrejPropertiesLogo,
+      rank: 2,
+      highlights: 'National developer newly active in Hyderabad, high-magnitude projects'
+    },
+    {
+      id: 'ramky-group',
+      name: 'Ramky Group',
+      logo: ramkyGroupLogo,
+      rank: 3,
+      highlights: 'Hyderabad-based, focus on sustainable and innovative infrastructure'
+    },
+    {
+      id: 'brigade-group',
+      name: 'Brigade Group',
+      logo: brigadeGroupLogo,
+      rank: 4,
+      highlights: 'Award-winning developer, active in residential, commercial, hospitality'
+    },
+    {
+      id: 'aparna-constructions',
+      name: 'Aparna Constructions',
+      logo: aparnaConstructionsLogo,
+      rank: 5,
+      highlights: 'High-quality housing, tech-enabled, eco-conscious building practices'
+    },
+    {
+      id: 'aliens-group',
+      name: 'Aliens Group',
+      logo: aliensGroupLogo,
+      rank: 6,
+      highlights: 'Hyderabad-founded, iconic skyscraper projects, design awards'
+    }
+  ];
+
+  // Create infinite loop by duplicating companies
+  const infiniteCompanies = [...companies, ...companies];
+  
+  const handleCompanyClick = (companyId: string) => {
+    navigate(`/developer/${companyId}`);
+  };
+
   const scroll = (direction: 'left' | 'right') => {
     if (scrollContainerRef.current) {
       const scrollAmount = 300;
@@ -42,7 +81,7 @@ const RealEstateSlider = () => {
       if (scrollContainerRef.current) {
         const container = scrollContainerRef.current;
         const slideWidth = 208; // 192px width + 16px gap
-        const totalOriginalWidth = slides.length * slideWidth;
+        const totalOriginalWidth = companies.length * slideWidth;
 
         // Smooth continuous scroll
         container.scrollBy({
@@ -58,7 +97,7 @@ const RealEstateSlider = () => {
     };
     const interval = setInterval(autoScroll, 20); // Much faster interval for smooth movement
     return () => clearInterval(interval);
-  }, [isPaused, slides.length]);
+  }, [isPaused, companies.length]);
   return <section className="pb-4 -mt-4 md:-mt-6 bg-gradient-to-br from-background to-secondary/20">
       <div className="container mx-auto px-4">
         <div className="relative max-w-6xl mx-auto">
@@ -76,16 +115,30 @@ const RealEstateSlider = () => {
           scrollbarWidth: 'none',
           msOverflowStyle: 'none'
         }} onMouseEnter={() => setIsPaused(true)} onMouseLeave={() => setIsPaused(false)}>
-            {infiniteSlides.map((slide, index) => <div key={index} className="flex-none w-48 bg-card rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
-                <div className="h-32 overflow-hidden">
-                  <img src={slide.image} alt={slide.title} className="w-full h-full object-cover" />
+            {infiniteCompanies.map((company, index) => 
+              <div 
+                key={index} 
+                className="flex-none w-48 bg-card rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer transform hover:scale-105"
+                onClick={() => handleCompanyClick(company.id)}
+              >
+                <div className="h-32 overflow-hidden bg-white flex items-center justify-center p-4">
+                  <img src={company.logo} alt={`${company.name} logo`} className="w-full h-full object-contain" />
                 </div>
                 <div className="p-4">
-                  <h3 className="text-sm font-medium text-foreground text-center">
-                    {slide.title}
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-xs bg-red-100 text-red-600 px-2 py-1 rounded-full font-semibold">
+                      #{company.rank}
+                    </span>
+                  </div>
+                  <h3 className="text-sm font-bold text-foreground text-center mb-1">
+                    {company.name}
                   </h3>
+                  <p className="text-xs text-muted-foreground text-center line-clamp-2">
+                    {company.highlights}
+                  </p>
                 </div>
-              </div>)}
+              </div>
+            )}
           </div>
         </div>
       </div>
