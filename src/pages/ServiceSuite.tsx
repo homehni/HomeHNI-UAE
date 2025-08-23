@@ -254,29 +254,29 @@ const ServiceSuite = () => {
       </section>
 
       {/* Sticky Form Container for Large Screens */}
-      <div className="hidden lg:block fixed top-32 right-8 z-40 w-[420px]">
-        <Card className="w-full rounded-xl shadow-2xl bg-background border-2 border-primary">
-          <CardContent className="p-4">
-            <h3 className="text-lg font-semibold text-foreground mb-1 text-uniform-center">Need Service Providers?</h3>
-            <p className="text-xs text-muted-foreground mb-3 text-uniform-center">Submit your requirements & get matched</p>
+      <div className="hidden lg:block fixed top-28 right-6 z-40 w-80 max-h-[calc(100vh-8rem)] overflow-y-auto">
+        <Card className="w-full rounded-lg shadow-xl bg-background border border-primary">
+          <CardContent className="p-3">
+            <h3 className="text-base font-semibold text-foreground mb-1 text-center">Need Service Providers?</h3>
+            <p className="text-xs text-muted-foreground mb-2 text-center">Submit requirements & get matched</p>
 
-            <form className="space-y-3" onSubmit={(e) => handleFormSubmit(e, false)}>
-              <div className="flex gap-2">
+            <form className="space-y-2" onSubmit={(e) => handleFormSubmit(e, false)}>
+              <div className="flex gap-1">
                 <Select defaultValue="+91" name="countryCode">
-                  <SelectTrigger className="w-28"><SelectValue /></SelectTrigger>
+                  <SelectTrigger className="w-20 h-8 text-xs"><SelectValue /></SelectTrigger>
                   <SelectContent>
                     <SelectItem value="+91">🇮🇳 +91</SelectItem>
                     <SelectItem value="+1">🇺🇸 +1</SelectItem>
                     <SelectItem value="+44">🇬🇧 +44</SelectItem>
                   </SelectContent>
                 </Select>
-                <Input name="phone" type="tel" placeholder="Phone Number" className="flex-1" required />
+                <Input name="phone" type="tel" placeholder="Phone Number" className="flex-1 h-8 text-xs" required />
               </div>
 
-              <Input name="email" type="email" placeholder="Email ID" required />
+              <Input name="email" type="email" placeholder="Email ID" className="h-8 text-xs" required />
 
               <Select name="serviceType" required>
-                <SelectTrigger><SelectValue placeholder="Select Service Type" /></SelectTrigger>
+                <SelectTrigger className="h-8 text-xs"><SelectValue placeholder="Select Service Type" /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="legal-services">Legal Services</SelectItem>
                   <SelectItem value="interior-design">Interior Design</SelectItem>
@@ -290,9 +290,9 @@ const ServiceSuite = () => {
                 </SelectContent>
               </Select>
 
-              <div className="flex gap-2">
+              <div className="flex gap-1">
                 <Select defaultValue="India" name="country">
-                  <SelectTrigger className="flex-1"><SelectValue placeholder="Country" /></SelectTrigger>
+                  <SelectTrigger className="flex-1 h-8 text-xs"><SelectValue placeholder="Country" /></SelectTrigger>
                   <SelectContent>
                     <SelectItem value="India">India</SelectItem>
                     <SelectItem value="USA">USA</SelectItem>
@@ -302,7 +302,7 @@ const ServiceSuite = () => {
                 </Select>
 
                 <Select name="state" onValueChange={setSelectedStateDesktop}>
-                  <SelectTrigger className="flex-1"><SelectValue placeholder="State" /></SelectTrigger>
+                  <SelectTrigger className="flex-1 h-8 text-xs"><SelectValue placeholder="State" /></SelectTrigger>
                   <SelectContent>
                     {statesData && Object.keys(statesData).map((state: string) => (
                       <SelectItem key={state} value={state}>
@@ -313,7 +313,7 @@ const ServiceSuite = () => {
                 </Select>
 
                 <Select name="city">
-                  <SelectTrigger className="flex-1"><SelectValue placeholder="City" /></SelectTrigger>
+                  <SelectTrigger className="flex-1 h-8 text-xs"><SelectValue placeholder="City" /></SelectTrigger>
                   <SelectContent>
                     {citiesDesktop.map((city: string) => (
                       <SelectItem key={city} value={city}>
@@ -327,10 +327,10 @@ const ServiceSuite = () => {
               <CategorizedImageUpload 
                 images={serviceImages}
                 onImagesChange={setServiceImages}
-                className="mt-2"
+                className="mt-1"
               />
 
-              <Button type="submit" className="w-full h-9 text-sm">Submit Requirements</Button>
+              <Button type="submit" className="w-full h-8 text-xs font-medium">Submit Requirements</Button>
             </form>
           </CardContent>
         </Card>
