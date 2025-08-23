@@ -5,23 +5,26 @@ import { PropertyReviewModal } from '@/components/admin/PropertyReviewModal';
 import { DeleteConfirmationModal } from '@/components/DeleteConfirmationModal';
 import { useToast } from '@/hooks/use-toast';
 
-interface Property {
+// Property submission interface for new table
+interface PropertySubmission {
   id: string;
   title: string;
-  property_type: string;
-  listing_type: string;
-  bhk_type: string;
-  state: string;
   city: string;
-  locality: string;
-  expected_price: number;
-  super_area: number;
-  description: string;
-  images: string[];
+  state: string;
   status: string;
+  payload: any;
   created_at: string;
+  user_id?: string;
+  // Add fields that PropertyTable expects
+  property_type?: string;
+  listing_type?: string;
+  bhk_type?: string;
+  locality?: string;
+  expected_price?: number;
+  super_area?: number;
+  description?: string;
+  images?: string[];
   rejection_reason?: string;
-  user_id: string;
   owner_name?: string;
   owner_email?: string;
   owner_phone?: string;
@@ -30,11 +33,11 @@ interface Property {
 }
 
 const AdminProperties = () => {
-  const [properties, setProperties] = useState<Property[]>([]);
-  const [filteredProperties, setFilteredProperties] = useState<Property[]>([]);
+  const [properties, setProperties] = useState<PropertySubmission[]>([]);
+  const [filteredProperties, setFilteredProperties] = useState<PropertySubmission[]>([]);
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(false);
-  const [selectedProperty, setSelectedProperty] = useState<Property | null>(null);
+  const [selectedProperty, setSelectedProperty] = useState<PropertySubmission | null>(null);
   const [reviewModalOpen, setReviewModalOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [propertyToDelete, setPropertyToDelete] = useState<string | null>(null);
@@ -57,23 +60,23 @@ const AdminProperties = () => {
   useEffect(() => {
     fetchProperties();
     
-    // Set up real-time subscription for property changes
+    // Set up real-time subscription for property submission changes
     const channel = supabase
-      .channel('properties-changes')
+      .channel('property-submissions-changes')
       .on(
         'postgres_changes',
         {
           event: 'INSERT',
           schema: 'public',
-          table: 'properties'
+          table: 'property_submissions'
         },
         (payload) => {
-          const newProperty = payload.new as Property;
+          const newSubmission = payload.new as PropertySubmission;
           
           // Show real-time notification for new property submission
           toast({
             title: '🎉 New Property Submitted!',
-            description: `"${newProperty.title}" by ${newProperty.owner_name || 'Unknown'} needs review`,
+            description: `"${newSubmission.title}" needs review`,
             duration: 6000,
           });
           
@@ -87,7 +90,7 @@ const AdminProperties = () => {
         {
           event: 'UPDATE',
           schema: 'public',
-          table: 'properties'
+          table: 'property_submissions'
         },
         (payload) => {
           // Refresh list for updates (status changes, etc.)
@@ -107,31 +110,62 @@ const AdminProperties = () => {
 
   const fetchProperties = async () => {
     try {
-      // Fetch all properties with owner information directly from properties table
-      const { data: propertiesData, error } = await supabase
-        .from('properties')
+      // Fetch all property submissions from new table
+      const { data: submissionsData, error } = await supabase
+        .from('property_submissions')
         .select('*')
         .order('created_at', { ascending: false });
 
       if (error) throw error;
 
-      // Owner information is now stored directly in properties table
-      setProperties(propertiesData || []);
+      // Transform submissions to match PropertyTable interface
+      const transformedProperties = submissionsData?.map(submission => {
+        // Parse the payload if it's a string
+        let payload: any = {};
+        try {
+          payload = typeof submission.payload === 'string' 
+            ? JSON.parse(submission.payload) 
+            : submission.payload || {};
+        } catch (e) {
+          console.warn('Error parsing payload for submission:', submission.id, e);
+          payload = {};
+        }
+        
+        return {
+          ...submission,
+          property_type: payload?.property_type || 'Unknown',
+          listing_type: payload?.listing_type || 'Unknown',
+          bhk_type: payload?.bhk_type || '',
+          locality: payload?.locality || 'Unknown',
+          expected_price: payload?.expected_price || 0,
+          super_area: payload?.super_area || 0,
+          description: payload?.description || '',
+          images: payload?.images || [],
+          rejection_reason: payload?.rejection_reason || '',
+          owner_name: payload?.owner_name || 'Unknown',
+          owner_email: payload?.owner_email || '',
+          owner_phone: payload?.owner_phone || '',
+          owner_role: payload?.owner_role || 'Owner',
+          is_featured: payload?.is_featured || false
+        };
+      }) || [];
+
+      setProperties(transformedProperties);
       
-      // Calculate stats
-      const total = propertiesData?.length || 0;
-      const pending = propertiesData?.filter(p => p.status === 'pending').length || 0;
-      const approved = propertiesData?.filter(p => p.status === 'approved').length || 0;
-      const rejected = propertiesData?.filter(p => p.status === 'rejected').length || 0;
-      const deleted = propertiesData?.filter(p => p.status === 'deleted').length || 0;
-      const featuredPending = propertiesData?.filter(p => p.status === 'pending' && p.is_featured === true).length || 0;
+      // Calculate stats based on new status system
+      const total = transformedProperties?.length || 0;
+      const pending = transformedProperties?.filter(p => p.status === 'new').length || 0;
+      const approved = transformedProperties?.filter(p => p.status === 'approved').length || 0;
+      const rejected = transformedProperties?.filter(p => p.status === 'rejected').length || 0;
+      const deleted = transformedProperties?.filter(p => p.status === 'deleted').length || 0;
+      const featuredPending = 0; // Not applicable for submissions
 
       setStats({ total, pending, approved, rejected, deleted, featuredPending });
     } catch (error) {
-      console.error('Error fetching properties:', error);
+      console.error('Error fetching property submissions:', error);
       toast({
         title: 'Error',
-        description: 'Failed to fetch properties',
+        description: 'Failed to fetch property submissions',
         variant: 'destructive'
       });
     } finally {
@@ -147,23 +181,17 @@ const AdminProperties = () => {
       filtered = filtered.filter(property =>
         property.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         property.city.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        property.state.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        property.locality.toLowerCase().includes(searchTerm.toLowerCase())
+        property.state.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
 
-    // Filter by status
+    // Filter by status (map 'pending' to 'new' for submissions)
     if (statusFilter !== 'all') {
-      if (statusFilter === 'featured-pending') {
-        filtered = filtered.filter(property => property.status === 'pending' && property.is_featured === true);
+      if (statusFilter === 'pending') {
+        filtered = filtered.filter(property => property.status === 'new');
       } else {
         filtered = filtered.filter(property => property.status === statusFilter);
       }
-    }
-
-    // Additional featured filter
-    if (featuredFilter) {
-      filtered = filtered.filter(property => property.is_featured === true);
     }
 
     setFilteredProperties(filtered);
@@ -173,12 +201,9 @@ const AdminProperties = () => {
     setActionLoading(true);
     try {
       const { error } = await supabase
-        .from('properties')
+        .from('property_submissions')
         .update({
-          status: 'approved',
-          is_featured: selectedProperty?.is_featured || false, // Preserve featured status on approval
-          admin_reviewed_at: new Date().toISOString(),
-          rejection_reason: null
+          status: 'approved'
         })
         .eq('id', propertyId);
 
@@ -186,16 +211,16 @@ const AdminProperties = () => {
 
       toast({
         title: 'Success',
-        description: 'Property approved successfully'
+        description: 'Property submission approved successfully'
       });
 
       setReviewModalOpen(false);
       fetchProperties();
     } catch (error) {
-      console.error('Error approving property:', error);
+      console.error('Error approving property submission:', error);
       toast({
         title: 'Error',
-        description: 'Failed to approve property',
+        description: 'Failed to approve property submission',
         variant: 'destructive'
       });
     } finally {
@@ -206,13 +231,24 @@ const AdminProperties = () => {
   const handleReject = async (propertyId: string, reason: string) => {
     setActionLoading(true);
     try {
+      // Parse existing payload and add rejection reason
+      let updatedPayload: any = {};
+      try {
+        updatedPayload = typeof selectedProperty?.payload === 'string' 
+          ? JSON.parse(selectedProperty.payload) 
+          : selectedProperty?.payload || {};
+      } catch (e) {
+        console.warn('Error parsing payload for rejection:', e);
+        updatedPayload = {};
+      }
+      
+      updatedPayload.rejection_reason = reason;
+      
       const { error } = await supabase
-        .from('properties')
+        .from('property_submissions')
         .update({
           status: 'rejected',
-          is_featured: false, // Clear featured status on rejection
-          rejection_reason: reason,
-          admin_reviewed_at: new Date().toISOString()
+          payload: JSON.stringify(updatedPayload)
         })
         .eq('id', propertyId);
 
@@ -220,16 +256,16 @@ const AdminProperties = () => {
 
       toast({
         title: 'Success',
-        description: 'Property rejected successfully'
+        description: 'Property submission rejected successfully'
       });
 
       setReviewModalOpen(false);
       fetchProperties();
     } catch (error) {
-      console.error('Error rejecting property:', error);
+      console.error('Error rejecting property submission:', error);
       toast({
         title: 'Error',
-        description: 'Failed to reject property',
+        description: 'Failed to reject property submission',
         variant: 'destructive'
       });
     } finally {
@@ -243,29 +279,25 @@ const AdminProperties = () => {
     setActionLoading(true);
     try {
       const { error } = await supabase
-        .from('properties')
-        .update({
-          status: 'deleted',
-          is_featured: false, // Clear featured status on deletion
-          admin_reviewed_at: new Date().toISOString()
-        })
+        .from('property_submissions')
+        .delete()
         .eq('id', propertyToDelete);
 
       if (error) throw error;
 
       toast({
         title: 'Success',
-        description: 'Property deleted successfully'
+        description: 'Property submission deleted successfully'
       });
 
       setDeleteModalOpen(false);
       setPropertyToDelete(null);
       fetchProperties();
     } catch (error) {
-      console.error('Error deleting property:', error);
+      console.error('Error deleting property submission:', error);
       toast({
         title: 'Error',
-        description: 'Failed to delete property',
+        description: 'Failed to delete property submission',
         variant: 'destructive'
       });
     } finally {
@@ -273,7 +305,7 @@ const AdminProperties = () => {
     }
   };
 
-  const handleRejectWithProperty = (property: Property) => {
+  const handleRejectWithProperty = (property: PropertySubmission) => {
     setSelectedProperty(property);
     setReviewModalOpen(true);
   };
@@ -291,8 +323,8 @@ const AdminProperties = () => {
       <div className="mb-8">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-foreground mb-2">Properties Management</h1>
-            <p className="text-muted-foreground">Review, approve, reject, and manage all property listings</p>
+            <h1 className="text-3xl font-bold text-foreground mb-2">Property Submissions</h1>
+            <p className="text-muted-foreground">Review instant property submissions from users</p>
           </div>
           {newPropertyCount > 0 && (
             <div className="flex items-center gap-3">
@@ -314,7 +346,7 @@ const AdminProperties = () => {
       </div>
 
       <PropertyTable
-        properties={filteredProperties}
+        properties={filteredProperties as any}
         searchTerm={searchTerm}
         onSearchChange={setSearchTerm}
         statusFilter={statusFilter}
@@ -323,11 +355,11 @@ const AdminProperties = () => {
         onFeaturedFilterChange={setFeaturedFilter}
         stats={stats}
         onView={(property) => {
-          setSelectedProperty(property);
+          setSelectedProperty(property as PropertySubmission);
           setReviewModalOpen(true);
         }}
         onApprove={handleApprove}
-        onReject={handleRejectWithProperty}
+        onReject={handleRejectWithProperty as any}
         onDelete={(id) => {
           setPropertyToDelete(id);
           setDeleteModalOpen(true);
@@ -336,7 +368,7 @@ const AdminProperties = () => {
       />
 
       <PropertyReviewModal
-        property={selectedProperty}
+        property={selectedProperty as any}
         open={reviewModalOpen}
         onClose={() => {
           setReviewModalOpen(false);

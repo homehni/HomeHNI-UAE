@@ -287,10 +287,24 @@ export const PostProperty: React.FC = () => {
       });
 
       // Insert property into database
-      console.log('About to insert property into database...');
+      // Submit to new instant submissions table
       const { data: property, error } = await supabase
-        .from('properties')
-        .insert([propertyData])
+        .from('property_submissions')
+        .insert({
+          title: propertyData.title || 'New Property Submission',
+          city: propertyData.city || 'Unknown',
+          state: propertyData.state || 'Unknown', 
+          status: 'new',
+          payload: JSON.stringify({
+            ...propertyData,
+            images: imageUrls.map(img => ({ url: img.url })),
+            videos: videoUrls,
+            originalFormData: {
+              ownerInfo: JSON.parse(JSON.stringify(data.ownerInfo)),
+              propertyInfo: JSON.parse(JSON.stringify(data.propertyInfo))
+            }
+          })
+        })
         .select()
         .single();
 
