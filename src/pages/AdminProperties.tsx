@@ -245,7 +245,7 @@ const AdminProperties = () => {
           super_area: payload.super_area || 0,
           carpet_area: payload.carpet_area || null,
           availability_date: payload.availability_date || null,
-          expected_price: payload.expected_price || 0,
+          expected_price: Math.max(payload.expected_price || 1, 1),
           price_negotiable: payload.price_negotiable !== false,
           maintenance_charges: payload.maintenance_charges || 0,
           security_deposit: payload.security_deposit || 0,
