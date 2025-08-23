@@ -47,15 +47,13 @@ export const validatePropertySubmission = (
     role: ownerInfo.role
   };
 
-  // Owner validation with sanitized data
-  if (!sanitizedOwner.fullName) errors.push('Owner full name is required');
-  if (!sanitizedOwner.phoneNumber) errors.push('Valid owner phone number is required');
-  if (!sanitizedOwner.email) errors.push('Valid owner email is required');
-  if (!sanitizedOwner.role) errors.push('Owner role is required');
+  // Minimal owner validation - only require at least one field
+  const hasOwnerInfo = sanitizedOwner.fullName || sanitizedOwner.phoneNumber || sanitizedOwner.email;
+  if (!hasOwnerInfo) errors.push('At least one owner detail (name, phone, or email) is required');
 
-  // Phone number format validation
-  if (sanitizedOwner.phoneNumber && !/^\+?[\d\s-()]{10,}$/.test(sanitizedOwner.phoneNumber)) {
-    errors.push('Phone number format is invalid');
+  // Relaxed phone number validation - only validate if provided
+  if (sanitizedOwner.phoneNumber && sanitizedOwner.phoneNumber.length > 0 && !/^\+?[\d\s-()]{7,}$/.test(sanitizedOwner.phoneNumber)) {
+    warnings.push('Phone number format may be invalid');
   }
 
   // Sanitize and validate property information
@@ -74,53 +72,57 @@ export const validatePropertySubmission = (
     balconies: sanitizeNumber(propertyInfo.propertyDetails?.balconies, 0, 10)
   };
 
-  // Property validation with sanitized data
-  if (!sanitizedProperty.title || sanitizedProperty.title.length < 10) {
-    errors.push('Property title must be at least 10 characters');
+  // Minimal property validation - only require at least one meaningful field
+  const hasPropertyInfo = sanitizedProperty.title || sanitizedProperty.propertyType || 
+                          sanitizedProperty.state || sanitizedProperty.city || 
+                          sanitizedProperty.locality || sanitizedProperty.expectedPrice > 0;
+  
+  if (!hasPropertyInfo) {
+    errors.push('At least one property detail is required (title, type, location, or price)');
   }
-  if (!sanitizedProperty.propertyType) errors.push('Property type is required');
-  if (!sanitizedProperty.listingType) errors.push('Listing type is required');
-  if (!sanitizedProperty.state) errors.push('State is required');
-  if (!sanitizedProperty.city) errors.push('City is required');
-  if (!sanitizedProperty.locality) errors.push('Locality is required');
-  if (!sanitizedProperty.pincode) errors.push('Pincode is required');
+  
+  // Gentle warnings for missing important fields
+  if (!sanitizedProperty.title) warnings.push('Property title is recommended for better visibility');
+  if (!sanitizedProperty.propertyType) warnings.push('Property type helps categorize your listing');
+  if (!sanitizedProperty.state || !sanitizedProperty.city) warnings.push('Location details help buyers find your property');
 
-  // Pincode validation
+  // Relaxed validations - convert to warnings
   if (sanitizedProperty.pincode && !/^\d{5,6}$/.test(sanitizedProperty.pincode)) {
-    errors.push('Pincode must be 5-6 digits');
+    warnings.push('Pincode should be 5-6 digits for better accuracy');
   }
 
-  // Numerical validations
-  if (sanitizedProperty.expectedPrice <= 0) {
-    errors.push('Expected price must be greater than 0');
+  if (sanitizedProperty.expectedPrice <= 0 && sanitizedProperty.expectedPrice !== null) {
+    warnings.push('Expected price helps buyers understand your property value');
   }
 
-  if (sanitizedProperty.superBuiltUpArea <= 0) {
-    errors.push('Super built-up area must be greater than 0');
+  if (sanitizedProperty.superBuiltUpArea <= 0 && sanitizedProperty.superBuiltUpArea !== null) {
+    warnings.push('Super built-up area helps buyers understand property size');
   }
 
-  // File validation for images
-  if (!propertyInfo.gallery?.images || propertyInfo.gallery.images.length < 3) {
-    errors.push('At least 3 property images are required');
-  } else if (propertyInfo.gallery.images.length > 10) {
-    errors.push('Maximum 10 images allowed');
+  // Relaxed image validation - make images optional but recommend them
+  if (!propertyInfo.gallery?.images || propertyInfo.gallery.images.length === 0) {
+    warnings.push('Adding images will make your property more attractive to buyers');
+  } else if (propertyInfo.gallery.images.length < 3) {
+    warnings.push('At least 3 images are recommended for better visibility');
+  } else if (propertyInfo.gallery.images.length > 15) {
+    warnings.push('Consider limiting to 15 images for better loading speed');
   }
 
-  // Validate each image file
+  // Validate each image file if provided
   if (propertyInfo.gallery?.images) {
     for (let i = 0; i < propertyInfo.gallery.images.length; i++) {
       const validation = validateFileUpload(propertyInfo.gallery.images[i], 'image');
       if (!validation.isValid) {
-        errors.push(`Image ${i + 1}: ${validation.errors.join(', ')}`);
+        warnings.push(`Image ${i + 1}: ${validation.errors.join(', ')}`);
       }
     }
   }
 
-  // Video validation (optional)
+  // Video validation (optional) - convert to warnings
   if (propertyInfo.gallery?.video) {
     const validation = validateFileUpload(propertyInfo.gallery.video, 'video');
     if (!validation.isValid) {
-      errors.push(`Video: ${validation.errors.join(', ')}`);
+      warnings.push(`Video: ${validation.errors.join(', ')}`);
     }
   }
 
