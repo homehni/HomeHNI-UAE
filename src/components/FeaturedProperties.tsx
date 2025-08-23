@@ -5,6 +5,7 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { contentElementsService, ContentElement } from '@/services/contentElementsService';
+import { fetchFeaturedProperties } from '@/services/propertyService';
 import { supabase } from '@/integrations/supabase/client';
 
 // Minimal type for featured properties
@@ -33,24 +34,16 @@ const FeaturedProperties = ({
   useEffect(() => {
     const fetchContent = async () => {
       try {
-        // Get featured properties directly from properties table
-        const { data: propertiesData, error } = await supabase
-          .from('properties')
-          .select('*')
-          .eq('status', 'approved')
-          .eq('is_featured', true)
-          .order('created_at', { ascending: false })
-          .limit(20);
-        
-        if (error) throw error;
+        // Get featured properties using the service function
+        const propertiesData = await fetchFeaturedProperties();
         
         // Transform to FeaturedProperty format
-        const transformedProperties = (propertiesData || []).map(property => ({
+        const transformedProperties = propertiesData.map(property => ({
           id: property.id,
           title: property.title,
           location: `${property.locality}, ${property.city}`,
           price: `₹${(property.expected_price / 100000).toFixed(1)}L`,
-          area: `${property.super_area} sq ft`,
+          area: `${property.super_area || 0} sq ft`,
           bedrooms: parseInt(property.bhk_type?.replace(/[^\d]/g, '') || '0'),
           bathrooms: property.bathrooms || 0,
           image: property.images?.[0] || 'photo-1560518883-ce09059eeffa',

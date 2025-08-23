@@ -35,7 +35,7 @@ export interface PublicProperty {
 }
 
 // Service to fetch public properties (no sensitive owner data)
-export const fetchPublicProperties = async (): Promise<PublicProperty[]> => {
+export const fetchPublicProperties = async () => {
   const { data, error } = await supabase
     .from('public_properties')
     .select('*')
@@ -46,46 +46,14 @@ export const fetchPublicProperties = async (): Promise<PublicProperty[]> => {
     throw error;
   }
   
-  return (data as PublicProperty[]) || [];
+  return data || [];
 };
 
 // Service to fetch featured properties for the home page
-export const fetchFeaturedProperties = async (): Promise<PublicProperty[]> => {
+export const fetchFeaturedProperties = async () => {
   const { data, error } = await supabase
     .from('public_properties')
-    .select(`
-      id,
-      title,
-      property_type,
-      listing_type,
-      bhk_type,
-      expected_price,
-      super_area,
-      carpet_area,
-      bathrooms,
-      balconies,
-      floor_no,
-      total_floors,
-      furnishing,
-      availability_type,
-      availability_date,
-      price_negotiable,
-      maintenance_charges,
-      security_deposit,
-      city,
-      locality,
-      state,
-      pincode,
-      street_address,
-      landmarks,
-      description,
-      images,
-      videos,
-      status,
-      created_at,
-      updated_at,
-      is_featured
-    `)
+    .select('*')
     .eq('status', 'approved')
     .eq('is_featured', true)
     .order('created_at', { ascending: false })
@@ -96,11 +64,11 @@ export const fetchFeaturedProperties = async (): Promise<PublicProperty[]> => {
     throw error;
   }
   
-  return (data as PublicProperty[]) || [];
+  return data || [];
 };
 
 // Service to fetch a single public property by ID
-export const fetchPublicPropertyById = async (id: string): Promise<PublicProperty | null> => {
+export const fetchPublicPropertyById = async (id: string) => {
   const { data, error } = await supabase
     .from('public_properties')
     .select('*')
@@ -112,5 +80,5 @@ export const fetchPublicPropertyById = async (id: string): Promise<PublicPropert
     return null;
   }
   
-  return data as PublicProperty | null;
+  return data;
 };
