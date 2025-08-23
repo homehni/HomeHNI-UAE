@@ -247,14 +247,14 @@ const ServiceSuite = () => {
 
             {/* Right: Placeholder for form on desktop */}
             <div className="hidden lg:block lg:justify-self-end">
-              <div className="w-full max-w-md h-80"></div>
+              <div className="w-full max-w-md h-96"></div>
             </div>
           </div>
         </div>
       </section>
 
       {/* Sticky Form Container for Large Screens */}
-      <div className="hidden lg:block fixed top-32 right-8 z-40 w-96">
+      <div className="hidden lg:block fixed top-32 right-8 z-40 w-[420px]">
         <Card className="w-full rounded-xl shadow-2xl bg-background border-2 border-primary">
           <CardContent className="p-4">
             <h3 className="text-lg font-semibold text-foreground mb-1 text-uniform-center">Need Service Providers?</h3>
