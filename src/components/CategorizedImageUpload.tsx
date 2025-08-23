@@ -109,28 +109,28 @@ export const CategorizedImageUpload: React.FC<CategorizedImageUploadProps> = ({
   const totalImages = images.gstCopy.length + images.servicePortfolio.length + images.capacityOfService.length;
 
   return (
-    <div className={`space-y-4 ${className}`}>
-      <div className="grid gap-4">
+    <div className={`space-y-3 ${className}`}>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
         {categories.map((category) => {
           const IconComponent = category.icon;
           const categoryImages = images[category.key];
           
           return (
-            <Card key={category.key} className="p-4 border border-muted-foreground/20">
-              <div className="flex items-start gap-3 mb-3">
+            <Card key={category.key} className="p-3 border border-muted-foreground/20">
+              <div className="flex flex-col items-center gap-2 mb-3">
                 <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${category.color}`}>
                   <IconComponent className="w-4 h-4" />
                 </div>
-                <div className="flex-1">
-                  <h4 className="text-sm font-medium text-foreground">{category.label}</h4>
-                  <p className="text-xs text-muted-foreground">{category.description}</p>
+                <div className="text-center">
+                  <h4 className="text-xs font-medium text-foreground">{category.label}</h4>
+                  <p className="text-[10px] text-muted-foreground">{category.description}</p>
                 </div>
                 <Button
                   type="button"
                   variant="outline"
                   size="sm"
                   onClick={() => handleUploadClick(category.key)}
-                  className="h-8 text-xs"
+                  className="h-7 text-xs px-2"
                 >
                   <Upload className="w-3 h-3 mr-1" />
                   Upload
@@ -146,24 +146,21 @@ export const CategorizedImageUpload: React.FC<CategorizedImageUploadProps> = ({
               />
               
               {categoryImages.length > 0 && (
-                <div className="space-y-2">
+                <div className="space-y-1">
                   {categoryImages.map((file, index) => (
-                    <div key={index} className="flex items-center gap-2 p-2 bg-muted/30 rounded text-xs">
+                    <div key={index} className="flex items-center gap-1 p-1 bg-muted/30 rounded text-[10px]">
                       <FileText className="w-3 h-3 text-muted-foreground flex-shrink-0" />
                       <span className="flex-1 truncate" title={file.name}>
-                        {file.name}
-                      </span>
-                      <span className="text-muted-foreground">
-                        ({(file.size / 1024 / 1024).toFixed(1)}MB)
+                        {file.name.length > 12 ? file.name.substring(0, 12) + '...' : file.name}
                       </span>
                       <Button
                         type="button"
                         variant="ghost"
                         size="sm"
                         onClick={() => removeImage(category.key, index)}
-                        className="h-6 w-6 p-0 hover:bg-destructive hover:text-destructive-foreground"
+                        className="h-5 w-5 p-0 hover:bg-destructive hover:text-destructive-foreground"
                       >
-                        <X className="w-3 h-3" />
+                        <X className="w-2 h-2" />
                       </Button>
                     </div>
                   ))}
@@ -172,11 +169,11 @@ export const CategorizedImageUpload: React.FC<CategorizedImageUploadProps> = ({
               
               {categoryImages.length === 0 && (
                 <div 
-                  className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-3 text-center cursor-pointer hover:border-muted-foreground/40 transition-colors"
+                  className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-2 text-center cursor-pointer hover:border-muted-foreground/40 transition-colors"
                   onClick={() => handleUploadClick(category.key)}
                 >
-                  <p className="text-xs text-muted-foreground">
-                    Click to upload or drag & drop files here
+                  <p className="text-[10px] text-muted-foreground">
+                    Click to upload files
                   </p>
                 </div>
               )}

@@ -256,11 +256,11 @@ const ServiceSuite = () => {
       {/* Sticky Form Container for Large Screens */}
       <div className="hidden lg:block fixed top-32 right-8 z-40 w-96">
         <Card className="w-full rounded-xl shadow-2xl bg-background border-2 border-primary">
-          <CardContent className="p-6">
-            <h3 className="text-xl font-semibold text-foreground mb-2 text-uniform-center">Need Service Providers?</h3>
-            <p className="text-sm text-muted-foreground mb-4 text-uniform-center">Submit your requirements & get matched</p>
+          <CardContent className="p-4">
+            <h3 className="text-lg font-semibold text-foreground mb-1 text-uniform-center">Need Service Providers?</h3>
+            <p className="text-xs text-muted-foreground mb-3 text-uniform-center">Submit your requirements & get matched</p>
 
-            <form className="space-y-4" onSubmit={(e) => handleFormSubmit(e, false)}>
+            <form className="space-y-3" onSubmit={(e) => handleFormSubmit(e, false)}>
               <div className="flex gap-2">
                 <Select defaultValue="+91" name="countryCode">
                   <SelectTrigger className="w-28"><SelectValue /></SelectTrigger>
@@ -327,10 +327,10 @@ const ServiceSuite = () => {
               <CategorizedImageUpload 
                 images={serviceImages}
                 onImagesChange={setServiceImages}
-                className="mt-4"
+                className="mt-2"
               />
 
-              <Button type="submit" className="w-full">Submit Requirements</Button>
+              <Button type="submit" className="w-full h-9 text-sm">Submit Requirements</Button>
             </form>
           </CardContent>
         </Card>
@@ -340,11 +340,11 @@ const ServiceSuite = () => {
       <section className="lg:hidden px-4 py-8 bg-background">
         <div className="container mx-auto max-w-xl px-4">
           <Card className="w-full rounded-2xl shadow-xl border-2 border-primary bg-card">
-            <CardContent className="p-8">
-              <h3 className="text-2xl font-bold text-foreground mb-3 text-uniform-center">Need Service Providers?</h3>
-              <p className="text-base text-muted-foreground mb-8 text-uniform-center">Submit your requirements & get matched</p>
+            <CardContent className="p-6">
+              <h3 className="text-xl font-bold text-foreground mb-2 text-uniform-center">Need Service Providers?</h3>
+              <p className="text-sm text-muted-foreground mb-6 text-uniform-center">Submit your requirements & get matched</p>
 
-              <form className="space-y-5" onSubmit={(e) => handleFormSubmit(e, true)}>
+              <form className="space-y-4" onSubmit={(e) => handleFormSubmit(e, true)}>
                 <div className="flex gap-3">
                   <Select defaultValue="+91" name="countryCode">
                     <SelectTrigger className="w-32 h-12 bg-background">
@@ -433,10 +433,10 @@ const ServiceSuite = () => {
                 <CategorizedImageUpload 
                   images={serviceImages}
                   onImagesChange={setServiceImages}
-                  className="mt-4"
+                  className="mt-3"
                 />
 
-                <Button type="submit" className="w-full h-12 text-base font-semibold bg-red-600 hover:bg-red-700 text-white mt-6">
+                <Button type="submit" className="w-full h-11 text-sm font-semibold bg-red-600 hover:bg-red-700 text-white mt-4">
                   Submit Requirements
                 </Button>
               </form>
