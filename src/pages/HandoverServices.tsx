@@ -210,6 +210,7 @@ const HandoverServices = () => {
                   <SelectItem value="farm-house">Farm House</SelectItem>
                   <SelectItem value="villa">Villa</SelectItem>
                   <SelectItem value="plots">Plots</SelectItem>
+                  <SelectItem value="resort">Resort</SelectItem>
                   <SelectItem value="commercial-building">Commercial Building/House</SelectItem>
                   <SelectItem value="agricultural">Agricultural Lands</SelectItem>
                   <SelectItem value="other">Others</SelectItem>
