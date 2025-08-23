@@ -198,21 +198,22 @@ export const PostProperty: React.FC = () => {
       });
 
       const imageUrls = await uploadFilesToStorage(
-        data.propertyInfo.gallery.images,
+        (data as any)?.propertyInfo?.gallery?.images || [],
         'images',
         user.id
       );
 
       // Upload video if provided
       let videoUrls: string[] = [];
-      if (data.propertyInfo.gallery.video) {
+      const videoFile = (data as any)?.propertyInfo?.gallery?.video;
+      if (videoFile) {
         toast({
           title: "Uploading Video...",
           description: "Please wait while we upload your property video.",
         });
 
         const videoResult = await uploadSingleFile(
-          data.propertyInfo.gallery.video,
+          videoFile,
           'videos',
           user.id
         );
