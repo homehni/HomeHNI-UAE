@@ -132,7 +132,7 @@ const GrievanceRedressal = () => {
             </div>
 
             {/* Grievance Form */}
-            <div className="bg-gray-50 rounded-lg p-8 mb-8">
+            <div className="bg-gray-50 rounded-lg p-8 mb-8 border border-primary">
               <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                   {/* Personal Information Section */}
