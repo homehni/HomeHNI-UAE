@@ -1,6 +1,7 @@
 
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { User, Mail, Phone, MapPin } from 'lucide-react';
 
 interface PersonalDetailsData {
@@ -78,52 +79,76 @@ const PersonalDetailsStep = ({ data, onChange }: PersonalDetailsStepProps) => {
           <p className="text-xs text-gray-500 mt-1">Enter a valid 10-digit Indian mobile number</p>
         </div>
 
-        <div>
-          <Label htmlFor="country" className="text-sm font-medium text-gray-700 mb-2 flex items-center">
+        {/* Location Information in a single row */}
+        <div className="md:col-span-2">
+          <Label className="text-sm font-medium text-gray-700 mb-2 flex items-center">
             <MapPin className="h-4 w-4 mr-2" />
-            Country <span className="text-red-500 ml-1">*</span>
+            Location <span className="text-red-500 ml-1">*</span>
           </Label>
-          <Input
-            id="country"
-            type="text"
-            placeholder="Enter your country"
-            value={data.country}
-            onChange={(e) => onChange({ country: e.target.value })}
-            className="mt-1"
-            required
-          />
-        </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-1">
+            <div>
+              <Select
+                value={data.country}
+                onValueChange={(value) => onChange({ country: value })}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Country" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="India">India</SelectItem>
+                  <SelectItem value="USA">United States</SelectItem>
+                  <SelectItem value="UK">United Kingdom</SelectItem>
+                  <SelectItem value="Canada">Canada</SelectItem>
+                  <SelectItem value="Australia">Australia</SelectItem>
+                  <SelectItem value="Other">Other</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
 
-        <div>
-          <Label htmlFor="state" className="text-sm font-medium text-gray-700 mb-2 flex items-center">
-            <MapPin className="h-4 w-4 mr-2" />
-            State/Province <span className="text-red-500 ml-1">*</span>
-          </Label>
-          <Input
-            id="state"
-            type="text"
-            placeholder="Enter your state/province"
-            value={data.state}
-            onChange={(e) => onChange({ state: e.target.value })}
-            className="mt-1"
-            required
-          />
-        </div>
+            <div>
+              <Select
+                value={data.state}
+                onValueChange={(value) => onChange({ state: value })}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="State" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Maharashtra">Maharashtra</SelectItem>
+                  <SelectItem value="Delhi">Delhi</SelectItem>
+                  <SelectItem value="Karnataka">Karnataka</SelectItem>
+                  <SelectItem value="Tamil Nadu">Tamil Nadu</SelectItem>
+                  <SelectItem value="Gujarat">Gujarat</SelectItem>
+                  <SelectItem value="Rajasthan">Rajasthan</SelectItem>
+                  <SelectItem value="West Bengal">West Bengal</SelectItem>
+                  <SelectItem value="Uttar Pradesh">Uttar Pradesh</SelectItem>
+                  <SelectItem value="Other">Other</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
 
-        <div>
-          <Label htmlFor="city" className="text-sm font-medium text-gray-700 mb-2 flex items-center">
-            <MapPin className="h-4 w-4 mr-2" />
-            City <span className="text-red-500 ml-1">*</span>
-          </Label>
-          <Input
-            id="city"
-            type="text"
-            placeholder="Enter your city"
-            value={data.city}
-            onChange={(e) => onChange({ city: e.target.value })}
-            className="mt-1"
-            required
-          />
+            <div>
+              <Select
+                value={data.city}
+                onValueChange={(value) => onChange({ city: value })}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="City" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Mumbai">Mumbai</SelectItem>
+                  <SelectItem value="Delhi">Delhi</SelectItem>
+                  <SelectItem value="Bangalore">Bangalore</SelectItem>
+                  <SelectItem value="Chennai">Chennai</SelectItem>
+                  <SelectItem value="Hyderabad">Hyderabad</SelectItem>
+                  <SelectItem value="Pune">Pune</SelectItem>
+                  <SelectItem value="Ahmedabad">Ahmedabad</SelectItem>
+                  <SelectItem value="Kolkata">Kolkata</SelectItem>
+                  <SelectItem value="Other">Other</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
         </div>
       </div>
     </div>
