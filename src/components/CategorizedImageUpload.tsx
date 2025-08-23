@@ -123,7 +123,6 @@ export const CategorizedImageUpload: React.FC<CategorizedImageUploadProps> = ({
                 </div>
                 <div className="text-center">
                   <h4 className="text-xs font-medium text-foreground">{category.label}</h4>
-                  <p className="text-[10px] text-muted-foreground">{category.description}</p>
                 </div>
                 <Button
                   type="button"
