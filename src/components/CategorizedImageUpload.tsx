@@ -116,7 +116,7 @@ export const CategorizedImageUpload: React.FC<CategorizedImageUploadProps> = ({
           const categoryImages = images[category.key];
           
           return (
-            <Card key={category.key} className="p-3 border border-muted-foreground/20">
+            <Card key={category.key} className="p-2 border border-muted-foreground/20">
               <div className="flex flex-col items-center gap-2 mb-3">
                 <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${category.color}`}>
                   <IconComponent className="w-4 h-4" />
