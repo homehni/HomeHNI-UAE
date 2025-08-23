@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import Header from "@/components/Header";
 import Marquee from "@/components/Marquee";
+import Footer from "@/components/Footer";
 
 const DeveloperPage = () => {
   const { developerId } = useParams();
@@ -225,10 +226,6 @@ const DeveloperPage = () => {
       <section className="pt-32 pb-16 px-4 bg-gradient-to-br from-red-600 to-red-800 text-white">
         <div className="container mx-auto max-w-6xl">
           <div className="text-center">
-            <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full mb-6">
-              <Award className="w-5 h-5" />
-              <span className="font-semibold">Rank #{developer.rank} in Hyderabad</span>
-            </div>
             <h1 className="text-4xl md:text-6xl font-bold mb-4">{developer.name}</h1>
             <p className="text-xl text-white/90 mb-8 max-w-3xl mx-auto">
               {developer.highlights}
@@ -380,6 +377,8 @@ const DeveloperPage = () => {
           </div>
         </div>
       </section>
+      
+      <Footer />
     </div>
   );
 };
