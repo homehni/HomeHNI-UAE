@@ -90,8 +90,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     // Get the current redirectTo parameter to preserve it after OAuth
     const urlParams = new URLSearchParams(window.location.search);
     const redirectPath = urlParams.get('redirectTo');
+    // Redirect directly to the intended page after Google auth, not back to auth page
     const redirectUrl = redirectPath 
-      ? `${window.location.origin}/auth?redirectTo=${encodeURIComponent(redirectPath)}` 
+      ? `${window.location.origin}${redirectPath}` 
       : `${window.location.origin}/`;
     
     const { error } = await supabase.auth.signInWithOAuth({

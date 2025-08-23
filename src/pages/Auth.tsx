@@ -34,13 +34,17 @@ export const Auth: React.FC = () => {
 
   useEffect(() => {
     if (user && profile) {
-      // Check if user needs to select a role (first time setup)
-      if (profile.role === 'buyer' || profile.role === 'seller') {
-        const urlParams = new URLSearchParams(location.search);
-        const redirectPath = urlParams.get('redirectTo');
-        navigate(redirectPath ? redirectPath : '/', { replace: true });
-      } else {
+      // Get the redirect path from URL
+      const urlParams = new URLSearchParams(location.search);
+      const redirectPath = urlParams.get('redirectTo');
+      
+      // Check if user needs to select a role (only if they don't have buyer/seller/agent/builder role)
+      const validRoles = ['buyer', 'seller', 'agent', 'builder'];
+      if (!validRoles.includes(profile.role)) {
         setShowRoleModal(true);
+      } else {
+        // User has a valid role, redirect them
+        navigate(redirectPath ? redirectPath : '/', { replace: true });
       }
     }
   }, [user, profile, navigate, location]);
