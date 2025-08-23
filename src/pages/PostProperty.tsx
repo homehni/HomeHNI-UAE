@@ -175,11 +175,17 @@ export const PostProperty: React.FC = () => {
         gallery: (data.propertyInfo as any).gallery || { images: [], video: null }
       } as any;
 
+      console.log('Starting property submission process...');
+      console.log('Owner info:', data.ownerInfo);
+      console.log('Property info before normalization:', data.propertyInfo);
+      
       const validation = validatePropertySubmission(
         data.ownerInfo as any,
         normalizedPropertyInfo as any,
         user.id
       );
+      
+      console.log('Validation result:', validation);
 
       if (!validation.isValid) {
         console.error('Validation failed:', validation.errors);
@@ -281,6 +287,7 @@ export const PostProperty: React.FC = () => {
       });
 
       // Insert property into database
+      console.log('About to insert property into database...');
       const { data: property, error } = await supabase
         .from('properties')
         .insert([propertyData])
@@ -288,11 +295,14 @@ export const PostProperty: React.FC = () => {
         .single();
 
       if (error) {
-        console.error('Full database error object:', error);
-        console.error('Error code:', error.code);
-        console.error('Error message:', error.message);
-        console.error('Error details:', error.details);
-        console.error('Error hint:', error.hint);
+        console.error('Database insertion error - Full details:', {
+          error,
+          code: error.code,
+          message: error.message,
+          details: error.details,
+          hint: error.hint,
+          propertyDataSent: propertyData
+        });
         
         // Provide specific error messages based on error type
         let errorMessage = `Database error: ${error.message}`;
