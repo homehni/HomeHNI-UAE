@@ -460,7 +460,7 @@ const Careers = () => {
               </div>
               
               <div className="space-y-8">
-                <div className="card-border hover-lift p-6 bg-white">
+                <div className="card-border-red hover-lift p-6 bg-white">
                   <h3 className="text-xl font-semibold text-gray-900 mb-3 text-uniform">1. Real Estate Sales Consultant – HNI Segment</h3>
                   <div className="space-y-2 text-gray-700 text-uniform">
                     <p><strong>Location:</strong> Mumbai / Bangalore / Delhi NCR</p>
@@ -469,7 +469,7 @@ const Careers = () => {
                   </div>
                 </div>
                 
-                <div className="card-border hover-lift p-6 bg-white">
+                <div className="card-border-blue hover-lift p-6 bg-white">
                   <h3 className="text-xl font-semibold text-gray-900 mb-3 text-uniform">2. Digital Marketing Executive</h3>
                   <div className="space-y-2 text-gray-700 text-uniform">
                     <p><strong>Location:</strong> Remote</p>
@@ -478,7 +478,7 @@ const Careers = () => {
                   </div>
                 </div>
                 
-                <div className="card-border hover-lift p-6 bg-white">
+                <div className="card-border-green hover-lift p-6 bg-white">
                   <h3 className="text-xl font-semibold text-gray-900 mb-3 text-uniform">3. Full Stack Developer (React + Node.js)</h3>
                   <div className="space-y-2 text-gray-700 text-uniform">
                     <p><strong>Location:</strong> Hybrid (Bangalore Preferred)</p>
@@ -487,7 +487,7 @@ const Careers = () => {
                   </div>
                 </div>
                 
-                <div className="card-border hover-lift p-6 bg-white">
+                <div className="card-border-purple hover-lift p-6 bg-white">
                   <h3 className="text-xl font-semibold text-gray-900 mb-3 text-uniform">4. Legal Documentation Executive</h3>
                   <div className="space-y-2 text-gray-700 text-uniform">
                     <p><strong>Location:</strong> Remote / Onsite</p>
