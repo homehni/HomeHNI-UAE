@@ -200,18 +200,80 @@ const AdminProperties = () => {
   const handleApprove = async (propertyId: string) => {
     setActionLoading(true);
     try {
-      const { error } = await supabase
+      // First, get the submission data
+      const { data: submission, error: fetchError } = await supabase
+        .from('property_submissions')
+        .select('*')
+        .eq('id', propertyId)
+        .single();
+
+      if (fetchError) throw fetchError;
+
+      // Parse the payload
+      let payload: any = {};
+      try {
+        payload = typeof submission.payload === 'string' 
+          ? JSON.parse(submission.payload) 
+          : submission.payload || {};
+      } catch (e) {
+        console.warn('Error parsing payload for approval:', e);
+        payload = {};
+      }
+
+      // Insert into main properties table for homepage display
+      const { error: insertError } = await supabase
+        .from('properties')
+        .insert({
+          user_id: submission.user_id,
+          title: submission.title || payload.title || 'Untitled Property',
+          property_type: payload.property_type || 'Unknown',
+          listing_type: payload.listing_type || 'Unknown',
+          bhk_type: payload.bhk_type || '',
+          furnishing: payload.furnishing || '',
+          availability_type: payload.availability_type || 'immediate',
+          state: submission.state || payload.state || '',
+          city: submission.city || payload.city || '',
+          locality: payload.locality || '',
+          street_address: payload.street_address || '',
+          pincode: payload.pincode || '',
+          landmarks: payload.landmarks || '',
+          description: payload.description || '',
+          bathrooms: payload.bathrooms || 0,
+          balconies: payload.balconies || 0,
+          floor_no: payload.floor_no || null,
+          total_floors: payload.total_floors || null,
+          super_area: payload.super_area || 0,
+          carpet_area: payload.carpet_area || null,
+          availability_date: payload.availability_date || null,
+          expected_price: payload.expected_price || 0,
+          price_negotiable: payload.price_negotiable !== false,
+          maintenance_charges: payload.maintenance_charges || 0,
+          security_deposit: payload.security_deposit || 0,
+          images: payload.images || [],
+          videos: payload.videos || [],
+          owner_name: payload.owner_name || '',
+          owner_email: payload.owner_email || '',
+          owner_phone: payload.owner_phone || '',
+          owner_role: payload.owner_role || 'Owner',
+          status: 'approved',
+          is_featured: payload.is_featured || false
+        });
+
+      if (insertError) throw insertError;
+
+      // Update submission status
+      const { error: updateError } = await supabase
         .from('property_submissions')
         .update({
           status: 'approved'
         })
         .eq('id', propertyId);
 
-      if (error) throw error;
+      if (updateError) throw updateError;
 
       toast({
         title: 'Success',
-        description: 'Property submission approved successfully'
+        description: 'Property approved and added to listings'
       });
 
       setReviewModalOpen(false);
