@@ -1,12 +1,15 @@
 
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
-import { User, Mail, Phone } from 'lucide-react';
+import { User, Mail, Phone, MapPin } from 'lucide-react';
 
 interface PersonalDetailsData {
   fullName: string;
   email: string;
   phoneNumber: string;
+  country: string;
+  state: string;
+  city: string;
 }
 
 interface PersonalDetailsStepProps {
@@ -73,6 +76,54 @@ const PersonalDetailsStep = ({ data, onChange }: PersonalDetailsStepProps) => {
             required
           />
           <p className="text-xs text-gray-500 mt-1">Enter a valid 10-digit Indian mobile number</p>
+        </div>
+
+        <div>
+          <Label htmlFor="country" className="text-sm font-medium text-gray-700 mb-2 flex items-center">
+            <MapPin className="h-4 w-4 mr-2" />
+            Country <span className="text-red-500 ml-1">*</span>
+          </Label>
+          <Input
+            id="country"
+            type="text"
+            placeholder="Enter your country"
+            value={data.country}
+            onChange={(e) => onChange({ country: e.target.value })}
+            className="mt-1"
+            required
+          />
+        </div>
+
+        <div>
+          <Label htmlFor="state" className="text-sm font-medium text-gray-700 mb-2 flex items-center">
+            <MapPin className="h-4 w-4 mr-2" />
+            State/Province <span className="text-red-500 ml-1">*</span>
+          </Label>
+          <Input
+            id="state"
+            type="text"
+            placeholder="Enter your state/province"
+            value={data.state}
+            onChange={(e) => onChange({ state: e.target.value })}
+            className="mt-1"
+            required
+          />
+        </div>
+
+        <div>
+          <Label htmlFor="city" className="text-sm font-medium text-gray-700 mb-2 flex items-center">
+            <MapPin className="h-4 w-4 mr-2" />
+            City <span className="text-red-500 ml-1">*</span>
+          </Label>
+          <Input
+            id="city"
+            type="text"
+            placeholder="Enter your city"
+            value={data.city}
+            onChange={(e) => onChange({ city: e.target.value })}
+            className="mt-1"
+            required
+          />
         </div>
       </div>
     </div>

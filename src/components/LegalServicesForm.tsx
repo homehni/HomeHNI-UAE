@@ -19,6 +19,9 @@ interface FormData {
     fullName: string;
     email: string;
     phoneNumber: string;
+    country: string;
+    state: string;
+    city: string;
   };
   propertyInformation: {
     propertyAddress: string;
@@ -52,6 +55,9 @@ const LegalServicesForm = ({ isOpen, onClose }: LegalServicesFormProps) => {
       fullName: '',
       email: '',
       phoneNumber: '',
+      country: '',
+      state: '',
+      city: '',
     },
     propertyInformation: {
       propertyAddress: '',
