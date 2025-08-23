@@ -816,7 +816,7 @@ const ServiceSuite = () => {
                 </div>
               </div>
 
-              <h3 className="text-2xl md:text-3xl font-bold text-foreground mb-6">
+              {/* <h3 className="text-2xl md:text-3xl font-bold text-foreground mb-6">
                 Get Started with Our Service Suite Today
               </h3>
               
@@ -828,7 +828,7 @@ const ServiceSuite = () => {
 
               <Button className="bg-red-600 hover:bg-red-700 text-white px-8 py-3 text-lg font-semibold">
                 Submit Your Requirements Now
-              </Button>
+              </Button> */}
             </div>
             
             {/* Right side spacing for sticky form */}
