@@ -49,7 +49,7 @@ const FeaturedProperties = ({
         let validPropertyIdSet = new Set<string>();
         if (referencedPropertyIds.length > 0) {
           const { data: existingProps, error: existingErr } = await supabase
-            .from('public_properties')
+            .from('properties')
             .select('id, status')
             .in('id', referencedPropertyIds);
           if (!existingErr && existingProps) {

@@ -52,7 +52,7 @@ export const fetchPublicProperties = async () => {
 // Service to fetch featured properties for the home page
 export const fetchFeaturedProperties = async () => {
   const { data, error } = await supabase
-    .from('public_properties')
+    .from('properties')
     .select('*')
     .eq('status', 'approved')
     .eq('is_featured', true)
