@@ -1,4 +1,5 @@
 
+import { useState, useEffect } from 'react';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -19,6 +20,49 @@ interface PersonalDetailsStepProps {
 }
 
 const PersonalDetailsStep = ({ data, onChange }: PersonalDetailsStepProps) => {
+  const [indiaData, setIndiaData] = useState<Record<string, string[]>>({});
+  const [availableStates, setAvailableStates] = useState<string[]>([]);
+  const [availableCities, setAvailableCities] = useState<string[]>([]);
+
+  // Load India states and cities data
+  useEffect(() => {
+    const loadIndiaData = async () => {
+      try {
+        const response = await fetch('/data/india_states_cities.json');
+        const data = await response.json();
+        setIndiaData(data);
+      } catch (error) {
+        console.error('Failed to load India data:', error);
+      }
+    };
+    loadIndiaData();
+  }, []);
+
+  // Update available states when country changes
+  useEffect(() => {
+    if (data.country === 'India') {
+      setAvailableStates(Object.keys(indiaData));
+    } else {
+      setAvailableStates([]);
+    }
+    // Reset state and city when country changes
+    if (data.state) {
+      onChange({ state: '', city: '' });
+    }
+  }, [data.country, indiaData]);
+
+  // Update available cities when state changes
+  useEffect(() => {
+    if (data.country === 'India' && data.state && indiaData[data.state]) {
+      setAvailableCities(indiaData[data.state]);
+    } else {
+      setAvailableCities([]);
+    }
+    // Reset city when state changes
+    if (data.city) {
+      onChange({ city: '' });
+    }
+  }, [data.state, data.country, indiaData]);
   return (
     <div className="space-y-6">
       <div className="text-center mb-8">
@@ -109,20 +153,24 @@ const PersonalDetailsStep = ({ data, onChange }: PersonalDetailsStepProps) => {
               <Select
                 value={data.state}
                 onValueChange={(value) => onChange({ state: value })}
+                disabled={data.country !== 'India' || availableStates.length === 0}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="State" />
+                  <SelectValue placeholder={data.country === 'India' ? 'Select State' : 'State'} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="Maharashtra">Maharashtra</SelectItem>
-                  <SelectItem value="Delhi">Delhi</SelectItem>
-                  <SelectItem value="Karnataka">Karnataka</SelectItem>
-                  <SelectItem value="Tamil Nadu">Tamil Nadu</SelectItem>
-                  <SelectItem value="Gujarat">Gujarat</SelectItem>
-                  <SelectItem value="Rajasthan">Rajasthan</SelectItem>
-                  <SelectItem value="West Bengal">West Bengal</SelectItem>
-                  <SelectItem value="Uttar Pradesh">Uttar Pradesh</SelectItem>
-                  <SelectItem value="Other">Other</SelectItem>
+                  {data.country === 'India' ? (
+                    availableStates.map((state) => (
+                      <SelectItem key={state} value={state}>
+                        {state}
+                      </SelectItem>
+                    ))
+                  ) : (
+                    <>
+                      <SelectItem value="Other State">Other State</SelectItem>
+                      <SelectItem value="Not Applicable">Not Applicable</SelectItem>
+                    </>
+                  )}
                 </SelectContent>
               </Select>
             </div>
@@ -131,20 +179,24 @@ const PersonalDetailsStep = ({ data, onChange }: PersonalDetailsStepProps) => {
               <Select
                 value={data.city}
                 onValueChange={(value) => onChange({ city: value })}
+                disabled={!data.state || (data.country === 'India' && availableCities.length === 0)}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="City" />
+                  <SelectValue placeholder={data.country === 'India' && data.state ? 'Select City' : 'City'} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="Mumbai">Mumbai</SelectItem>
-                  <SelectItem value="Delhi">Delhi</SelectItem>
-                  <SelectItem value="Bangalore">Bangalore</SelectItem>
-                  <SelectItem value="Chennai">Chennai</SelectItem>
-                  <SelectItem value="Hyderabad">Hyderabad</SelectItem>
-                  <SelectItem value="Pune">Pune</SelectItem>
-                  <SelectItem value="Ahmedabad">Ahmedabad</SelectItem>
-                  <SelectItem value="Kolkata">Kolkata</SelectItem>
-                  <SelectItem value="Other">Other</SelectItem>
+                  {data.country === 'India' && data.state ? (
+                    availableCities.map((city) => (
+                      <SelectItem key={city} value={city}>
+                        {city}
+                      </SelectItem>
+                    ))
+                  ) : (
+                    <>
+                      <SelectItem value="Other City">Other City</SelectItem>
+                      <SelectItem value="Not Applicable">Not Applicable</SelectItem>
+                    </>
+                  )}
                 </SelectContent>
               </Select>
             </div>
