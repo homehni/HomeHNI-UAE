@@ -171,12 +171,6 @@ export const CategorizedImageUpload: React.FC<CategorizedImageUploadProps> = ({
           );
         })}
       </div>
-      
-      <div className="text-center">
-        <p className="text-xs text-muted-foreground">
-          Total files: {totalImages} | Supported formats: Images (PNG, JPG, GIF), PDF | Max size: 5MB per file
-        </p>
-      </div>
     </div>
   );
 };
