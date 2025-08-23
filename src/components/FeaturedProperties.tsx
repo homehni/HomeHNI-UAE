@@ -34,10 +34,28 @@ const FeaturedProperties = ({
   useEffect(() => {
     const fetchContent = async () => {
       try {
-        // Get featured properties using the service function
+        // Get featured properties from both sources
+        // 1. From content_elements table (existing property_1 to property_19)
+        const contentElements = await contentElementsService.getFeaturedProperties();
+        
+        // 2. From properties table (newly approved properties)
         const propertiesData = await fetchFeaturedProperties();
         
-        // Transform to FeaturedProperty format and categorize by type
+        // Transform content_elements to FeaturedProperty format
+        const contentElementProperties = contentElements.map(element => ({
+          id: element.content?.id || element.id,
+          title: element.title || element.content?.title || 'Property',
+          location: element.content?.location || 'Location',
+          price: element.content?.price || '₹0',
+          area: element.content?.area || element.content?.size || '0 sq ft',
+          bedrooms: element.content?.bedrooms || parseInt(element.content?.bhk?.replace(/[^\d]/g, '') || '0'),
+          bathrooms: element.content?.bathrooms || 0,
+          image: element.content?.image || element.images?.[0] || 'photo-1560518883-ce09059eeffa',
+          propertyType: element.content?.propertyType || 'Property',
+          isNew: element.content?.isNew || false
+        }));
+        
+        // Transform properties table data to FeaturedProperty format
         const transformedProperties = propertiesData.map(property => ({
           id: property.id,
           title: property.title,
@@ -51,7 +69,15 @@ const FeaturedProperties = ({
           isNew: new Date(property.created_at) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) // New if created within last 7 days
         }));
 
-        setFeaturedProperties(transformedProperties);
+        // Combine both sources, with newer properties first
+        const allProperties = [...transformedProperties, ...contentElementProperties];
+        
+        // Remove duplicates based on ID and limit to reasonable number
+        const uniqueProperties = allProperties.filter((property, index, self) => 
+          index === self.findIndex(p => p.id === property.id)
+        ).slice(0, 50); // Limit to 50 properties max
+        
+        setFeaturedProperties(uniqueProperties);
 
         // Get header content
         const headerContent = await contentElementsService.getSectionContent('homepage', 'featured_properties', 'featured_properties_header');
