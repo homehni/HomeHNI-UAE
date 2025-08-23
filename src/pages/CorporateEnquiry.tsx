@@ -126,7 +126,7 @@ const CorporateEnquiry = () => {
   return <div className="min-h-screen bg-background">
       {/* Sticky Corporate Enquiry Form - Desktop Only */}
       <div className="hidden xl:block fixed top-32 right-6 z-50 w-96">
-        <div className="bg-gradient-to-br from-white to-gray-50 rounded-2xl shadow-2xl border border-gray-100 p-6 backdrop-blur-sm">
+        <div className="bg-gradient-to-br from-white to-gray-50 rounded-2xl shadow-2xl border border-primary p-6 backdrop-blur-sm">
           <div className="text-center mb-6">
             <div className="w-12 h-12 bg-gradient-to-br from-brand-red to-brand-red-dark rounded-full mx-auto mb-3 flex items-center justify-center">
               <Building className="h-6 w-6 text-white" />
@@ -182,7 +182,7 @@ const CorporateEnquiry = () => {
         <div className="max-w-6xl mx-auto px-4 text-center xl:pr-96">
           <h2 className="text-2xl font-semibold text-foreground mb-8">Trusted by Leading Companies</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {[1, 2, 3, 4].map(i => <div key={i} className="bg-card p-6 rounded-lg border border-border">
+            {[1, 2, 3, 4].map(i => <div key={i} className="bg-card p-6 rounded-lg border border-primary">
                 <div className="h-12 bg-muted rounded flex items-center justify-center">
                   <Building className="h-6 w-6 text-muted-foreground" />
                 </div>
@@ -200,7 +200,7 @@ const CorporateEnquiry = () => {
           
           <div className="grid md:grid-cols-2 gap-12 mb-16">
             {/* Employees */}
-            <div className="bg-card p-8 rounded-lg border border-border">
+            <div className="bg-card p-8 rounded-lg border border-primary">
               <div className="flex items-center mb-6">
                 <Users className="h-8 w-8 text-brand-red mr-3" />
                 <h3 className="text-2xl font-bold text-foreground">Employees</h3>
@@ -234,7 +234,7 @@ const CorporateEnquiry = () => {
             </div>
 
             {/* Office Space */}
-            <div className="bg-card p-8 rounded-lg border border-border">
+            <div className="bg-card p-8 rounded-lg border border-primary">
               <div className="flex items-center mb-6">
                 <Building className="h-8 w-8 text-brand-red mr-3" />
                 <h3 className="text-2xl font-bold text-foreground">Office Space</h3>
@@ -265,7 +265,7 @@ const CorporateEnquiry = () => {
             Services We Offer to Your Employees
           </h2>
           <div className="grid md:grid-cols-3 gap-8">
-            {services.map((service, index) => <div key={index} className="bg-card p-6 rounded-lg border border-border text-center">
+            {services.map((service, index) => <div key={index} className="bg-card p-6 rounded-lg border border-primary text-center">
                 <service.icon className="h-12 w-12 text-brand-red mx-auto mb-4" />
                 <h3 className="text-lg font-semibold text-foreground mb-2">{service.title}</h3>
                 <p className="text-muted-foreground">{service.description}</p>
@@ -297,7 +297,7 @@ const CorporateEnquiry = () => {
             Why Use Our Corporate Solutions?
           </h2>
           <div className="grid md:grid-cols-3 gap-8">
-            {benefits.map((benefit, index) => <div key={index} className="bg-card p-6 rounded-lg border border-border">
+            {benefits.map((benefit, index) => <div key={index} className="bg-card p-6 rounded-lg border border-primary">
                 <benefit.icon className="h-10 w-10 text-brand-red mb-4" />
                 <h3 className="text-lg font-semibold text-foreground mb-2">{benefit.title}</h3>
                 <p className="text-muted-foreground">{benefit.description}</p>
@@ -309,7 +309,7 @@ const CorporateEnquiry = () => {
       {/* Mobile Corporate Enquiry Form */}
       <section className="xl:hidden py-8 px-4 bg-muted/30">
         <div className="max-w-md mx-auto">
-          <div className="bg-white rounded-lg shadow-lg border border-gray-200 p-6">
+          <div className="bg-white rounded-lg shadow-lg border border-primary p-6">
             <div className="mb-4 text-center">
               <h3 className="text-lg font-semibold text-gray-900 mb-2">Corporate Enquiry</h3>
               <p className="text-sm text-gray-600">Get custom solutions for your company</p>
