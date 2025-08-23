@@ -41,8 +41,31 @@ const FeaturedProperties = ({
         // 2. From properties table (newly approved properties)
         const propertiesData = await fetchFeaturedProperties();
         
-        // Transform content_elements to FeaturedProperty format
-        const contentElementProperties = contentElements.map(element => ({
+        // Validate content elements referencing properties against current database
+        const referencedPropertyIds = contentElements
+          .map(e => e.content?.id)
+          .filter((id): id is string => Boolean(id));
+
+        let validPropertyIdSet = new Set<string>();
+        if (referencedPropertyIds.length > 0) {
+          const { data: existingProps, error: existingErr } = await supabase
+            .from('public_properties')
+            .select('id, status')
+            .in('id', referencedPropertyIds);
+          if (!existingErr && existingProps) {
+            validPropertyIdSet = new Set(existingProps.filter(p => p.status === 'approved').map(p => p.id));
+          }
+        }
+
+        // Filter out content elements that point to deleted/unapproved properties
+        const filteredContentElements = contentElements.filter(e => {
+          const refId = e.content?.id as string | undefined;
+          if (!refId) return true; // keep static curated tiles
+          return validPropertyIdSet.has(refId);
+        });
+
+        // Transform filtered content_elements to FeaturedProperty format
+        const contentElementProperties = filteredContentElements.map(element => ({
           id: element.content?.id || element.id,
           title: element.title || element.content?.title || 'Property',
           location: element.content?.location || 'Location',
@@ -97,32 +120,43 @@ const FeaturedProperties = ({
         {
           event: '*',
           schema: 'public',
-          table: 'properties',
-          filter: 'is_featured=eq.true'
+          table: 'properties'
         },
         (payload) => {
-          console.log('Featured property change detected:', payload);
-          
-          // Handle real-time updates for featured properties
-          if (payload.eventType === 'UPDATE' && payload.new?.status === 'approved' && payload.new?.is_featured) {
-            // Add newly approved featured property to the appropriate category
+          console.log('Property change detected:', payload);
+
+          if (payload.eventType === 'DELETE') {
+            const deletedId = payload.old?.id;
+            if (deletedId) {
+              setFeaturedProperties(prev => prev.filter(p => p.id !== deletedId));
+            }
+            return;
+          }
+
+          const record = payload.new as any;
+          if (!record) return;
+
+          const qualifies = record.status === 'approved' && record.is_featured === true;
+          if (qualifies) {
             const newProperty = {
-              id: payload.new.id,
-              title: payload.new.title,
-              location: `${payload.new.locality}, ${payload.new.city}`,
-              price: `₹${(payload.new.expected_price / 100000).toFixed(1)}L`,
-              area: `${payload.new.super_area} sq ft`,
-              bedrooms: parseInt(payload.new.bhk_type?.replace(/[^\d]/g, '') || '0'),
-              bathrooms: payload.new.bathrooms || 0,
-              image: payload.new.images?.[0] || 'photo-1560518883-ce09059eeffa',
-              propertyType: payload.new.property_type?.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase()) || 'Property',
+              id: record.id,
+              title: record.title,
+              location: `${record.locality}, ${record.city}`,
+              price: `₹${(record.expected_price / 100000).toFixed(1)}L`,
+              area: `${record.super_area} sq ft`,
+              bedrooms: parseInt(record.bhk_type?.replace(/[^\d]/g, '') || '0'),
+              bathrooms: record.bathrooms || 0,
+              image: record.images?.[0] || 'photo-1560518883-ce09059eeffa',
+              propertyType: record.property_type?.replace('_', ' ').replace(/\b\w/g, (l: string) => l.toUpperCase()) || 'Property',
               isNew: true
             };
-            
-            setFeaturedProperties(prev => [newProperty, ...prev.slice(0, 19)]); // Keep maximum 20 items
+            setFeaturedProperties(prev => {
+              const without = prev.filter(p => p.id !== newProperty.id);
+              return [newProperty, ...without].slice(0, 50);
+            });
           } else {
-            // For other changes, refetch all data
-            fetchContent();
+            // If it no longer qualifies, remove it from the list
+            setFeaturedProperties(prev => prev.filter(p => p.id !== record.id));
           }
         }
       )
