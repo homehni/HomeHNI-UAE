@@ -408,6 +408,11 @@ const PropertyDetails: React.FC = () => {
           onClose={() => setShowScheduleVisitModal(false)}
           propertyId={property.id}
           propertyTitle={property.title}
+          propertyType={property.property_type}
+          propertyArea={property.super_area ? `${property.super_area} sq.ft` : property.carpet_area ? `${property.carpet_area} sq.ft` : undefined}
+          bhkType={property.bhk_type}
+          city={property.city}
+          expectedPrice={property.expected_price}
         />
       )}
       

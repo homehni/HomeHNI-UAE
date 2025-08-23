@@ -13,10 +13,16 @@ interface ScheduleVisitModalProps {
   onClose: () => void;
   propertyId: string;
   propertyTitle: string;
+  propertyType?: string;
+  propertyArea?: string;
+  bhkType?: string;
+  city?: string;
+  expectedPrice?: number;
 }
 
 interface ScheduleVisitFormData {
   name: string;
+  email: string;
   phone: string;
   reasonToBuy: 'investment' | 'self_use';
   isPropertyDealer: 'yes' | 'no';
@@ -30,12 +36,18 @@ export const ScheduleVisitModal: React.FC<ScheduleVisitModalProps> = ({
   isOpen,
   onClose,
   propertyId,
-  propertyTitle
+  propertyTitle,
+  propertyType,
+  propertyArea,
+  bhkType,
+  city,
+  expectedPrice
 }) => {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState<ScheduleVisitFormData>({
     name: '',
+    email: '',
     phone: '',
     reasonToBuy: 'investment',
     isPropertyDealer: 'no',
@@ -57,7 +69,7 @@ export const ScheduleVisitModal: React.FC<ScheduleVisitModalProps> = ({
       return;
     }
 
-    if (!formData.name.trim() || !formData.phone.trim()) {
+    if (!formData.name.trim() || !formData.phone.trim() || !formData.email.trim()) {
       toast({
         title: "Missing information",
         description: "Please fill in all required fields.",
@@ -81,6 +93,7 @@ export const ScheduleVisitModal: React.FC<ScheduleVisitModalProps> = ({
       // Reset form and close modal
       setFormData({
         name: '',
+        email: '',
         phone: '',
         reasonToBuy: 'investment',
         isPropertyDealer: 'no',
@@ -125,17 +138,18 @@ export const ScheduleVisitModal: React.FC<ScheduleVisitModalProps> = ({
         <div className="space-y-6">
           {/* Property Info */}
           <div className="bg-muted/30 rounded-lg p-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-              <div>
-                <span className="font-semibold">POSTED BY BUILDER:</span>
-                <div className="text-muted-foreground">+91 98***543** | *****@*****.com</div>
-                <div className="text-muted-foreground">SRAVAN | ELITE HOMES INFRACON LLP</div>
+            <div className="text-sm">
+              <span className="font-semibold">PROPERTY DETAILS:</span>
+              <div className="font-semibold mt-2">{propertyTitle}</div>
+              <div className="text-muted-foreground">
+                {propertyArea} {bhkType && `| ${bhkType}`} {propertyType?.replace('_', ' ').toUpperCase()}
               </div>
-              <div>
-                <span className="font-semibold">POSTED ON JUL 17, 2025:</span>
-                <div className="font-semibold">{propertyTitle}</div>
-                <div className="text-muted-foreground">1425 - 2435 SQ.FT. | 3 BHK FLAT/APARTMENT</div>
-              </div>
+              {city && <div className="text-muted-foreground">Location: {city}</div>}
+              {expectedPrice && (
+                <div className="text-muted-foreground">
+                  Price: ₹{expectedPrice.toLocaleString()}
+                </div>
+              )}
             </div>
           </div>
 
@@ -198,6 +212,19 @@ export const ScheduleVisitModal: React.FC<ScheduleVisitModalProps> = ({
                       value={formData.name}
                       onChange={(e) => handleChange('name', e.target.value)}
                       className="mt-1"
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <Label htmlFor="email" className="text-sm font-medium">Email</Label>
+                    <Input
+                      id="email"
+                      type="email"
+                      value={formData.email}
+                      onChange={(e) => handleChange('email', e.target.value)}
+                      className="mt-1"
+                      placeholder="Enter email address"
                       required
                     />
                   </div>
