@@ -36,6 +36,7 @@ interface Property {
   owner_name?: string;
   owner_email?: string;
   owner_phone?: string;
+  is_featured?: boolean;
 }
 
 interface PropertyTableProps {
@@ -44,6 +45,16 @@ interface PropertyTableProps {
   onSearchChange: (value: string) => void;
   statusFilter: string;
   onStatusFilterChange: (value: string) => void;
+  featuredFilter?: boolean;
+  onFeaturedFilterChange?: (featured: boolean) => void;
+  stats?: {
+    total: number;
+    pending: number;
+    approved: number;
+    rejected: number;
+    deleted: number;
+    featuredPending?: number;
+  };
   onView: (property: Property) => void;
   onApprove: (id: string) => void;
   onReject: (property: Property) => void;
@@ -57,6 +68,9 @@ export const PropertyTable: React.FC<PropertyTableProps> = ({
   onSearchChange,
   statusFilter,
   onStatusFilterChange,
+  featuredFilter,
+  onFeaturedFilterChange,
+  stats,
   onView,
   onApprove,
   onReject,
@@ -100,12 +114,28 @@ export const PropertyTable: React.FC<PropertyTableProps> = ({
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All Status</SelectItem>
-              <SelectItem value="pending">Pending</SelectItem>
-              <SelectItem value="approved">Approved</SelectItem>
-              <SelectItem value="rejected">Rejected</SelectItem>
-              <SelectItem value="deleted">Deleted</SelectItem>
+              <SelectItem value="pending">Pending ({stats?.pending || 0})</SelectItem>
+              <SelectItem value="featured-pending">Featured Pending ({stats?.featuredPending || 0})</SelectItem>
+              <SelectItem value="approved">Approved ({stats?.approved || 0})</SelectItem>
+              <SelectItem value="rejected">Rejected ({stats?.rejected || 0})</SelectItem>
+              <SelectItem value="deleted">Deleted ({stats?.deleted || 0})</SelectItem>
             </SelectContent>
           </Select>
+          
+          {onFeaturedFilterChange && (
+            <div className="flex items-center space-x-2">
+              <input
+                type="checkbox"
+                id="featured-filter"
+                checked={featuredFilter}
+                onChange={(e) => onFeaturedFilterChange(e.target.checked)}
+                className="rounded border-gray-300"
+              />
+              <label htmlFor="featured-filter" className="text-sm text-gray-700">
+                Featured Only
+              </label>
+            </div>
+          )}
         </div>
       </CardHeader>
       
@@ -132,8 +162,11 @@ export const PropertyTable: React.FC<PropertyTableProps> = ({
                 >
                   <TableCell className="font-medium">
                     <div className="space-y-1">
-                      <div className="font-medium text-foreground truncate max-w-[200px]">
+                      <div className="font-medium text-foreground truncate max-w-[200px] flex items-center gap-2">
                         {property.title}
+                        {property.is_featured && (
+                          <Badge variant="secondary" className="text-xs">Featured</Badge>
+                        )}
                       </div>
                       <div className="text-xs text-muted-foreground">
                         {property.bhk_type}

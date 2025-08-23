@@ -26,6 +26,7 @@ interface Property {
   owner_email?: string;
   owner_phone?: string;
   owner_role?: string;
+  is_featured?: boolean;
 }
 
 const AdminProperties = () => {
@@ -39,8 +40,17 @@ const AdminProperties = () => {
   const [propertyToDelete, setPropertyToDelete] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
+  const [featuredFilter, setFeaturedFilter] = useState(false);
   const [newPropertyCount, setNewPropertyCount] = useState(0);
   const [lastViewedTime, setLastViewedTime] = useState<string>(new Date().toISOString());
+  const [stats, setStats] = useState({
+    total: 0,
+    pending: 0,
+    approved: 0,
+    rejected: 0,
+    deleted: 0,
+    featuredPending: 0
+  });
 
   const { toast } = useToast();
 
@@ -93,7 +103,7 @@ const AdminProperties = () => {
 
   useEffect(() => {
     filterProperties();
-  }, [properties, searchTerm, statusFilter]);
+  }, [properties, searchTerm, statusFilter, featuredFilter]);
 
   const fetchProperties = async () => {
     try {
@@ -107,6 +117,16 @@ const AdminProperties = () => {
 
       // Owner information is now stored directly in properties table
       setProperties(propertiesData || []);
+      
+      // Calculate stats
+      const total = propertiesData?.length || 0;
+      const pending = propertiesData?.filter(p => p.status === 'pending').length || 0;
+      const approved = propertiesData?.filter(p => p.status === 'approved').length || 0;
+      const rejected = propertiesData?.filter(p => p.status === 'rejected').length || 0;
+      const deleted = propertiesData?.filter(p => p.status === 'deleted').length || 0;
+      const featuredPending = propertiesData?.filter(p => p.status === 'pending' && p.is_featured === true).length || 0;
+
+      setStats({ total, pending, approved, rejected, deleted, featuredPending });
     } catch (error) {
       console.error('Error fetching properties:', error);
       toast({
@@ -134,7 +154,16 @@ const AdminProperties = () => {
 
     // Filter by status
     if (statusFilter !== 'all') {
-      filtered = filtered.filter(property => property.status === statusFilter);
+      if (statusFilter === 'featured-pending') {
+        filtered = filtered.filter(property => property.status === 'pending' && property.is_featured === true);
+      } else {
+        filtered = filtered.filter(property => property.status === statusFilter);
+      }
+    }
+
+    // Additional featured filter
+    if (featuredFilter) {
+      filtered = filtered.filter(property => property.is_featured === true);
     }
 
     setFilteredProperties(filtered);
@@ -147,6 +176,7 @@ const AdminProperties = () => {
         .from('properties')
         .update({
           status: 'approved',
+          is_featured: selectedProperty?.is_featured || false, // Preserve featured status on approval
           admin_reviewed_at: new Date().toISOString(),
           rejection_reason: null
         })
@@ -180,6 +210,7 @@ const AdminProperties = () => {
         .from('properties')
         .update({
           status: 'rejected',
+          is_featured: false, // Clear featured status on rejection
           rejection_reason: reason,
           admin_reviewed_at: new Date().toISOString()
         })
@@ -215,6 +246,7 @@ const AdminProperties = () => {
         .from('properties')
         .update({
           status: 'deleted',
+          is_featured: false, // Clear featured status on deletion
           admin_reviewed_at: new Date().toISOString()
         })
         .eq('id', propertyToDelete);
@@ -287,6 +319,9 @@ const AdminProperties = () => {
         onSearchChange={setSearchTerm}
         statusFilter={statusFilter}
         onStatusFilterChange={setStatusFilter}
+        featuredFilter={featuredFilter}
+        onFeaturedFilterChange={setFeaturedFilter}
+        stats={stats}
         onView={(property) => {
           setSelectedProperty(property);
           setReviewModalOpen(true);

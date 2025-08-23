@@ -33,46 +33,29 @@ const FeaturedProperties = ({
   useEffect(() => {
     const fetchContent = async () => {
       try {
-        // Get featured properties from actual database
-        const { data: featuredPropsData, error: featuredError } = await supabase
-          .from('featured_properties')
-          .select(`
-            id,
-            sort_order,
-            is_active,
-            properties!inner (
-              id,
-              title,
-              city,
-              locality,
-              state,
-              expected_price,
-              super_area,
-              bhk_type,
-              bathrooms,
-              property_type,
-              images,
-              status
-            )
-          `)
-          .eq('is_active', true)
-          .eq('properties.status', 'approved')
-          .order('sort_order');
+        // Get featured properties directly from properties table
+        const { data: propertiesData, error } = await supabase
+          .from('properties')
+          .select('*')
+          .eq('status', 'approved')
+          .eq('is_featured', true)
+          .order('created_at', { ascending: false })
+          .limit(20);
         
-        if (featuredError) throw featuredError;
+        if (error) throw error;
         
         // Transform to FeaturedProperty format
-        const transformedProperties = (featuredPropsData || []).map(item => ({
-          id: item.properties.id,
-          title: item.properties.title,
-          location: `${item.properties.locality}, ${item.properties.city}`,
-          price: `₹${(item.properties.expected_price / 100000).toFixed(1)}L`,
-          area: `${item.properties.super_area} sq ft`,
-          bedrooms: parseInt(item.properties.bhk_type?.replace(/[^\d]/g, '') || '0'),
-          bathrooms: item.properties.bathrooms || 0,
-          image: item.properties.images?.[0] || 'photo-1560518883-ce09059eeffa',
-          propertyType: item.properties.property_type?.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase()) || 'Property',
-          isNew: false
+        const transformedProperties = (propertiesData || []).map(property => ({
+          id: property.id,
+          title: property.title,
+          location: `${property.locality}, ${property.city}`,
+          price: `₹${(property.expected_price / 100000).toFixed(1)}L`,
+          area: `${property.super_area} sq ft`,
+          bedrooms: parseInt(property.bhk_type?.replace(/[^\d]/g, '') || '0'),
+          bathrooms: property.bathrooms || 0,
+          image: property.images?.[0] || 'photo-1560518883-ce09059eeffa',
+          propertyType: property.property_type?.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase()) || 'Property',
+          isNew: new Date(property.created_at) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) // New if created within last 7 days
         }));
 
         setFeaturedProperties(transformedProperties);
@@ -87,36 +70,47 @@ const FeaturedProperties = ({
 
     fetchContent();
 
-    // Set up real-time subscriptions for both tables
+    // Set up real-time subscription for featured properties
     const propertiesChannel = supabase
-      .channel('properties-realtime')
-      .on(
-        'postgres_changes',
-        {
-          event: '*',
-          schema: 'public',
-          table: 'properties'
-        },
-        () => fetchContent()
-      )
-      .subscribe();
-      
-    const featuredChannel = supabase
       .channel('featured-properties-realtime')
       .on(
         'postgres_changes',
         {
           event: '*',
           schema: 'public',
-          table: 'featured_properties'
+          table: 'properties',
+          filter: 'is_featured=eq.true'
         },
-        () => fetchContent()
+        (payload) => {
+          console.log('Featured property change detected:', payload);
+          
+          // Handle real-time updates for featured properties
+          if (payload.eventType === 'UPDATE' && payload.new?.status === 'approved' && payload.new?.is_featured) {
+            // Add newly approved featured property to the beginning of the list
+            const newProperty = {
+              id: payload.new.id,
+              title: payload.new.title,
+              location: `${payload.new.locality}, ${payload.new.city}`,
+              price: `₹${(payload.new.expected_price / 100000).toFixed(1)}L`,
+              area: `${payload.new.super_area} sq ft`,
+              bedrooms: parseInt(payload.new.bhk_type?.replace(/[^\d]/g, '') || '0'),
+              bathrooms: payload.new.bathrooms || 0,
+              image: payload.new.images?.[0] || 'photo-1560518883-ce09059eeffa',
+              propertyType: payload.new.property_type?.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase()) || 'Property',
+              isNew: true
+            };
+            
+            setFeaturedProperties(prev => [newProperty, ...prev.slice(0, 19)]); // Keep maximum 20 items
+          } else {
+            // For other changes, refetch all data
+            fetchContent();
+          }
+        }
       )
       .subscribe();
 
     return () => {
       supabase.removeChannel(propertiesChannel);
-      supabase.removeChannel(featuredChannel);
     };
   }, []);
 

@@ -1,6 +1,5 @@
 import { supabase } from '@/integrations/supabase/client';
 
-// Sanitized property interface (matches public_properties view)
 export interface PublicProperty {
   id: string;
   title: string;
@@ -32,6 +31,7 @@ export interface PublicProperty {
   status: string;
   created_at: string;
   updated_at: string;
+  is_featured?: boolean;
 }
 
 // Service to fetch public properties (no sensitive owner data)
@@ -46,7 +46,57 @@ export const fetchPublicProperties = async (): Promise<PublicProperty[]> => {
     throw error;
   }
   
-  return data || [];
+  return (data as PublicProperty[]) || [];
+};
+
+// Service to fetch featured properties for the home page
+export const fetchFeaturedProperties = async (): Promise<PublicProperty[]> => {
+  const { data, error } = await supabase
+    .from('public_properties')
+    .select(`
+      id,
+      title,
+      property_type,
+      listing_type,
+      bhk_type,
+      expected_price,
+      super_area,
+      carpet_area,
+      bathrooms,
+      balconies,
+      floor_no,
+      total_floors,
+      furnishing,
+      availability_type,
+      availability_date,
+      price_negotiable,
+      maintenance_charges,
+      security_deposit,
+      city,
+      locality,
+      state,
+      pincode,
+      street_address,
+      landmarks,
+      description,
+      images,
+      videos,
+      status,
+      created_at,
+      updated_at,
+      is_featured
+    `)
+    .eq('status', 'approved')
+    .eq('is_featured', true)
+    .order('created_at', { ascending: false })
+    .limit(20);
+    
+  if (error) {
+    console.error('Error fetching featured properties:', error);
+    throw error;
+  }
+  
+  return (data as PublicProperty[]) || [];
 };
 
 // Service to fetch a single public property by ID
@@ -55,12 +105,12 @@ export const fetchPublicPropertyById = async (id: string): Promise<PublicPropert
     .from('public_properties')
     .select('*')
     .eq('id', id)
-    .single();
+    .maybeSingle();
     
   if (error) {
     console.error('Error fetching public property:', error);
     return null;
   }
   
-  return data;
+  return data as PublicProperty | null;
 };

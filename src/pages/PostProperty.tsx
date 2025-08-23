@@ -265,6 +265,7 @@ export const PostProperty: React.FC = () => {
         videos: videoUrls,
         availability_type: 'immediate',
         status: 'pending',
+        is_featured: true, // Mark all submitted properties as featured candidates
         // Add owner information directly to properties table
         owner_name: data.ownerInfo.fullName,
         owner_email: data.ownerInfo.email,

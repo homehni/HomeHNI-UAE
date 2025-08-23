@@ -501,6 +501,7 @@ export type Database = {
           furnishing: string | null
           id: string
           images: string[] | null
+          is_featured: boolean
           landmarks: string | null
           listing_type: string
           locality: string
@@ -541,6 +542,7 @@ export type Database = {
           furnishing?: string | null
           id?: string
           images?: string[] | null
+          is_featured?: boolean
           landmarks?: string | null
           listing_type: string
           locality: string
@@ -581,6 +583,7 @@ export type Database = {
           furnishing?: string | null
           id?: string
           images?: string[] | null
+          is_featured?: boolean
           landmarks?: string | null
           listing_type?: string
           locality?: string
