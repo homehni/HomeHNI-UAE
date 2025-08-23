@@ -9,6 +9,7 @@ import { Home, MapPin, IndianRupee, Calendar, Mail, Phone, User, Images, Paintbr
 import { ContactOwnerModal } from '@/components/ContactOwnerModal';
 import { ScheduleVisitModal } from '@/components/ScheduleVisitModal';
 import { PropertyImageGallery } from '@/components/PropertyImageGallery';
+import EMICalculatorModal from '@/components/EMICalculatorModal';
 interface Property {
   id: string;
   title: string;
@@ -40,6 +41,7 @@ const PropertyDetails: React.FC = () => {
   const property = location.state as Property | undefined || null;
   const [showContactModal, setShowContactModal] = React.useState(false);
   const [showScheduleVisitModal, setShowScheduleVisitModal] = React.useState(false);
+  const [showEMICalculatorModal, setShowEMICalculatorModal] = React.useState(false);
   
   React.useEffect(() => {
     document.title = property ? `${property.title} | Property Details` : 'Property Details';
@@ -365,7 +367,12 @@ const PropertyDetails: React.FC = () => {
                         <TrendingUp className="h-4 w-4 mr-2" />
                         Schedule Visit
                       </Button>
-                      <Button variant="outline" className="w-full justify-start" size="sm">
+                      <Button 
+                        variant="outline" 
+                        className="w-full justify-start" 
+                        size="sm"
+                        onClick={() => setShowEMICalculatorModal(true)}
+                      >
                         <Calculator className="h-4 w-4 mr-2" />
                         EMI Calculator
                       </Button>
@@ -413,6 +420,15 @@ const PropertyDetails: React.FC = () => {
           bhkType={property.bhk_type}
           city={property.city}
           expectedPrice={property.expected_price}
+        />
+      )}
+      
+      {/* EMI Calculator Modal */}
+      {property && (
+        <EMICalculatorModal
+          isOpen={showEMICalculatorModal}
+          onClose={() => setShowEMICalculatorModal(false)}
+          propertyPrice={property.expected_price}
         />
       )}
       
