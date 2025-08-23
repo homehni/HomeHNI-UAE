@@ -27,10 +27,12 @@ const Header = () => {
   const [isRentalDropdownOpen, setIsRentalDropdownOpen] = useState(false);
   const [isServicesDropdownOpen, setIsServicesDropdownOpen] = useState(false);
   const [isSellersDropdownOpen, setIsSellersDropdownOpen] = useState(false);
+  const [isLifetimePlansDropdownOpen, setIsLifetimePlansDropdownOpen] = useState(false);
   const [statesData, setStatesData] = useState<Record<string, string[]>>({});
   const rentalHoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const servicesHoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const sellersHoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const lifetimePlansHoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const navigate = useNavigate();
   const location = useLocation();
   const {
@@ -67,6 +69,19 @@ const Header = () => {
   const handleSellersLeave = () => {
     sellersHoverTimeoutRef.current = setTimeout(() => {
       setIsSellersDropdownOpen(false);
+    }, 150);
+  };
+
+  const handleLifetimePlansHover = () => {
+    if (lifetimePlansHoverTimeoutRef.current) {
+      clearTimeout(lifetimePlansHoverTimeoutRef.current);
+    }
+    setIsLifetimePlansDropdownOpen(true);
+  };
+
+  const handleLifetimePlansLeave = () => {
+    lifetimePlansHoverTimeoutRef.current = setTimeout(() => {
+      setIsLifetimePlansDropdownOpen(false);
     }, 150);
   };
   useEffect(() => {
@@ -254,6 +269,32 @@ const Header = () => {
 
           <button onClick={() => navigate('/interior')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
             Interior Designers
+          </button>
+        </div>
+      </div>}
+  </div>
+
+  {/* Lifetime Plans Dropdown */}
+  <div className="relative" onMouseEnter={handleLifetimePlansHover} onMouseLeave={handleLifetimePlansLeave}>
+    <button className={`flex items-center hover:opacity-80 transition-colors duration-500 text-base font-medium uppercase ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
+      Plans
+      <ChevronDown className="ml-1 h-3 w-3" />
+    </button>
+    
+    {/* Custom Lifetime Plans Dropdown */}
+    {isLifetimePlansDropdownOpen && <div className="absolute top-full left-0 w-40 bg-white border border-gray-200 rounded-lg shadow-xl z-[100] mt-2" onMouseEnter={handleLifetimePlansHover} onMouseLeave={handleLifetimePlansLeave}>
+        <div className="py-2">
+          <button onClick={() => navigate('/owner-plans')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+            Owner Plans
+          </button>
+          <button onClick={() => navigate('/buyer-plans')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+            Buyer Plans
+          </button>
+          <button onClick={() => navigate('/seller-plans')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+            Seller Plans
+          </button>
+          <button onClick={() => navigate('/lifetime-plans')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+            Lifetime Plans
           </button>
         </div>
       </div>}
