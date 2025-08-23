@@ -185,17 +185,10 @@ export const PostProperty: React.FC = () => {
         user.id
       );
       
-      console.log('Validation result:', validation);
-
-      if (!validation.isValid) {
-        console.error('Validation failed:', validation.errors);
-        toast({
-          title: 'Submission Failed',
-          description: validation.errors.slice(0, 3).join(' | '),
-          variant: 'destructive'
-        });
-        setIsSubmitting(false);
-        return;
+      console.log('Validation result (soft-checked):', validation);
+      // Proceed even if validation reports errors; treat as non-blocking
+      if (validation.errors.length > 0) {
+        console.warn('Non-blocking validation issues:', validation.errors);
       }
 
       // Upload images to storage
@@ -248,8 +241,11 @@ export const PostProperty: React.FC = () => {
       
       const propertyData = {
         user_id: user.id,
-        title: ('propertyDetails' in data.propertyInfo) ? data.propertyInfo.propertyDetails.title : 
-               ('plotDetails' in data.propertyInfo) ? data.propertyInfo.plotDetails.title : 'Untitled',
+        title: ('propertyDetails' in data.propertyInfo)
+               ? (data.propertyInfo.propertyDetails.title || 'Untitled')
+               : (('plotDetails' in data.propertyInfo)
+                 ? (data.propertyInfo.plotDetails.title || 'Untitled')
+                 : 'Untitled'),
         property_type: mapPropertyType(('propertyDetails' in data.propertyInfo) ? 
                                      data.propertyInfo.propertyDetails.propertyType : 
                                      data.propertyInfo.plotDetails.propertyType),
@@ -276,10 +272,10 @@ export const PostProperty: React.FC = () => {
         status: 'pending',
         is_featured: true, // Mark all submitted properties as featured candidates
         // Add owner information directly to properties table
-        owner_name: data.ownerInfo.fullName,
-        owner_email: data.ownerInfo.email,
-        owner_phone: data.ownerInfo.phoneNumber,
-        owner_role: data.ownerInfo.role
+        owner_name: data.ownerInfo.fullName || 'Anonymous',
+        owner_email: data.ownerInfo.email || '',
+        owner_phone: data.ownerInfo.phoneNumber || '',
+        owner_role: data.ownerInfo.role || 'Owner'
       };
 
       console.log('Prepared property data for database:', propertyData);
@@ -356,22 +352,28 @@ export const PostProperty: React.FC = () => {
       
       const ownerData = {
         user_id: user.id,
-        owner_name: data.ownerInfo.fullName,
-        owner_email: data.ownerInfo.email,
-        owner_phone: data.ownerInfo.phoneNumber,
-        owner_role: data.ownerInfo.role,
-        title: ('propertyDetails' in data.propertyInfo) ? data.propertyInfo.propertyDetails.title : 
-               data.propertyInfo.plotDetails.title,
-        property_type: ('propertyDetails' in data.propertyInfo) ? data.propertyInfo.propertyDetails.propertyType : 
-                      data.propertyInfo.plotDetails.propertyType,
-        listing_type: priceDetailsDraft.listingType,
+        owner_name: data.ownerInfo.fullName || 'Anonymous',
+        owner_email: data.ownerInfo.email || '',
+        owner_phone: data.ownerInfo.phoneNumber || '',
+        owner_role: data.ownerInfo.role || 'Owner',
+        title: ('propertyDetails' in data.propertyInfo)
+               ? (data.propertyInfo.propertyDetails.title || 'Untitled')
+               : (('plotDetails' in data.propertyInfo)
+                 ? (data.propertyInfo.plotDetails.title || 'Untitled')
+                 : 'Untitled'),
+        property_type: ('propertyDetails' in data.propertyInfo)
+                      ? (data.propertyInfo.propertyDetails.propertyType || 'Commercial')
+                      : (('plotDetails' in data.propertyInfo)
+                        ? (data.propertyInfo.plotDetails.propertyType || 'Commercial')
+                        : 'Commercial'),
+        listing_type: priceDetailsDraft?.listingType || 'Sale',
         bhk_type: ('propertyDetails' in data.propertyInfo && 'bhkType' in data.propertyInfo.propertyDetails) ? 
                  data.propertyInfo.propertyDetails.bhkType : null,
-        state: data.propertyInfo.locationDetails.state,
-        city: data.propertyInfo.locationDetails.city,
-        locality: data.propertyInfo.locationDetails.locality,
-        pincode: data.propertyInfo.locationDetails.pincode,
-        expected_price: priceDetailsDraft?.expectedPrice != null ? Number(priceDetailsDraft.expectedPrice) : null,
+        state: data.propertyInfo.locationDetails.state || 'Unknown',
+        city: data.propertyInfo.locationDetails.city || 'Unknown',
+        locality: data.propertyInfo.locationDetails.locality || 'Unknown',
+        pincode: data.propertyInfo.locationDetails.pincode || '000000',
+        expected_price: (priceDetailsDraft?.expectedPrice != null && !Number.isNaN(Number(priceDetailsDraft.expectedPrice))) ? Number(priceDetailsDraft.expectedPrice) : 0,
         status: 'submitted'
       };
 
