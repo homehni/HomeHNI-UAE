@@ -34,6 +34,7 @@ import BuyerPlans from "./pages/BuyerPlans";
 import SellerPlans from "./pages/SellerPlans";
 import AgentLifetimePlans from "@/pages/AgentLifetimePlans";
 import BuilderLifetimePlans from "@/pages/BuilderLifetimePlans";
+import ServiceSuite from "@/pages/ServiceSuite";
 import CorporateEnquiry from "./pages/CorporateEnquiry";
 import CommercialOwnerPlans from "./pages/CommercialOwnerPlans";
 import CommercialBuyerPlan from "./pages/CommercialBuyerPlan";
@@ -119,6 +120,7 @@ const App: React.FC = () => {
             <Route path="/seller-plans" element={<SellerPlans />} />
         <Route path="/agent-lifetime-plans" element={<AgentLifetimePlans />} />
         <Route path="/builder-lifetime-plans" element={<BuilderLifetimePlans />} />
+        <Route path="/service-suite" element={<ServiceSuite />} />
             <Route path="/commercial-owner-plans" element={<CommercialOwnerPlans />} />
           <Route path="/commercial-buyer-plan" element={<CommercialBuyerPlan />} />
           <Route path="/commercial-seller-plans" element={<CommercialSellerPlans />} />

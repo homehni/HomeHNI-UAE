@@ -301,6 +301,13 @@ const Header = () => {
                   Loans
                 </a>
 
+                <a href="/service-suite" onClick={e => {
+                e.preventDefault();
+                navigate('/service-suite');
+              }} className={`hover:opacity-80 transition-colors duration-500 text-base font-medium uppercase ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
+                  Service Suite
+                </a>
+
               {<a href="/careers" className={`hover:opacity-80 transition-colors duration-500 text-base font-medium uppercase ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
      Jobs
   </a>}
