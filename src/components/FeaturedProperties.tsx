@@ -27,7 +27,7 @@ const FeaturedProperties = ({
   properties?: FeaturedProperty[];
 }) => {
   const [showAll, setShowAll] = useState(false);
-  const [featuredProperties, setFeaturedProperties] = useState<FeaturedProperty[]>([]);
+  const [featuredPropertiesByType, setFeaturedPropertiesByType] = useState<Record<string, FeaturedProperty[]>>({});
   const [sectionHeader, setSectionHeader] = useState<ContentElement | null>(null);
   
   // Fetch real featured properties from database
@@ -37,7 +37,7 @@ const FeaturedProperties = ({
         // Get featured properties using the service function
         const propertiesData = await fetchFeaturedProperties();
         
-        // Transform to FeaturedProperty format
+        // Transform to FeaturedProperty format and categorize by type
         const transformedProperties = propertiesData.map(property => ({
           id: property.id,
           title: property.title,
@@ -51,7 +51,22 @@ const FeaturedProperties = ({
           isNew: new Date(property.created_at) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) // New if created within last 7 days
         }));
 
-        setFeaturedProperties(transformedProperties);
+        // Categorize properties by type and append to existing ones
+        setFeaturedPropertiesByType(prev => {
+          const updated = { ...prev };
+          transformedProperties.forEach(property => {
+            const type = property.propertyType;
+            if (!updated[type]) {
+              updated[type] = [];
+            }
+            // Check if property already exists to avoid duplicates
+            const exists = updated[type].some(p => p.id === property.id);
+            if (!exists) {
+              updated[type] = [...updated[type], property].slice(-20); // Keep last 20 per category
+            }
+          });
+          return updated;
+        });
 
         // Get header content
         const headerContent = await contentElementsService.getSectionContent('homepage', 'featured_properties', 'featured_properties_header');
@@ -79,7 +94,7 @@ const FeaturedProperties = ({
           
           // Handle real-time updates for featured properties
           if (payload.eventType === 'UPDATE' && payload.new?.status === 'approved' && payload.new?.is_featured) {
-            // Add newly approved featured property to the beginning of the list
+            // Add newly approved featured property to the appropriate category
             const newProperty = {
               id: payload.new.id,
               title: payload.new.title,
@@ -93,7 +108,19 @@ const FeaturedProperties = ({
               isNew: true
             };
             
-            setFeaturedProperties(prev => [newProperty, ...prev.slice(0, 19)]); // Keep maximum 20 items
+            setFeaturedPropertiesByType(prev => {
+              const updated = { ...prev };
+              const type = newProperty.propertyType;
+              if (!updated[type]) {
+                updated[type] = [];
+              }
+              // Check if property already exists to avoid duplicates
+              const exists = updated[type].some(p => p.id === newProperty.id);
+              if (!exists) {
+                updated[type] = [newProperty, ...updated[type]].slice(0, 20); // Add to beginning, keep max 20
+              }
+              return updated;
+            });
           } else {
             // For other changes, refetch all data
             fetchContent();
@@ -309,9 +336,19 @@ const FeaturedProperties = ({
     isNew: true
   }];
 
+  // Combine all properties from all types for display
+  const allFeaturedProperties = useMemo(() => {
+    return Object.values(featuredPropertiesByType).flat().sort((a, b) => {
+      // Sort by newest first, then by title
+      if (a.isNew && !b.isNew) return -1;
+      if (!a.isNew && b.isNew) return 1;
+      return a.title.localeCompare(b.title);
+    });
+  }, [featuredPropertiesByType]);
+
   // Use real database properties if available, otherwise fall back to default
   const properties: FeaturedProperty[] = propsProperties ?? (
-    featuredProperties.length > 0 ? featuredProperties : defaultProperties
+    allFeaturedProperties.length > 0 ? allFeaturedProperties : defaultProperties
   );
 
   // Compute available types dynamically so it works if properties change in the future
