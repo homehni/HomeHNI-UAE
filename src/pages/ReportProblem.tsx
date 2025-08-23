@@ -77,7 +77,7 @@ const ReportProblem = () => {
         <div className="container mx-auto px-4 py-16">
           <div className="max-w-2xl mx-auto">
             {/* Feedback Form */}
-            <div className="bg-white rounded-lg shadow-lg p-8">
+            <div className="bg-white rounded-lg shadow-lg p-8 border border-border">
               <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
                 We would love to hear you!
               </h2>
