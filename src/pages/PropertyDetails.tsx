@@ -122,7 +122,7 @@ const PropertyDetails: React.FC = () => {
               {/* Left: Main Details */}
               <div className="xl:col-span-3 space-y-6">
                 {/* Property Details Card */}
-                <div className="bg-card rounded-xl border shadow-sm p-6">
+                <div className="bg-card rounded-xl border-2 border-border shadow-lg hover:shadow-xl transition-shadow duration-300 p-6">
                   <h2 className="text-2xl font-bold mb-6 flex items-center">
                     <Home className="h-6 w-6 mr-3 text-brand-red" />
                     Property Details
@@ -170,7 +170,7 @@ const PropertyDetails: React.FC = () => {
                 </div>
 
                 {/* Location Card */}
-                <div className="bg-card rounded-xl border shadow-sm p-6">
+                <div className="bg-card rounded-xl border-2 border-border shadow-lg hover:shadow-xl transition-shadow duration-300 p-6">
                   <h2 className="text-2xl font-bold mb-6 flex items-center">
                     <MapPin className="h-6 w-6 mr-3 text-brand-red" />
                     Location
@@ -200,7 +200,7 @@ const PropertyDetails: React.FC = () => {
                 </div>
 
                 {/* Overview Card */}
-                <div className="bg-card rounded-xl border shadow-sm p-6">
+                <div className="bg-card rounded-xl border-2 border-border shadow-lg hover:shadow-xl transition-shadow duration-300 p-6">
                   <h2 className="text-2xl font-bold mb-6">Overview</h2>
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     {overview.map((o, idx) => (
@@ -213,7 +213,7 @@ const PropertyDetails: React.FC = () => {
                 </div>
 
                 {/* Services Card */}
-                <div className="bg-card rounded-xl border shadow-sm p-6">
+                <div className="bg-card rounded-xl border-2 border-border shadow-lg hover:shadow-xl transition-shadow duration-300 p-6">
                   <h2 className="text-2xl font-bold mb-6">Services</h2>
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                     <div className="flex flex-col items-center gap-3 bg-muted/30 rounded-lg p-4 hover:bg-muted/50 transition-colors cursor-pointer">
@@ -236,7 +236,7 @@ const PropertyDetails: React.FC = () => {
                 </div>
 
                 {/* Description Card */}
-                <div className="bg-card rounded-xl border shadow-sm p-6">
+                <div className="bg-card rounded-xl border-2 border-border shadow-lg hover:shadow-xl transition-shadow duration-300 p-6">
                   <h2 className="text-2xl font-bold mb-4">Description</h2>
                   <p className="text-muted-foreground leading-relaxed mb-4">
                     {descExpanded ? property.description || fallbackDescription : (property.description || fallbackDescription).slice(0, 320)}
@@ -250,7 +250,7 @@ const PropertyDetails: React.FC = () => {
                 </div>
 
                 {/* Amenities Card */}
-                <div className="bg-card rounded-xl border shadow-sm p-6">
+                <div className="bg-card rounded-xl border-2 border-border shadow-lg hover:shadow-xl transition-shadow duration-300 p-6">
                   <h2 className="text-2xl font-bold mb-6">Amenities</h2>
                   <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
                     {amenities.map(a => (
@@ -262,7 +262,7 @@ const PropertyDetails: React.FC = () => {
                 </div>
 
                 {/* Neighborhood Card */}
-                <div className="bg-card rounded-xl border shadow-sm p-6">
+                <div className="bg-card rounded-xl border-2 border-border shadow-lg hover:shadow-xl transition-shadow duration-300 p-6">
                   <h2 className="text-2xl font-bold mb-6">Neighborhood</h2>
                   <div className="w-full h-80 rounded-xl overflow-hidden border mb-6">
                     <iframe 
