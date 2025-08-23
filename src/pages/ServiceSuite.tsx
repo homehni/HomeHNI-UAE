@@ -543,7 +543,7 @@ const ServiceSuite = () => {
               <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
                 Complete Property Service Ecosystem
               </h2>
-              <div className="text-muted-foreground space-y-4 text-sm leading-relaxed">
+              <div className="text-muted-foreground space-y-4 text-sm leading-relaxed text-justify">
                 <p>
                   Whether you need legal documentation, interior design, architectural services, 
                   or reliable packers and movers, our Service Suite connects you with verified 
