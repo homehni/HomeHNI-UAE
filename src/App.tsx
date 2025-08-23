@@ -32,7 +32,8 @@ import SitemapXml from "./pages/SitemapXml";
 import OwnerPlans from "./pages/OwnerPlans";
 import BuyerPlans from "./pages/BuyerPlans";
 import SellerPlans from "./pages/SellerPlans";
-import { LifetimePlans } from "./pages/LifetimePlans";
+import AgentLifetimePlans from "@/pages/AgentLifetimePlans";
+import BuilderLifetimePlans from "@/pages/BuilderLifetimePlans";
 import CorporateEnquiry from "./pages/CorporateEnquiry";
 import CommercialOwnerPlans from "./pages/CommercialOwnerPlans";
 import CommercialBuyerPlan from "./pages/CommercialBuyerPlan";
@@ -116,7 +117,8 @@ const App: React.FC = () => {
             <Route path="/owner-plans" element={<OwnerPlans />} />
             <Route path="/buyer-plans" element={<BuyerPlans />} />
             <Route path="/seller-plans" element={<SellerPlans />} />
-            <Route path="/lifetime-plans" element={<LifetimePlans />} />
+        <Route path="/agent-lifetime-plans" element={<AgentLifetimePlans />} />
+        <Route path="/builder-lifetime-plans" element={<BuilderLifetimePlans />} />
             <Route path="/commercial-owner-plans" element={<CommercialOwnerPlans />} />
           <Route path="/commercial-buyer-plan" element={<CommercialBuyerPlan />} />
           <Route path="/commercial-seller-plans" element={<CommercialSellerPlans />} />
