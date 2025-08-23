@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { Home, MapPin, IndianRupee, Calendar, Mail, Phone, User, Images, Paintbrush, Calculator, FileText, ShieldCheck, Bus, Train, Car, TrendingUp } from 'lucide-react';
 import { ContactOwnerModal } from '@/components/ContactOwnerModal';
+import { ScheduleVisitModal } from '@/components/ScheduleVisitModal';
 import { PropertyImageGallery } from '@/components/PropertyImageGallery';
 interface Property {
   id: string;
@@ -38,6 +39,7 @@ const PropertyDetails: React.FC = () => {
   const location = useLocation();
   const property = location.state as Property | undefined || null;
   const [showContactModal, setShowContactModal] = React.useState(false);
+  const [showScheduleVisitModal, setShowScheduleVisitModal] = React.useState(false);
   
   React.useEffect(() => {
     document.title = property ? `${property.title} | Property Details` : 'Property Details';
@@ -354,7 +356,12 @@ const PropertyDetails: React.FC = () => {
                   <div className="bg-card rounded-xl border shadow-lg p-6 space-y-4">
                     <h3 className="text-lg font-semibold">Quick Actions</h3>
                     <div className="space-y-2">
-                      <Button variant="outline" className="w-full justify-start" size="sm">
+                      <Button 
+                        variant="outline" 
+                        className="w-full justify-start" 
+                        size="sm"
+                        onClick={() => setShowScheduleVisitModal(true)}
+                      >
                         <TrendingUp className="h-4 w-4 mr-2" />
                         Schedule Visit
                       </Button>
@@ -389,6 +396,16 @@ const PropertyDetails: React.FC = () => {
         <ContactOwnerModal
           isOpen={showContactModal}
           onClose={() => setShowContactModal(false)}
+          propertyId={property.id}
+          propertyTitle={property.title}
+        />
+      )}
+      
+      {/* Schedule Visit Modal */}
+      {property && (
+        <ScheduleVisitModal
+          isOpen={showScheduleVisitModal}
+          onClose={() => setShowScheduleVisitModal(false)}
           propertyId={property.id}
           propertyTitle={property.title}
         />

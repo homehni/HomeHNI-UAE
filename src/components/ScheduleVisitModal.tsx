@@ -1,0 +1,312 @@
+import React, { useState } from 'react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Calendar, X } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
+
+interface ScheduleVisitModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  propertyId: string;
+  propertyTitle: string;
+}
+
+interface ScheduleVisitFormData {
+  name: string;
+  phone: string;
+  reasonToBuy: 'investment' | 'self_use';
+  isPropertyDealer: 'yes' | 'no';
+  planningToBuy: '3_months' | '6_months' | 'more_than_6_months';
+  interestedInHomeLoan: boolean;
+  interestedInSiteVisit: boolean;
+  agreeToTerms: boolean;
+}
+
+export const ScheduleVisitModal: React.FC<ScheduleVisitModalProps> = ({
+  isOpen,
+  onClose,
+  propertyId,
+  propertyTitle
+}) => {
+  const { toast } = useToast();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formData, setFormData] = useState<ScheduleVisitFormData>({
+    name: '',
+    phone: '',
+    reasonToBuy: 'investment',
+    isPropertyDealer: 'no',
+    planningToBuy: '3_months',
+    interestedInHomeLoan: false,
+    interestedInSiteVisit: true,
+    agreeToTerms: false
+  });
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!formData.agreeToTerms) {
+      toast({
+        title: "Please agree to terms",
+        description: "You must agree to the terms and conditions to proceed.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    if (!formData.name.trim() || !formData.phone.trim()) {
+      toast({
+        title: "Missing information",
+        description: "Please fill in all required fields.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    setIsSubmitting(true);
+    
+    try {
+      // Future: Send schedule visit request to backend
+      // For now, just show success message
+      await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API call
+      
+      toast({
+        title: "Visit scheduled successfully!",
+        description: "We'll contact you shortly to confirm the visit timing."
+      });
+      
+      // Reset form and close modal
+      setFormData({
+        name: '',
+        phone: '',
+        reasonToBuy: 'investment',
+        isPropertyDealer: 'no',
+        planningToBuy: '3_months',
+        interestedInHomeLoan: false,
+        interestedInSiteVisit: true,
+        agreeToTerms: false
+      });
+      onClose();
+    } catch (error) {
+      toast({
+        title: "Error scheduling visit",
+        description: "Something went wrong. Please try again later.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleChange = (field: keyof ScheduleVisitFormData, value: any) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+  };
+
+  return (
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+        <DialogHeader className="relative">
+          <Button
+            variant="ghost"
+            size="sm"
+            className="absolute right-0 top-0 h-6 w-6 p-0"
+            onClick={onClose}
+          >
+            <X className="h-4 w-4" />
+          </Button>
+          <DialogTitle className="text-xl font-semibold">
+            You are requesting to view advertiser details.
+          </DialogTitle>
+        </DialogHeader>
+
+        <div className="space-y-6">
+          {/* Property Info */}
+          <div className="bg-muted/30 rounded-lg p-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+              <div>
+                <span className="font-semibold">POSTED BY BUILDER:</span>
+                <div className="text-muted-foreground">+91 98***543** | *****@*****.com</div>
+                <div className="text-muted-foreground">SRAVAN | ELITE HOMES INFRACON LLP</div>
+              </div>
+              <div>
+                <span className="font-semibold">POSTED ON JUL 17, 2025:</span>
+                <div className="font-semibold">{propertyTitle}</div>
+                <div className="text-muted-foreground">1425 - 2435 SQ.FT. | 3 BHK FLAT/APARTMENT</div>
+              </div>
+            </div>
+          </div>
+
+          <p className="text-sm font-medium">
+            Please fill in your details to be shared with this advertiser only.
+          </p>
+
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Basic Information */}
+              <div className="space-y-4">
+                <h3 className="font-semibold">BASIC INFORMATION</h3>
+                
+                <div className="space-y-4">
+                  <div>
+                    <Label className="text-sm font-medium mb-2 block">
+                      Your reason to buy is
+                    </Label>
+                    <RadioGroup
+                      value={formData.reasonToBuy}
+                      onValueChange={(value) => handleChange('reasonToBuy', value)}
+                      className="flex gap-6"
+                    >
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="investment" id="investment" />
+                        <Label htmlFor="investment" className="text-sm">Investment</Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="self_use" id="self_use" />
+                        <Label htmlFor="self_use" className="text-sm">Self Use</Label>
+                      </div>
+                    </RadioGroup>
+                  </div>
+
+                  <div>
+                    <Label className="text-sm font-medium mb-2 block">
+                      Are you a property dealer
+                    </Label>
+                    <RadioGroup
+                      value={formData.isPropertyDealer}
+                      onValueChange={(value) => handleChange('isPropertyDealer', value)}
+                      className="flex gap-6"
+                    >
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="yes" id="dealer_yes" />
+                        <Label htmlFor="dealer_yes" className="text-sm">Yes</Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="no" id="dealer_no" />
+                        <Label htmlFor="dealer_no" className="text-sm">No</Label>
+                      </div>
+                    </RadioGroup>
+                  </div>
+
+                  <div>
+                    <Label htmlFor="name" className="text-sm font-medium">Name</Label>
+                    <Input
+                      id="name"
+                      type="text"
+                      value={formData.name}
+                      onChange={(e) => handleChange('name', e.target.value)}
+                      className="mt-1"
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <Label htmlFor="phone" className="text-sm font-medium">Phone</Label>
+                    <div className="flex mt-1">
+                      <div className="flex items-center px-3 bg-muted border border-r-0 rounded-l-md text-sm">
+                        +91 IND
+                      </div>
+                      <Input
+                        id="phone"
+                        type="tel"
+                        value={formData.phone}
+                        onChange={(e) => handleChange('phone', e.target.value)}
+                        className="rounded-l-none"
+                        placeholder="Enter phone number"
+                        required
+                      />
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-1">This number would be verified</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Optional Information */}
+              <div className="space-y-4">
+                <h3 className="font-semibold">OPTIONAL INFORMATION</h3>
+                
+                <div>
+                  <Label className="text-sm font-medium mb-2 block">
+                    By when you are planning to buy the property?
+                  </Label>
+                  <RadioGroup
+                    value={formData.planningToBuy}
+                    onValueChange={(value) => handleChange('planningToBuy', value)}
+                    className="space-y-2"
+                  >
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="3_months" id="3_months" />
+                      <Label htmlFor="3_months" className="text-sm">3 months</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="6_months" id="6_months" />
+                      <Label htmlFor="6_months" className="text-sm">6 months</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="more_than_6_months" id="more_than_6_months" />
+                      <Label htmlFor="more_than_6_months" className="text-sm">More than 6 months</Label>
+                    </div>
+                  </RadioGroup>
+                </div>
+
+                <div className="space-y-3">
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      id="home_loan"
+                      checked={formData.interestedInHomeLoan}
+                      onCheckedChange={(checked) => handleChange('interestedInHomeLoan', checked)}
+                    />
+                    <Label htmlFor="home_loan" className="text-sm">
+                      I am interested in home loan
+                    </Label>
+                  </div>
+
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      id="site_visit"
+                      checked={formData.interestedInSiteVisit}
+                      onCheckedChange={(checked) => handleChange('interestedInSiteVisit', checked)}
+                    />
+                    <Label htmlFor="site_visit" className="text-sm">
+                      I am interested in site visits.
+                    </Label>
+                  </div>
+
+                  <div className="flex items-start space-x-2">
+                    <Checkbox
+                      id="terms"
+                      checked={formData.agreeToTerms}
+                      onCheckedChange={(checked) => handleChange('agreeToTerms', checked)}
+                    />
+                    <Label htmlFor="terms" className="text-sm leading-tight">
+                      I agree to the{' '}
+                      <span className="text-blue-600 hover:underline cursor-pointer">
+                        Terms & Conditions
+                      </span>{' '}
+                      and{' '}
+                      <span className="text-blue-600 hover:underline cursor-pointer">
+                        Privacy Policy
+                      </span>
+                    </Label>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex justify-center pt-4">
+              <Button
+                type="submit"
+                disabled={isSubmitting || !formData.agreeToTerms}
+                className="px-8"
+              >
+                {isSubmitting ? 'Processing...' : 'View Advertiser Details'}
+              </Button>
+            </div>
+          </form>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+};
