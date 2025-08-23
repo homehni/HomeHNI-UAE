@@ -33,18 +33,26 @@ export const Auth: React.FC = () => {
   });
 
   useEffect(() => {
-    if (user && profile) {
-      // Get the redirect path from URL
+    if (user) {
       const urlParams = new URLSearchParams(location.search);
       const redirectPath = urlParams.get('redirectTo');
       
-      // Check if user needs to select a role (only if they don't have buyer/seller/agent/builder role)
-      const validRoles = ['buyer', 'seller', 'agent', 'builder'];
-      if (!validRoles.includes(profile.role)) {
-        setShowRoleModal(true);
+      if (profile) {
+        // Profile exists, check if user needs to select a role
+        const validRoles = ['buyer', 'seller', 'agent', 'builder'];
+        if (!validRoles.includes(profile.role)) {
+          setShowRoleModal(true);
+        } else {
+          // User has a valid role, redirect them
+          navigate(redirectPath ? redirectPath : '/', { replace: true });
+        }
       } else {
-        // User has a valid role, redirect them
-        navigate(redirectPath ? redirectPath : '/', { replace: true });
+        // Profile doesn't exist yet (first-time user) - show role selection
+        setTimeout(() => {
+          if (!profile) {
+            setShowRoleModal(true);
+          }
+        }, 1000); // Wait 1 second for profile to load
       }
     }
   }, [user, profile, navigate, location]);
@@ -351,7 +359,13 @@ export const Auth: React.FC = () => {
       {/* Role Selection Modal */}
       <RoleSelectionModal 
         isOpen={showRoleModal} 
-        onComplete={() => setShowRoleModal(false)} 
+        onComplete={() => {
+          setShowRoleModal(false);
+          // After role selection, redirect to intended page
+          const urlParams = new URLSearchParams(location.search);
+          const redirectPath = urlParams.get('redirectTo');
+          navigate(redirectPath ? redirectPath : '/', { replace: true });
+        }} 
       />
     </div>
   );
