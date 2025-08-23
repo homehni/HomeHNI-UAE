@@ -125,11 +125,6 @@ const RealEstateSlider = () => {
                   <img src={company.logo} alt={`${company.name} logo`} className="w-full h-full object-contain" />
                 </div>
                 <div className="p-4">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs bg-red-100 text-red-600 px-2 py-1 rounded-full font-semibold">
-                      #{company.rank}
-                    </span>
-                  </div>
                   <h3 className="text-sm font-bold text-foreground text-center mb-1">
                     {company.name}
                   </h3>
