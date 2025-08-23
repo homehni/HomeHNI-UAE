@@ -10,6 +10,7 @@ import { ContactOwnerModal } from '@/components/ContactOwnerModal';
 import { ScheduleVisitModal } from '@/components/ScheduleVisitModal';
 import { PropertyImageGallery } from '@/components/PropertyImageGallery';
 import EMICalculatorModal from '@/components/EMICalculatorModal';
+import LegalServicesForm from '@/components/LegalServicesForm';
 interface Property {
   id: string;
   title: string;
@@ -42,6 +43,7 @@ const PropertyDetails: React.FC = () => {
   const [showContactModal, setShowContactModal] = React.useState(false);
   const [showScheduleVisitModal, setShowScheduleVisitModal] = React.useState(false);
   const [showEMICalculatorModal, setShowEMICalculatorModal] = React.useState(false);
+  const [showLegalServicesModal, setShowLegalServicesModal] = React.useState(false);
   
   React.useEffect(() => {
     document.title = property ? `${property.title} | Property Details` : 'Property Details';
@@ -228,7 +230,10 @@ const PropertyDetails: React.FC = () => {
                       <Calculator className="h-8 w-8 text-brand-red" />
                       <span className="text-sm font-medium">Estimate Cost</span>
                     </div>
-                    <div className="flex flex-col items-center gap-3 bg-muted/30 rounded-lg p-4 hover:bg-muted/50 transition-colors cursor-pointer">
+                    <div 
+                      className="flex flex-col items-center gap-3 bg-muted/30 rounded-lg p-4 hover:bg-muted/50 transition-colors cursor-pointer"
+                      onClick={() => setShowLegalServicesModal(true)}
+                    >
                       <FileText className="h-8 w-8 text-brand-red" />
                       <span className="text-sm font-medium">Legal Services</span>
                     </div>
@@ -376,7 +381,12 @@ const PropertyDetails: React.FC = () => {
                         <Calculator className="h-4 w-4 mr-2" />
                         EMI Calculator
                       </Button>
-                      <Button variant="outline" className="w-full justify-start" size="sm">
+                      <Button 
+                        variant="outline" 
+                        className="w-full justify-start" 
+                        size="sm"
+                        onClick={() => setShowLegalServicesModal(true)}
+                      >
                         <FileText className="h-4 w-4 mr-2" />
                         Legal Check
                       </Button>
@@ -431,6 +441,12 @@ const PropertyDetails: React.FC = () => {
           propertyPrice={property.expected_price}
         />
       )}
+      
+      {/* Legal Services Modal */}
+      <LegalServicesForm
+        isOpen={showLegalServicesModal}
+        onClose={() => setShowLegalServicesModal(false)}
+      />
       
       <Footer />
     </div>;
