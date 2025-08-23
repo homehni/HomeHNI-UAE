@@ -167,16 +167,6 @@ export const CategorizedImageUpload: React.FC<CategorizedImageUploadProps> = ({
                 </div>
               )}
               
-              {categoryImages.length === 0 && (
-                <div 
-                  className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-2 text-center cursor-pointer hover:border-muted-foreground/40 transition-colors"
-                  onClick={() => handleUploadClick(category.key)}
-                >
-                  <p className="text-[10px] text-muted-foreground">
-                    Click to upload files
-                  </p>
-                </div>
-              )}
             </Card>
           );
         })}
