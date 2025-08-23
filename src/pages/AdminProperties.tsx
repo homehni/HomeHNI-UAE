@@ -221,7 +221,7 @@ const AdminProperties = () => {
       }
 
       // Insert into main properties table for homepage display
-      const { error: insertError } = await supabase
+      const { data: insertedProperty, error: insertError } = await supabase
         .from('properties')
         .insert({
           user_id: submission.user_id,
@@ -257,9 +257,74 @@ const AdminProperties = () => {
           owner_role: payload.owner_role || 'Owner',
           status: 'approved',
           is_featured: payload.is_featured || false
-        });
+        })
+        .select()
+        .single();
 
       if (insertError) throw insertError;
+
+      // Find the next available property key in content_elements
+      const { data: existingElements } = await supabase
+        .from('content_elements')
+        .select('element_key')
+        .like('element_key', 'property_%')
+        .order('element_key');
+
+      // Find the highest property number
+      let nextPropertyNumber = 20; // Start from property_20
+      if (existingElements) {
+        const propertyNumbers = existingElements
+          .map(el => {
+            const match = el.element_key.match(/^property_(\d+)$/);
+            return match ? parseInt(match[1]) : 0;
+          })
+          .filter(num => num > 0);
+        
+        if (propertyNumbers.length > 0) {
+          nextPropertyNumber = Math.max(...propertyNumbers) + 1;
+        }
+      }
+
+      // Add to content_elements table
+      const contentElement = {
+        element_type: 'featured_property',
+        element_key: `property_${nextPropertyNumber}`,
+        title: insertedProperty.title,
+        content: {
+          id: insertedProperty.id,
+          title: insertedProperty.title,
+          price: `₹${insertedProperty.expected_price}`,
+          location: `${insertedProperty.locality}, ${insertedProperty.city}`,
+          propertyType: insertedProperty.property_type,
+          bhk: insertedProperty.bhk_type,
+          size: `${insertedProperty.super_area} sq ft`,
+          image: insertedProperty.images?.[0] || '/placeholder.svg'
+        },
+        images: insertedProperty.images || [],
+        sort_order: nextPropertyNumber,
+        is_active: true,
+        page_location: 'homepage',
+        section_location: 'featured_properties',
+        created_by: (await supabase.auth.getUser()).data.user?.id
+      };
+
+      const { error: contentError } = await supabase
+        .from('content_elements')
+        .insert(contentElement);
+
+      if (contentError) {
+        console.error('Error adding to content_elements:', contentError);
+        // Don't fail the entire operation if content_elements insert fails
+        toast({
+          title: 'Success',
+          description: 'Property approved successfully (content element creation failed)'
+        });
+      } else {
+        toast({
+          title: 'Success',
+          description: 'Property approved and added to featured properties'
+        });
+      }
 
       // Update submission status
       const { error: updateError } = await supabase
@@ -270,11 +335,6 @@ const AdminProperties = () => {
         .eq('id', propertyId);
 
       if (updateError) throw updateError;
-
-      toast({
-        title: 'Success',
-        description: 'Property approved and added to listings'
-      });
 
       setReviewModalOpen(false);
       fetchProperties();

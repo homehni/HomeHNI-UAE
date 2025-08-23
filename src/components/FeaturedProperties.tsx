@@ -27,7 +27,7 @@ const FeaturedProperties = ({
   properties?: FeaturedProperty[];
 }) => {
   const [showAll, setShowAll] = useState(false);
-  const [featuredPropertiesByType, setFeaturedPropertiesByType] = useState<Record<string, FeaturedProperty[]>>({});
+  const [featuredProperties, setFeaturedProperties] = useState<FeaturedProperty[]>([]);
   const [sectionHeader, setSectionHeader] = useState<ContentElement | null>(null);
   
   // Fetch real featured properties from database
@@ -51,22 +51,7 @@ const FeaturedProperties = ({
           isNew: new Date(property.created_at) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) // New if created within last 7 days
         }));
 
-        // Categorize properties by type and append to existing ones
-        setFeaturedPropertiesByType(prev => {
-          const updated = { ...prev };
-          transformedProperties.forEach(property => {
-            const type = property.propertyType;
-            if (!updated[type]) {
-              updated[type] = [];
-            }
-            // Check if property already exists to avoid duplicates
-            const exists = updated[type].some(p => p.id === property.id);
-            if (!exists) {
-              updated[type] = [...updated[type], property].slice(-20); // Keep last 20 per category
-            }
-          });
-          return updated;
-        });
+        setFeaturedProperties(transformedProperties);
 
         // Get header content
         const headerContent = await contentElementsService.getSectionContent('homepage', 'featured_properties', 'featured_properties_header');
@@ -108,19 +93,7 @@ const FeaturedProperties = ({
               isNew: true
             };
             
-            setFeaturedPropertiesByType(prev => {
-              const updated = { ...prev };
-              const type = newProperty.propertyType;
-              if (!updated[type]) {
-                updated[type] = [];
-              }
-              // Check if property already exists to avoid duplicates
-              const exists = updated[type].some(p => p.id === newProperty.id);
-              if (!exists) {
-                updated[type] = [newProperty, ...updated[type]].slice(0, 20); // Add to beginning, keep max 20
-              }
-              return updated;
-            });
+            setFeaturedProperties(prev => [newProperty, ...prev.slice(0, 19)]); // Keep maximum 20 items
           } else {
             // For other changes, refetch all data
             fetchContent();
@@ -336,19 +309,9 @@ const FeaturedProperties = ({
     isNew: true
   }];
 
-  // Combine all properties from all types for display
-  const allFeaturedProperties = useMemo(() => {
-    return Object.values(featuredPropertiesByType).flat().sort((a, b) => {
-      // Sort by newest first, then by title
-      if (a.isNew && !b.isNew) return -1;
-      if (!a.isNew && b.isNew) return 1;
-      return a.title.localeCompare(b.title);
-    });
-  }, [featuredPropertiesByType]);
-
   // Use real database properties if available, otherwise fall back to default
   const properties: FeaturedProperty[] = propsProperties ?? (
-    allFeaturedProperties.length > 0 ? allFeaturedProperties : defaultProperties
+    featuredProperties.length > 0 ? featuredProperties : defaultProperties
   );
 
   // Compute available types dynamically so it works if properties change in the future
