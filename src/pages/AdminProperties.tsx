@@ -220,11 +220,18 @@ const AdminProperties = () => {
         payload = {};
       }
 
+      // Ensure we have a user_id to assign (fallback to current admin if submission has none)
+      const { data: authUser } = await supabase.auth.getUser();
+      const userIdToAssign = submission.user_id || authUser.user?.id;
+      if (!userIdToAssign) {
+        throw new Error('Approval requires an authenticated admin user.');
+      }
+
       // Insert into main properties table for homepage display
       const { data: insertedProperty, error: insertError } = await supabase
         .from('properties')
         .insert({
-          user_id: submission.user_id,
+          user_id: userIdToAssign,
           title: submission.title || payload.title || 'Untitled Property',
           property_type: payload.property_type || 'Unknown',
           listing_type: payload.listing_type || 'Unknown',
