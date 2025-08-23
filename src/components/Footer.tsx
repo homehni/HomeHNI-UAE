@@ -190,7 +190,7 @@ const Footer = ({
           <div className="text-center">
             <h4 className="font-semibold text-gray-900 mb-2">List Your Property</h4>
             <p className="text-sm text-gray-600 mb-4">For Free, Without any brokerage.</p>
-            <button onClick={handlePostPropertyClick} className="bg-gray-800 text-white px-6 py-2 rounded text-sm hover:bg-gray-700 transition-colors">
+            <button onClick={handlePostPropertyClick} className="bg-brand-red text-white px-6 py-2 rounded text-sm hover:bg-brand-red-dark transition-colors">
               Free Posting
             </button>
           </div>
@@ -199,7 +199,7 @@ const Footer = ({
           <div className="text-center">
             <h4 className="font-semibold text-gray-900 mb-2">Find Property</h4>
             <p className="text-sm text-gray-600 mb-4">Select from thousands of options, without brokerage.</p>
-            <button onClick={handleFindNowClick} className="bg-gray-800 text-white px-6 py-2 rounded text-sm hover:bg-gray-700 transition-colors">
+            <button onClick={handleFindNowClick} className="bg-brand-red text-white px-6 py-2 rounded text-sm hover:bg-brand-red-dark transition-colors">
               Find Now
             </button>
           </div>
