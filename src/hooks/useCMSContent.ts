@@ -22,13 +22,12 @@ export const useCMSContent = (elementKey: string) => {
           .select('*')
           .eq('element_key', elementKey)
           .eq('is_active', true)
-          .single();
+          .maybeSingle();
 
-        if (error && error.code !== 'PGRST116') {
+        if (error) {
           console.error('Error fetching CMS content:', error);
-        } else {
-          setContent(data);
         }
+        setContent(data);
       } catch (error) {
         console.error('Error fetching CMS content:', error);
       } finally {
