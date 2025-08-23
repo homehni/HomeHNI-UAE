@@ -438,7 +438,7 @@ const PropertyManagement = () => {
               <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
                 Comprehensive Property Management Solutions
               </h2>
-              <div className="text-muted-foreground space-y-4 text-sm leading-relaxed">
+              <div className="text-muted-foreground space-y-4 text-sm leading-relaxed text-justify">
                 <p>
                   Whether you own a single rental property or a diverse real estate portfolio, our comprehensive 
                   property management services are designed to maximize your investment returns while minimizing 
