@@ -51,11 +51,11 @@ export const OwnerInfoStep: React.FC<OwnerInfoStepProps> = ({
   const getListingTypes = () => {
     switch (selectedPropertyType) {
       case 'Commercial':
-        return ['Sale'];
+        return ['Rent', 'Sale'];
       case 'Land/Plot':
         return ['Resale'];
       default: // Residential
-        return ['Resale', 'PG/Hostel', 'Flatmates'];
+        return ['Rent', 'Resale', 'PG/Hostel', 'Flatmates'];
     }
   };
 
