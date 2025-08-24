@@ -242,15 +242,8 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50/30 to-teal-100/30">
-      <div className="text-center py-8">
-        <Badge variant="secondary" className="bg-green-100 text-green-800 px-6 py-2 text-lg font-semibold mb-4">
-          🏠 FLATMATES PROPERTY FORM
-        </Badge>
-        <p className="text-muted-foreground max-w-2xl mx-auto">
-          Find the perfect flatmate by listing your shared accommodation with detailed preferences and amenities.
-        </p>
-        
-        <div className="mt-8 max-w-4xl mx-auto px-4">
+      <div className="py-6">
+        <div className="max-w-6xl mx-auto px-4">
           <ProgressIndicator 
             currentStep={currentStep} 
             totalSteps={7} 

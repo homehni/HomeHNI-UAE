@@ -280,15 +280,8 @@ export const PGHostelMultiStepForm: React.FC<PGHostelMultiStepFormProps> = ({
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-red-50/30 to-orange-100/30">
-      <div className="text-center py-8">
-        <Badge variant="secondary" className="bg-red-100 text-red-800 px-6 py-2 text-lg font-semibold mb-4">
-          🏠 PG/HOSTEL PROPERTY FORM
-        </Badge>
-        <p className="text-muted-foreground max-w-2xl mx-auto">
-          List your PG/Hostel with detailed room information and amenities to attract the right tenants.
-        </p>
-        
-        <div className="mt-8 max-w-4xl mx-auto px-4">
+      <div className="py-6">
+        <div className="max-w-6xl mx-auto px-4">
           <ProgressIndicator 
             currentStep={currentStep - 1} 
             totalSteps={7} 
