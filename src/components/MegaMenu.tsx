@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -41,18 +40,14 @@ const MegaMenu = ({ isScrolled }: MegaMenuProps) => {
     
           {/* <DropdownMenuSeparator /> */}
           {[
-            // 'All Residential',
-            'Residential',
-            // 'Commercial Building',
-            'Commercial',
-            // 'Villa',
-            'Industrial',
-            // 'Independent House',
-            'Agricultural lands',
-          ].map((label) => (
-            <DropdownMenuItem key={label} asChild>
-              <a href="#" className="w-full">
-                {label}
+            { label: 'Residential', href: '/search?type=buy' },
+            { label: 'Commercial', href: '/search?type=buy&propertyType=Commercial+Space%2FBuilding' },
+            { label: 'Industrial', href: '/search?type=buy&propertyType=Industrial+Space%2FBuilding' },
+            { label: 'Agricultural lands', href: '/search?type=buy&propertyType=Plots' },
+          ].map((item) => (
+            <DropdownMenuItem key={item.label} asChild>
+              <a href={item.href} className="w-full">
+                {item.label}
               </a>
             </DropdownMenuItem>
           ))}
