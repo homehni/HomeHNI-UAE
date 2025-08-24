@@ -289,13 +289,12 @@ export const PGHostelMultiStepForm: React.FC<PGHostelMultiStepFormProps> = ({
         
         {/* Main Content */}
         <div className="flex-1 p-4 lg:p-8">
-          <div className="mb-8">
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 lg:p-8">
             <ProgressIndicator 
               currentStep={currentStep - 1} 
               totalSteps={7} 
               completedSteps={completedSteps.map(step => step - 1)} 
             />
-          </div>
         
         {!hasOwnerInfo && currentStep === 1 && (
           <PgHostelOwnerInfoStep
@@ -375,6 +374,7 @@ export const PGHostelMultiStepForm: React.FC<PGHostelMultiStepFormProps> = ({
             totalSteps={7}
           />
         )}
+          </div>
         </div>
       </div>
     </div>

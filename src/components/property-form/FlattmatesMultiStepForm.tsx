@@ -249,13 +249,12 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
         />
         
         <div className="flex-1 p-4 lg:p-8">
-          <div className="mb-8">
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 lg:p-8">
             <ProgressIndicator 
               currentStep={currentStep} 
               totalSteps={7} 
               completedSteps={completedSteps} 
             />
-          </div>
         
         {currentStep === 1 && (
           <FlattmatesPropertyDetailsStep
@@ -325,6 +324,7 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
             isSubmitting={isSubmitting}
           />
         )}
+          </div>
         </div>
       </div>
     </div>
