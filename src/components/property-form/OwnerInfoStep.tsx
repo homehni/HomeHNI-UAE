@@ -51,11 +51,11 @@ export const OwnerInfoStep: React.FC<OwnerInfoStepProps> = ({
   const getListingTypes = () => {
     switch (selectedPropertyType) {
       case 'Commercial':
-        return ['Lease', 'Sale'];
+        return ['Rent', 'Sale'];
       case 'Land/Plot':
         return ['Resale'];
       default: // Residential
-        return ['Lease', 'Resale', 'PG/Hostel', 'Flatmates'];
+        return ['Rent', 'Resale', 'PG/Hostel', 'Flatmates'];
     }
   };
 
@@ -234,7 +234,7 @@ export const OwnerInfoStep: React.FC<OwnerInfoStepProps> = ({
                     trigger('listingType');
                   }}
                 >
-                  {type}
+                  {type === 'Rent' ? 'Lease' : type}
                 </Button>
               ))}
             </div>
