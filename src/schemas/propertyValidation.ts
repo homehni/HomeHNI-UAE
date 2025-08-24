@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 export const ownerInfoSchema = z.object({
   phoneNumber: z.string().optional(),
-  role: z.enum(['Owner', 'Agent', 'Builder']).optional(),
+  role: z.enum(['Owner', 'Agent', 'Builder', 'Tenant']).optional(),
   city: z.string().optional(),
   whatsappUpdates: z.boolean().optional(),
   propertyType: z.enum(['Residential', 'Commercial', 'Land/Plot']).optional(),

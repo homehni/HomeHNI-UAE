@@ -10,7 +10,7 @@ interface PgHostelOwnerInfo {
   fullName: string;
   phoneNumber: string;
   email: string;
-  role: 'Owner' | 'Agent' | 'Builder';
+  role: 'Owner' | 'Agent' | 'Builder' | 'Tenant';
   city: string;
   whatsappUpdates: boolean;
 }
@@ -98,7 +98,7 @@ export function PgHostelOwnerInfoStep({
                 <Label htmlFor="role">You are</Label>
                 <Select
                   value={formData.role}
-                  onValueChange={(value: 'Owner' | 'Agent' | 'Builder') => 
+                  onValueChange={(value: 'Owner' | 'Agent' | 'Builder' | 'Tenant') => 
                     setFormData({ ...formData, role: value })
                   }
                 >
@@ -109,6 +109,7 @@ export function PgHostelOwnerInfoStep({
                     <SelectItem value="Owner">Owner</SelectItem>
                     <SelectItem value="Agent">Agent</SelectItem>
                     <SelectItem value="Builder">Builder</SelectItem>
+                    <SelectItem value="Tenant">Tenant</SelectItem>
                   </SelectContent>
                 </Select>
               </div>

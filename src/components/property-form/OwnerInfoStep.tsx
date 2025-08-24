@@ -116,7 +116,10 @@ export const OwnerInfoStep: React.FC<OwnerInfoStepProps> = ({
       <Card className="w-full border border-muted rounded-2xl shadow-lg bg-card/80 backdrop-blur-sm">
         <CardHeader>
           <CardTitle className="text-center text-primary text-2xl font-bold">
-            Start Posting Your Ad For FREE
+            {selectedListingType === 'Rent' || !selectedListingType ? 
+              'Find Your Perfect Rental Match - FREE' : 
+              'Start Posting Your Property For FREE'
+            }
           </CardTitle>
         </CardHeader>
       <CardContent>
@@ -221,22 +224,35 @@ export const OwnerInfoStep: React.FC<OwnerInfoStepProps> = ({
 
           {/* Property Listing Type Section */}
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-foreground">I want to</h3>
+            <h3 className="text-lg font-semibold text-foreground">
+              {selectedPropertyType === 'Residential' ? 'I want to' : 'I want to'}
+            </h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-              {getListingTypes().map((type) => (
-                <Button
-                  key={type}
-                  type="button"
-                  variant={selectedListingType === type ? "default" : "outline"}
-                  className="h-12"
-                  onClick={() => {
-                    setValue('listingType', type as any);
-                    trigger('listingType');
-                  }}
-                >
-                  {type === 'Rent' ? 'Lease' : type}
-                </Button>
-              ))}
+              {getListingTypes().map((type) => {
+                let buttonText = type;
+                if (type === 'Rent') {
+                  buttonText = 'Rent Out / Find Rental';
+                } else if (type === 'PG/Hostel') {
+                  buttonText = 'List PG/Hostel';
+                } else if (type === 'Flatmates') {
+                  buttonText = 'Find Flatmates';
+                }
+                
+                return (
+                  <Button
+                    key={type}
+                    type="button"
+                    variant={selectedListingType === type ? "default" : "outline"}
+                    className="h-12 text-xs md:text-sm"
+                    onClick={() => {
+                      setValue('listingType', type as any);
+                      trigger('listingType');
+                    }}
+                  >
+                    {buttonText}
+                  </Button>
+                );
+              })}
             </div>
             {errors.listingType && touchedFields.listingType && (
               <p className="text-sm text-destructive">{errors.listingType.message}</p>
@@ -250,17 +266,31 @@ export const OwnerInfoStep: React.FC<OwnerInfoStepProps> = ({
               <Select 
                 value={selectedRole} 
                 onValueChange={(value) => {
-                  setValue('role', value as 'Owner' | 'Agent' | 'Builder');
+                  setValue('role', value as 'Owner' | 'Agent' | 'Builder' | 'Tenant');
                   trigger('role');
                 }}
               >
               <SelectTrigger className={errors.role ? 'border-destructive' : ''}>
-                <SelectValue placeholder="Select your role" />
+                <SelectValue placeholder={
+                  selectedListingType === 'Rent' ? 
+                    "Are you Owner or Tenant?" : 
+                    "Select your role"
+                } />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="Owner">Owner</SelectItem>
-                <SelectItem value="Agent">Agent</SelectItem>
-                <SelectItem value="Builder">Builder</SelectItem>
+                {selectedListingType === 'Rent' ? (
+                  <>
+                    <SelectItem value="Owner">Property Owner</SelectItem>
+                    <SelectItem value="Tenant">Tenant (Looking for Rental)</SelectItem>
+                    <SelectItem value="Agent">Agent</SelectItem>
+                  </>
+                ) : (
+                  <>
+                    <SelectItem value="Owner">Owner</SelectItem>
+                    <SelectItem value="Agent">Agent</SelectItem>
+                    <SelectItem value="Builder">Builder</SelectItem>
+                  </>
+                )}
               </SelectContent>
               </Select>
             </div>
@@ -276,7 +306,10 @@ export const OwnerInfoStep: React.FC<OwnerInfoStepProps> = ({
               className="bg-primary hover:bg-primary/90 px-8 py-3 text-lg font-semibold"
               size="lg"
             >
-              Start Posting Your Ad For FREE
+              {selectedListingType === 'Rent' ? 
+                (selectedRole === 'Tenant' ? 'Start Finding Your Dream Rental' : 'List Your Property For FREE') :
+                'Start Posting Your Property For FREE'
+              }
             </Button>
           </div>
         </form>

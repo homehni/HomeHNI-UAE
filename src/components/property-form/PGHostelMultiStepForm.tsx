@@ -18,7 +18,7 @@ interface LocalOwnerInfo {
   fullName: string;
   phoneNumber: string;
   email: string;
-  role: 'Owner' | 'Agent' | 'Builder';
+  role: 'Owner' | 'Agent' | 'Builder' | 'Tenant';
   city: string;
   whatsappUpdates: boolean;
 }

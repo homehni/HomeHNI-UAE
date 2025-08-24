@@ -2,7 +2,7 @@ export interface OwnerInfo {
   fullName: string;
   phoneNumber: string;
   email: string;
-  role: 'Owner' | 'Agent' | 'Builder';
+  role: 'Owner' | 'Agent' | 'Builder' | 'Tenant';
   city: string;
   whatsappUpdates: boolean;
   propertyType: 'Residential' | 'Commercial' | 'Land/Plot';
