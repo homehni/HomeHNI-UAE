@@ -241,17 +241,7 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50/30 to-teal-100/30">
-      <div className="py-6">
-        <div className="max-w-6xl mx-auto px-4">
-          <ProgressIndicator 
-            currentStep={currentStep} 
-            totalSteps={7} 
-            completedSteps={completedSteps} 
-          />
-        </div>
-      </div>
-      
+    <div className="min-h-screen bg-gradient-to-br from-green-50/30 to-teal-100/30">      
       <div className="flex min-h-screen">
         <FlattmatesSidebar 
           currentStep={currentStep} 
@@ -259,6 +249,14 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
         />
         
         <div className="flex-1 p-4 lg:p-8">
+          <div className="mb-8">
+            <ProgressIndicator 
+              currentStep={currentStep} 
+              totalSteps={7} 
+              completedSteps={completedSteps} 
+            />
+          </div>
+        
         {currentStep === 1 && (
           <FlattmatesPropertyDetailsStep
             initialData={propertyDetails}

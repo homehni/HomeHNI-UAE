@@ -279,17 +279,7 @@ export const PGHostelMultiStepForm: React.FC<PGHostelMultiStepFormProps> = ({
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-red-50/30 to-orange-100/30">
-      <div className="py-6">
-        <div className="max-w-6xl mx-auto px-4">
-          <ProgressIndicator 
-            currentStep={currentStep - 1} 
-            totalSteps={7} 
-            completedSteps={completedSteps.map(step => step - 1)} 
-          />
-        </div>
-      </div>
-
+    <div className="min-h-screen bg-gradient-to-br from-red-50/30 to-orange-100/30">      
       <div className="flex min-h-screen">
         {/* Sidebar */}
         <PgHostelSidebar 
@@ -299,6 +289,14 @@ export const PGHostelMultiStepForm: React.FC<PGHostelMultiStepFormProps> = ({
         
         {/* Main Content */}
         <div className="flex-1 p-4 lg:p-8">
+          <div className="mb-8">
+            <ProgressIndicator 
+              currentStep={currentStep - 1} 
+              totalSteps={7} 
+              completedSteps={completedSteps.map(step => step - 1)} 
+            />
+          </div>
+        
         {!hasOwnerInfo && currentStep === 1 && (
           <PgHostelOwnerInfoStep
             initialData={ownerInfo}
