@@ -139,20 +139,21 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
         <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
           List Your Property for Rent
         </h1>
-        <p className="text-gray-600 text-lg mb-8">
+        <p className="text-gray-600 text-lg">
           Fill in the details below to list your property for rent on our platform
         </p>
-        
-        {/* Progress Indicator */}
-        <ProgressIndicator
-          currentStep={currentStep}
-          totalSteps={8}
-          completedSteps={completedSteps}
-        />
       </div>
 
       {/* Form Container */}
       <div className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden animate-scale-in">
+        {/* Progress Indicator inside container */}
+        <div className="px-6 md:px-8 pt-6 md:pt-8 pb-4">
+          <ProgressIndicator
+            currentStep={currentStep}
+            totalSteps={8}
+            completedSteps={completedSteps}
+          />
+        </div>
         <div className="flex">
           {/* Sidebar - Hidden on mobile and tablet, visible on desktop */}
           <div className="hidden lg:block">
