@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { Badge } from '@/components/ui/badge';
+import { ProgressIndicator } from './ProgressIndicator';
 import { PgHostelSidebar } from './PgHostelSidebar';
 import { PgHostelOwnerInfoStep } from './PgHostelOwnerInfoStep';
 import { PgHostelRoomTypeStep } from './PgHostelRoomTypeStep';
@@ -277,15 +279,33 @@ export const PGHostelMultiStepForm: React.FC<PGHostelMultiStepFormProps> = ({
   };
 
   return (
-    <div className="min-h-screen bg-background flex">
-      {/* Sidebar */}
-      <PgHostelSidebar 
-        currentStep={currentStep} 
-        completedSteps={completedSteps} 
-      />
-      
-      {/* Main Content */}
-      <div className="flex-1">
+    <div className="min-h-screen bg-gradient-to-br from-red-50/30 to-orange-100/30">
+      <div className="text-center py-8">
+        <Badge variant="secondary" className="bg-red-100 text-red-800 px-6 py-2 text-lg font-semibold mb-4">
+          🏠 PG/HOSTEL PROPERTY FORM
+        </Badge>
+        <p className="text-muted-foreground max-w-2xl mx-auto">
+          List your PG/Hostel with detailed room information and amenities to attract the right tenants.
+        </p>
+        
+        <div className="mt-8 max-w-4xl mx-auto px-4">
+          <ProgressIndicator 
+            currentStep={currentStep - 1} 
+            totalSteps={7} 
+            completedSteps={completedSteps.map(step => step - 1)} 
+          />
+        </div>
+      </div>
+
+      <div className="flex min-h-screen">
+        {/* Sidebar */}
+        <PgHostelSidebar 
+          currentStep={currentStep} 
+          completedSteps={completedSteps} 
+        />
+        
+        {/* Main Content */}
+        <div className="flex-1 p-4 lg:p-8">
         {!hasOwnerInfo && currentStep === 1 && (
           <PgHostelOwnerInfoStep
             initialData={ownerInfo}
@@ -364,6 +384,7 @@ export const PGHostelMultiStepForm: React.FC<PGHostelMultiStepFormProps> = ({
             totalSteps={7}
           />
         )}
+        </div>
       </div>
     </div>
   );

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Badge } from '@/components/ui/badge';
+import { ProgressIndicator } from './ProgressIndicator';
 import { FlattmatesPropertyDetailsStep } from './FlattmatesPropertyDetailsStep';
 import { FlattmatesLocationDetailsStep } from './FlattmatesLocationDetailsStep';
 import { FlattmatesRentalDetailsStep } from './FlattmatesRentalDetailsStep';
@@ -248,6 +249,14 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
         <p className="text-muted-foreground max-w-2xl mx-auto">
           Find the perfect flatmate by listing your shared accommodation with detailed preferences and amenities.
         </p>
+        
+        <div className="mt-8 max-w-4xl mx-auto px-4">
+          <ProgressIndicator 
+            currentStep={currentStep} 
+            totalSteps={7} 
+            completedSteps={completedSteps} 
+          />
+        </div>
       </div>
       
       <div className="flex min-h-screen">
