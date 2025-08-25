@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { MapPin, ShieldCheck, Share2, Heart, Image, Phone, CalendarClock, BadgeIndianRupee } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { PropertyImageModal } from '@/components/PropertyImageModal';
 
 interface PropertyHeroProps {
   property: {
@@ -31,6 +32,18 @@ export const PropertyHero: React.FC<PropertyHeroProps> = ({
   onEMICalculator,
   onLegalCheck
 }) => {
+  const [showImageModal, setShowImageModal] = useState(false);
+  const [initialImageIndex, setInitialImageIndex] = useState(0);
+
+  const handleImageClick = (index: number) => {
+    setInitialImageIndex(index);
+    setShowImageModal(true);
+  };
+
+  const handleViewAllPhotos = () => {
+    setInitialImageIndex(0);
+    setShowImageModal(true);
+  };
   return (
     <div className="mx-auto max-w-7xl px-4">
       {/* Breadcrumb */}
@@ -92,39 +105,68 @@ export const PropertyHero: React.FC<PropertyHeroProps> = ({
           <div className="relative">
             <div className="grid grid-cols-4 gap-2 h-64 md:h-[360px]">
               {/* Primary Image */}
-              <div className="col-span-3 relative">
+              <div 
+                className="col-span-3 relative cursor-pointer group"
+                onClick={() => handleImageClick(0)}
+              >
                 <img
                   src={property.images?.[0] || '/placeholder-property.jpg'}
                   alt={property.title}
-                  className="w-full h-full object-cover rounded-xl"
+                  className="w-full h-full object-cover rounded-xl transition-opacity group-hover:opacity-90"
                   loading="lazy"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-xl" />
+                <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition-all duration-200 flex items-center justify-center rounded-xl">
+                  <Image className="h-8 w-8 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+                </div>
               </div>
               
               {/* Secondary Images */}
               <div className="flex flex-col gap-2">
-                <div className="flex-1 relative">
+                <div 
+                  className="flex-1 relative cursor-pointer group"
+                  onClick={() => handleImageClick(1)}
+                >
                   <img
                     src={property.images?.[1] || '/placeholder-property.jpg'}
                     alt={`${property.title} - Image 2`}
-                    className="w-full h-full object-cover rounded-xl"
+                    className="w-full h-full object-cover rounded-xl transition-opacity group-hover:opacity-90"
                     loading="lazy"
                   />
+                  <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition-all duration-200 flex items-center justify-center rounded-xl">
+                    <Image className="h-6 w-6 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+                  </div>
                 </div>
-                <div className="flex-1 relative">
+                <div 
+                  className="flex-1 relative cursor-pointer group"
+                  onClick={() => handleImageClick(2)}
+                >
                   <img
                     src={property.images?.[2] || '/placeholder-property.jpg'}
                     alt={`${property.title} - Image 3`}
-                    className="w-full h-full object-cover rounded-xl"
+                    className="w-full h-full object-cover rounded-xl transition-opacity group-hover:opacity-90"
                     loading="lazy"
                   />
+                  <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition-all duration-200 flex items-center justify-center rounded-xl">
+                    <Image className="h-6 w-6 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+                  </div>
+                  {/* Show "+X more" overlay if there are more than 3 images */}
+                  {property.images && property.images.length > 3 && (
+                    <div className="absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center rounded-xl">
+                      <div className="text-white text-sm font-semibold">
+                        +{property.images.length - 3} more
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
             
             {/* View all photos button */}
-            <button className="absolute bottom-4 right-4 bg-white/90 backdrop-blur-sm rounded-lg px-3 py-2 text-sm font-medium text-gray-800 hover:bg-white focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#d21404]">
+            <button 
+              onClick={handleViewAllPhotos}
+              className="absolute bottom-4 right-4 bg-white/90 backdrop-blur-sm rounded-lg px-3 py-2 text-sm font-medium text-gray-800 hover:bg-white focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#d21404] transition-colors"
+            >
               <Image className="w-4 h-4 mr-1 inline" />
               View all photos
             </button>
@@ -187,6 +229,17 @@ export const PropertyHero: React.FC<PropertyHeroProps> = ({
           </div>
         </aside>
       </div>
+
+      {/* Image Modal */}
+      {property.images && (
+        <PropertyImageModal
+          images={property.images}
+          isOpen={showImageModal}
+          onClose={() => setShowImageModal(false)}
+          initialIndex={initialImageIndex}
+          propertyTitle={property.title}
+        />
+      )}
     </div>
   );
 };
