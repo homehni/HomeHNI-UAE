@@ -5,7 +5,7 @@ import Header from '@/components/Header';
 import Marquee from '@/components/Marquee';
 import SearchSection, { SearchSectionRef } from '@/components/SearchSection';
 import DirectorySection from '@/components/DirectorySection';
-import MobilePropertyServices from '@/components/MobilePropertyServices';
+
 import RealEstateSlider from '@/components/RealEstateSlider';
 import FeaturedProperties from '@/components/FeaturedProperties';
 import Services from '@/components/Services';
@@ -47,7 +47,7 @@ const Index = () => {
           <SearchSection ref={searchSectionRef} />
           <DirectorySection />
         </div>
-        <MobilePropertyServices />
+        
         <RealEstateSlider />
         <FeaturedProperties />
         <Services />
