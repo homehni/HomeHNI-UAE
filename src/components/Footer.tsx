@@ -85,7 +85,19 @@ const Footer = ({
       'Pay Rent': '/rent-receipts',
       'Sale Agreement': '/legal-services',
       'Apply Home Loan': '/loans',
-      'Home Loan Eligibility Calculator': '/loans'
+      'Home Loan Eligibility Calculator': '/loans',
+      'Compare Home Loan Interest': '/loans',
+      'Home Loan Guide': '/loans',
+      'Home Loan Queries': '/loans',
+      'Personal Loan Guide': '/loans',
+      'Personal Loan Queries': '/loans',
+      'Loan against Mutual fund': '/loans',
+      'Loan Liability Balance Transfer': '/loans',
+      'Interior Design Tips': '/interior',
+      'Interior Design Queries': '/interior',
+      'Home Renovation Guide': '/interior',
+      'Home Renovation Queries': '/interior',
+      'Readinsite Vastu Guide': '/architects'
     };
 
     // If the service has a dedicated page, navigate there
