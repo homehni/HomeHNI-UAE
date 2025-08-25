@@ -13,7 +13,7 @@ const NRIQueries = () => {
       <Header />
       
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-teal-600 to-cyan-700 text-white py-16">
+      <section className="bg-gradient-to-r from-teal-600 to-cyan-700 text-white py-20 md:py-32">
         <div className="container mx-auto px-4">
           <div className="text-center">
             <h1 className="text-4xl md:text-6xl font-bold mb-6">NRI Real Estate Queries</h1>

@@ -13,7 +13,7 @@ const RentalGuide = () => {
       <Header />
       
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-purple-600 to-indigo-700 text-white py-16">
+      <section className="bg-gradient-to-r from-purple-600 to-indigo-700 text-white py-20 md:py-32">
         <div className="container mx-auto px-4">
           <div className="text-center">
             <h1 className="text-4xl md:text-6xl font-bold mb-6">Property Rental Guide</h1>
