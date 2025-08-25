@@ -78,7 +78,7 @@ const WhyUseSection = () => {
     {
       icon: (
         <div className="w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center">
-          <Upload className="w-8 h-8 text-green-600" />
+          <Upload className="w-8 h-8 text-red-500" />
         </div>
       ),
       title: 'Free Listing',
@@ -87,7 +87,7 @@ const WhyUseSection = () => {
     {
       icon: (
         <div className="w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center">
-          <Eye className="w-8 h-8 text-blue-600" />
+          <Eye className="w-8 h-8 text-red-500" />
         </div>
       ),
       title: 'Shortlist without Visit',
@@ -96,7 +96,7 @@ const WhyUseSection = () => {
     {
       icon: (
         <div className="w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center">
-          <FileSignature className="w-8 h-8 text-purple-600" />
+          <FileSignature className="w-8 h-8 text-red-500" />
         </div>
       ),
       title: 'Rental Agreement',
