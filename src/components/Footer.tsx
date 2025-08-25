@@ -185,7 +185,8 @@ const Footer = ({
     propertyLoanServices: ["Loan Against Property in Hyderabad", "Property Valuation Services"],
     homeLoanDocumentation: ["Home Loan Documents", "Loan Processing Services", "Digital Loan Application", "Instant Loan Approval", "Zero Processing Fee Loans"]
   };
-  return <footer className="bg-white text-gray-700 border-t">
+  return (
+    <footer className="bg-white text-gray-700 border-t">
       <div className="container mx-auto px-4 py-8">
         {/* Property listings grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6 mb-8">
@@ -277,7 +278,6 @@ const Footer = ({
   </div>
 </div>
 
-        </div>
 
         {/* Footer links and social media */}
         <div className="border-t border-gray-200 pt-6">
@@ -325,6 +325,7 @@ const Footer = ({
           
         </div>
       </div>
-    </footer>;
+    </footer>
+  );
 };
 export default Footer;
