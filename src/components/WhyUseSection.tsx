@@ -1,4 +1,4 @@
-import { FileText, Home, Heart, Building, Palette, Globe, Banknote, Scale } from 'lucide-react';
+import { FileText, Home, Heart, Building, Palette, Globe, Banknote, Scale, UserX, Upload, Eye, FileSignature } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useCMSContent } from '@/hooks/useCMSContent';
 
@@ -69,7 +69,7 @@ const WhyUseSection = () => {
     {
       icon: (
         <div className="w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center">
-          <div className="w-8 h-8 bg-red-500 rounded-full" />
+          <UserX className="w-8 h-8 text-red-500" />
         </div>
       ),
       title: 'Avoid Brokers',
@@ -78,18 +78,16 @@ const WhyUseSection = () => {
     {
       icon: (
         <div className="w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center">
-          <FileText className="w-8 h-8 text-gray-600" />
+          <Upload className="w-8 h-8 text-green-600" />
         </div>
       ),
       title: 'Free Listing',
       description: 'Easy listing process. Also using WhatsApp',
     },
     {
-      // make the heart badge position correctly
       icon: (
-        <div className="w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center relative">
-          <Home className="w-8 h-8 text-gray-600" />
-          <Heart className="w-4 h-4 text-red-500 absolute top-1 right-1" />
+        <div className="w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center">
+          <Eye className="w-8 h-8 text-blue-600" />
         </div>
       ),
       title: 'Shortlist without Visit',
@@ -98,7 +96,7 @@ const WhyUseSection = () => {
     {
       icon: (
         <div className="w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center">
-          <FileText className="w-8 h-8 text-gray-600" />
+          <FileSignature className="w-8 h-8 text-purple-600" />
         </div>
       ),
       title: 'Rental Agreement',
