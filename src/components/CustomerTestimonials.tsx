@@ -63,7 +63,7 @@ export function TrustMetricsRow() {
 }
 
 export function VideoTile({ 
-  thumbnail = "/lovable-uploads/c996469f-4da3-4235-b9fc-d1152fe010e8.png", 
+  thumbnail = "/lovable-uploads/fbb0d72f-782e-49f5-bbe1-8afc1314b5f7.png", 
   duration = "2:13", 
   title = "Customer Success Stories" 
 }) {
