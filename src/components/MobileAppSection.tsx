@@ -17,7 +17,7 @@ const MobileAppSection = () => {
             </div> */}
 
             <h2 className="text-3xl md:text-4xl font-bold text-black mb-4">
-              {cmsContent?.content?.title || 'Find A New Home On The Go'}
+              {cmsContent?.content?.title || 'Homes, Wherever You Are'}
             </h2>
 
             <p className="text-gray-600 text-base md:text-lg mb-8 leading-relaxed">
