@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef } from 'react';
 import { Star, ShieldCheck, Play, Users, BadgeIndianRupee } from 'lucide-react';
 
@@ -231,28 +230,28 @@ function AutoScrollTestimonials() {
     <div className="relative">
       <div 
         ref={scrollRef}
-        className="overflow-x-auto -mx-4 px-4 pb-2 scrollbar-hide"
+        className="overflow-x-auto -mx-4 px-4 pb-2"
         style={{ 
           scrollbarWidth: 'none', 
           msOverflowStyle: 'none',
           WebkitOverflowScrolling: 'touch'
         }}
       >
+        <style>
+          {`
+            .overflow-x-auto::-webkit-scrollbar {
+              display: none;
+            }
+          `}
+        </style>
         <div className="flex gap-4">
           {testimonials.map((testimonial, index) => (
-            <div key={index} className="w-[90%] md:w-[75%] flex-shrink-0 testimonial-card">
+            <div key={index} className="w-[90%] md:w-[75%] flex-shrink-0">
               <TestimonialCard {...testimonial} />
             </div>
           ))}
         </div>
       </div>
-      
-      {/* Hide scrollbar with CSS */}
-      <style jsx>{`
-        .scrollbar-hide::-webkit-scrollbar {
-          display: none;
-        }
-      `}</style>
     </div>
   );
 }
