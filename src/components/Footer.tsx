@@ -97,7 +97,20 @@ const Footer = ({
       'Interior Design Queries': '/interior',
       'Home Renovation Guide': '/interior',
       'Home Renovation Queries': '/interior',
-      'Readinsite Vastu Guide': '/architects'
+      'Readinsite Vastu Guide': '/architects',
+      'Packers and Movers Guide': '/packers-movers',
+      'Packers and Movers queries': '/packers-movers',
+      'Painting Services': '/painting-cleaning',
+      'Home Painting Guide': '/painting-cleaning',
+      'Home Painting Queries': '/painting-cleaning',
+      'Cleaning Services': '/painting-cleaning',
+      'Kitchen Cleaning Services': '/painting-cleaning',
+      'Sofa Cleaning Services': '/painting-cleaning',
+      'Bathroom Cleaning Services': '/painting-cleaning',
+      'Full House Cleaning Services': '/painting-cleaning',
+      'Home Cleaning Guide': '/painting-cleaning',
+      'Home Services': '/service-suite',
+      'Home Services Queries': '/service-suite'
     };
 
     // If the service has a dedicated page, navigate there
