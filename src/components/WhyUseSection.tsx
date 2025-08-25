@@ -1,4 +1,4 @@
-import { FileText, Home, Heart, Edit } from 'lucide-react';
+import { FileText, Home, Heart, Edit, Building, Palette, Globe } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useCMSContent } from '@/hooks/useCMSContent';
 
@@ -6,7 +6,7 @@ const WhyUseSection = () => {
   const { content: cmsContent } = useCMSContent('why-use');
   const topServices = [{
     icon: <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
-        <div className="w-8 h-8 bg-gray-300 rounded"></div>
+        <Building className="w-6 h-6 text-gray-600" />
       </div>,
     title: "Builder Projects",
     badge: "New",
@@ -34,14 +34,14 @@ const WhyUseSection = () => {
     link: "/legal-services"
   }, {
     icon: <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
-        <div className="w-8 h-6 bg-gray-300 rounded"></div>
+        <Palette className="w-6 h-6 text-gray-600" />
       </div>,
     title: "Home Interiors",
     badge: "Sale is live!",
     link: "/interior"
   }, {
     icon: <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
-        <div className="w-6 h-6 border-2 border-gray-400 rounded-full"></div>
+        <Globe className="w-6 h-6 text-gray-600" />
       </div>,
     title: "NoBroker For NRIs",
     link: "/nri-services"
