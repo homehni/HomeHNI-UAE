@@ -139,21 +139,20 @@ const PropertyCard = ({
           <span className="text-xs line-clamp-1 text-uniform">{location}</span>
         </div>
         
-        <div className="flex gap-2 mt-auto">
+        <div className="flex gap-1 mt-auto">
           <Button
             variant="outline"
             size="sm"
-            className="w-16 h-7 text-xs border-gray-200 hover:bg-gray-50 px-1 card-border"
+            className="w-12 h-6 text-xs border-gray-200 hover:bg-gray-50 px-1 card-border"
             onClick={(e) => e.stopPropagation()}
           >
-            <Phone size={8} className="mr-0.5" />
-            <span className="text-xs">Call</span>
+            <Phone size={8} />
           </Button>
           <Button
             size="sm"
-            className="flex-1 h-7 text-xs bg-red-600 hover:bg-red-700 text-white"
+            className="flex-1 h-6 text-xs bg-red-600 hover:bg-red-700 text-white px-1"
           >
-            View Details
+            Details
           </Button>
         </div>
       </CardContent>
