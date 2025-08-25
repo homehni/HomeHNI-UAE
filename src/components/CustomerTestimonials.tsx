@@ -1,6 +1,6 @@
 
-import React from 'react';
-import { Star, ShieldCheck, Play, Users, BadgeIndianRupee, Quote } from 'lucide-react';
+import React, { useEffect, useRef } from 'react';
+import { Star, ShieldCheck, Play, Users, BadgeIndianRupee } from 'lucide-react';
 
 // Sample data
 const testimonials = [
@@ -64,7 +64,7 @@ export function TrustMetricsRow() {
 }
 
 export function VideoTile({ 
-  thumbnail = "/placeholder-property.jpg", 
+  thumbnail = "/lovable-uploads/fbb0d72f-782e-49f5-bbe1-8afc1314b5f7.png", 
   duration = "2:13", 
   title = "Customer Success Stories" 
 }) {
@@ -148,12 +148,58 @@ export function TestimonialCard({
         </div>
       </div>
 
-      {/* Quote */}
-      <div className="relative">
-        <Quote className="absolute -top-1 -left-1 w-6 h-6 text-[#d21404] opacity-20" />
-        <p className="text-gray-700 line-clamp-3 pl-4">
+      {/* Quote without quote icon */}
+      <div>
+        <p className="text-gray-700 line-clamp-3">
           {text}
         </p>
+      </div>
+    </div>
+  );
+}
+
+function AutoScrollTestimonials() {
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const scrollContainer = scrollRef.current;
+    if (!scrollContainer) return;
+
+    let currentIndex = 0;
+    const testimonialWidth = scrollContainer.children[0]?.clientWidth || 0;
+    const gap = 16; // 1rem gap
+
+    const autoScroll = () => {
+      if (scrollContainer) {
+        currentIndex = (currentIndex + 1) % testimonials.length;
+        const scrollPosition = currentIndex * (testimonialWidth + gap);
+        scrollContainer.scrollTo({
+          left: scrollPosition,
+          behavior: 'smooth'
+        });
+      }
+    };
+
+    const interval = setInterval(autoScroll, 3000); // Auto-scroll every 3 seconds
+
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <div 
+      ref={scrollRef}
+      className="overflow-x-auto -mx-4 px-4 [&::-webkit-scrollbar]:hidden"
+      style={{ 
+        scrollbarWidth: 'none', 
+        msOverflowStyle: 'none'
+      }}
+    >
+      <div className="flex gap-4">
+        {testimonials.map((testimonial, index) => (
+          <div key={index} className="min-w-[85%] sm:min-w-[60%] flex-shrink-0">
+            <TestimonialCard {...testimonial} />
+          </div>
+        ))}
       </div>
     </div>
   );
@@ -187,23 +233,15 @@ export function TestimonialsSection() {
           </div>
         </div>
 
-        {/* Mobile Layout */}
+        {/* Mobile & Tablet Layout */}
         <div className="lg:hidden">
           {/* Video First */}
           <div className="mb-8">
             <VideoTile />
           </div>
           
-          {/* Horizontal Testimonials Rail */}
-          <div className="overflow-x-auto snap-x snap-mandatory -mx-4 px-4">
-            <div className="flex gap-4">
-              {testimonials.map((testimonial, index) => (
-                <div key={index} className="min-w-[85%] sm:min-w-[60%] snap-start">
-                  <TestimonialCard {...testimonial} />
-                </div>
-              ))}
-            </div>
-          </div>
+          {/* Auto-scrolling Testimonials */}
+          <AutoScrollTestimonials />
         </div>
       </div>
     </section>
