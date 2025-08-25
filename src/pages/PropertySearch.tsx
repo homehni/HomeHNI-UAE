@@ -497,15 +497,15 @@ const PropertySearch = () => {
 
             {/* Properties Grid/List - Real-time results */}
             {isLoading ? (
-              <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+              <div className="grid gap-4 sm:gap-6 grid-cols-2 md:grid-cols-2 lg:grid-cols-3">
                 {[1, 2, 3, 4, 5, 6].map((i) => (
                   <div key={i} className="bg-gray-100 animate-pulse rounded-lg h-80"></div>
                 ))}
               </div>
             ) : filteredProperties.length > 0 ? (
-              <div className={`grid gap-6 ${
+              <div className={`grid gap-4 sm:gap-6 ${
                 viewMode === 'grid' 
-                  ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3' 
+                  ? 'grid-cols-2 md:grid-cols-2 lg:grid-cols-3' 
                   : 'grid-cols-1'
               }`}>
                 {filteredProperties.map((property) => (
