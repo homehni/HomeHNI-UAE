@@ -45,7 +45,7 @@ const PrivacyPolicy = () => {
             
             <section className="mb-12">
               <div className="flex items-center mb-6">
-                <h2 className="text-2xl font-bold text-gray-900">📋 1. Information We Collect</h2>
+                <h2 className="text-2xl font-bold text-gray-900"> 1. Information We Collect</h2>
               </div>
               <p className="text-gray-700 mb-4 leading-relaxed">
                 We may collect the following types of information:
@@ -120,7 +120,7 @@ const PrivacyPolicy = () => {
 
             <section className="mb-12">
               <div className="flex items-center mb-6">
-                <h2 className="text-2xl font-bold text-gray-900">🔄 2. How We Use Your Information</h2>
+                <h2 className="text-2xl font-bold text-gray-900"> 2. How We Use Your Information</h2>
               </div>
               <p className="text-gray-700 mb-4 leading-relaxed">
                 Your information is used to:
@@ -157,7 +157,7 @@ const PrivacyPolicy = () => {
 
             <section className="mb-12">
               <div className="flex items-center mb-6">
-                <h2 className="text-2xl font-bold text-gray-900">🍪 3. Cookies and Tracking Technologies</h2>
+                <h2 className="text-2xl font-bold text-gray-900"> 3. Cookies and Tracking Technologies</h2>
               </div>
               <p className="text-gray-700 mb-4 leading-relaxed">
                 We use cookies, pixels, and similar technologies to:
@@ -181,7 +181,7 @@ const PrivacyPolicy = () => {
 
             <section className="mb-12">
               <div className="flex items-center mb-6">
-                <h2 className="text-2xl font-bold text-gray-900">🤝 4. Sharing of Information</h2>
+                <h2 className="text-2xl font-bold text-gray-900"> 4. Sharing of Information</h2>
               </div>
               <p className="text-gray-700 mb-4 leading-relaxed">
                 We do not sell your personal information. However, we may share it with:
@@ -213,7 +213,7 @@ const PrivacyPolicy = () => {
 
             <section className="mb-12">
               <div className="flex items-center mb-6">
-                <h2 className="text-2xl font-bold text-gray-900">👤 5. User Rights</h2>
+                <h2 className="text-2xl font-bold text-gray-900"> 5. User Rights</h2>
               </div>
               <p className="text-gray-700 mb-4 leading-relaxed">
                 As a user, you have the right to:
@@ -249,7 +249,7 @@ const PrivacyPolicy = () => {
 
             <section className="mb-12">
               <div className="flex items-center mb-6">
-                <h2 className="text-2xl font-bold text-gray-900">🔒 6. Data Security</h2>
+                <h2 className="text-2xl font-bold text-gray-900"> 6. Data Security</h2>
               </div>
               <p className="text-gray-700 mb-4 leading-relaxed">
                 We implement industry-standard security practices to protect your data:
@@ -279,7 +279,7 @@ const PrivacyPolicy = () => {
 
             <section className="mb-12">
               <div className="flex items-center mb-6">
-                <h2 className="text-2xl font-bold text-gray-900">🗓️ 7. Data Retention</h2>
+                <h2 className="text-2xl font-bold text-gray-900"> 7. Data Retention</h2>
               </div>
               <p className="text-gray-700 mb-4 leading-relaxed">
                 We retain your information for as long as necessary:
@@ -307,7 +307,7 @@ const PrivacyPolicy = () => {
 
             <section className="mb-12">
               <div className="flex items-center mb-6">
-                <h2 className="text-2xl font-bold text-gray-900">🔗 8. Third-Party Links</h2>
+                <h2 className="text-2xl font-bold text-gray-900"> 8. Third-Party Links</h2>
               </div>
               <p className="text-gray-700 mb-4 leading-relaxed">
                 Our website may contain links to third-party websites. We are not responsible for their privacy practices. Please review their policies before sharing any information.
@@ -316,7 +316,7 @@ const PrivacyPolicy = () => {
 
             <section className="mb-12">
               <div className="flex items-center mb-6">
-                <h2 className="text-2xl font-bold text-gray-900">👶 9. Children's Privacy</h2>
+                <h2 className="text-2xl font-bold text-gray-900"> 9. Children's Privacy</h2>
               </div>
               <p className="text-gray-700 mb-4 leading-relaxed">
                 Our services are not intended for users under the age of 18. We do not knowingly collect data from minors. If we learn that we have unintentionally collected information from a minor, we will promptly delete it.
@@ -325,7 +325,7 @@ const PrivacyPolicy = () => {
 
             <section className="mb-12">
               <div className="flex items-center mb-6">
-                <h2 className="text-2xl font-bold text-gray-900">📝 10. Updates to This Policy</h2>
+                <h2 className="text-2xl font-bold text-gray-900"> 10. Updates to This Policy</h2>
               </div>
               <p className="text-gray-700 mb-4 leading-relaxed">
                 We may revise this Privacy Policy from time to time. Any changes will be posted on this page with a new effective date. Continued use of the platform after changes means you accept the updated policy.
@@ -334,7 +334,7 @@ const PrivacyPolicy = () => {
 
             <section className="mb-12">
               <div className="flex items-center mb-6">
-                <h2 className="text-2xl font-bold text-gray-900">📞 11. Contact Us</h2>
+                <h2 className="text-2xl font-bold text-gray-900"> 11. Contact Us</h2>
               </div>
               <p className="text-gray-700 mb-4 leading-relaxed">
                 For questions, concerns, or complaints regarding this Privacy Policy, please contact:
