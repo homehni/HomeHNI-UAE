@@ -45,7 +45,7 @@ const TermsAndConditions = () => {
             
             <section className="mb-12">
               <div className="flex items-center mb-6">
-                <h2 className="text-2xl font-bold text-gray-900">📋 1. Acceptance of Terms</h2>
+                <h2 className="text-2xl font-bold text-gray-900"> 1. Acceptance of Terms</h2>
               </div>
               <p className="text-gray-700 mb-4 leading-relaxed">
                 By accessing and using HomeHNI's services, you accept and agree to be bound by the terms and provision of this agreement. If you do not agree to abide by the above, please do not use this service.
@@ -54,7 +54,7 @@ const TermsAndConditions = () => {
 
             <section className="mb-12">
               <div className="flex items-center mb-6">
-                <h2 className="text-2xl font-bold text-gray-900">📜 2. Use License</h2>
+                <h2 className="text-2xl font-bold text-gray-900">2. Use License</h2>
               </div>
               <p className="text-gray-700 mb-4 leading-relaxed">
                 Permission is granted to temporarily download one copy of the materials on HomeHNI's website for personal, non-commercial transitory viewing only. This is the grant of a license, not a transfer of title, and under this license you may not:
@@ -83,7 +83,7 @@ const TermsAndConditions = () => {
 
             <section className="mb-12">
               <div className="flex items-center mb-6">
-                <h2 className="text-2xl font-bold text-gray-900">🏠 3. Property Listings</h2>
+                <h2 className="text-2xl font-bold text-gray-900"> 3. Property Listings</h2>
               </div>
               <p className="text-gray-700 mb-4 leading-relaxed">
                 HomeHNI provides property listing services connecting buyers, sellers, and renters. We act as a platform facilitating these connections but do not guarantee the accuracy of property information provided by third parties.
@@ -97,14 +97,14 @@ const TermsAndConditions = () => {
 
             <section className="mb-12">
               <div className="flex items-center mb-6">
-                <h2 className="text-2xl font-bold text-gray-900">👤 4. User Responsibilities</h2>
+                <h2 className="text-2xl font-bold text-gray-900"> 4. User Responsibilities</h2>
               </div>
               <p className="text-gray-700 mb-4 leading-relaxed">
                 As a user of HomeHNI, you are responsible for:
               </p>
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="bg-green-50 p-6 rounded-lg">
-                  <h3 className="font-semibold text-green-800 mb-3">✅ What You Should Do</h3>
+                  <h3 className="font-semibold text-green-800 mb-3"> What You Should Do</h3>
                   <ul className="space-y-2 text-green-700">
                     <li>• Provide accurate information when creating listings</li>
                     <li>• Comply with local laws and regulations</li>
@@ -113,7 +113,7 @@ const TermsAndConditions = () => {
                   </ul>
                 </div>
                 <div className="bg-red-50 p-6 rounded-lg">
-                  <h3 className="font-semibold text-red-800 mb-3">❌ What You Should Not Do</h3>
+                  <h3 className="font-semibold text-red-800 mb-3"> What You Should Not Do</h3>
                   <ul className="space-y-2 text-red-700">
                     <li>• Use the platform for fraudulent activities</li>
                     <li>• Post false or misleading information</li>
@@ -126,7 +126,7 @@ const TermsAndConditions = () => {
 
             <section className="mb-12">
               <div className="flex items-center mb-6">
-                <h2 className="text-2xl font-bold text-gray-900">🔒 5. Privacy & Data Protection</h2>
+                <h2 className="text-2xl font-bold text-gray-900"> 5. Privacy & Data Protection</h2>
               </div>
               <p className="text-gray-700 mb-4 leading-relaxed">
                 Your privacy is important to us. Please review our Privacy Policy, which also governs your use of the website. We are committed to protecting your personal information and complying with applicable data protection laws.
@@ -135,7 +135,7 @@ const TermsAndConditions = () => {
 
             <section className="mb-12">
               <div className="flex items-center mb-6">
-                <h2 className="text-2xl font-bold text-gray-900">⚠️ 6. Disclaimer</h2>
+                <h2 className="text-2xl font-bold text-gray-900"> 6. Disclaimer</h2>
               </div>
               <div className="bg-yellow-50 border border-yellow-200 p-6 rounded-lg">
                 <p className="text-yellow-800 leading-relaxed">
@@ -146,7 +146,7 @@ const TermsAndConditions = () => {
 
             <section className="mb-12">
               <div className="flex items-center mb-6">
-                <h2 className="text-2xl font-bold text-gray-900">⚖️ 7. Limitations of Liability</h2>
+                <h2 className="text-2xl font-bold text-gray-900"> 7. Limitations of Liability</h2>
               </div>
               <p className="text-gray-700 mb-4 leading-relaxed">
                 In no event shall HomeHNI or its suppliers be liable for any damages (including, without limitation, damages for loss of data or profit, or due to business interruption) arising out of the use or inability to use the materials on HomeHNI's website, even if HomeHNI or a HomeHNI authorized representative has been notified orally or in writing of the possibility of such damage.
@@ -155,7 +155,7 @@ const TermsAndConditions = () => {
 
             <section className="mb-12">
               <div className="flex items-center mb-6">
-                <h2 className="text-2xl font-bold text-gray-900">🔄 8. Modifications & Updates</h2>
+                <h2 className="text-2xl font-bold text-gray-900"> 8. Modifications & Updates</h2>
               </div>
               <p className="text-gray-700 mb-4 leading-relaxed">
                 HomeHNI may revise these terms of service for its website at any time without notice. By using this website, you are agreeing to be bound by the then current version of these terms of service. We will notify users of significant changes through the platform.
@@ -164,7 +164,7 @@ const TermsAndConditions = () => {
 
             <section className="mb-12">
               <div className="flex items-center mb-6">
-                <h2 className="text-2xl font-bold text-gray-900">🏛️ 9. Governing Law</h2>
+                <h2 className="text-2xl font-bold text-gray-900"> 9. Governing Law</h2>
               </div>
               <p className="text-gray-700 mb-4 leading-relaxed">
                 These terms and conditions are governed by and construed in accordance with the laws of India and you irrevocably submit to the exclusive jurisdiction of the courts in that state or location.
@@ -173,7 +173,7 @@ const TermsAndConditions = () => {
 
             <section className="mb-12">
               <div className="flex items-center mb-6">
-                <h2 className="text-2xl font-bold text-gray-900">📞 10. Contact Information</h2>
+                <h2 className="text-2xl font-bold text-gray-900"> 10. Contact Information</h2>
               </div>
               <p className="text-gray-700 mb-4 leading-relaxed">
                 If you have any questions about these Terms & Conditions, please contact us:
