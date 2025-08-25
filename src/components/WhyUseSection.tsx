@@ -1,5 +1,4 @@
 import { FileText, Home, Heart, Edit } from 'lucide-react';
-import { Link } from 'react-router-dom';
 import { useCMSContent } from '@/hooks/useCMSContent';
 
 const WhyUseSection = () => {
@@ -9,42 +8,36 @@ const WhyUseSection = () => {
         <div className="w-8 h-8 bg-gray-300 rounded"></div>
       </div>,
     title: "Builder Projects",
-    badge: "New",
-    link: "/new-projects"
+    badge: "New"
   }, {
     icon: <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
         <FileText className="w-6 h-6 text-gray-600" />
       </div>,
     title: "Sale Agreement",
-    badge: "New",
-    link: "/rental-agreement"
+    badge: "New"
   }, {
     icon: <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
         <div className="w-6 h-6 bg-red-500 rounded-full flex items-center justify-center">
           <span className="text-white text-xs">₹</span>
         </div>
       </div>,
-    title: "Home Loan",
-    link: "/loans"
+    title: "Home Loan"
   }, {
     icon: <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
         <Edit className="w-6 h-6 text-gray-600" />
       </div>,
-    title: "Property Legal Services",
-    link: "/legal-services"
+    title: "Property Legal Services"
   }, {
     icon: <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
         <div className="w-8 h-6 bg-gray-300 rounded"></div>
       </div>,
     title: "Home Interiors",
-    badge: "Sale is live!",
-    link: "/interior"
+    badge: "Sale is live!"
   }, {
     icon: <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
         <div className="w-6 h-6 border-2 border-gray-400 rounded-full"></div>
       </div>,
-    title: "NoBroker For NRIs",
-    link: "/nri-services"
+    title: "NoBroker For NRIs"
   }];
 
   const benefits = [{
@@ -54,7 +47,7 @@ const WhyUseSection = () => {
     title: "Avoid Brokers",
     description: "We directly connect you to verified owners to save brokerage"
   }, {
-    icon: <div className="w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center">
+    icon: <div className="w-16 h-16 bg-gray-100 rounded-lg flex items-left justify-left">
         <FileText className="w-8 h-8 text-gray-600" />
       </div>,
     title: "Free Listing",
@@ -96,8 +89,7 @@ const WhyUseSection = () => {
       <div className="container mx-auto px-4">
         {/* Top services grid */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 mb-16">
-          {topServices.map((service, index) => 
-            <Link key={index} to={service.link} className="card-border hover-lift p-4 bg-white block transition-transform">
+          {topServices.map((service, index) => <div key={index} className="card-border hover-lift p-4 bg-white">
               <div className="relative inline-block mb-3 text-uniform-center w-full">
                 {service.icon}
                 {service.badge && <span className={`absolute -top-2 -right-2 px-2 py-1 text-xs rounded-full text-white ${service.badge === "Sale is live!" ? "bg-green-500" : "bg-orange-500"}`}>
@@ -105,8 +97,7 @@ const WhyUseSection = () => {
                   </span>}
               </div>
               <h3 className="text-sm font-medium text-gray-700 text-uniform-center">{service.title}</h3>
-            </Link>
-          )}
+            </div>)}
         </div>
 
         {/* Why Use NoBroker section */}
