@@ -4,24 +4,26 @@ interface CountryOption {
   code: string;
   name: string;
   domain: string;
+  flag: string;
+  displayCode: string;
 }
 
 const CountrySwitcher: React.FC = () => {
   const [currentCountry, setCurrentCountry] = useState<string>('');
   
-  // Country options with domains
+  // Country options with flags and domains
   const countries: CountryOption[] = [
-    { code: 'GLOBAL', name: 'Global', domain: 'homehni.com' },
-    { code: 'US', name: 'United States', domain: 'homehni.us' },
-    { code: 'IN', name: 'India', domain: 'homehni.in' },
-    { code: 'GB', name: 'United Kingdom', domain: 'homehni.co.uk' },
-    { code: 'DE', name: 'Germany', domain: 'homehni.de' },
-    { code: 'AE', name: 'United Arab Emirates', domain: 'homehni.ae' },
-    { code: 'ZA', name: 'South Africa', domain: 'homehni.co.za' },
-    { code: 'IT', name: 'Italy', domain: 'homehni.it' },
-    { code: 'FR', name: 'France', domain: 'homehni.fr' },
-    { code: 'CA', name: 'Canada', domain: 'homehni.ca' },
-    { code: 'AU', name: 'Australia', domain: 'homehni.com.au' }
+    { code: 'GLOBAL', name: 'Global', domain: 'homehni.com', flag: '🌍', displayCode: 'Global' },
+    { code: 'US', name: 'United States', domain: 'homehni.us', flag: '🇺🇸', displayCode: 'US' },
+    { code: 'IN', name: 'India', domain: 'homehni.in', flag: '🇮🇳', displayCode: 'IN' },
+    { code: 'GB', name: 'United Kingdom', domain: 'homehni.co.uk', flag: '🇬🇧', displayCode: 'UK' },
+    { code: 'DE', name: 'Germany', domain: 'homehni.de', flag: '🇩🇪', displayCode: 'DE' },
+    { code: 'AE', name: 'United Arab Emirates', domain: 'homehni.ae', flag: '🇦🇪', displayCode: 'UAE' },
+    { code: 'ZA', name: 'South Africa', domain: 'homehni.co.za', flag: '🇿🇦', displayCode: 'ZA' },
+    { code: 'IT', name: 'Italy', domain: 'homehni.it', flag: '🇮🇹', displayCode: 'IT' },
+    { code: 'FR', name: 'France', domain: 'homehni.fr', flag: '🇫🇷', displayCode: 'FR' },
+    { code: 'CA', name: 'Canada', domain: 'homehni.ca', flag: '🇨🇦', displayCode: 'CA' },
+    { code: 'AU', name: 'Australia', domain: 'homehni.com.au', flag: '🇦🇺', displayCode: 'AU' }
   ];
 
   const PREF_KEY = 'homehni_country_pref_v1';
@@ -57,8 +59,14 @@ const CountrySwitcher: React.FC = () => {
     }
   };
 
+  const getCurrentCountryDisplay = () => {
+    const country = countries.find(c => c.code === currentCountry);
+    if (!country) return '🌍 Global';
+    return `${country.flag} ${country.displayCode}`;
+  };
+
   return (
-    <div className="flex items-center gap-2">
+    <div className="relative">
       <label 
         htmlFor="country-switcher" 
         className="text-sm font-medium text-foreground sr-only"
@@ -69,12 +77,17 @@ const CountrySwitcher: React.FC = () => {
         id="country-switcher"
         value={currentCountry}
         onChange={handleCountryChange}
-        className="text-sm border border-border rounded px-2 py-1 bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-        style={{ minWidth: '120px' }}
+        className="appearance-none text-sm border border-border rounded-md px-3 py-2 pr-8 bg-white text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary shadow-sm hover:bg-gray-50 transition-colors cursor-pointer z-50 min-w-[100px]"
+        style={{ 
+          backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e")`,
+          backgroundPosition: 'right 0.5rem center',
+          backgroundRepeat: 'no-repeat',
+          backgroundSize: '1.5em 1.5em'
+        }}
       >
         {countries.map((country) => (
           <option key={country.code} value={country.code}>
-            {country.name}
+            {country.flag} {country.displayCode}
           </option>
         ))}
       </select>
