@@ -64,6 +64,7 @@ import { AdminPageManagement } from "./pages/AdminPageManagement";
 import { AdminWebsiteCMS } from "./pages/AdminWebsiteCMS";
 import NotFound from "./pages/NotFound";
 import ScrollToTop from "./components/ScrollToTop";
+import GeolocationRedirect from "./components/GeolocationRedirect";
 
 import Architecture from "./pages/Architects";
 import Interior from "./pages/Interior";
@@ -102,9 +103,10 @@ const App: React.FC = () => {
       <TooltipProvider>
         <Toaster />
         <Sonner />
-        <BrowserRouter>
-          <AuthProvider>
-            <ScrollToTop />
+        <GeolocationRedirect>
+          <BrowserRouter>
+            <AuthProvider>
+              <ScrollToTop />
             <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/about-us" element={<AboutUs />} />
@@ -221,8 +223,9 @@ const App: React.FC = () => {
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
             </Routes>
-          </AuthProvider>
-        </BrowserRouter>
+            </AuthProvider>
+          </BrowserRouter>
+        </GeolocationRedirect>
       </TooltipProvider>
     </QueryClientProvider>
   );
