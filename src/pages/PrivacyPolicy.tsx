@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Marquee from '@/components/Marquee';
+import { Mail, Phone, Building } from 'lucide-react';
 
 const PrivacyPolicy = () => {
   useEffect(() => {
@@ -340,13 +341,21 @@ const PrivacyPolicy = () => {
                 For questions, concerns, or complaints regarding this Privacy Policy, please contact:
               </p>
               <div className="bg-gray-50 p-6 rounded-lg">
-                <div className="text-center">
-                  <div className="text-2xl mb-2">🏢</div>
-                  <p className="font-medium text-gray-900">Privacy Officer – HomeHNI</p>
-                  <div className="mt-4 space-y-2">
-                    <p className="text-gray-600">📧 Email: homehni8@gmail.com</p>
-                    <p className="text-gray-600">📱 Phone: +91 8074 017 388</p>
-                    <p className="text-gray-600">🏢 Address: Plot No: 52 E/P<br />CBI Colony Sahebnagar Kalan</p>
+                <div className="grid md:grid-cols-3 gap-4">
+                  <div className="text-center">
+                    <Mail className="w-8 h-8 mx-auto mb-2 text-primary" />
+                    <p className="font-medium text-gray-900">Email</p>
+                    <p className="text-gray-600">homehni8@gmail.com</p>
+                  </div>
+                  <div className="text-center">
+                    <Phone className="w-8 h-8 mx-auto mb-2 text-primary" />
+                    <p className="font-medium text-gray-900">Phone</p>
+                    <p className="text-gray-600">+91 8074 017 388</p>
+                  </div>
+                  <div className="text-center">
+                    <Building className="w-8 h-8 mx-auto mb-2 text-primary" />
+                    <p className="font-medium text-gray-900">Address</p>
+                    <p className="text-gray-600">Plot No: 52 E/P<br />CBI Colony Sahebnagar Kalan</p>
                   </div>
                 </div>
               </div>
