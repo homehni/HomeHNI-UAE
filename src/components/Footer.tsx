@@ -185,8 +185,7 @@ const Footer = ({
     propertyLoanServices: ["Loan Against Property in Hyderabad", "Property Valuation Services"],
     homeLoanDocumentation: ["Home Loan Documents", "Loan Processing Services", "Digital Loan Application", "Instant Loan Approval", "Zero Processing Fee Loans"]
   };
-  return (
-    <footer className="bg-white text-gray-700 border-t">
+  return <footer className="bg-white text-gray-700 border-t">
       <div className="container mx-auto px-4 py-8">
         {/* Property listings grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6 mb-8">
@@ -244,88 +243,157 @@ const Footer = ({
         </div>
 
         {/* Call-to-action sections */}
-       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8 py-8 bg-gray-50 px-6 rounded-lg">
-  {/* Post property card */}
-  <div className="bg-white rounded-md p-6 shadow-sm ring-1 ring-gray-200 hover:shadow-md transition-shadow">
-    <div className="text-center">
-      <h4 className="font-semibold text-gray-900 mb-2">Post Your Property (Free)</h4>
-      <p className="text-sm text-gray-600 mb-4">
-        Reach verified buyers & tenants. Zero brokerage.
-      </p>
-      <button
-        onClick={handlePostPropertyClick}
-        className="bg-brand-red text-white px-6 py-2 rounded text-sm hover:bg-brand-red-dark transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-brand-red"
-      >
-        Post for Free
-      </button>
-    </div>
-  </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8 py-8 bg-gray-50 px-6 rounded-lg">
+          
+          <div className="text-center">
+            <h4 className="font-semibold text-gray-900 mb-2">List Your Property</h4>
+            <p className="text-sm text-gray-600 mb-4">For Free, Without any brokerage.</p>
+            <button onClick={handlePostPropertyClick} className="bg-brand-red text-white px-6 py-2 rounded text-sm hover:bg-brand-red-dark transition-colors">
+              Free Posting
+            </button>
+          </div>
 
-  {/* Find property card */}
-  <div className="bg-white rounded-md p-6 shadow-sm ring-1 ring-gray-200 hover:shadow-md transition-shadow">
-    <div className="text-center">
-      <h4 className="font-semibold text-gray-900 mb-2">Search Verified Listings</h4>
-      <p className="text-sm text-gray-600 mb-4">
-        Thousands of owner-listed options. No brokerage.
-      </p>
-      <button
-        onClick={handleFindNowClick}
-        className="bg-brand-red text-white px-6 py-2 rounded text-sm hover:bg-brand-red-dark transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-brand-red"
-      >
-        Browse Listings
-      </button>
-    </div>
-  </div>
-</div>
 
+          <div className="text-center">
+            <h4 className="font-semibold text-gray-900 mb-2">Find Property</h4>
+            <p className="text-sm text-gray-600 mb-4">Select from thousands of options, without brokerage.</p>
+            <button onClick={handleFindNowClick} className="bg-brand-red text-white px-6 py-2 rounded text-sm hover:bg-brand-red-dark transition-colors">
+              Find Now
+            </button>
+          </div>
+        </div>
 
         {/* Footer links and social media */}
         <div className="border-t border-gray-200 pt-6">
-          <div className="flex flex-wrap justify-center gap-6 mb-6 text-sm">
-            <Link to="/about?tab=about" className="text-gray-600 hover:text-brand-red transition-colors">About Us</Link>
-            <Link to="/careers" className="text-gray-600 hover:text-brand-red transition-colors">Careers</Link>
-            <Link to="/about?tab=contact" className="text-gray-600 hover:text-brand-red transition-colors">Contact Us</Link>
-            <Link to="/terms-and-conditions" className="text-gray-600 hover:text-brand-red transition-colors">Terms & Conditions</Link>
-            <Link to="/privacy-policy" className="text-gray-600 hover:text-brand-red transition-colors">Privacy Policy</Link>
-            {/* <Link to="/testimonials" className="text-gray-600 hover:text-brand-red transition-colors">Testimonials</Link> */}
-            <a href="/sitemap.xml" className="text-gray-600 hover:text-brand-red transition-colors">Sitemap</a>
-            <Link to="/about?tab=faq" className="text-gray-600 hover:text-brand-red transition-colors">FAQs</Link>
-          </div>
+  <div className="max-w-7xl mx-auto px-4">
+    {/* Footer links */}
+    <nav aria-label="Footer" className="mb-6">
+      <ul className="flex flex-wrap justify-center gap-x-6 gap-y-3 text-sm">
+        <li>
+          <Link to="/about?tab=about" className="text-gray-600 hover:text-brand-red transition-colors">
+            About Us
+          </Link>
+        </li>
+        <li>
+          <Link to="/careers" className="text-gray-600 hover:text-brand-red transition-colors">
+            Careers
+          </Link>
+        </li>
+        <li>
+          <Link to="/about?tab=contact" className="text-gray-600 hover:text-brand-red transition-colors">
+            Contact Us
+          </Link>
+        </li>
+        <li>
+          <Link to="/terms-and-conditions" className="text-gray-600 hover:text-brand-red transition-colors">
+            Terms &amp; Conditions
+          </Link>
+        </li>
+        <li>
+          <Link to="/privacy-policy" className="text-gray-600 hover:text-brand-red transition-colors">
+            Privacy Policy
+          </Link>
+        </li>
+        <li>
+          <a href="/sitemap.xml" className="text-gray-600 hover:text-brand-red transition-colors">
+            Sitemap
+          </a>
+        </li>
+        <li>
+          <Link to="/about?tab=faq" className="text-gray-600 hover:text-brand-red transition-colors">
+            FAQs
+          </Link>
+        </li>
+      </ul>
+    </nav>
 
-          {/* App store badges */}
-          <div className="flex justify-center gap-4 mb-6">
-            <img src="/lovable-uploads/8b28a8cb-02f0-4e86-9ba6-1845c4372e1a.png" alt="Google Play and App Store" className="h-12" />
-          </div>
+    {/* App store badges */}
+    <div className="flex justify-center mb-6">
+      <a
+        href="#"
+        aria-label="Download the Home HNI app"
+        className="inline-flex items-center justify-center ring-1 ring-gray-200 rounded-md p-1 hover:ring-gray-300 transition"
+      >
+        <img
+          src="/lovable-uploads/8b28a8cb-02f0-4e86-9ba6-1845c4372e1a.png"
+          alt="Get it on Google Play and App Store"
+          className="h-12"
+          loading="lazy"
+        />
+      </a>
+    </div>
 
-          {/* Social media icons */}
-          <div className="flex justify-center space-x-4 mb-6">
-            <a href="https://www.facebook.com/profile.php?id=61578319572154" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center transition-all hover:bg-gray-400 hover:scale-110">
-              <Facebook className="w-5 h-5 text-gray-700" />
-            </a>
-            <a href="https://x.com/homehni8" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center transition-all hover:bg-gray-400 hover:scale-110">
-              <Twitter className="w-5 h-5 text-gray-700" />
-            </a>
-            <a href="https://www.instagram.com/homehni/" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center transition-all hover:bg-gray-400 hover:scale-110">
-              <Instagram className="w-5 h-5 text-gray-700" />
-            </a>
-            <a href="https://www.linkedin.com/in/home-hni-622605376/" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center transition-all hover:bg-gray-400 hover:scale-110">
-              <Linkedin className="w-5 h-5 text-gray-700" />
-            </a>
-          </div>
+    {/* Social media icons */}
+    <div className="flex justify-center gap-3 mb-6">
+      <a
+        href="https://www.facebook.com/profile.php?id=61578319572154"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Home HNI on Facebook"
+        className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center transition-all hover:bg-gray-300 hover:scale-110
+                   focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-brand-red"
+      >
+        <span className="sr-only">Facebook</span>
+        <Facebook className="w-5 h-5 text-gray-700" />
+      </a>
 
-          {/* Copyright */}
-          <div className="text-center text-xs text-gray-500">
-            © 2025 Home HNI Pvt. Ltd. | All Rights Reserved
-          </div>
+      <a
+        href="https://x.com/homehni8"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Home HNI on X (Twitter)"
+        className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center transition-all hover:bg-gray-300 hover:scale-110
+                   focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-brand-red"
+      >
+        <span className="sr-only">X (Twitter)</span>
+        <Twitter className="w-5 h-5 text-gray-700" />
+      </a>
 
+      <a
+        href="https://www.instagram.com/homehni/"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Home HNI on Instagram"
+        className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center transition-all hover:bg-gray-300 hover:scale-110
+                   focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-brand-red"
+      >
+        <span className="sr-only">Instagram</span>
+        <Instagram className="w-5 h-5 text-gray-700" />
+      </a>
 
-           <div className="text-center text-xs text-gray-500 py-[7px]">
-            A Product of <a href="https://ranazonai.com/" target="_blank" rel="noopener noreferrer" className="text-brand-red font-semibold underline hover:text-brand-red/80 transition-colors">Ranazonai Technologies</a>, Built with 🤍 and Dedication.
-          </div>
-          
-        </div>
+      <a
+        href="https://www.linkedin.com/in/home-hni-622605376/"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Home HNI on LinkedIn"
+        className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center transition-all hover:bg-gray-300 hover:scale-110
+                   focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-brand-red"
+      >
+        <span className="sr-only">LinkedIn</span>
+        <Linkedin className="w-5 h-5 text-gray-700" />
+      </a>
+    </div>
+
+    {/* Copyright */}
+    <p className="text-center text-xs text-gray-500">
+      © 2025 Home HNI Pvt. Ltd. | All Rights Reserved
+    </p>
+    <p className="text-center text-xs text-gray-500 py-[7px]">
+      A Product of{" "}
+      <a
+        href="https://ranazonai.com/"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-brand-red font-semibold underline hover:text-brand-red/80 transition-colors"
+      >
+        Ranazonai Technologies
+      </a>
+      , Built with 🤍 and Dedication.
+    </p>
+  </div>
+</div>
+
       </div>
-    </footer>
-  );
+    </footer>;
 };
 export default Footer;
