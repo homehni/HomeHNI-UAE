@@ -7,7 +7,6 @@ import { useToast } from '@/hooks/use-toast';
 interface CategorizedImages {
   gstCopy: File[];
   servicePortfolio: File[];
-  capacityOfService: File[];
 }
 
 interface CategorizedImageUploadProps {
@@ -30,13 +29,6 @@ const categories = [
     icon: Briefcase,
     description: 'Upload your work samples',
     color: 'bg-green-100 text-green-600'
-  },
-  {
-    key: 'capacityOfService' as keyof CategorizedImages,
-    label: 'Capacity of Service',
-    icon: Award,
-    description: 'Upload capacity documents',
-    color: 'bg-purple-100 text-purple-600'
   }
 ];
 
@@ -106,7 +98,7 @@ export const CategorizedImageUpload: React.FC<CategorizedImageUploadProps> = ({
     }
   }, []);
 
-  const totalImages = images.gstCopy.length + images.servicePortfolio.length + images.capacityOfService.length;
+  const totalImages = images.gstCopy.length + images.servicePortfolio.length;
 
   return (
     <div className={`space-y-3 ${className}`}>

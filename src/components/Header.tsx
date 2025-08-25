@@ -279,7 +279,7 @@ const Header = () => {
       <ChevronDown className="ml-1 h-3 w-3" />
     </button>
     
-    {/* Custom Lifetime Plans Dropdown */}
+    {/* Custom Lifetime Plans Drppopdown */}
     {isLifetimePlansDropdownOpen && <div className="absolute top-full left-0 w-48 bg-white border border-gray-200 rounded-lg shadow-xl z-[100] mt-2" onMouseEnter={handleLifetimePlansHover} onMouseLeave={handleLifetimePlansLeave}>
         <div className="py-2">
           <button onClick={() => navigate('/agent-lifetime-plans')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
@@ -291,7 +291,6 @@ const Header = () => {
         </div>
       </div>}
   </div>
-
                 <a href="/service-suite" onClick={e => {
                 e.preventDefault();
                 navigate('/service-suite');

@@ -179,11 +179,24 @@ const HandoverServices = () => {
 
             <form className="space-y-4" onSubmit={e => {
             e.preventDefault();
+            const form = e.currentTarget as HTMLFormElement;
+            
+            // Check if all required fields are filled
+            if (!form.checkValidity()) {
+              form.reportValidity();
+              toast({
+                title: "Required Fields Missing",
+                description: "Please fill in all required fields before submitting.",
+                variant: "destructive"
+              });
+              return;
+            }
+
             toast({
               title: "Request received",
               description: "Our handover expert will contact you shortly."
             });
-            (e.currentTarget as HTMLFormElement).reset();
+            form.reset();
           }}>
               <Input id="handover-name" name="name" placeholder="Name" required />
 
@@ -199,9 +212,9 @@ const HandoverServices = () => {
                 <Input id="handover-phone" name="phone" type="tel" placeholder="Phone Number" className="flex-1" required />
               </div>
 
-              <Input id="handover-email" name="email" type="email" placeholder="Email ID" />
+              <Input id="handover-email" name="email" type="email" placeholder="Email ID" required />
 
-              <Select name="propertyType">
+              <Select name="propertyType" required>
                 <SelectTrigger id="property-type"><SelectValue placeholder="Property Type" /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="residential">All Residential</SelectItem>
@@ -219,7 +232,7 @@ const HandoverServices = () => {
 
               <div className="flex gap-2">
                 <Input id="handover-location" name="location" placeholder="Property Location" className="flex-1" />
-                <Select name="handoverType">
+                <Select name="handoverType" required>
                   <SelectTrigger id="handover-type" className="w-40"><SelectValue placeholder="Handover Type" /></SelectTrigger>
                   <SelectContent>
                     <SelectItem value="buying">Buying Property</SelectItem>
@@ -290,11 +303,24 @@ const HandoverServices = () => {
 
               <form className="space-y-5" onSubmit={e => {
               e.preventDefault();
+              const form = e.currentTarget as HTMLFormElement;
+              
+              // Check if all required fields are filled
+              if (!form.checkValidity()) {
+                form.reportValidity();
+                toast({
+                  title: "Required Fields Missing",
+                  description: "Please fill in all required fields before submitting.",
+                  variant: "destructive"
+                });
+                return;
+              }
+
               toast({
                 title: "Request received",
                 description: "Our handover expert will contact you shortly."
               });
-              (e.currentTarget as HTMLFormElement).reset();
+              form.reset();
             }}>
                 <Input id="handover-name-mobile" name="name" placeholder="Name" className="h-12 text-base bg-background" required />
 
@@ -312,9 +338,9 @@ const HandoverServices = () => {
                   <Input id="handover-phone-mobile" name="phone" type="tel" placeholder="Phone Number" className="flex-1 h-12 text-base bg-background" required />
                 </div>
 
-                <Input id="handover-email-mobile" name="email" type="email" placeholder="Email ID" className="h-12 text-base bg-background" />
+                <Input id="handover-email-mobile" name="email" type="email" placeholder="Email ID" className="h-12 text-base bg-background" required />
 
-                <Select name="propertyType">
+                <Select name="propertyType" required>
                   <SelectTrigger id="property-type-mobile" className="h-12 bg-background">
                     <SelectValue placeholder="Property Type" />
                   </SelectTrigger>
@@ -328,7 +354,7 @@ const HandoverServices = () => {
 
                 <div className="flex gap-3">
                   <Input id="handover-location-mobile" name="location" placeholder="Property Location" className="flex-1 h-12 text-base bg-background" />
-                  <Select name="handoverType">
+                  <Select name="handoverType" required>
                     <SelectTrigger id="handover-type-mobile" className="w-40 h-12 bg-background">
                       <SelectValue placeholder="Handover Type" />
                     </SelectTrigger>

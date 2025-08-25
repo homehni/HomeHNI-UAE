@@ -3,6 +3,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { ChevronLeft, ChevronRight, X } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 import PersonalDetailsStep from './legal-form/PersonalDetailsStep';
 import PropertyInformationStep from './legal-form/PropertyInformationStep';
 import LegalQueryStep from './legal-form/LegalQueryStep';
@@ -50,6 +51,8 @@ const LegalServicesForm = ({ isOpen, onClose }: LegalServicesFormProps) => {
   const [currentStep, setCurrentStep] = useState(1);
   const totalSteps = 5;
 
+  const { toast } = useToast();
+  
   const [formData, setFormData] = useState<FormData>({
     personalDetails: {
       fullName: '',
@@ -90,8 +93,37 @@ const LegalServicesForm = ({ isOpen, onClose }: LegalServicesFormProps) => {
     { id: 5, title: 'Consultation Preferences', component: ConsultationPreferencesStep },
   ];
 
+  const validatePersonalDetails = () => {
+    const { fullName, email, phoneNumber } = formData.personalDetails;
+    if (!fullName || !email || !phoneNumber) {
+      return false;
+    }
+    // Basic email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return false;
+    }
+    // Basic phone validation (at least 10 digits)
+    const phoneRegex = /^\d{10,}$/;
+    if (!phoneRegex.test(phoneNumber)) {
+      return false;
+    }
+    return true;
+  };
+
   const nextStep = () => {
     if (currentStep < totalSteps) {
+      // For step 1 (Personal Details), validate required fields
+      if (currentStep === 1) {
+        if (!validatePersonalDetails()) {
+          toast({
+            title: "Required Fields",
+            description: "Please fill in all required fields (Name, Email, Phone) correctly.",
+            variant: "destructive"
+          });
+          return;
+        }
+      }
       setCurrentStep(currentStep + 1);
     }
   };
@@ -108,7 +140,7 @@ const LegalServicesForm = ({ isOpen, onClose }: LegalServicesFormProps) => {
     onClose();
   };
 
-  const updateFormData = (step: keyof FormData, data: any) => {
+  const updateFormData = (step: keyof FormData, data: Partial<FormData[keyof FormData]>) => {
     setFormData(prev => ({
       ...prev,
       [step]: { ...prev[step], ...data }

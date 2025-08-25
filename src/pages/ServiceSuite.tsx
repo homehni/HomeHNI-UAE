@@ -18,9 +18,9 @@ const ServiceSuite = () => {
   const [citiesDesktop, setCitiesDesktop] = useState<string[]>([]);
   const [serviceImages, setServiceImages] = useState({
     gstCopy: [] as File[],
-    servicePortfolio: [] as File[],
-    capacityOfService: [] as File[]
+    servicePortfolio: [] as File[]
   });
+  const [showThankYouModal, setShowThankYouModal] = useState(false);
 
   const services = [{
     icon: Scale,
@@ -194,7 +194,7 @@ const ServiceSuite = () => {
     const formData = new FormData(e.currentTarget as HTMLFormElement);
     
     // Check if at least one image is uploaded
-    const totalImages = serviceImages.gstCopy.length + serviceImages.servicePortfolio.length + serviceImages.capacityOfService.length;
+    const totalImages = serviceImages.gstCopy.length + serviceImages.servicePortfolio.length;
     
     if (totalImages === 0) {
       toast({
@@ -205,17 +205,13 @@ const ServiceSuite = () => {
       return;
     }
 
-    toast({
-      title: "Service request submitted",
-      description: "Our team will review your requirements and get back to you soon."
-    });
+    setShowThankYouModal(true);
     
     // Reset form and images
     (e.currentTarget as HTMLFormElement).reset();
     setServiceImages({
       gstCopy: [],
-      servicePortfolio: [],
-      capacityOfService: []
+      servicePortfolio: []
     });
   };
 
@@ -274,6 +270,7 @@ const ServiceSuite = () => {
               </div>
 
               <Input name="email" type="email" placeholder="Email ID" required />
+              <Input name="text" type="CompanyName" placeholder="Company Name" required />
 
               <Select name="serviceType" required>
                 <SelectTrigger><SelectValue placeholder="Select Service Type" /></SelectTrigger>
@@ -836,6 +833,24 @@ const ServiceSuite = () => {
           </div>
         </div>
       </section>
+
+      {/* Thank You Modal */}
+      {showThankYouModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-8 max-w-md w-full mx-4 text-center">
+            <h3 className="text-2xl font-semibold text-gray-900 mb-4">Thank You!</h3>
+            <p className="text-gray-600 mb-6">
+              Your service request has been submitted successfully. Our team will review your requirements and get back to you soon.
+            </p>
+            <Button
+              onClick={() => setShowThankYouModal(false)}
+              className="bg-red-600 hover:bg-red-700 text-white font-semibold px-8 py-2"
+            >
+              OK
+            </Button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

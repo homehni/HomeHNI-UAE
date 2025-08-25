@@ -227,11 +227,21 @@ const Loans = () => {
 
             <form className="space-y-4" onSubmit={e => {
               e.preventDefault();
+              const form = e.currentTarget as HTMLFormElement;
+              if (!form.checkValidity()) {
+                form.reportValidity();
+                toast({
+                  title: "Required Fields Missing",
+                  description: "Please fill in all required fields before submitting the loan application.",
+                  variant: "destructive"
+                });
+                return;
+              }
               toast({
                 title: "Application received",
                 description: "Our loan expert will contact you shortly."
               });
-              (e.currentTarget as HTMLFormElement).reset();
+              form.reset();
             }}>
               <Input id="loan-name" name="name" placeholder="Name" required />
 
@@ -247,7 +257,7 @@ const Loans = () => {
                 <Input id="loan-phone" name="phone" type="tel" placeholder="Phone Number" className="flex-1" required />
               </div>
 
-              <Input id="loan-email" name="email" type="email" placeholder="Email ID" />
+              <Input id="loan-email" name="email" type="email" placeholder="Email ID" required />
 
               <div className="flex gap-2">
                 <Select defaultValue="India" name="country">
@@ -284,7 +294,7 @@ const Loans = () => {
               </div>
 
               <div className="flex gap-2">
-                <Select name="loanType">
+                <Select name="loanType" required>
                   <SelectTrigger className="flex-1"><SelectValue placeholder="Loan Type" /></SelectTrigger>
                   <SelectContent>
                     <SelectItem value="home-loan">Home Loan</SelectItem>
@@ -297,7 +307,7 @@ const Loans = () => {
                   </SelectContent>
                 </Select>
 
-                <Input id="loan-amount" name="amount" type="number" placeholder="Loan Amount Required" className="flex-1" />
+                <Input id="loan-amount" name="amount" type="number" placeholder="Loan Amount Required" className="flex-1" required />
               </div>
 
               <Button type="submit" className="w-full">Get Pre-Approved Now!</Button>
@@ -316,11 +326,21 @@ const Loans = () => {
 
               <form className="space-y-5" onSubmit={e => {
                 e.preventDefault();
+                const form = e.currentTarget as HTMLFormElement;
+                if (!form.checkValidity()) {
+                  form.reportValidity();
+                  toast({
+                    title: "Required Fields Missing",
+                    description: "Please fill in all required fields before submitting the loan application.",
+                    variant: "destructive"
+                  });
+                  return;
+                }
                 toast({
                   title: "Application received",
                   description: "Our loan expert will contact you shortly."
                 });
-                (e.currentTarget as HTMLFormElement).reset();
+                form.reset();
               }}>
                 <Input 
                   id="loan-name-mobile" 
