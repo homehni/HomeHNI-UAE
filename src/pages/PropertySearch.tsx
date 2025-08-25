@@ -378,23 +378,42 @@ const PropertySearch = () => {
               <div>
                 <h1 className="text-2xl font-bold text-gray-900">
                   {(() => {
+                    // Get property type context
+                    const hasPropertyTypeFilter = filters.propertyType.length > 0 && !filters.propertyType.includes('All Residential');
+                    const propertyTypeText = hasPropertyTypeFilter ? 
+                      filters.propertyType.length === 1 ? 
+                        filters.propertyType[0].toLowerCase().replace('/', '/').replace('flat/apartment', 'flats/apartments').replace('independent house', 'independent houses').replace('villa', 'villas').replace('plots', 'plots/land').replace('commercial space/building', 'commercial spaces').replace('industrial space/building', 'industrial spaces') 
+                        : 'properties'
+                      : 'properties';
+                    
+                    // Get location context
+                    const locationText = filters.location ? ` in ${filters.location}` : '';
+                    
                     switch (activeTab) {
                       case 'buy':
-                        return `Properties for Sale in ${filters.location || 'All Locations'}`;
+                        return hasPropertyTypeFilter ? 
+                          `${propertyTypeText.charAt(0).toUpperCase() + propertyTypeText.slice(1)} for Sale${locationText}` :
+                          `Properties for Sale${locationText || ' in All Locations'}`;
                       case 'rent':
-                        return `Properties for Rent in ${filters.location || 'All Locations'}`;
+                        return hasPropertyTypeFilter ? 
+                          `${propertyTypeText.charAt(0).toUpperCase() + propertyTypeText.slice(1)} for Rent${locationText}` :
+                          `Properties for Rent${locationText || ' in All Locations'}`;
                       case 'new-launch':
-                        return `Newly Launched Properties in ${filters.location || 'All Locations'}`;
+                        return hasPropertyTypeFilter ? 
+                          `Newly launched ${propertyTypeText}${locationText}` :
+                          `Newly Launched Properties${locationText || ' in All Locations'}`;
                       case 'commercial':
-                        return `Commercial Spaces in ${filters.location || 'All Locations'}`;
+                        return hasPropertyTypeFilter ? 
+                          `${propertyTypeText.charAt(0).toUpperCase() + propertyTypeText.slice(1)}${locationText}` :
+                          `Commercial Spaces${locationText || ' in All Locations'}`;
                       case 'plots':
-                        return `Plots/Land for Sale in ${filters.location || 'All Locations'}`;
+                        return `Plots/Land for Sale${locationText || ' in All Locations'}`;
                       case 'pg':
-                        return `PG's in ${filters.location || 'All Locations'}`;
+                        return `PG's${locationText || ' in All Locations'}`;
                       case 'projects':
-                        return `Other Projects in ${filters.location || 'All Locations'}`;
+                        return `Other Projects${locationText || ' in All Locations'}`;
                       default:
-                        return `Properties for Sale in ${filters.location || 'All Locations'}`;
+                        return `Properties for Sale${locationText || ' in All Locations'}`;
                     }
                   })()}
                 </h1>
