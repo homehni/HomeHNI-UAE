@@ -12,20 +12,29 @@ const NRIGuide = () => {
       <Marquee />
       <Header />
       
-      {/* Hero Section */}
-      <section className="bg-gradient-to-r from-indigo-600 to-blue-700 text-white py-16">
-        <div className="container mx-auto px-4">
-          <div className="text-center">
-            <h1 className="text-4xl md:text-6xl font-bold mb-6">NRI Real Estate Guide</h1>
-            <p className="text-xl md:text-2xl mb-8 opacity-90">
-              Complete guide for Non-Resident Indians investing in Indian real estate
-            </p>
-            <Button className="bg-white text-indigo-600 hover:bg-gray-100 px-8 py-3 text-lg">
-              Download Guide
-            </Button>
-          </div>
-        </div>
-      </section>
+ {/* Hero Section (Mobile-friendly) */}
+<section className="bg-gradient-to-r from-indigo-600 to-blue-700 text-white">
+  <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    {/* Taller on mobile, full screen on md+; vertical centering */}
+    <div className="flex min-h-[70vh] md:min-h-screen items-center py-16 sm:py-20 md:py-24">
+      <div className="w-full text-center">
+        <h1 className="text-3xl sm:text-4xl md:text-6xl font-bold leading-tight mb-4 md:mb-6">
+          NRI Real Estate Guide
+        </h1>
+
+        <p className="text-base sm:text-lg md:text-2xl mb-6 md:mb-8 opacity-90 max-w-2xl mx-auto">
+          Complete guide for Non-Resident Indians investing in Indian real estate
+        </p>
+
+        {/* Full-width button on mobile, inline on larger screens */}
+        <Button className="w-full sm:w-auto bg-white text-indigo-600 hover:bg-gray-100 px-6 sm:px-8 py-3 text-base sm:text-lg">
+          Download Guide
+        </Button>
+      </div>
+    </div>
+  </div>
+</section>
+
 
       {/* Guide Categories */}
       <section className="py-16">
