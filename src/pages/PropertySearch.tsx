@@ -377,7 +377,26 @@ const PropertySearch = () => {
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
               <div>
                 <h1 className="text-2xl font-bold text-gray-900">
-                  Properties {activeTab === 'buy' ? 'for Sale' : 'for Rent'} in {filters.location || 'All Locations'}
+                  {(() => {
+                    switch (activeTab) {
+                      case 'buy':
+                        return `Properties for Sale in ${filters.location || 'All Locations'}`;
+                      case 'rent':
+                        return `Properties for Rent in ${filters.location || 'All Locations'}`;
+                      case 'new-launch':
+                        return `Newly Launched Properties in ${filters.location || 'All Locations'}`;
+                      case 'commercial':
+                        return `Commercial Spaces in ${filters.location || 'All Locations'}`;
+                      case 'plots':
+                        return `Plots/Land for Sale in ${filters.location || 'All Locations'}`;
+                      case 'pg':
+                        return `PG's in ${filters.location || 'All Locations'}`;
+                      case 'projects':
+                        return `Other Projects in ${filters.location || 'All Locations'}`;
+                      default:
+                        return `Properties for Sale in ${filters.location || 'All Locations'}`;
+                    }
+                  })()}
                 </h1>
                 <p className="text-gray-600 mt-1">
                   {isLoading ? 'Searching...' : `${filteredProperties.length} results found`}
