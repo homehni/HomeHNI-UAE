@@ -162,7 +162,7 @@ const handleAuthClick = () => {
           <div className="flex items-center justify-between p-4 border-b border-gray-200">
             <div className="flex items-center space-x-2">
               <img 
-                src="/lovable-uploads/76edf36e-5a4c-4707-b169-fb70fe75880c.png" 
+                src="/lovable-uploads/main-logo-final.png" 
                 alt="Home HNI Logo" 
                 className="h-8 w-auto"
               />
