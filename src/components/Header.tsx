@@ -176,7 +176,7 @@ const Header = () => {
               {/* Location Selector - Show everywhere */}
               {(
                 <Select>
-                  <SelectTrigger className={`w-28 sm:w-32 transition-all duration-500 [&>svg]:text-current ${isScrolled ? 'bg-gray-100 text-gray-800 hover:bg-gray-200 border-gray-300' : 'bg-white/20 backdrop-blur-sm text-white border-white/30 hover:bg-white/30'}`}>
+                  <SelectTrigger className={`w-28 sm:w-32 transition-all duration-500 [&>svg]:text-current hidden sm:flex ${isScrolled ? 'bg-gray-100 text-gray-800 hover:bg-gray-200 border-gray-300' : 'bg-white/20 backdrop-blur-sm text-white border-white/30 hover:bg-white/30'}`}>
                     <SelectValue placeholder="All India" defaultValue="all-india" />
                   </SelectTrigger>
                   <SelectContent className="bg-white border border-gray-200 shadow-lg z-50">
@@ -315,10 +315,10 @@ const Header = () => {
                   <span className="font-medium text-sm">+91 80740 17388</span>
                 </a>}
                {/* Post Property Button - Show everywhere */}
-               {<Button variant="outline" size="sm" onClick={() => handlePostPropertyClick()} className={`font-medium px-1.5 sm:px-3 py-1.5 text-xs sm:text-sm transition-all duration-500 ${isScrolled ? 'bg-white text-brand-red border-gray-300 hover:bg-gray-50' : 'bg-white text-brand-red border-white/50 hover:bg-white/90'}`}>
+               {<Button variant="outline" size="sm" onClick={() => handlePostPropertyClick()} className={`font-medium px-2 sm:px-3 py-1.5 text-xs sm:text-sm transition-all duration-500 ${isScrolled ? 'bg-white text-brand-red border-gray-300 hover:bg-gray-50' : 'bg-white text-brand-red border-white/50 hover:bg-white/90'}`}>
                   <span className="hidden sm:inline">Post property</span>
-                  <span className="sm:hidden">Post</span>
-                  <span className="ml-1 bg-green-500 text-white text-[10px] px-1 py-0.5 rounded">Free</span>
+                  <span className="sm:hidden">Post Property</span>
+                  <span className="ml-1 bg-green-500 text-white text-[10px] px-1.5 py-0.5 rounded-full font-medium">Free</span>
                 </Button>}
 
 
