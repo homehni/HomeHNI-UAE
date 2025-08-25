@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { ChevronDown } from 'lucide-react';
 
 interface CountryOption {
   code: string;
@@ -11,6 +12,8 @@ interface CountryOption {
 const CountrySwitcher: React.FC = () => {
   const [currentCountry, setCurrentCountry] = useState<string>('');
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   // Listen for scroll to match header styling
   useEffect(() => {
@@ -20,6 +23,18 @@ const CountrySwitcher: React.FC = () => {
     
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   // Country options with flags and domains
@@ -53,11 +68,12 @@ const CountrySwitcher: React.FC = () => {
     }
   }, []);
 
-  const handleCountryChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedCode = event.target.value;
+  const handleCountryChange = (selectedCode: string) => {
     const selectedCountry = countries.find(c => c.code === selectedCode);
     
     if (!selectedCountry) return;
+
+    setIsOpen(false);
 
     if (selectedCode === 'GLOBAL') {
       // Remove preference and go to global domain
@@ -70,36 +86,59 @@ const CountrySwitcher: React.FC = () => {
     }
   };
 
+  const getCurrentCountry = () => {
+    return countries.find(c => c.code === currentCountry) || countries[0];
+  };
+
+  const currentCountryData = getCurrentCountry();
+
   return (
-    <div className="relative">
-      <label 
-        htmlFor="country-switcher" 
-        className="text-sm font-medium text-foreground sr-only"
-      >
-        Country
-      </label>
-      <select
-        id="country-switcher"
-        value={currentCountry}
-        onChange={handleCountryChange}
-        className={`appearance-none text-sm rounded-md px-3 py-2 pr-8 focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all duration-500 cursor-pointer z-50 min-w-[100px] ${
+    <div className="relative" ref={dropdownRef}>
+      <button
+        type="button"
+        onClick={() => setIsOpen(!isOpen)}
+        className={`flex items-center gap-2 text-sm rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all duration-500 cursor-pointer min-w-[100px] ${
           isScrolled 
             ? 'bg-gray-100 text-gray-800 hover:bg-gray-200 border border-gray-300' 
             : 'bg-white/20 backdrop-blur-sm text-white border border-white/30 hover:bg-white/30'
         }`}
-        style={{ 
-          backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='${isScrolled ? '%236b7280' : '%23ffffff'}' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e")`,
-          backgroundPosition: 'right 0.5rem center',
-          backgroundRepeat: 'no-repeat',
-          backgroundSize: '1.5em 1.5em'
-        }}
       >
-        {countries.map((country) => (
-          <option key={country.code} value={country.code}>
-            {country.flag} {country.displayCode}
-          </option>
-        ))}
-      </select>
+        <span>{currentCountryData.flag} {currentCountryData.displayCode}</span>
+        <ChevronDown 
+          className={`w-4 h-4 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''} ${
+            isScrolled ? 'text-gray-600' : 'text-white'
+          }`}
+        />
+      </button>
+
+      {isOpen && (
+        <div className={`absolute top-full left-0 mt-1 min-w-full rounded-md shadow-lg z-50 border transition-all duration-500 ${
+          isScrolled 
+            ? 'bg-white/95 backdrop-blur-sm border-gray-200' 
+            : 'bg-red-800/95 backdrop-blur-sm border-white/20'
+        }`}>
+          <div className="py-1">
+            {countries.map((country) => (
+              <button
+                key={country.code}
+                type="button"
+                onClick={() => handleCountryChange(country.code)}
+                className={`w-full text-left px-3 py-2 text-sm transition-colors duration-200 flex items-center gap-2 ${
+                  currentCountry === country.code
+                    ? isScrolled 
+                      ? 'bg-gray-100 text-gray-900' 
+                      : 'bg-white/20 text-white'
+                    : isScrolled
+                      ? 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
+                      : 'text-white hover:bg-white/20'
+                }`}
+              >
+                <span>{country.flag} {country.displayCode}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
