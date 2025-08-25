@@ -93,10 +93,23 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
         const ac = new (window as any).google.maps.places.Autocomplete(el, options);
         ac.addListener('place_changed', () => {
           const place = ac.getPlace();
-          const value = place?.formatted_address || place?.name || '';
+          let value = place?.formatted_address || place?.name || '';
+          
+          // Extract city name from formatted address for better matching
+          if (value && place?.formatted_address) {
+            // Extract city name from Google Places result
+            const addressComponents = place.address_components || [];
+            const cityComponent = addressComponents.find((comp: any) => 
+              comp.types.includes('locality') || comp.types.includes('administrative_area_level_2')
+            );
+            if (cityComponent) {
+              value = cityComponent.long_name;
+            }
+          }
+          
           if (el && value) {
             el.value = value;
-            setSearchQuery(value); // Update React state so search works
+            setSearchQuery(value);
           }
         });
       });

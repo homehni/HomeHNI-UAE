@@ -308,18 +308,33 @@ export const useRealTimeSearch = () => {
     }
     // 'buy' shows all residential properties (default)
 
-    // Location filter
-    if (debouncedLocation.trim()) {
-      const searchTerms = debouncedLocation.toLowerCase().split(' ');
-      result = result.filter(property => 
-        searchTerms.every(term => 
-          property.title.toLowerCase().includes(term) ||
-          property.location.toLowerCase().includes(term) ||
-          property.locality.toLowerCase().includes(term) ||
-          property.city.toLowerCase().includes(term)
-        )
+  // Location filter - improved matching logic
+  if (debouncedLocation.trim()) {
+    const searchLocation = debouncedLocation.toLowerCase().trim();
+    
+    result = result.filter(property => {
+      const matches = [
+        property.title.toLowerCase(),
+        property.location.toLowerCase(),
+        property.locality.toLowerCase(), 
+        property.city.toLowerCase()
+      ];
+      
+      // Check if any search terms match any property fields
+      const isMatch = matches.some(field => 
+        field.includes(searchLocation) ||
+        searchLocation.includes(field) ||
+        // Handle partial matches for common search patterns
+        (searchLocation.includes('noida') && field.includes('noida')) ||
+        (searchLocation.includes('gurgaon') && field.includes('gurgaon')) ||
+        (searchLocation.includes('mumbai') && field.includes('mumbai')) ||
+        (searchLocation.includes('bangalore') && field.includes('bangalore')) ||
+        (searchLocation.includes('delhi') && field.includes('delhi'))
       );
-    }
+      
+      return isMatch;
+    });
+  }
 
     // Property Type filter
     if (filters.propertyType.length > 0 && !filters.propertyType.includes('All Residential')) {
