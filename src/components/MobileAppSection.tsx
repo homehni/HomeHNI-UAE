@@ -11,10 +11,10 @@ const MobileAppSection = () => {
           {/* Content */}
           <div className="text-center lg:text-left order-2 lg:order-1">
             {/* Optional badge */}
-            <div className="inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-medium
+            {/* <div className="inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-medium
                             bg-white text-[#d21404] border border-rose-200 mb-4">
               New features going live every week
-            </div>
+            </div> */}
 
             <h2 className="text-3xl md:text-4xl font-bold text-black mb-4">
               {cmsContent?.content?.title || 'Find A New Home On The Go'}
@@ -61,9 +61,9 @@ const MobileAppSection = () => {
             </div>
 
             {/* Small trust row (optional) */}
-            <div className="mt-6 text-xs text-gray-500">
+            {/* <div className="mt-6 text-xs text-gray-500">
               Free to download · Instant updates · Secure login
-            </div>
+            </div> */}
           </div>
 
           {/* Image */}
