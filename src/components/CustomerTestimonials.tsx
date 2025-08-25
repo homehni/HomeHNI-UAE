@@ -119,7 +119,7 @@ export function TestimonialCard({
   initial 
 }) {
   return (
-    <div className="rounded-2xl border border-gray-200 bg-white shadow-sm hover:shadow-md transition-shadow p-6">
+    <div className="rounded-2xl border border-gray-200 bg-white shadow-sm hover:shadow-md transition-shadow p-6 min-h-[200px] flex flex-col">
       {/* Header */}
       <div className="flex items-start gap-3 mb-4">
         <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center flex-shrink-0">
@@ -148,9 +148,9 @@ export function TestimonialCard({
         </div>
       </div>
 
-      {/* Quote without quote icon */}
-      <div>
-        <p className="text-gray-700 line-clamp-3">
+      {/* Quote - with flex-1 to take remaining space */}
+      <div className="flex-1">
+        <p className="text-gray-700 leading-relaxed">
           {text}
         </p>
       </div>
@@ -166,21 +166,30 @@ function AutoScrollTestimonials() {
     if (!scrollContainer) return;
 
     let currentIndex = 0;
-    const testimonialWidth = scrollContainer.children[0]?.clientWidth || 0;
-    const gap = 16; // 1rem gap
 
     const autoScroll = () => {
       if (scrollContainer) {
+        const cardWidth = scrollContainer.querySelector('.testimonial-card')?.clientWidth || 0;
+        const gap = 16; // 1rem gap
+        
         currentIndex = (currentIndex + 1) % testimonials.length;
-        const scrollPosition = currentIndex * (testimonialWidth + gap);
+        const scrollPosition = currentIndex * (cardWidth + gap);
+        
         scrollContainer.scrollTo({
           left: scrollPosition,
           behavior: 'smooth'
         });
+
+        // Reset to beginning if at end
+        if (currentIndex === 0) {
+          setTimeout(() => {
+            scrollContainer.scrollTo({ left: 0, behavior: 'smooth' });
+          }, 100);
+        }
       }
     };
 
-    const interval = setInterval(autoScroll, 3000); // Auto-scroll every 3 seconds
+    const interval = setInterval(autoScroll, 4000); // Auto-scroll every 4 seconds
 
     return () => clearInterval(interval);
   }, []);
@@ -196,7 +205,7 @@ function AutoScrollTestimonials() {
     >
       <div className="flex gap-4">
         {testimonials.map((testimonial, index) => (
-          <div key={index} className="min-w-[85%] sm:min-w-[60%] flex-shrink-0">
+          <div key={index} className="min-w-[85%] sm:min-w-[60%] flex-shrink-0 testimonial-card">
             <TestimonialCard {...testimonial} />
           </div>
         ))}
