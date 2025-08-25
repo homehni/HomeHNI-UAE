@@ -73,7 +73,28 @@ const Footer = ({
     links: []
   }];
   const handleLinkClick = (linkText: string) => {
-    // Extract location and property type information from the link text
+    // Check for services with dedicated pages first
+    const serviceRoutes = {
+      'Property Legal Services': '/legal-services',
+      'Interiors': '/interior',
+      'Rental Agreement': '/rental-agreement',
+      'Packers and Movers': '/packers-movers',
+      'Property Management in India': '/property-management',
+      'Painting and Cleaning': '/painting-cleaning',
+      'Refer and Earn': '/refer-earn',
+      'Pay Rent': '/rent-receipts',
+      'Sale Agreement': '/legal-services',
+      'Apply Home Loan': '/loans',
+      'Home Loan Eligibility Calculator': '/loans'
+    };
+
+    // If the service has a dedicated page, navigate there
+    if (serviceRoutes[linkText as keyof typeof serviceRoutes]) {
+      navigate(serviceRoutes[linkText as keyof typeof serviceRoutes]);
+      return;
+    }
+
+    // Otherwise, extract location and property type information from the link text
     const searchParams = new URLSearchParams();
     
     // Determine search type based on link content
