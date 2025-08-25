@@ -12,6 +12,7 @@ import Logo from './Logo';
 import Sidebar from './Sidebar';
 import MegaMenu from './MegaMenu';
 import LegalServicesForm from './LegalServicesForm';
+import CountrySwitcher from './CountrySwitcher';
 const Header = () => {
   const {
     user,
@@ -189,6 +190,9 @@ const Header = () => {
                   </SelectContent>
                 </Select>
               )}
+
+              {/* Country Switcher - Show for testing */}
+              <CountrySwitcher />
 
               {/* Desktop Navigation Links - Show everywhere */}
               {<nav className="hidden lg:flex items-center space-x-5">
