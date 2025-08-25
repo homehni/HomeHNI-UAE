@@ -342,14 +342,31 @@ const Footer = ({
     </div>
 
           {/* Copyright */}
-          <div className="text-center text-xs text-gray-500">
-            © 2025 Home HNI Pvt. Ltd. | All Rights Reserved
-          </div>
+        {/* Copyright & Credit */}
+<div className="mt-6 text-center space-y-3">
+  {/* Compact badge-style copyright line */}
+  <div className="inline-flex items-center gap-2 rounded-full bg-white px-3 py-1 ring-1 ring-gray-200 text-[11px] sm:text-xs text-gray-600">
+    <span>© 2025</span>
+    <span className="font-medium text-gray-800">Home HNI Pvt. Ltd.</span>
+    <span className="text-gray-400">•</span>
+    <span>All Rights Reserved</span>
+  </div>
 
+  {/* Product credit with orange heart */}
+  <div className="text-[11px] sm:text-xs text-gray-500">
+    A Product of{" "}
+    <a
+      href="https://ranazonai.com/"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="text-brand-red font-semibold underline hover:text-brand-red/80 transition-colors"
+    >
+      Ranazonai Technologies
+    </a>
+    , Built with <span className="text-orange-500" role="img" aria-label="orange heart">🧡</span> and Dedication.
+  </div>
+</div>
 
-           <div className="text-center text-xs text-gray-500 py-[7px]">
-            A Product of <a href="https://ranazonai.com/" target="_blank" rel="noopener noreferrer" className="text-brand-red font-semibold underline hover:text-brand-red/80 transition-colors">Ranazonai Technologies</a>, Built with 🤍 and Dedication.
-          </div>
           
         </div>
       </div>
