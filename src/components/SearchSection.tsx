@@ -119,7 +119,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
       backgroundPosition: 'center calc(50% - 2%)'
     }}>
         {/* Mobile Search Section - overlapping 50% at bottom of hero */}
-        <div className="sm:hidden absolute bottom-16 left-4 right-4 transform translate-y-1/2">
+        <div className="sm:hidden absolute bottom-8 left-4 right-4 transform translate-y-1/2">
           <div className="bg-white rounded-lg shadow-xl border border-gray-100 p-4">
             {/* Property Type Dropdown for Mobile */}
             <div className="mb-3">
