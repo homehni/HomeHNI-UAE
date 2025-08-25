@@ -121,9 +121,35 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
         {/* Mobile Search Section - overlapping 50% at bottom of hero */}
         <div className="sm:hidden absolute bottom-0 left-4 right-4 transform translate-y-1/2">
           <div className="bg-white rounded-lg shadow-xl border border-gray-100 p-4">
-            <div className="relative">
-              <div className="relative flex items-center">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+            {/* Property Type Dropdown for Mobile */}
+            <div className="mb-3">
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button variant="outline" className="w-full h-10 border-gray-300 text-gray-700 font-medium text-sm justify-between hover:bg-gray-50 bg-white px-3">
+                    <span>{selectedCity}</span>
+                    <ChevronDown className="h-4 w-4 text-gray-400" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-full p-0 bg-white border border-gray-200 shadow-lg z-50" align="start">
+                  <div className="py-2">
+                    {cities.map(city => 
+                      <button 
+                        key={city} 
+                        onClick={() => handleCitySelect(city)} 
+                        className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                      >
+                        {city}
+                      </button>
+                    )}
+                  </div>
+                </PopoverContent>
+              </Popover>
+            </div>
+            
+            {/* Search Input and Button */}
+            <div className="flex gap-2">
+              <div className="relative flex-1">
+                <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-brand-red" />
                 <input 
                   ref={mobileInputRef} 
                   type="text" 
@@ -131,12 +157,19 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onKeyPress={handleKeyPress}
-                  className="w-full pl-10 pr-12 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-700 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+                  className="w-full pl-10 pr-12 py-3 bg-gray-50 border border-brand-red rounded-lg text-brand-red placeholder-brand-red/60 focus:outline-none focus:ring-2 focus:ring-brand-red focus:border-transparent" 
                 />
-                <button className="absolute right-3 top-1/2 transform -translate-y-1/2 p-1 hover:bg-gray-100 rounded-full transition-colors">
-                  <Mic className="w-5 h-5 text-blue-500" />
+                <button className="absolute right-3 top-1/2 transform -translate-y-1/2 p-1 hover:bg-brand-red/10 rounded-full transition-colors">
+                  <Mic className="w-5 h-5 text-brand-red" />
                 </button>
               </div>
+              
+              <Button 
+                onClick={handleSearch}
+                className="h-12 px-6 bg-brand-red hover:bg-brand-red-dark text-white font-medium whitespace-nowrap"
+              >
+                Search
+              </Button>
             </div>
           </div>
         </div>
