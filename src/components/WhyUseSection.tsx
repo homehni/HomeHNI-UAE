@@ -60,7 +60,7 @@ const WhyUseSection = () => {
           <Globe className="w-6 h-6 text-gray-600" />
         </div>
       ),
-      title: 'NoBroker For NRIs',
+      title: 'Home HNI For NRIs',
       link: '/nri-services',
     },
   ];
