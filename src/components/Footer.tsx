@@ -265,68 +265,16 @@ const Footer = ({
 
         {/* Footer links and social media */}
         <div className="border-t border-gray-200 pt-6">
-         <div className="flex flex-wrap justify-center gap-x-3 gap-y-2 sm:gap-x-4 md:gap-x-6 mb-6 text-sm">
-  <Link
-    to="/about?tab=about"
-    className="inline-flex items-center px-3 py-2 rounded-md text-gray-700 transition-colors
-               hover:text-brand-red hover:bg-white ring-1 ring-transparent hover:ring-gray-200
-               focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-red"
-  >
-    About Us
-  </Link>
-  <Link
-    to="/careers"
-    className="inline-flex items-center px-3 py-2 rounded-md text-gray-700 transition-colors
-               hover:text-brand-red hover:bg-white ring-1 ring-transparent hover:ring-gray-200
-               focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-red"
-  >
-    Careers
-  </Link>
-  <Link
-    to="/about?tab=contact"
-    className="inline-flex items-center px-3 py-2 rounded-md text-gray-700 transition-colors
-               hover:text-brand-red hover:bg-white ring-1 ring-transparent hover:ring-gray-200
-               focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-red"
-  >
-    Contact Us
-  </Link>
-  <Link
-    to="/terms-and-conditions"
-    className="inline-flex items-center px-3 py-2 rounded-md text-gray-700 transition-colors
-               hover:text-brand-red hover:bg-white ring-1 ring-transparent hover:ring-gray-200
-               focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-red"
-  >
-    Terms &amp; Conditions
-  </Link>
-  <Link
-    to="/privacy-policy"
-    className="inline-flex items-center px-3 py-2 rounded-md text-gray-700 transition-colors
-               hover:text-brand-red hover:bg-white ring-1 ring-transparent hover:ring-gray-200
-               focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-red"
-  >
-    Privacy Policy
-  </Link>
-  {/* <Link to="/testimonials" className="inline-flex items-center px-3 py-2 rounded-md text-gray-700 transition-colors
-               hover:text-brand-red hover:bg-white ring-1 ring-transparent hover:ring-gray-200
-               focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-red">Testimonials</Link> */}
-  <a
-    href="/sitemap.xml"
-    className="inline-flex items-center px-3 py-2 rounded-md text-gray-700 transition-colors
-               hover:text-brand-red hover:bg-white ring-1 ring-transparent hover:ring-gray-200
-               focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-red"
-  >
-    Sitemap
-  </a>
-  <Link
-    to="/about?tab=faq"
-    className="inline-flex items-center px-3 py-2 rounded-md text-gray-700 transition-colors
-               hover:text-brand-red hover:bg-white ring-1 ring-transparent hover:ring-gray-200
-               focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-red"
-  >
-    FAQs
-  </Link>
-</div>
-
+          <div className="flex flex-wrap justify-center gap-6 mb-6 text-sm">
+            <Link to="/about?tab=about" className="text-gray-600 hover:text-brand-red transition-colors">About Us</Link>
+            <Link to="/careers" className="text-gray-600 hover:text-brand-red transition-colors">Careers</Link>
+            <Link to="/about?tab=contact" className="text-gray-600 hover:text-brand-red transition-colors">Contact Us</Link>
+            <Link to="/terms-and-conditions" className="text-gray-600 hover:text-brand-red transition-colors">Terms & Conditions</Link>
+            <Link to="/privacy-policy" className="text-gray-600 hover:text-brand-red transition-colors">Privacy Policy</Link>
+            {/* <Link to="/testimonials" className="text-gray-600 hover:text-brand-red transition-colors">Testimonials</Link> */}
+            <a href="/sitemap.xml" className="text-gray-600 hover:text-brand-red transition-colors">Sitemap</a>
+            <Link to="/about?tab=faq" className="text-gray-600 hover:text-brand-red transition-colors">FAQs</Link>
+          </div>
 
           {/* App store badges */}
           <div className="flex justify-center gap-4 mb-6">
@@ -334,20 +282,49 @@ const Footer = ({
           </div>
 
           {/* Social media icons */}
-          <div className="flex justify-center space-x-4 mb-6">
-            <a href="https://www.facebook.com/profile.php?id=61578319572154" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center transition-all hover:bg-gray-400 hover:scale-110">
-              <Facebook className="w-5 h-5 text-gray-700" />
-            </a>
-            <a href="https://x.com/homehni8" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center transition-all hover:bg-gray-400 hover:scale-110">
-              <Twitter className="w-5 h-5 text-gray-700" />
-            </a>
-            <a href="https://www.instagram.com/homehni/" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center transition-all hover:bg-gray-400 hover:scale-110">
-              <Instagram className="w-5 h-5 text-gray-700" />
-            </a>
-            <a href="https://www.linkedin.com/in/home-hni-622605376/" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center transition-all hover:bg-gray-400 hover:scale-110">
-              <Linkedin className="w-5 h-5 text-gray-700" />
-            </a>
-          </div>
+              {/* Social: brand ring, fills red on hover */}
+    <div className="flex justify-center gap-4 mb-8">
+      <a
+        href="https://www.facebook.com/profile.php?id=61578319572154"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Home HNI on Facebook"
+        className="group w-10 h-10 rounded-full ring-1 ring-brand-red/40 bg-white hover:bg-brand-red transition-all flex items-center justify-center hover:scale-110
+                   focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-brand-red"
+      >
+        <Facebook className="w-5 h-5 text-brand-red group-hover:text-white" />
+      </a>
+      <a
+        href="https://x.com/homehni8"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Home HNI on X (Twitter)"
+        className="group w-10 h-10 rounded-full ring-1 ring-brand-red/40 bg-white hover:bg-brand-red transition-all flex items-center justify-center hover:scale-110
+                   focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-brand-red"
+      >
+        <Twitter className="w-5 h-5 text-brand-red group-hover:text-white" />
+      </a>
+      <a
+        href="https://www.instagram.com/homehni/"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Home HNI on Instagram"
+        className="group w-10 h-10 rounded-full ring-1 ring-brand-red/40 bg-white hover:bg-brand-red transition-all flex items-center justify-center hover:scale-110
+                   focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-brand-red"
+      >
+        <Instagram className="w-5 h-5 text-brand-red group-hover:text-white" />
+      </a>
+      <a
+        href="https://www.linkedin.com/in/home-hni-622605376/"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Home HNI on LinkedIn"
+        className="group w-10 h-10 rounded-full ring-1 ring-brand-red/40 bg-white hover:bg-brand-red transition-all flex items-center justify-center hover:scale-110
+                   focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-brand-red"
+      >
+        <Linkedin className="w-5 h-5 text-brand-red group-hover:text-white" />
+      </a>
+    </div>
 
           {/* Copyright */}
           <div className="text-center text-xs text-gray-500">
