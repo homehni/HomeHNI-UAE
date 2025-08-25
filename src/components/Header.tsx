@@ -250,8 +250,8 @@ const Header = () => {
     {/* Custom Services Dropdown */}
     {isServicesDropdownOpen && <div className="absolute top-full left-0 w-56 bg-white border border-gray-200 rounded-lg shadow-xl z-[100] mt-2" onMouseEnter={handleServicesHover} onMouseLeave={handleServicesLeave}>
         <div className="py-2">
-          <button onClick={() => navigate('/service-suite')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
-            Service Provider
+          <button onClick={() => navigate('/loans')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+            Loans
           </button>
           <button onClick={handleLegalServicesClick} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
             Legal Services
@@ -292,11 +292,11 @@ const Header = () => {
       </div>}
   </div>
 
-                <a href="/loans" onClick={e => {
+                <a href="/service-suite" onClick={e => {
                 e.preventDefault();
-                navigate('/loans');
+                navigate('/service-suite');
               }} className={`hover:opacity-80 transition-colors duration-500 text-base font-medium uppercase ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
-                  Loans
+                  Service Provider
                 </a>
 
               {<a href="/careers" className={`hover:opacity-80 transition-colors duration-500 text-base font-medium uppercase ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
