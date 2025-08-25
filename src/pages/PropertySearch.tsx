@@ -60,7 +60,7 @@ const PropertySearch = () => {
       {/* Search Header */}
       <div className="bg-white border-b border-gray-200 pt-20">
         <div className="container mx-auto px-4 py-4">
-          <div className="flex flex-col lg:flex-row gap-4 items-center">
+          <div className="flex flex-col lg:flex-row gap-4 items-center pt-4">
             {/* Search Tabs */}
             <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full lg:w-auto">
               <TabsList className="grid w-full lg:w-auto grid-cols-4 lg:grid-cols-7 bg-gray-100">
