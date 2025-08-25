@@ -40,16 +40,12 @@ const CountrySwitcher: React.FC = () => {
   // Country options with flags and domains
   const countries: CountryOption[] = [
     { code: 'GLOBAL', name: 'Global', domain: 'homehni.com', flag: '🌍', displayCode: 'Global' },
-    { code: 'US', name: 'United States', domain: 'homehni.us', flag: '🇺🇸', displayCode: 'US' },
     { code: 'IN', name: 'India', domain: 'homehni.in', flag: '🇮🇳', displayCode: 'IN' },
+    { code: 'US', name: 'United States', domain: 'homehni.us', flag: '🇺🇸', displayCode: 'US' },
     { code: 'GB', name: 'United Kingdom', domain: 'homehni.co.uk', flag: '🇬🇧', displayCode: 'UK' },
-    { code: 'DE', name: 'Germany', domain: 'homehni.de', flag: '🇩🇪', displayCode: 'DE' },
     { code: 'AE', name: 'United Arab Emirates', domain: 'homehni.ae', flag: '🇦🇪', displayCode: 'UAE' },
-    { code: 'ZA', name: 'South Africa', domain: 'homehni.co.za', flag: '🇿🇦', displayCode: 'ZA' },
-    { code: 'IT', name: 'Italy', domain: 'homehni.it', flag: '🇮🇹', displayCode: 'IT' },
-    { code: 'FR', name: 'France', domain: 'homehni.fr', flag: '🇫🇷', displayCode: 'FR' },
-    { code: 'CA', name: 'Canada', domain: 'homehni.ca', flag: '🇨🇦', displayCode: 'CA' },
-    { code: 'AU', name: 'Australia', domain: 'homehni.com.au', flag: '🇦🇺', displayCode: 'AU' }
+    { code: 'DE', name: 'Germany', domain: 'homehni.de', flag: '🇩🇪', displayCode: 'DE' },
+    { code: 'ZA', name: 'South Africa', domain: 'homehni.co.za', flag: '🇿🇦', displayCode: 'ZA' }
   ];
 
   const PREF_KEY = 'homehni_country_pref_v1';
