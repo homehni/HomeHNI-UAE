@@ -27,6 +27,71 @@
 
   <body>
     <div id="root"></div>
+    
+    <!-- Geo-routing script - runs before main bundle for fast redirects -->
+    <script>
+      // Feature flag - set to false to disable geo-routing
+      window.__ENABLE_GEO__ = window.__ENABLE_GEO__ !== undefined ? window.__ENABLE_GEO__ : true;
+      
+      if (window.__ENABLE_GEO__ && location.hostname === "homehni.com") {
+        // Country to domain mapping (single source of truth)
+        const COUNTRY_DOMAINS = {
+          'US': 'homehni.us',
+          'GB': 'homehni.co.uk', 
+          'UK': 'homehni.co.uk',
+          'DE': 'homehni.de',
+          'AE': 'homehni.ae',
+          'ZA': 'homehni.co.za',
+          'IN': 'homehni.in',
+          'IT': 'homehni.it',
+          'FR': 'homehni.fr',
+          'CA': 'homehni.ca',
+          'AU': 'homehni.com.au'
+        };
+        
+        const PREF_KEY = 'homehni_country_pref_v1';
+        
+        // 1. Check for ?country=XX override
+        const urlParams = new URLSearchParams(location.search);
+        const countryOverride = urlParams.get('country');
+        if (countryOverride) {
+          const upperCountry = countryOverride.toUpperCase();
+          if (COUNTRY_DOMAINS[upperCountry]) {
+            localStorage.setItem(PREF_KEY, upperCountry);
+            location.replace('https://' + COUNTRY_DOMAINS[upperCountry] + location.pathname + location.hash);
+            return;
+          }
+        }
+        
+        // 2. Check saved preference
+        const savedCountry = localStorage.getItem(PREF_KEY);
+        if (savedCountry && COUNTRY_DOMAINS[savedCountry]) {
+          location.replace('https://' + COUNTRY_DOMAINS[savedCountry] + location.pathname + location.hash);
+          return;
+        }
+        
+        // 3. Try navigator.language fallback
+        if (navigator.language) {
+          const lang = navigator.language.toLowerCase();
+          let detectedCountry = null;
+          
+          // Extract country from language codes like en-US, en-IN, etc.
+          if (lang.includes('-')) {
+            detectedCountry = lang.split('-')[1].toUpperCase();
+          } else if (lang.includes('_')) {
+            detectedCountry = lang.split('_')[1].toUpperCase();
+          }
+          
+          if (detectedCountry && COUNTRY_DOMAINS[detectedCountry]) {
+            location.replace('https://' + COUNTRY_DOMAINS[detectedCountry] + location.pathname + location.hash);
+            return;
+          }
+        }
+        
+        // 4. Stay on global domain (no redirect needed)
+      }
+    </script>
+    
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
