@@ -243,24 +243,40 @@ const Footer = ({
         </div>
 
         {/* Call-to-action sections */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8 py-8 bg-gray-50 px-6 rounded-lg">
-          
-          <div className="text-center">
-            <h4 className="font-semibold text-gray-900 mb-2">List Your Property</h4>
-            <p className="text-sm text-gray-600 mb-4">For Free, Without any brokerage.</p>
-            <button onClick={handlePostPropertyClick} className="bg-brand-red text-white px-6 py-2 rounded text-sm hover:bg-brand-red-dark transition-colors">
-              Free Posting
-            </button>
-          </div>
+       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8 py-8 bg-gray-50 px-6 rounded-lg">
+  {/* Post property card */}
+  <div className="bg-white rounded-md p-6 shadow-sm ring-1 ring-gray-200 hover:shadow-md transition-shadow">
+    <div className="text-center">
+      <h4 className="font-semibold text-gray-900 mb-2">Post Your Property (Free)</h4>
+      <p className="text-sm text-gray-600 mb-4">
+        Reach verified buyers & tenants. Zero brokerage.
+      </p>
+      <button
+        onClick={handlePostPropertyClick}
+        className="bg-brand-red text-white px-6 py-2 rounded text-sm hover:bg-brand-red-dark transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-brand-red"
+      >
+        Post for Free
+      </button>
+    </div>
+  </div>
 
+  {/* Find property card */}
+  <div className="bg-white rounded-md p-6 shadow-sm ring-1 ring-gray-200 hover:shadow-md transition-shadow">
+    <div className="text-center">
+      <h4 className="font-semibold text-gray-900 mb-2">Search Verified Listings</h4>
+      <p className="text-sm text-gray-600 mb-4">
+        Thousands of owner-listed options. No brokerage.
+      </p>
+      <button
+        onClick={handleFindNowClick}
+        className="bg-brand-red text-white px-6 py-2 rounded text-sm hover:bg-brand-red-dark transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-brand-red"
+      >
+        Browse Listings
+      </button>
+    </div>
+  </div>
+</div>
 
-          <div className="text-center">
-            <h4 className="font-semibold text-gray-900 mb-2">Find Property</h4>
-            <p className="text-sm text-gray-600 mb-4">Select from thousands of options, without brokerage.</p>
-            <button onClick={handleFindNowClick} className="bg-brand-red text-white px-6 py-2 rounded text-sm hover:bg-brand-red-dark transition-colors">
-              Find Now
-            </button>
-          </div>
         </div>
 
         {/* Footer links and social media */}
