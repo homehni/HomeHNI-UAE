@@ -125,7 +125,7 @@ const GrievanceRedressal = () => {
           <div className="max-w-4xl mx-auto">
             {/* Page Title */}
             <div className="mb-8 text-center">
-              <h1 className="text-4xl font-bold text-gray-900 mb-4">📝 Grievance Redressal Form</h1>
+              <h1 className="text-4xl font-bold text-gray-900 mb-4"> Grievance Redressal Form</h1>
               <p className="text-lg text-gray-700 leading-relaxed">
                 At Home HNI, we are committed to providing a safe and transparent experience to all our users. If you believe that any content hosted on our platform violates laws, infringes rights, or is misleading or harmful, you can raise your concern by filling the grievance form below.
               </p>
@@ -298,7 +298,7 @@ const GrievanceRedressal = () => {
             <div className="bg-blue-50 border-l-4 border-blue-400 p-6 rounded-r-lg">
               <div className="flex">
                 <div className="ml-3">
-                  <h3 className="text-sm font-medium text-blue-800">🛡️ Important Information</h3>
+                  <h3 className="text-sm font-medium text-blue-800"> Important Information</h3>
                   <div className="mt-2 text-sm text-blue-700">
                     <p>
                       We will review your grievance within 7 working days. If further information is required, our team will reach out via the provided contact details.
