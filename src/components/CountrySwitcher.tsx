@@ -10,7 +10,18 @@ interface CountryOption {
 
 const CountrySwitcher: React.FC = () => {
   const [currentCountry, setCurrentCountry] = useState<string>('');
-  
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  // Listen for scroll to match header styling
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+    };
+    
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   // Country options with flags and domains
   const countries: CountryOption[] = [
     { code: 'GLOBAL', name: 'Global', domain: 'homehni.com', flag: '🌍', displayCode: 'Global' },
@@ -59,12 +70,6 @@ const CountrySwitcher: React.FC = () => {
     }
   };
 
-  const getCurrentCountryDisplay = () => {
-    const country = countries.find(c => c.code === currentCountry);
-    if (!country) return '🌍 Global';
-    return `${country.flag} ${country.displayCode}`;
-  };
-
   return (
     <div className="relative">
       <label 
@@ -77,9 +82,13 @@ const CountrySwitcher: React.FC = () => {
         id="country-switcher"
         value={currentCountry}
         onChange={handleCountryChange}
-        className="appearance-none text-sm border border-border rounded-md px-3 py-2 pr-8 bg-white text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary shadow-sm hover:bg-gray-50 transition-colors cursor-pointer z-50 min-w-[100px]"
+        className={`appearance-none text-sm rounded-md px-3 py-2 pr-8 focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all duration-500 cursor-pointer z-50 min-w-[100px] ${
+          isScrolled 
+            ? 'bg-gray-100 text-gray-800 hover:bg-gray-200 border border-gray-300' 
+            : 'bg-white/20 backdrop-blur-sm text-white border border-white/30 hover:bg-white/30'
+        }`}
         style={{ 
-          backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e")`,
+          backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='${isScrolled ? '%236b7280' : '%23ffffff'}' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e")`,
           backgroundPosition: 'right 0.5rem center',
           backgroundRepeat: 'no-repeat',
           backgroundSize: '1.5em 1.5em'
