@@ -99,7 +99,7 @@ export const PropertyHero: React.FC<PropertyHeroProps> = ({
       </div>
 
       {/* Main Grid */}
-      <div className="grid lg:grid-cols-3 gap-6">
+      <div className="grid lg:grid-cols-3 gap-6 mb-8">
         {/* Gallery */}
         <div className="lg:col-span-2">
           <div className="relative">
@@ -174,7 +174,7 @@ export const PropertyHero: React.FC<PropertyHeroProps> = ({
         </div>
 
         {/* Sticky Price Card */}
-        <aside className="lg:sticky lg:top-24">
+        <aside className="lg:sticky lg:top-24 lg:self-start">
           <div className="rounded-2xl border border-gray-200 bg-white shadow-sm p-5">
             <div className="text-center mb-6">
               <div className="text-3xl font-bold text-gray-900 mb-1">
