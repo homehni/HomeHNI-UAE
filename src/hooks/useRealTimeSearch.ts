@@ -186,6 +186,63 @@ const mockProperties: Property[] = [
     locality: 'Jubilee Hills',
     city: 'Hyderabad',
     bhkType: '5+ BHK'
+  },
+  {
+    id: '9',
+    title: 'Commercial Office Space in Cyber City, Gurgaon',
+    location: 'Cyber City, Gurgaon',
+    price: '₹2.5 Crore',
+    priceNumber: 25000000,
+    area: '1500 sq ft',
+    areaNumber: 1500,
+    bedrooms: 0,
+    bathrooms: 2,
+    image: 'photo-1497366216548-37526070297c',
+    propertyType: 'Commercial Space/Building',
+    furnished: 'Furnished',
+    availability: 'Ready to Move',
+    ageOfProperty: 'New Project',
+    locality: 'Cyber City',
+    city: 'Gurgaon',
+    bhkType: 'Commercial'
+  },
+  {
+    id: '10',
+    title: 'Industrial Warehouse in Okhla, Delhi',
+    location: 'Okhla Industrial Area, Delhi',
+    price: '₹5 Crore',
+    priceNumber: 50000000,
+    area: '5000 sq ft',
+    areaNumber: 5000,
+    bedrooms: 0,
+    bathrooms: 1,
+    image: 'photo-1586023492125-27b2c045efd7',
+    propertyType: 'Industrial Space/Building',
+    furnished: 'Unfurnished',
+    availability: 'Ready to Move',
+    ageOfProperty: '1-5 Years Old',
+    locality: 'Okhla Industrial Area',
+    city: 'Delhi',
+    bhkType: 'Industrial'
+  },
+  {
+    id: '11',
+    title: 'Residential Plot in Sector 85, Gurgaon',
+    location: 'Sector 85, Gurgaon',
+    price: '₹80 Lakh',
+    priceNumber: 8000000,
+    area: '250 sq yards',
+    areaNumber: 2090,
+    bedrooms: 0,
+    bathrooms: 0,
+    image: 'photo-1500382017468-9049fed747ef',
+    propertyType: 'Plots',
+    furnished: 'Unfurnished',
+    availability: 'Ready to Move',
+    ageOfProperty: 'New Project',
+    locality: 'Sector 85',
+    city: 'Gurgaon',
+    bhkType: 'Plot'
   }
 ];
 
@@ -230,6 +287,26 @@ export const useRealTimeSearch = () => {
   // Filter properties in real-time
   const filteredProperties = useMemo(() => {
     let result = [...mockProperties];
+
+    // Tab filter - filter by listing type first
+    if (activeTab === 'rent') {
+      // For rent, filter properties that would be suitable for rental
+      result = result.filter(property => 
+        property.propertyType === 'Flat/Apartment' || 
+        property.propertyType === 'Independent House' || 
+        property.propertyType === 'Villa'
+      );
+    } else if (activeTab === 'commercial') {
+      result = result.filter(property => 
+        property.propertyType === 'Commercial Space/Building' || 
+        property.propertyType === 'Industrial Space/Building'
+      );
+    } else if (activeTab === 'plots') {
+      result = result.filter(property => property.propertyType === 'Plots');
+    } else if (activeTab === 'new-launch') {
+      result = result.filter(property => property.ageOfProperty === 'New Project');
+    }
+    // 'buy' shows all residential properties (default)
 
     // Location filter
     if (debouncedLocation.trim()) {
