@@ -243,14 +243,14 @@ const handleAuthClick = () => {
                   <LogIn size={16} className="mr-2" />
                   Login
                 </Button>
-                <Button 
+                {/* <Button 
                   variant="outline" 
                   className="w-full border-orange-600 text-orange-600 hover:bg-orange-600 hover:text-white"
                   onClick={handleAdminLoginClick}
                 >
                   <Shield size={16} className="mr-2" />
                   Admin Login
-                </Button>
+                </Button> */}
               </div>
             )}
           </div>
