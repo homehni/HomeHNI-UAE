@@ -179,11 +179,24 @@ const PropertyManagement = () => {
 
             <form className="space-y-4" onSubmit={e => {
             e.preventDefault();
+            const form = e.currentTarget as HTMLFormElement;
+            
+            // Check if all required fields are filled
+            if (!form.checkValidity()) {
+              form.reportValidity();
+              toast({
+                title: "Required Fields Missing",
+                description: "Please fill in all required fields before submitting.",
+                variant: "destructive"
+              });
+              return;
+            }
+
             toast({
               title: "Request received",
               description: "Our property management expert will contact you shortly."
             });
-            (e.currentTarget as HTMLFormElement).reset();
+            form.reset();
           }}>
               <Input id="pm-name" name="name" placeholder="Name" required />
 
@@ -200,6 +213,36 @@ const PropertyManagement = () => {
               </div>
 
               <Input id="pm-email" name="email" type="email" placeholder="Email ID" required />
+
+              <Select name="propertyType" required>
+                <SelectTrigger id="property-type"><SelectValue placeholder="Property Type" /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="residential">All Residential</SelectItem>
+                  <SelectItem value="flats">Flat/Apartment</SelectItem>
+                  <SelectItem value="independent-building">Independent Building/Floor</SelectItem>
+                  <SelectItem value="farm-house">Farm House</SelectItem>
+                  <SelectItem value="villa">Villa</SelectItem>
+                  <SelectItem value="plots">Plots</SelectItem>
+                  <SelectItem value="resort">Resort</SelectItem>
+                  <SelectItem value="commercial-building">Commercial Building/House</SelectItem>
+                  <SelectItem value="agricultural">Agricultural Lands</SelectItem>
+                  <SelectItem value="other">Others</SelectItem>
+                </SelectContent>
+              </Select>
+
+              <div className="flex gap-2">
+                <Input id="pm-location" name="location" placeholder="Property Location" className="flex-1" />
+                <Select name="managementType" required>
+                  <SelectTrigger id="management-type" className="w-40"><SelectValue placeholder="Management Type" /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="full-management">Full Management</SelectItem>
+                    <SelectItem value="tenant-management">Tenant Management</SelectItem>
+                    <SelectItem value="maintenance-only">Maintenance Only</SelectItem>
+                    <SelectItem value="rent-collection">Rent Collection</SelectItem>
+                    <SelectItem value="consultation">Consultation</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
 
               <div className="flex gap-2">
                 <Select name="country">
@@ -259,11 +302,24 @@ const PropertyManagement = () => {
 
               <form className="space-y-5" onSubmit={e => {
               e.preventDefault();
+              const form = e.currentTarget as HTMLFormElement;
+              
+              // Check if all required fields are filled
+              if (!form.checkValidity()) {
+                form.reportValidity();
+                toast({
+                  title: "Required Fields Missing",
+                  description: "Please fill in all required fields before submitting.",
+                  variant: "destructive"
+                });
+                return;
+              }
+
               toast({
                 title: "Request received",
                 description: "Our property management expert will contact you shortly."
               });
-              (e.currentTarget as HTMLFormElement).reset();
+              form.reset();
             }}>
                 <Input id="pm-name-mobile" name="name" placeholder="Name" className="h-12 text-base bg-background" required />
 
@@ -282,6 +338,40 @@ const PropertyManagement = () => {
                 </div>
 
                 <Input id="pm-email-mobile" name="email" type="email" placeholder="Email ID" className="h-12 text-base bg-background" required />
+
+                <Select name="propertyType" required>
+                  <SelectTrigger id="property-type-mobile" className="h-12 bg-background">
+                    <SelectValue placeholder="Property Type" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-background border shadow-lg">
+                    <SelectItem value="residential">All Residential</SelectItem>
+                    <SelectItem value="flats">Flat/Apartment</SelectItem>
+                    <SelectItem value="independent-building">Independent Building/Floor</SelectItem>
+                    <SelectItem value="farm-house">Farm House</SelectItem>
+                    <SelectItem value="villa">Villa</SelectItem>
+                    <SelectItem value="plots">Plots</SelectItem>
+                    <SelectItem value="resort">Resort</SelectItem>
+                    <SelectItem value="commercial-building">Commercial Building/House</SelectItem>
+                    <SelectItem value="agricultural">Agricultural Lands</SelectItem>
+                    <SelectItem value="other">Others</SelectItem>
+                  </SelectContent>
+                </Select>
+
+                <div className="flex gap-3">
+                  <Input id="pm-location-mobile" name="location" placeholder="Property Location" className="flex-1 h-12 text-base bg-background" />
+                  <Select name="managementType" required>
+                    <SelectTrigger id="management-type-mobile" className="w-40 h-12 bg-background">
+                      <SelectValue placeholder="Management Type" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-background border shadow-lg">
+                      <SelectItem value="full-management">Full Management</SelectItem>
+                      <SelectItem value="tenant-management">Tenant Management</SelectItem>
+                      <SelectItem value="maintenance-only">Maintenance Only</SelectItem>
+                      <SelectItem value="rent-collection">Rent Collection</SelectItem>
+                      <SelectItem value="consultation">Consultation</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
 
                 <div className="flex gap-3">
                   <Select name="country">

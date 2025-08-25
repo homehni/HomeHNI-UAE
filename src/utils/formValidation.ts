@@ -12,8 +12,8 @@ export const validateFormFields = (formData: Record<string, unknown>, excludedFi
       return false;
     }
 
-    if (typeof value === 'object' && !Array.isArray(value)) {
-      if (!validateFormFields(value, excludedFields)) {
+    if (typeof value === 'object' && !Array.isArray(value) && value !== null) {
+      if (!validateFormFields(value as Record<string, unknown>, excludedFields)) {
         return false;
       }
     }
