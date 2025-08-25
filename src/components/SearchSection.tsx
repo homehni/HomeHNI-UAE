@@ -94,7 +94,10 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
         ac.addListener('place_changed', () => {
           const place = ac.getPlace();
           const value = place?.formatted_address || place?.name || '';
-          if (el && value) el.value = value;
+          if (el && value) {
+            el.value = value;
+            setSearchQuery(value); // Update React state so search works
+          }
         });
       });
     };
