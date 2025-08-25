@@ -2,15 +2,22 @@ import React from 'react';
 import Header from '@/components/Header';
 import Marquee from '@/components/Marquee';
 import Footer from '@/components/Footer';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { Home, MapPin, IndianRupee, Calendar, Mail, Phone, User, Images, Paintbrush, Calculator, FileText, ShieldCheck, Bus, Train, Car, TrendingUp } from 'lucide-react';
+import { Calendar } from 'lucide-react';
 import { ContactOwnerModal } from '@/components/ContactOwnerModal';
 import { ScheduleVisitModal } from '@/components/ScheduleVisitModal';
-import { PropertyImageGallery } from '@/components/PropertyImageGallery';
 import EMICalculatorModal from '@/components/EMICalculatorModal';
 import LegalServicesForm from '@/components/LegalServicesForm';
+import { PropertyHero } from '@/components/property-details/PropertyHero';
+import { PropertyDetailsCard } from '@/components/property-details/PropertyDetailsCard';
+import { LocationCard } from '@/components/property-details/LocationCard';
+import { OverviewCard } from '@/components/property-details/OverviewCard';
+import { ServicesStrip } from '@/components/property-details/ServicesStrip';
+import { DescriptionCard } from '@/components/property-details/DescriptionCard';
+import { AmenitiesCard } from '@/components/property-details/AmenitiesCard';
+import { NeighborhoodCard } from '@/components/property-details/NeighborhoodCard';
+import { MobileStickyCTA } from '@/components/property-details/MobileStickyCTA';
 interface Property {
   id: string;
   title: string;
@@ -48,39 +55,7 @@ const PropertyDetails: React.FC = () => {
   React.useEffect(() => {
     document.title = property ? `${property.title} | Property Details` : 'Property Details';
   }, [property]);
-  const [descExpanded, setDescExpanded] = React.useState(false);
   const fallbackDescription = `This beautifully maintained ${property?.bhk_type ?? ''} ${property?.property_type?.replace('_', ' ') ?? 'apartment'} offers a spacious layout with abundant natural light and excellent connectivity to local conveniences. Situated in a prime locality, it features well-ventilated rooms, ample storage and proximity to schools, hospitals and public transport. A perfect choice for families looking for comfort and convenience.`;
-  const overview = [{
-    label: 'Age of Building',
-    value: '10+ years'
-  }, {
-    label: 'Ownership Type',
-    value: 'Self Owned'
-  }, {
-    label: 'Maintenance',
-    value: '₹ 2.8 / Sq.Ft/M'
-  }, {
-    label: 'Flooring',
-    value: 'Vitrified Tiles'
-  }, {
-    label: 'Builtup Area',
-    value: `${property?.super_area ?? property?.carpet_area ?? 960} Sq.Ft`
-  }, {
-    label: 'Furnishing',
-    value: 'Semi'
-  }, {
-    label: 'Facing',
-    value: 'West'
-  }, {
-    label: 'Floor',
-    value: '0/3'
-  }, {
-    label: 'Parking',
-    value: 'Bike and Car'
-  }, {
-    label: 'Gated Security',
-    value: 'Yes'
-  }];
   const amenities = ['Lift', 'Internet provider', 'Security', 'Park', 'Sewage treatment', 'Visitor parking'];
   if (!property) {
     return <div className="min-h-screen flex flex-col">
@@ -98,314 +73,56 @@ const PropertyDetails: React.FC = () => {
       <Marquee />
       <Header />
       <main className="flex-1">
-        <section className="bg-gray-50 border-b">
-          <div className="container mx-auto px-4 py-6">
-            <nav className="text-sm text-gray-500 mb-3">
-              Home / Properties / <span className="text-gray-700 font-medium">{property.title}</span>
-            </nav>
-            <h1 className="text-2xl md:text-3xl font-bold mb-2">{property.title}</h1>
-            <div className="flex flex-wrap items-center gap-3 text-gray-600 mx-[12px] my-0 py-[7px]">
-              <span className="inline-flex items-center"><MapPin className="h-4 w-4 mr-1" />{property.locality}, {property.city}</span>
-              <Badge variant={property.listing_type === 'sale' ? 'default' : 'secondary'}>For {property.listing_type}</Badge>
-              <Badge variant={property.status === 'active' ? 'default' : 'secondary'}>{property.status}</Badge>
+        {/* Hero Section */}
+        <section className="bg-gray-50 border-b py-6">
+          <PropertyHero
+            property={property}
+            onContactOwner={() => setShowContactModal(true)}
+            onScheduleVisit={() => setShowScheduleVisitModal(true)}
+            onEMICalculator={() => setShowEMICalculatorModal(true)}
+            onLegalCheck={() => setShowLegalServicesModal(true)}
+          />
+        </section>
+
+        {/* Main Content */}
+        <section className="py-8">
+          <div className="mx-auto max-w-7xl px-4 space-y-6">
+            {/* Services Strip */}
+            <ServicesStrip onLegalServices={() => setShowLegalServicesModal(true)} />
+            
+            {/* Property Details */}
+            <PropertyDetailsCard property={property} />
+            
+            {/* Location */}
+            <LocationCard property={property} />
+            
+            {/* Overview */}
+            <OverviewCard property={property} />
+            
+            {/* Description */}
+            <DescriptionCard 
+              description={property.description}
+              fallbackDescription={fallbackDescription}
+            />
+            
+            {/* Amenities */}
+            <AmenitiesCard amenities={amenities} />
+            
+            {/* Neighborhood */}
+            <NeighborhoodCard property={property} />
+
+            {/* Listed on */}
+            <div className="pt-6 border-t border-gray-200">
+              <div className="flex items-center text-sm text-gray-500">
+                <Calendar className="h-4 w-4 mr-2" />
+                Listed on {new Date(property.created_at).toLocaleDateString()}
+              </div>
             </div>
           </div>
         </section>
 
-        <section className="container mx-auto py-8 px-4 lg:px-8">
-          <div className="max-w-7xl mx-auto">
-            {/* Image Gallery */}
-            {property.images && property.images.length > 0 && (
-              <div className="mb-8">
-                <PropertyImageGallery 
-                  images={property.images} 
-                  propertyTitle={property.title}
-                />
-              </div>
-            )}
-
-            <div className="grid grid-cols-1 xl:grid-cols-4 gap-8">
-              {/* Left: Main Details */}
-              <div className="xl:col-span-3 space-y-6">
-                {/* Property Details Card */}
-                <div className="bg-card rounded-xl border-2 border-border shadow-lg shadow-red-200/50 hover:shadow-xl hover:shadow-red-300/60 transition-shadow duration-300 p-6">
-                  <h2 className="text-2xl font-bold mb-6 flex items-center">
-                    <Home className="h-6 w-6 mr-3 text-brand-red" />
-                    Property Details
-                  </h2>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="space-y-4">
-                      <div className="flex justify-between items-center py-2 border-b border-border">
-                        <span className="text-muted-foreground">Type</span>
-                        <span className="font-semibold capitalize">{property.property_type.replace('_', ' ')}</span>
-                      </div>
-                      {property.bhk_type && (
-                        <div className="flex justify-between items-center py-2 border-b border-border">
-                          <span className="text-muted-foreground">BHK</span>
-                          <span className="font-semibold">{property.bhk_type}</span>
-                        </div>
-                      )}
-                      {property.super_area && (
-                        <div className="flex justify-between items-center py-2 border-b border-border">
-                          <span className="text-muted-foreground">Super Area</span>
-                          <span className="font-semibold">{property.super_area} sqft</span>
-                        </div>
-                      )}
-                    </div>
-                    <div className="space-y-4">
-                      {property.carpet_area && (
-                        <div className="flex justify-between items-center py-2 border-b border-border">
-                          <span className="text-muted-foreground">Carpet Area</span>
-                          <span className="font-semibold">{property.carpet_area} sqft</span>
-                        </div>
-                      )}
-                      {property.bathrooms !== undefined && (
-                        <div className="flex justify-between items-center py-2 border-b border-border">
-                          <span className="text-muted-foreground">Bathrooms</span>
-                          <span className="font-semibold">{property.bathrooms}</span>
-                        </div>
-                      )}
-                      {property.balconies !== undefined && (
-                        <div className="flex justify-between items-center py-2 border-b border-border">
-                          <span className="text-muted-foreground">Balconies</span>
-                          <span className="font-semibold">{property.balconies}</span>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Location Card */}
-                <div className="bg-card rounded-xl border-2 border-border shadow-lg shadow-red-200/50 hover:shadow-xl hover:shadow-red-300/60 transition-shadow duration-300 p-6">
-                  <h2 className="text-2xl font-bold mb-6 flex items-center">
-                    <MapPin className="h-6 w-6 mr-3 text-brand-red" />
-                    Location
-                  </h2>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="space-y-4">
-                      <div className="flex justify-between items-center py-2 border-b border-border">
-                        <span className="text-muted-foreground">City</span>
-                        <span className="font-semibold">{property.city}</span>
-                      </div>
-                      <div className="flex justify-between items-center py-2 border-b border-border">
-                        <span className="text-muted-foreground">Locality</span>
-                        <span className="font-semibold">{property.locality}</span>
-                      </div>
-                    </div>
-                    <div className="space-y-4">
-                      <div className="flex justify-between items-center py-2 border-b border-border">
-                        <span className="text-muted-foreground">State</span>
-                        <span className="font-semibold">{property.state}</span>
-                      </div>
-                      <div className="flex justify-between items-center py-2 border-b border-border">
-                        <span className="text-muted-foreground">Pincode</span>
-                        <span className="font-semibold">{property.pincode}</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Overview Card */}
-                <div className="bg-card rounded-xl border-2 border-border shadow-lg shadow-red-200/50 hover:shadow-xl hover:shadow-red-300/60 transition-shadow duration-300 p-6">
-                  <h2 className="text-2xl font-bold mb-6">Overview</h2>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {overview.map((o, idx) => (
-                      <div key={idx} className="bg-muted/30 rounded-lg p-4 hover:bg-muted/50 transition-colors">
-                        <div className="text-muted-foreground text-sm mb-1">{o.label}</div>
-                        <div className="font-semibold">{o.value}</div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Services Card */}
-                <div className="bg-card rounded-xl border-2 border-border shadow-lg shadow-red-200/50 hover:shadow-xl hover:shadow-red-300/60 transition-shadow duration-300 p-6">
-                  <h2 className="text-2xl font-bold mb-6">Services</h2>
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                    <div className="flex flex-col items-center gap-3 bg-muted/30 rounded-lg p-4 hover:bg-muted/50 transition-colors cursor-pointer">
-                      <Paintbrush className="h-8 w-8 text-brand-red" />
-                      <span className="text-sm font-medium">Painting</span>
-                    </div>
-                    <div className="flex flex-col items-center gap-3 bg-muted/30 rounded-lg p-4 hover:bg-muted/50 transition-colors cursor-pointer">
-                      <Calculator className="h-8 w-8 text-brand-red" />
-                      <span className="text-sm font-medium">Estimate Cost</span>
-                    </div>
-                    <div 
-                      className="flex flex-col items-center gap-3 bg-muted/30 rounded-lg p-4 hover:bg-muted/50 transition-colors cursor-pointer"
-                      onClick={() => setShowLegalServicesModal(true)}
-                    >
-                      <FileText className="h-8 w-8 text-brand-red" />
-                      <span className="text-sm font-medium">Legal Services</span>
-                    </div>
-                    <div className="flex flex-col items-center gap-3 bg-muted/30 rounded-lg p-4 hover:bg-muted/50 transition-colors cursor-pointer">
-                      <ShieldCheck className="h-8 w-8 text-brand-red" />
-                      <span className="text-sm font-medium">Create Agreement</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Description Card */}
-                <div className="bg-card rounded-xl border-2 border-border shadow-lg shadow-red-200/50 hover:shadow-xl hover:shadow-red-300/60 transition-shadow duration-300 p-6">
-                  <h2 className="text-2xl font-bold mb-4">Description</h2>
-                  <p className="text-muted-foreground leading-relaxed mb-4">
-                    {descExpanded ? property.description || fallbackDescription : (property.description || fallbackDescription).slice(0, 320)}
-                    {(property.description || fallbackDescription).length > 320 && !descExpanded && '...'}
-                  </p>
-                  {(property.description || fallbackDescription).length > 320 && (
-                    <Button variant="outline" size="sm" onClick={() => setDescExpanded(v => !v)}>
-                      {descExpanded ? 'Show Less' : 'Show More'}
-                    </Button>
-                  )}
-                </div>
-
-                {/* Amenities Card */}
-                <div className="bg-card rounded-xl border-2 border-border shadow-lg shadow-red-200/50 hover:shadow-xl hover:shadow-red-300/60 transition-shadow duration-300 p-6">
-                  <h2 className="text-2xl font-bold mb-6">Amenities</h2>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
-                    {amenities.map(a => (
-                      <div key={a} className="bg-muted/30 rounded-lg p-3 text-center text-sm font-medium hover:bg-muted/50 transition-colors">
-                        {a}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Neighborhood Card */}
-                <div className="bg-card rounded-xl border-2 border-border shadow-lg shadow-red-200/50 hover:shadow-xl hover:shadow-red-300/60 transition-shadow duration-300 p-6">
-                  <h2 className="text-2xl font-bold mb-6">Neighborhood</h2>
-                  <div className="w-full h-80 rounded-xl overflow-hidden border mb-6">
-                    <iframe 
-                      title="map" 
-                      width="100%" 
-                      height="100%" 
-                      loading="lazy" 
-                      src={`https://www.google.com/maps?q=${encodeURIComponent(`${property.locality}, ${property.city}`)}&output=embed`} 
-                    />
-                  </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-                    <div className="space-y-3">
-                      <div className="font-bold text-lg">Transit</div>
-                      <div className="space-y-2 text-muted-foreground">
-                        <div className="flex items-center gap-2">
-                          <Bus className="h-4 w-4" />
-                          <span>Bus Stations nearby</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <Train className="h-4 w-4" />
-                          <span>Metro Stations nearby</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <Car className="h-4 w-4" />
-                          <span>Parking available</span>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="space-y-3">
-                      <div className="font-bold text-lg">Essentials</div>
-                      <div className="space-y-1 text-muted-foreground">
-                        <div>Schools, Hospitals, ATMs</div>
-                        <div>Parks and Markets</div>
-                      </div>
-                    </div>
-                    <div className="space-y-3">
-                      <div className="font-bold text-lg">Utilities</div>
-                      <div className="space-y-1 text-muted-foreground">
-                        <div>24x7 Water supply</div>
-                        <div>Power backup</div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Listed on */}
-                <div className="pt-6 border-t border-border">
-                  <div className="flex items-center text-sm text-muted-foreground">
-                    <Calendar className="h-4 w-4 mr-2" />
-                    Listed on {new Date(property.created_at).toLocaleDateString()}
-                  </div>
-                </div>
-              </div>
-
-              {/* Right: Sticky Sidebar */}
-              <aside className="xl:col-span-1">
-                <div className="sticky top-8 space-y-6">
-                  {/* Price Card */}
-                  <div className="bg-card rounded-xl border shadow-lg p-6">
-                    <div className="text-center">
-                      <div className="text-3xl font-bold text-brand-red mb-2">
-                        ₹{property.expected_price.toLocaleString()}
-                      </div>
-                      <div className="text-muted-foreground text-sm">
-                        {property.listing_type === 'sale' ? 'Total Price' : 'Monthly Rent'}
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Contact Card */}
-                  <div className="bg-card rounded-xl border shadow-lg p-6 space-y-4">
-                    <h3 className="text-xl font-bold flex items-center">
-                      <User className="h-5 w-5 mr-2 text-brand-red" />
-                      Contact Owner
-                    </h3>
-                    <p className="text-muted-foreground text-sm">
-                      Interested in this property? Contact the owner through our secure platform.
-                    </p>
-                    <Button 
-                      className="w-full" 
-                      size="lg"
-                      onClick={() => setShowContactModal(true)}
-                    >
-                      Get Owner Details
-                    </Button>
-                  </div>
-
-                  {/* Quick Actions */}
-                  <div className="bg-card rounded-xl border shadow-lg p-6 space-y-4">
-                    <h3 className="text-lg font-semibold">Quick Actions</h3>
-                    <div className="space-y-2">
-                      <Button 
-                        variant="outline" 
-                        className="w-full justify-start" 
-                        size="sm"
-                        onClick={() => setShowScheduleVisitModal(true)}
-                      >
-                        <TrendingUp className="h-4 w-4 mr-2" />
-                        Schedule Visit
-                      </Button>
-                      <Button 
-                        variant="outline" 
-                        className="w-full justify-start" 
-                        size="sm"
-                        onClick={() => setShowEMICalculatorModal(true)}
-                      >
-                        <Calculator className="h-4 w-4 mr-2" />
-                        EMI Calculator
-                      </Button>
-                      <Button 
-                        variant="outline" 
-                        className="w-full justify-start" 
-                        size="sm"
-                        onClick={() => setShowLegalServicesModal(true)}
-                      >
-                        <FileText className="h-4 w-4 mr-2" />
-                        Legal Check
-                      </Button>
-                    </div>
-                  </div>
-
-                  {/* Back Button */}
-                  <Button 
-                    variant="outline" 
-                    className="w-full" 
-                    onClick={() => navigate(-1)}
-                  >
-                    ← Back to Search
-                  </Button>
-                </div>
-              </aside>
-            </div>
-          </div>
-        </section>
+        {/* Mobile Sticky CTA */}
+        <MobileStickyCTA onContactOwner={() => setShowContactModal(true)} />
       </main>
       
       {/* Contact Modal */}
