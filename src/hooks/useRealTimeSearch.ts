@@ -305,6 +305,9 @@ export const useRealTimeSearch = () => {
       result = result.filter(property => property.propertyType === 'Plots');
     } else if (activeTab === 'new-launch') {
       result = result.filter(property => property.ageOfProperty === 'New Project');
+    } else if (activeTab === 'pg' || activeTab === 'projects') {
+      // No properties available for PG/Co-living and Projects sections
+      result = [];
     }
     // 'buy' shows all residential properties (default)
 
