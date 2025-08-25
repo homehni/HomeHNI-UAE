@@ -69,6 +69,18 @@ import Architecture from "./pages/Architects";
 import Interior from "./pages/Interior";
 import Loans from "./pages/Loans";
 import AboutSidebar from "./pages/AboutSidebar";
+import NRIServices from "./pages/NRIServices";
+import NewProjects from "./pages/NewProjects";
+import BuyersForum from "./pages/BuyersForum";
+import BuyersGuide from "./pages/BuyersGuide";
+import SellersGuide from "./pages/SellersGuide";
+import NRIGuide from "./pages/NRIGuide";
+import NRIQueries from "./pages/NRIQueries";
+import RentalHelp from "./pages/RentalHelp";
+import RentCalculator from "./pages/RentCalculator";
+import RentalGuide from "./pages/RentalGuide";
+import LandlordGuide from "./pages/LandlordGuide";
+import TenantGuide from "./pages/TenantGuide";
 import PropertyDetails from "./pages/PropertyDetails";
 import PropertySearch from "./pages/PropertySearch";
 import PagePreview from "./pages/PagePreview";
@@ -131,6 +143,20 @@ const App: React.FC = () => {
             <Route path="/architects" element={<Architecture />} />
             <Route path="/interior" element={<Interior />} />
             <Route path="/loans" element={<Loans />} />
+            
+            {/* Service Pages */}
+            <Route path="/nri-services" element={<NRIServices />} />
+            <Route path="/new-projects" element={<NewProjects />} />
+            <Route path="/buyers-forum" element={<BuyersForum />} />
+            <Route path="/buyers-guide" element={<BuyersGuide />} />
+            <Route path="/sellers-guide" element={<SellersGuide />} />
+            <Route path="/nri-guide" element={<NRIGuide />} />
+            <Route path="/nri-queries" element={<NRIQueries />} />
+            <Route path="/rental-help" element={<RentalHelp />} />
+            <Route path="/rent-calculator" element={<RentCalculator />} />
+            <Route path="/rental-guide" element={<RentalGuide />} />
+            <Route path="/landlord-guide" element={<LandlordGuide />} />
+            <Route path="/tenant-guide" element={<TenantGuide />} />
             
             {/* Authentication Routes */}
             <Route path="/auth" element={<Auth />} />

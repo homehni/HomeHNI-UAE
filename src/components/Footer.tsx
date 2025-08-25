@@ -110,7 +110,19 @@ const Footer = ({
       'Full House Cleaning Services': '/painting-cleaning',
       'Home Cleaning Guide': '/painting-cleaning',
       'Home Services': '/service-suite',
-      'Home Services Queries': '/service-suite'
+      'Home Services Queries': '/service-suite',
+      'NoBroker For NRI\'s': '/nri-services',
+      'New Builder Project': '/new-projects',
+      'Property Buyers Forum': '/buyers-forum',
+      'Property Buyers Guide': '/buyers-guide',
+      'Property Seller Guide': '/sellers-guide',
+      'NRI Real Estate Guide': '/nri-guide',
+      'NRI Real Estate Queries': '/nri-queries',
+      'Rental Questions': '/rental-help',
+      'Rent Calculator': '/rent-calculator',
+      'Property Rental Guide': '/rental-guide',
+      'Landlord Guide': '/landlord-guide',
+      'Tenant Guide': '/tenant-guide'
     };
 
     // If the service has a dedicated page, navigate there
