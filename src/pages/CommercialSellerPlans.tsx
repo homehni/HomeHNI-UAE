@@ -108,7 +108,7 @@ const CommercialSellerPlans = () => {
       >
         <div className="container mx-auto px-4 text-center">
           <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
-            🏢 Get Commercial Property Seller Support!
+             Get Commercial Property Seller Support!
           </h1>
           <p className="text-xl md:text-2xl mb-4 text-red-100">
             ⭐️⭐️⭐️⭐️⭐️ — Trusted by 3 Lacs+ Sellers like you!
@@ -127,7 +127,7 @@ const CommercialSellerPlans = () => {
       <section id="pricing" className="py-16 px-4 bg-gray-50">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-4 text-gray-900">
-            🛍️ Commercial Seller Plans
+             Commercial Seller Plans
           </h2>
       
           
@@ -203,7 +203,7 @@ const CommercialSellerPlans = () => {
       <section className="py-16 px-4 bg-gray-50">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-gray-900">
-            🌟 What Our Sellers Say
+             What Our Sellers Say
           </h2>
           <div className="grid md:grid-cols-3 gap-8">
             {testimonials.map((testimonial, index) => <Card key={index} className="bg-white shadow-lg hover:shadow-xl transition-shadow">
@@ -229,7 +229,7 @@ const CommercialSellerPlans = () => {
       <section className="py-16 px-4 bg-white">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-gray-900">
-            ❓ Frequently Asked Questions
+             Frequently Asked Questions
           </h2>
           <Accordion type="single" collapsible className="w-full">
             {faqs.map((faq, index) => <AccordionItem key={index} value={`item-${index}`}>
