@@ -206,10 +206,10 @@ const Interior = () => {
                 <Input id="design-phone" name="phone" type="tel" placeholder="Phone Number" className="flex-1" required />
               </div>
 
-              <Input id="design-email" name="email" type="email" placeholder="Email ID" />
+              <Input id="design-email" name="email" type="email" placeholder="Email ID" required />
 
               <div className="flex gap-2">
-                <Select name="spaceType">
+                <Select name="spaceType" required>
                   <SelectTrigger id="space-type" className="flex-1"><SelectValue placeholder="Space Type" /></SelectTrigger>
                   <SelectContent>
                     <SelectItem value="home">Home Interior</SelectItem>
@@ -221,7 +221,7 @@ const Interior = () => {
                     <SelectItem value="other">Others</SelectItem>
                   </SelectContent>
                 </Select>
-                <Input id="design-budget" name="budget" placeholder="Budget Range (₹)" className="flex-1" />
+                <Input id="design-budget" name="budget" placeholder="Budget Range (₹)" className="flex-1" required />
               </div>
 
               <div className="flex gap-2">
@@ -324,10 +324,11 @@ const Interior = () => {
                   type="email" 
                   placeholder="Email ID" 
                   className="h-12 text-base bg-background"
+                  required
                 />
 
                 <div className="flex gap-3">
-                  <Select name="spaceType">
+                  <Select name="spaceType" required>
                     <SelectTrigger id="space-type-mobile" className="flex-1 h-12 bg-background">
                       <SelectValue placeholder="Space Type" />
                     </SelectTrigger>
@@ -345,6 +346,7 @@ const Interior = () => {
                     name="budget" 
                     placeholder="Budget Range (₹)" 
                     className="flex-1 h-12 text-base bg-background"
+                    required
                   />
                 </div>
 

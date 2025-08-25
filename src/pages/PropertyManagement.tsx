@@ -199,7 +199,7 @@ const PropertyManagement = () => {
                 <Input id="pm-phone" name="phone" type="tel" placeholder="Phone Number" className="flex-1" required />
               </div>
 
-              <Input id="pm-email" name="email" type="email" placeholder="Email ID" />
+              <Input id="pm-email" name="email" type="email" placeholder="Email ID" required />
 
               <div className="flex gap-2">
                 <Select name="country">
@@ -281,7 +281,7 @@ const PropertyManagement = () => {
                   <Input id="pm-phone-mobile" name="phone" type="tel" placeholder="Phone Number" className="flex-1 h-12 text-base bg-background" required />
                 </div>
 
-                <Input id="pm-email-mobile" name="email" type="email" placeholder="Email ID" className="h-12 text-base bg-background" />
+                <Input id="pm-email-mobile" name="email" type="email" placeholder="Email ID" className="h-12 text-base bg-background" required />
 
                 <div className="flex gap-3">
                   <Select name="country">

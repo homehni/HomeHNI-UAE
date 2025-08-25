@@ -199,10 +199,10 @@ const Architects = () => {
                 <Input id="arch-phone" name="phone" type="tel" placeholder="Phone Number" className="flex-1" required />
               </div>
 
-              <Input id="arch-email" name="email" type="email" placeholder="Email ID" />
+              <Input id="arch-email" name="email" type="email" placeholder="Email ID" required />
 
               <div className="flex gap-2">
-                <Select name="projectType">
+                <Select name="projectType" required>
                   <SelectTrigger id="arch-project-type" className="flex-1"><SelectValue placeholder="Project Type" /></SelectTrigger>
                   <SelectContent>
                     <SelectItem value="residential">Residential Design</SelectItem>
@@ -298,10 +298,10 @@ const Architects = () => {
                   <Input id="arch-phone-mobile" name="phone" type="tel" placeholder="Phone Number" className="flex-1 h-12 text-base bg-background" required />
                 </div>
 
-                <Input id="arch-email-mobile" name="email" type="email" placeholder="Email ID" className="h-12 text-base bg-background" />
+                <Input id="arch-email-mobile" name="email" type="email" placeholder="Email ID" className="h-12 text-base bg-background" required />
 
                 <div className="flex gap-3">
-                  <Select name="projectType">
+                  <Select name="projectType" required>
                     <SelectTrigger id="arch-project-type-mobile" className="flex-1 h-12 bg-background">
                       <SelectValue placeholder="Project Type" />
                     </SelectTrigger>
