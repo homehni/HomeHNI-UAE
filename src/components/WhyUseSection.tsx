@@ -1,4 +1,4 @@
-import { FileText, Home, Heart, Edit, Building, Palette, Globe } from 'lucide-react';
+import { FileText, Home, Heart, Edit, Building, Palette, Globe, Banknote, Scale } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useCMSContent } from '@/hooks/useCMSContent';
 
@@ -20,15 +20,13 @@ const WhyUseSection = () => {
     link: "/rental-agreement"
   }, {
     icon: <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
-        <div className="w-6 h-6 bg-red-500 rounded-full flex items-center justify-center">
-          <span className="text-white text-xs">₹</span>
-        </div>
+        <Banknote className="w-6 h-6 text-gray-600" />
       </div>,
     title: "Home Loan",
     link: "/loans"
   }, {
     icon: <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
-        <Edit className="w-6 h-6 text-gray-600" />
+        <Scale className="w-6 h-6 text-gray-600" />
       </div>,
     title: "Property Legal Services",
     link: "/legal-services"
@@ -98,7 +96,7 @@ const WhyUseSection = () => {
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 mb-16">
           {topServices.map((service, index) => 
             <Link key={index} to={service.link} className="card-border hover-lift p-4 bg-white block transition-transform">
-              <div className="relative inline-block mb-3 text-uniform-center w-full">
+              <div className="relative flex items-center justify-center mb-3 w-full">
                 {service.icon}
                 {service.badge && <span className={`absolute -top-2 -right-2 px-2 py-1 text-xs rounded-full text-white ${service.badge === "Sale is live!" ? "bg-green-500" : "bg-orange-500"}`}>
                     {service.badge}
