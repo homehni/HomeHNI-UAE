@@ -64,7 +64,7 @@ export function TrustMetricsRow() {
 }
 
 export function VideoTile({ 
-  thumbnail = "/lovable-uploads/fbb0d72f-782e-49f5-bbe1-8afc1314b5f7.png", 
+  thumbnail = "/lovable-uploads/c996469f-4da3-4235-b9fc-d1152fe010e8.png", 
   duration = "2:13", 
   title = "Customer Success Stories" 
 }) {
@@ -119,7 +119,7 @@ export function TestimonialCard({
   initial 
 }) {
   return (
-    <div className="rounded-2xl border border-gray-200 bg-white shadow-sm hover:shadow-md transition-shadow p-6 h-auto min-h-[240px] flex flex-col">
+    <div className="rounded-2xl border border-gray-200 bg-white shadow-sm hover:shadow-md transition-shadow p-4 sm:p-6 min-h-[280px] sm:min-h-[240px] flex flex-col">
       {/* Header */}
       <div className="flex items-start gap-3 mb-4">
         <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center flex-shrink-0">
@@ -148,10 +148,10 @@ export function TestimonialCard({
         </div>
       </div>
 
-      {/* Quote - Full text without truncation */}
-      <div className="flex-1">
-        <p className="text-gray-700 text-sm leading-relaxed">
-          {text}
+      {/* Quote - Full text with proper spacing */}
+      <div className="flex-1 flex items-start">
+        <p className="text-gray-700 text-sm leading-relaxed text-left">
+          "{text}"
         </p>
       </div>
     </div>
@@ -167,72 +167,92 @@ function AutoScrollTestimonials() {
 
     let currentIndex = 0;
     let isScrolling = false;
+    let intervalId: NodeJS.Timeout;
 
-    const getCardWidth = () => {
-      const firstCard = scrollContainer.querySelector('.testimonial-card');
-      return firstCard ? firstCard.getBoundingClientRect().width : 0;
+    const getScrollWidth = () => {
+      const containerWidth = scrollContainer.offsetWidth;
+      // Calculate width based on responsive classes
+      if (window.innerWidth >= 768) {
+        // md and up - cards are 75% width
+        return containerWidth * 0.75 + 16; // 75% + gap
+      } else {
+        // mobile - cards are 90% width  
+        return containerWidth * 0.9 + 16; // 90% + gap
+      }
     };
 
-    const autoScroll = () => {
-      if (isScrolling || !scrollContainer) return;
+    const scrollToIndex = (index: number) => {
+      if (!scrollContainer || isScrolling) return;
       
       isScrolling = true;
-      const cardWidth = getCardWidth();
-      const gap = 16;
-      
-      currentIndex = (currentIndex + 1) % testimonials.length;
-      const scrollPosition = currentIndex * (cardWidth + gap);
+      const scrollWidth = getScrollWidth();
+      const scrollPosition = index * scrollWidth;
       
       scrollContainer.scrollTo({
         left: scrollPosition,
         behavior: 'smooth'
       });
 
-      // Reset scrolling flag after animation
+      // Reset scrolling flag after animation completes
       setTimeout(() => {
         isScrolling = false;
-      }, 800);
+      }, 600);
     };
 
-    // Start auto-scrolling after initial load
-    const startDelay = setTimeout(() => {
-      const interval = setInterval(autoScroll, 5000);
+    const autoScroll = () => {
+      if (isScrolling) return;
       
-      return () => {
-        clearInterval(interval);
-        clearTimeout(startDelay);
-      };
+      currentIndex = (currentIndex + 1) % testimonials.length;
+      scrollToIndex(currentIndex);
+    };
+
+    // Start auto-scrolling after initial delay
+    const startTimer = setTimeout(() => {
+      intervalId = setInterval(autoScroll, 4000);
     }, 2000);
 
+    // Handle resize to recalculate scroll positions
+    const handleResize = () => {
+      if (!isScrolling) {
+        scrollToIndex(currentIndex);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+
     return () => {
-      clearTimeout(startDelay);
+      clearTimeout(startTimer);
+      if (intervalId) clearInterval(intervalId);
+      window.removeEventListener('resize', handleResize);
     };
   }, []);
 
   return (
-    <div 
-      ref={scrollRef}
-      className="overflow-x-auto -mx-4 px-4 pb-2"
-      style={{ 
-        scrollbarWidth: 'none', 
-        msOverflowStyle: 'none',
-        WebkitOverflowScrolling: 'touch'
-      }}
-    >
-      <style dangerouslySetInnerHTML={{
-        __html: `
-          .testimonial-container::-webkit-scrollbar {
-            display: none;
-          }
-        `
-      }} />
-      <div className="flex gap-4 testimonial-container">
-        {testimonials.map((testimonial, index) => (
-          <div key={index} className="min-w-[90%] sm:min-w-[75%] md:min-w-[60%] flex-shrink-0 testimonial-card">
-            <TestimonialCard {...testimonial} />
-          </div>
-        ))}
+    <div className="relative">
+      <div 
+        ref={scrollRef}
+        className="overflow-x-auto -mx-4 px-4 pb-2 scrollbar-hide"
+        style={{ 
+          scrollbarWidth: 'none', 
+          msOverflowStyle: 'none',
+          WebkitOverflowScrolling: 'touch'
+        }}
+      >
+        <div className="flex gap-4">
+          {testimonials.map((testimonial, index) => (
+            <div key={index} className="w-[90%] md:w-[75%] flex-shrink-0 testimonial-card">
+              <TestimonialCard {...testimonial} />
+            </div>
+          ))}
+        </div>
       </div>
+      
+      {/* Hide scrollbar with CSS */}
+      <style jsx>{`
+        .scrollbar-hide::-webkit-scrollbar {
+          display: none;
+        }
+      `}</style>
     </div>
   );
 }
