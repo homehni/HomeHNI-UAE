@@ -90,7 +90,7 @@ const OwnerPlans = () => {
   ];
 
   const testimonials = [{
-    text: "NoBroker's customer service was impressively prompt and friendly. Listing my flat was a memorable experience.",
+    text: "Home HNI's customer service was impressively prompt and friendly. Listing my flat was a memorable experience.",
     hashtag: "#ZeroBrokerage"
   }, {
     text: "The premium plan helped me get the best deal for a PG in a very short time!",
