@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef } from 'react';
 import { Home, Building, TrendingUp, MapPin, Users, ShoppingBag, Briefcase, BarChart3, Building2, PlusCircle } from 'lucide-react';
 
