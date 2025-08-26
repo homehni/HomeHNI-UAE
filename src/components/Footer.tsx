@@ -1,6 +1,7 @@
 import { MapPin, Phone, Mail, Facebook, Twitter, Instagram, Linkedin } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
+import { useState } from 'react';
 interface FooterProps {
   searchSectionRef?: React.RefObject<{
     focusSearchInput: () => void;
@@ -13,6 +14,8 @@ const Footer = ({
     user
   } = useAuth();
   const navigate = useNavigate();
+  const [activeTab, setActiveTab] = useState('Properties & Flats for Sale');
+  
   const handlePostPropertyClick = () => {
     if (user) {
       navigate('/post-property');
@@ -42,20 +45,47 @@ const Footer = ({
   };
   const propertyListings = [{
     title: "Properties & Flats for Sale",
-    links: ["Flats for Sale in Koramangala", "Flats for Sale in Marathahalli", "Flats for Sale in HSR Layout", "Flats for Sale in Whitefield", "Flats for Sale in Indira Nagar", "Flats for Sale in Bellandur", "Flats for Sale in Chandra Layout", "Flats for Sale in J.P Nagar", "Flats for Sale in BTM Layout", "Flats for Sale in Jayanagar", "Flats for Sale Below 30 Lakhs in Bangalore", "Flats for Sale Between 50-90 Lakhs", "Flats for Sale Between 90 Lakhs-1 Crore", "Flats for Sale Below 50 Lakhs in Bangalore", "Flats for Sale Below 30 Lakhs in Bangalore", "Properties for Sale in Bangalore"]
+    cityData: {
+      "Flats for Sale in Bangalore": ["Flats for Sale in Koramangala", "Flats for Sale in Marathahalli", "Flats for Sale in HSR Layout", "Flats for Sale in Whitefield", "Flats for Sale in Indira Nagar", "Flats for Sale in Bellandur", "Flats for Sale in Chandra Layout", "Flats for Sale in J.P Nagar", "Flats for Sale in BTM Layout", "Flats for Sale in Jayanagar", "Flats for Sale Below 30 Lakhs in Bangalore", "Flats for Sale Between 50-90 Lakhs", "Flats for Sale Between 90 Lakhs-1 Crore", "Flats for Sale Below 50 Lakhs in Bangalore", "Properties for Sale in Bangalore"],
+      "Flats for Sale in Mumbai": ["Flats for Sale in Andheri West", "Flats for Sale in Andheri East", "Flats for Sale in Malad West", "Flats for Sale in Navi Mumbai", "Flats for Sale in Powai", "Flats for Sale in Vashi", "Flats for Sale in Mira Road East", "Flats for Sale in Bhayander", "Flats for Sale in Kandivali", "Flats for Sale in Borivali West", "Flats for Sale Below 1 Cr in Mumbai", "Flats for Sale in Thane", "Flats for Sale Below 2 Cr in Mumbai", "Properties for Sale in Mumbai"],
+      "Flats for Sale in Hyderabad": ["Flats for Sale in Banjara Hills", "Flats for Sale in Jubilee Hills", "Flats for Sale in Madhapur", "Flats for Sale in Kukatpally", "Flats for Sale in Gachibowli", "Flats for Sale in Secunderabad", "Flats for Sale in Miyapur", "Flats for Sale in Himayatnagar", "Flats for Sale in Ameerpet", "Flats for Sale Below 65 Lakhs in Hyderabad", "Flats for Sale Below 50 Lakhs in Hyderabad", "Properties for Sale in Hyderabad"]
+    }
   }, {
     title: "Flats for Rent",
-    links: ["Flats for Sale in Andrew West", "Flats for Sale in Andrew East", "Flats for Sale in Malad West", "Flats for Sale in New Mumbai", "Flats for Sale in Powai", "Flats for Sale in Vashi West", "Flats for Sale in Mira Road East", "Flats for Sale in Bhayander", "Flats for Sale in Kandivali", "Flats for Sale in Borivali West", "Flats for Sale Below 30 Lakhs in Mumbai", "Flats for Sale Below 30 Lakhs in Mumbai", "Flats for Sale in Thane", "Flats for Sale Below 30 Lakhs in Mumbai", "Flats for Sale Below 2 Cr in Mumbai", "Properties for Sale in Mumbai"]
+    cityData: {
+      "Flats for Rent in Bangalore": ["Flats for Rent in Koramangala", "Flats for Rent in Marathahalli", "Flats for Rent in HSR Layout", "Flats for Rent in Whitefield", "Flats for Rent in Indira Nagar", "Flats for Rent in Bellandur", "Flats for Rent in Electronic City", "Flats for Rent in BTM Layout", "Flats for Rent in Jayanagar", "1 BHK for Rent in Bangalore", "2 BHK for Rent in Bangalore", "3 BHK for Rent in Bangalore"],
+      "Flats for Rent in Mumbai": ["Flats for Rent in Andheri West", "Flats for Rent in Andheri East", "Flats for Rent in Malad West", "Flats for Rent in Navi Mumbai", "Flats for Rent in Powai", "Flats for Rent in Vashi", "Flats for Rent in Kandivali", "Flats for Rent in Borivali", "1 BHK for Rent in Mumbai", "2 BHK for Rent in Mumbai", "3 BHK for Rent in Mumbai"],
+      "Flats for Rent in Hyderabad": ["Flats for Rent in Banjara Hills", "Flats for Rent in Jubilee Hills", "Flats for Rent in Madhapur", "Flats for Rent in Kukatpally", "Flats for Rent in Gachibowli", "Flats for Rent in Secunderabad", "Flats for Rent in Miyapur", "1 BHK for Rent in Hyderabad", "2 BHK for Rent in Hyderabad", "3 BHK for Rent in Hyderabad"]
+    }
   }, {
     title: "PG / Hostels",
-    links: ["Flats for Sale in Velachery", "Flats for Sale in Thiruvanmiyur", "Flats for Sale in Madipakkam", "Flats for Sale in Thiruvanmiyur", "Flats for Sale in Sholinganallur", "Flats for Sale in Maduravoyal", "Flats for Sale in Mylapore", "Flats for Sale in Adyar", "Flats for Sale in T Nagar", "Flats for Sale in Perungudi", "Flats for Sale Chennai Below 40 Lakhs", "Flats for Sale in Chennai Below 40 Lakhs", "Flats for Sale Below 30 Lakhs in Chennai", "Flats for Sale Below 70 Lakhs in Chennai", "Flats for Sale Below 90 Lakhs in Chennai", "Flats for Sale Below 90 Lakhs in Chennai", "Properties for Sale in Chennai"]
+    cityData: {
+      "PG in Bangalore": ["PG for Boys in Koramangala", "PG for Girls in Marathahalli", "PG near HSR Layout", "PG near Whitefield", "PG near Electronic City", "PG near BTM Layout", "PG near Jayanagar", "Shared PG in Bangalore", "Single Room PG in Bangalore", "Double Sharing PG in Bangalore"],
+      "PG in Mumbai": ["PG for Boys in Andheri", "PG for Girls in Malad", "PG near Powai", "PG near Vashi", "PG near Kandivali", "PG near Borivali", "Shared PG in Mumbai", "Single Room PG in Mumbai", "Double Sharing PG in Mumbai"],
+      "PG in Hyderabad": ["PG for Boys in Madhapur", "PG for Girls in Gachibowli", "PG near Kukatpally", "PG near Secunderabad", "PG near Miyapur", "Shared PG in Hyderabad", "Single Room PG in Hyderabad", "Double Sharing PG in Hyderabad"]
+    }
   }, {
     title: "Flatmates",
-    links: ["Flats for Sale in Wakad", "Flats for Sale in Kharadi", "Flats for Sale in Baner", "Flats for Sale in Hadapsar", "Flats for Sale in Aundh", "Flats for Sale in Kondivad", "Flats for Sale in Pimple Saudagar", "Flats for Sale in Viman Nagar", "Flats for Sale in Pimpri", "Flats for Sale in Hinjewadi", "Flats for Sale Below 40 Lakhs", "Flats for Sale Below 50 Lakhs", "Flats for Sale Below 30 Lakhs in Pune", "Flats for Sale Below 70 Lakhs in Pune", "Flats for Sale Below 90 Lakhs in Pune", "Flats for Sale 90 Lakhs in Pune", "Properties for Sale in Pune"]
+    cityData: {
+      "Flatmates in Bangalore": ["Flatmates in Koramangala", "Flatmates in Marathahalli", "Flatmates in HSR Layout", "Flatmates in Whitefield", "Flatmates in Electronic City", "Flatmates in BTM Layout", "Male Roommates in Bangalore", "Female Roommates in Bangalore", "Working Professional Roommates"],
+      "Flatmates in Mumbai": ["Flatmates in Andheri", "Flatmates in Malad", "Flatmates in Powai", "Flatmates in Vashi", "Flatmates in Kandivali", "Male Roommates in Mumbai", "Female Roommates in Mumbai", "Working Professional Roommates Mumbai"],
+      "Flatmates in Hyderabad": ["Flatmates in Madhapur", "Flatmates in Gachibowli", "Flatmates in Kukatpally", "Flatmates in Secunderabad", "Male Roommates in Hyderabad", "Female Roommates in Hyderabad", "Working Professional Roommates Hyderabad"]
+    }
   }, {
     title: "Miscellaneous",
-    links: ["1 BHK Flats in Gurgaon", "2 BHK Flats in Gurgaon", "3 BHK Flats in Gurgaon", "4 BHK Flats in Gurgaon", "As BHK in Gurgaon", "Independent Flats in Gurgaon", "Semi Furnished Flats in Gurgaon", "Unfurnished Flats in Gurgaon", "Independent Flats for Sale in Gurgaon", "Independent Houses for Sale in Gurgaon", "Flats for Sale Below 20 Lakhs in Gurgaon", "Flats for Sale Below 10 Lakhs in Gurgaon", "Flats for Sale in Gurgaon", "Flats for Sale Below 50 Lakhs in Gurgaon", "Properties for Sale in Gurgaon", "Properties for Sale in Sector 51", "Properties for Sale in Sector 4"]
+    cityData: {
+      "Commercial Properties": ["Office Space for Rent in Bangalore", "Office Space for Sale in Mumbai", "Retail Space in Hyderabad", "Warehouse for Rent", "Co-working Spaces", "Business Centers", "Industrial Plots", "Commercial Land"],
+      "Investment Properties": ["Investment Properties in Bangalore", "Investment Properties in Mumbai", "Investment Properties in Hyderabad", "High ROI Properties", "Pre-launch Projects", "Under Construction Properties"],
+      "Luxury Properties": ["Luxury Villas in Bangalore", "Luxury Apartments in Mumbai", "Premium Properties in Hyderabad", "Penthouses", "Villa Communities", "Gated Communities"]
+    }
   }];
+
+  const tabs = propertyListings.map(section => section.title);
+
+  const getActiveTabData = () => {
+    const activeSection = propertyListings.find(section => section.title === activeTab);
+    return activeSection ? activeSection.cityData : {};
+  };
   const cityListings = [{
     title: "Flats for Sale in Bangalore",
     links: ["Properties for Sale in Koramangala", "Properties for Sale in Whitefield", "Independent Floor for Sale in Bangalore"]
@@ -187,18 +217,47 @@ const Footer = ({
   };
   return <footer className="bg-white text-gray-700 border-t">
       <div className="container mx-auto px-4 py-8">
-        {/* Property listings grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6 mb-8">
-          {propertyListings.map((section, index) => <div key={index}>
-              <h4 className="font-semibold text-gray-900 mb-3 text-sm">{section.title}</h4>
-              <ul className="space-y-1">
-                {section.links.map((link, linkIndex) => <li key={linkIndex}>
-                    <button onClick={() => handleLinkClick(link)} className="text-xs text-gray-600 hover:text-brand-red transition-colors leading-relaxed text-left">
-                      {link}
-                    </button>
-                  </li>)}
-              </ul>
-            </div>)}
+        {/* Tabbed Property Listings Section */}
+        <div className="mb-8">
+          {/* Tab Navigation */}
+          <div className="border-b border-gray-200 mb-6">
+            <div className="flex flex-wrap gap-0">
+              {tabs.map((tab, index) => (
+                <button
+                  key={index}
+                  onClick={() => setActiveTab(tab)}
+                  className={`px-4 py-3 text-sm font-medium border-b-2 transition-colors ${
+                    activeTab === tab
+                      ? 'border-brand-red text-brand-red bg-brand-red/5'
+                      : 'border-transparent text-gray-600 hover:text-gray-900 hover:border-gray-300'
+                  }`}
+                >
+                  {tab}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Tab Content */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {Object.entries(getActiveTabData()).map(([cityTitle, links], index) => (
+              <div key={index}>
+                <h4 className="font-semibold text-gray-900 mb-3 text-sm">{cityTitle}</h4>
+                <ul className="space-y-1">
+                  {(links as string[]).map((link, linkIndex) => (
+                    <li key={linkIndex}>
+                      <button 
+                        onClick={() => handleLinkClick(link)} 
+                        className="text-xs text-gray-600 hover:text-brand-red transition-colors leading-relaxed text-left"
+                      >
+                        {link}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* Additional city listings */}
