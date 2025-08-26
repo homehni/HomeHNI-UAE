@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -32,6 +33,7 @@ interface UserPreferences {
   propertyType?: string;
   bedrooms?: string;
   language?: string;
+  role?: string;
 }
 
 const sampleProperties: PropertyData[] = [
@@ -71,19 +73,20 @@ const sampleProperties: PropertyData[] = [
 ];
 
 const ChatBot = () => {
+  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
-      text: 'Hello! I\'m your AI real estate assistant. I can help you find properties, schedule visits, and answer your questions. How can I assist you today?',
+      text: 'Hello! I\'m your AI real estate assistant. I can help you with all your property needs. Let me know your role to get started:',
       isBot: true,
       timestamp: new Date(),
-      options: ['Find Properties', 'Schedule Visit', 'Market Insights', 'Price Trends']
+      options: ['Seller', 'Agent', 'Builder', 'Want to buy a property']
     }
   ]);
   const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
-  const [conversationStep, setConversationStep] = useState('greeting');
+  const [conversationStep, setConversationStep] = useState('role_selection');
   const [userPreferences, setUserPreferences] = useState<UserPreferences>({});
   const [currentLanguage, setCurrentLanguage] = useState('english');
   const [userName, setUserName] = useState('');
@@ -106,6 +109,24 @@ const ChatBot = () => {
     await simulateBotResponse(inputValue);
   };
 
+  const propertyTypes = [
+    'Flat/Apartment', 
+    'Independent House',
+    'Villa',
+    'Commercial Space',
+    'Plot/Land'
+  ];
+
+  const budgetRanges = [
+    { label: 'Under 50L', value: [0, 5000000] },
+    { label: '50L-1Cr', value: [5000000, 10000000] },
+    { label: '1-2Cr', value: [10000000, 20000000] },
+    { label: '2-5Cr', value: [20000000, 50000000] },
+    { label: '5Cr+', value: [50000000, 100000000] }
+  ];
+
+  const availableLocations = ['Noida', 'Gurgaon', 'Mumbai', 'Bangalore', 'Delhi', 'Hyderabad', 'Chennai', 'Pune'];
+
   const simulateBotResponse = async (userMessage: string) => {
     return new Promise((resolve) => {
       setTimeout(() => {
@@ -124,87 +145,117 @@ const ChatBot = () => {
           setIsTyping(false);
           let finalResponse: Message;
 
-          if (conversationStep === 'greeting') {
-            if (userMessage.toLowerCase().includes('find properties')) {
-              setConversationStep('propertySearch');
+          if (conversationStep === 'role_selection') {
+            setUserPreferences(prev => ({ ...prev, role: userMessage }));
+            
+            if (['Seller', 'Agent', 'Builder'].includes(userMessage)) {
+              setConversationStep('post_property');
               finalResponse = {
                 id: String(Date.now() + 2),
                 isBot: true,
                 timestamp: new Date(),
-                text: 'Great! To help me find the perfect properties for you, could you tell me your budget?',
+                text: `Great! As a ${userMessage.toLowerCase()}, you can easily list your property with us. Click the button below to get started:`,
+                options: ['Post Your Property']
               };
-            } else if (userMessage.toLowerCase().includes('schedule visit')) {
+            } else if (userMessage === 'Want to buy a property') {
+              setConversationStep('property_type_selection');
               finalResponse = {
                 id: String(Date.now() + 2),
                 isBot: true,
                 timestamp: new Date(),
-                text: 'Okay, please provide the property ID and your preferred date and time for the visit.',
+                text: 'Perfect! Let me help you find the right property. What type of property are you looking for?',
+                options: propertyTypes
               };
             } else {
               finalResponse = {
                 id: String(Date.now() + 2),
                 isBot: true,
                 timestamp: new Date(),
-                text: 'I can help you with finding properties or scheduling a visit. What would you like to do?',
-                options: ['Find Properties', 'Schedule Visit']
+                text: 'Please select one of the available options to proceed.',
+                options: ['Seller', 'Agent', 'Builder', 'Want to buy a property']
               };
             }
-          } else if (conversationStep === 'propertySearch') {
-            setUserPreferences(prev => ({ ...prev, budget: userMessage }));
-            setConversationStep('locationPreference');
-            finalResponse = {
-              id: String(Date.now() + 2),
-              isBot: true,
-              timestamp: new Date(),
-              text: 'Got it! And where are you looking to buy or rent a property?',
-            };
-          } else if (conversationStep === 'locationPreference') {
-            setUserPreferences(prev => ({ ...prev, location: userMessage }));
-            setConversationStep('propertyTypePreference');
-            finalResponse = {
-              id: String(Date.now() + 2),
-              isBot: true,
-              timestamp: new Date(),
-              text: 'Okay, which type of property are you interested in (e.g., apartment, villa, house)?',
-            };
-          } else if (conversationStep === 'propertyTypePreference') {
-            setUserPreferences(prev => ({ ...prev, propertyType: userMessage }));
-            setConversationStep('bedroomsPreference');
-            finalResponse = {
-              id: String(Date.now() + 2),
-              isBot: true,
-              timestamp: new Date(),
-              text: 'Great! How many bedrooms would you prefer?',
-            };
-          } else if (conversationStep === 'bedroomsPreference') {
-            setUserPreferences(prev => ({ ...prev, bedrooms: userMessage }));
-            setConversationStep('userName');
-            finalResponse = {
-              id: String(Date.now() + 2),
-              isBot: true,
-              timestamp: new Date(),
-              text: 'Thank you! Before I show you some properties, could you please tell me your name?',
-            };
-          } else if (conversationStep === 'userName') {
-            setUserName(userMessage);
-            setConversationStep('propertySuggestions');
-            finalResponse = {
-              id: String(Date.now() + 2),
-              isBot: true,
-              timestamp: new Date(),
-              text: `Thank you, ${userMessage}! Based on your preferences, here are a few properties you might like:`,
-              propertyCard: sampleProperties[0]
-            };
-          } else if (conversationStep === 'propertySuggestions') {
-            finalResponse = {
-              id: String(Date.now() + 2),
-              isBot: true,
-              timestamp: new Date(),
-              text: `Would you like to see more properties?`,
-              options: ['Yes', 'No']
-            };
-          }
-          else {
+          } else if (conversationStep === 'post_property') {
+            if (userMessage === 'Post Your Property') {
+              navigate('/post-property');
+              setIsOpen(false);
+              return resolve(undefined);
+            }
+          } else if (conversationStep === 'property_type_selection') {
+            if (propertyTypes.includes(userMessage)) {
+              setUserPreferences(prev => ({ ...prev, propertyType: userMessage }));
+              setConversationStep('budget_selection');
+              finalResponse = {
+                id: String(Date.now() + 2),
+                isBot: true,
+                timestamp: new Date(),
+                text: `Excellent choice! Now, what's your budget range for a ${userMessage.toLowerCase()}?`,
+                options: budgetRanges.map(range => range.label)
+              };
+            } else {
+              finalResponse = {
+                id: String(Date.now() + 2),
+                isBot: true,
+                timestamp: new Date(),
+                text: 'Please select a valid property type from the options:',
+                options: propertyTypes
+              };
+            }
+          } else if (conversationStep === 'budget_selection') {
+            const selectedBudget = budgetRanges.find(range => range.label === userMessage);
+            if (selectedBudget) {
+              setUserPreferences(prev => ({ ...prev, budget: userMessage }));
+              setConversationStep('location_selection');
+              finalResponse = {
+                id: String(Date.now() + 2),
+                isBot: true,
+                timestamp: new Date(),
+                text: `Great! With a budget of ${userMessage}, which location are you interested in?`,
+                options: availableLocations
+              };
+            } else {
+              finalResponse = {
+                id: String(Date.now() + 2),
+                isBot: true,
+                timestamp: new Date(),
+                text: 'Please select a valid budget range:',
+                options: budgetRanges.map(range => range.label)
+              };
+            }
+          } else if (conversationStep === 'location_selection') {
+            if (availableLocations.includes(userMessage)) {
+              setUserPreferences(prev => ({ ...prev, location: userMessage }));
+              
+              // Navigate to search page with filters
+              const propertyTypeMap: Record<string, string> = {
+                'Flat/Apartment': 'Flat/Apartment',
+                'Independent House': 'Independent House',
+                'Villa': 'Villa',
+                'Commercial Space': 'Commercial Space/Building',
+                'Plot/Land': 'Plots'
+              };
+
+              const budgetRange = budgetRanges.find(range => range.label === userPreferences.budget);
+              
+              const params = new URLSearchParams({
+                type: userPreferences.propertyType === 'Commercial Space' ? 'commercial' : 'buy',
+                location: userMessage,
+                propertyType: propertyTypeMap[userPreferences.propertyType!] || userPreferences.propertyType!
+              });
+
+              navigate(`/search?${params.toString()}`);
+              setIsOpen(false);
+              return resolve(undefined);
+            } else {
+              finalResponse = {
+                id: String(Date.now() + 2),
+                isBot: true,
+                timestamp: new Date(),
+                text: 'Please select a location from the available options:',
+                options: availableLocations
+              };
+            }
+          } else {
             finalResponse = {
               id: String(Date.now() + 2),
               isBot: true,
