@@ -12,7 +12,7 @@ export interface SearchSectionRef {
 const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('buy');
-  const [selectedCity, setSelectedCity] = useState('All Residential');
+  const [selectedCity, setSelectedCity] = useState('Residential');
   const [searchQuery, setSearchQuery] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
   const mobileInputRef = useRef<HTMLInputElement>(null);
