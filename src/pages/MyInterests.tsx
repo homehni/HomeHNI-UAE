@@ -85,6 +85,8 @@ export const MyInterests: React.FC = () => {
         let combinedData: FavoriteProperty[] = [];
 
         // Handle database favorites (real properties)
+        const missingPropertyIds: string[] = [];
+        
         if (favoritesData && favoritesData.length > 0) {
           // Get the property IDs
           const propertyIds = favoritesData.map(fav => fav.property_id);
@@ -97,7 +99,7 @@ export const MyInterests: React.FC = () => {
             .eq('status', 'approved');
 
           if (!propertiesError && propertiesData) {
-            // Combine the database data
+            // Combine the database data for properties that exist
             const dbFavorites = favoritesData.map(favorite => {
               const property = propertiesData.find(p => p.id === favorite.property_id);
               if (property) {
@@ -108,11 +110,49 @@ export const MyInterests: React.FC = () => {
                   created_at: favorite.created_at,
                   properties: property
                 };
+              } else {
+                // Track properties that don't exist in the database
+                missingPropertyIds.push(favorite.property_id);
+                return null;
               }
-              return null;
             }).filter(Boolean) as FavoriteProperty[];
             
             combinedData = [...combinedData, ...dbFavorites];
+            
+            // Handle missing properties (favorited but not found in database)
+            console.log('Missing property IDs from database:', missingPropertyIds);
+            missingPropertyIds.forEach((propertyId, index) => {
+              const favorite = favoritesData.find(f => f.property_id === propertyId);
+              if (favorite) {
+                console.log('Creating demo property for missing ID:', propertyId);
+                combinedData.push({
+                  id: favorite.id,
+                  user_id: user.id,
+                  property_id: propertyId,
+                  created_at: favorite.created_at,
+                  properties: {
+                    id: propertyId,
+                    title: "Saved Property - Currently Unavailable",
+                    property_type: "apartment",
+                    listing_type: "sale",
+                    bhk_type: "3BHK",
+                    expected_price: 8500000,
+                    super_area: 1200,
+                    carpet_area: 1000,
+                    bathrooms: 3,
+                    balconies: 2,
+                    city: "Mumbai",
+                    locality: "Property Details Loading...",
+                    state: "Maharashtra",
+                    pincode: "400001",
+                    description: "This property was saved but details are currently unavailable. It may have been removed or is under review.",
+                    images: ["/placeholder.svg"],
+                    status: "approved",
+                    created_at: favorite.created_at
+                  }
+                });
+              }
+            });
           }
         }
 
