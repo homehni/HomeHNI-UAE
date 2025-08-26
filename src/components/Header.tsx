@@ -334,7 +334,7 @@ const Header = () => {
                  <Button 
                    variant="ghost" 
                    size="sm" 
-                   onClick={handleAuthClick}
+                   onClick={() => navigate('/auth')}
                    className={`font-medium px-3 py-1.5 text-sm transition-all duration-500 ${isScrolled ? 'text-gray-800 hover:bg-gray-100' : 'text-white hover:bg-white/10'}`}
                  >
                    <LogIn className="mr-1 h-4 w-4" />
@@ -343,7 +343,7 @@ const Header = () => {
                  <Button 
                    variant="outline" 
                    size="sm" 
-                   onClick={handleAuthClick}
+                   onClick={() => navigate('/auth?mode=signup')}
                    className={`font-medium px-3 py-1.5 text-sm transition-all duration-500 ${isScrolled ? 'bg-white text-brand-red border-gray-300 hover:bg-gray-50' : 'bg-white/20 backdrop-blur-sm text-white border-white/30 hover:bg-white/30'}`}
                  >
                    <UserPlus className="mr-1 h-4 w-4" />
