@@ -17,7 +17,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const mobileInputRef = useRef<HTMLInputElement>(null);
   const { content: cmsContent } = useCMSContent('hero-search');
-  const cities = ['All Residential', 'Flat/Apartment', 'Independent Building/ Floor', 'Farm House', 'Villa', 'Plots', 'Independent House', 'Agriculture Lands'];
+  const cities = ['Residential', 'Commercial', 'Industrial', 'Agricultural'];
   const handleCitySelect = (city: string) => {
     setSelectedCity(city);
   };
