@@ -8,6 +8,7 @@ import DirectorySection from '@/components/DirectorySection';
 
 import RealEstateSlider from '@/components/RealEstateSlider';
 import FeaturedProperties from '@/components/FeaturedProperties';
+import HomeServices from '@/components/HomeServices';
 import Services from '@/components/Services';
 import WhyUseSection from '@/components/WhyUseSection';
 import Stats from '@/components/Stats';
@@ -49,6 +50,7 @@ const Index = () => {
         </div>
         
         <RealEstateSlider />
+        <HomeServices />
         <FeaturedProperties />
         <Services />
         <WhyUseSection />
