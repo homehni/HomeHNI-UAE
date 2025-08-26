@@ -15,6 +15,7 @@ const Footer = ({
   } = useAuth();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('Properties & Flats for Sale');
+  const [activeServicesTab, setActiveServicesTab] = useState('Buy');
   
   const handlePostPropertyClick = () => {
     if (user) {
@@ -279,25 +280,45 @@ const Footer = ({
           
         </div>
 
-        {/* Original Services sections */}
+        {/* Services Section with Tabs */}
         <div className="mb-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div>
-              <h4 className="font-semibold text-gray-900 mb-4">Buy</h4>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
-                {services.buy.map((service, index) => <button key={index} onClick={() => handleLinkClick(service)} className="text-xs text-gray-600 hover:text-brand-red transition-colors text-left">
-                    {service}
-                  </button>)}
-              </div>
+          {/* Services Tab Navigation */}
+          <div className="border-b border-gray-200 mb-6">
+            <div className="flex justify-between gap-0">
+              <button
+                onClick={() => setActiveServicesTab('Buy')}
+                className={`px-4 py-3 text-sm font-medium border-b-2 transition-colors flex-1 ${
+                  activeServicesTab === 'Buy'
+                    ? 'border-brand-red text-brand-red bg-brand-red/5'
+                    : 'border-transparent text-gray-600 hover:text-gray-900 hover:border-gray-300'
+                }`}
+              >
+                Buy
+              </button>
+              <button
+                onClick={() => setActiveServicesTab('Rent')}
+                className={`px-4 py-3 text-sm font-medium border-b-2 transition-colors flex-1 ${
+                  activeServicesTab === 'Rent'
+                    ? 'border-brand-red text-brand-red bg-brand-red/5'
+                    : 'border-transparent text-gray-600 hover:text-gray-900 hover:border-gray-300'
+                }`}
+              >
+                Rent
+              </button>
             </div>
-            <div>
-              <h4 className="font-semibold text-gray-900 mb-4">Rent</h4>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
-                {services.rent.map((service, index) => <button key={index} onClick={() => handleLinkClick(service)} className="text-xs text-gray-600 hover:text-brand-red transition-colors text-left">
-                    {service}
-                  </button>)}
-              </div>
-            </div>
+          </div>
+
+          {/* Services Tab Content */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+            {(activeServicesTab === 'Buy' ? services.buy : services.rent).map((service, index) => (
+              <button 
+                key={index} 
+                onClick={() => handleLinkClick(service)} 
+                className="text-xs text-gray-600 hover:text-brand-red transition-colors text-left"
+              >
+                {service}
+              </button>
+            ))}
           </div>
         </div>
 
