@@ -73,7 +73,7 @@ const MobileAppSection = () => {
                 src={cmsContent?.content?.appImage || '/lovable-uploads/ee843ec7-81c8-4575-aff3-09a145035577.png'}
                 alt="Home HNI mobile app preview"
                 loading="lazy"
-                className="w-full max-w-md h-auto rounded-xl shadow-xl ring-1 ring-black/5"
+                className="w-full max-w-md h-auto"
               />
               {/* Decorative cherry-red glow */}
               <div className="pointer-events-none absolute -inset-6 -z-10 blur-2xl
