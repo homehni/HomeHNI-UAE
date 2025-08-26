@@ -328,6 +328,40 @@ const HomeSecurityServices = () => {
                 <Input id="security-phone" name="phone" type="tel" placeholder="Phone Number" className="flex-1" required />
               </div>
 
+              <div className="flex gap-2">
+                <Select defaultValue="India" name="country">
+                  <SelectTrigger className="flex-1"><SelectValue placeholder="Country" /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="India">India</SelectItem>
+                    <SelectItem value="USA">USA</SelectItem>
+                    <SelectItem value="UK">UK</SelectItem>
+                    <SelectItem value="Other">Other</SelectItem>
+                  </SelectContent>
+                </Select>
+
+                <Select name="state" onValueChange={setSelectedStateDesktop}>
+                  <SelectTrigger className="flex-1"><SelectValue placeholder="State" /></SelectTrigger>
+                  <SelectContent>
+                    {statesData && Object.keys(statesData).map((state: string) => (
+                      <SelectItem key={state} value={state}>
+                        {state}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+
+                <Select name="city">
+                  <SelectTrigger className="flex-1"><SelectValue placeholder="City" /></SelectTrigger>
+                  <SelectContent>
+                    {citiesDesktop.map((city: string) => (
+                      <SelectItem key={city} value={city}>
+                        {city}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
               <Select name="serviceType" required>
                 <SelectTrigger className="w-full"><SelectValue placeholder="Service Type" /></SelectTrigger>
                 <SelectContent>
@@ -400,6 +434,46 @@ const HomeSecurityServices = () => {
                   />
                 </div>
 
+                <div className="flex gap-3">
+                  <Select defaultValue="India" name="country">
+                    <SelectTrigger className="flex-1 h-12 bg-background">
+                      <SelectValue placeholder="Country" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-background border shadow-lg">
+                      <SelectItem value="India">India</SelectItem>
+                      <SelectItem value="USA">USA</SelectItem>
+                      <SelectItem value="UK">UK</SelectItem>
+                      <SelectItem value="Other">Other</SelectItem>
+                    </SelectContent>
+                  </Select>
+
+                  <Select name="state" onValueChange={setSelectedState}>
+                    <SelectTrigger className="flex-1 h-12 bg-background">
+                      <SelectValue placeholder="State" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-background border shadow-lg">
+                      {statesData && Object.keys(statesData).map((state: string) => (
+                        <SelectItem key={state} value={state}>
+                          {state}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+
+                  <Select name="city">
+                    <SelectTrigger className="flex-1 h-12 bg-background">
+                      <SelectValue placeholder="City" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-background border shadow-lg">
+                      {cities.map((city: string) => (
+                        <SelectItem key={city} value={city}>
+                          {city}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
                 <Select name="serviceType" required>
                   <SelectTrigger className="h-12 bg-background">
                     <SelectValue placeholder="Service Type" />
@@ -423,11 +497,11 @@ const HomeSecurityServices = () => {
       {/* Why Choose Our Home Security Services */}
       <section className="py-16 md:py-24 px-4 md:px-8 bg-background">
         <div className="container mx-auto max-w-7xl">
-          <div className="text-uniform-center mb-16">
+          <div className="mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
               Why Choose Our Home Security Services?
             </h2>
-            <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+            <p className="text-lg text-muted-foreground max-w-3xl">
               Comprehensive security solutions with professional installation, smart technology, and 24/7 support.
             </p>
           </div>
@@ -458,11 +532,11 @@ const HomeSecurityServices = () => {
       {/* Comprehensive Home Security Solutions */}
       <section className="py-16 md:py-24 px-4 md:px-8 bg-muted/30">
         <div className="container mx-auto max-w-7xl">
-          <div className="text-uniform-center mb-16">
+          <div className="mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
               Comprehensive Home Security Solutions
             </h2>
-            <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+            <p className="text-lg text-muted-foreground max-w-3xl">
               Complete range of security systems designed to protect your home and family with cutting-edge technology.
             </p>
           </div>
@@ -499,11 +573,11 @@ const HomeSecurityServices = () => {
       {/* Our Security Services */}
       <section className="py-16 md:py-24 px-4 md:px-8 bg-background">
         <div className="container mx-auto max-w-7xl">
-          <div className="text-uniform-center mb-16">
+          <div className="mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
               Our Security Services
             </h2>
-            <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+            <p className="text-lg text-muted-foreground max-w-3xl">
               Professional installation and setup services for all your home security needs.
             </p>
           </div>
@@ -558,11 +632,11 @@ const HomeSecurityServices = () => {
       {/* Why Home HNI is Better - Comparison */}
       <section className="py-16 md:py-24 px-4 md:px-8 bg-muted/30">
         <div className="container mx-auto max-w-5xl">
-          <div className="text-uniform-center mb-16">
+          <div className="mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
               Why Home HNI is Better
             </h2>
-            <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+            <p className="text-lg text-muted-foreground max-w-3xl">
               Compare our professional security services with local vendors and see the difference.
             </p>
           </div>
@@ -607,11 +681,11 @@ const HomeSecurityServices = () => {
       {/* Customer Testimonials */}
       <section className="py-16 md:py-24 px-4 md:px-8 bg-background">
         <div className="container mx-auto max-w-7xl">
-          <div className="text-uniform-center mb-16">
+          <div className="mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
               Customer Testimonials
             </h2>
-            <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+            <p className="text-lg text-muted-foreground max-w-3xl">
               Hear from our satisfied customers about their experience with our home security services.
             </p>
           </div>
@@ -647,11 +721,11 @@ const HomeSecurityServices = () => {
       {/* Who We Serve */}
       <section className="py-16 md:py-24 px-4 md:px-8 bg-muted/30">
         <div className="container mx-auto max-w-7xl">
-          <div className="text-uniform-center mb-16">
+          <div className="mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
               Who We Serve
             </h2>
-            <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+            <p className="text-lg text-muted-foreground max-w-3xl">
               Our security solutions cater to diverse needs across residential and commercial segments.
             </p>
           </div>
@@ -678,7 +752,7 @@ const HomeSecurityServices = () => {
       {/* FAQ Section */}
       <section className="py-16 md:py-24 px-4 md:px-8 bg-background">
         <div className="container mx-auto max-w-4xl">
-          <div className="text-uniform-center mb-16">
+          <div className="mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
               Frequently Asked Questions
             </h2>
