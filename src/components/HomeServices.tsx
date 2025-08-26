@@ -146,7 +146,8 @@ const HomeServices = () => {
     <section className="py-12 bg-white">
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center mb-8">
-          <h2 className="text-3xl font-bold text-gray-900">Home Services</h2>
+         <h2 className="text-3xl font-bold text-gray-900 text-center">Home Services</h2>
+
           <button className="text-primary font-semibold hover:text-primary-dark flex items-center gap-1">
             See All
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
