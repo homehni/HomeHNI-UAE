@@ -59,9 +59,10 @@ export const Dashboard: React.FC = () => {
   const location = useLocation();
   const { toast } = useToast();
   
-  // Get tab from URL parameters
+  // Get tab from URL parameters and manage active tab state
   const searchParams = new URLSearchParams(location.search);
   const initialTab = searchParams.get('tab') || 'properties';
+  const [activeTab, setActiveTab] = useState(initialTab);
   
   const [properties, setProperties] = useState<Property[]>([]);
   const [leads, setLeads] = useState<Lead[]>([]);
@@ -99,6 +100,21 @@ export const Dashboard: React.FC = () => {
       fetchLeads();
     }
   }, [user]);
+
+  // Update active tab when URL changes
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const tabFromUrl = searchParams.get('tab') || 'properties';
+    setActiveTab(tabFromUrl);
+  }, [location.search]);
+
+  // Handle tab change
+  const handleTabChange = (newTab: string) => {
+    setActiveTab(newTab);
+    const searchParams = new URLSearchParams(location.search);
+    searchParams.set('tab', newTab);
+    navigate(`${location.pathname}?${searchParams.toString()}`, { replace: true });
+  };
 
   const fetchProperties = async () => {
     try {
@@ -290,7 +306,7 @@ export const Dashboard: React.FC = () => {
         </div>
 
         {/* Tabs */}
-        <Tabs defaultValue={initialTab} className="space-y-6">
+        <Tabs value={activeTab} onValueChange={handleTabChange} className="space-y-6">
           <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="properties">My Listings</TabsTrigger>
             <TabsTrigger value="leads">Contact Leads</TabsTrigger>
