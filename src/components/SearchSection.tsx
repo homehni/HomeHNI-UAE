@@ -2,8 +2,7 @@ import { useState, useEffect, useRef, forwardRef, useImperativeHandle } from 're
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { MapPin, Search, Mic, MapPinIcon, ChevronDown } from 'lucide-react';
+import { MapPin, Mic } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useCMSContent } from '@/hooks/useCMSContent';
 export interface SearchSectionRef {
@@ -12,20 +11,13 @@ export interface SearchSectionRef {
 const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('buy');
-  const [selectedCity, setSelectedCity] = useState('Residential');
   const [searchQuery, setSearchQuery] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
   const mobileInputRef = useRef<HTMLInputElement>(null);
   const { content: cmsContent } = useCMSContent('hero-search');
-  const cities = ['Residential', 'Commercial', 'Industrial', 'Agricultural'];
-  const handleCitySelect = (city: string) => {
-    setSelectedCity(city);
-  };
-
   const handleSearch = () => {
     const params = new URLSearchParams({
       type: activeTab,
-      propertyType: selectedCity === 'All Residential' ? '' : selectedCity,
       location: searchQuery.trim()
     });
     navigate(`/search?${params.toString()}`);
@@ -137,31 +129,6 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
         {/* Mobile Search Section - overlapping 50% at bottom of hero */}
         <div className="sm:hidden absolute bottom-8 left-4 right-4 transform translate-y-1/2">
           <div className="bg-white rounded-lg shadow-xl border border-gray-100 p-4">
-            {/* Property Type Dropdown for Mobile */}
-            <div className="mb-3">
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button variant="outline" className="w-full h-10 border-gray-300 text-gray-700 font-medium text-sm justify-between hover:bg-gray-50 bg-white px-3">
-                    <span>{selectedCity}</span>
-                    <ChevronDown className="h-4 w-4 text-gray-400" />
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-full p-0 bg-white border border-gray-200 shadow-lg z-50" align="start">
-                  <div className="py-2">
-                    {cities.map(city => 
-                      <button 
-                        key={city} 
-                        onClick={() => handleCitySelect(city)} 
-                        className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors"
-                      >
-                        {city}
-                      </button>
-                    )}
-                  </div>
-                </PopoverContent>
-              </Popover>
-            </div>
-            
             {/* Search Input and Button */}
             <div className="flex gap-2">
               <div className="relative flex-1">
@@ -207,24 +174,8 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                   </TabsList>
 
                   <TabsContent value={activeTab} className="mt-0 px-6 py-2 bg-white rounded-b-lg">
-                    {/* Property Type Dropdown and Search Bar - Now inline */}
+                    {/* Search Bar */}
                     <div className="flex flex-col sm:flex-row gap-4">
-                      <Popover>
-                        <PopoverTrigger asChild>
-                          <Button variant="outline" className="w-40 h-12 border-gray-300 text-gray-700 font-medium text-sm justify-between hover:bg-gray-50 bg-white px-3">
-                            <span>{selectedCity}</span>
-                            <ChevronDown className="h-4 w-4 text-gray-400" />
-                          </Button>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-48 p-0 bg-white border border-gray-200 shadow-lg z-50" align="start">
-                          <div className="py-2">
-                            {cities.map(city => <button key={city} onClick={() => handleCitySelect(city)} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
-                                {city}
-                              </button>)}
-                          </div>
-                        </PopoverContent>
-                      </Popover>
-                      
                       <div className="flex-1 relative">
                          <MapPin className="absolute left-3 top-3 text-brand-red" size={20} />
                          <Input 
