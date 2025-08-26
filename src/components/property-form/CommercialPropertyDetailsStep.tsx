@@ -101,6 +101,7 @@ export const CommercialPropertyDetailsStep: React.FC<CommercialPropertyDetailsSt
                       </FormControl>
                       <SelectContent>
                         <SelectItem value="office">Office Space</SelectItem>
+                        <SelectItem value="co-working">Co-Living</SelectItem>
                         <SelectItem value="retail">Retail Shop</SelectItem>
                         <SelectItem value="warehouse">Warehouse</SelectItem>
                         <SelectItem value="showroom">Showroom</SelectItem>
