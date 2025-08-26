@@ -374,7 +374,8 @@ const Footer = ({
           {/* App store badges */}
           <div className="flex flex-col items-center gap-2 mb-6">
             <img src="/lovable-uploads/8b28a8cb-02f0-4e86-9ba6-1845c4372e1a.png" alt="Google Play and App Store" className="h-12" />
-            <p className="text-sm text-gray-600">Coming Soon</p>
+           <p className="text-sm font-semibold text-red-600">Coming Soon</p>
+
           </div>
 
           {/* Social media icons */}
