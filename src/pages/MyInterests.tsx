@@ -85,23 +85,46 @@ export const MyInterests: React.FC = () => {
         let combinedData: FavoriteProperty[] = [];
 
         // Handle database favorites (real properties)
-        const missingPropertyIds: string[] = [];
-        
         if (favoritesData && favoritesData.length > 0) {
           // Get the property IDs
           const propertyIds = favoritesData.map(fav => fav.property_id);
+          console.log('Fetching properties for IDs:', propertyIds);
 
-          // Then fetch the properties
+          // First try to fetch from properties table (without status filter)
           const { data: propertiesData, error: propertiesError } = await supabase
             .from('properties')
             .select('*')
-            .in('id', propertyIds)
-            .eq('status', 'approved');
+            .in('id', propertyIds);
 
-          if (!propertiesError && propertiesData) {
+          console.log('Properties from main table:', propertiesData);
+          console.log('Properties error:', propertiesError);
+
+          // Also try to fetch from public_properties view
+          const { data: publicPropertiesData, error: publicPropertiesError } = await supabase
+            .from('public_properties')
+            .select('*')
+            .in('id', propertyIds);
+
+          console.log('Properties from public view:', publicPropertiesData);
+          console.log('Public properties error:', publicPropertiesError);
+
+          // Combine results from both queries
+          const allProperties = [
+            ...(propertiesData || []),
+            ...(publicPropertiesData || [])
+          ];
+
+          // Remove duplicates by ID
+          const uniqueProperties = allProperties.filter((property, index, self) => 
+            index === self.findIndex(p => p.id === property.id)
+          );
+
+          console.log('All unique properties found:', uniqueProperties);
+
+          if (uniqueProperties.length > 0) {
             // Combine the database data for properties that exist
             const dbFavorites = favoritesData.map(favorite => {
-              const property = propertiesData.find(p => p.id === favorite.property_id);
+              const property = uniqueProperties.find(p => p.id === favorite.property_id);
               if (property) {
                 return {
                   id: favorite.id,
@@ -110,61 +133,25 @@ export const MyInterests: React.FC = () => {
                   created_at: favorite.created_at,
                   properties: property
                 };
-              } else {
-                // Track properties that don't exist in the database
-                missingPropertyIds.push(favorite.property_id);
-                return null;
               }
+              return null;
             }).filter(Boolean) as FavoriteProperty[];
             
             combinedData = [...combinedData, ...dbFavorites];
-            
-            // Handle missing properties (favorited but not found in database)
-            console.log('Missing property IDs from database:', missingPropertyIds);
-            missingPropertyIds.forEach((propertyId, index) => {
-              const favorite = favoritesData.find(f => f.property_id === propertyId);
-              if (favorite) {
-                console.log('Creating demo property for missing ID:', propertyId);
-                combinedData.push({
-                  id: favorite.id,
-                  user_id: user.id,
-                  property_id: propertyId,
-                  created_at: favorite.created_at,
-                  properties: {
-                    id: propertyId,
-                    title: "Saved Property - Currently Unavailable",
-                    property_type: "apartment",
-                    listing_type: "sale",
-                    bhk_type: "3BHK",
-                    expected_price: 8500000,
-                    super_area: 1200,
-                    carpet_area: 1000,
-                    bathrooms: 3,
-                    balconies: 2,
-                    city: "Mumbai",
-                    locality: "Property Details Loading...",
-                    state: "Maharashtra",
-                    pincode: "400001",
-                    description: "This property was saved but details are currently unavailable. It may have been removed or is under review.",
-                    images: ["/placeholder.svg"],
-                    status: "approved",
-                    created_at: favorite.created_at
-                  }
-                });
-              }
-            });
+            console.log('Successfully mapped database favorites:', dbFavorites.length);
           }
         }
 
-        // Handle demo properties (from local state)
+        // Handle demo properties (from local state that aren't in database)
         console.log('Processing local favorites:', Object.entries(localFavorites));
         Object.entries(localFavorites).forEach(([propertyId, isFavorited]) => {
           if (isFavorited && !combinedData.find(f => f.property_id === propertyId)) {
-            console.log('Adding demo property:', propertyId);
+            console.log('Adding missing property as demo:', propertyId);
             // Check if this is likely a demo property (non-UUID format)
             const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+            
             if (!uuidRegex.test(propertyId)) {
-              // Create a demo property object for display
+              // Create a demo property object for non-UUID properties
               combinedData.push({
                 id: `demo-${propertyId}`,
                 user_id: user.id,
@@ -186,6 +173,34 @@ export const MyInterests: React.FC = () => {
                   state: "Delhi",
                   pincode: "110001",
                   description: "This is a demo property for showcase purposes.",
+                  images: ["/placeholder.svg"],
+                  status: "approved",
+                  created_at: new Date().toISOString()
+                }
+              });
+            } else {
+              // This is a valid UUID but not found in database - create a placeholder
+              combinedData.push({
+                id: `missing-${propertyId}`,
+                user_id: user.id,
+                property_id: propertyId,
+                created_at: new Date().toISOString(),
+                properties: {
+                  id: propertyId,
+                  title: "Saved Property - Currently Unavailable",
+                  property_type: "apartment",
+                  listing_type: "sale",
+                  bhk_type: "3BHK",
+                  expected_price: 8500000,
+                  super_area: 1200,
+                  carpet_area: 1000,
+                  bathrooms: 3,
+                  balconies: 2,
+                  city: "Mumbai",
+                  locality: "Property Details Loading...",
+                  state: "Maharashtra",
+                  pincode: "400001",
+                  description: "This property was saved but details are currently unavailable. It may have been removed or is under review.",
                   images: ["/placeholder.svg"],
                   status: "approved",
                   created_at: new Date().toISOString()
@@ -214,19 +229,22 @@ export const MyInterests: React.FC = () => {
 
   const handleRemoveFavorite = async (favoriteId: string, propertyTitle: string) => {
     try {
-      // Check if this is a demo favorite
+      // Check if this is a demo or missing property
       const isDemo = favoriteId.startsWith('demo-');
+      const isMissing = favoriteId.startsWith('missing-');
       
-      if (isDemo) {
-        // For demo properties, just toggle the favorite status
-        const propertyId = favoriteId.replace('demo-', '');
+      if (isDemo || isMissing) {
+        // For demo and missing properties, just toggle the favorite status
+        const propertyId = isDemo 
+          ? favoriteId.replace('demo-', '')
+          : favoriteId.replace('missing-', '');
         await toggleFavorite(propertyId);
         
         // Remove from local state
         setFavorites(prev => prev.filter(fav => fav.id !== favoriteId));
         
         toast({
-          title: "Demo property removed",
+          title: isDemo ? "Demo property removed" : "Property removed",
           description: `"${propertyTitle}" has been removed from your saved properties.`,
         });
       } else {
