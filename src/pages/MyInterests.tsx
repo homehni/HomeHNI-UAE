@@ -64,6 +64,9 @@ export const MyInterests: React.FC = () => {
       if (!user) return;
 
       try {
+        console.log('Fetching favorites for user:', user.id);
+        console.log('Local favorites:', localFavorites);
+        
         // First get the favorite property IDs from database
         const { data: favoritesData, error: favoritesError } = await supabase
           .from('user_favorites')
@@ -71,7 +74,12 @@ export const MyInterests: React.FC = () => {
           .eq('user_id', user.id)
           .order('created_at', { ascending: false });
 
-        if (favoritesError) throw favoritesError;
+        if (favoritesError) {
+          console.error('Error fetching favorites from DB:', favoritesError);
+          throw favoritesError;
+        }
+
+        console.log('Database favorites:', favoritesData);
 
         // Also get local demo favorites from useFavorites hook        
         let combinedData: FavoriteProperty[] = [];
@@ -109,8 +117,10 @@ export const MyInterests: React.FC = () => {
         }
 
         // Handle demo properties (from local state)
+        console.log('Processing local favorites:', Object.entries(localFavorites));
         Object.entries(localFavorites).forEach(([propertyId, isFavorited]) => {
           if (isFavorited && !combinedData.find(f => f.property_id === propertyId)) {
+            console.log('Adding demo property:', propertyId);
             // Check if this is likely a demo property (non-UUID format)
             const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
             if (!uuidRegex.test(propertyId)) {
@@ -145,6 +155,7 @@ export const MyInterests: React.FC = () => {
           }
         });
 
+        console.log('Final combined data:', combinedData);
         setFavorites(combinedData);
       } catch (error) {
         console.error('Error fetching favorites:', error);
