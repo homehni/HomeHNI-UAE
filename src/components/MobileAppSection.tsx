@@ -70,7 +70,7 @@ const MobileAppSection = () => {
           <div className="flex justify-center lg:justify-end order-1 lg:order-2">
             <div className="relative">
               <img
-                src={cmsContent?.content?.appImage || '/lovable-uploads/homeAppPromotion.png'}
+                src={cmsContent?.content?.appImage || '/lovable-uploads/ee843ec7-81c8-4575-aff3-09a145035577.png'}
                 alt="Home HNI mobile app preview"
                 loading="lazy"
                 className="w-full max-w-md h-auto rounded-xl shadow-xl ring-1 ring-black/5"
