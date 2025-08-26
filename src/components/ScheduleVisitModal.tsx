@@ -7,6 +7,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Calendar, X } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { Link } from 'react-router-dom';
 
 interface ScheduleVisitModalProps {
   isOpen: boolean;
@@ -273,13 +274,23 @@ export const ScheduleVisitModal: React.FC<ScheduleVisitModalProps> = ({
                     />
                     <Label htmlFor="terms" className="text-sm leading-tight">
                       I agree to the{' '}
-                      <span className="text-blue-600 hover:underline cursor-pointer">
+                      <Link 
+                        to="/terms-and-conditions" 
+                        className="text-blue-600 hover:underline cursor-pointer"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
                         Terms & Conditions
-                      </span>{' '}
+                      </Link>{' '}
                       and{' '}
-                      <span className="text-blue-600 hover:underline cursor-pointer">
+                      <Link 
+                        to="/privacy-policy" 
+                        className="text-blue-600 hover:underline cursor-pointer"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
                         Privacy Policy
-                      </span>
+                      </Link>
                     </Label>
                   </div>
                 </div>
