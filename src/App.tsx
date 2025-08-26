@@ -69,6 +69,7 @@ import GeolocationRedirect from "./components/GeolocationRedirect";
 import Architecture from "./pages/Architects";
 import Interior from "./pages/Interior";
 import Loans from "./pages/Loans";
+import HomeSecurityServices from "./pages/HomeSecurityServices";
 import AboutSidebar from "./pages/AboutSidebar";
 import NRIServices from "./pages/NRIServices";
 import NewProjects from "./pages/NewProjects";
@@ -145,6 +146,7 @@ const App: React.FC = () => {
             <Route path="/architects" element={<Architecture />} />
             <Route path="/interior" element={<Interior />} />
             <Route path="/loans" element={<Loans />} />
+            <Route path="/home-security-services" element={<HomeSecurityServices />} />
             
             {/* Service Pages */}
             <Route path="/nri-services" element={<NRIServices />} />
