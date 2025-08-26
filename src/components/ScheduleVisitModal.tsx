@@ -24,11 +24,10 @@ interface ScheduleVisitFormData {
   name: string;
   email: string;
   phone: string;
-  reasonToBuy: 'investment' | 'self_use';
   isPropertyDealer: 'yes' | 'no';
-  planningToBuy: '3_months' | '6_months' | 'more_than_6_months';
   interestedInHomeLoan: boolean;
   interestedInSiteVisit: boolean;
+  immediateVisit: boolean;
   agreeToTerms: boolean;
 }
 
@@ -49,11 +48,10 @@ export const ScheduleVisitModal: React.FC<ScheduleVisitModalProps> = ({
     name: '',
     email: '',
     phone: '',
-    reasonToBuy: 'investment',
     isPropertyDealer: 'no',
-    planningToBuy: '3_months',
     interestedInHomeLoan: false,
     interestedInSiteVisit: true,
+    immediateVisit: false,
     agreeToTerms: false
   });
 
@@ -95,11 +93,10 @@ export const ScheduleVisitModal: React.FC<ScheduleVisitModalProps> = ({
         name: '',
         email: '',
         phone: '',
-        reasonToBuy: 'investment',
         isPropertyDealer: 'no',
-        planningToBuy: '3_months',
         interestedInHomeLoan: false,
         interestedInSiteVisit: true,
+        immediateVisit: false,
         agreeToTerms: false
       });
       onClose();
@@ -164,26 +161,6 @@ export const ScheduleVisitModal: React.FC<ScheduleVisitModalProps> = ({
                 <h3 className="font-semibold">BASIC INFORMATION</h3>
                 
                 <div className="space-y-4">
-                  <div>
-                    <Label className="text-sm font-medium mb-2 block">
-                      Your reason to buy is
-                    </Label>
-                    <RadioGroup
-                      value={formData.reasonToBuy}
-                      onValueChange={(value) => handleChange('reasonToBuy', value)}
-                      className="flex gap-6"
-                    >
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="investment" id="investment" />
-                        <Label htmlFor="investment" className="text-sm">Investment</Label>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="self_use" id="self_use" />
-                        <Label htmlFor="self_use" className="text-sm">Self Use</Label>
-                      </div>
-                    </RadioGroup>
-                  </div>
-
                   <div>
                     <Label className="text-sm font-medium mb-2 block">
                       Are you a property dealer
@@ -254,31 +231,18 @@ export const ScheduleVisitModal: React.FC<ScheduleVisitModalProps> = ({
               <div className="space-y-4">
                 <h3 className="font-semibold">OPTIONAL INFORMATION</h3>
                 
-                <div>
-                  <Label className="text-sm font-medium mb-2 block">
-                    By when you are planning to buy the property?
-                  </Label>
-                  <RadioGroup
-                    value={formData.planningToBuy}
-                    onValueChange={(value) => handleChange('planningToBuy', value)}
-                    className="space-y-2"
-                  >
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="3_months" id="3_months" />
-                      <Label htmlFor="3_months" className="text-sm">3 months</Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="6_months" id="6_months" />
-                      <Label htmlFor="6_months" className="text-sm">6 months</Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="more_than_6_months" id="more_than_6_months" />
-                      <Label htmlFor="more_than_6_months" className="text-sm">More than 6 months</Label>
-                    </div>
-                  </RadioGroup>
-                </div>
-
                 <div className="space-y-3">
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      id="immediate_visit"
+                      checked={formData.immediateVisit}
+                      onCheckedChange={(checked) => handleChange('immediateVisit', checked)}
+                    />
+                    <Label htmlFor="immediate_visit" className="text-sm">
+                      I need immediate visit
+                    </Label>
+                  </div>
+
                   <div className="flex items-center space-x-2">
                     <Checkbox
                       id="home_loan"
