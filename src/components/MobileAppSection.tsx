@@ -5,9 +5,9 @@ const MobileAppSection = () => {
   const { content: cmsContent } = useCMSContent('mobile-app');
 
   return (
-    <section className="py-4 bg-gradient-to-br from-rose-50 to-white">
-      <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center max-w-6xl mx-auto">
+    <section className="py-2 bg-gradient-to-br from-rose-50 to-white">
+      <div className="container mx-auto px-2">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-center max-w-6xl mx-auto">
           {/* Content */}
           <div className="text-center lg:text-left order-2 lg:order-1">
             {/* Optional badge */}
