@@ -22,7 +22,7 @@ export const OverviewCard: React.FC<OverviewCardProps> = ({ property }) => {
   ];
 
   return (
-    <div className="rounded-2xl border border-gray-200 bg-white shadow-sm">
+    <div className="rounded-2xl border-2 border-red-500 bg-white shadow-lg">
       <div className="p-5 border-b border-gray-200">
         <h2 className="text-lg font-semibold text-gray-900">Overview</h2>
       </div>

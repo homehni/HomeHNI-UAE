@@ -30,7 +30,7 @@ export const ServicesStrip: React.FC<ServicesStripProps> = ({ onLegalServices })
   ];
 
   return (
-    <div className="rounded-2xl border border-gray-200 bg-white shadow-sm">
+    <div className="rounded-2xl border-2 border-red-500 bg-white shadow-lg">
       <div className="p-5 pt-4">
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           {services.map((service, index) => {

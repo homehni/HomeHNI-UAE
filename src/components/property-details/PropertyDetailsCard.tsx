@@ -31,7 +31,7 @@ export const PropertyDetailsCard: React.FC<PropertyDetailsCardProps> = ({ proper
   ].filter(Boolean);
 
   return (
-    <div className="rounded-2xl border border-gray-200 bg-white shadow-sm">
+    <div className="rounded-2xl border-2 border-red-500 bg-white shadow-lg">
       <div className="flex items-center justify-between p-5 border-b border-gray-200">
         <h2 className="text-lg font-semibold text-gray-900 flex items-center">
           <Building2 className="w-5 h-5 mr-2 text-[#d21404]" />
