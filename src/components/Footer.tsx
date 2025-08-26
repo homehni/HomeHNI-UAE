@@ -221,7 +221,7 @@ const Footer = ({
         <div className="mb-8">
           {/* Tab Navigation */}
           <div className="border-b border-gray-200 mb-6">
-            <div className="flex flex-wrap gap-0">
+            <div className="flex flex-wrap justify-between gap-0">
               {tabs.map((tab, index) => (
                 <button
                   key={index}
