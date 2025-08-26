@@ -125,7 +125,18 @@ const ChatBot = () => {
     { label: '5Cr+', value: [50000000, 100000000] }
   ];
 
-  const availableLocations = ['Noida', 'Gurgaon', 'Mumbai', 'Bangalore', 'Delhi', 'Hyderabad', 'Chennai', 'Pune'];
+  // Dynamic location filtering based on property type and available properties
+  const getAvailableLocations = (propertyType: string) => {
+    const locationMap: Record<string, string[]> = {
+      'Flat/Apartment': ['Noida', 'Mumbai', 'Bangalore', 'Gurgaon'],
+      'Independent House': ['Gurgaon'],
+      'Villa': ['Bangalore', 'Hyderabad'],
+      'Commercial Space': ['Gurgaon', 'Delhi'],
+      'Plot/Land': ['Gurgaon']
+    };
+    
+    return locationMap[propertyType] || [];
+  };
 
   const simulateBotResponse = async (userMessage: string) => {
     return new Promise((resolve) => {
@@ -206,13 +217,26 @@ const ChatBot = () => {
             if (selectedBudget) {
               setUserPreferences(prev => ({ ...prev, budget: userMessage }));
               setConversationStep('location_selection');
-              finalResponse = {
-                id: String(Date.now() + 2),
-                isBot: true,
-                timestamp: new Date(),
-                text: `Great! With a budget of ${userMessage}, which location are you interested in?`,
-                options: availableLocations
-              };
+              
+              const availableLocations = getAvailableLocations(userPreferences.propertyType || '');
+              
+              if (availableLocations.length === 0) {
+                finalResponse = {
+                  id: String(Date.now() + 2),
+                  isBot: true,
+                  timestamp: new Date(),
+                  text: `Sorry, we don't have any ${userPreferences.propertyType?.toLowerCase()} properties available in our current locations. Please try selecting a different property type.`,
+                  options: ['Go Back to Property Types']
+                };
+              } else {
+                finalResponse = {
+                  id: String(Date.now() + 2),
+                  isBot: true,
+                  timestamp: new Date(),
+                  text: `Great! With a budget of ${userMessage}, which location are you interested in? Here are the available locations for ${userPreferences.propertyType?.toLowerCase()}:`,
+                  options: availableLocations
+                };
+              }
             } else {
               finalResponse = {
                 id: String(Date.now() + 2),
@@ -223,7 +247,16 @@ const ChatBot = () => {
               };
             }
           } else if (conversationStep === 'location_selection') {
-            if (availableLocations.includes(userMessage)) {
+            if (userMessage === 'Go Back to Property Types') {
+              setConversationStep('property_type_selection');
+              finalResponse = {
+                id: String(Date.now() + 2),
+                isBot: true,
+                timestamp: new Date(),
+                text: 'No problem! Let\'s choose a different property type. What type of property are you looking for?',
+                options: propertyTypes
+              };
+            } else if (getAvailableLocations(userPreferences.propertyType || '').includes(userMessage)) {
               setUserPreferences(prev => ({ ...prev, location: userMessage }));
               
               // Navigate to search page with filters
@@ -247,6 +280,7 @@ const ChatBot = () => {
               setIsOpen(false);
               return resolve(undefined);
             } else {
+              const availableLocations = getAvailableLocations(userPreferences.propertyType || '');
               finalResponse = {
                 id: String(Date.now() + 2),
                 isBot: true,
