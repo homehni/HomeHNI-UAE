@@ -40,21 +40,21 @@ const HomeServices = () => {
     },
     {
       icon: FileText,
-      title: 'Rental Agreement',
+      title: 'Loans',
       subtitle: 'ONLINE PROCESS',
-      onClick: () => navigate('/rental-agreement')
+      onClick: () => navigate('/loans')
     },
     {
       icon: CreditCard,
-      title: 'Rent Payment',
+      title: 'Home Security Services',
       subtitle: 'SECURE & EASY',
-      onClick: () => {}
+      onClick: () => navigate('/home-security-services')
     },
     {
       icon: Wrench,
-      title: 'Plumbing Services',
-      subtitle: '24/7 AVAILABLE',
-      onClick: () => {}
+      title: 'Architect',
+      subtitle: 'CREATIVE',
+      onClick: () => navigate('/architects')
     },
     {
       icon: Calculator,
@@ -67,12 +67,6 @@ const HomeServices = () => {
       title: 'Legal Services',
       subtitle: 'EXPERT ADVICE',
       onClick: () => navigate('/legal-services')
-    },
-    {
-      icon: ClipboardList,
-      title: 'Property Valuation',
-      subtitle: 'FREE ESTIMATE',
-      onClick: () => {}
     },
     {
       icon: Receipt,
