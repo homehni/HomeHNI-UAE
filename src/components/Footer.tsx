@@ -412,7 +412,7 @@ const Footer = ({
         <Instagram className="w-5 h-5 text-brand-red group-hover:text-white" />
       </a>
       <a
-        href="https://www.linkedin.com/in/home-hni-622605376/"
+        href="https://www.linkedin.com/in/homehni/"
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Home HNI on LinkedIn"
