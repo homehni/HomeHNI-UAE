@@ -47,26 +47,6 @@ export const useFavorites = () => {
     }
   };
 
-  // Helper function to check if property ID is a valid UUID
-  const isValidUUID = (str: string): boolean => {
-    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-    return uuidRegex.test(str);
-  };
-
-  // Helper function to generate a consistent UUID for demo properties
-  const generateConsistentUUID = (propertyId: string): string => {
-    // Create a consistent UUID based on the property ID
-    // This ensures the same property always gets the same UUID
-    const hash = Array.from(propertyId).reduce((hash, char) => {
-      hash = ((hash << 5) - hash) + char.charCodeAt(0);
-      return hash & hash; // Convert to 32bit integer
-    }, 0);
-    
-    // Convert to a valid UUID format (this is a demo UUID, not cryptographically secure)
-    const hexHash = Math.abs(hash).toString(16).padStart(8, '0');
-    return `${hexHash}-1234-5678-9abc-${hexHash}${hexHash.substring(0, 4)}`;
-  };
-
   const toggleFavorite = async (propertyId: string) => {
     if (!user) {
       toast({
@@ -77,36 +57,6 @@ export const useFavorites = () => {
       return false;
     }
 
-    // Check if this is a demo property (non-UUID) or real property (UUID)
-    const isDemo = !isValidUUID(propertyId);
-    
-    if (isDemo) {
-      // For demo properties, just handle locally without database interaction
-      const currentlyFavorited = favorites[propertyId] || false;
-      const newStatus = !currentlyFavorited;
-      
-      setFavorites(prev => ({
-        ...prev,
-        [propertyId]: newStatus
-      }));
-
-      // Show appropriate toast message
-      if (newStatus) {
-        toast({
-          title: "Demo Property Saved",
-          description: "This is a demo property. In the real app, this would be saved to your favorites.",
-        });
-      } else {
-        toast({
-          title: "Demo Property Removed",
-          description: "This demo property has been removed from your favorites.",
-        });
-      }
-
-      return newStatus;
-    }
-
-    // Handle real properties with database interaction
     const currentlyFavorited = favorites[propertyId] || false;
     
     // Optimistically update UI
@@ -120,15 +70,39 @@ export const useFavorites = () => {
         property_id: propertyId
       });
 
-      if (error) throw error;
+      if (error) {
+        // Handle the case where property doesn't exist in database (demo properties)
+        if (error.message?.includes('invalid input syntax for type uuid') || 
+            error.message?.includes('does not exist') ||
+            error.message?.includes('violates foreign key constraint')) {
+          
+          // For demo properties, just handle locally
+          const newStatus = !currentlyFavorited;
+          setFavorites(prev => ({
+            ...prev,
+            [propertyId]: newStatus
+          }));
 
-      // Update local state based on server response
+          toast({
+            title: newStatus ? "Demo Property Saved" : "Demo Property Removed", 
+            description: newStatus 
+              ? "This is a demo property. In the real app, this would be saved to your favorites."
+              : "This demo property has been removed from your favorites.",
+          });
+
+          return newStatus;
+        }
+        
+        throw error;
+      }
+
+      // Update local state based on server response for real properties
       setFavorites(prev => ({
         ...prev,
         [propertyId]: data
       }));
 
-      // Show appropriate toast message
+      // Show appropriate toast message for real properties
       if (data) {
         toast({
           title: "Property Saved",
