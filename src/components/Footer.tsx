@@ -187,18 +187,73 @@ const Footer = ({
   };
   return <footer className="bg-white text-gray-700 border-t">
       <div className="container mx-auto px-4 py-8">
-        {/* Property listings grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6 mb-8">
-          {propertyListings.map((section, index) => <div key={index}>
-              <h4 className="font-semibold text-gray-900 mb-3 text-sm">{section.title}</h4>
-              <ul className="space-y-1">
-                {section.links.map((link, linkIndex) => <li key={linkIndex}>
-                    <button onClick={() => handleLinkClick(link)} className="text-xs text-gray-600 hover:text-brand-red transition-colors leading-relaxed text-left">
-                      {link}
-                    </button>
-                  </li>)}
-              </ul>
-            </div>)}
+        {/* Property Categories - Structured Layout */}
+        <div className="mb-8">
+          {/* Category Headers */}
+          <div className="flex flex-wrap bg-gray-50 rounded-t-lg">
+            <div className="bg-orange-500 text-white px-6 py-3 font-semibold text-sm">
+              Flats
+            </div>
+            <div className="bg-gray-800 text-white px-6 py-3 font-semibold text-sm">
+              Plots
+            </div>
+            <div className="bg-gray-800 text-white px-6 py-3 font-semibold text-sm">
+              Villas
+            </div>
+            <div className="bg-gray-800 text-white px-6 py-3 font-semibold text-sm">
+              Agricultural & Commercial Land
+            </div>
+            <div className="bg-gray-800 text-white px-6 py-3 font-semibold text-sm">
+              Commercial & Industrial Prop
+            </div>
+            <div className="bg-gray-800 text-white px-6 py-3 font-semibold text-sm">
+              Investment & Income Oppor
+            </div>
+            <div className="bg-gray-800 text-white px-6 py-3 font-semibold text-sm">
+              Strategic Locations
+            </div>
+            <div className="bg-gray-800 text-white px-6 py-3 font-semibold text-sm">
+              Miscellaneous
+            </div>
+          </div>
+
+          {/* Property Listings Content */}
+          <div className="bg-gray-800 text-white p-6 rounded-b-lg">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {/* Flats for Sale in Bangalore */}
+              <div>
+                <h4 className="font-semibold text-white mb-4 text-sm">Flats for Sale in Bangalore</h4>
+                <ul className="space-y-2">
+                  <li><button onClick={() => handleLinkClick("Flats for Sale in Koramangala")} className="text-xs text-gray-300 hover:text-orange-400 transition-colors text-left">Flats for Sale in Koramangala</button></li>
+                  <li><button onClick={() => handleLinkClick("Flats for Sale in Whitefield")} className="text-xs text-gray-300 hover:text-orange-400 transition-colors text-left">Flats for Sale in Whitefield</button></li>
+                  <li><button onClick={() => handleLinkClick("Flats Below 50 Lakhs in Bangalore")} className="text-xs text-gray-300 hover:text-orange-400 transition-colors text-left">Flats Below 50 Lakhs in Bangalore</button></li>
+                  <li><button onClick={() => handleLinkClick("Luxury Flats Above 1 Crore in Bangalore")} className="text-xs text-gray-300 hover:text-orange-400 transition-colors text-left">Luxury Flats Above 1 Crore in Bangalore</button></li>
+                </ul>
+              </div>
+              
+              {/* Flats for Sale in Mumbai */}
+              <div>
+                <h4 className="font-semibold text-white mb-4 text-sm">Flats for Sale in Mumbai</h4>
+                <ul className="space-y-2">
+                  <li><button onClick={() => handleLinkClick("Flats for Sale in Andheri West")} className="text-xs text-gray-300 hover:text-orange-400 transition-colors text-left">Flats for Sale in Andheri West</button></li>
+                  <li><button onClick={() => handleLinkClick("Flats for Sale in Navi Mumbai")} className="text-xs text-gray-300 hover:text-orange-400 transition-colors text-left">Flats for Sale in Navi Mumbai</button></li>
+                  <li><button onClick={() => handleLinkClick("Flats Below 50 Lakhs in Mumbai")} className="text-xs text-gray-300 hover:text-orange-400 transition-colors text-left">Flats Below 50 Lakhs in Mumbai</button></li>
+                  <li><button onClick={() => handleLinkClick("Luxury Flats Above 2 Crores in Mumbai")} className="text-xs text-gray-300 hover:text-orange-400 transition-colors text-left">Luxury Flats Above 2 Crores in Mumbai</button></li>
+                </ul>
+              </div>
+              
+              {/* Flats for Sale in Hyderabad */}
+              <div>
+                <h4 className="font-semibold text-white mb-4 text-sm">Flats for Sale in Hyderabad</h4>
+                <ul className="space-y-2">
+                  <li><button onClick={() => handleLinkClick("Flats for Sale in Andheri West")} className="text-xs text-gray-300 hover:text-orange-400 transition-colors text-left">Flats for Sale in Andheri West</button></li>
+                  <li><button onClick={() => handleLinkClick("Flats for Sale in Navi Mumbai")} className="text-xs text-gray-300 hover:text-orange-400 transition-colors text-left">Flats for Sale in Navi Mumbai</button></li>
+                  <li><button onClick={() => handleLinkClick("Flats Below 50 Lakhs in Mumbai")} className="text-xs text-gray-300 hover:text-orange-400 transition-colors text-left">Flats Below 50 Lakhs in Mumbai</button></li>
+                  <li><button onClick={() => handleLinkClick("Luxury Flats Above 2 Crores in Mumbai")} className="text-xs text-gray-300 hover:text-orange-400 transition-colors text-left">Luxury Flats Above 2 Crores in Mumbai</button></li>
+                </ul>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Additional city listings */}
