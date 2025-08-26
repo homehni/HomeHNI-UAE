@@ -33,7 +33,7 @@ const AdminUsers = () => {
   useEffect(() => {
     fetchUsers();
     
-    // Set up real-time subscriptions
+    // Set up real-time subscriptions for immediate updates
     const propertiesChannel = supabase
       .channel('properties-changes')
       .on(
@@ -43,8 +43,9 @@ const AdminUsers = () => {
           schema: 'public',
           table: 'properties'
         },
-        () => {
-          fetchUsers();
+        (payload) => {
+          console.log('Properties table changed:', payload);
+          fetchUsers(); // Refresh user list immediately
         }
       )
       .subscribe();
@@ -58,8 +59,26 @@ const AdminUsers = () => {
           schema: 'public',
           table: 'profiles'
         },
-        () => {
-          fetchUsers();
+        (payload) => {
+          console.log('Profiles table changed:', payload);
+          fetchUsers(); // Refresh user list immediately
+        }
+      )
+      .subscribe();
+
+    // Also listen to property_submissions for immediate feedback
+    const submissionsChannel = supabase
+      .channel('submissions-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'property_submissions'
+        },
+        (payload) => {
+          console.log('New property submission:', payload);
+          fetchUsers(); // Refresh user list immediately when new submission
         }
       )
       .subscribe();
@@ -67,6 +86,7 @@ const AdminUsers = () => {
     return () => {
       supabase.removeChannel(propertiesChannel);
       supabase.removeChannel(profilesChannel);
+      supabase.removeChannel(submissionsChannel);
     };
   }, []);
 
