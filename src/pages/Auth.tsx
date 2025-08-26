@@ -18,7 +18,11 @@ export const Auth: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { toast } = useToast();
-  const [activeTab, setActiveTab] = useState("signin");
+  const [activeTab, setActiveTab] = useState(() => {
+    const urlParams = new URLSearchParams(location.search);
+    const mode = urlParams.get('mode');
+    return mode === 'signup' ? 'signup' : 'signin';
+  });
   const [showRoleModal, setShowRoleModal] = useState(false);
   const [showSignInPassword, setShowSignInPassword] = useState(false);
   const [showSignUpPassword, setShowSignUpPassword] = useState(false);
