@@ -48,7 +48,7 @@ export const MyInterests: React.FC = () => {
   const { toast } = useToast();
   const [favorites, setFavorites] = useState<FavoriteProperty[]>([]);
   const [loading, setLoading] = useState(true);
-  const { refetchFavorites } = useFavorites();
+  const { refetchFavorites, toggleFavorite, favorites: localFavorites } = useFavorites();
 
   // Redirect to auth if not logged in
   useEffect(() => {
@@ -64,7 +64,7 @@ export const MyInterests: React.FC = () => {
       if (!user) return;
 
       try {
-        // First get the favorite property IDs
+        // First get the favorite property IDs from database
         const { data: favoritesData, error: favoritesError } = await supabase
           .from('user_favorites')
           .select('id, property_id, created_at')
@@ -73,38 +73,77 @@ export const MyInterests: React.FC = () => {
 
         if (favoritesError) throw favoritesError;
 
-        if (!favoritesData || favoritesData.length === 0) {
-          setFavorites([]);
-          setLoading(false);
-          return;
+        // Also get local demo favorites from useFavorites hook        
+        let combinedData: FavoriteProperty[] = [];
+
+        // Handle database favorites (real properties)
+        if (favoritesData && favoritesData.length > 0) {
+          // Get the property IDs
+          const propertyIds = favoritesData.map(fav => fav.property_id);
+
+          // Then fetch the properties
+          const { data: propertiesData, error: propertiesError } = await supabase
+            .from('properties')
+            .select('*')
+            .in('id', propertyIds)
+            .eq('status', 'approved');
+
+          if (!propertiesError && propertiesData) {
+            // Combine the database data
+            const dbFavorites = favoritesData.map(favorite => {
+              const property = propertiesData.find(p => p.id === favorite.property_id);
+              if (property) {
+                return {
+                  id: favorite.id,
+                  user_id: user.id,
+                  property_id: favorite.property_id,
+                  created_at: favorite.created_at,
+                  properties: property
+                };
+              }
+              return null;
+            }).filter(Boolean) as FavoriteProperty[];
+            
+            combinedData = [...combinedData, ...dbFavorites];
+          }
         }
 
-        // Get the property IDs
-        const propertyIds = favoritesData.map(fav => fav.property_id);
-
-        // Then fetch the properties
-        const { data: propertiesData, error: propertiesError } = await supabase
-          .from('properties')
-          .select('*')
-          .in('id', propertyIds)
-          .eq('status', 'approved');
-
-        if (propertiesError) throw propertiesError;
-
-        // Combine the data
-        const combinedData = favoritesData.map(favorite => {
-          const property = propertiesData?.find(p => p.id === favorite.property_id);
-          if (property) {
-            return {
-              id: favorite.id,
-              user_id: user.id,
-              property_id: favorite.property_id,
-              created_at: favorite.created_at,
-              properties: property
-            };
+        // Handle demo properties (from local state)
+        Object.entries(localFavorites).forEach(([propertyId, isFavorited]) => {
+          if (isFavorited && !combinedData.find(f => f.property_id === propertyId)) {
+            // Check if this is likely a demo property (non-UUID format)
+            const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+            if (!uuidRegex.test(propertyId)) {
+              // Create a demo property object for display
+              combinedData.push({
+                id: `demo-${propertyId}`,
+                user_id: user.id,
+                property_id: propertyId,
+                created_at: new Date().toISOString(),
+                properties: {
+                  id: propertyId,
+                  title: "Demo Property - Featured Listing",
+                  property_type: "apartment",
+                  listing_type: "sale",
+                  bhk_type: "3BHK",
+                  expected_price: 8500000,
+                  super_area: 1200,
+                  carpet_area: 1000,
+                  bathrooms: 3,
+                  balconies: 2,
+                  city: "Delhi",
+                  locality: "Online Only",
+                  state: "Delhi",
+                  pincode: "110001",
+                  description: "This is a demo property for showcase purposes.",
+                  images: ["/placeholder.svg"],
+                  status: "approved",
+                  created_at: new Date().toISOString()
+                }
+              });
+            }
           }
-          return null;
-        }).filter(Boolean) as FavoriteProperty[];
+        });
 
         setFavorites(combinedData);
       } catch (error) {
@@ -120,26 +159,44 @@ export const MyInterests: React.FC = () => {
     };
 
     fetchFavorites();
-  }, [user, toast]);
+  }, [user, toast, localFavorites]);
 
   const handleRemoveFavorite = async (favoriteId: string, propertyTitle: string) => {
     try {
-      const { error } = await supabase
-        .from('user_favorites')
-        .delete()
-        .eq('id', favoriteId);
-
-      if (error) throw error;
-
-      setFavorites(prev => prev.filter(fav => fav.id !== favoriteId));
+      // Check if this is a demo favorite
+      const isDemo = favoriteId.startsWith('demo-');
       
-      // Refresh the favorites in the global hook
-      refetchFavorites();
-      
-      toast({
-        title: "Property removed",
-        description: `"${propertyTitle}" has been removed from your saved properties.`,
-      });
+      if (isDemo) {
+        // For demo properties, just toggle the favorite status
+        const propertyId = favoriteId.replace('demo-', '');
+        await toggleFavorite(propertyId);
+        
+        // Remove from local state
+        setFavorites(prev => prev.filter(fav => fav.id !== favoriteId));
+        
+        toast({
+          title: "Demo property removed",
+          description: `"${propertyTitle}" has been removed from your saved properties.`,
+        });
+      } else {
+        // For real properties, delete from database
+        const { error } = await supabase
+          .from('user_favorites')
+          .delete()
+          .eq('id', favoriteId);
+
+        if (error) throw error;
+
+        setFavorites(prev => prev.filter(fav => fav.id !== favoriteId));
+        
+        // Refresh the favorites in the global hook
+        refetchFavorites();
+        
+        toast({
+          title: "Property removed",
+          description: `"${propertyTitle}" has been removed from your saved properties.`,
+        });
+      }
     } catch (error) {
       console.error('Error removing favorite:', error);
       toast({
