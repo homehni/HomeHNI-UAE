@@ -5,9 +5,9 @@ const MobileAppSection = () => {
   const { content: cmsContent } = useCMSContent('mobile-app');
 
   return (
-    <section className="py-0 bg-gradient-to-br from-rose-50 to-white">
-      <div className="container mx-auto px-1">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 items-center max-w-4xl mx-auto">
+    <section className="py-2 bg-gradient-to-br from-rose-50 to-white">
+      <div className="container mx-auto px-2">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-center max-w-6xl mx-auto">
           {/* Content */}
           <div className="text-center lg:text-left order-2 lg:order-1">
             {/* Optional badge */}
@@ -16,11 +16,11 @@ const MobileAppSection = () => {
               New features going live every week
             </div> */}
 
-            <h2 className="text-3xl md:text-4xl font-bold text-black mb-2">
+            <h2 className="text-3xl md:text-4xl font-bold text-black mb-4">
               {cmsContent?.content?.title || 'Homes, Wherever You Are'}
             </h2>
 
-            <p className="text-gray-600 text-base md:text-lg mb-4 leading-relaxed">
+            <p className="text-gray-600 text-base md:text-lg mb-8 leading-relaxed">
               {cmsContent?.content?.description ||
                 'Download our app and discover properties anytime, anywhere. Get instant notifications for new listings that match your preferences.'}
             </p>
