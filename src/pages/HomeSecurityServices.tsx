@@ -325,7 +325,23 @@ const HomeSecurityServices = () => {
                     <SelectItem value="+44">🇬🇧 +44</SelectItem>
                   </SelectContent>
                 </Select>
-                <Input id="security-phone" name="phone" type="tel" placeholder="Phone Number" className="flex-1" required />
+              <Input 
+                id="security-phone" 
+                name="phone" 
+                type="tel" 
+                placeholder="Phone Number" 
+                className="flex-1" 
+                required 
+                onKeyPress={(e) => {
+                  if (!/[0-9]/.test(e.key) && e.key !== 'Backspace' && e.key !== 'Delete' && e.key !== 'Tab' && e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') {
+                    e.preventDefault();
+                  }
+                }}
+                onInput={(e) => {
+                  const target = e.target as HTMLInputElement;
+                  target.value = target.value.replace(/[^0-9]/g, '');
+                }}
+              />
               </div>
 
               <div className="flex gap-2">
@@ -431,6 +447,15 @@ const HomeSecurityServices = () => {
                     placeholder="Phone Number" 
                     className="flex-1 h-12 text-base bg-background" 
                     required 
+                    onKeyPress={(e) => {
+                      if (!/[0-9]/.test(e.key) && e.key !== 'Backspace' && e.key !== 'Delete' && e.key !== 'Tab' && e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') {
+                        e.preventDefault();
+                      }
+                    }}
+                    onInput={(e) => {
+                      const target = e.target as HTMLInputElement;
+                      target.value = target.value.replace(/[^0-9]/g, '');
+                    }}
                   />
                 </div>
 
@@ -899,7 +924,7 @@ const HomeSecurityServices = () => {
         </div>
       </section>
 
-      <Footer />
+      
     </div>
   );
 };
