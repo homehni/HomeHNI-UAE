@@ -64,20 +64,6 @@ const Footer = ({
       "PG in Mumbai": ["PG for Boys in Andheri", "PG for Girls in Malad", "PG near Powai", "PG near Vashi", "PG near Kandivali", "PG near Borivali", "Shared PG in Mumbai", "Single Room PG in Mumbai", "Double Sharing PG in Mumbai"],
       "PG in Hyderabad": ["PG for Boys in Madhapur", "PG for Girls in Gachibowli", "PG near Kukatpally", "PG near Secunderabad", "PG near Miyapur", "Shared PG in Hyderabad", "Single Room PG in Hyderabad", "Double Sharing PG in Hyderabad"]
     }
-  }, {
-    title: "Flatmates",
-    cityData: {
-      "Flatmates in Bangalore": ["Flatmates in Koramangala", "Flatmates in Marathahalli", "Flatmates in HSR Layout", "Flatmates in Whitefield", "Flatmates in Electronic City", "Flatmates in BTM Layout", "Male Roommates in Bangalore", "Female Roommates in Bangalore", "Working Professional Roommates"],
-      "Flatmates in Mumbai": ["Flatmates in Andheri", "Flatmates in Malad", "Flatmates in Powai", "Flatmates in Vashi", "Flatmates in Kandivali", "Male Roommates in Mumbai", "Female Roommates in Mumbai", "Working Professional Roommates Mumbai"],
-      "Flatmates in Hyderabad": ["Flatmates in Madhapur", "Flatmates in Gachibowli", "Flatmates in Kukatpally", "Flatmates in Secunderabad", "Male Roommates in Hyderabad", "Female Roommates in Hyderabad", "Working Professional Roommates Hyderabad"]
-    }
-  }, {
-    title: "Miscellaneous",
-    cityData: {
-      "Commercial Properties": ["Office Space for Rent in Bangalore", "Office Space for Sale in Mumbai", "Retail Space in Hyderabad", "Warehouse for Rent", "Co-working Spaces", "Business Centers", "Industrial Plots", "Commercial Land"],
-      "Investment Properties": ["Investment Properties in Bangalore", "Investment Properties in Mumbai", "Investment Properties in Hyderabad", "High ROI Properties", "Pre-launch Projects", "Under Construction Properties"],
-      "Luxury Properties": ["Luxury Villas in Bangalore", "Luxury Apartments in Mumbai", "Premium Properties in Hyderabad", "Penthouses", "Villa Communities", "Gated Communities"]
-    }
   }];
 
   const tabs = propertyListings.map(section => section.title);
@@ -279,54 +265,37 @@ const Footer = ({
           
         </div>
 
-        {/* Services sections - now tabbed */}
+        {/* Services sections - side by side layout */}
         <div className="mb-8">
-          {/* Service Tab Navigation */}
-          <div className="border-b border-gray-200 mb-6">
-            <div className="flex flex-wrap justify-between gap-0">
-              <button
-                onClick={() => setActiveServiceTab('Buy Services')}
-                className={`px-4 py-3 text-sm font-medium border-b-2 transition-colors ${
-                  activeServiceTab === 'Buy Services'
-                    ? 'border-brand-red text-brand-red bg-brand-red/5'
-                    : 'border-transparent text-gray-600 hover:text-gray-900 hover:border-gray-300'
-                }`}
-              >
-                Buy Services
-              </button>
-              <button
-                onClick={() => setActiveServiceTab('Rent Services')}
-                className={`px-4 py-3 text-sm font-medium border-b-2 transition-colors ${
-                  activeServiceTab === 'Rent Services'
-                    ? 'border-brand-red text-brand-red bg-brand-red/5'
-                    : 'border-transparent text-gray-600 hover:text-gray-900 hover:border-gray-300'
-                }`}
-              >
-                Rent Services
-              </button>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div>
+              <h4 className="font-semibold text-gray-900 mb-4">Buy</h4>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+                {services.buy.map((service, index) => (
+                  <button 
+                    key={index} 
+                    onClick={() => handleLinkClick(service)} 
+                    className="text-xs text-gray-600 hover:text-brand-red transition-colors text-left"
+                  >
+                    {service}
+                  </button>
+                ))}
+              </div>
             </div>
-          </div>
-
-          {/* Service Tab Content */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
-            {activeServiceTab === 'Buy Services' && services.buy.map((service, index) => (
-              <button 
-                key={index} 
-                onClick={() => handleLinkClick(service)} 
-                className="text-xs text-gray-600 hover:text-brand-red transition-colors text-left"
-              >
-                {service}
-              </button>
-            ))}
-            {activeServiceTab === 'Rent Services' && services.rent.map((service, index) => (
-              <button 
-                key={index} 
-                onClick={() => handleLinkClick(service)} 
-                className="text-xs text-gray-600 hover:text-brand-red transition-colors text-left"
-              >
-                {service}
-              </button>
-            ))}
+            <div>
+              <h4 className="font-semibold text-gray-900 mb-4">Rent</h4>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+                {services.rent.map((service, index) => (
+                  <button 
+                    key={index} 
+                    onClick={() => handleLinkClick(service)} 
+                    className="text-xs text-gray-600 hover:text-brand-red transition-colors text-left"
+                  >
+                    {service}
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
 
