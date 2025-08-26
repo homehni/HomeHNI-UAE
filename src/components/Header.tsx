@@ -196,16 +196,16 @@ const Header = () => {
 
               {/* Desktop Navigation Links - Show everywhere */}
               {<nav className="hidden lg:flex items-center space-x-5">
-  <MegaMenu isScrolled={isScrolled} />
+  {/* <MegaMenu isScrolled={isScrolled} /> */}
   
   {/* Sellers Dropdown */}
-  <div className="relative" onMouseEnter={handleSellersHover} onMouseLeave={handleSellersLeave}>
+  {/* <div className="relative" onMouseEnter={handleSellersHover} onMouseLeave={handleSellersLeave}>
     <button className={`flex items-center hover:opacity-80 transition-colors duration-500 text-base font-medium uppercase ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
       Sellers
       <ChevronDown className="ml-1 h-3 w-3" />
     </button>
     
-    {/* Custom Sellers Dropdown */}
+    Custom Sellers Dropdown
     {isSellersDropdownOpen && <div className="absolute top-full left-0 w-32 bg-white border border-gray-200 rounded-lg shadow-xl z-[100] mt-2" onMouseEnter={handleSellersHover} onMouseLeave={handleSellersLeave}>
         <div className="py-2">
           <button onClick={() => handlePostPropertyClick('Owner')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
@@ -219,18 +219,18 @@ const Header = () => {
           </button>
         </div>
       </div>}
-  </div>
+  </div> */}
   
 
 
 
-              <div className="relative" onMouseEnter={handleRentalHover} onMouseLeave={handleRentalLeave}>
+              {/* <div className="relative" onMouseEnter={handleRentalHover} onMouseLeave={handleRentalLeave}>
     <button className={`flex items-center hover:opacity-80 transition-colors duration-500 text-base font-medium uppercase ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
       Rental
       <ChevronDown className="ml-1 h-3 w-3" />
     </button>
     
-    {/* Custom Rental Dropdown */}
+    Custom Rental Dropdown
     {isRentalDropdownOpen && <div className="absolute top-full left-0 w-32 bg-white border border-gray-200 rounded-lg shadow-xl z-[100] mt-2" onMouseEnter={handleRentalHover} onMouseLeave={handleRentalLeave}>
         <div className="py-2">
           <button onClick={() => handlePostPropertyClick('Owner')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
@@ -242,7 +242,7 @@ const Header = () => {
           
         </div>
       </div>}
-  </div>
+  </div> */}
   
   {/* Services Dropdown */}
   <div className="relative" onMouseEnter={handleServicesHover} onMouseLeave={handleServicesLeave}>
@@ -329,7 +329,29 @@ const Header = () => {
                 </Button>}
 
 
-              {/* Profile Avatar - Only visible for authenticated users */}
+               {/* Sign Up / Login buttons for unauthenticated users */}
+               {!user && <div className="flex items-center space-x-2">
+                 <Button 
+                   variant="ghost" 
+                   size="sm" 
+                   onClick={handleAuthClick}
+                   className={`font-medium px-3 py-1.5 text-sm transition-all duration-500 ${isScrolled ? 'text-gray-800 hover:bg-gray-100' : 'text-white hover:bg-white/10'}`}
+                 >
+                   <LogIn className="mr-1 h-4 w-4" />
+                   Login
+                 </Button>
+                 <Button 
+                   variant="outline" 
+                   size="sm" 
+                   onClick={handleAuthClick}
+                   className={`font-medium px-3 py-1.5 text-sm transition-all duration-500 ${isScrolled ? 'bg-white text-brand-red border-gray-300 hover:bg-gray-50' : 'bg-white/20 backdrop-blur-sm text-white border-white/30 hover:bg-white/30'}`}
+                 >
+                   <UserPlus className="mr-1 h-4 w-4" />
+                   Sign Up
+                 </Button>
+               </div>}
+
+               {/* Profile Avatar - Only visible for authenticated users */}
               {user && <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button variant="ghost" className={`p-2 transition-colors duration-500 ${isScrolled ? 'text-gray-800 hover:bg-gray-100' : 'text-white hover:bg-white/10'}`}>
