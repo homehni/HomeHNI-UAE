@@ -358,13 +358,9 @@ const Header = () => {
                       <MessageCircle className="mr-2 h-4 w-4" />
                       <span>Contact Leads</span>
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => navigate('/dashboard?tab=profile')}>
-                      <Users className="mr-2 h-4 w-4" />
-                      <span>Profile</span>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => navigate('/dashboard?tab=interests')}>
+                    <DropdownMenuItem onClick={() => navigate('/my-interests')}>
                       <Heart className="mr-2 h-4 w-4" />
-                      <span>My Interests</span>
+                      <span>My Interest</span>
                     </DropdownMenuItem>
                     {isAdmin && <DropdownMenuItem onClick={() => navigate('/admin')}>
                         <Settings className="mr-2 h-4 w-4" />

@@ -4,6 +4,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 import { RECOMMENDED_CARD_WIDTH, RECOMMENDED_IMAGE_HEIGHT } from '@/constants/ui';
 import { useNavigate } from 'react-router-dom';
+import { FavoriteButton } from '@/components/FavoriteButton';
 
 interface PropertyCardProps {
   id: string;
@@ -113,14 +114,11 @@ const PropertyCard = ({
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
           />
         </div>
-        <Button
-          variant="ghost"
+        <FavoriteButton 
+          propertyId={id}
           size="sm"
-          className="absolute top-2 right-2 bg-white/90 hover:bg-white text-red-500 hover:text-red-600 h-8 w-8 p-0 rounded-full"
-          onClick={(e) => e.stopPropagation()}
-        >
-          <Heart size={14} />
-        </Button>
+          className="absolute top-2 right-2 bg-white/90 hover:bg-white"
+        />
         {isNew && (
           <div className="absolute top-2 left-2 bg-red-600 text-white px-2 py-1 rounded-md text-xs font-medium">
             New
