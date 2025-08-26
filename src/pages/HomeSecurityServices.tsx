@@ -547,8 +547,8 @@ const HomeSecurityServices = () => {
               return (
                 <Card key={index} className="p-6 hover:shadow-lg transition-shadow">
                   <CardContent className="p-0">
-                    <div className="text-uniform-center mb-6">
-                      <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <div className="mb-6">
+                      <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-4">
                         <Icon className="w-8 h-8 text-primary" />
                       </div>
                       <h3 className="font-semibold text-xl text-foreground mb-2">{solution.title}</h3>
@@ -586,9 +586,9 @@ const HomeSecurityServices = () => {
             {services.map((service, index) => {
               const Icon = service.icon;
               return (
-                <Card key={index} className="p-6 text-uniform-center hover:shadow-lg transition-shadow">
+                <Card key={index} className="p-6 hover:shadow-lg transition-shadow">
                   <CardContent className="p-0">
-                    <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-4">
                       <Icon className="w-8 h-8 text-primary" />
                     </div>
                     <h3 className="font-semibold text-lg text-foreground mb-2">{service.title}</h3>
@@ -604,11 +604,11 @@ const HomeSecurityServices = () => {
       {/* Trusted by Thousands - Stats */}
       <section className="py-16 gradient-red-maroon">
         <div className="container mx-auto px-4">
-          <div className="text-uniform-center mb-12">
+          <div className="mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
               Trusted by Thousands
             </h2>
-            <p className="text-lg text-white/90 max-w-2xl mx-auto">
+            <p className="text-lg text-white/90 max-w-2xl">
               Join thousands of satisfied customers who trust Home HNI for their security needs.
             </p>
           </div>
@@ -734,9 +734,9 @@ const HomeSecurityServices = () => {
             {targetAudience.map((audience, index) => {
               const Icon = audience.icon;
               return (
-                <Card key={index} className="p-6 text-uniform-center hover:shadow-lg transition-shadow">
+                <Card key={index} className="p-6 hover:shadow-lg transition-shadow">
                   <CardContent className="p-0">
-                    <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-4">
                       <Icon className="w-8 h-8 text-primary" />
                     </div>
                     <h3 className="font-semibold text-lg text-foreground mb-2">{audience.title}</h3>
@@ -778,7 +778,7 @@ const HomeSecurityServices = () => {
 
       {/* Final CTA */}
       <section className="py-16 md:py-20 px-4 md:px-8 bg-primary text-white">
-        <div className="container mx-auto max-w-4xl text-uniform-center">
+        <div className="container mx-auto max-w-4xl">
           <h2 className="text-3xl md:text-4xl font-bold mb-6">
             Secure Your Home Today with Home HNI Security Experts
           </h2>
