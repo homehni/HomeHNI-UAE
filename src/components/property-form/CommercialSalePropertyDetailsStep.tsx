@@ -106,6 +106,7 @@ export const CommercialSalePropertyDetailsStep = ({
                     <SelectContent>
                       <SelectItem value="office">Office</SelectItem>
                       <SelectItem value="retail">Retail</SelectItem>
+                       <SelectItem value="co-living">Co-Living</SelectItem>
                       <SelectItem value="warehouse">Warehouse</SelectItem>
                       <SelectItem value="showroom">Showroom</SelectItem>
                       <SelectItem value="restaurant">Restaurant</SelectItem>
