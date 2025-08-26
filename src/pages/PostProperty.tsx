@@ -286,16 +286,16 @@ export const PostProperty: React.FC = () => {
         description: "Almost done! Saving your property listing.",
       });
 
-      // Insert property into database
-      // Submit to new instant submissions table
-      const { data: property, error } = await supabase
+      // Insert property into database without returning the row (avoids SELECT RLS issues for non-admins)
+      const { error } = await supabase
         .from('property_submissions')
         .insert({
+          user_id: user.id,
           title: propertyData.title || 'New Property Submission',
           city: propertyData.city || 'Unknown',
           state: propertyData.state || 'Unknown', 
           status: 'new',
-          payload: JSON.stringify({
+          payload: {
             ...propertyData,
             images: imageUrls.map(img => ({ url: img.url })),
             videos: videoUrls,
@@ -303,10 +303,8 @@ export const PostProperty: React.FC = () => {
               ownerInfo: JSON.parse(JSON.stringify(data.ownerInfo)),
               propertyInfo: JSON.parse(JSON.stringify(data.propertyInfo))
             }
-          })
-        })
-        .select()
-        .single();
+          }
+        });
 
       if (error) {
         console.error('Database insertion error - Full details:', {
@@ -351,7 +349,7 @@ export const PostProperty: React.FC = () => {
         throw new Error(errorMessage);
       }
 
-      console.log('Property created successfully:', property);
+      console.log('Property submission created successfully.');
 
       // Save owner contact information to property_drafts table
       let priceDetailsDraft: any;
