@@ -27,7 +27,7 @@ interface Property {
   expected_price: number;
   super_area: number;
   description: string;
-  images: string[];
+  images: (string | { url: string })[];
   status: string;
   created_at: string;
   rejection_reason?: string;
@@ -103,16 +103,24 @@ export const PropertyReviewModal: React.FC<PropertyReviewModalProps> = ({
               <CardContent>
                 {property.images && property.images.length > 0 ? (
                   <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                    {property.images.slice(0, 6).map((image, index) => (
-                      <div key={index} className="relative group overflow-hidden rounded-lg">
-                        <img
-                          src={image}
-                          alt={`Property ${index + 1}`}
-                          className="w-full h-32 object-cover transition-transform group-hover:scale-105"
-                        />
-                        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors" />
-                      </div>
-                    ))}
+                     {property.images.slice(0, 6).map((image, index) => {
+                       // Handle both object format {url: "..."} and direct URL string
+                       const imageUrl: string = typeof image === 'string' ? image : (image?.url || '/placeholder.svg');
+                       return (
+                         <div key={index} className="relative group overflow-hidden rounded-lg">
+                           <img
+                             src={imageUrl}
+                             alt={`Property ${index + 1}`}
+                             className="w-full h-32 object-cover transition-transform group-hover:scale-105"
+                             onError={(e) => {
+                               e.currentTarget.src = '/placeholder.svg';
+                               e.currentTarget.alt = 'Image not available';
+                             }}
+                           />
+                           <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors" />
+                         </div>
+                       );
+                     })}
                   </div>
                 ) : (
                   <div className="text-center py-8 text-muted-foreground">
