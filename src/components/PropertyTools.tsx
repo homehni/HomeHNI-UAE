@@ -4,9 +4,13 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Calculator, DollarSign, TrendingUp, Ruler } from 'lucide-react';
 import EMICalculatorModal from '@/components/EMICalculatorModal';
+import BudgetCalculatorModal from '@/components/BudgetCalculatorModal';
+import AreaConverterModal from '@/components/AreaConverterModal';
 
 const PropertyTools = () => {
   const [emiModalOpen, setEmiModalOpen] = useState(false);
+  const [budgetModalOpen, setBudgetModalOpen] = useState(false);
+  const [areaModalOpen, setAreaModalOpen] = useState(false);
   const navigate = useNavigate();
   const tools = [
     {
@@ -45,13 +49,13 @@ const PropertyTools = () => {
         setEmiModalOpen(true);
         break;
       case 'budget-calculator':
-        navigate('/budget-calculator');
+        setBudgetModalOpen(true);
         break;
       case 'loan-eligibility':
-        navigate('/loan-eligibility');
+        navigate('/loans');
         break;
       case 'area-converter':
-        navigate('/area-converter');
+        setAreaModalOpen(true);
         break;
       default:
         break;
@@ -100,6 +104,16 @@ const PropertyTools = () => {
       <EMICalculatorModal 
         isOpen={emiModalOpen} 
         onClose={() => setEmiModalOpen(false)} 
+      />
+      
+      <BudgetCalculatorModal 
+        isOpen={budgetModalOpen} 
+        onClose={() => setBudgetModalOpen(false)} 
+      />
+      
+      <AreaConverterModal 
+        isOpen={areaModalOpen} 
+        onClose={() => setAreaModalOpen(false)} 
       />
     </section>
   );
