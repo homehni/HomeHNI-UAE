@@ -166,49 +166,36 @@ function AutoScrollTestimonials() {
     const scroller = scrollRef.current;
     if (!scroller) return;
 
-    let current = 0;
-    let ticking = false;
+    let i = 0;
+    let busy = false;
     let timer: ReturnType<typeof setInterval> | null = null;
 
-    const scrollToIndex = (i: number) => {
-      if (!scroller || ticking) return;
-      const el = itemRefs.current[i];
+    const goto = (idx: number) => {
+      if (busy || !scroller) return;
+      const el = itemRefs.current[idx];
       if (!el) return;
-
-      ticking = true;
-      scroller.scrollTo({ left: el.offsetLeft, behavior: "smooth" });
-      // allow smooth scrolling to finish
-      setTimeout(() => (ticking = false), 600);
+      busy = true;
+      scroller.scrollTo({ left: el.offsetLeft - scroller.scrollLeft + scroller.scrollLeft, behavior: "smooth" });
+      setTimeout(() => (busy = false), 600);
     };
 
     const start = () => {
       stop();
       timer = setInterval(() => {
-        current = (current + 1) % testimonials.length;
-        scrollToIndex(current);
+        i = (i + 1) % testimonials.length;
+        goto(i);
       }, 4000);
     };
+    const stop = () => { if (timer) clearInterval(timer); timer = null; };
 
-    const stop = () => {
-      if (timer) clearInterval(timer);
-      timer = null;
-    };
-
-    // keep alignment on resize
-    const ro = new ResizeObserver(() => {
-      scrollToIndex(current);
-    });
+    // keep alignment on resize/orientation
+    const ro = new ResizeObserver(() => goto(i));
     ro.observe(scroller);
 
-    // kick off after a tiny delay (lets layout settle)
     const init = setTimeout(start, 800);
 
-    // pause on user interaction for better UX
-    const onPointerDown = () => stop();
-    const onPointerUp = () => start();
-
-    scroller.addEventListener("pointerdown", onPointerDown);
-    scroller.addEventListener("pointerup", onPointerUp);
+    scroller.addEventListener("pointerdown", stop);
+    scroller.addEventListener("pointerup", start);
     scroller.addEventListener("mouseenter", stop);
     scroller.addEventListener("mouseleave", start);
 
@@ -216,8 +203,8 @@ function AutoScrollTestimonials() {
       clearTimeout(init);
       stop();
       ro.disconnect();
-      scroller.removeEventListener("pointerdown", onPointerDown);
-      scroller.removeEventListener("pointerup", onPointerUp);
+      scroller.removeEventListener("pointerdown", stop);
+      scroller.removeEventListener("pointerup", start);
       scroller.removeEventListener("mouseenter", stop);
       scroller.removeEventListener("mouseleave", start);
     };
@@ -231,27 +218,31 @@ function AutoScrollTestimonials() {
     <div className="relative">
       <div
         ref={scrollRef}
-        className="overflow-x-auto -mx-4 px-4 pb-2 snap-x snap-mandatory scroll-smooth"
+        className="overflow-x-auto px-4 pb-2 snap-x snap-mandatory scroll-smooth hide-scroll"
         style={{
-          scrollbarWidth: "none",
-          msOverflowStyle: "none",
+          scrollPaddingLeft: "1rem",   // = px-4
+          scrollPaddingRight: "1rem",  // neat end spacing
           WebkitOverflowScrolling: "touch",
         }}
       >
-        <style>{`.overflow-x-auto::-webkit-scrollbar{display:none}`}</style>
-
         <div className="flex gap-4">
-          {testimonials.map((t, i) => (
+          {testimonials.map((t, idx) => (
             <div
-              key={i}
+              key={idx}
               ref={setItemRef}
-              className="w-[92%] sm:w-[85%] md:w-[75%] flex-shrink-0 snap-start"
+              className="snap-start shrink-0 box-border
+                         basis-[92%] sm:basis-[85%] md:basis-[75%]"
             >
               <TestimonialCard {...t} />
             </div>
           ))}
         </div>
       </div>
+
+      {/* hide scrollbar (webkit) */}
+      <style>{`
+        .hide-scroll::-webkit-scrollbar { display: none; }
+      `}</style>
     </div>
   );
 }
