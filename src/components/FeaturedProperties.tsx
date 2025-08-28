@@ -167,156 +167,107 @@ const FeaturedProperties = ({
     };
   }, []);
 
-  // Default properties as fallback - curated list with 2-3 properties per category
+  // Manual featured properties with customizable images
   const defaultProperties: FeaturedProperty[] = [
-    // Apartments - 2 properties
+    // Apartments
     {
       id: '1',
-      title: 'Modern 3BHK Apartment with City View',
-      location: 'Whitefield, Bangalore',
+      title: 'Modern Apartment with Delhi',
+      location: 'Sector 18, KK Road',
       price: '₹95 L',
       area: '1,350 sq ft',
       bedrooms: 3,
       bathrooms: 2,
-      image: '/src/Images/apartment1.jpg',
+      image: '/public/images/apartment1.jpg',
       propertyType: 'Apartment',
       isNew: true
     },
     {
       id: '2',
-      title: 'Luxury 2BHK Apartment Near Metro',
-      location: 'Dwarka, Delhi',
+      title: 'Affordable 2BHK in IT Hub',
+      location: 'Electronic City, Bangalore',
       price: '₹75 L',
       area: '1,100 sq ft',
       bedrooms: 2,
       bathrooms: 2,
-      image: '/src/Images/apartment3..jpg',
+      image: '/public/images/apartment3..jpg',
       propertyType: 'Apartment'
     },
     
-    // Villas - 2 properties
+    // Villas
     {
       id: '3',
-      title: 'Premium Villa with Private Garden',
+      title: 'Modern Villa with Garden',
       location: 'DLF Phase 3, Gurgaon',
       price: '₹2.5 Cr',
       area: '2,400 sq ft',
       bedrooms: 4,
       bathrooms: 3,
-      image: '/src/Images/villa1.jpg',
+      image: '/public/images/villa1.jpg',
       propertyType: 'Villa',
       isNew: true
     },
     {
       id: '4',
-      title: 'Modern Villa with Swimming Pool',
-      location: 'Jubilee Hills, Hyderabad',
+      title: 'Premium Office Space',
+      location: 'Cyber City, Gurgaon',
       price: '₹2.8 Cr',
       area: '3,200 sq ft',
       bedrooms: 5,
       bathrooms: 4,
-      image: '/src/Images/villa2.jpg',
-      propertyType: 'Villa'
+      image: '/public/images/villa2.jpg',
+      propertyType: 'Commercial',
+      isNew: true
     },
     
-    // Plots - 2 properties
+    // Houses
     {
       id: '5',
-      title: 'Prime Residential Plot in Gated Community',
-      location: 'Hinjewadi, Pune',
+      title: 'Spacious 3BHK with Balcony',
+      location: 'Whitefield, Bangalore',
       price: '₹60 L',
       area: '2,400 sq ft',
-      bedrooms: 0,
-      bathrooms: 0,
-      image: '/src/Images/plot1.jpg',
-      propertyType: 'Plot',
+      bedrooms: 3,
+      bathrooms: 2,
+      image: '/public/images/house1.jpg',
+      propertyType: 'Apartment',
       isNew: true
     },
     {
       id: '6',
-      title: 'Agricultural Land with Water Source',
-      location: 'Kharif Valley, Punjab',
+      title: 'Independent House with Parking',
+      location: 'Sector 15, Noida',
       price: '₹25 L',
-      area: '5 acres',
-      bedrooms: 0,
-      bathrooms: 0,
-      image: '/src/Images/plot2.jpg',
-      propertyType: 'Plot'
+      area: '1,800 sq ft',
+      bedrooms: 4,
+      bathrooms: 3,
+      image: '/public/images/house2.jpg',
+      propertyType: 'House'
     },
     
-    // Commercial - 2 properties
+    // Commercial
     {
       id: '7',
-      title: 'Premium Office Space in IT Park',
-      location: 'Cyber City, Gurgaon',
+      title: 'Modern 2BHK with City View',
+      location: 'Bandra West, Mumbai',
       price: '₹45 L',
       area: '800 sq ft',
-      bedrooms: 0,
+      bedrooms: 2,
       bathrooms: 1,
-      image: '/src/Images/hall1.jpg',
-      propertyType: 'Commercial',
+      image: '/public/images/hall1.jpg',
+      propertyType: 'Apartment',
       isNew: true
     },
     {
       id: '8',
-      title: 'Warehouse Space with Loading Dock',
-      location: 'Manesar, Gurgaon',
+      title: 'Luxury Penthouse with Terrace',
+      location: 'Koramangala, Bangalore',
       price: '₹75 L',
-      area: '5,000 sq ft',
-      bedrooms: 0,
-      bathrooms: 2,
-      image: '/src/Images/hall2.jpg',
-      propertyType: 'Commercial'
-    },
-    
-    // Independent Houses - 2 properties
-    {
-      id: '9',
-      title: 'Independent House with Parking',
-      location: 'Sector 15, Noida',
-      price: '₹1.8 Cr',
-      area: '1,800 sq ft',
-      bedrooms: 4,
-      bathrooms: 3,
-      image: '/src/Images/house1.jpg',
-      propertyType: 'Independent House',
-      isNew: true
-    },
-    {
-      id: '10',
-      title: 'Duplex House with Garden',
-      location: 'Vijayanagar, Bangalore',
-      price: '₹1.7 Cr',
-      area: '1,900 sq ft',
-      bedrooms: 4,
-      bathrooms: 3,
-      image: '/src/Images/house2.jpg',
-      propertyType: 'Independent House'
-    },
-    
-    // Farm Houses - 2 properties
-    {
-      id: '11',
-      title: 'Farmhouse with Orchard',
-      location: 'Lonavala, Maharashtra',
-      price: '₹1.2 Cr',
-      area: '2 acres',
+      area: '2,000 sq ft',
       bedrooms: 3,
-      bathrooms: 2,
-      image: '/src/Images/farm1.jpg',
-      propertyType: 'Farm House',
-      isNew: true
-    },
-    {
-      id: '12',
-      title: 'Luxury Farmhouse with Pool',
-      location: 'Alibaug, Maharashtra',
-      price: '₹2.1 Cr',
-      area: '3 acres',
-      bedrooms: 4,
       bathrooms: 3,
-      image: '/src/Images/farm2.jpg',
-      propertyType: 'Farm House'
+      image: '/public/images/hall2.jpg',
+      propertyType: 'Penthouse'
     }
   ];
 

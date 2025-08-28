@@ -71,7 +71,7 @@ export const Auth: React.FC = () => {
         toast({
           title: "Email verification required",
           description: error.message,
-          variant: "warning",
+          variant: "default",
           duration: 8000, // Show for longer
         });
       } else {
