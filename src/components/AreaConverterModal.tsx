@@ -200,13 +200,6 @@ const AreaConverterModal: React.FC<AreaConverterModalProps> = ({
               </CardContent>
             </Card>
 
-            <Button 
-              onClick={onClose} 
-              className="w-full"
-              size="lg"
-            >
-              View Full Calculator
-            </Button>
           </div>
         </div>
       </DialogContent>
