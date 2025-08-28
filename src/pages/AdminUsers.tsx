@@ -6,8 +6,9 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Search, Users, UserCheck, ShieldCheck, Building, Filter } from 'lucide-react';
+import { Search, Users, UserCheck, ShieldCheck, Building, Filter, Trash2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 
 interface User {
   id: string;
@@ -255,6 +256,53 @@ const AdminUsers = () => {
     }
   };
 
+  const handleDeleteUser = async (userId: string, userName: string) => {
+    try {
+      // Delete user's properties first
+      const { error: propertiesError } = await supabase
+        .from('properties')
+        .delete()
+        .eq('user_id', userId);
+
+      if (propertiesError) throw propertiesError;
+
+      // Delete user roles
+      const { error: rolesError } = await supabase
+        .from('user_roles')
+        .delete()
+        .eq('user_id', userId);
+
+      if (rolesError) throw rolesError;
+
+      // Delete user profile
+      const { error: profileError } = await supabase
+        .from('profiles')
+        .delete()
+        .eq('user_id', userId);
+
+      if (profileError) throw profileError;
+
+      // Update local state
+      setUsers(users.filter(user => user.user_id !== userId));
+      
+      toast({
+        title: 'Success',
+        description: `User ${userName} has been deleted successfully`,
+        variant: 'default'
+      });
+
+      // Refresh users data to update stats
+      fetchUsers();
+    } catch (error) {
+      console.error('Error deleting user:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to delete user',
+        variant: 'destructive'
+      });
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
@@ -369,6 +417,7 @@ const AdminUsers = () => {
                   <TableHead className="text-muted-foreground font-medium">Status</TableHead>
                   <TableHead className="text-muted-foreground font-medium">Properties</TableHead>
                   <TableHead className="text-muted-foreground font-medium">Joined</TableHead>
+                  <TableHead className="text-muted-foreground font-medium">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -420,11 +469,41 @@ const AdminUsers = () => {
                       <TableCell className="text-muted-foreground">
                         {new Date(user.created_at).toLocaleDateString()}
                       </TableCell>
+                      <TableCell>
+                        <AlertDialog>
+                          <AlertDialogTrigger asChild>
+                            <Button 
+                              variant="ghost" 
+                              size="sm" 
+                              className="text-destructive hover:text-destructive hover:bg-destructive/10"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </AlertDialogTrigger>
+                          <AlertDialogContent>
+                            <AlertDialogHeader>
+                              <AlertDialogTitle>Delete User</AlertDialogTitle>
+                              <AlertDialogDescription>
+                                Are you sure you want to delete user "{user.full_name}"? This will permanently remove their account, profile, and all associated properties. This action cannot be undone.
+                              </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                              <AlertDialogCancel>Cancel</AlertDialogCancel>
+                              <AlertDialogAction 
+                                onClick={() => handleDeleteUser(user.user_id, user.full_name)}
+                                className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                              >
+                                Delete
+                              </AlertDialogAction>
+                            </AlertDialogFooter>
+                          </AlertDialogContent>
+                        </AlertDialog>
+                      </TableCell>
                     </TableRow>
                   ))
                 ) : (
                   <TableRow>
-                    <TableCell colSpan={8} className="text-center py-8 text-muted-foreground">
+                    <TableCell colSpan={9} className="text-center py-8 text-muted-foreground">
                       {roleFilter === 'all' ? 'No users found' : `No ${roleFilter}s found`}
                     </TableCell>
                   </TableRow>
