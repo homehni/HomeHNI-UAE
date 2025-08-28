@@ -240,13 +240,6 @@ const BudgetCalculatorModal: React.FC<BudgetCalculatorModalProps> = ({
               </CardContent>
             </Card>
 
-            <Button 
-              onClick={onClose} 
-              className="w-full"
-              size="lg"
-            >
-              View Detailed Calculator
-            </Button>
           </div>
         </div>
       </DialogContent>
