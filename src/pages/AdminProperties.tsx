@@ -443,6 +443,48 @@ const AdminProperties = () => {
 
     setActionLoading(true);
     try {
+      // First, get the submission to find associated property if approved
+      const { data: submission } = await supabase
+        .from('property_submissions')
+        .select('*')
+        .eq('id', propertyToDelete)
+        .single();
+
+      if (submission?.status === 'approved') {
+        // Find and delete from main properties table using title match
+        const { data: properties } = await supabase
+          .from('properties')
+          .select('id')
+          .eq('title', submission.title)
+          .eq('city', submission.city)
+          .eq('state', submission.state);
+
+        if (properties && properties.length > 0) {
+          const propertyId = properties[0].id;
+          
+          // Delete from properties table
+          await supabase
+            .from('properties')
+            .delete()
+            .eq('id', propertyId);
+
+          // Delete from content_elements (featured properties)
+          await supabase
+            .from('content_elements')
+            .delete()
+            .eq('element_type', 'featured_property')
+            .like('content', `%"id":"${propertyId}"%`);
+
+          // Also delete type-specific featured entries
+          await supabase
+            .from('content_elements')
+            .delete()
+            .eq('element_type', 'featured_property')
+            .like('content', `%"id":"${propertyId}"%`);
+        }
+      }
+
+      // Delete the submission
       const { error } = await supabase
         .from('property_submissions')
         .delete()
@@ -452,17 +494,17 @@ const AdminProperties = () => {
 
       toast({
         title: 'Success',
-        description: 'Property submission deleted successfully'
+        description: 'Property deleted successfully from all locations'
       });
 
       setDeleteModalOpen(false);
       setPropertyToDelete(null);
       fetchProperties();
     } catch (error) {
-      console.error('Error deleting property submission:', error);
+      console.error('Error deleting property:', error);
       toast({
         title: 'Error',
-        description: 'Failed to delete property submission',
+        description: 'Failed to delete property completely',
         variant: 'destructive'
       });
     } finally {
