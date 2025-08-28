@@ -9,18 +9,18 @@ import { fetchFeaturedProperties } from '@/services/propertyService';
 import { supabase } from '@/integrations/supabase/client';
 
 // Minimal type for featured properties
-type FeaturedProperty = {
-  id: string;
-  title: string;
-  location: string;
-  price: string;
-  area: string;
-  bedrooms: number;
-  bathrooms: number;
-  image: string;
-  propertyType: string;
-  isNew?: boolean;
-};
+ type FeaturedProperty = {
+   id: string;
+   title: string;
+   location: string;
+   price: string;
+   area: string;
+   bedrooms: number;
+   bathrooms: number;
+   image: string | { url: string } | (string | { url: string })[];
+   propertyType: string;
+   isNew?: boolean;
+ };
 const FeaturedProperties = ({
   properties: propsProperties
 }: {

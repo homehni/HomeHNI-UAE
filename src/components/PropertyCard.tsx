@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils';
 import { RECOMMENDED_CARD_WIDTH, RECOMMENDED_IMAGE_HEIGHT } from '@/constants/ui';
 import { useNavigate } from 'react-router-dom';
 import { FavoriteButton } from '@/components/FavoriteButton';
+import { supabase } from '@/integrations/supabase/client';
 
 interface PropertyCardProps {
   id: string;
@@ -70,15 +71,36 @@ const PropertyCard = ({
   };
   const cityMeta = cityInfoMap[detectedCity] || { state: 'Delhi', pincode: '110001' };
 
-  // Provide 2-3 photos per property
-  const additionalIds = [
-    'photo-1512917774080-9991f1c4c750',
-    'photo-1568605114967-8130f3a36994',
-    'photo-1522708323590-d24dbb6b0267',
-    'photo-1613490493576-7fde63acd811',
+  // Build preview images prioritizing the provided image(s)
+  const resolveUrlFromString = (s: string): string | undefined => {
+    if (!s) return undefined;
+    if (s.startsWith('http')) return s;
+    if (s.startsWith('photo-')) return `https://images.unsplash.com/${s}?auto=format&fit=crop&w=1200&q=80`;
+    try {
+      const { data } = supabase.storage.from('property-media').getPublicUrl(s);
+      return data.publicUrl;
+    } catch {
+      return undefined;
+    }
+  };
+
+  const toUrl = (v: string | { url: string } | undefined): string | undefined => {
+    if (!v) return undefined;
+    return typeof v === 'string' ? resolveUrlFromString(v) : resolveUrlFromString(v.url);
+  };
+
+  const fallbackUrls = [
+    'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=80',
+    'https://images.unsplash.com/photo-1568605114967-8130f3a36994?auto=format&fit=crop&w=1200&q=80',
   ];
-  const imageIds = Array.from(new Set([image, ...additionalIds])).slice(0, 3);
-  const imagesForPage = imageIds.map((id) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=1200&q=80`);
+
+  let imagesForPage: string[] = [];
+  if (Array.isArray(image)) {
+    imagesForPage = image.map((it) => (typeof it === 'string' ? toUrl(it) : toUrl(it?.url ? it : undefined))).filter(Boolean) as string[];
+  } else {
+    imagesForPage = [toUrl(typeof image === 'string' ? image : image?.url)].filter(Boolean) as string[];
+  }
+  imagesForPage = [...imagesForPage, ...fallbackUrls].slice(0, 3);
 
   const propertyForPage = {
     id,
