@@ -159,95 +159,95 @@ export function TestimonialCard({
 
 function AutoScrollTestimonials() {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const itemRefs = useRef<HTMLDivElement[]>([]);
+  itemRefs.current = [];
 
   useEffect(() => {
-    const scrollContainer = scrollRef.current;
-    if (!scrollContainer) return;
+    const scroller = scrollRef.current;
+    if (!scroller) return;
 
-    let currentIndex = 0;
-    let isScrolling = false;
-    let intervalId: NodeJS.Timeout;
+    let current = 0;
+    let ticking = false;
+    let timer: ReturnType<typeof setInterval> | null = null;
 
-    const getScrollWidth = () => {
-      const containerWidth = scrollContainer.offsetWidth;
-      // Calculate width based on responsive classes
-      if (window.innerWidth >= 768) {
-        // md and up - cards are 75% width
-        return containerWidth * 0.75 + 16; // 75% + gap
-      } else {
-        // mobile - cards are 90% width  
-        return containerWidth * 0.9 + 16; // 90% + gap
-      }
+    const scrollToIndex = (i: number) => {
+      if (!scroller || ticking) return;
+      const el = itemRefs.current[i];
+      if (!el) return;
+
+      ticking = true;
+      scroller.scrollTo({ left: el.offsetLeft, behavior: "smooth" });
+      // allow smooth scrolling to finish
+      setTimeout(() => (ticking = false), 600);
     };
 
-    const scrollToIndex = (index: number) => {
-      if (!scrollContainer || isScrolling) return;
-      
-      isScrolling = true;
-      const scrollWidth = getScrollWidth();
-      const scrollPosition = index * scrollWidth;
-      
-      scrollContainer.scrollTo({
-        left: scrollPosition,
-        behavior: 'smooth'
-      });
-
-      // Reset scrolling flag after animation completes
-      setTimeout(() => {
-        isScrolling = false;
-      }, 600);
+    const start = () => {
+      stop();
+      timer = setInterval(() => {
+        current = (current + 1) % testimonials.length;
+        scrollToIndex(current);
+      }, 4000);
     };
 
-    const autoScroll = () => {
-      if (isScrolling) return;
-      
-      currentIndex = (currentIndex + 1) % testimonials.length;
-      scrollToIndex(currentIndex);
+    const stop = () => {
+      if (timer) clearInterval(timer);
+      timer = null;
     };
 
-    // Start auto-scrolling after initial delay
-    const startTimer = setTimeout(() => {
-      intervalId = setInterval(autoScroll, 4000);
-    }, 2000);
+    // keep alignment on resize
+    const ro = new ResizeObserver(() => {
+      scrollToIndex(current);
+    });
+    ro.observe(scroller);
 
-    // Handle resize to recalculate scroll positions
-    const handleResize = () => {
-      if (!isScrolling) {
-        scrollToIndex(currentIndex);
-      }
-    };
+    // kick off after a tiny delay (lets layout settle)
+    const init = setTimeout(start, 800);
 
-    window.addEventListener('resize', handleResize);
+    // pause on user interaction for better UX
+    const onPointerDown = () => stop();
+    const onPointerUp = () => start();
+
+    scroller.addEventListener("pointerdown", onPointerDown);
+    scroller.addEventListener("pointerup", onPointerUp);
+    scroller.addEventListener("mouseenter", stop);
+    scroller.addEventListener("mouseleave", start);
 
     return () => {
-      clearTimeout(startTimer);
-      if (intervalId) clearInterval(intervalId);
-      window.removeEventListener('resize', handleResize);
+      clearTimeout(init);
+      stop();
+      ro.disconnect();
+      scroller.removeEventListener("pointerdown", onPointerDown);
+      scroller.removeEventListener("pointerup", onPointerUp);
+      scroller.removeEventListener("mouseenter", stop);
+      scroller.removeEventListener("mouseleave", start);
     };
   }, []);
 
+  const setItemRef = (el: HTMLDivElement | null) => {
+    if (el && !itemRefs.current.includes(el)) itemRefs.current.push(el);
+  };
+
   return (
     <div className="relative">
-      <div 
+      <div
         ref={scrollRef}
-        className="overflow-x-auto -mx-4 px-4 pb-2"
-        style={{ 
-          scrollbarWidth: 'none', 
-          msOverflowStyle: 'none',
-          WebkitOverflowScrolling: 'touch'
+        className="overflow-x-auto -mx-4 px-4 pb-2 snap-x snap-mandatory scroll-smooth"
+        style={{
+          scrollbarWidth: "none",
+          msOverflowStyle: "none",
+          WebkitOverflowScrolling: "touch",
         }}
       >
-        <style>
-          {`
-            .overflow-x-auto::-webkit-scrollbar {
-              display: none;
-            }
-          `}
-        </style>
+        <style>{`.overflow-x-auto::-webkit-scrollbar{display:none}`}</style>
+
         <div className="flex gap-4">
-          {testimonials.map((testimonial, index) => (
-            <div key={index} className="w-[90%] md:w-[75%] flex-shrink-0">
-              <TestimonialCard {...testimonial} />
+          {testimonials.map((t, i) => (
+            <div
+              key={i}
+              ref={setItemRef}
+              className="w-[92%] sm:w-[85%] md:w-[75%] flex-shrink-0 snap-start"
+            >
+              <TestimonialCard {...t} />
             </div>
           ))}
         </div>
@@ -255,6 +255,7 @@ function AutoScrollTestimonials() {
     </div>
   );
 }
+
 
 export function TestimonialsSection() {
   return (
