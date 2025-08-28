@@ -3,7 +3,7 @@ import { XCircle } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
-export default function PaymentFailed() {
+const PaymentFailed = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
@@ -35,4 +35,6 @@ export default function PaymentFailed() {
       <Footer />
     </div>
   );
-}
+};
+
+export default PaymentFailed;

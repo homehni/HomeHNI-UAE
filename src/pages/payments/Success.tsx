@@ -3,7 +3,7 @@ import { CheckCircle } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
-export default function PaymentSuccess() {
+const PaymentSuccess = () => {
   const { search } = useLocation();
   const params = new URLSearchParams(search);
   const paymentId = params.get("payment_id") || "N/A";
@@ -43,4 +43,6 @@ export default function PaymentSuccess() {
       <Footer />
     </div>
   );
-}
+};
+
+export default PaymentSuccess;
