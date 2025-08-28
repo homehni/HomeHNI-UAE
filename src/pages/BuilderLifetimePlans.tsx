@@ -5,12 +5,18 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Badge } from '@/components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Marquee from '@/components/Marquee';
 
 const BuilderLifetimePlans = () => {
-  const [selectedPlan, setSelectedPlan] = useState(0);
+  const [selectedPlans, setSelectedPlans] = useState({
+    residential: 0,
+    commercial: 0, 
+    industrial: 0,
+    agricultural: 0
+  });
 
   const plans = [
     {
