@@ -1,8 +1,17 @@
 import { Download } from 'lucide-react';
 import { useCMSContent } from '@/hooks/useCMSContent';
+import { useToast } from '@/hooks/use-toast';
 
 const MobileAppSection = () => {
   const { content: cmsContent } = useCMSContent('mobile-app');
+  const { toast } = useToast();
+
+  const handleDownloadClick = () => {
+    toast({
+      title: "Coming Soon!",
+      description: "Mobile app download will be available soon.",
+    });
+  };
 
   return (
     <section className="py-2 bg-gradient-to-br from-rose-50 to-white">
@@ -27,37 +36,35 @@ const MobileAppSection = () => {
 
             {/* Buttons — cherry red */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-              <a
-                href="#"
+              <button
+                onClick={handleDownloadClick}
                 aria-label="Download on Google Play"
                 className="min-w-[200px] inline-flex items-center justify-center gap-3 rounded-lg px-6 py-3
                            bg-[#d21404] text-white hover:bg-[#b80f03] transition-colors
                            focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#d21404]
                            shadow-md"
-                rel="noopener noreferrer"
               >
                 <Download className="w-5 h-5" />
                 <span className="text-left">
                   <span className="block text-xs opacity-90">Download on</span>
                   <span className="block text-sm font-semibold">Google Play</span>
                 </span>
-              </a>
+              </button>
 
-              <a
-                href="#"
+              <button
+                onClick={handleDownloadClick}
                 aria-label="Download on the App Store"
                 className="min-w-[200px] inline-flex items-center justify-center gap-3 rounded-lg px-6 py-3
                            bg-[#d21404] text-white hover:bg-[#b80f03] transition-colors
                            focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#d21404]
                            shadow-md"
-                rel="noopener noreferrer"
               >
                 <Download className="w-5 h-5" />
                 <span className="text-left">
                   <span className="block text-xs opacity-90">Download on</span>
                   <span className="block text-sm font-semibold">App Store</span>
                 </span>
-              </a>
+              </button>
             </div>
 
             {/* Small trust row (optional) */}
