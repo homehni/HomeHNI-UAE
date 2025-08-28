@@ -107,14 +107,27 @@ export const PropertyHero: React.FC<PropertyHeroProps> = ({
               {/* Primary Image */}
               <div 
                 className="col-span-3 relative cursor-pointer group"
-                onClick={() => handleImageClick(0)}
+                onClick={() => property.images && property.images.length > 0 ? handleImageClick(0) : undefined}
               >
-                <img
-                  src={property.images?.[0] || '/placeholder-property.jpg'}
-                  alt={property.title}
-                  className="w-full h-full object-cover rounded-xl transition-opacity group-hover:opacity-90"
-                  loading="lazy"
-                />
+                {property.images && property.images.length > 0 ? (
+                  <img
+                    src={property.images[0]}
+                    alt={property.title}
+                    className="w-full h-full object-cover rounded-xl transition-opacity group-hover:opacity-90"
+                    loading="lazy"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.src = '/placeholder-property.jpg';
+                    }}
+                  />
+                ) : (
+                  <div className="w-full h-full bg-gray-200 rounded-xl flex items-center justify-center">
+                    <div className="text-center text-gray-500">
+                      <Image className="h-12 w-12 mx-auto mb-2 opacity-50" />
+                      <p className="text-sm">No images available</p>
+                    </div>
+                  </div>
+                )}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-xl" />
                 <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition-all duration-200 flex items-center justify-center rounded-xl">
                   <Image className="h-8 w-8 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
@@ -125,28 +138,52 @@ export const PropertyHero: React.FC<PropertyHeroProps> = ({
               <div className="flex flex-col gap-2">
                 <div 
                   className="flex-1 relative cursor-pointer group"
-                  onClick={() => handleImageClick(1)}
+                  onClick={() => property.images && property.images.length > 1 ? handleImageClick(1) : undefined}
                 >
-                  <img
-                    src={property.images?.[1] || '/placeholder-property.jpg'}
-                    alt={`${property.title} - Image 2`}
-                    className="w-full h-full object-cover rounded-xl transition-opacity group-hover:opacity-90"
-                    loading="lazy"
-                  />
+                  {property.images && property.images.length > 1 ? (
+                    <img
+                      src={property.images[1]}
+                      alt={`${property.title} - Image 2`}
+                      className="w-full h-full object-cover rounded-xl transition-opacity group-hover:opacity-90"
+                      loading="lazy"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.src = '/placeholder-property.jpg';
+                      }}
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-gray-200 rounded-xl flex items-center justify-center">
+                      <div className="text-center text-gray-500">
+                        <Image className="h-8 w-8 mx-auto opacity-50" />
+                      </div>
+                    </div>
+                  )}
                   <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition-all duration-200 flex items-center justify-center rounded-xl">
                     <Image className="h-6 w-6 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
                   </div>
                 </div>
                 <div 
                   className="flex-1 relative cursor-pointer group"
-                  onClick={() => handleImageClick(2)}
+                  onClick={() => property.images && property.images.length > 2 ? handleImageClick(2) : undefined}
                 >
-                  <img
-                    src={property.images?.[2] || '/placeholder-property.jpg'}
-                    alt={`${property.title} - Image 3`}
-                    className="w-full h-full object-cover rounded-xl transition-opacity group-hover:opacity-90"
-                    loading="lazy"
-                  />
+                  {property.images && property.images.length > 2 ? (
+                    <img
+                      src={property.images[2]}
+                      alt={`${property.title} - Image 3`}
+                      className="w-full h-full object-cover rounded-xl transition-opacity group-hover:opacity-90"
+                      loading="lazy"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.src = '/placeholder-property.jpg';
+                      }}
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-gray-200 rounded-xl flex items-center justify-center">
+                      <div className="text-center text-gray-500">
+                        <Image className="h-8 w-8 mx-auto opacity-50" />
+                      </div>
+                    </div>
+                  )}
                   <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition-all duration-200 flex items-center justify-center rounded-xl">
                     <Image className="h-6 w-6 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
                   </div>
@@ -162,14 +199,16 @@ export const PropertyHero: React.FC<PropertyHeroProps> = ({
               </div>
             </div>
             
-            {/* View all photos button */}
-            <button 
-              onClick={handleViewAllPhotos}
-              className="absolute bottom-4 right-4 bg-white/90 backdrop-blur-sm rounded-lg px-3 py-2 text-sm font-medium text-gray-800 hover:bg-white focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#d21404] transition-colors"
-            >
-              <Image className="w-4 h-4 mr-1 inline" />
-              View all photos
-            </button>
+            {/* View all photos button - only show if there are images */}
+            {property.images && property.images.length > 0 && (
+              <button 
+                onClick={handleViewAllPhotos}
+                className="absolute bottom-4 right-4 bg-white/90 backdrop-blur-sm rounded-lg px-3 py-2 text-sm font-medium text-gray-800 hover:bg-white focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#d21404] transition-colors"
+              >
+                <Image className="w-4 h-4 mr-1 inline" />
+                View all photos
+              </button>
+            )}
           </div>
         </div>
 

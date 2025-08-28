@@ -4,6 +4,11 @@ import { supabase } from '@/integrations/supabase/client';
 import { getCurrentUserProfile, type UserProfile } from '@/services/profileService';
 import { AuditService } from '@/services/auditService';
 
+interface SignUpResult {
+  user: User | null;
+  isEmailConfirmationRequired: boolean;
+}
+
 interface AuthContextType {
   user: User | null;
   session: Session | null;
@@ -11,7 +16,7 @@ interface AuthContextType {
   loading: boolean;
   signInWithGoogle: () => Promise<void>;
   signInWithPassword: (email: string, password: string) => Promise<void>;
-  signUpWithPassword: (email: string, password: string, fullName?: string) => Promise<void>;
+  signUpWithPassword: (email: string, password: string, fullName?: string) => Promise<SignUpResult>;
   signOut: () => Promise<void>;
   refreshProfile: () => Promise<void>;
 }
@@ -116,6 +121,26 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     
     if (error) {
       console.error('Error signing in with password:', error);
+      
+      // Check if this is an email confirmation error
+      if (error.message === 'Email not confirmed') {
+        // Send a new confirmation email
+        try {
+          await supabase.auth.resend({
+            type: 'signup',
+            email,
+          });
+          console.log('Resent confirmation email');
+          
+          // Throw a more user-friendly error
+          const customError = new Error('Your email has not been verified. We have sent a new verification email. Please check your inbox.');
+          customError.name = 'EmailNotConfirmedError';
+          throw customError;
+        } catch (resendError) {
+          console.error('Error resending confirmation email:', resendError);
+        }
+      }
+      
       try {
         await AuditService.logAuthEvent('User Login Failed', email, false, error.message);
       } catch (e) {
@@ -129,7 +154,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const signUpWithPassword = async (email: string, password: string, fullName?: string) => {
     const redirectUrl = `${window.location.origin}/`;
     
-    const { error } = await supabase.auth.signUp({
+    // First sign up the user
+    const { error: signUpError, data } = await supabase.auth.signUp({
       email,
       password,
       options: {
@@ -140,10 +166,42 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
     });
     
-    if (error) {
-      console.error('Error signing up:', error);
-      throw error;
+    if (signUpError) {
+      console.error('Error signing up:', signUpError);
+      throw signUpError;
     }
+    
+    // Check if email confirmation is required
+    const isEmailConfirmationRequired = data?.user?.identities?.length === 0 || 
+      (data?.user?.identities && data?.user?.identities[0]?.identity_data?.email_verified === false);
+    
+    // Log the signup response for debugging
+    console.log('Signup response:', data);
+    console.log('Email confirmation required:', isEmailConfirmationRequired);
+    
+    // If email confirmation is not required, immediately sign in
+    if (data?.user && !isEmailConfirmationRequired) {
+      try {
+        const { error: signInError } = await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
+        
+        if (signInError) {
+          console.error('Error signing in after signup:', signInError);
+          // We don't throw here as signup was successful
+        }
+      } catch (signInError) {
+        console.error('Exception during sign in after signup:', signInError);
+        // We don't throw here as signup was successful
+      }
+    }
+    
+    // Return information about whether email confirmation is required
+    return { 
+      user: data?.user, 
+      isEmailConfirmationRequired: isEmailConfirmationRequired || false 
+    };
   };
 
   const refreshProfile = async () => {
