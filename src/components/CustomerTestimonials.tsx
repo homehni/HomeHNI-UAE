@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Star, ShieldCheck, Play, Users, BadgeIndianRupee } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
 
 /** 
  * 🔗 ADD YOUR VIDEO URL HERE (use the GitHub "raw" file URL)
@@ -289,6 +291,11 @@ export function TestimonialsSection() {
             Real stories from verified buyers & owners.
           </p>
           <TrustMetricsRow />
+          <div className="flex justify-center mt-6">
+            <Button asChild variant="outline" size="lg">
+              <Link to="/testimonials">See All Testimonials</Link>
+            </Button>
+          </div>
         </div>
 
         {/* Desktop Layout */}
