@@ -93,13 +93,13 @@ const HomeServices = () => {
         // Reset to beginning for infinite scroll
         scrollContainer.scrollLeft = 0;
       } else {
-        // Increased scroll speed from 1px to 3px per interval
-        scrollContainer.scrollBy({ left: 3, behavior: 'auto' });
+        // Smooth scroll speed - 1.5px per interval for fluid motion
+        scrollContainer.scrollBy({ left: 1.5, behavior: 'auto' });
       }
     };
 
-    // Faster interval for smoother, quicker scrolling
-    const interval = setInterval(autoScroll, 15);
+    // Balanced interval for smooth scrolling
+    const interval = setInterval(autoScroll, 16); // ~60fps
     return () => clearInterval(interval);
   }, [isHovered]);
 
