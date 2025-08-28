@@ -8,8 +8,8 @@ const MobileAppSection = () => {
 
   const handleDownloadClick = () => {
     toast({
-      title: "Coming Soon!",
-      description: "Mobile app download will be available soon.",
+      title: "🚀 Mobile Apps Coming Soon!",
+      description: "Download our apps for the ultimate property experience. Stay tuned!",
     });
   };
 
@@ -67,6 +67,12 @@ const MobileAppSection = () => {
               </button>
             </div>
 
+            {/* Coming Soon indicator */}
+            <div className="mt-4 text-center lg:text-left">
+              <p className="text-sm font-bold text-[#d21404]">🚀 Coming Soon!</p>
+              <p className="text-xs text-gray-600">Get ready for the ultimate property experience</p>
+            </div>
+
             {/* Small trust row (optional) */}
             {/* <div className="mt-6 text-xs text-gray-500">
               Free to download · Instant updates · Secure login
@@ -80,7 +86,7 @@ const MobileAppSection = () => {
                 src={cmsContent?.content?.appImage || '/lovable-uploads/ee843ec7-81c8-4575-aff3-09a145035577.png'}
                 alt="Home HNI mobile app preview"
                 loading="lazy"
-                className="w-full max-w-md h-auto"
+                className="w-full max-w-lg h-auto"
               />
               {/* Decorative cherry-red glow */}
               <div className="pointer-events-none absolute -inset-6 -z-10 blur-2xl
