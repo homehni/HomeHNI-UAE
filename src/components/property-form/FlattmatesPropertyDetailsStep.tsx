@@ -71,7 +71,7 @@ export function FlattmatesPropertyDetailsStep({
                 {/* Apartment Type and BHK Type */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="apartmentType">Apartment Type</Label>
+                    <Label htmlFor="apartmentType">Type of Property</Label>
                     <Select
                       value={formData.apartmentType}
                       onValueChange={(value) => setFormData({ ...formData, apartmentType: value })}
