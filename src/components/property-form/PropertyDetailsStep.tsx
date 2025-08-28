@@ -90,16 +90,15 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="Co-Working">Co-Working</SelectItem>
-                      <SelectItem value="Office">Office Space</SelectItem>
-                      <SelectItem value="Shop">Shop</SelectItem>
-                      <SelectItem value="Showroom">Showroom</SelectItem>
-                      <SelectItem value="Co-Living">Co-Living</SelectItem>
-                      <SelectItem value="Godown">Godown/Warehouse</SelectItem>
-                      <SelectItem value="Industrial-Shed">Industrial Shed</SelectItem>
-                      <SelectItem value="Industrial-Building">Industrial Building</SelectItem>
-                      <SelectItem value="Restaurant-Cafe">Restaurant/Cafe</SelectItem>
-                      <SelectItem value="Other-Business">Other Business</SelectItem>
+                      <SelectItem value="Apartment">Apartment</SelectItem>
+                      <SelectItem value="Villa">Villa</SelectItem>
+                      <SelectItem value="Independent House">Independent House</SelectItem>
+                      <SelectItem value="Row House">Row House</SelectItem>
+                      <SelectItem value="Studio Apartment">Studio Apartment</SelectItem>
+                      <SelectItem value="Builder Floor">Builder Floor</SelectItem>
+                      <SelectItem value="Penthouse">Penthouse</SelectItem>
+                      <SelectItem value="Farmhouse">Farmhouse</SelectItem>
+                      <SelectItem value="Duplex">Duplex</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />
@@ -120,11 +119,11 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                       <SelectItem value="Independent House">Independent House</SelectItem>
-                      <SelectItem value="Business Park">Business Park</SelectItem>
-                      <SelectItem value="Mall">Mall</SelectItem>                              
-                      <SelectItem value="Standalone Building">Standalone Building</SelectItem>                              
-                      <SelectItem value="Independent Shop">Independent Shop</SelectItem>
+                      <SelectItem value="Apartment Complex">Apartment Complex</SelectItem>
+                      <SelectItem value="Independent Building">Independent Building</SelectItem>
+                      <SelectItem value="Gated Community">Gated Community</SelectItem>
+                      <SelectItem value="Villa Complex">Villa Complex</SelectItem>
+                      <SelectItem value="Standalone Building">Standalone Building</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />
