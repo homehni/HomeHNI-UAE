@@ -392,7 +392,7 @@ const AgentLifetimePlans = () => {
             {/* Contact Info */}
             <div className="mt-8 text-center">
               <p className="text-gray-600 mb-2">
-                For assistance call us at: <span className="text-brand-red font-semibold">+91-92-430-099-80</span>
+                For assistance call us at: <span className="text-brand-red font-semibold">+91 80740 17388</span>
               </p>
               <p className="text-sm text-gray-500">
                 <Link 

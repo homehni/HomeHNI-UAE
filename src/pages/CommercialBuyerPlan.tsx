@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Check, Phone, MessageCircle, Quote, Star, Target, Users, Shield, Clock, Bell, FileText, Headphones } from 'lucide-react';
-import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
@@ -383,17 +382,11 @@ const CommercialBuyerPlan = () => {
           {/* Contact Info */}
           <div className="mt-8 text-center">
             <p className="text-gray-600 mb-2">
-              For assistance call us at: <span className="text-brand-red font-semibold">+91-89-059-996-69</span>
+              For assistance call us at: <span className="text-brand-red font-semibold">+91 80740 17388</span>
             </p>
-           <p className="text-sm text-gray-500">
-  <Link 
-    to="/terms-and-conditions" 
-    className="underline cursor-pointer hover:text-gray-700"
-  >
-    Terms & Conditions Apply
-  </Link>
-</p>
-
+            <p className="text-sm text-gray-500">
+              <span className="underline cursor-pointer hover:text-gray-700">Terms & Conditions Apply</span>
+            </p>
           </div>
         </div>
       </section>

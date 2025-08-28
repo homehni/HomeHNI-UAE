@@ -367,7 +367,7 @@ const OwnerPlans = () => {
           {/* Contact Info */}
           <div className="mt-8 text-center">
             <p className="text-gray-600 mb-2">
-              For assistance call us at: <span className="text-brand-red font-semibold">+91-92-430-099-80</span>
+              For assistance call us at: <span className="text-brand-red font-semibold">+91 80740 17388</span>
             </p>
             <p className="text-sm text-gray-500">
   <Link 
@@ -408,8 +408,8 @@ const OwnerPlans = () => {
           <Phone className="w-8 h-8 mx-auto mb-4" />
           <h3 className="text-2xl font-bold mb-4">Need Assistance?</h3>
           <p className="text-lg mb-4">For assistance, call us at</p>
-          <a href="tel:+919243009980" className="text-2xl font-bold hover:underline">
-            +91-92-430-099-80
+          <a href="tel:+918074017388" className="text-2xl font-bold hover:underline">
+            +91 80740 17388
           </a>
         </div>
       </section>
