@@ -167,7 +167,7 @@ const FeaturedProperties = ({
     };
   }, []);
 
-  // Manual featured properties with customizable images
+  // Manual featured properties with images from public/images directory
   const defaultProperties: FeaturedProperty[] = [
     // Apartments
     {
@@ -178,7 +178,7 @@ const FeaturedProperties = ({
       area: '1,350 sq ft',
       bedrooms: 3,
       bathrooms: 2,
-      image: '/public/images/apartment1.jpg',
+      image: '/images/apartment1.jpg',
       propertyType: 'Apartment',
       isNew: true
     },
@@ -190,7 +190,7 @@ const FeaturedProperties = ({
       area: '1,100 sq ft',
       bedrooms: 2,
       bathrooms: 2,
-      image: '/public/images/apartment3..jpg',
+      image: '/images/apartment3..jpg',
       propertyType: 'Apartment'
     },
     
@@ -203,71 +203,121 @@ const FeaturedProperties = ({
       area: '2,400 sq ft',
       bedrooms: 4,
       bathrooms: 3,
-      image: '/public/images/villa1.jpg',
+      image: '/images/villa1.jpg',
       propertyType: 'Villa',
       isNew: true
     },
     {
-      id: '4',
-      title: 'Premium Office Space',
-      location: 'Cyber City, Gurgaon',
-      price: '₹2.8 Cr',
-      area: '3,200 sq ft',
+      id: '4', 
+      title: 'Luxury Villa with Pool',
+      location: 'Jubilee Hills, Hyderabad',
+      price: '₹3.2 Cr',
+      area: '3,500 sq ft',
       bedrooms: 5,
       bathrooms: 4,
-      image: '/public/images/villa2.jpg',
-      propertyType: 'Commercial',
+      image: '/images/villa2.jpg',
+      propertyType: 'Villa',
       isNew: true
     },
     
     // Houses
     {
       id: '5',
-      title: 'Spacious 3BHK with Balcony',
+      title: 'Spacious 3BHK House',
       location: 'Whitefield, Bangalore',
-      price: '₹60 L',
-      area: '2,400 sq ft',
+      price: '₹1.2 Cr',
+      area: '1,800 sq ft',
       bedrooms: 3,
       bathrooms: 2,
-      image: '/public/images/house1.jpg',
-      propertyType: 'Apartment',
+      image: '/images/house1.jpg',
+      propertyType: 'Independent House',
       isNew: true
     },
     {
       id: '6',
-      title: 'Independent House with Parking',
+      title: 'Independent House with Garden',
       location: 'Sector 15, Noida',
-      price: '₹25 L',
-      area: '1,800 sq ft',
+      price: '₹1.8 Cr',
+      area: '2,200 sq ft',
       bedrooms: 4,
       bathrooms: 3,
-      image: '/public/images/house2.jpg',
-      propertyType: 'House'
+      image: '/images/house2.jpg',
+      propertyType: 'Independent House'
     },
     
-    // Commercial
+    // Commercial Halls
     {
       id: '7',
-      title: 'Modern 2BHK with City View',
-      location: 'Bandra West, Mumbai',
-      price: '₹45 L',
-      area: '800 sq ft',
-      bedrooms: 2,
-      bathrooms: 1,
-      image: '/public/images/hall1.jpg',
-      propertyType: 'Apartment',
+      title: 'Premium Commercial Hall',
+      location: 'Cyber City, Gurgaon',
+      price: '₹85 L',
+      area: '1,200 sq ft',
+      bedrooms: 0,
+      bathrooms: 2,
+      image: '/images/hall1.jpg',
+      propertyType: 'Commercial',
       isNew: true
     },
     {
       id: '8',
-      title: 'Luxury Penthouse with Terrace',
-      location: 'Koramangala, Bangalore',
-      price: '₹75 L',
-      area: '2,000 sq ft',
-      bedrooms: 3,
+      title: 'Modern Event Hall',
+      location: 'Bandra West, Mumbai',
+      price: '₹1.2 Cr',
+      area: '2,500 sq ft',
+      bedrooms: 0,
       bathrooms: 3,
-      image: '/public/images/hall2.jpg',
-      propertyType: 'Penthouse'
+      image: '/images/hall2.jpg',
+      propertyType: 'Commercial'
+    },
+    
+    // Plots
+    {
+      id: '9',
+      title: 'Prime Residential Plot',
+      location: 'Hinjewadi, Pune',
+      price: '₹45 L',
+      area: '2,000 sq ft',
+      bedrooms: 0,
+      bathrooms: 0,
+      image: '/images/plot1.jpg',
+      propertyType: 'Plot',
+      isNew: true
+    },
+    {
+      id: '10',
+      title: 'Commercial Plot Near Highway',
+      location: 'Manesar, Gurgaon',
+      price: '₹60 L',
+      area: '3,000 sq ft',
+      bedrooms: 0,
+      bathrooms: 0,
+      image: '/images/plot2.jpg',
+      propertyType: 'Plot'
+    },
+    
+    // Farm Houses
+    {
+      id: '11',
+      title: 'Farmhouse with Orchard',
+      location: 'Lonavala, Maharashtra',
+      price: '₹1.5 Cr',
+      area: '2.5 acres',
+      bedrooms: 3,
+      bathrooms: 2,
+      image: '/images/farm1.jpg',
+      propertyType: 'Farm House',
+      isNew: true
+    },
+    {
+      id: '12',
+      title: 'Luxury Farmhouse Resort',
+      location: 'Alibaug, Maharashtra',
+      price: '₹2.8 Cr',
+      area: '4 acres',
+      bedrooms: 5,
+      bathrooms: 4,
+      image: '/images/farm2.jpg',
+      propertyType: 'Farm House'
     }
   ];
 
