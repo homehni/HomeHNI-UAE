@@ -93,14 +93,20 @@ const HomeServices = () => {
         // Reset to beginning for infinite scroll
         scrollContainer.scrollLeft = 0;
       } else {
-        // Smooth scroll speed - 1.5px per interval for fluid motion
-        scrollContainer.scrollBy({ left: 1.5, behavior: 'auto' });
+        // Very smooth scroll - smaller increment for fluid motion
+        scrollContainer.scrollLeft += 0.5;
       }
     };
 
-    // Balanced interval for smooth scrolling
-    const interval = setInterval(autoScroll, 16); // ~60fps
-    return () => clearInterval(interval);
+    // Use requestAnimationFrame for smoothest scrolling
+    let animationId: number;
+    const smoothScroll = () => {
+      autoScroll();
+      animationId = requestAnimationFrame(smoothScroll);
+    };
+    
+    animationId = requestAnimationFrame(smoothScroll);
+    return () => cancelAnimationFrame(animationId);
   }, [isHovered]);
 
 
@@ -111,17 +117,17 @@ const HomeServices = () => {
           <h2 className="text-2xl md:text-3xl font-bold text-gray-900">Home Services</h2>
         </div>
 
-        {/* Scroll Navigation Buttons */}
+        {/* Scroll Navigation Buttons - Hidden on mobile */}
         <button
           onClick={() => scroll('left')}
-          className="absolute left-4 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white shadow-lg rounded-full p-3 transition-all duration-200 hover:scale-110"
+          className="hidden md:block absolute left-4 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white shadow-lg rounded-full p-3 transition-all duration-200 hover:scale-110"
         >
           <ChevronLeft className="h-6 w-6 text-gray-700" />
         </button>
         
         <button
           onClick={() => scroll('right')}
-          className="absolute right-4 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white shadow-lg rounded-full p-3 transition-all duration-200 hover:scale-110"
+          className="hidden md:block absolute right-4 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white shadow-lg rounded-full p-3 transition-all duration-200 hover:scale-110"
         >
           <ChevronRight className="h-6 w-6 text-gray-700" />
         </button>
@@ -138,7 +144,7 @@ const HomeServices = () => {
             <div
               key={index}
               onClick={service.onClick}
-              className="flex-shrink-0 w-80 cursor-pointer group hover:scale-105 transition-all duration-300"
+              className="flex-shrink-0 w-64 sm:w-72 md:w-80 lg:w-80 cursor-pointer group hover:scale-105 transition-all duration-300"
             >
               <div className="relative bg-white rounded-2xl shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden border border-gray-100 h-full">
                 {/* Service Image */}
