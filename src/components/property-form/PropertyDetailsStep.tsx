@@ -91,13 +91,13 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
                     </FormControl>
                     <SelectContent>
                       <SelectItem value="Apartment">Apartment</SelectItem>
+                      <SelectItem value="Co-Living">Co-Living</SelectItem>
                       <SelectItem value="Villa">Villa</SelectItem>
                       <SelectItem value="Independent House">Independent House</SelectItem>
-                      <SelectItem value="Row House">Row House</SelectItem>
-                      <SelectItem value="Studio Apartment">Studio Apartment</SelectItem>
                       <SelectItem value="Builder Floor">Builder Floor</SelectItem>
+                      <SelectItem value="Studio Apartment">Studio Apartment</SelectItem>
+                      <SelectItem value="Co-Working">Co-Working</SelectItem>
                       <SelectItem value="Penthouse">Penthouse</SelectItem>
-                      <SelectItem value="Farmhouse">Farmhouse</SelectItem>
                       <SelectItem value="Duplex">Duplex</SelectItem>
                     </SelectContent>
                   </Select>
