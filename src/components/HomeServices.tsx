@@ -10,8 +10,10 @@ const HomeServices = () => {
   );
   const [emblaRef, emblaApi] = useEmblaCarousel({ 
     loop: true, 
-    dragFree: true,
-    skipSnaps: false 
+    dragFree: false,
+    skipSnaps: false,
+    align: 'start',
+    containScroll: 'trimSnaps'
   }, [autoplay.current]);
 
   const services = [
@@ -72,64 +74,18 @@ const HomeServices = () => {
           <h2 className="text-2xl md:text-3xl font-bold text-gray-900">Home Services</h2>
         </div>
 
-        {/* Desktop Scrolling View Only */}
-        <div className="hidden lg:block">
-          <div 
-            className="overflow-hidden" 
-            ref={emblaRef}
-          >
-            <div className="flex gap-6 pl-4">
-              {services.map((service, index) => (
-                <div
-                  key={index}
-                  onClick={service.onClick}
-                  className="flex-none w-72 h-48 relative group cursor-pointer hover:scale-105 transition-all duration-300"
-                >
-                  <div className="relative bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden border border-gray-200 w-full h-full">
-                    {/* Service Image */}
-                    <div className="relative overflow-hidden h-3/4">
-                      <img
-                        src={service.image}
-                        alt={service.title}
-                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                      />
-                      
-                      {/* Badge */}
-                      {service.badge && (
-                        <div className={`absolute top-4 left-4 ${service.badgeColor} text-gray-800 px-3 py-1 rounded-full text-sm font-bold shadow-md`}>
-                          {service.badge}
-                        </div>
-                      )}
-                      
-                      {/* Gradient overlay */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
-                    </div>
-
-                    {/* Service Title */}
-                    <div className="p-4 h-1/4 flex items-center justify-center">
-                      <h3 className="text-sm font-bold text-gray-900 text-center">
-                        {service.title}
-                      </h3>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Mobile and Tablet Grid View */}
-        <div className="lg:hidden">
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+        {/* Scrolling Services - All Screen Sizes */}
+        <div className="overflow-hidden" ref={emblaRef}>
+          <div className="flex gap-4 md:gap-6">
             {services.map((service, index) => (
               <div
                 key={index}
                 onClick={service.onClick}
-                className="relative group cursor-pointer hover:scale-105 transition-all duration-300"
+                className="flex-none w-[calc(50%-8px)] sm:w-[calc(33.333%-16px)] lg:w-[calc(25%-18px)] group cursor-pointer hover-scale"
               >
-                <div className="relative bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden border border-gray-200">
+                <div className="relative bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden border border-gray-200 h-full animate-fade-in">
                   {/* Service Image */}
-                  <div className="relative h-32 md:h-40 overflow-hidden">
+                  <div className="relative overflow-hidden h-32 sm:h-36 lg:h-40">
                     <img
                       src={service.image}
                       alt={service.title}
@@ -138,7 +94,7 @@ const HomeServices = () => {
                     
                     {/* Badge */}
                     {service.badge && (
-                      <div className={`absolute top-2 left-2 ${service.badgeColor} text-gray-800 px-2 py-1 rounded-full text-xs font-bold shadow-md`}>
+                      <div className={`absolute top-2 left-2 lg:top-4 lg:left-4 ${service.badgeColor} text-gray-800 px-2 py-1 lg:px-3 lg:py-1 rounded-full text-xs lg:text-sm font-bold shadow-md`}>
                         {service.badge}
                       </div>
                     )}
@@ -148,8 +104,8 @@ const HomeServices = () => {
                   </div>
 
                   {/* Service Title */}
-                  <div className="p-3">
-                    <h3 className="text-sm md:text-base font-bold text-gray-900 text-center">
+                  <div className="p-3 lg:p-4">
+                    <h3 className="text-sm lg:text-base font-bold text-gray-900 text-center leading-tight">
                       {service.title}
                     </h3>
                   </div>
