@@ -80,6 +80,9 @@ import NRIGuide from "./pages/NRIGuide";
 import NRIQueries from "./pages/NRIQueries";
 import RentalHelp from "./pages/RentalHelp";
 import RentCalculator from "./pages/RentCalculator";
+import BudgetCalculator from "./pages/BudgetCalculator";
+import AreaConverter from "./pages/AreaConverter";
+import LoanEligibility from "./pages/LoanEligibility";
 import RentalGuide from "./pages/RentalGuide";
 import LandlordGuide from "./pages/LandlordGuide";
 import TenantGuide from "./pages/TenantGuide";
@@ -159,6 +162,9 @@ const App: React.FC = () => {
             <Route path="/nri-queries" element={<NRIQueries />} />
             <Route path="/rental-help" element={<RentalHelp />} />
             <Route path="/rent-calculator" element={<RentCalculator />} />
+            <Route path="/budget-calculator" element={<BudgetCalculator />} />
+            <Route path="/area-converter" element={<AreaConverter />} />
+            <Route path="/loan-eligibility" element={<LoanEligibility />} />
             <Route path="/rental-guide" element={<RentalGuide />} />
             <Route path="/landlord-guide" element={<LandlordGuide />} />
             <Route path="/tenant-guide" element={<TenantGuide />} />

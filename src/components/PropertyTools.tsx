@@ -1,8 +1,13 @@
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Calculator, DollarSign, TrendingUp, Ruler } from 'lucide-react';
+import EMICalculatorModal from '@/components/EMICalculatorModal';
 
 const PropertyTools = () => {
+  const [emiModalOpen, setEmiModalOpen] = useState(false);
+  const navigate = useNavigate();
   const tools = [
     {
       id: 'budget-calculator',
@@ -34,6 +39,25 @@ const PropertyTools = () => {
     }
   ];
 
+  const handleToolClick = (toolId: string) => {
+    switch (toolId) {
+      case 'emi-calculator':
+        setEmiModalOpen(true);
+        break;
+      case 'budget-calculator':
+        navigate('/budget-calculator');
+        break;
+      case 'loan-eligibility':
+        navigate('/loan-eligibility');
+        break;
+      case 'area-converter':
+        navigate('/area-converter');
+        break;
+      default:
+        break;
+    }
+  };
+
   return (
     <section className="py-16 bg-gray-50">
       <div className="container mx-auto px-4">
@@ -52,7 +76,11 @@ const PropertyTools = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {tools.map((tool) => (
-            <Card key={tool.id} className="hover:shadow-lg transition-all duration-300 cursor-pointer group border-2 border-primary">
+            <Card 
+              key={tool.id} 
+              className="hover:shadow-lg transition-all duration-300 cursor-pointer group border-2 border-primary"
+              onClick={() => handleToolClick(tool.id)}
+            >
               <CardContent className="p-6 text-center">
                 <div className={`w-16 h-16 ${tool.color} rounded-lg flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300`}>
                   <tool.icon className="w-8 h-8" />
@@ -68,6 +96,11 @@ const PropertyTools = () => {
           ))}
         </div>
       </div>
+      
+      <EMICalculatorModal 
+        isOpen={emiModalOpen} 
+        onClose={() => setEmiModalOpen(false)} 
+      />
     </section>
   );
 };
