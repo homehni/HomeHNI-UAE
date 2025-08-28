@@ -193,6 +193,10 @@ export const auditLogger = {
   passwordReset: (userEmail: string) => 
     AuditService.logAuthEvent('Password Reset Request', userEmail, true),
 
+  // Generic events
+  logGenericEvent: (category: string, action: string, details?: string) =>
+    AuditService.logSystemEvent(`${category}: ${action}`, details, 'low'),
+
   // Property events
   propertyCreated: (propertyId: string, title: string) =>
     AuditService.logPropertyEvent('Property Created', propertyId, title),
