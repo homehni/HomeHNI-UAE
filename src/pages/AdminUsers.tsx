@@ -3,18 +3,22 @@ import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Search, Users, UserCheck, ShieldCheck } from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Search, Users, UserCheck, ShieldCheck, Building, Filter } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 interface User {
   id: string;
-  name: string;
+  user_id: string;
+  full_name: string;
   email: string;
   phone: string;
   created_at: string;
   role: string;
   properties_count: number;
+  verification_status: string;
 }
 
 const AdminUsers = () => {
@@ -22,10 +26,14 @@ const AdminUsers = () => {
   const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+  const [roleFilter, setRoleFilter] = useState('all');
   const [stats, setStats] = useState({
     total: 0,
+    property_owners: 0,
     admins: 0,
-    users: 0
+    buyers: 0,
+    sellers: 0,
+    active_listings: 0
   });
 
   const { toast } = useToast();
@@ -34,22 +42,6 @@ const AdminUsers = () => {
     fetchUsers();
     
     // Set up real-time subscriptions for immediate updates
-    const propertiesChannel = supabase
-      .channel('properties-changes')
-      .on(
-        'postgres_changes',
-        {
-          event: '*',
-          schema: 'public',
-          table: 'properties'
-        },
-        (payload) => {
-          console.log('Properties table changed:', payload);
-          fetchUsers(); // Refresh user list immediately
-        }
-      )
-      .subscribe();
-    
     const profilesChannel = supabase
       .channel('profiles-changes')
       .on(
@@ -61,102 +53,137 @@ const AdminUsers = () => {
         },
         (payload) => {
           console.log('Profiles table changed:', payload);
-          fetchUsers(); // Refresh user list immediately
+          fetchUsers();
         }
       )
       .subscribe();
 
-    // Also listen to property_submissions for immediate feedback
-    const submissionsChannel = supabase
-      .channel('submissions-changes')
+    const userRolesChannel = supabase
+      .channel('user-roles-changes')
       .on(
         'postgres_changes',
         {
-          event: 'INSERT',
+          event: '*',
           schema: 'public',
-          table: 'property_submissions'
+          table: 'user_roles'
         },
         (payload) => {
-          console.log('New property submission:', payload);
-          fetchUsers(); // Refresh user list immediately when new submission
+          console.log('User roles changed:', payload);
+          fetchUsers();
+        }
+      )
+      .subscribe();
+
+    const propertiesChannel = supabase
+      .channel('properties-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'properties'
+        },
+        (payload) => {
+          console.log('Properties table changed:', payload);
+          fetchUsers();
         }
       )
       .subscribe();
     
     return () => {
-      supabase.removeChannel(propertiesChannel);
       supabase.removeChannel(profilesChannel);
-      supabase.removeChannel(submissionsChannel);
+      supabase.removeChannel(userRolesChannel);
+      supabase.removeChannel(propertiesChannel);
     };
   }, []);
 
   useEffect(() => {
     filterUsers();
-  }, [users, searchTerm]);
+  }, [users, searchTerm, roleFilter]);
 
   const fetchUsers = async () => {
     try {
-      // Get all properties with owner information directly from properties table
-      const { data: properties, error: propertiesError } = await supabase
-        .from('properties')
-        .select('user_id, owner_name, owner_email, owner_phone, created_at')
-        .order('created_at', { ascending: false });
+      // Get all profiles
+      const { data: profilesData, error: profilesError } = await supabase
+        .from('profiles')
+        .select(`
+          id,
+          user_id,
+          full_name,
+          phone,
+          verification_status,
+          created_at
+        `);
 
-      if (propertiesError) throw propertiesError;
+      if (profilesError) throw profilesError;
 
-      // Get unique user IDs
-      const uniqueUserIds = [...new Set(properties?.map(p => p.user_id) || [])];
+      // Get all user roles
+      const { data: userRolesData, error: rolesError } = await supabase
+        .from('user_roles')
+        .select('user_id, role');
+
+      if (rolesError) throw rolesError;
+
+      // Get auth users data for email
+      const { data: authUsers, error: authError } = await supabase
+        .rpc('get_user_profiles');
+
+      if (authError) throw authError;
 
       // Get property counts for each user
+      const { data: properties, error: propError } = await supabase
+        .from('properties')
+        .select('user_id');
+
+      if (propError) throw propError;
+
       const propertyCountMap = properties?.reduce((acc, prop) => {
         acc[prop.user_id] = (acc[prop.user_id] || 0) + 1;
         return acc;
       }, {} as Record<string, number>) || {};
 
-      // Create user data by aggregating the most complete information for each user
-      const usersData = uniqueUserIds.map((userId) => {
-        const userProperties = properties?.filter(p => p.user_id === userId) || [];
-        const firstPropertyDate = userProperties[userProperties.length - 1]?.created_at;
+      // Create role map
+      const roleMap = userRolesData?.reduce((acc, userRole) => {
+        acc[userRole.user_id] = userRole.role;
+        return acc;
+      }, {} as Record<string, string>) || {};
 
-        // Find the property with the most complete owner information
-        let bestProperty = userProperties[0]; // Start with most recent
-        for (const property of userProperties) {
-          if (property.owner_name && property.owner_email && property.owner_phone) {
-            bestProperty = property;
-            break; // Found a complete record
-          }
-          // If current best is missing info but this one has some, use this one
-          if ((!bestProperty?.owner_name && property.owner_name) ||
-              (!bestProperty?.owner_email && property.owner_email) ||
-              (!bestProperty?.owner_phone && property.owner_phone)) {
-            bestProperty = property;
-          }
-        }
-
+      // Combine profile data with auth data
+      const usersData: User[] = profilesData?.map((profile) => {
+        const authUser = authUsers?.find(u => u.id === profile.user_id);
+        const role = roleMap[profile.user_id] || 'buyer';
+        
         return {
-          id: userId,
-          name: bestProperty?.owner_name || 'Not Provided',
-          email: bestProperty?.owner_email || 'Not Provided', 
-          phone: bestProperty?.owner_phone || 'Not Provided',
-          created_at: firstPropertyDate || new Date().toISOString(),
-          role: 'user', // All property submitters are regular users
-          properties_count: propertyCountMap[userId] || 0
+          id: profile.id,
+          user_id: profile.user_id,
+          full_name: profile.full_name || 'Not Provided',
+          email: authUser?.email || 'Not Provided',
+          phone: profile.phone || 'Not Provided',
+          created_at: profile.created_at,
+          role: role,
+          properties_count: propertyCountMap[profile.user_id] || 0,
+          verification_status: profile.verification_status || 'unverified'
         };
-      });
+      }) || [];
 
-      // Only filter out users where ALL information is missing
-      const validUsers = usersData.filter(user => 
-        user.name !== 'Not Provided' || user.email !== 'Not Provided' || user.phone !== 'Not Provided'
-      );
-
-      setUsers(validUsers);
+      setUsers(usersData);
 
       // Calculate stats
-      const total = validUsers.length;
-      const admins = 0; // No admins in this list
-      const regularUsers = total;
+      const total = usersData.length;
+      const propertyOwners = usersData.filter(u => u.properties_count > 0).length;
+      const admins = usersData.filter(u => u.role === 'admin').length;
+      const buyers = usersData.filter(u => u.role === 'buyer').length;
+      const sellers = usersData.filter(u => u.role === 'seller').length;
+      const activeListings = Object.values(propertyCountMap).reduce((sum, count) => sum + count, 0);
 
-      setStats({ total, admins, users: regularUsers });
+      setStats({ 
+        total, 
+        property_owners: propertyOwners, 
+        admins, 
+        buyers, 
+        sellers, 
+        active_listings: activeListings 
+      });
     } catch (error) {
       console.error('Error fetching users:', error);
       toast({
@@ -174,11 +201,15 @@ const AdminUsers = () => {
 
     if (searchTerm) {
       filtered = filtered.filter(user =>
-        user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        user.full_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
         user.phone.toLowerCase().includes(searchTerm.toLowerCase()) ||
         user.role.toLowerCase().includes(searchTerm.toLowerCase())
       );
+    }
+
+    if (roleFilter !== 'all') {
+      filtered = filtered.filter(user => user.role === roleFilter);
     }
 
     setFilteredUsers(filtered);
@@ -188,10 +219,25 @@ const AdminUsers = () => {
     switch (role) {
       case 'admin':
         return 'destructive';
-      case 'user':
+      case 'seller':
         return 'default';
-      default:
+      case 'buyer':
         return 'secondary';
+      default:
+        return 'outline';
+    }
+  };
+
+  const getVerificationBadgeVariant = (status: string) => {
+    switch (status) {
+      case 'verified':
+        return 'default';
+      case 'pending':
+        return 'secondary';
+      case 'unverified':
+        return 'outline';
+      default:
+        return 'outline';
     }
   };
 
@@ -211,7 +257,7 @@ const AdminUsers = () => {
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-8">
         <Card className="border-border bg-card">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">Total Users</CardTitle>
@@ -225,22 +271,40 @@ const AdminUsers = () => {
         <Card className="border-border bg-card">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">Property Owners</CardTitle>
+            <Building className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold text-foreground">{stats.property_owners}</div>
+          </CardContent>
+        </Card>
+
+        <Card className="border-border bg-card">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium text-muted-foreground">Buyers</CardTitle>
             <UserCheck className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-foreground">{stats.users}</div>
+            <div className="text-2xl font-bold text-foreground">{stats.buyers}</div>
+          </CardContent>
+        </Card>
+
+        <Card className="border-border bg-card">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium text-muted-foreground">Sellers</CardTitle>
+            <ShieldCheck className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold text-foreground">{stats.sellers}</div>
           </CardContent>
         </Card>
 
         <Card className="border-border bg-card">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">Active Listings</CardTitle>
-            <ShieldCheck className="h-4 w-4 text-muted-foreground" />
+            <Building className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-foreground">
-              {users.reduce((sum, user) => sum + user.properties_count, 0)}
-            </div>
+            <div className="text-2xl font-bold text-foreground">{stats.active_listings}</div>
           </CardContent>
         </Card>
       </div>
@@ -250,17 +314,31 @@ const AdminUsers = () => {
         <CardHeader className="pb-4">
           <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
             <div>
-              <CardTitle className="text-xl font-semibold text-foreground">Property Owners</CardTitle>
-              <p className="text-sm text-muted-foreground">Users who have submitted property listings</p>
+              <CardTitle className="text-xl font-semibold text-foreground">All Users</CardTitle>
+              <p className="text-sm text-muted-foreground">Manage user accounts and roles</p>
             </div>
-            <div className="relative w-full sm:w-64">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
-              <Input
-                placeholder="Search users..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 bg-background border-border"
-              />
+            <div className="flex gap-2 w-full sm:w-auto">
+              <div className="relative flex-1 sm:w-64">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+                <Input
+                  placeholder="Search users..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="pl-10 bg-background border-border"
+                />
+              </div>
+              <Select value={roleFilter} onValueChange={setRoleFilter}>
+                <SelectTrigger className="w-[140px]">
+                  <Filter className="h-4 w-4 mr-2" />
+                  <SelectValue placeholder="Filter by role" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Roles</SelectItem>
+                  <SelectItem value="admin">Admin</SelectItem>
+                  <SelectItem value="seller">Seller</SelectItem>
+                  <SelectItem value="buyer">Buyer</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
           </div>
         </CardHeader>
@@ -272,6 +350,8 @@ const AdminUsers = () => {
                   <TableHead className="text-muted-foreground font-medium">Name</TableHead>
                   <TableHead className="text-muted-foreground font-medium">Email</TableHead>
                   <TableHead className="text-muted-foreground font-medium">Phone</TableHead>
+                  <TableHead className="text-muted-foreground font-medium">Role</TableHead>
+                  <TableHead className="text-muted-foreground font-medium">Status</TableHead>
                   <TableHead className="text-muted-foreground font-medium">Properties</TableHead>
                   <TableHead className="text-muted-foreground font-medium">Joined</TableHead>
                 </TableRow>
@@ -281,7 +361,7 @@ const AdminUsers = () => {
                   filteredUsers.map((user) => (
                     <TableRow key={user.id} className="border-border hover:bg-muted/50">
                       <TableCell className="font-medium text-foreground">
-                        {user.name}
+                        {user.full_name}
                       </TableCell>
                       <TableCell className="text-foreground">
                         {user.email}
@@ -289,8 +369,21 @@ const AdminUsers = () => {
                       <TableCell className="text-foreground">
                         {user.phone}
                       </TableCell>
+                      <TableCell>
+                        <Badge variant={getRoleBadgeVariant(user.role)} className="capitalize">
+                          {user.role}
+                        </Badge>
+                      </TableCell>
+                      <TableCell>
+                        <Badge variant={getVerificationBadgeVariant(user.verification_status)} className="capitalize">
+                          {user.verification_status}
+                        </Badge>
+                      </TableCell>
                       <TableCell className="text-foreground">
-                        {user.properties_count}
+                        <div className="flex items-center gap-1">
+                          <Building className="h-3 w-3 text-muted-foreground" />
+                          {user.properties_count}
+                        </div>
                       </TableCell>
                       <TableCell className="text-muted-foreground">
                         {new Date(user.created_at).toLocaleDateString()}
@@ -299,8 +392,8 @@ const AdminUsers = () => {
                   ))
                 ) : (
                   <TableRow>
-                    <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
-                      No property owners found
+                    <TableCell colSpan={7} className="text-center py-8 text-muted-foreground">
+                      {roleFilter === 'all' ? 'No users found' : `No ${roleFilter}s found`}
                     </TableCell>
                   </TableRow>
                 )}
