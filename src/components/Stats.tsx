@@ -7,25 +7,25 @@ const Stats = () => {
   const defaultStats = [
     {
       icon: Home,
-      number: '50,000+',
+      number: '1,000+',
       label: 'Properties Listed',
       color: 'text-brand-red'
     },
     {
       icon: Users,
-      number: '1,00,000+',
+      number: '10,00+',
       label: 'Happy Customers',
       color: 'text-brand-maroon'
     },
     {
       icon: Building,
-      number: '25+',
-      label: 'Cities Covered',
+      number: '15+',
+      label: 'Countries Covered',
       color: 'text-brand-red'
     },
     {
       icon: Award,
-      number: '500+',
+      number: '50+',
       label: 'Awards Won',
       color: 'text-brand-maroon'
     }
