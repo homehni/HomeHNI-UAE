@@ -389,7 +389,7 @@ const BuilderLifetimePlans = () => {
                               : 'bg-transparent text-foreground border border-border hover:bg-muted'
                           }`}
                         >
-                          Choose Plan
+                         Subscribe
                         </Button>
                       </CardContent>
                     </Card>
