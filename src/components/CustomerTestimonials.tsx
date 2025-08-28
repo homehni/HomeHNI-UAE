@@ -1,11 +1,20 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Star, ShieldCheck, Play, Users, BadgeIndianRupee } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
+
+/** 
+ * 🔗 ADD YOUR VIDEO URL HERE (use the GitHub "raw" file URL)
+ * Example: https://raw.githubusercontent.com/your/repo/branch/public/videos/testimonials.mp4
+ */
+const VIDEO_SRC = "/lovable-uploads/Property Listing.mp4";
+const VIDEO_POSTER = "/lovable-uploads/fbb0d72f-782e-49f5-bbe1-8afc1314b5f7.png"; // optional fallback image
 
 // Sample data
 const testimonials = [
   {
     name: "Rajesh Kumar",
-    roleCity: "Buyer • Bengaluru", 
+    roleCity: "Buyer • Bengaluru",
     rating: 5,
     text: "Home HNI made my property search incredibly smooth. The verified listings and transparent process saved me months of searching. I found my dream home in just 3 weeks!",
     date: "Aug 2025",
@@ -15,7 +24,7 @@ const testimonials = [
   {
     name: "Priya Sharma",
     roleCity: "Owner • Pune",
-    rating: 5, 
+    rating: 5,
     text: "Excellent service! They helped me sell my property at the best market price. The legal support and documentation process was handled professionally.",
     date: "Jul 2025",
     verified: true,
@@ -26,7 +35,7 @@ const testimonials = [
     roleCity: "Buyer • Mumbai",
     rating: 5,
     text: "Zero brokerage and complete transparency. The team guided me through every step of the buying process. Highly recommended for first-time buyers!",
-    date: "Sep 2025", 
+    date: "Sep 2025",
     verified: true,
     initial: "A"
   },
@@ -62,60 +71,84 @@ export function TrustMetricsRow() {
   );
 }
 
-export function VideoTile({ 
-  thumbnail = "/lovable-uploads/fbb0d72f-782e-49f5-bbe1-8afc1314b5f7.png", 
-  duration = "2:13", 
-  title = "Customer Success Stories" 
+/** ===========================
+ *  VideoTile — actual <video>
+ *  =========================== */
+export function VideoTile({
+  src = "",
+  title = "Customer Success Stories",
+  poster = VIDEO_POSTER,
+}: {
+  src?: string;
+  title?: string;
+  poster?: string;
 }) {
-  const handlePlayClick = () => {
-    console.log("Play video:", title);
-    // TODO: Open video modal
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+
+  const togglePlay = () => {
+    const v = videoRef.current;
+    if (!v) return;
+    if (v.paused) {
+      v.play();
+      setIsPlaying(true);
+    } else {
+      v.pause();
+      setIsPlaying(false);
+    }
   };
 
   return (
     <div className="space-y-3">
-      <div className="relative aspect-video overflow-hidden rounded-2xl border border-gray-200 bg-gray-100 shadow-sm">
-        <img 
-          src={thumbnail}
-          alt={title}
+      <div className="relative aspect-video overflow-hidden rounded-2xl border border-gray-200 bg-black shadow-sm">
+        <video
+          ref={videoRef}
+          src={src}
+          poster={poster}
+          preload="metadata"
+          playsInline
+          muted
+          // show controls only while playing for a clean look
+          controls={isPlaying}
           className="w-full h-full object-cover"
+          onEnded={() => setIsPlaying(false)}
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent" />
-        
-        {/* Play Button */}
-        <button
-          onClick={handlePlayClick}
-          className="absolute inset-0 flex items-center justify-center group focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#d21404] rounded-2xl"
-          aria-label="Play customer testimonial video"
-        >
-          <div className="w-16 h-16 bg-white rounded-full shadow-lg ring-4 ring-white/20 flex items-center justify-center group-hover:scale-105 transition-transform">
-            <Play className="w-6 h-6 text-[#d21404] fill-current ml-1" />
-          </div>
-        </button>
+        {!isPlaying && (
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+        )}
 
-        {/* Duration */}
-        <div className="absolute bottom-3 right-3 bg-black/60 text-white text-xs px-2 py-1 rounded">
-          {duration}
-        </div>
+        {/* Overlay Play button (hidden while playing) */}
+        {!isPlaying && (
+          <button
+            type="button"
+            onClick={togglePlay}
+            className="absolute inset-0 flex items-center justify-center group focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#d21404] rounded-2xl"
+            aria-label="Play video"
+          >
+            <div className="w-16 h-16 bg-white rounded-full shadow-lg ring-4 ring-white/20 flex items-center justify-center group-hover:scale-105 transition-transform">
+              <Play className="w-6 h-6 text-[#d21404] fill-current ml-1" />
+            </div>
+          </button>
+        )}
       </div>
-      
+
       {/* Caption */}
       <div className="flex items-center gap-1 text-gray-700">
         <Play className="w-3 h-3 text-[#d21404]" />
-        <span className="text-sm">Watch customer stories</span>
+        <span className="text-sm">{title}</span>
       </div>
     </div>
   );
 }
 
-export function TestimonialCard({ 
-  name, 
-  roleCity, 
-  rating, 
-  text, 
-  date, 
-  verified, 
-  initial 
+export function TestimonialCard({
+  name,
+  roleCity,
+  rating,
+  text,
+  date,
+  verified,
+  initial
 }) {
   return (
     <div className="rounded-2xl border border-gray-200 bg-white shadow-sm hover:shadow-md transition-shadow p-4 sm:p-6 min-h-[280px] sm:min-h-[240px] flex flex-col">
@@ -147,7 +180,7 @@ export function TestimonialCard({
         </div>
       </div>
 
-      {/* Quote - Full text with proper spacing */}
+      {/* Quote */}
       <div className="flex-1 flex items-start">
         <p className="text-gray-700 text-sm leading-relaxed text-left">
           "{text}"
@@ -157,101 +190,90 @@ export function TestimonialCard({
   );
 }
 
+/** ===========================
+ *  Mobile/Tablet slider
+ *  =========================== */
 function AutoScrollTestimonials() {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const itemRefs = useRef<HTMLDivElement[]>([]);
+  itemRefs.current = [];
 
   useEffect(() => {
-    const scrollContainer = scrollRef.current;
-    if (!scrollContainer) return;
+    const scroller = scrollRef.current;
+    if (!scroller) return;
 
-    let currentIndex = 0;
-    let isScrolling = false;
-    let intervalId: NodeJS.Timeout;
+    let i = 0;
+    let busy = false;
+    let timer: ReturnType<typeof setInterval> | null = null;
 
-    const getScrollWidth = () => {
-      const containerWidth = scrollContainer.offsetWidth;
-      // Calculate width based on responsive classes
-      if (window.innerWidth >= 768) {
-        // md and up - cards are 75% width
-        return containerWidth * 0.75 + 16; // 75% + gap
-      } else {
-        // mobile - cards are 90% width  
-        return containerWidth * 0.9 + 16; // 90% + gap
-      }
+    const goto = (idx: number) => {
+      if (busy || !scroller) return;
+      const el = itemRefs.current[idx];
+      if (!el) return;
+      busy = true;
+      scroller.scrollTo({ left: el.offsetLeft, behavior: "smooth" });
+      setTimeout(() => (busy = false), 600);
     };
 
-    const scrollToIndex = (index: number) => {
-      if (!scrollContainer || isScrolling) return;
-      
-      isScrolling = true;
-      const scrollWidth = getScrollWidth();
-      const scrollPosition = index * scrollWidth;
-      
-      scrollContainer.scrollTo({
-        left: scrollPosition,
-        behavior: 'smooth'
-      });
-
-      // Reset scrolling flag after animation completes
-      setTimeout(() => {
-        isScrolling = false;
-      }, 600);
+    const start = () => {
+      stop();
+      timer = setInterval(() => {
+        i = (i + 1) % testimonials.length;
+        goto(i);
+      }, 4000);
     };
+    const stop = () => { if (timer) clearInterval(timer); timer = null; };
 
-    const autoScroll = () => {
-      if (isScrolling) return;
-      
-      currentIndex = (currentIndex + 1) % testimonials.length;
-      scrollToIndex(currentIndex);
-    };
+    const ro = new ResizeObserver(() => goto(i));
+    ro.observe(scroller);
 
-    // Start auto-scrolling after initial delay
-    const startTimer = setTimeout(() => {
-      intervalId = setInterval(autoScroll, 4000);
-    }, 2000);
+    const init = setTimeout(start, 800);
 
-    // Handle resize to recalculate scroll positions
-    const handleResize = () => {
-      if (!isScrolling) {
-        scrollToIndex(currentIndex);
-      }
-    };
-
-    window.addEventListener('resize', handleResize);
+    scroller.addEventListener("pointerdown", stop);
+    scroller.addEventListener("pointerup", start);
+    scroller.addEventListener("mouseenter", stop);
+    scroller.addEventListener("mouseleave", start);
 
     return () => {
-      clearTimeout(startTimer);
-      if (intervalId) clearInterval(intervalId);
-      window.removeEventListener('resize', handleResize);
+      clearTimeout(init);
+      stop();
+      ro.disconnect();
+      scroller.removeEventListener("pointerdown", stop);
+      scroller.removeEventListener("pointerup", start);
+      scroller.removeEventListener("mouseenter", stop);
+      scroller.removeEventListener("mouseleave", start);
     };
   }, []);
 
+  const setItemRef = (el: HTMLDivElement | null) => {
+    if (el && !itemRefs.current.includes(el)) itemRefs.current.push(el);
+  };
+
   return (
     <div className="relative">
-      <div 
+      <div
         ref={scrollRef}
-        className="overflow-x-auto -mx-4 px-4 pb-2"
-        style={{ 
-          scrollbarWidth: 'none', 
-          msOverflowStyle: 'none',
-          WebkitOverflowScrolling: 'touch'
+        className="overflow-x-auto px-4 pb-2 snap-x snap-mandatory scroll-smooth hide-scroll"
+        style={{
+          scrollPaddingLeft: "1rem",
+          scrollPaddingRight: "1rem",
+          WebkitOverflowScrolling: "touch",
         }}
       >
-        <style>
-          {`
-            .overflow-x-auto::-webkit-scrollbar {
-              display: none;
-            }
-          `}
-        </style>
         <div className="flex gap-4">
-          {testimonials.map((testimonial, index) => (
-            <div key={index} className="w-[90%] md:w-[75%] flex-shrink-0">
-              <TestimonialCard {...testimonial} />
+          {testimonials.map((t, idx) => (
+            <div
+              key={idx}
+              ref={setItemRef}
+              className="snap-start shrink-0 box-border basis-[92%] sm:basis-[85%] md:basis-[75%]"
+            >
+              <TestimonialCard {...t} />
             </div>
           ))}
         </div>
       </div>
+
+      <style>{`.hide-scroll::-webkit-scrollbar{display:none}`}</style>
     </div>
   );
 }
@@ -269,13 +291,18 @@ export function TestimonialsSection() {
             Real stories from verified buyers & owners.
           </p>
           <TrustMetricsRow />
+          <div className="flex justify-center mt-6">
+            <Button asChild variant="outline" size="lg">
+              <Link to="/testimonials">See All Testimonials</Link>
+            </Button>
+          </div>
         </div>
 
         {/* Desktop Layout */}
         <div className="hidden lg:grid lg:grid-cols-2 gap-12 items-start">
           {/* Left Column - Video */}
-          <VideoTile />
-          
+          <VideoTile src={VIDEO_SRC} poster={VIDEO_POSTER} title="Customer Success Stories" />
+
           {/* Right Column - Testimonials */}
           <div className="space-y-6">
             {testimonials.slice(0, 3).map((testimonial, index) => (
@@ -286,12 +313,9 @@ export function TestimonialsSection() {
 
         {/* Mobile & Tablet Layout */}
         <div className="lg:hidden">
-          {/* Video First */}
           <div className="mb-8">
-            <VideoTile />
+            <VideoTile src={VIDEO_SRC} poster={VIDEO_POSTER} title="Customer Success Stories" />
           </div>
-          
-          {/* Auto-scrolling Testimonials */}
           <AutoScrollTestimonials />
         </div>
       </div>
@@ -300,5 +324,4 @@ export function TestimonialsSection() {
 }
 
 const CustomerTestimonials = TestimonialsSection;
-
 export default CustomerTestimonials;

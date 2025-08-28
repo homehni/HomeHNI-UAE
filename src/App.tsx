@@ -92,6 +92,8 @@ import { MyInterests } from "./pages/MyInterests";
 import PagePreview from "./pages/PagePreview";
 import DynamicPage from "./pages/DynamicPage";
 import DeveloperPage from "./pages/DeveloperPage";
+import PaymentSuccess from "./pages/payments/Success";
+import PaymentFailed from "./pages/payments/Failed";
 
 const App: React.FC = () => {
   const [queryClient] = useState(() => new QueryClient({
@@ -233,6 +235,10 @@ const App: React.FC = () => {
             
             <Route path="/robots.txt" element={<RobotsTxt />} />
             <Route path="/sitemap.xml" element={<SitemapXml />} />
+            
+            {/* Payment Routes */}
+            <Route path="/payment/success" element={<PaymentSuccess />} />
+            <Route path="/payment/failed" element={<PaymentFailed />} />
             
             {/* Dynamic page route - must be before catch-all */}
             <Route path="/:slug" element={<DynamicPage />} />

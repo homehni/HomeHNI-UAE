@@ -5,76 +5,257 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Badge } from '@/components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Marquee from '@/components/Marquee';
+import PayButton from '@/components/PayButton';
 
 const AgentLifetimePlans = () => {
-  const [selectedPlan, setSelectedPlan] = useState(0);
+  const [selectedPlans, setSelectedPlans] = useState({
+    residential: 0,
+    commercial: 0,
+    industrial: 0,
+    agricultural: 0
+  });
 
-  const plans = [
-    {
-      name: "Lifetime Standard",
-      price: "₹79,999 - ₹1,49,999",
-      gst: "+18% GST",
-      badge: "FOR NEW AGENTS",
-      badgeColor: "bg-yellow-500",
-    },
-    {
-      name: "Lifetime Platinum", 
-      price: "₹1,49,999 - ₹2,49,999",
-      gst: "+18% GST",
-      badge: "ENHANCED VISIBILITY",
-      badgeColor: "bg-green-500",
-    },
-    {
-      name: "Lifetime VIP",
-      price: "₹2,49,999",
-      gst: "+18% GST", 
-      badge: "EXCLUSIVE SERVICES",
-      badgeColor: "bg-red-500",
-    }
-  ];
-
-  const planDetails = [
-    // Lifetime Standard features
-    [
-      { icon: <Bell className="w-5 h-5" />, text: "Property Alerts & Notifications" },
-      { icon: <Home className="w-5 h-5" />, text: "Limited Property Listings" },
-      { icon: <Headphones className="w-5 h-5" />, text: "Basic Customer Support" },
-      { icon: <FileText className="w-5 h-5" />, text: "Standard Marketing Materials" }
+  const tabPlans = {
+    residential: [
+      {
+        name: "Lifetime Standard",
+        price: "₹79,999 - ₹1,49,999",
+        gst: "+18% GST",
+        badge: "FOR NEW AGENTS",
+        badgeColor: "bg-yellow-500",
+        amountPaise: 7999900, // ₹79,999 in paise
+      },
+      {
+        name: "Lifetime Platinum", 
+        price: "₹1,49,999 - ₹2,49,999",
+        gst: "+18% GST",
+        badge: "ENHANCED VISIBILITY",
+        badgeColor: "bg-green-500",
+        amountPaise: 14999900, // ₹1,49,999 in paise
+      },
+      {
+        name: "Lifetime VIP",
+        price: "₹2,49,999",
+        gst: "+18% GST", 
+        badge: "EXCLUSIVE SERVICES",
+        badgeColor: "bg-red-500",
+        amountPaise: 24999900, // ₹2,49,999 in paise
+      }
     ],
-    // Lifetime Platinum features
-    [
-      { icon: <Bell className="w-5 h-5" />, text: "Property Alerts & Notifications" },
-      { icon: <Home className="w-5 h-5" />, text: "Unlimited Property Listings" },
-      { icon: <Headphones className="w-5 h-5" />, text: "Priority Customer Support" },
-      { icon: <Video className="w-5 h-5" />, text: "Virtual Tour Creation Tools" },
-      { icon: <TrendingUp className="w-5 h-5" />, text: "Enhanced Marketing Resources" },
-      { icon: <Globe className="w-5 h-5" />, text: "Featured Listing Placement" },
-      { icon: <Users className="w-5 h-5" />, text: "Lead Generation Support" },
-      { icon: <Camera className="w-5 h-5" />, text: "Professional Photography Credits" }
+    commercial: [
+      {
+        name: "Commercial Standard",
+        price: "₹1,29,999 - ₹1,99,999",
+        gst: "+18% GST",
+        badge: "COMMERCIAL FOCUS",
+        badgeColor: "bg-blue-500",
+        amountPaise: 12999900, // ₹1,29,999 in paise
+      },
+      {
+        name: "Commercial Platinum", 
+        price: "₹1,99,999 - ₹2,99,999",
+        gst: "+18% GST",
+        badge: "BUSINESS GROWTH",
+        badgeColor: "bg-purple-500",
+        amountPaise: 19999900, // ₹1,99,999 in paise
+      },
+      {
+        name: "Commercial VIP",
+        price: "₹2,99,999",
+        gst: "+18% GST", 
+        badge: "ENTERPRISE LEVEL",
+        badgeColor: "bg-indigo-500",
+        amountPaise: 29999900, // ₹2,99,999 in paise
+      }
     ],
-    // Lifetime VIP features
-    [
-      { icon: <Crown className="w-5 h-5" />, text: "VIP Concierge Service" },
-      { icon: <Home className="w-5 h-5" />, text: "Unlimited Premium Listings" },
-      { icon: <BarChart3 className="w-5 h-5" />, text: "Advanced Analytics Dashboard" },
-      { icon: <TrendingUp className="w-5 h-5" />, text: "Premium Marketing Campaigns" },
-      { icon: <Zap className="w-5 h-5" />, text: "Exclusive Listing Access" },
-      { icon: <Headphones className="w-5 h-5" />, text: "24/7 Dedicated Support" },
-      { icon: <Video className="w-5 h-5" />, text: "Professional Video Marketing" },
-      { icon: <Users className="w-5 h-5" />, text: "Personal Account Manager" },
-      { icon: <Globe className="w-5 h-5" />, text: "Multi-Platform Promotion" },
-      { icon: <Shield className="w-5 h-5" />, text: "Priority Issue Resolution" }
+    industrial: [
+      {
+        name: "Industrial Standard",
+        price: "₹1,49,999 - ₹2,49,999",
+        gst: "+18% GST",
+        badge: "INDUSTRIAL FOCUS",
+        badgeColor: "bg-gray-500",
+        amountPaise: 14999900, // ₹1,49,999 in paise
+      },
+      {
+        name: "Industrial Platinum", 
+        price: "₹2,49,999 - ₹3,49,999",
+        gst: "+18% GST",
+        badge: "HEAVY INDUSTRY",
+        badgeColor: "bg-slate-500",
+        amountPaise: 24999900, // ₹2,49,999 in paise
+      },
+      {
+        name: "Industrial VIP",
+        price: "₹3,49,999",
+        gst: "+18% GST", 
+        badge: "MEGA PROJECTS",
+        badgeColor: "bg-zinc-500",
+        amountPaise: 34999900, // ₹3,49,999 in paise
+      }
+    ],
+    agricultural: [
+      {
+        name: "Agricultural Standard",
+        price: "₹99,999 - ₹1,79,999",
+        gst: "+18% GST",
+        badge: "FARM PROPERTIES",
+        badgeColor: "bg-emerald-500",
+        amountPaise: 9999900, // ₹99,999 in paise
+      },
+      {
+        name: "Agricultural Platinum", 
+        price: "₹1,79,999 - ₹2,79,999",
+        gst: "+18% GST",
+        badge: "AGRI BUSINESS",
+        badgeColor: "bg-teal-500",
+        amountPaise: 17999900, // ₹1,79,999 in paise
+      },
+      {
+        name: "Agricultural VIP",
+        price: "₹2,79,999",
+        gst: "+18% GST", 
+        badge: "LARGE ESTATES",
+        badgeColor: "bg-cyan-500",
+        amountPaise: 27999900, // ₹2,79,999 in paise
+      }
     ]
-  ];
+  };
 
-  const bestForDescriptions = [
-    "New agents or those starting out with moderate exposure needs",
-    "Established agents looking for unlimited listings, enhanced visibility, and support",
-    "Top-tier agents or agents handling luxury listings, requiring exclusive services and promotions"
-  ];
+  const planDetails = {
+    residential: [
+      // Lifetime Standard features
+      [
+        { icon: <Bell className="w-5 h-5" />, text: "Property Alerts & Notifications" },
+        { icon: <Home className="w-5 h-5" />, text: "Limited Property Listings" },
+        { icon: <Headphones className="w-5 h-5" />, text: "Basic Customer Support" },
+        { icon: <FileText className="w-5 h-5" />, text: "Standard Marketing Materials" }
+      ],
+      // Lifetime Platinum features
+      [
+        { icon: <Bell className="w-5 h-5" />, text: "Property Alerts & Notifications" },
+        { icon: <Home className="w-5 h-5" />, text: "Unlimited Property Listings" },
+        { icon: <Headphones className="w-5 h-5" />, text: "Priority Customer Support" },
+        { icon: <Video className="w-5 h-5" />, text: "Virtual Tour Creation Tools" },
+        { icon: <TrendingUp className="w-5 h-5" />, text: "Enhanced Marketing Resources" },
+        { icon: <Globe className="w-5 h-5" />, text: "Featured Listing Placement" },
+        { icon: <Users className="w-5 h-5" />, text: "Lead Generation Support" },
+        { icon: <Camera className="w-5 h-5" />, text: "Professional Photography Credits" }
+      ],
+      // Lifetime VIP features
+      [
+        { icon: <Crown className="w-5 h-5" />, text: "VIP Concierge Service" },
+        { icon: <Home className="w-5 h-5" />, text: "Unlimited Premium Listings" },
+        { icon: <BarChart3 className="w-5 h-5" />, text: "Advanced Analytics Dashboard" },
+        { icon: <TrendingUp className="w-5 h-5" />, text: "Premium Marketing Campaigns" },
+        { icon: <Zap className="w-5 h-5" />, text: "Exclusive Listing Access" },
+        { icon: <Headphones className="w-5 h-5" />, text: "24/7 Dedicated Support" },
+        { icon: <Video className="w-5 h-5" />, text: "Professional Video Marketing" },
+        { icon: <Users className="w-5 h-5" />, text: "Personal Account Manager" },
+        { icon: <Globe className="w-5 h-5" />, text: "Multi-Platform Promotion" },
+        { icon: <Shield className="w-5 h-5" />, text: "Priority Issue Resolution" }
+      ]
+    ],
+    commercial: [
+      [
+        { icon: <Bell className="w-5 h-5" />, text: "Commercial Property Alerts" },
+        { icon: <Home className="w-5 h-5" />, text: "Basic Commercial Listings" },
+        { icon: <Headphones className="w-5 h-5" />, text: "Business Hours Support" },
+        { icon: <FileText className="w-5 h-5" />, text: "Commercial Marketing Kit" }
+      ],
+      [
+        { icon: <Bell className="w-5 h-5" />, text: "Priority Commercial Alerts" },
+        { icon: <Home className="w-5 h-5" />, text: "Unlimited Commercial Listings" },
+        { icon: <Headphones className="w-5 h-5" />, text: "Business Priority Support" },
+        { icon: <Video className="w-5 h-5" />, text: "Commercial Virtual Tours" },
+        { icon: <TrendingUp className="w-5 h-5" />, text: "Business Growth Analytics" },
+        { icon: <Globe className="w-5 h-5" />, text: "Commercial Featured Placement" }
+      ],
+      [
+        { icon: <Crown className="w-5 h-5" />, text: "Enterprise Agent Service" },
+        { icon: <Home className="w-5 h-5" />, text: "Premium Commercial Portfolio" },
+        { icon: <BarChart3 className="w-5 h-5" />, text: "Enterprise Analytics Suite" },
+        { icon: <TrendingUp className="w-5 h-5" />, text: "Corporate Marketing Campaigns" },
+        { icon: <Users className="w-5 h-5" />, text: "Dedicated Business Manager" },
+        { icon: <Shield className="w-5 h-5" />, text: "Enterprise-level Support" }
+      ]
+    ],
+    industrial: [
+      [
+        { icon: <Bell className="w-5 h-5" />, text: "Industrial Property Alerts" },
+        { icon: <Home className="w-5 h-5" />, text: "Basic Industrial Listings" },
+        { icon: <Headphones className="w-5 h-5" />, text: "Industrial Support" },
+        { icon: <FileText className="w-5 h-5" />, text: "Industrial Documentation" }
+      ],
+      [
+        { icon: <Bell className="w-5 h-5" />, text: "Priority Industrial Alerts" },
+        { icon: <Home className="w-5 h-5" />, text: "Unlimited Industrial Listings" },
+        { icon: <Headphones className="w-5 h-5" />, text: "Industrial Specialist Support" },
+        { icon: <Video className="w-5 h-5" />, text: "Industrial Site Tours" },
+        { icon: <TrendingUp className="w-5 h-5" />, text: "Industrial Market Analytics" },
+        { icon: <Globe className="w-5 h-5" />, text: "Industrial Network Access" }
+      ],
+      [
+        { icon: <Crown className="w-5 h-5" />, text: "Mega Project Agent Service" },
+        { icon: <Home className="w-5 h-5" />, text: "Premium Industrial Portfolio" },
+        { icon: <BarChart3 className="w-5 h-5" />, text: "Advanced Industrial Analytics" },
+        { icon: <TrendingUp className="w-5 h-5" />, text: "Industrial Marketing Suite" },
+        { icon: <Users className="w-5 h-5" />, text: "Industrial Project Manager" },
+        { icon: <Shield className="w-5 h-5" />, text: "Heavy Industry Support" }
+      ]
+    ],
+    agricultural: [
+      [
+        { icon: <Bell className="w-5 h-5" />, text: "Agricultural Property Alerts" },
+        { icon: <Home className="w-5 h-5" />, text: "Basic Farm Listings" },
+        { icon: <Headphones className="w-5 h-5" />, text: "Agricultural Support" },
+        { icon: <FileText className="w-5 h-5" />, text: "Farm Documentation Kit" }
+      ],
+      [
+        { icon: <Bell className="w-5 h-5" />, text: "Priority Farm Alerts" },
+        { icon: <Home className="w-5 h-5" />, text: "Unlimited Agricultural Listings" },
+        { icon: <Headphones className="w-5 h-5" />, text: "Agricultural Specialist Support" },
+        { icon: <Video className="w-5 h-5" />, text: "Farm Virtual Tours" },
+        { icon: <TrendingUp className="w-5 h-5" />, text: "Agricultural Market Insights" },
+        { icon: <Globe className="w-5 h-5" />, text: "Agri-Business Network" }
+      ],
+      [
+        { icon: <Crown className="w-5 h-5" />, text: "Estate Agent VIP Service" },
+        { icon: <Home className="w-5 h-5" />, text: "Premium Agricultural Portfolio" },
+        { icon: <BarChart3 className="w-5 h-5" />, text: "Estate Analytics Dashboard" },
+        { icon: <TrendingUp className="w-5 h-5" />, text: "Large Estate Marketing" },
+        { icon: <Users className="w-5 h-5" />, text: "Estate Portfolio Manager" },
+        { icon: <Shield className="w-5 h-5" />, text: "Premium Estate Support" }
+      ]
+    ]
+  };
+
+  const bestForDescriptions = {
+    residential: [
+      "New agents or those starting out with moderate exposure needs",
+      "Established agents looking for unlimited listings, enhanced visibility, and support",
+      "Top-tier agents or agents handling luxury listings, requiring exclusive services and promotions"
+    ],
+    commercial: [
+      "New commercial agents focusing on office and retail spaces",
+      "Established commercial agents looking for business growth and enhanced visibility",
+      "Top-tier commercial agents handling enterprise-level properties and corporate clients"
+    ],
+    industrial: [
+      "Industrial property specialists starting their industrial portfolio",
+      "Experienced industrial agents focusing on warehouses and manufacturing spaces",
+      "Industrial property experts handling mega projects and heavy industry deals"
+    ],
+    agricultural: [
+      "Agricultural property agents starting with farm listings",
+      "Experienced agricultural agents focusing on agri-business properties",
+      "Estate specialists handling large agricultural estates and premium farmland"
+    ]
+  };
 
   const howItWorks = [
     "Choose your Agent Lifetime Plan",
@@ -141,84 +322,103 @@ const AgentLifetimePlans = () => {
         </div>
       </section>
 
-      {/* Agent Lifetime Plans */}
-      <section className="py-16 px-4 bg-gray-50">
+      {/* Agent Lifetime Plans with Tabs */}
+      <section className="py-16 px-4 bg-gray-50" id="pricing">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-              Agent Lifetime Plans
-            </h2>
-          </div>
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-4">
+            Choose Your Agent Lifetime Plan
+          </h2>
+          <p className="text-lg text-muted-foreground text-center mb-12">Select the category that best fits your property expertise</p>
 
-          {/* Plan Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {plans.map((plan, index) => (
-              <Card 
-                key={index} 
-                className={`relative cursor-pointer transition-all duration-200 ${
-                  selectedPlan === index ? 'ring-2 ring-brand-red bg-muted' : 'bg-card hover:shadow-md'
-                }`}
-                onClick={() => setSelectedPlan(index)}
-              >
-                <div className="absolute top-3 left-3 right-3">
-                  <Badge className={`${plan.badgeColor} text-white text-xs px-2 py-1 font-medium w-full text-center`}>
-                    {plan.badge}
-                  </Badge>
+          <Tabs defaultValue="residential" className="w-full">
+            <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 mb-8">
+              <TabsTrigger value="residential" className="text-sm md:text-base">Residential</TabsTrigger>
+              <TabsTrigger value="commercial" className="text-sm md:text-base">Commercial</TabsTrigger>
+              <TabsTrigger value="industrial" className="text-sm md:text-base">Industrial</TabsTrigger>
+              <TabsTrigger value="agricultural" className="text-sm md:text-base">Agricultural</TabsTrigger>
+            </TabsList>
+
+            {Object.entries(tabPlans).map(([tabKey, plans]) => (
+              <TabsContent key={tabKey} value={tabKey} className="space-y-8">
+                {/* Plan Cards */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  {plans.map((plan, index) => (
+                    <Card 
+                      key={index} 
+                      className={`relative cursor-pointer transition-all duration-200 ${
+                        selectedPlans[tabKey as keyof typeof selectedPlans] === index ? 'ring-2 ring-brand-red bg-muted' : 'bg-card hover:shadow-md'
+                      }`}
+                      onClick={() => setSelectedPlans(prev => ({ ...prev, [tabKey]: index }))}
+                    >
+                      <div className="absolute top-3 left-3 right-3">
+                        <Badge className={`${plan.badgeColor} text-white text-xs px-2 py-1 font-medium w-full text-center`}>
+                          {plan.badge}
+                        </Badge>
+                      </div>
+                      
+                      <CardContent className="pt-16 pb-6 px-6">
+                        <h3 className="text-xl font-bold text-gray-900 mb-3">{plan.name}</h3>
+                        <div className="mb-4">
+                          <span className="text-2xl font-bold text-gray-900">{plan.price}</span>
+                          <div className="text-sm text-gray-500">{plan.gst}</div>
+                        </div>
+                        
+                        <div className="mb-6 text-sm text-gray-600">
+                          <strong>Best For:</strong> {bestForDescriptions[tabKey as keyof typeof bestForDescriptions][index]}
+                        </div>
+                        
+                        <PayButton
+                          label="Subscribe"
+                          planName={`Agent — ${plan.name}`}
+                          amountPaise={plan.amountPaise}
+                          notes={{ plan: plan.name, category: "agent", type: tabKey }}
+                          className={`w-full ${
+                            selectedPlans[tabKey as keyof typeof selectedPlans] === index 
+                              ? 'bg-brand-red hover:bg-brand-maroon-dark text-white' 
+                              : 'bg-transparent text-foreground border border-border hover:bg-muted'
+                          }`}
+                        />
+                      </CardContent>
+                    </Card>
+                  ))}
                 </div>
-                
-                <CardContent className="pt-16 pb-6 px-6">
-                  <h3 className="text-xl font-bold text-gray-900 mb-3">{plan.name}</h3>
-                  <div className="mb-4">
-                    <span className="text-2xl font-bold text-gray-900">{plan.price}</span>
-                    <div className="text-sm text-gray-500">{plan.gst}</div>
+
+                {/* Plan Details */}
+                <div className={`rounded-lg p-8 shadow-sm ${plans[selectedPlans[tabKey as keyof typeof selectedPlans]].badgeColor} bg-opacity-10 border border-opacity-20`} style={{
+                  borderColor: plans[selectedPlans[tabKey as keyof typeof selectedPlans]].badgeColor.replace('bg-', ''),
+                  backgroundColor: plans[selectedPlans[tabKey as keyof typeof selectedPlans]].badgeColor.replace('bg-', '') + '20'
+                }}>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    {planDetails[tabKey as keyof typeof planDetails][selectedPlans[tabKey as keyof typeof selectedPlans]].map((detail, index) => (
+                      <div key={index} className="flex items-start gap-3">
+                        <div className="text-brand-red mt-1">
+                          {detail.icon}
+                        </div>
+                        <span className="text-sm text-foreground leading-relaxed">
+                          {detail.text}
+                        </span>
+                      </div>
+                    ))}
                   </div>
-                  
-                  <div className="mb-6 text-sm text-gray-600">
-                    <strong>Best For:</strong> {bestForDescriptions[index]}
-                  </div>
-                  
-                  <Button 
-                    className={`w-full ${
-                      selectedPlan === index 
-                        ? 'bg-brand-red hover:bg-brand-maroon-dark text-white' 
-                        : 'bg-transparent text-foreground border border-border hover:bg-muted'
-                    }`}
-                  >
-                    Choose Plan
-                  </Button>
-                </CardContent>
-              </Card>
+                </div>
+              </TabsContent>
             ))}
-          </div>
 
-          {/* Plan Details */}
-          <div className={`mt-8 rounded-lg p-8 shadow-sm ${plans[selectedPlan].badgeColor} bg-opacity-10 border border-opacity-20`} style={{
-            borderColor: plans[selectedPlan].badgeColor.replace('bg-', ''),
-            backgroundColor: plans[selectedPlan].badgeColor.replace('bg-', '') + '20'
-          }}>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {planDetails[selectedPlan].map((detail, index) => (
-                <div key={index} className="flex items-start gap-3">
-                  <div className="text-brand-red mt-1">
-                    {detail.icon}
-                  </div>
-                  <span className="text-sm text-foreground leading-relaxed">
-                    {detail.text}
-                  </span>
-                </div>
-              ))}
+            {/* Contact Info */}
+            <div className="mt-8 text-center">
+              <p className="text-gray-600 mb-2">
+                For assistance call us at: <span className="text-brand-red font-semibold">+91 80740 17388</span>
+              </p>
+              <p className="text-sm text-gray-500">
+                <Link 
+                  to="/terms-and-conditions" 
+                  className="underline cursor-pointer hover:text-gray-700"
+                >
+                  Terms & Conditions Apply
+                </Link>
+              </p>
             </div>
-          </div>
-
-          {/* Contact Info */}
-          <div className="mt-8 text-center">
-            <p className="text-gray-600 mb-2">
-              For assistance call us at: <span className="text-brand-red font-semibold">+91-92-430-099-80</span>
-            </p>
-            <p className="text-sm text-gray-500">
-              <span className="underline cursor-pointer hover:text-gray-700">Terms & Conditions Apply</span>
-            </p>
-          </div>
+          </Tabs>
         </div>
       </section>
 

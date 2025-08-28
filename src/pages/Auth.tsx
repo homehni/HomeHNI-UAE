@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -380,9 +380,22 @@ export const Auth: React.FC = () => {
                 </TabsContent>
               </Tabs>
               
-              <div className="text-center text-xs text-gray-500 mt-8 pt-6 border-t border-gray-100">
-                By continuing, you agree to our <span className="text-brand-red hover:underline cursor-pointer">Terms of Service</span> and <span className="text-brand-red hover:underline cursor-pointer">Privacy Policy</span>
-              </div>
+             <div className="text-center text-xs text-gray-500 mt-8 pt-6 border-t border-gray-100">
+  By continuing, you agree to our{" "}
+  <Link 
+    to="/terms-and-conditions" 
+    className="text-brand-red hover:underline cursor-pointer"
+  >
+    Terms of Service
+  </Link>{" "}
+  and{" "}
+  <Link 
+    to="/privacy-policy" 
+    className="text-brand-red hover:underline cursor-pointer"
+  >
+    Privacy Policy
+  </Link>
+</div>
             </CardContent>
           </Card>
         </div>
