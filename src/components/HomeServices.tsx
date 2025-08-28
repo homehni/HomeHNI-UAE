@@ -63,7 +63,11 @@ const HomeServices = () => {
   const scroll = (direction: 'left' | 'right') => {
     if (!scrollContainerRef.current) return;
     
-    const scrollAmount = 320; // Width of one card plus gap
+    // Dynamic scroll amount based on viewport
+    const cardWidth = 320; // Width of one card plus gap
+    const viewportWidth = window.innerWidth;
+    const scrollAmount = viewportWidth < 768 ? cardWidth * 2 : cardWidth * 3; // Scroll more cards at once
+    
     const currentScroll = scrollContainerRef.current.scrollLeft;
     const newScroll = direction === 'left' 
       ? currentScroll - scrollAmount 
@@ -86,14 +90,16 @@ const HomeServices = () => {
       const currentScroll = scrollContainer.scrollLeft;
       
       if (currentScroll >= maxScroll * 0.66) {
-        // Reset to beginning smoothly
-        scrollContainer.scrollTo({ left: 0, behavior: 'smooth' });
+        // Reset to beginning for infinite scroll
+        scrollContainer.scrollLeft = 0;
       } else {
-        scrollContainer.scrollBy({ left: 1, behavior: 'auto' });
+        // Increased scroll speed from 1px to 3px per interval
+        scrollContainer.scrollBy({ left: 3, behavior: 'auto' });
       }
     };
 
-    const interval = setInterval(autoScroll, 20);
+    // Faster interval for smoother, quicker scrolling
+    const interval = setInterval(autoScroll, 15);
     return () => clearInterval(interval);
   }, [isHovered]);
 
