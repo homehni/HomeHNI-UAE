@@ -9,6 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Marquee from '@/components/Marquee';
+import PayButton from '@/components/PayButton';
 
 const BuilderLifetimePlans = () => {
   const [selectedPlans, setSelectedPlans] = useState({
@@ -26,6 +27,7 @@ const BuilderLifetimePlans = () => {
         gst: "+18% GST",
         badge: "PROJECT SHOWCASE",
         badgeColor: "bg-yellow-500",
+        amountPaise: 14999900, // ₹1,49,999 in paise
       },
       {
         name: "Lifetime Platinum", 
@@ -33,6 +35,7 @@ const BuilderLifetimePlans = () => {
         gst: "+18% GST",
         badge: "ENHANCED MARKETING",
         badgeColor: "bg-green-500",
+        amountPaise: 24999900, // ₹2,49,999 in paise
       },
       {
         name: "Lifetime VIP",
@@ -40,6 +43,7 @@ const BuilderLifetimePlans = () => {
         gst: "+18% GST", 
         badge: "PREMIUM SHOWCASE",
         badgeColor: "bg-red-500",
+        amountPaise: 39999900, // ₹3,99,999 in paise
       }
     ],
     commercial: [
@@ -49,6 +53,7 @@ const BuilderLifetimePlans = () => {
         gst: "+18% GST",
         badge: "COMMERCIAL PROJECTS",
         badgeColor: "bg-blue-500",
+        amountPaise: 24999900, // ₹2,49,999 in paise
       },
       {
         name: "Commercial Platinum", 
@@ -56,6 +61,7 @@ const BuilderLifetimePlans = () => {
         gst: "+18% GST",
         badge: "BUSINESS GROWTH",
         badgeColor: "bg-indigo-500",
+        amountPaise: 34999900, // ₹3,49,999 in paise
       },
       {
         name: "Commercial VIP",
@@ -63,6 +69,7 @@ const BuilderLifetimePlans = () => {
         gst: "+18% GST", 
         badge: "ENTERPRISE LEVEL",
         badgeColor: "bg-purple-600",
+        amountPaise: 49999900, // ₹4,99,999 in paise
       }
     ],
     industrial: [
@@ -72,6 +79,7 @@ const BuilderLifetimePlans = () => {
         gst: "+18% GST",
         badge: "INDUSTRIAL FOCUS",
         badgeColor: "bg-gray-600",
+        amountPaise: 29999900, // ₹2,99,999 in paise
       },
       {
         name: "Industrial Platinum", 
@@ -79,6 +87,7 @@ const BuilderLifetimePlans = () => {
         gst: "+18% GST",
         badge: "ADVANCED SOLUTIONS",
         badgeColor: "bg-slate-700",
+        amountPaise: 39999900, // ₹3,99,999 in paise
       },
       {
         name: "Industrial VIP",
@@ -86,6 +95,7 @@ const BuilderLifetimePlans = () => {
         gst: "+18% GST", 
         badge: "PREMIUM INDUSTRIAL",
         badgeColor: "bg-zinc-800",
+        amountPaise: 54999900, // ₹5,49,999 in paise
       }
     ],
     agricultural: [
@@ -95,6 +105,7 @@ const BuilderLifetimePlans = () => {
         gst: "+18% GST",
         badge: "FARM PROJECTS",
         badgeColor: "bg-green-600",
+        amountPaise: 17999900, // ₹1,79,999 in paise
       },
       {
         name: "Agricultural Platinum", 
@@ -102,6 +113,7 @@ const BuilderLifetimePlans = () => {
         gst: "+18% GST",
         badge: "RURAL DEVELOPMENT",
         badgeColor: "bg-emerald-600",
+        amountPaise: 25999900, // ₹2,59,999 in paise
       },
       {
         name: "Agricultural VIP",
@@ -109,6 +121,7 @@ const BuilderLifetimePlans = () => {
         gst: "+18% GST", 
         badge: "AGRI-TECH FOCUS",
         badgeColor: "bg-lime-700",
+        amountPaise: 37999900, // ₹3,79,999 in paise
       }
     ]
   };
@@ -382,15 +395,17 @@ const BuilderLifetimePlans = () => {
                           <strong>Best For:</strong> {bestForDescriptions[category as keyof typeof bestForDescriptions][index]}
                         </div>
                         
-                        <Button 
+                        <PayButton
+                          label="Subscribe"
+                          planName={`Builder — ${plan.name}`}
+                          amountPaise={plan.amountPaise}
+                          notes={{ plan: plan.name, category: "builder", type: category }}
                           className={`w-full ${
                             selectedPlans[category as keyof typeof selectedPlans] === index 
                               ? 'bg-brand-red hover:bg-brand-maroon-dark text-white' 
                               : 'bg-transparent text-foreground border border-border hover:bg-muted'
                           }`}
-                        >
-                         Subscribe
-                        </Button>
+                        />
                       </CardContent>
                     </Card>
                   ))}

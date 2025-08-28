@@ -9,6 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Marquee from '@/components/Marquee';
+import PayButton from '@/components/PayButton';
 const OwnerPlans = () => {
   const [selectedPlans, setSelectedPlans] = useState({
     residential: 0,
@@ -25,6 +26,7 @@ const OwnerPlans = () => {
         gst: "+18% GST",
         badge: "ON CALL ASSISTANCE",
         badgeColor: "bg-yellow-500",
+        amountPaise: 339900,
       },
       {
         name: "Gold",
@@ -32,6 +34,7 @@ const OwnerPlans = () => {
         gst: "+18% GST",
         badge: "HOUSE VISIT ASSISTANCE",
         badgeColor: "bg-green-500",
+        amountPaise: 589900,
       },
       {
         name: "Platinum",
@@ -39,6 +42,7 @@ const OwnerPlans = () => {
         gst: "+18% GST", 
         badge: "EXPERT GUIDANCE",
         badgeColor: "bg-red-500",
+        amountPaise: 699900,
       },
       {
         name: "Diamond",
@@ -46,6 +50,7 @@ const OwnerPlans = () => {
         gst: "+18% GST",
         badge: "PERSONAL FIELD ASSISTANT", 
         badgeColor: "bg-purple-500",
+        amountPaise: 1099900,
       }
     ],
     commercial: [
@@ -55,6 +60,7 @@ const OwnerPlans = () => {
         gst: "+18% GST",
         badge: "COMMERCIAL SUPPORT",
         badgeColor: "bg-blue-500",
+        amountPaise: 899900,
       },
       {
         name: "Business Pro",
@@ -62,6 +68,7 @@ const OwnerPlans = () => {
         gst: "+18% GST",
         badge: "PREMIUM MARKETING",
         badgeColor: "bg-indigo-500",
+        amountPaise: 1599900,
       },
       {
         name: "Business Elite",
@@ -69,6 +76,7 @@ const OwnerPlans = () => {
         gst: "+18% GST", 
         badge: "DEDICATED MANAGER",
         badgeColor: "bg-purple-600",
+        amountPaise: 2599900,
       }
     ],
     industrial: [
@@ -78,6 +86,7 @@ const OwnerPlans = () => {
         gst: "+18% GST",
         badge: "INDUSTRIAL FOCUS",
         badgeColor: "bg-gray-600",
+        amountPaise: 1299900,
       },
       {
         name: "Industrial Growth",
@@ -85,6 +94,7 @@ const OwnerPlans = () => {
         gst: "+18% GST",
         badge: "ENTERPRISE LEVEL",
         badgeColor: "bg-slate-700",
+        amountPaise: 2299900,
       },
       {
         name: "Industrial Premium",
@@ -92,6 +102,7 @@ const OwnerPlans = () => {
         gst: "+18% GST", 
         badge: "CUSTOM SOLUTIONS",
         badgeColor: "bg-zinc-800",
+        amountPaise: 3599900,
       }
     ],
     agricultural: [
@@ -101,6 +112,7 @@ const OwnerPlans = () => {
         gst: "+18% GST",
         badge: "AGRICULTURAL LAND",
         badgeColor: "bg-green-600",
+        amountPaise: 499900,
       },
       {
         name: "Farm Pro",
@@ -108,6 +120,7 @@ const OwnerPlans = () => {
         gst: "+18% GST",
         badge: "CROP ADVISORY",
         badgeColor: "bg-emerald-600",
+        amountPaise: 899900,
       },
       {
         name: "Farm Premium",
@@ -115,6 +128,7 @@ const OwnerPlans = () => {
         gst: "+18% GST", 
         badge: "FULL FARM SUPPORT",
         badgeColor: "bg-teal-600",
+        amountPaise: 1599900,
       }
     ]
   };
@@ -328,15 +342,17 @@ const OwnerPlans = () => {
                           <div className="text-sm text-gray-500">{plan.gst}</div>
                         </div>
                         
-                        <Button 
+                        <PayButton
+                          label="Subscribe"  
+                          planName={`Owner — ${plan.name}`}
+                          amountPaise={plan.amountPaise}
+                          notes={{ plan: plan.name, category: "owner", type: tabKey }}
                           className={`w-full ${
                             selectedPlans[tabKey as keyof typeof selectedPlans] === index 
                               ? 'bg-brand-red hover:bg-brand-maroon-dark text-white' 
                               : 'bg-transparent text-foreground border border-border hover:bg-muted'
                           }`}
-                        >
-                          Subscribe
-                        </Button>
+                        />
                       </CardContent>
                     </Card>
                   ))}

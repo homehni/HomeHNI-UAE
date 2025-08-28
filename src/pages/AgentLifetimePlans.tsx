@@ -9,6 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Marquee from '@/components/Marquee';
+import PayButton from '@/components/PayButton';
 
 const AgentLifetimePlans = () => {
   const [selectedPlans, setSelectedPlans] = useState({
@@ -26,6 +27,7 @@ const AgentLifetimePlans = () => {
         gst: "+18% GST",
         badge: "FOR NEW AGENTS",
         badgeColor: "bg-yellow-500",
+        amountPaise: 7999900, // ₹79,999 in paise
       },
       {
         name: "Lifetime Platinum", 
@@ -33,6 +35,7 @@ const AgentLifetimePlans = () => {
         gst: "+18% GST",
         badge: "ENHANCED VISIBILITY",
         badgeColor: "bg-green-500",
+        amountPaise: 14999900, // ₹1,49,999 in paise
       },
       {
         name: "Lifetime VIP",
@@ -40,6 +43,7 @@ const AgentLifetimePlans = () => {
         gst: "+18% GST", 
         badge: "EXCLUSIVE SERVICES",
         badgeColor: "bg-red-500",
+        amountPaise: 24999900, // ₹2,49,999 in paise
       }
     ],
     commercial: [
@@ -49,6 +53,7 @@ const AgentLifetimePlans = () => {
         gst: "+18% GST",
         badge: "COMMERCIAL FOCUS",
         badgeColor: "bg-blue-500",
+        amountPaise: 12999900, // ₹1,29,999 in paise
       },
       {
         name: "Commercial Platinum", 
@@ -56,6 +61,7 @@ const AgentLifetimePlans = () => {
         gst: "+18% GST",
         badge: "BUSINESS GROWTH",
         badgeColor: "bg-purple-500",
+        amountPaise: 19999900, // ₹1,99,999 in paise
       },
       {
         name: "Commercial VIP",
@@ -63,6 +69,7 @@ const AgentLifetimePlans = () => {
         gst: "+18% GST", 
         badge: "ENTERPRISE LEVEL",
         badgeColor: "bg-indigo-500",
+        amountPaise: 29999900, // ₹2,99,999 in paise
       }
     ],
     industrial: [
@@ -72,6 +79,7 @@ const AgentLifetimePlans = () => {
         gst: "+18% GST",
         badge: "INDUSTRIAL FOCUS",
         badgeColor: "bg-gray-500",
+        amountPaise: 14999900, // ₹1,49,999 in paise
       },
       {
         name: "Industrial Platinum", 
@@ -79,6 +87,7 @@ const AgentLifetimePlans = () => {
         gst: "+18% GST",
         badge: "HEAVY INDUSTRY",
         badgeColor: "bg-slate-500",
+        amountPaise: 24999900, // ₹2,49,999 in paise
       },
       {
         name: "Industrial VIP",
@@ -86,6 +95,7 @@ const AgentLifetimePlans = () => {
         gst: "+18% GST", 
         badge: "MEGA PROJECTS",
         badgeColor: "bg-zinc-500",
+        amountPaise: 34999900, // ₹3,49,999 in paise
       }
     ],
     agricultural: [
@@ -95,6 +105,7 @@ const AgentLifetimePlans = () => {
         gst: "+18% GST",
         badge: "FARM PROPERTIES",
         badgeColor: "bg-emerald-500",
+        amountPaise: 9999900, // ₹99,999 in paise
       },
       {
         name: "Agricultural Platinum", 
@@ -102,6 +113,7 @@ const AgentLifetimePlans = () => {
         gst: "+18% GST",
         badge: "AGRI BUSINESS",
         badgeColor: "bg-teal-500",
+        amountPaise: 17999900, // ₹1,79,999 in paise
       },
       {
         name: "Agricultural VIP",
@@ -109,6 +121,7 @@ const AgentLifetimePlans = () => {
         gst: "+18% GST", 
         badge: "LARGE ESTATES",
         badgeColor: "bg-cyan-500",
+        amountPaise: 27999900, // ₹2,79,999 in paise
       }
     ]
   };
@@ -354,15 +367,17 @@ const AgentLifetimePlans = () => {
                           <strong>Best For:</strong> {bestForDescriptions[tabKey as keyof typeof bestForDescriptions][index]}
                         </div>
                         
-                        <Button 
+                        <PayButton
+                          label="Subscribe"
+                          planName={`Agent — ${plan.name}`}
+                          amountPaise={plan.amountPaise}
+                          notes={{ plan: plan.name, category: "agent", type: tabKey }}
                           className={`w-full ${
                             selectedPlans[tabKey as keyof typeof selectedPlans] === index 
                               ? 'bg-brand-red hover:bg-brand-maroon-dark text-white' 
                               : 'bg-transparent text-foreground border border-border hover:bg-muted'
                           }`}
-                        >
-                          Subscribe
-                        </Button>
+                        />
                       </CardContent>
                     </Card>
                   ))}
