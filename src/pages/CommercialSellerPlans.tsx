@@ -317,9 +317,15 @@ const CommercialSellerPlans = () => {
             <p className="text-gray-600 mb-2">
               For assistance call us at: <span className="text-brand-red font-semibold">+91-89-059-998-88</span>
             </p>
-            <p className="text-sm text-gray-500">
-              <span className="underline cursor-pointer hover:text-gray-700">Terms & Conditions Apply</span>
-            </p>
+           <p className="text-sm text-gray-500">
+  <Link 
+    to="/terms-and-conditions" 
+    className="underline cursor-pointer hover:text-gray-700"
+  >
+    Terms & Conditions Apply
+  </Link>
+</p>
+
           </div>
         </div>
       </section>
