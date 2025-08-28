@@ -14,8 +14,8 @@ interface PropertyCardProps {
   area: string;
   bedrooms: number;
   bathrooms: number;
-  image: string;
-  propertyType: string;
+  image: string | { url: string } | (string | { url: string })[];
+  propertyType: string;  
   isNew?: boolean;
   size?: 'default' | 'compact' | 'large';
 }
@@ -104,14 +104,36 @@ const PropertyCard = ({
     owner_role: undefined,
   };
 
+  // Handle different image formats
+  const getImageUrl = () => {
+    if (Array.isArray(image)) {
+      // If it's an array, get the first image
+      const firstImage = image[0];
+      if (typeof firstImage === 'string') {
+        return firstImage.startsWith('http') ? firstImage : `https://images.unsplash.com/${firstImage}?auto=format&fit=crop&w=400&q=80`;
+      }
+      return firstImage?.url || '/placeholder.svg';
+    }
+    if (typeof image === 'string') {
+      // Check if it's a full URL or just an ID
+      return image.startsWith('http') ? image : `https://images.unsplash.com/${image}?auto=format&fit=crop&w=400&q=80`;
+    }
+    // If it's an object with url property
+    return image?.url || '/placeholder.svg';
+  };
+
   return (
     <Card className="w-full overflow-hidden card-border hover-lift cursor-pointer bg-white border-2 border-primary" onClick={() => navigate(`/property/${id}`, { state: propertyForPage })}>
       <div className="relative">
         <div className="h-24 overflow-hidden">
           <img
-            src={`https://images.unsplash.com/${image}?auto=format&fit=crop&w=400&q=80`}
+            src={getImageUrl()}
             alt={title}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            onError={(e) => {
+              e.currentTarget.src = '/placeholder.svg';
+              e.currentTarget.alt = 'Image not available';
+            }}
           />
         </div>
         <FavoriteButton 
