@@ -5,89 +5,231 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Badge } from '@/components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Marquee from '@/components/Marquee';
 const OwnerPlans = () => {
-  const [selectedPlan, setSelectedPlan] = useState(0);
+  const [selectedPlans, setSelectedPlans] = useState({
+    residential: 0,
+    commercial: 0, 
+    industrial: 0,
+    agricultural: 0
+  });
 
-  const plans = [
-    {
-      name: "Silver",
-      price: "₹3,399",
-      gst: "+18% GST",
-      badge: "ON CALL ASSISTANCE",
-      badgeColor: "bg-yellow-500",
-    },
-    {
-      name: "Gold",
-      price: "₹5,899", 
-      gst: "+18% GST",
-      badge: "HOUSE VISIT ASSISTANCE",
-      badgeColor: "bg-green-500",
-    },
-    {
-      name: "Platinum",
-      price: "₹6,999",
-      gst: "+18% GST", 
-      badge: "EXPERT GUIDANCE",
-      badgeColor: "bg-red-500",
-    },
-    {
-      name: "Diamond",
-      price: "₹10,999",
-      gst: "+18% GST",
-      badge: "PERSONAL FIELD ASSISTANT", 
-      badgeColor: "bg-purple-500",
-    }
-  ];
-
-  const planDetails = [
-    // Relax plan features
-    [
-      { icon: <Clock className="w-5 h-5" />, text: "45 Days Plan Validity" },
-      { icon: <UserCheck className="w-5 h-5" />, text: "Relationship Manager (RM)- Super Fast Closure" },
-      { icon: <FileText className="w-5 h-5" />, text: "Rental Agreement Home Delivered" }
+  const tabPlans = {
+    residential: [
+      {
+        name: "Silver",
+        price: "₹3,399",
+        gst: "+18% GST",
+        badge: "ON CALL ASSISTANCE",
+        badgeColor: "bg-yellow-500",
+      },
+      {
+        name: "Gold",
+        price: "₹5,899", 
+        gst: "+18% GST",
+        badge: "HOUSE VISIT ASSISTANCE",
+        badgeColor: "bg-green-500",
+      },
+      {
+        name: "Platinum",
+        price: "₹6,999",
+        gst: "+18% GST", 
+        badge: "EXPERT GUIDANCE",
+        badgeColor: "bg-red-500",
+      },
+      {
+        name: "Diamond",
+        price: "₹10,999",
+        gst: "+18% GST",
+        badge: "PERSONAL FIELD ASSISTANT", 
+        badgeColor: "bg-purple-500",
+      }
     ],
-    // Super Relax plan features (includes Relax features)
-    [
-      { icon: <Clock className="w-5 h-5" />, text: "45 Days Plan Validity" },
-      { icon: <UserCheck className="w-5 h-5" />, text: "Relationship Manager (RM)- Super Fast Closure" },
-      { icon: <FileText className="w-5 h-5" />, text: "Rental Agreement Home Delivered" },
-      { icon: <TrendingUp className="w-5 h-5" />, text: "Top Slot Listing For 5x More Visibility" },
-      { icon: <Globe className="w-5 h-5" />, text: "Property Promotion On Website" },
-      { icon: <Camera className="w-5 h-5" />, text: "Photoshoot Of Your Property" },
-      { icon: <Lock className="w-5 h-5" />, text: "Privacy Of Your Phone Number" }
+    commercial: [
+      {
+        name: "Business Basic",
+        price: "₹8,999",
+        gst: "+18% GST",
+        badge: "COMMERCIAL SUPPORT",
+        badgeColor: "bg-blue-500",
+      },
+      {
+        name: "Business Pro",
+        price: "₹15,999", 
+        gst: "+18% GST",
+        badge: "PREMIUM MARKETING",
+        badgeColor: "bg-indigo-500",
+      },
+      {
+        name: "Business Elite",
+        price: "₹25,999",
+        gst: "+18% GST", 
+        badge: "DEDICATED MANAGER",
+        badgeColor: "bg-purple-600",
+      }
     ],
-    // MoneyBack plan features (includes previous features)
-    [
-      { icon: <Clock className="w-5 h-5" />, text: "45 Days Plan Validity" },
-      { icon: <UserCheck className="w-5 h-5" />, text: "Relationship Manager (RM)- Super Fast Closure" },
-      { icon: <FileText className="w-5 h-5" />, text: "Rental Agreement Home Delivered" },
-      { icon: <TrendingUp className="w-5 h-5" />, text: "Top Slot Listing For 5x More Visibility" },
-      { icon: <Globe className="w-5 h-5" />, text: "Property Promotion On Website" },
-      { icon: <Camera className="w-5 h-5" />, text: "Photoshoot Of Your Property" },
-      { icon: <Lock className="w-5 h-5" />, text: "Privacy Of Your Phone Number" },
-      { icon: <UserCheck className="w-5 h-5" />, text: "Personal Field Assistant" },
-      { icon: <Users className="w-5 h-5" />, text: "Showing Property On Your Behalf" },
-      { icon: <TrendingUp className="w-5 h-5" />, text: "Facebook Marketing Of Your Property" }
+    industrial: [
+      {
+        name: "Industrial Starter",
+        price: "₹12,999",
+        gst: "+18% GST",
+        badge: "INDUSTRIAL FOCUS",
+        badgeColor: "bg-gray-600",
+      },
+      {
+        name: "Industrial Growth",
+        price: "₹22,999", 
+        gst: "+18% GST",
+        badge: "ENTERPRISE LEVEL",
+        badgeColor: "bg-slate-700",
+      },
+      {
+        name: "Industrial Premium",
+        price: "₹35,999",
+        gst: "+18% GST", 
+        badge: "CUSTOM SOLUTIONS",
+        badgeColor: "bg-zinc-800",
+      }
     ],
-    // Super MoneyBack plan features (includes all previous features)
-    [
-      { icon: <Clock className="w-5 h-5" />, text: "45 Days Plan Validity" },
-      { icon: <UserCheck className="w-5 h-5" />, text: "Relationship Manager (RM)- Super Fast Closure" },
-      { icon: <FileText className="w-5 h-5" />, text: "Rental Agreement Home Delivered" },
-      { icon: <TrendingUp className="w-5 h-5" />, text: "Top Slot Listing For 5x More Visibility" },
-      { icon: <Globe className="w-5 h-5" />, text: "Property Promotion On Website" },
-      { icon: <Camera className="w-5 h-5" />, text: "Photoshoot Of Your Property" },
-      { icon: <Lock className="w-5 h-5" />, text: "Privacy Of Your Phone Number" },
-      { icon: <UserCheck className="w-5 h-5" />, text: "Personal Field Assistant" },
-      { icon: <Users className="w-5 h-5" />, text: "Showing Property On Your Behalf" },
-      { icon: <TrendingUp className="w-5 h-5" />, text: "Facebook Marketing Of Your Property" },
-      { icon: <Shield className="w-5 h-5" />, text: "Premium Customer Support" },
-      { icon: <FileText className="w-5 h-5" />, text: "Legal Documentation Assistance" }
+    agricultural: [
+      {
+        name: "Farm Basic",
+        price: "₹4,999",
+        gst: "+18% GST",
+        badge: "AGRICULTURAL LAND",
+        badgeColor: "bg-green-600",
+      },
+      {
+        name: "Farm Pro",
+        price: "₹8,999", 
+        gst: "+18% GST",
+        badge: "CROP ADVISORY",
+        badgeColor: "bg-emerald-600",
+      },
+      {
+        name: "Farm Premium",
+        price: "₹15,999",
+        gst: "+18% GST", 
+        badge: "FULL FARM SUPPORT",
+        badgeColor: "bg-teal-600",
+      }
     ]
-  ];
+  };
+
+  const tabPlanDetails = {
+    residential: [
+      [
+        { icon: <Clock className="w-5 h-5" />, text: "45 Days Plan Validity" },
+        { icon: <UserCheck className="w-5 h-5" />, text: "Relationship Manager" },
+        { icon: <FileText className="w-5 h-5" />, text: "Rental Agreement Home Delivered" }
+      ],
+      [
+        { icon: <Clock className="w-5 h-5" />, text: "45 Days Plan Validity" },
+        { icon: <UserCheck className="w-5 h-5" />, text: "Relationship Manager" },
+        { icon: <FileText className="w-5 h-5" />, text: "Rental Agreement Home Delivered" },
+        { icon: <TrendingUp className="w-5 h-5" />, text: "Top Slot Listing For 5x More Visibility" },
+        { icon: <Globe className="w-5 h-5" />, text: "Property Promotion On Website" },
+        { icon: <Camera className="w-5 h-5" />, text: "Photoshoot Of Your Property" }
+      ],
+      [
+        { icon: <Clock className="w-5 h-5" />, text: "60 Days Plan Validity" },
+        { icon: <UserCheck className="w-5 h-5" />, text: "Dedicated Relationship Manager" },
+        { icon: <FileText className="w-5 h-5" />, text: "Premium Documentation Support" },
+        { icon: <TrendingUp className="w-5 h-5" />, text: "Featured Listing Priority" },
+        { icon: <Globe className="w-5 h-5" />, text: "Multi-Platform Marketing" },
+        { icon: <Camera className="w-5 h-5" />, text: "Professional Photography" },
+        { icon: <Lock className="w-5 h-5" />, text: "Privacy Protection" }
+      ],
+      [
+        { icon: <Clock className="w-5 h-5" />, text: "90 Days Plan Validity" },
+        { icon: <UserCheck className="w-5 h-5" />, text: "Personal Field Assistant" },
+        { icon: <FileText className="w-5 h-5" />, text: "Complete Legal Support" },
+        { icon: <TrendingUp className="w-5 h-5" />, text: "Premium Slot Guarantee" },
+        { icon: <Globe className="w-5 h-5" />, text: "360° Marketing Campaign" },
+        { icon: <Camera className="w-5 h-5" />, text: "HD Video Tour" },
+        { icon: <Users className="w-5 h-5" />, text: "Property Showing Service" },
+        { icon: <Shield className="w-5 h-5" />, text: "VIP Customer Support" }
+      ]
+    ],
+    commercial: [
+      [
+        { icon: <Clock className="w-5 h-5" />, text: "60 Days Plan Validity" },
+        { icon: <UserCheck className="w-5 h-5" />, text: "Commercial Property Expert" },
+        { icon: <FileText className="w-5 h-5" />, text: "Commercial Documentation" },
+        { icon: <TrendingUp className="w-5 h-5" />, text: "Business Listing Priority" }
+      ],
+      [
+        { icon: <Clock className="w-5 h-5" />, text: "90 Days Plan Validity" },
+        { icon: <UserCheck className="w-5 h-5" />, text: "Dedicated Commercial Manager" },
+        { icon: <FileText className="w-5 h-5" />, text: "Complete Legal Framework" },
+        { icon: <TrendingUp className="w-5 h-5" />, text: "Premium Business Exposure" },
+        { icon: <Globe className="w-5 h-5" />, text: "Multi-Channel Marketing" },
+        { icon: <Camera className="w-5 h-5" />, text: "Professional Space Photography" }
+      ],
+      [
+        { icon: <Clock className="w-5 h-5" />, text: "120 Days Plan Validity" },
+        { icon: <UserCheck className="w-5 h-5" />, text: "Executive Account Manager" },
+        { icon: <FileText className="w-5 h-5" />, text: "Enterprise Documentation" },
+        { icon: <TrendingUp className="w-5 h-5" />, text: "Exclusive Business Promotion" },
+        { icon: <Globe className="w-5 h-5" />, text: "Corporate Marketing Suite" },
+        { icon: <Camera className="w-5 h-5" />, text: "Virtual Reality Tours" },
+        { icon: <Shield className="w-5 h-5" />, text: "Priority Support Hotline" }
+      ]
+    ],
+    industrial: [
+      [
+        { icon: <Clock className="w-5 h-5" />, text: "90 Days Plan Validity" },
+        { icon: <UserCheck className="w-5 h-5" />, text: "Industrial Property Specialist" },
+        { icon: <FileText className="w-5 h-5" />, text: "Industrial Compliance Support" },
+        { icon: <TrendingUp className="w-5 h-5" />, text: "Industrial Network Exposure" }
+      ],
+      [
+        { icon: <Clock className="w-5 h-5" />, text: "120 Days Plan Validity" },
+        { icon: <UserCheck className="w-5 h-5" />, text: "Senior Industrial Advisor" },
+        { icon: <FileText className="w-5 h-5" />, text: "Regulatory Documentation" },
+        { icon: <TrendingUp className="w-5 h-5" />, text: "Enterprise-Grade Marketing" },
+        { icon: <Globe className="w-5 h-5" />, text: "Industrial Portal Listing" },
+        { icon: <Shield className="w-5 h-5" />, text: "Compliance Verification" }
+      ],
+      [
+        { icon: <Clock className="w-5 h-5" />, text: "180 Days Plan Validity" },
+        { icon: <UserCheck className="w-5 h-5" />, text: "Executive Industrial Consultant" },
+        { icon: <FileText className="w-5 h-5" />, text: "Complete Regulatory Support" },
+        { icon: <TrendingUp className="w-5 h-5" />, text: "Custom Marketing Solutions" },
+        { icon: <Globe className="w-5 h-5" />, text: "Global Industrial Network" },
+        { icon: <Camera className="w-5 h-5" />, text: "Detailed Facility Documentation" },
+        { icon: <Shield className="w-5 h-5" />, text: "24/7 Enterprise Support" }
+      ]
+    ],
+    agricultural: [
+      [
+        { icon: <Clock className="w-5 h-5" />, text: "60 Days Plan Validity" },
+        { icon: <UserCheck className="w-5 h-5" />, text: "Agricultural Land Expert" },
+        { icon: <FileText className="w-5 h-5" />, text: "Land Documentation Support" },
+        { icon: <TrendingUp className="w-5 h-5" />, text: "Farming Community Reach" }
+      ],
+      [
+        { icon: <Clock className="w-5 h-5" />, text: "90 Days Plan Validity" },
+        { icon: <UserCheck className="w-5 h-5" />, text: "Agricultural Advisor" },
+        { icon: <FileText className="w-5 h-5" />, text: "Crop Planning Assistance" },
+        { icon: <TrendingUp className="w-5 h-5" />, text: "Agricultural Network Marketing" },
+        { icon: <Globe className="w-5 h-5" />, text: "Farming Portal Listing" },
+        { icon: <Shield className="w-5 h-5" />, text: "Soil Quality Assessment" }
+      ],
+      [
+        { icon: <Clock className="w-5 h-5" />, text: "120 Days Plan Validity" },
+        { icon: <UserCheck className="w-5 h-5" />, text: "Senior Agricultural Consultant" },
+        { icon: <FileText className="w-5 h-5" />, text: "Complete Farm Planning" },
+        { icon: <TrendingUp className="w-5 h-5" />, text: "Premium Agricultural Marketing" },
+        { icon: <Globe className="w-5 h-5" />, text: "National Farming Network" },
+        { icon: <Camera className="w-5 h-5" />, text: "Drone Survey Documentation" },
+        { icon: <Shield className="w-5 h-5" />, text: "Crop Insurance Guidance" }
+      ]
+    ]
+  };
 
   const testimonials = [{
     text: "Home HNI's customer service was impressively prompt and friendly. Listing my flat was a memorable experience.",
@@ -145,64 +287,82 @@ const OwnerPlans = () => {
         </div>
       </section>
 
-      {/* Pricing Plans */}
+      {/* Pricing Plans with Tabs */}
       <section className="py-16 px-4 bg-gray-50">
         <div className="max-w-6xl mx-auto">
-          {/* Plan Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {plans.map((plan, index) => (
-              <Card 
-                key={index} 
-                className={`relative cursor-pointer transition-all duration-200 ${
-                  selectedPlan === index ? 'ring-2 ring-brand-red bg-muted' : 'bg-card hover:shadow-md'
-                }`}
-                onClick={() => setSelectedPlan(index)}
-              >
-                <div className="absolute top-3 left-3 right-3">
-                  <Badge className={`${plan.badgeColor} text-white text-xs px-2 py-1 font-medium w-full text-center`}>
-                    {plan.badge}
-                  </Badge>
-                </div>
-                
-                <CardContent className="pt-16 pb-6 px-6">
-                  <h3 className="text-xl font-bold text-gray-900 mb-3">{plan.name}</h3>
-                  <div className="mb-6">
-                    <span className="text-2xl font-bold text-gray-900">{plan.price}</span>
-                    <div className="text-sm text-gray-500">{plan.gst}</div>
-                  </div>
-                  
-                  <Button 
-                    className={`w-full ${
-                      selectedPlan === index 
-                        ? 'bg-brand-red hover:bg-brand-maroon-dark text-white' 
-                        : 'bg-transparent text-foreground border border-border hover:bg-muted'
-                    }`}
-                  >
-                    Subscribe
-                  </Button>
-                </CardContent>
-              </Card>
-            ))}
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold mb-4">Choose Your Perfect Plan</h2>
+            <p className="text-lg text-muted-foreground">Select the category that best fits your property needs</p>
           </div>
 
-          {/* Plan Details */}
-          <div className={`mt-8 rounded-lg p-8 shadow-sm ${plans[selectedPlan].badgeColor} bg-opacity-10 border border-opacity-20`} style={{
-            borderColor: plans[selectedPlan].badgeColor.replace('bg-', ''),
-            backgroundColor: plans[selectedPlan].badgeColor.replace('bg-', '') + '20'
-          }}>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {planDetails[selectedPlan].map((detail, index) => (
-                <div key={index} className="flex items-start gap-3">
-                  <div className="text-brand-red mt-1">
-                    {detail.icon}
-                  </div>
-                  <span className="text-sm text-foreground leading-relaxed">
-                    {detail.text}
-                  </span>
+          <Tabs defaultValue="residential" className="w-full">
+            <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 mb-8">
+              <TabsTrigger value="residential" className="text-sm md:text-base">Residential</TabsTrigger>
+              <TabsTrigger value="commercial" className="text-sm md:text-base">Commercial</TabsTrigger>
+              <TabsTrigger value="industrial" className="text-sm md:text-base">Industrial</TabsTrigger>
+              <TabsTrigger value="agricultural" className="text-sm md:text-base">Agricultural</TabsTrigger>
+            </TabsList>
+
+            {Object.entries(tabPlans).map(([tabKey, plans]) => (
+              <TabsContent key={tabKey} value={tabKey} className="space-y-8">
+                {/* Plan Cards */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                  {plans.map((plan, index) => (
+                    <Card 
+                      key={index} 
+                      className={`relative cursor-pointer transition-all duration-200 ${
+                        selectedPlans[tabKey as keyof typeof selectedPlans] === index ? 'ring-2 ring-brand-red bg-muted' : 'bg-card hover:shadow-md'
+                      }`}
+                      onClick={() => setSelectedPlans(prev => ({ ...prev, [tabKey]: index }))}
+                    >
+                      <div className="absolute top-3 left-3 right-3">
+                        <Badge className={`${plan.badgeColor} text-white text-xs px-2 py-1 font-medium w-full text-center`}>
+                          {plan.badge}
+                        </Badge>
+                      </div>
+                      
+                      <CardContent className="pt-16 pb-6 px-6">
+                        <h3 className="text-xl font-bold text-gray-900 mb-3">{plan.name}</h3>
+                        <div className="mb-6">
+                          <span className="text-2xl font-bold text-gray-900">{plan.price}</span>
+                          <div className="text-sm text-gray-500">{plan.gst}</div>
+                        </div>
+                        
+                        <Button 
+                          className={`w-full ${
+                            selectedPlans[tabKey as keyof typeof selectedPlans] === index 
+                              ? 'bg-brand-red hover:bg-brand-maroon-dark text-white' 
+                              : 'bg-transparent text-foreground border border-border hover:bg-muted'
+                          }`}
+                        >
+                          Subscribe
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  ))}
                 </div>
-              ))}
-            </div>
-          </div>
+
+                {/* Plan Details */}
+                <div className={`rounded-lg p-8 shadow-sm ${plans[selectedPlans[tabKey as keyof typeof selectedPlans]].badgeColor} bg-opacity-10 border border-opacity-20`} style={{
+                  borderColor: plans[selectedPlans[tabKey as keyof typeof selectedPlans]].badgeColor.replace('bg-', ''),
+                  backgroundColor: plans[selectedPlans[tabKey as keyof typeof selectedPlans]].badgeColor.replace('bg-', '') + '20'
+                }}>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    {tabPlanDetails[tabKey as keyof typeof tabPlanDetails][selectedPlans[tabKey as keyof typeof selectedPlans]].map((detail, index) => (
+                      <div key={index} className="flex items-start gap-3">
+                        <div className="text-brand-red mt-1">
+                          {detail.icon}
+                        </div>
+                        <span className="text-sm text-foreground leading-relaxed">
+                          {detail.text}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </TabsContent>
+            ))}
+          </Tabs>
 
           {/* Contact Info */}
           <div className="mt-8 text-center">
