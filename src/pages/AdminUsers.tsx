@@ -17,6 +17,7 @@ interface User {
   phone: string;
   created_at: string;
   role: string;
+  property_roles: string[]; // All roles used when posting properties
   properties_count: number;
   verification_status: string;
 }
@@ -130,10 +131,10 @@ const AdminUsers = () => {
 
       if (authError) throw authError;
 
-      // Get property counts for each user
+      // Get property counts and owner roles for each user
       const { data: properties, error: propError } = await supabase
         .from('properties')
-        .select('user_id');
+        .select('user_id, owner_role');
 
       if (propError) throw propError;
 
@@ -141,6 +142,17 @@ const AdminUsers = () => {
         acc[prop.user_id] = (acc[prop.user_id] || 0) + 1;
         return acc;
       }, {} as Record<string, number>) || {};
+
+      // Create property roles map (all distinct roles used by each user when posting properties)
+      const propertyRolesMap = properties?.reduce((acc, prop) => {
+        if (!acc[prop.user_id]) {
+          acc[prop.user_id] = [];
+        }
+        if (prop.owner_role && !acc[prop.user_id].includes(prop.owner_role)) {
+          acc[prop.user_id].push(prop.owner_role);
+        }
+        return acc;
+      }, {} as Record<string, string[]>) || {};
 
       // Create role map
       const roleMap = userRolesData?.reduce((acc, userRole) => {
@@ -152,6 +164,7 @@ const AdminUsers = () => {
       const usersData: User[] = profilesData?.map((profile) => {
         const authUser = authUsers?.find(u => u.id === profile.user_id);
         const role = roleMap[profile.user_id] || 'buyer';
+        const propertyRoles = propertyRolesMap[profile.user_id] || [];
         
         return {
           id: profile.id,
@@ -161,6 +174,7 @@ const AdminUsers = () => {
           phone: profile.phone || 'Not Provided',
           created_at: profile.created_at,
           role: role,
+          property_roles: propertyRoles,
           properties_count: propertyCountMap[profile.user_id] || 0,
           verification_status: profile.verification_status || 'unverified'
         };
@@ -350,7 +364,8 @@ const AdminUsers = () => {
                   <TableHead className="text-muted-foreground font-medium">Name</TableHead>
                   <TableHead className="text-muted-foreground font-medium">Email</TableHead>
                   <TableHead className="text-muted-foreground font-medium">Phone</TableHead>
-                  <TableHead className="text-muted-foreground font-medium">Role</TableHead>
+                  <TableHead className="text-muted-foreground font-medium">Account Role</TableHead>
+                  <TableHead className="text-muted-foreground font-medium">Property Roles</TableHead>
                   <TableHead className="text-muted-foreground font-medium">Status</TableHead>
                   <TableHead className="text-muted-foreground font-medium">Properties</TableHead>
                   <TableHead className="text-muted-foreground font-medium">Joined</TableHead>
@@ -375,6 +390,23 @@ const AdminUsers = () => {
                         </Badge>
                       </TableCell>
                       <TableCell>
+                        <div className="flex flex-wrap gap-1">
+                          {user.property_roles.length > 0 ? (
+                            user.property_roles.map((role, index) => (
+                              <Badge 
+                                key={index} 
+                                variant="outline" 
+                                className="capitalize text-xs"
+                              >
+                                {role}
+                              </Badge>
+                            ))
+                          ) : (
+                            <span className="text-muted-foreground text-sm">None</span>
+                          )}
+                        </div>
+                      </TableCell>
+                      <TableCell>
                         <Badge variant={getVerificationBadgeVariant(user.verification_status)} className="capitalize">
                           {user.verification_status}
                         </Badge>
@@ -392,7 +424,7 @@ const AdminUsers = () => {
                   ))
                 ) : (
                   <TableRow>
-                    <TableCell colSpan={7} className="text-center py-8 text-muted-foreground">
+                    <TableCell colSpan={8} className="text-center py-8 text-muted-foreground">
                       {roleFilter === 'all' ? 'No users found' : `No ${roleFilter}s found`}
                     </TableCell>
                   </TableRow>
