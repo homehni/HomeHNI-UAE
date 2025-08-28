@@ -352,9 +352,13 @@ export const Auth: React.FC = () => {
                 </TabsContent>
               </Tabs>
               
-              <div className="text-center text-xs text-gray-500 mt-8 pt-6 border-t border-gray-100">
-                By continuing, you agree to our <span className="text-brand-red hover:underline cursor-pointer">Terms of Service</span> and <span className="text-brand-red hover:underline cursor-pointer">Privacy Policy</span>
-              </div>
+             <div className="text-center text-xs text-gray-500 mt-8 pt-6 border-t border-gray-100">
+  By continuing, you agree to our 
+  <span className="text-brand-red hover:underline cursor-pointer">Terms of Service</span> 
+  and 
+  <span className="text-brand-red hover:underline cursor-pointer">Privacy Policy</span>
+</div>
+
             </CardContent>
           </Card>
         </div>
