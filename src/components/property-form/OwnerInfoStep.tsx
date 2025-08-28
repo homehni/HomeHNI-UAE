@@ -277,11 +277,23 @@ export const OwnerInfoStep: React.FC<OwnerInfoStepProps> = ({
                     "Select your role"
                 } />
               </SelectTrigger>
-              <SelectContent>
+               <SelectContent>
                 {selectedListingType === 'Rent' ? (
                   <>
                     <SelectItem value="Owner">Property Owner</SelectItem>
                     <SelectItem value="Tenant">Tenant (Looking for Rental)</SelectItem>
+                    <SelectItem value="Agent">Agent</SelectItem>
+                  </>
+                ) : selectedListingType === 'PG/Hostel' ? (
+                  <>
+                    <SelectItem value="Tenant">Tenant (In the PG)</SelectItem>
+                    <SelectItem value="Owner">Owner (of Building)</SelectItem>
+                    <SelectItem value="Agent">Agent</SelectItem>
+                  </>
+                ) : selectedListingType === 'Flatmates' ? (
+                  <>
+                    <SelectItem value="Tenant">Tenant</SelectItem>
+                    <SelectItem value="Owner">Owner (of the flat)</SelectItem>
                     <SelectItem value="Agent">Agent</SelectItem>
                   </>
                 ) : (
