@@ -107,8 +107,8 @@ const HomeServices = () => {
           <h2 className="text-2xl md:text-3xl font-bold text-gray-900">Home Services</h2>
         </div>
 
-        {/* Desktop and Tablet Scrolling View */}
-        <div className="hidden md:block">
+        {/* Desktop Scrolling View Only */}
+        <div className="hidden lg:block">
           <div 
             className="overflow-hidden" 
             ref={emblaRef}
@@ -120,7 +120,7 @@ const HomeServices = () => {
                 <div
                   key={index}
                   onClick={service.onClick}
-                  className={`flex-none ${getSizeClasses(service.size)} relative group cursor-pointer hover:scale-105 transition-all duration-300`}
+                  className="flex-none w-72 h-48 relative group cursor-pointer hover:scale-105 transition-all duration-300"
                 >
                   <div className="relative bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden border border-gray-200 w-full h-full">
                     {/* Service Image */}
@@ -155,8 +155,8 @@ const HomeServices = () => {
           </div>
         </div>
 
-        {/* Mobile Grid View */}
-        <div className="md:hidden">
+        {/* Mobile and Tablet Grid View */}
+        <div className="lg:hidden">
           {/* Large cards row */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
             {services.filter(service => service.size === 'large').map((service, index) => (
@@ -167,7 +167,7 @@ const HomeServices = () => {
               >
                 <div className="relative bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden border border-gray-200">
                   {/* Service Image */}
-                  <div className="relative h-40 overflow-hidden">
+                  <div className="relative h-40 md:h-48 overflow-hidden">
                     <img
                       src={service.image}
                       alt={service.title}
@@ -187,7 +187,7 @@ const HomeServices = () => {
 
                   {/* Service Title */}
                   <div className="p-4">
-                    <h3 className="text-lg font-bold text-gray-900 text-center">
+                    <h3 className="text-base md:text-lg font-bold text-gray-900 text-center">
                       {service.title}
                     </h3>
                   </div>
@@ -206,7 +206,7 @@ const HomeServices = () => {
               >
                 <div className="relative bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden border border-gray-200">
                   {/* Service Image */}
-                  <div className="relative h-32 overflow-hidden">
+                  <div className="relative h-32 md:h-40 overflow-hidden">
                     <img
                       src={service.image}
                       alt={service.title}
@@ -219,7 +219,7 @@ const HomeServices = () => {
 
                   {/* Service Title */}
                   <div className="p-3">
-                    <h3 className="text-sm font-bold text-gray-900 text-center">
+                    <h3 className="text-sm md:text-base font-bold text-gray-900 text-center">
                       {service.title}
                     </h3>
                   </div>
