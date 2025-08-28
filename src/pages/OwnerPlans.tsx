@@ -370,8 +370,14 @@ const OwnerPlans = () => {
               For assistance call us at: <span className="text-brand-red font-semibold">+91-92-430-099-80</span>
             </p>
             <p className="text-sm text-gray-500">
-              <span className="underline cursor-pointer hover:text-gray-700">Terms & Conditions Apply</span>
-            </p>
+  <Link 
+    to="/terms-and-conditions" 
+    className="underline cursor-pointer hover:text-gray-700"
+  >
+    Terms & Conditions Apply
+  </Link>
+</p>
+
           </div>
         </div>
       </section>
