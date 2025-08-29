@@ -194,9 +194,6 @@ const PostService = () => {
       newErrors.budget = "Minimum budget cannot be greater than maximum budget";
     }
 
-    if (formData.premiumSelected && !formData.paymentMethod) {
-      newErrors.paymentMethod = "Please select a payment method";
-    }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -234,19 +231,17 @@ const PostService = () => {
       return;
     }
 
+    // Handle premium payment - redirect to razorpay
+    if (formData.premiumSelected) {
+      // Redirect to razorpay page
+      window.open('https://razorpay.com', '_blank');
+      return;
+    }
+
     setSubmitting(true);
     
     try {
-      // Handle premium payment if selected
-      if (formData.premiumSelected) {
-        updateProgress("Processing payment...");
-        const paymentSuccess = await initiatePayment(999, formData.currency);
-        if (!paymentSuccess) {
-          throw new Error("Payment failed");
-        }
-      }
-
-      // Submit form data
+      // Submit form data for non-premium
       updateProgress("Submitting your requirement...");
       
       const submissionData = {
@@ -265,24 +260,37 @@ const PostService = () => {
           max: formData.budgetRange[1],
           currency: formData.currency
         },
-        premiumSelected: formData.premiumSelected,
-        paymentMethod: formData.premiumSelected ? formData.paymentMethod : null,
+        premiumSelected: false,
         notes: formData.notes
       };
 
       // Mock API call - replace with real endpoint
       await new Promise(resolve => setTimeout(resolve, 1500));
       
-      // Generate reference ID
-      const refId = `REQ${Date.now().toString().slice(-6)}`;
-      setReferenceId(refId);
-      setShowSuccess(true);
-      
-      if (formData.premiumSelected) {
-        showSuccessToast("Success", "Payment captured (test) - Your requirement has been posted!");
-      } else {
-        showSuccessToast("Success", "Your requirement has been posted successfully!");
-      }
+      // Show thank you toast for regular submission
+      toast({
+        title: "Thank You!",
+        description: "Your requirement has been submitted successfully. We'll get back to you soon.",
+      });
+
+      // Reset form
+      setFormData({
+        name: "",
+        phone: "",
+        email: "",
+        country: "India",
+        state: "",
+        city: "",
+        intent: "",
+        propertyType: "",
+        services: [],
+        otherService: "",
+        budgetRange: [0, 50000000],
+        currency: "INR",
+        premiumSelected: false,
+        paymentMethod: "",
+        notes: ""
+      });
 
     } catch (error) {
       showErrorToast("Submission Failed", "Please try again or contact support");
@@ -645,28 +653,6 @@ const PostService = () => {
                            </ul>
                          </div>
                        </div>
-                      <div>
-                        <Label className="text-base font-medium">Payment Method *</Label>
-                        <RadioGroup 
-                          value={formData.paymentMethod} 
-                          onValueChange={(value) => handleInputChange("paymentMethod", value)}
-                          className="mt-2"
-                        >
-                          <div className="flex items-center space-x-2">
-                            <RadioGroupItem value="UPI" id="upi" />
-                            <Label htmlFor="upi" className="cursor-pointer">UPI</Label>
-                          </div>
-                          <div className="flex items-center space-x-2">
-                            <RadioGroupItem value="Card" id="card" />
-                            <Label htmlFor="card" className="cursor-pointer">Card</Label>
-                          </div>
-                          <div className="flex items-center space-x-2">
-                            <RadioGroupItem value="NetBanking" id="netbanking" />
-                            <Label htmlFor="netbanking" className="cursor-pointer">Net Banking</Label>
-                          </div>
-                        </RadioGroup>
-                        {errors.paymentMethod && <p className="text-sm text-destructive mt-1">{errors.paymentMethod}</p>}
-                      </div>
                     </div>
                   )}
                 </div>
