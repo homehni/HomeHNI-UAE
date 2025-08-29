@@ -94,6 +94,7 @@ import DynamicPage from "./pages/DynamicPage";
 import DeveloperPage from "./pages/DeveloperPage";
 import PaymentSuccess from "./pages/payments/Success";
 import PaymentFailed from "./pages/payments/Failed";
+import PostService from "./pages/PostService";
 
 const App: React.FC = () => {
   const [queryClient] = useState(() => new QueryClient({
@@ -153,6 +154,7 @@ const App: React.FC = () => {
             <Route path="/interior" element={<Interior />} />
             <Route path="/loans" element={<Loans />} />
             <Route path="/home-security-services" element={<HomeSecurityServices />} />
+            <Route path="/post-service" element={<PostService />} />
             
             {/* Service Pages */}
             <Route path="/nri-services" element={<NRIServices />} />
