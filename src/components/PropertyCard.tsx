@@ -75,10 +75,7 @@ const PropertyCard = ({
   const resolveUrlFromString = (s: string): string | undefined => {
     if (!s) return undefined;
     if (s.startsWith('http')) return s;
-    // Check if it's a local image path from src/Images
-    if (s.startsWith('/src/Images/')) return s;
-    // Check if it's a local image path from lovable-uploads
-    if (s.startsWith('/lovable-uploads/')) return s;
+    if (s.startsWith('photo-')) return `https://images.unsplash.com/${s}?auto=format&fit=crop&w=1200&q=80`;
     try {
       const { data } = supabase.storage.from('property-media').getPublicUrl(s);
       return data.publicUrl;
@@ -93,8 +90,8 @@ const PropertyCard = ({
   };
 
   const fallbackUrls = [
-    '/placeholder.svg',
-    '/placeholder.svg',
+    'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=80',
+    'https://images.unsplash.com/photo-1568605114967-8130f3a36994?auto=format&fit=crop&w=1200&q=80',
   ];
 
   let imagesForPage: string[] = [];
@@ -150,15 +147,7 @@ const PropertyCard = ({
         if (firstImage.includes('storage.googleapis.com') || firstImage.includes('supabase')) {
           return firstImage;
         }
-        // Check if it's a local image path from src/Images
-        if (firstImage.startsWith('/src/Images/')) {
-          return firstImage;
-        }
-        // Check if it's a local image path from lovable-uploads
-        if (firstImage.startsWith('/lovable-uploads/')) {
-          return firstImage;
-        }
-        return firstImage.startsWith('http') ? firstImage : '/placeholder.svg';
+        return firstImage.startsWith('http') ? firstImage : `https://images.unsplash.com/${firstImage}?auto=format&fit=crop&w=400&q=80`;
       }
       return firstImage?.url || '/placeholder.svg';
     }
@@ -167,16 +156,8 @@ const PropertyCard = ({
       if (image.includes('storage.googleapis.com') || image.includes('supabase')) {
         return image;
       }
-      // Check if it's a local image path from src/Images
-      if (image.startsWith('/src/Images/')) {
-        return image;
-      }
-      // Check if it's a local image path from lovable-uploads
-      if (image.startsWith('/lovable-uploads/')) {
-        return image;
-      }
-      // Check if it's a full URL or just use placeholder
-      return image.startsWith('http') ? image : '/placeholder.svg';
+      // Check if it's a full URL or just an ID
+      return image.startsWith('http') ? image : `https://images.unsplash.com/${image}?auto=format&fit=crop&w=400&q=80`;
     }
     // If it's an object with url property
     return image?.url || '/placeholder.svg';
