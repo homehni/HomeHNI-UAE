@@ -60,6 +60,7 @@ export const ResalePropertyDetailsStep: React.FC<ResalePropertyDetailsStepProps>
   const onSubmit = (data: ResalePropertyDetailsFormData) => {
     onNext({
       ...initialData,
+      title: data.title,
       propertyType: data.propertyType,
       buildingType: data.propertyType, // Use propertyType as buildingType for residential
       bhkType: data.bhkType,
