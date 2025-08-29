@@ -295,13 +295,6 @@ export type Database = {
             referencedRelation: "properties"
             referencedColumns: ["id"]
           },
-          {
-            foreignKeyName: "featured_properties_property_id_fkey"
-            columns: ["property_id"]
-            isOneToOne: false
-            referencedRelation: "public_properties"
-            referencedColumns: ["id"]
-          },
         ]
       }
       leads: {
@@ -347,13 +340,6 @@ export type Database = {
             columns: ["property_id"]
             isOneToOne: false
             referencedRelation: "properties"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "leads_property_id_fkey"
-            columns: ["property_id"]
-            isOneToOne: false
-            referencedRelation: "public_properties"
             referencedColumns: ["id"]
           },
         ]
@@ -645,13 +631,6 @@ export type Database = {
             referencedRelation: "properties"
             referencedColumns: ["id"]
           },
-          {
-            foreignKeyName: "property_audit_log_property_id_fkey"
-            columns: ["property_id"]
-            isOneToOne: false
-            referencedRelation: "public_properties"
-            referencedColumns: ["id"]
-          },
         ]
       }
       property_drafts: {
@@ -890,105 +869,7 @@ export type Database = {
       }
     }
     Views: {
-      public_properties: {
-        Row: {
-          availability_date: string | null
-          availability_type: string | null
-          balconies: number | null
-          bathrooms: number | null
-          bhk_type: string | null
-          carpet_area: number | null
-          city: string | null
-          created_at: string | null
-          description: string | null
-          expected_price: number | null
-          floor_no: number | null
-          furnishing: string | null
-          id: string | null
-          images: string[] | null
-          is_featured: boolean | null
-          landmarks: string | null
-          listing_type: string | null
-          locality: string | null
-          maintenance_charges: number | null
-          pincode: string | null
-          price_negotiable: boolean | null
-          property_type: string | null
-          security_deposit: number | null
-          state: string | null
-          status: string | null
-          super_area: number | null
-          title: string | null
-          total_floors: number | null
-          updated_at: string | null
-          videos: string[] | null
-        }
-        Insert: {
-          availability_date?: string | null
-          availability_type?: string | null
-          balconies?: number | null
-          bathrooms?: number | null
-          bhk_type?: string | null
-          carpet_area?: number | null
-          city?: string | null
-          created_at?: string | null
-          description?: string | null
-          expected_price?: number | null
-          floor_no?: number | null
-          furnishing?: string | null
-          id?: string | null
-          images?: string[] | null
-          is_featured?: boolean | null
-          landmarks?: string | null
-          listing_type?: string | null
-          locality?: string | null
-          maintenance_charges?: number | null
-          pincode?: string | null
-          price_negotiable?: boolean | null
-          property_type?: string | null
-          security_deposit?: number | null
-          state?: string | null
-          status?: never
-          super_area?: number | null
-          title?: string | null
-          total_floors?: number | null
-          updated_at?: string | null
-          videos?: string[] | null
-        }
-        Update: {
-          availability_date?: string | null
-          availability_type?: string | null
-          balconies?: number | null
-          bathrooms?: number | null
-          bhk_type?: string | null
-          carpet_area?: number | null
-          city?: string | null
-          created_at?: string | null
-          description?: string | null
-          expected_price?: number | null
-          floor_no?: number | null
-          furnishing?: string | null
-          id?: string | null
-          images?: string[] | null
-          is_featured?: boolean | null
-          landmarks?: string | null
-          listing_type?: string | null
-          locality?: string | null
-          maintenance_charges?: number | null
-          pincode?: string | null
-          price_negotiable?: boolean | null
-          property_type?: string | null
-          security_deposit?: number | null
-          state?: string | null
-          status?: never
-          super_area?: number | null
-          title?: string | null
-          total_floors?: number | null
-          updated_at?: string | null
-          videos?: string[] | null
-        }
-        Relationships: []
-      }
+      [_ in never]: never
     }
     Functions: {
       assign_admin_role_by_email: {
@@ -1031,6 +912,14 @@ export type Database = {
       get_property_owner: {
         Args: { _property_id: string }
         Returns: string
+      }
+      get_security_recommendations: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          priority: string
+          recommendation: string
+          status: string
+        }[]
       }
       get_user_profile_with_role: {
         Args: { _user_id?: string }
