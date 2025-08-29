@@ -917,7 +917,6 @@ export type Database = {
           security_deposit: number | null
           state: string | null
           status: string | null
-          street_address: string | null
           super_area: number | null
           title: string | null
           total_floors: number | null
@@ -949,8 +948,7 @@ export type Database = {
           property_type?: string | null
           security_deposit?: number | null
           state?: string | null
-          status?: string | null
-          street_address?: string | null
+          status?: never
           super_area?: number | null
           title?: string | null
           total_floors?: number | null
@@ -982,8 +980,7 @@ export type Database = {
           property_type?: string | null
           security_deposit?: number | null
           state?: string | null
-          status?: string | null
-          street_address?: string | null
+          status?: never
           super_area?: number | null
           title?: string | null
           total_floors?: number | null
