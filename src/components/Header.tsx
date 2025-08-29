@@ -352,6 +352,12 @@ const Header = () => {
                   <span className="ml-1 bg-green-500 text-white text-[10px] px-1.5 py-0.5 rounded-full font-medium">Free</span>
                 </Button>}
 
+               {/* Post Requirement Button - Show everywhere */}
+               {<Button variant="outline" size="sm" onClick={() => navigate('/post-service')} className={`font-medium px-2 sm:px-3 py-1.5 text-xs sm:text-sm transition-all duration-500 ${isScrolled ? 'bg-white text-brand-red border-gray-300 hover:bg-gray-50' : 'bg-white text-brand-red border-white/50 hover:bg-white/90'}`}>
+                  <span className="hidden sm:inline">Post Requirement</span>
+                  <span className="sm:hidden">Post Requirement</span>
+                </Button>}
+
 
                {/* Sign Up / Login buttons for unauthenticated users */}
                {!user && <div className="flex items-center space-x-2">
