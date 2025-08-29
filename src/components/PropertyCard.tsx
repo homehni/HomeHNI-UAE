@@ -126,36 +126,17 @@ const PropertyCard = ({
     owner_role: undefined,
   };
 
-  // Handle different image formats with priority for uploaded images
+  // Handle different image formats
   const getImageUrl = () => {
-    // Check if there's a Supabase storage URL in the property images
-    const supabaseStorageUrl = propertyForPage.images.find(url => 
-      url && (url.includes('storage.googleapis.com') || url.includes('supabase'))
-    );
-    
-    // If we have a Supabase storage URL, use it as priority
-    if (supabaseStorageUrl) {
-      return supabaseStorageUrl;
-    }
-    
-    // Otherwise fall back to the original logic
     if (Array.isArray(image)) {
       // If it's an array, get the first image
       const firstImage = image[0];
       if (typeof firstImage === 'string') {
-        // Check if it's a storage URL first
-        if (firstImage.includes('storage.googleapis.com') || firstImage.includes('supabase')) {
-          return firstImage;
-        }
         return firstImage.startsWith('http') ? firstImage : `https://images.unsplash.com/${firstImage}?auto=format&fit=crop&w=400&q=80`;
       }
       return firstImage?.url || '/placeholder.svg';
     }
     if (typeof image === 'string') {
-      // Check if it's a storage URL first
-      if (image.includes('storage.googleapis.com') || image.includes('supabase')) {
-        return image;
-      }
       // Check if it's a full URL or just an ID
       return image.startsWith('http') ? image : `https://images.unsplash.com/${image}?auto=format&fit=crop&w=400&q=80`;
     }

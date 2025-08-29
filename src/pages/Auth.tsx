@@ -66,21 +66,11 @@ export const Auth: React.FC = () => {
     try {
       await signInWithPassword(signInForm.email, signInForm.password);
     } catch (error: any) {
-      // Check if this is our custom email not confirmed error
-      if (error.name === 'EmailNotConfirmedError') {
-        toast({
-          title: "Email verification required",
-          description: error.message,
-          variant: "warning",
-          duration: 8000, // Show for longer
-        });
-      } else {
-        toast({
-          title: "Sign in failed",
-          description: error.message || "Please check your credentials and try again.",
-          variant: "destructive",
-        });
-      }
+      toast({
+        title: "Sign in failed",
+        description: error.message || "Please check your credentials and try again.",
+        variant: "destructive",
+      });
     }
   };
 
@@ -106,29 +96,11 @@ export const Auth: React.FC = () => {
     }
 
     try {
-      const { isEmailConfirmationRequired } = await signUpWithPassword(
-        signUpForm.email, 
-        signUpForm.password, 
-        signUpForm.fullName
-      );
-      
-      if (isEmailConfirmationRequired) {
-        toast({
-          title: "Account created successfully!",
-          description: "Please check your email to verify your account before logging in.",
-        });
-        // Switch to sign in tab after signup if email confirmation is required
-        setActiveTab('signin');
-        // Pre-fill the email field in the sign in form
-        setSignInForm(prev => ({ ...prev, email: signUpForm.email }));
-      } else {
-        toast({
-          title: "Account created successfully!",
-          description: "You are now logged in to your new account.",
-        });
-        // No need to redirect here as the useEffect hook will handle it
-        // when the user state updates after successful login
-      }
+      await signUpWithPassword(signUpForm.email, signUpForm.password, signUpForm.fullName);
+      toast({
+        title: "Account created successfully!",
+        description: "Please check your email to verify your account.",
+      });
     } catch (error: any) {
       toast({
         title: "Sign up failed",
