@@ -201,6 +201,24 @@ const AdminProperties = () => {
   const handleApprove = async (propertyId: string) => {
     setActionLoading(true);
     try {
+      // Check if current user has admin role
+      const { data: currentUser } = await supabase.auth.getUser();
+      if (!currentUser.user) {
+        throw new Error('User not authenticated');
+      }
+
+      const { data: userRoles } = await supabase
+        .from('user_roles')
+        .select('role')
+        .eq('user_id', currentUser.user.id);
+      
+      const isAdmin = userRoles?.some(r => r.role === 'admin');
+      console.log('Current user admin status:', isAdmin);
+      
+      if (!isAdmin) {
+        throw new Error('Only administrators can approve property submissions');
+      }
+
       // First, get the submission data
       const { data: submission, error: fetchError } = await supabase
         .from('property_submissions')
@@ -208,7 +226,10 @@ const AdminProperties = () => {
         .eq('id', propertyId)
         .single();
 
-      if (fetchError) throw fetchError;
+      if (fetchError) {
+        console.error('Error fetching submission:', fetchError);
+        throw fetchError;
+      }
 
       // Parse the payload
       let payload: any = {};
@@ -236,6 +257,7 @@ const AdminProperties = () => {
       const bhkValue = allowedBhk.has(mappedBhkRaw) ? mappedBhkRaw : null;
 
       // Insert into main properties table for homepage display
+      console.log('Attempting to insert property with user_id:', userIdToAssign);
       const { data: insertedProperty, error: insertError } = await supabase
         .from('properties')
         .insert({
@@ -276,7 +298,13 @@ const AdminProperties = () => {
         .select()
         .single();
 
-      if (insertError) throw insertError;
+      if (insertError) {
+        console.error('Error inserting property:', insertError);
+        console.error('Insert error details:', JSON.stringify(insertError, null, 2));
+        throw insertError;
+      }
+
+      console.log('Property inserted successfully:', insertedProperty);
 
       // Find the next available property key in content_elements
       const { data: existingElements } = await supabase
