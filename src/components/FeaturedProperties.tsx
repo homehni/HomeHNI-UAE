@@ -190,7 +190,7 @@ const FeaturedProperties = ({
       area: '1,100 sq ft',
       bedrooms: 2,
       bathrooms: 2,
-      image: '/images/apartment3..jpg',
+      image: '/images/kitchen1.jpg',
       propertyType: 'Apartment'
     },
     
@@ -266,7 +266,7 @@ const FeaturedProperties = ({
       area: '2,500 sq ft',
       bedrooms: 0,
       bathrooms: 3,
-      image: '/images/hall2.jpg',
+      image: '/images/hall3.jpg',
       propertyType: 'Commercial'
     },
     
