@@ -1091,16 +1091,11 @@ export type Database = {
         Returns: boolean
       }
       update_user_role: {
-        Args:
-          | {
-              _new_role: Database["public"]["Enums"]["app_role"]
-              _reason?: string
-              _user_id: string
-            }
-          | {
-              _new_role: Database["public"]["Enums"]["app_role"]
-              _user_id: string
-            }
+        Args: {
+          _new_role: Database["public"]["Enums"]["app_role"]
+          _reason?: string
+          _user_id: string
+        }
         Returns: undefined
       }
     }
