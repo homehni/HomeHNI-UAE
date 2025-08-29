@@ -38,7 +38,14 @@ export interface PublicProperty {
 export const fetchPublicProperties = async () => {
   const { data, error } = await supabase
     .from('properties')
-    .select('*')
+    .select(`
+      id, title, property_type, listing_type, bhk_type, expected_price, 
+      super_area, carpet_area, bathrooms, balconies, floor_no, total_floors, 
+      furnishing, availability_type, availability_date, price_negotiable, 
+      maintenance_charges, security_deposit, city, locality, state, pincode, 
+      street_address, landmarks, description, images, videos, status, 
+      created_at, updated_at, is_featured
+    `)
     .order('created_at', { ascending: false });
     
   if (error) {
@@ -53,7 +60,14 @@ export const fetchPublicProperties = async () => {
 export const fetchFeaturedProperties = async () => {
   const { data, error } = await supabase
     .from('properties')
-    .select('*')
+    .select(`
+      id, title, property_type, listing_type, bhk_type, expected_price, 
+      super_area, carpet_area, bathrooms, balconies, floor_no, total_floors, 
+      furnishing, availability_type, availability_date, price_negotiable, 
+      maintenance_charges, security_deposit, city, locality, state, pincode, 
+      street_address, landmarks, description, images, videos, status, 
+      created_at, updated_at, is_featured
+    `)
     .eq('status', 'approved')
     .eq('is_featured', true)
     .order('created_at', { ascending: false })
@@ -71,7 +85,14 @@ export const fetchFeaturedProperties = async () => {
 export const fetchPublicPropertyById = async (id: string) => {
   const { data, error } = await supabase
     .from('properties')
-    .select('*')
+    .select(`
+      id, title, property_type, listing_type, bhk_type, expected_price, 
+      super_area, carpet_area, bathrooms, balconies, floor_no, total_floors, 
+      furnishing, availability_type, availability_date, price_negotiable, 
+      maintenance_charges, security_deposit, city, locality, state, pincode, 
+      street_address, landmarks, description, images, videos, status, 
+      created_at, updated_at, is_featured
+    `)
     .eq('id', id)
     .maybeSingle();
     

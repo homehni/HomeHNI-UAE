@@ -53,7 +53,14 @@ export class SecurePropertyService {
   static async getPublicProperties(): Promise<{ data: PublicProperty[] | null; error: any }> {
     const { data, error } = await supabase
       .from('properties')
-      .select('*')
+      .select(`
+        id, title, property_type, listing_type, bhk_type, expected_price, 
+        super_area, carpet_area, bathrooms, balconies, floor_no, total_floors, 
+        furnishing, availability_type, availability_date, price_negotiable, 
+        maintenance_charges, security_deposit, city, locality, state, pincode, 
+        street_address, landmarks, description, images, videos, status, 
+        created_at, updated_at, is_featured
+      `)
       .order('created_at', { ascending: false });
     
     return { data, error };
@@ -65,7 +72,14 @@ export class SecurePropertyService {
   static async getPublicProperty(id: string): Promise<{ data: PublicProperty | null; error: any }> {
     const { data, error } = await supabase
       .from('properties')
-      .select('*')
+      .select(`
+        id, title, property_type, listing_type, bhk_type, expected_price, 
+        super_area, carpet_area, bathrooms, balconies, floor_no, total_floors, 
+        furnishing, availability_type, availability_date, price_negotiable, 
+        maintenance_charges, security_deposit, city, locality, state, pincode, 
+        street_address, landmarks, description, images, videos, status, 
+        created_at, updated_at, is_featured
+      `)
       .eq('id', id)
       .maybeSingle();
     
@@ -85,7 +99,14 @@ export class SecurePropertyService {
   }): Promise<{ data: PublicProperty[] | null; error: any }> {
     let query = supabase
       .from('properties')
-      .select('*');
+      .select(`
+        id, title, property_type, listing_type, bhk_type, expected_price, 
+        super_area, carpet_area, bathrooms, balconies, floor_no, total_floors, 
+        furnishing, availability_type, availability_date, price_negotiable, 
+        maintenance_charges, security_deposit, city, locality, state, pincode, 
+        street_address, landmarks, description, images, videos, status, 
+        created_at, updated_at, is_featured
+      `);
 
     // Apply filters
     if (filters.city) {
@@ -149,7 +170,14 @@ export class SecurePropertyService {
   static async getPropertiesByLocation(city: string, state?: string): Promise<{ data: PublicProperty[] | null; error: any }> {
     let query = supabase
       .from('properties')
-      .select('*')
+      .select(`
+        id, title, property_type, listing_type, bhk_type, expected_price, 
+        super_area, carpet_area, bathrooms, balconies, floor_no, total_floors, 
+        furnishing, availability_type, availability_date, price_negotiable, 
+        maintenance_charges, security_deposit, city, locality, state, pincode, 
+        street_address, landmarks, description, images, videos, status, 
+        created_at, updated_at, is_featured
+      `)
       .ilike('city', `%${city}%`);
 
     if (state) {
@@ -166,7 +194,14 @@ export class SecurePropertyService {
   static async getFeaturedProperties(limit: number = 6): Promise<{ data: PublicProperty[] | null; error: any }> {
     const { data, error } = await supabase
       .from('properties')
-      .select('*')
+      .select(`
+        id, title, property_type, listing_type, bhk_type, expected_price, 
+        super_area, carpet_area, bathrooms, balconies, floor_no, total_floors, 
+        furnishing, availability_type, availability_date, price_negotiable, 
+        maintenance_charges, security_deposit, city, locality, state, pincode, 
+        street_address, landmarks, description, images, videos, status, 
+        created_at, updated_at, is_featured
+      `)
       .order('created_at', { ascending: false })
       .limit(limit);
 
