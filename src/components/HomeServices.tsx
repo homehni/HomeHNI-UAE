@@ -144,7 +144,7 @@ const HomeServices = () => {
             <div
               key={index}
               onClick={service.onClick}
-              className="flex-shrink-0 w-64 sm:w-72 md:w-80 lg:w-80 cursor-pointer group hover:scale-105 transition-all duration-300"
+              className="flex-shrink-0 w-72 cursor-pointer group hover:scale-105 transition-all duration-300"
             >
               <div className="relative bg-white rounded-2xl shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden border border-gray-100 h-full">
                 {/* Service Image */}
