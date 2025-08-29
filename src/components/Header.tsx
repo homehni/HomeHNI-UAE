@@ -295,6 +295,30 @@ const Header = () => {
           <button onClick={() => navigate('/builder-lifetime-plans')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
             Builder's Lifetime Plan
           </button>
+
+          <button onClick={() => navigate('/owner-plans')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+           Property Renting Owner Plans
+          </button>
+
+          <button onClick={() => navigate('/buyer-plans')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+           Property Seller Plans
+          </button>
+
+          <button onClick={() => navigate('/seller-plans')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+           Property Owner Plans
+          </button>
+
+          <button onClick={() => navigate('/commercial-owner-plans')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+          Commercial Owner Plans
+          </button>
+
+          <button onClick={() => navigate('/commercial-buyer-plan')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+           Commercial Buyer Plans
+          </button>
+
+          <button onClick={() => navigate('/commercial-seller-plans')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+           Commercial Seller Plans
+          </button>
         </div>
       </div>}
   </div>
