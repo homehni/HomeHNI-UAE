@@ -257,6 +257,9 @@ const Header = () => {
           <button onClick={() => navigate('/loans')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
             Loans
           </button>
+           <button onClick={() => navigate('/painting-cleaning')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+            Painting & Cleaning
+          </button>
            <button onClick={() => navigate('/home-security-services')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
             Home Security Services
           </button>
@@ -272,6 +275,11 @@ const Header = () => {
           <button onClick={() => navigate('/architects')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
             Architects
           </button>
+
+           <button onClick={() => navigate('/packers-movers')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+            Packer & Movers
+          </button>
+          
           <button onClick={() => navigate('/interior')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
             Interior Designers
           </button>
@@ -294,30 +302,6 @@ const Header = () => {
           </button>
           <button onClick={() => navigate('/builder-lifetime-plans')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
             Builder's Lifetime Plan
-          </button>
-
-          <button onClick={() => navigate('/owner-plans')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
-           Property Renting Owner Plans
-          </button>
-
-          <button onClick={() => navigate('/buyer-plans')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
-           Property Seller Plans
-          </button>
-
-          <button onClick={() => navigate('/seller-plans')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
-           Property Owner Plans
-          </button>
-
-          <button onClick={() => navigate('/commercial-owner-plans')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
-          Commercial Owner Plans
-          </button>
-
-          <button onClick={() => navigate('/commercial-buyer-plan')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
-           Commercial Buyer Plans
-          </button>
-
-          <button onClick={() => navigate('/commercial-seller-plans')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
-           Commercial Seller Plans
           </button>
         </div>
       </div>}
@@ -350,12 +334,6 @@ const Header = () => {
                   <span className="hidden sm:inline">Post property</span>
                   <span className="sm:hidden">Post Property</span>
                   <span className="ml-1 bg-green-500 text-white text-[10px] px-1.5 py-0.5 rounded-full font-medium">Free</span>
-                </Button>}
-
-               {/* Post Requirement Button - Show everywhere */}
-               {<Button variant="outline" size="sm" onClick={() => navigate('/post-service')} className={`font-medium px-2 sm:px-3 py-1.5 text-xs sm:text-sm transition-all duration-500 ${isScrolled ? 'bg-white text-brand-red border-gray-300 hover:bg-gray-50' : 'bg-white text-brand-red border-white/50 hover:bg-white/90'}`}>
-                  <span className="hidden sm:inline">Post Requirement</span>
-                  <span className="sm:hidden">Post Requirement</span>
                 </Button>}
 
 
