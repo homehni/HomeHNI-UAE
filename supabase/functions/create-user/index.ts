@@ -19,22 +19,61 @@ Deno.serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
+  console.log('Edge function called with method:', req.method);
+
   try {
+    // Validate request method
+    if (req.method !== 'POST') {
+      console.error('Invalid method:', req.method);
+      return new Response(
+        JSON.stringify({ success: false, error: 'Method not allowed' }),
+        {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          status: 405,
+        }
+      );
+    }
+
     const { name, email, password, role, status }: CreateUserRequest = await req.json();
+    
+    console.log('Creating user with data:', { name, email, role, status });
+
+    // Validate required fields
+    if (!name || !email || !password || !role) {
+      console.error('Missing required fields');
+      return new Response(
+        JSON.stringify({ success: false, error: 'Missing required fields' }),
+        {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          status: 400,
+        }
+      );
+    }
+
+    // Get environment variables
+    const supabaseUrl = Deno.env.get('SUPABASE_URL');
+    const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
+
+    if (!supabaseUrl || !serviceRoleKey) {
+      console.error('Missing environment variables');
+      return new Response(
+        JSON.stringify({ success: false, error: 'Server configuration error' }),
+        {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          status: 500,
+        }
+      );
+    }
 
     // Create Supabase client with service role key for admin operations
-    const supabaseAdmin = createClient(
-      Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '',
-      {
-        auth: {
-          autoRefreshToken: false,
-          persistSession: false
-        }
+    const supabaseAdmin = createClient(supabaseUrl, serviceRoleKey, {
+      auth: {
+        autoRefreshToken: false,
+        persistSession: false
       }
-    )
+    });
 
-    console.log('Creating user with email:', email);
+    console.log('Creating auth user...');
 
     // Create auth user
     const { data: authData, error: authError } = await supabaseAdmin.auth.admin.createUser({
@@ -48,11 +87,24 @@ Deno.serve(async (req) => {
 
     if (authError) {
       console.error('Auth creation error:', authError);
-      throw authError;
+      return new Response(
+        JSON.stringify({ success: false, error: `Auth error: ${authError.message}` }),
+        {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          status: 400,
+        }
+      );
     }
 
     if (!authData.user) {
-      throw new Error('Failed to create auth user');
+      console.error('No auth user returned');
+      return new Response(
+        JSON.stringify({ success: false, error: 'Failed to create auth user' }),
+        {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          status: 500,
+        }
+      );
     }
 
     console.log('Auth user created successfully:', authData.user.id);
@@ -68,7 +120,13 @@ Deno.serve(async (req) => {
 
     if (profileError) {
       console.error('Profile creation error:', profileError);
-      throw profileError;
+      return new Response(
+        JSON.stringify({ success: false, error: `Profile error: ${profileError.message}` }),
+        {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          status: 400,
+        }
+      );
     }
 
     console.log('Profile created successfully');
@@ -83,7 +141,13 @@ Deno.serve(async (req) => {
 
     if (roleError) {
       console.error('Role assignment error:', roleError);
-      throw roleError;
+      return new Response(
+        JSON.stringify({ success: false, error: `Role error: ${roleError.message}` }),
+        {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          status: 400,
+        }
+      );
     }
 
     console.log('Role assigned successfully');
@@ -101,16 +165,16 @@ Deno.serve(async (req) => {
     );
 
   } catch (error) {
-    console.error('Error creating user:', error);
+    console.error('Unexpected error:', error);
     
     return new Response(
       JSON.stringify({ 
         success: false, 
-        error: error.message || 'Failed to create user' 
+        error: `Server error: ${error.message || 'Unknown error'}` 
       }),
       {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        status: 400,
+        status: 500,
       }
     );
   }

@@ -135,12 +135,15 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({ isOpen, onClose, onU
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-md bg-background border-border">
+      <DialogContent className="sm:max-w-md bg-background border-border" aria-describedby="add-user-description">
         <DialogHeader className="pb-4 border-b border-border">
           <DialogTitle className="text-xl font-semibold text-foreground flex items-center gap-2">
             <User className="h-5 w-5" />
             Add User
           </DialogTitle>
+          <p id="add-user-description" className="sr-only">
+            Create a new user account with specified role and permissions
+          </p>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-6 pt-4">
