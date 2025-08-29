@@ -32,7 +32,7 @@ import SitemapXml from "./pages/SitemapXml";
 import OwnerPlans from "./pages/OwnerPlans";
 import BuyerPlans from "./pages/BuyerPlans";
 import SellerPlans from "./pages/SellerPlans";
-import AgentPlans from "@/pages/AgentPlans";
+import AgentPlans from "./pages/AgentPlans";
 import BuilderLifetimePlans from "@/pages/BuilderLifetimePlans";
 import ServiceSuite from "@/pages/ServiceSuite";
 import CorporateEnquiry from "./pages/CorporateEnquiry";
