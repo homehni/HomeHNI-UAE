@@ -609,98 +609,25 @@ const PostService = () => {
                   {formData.premiumSelected && (
                     <div className="mt-4 space-y-4 transition-all duration-300 ease-in-out">
                       <div className="bg-primary/5 p-4 rounded-lg">
-                        <h4 className="font-semibold text-primary mb-4">HomeHNI Requirement Plan – ₹999 (30 Days)</h4>
-                        
-                        {/* Plan Highlights */}
-                        <div className="mb-6">
-                          <h5 className="font-semibold text-primary mb-3">1. Plan Highlights</h5>
-                          <div className="space-y-3">
-                            <div className="flex items-start gap-3">
-                              <div className="w-2 h-2 bg-primary rounded-full mt-2"></div>
-                              <div>
-                                <span className="font-medium">AI Matching:</span>
-                                <span className="text-sm ml-2">Instant property suggestions using AI for accurate matches.</span>
-                              </div>
-                            </div>
-                            <div className="flex items-start gap-3">
-                              <div className="w-2 h-2 bg-primary rounded-full mt-2"></div>
-                              <div>
-                                <span className="font-medium">Verified Tag:</span>
-                                <span className="text-sm ml-2">Requirement marked as "Verified" for priority visibility to agents/builders.</span>
-                              </div>
-                            </div>
-                            <div className="flex items-start gap-3">
-                              <div className="w-2 h-2 bg-primary rounded-full mt-2"></div>
-                              <div>
-                                <span className="font-medium">Multi-Channel Alerts:</span>
-                                <span className="text-sm ml-2">Real-time updates via WhatsApp, Email, and IVR automated calls.</span>
-                              </div>
-                            </div>
-                            <div className="flex items-start gap-3">
-                              <div className="w-2 h-2 bg-primary rounded-full mt-2"></div>
-                              <div>
-                                <span className="font-medium">Dedicated Relationship Manager (RM):</span>
-                                <span className="text-sm ml-2">One-on-one assistance to refine requirements and ensure better matches.</span>
-                              </div>
-                            </div>
-                            <div className="flex items-start gap-3">
-                              <div className="w-2 h-2 bg-primary rounded-full mt-2"></div>
-                              <div>
-                                <span className="font-medium">Weekly Lead Reports:</span>
-                                <span className="text-sm ml-2">PDF or email summary of all matches and responses received.</span>
-                              </div>
-                            </div>
-                            <div className="flex items-start gap-3">
-                              <div className="w-2 h-2 bg-primary rounded-full mt-2"></div>
-                              <div>
-                                <span className="font-medium">Dashboard Access:</span>
-                                <span className="text-sm ml-2">Track all matched properties and lead interactions in one place.</span>
-                              </div>
-                            </div>
-                            <div className="flex items-start gap-3">
-                              <div className="w-2 h-2 bg-primary rounded-full mt-2"></div>
-                              <div>
-                                <span className="font-medium">Free Consultation Credits:</span>
-                                <span className="text-sm ml-2">Access to one free session with legal or loan advisors.</span>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* Communication Features */}
-                        <div>
-                          <h5 className="font-semibold text-primary mb-3">2. Communication Features</h5>
-                          <div className="space-y-3">
-                            <div className="flex items-start gap-3">
-                              <div className="w-2 h-2 bg-primary rounded-full mt-2"></div>
-                              <div>
-                                <span className="font-medium">Email Alerts:</span>
-                                <span className="text-sm ml-2">Daily property suggestions, updates, and weekly reports.</span>
-                              </div>
-                            </div>
-                            <div className="flex items-start gap-3">
-                              <div className="w-2 h-2 bg-primary rounded-full mt-2"></div>
-                              <div>
-                                <span className="font-medium">WhatsApp Notifications:</span>
-                                <span className="text-sm ml-2">Instant alerts with "Contact Now" buttons for faster responses.</span>
-                              </div>
-                            </div>
-                            <div className="flex items-start gap-3">
-                              <div className="w-2 h-2 bg-primary rounded-full mt-2"></div>
-                              <div>
-                                <span className="font-medium">IVR Calls:</span>
-                                <span className="text-sm ml-2">Automated call alerts for high-priority matches.</span>
-                              </div>
-                            </div>
-                            <div className="flex items-start gap-3">
-                              <div className="w-2 h-2 bg-primary rounded-full mt-2"></div>
-                              <div>
-                                <span className="font-medium">Dedicated RM:</span>
-                                <span className="text-sm ml-2">Support via call or WhatsApp for requirement refinements and faster closures.</span>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
+                        <h4 className="font-semibold text-primary mb-3">Premium Service Features:</h4>
+                        <ul className="space-y-2 text-sm">
+                          <li className="flex items-center gap-2">
+                            <div className="w-2 h-2 bg-primary rounded-full"></div>
+                            <span>Dedicated Relationship Manager (RM)</span>
+                          </li>
+                          <li className="flex items-center gap-2">
+                            <div className="w-2 h-2 bg-primary rounded-full"></div>
+                            <span>Regular Updates via WhatsApp</span>
+                          </li>
+                          <li className="flex items-center gap-2">
+                            <div className="w-2 h-2 bg-primary rounded-full"></div>
+                            <span>Regular Updates via Email and SMS</span>
+                          </li>
+                          <li className="flex items-center gap-2">
+                            <div className="w-2 h-2 bg-primary rounded-full"></div>
+                            <span>IVR Support for Priority Assistance</span>
+                          </li>
+                        </ul>
                       </div>
                       <div>
                         <Label className="text-base font-medium">Payment Method *</Label>
