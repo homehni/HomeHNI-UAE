@@ -2,6 +2,17 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
+// Import service images
+import homeSecurityImage from '@/assets/home-security-services.jpg';
+import legalServicesImage from '@/assets/legal-services.jpg';
+import handoverServicesImage from '@/assets/handover-services.jpg';
+import propertyManagementImage from '@/assets/property-management.jpg';
+import architectsImage from '@/assets/architects.jpg';
+import interiorDesignImage from '@/assets/interior-design.jpg';
+import packersMoversImage from '@/assets/packers-movers-hero.jpg';
+import paintingCleaningImage from '@/assets/painting-cleaning.jpg';
+import loansImage from '@/assets/loans.jpg';
+
 const HomeServices = () => {
   const navigate = useNavigate();
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -9,59 +20,50 @@ const HomeServices = () => {
 
   const services = [
     {
-      icon: '🏠',
+      image: loansImage,
       title: 'Loans',
-      description: 'Get the best home loan deals with competitive interest rates and quick processing.',
       onClick: () => navigate('/loans')
     },
     {
-      icon: '🔒',
+      image: homeSecurityImage,
       title: 'Home Security Services',
-      description: 'Complete security solutions for your home with advanced monitoring systems.',
       onClick: () => navigate('/home-security-services')
     },
     {
-      icon: '⚖️',
+      image: legalServicesImage,
       title: 'Legal Services',
-      description: 'Expert legal assistance for property documentation and legal compliance.',
       onClick: () => navigate('/legal-services')
     },
     {
-      icon: '📋',
+      image: handoverServicesImage,
       title: 'Handover Services',
-      description: 'Seamless property handover with complete inspection and documentation.',
       onClick: () => navigate('/handover-services')
     },
     {
-      icon: '🏢',
+      image: propertyManagementImage,
       title: 'Property Management',
-      description: 'Professional property management services for hassle-free rental income.',
       onClick: () => navigate('/property-management')
     },
     {
-      icon: '📐',
+      image: architectsImage,
       title: 'Architects',
-      description: 'Connect with certified architects for your dream home design and construction.',
       onClick: () => navigate('/architects')
     },
     {
-      icon: '🎨',
+      image: interiorDesignImage,
       title: 'Interior Designers',
-      description: 'Transform your space with expert interior design and decoration services.',
       onClick: () => navigate('/interior')
     },
     {
-      icon: '📦',
+      image: packersMoversImage,
       title: 'Packers & Movers',
-      description: 'Reliable packing and moving services for safe relocation of your belongings.',
       onClick: () => navigate('/packers-movers')
     },
     {
-      icon: '🎨',
+      image: paintingCleaningImage,
       title: 'Painting & Cleaning',
       badge: 'FLAT 25% OFF',
       badgeColor: 'bg-amber-400',
-      description: 'Professional painting and deep cleaning services for your property.',
       onClick: () => navigate('/painting-cleaning')
     }
   ];
@@ -155,29 +157,28 @@ const HomeServices = () => {
               onClick={service.onClick}
               className="flex-shrink-0 w-60 cursor-pointer group transition-all duration-300"
             >
-              <div className="relative bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-300 border border-gray-200 h-48 p-4">
+              <div className="relative bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-300 border border-gray-200 h-48 overflow-hidden">
                 {/* Badge */}
                 {service.badge && (
-                  <div className={`absolute top-3 right-3 ${service.badgeColor} text-gray-800 px-2 py-1 rounded text-xs font-bold`}>
+                  <div className={`absolute top-3 right-3 z-10 ${service.badgeColor} text-gray-800 px-2 py-1 rounded text-xs font-bold`}>
                     {service.badge}
                   </div>
                 )}
                 
-                {/* Service Icon */}
-                <div className="flex justify-center mb-3">
-                  <div className="text-3xl bg-gray-50 w-12 h-12 rounded-lg flex items-center justify-center">
-                    {service.icon}
-                  </div>
+                {/* Service Image */}
+                <div className="h-32 w-full overflow-hidden">
+                  <img 
+                    src={service.image} 
+                    alt={service.title}
+                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  />
                 </div>
 
                 {/* Service Title */}
-                <div className="text-center">
-                  <h3 className="text-base font-bold text-gray-900 mb-2">
+                <div className="p-4 text-center">
+                  <h3 className="text-base font-bold text-gray-900">
                     {service.title}
                   </h3>
-                  <p className="text-xs text-gray-600 leading-relaxed line-clamp-3">
-                    {service.description}
-                  </p>
                 </div>
               </div>
             </div>
