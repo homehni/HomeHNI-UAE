@@ -80,7 +80,7 @@ const MobileAppSection = () => {
           </div>
 
           {/* Image */}
-          <div className="flex justify-center lg:justify-end order-1 lg:order-2">
+          <div className="hidden lg:flex justify-center lg:justify-end order-1 lg:order-2">
             <div className="relative">
               <img
                 src={cmsContent?.content?.appImage || '/lovable-uploads/ee843ec7-81c8-4575-aff3-09a145035577.png'}
