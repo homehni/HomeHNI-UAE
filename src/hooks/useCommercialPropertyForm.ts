@@ -14,7 +14,9 @@ import {
 export const useCommercialPropertyForm = () => {
   const [currentStep, setCurrentStep] = useState(2); // Start at Property Details step
   const [ownerInfo, setOwnerInfo] = useState<Partial<OwnerInfo>>({});
-  const [propertyDetails, setPropertyDetails] = useState<Partial<CommercialPropertyDetails>>({});
+  const [propertyDetails, setPropertyDetails] = useState<Partial<CommercialPropertyDetails>>({
+    title: ''
+  });
   const [locationDetails, setLocationDetails] = useState<Partial<LocationDetails>>({});
   const [rentalDetails, setRentalDetails] = useState<Partial<CommercialRentalDetails>>({});
   const [amenities, setAmenities] = useState<Partial<CommercialAmenities>>({});

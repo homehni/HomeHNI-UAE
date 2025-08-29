@@ -15,7 +15,9 @@ import {
 export const usePropertyForm = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [ownerInfo, setOwnerInfo] = useState<Partial<OwnerInfo>>({});
-  const [propertyDetails, setPropertyDetails] = useState<Partial<PropertyDetails>>({});
+  const [propertyDetails, setPropertyDetails] = useState<Partial<PropertyDetails>>({
+    title: ''
+  });
   const [locationDetails, setLocationDetails] = useState<Partial<LocationDetails>>({});
   const [rentalDetails, setRentalDetails] = useState<Partial<RentalDetails>>({});
   const [amenities, setAmenities] = useState<Partial<PropertyAmenities>>({});
@@ -51,7 +53,12 @@ export const usePropertyForm = () => {
   };
 
   const updatePropertyDetails = (data: Partial<PropertyDetails>) => {
-    setPropertyDetails(prev => ({ ...prev, ...data }));
+    console.log('Updating property details with:', data);
+    setPropertyDetails(prev => {
+      const updated = { ...prev, ...data };
+      console.log('Updated property details:', updated);
+      return updated;
+    });
   };
 
   const updateLocationDetails = (data: Partial<LocationDetails>) => {
@@ -78,18 +85,23 @@ export const usePropertyForm = () => {
     setScheduleInfo(prev => ({ ...prev, ...data }));
   };
 
-  const getFormData = () => ({
-    ownerInfo,
-    propertyInfo: {
-      propertyDetails,
-      locationDetails,
-      rentalDetails,
-      amenities,
-      gallery,
-      additionalInfo,
-      scheduleInfo
-    }
-  });
+  const getFormData = () => {
+    const formData = {
+      ownerInfo,
+      propertyInfo: {
+        propertyDetails,
+        locationDetails,
+        rentalDetails,
+        amenities,
+        gallery,
+        additionalInfo,
+        scheduleInfo
+      }
+    };
+    console.log('Getting form data (rental):', formData);
+    console.log('Property title in form data:', formData.propertyInfo.propertyDetails.title);
+    return formData;
+  };
 
   const isStepValid = (step: number): boolean => {
     // All steps are valid since all fields are now optional
