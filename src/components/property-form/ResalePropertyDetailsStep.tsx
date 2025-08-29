@@ -11,6 +11,7 @@ import { PropertyDetails } from '@/types/property';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 
 const resalePropertyDetailsSchema = z.object({
+  title: z.string().min(1, "Property name is required"),
   propertyType: z.string().optional(),
   bhkType: z.string().optional(),
   ownershipType: z.string().optional(),
@@ -39,6 +40,7 @@ export const ResalePropertyDetailsStep: React.FC<ResalePropertyDetailsStepProps>
   const form = useForm<ResalePropertyDetailsFormData>({
     resolver: zodResolver(resalePropertyDetailsSchema),
     defaultValues: {
+      title: initialData.title || '',
       propertyType: initialData.propertyType || '',
       bhkType: initialData.bhkType || '',
       ownershipType: (initialData as any).ownershipType || '',
@@ -83,6 +85,25 @@ export const ResalePropertyDetailsStep: React.FC<ResalePropertyDetailsStepProps>
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          {/* Property Name */}
+          <FormField
+            control={form.control}
+            name="title"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-sm font-medium">Name of Property *</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="e.g., Spacious 3BHK Villa for Sale"
+                    className="h-12"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
           {/* Property Type and BHK Type */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <FormField

@@ -10,6 +10,7 @@ import { Badge } from '@/components/ui/badge';
 import { CommercialPropertyDetails } from '@/types/property';
 
 const commercialSalePropertyDetailsSchema = z.object({
+  title: z.string().min(1, "Property name is required"),
   spaceType: z.enum(['office', 'retail', 'warehouse', 'showroom', 'restaurant', 'co-working', 'industrial', 'medical', 'educational']).optional(),
   buildingType: z.string().optional(),
   propertyAge: z.string().optional(),
@@ -46,6 +47,7 @@ export const CommercialSalePropertyDetailsStep = ({
   const form = useForm<CommercialSalePropertyDetailsFormData>({
     resolver: zodResolver(commercialSalePropertyDetailsSchema),
     defaultValues: {
+      title: initialData?.title || '',
       spaceType: (initialData?.spaceType as any) || 'office',
       buildingType: initialData?.buildingType || '',
       propertyAge: initialData?.propertyAge || '',
@@ -90,6 +92,24 @@ export const CommercialSalePropertyDetailsStep = ({
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit, onError)} className="space-y-6">
+          {/* Property Name */}
+          <FormField
+            control={form.control}
+            name="title"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Name of Property *</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="e.g., Premium Office Space in Business District"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <FormField
               control={form.control}

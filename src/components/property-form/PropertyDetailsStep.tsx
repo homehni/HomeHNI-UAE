@@ -11,6 +11,7 @@ import { PropertyDetails } from '@/types/property';
 import { Phone } from 'lucide-react';
 
 const propertyDetailsSchema = z.object({
+  title: z.string().min(1, "Property name is required"),
   propertyType: z.string().optional(),
   buildingType: z.string().optional(),
   propertyAge: z.string().optional(),
@@ -43,6 +44,7 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
   const form = useForm<PropertyDetailsFormData>({
     resolver: zodResolver(propertyDetailsSchema),
     defaultValues: {
+      title: initialData.title || '',
       propertyType: initialData.propertyType || '',
       buildingType: initialData.buildingType || '',
       propertyAge: initialData.propertyAge || '',
@@ -75,6 +77,25 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
       
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          {/* Property Name */}
+          <FormField
+            control={form.control}
+            name="title"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-sm font-medium">Name of Property *</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="e.g., Luxury 2BHK Apartment in Prime Location"
+                    className="h-12"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
           {/* Property Type and Building Type */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <FormField
