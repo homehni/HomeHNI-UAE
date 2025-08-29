@@ -148,6 +148,19 @@ const PostService = () => {
     return countryOptions.find(c => c.value === formData.country)?.symbol || "₹";
   };
 
+  const formatBudgetAmount = (amount: number) => {
+    const symbol = getCurrencySymbol();
+    if (amount >= 10000000) { // 1 crore or more
+      return `${symbol} ${(amount / 10000000).toFixed(1)} Cr`;
+    } else if (amount >= 100000) { // 1 lakh or more
+      return `${symbol} ${(amount / 100000).toFixed(1)} L`;
+    } else if (amount >= 1000) { // 1 thousand or more
+      return `${symbol} ${(amount / 1000).toFixed(0)}K`;
+    } else {
+      return `${symbol} ${amount.toLocaleString()}`;
+    }
+  };
+
   const validateForm = (): boolean => {
     const newErrors: {[key: string]: string} = {};
 
@@ -320,7 +333,7 @@ const PostService = () => {
                   <p><strong>Location:</strong> {formData.city}, {formData.state}</p>
                   <p><strong>Intent:</strong> {formData.intent}</p>
                   {formData.budgetRange[0] > 0 && formData.budgetRange[1] > 0 && (
-                    <p><strong>Budget:</strong> {getCurrencySymbol()} {formData.budgetRange[0].toLocaleString()} - {getCurrencySymbol()} {formData.budgetRange[1].toLocaleString()}</p>
+                    <p><strong>Budget:</strong> {formatBudgetAmount(formData.budgetRange[0])} - {formatBudgetAmount(formData.budgetRange[1])}</p>
                   )}
                   {formData.premiumSelected && (
                     <p><strong>Premium Service:</strong> Active</p>
@@ -574,11 +587,11 @@ const PostService = () => {
                       />
                     </div>
                     <div className="flex justify-between items-center text-sm text-muted-foreground">
-                      <span>{getCurrencySymbol()} {formData.budgetRange[0].toLocaleString()}</span>
-                      <span>{getCurrencySymbol()} {formData.budgetRange[1].toLocaleString()}</span>
+                      <span>{formatBudgetAmount(formData.budgetRange[0])}</span>
+                      <span>{formatBudgetAmount(formData.budgetRange[1])}</span>
                     </div>
                     <div className="text-center text-xs text-muted-foreground">
-                      Range: {getCurrencySymbol()} {formData.budgetRange[0].toLocaleString()} - {getCurrencySymbol()} {formData.budgetRange[1].toLocaleString()}
+                      Range: {formatBudgetAmount(formData.budgetRange[0])} - {formatBudgetAmount(formData.budgetRange[1])}
                     </div>
                   </div>
                   {errors.budget && <p className="text-sm text-destructive mt-1">{errors.budget}</p>}
