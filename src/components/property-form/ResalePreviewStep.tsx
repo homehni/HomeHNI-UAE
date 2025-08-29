@@ -70,7 +70,9 @@ export const ResalePreviewStep: React.FC<ResalePreviewStepProps> = ({
 
             {/* Property Title & Price */}
             <div className="space-y-2">
-              <h2 className="text-2xl font-bold">{propertyInfo?.propertyDetails?.bhkType} {propertyInfo?.propertyDetails?.propertyType} for Sale</h2>
+              <h2 className="text-2xl font-bold">
+                {(propertyInfo?.propertyDetails?.title?.trim() || `${propertyInfo?.propertyDetails?.bhkType ? propertyInfo.propertyDetails.bhkType + ' ' : ''}${propertyInfo?.propertyDetails?.propertyType || ''}`.trim() || 'Property')} for Sale
+              </h2>
               <div className="flex items-center gap-4">
                 <span className="text-3xl font-bold text-primary">
                   {propertyInfo?.saleDetails?.expectedPrice && formatPrice(propertyInfo.saleDetails.expectedPrice)}
