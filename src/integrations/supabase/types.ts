@@ -89,6 +89,44 @@ export type Database = {
         }
         Relationships: []
       }
+      content_approvals: {
+        Row: {
+          approved_at: string | null
+          approver_id: string | null
+          comments: string | null
+          content_version_id: string
+          created_at: string
+          id: string
+          status: string
+        }
+        Insert: {
+          approved_at?: string | null
+          approver_id?: string | null
+          comments?: string | null
+          content_version_id: string
+          created_at?: string
+          id?: string
+          status?: string
+        }
+        Update: {
+          approved_at?: string | null
+          approver_id?: string | null
+          comments?: string | null
+          content_version_id?: string
+          created_at?: string
+          id?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "content_approvals_content_version_id_fkey"
+            columns: ["content_version_id"]
+            isOneToOne: false
+            referencedRelation: "content_versions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       content_blocks: {
         Row: {
           block_type: string
@@ -795,6 +833,30 @@ export type Database = {
         }
         Relationships: []
       }
+      role_permissions: {
+        Row: {
+          action: Database["public"]["Enums"]["permission_action"]
+          content_type: Database["public"]["Enums"]["content_type"]
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["user_role"]
+        }
+        Insert: {
+          action: Database["public"]["Enums"]["permission_action"]
+          content_type: Database["public"]["Enums"]["content_type"]
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["user_role"]
+        }
+        Update: {
+          action?: Database["public"]["Enums"]["permission_action"]
+          content_type?: Database["public"]["Enums"]["content_type"]
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["user_role"]
+        }
+        Relationships: []
+      }
       user_favorites: {
         Row: {
           created_at: string
@@ -863,6 +925,33 @@ export type Database = {
           created_at?: string
           id?: string
           role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_sessions: {
+        Row: {
+          id: string
+          ip_address: unknown | null
+          session_end: string | null
+          session_start: string
+          user_agent: string | null
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          ip_address?: unknown | null
+          session_end?: string | null
+          session_start?: string
+          user_agent?: string | null
+          user_id: string
+        }
+        Update: {
+          id?: string
+          ip_address?: unknown | null
+          session_end?: string | null
+          session_start?: string
+          user_agent?: string | null
           user_id?: string
         }
         Relationships: []
@@ -949,15 +1038,33 @@ export type Database = {
           raw_user_meta_data: Json
         }[]
       }
+      get_user_roles: {
+        Args: { user_uuid: string }
+        Returns: {
+          assigned_at: string
+          expires_at: string
+          role: Database["public"]["Enums"]["user_role"]
+        }[]
+      }
       has_current_user_role: {
         Args: { _role: Database["public"]["Enums"]["app_role"] }
         Returns: boolean
       }
-      has_role: {
+      has_permission: {
         Args: {
-          _role: Database["public"]["Enums"]["app_role"]
-          _user_id: string
+          action_param: Database["public"]["Enums"]["permission_action"]
+          content_type_param: Database["public"]["Enums"]["content_type"]
+          user_uuid: string
         }
+        Returns: boolean
+      }
+      has_role: {
+        Args:
+          | { _role: Database["public"]["Enums"]["app_role"]; _user_id: string }
+          | {
+              required_role: Database["public"]["Enums"]["user_role"]
+              user_uuid: string
+            }
         Returns: boolean
       }
       log_audit_event: {
@@ -1016,6 +1123,20 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "user" | "buyer" | "seller" | "consultant"
+      content_type:
+        | "homepage"
+        | "properties"
+        | "blog"
+        | "static_pages"
+        | "users"
+        | "settings"
+      permission_action: "create" | "read" | "update" | "delete"
+      user_role:
+        | "admin"
+        | "content_manager"
+        | "sales_team"
+        | "blog_creator"
+        | "static_page_manager"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -1144,6 +1265,22 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "user", "buyer", "seller", "consultant"],
+      content_type: [
+        "homepage",
+        "properties",
+        "blog",
+        "static_pages",
+        "users",
+        "settings",
+      ],
+      permission_action: ["create", "read", "update", "delete"],
+      user_role: [
+        "admin",
+        "content_manager",
+        "sales_team",
+        "blog_creator",
+        "static_page_manager",
+      ],
     },
   },
 } as const
