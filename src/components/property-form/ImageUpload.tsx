@@ -3,6 +3,9 @@ import { Upload, X, Camera, Home, Bath, Bed, ChefHat, Eye, Building2, MoreHorizo
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { useToast } from '@/hooks/use-toast';
+import { compressImage, shouldCompress } from '@/utils/imageCompression';
+import { ImageCompressionProgress } from '@/components/ui/image-compression-progress';
 
 interface CategorizedImages {
   bathroom: File[];
@@ -39,6 +42,18 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
   minImages
 }) => {
   const fileInputRefs = useRef<{ [key: string]: HTMLInputElement | null }>({});
+  const { toast } = useToast();
+  const [compressionProgress, setCompressionProgress] = useState<{
+    isCompressing: boolean;
+    isUploading: boolean;
+    compressionComplete: boolean;
+    uploadComplete: boolean;
+    originalSize?: number;
+    compressedSize?: number;
+    compressionRatio?: number;
+    fileName: string;
+    error?: string;
+  } | null>(null);
   
   // Convert flat array to categorized structure
   const [categorizedImages, setCategorizedImages] = useState<CategorizedImages>(() => {
@@ -53,27 +68,126 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
     };
   });
 
-  const handleCategorizedFileSelect = (event: React.ChangeEvent<HTMLInputElement>, category: keyof CategorizedImages) => {
+  const handleCategorizedFileSelect = async (event: React.ChangeEvent<HTMLInputElement>, category: keyof CategorizedImages) => {
     const files = Array.from(event.target.files || []);
-    const validFiles = files.filter(file => {
-      const isImage = file.type.startsWith('image/');
-      const isValidSize = file.size <= 5 * 1024 * 1024; // 5MB limit
-      return isImage && isValidSize;
-    });
-
-    const maxPerCategory = 5;
-    const currentCategoryImages = categorizedImages[category];
-    const newCategoryImages = [...currentCategoryImages, ...validFiles].slice(0, maxPerCategory);
     
-    const updatedCategorized = {
-      ...categorizedImages,
-      [category]: newCategoryImages
-    };
-    setCategorizedImages(updatedCategorized);
+    for (const file of files) {
+      if (!file.type.startsWith('image/')) {
+        toast({
+          title: "Invalid file type",
+          description: "Please select image files only",
+          variant: "destructive"
+        });
+        continue;
+      }
 
-    // Convert back to flat array for parent component
-    const allImages = Object.values(updatedCategorized).flat();
-    onImagesChange(allImages.slice(0, maxImages));
+      if (file.size > 5 * 1024 * 1024) {
+        toast({
+          title: "File too large",
+          description: `${file.name} must be less than 5MB`,
+          variant: "destructive"
+        });
+        continue;
+      }
+
+      setCompressionProgress({
+        isCompressing: false,
+        isUploading: false,
+        compressionComplete: false,
+        uploadComplete: false,
+        fileName: file.name,
+      });
+
+      try {
+        let processedFile = file;
+
+        // Compress image if it's large enough
+        if (shouldCompress(file)) {
+          setCompressionProgress(prev => prev ? { ...prev, isCompressing: true } : null);
+          
+          try {
+            const compressionResult = await compressImage(file, {
+              maxWidth: 1920,
+              maxHeight: 1920,
+              quality: 0.8,
+              maxSizeKB: 800
+            });
+            
+            processedFile = compressionResult.compressedFile;
+            
+            setCompressionProgress(prev => prev ? {
+              ...prev,
+              isCompressing: false,
+              compressionComplete: true,
+              uploadComplete: true,
+              originalSize: compressionResult.originalSize,
+              compressedSize: compressionResult.compressedSize,
+              compressionRatio: compressionResult.compressionRatio
+            } : null);
+          } catch (compressionError) {
+            console.error('Compression error:', compressionError);
+            setCompressionProgress(prev => prev ? {
+              ...prev,
+              isCompressing: false,
+              compressionComplete: true,
+              uploadComplete: true,
+              error: 'Compression failed, using original'
+            } : null);
+          }
+        } else {
+          setCompressionProgress(prev => prev ? {
+            ...prev,
+            compressionComplete: true,
+            uploadComplete: true,
+            originalSize: file.size,
+            compressedSize: file.size,
+            compressionRatio: 0
+          } : null);
+        }
+
+        const maxPerCategory = 5;
+        const currentCategoryImages = categorizedImages[category];
+        
+        if (currentCategoryImages.length >= maxPerCategory) {
+          toast({
+            title: "Category full",
+            description: `Maximum ${maxPerCategory} images per category`,
+            variant: "destructive"
+          });
+          return;
+        }
+
+        const newCategoryImages = [...currentCategoryImages, processedFile].slice(0, maxPerCategory);
+        
+        const updatedCategorized = {
+          ...categorizedImages,
+          [category]: newCategoryImages
+        };
+        setCategorizedImages(updatedCategorized);
+
+        // Convert back to flat array for parent component
+        const allImages = Object.values(updatedCategorized).flat();
+        onImagesChange(allImages.slice(0, maxImages));
+
+        // Clear progress after a delay
+        setTimeout(() => {
+          setCompressionProgress(null);
+        }, 2000);
+
+      } catch (error) {
+        console.error('File processing error:', error);
+        setCompressionProgress(prev => prev ? {
+          ...prev,
+          isCompressing: false,
+          isUploading: false,
+          error: 'Processing failed'
+        } : null);
+        
+        setTimeout(() => {
+          setCompressionProgress(null);
+        }, 3000);
+      }
+    }
   };
 
   const removeCategorizedImage = (category: keyof CategorizedImages, index: number) => {
@@ -118,6 +232,21 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
           </Badge>
         </div>
       </div>
+
+      {/* Compression Progress */}
+      {compressionProgress && (
+        <ImageCompressionProgress
+          isCompressing={compressionProgress.isCompressing}
+          isUploading={compressionProgress.isUploading}
+          compressionComplete={compressionProgress.compressionComplete}
+          uploadComplete={compressionProgress.uploadComplete}
+          originalSize={compressionProgress.originalSize}
+          compressedSize={compressionProgress.compressedSize}
+          compressionRatio={compressionProgress.compressionRatio}
+          fileName={compressionProgress.fileName}
+          error={compressionProgress.error}
+        />
+      )}
 
       {/* Categories Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

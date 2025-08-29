@@ -1,8 +1,10 @@
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { Upload, X, FileText, Briefcase, Award } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
+import { compressImage, shouldCompress } from '@/utils/imageCompression';
+import { ImageCompressionProgress } from '@/components/ui/image-compression-progress';
 
 interface CategorizedImages {
   gstCopy: File[];
@@ -39,6 +41,17 @@ export const CategorizedImageUpload: React.FC<CategorizedImageUploadProps> = ({
 }) => {
   const fileInputRefs = useRef<{ [key: string]: HTMLInputElement | null }>({});
   const { toast } = useToast();
+  const [compressionProgress, setCompressionProgress] = useState<{
+    isCompressing: boolean;
+    isUploading: boolean;
+    compressionComplete: boolean;
+    uploadComplete: boolean;
+    originalSize?: number;
+    compressedSize?: number;
+    compressionRatio?: number;
+    fileName: string;
+    error?: string;
+  } | null>(null);
 
   const handleFileSelect = useCallback(async (category: keyof CategorizedImages, files: FileList | null) => {
     if (!files || files.length === 0) return;
@@ -46,7 +59,10 @@ export const CategorizedImageUpload: React.FC<CategorizedImageUploadProps> = ({
     const file = files[0];
     
     // Validate file type
-    if (!file.type.startsWith('image/') && file.type !== 'application/pdf') {
+    const isImage = file.type.startsWith('image/');
+    const isPDF = file.type === 'application/pdf';
+    
+    if (!isImage && !isPDF) {
       toast({
         title: "Invalid file type",
         description: "Please select an image or PDF file",
@@ -65,16 +81,77 @@ export const CategorizedImageUpload: React.FC<CategorizedImageUploadProps> = ({
       return;
     }
 
+    let processedFile = file;
+
+    // Only compress image files, not PDFs
+    if (isImage) {
+      setCompressionProgress({
+        isCompressing: false,
+        isUploading: false,
+        compressionComplete: false,
+        uploadComplete: false,
+        fileName: file.name,
+      });
+
+      try {
+        if (shouldCompress(file)) {
+          setCompressionProgress(prev => prev ? { ...prev, isCompressing: true } : null);
+          
+          const compressionResult = await compressImage(file, {
+            maxWidth: 1920,
+            maxHeight: 1920,
+            quality: 0.8,
+            maxSizeKB: 800
+          });
+          
+          processedFile = compressionResult.compressedFile;
+          
+          setCompressionProgress(prev => prev ? {
+            ...prev,
+            isCompressing: false,
+            compressionComplete: true,
+            uploadComplete: true,
+            originalSize: compressionResult.originalSize,
+            compressedSize: compressionResult.compressedSize,
+            compressionRatio: compressionResult.compressionRatio
+          } : null);
+        } else {
+          setCompressionProgress(prev => prev ? {
+            ...prev,
+            compressionComplete: true,
+            uploadComplete: true,
+            originalSize: file.size,
+            compressedSize: file.size,
+            compressionRatio: 0
+          } : null);
+        }
+      } catch (compressionError) {
+        console.error('Compression error:', compressionError);
+        setCompressionProgress(prev => prev ? {
+          ...prev,
+          isCompressing: false,
+          compressionComplete: true,
+          uploadComplete: true,
+          error: 'Compression failed, using original'
+        } : null);
+      }
+
+      // Clear progress after a delay
+      setTimeout(() => {
+        setCompressionProgress(null);
+      }, 2000);
+    }
+
     const updatedImages = {
       ...images,
-      [category]: [...images[category], file]
+      [category]: [...images[category], processedFile]
     };
     
     onImagesChange(updatedImages);
     
     toast({
       title: "File added",
-      description: `${file.name} has been added to ${categories.find(c => c.key === category)?.label}`
+      description: `${processedFile.name} has been added to ${categories.find(c => c.key === category)?.label}`
     });
   }, [images, onImagesChange, toast]);
 
@@ -162,6 +239,21 @@ export const CategorizedImageUpload: React.FC<CategorizedImageUploadProps> = ({
           );
         })}
       </div>
+      
+      {/* Compression Progress */}
+      {compressionProgress && (
+        <ImageCompressionProgress
+          isCompressing={compressionProgress.isCompressing}
+          isUploading={compressionProgress.isUploading}
+          compressionComplete={compressionProgress.compressionComplete}
+          uploadComplete={compressionProgress.uploadComplete}
+          originalSize={compressionProgress.originalSize}
+          compressedSize={compressionProgress.compressedSize}
+          compressionRatio={compressionProgress.compressionRatio}
+          fileName={compressionProgress.fileName}
+          error={compressionProgress.error}
+        />
+      )}
     </div>
   );
 };
