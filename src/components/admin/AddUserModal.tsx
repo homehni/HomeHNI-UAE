@@ -65,34 +65,26 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({ isOpen, onClose, onU
         throw new Error('All fields are required');
       }
 
-      // For production, this would use Supabase Admin API to create auth users
-      // For now, we'll create a profile and role entry that can be linked later
-      const newUserId = crypto.randomUUID();
+      // Call Edge Function to create user with admin privileges
+      const { data, error } = await supabase.functions.invoke('create-user', {
+        body: {
+          name: formData.name,
+          email: formData.email,
+          password: formData.password,
+          role: formData.role,
+          status: formData.status
+        }
+      });
 
-      // Create profile
-      const { error: profileError } = await supabase
-        .from('profiles')
-        .insert({
-          user_id: newUserId,
-          full_name: formData.name,
-          verification_status: formData.status === 'active' ? 'verified' : 'unverified'
-        });
+      if (error) throw error;
 
-      if (profileError) throw profileError;
-
-      // Assign role
-      const { error: roleError } = await supabase
-        .from('user_roles')
-        .insert({
-          user_id: newUserId,
-          role: formData.role as any // Type assertion for now since we validated the role above
-        });
-
-      if (roleError) throw roleError;
+      if (!data.success) {
+        throw new Error(data.error || 'Failed to create user');
+      }
 
       toast({
         title: 'Success',
-        description: `User ${formData.name} has been created successfully. Note: Auth user creation requires Supabase Admin API integration.`,
+        description: `User ${formData.name} has been created successfully`,
         variant: 'default'
       });
 

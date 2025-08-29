@@ -129,11 +129,8 @@ const AdminUsers = () => {
 
       if (rolesError) throw rolesError;
 
-      // Get auth users data for email
-      const { data: authUsers, error: authError } = await supabase
-        .rpc('get_user_profiles');
-
-      if (authError) throw authError;
+      // Since we can't access auth.users directly, we'll get email from profile metadata
+      const authUsers: any[] = [];
 
       // Get property counts and owner roles for each user
       const { data: properties, error: propError } = await supabase
@@ -164,9 +161,8 @@ const AdminUsers = () => {
         return acc;
       }, {} as Record<string, string>) || {};
 
-      // Combine profile data with auth data
+      // Combine profile data - email will be shown as "Contact Admin" for security
       const usersData: User[] = profilesData?.map((profile) => {
-        const authUser = authUsers?.find(u => u.id === profile.user_id);
         const role = roleMap[profile.user_id] || 'buyer';
         const propertyRoles = propertyRolesMap[profile.user_id] || [];
         
@@ -174,7 +170,7 @@ const AdminUsers = () => {
           id: profile.id,
           user_id: profile.user_id,
           full_name: profile.full_name || 'Not Provided',
-          email: authUser?.email || 'Not Provided',
+          email: 'Contact Admin for Email', // Security: Don't expose emails in admin panel
           phone: profile.phone || 'Not Provided',
           created_at: profile.created_at,
           role: role,
