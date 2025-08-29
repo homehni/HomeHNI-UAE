@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
+import { Slider } from "@/components/ui/slider";
 import { useToast } from "@/hooks/use-toast";
 import { useFormSubmission } from "@/hooks/useFormSubmission";
 import { Loader2, CheckCircle } from "lucide-react";
@@ -25,8 +26,7 @@ interface FormData {
   propertyType: string;
   services: string[];
   otherService: string;
-  budgetMin: string;
-  budgetMax: string;
+  budgetRange: number[];
   currency: string;
   premiumSelected: boolean;
   paymentMethod: string;
@@ -51,8 +51,7 @@ const PostService = () => {
     propertyType: "",
     services: [],
     otherService: "",
-    budgetMin: "",
-    budgetMax: "",
+    budgetRange: [0, 50000000],
     currency: "INR",
     premiumSelected: false,
     paymentMethod: "",
@@ -178,10 +177,8 @@ const PostService = () => {
       newErrors.otherService = "Please specify the service";
     }
 
-    if (formData.budgetMin && formData.budgetMax) {
-      if (Number(formData.budgetMin) > Number(formData.budgetMax)) {
-        newErrors.budget = "Minimum budget cannot be greater than maximum budget";
-      }
+    if (formData.budgetRange[0] > formData.budgetRange[1]) {
+      newErrors.budget = "Minimum budget cannot be greater than maximum budget";
     }
 
     if (formData.premiumSelected && !formData.paymentMethod) {
@@ -251,8 +248,8 @@ const PostService = () => {
         ...(formData.intent === "Service" && { services: formData.services }),
         ...(formData.services.includes("Others") && { otherService: formData.otherService }),
         budget: {
-          min: Number(formData.budgetMin) || 0,
-          max: Number(formData.budgetMax) || 0,
+          min: formData.budgetRange[0],
+          max: formData.budgetRange[1],
           currency: formData.currency
         },
         premiumSelected: formData.premiumSelected,
@@ -322,8 +319,8 @@ const PostService = () => {
                   <p><strong>Name:</strong> {formData.name}</p>
                   <p><strong>Location:</strong> {formData.city}, {formData.state}</p>
                   <p><strong>Intent:</strong> {formData.intent}</p>
-                  {formData.budgetMin && formData.budgetMax && (
-                    <p><strong>Budget:</strong> {getCurrencySymbol()} {formData.budgetMin} - {getCurrencySymbol()} {formData.budgetMax}</p>
+                  {formData.budgetRange[0] > 0 && formData.budgetRange[1] > 0 && (
+                    <p><strong>Budget:</strong> {getCurrencySymbol()} {formData.budgetRange[0].toLocaleString()} - {getCurrencySymbol()} {formData.budgetRange[1].toLocaleString()}</p>
                   )}
                   {formData.premiumSelected && (
                     <p><strong>Premium Service:</strong> Active</p>
@@ -565,38 +562,23 @@ const PostService = () => {
                 {/* Budget Range */}
                 <div>
                   <Label className="text-base font-medium">Budget Range</Label>
-                  <div className="grid md:grid-cols-2 gap-4 mt-2">
-                    <div>
-                      <Label htmlFor="budgetMin" className="text-sm text-muted-foreground">Min Budget</Label>
-                      <div className="relative">
-                        <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground">
-                          {getCurrencySymbol()}
-                        </span>
-                        <Input
-                          id="budgetMin"
-                          type="number"
-                          value={formData.budgetMin}
-                          onChange={(e) => handleInputChange("budgetMin", e.target.value)}
-                          className="h-12 pl-12"
-                          placeholder="0"
-                        />
-                      </div>
+                  <div className="mt-4 space-y-4">
+                    <div className="px-4">
+                      <Slider
+                        value={formData.budgetRange}
+                        onValueChange={(value) => handleInputChange("budgetRange", value)}
+                        max={50000000}
+                        min={0}
+                        step={100000}
+                        className="w-full"
+                      />
                     </div>
-                    <div>
-                      <Label htmlFor="budgetMax" className="text-sm text-muted-foreground">Max Budget</Label>
-                      <div className="relative">
-                        <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground">
-                          {getCurrencySymbol()}
-                        </span>
-                        <Input
-                          id="budgetMax"
-                          type="number"
-                          value={formData.budgetMax}
-                          onChange={(e) => handleInputChange("budgetMax", e.target.value)}
-                          className="h-12 pl-12"
-                          placeholder="0"
-                        />
-                      </div>
+                    <div className="flex justify-between items-center text-sm text-muted-foreground">
+                      <span>{getCurrencySymbol()} {formData.budgetRange[0].toLocaleString()}</span>
+                      <span>{getCurrencySymbol()} {formData.budgetRange[1].toLocaleString()}</span>
+                    </div>
+                    <div className="text-center text-xs text-muted-foreground">
+                      Range: {getCurrencySymbol()} {formData.budgetRange[0].toLocaleString()} - {getCurrencySymbol()} {formData.budgetRange[1].toLocaleString()}
                     </div>
                   </div>
                   {errors.budget && <p className="text-sm text-destructive mt-1">{errors.budget}</p>}
@@ -612,10 +594,28 @@ const PostService = () => {
                     />
                   </div>
                   {formData.premiumSelected && (
-                    <div className="mt-3 space-y-3 transition-all duration-300 ease-in-out">
-                      <p className="text-sm text-muted-foreground">
-                        Priority matching, featured placement, and a dedicated advisor.
-                      </p>
+                    <div className="mt-4 space-y-4 transition-all duration-300 ease-in-out">
+                      <div className="bg-primary/5 p-4 rounded-lg">
+                        <h4 className="font-semibold text-primary mb-3">Premium Service Features:</h4>
+                        <ul className="space-y-2 text-sm">
+                          <li className="flex items-center gap-2">
+                            <div className="w-2 h-2 bg-primary rounded-full"></div>
+                            <span>Dedicated Relationship Manager (RM)</span>
+                          </li>
+                          <li className="flex items-center gap-2">
+                            <div className="w-2 h-2 bg-primary rounded-full"></div>
+                            <span>Regular Updates via WhatsApp</span>
+                          </li>
+                          <li className="flex items-center gap-2">
+                            <div className="w-2 h-2 bg-primary rounded-full"></div>
+                            <span>Regular Updates via Email and SMS</span>
+                          </li>
+                          <li className="flex items-center gap-2">
+                            <div className="w-2 h-2 bg-primary rounded-full"></div>
+                            <span>IVR Support for Priority Assistance</span>
+                          </li>
+                        </ul>
+                      </div>
                       <div>
                         <Label className="text-base font-medium">Payment Method *</Label>
                         <RadioGroup 
