@@ -608,27 +608,43 @@ const PostService = () => {
                   </div>
                   {formData.premiumSelected && (
                     <div className="mt-4 space-y-4 transition-all duration-300 ease-in-out">
-                      <div className="bg-primary/5 p-4 rounded-lg">
-                        <h4 className="font-semibold text-primary mb-3">Premium Service Features:</h4>
-                        <ul className="space-y-2 text-sm">
-                          <li className="flex items-center gap-2">
-                            <div className="w-2 h-2 bg-primary rounded-full"></div>
-                            <span>Dedicated Relationship Manager (RM)</span>
-                          </li>
-                          <li className="flex items-center gap-2">
-                            <div className="w-2 h-2 bg-primary rounded-full"></div>
-                            <span>Regular Updates via WhatsApp</span>
-                          </li>
-                          <li className="flex items-center gap-2">
-                            <div className="w-2 h-2 bg-primary rounded-full"></div>
-                            <span>Regular Updates via Email and SMS</span>
-                          </li>
-                          <li className="flex items-center gap-2">
-                            <div className="w-2 h-2 bg-primary rounded-full"></div>
-                            <span>IVR Support for Priority Assistance</span>
-                          </li>
-                        </ul>
-                      </div>
+                       <div className="bg-primary/5 p-4 rounded-lg">
+                         <h4 className="font-semibold text-primary mb-3">Premium Service Features:</h4>
+                         <div className="grid md:grid-cols-2 gap-6">
+                           <ul className="space-y-2 text-sm">
+                             <li className="flex items-center gap-2">
+                               <div className="w-2 h-2 bg-primary rounded-full"></div>
+                               <span>Dedicated Relationship Manager (RM)</span>
+                             </li>
+                             <li className="flex items-center gap-2">
+                               <div className="w-2 h-2 bg-primary rounded-full"></div>
+                               <span>Regular Updates via WhatsApp</span>
+                             </li>
+                             <li className="flex items-center gap-2">
+                               <div className="w-2 h-2 bg-primary rounded-full"></div>
+                               <span>Regular Updates via Email and SMS</span>
+                             </li>
+                             <li className="flex items-center gap-2">
+                               <div className="w-2 h-2 bg-primary rounded-full"></div>
+                               <span>IVR Support for Priority Assistance</span>
+                             </li>
+                           </ul>
+                           <ul className="space-y-2 text-sm">
+                             <li className="flex items-center gap-2">
+                               <div className="w-2 h-2 bg-primary rounded-full"></div>
+                               <span>Weekly Lead Reports</span>
+                             </li>
+                             <li className="flex items-center gap-2">
+                               <div className="w-2 h-2 bg-primary rounded-full"></div>
+                               <span>Free Consultation Credits</span>
+                             </li>
+                             <li className="flex items-center gap-2">
+                               <div className="w-2 h-2 bg-primary rounded-full"></div>
+                               <span>Verified Tag for Priority Visibility</span>
+                             </li>
+                           </ul>
+                         </div>
+                       </div>
                       <div>
                         <Label className="text-base font-medium">Payment Method *</Label>
                         <RadioGroup 
