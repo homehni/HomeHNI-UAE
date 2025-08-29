@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Header from '@/components/Header';
 import Marquee from '@/components/Marquee';
 import Footer from '@/components/Footer';
@@ -18,7 +18,6 @@ import { DescriptionCard } from '@/components/property-details/DescriptionCard';
 import { AmenitiesCard } from '@/components/property-details/AmenitiesCard';
 import { NeighborhoodCard } from '@/components/property-details/NeighborhoodCard';
 import { MobileStickyCTA } from '@/components/property-details/MobileStickyCTA';
-import { supabase } from '@/integrations/supabase/client';
 interface Property {
   id: string;
   title: string;
@@ -42,80 +41,22 @@ interface Property {
   // Note: Owner contact info removed for security
 }
 const PropertyDetails: React.FC = () => {
-  const { id } = useParams();
+  const {
+    id
+  } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
-  const [property, setProperty] = useState<Property | null>(location.state as Property | null);
-  const [loading, setLoading] = useState(false);
-  const [showContactModal, setShowContactModal] = useState(false);
-  const [showScheduleVisitModal, setShowScheduleVisitModal] = useState(false);
-  const [showEMICalculatorModal, setShowEMICalculatorModal] = useState(false);
-  const [showLegalServicesModal, setShowLegalServicesModal] = useState(false);
+  const property = location.state as Property | undefined || null;
+  const [showContactModal, setShowContactModal] = React.useState(false);
+  const [showScheduleVisitModal, setShowScheduleVisitModal] = React.useState(false);
+  const [showEMICalculatorModal, setShowEMICalculatorModal] = React.useState(false);
+  const [showLegalServicesModal, setShowLegalServicesModal] = React.useState(false);
   
-  // Fetch property data from database if not available in state
-  useEffect(() => {
-    const fetchProperty = async () => {
-      if (!id) return;
-      
-      // If we don't have property data or if we need to refresh it
-      if (!property || !property.images || property.images.length === 0) {
-        setLoading(true);
-        try {
-          // First try to fetch from the main properties table
-          const { data: propertyData, error: propertyError } = await supabase
-            .from('properties')
-            .select('*')
-            .eq('id', id)
-            .eq('status', 'approved')
-            .single();
-            
-          if (propertyError) {
-            console.error('Error fetching property:', propertyError);
-            // Try fetching from public_properties view as fallback
-            const { data: publicPropertyData, error: publicError } = await supabase
-              .from('public_properties')
-              .select('*')
-              .eq('id', id)
-              .single();
-              
-            if (publicError) {
-              console.error('Error fetching public property:', publicError);
-              return;
-            }
-            
-            setProperty(publicPropertyData as Property);
-          } else {
-            setProperty(propertyData as Property);
-          }
-        } catch (error) {
-          console.error('Error fetching property:', error);
-        } finally {
-          setLoading(false);
-        }
-      }
-    };
-    
-    fetchProperty();
-  }, [id, property]);
-  
-  useEffect(() => {
+  React.useEffect(() => {
     document.title = property ? `${property.title} | Property Details` : 'Property Details';
   }, [property]);
   const fallbackDescription = `This beautifully maintained ${property?.bhk_type ?? ''} ${property?.property_type?.replace('_', ' ') ?? 'apartment'} offers a spacious layout with abundant natural light and excellent connectivity to local conveniences. Situated in a prime locality, it features well-ventilated rooms, ample storage and proximity to schools, hospitals and public transport. A perfect choice for families looking for comfort and convenience.`;
   const amenities = ['Lift', 'Internet provider', 'Security', 'Park', 'Sewage treatment', 'Visitor parking'];
-  if (loading) {
-    return <div className="min-h-screen flex flex-col">
-        <Marquee />
-        <Header />
-        <main className="flex-1 container mx-auto px-4 py-12 text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-600 mx-auto mb-4"></div>
-          <h1 className="text-2xl font-semibold mb-4">Loading Property...</h1>
-          <p className="text-gray-600">Please wait while we fetch the property details.</p>
-        </main>
-        <Footer />
-      </div>;
-  }
-  
   if (!property) {
     return <div className="min-h-screen flex flex-col">
         <Marquee />
