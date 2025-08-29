@@ -52,7 +52,7 @@ export class SecurePropertyService {
    */
   static async getPublicProperties(): Promise<{ data: PublicProperty[] | null; error: any }> {
     const { data, error } = await supabase
-      .from('public_properties')
+      .from('properties')
       .select('*')
       .order('created_at', { ascending: false });
     
@@ -64,7 +64,7 @@ export class SecurePropertyService {
    */
   static async getPublicProperty(id: string): Promise<{ data: PublicProperty | null; error: any }> {
     const { data, error } = await supabase
-      .from('public_properties')
+      .from('properties')
       .select('*')
       .eq('id', id)
       .maybeSingle();
@@ -84,7 +84,7 @@ export class SecurePropertyService {
     bhkType?: string;
   }): Promise<{ data: PublicProperty[] | null; error: any }> {
     let query = supabase
-      .from('public_properties')
+      .from('properties')
       .select('*');
 
     // Apply filters
@@ -148,7 +148,7 @@ export class SecurePropertyService {
    */
   static async getPropertiesByLocation(city: string, state?: string): Promise<{ data: PublicProperty[] | null; error: any }> {
     let query = supabase
-      .from('public_properties')
+      .from('properties')
       .select('*')
       .ilike('city', `%${city}%`);
 
@@ -165,7 +165,7 @@ export class SecurePropertyService {
    */
   static async getFeaturedProperties(limit: number = 6): Promise<{ data: PublicProperty[] | null; error: any }> {
     const { data, error } = await supabase
-      .from('public_properties')
+      .from('properties')
       .select('*')
       .order('created_at', { ascending: false })
       .limit(limit);
@@ -185,7 +185,7 @@ export class SecurePropertyService {
     error: any 
   }> {
     const { data, error } = await supabase
-      .from('public_properties')
+      .from('properties')
       .select('expected_price, city');
 
     if (error) return { data: null, error };

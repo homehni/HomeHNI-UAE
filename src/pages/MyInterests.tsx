@@ -99,9 +99,9 @@ export const MyInterests: React.FC = () => {
           console.log('Properties from main table:', propertiesData);
           console.log('Properties error:', propertiesError);
 
-          // Also try to fetch from public_properties view
+          // Also try to fetch from properties table
           const { data: publicPropertiesData, error: publicPropertiesError } = await supabase
-            .from('public_properties')
+            .from('properties')
             .select('*')
             .in('id', propertyIds);
 

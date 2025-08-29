@@ -47,6 +47,7 @@ export class AuditService {
         p_record_id: recordId,
         p_old_values: oldValues ? JSON.parse(JSON.stringify(oldValues)) : null,
         p_new_values: newValues ? JSON.parse(JSON.stringify(newValues)) : null,
+        p_user_id: (await supabase.auth.getUser()).data.user?.id || null,
         p_ip_address: ipAddress,
         p_user_agent: userAgent
       });

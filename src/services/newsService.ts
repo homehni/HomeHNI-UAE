@@ -67,8 +67,13 @@ export const fetchRealEstateNews = async (): Promise<string[]> => {
         '📈 Commercial real estate in Bengaluru records 40% increase in leasing activity year-over-year'
       ];
     }
-  } catch (error) {
-    console.error('Error fetching real estate news:', error);
+  } catch (error: any) {
+    // Handle rate limit (429) error more gracefully
+    if (error.message?.includes('429') || error.message?.includes('quota')) {
+      console.warn('News API rate limit reached, using fallback headlines');
+    } else {
+      console.error('Error fetching real estate news:', error);
+    }
     // Return fallback headlines if API call fails
     return [
       '📈 India housing market sees 15% growth in Q2 2024, driven by strong demand in tier-2 cities',

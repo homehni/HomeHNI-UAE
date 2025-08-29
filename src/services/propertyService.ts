@@ -37,7 +37,7 @@ export interface PublicProperty {
 // Service to fetch public properties (no sensitive owner data)
 export const fetchPublicProperties = async () => {
   const { data, error } = await supabase
-    .from('public_properties')
+    .from('properties')
     .select('*')
     .order('created_at', { ascending: false });
     
@@ -70,7 +70,7 @@ export const fetchFeaturedProperties = async () => {
 // Service to fetch a single public property by ID
 export const fetchPublicPropertyById = async (id: string) => {
   const { data, error } = await supabase
-    .from('public_properties')
+    .from('properties')
     .select('*')
     .eq('id', id)
     .maybeSingle();
