@@ -881,181 +881,252 @@ const PostService = () => {
 
       {/* Services Section */}
       <section className="py-16 px-4">
-        <div className="container mx-auto max-w-7xl">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-              Our Property Services
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Comprehensive property solutions to meet all your real estate needs
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {services.map((service, index) => (
-              <Card key={index} className="p-6 hover:shadow-lg transition-shadow">
-                <div className="flex items-start space-x-4">
-                  <div className="p-3 bg-primary/10 rounded-lg">
-                    <service.icon className="h-6 w-6 text-primary" />
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-semibold text-foreground mb-2">
-                      {service.title}
-                    </h3>
-                    <p className="text-muted-foreground text-sm">
-                      {service.description}
-                    </p>
-                  </div>
-                </div>
-              </Card>
-            ))}
+        <div className="container mx-auto">
+          <div className="grid lg:grid-cols-2 gap-16 items-start">
+            <div className="max-w-3xl">
+              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
+                Our Property Services
+              </h2>
+              <div className="grid gap-6">
+                {services.map((service, index) => {
+                  const IconComponent = service.icon;
+                  return (
+                    <div key={index} className="flex gap-4 p-6 bg-card rounded-lg border">
+                      <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <IconComponent className="w-6 h-6 text-red-600" />
+                      </div>
+                      <div>
+                        <h3 className="text-lg font-semibold text-foreground mb-2">{service.title}</h3>
+                        <p className="text-muted-foreground text-sm">{service.description}</p>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+            
+            {/* Right side spacing for sticky form */}
+            <div className="hidden lg:block"></div>
           </div>
         </div>
       </section>
 
       {/* Target Audience Section */}
       <section className="py-16 px-4 bg-muted/30">
-        <div className="container mx-auto max-w-7xl">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-              Who We Serve
-            </h2>
-            <p className="text-lg text-muted-foreground">
-              Tailored property solutions for every type of real estate need
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            {targetAudience.map((audience, index) => (
-              <Card key={index} className="text-center p-8 hover:shadow-lg transition-shadow">
-                <div className="inline-flex p-4 bg-primary/10 rounded-full mb-6">
-                  <audience.icon className="h-8 w-8 text-primary" />
-                </div>
-                <h3 className="text-xl font-semibold text-foreground mb-3">
-                  {audience.title}
-                </h3>
-                <p className="text-muted-foreground">
-                  {audience.description}
-                </p>
-              </Card>
-            ))}
+        <div className="container mx-auto">
+          <div className="grid lg:grid-cols-2 gap-16 items-start">
+            <div className="max-w-3xl">
+              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
+                Who We Serve
+              </h2>
+              <div className="grid gap-6">
+                {targetAudience.map((audience, index) => {
+                  const IconComponent = audience.icon;
+                  return (
+                    <div key={index} className="flex gap-4 p-6 bg-card rounded-lg border">
+                      <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <IconComponent className="w-6 h-6 text-red-600" />
+                      </div>
+                      <div>
+                        <h3 className="text-lg font-semibold text-foreground mb-2">{audience.title}</h3>
+                        <p className="text-muted-foreground text-sm">{audience.description}</p>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+            
+            {/* Right side spacing for sticky form */}
+            <div className="hidden lg:block"></div>
           </div>
         </div>
       </section>
 
       {/* Comparison Table */}
-      <section className="py-16 px-4">
-        <div className="container mx-auto max-w-5xl">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-              Why Choose Home HNI?
-            </h2>
-            <p className="text-lg text-muted-foreground">
-              See how we compare to other property service providers
-            </p>
-          </div>
-
-          <Card className="overflow-hidden">
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead className="bg-muted">
-                  <tr>
-                    <th className="text-left p-4 font-semibold">Features</th>
-                    <th className="text-center p-4 font-semibold text-primary">Home HNI</th>
-                    <th className="text-center p-4 font-semibold">Others</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {comparisonData.map((item, index) => (
-                    <tr key={index} className="border-t">
-                      <td className="p-4 font-medium">{item.feature}</td>
-                      <td className="text-center p-4">
-                        {item.homeHNI ? (
-                          <CheckCircle className="h-5 w-5 text-green-500 mx-auto" />
-                        ) : (
-                          <X className="h-5 w-5 text-red-500 mx-auto" />
-                        )}
-                      </td>
-                      <td className="text-center p-4">
-                        {item.others ? (
-                          <CheckCircle className="h-5 w-5 text-green-500 mx-auto" />
-                        ) : (
-                          <X className="h-5 w-5 text-red-500 mx-auto" />
-                        )}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+      <section className="py-16 px-4 bg-background">
+        <div className="container mx-auto">
+          <div className="grid lg:grid-cols-2 gap-16 items-start">
+            <div className="max-w-3xl">
+              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
+                Why Home HNI is Better
+              </h2>
+              <div className="bg-card rounded-xl border overflow-hidden">
+                <div className="grid grid-cols-3 gap-4 p-4 bg-muted/50 font-semibold text-sm">
+                  <div>Features</div>
+                  <div className="text-center">Home HNI</div>
+                  <div className="text-center">Others</div>
+                </div>
+                {comparisonData.map((item, index) => (
+                  <div key={index} className="grid grid-cols-3 gap-4 p-4 border-t text-sm">
+                    <div className="text-foreground">{item.feature}</div>
+                    <div className="text-center">
+                      {item.homeHNI ? (
+                        <CheckCircle className="w-4 h-4 text-red-600 mx-auto" />
+                      ) : (
+                        <X className="w-4 h-4 text-red-500 mx-auto" />
+                      )}
+                    </div>
+                    <div className="text-center">
+                      {item.others ? (
+                        <CheckCircle className="w-4 h-4 text-red-600 mx-auto" />
+                      ) : (
+                        <X className="w-4 h-4 text-red-500 mx-auto" />
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
-          </Card>
+            
+            {/* Right side spacing for sticky form */}
+            <div className="hidden lg:block"></div>
+          </div>
         </div>
       </section>
 
       {/* Testimonials */}
       <section className="py-16 px-4 bg-muted/30">
-        <div className="container mx-auto max-w-7xl">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-              What Our Clients Say
-            </h2>
-            <p className="text-lg text-muted-foreground">
-              Real experiences from satisfied property seekers
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            {testimonials.map((testimonial, index) => (
-              <Card key={index} className="p-6 hover:shadow-lg transition-shadow">
-                <div className="flex items-center mb-4">
-                  <img
-                    src={testimonial.image}
-                    alt={testimonial.name}
-                    className="w-12 h-12 rounded-full object-cover mr-4"
-                  />
-                  <div>
-                    <h4 className="font-semibold text-foreground">{testimonial.name}</h4>
-                    <p className="text-sm text-muted-foreground">{testimonial.role}</p>
-                  </div>
-                </div>
-                <div className="flex mb-3">
-                  {Array.from({ length: testimonial.rating }).map((_, i) => (
-                    <Star key={i} className="h-4 w-4 text-yellow-500 fill-current" />
-                  ))}
-                </div>
-                <p className="text-muted-foreground italic">"{testimonial.text}"</p>
-              </Card>
-            ))}
+        <div className="container mx-auto">
+          <div className="grid lg:grid-cols-2 gap-16 items-start">
+            <div className="max-w-3xl">
+              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
+                What Our Customers Say
+              </h2>
+              <div className="space-y-6">
+                {testimonials.map((testimonial, index) => (
+                  <Card key={index} className="p-6">
+                    <CardContent className="p-0">
+                      <div className="flex items-start gap-4">
+                        <img 
+                          src={testimonial.image} 
+                          alt={testimonial.name}
+                          className="w-12 h-12 rounded-full object-cover"
+                        />
+                        <div className="flex-1">
+                          <div className="flex items-center gap-1 mb-2">
+                            {[...Array(testimonial.rating)].map((_, i) => (
+                              <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                            ))}
+                          </div>
+                          <p className="text-muted-foreground text-sm mb-3">"{testimonial.text}"</p>
+                          <div>
+                            <p className="font-semibold text-sm">{testimonial.name}</p>
+                            <p className="text-xs text-muted-foreground">{testimonial.role}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </div>
+            
+            {/* Right side spacing for sticky form */}
+            <div className="hidden lg:block"></div>
           </div>
         </div>
       </section>
 
       {/* FAQ Section */}
-      <section className="py-16 px-4">
-        <div className="container mx-auto max-w-4xl">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-              Frequently Asked Questions
-            </h2>
-            <p className="text-lg text-muted-foreground">
-              Get answers to common questions about our property services
-            </p>
+      <section className="py-16 px-4 bg-background">
+        <div className="container mx-auto">
+          <div className="grid lg:grid-cols-2 gap-16 items-start">
+            <div className="max-w-3xl">
+              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
+                Frequently Asked Questions
+              </h2>
+              <Accordion type="single" collapsible className="space-y-4">
+                {faqs.map((faq, index) => (
+                  <AccordionItem key={index} value={`item-${index}`} className="bg-card border rounded-lg px-6">
+                    <AccordionTrigger className="text-left font-semibold text-sm py-4">
+                      {faq.question}
+                    </AccordionTrigger>
+                    <AccordionContent className="text-muted-foreground text-sm pb-4">
+                      {faq.answer}
+                    </AccordionContent>
+                  </AccordionItem>
+                ))}
+              </Accordion>
+            </div>
+            
+            {/* Right side spacing for sticky form */}
+            <div className="hidden lg:block"></div>
           </div>
-
-          <Accordion type="single" collapsible className="w-full">
-            {faqs.map((faq, index) => (
-              <AccordionItem key={index} value={`item-${index}`}>
-                <AccordionTrigger className="text-left font-semibold">
-                  {faq.question}
-                </AccordionTrigger>
-                <AccordionContent className="text-muted-foreground">
-                  {faq.answer}
-                </AccordionContent>
-              </AccordionItem>
-            ))}
-          </Accordion>
         </div>
       </section>
+
+      {/* Service Tags Section */}
+      <section className="py-16 px-4 bg-muted/30">
+        <div className="container mx-auto">
+          <div className="grid lg:grid-cols-2 gap-16 items-start">
+            <div className="max-w-3xl">
+              <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-8">
+                Property Services
+              </h2>
+              
+              <div className="space-y-6 mb-8">
+                <div className="flex flex-wrap gap-3">
+                  <span className="px-4 py-2 bg-background rounded-full text-sm">Property Requirements in Hyderabad</span>
+                  <span className="px-4 py-2 bg-background rounded-full text-sm">Property Requirements in Bangalore</span>
+                  <span className="px-4 py-2 bg-background rounded-full text-sm">Property Requirements in Mumbai</span>
+                </div>
+                <div className="flex flex-wrap gap-3">
+                  <span className="px-4 py-2 bg-background rounded-full text-sm">Property Requirements in Pune</span>
+                  <span className="px-4 py-2 bg-background rounded-full text-sm">Property Requirements in Delhi</span>
+                  <span className="px-4 py-2 bg-background rounded-full text-sm">Property Requirements in Chennai</span>
+                </div>
+                <div className="flex flex-wrap gap-3">
+                  <span className="px-4 py-2 bg-background rounded-full text-sm">Buy Property</span>
+                  <span className="px-4 py-2 bg-background rounded-full text-sm">Sell Property</span>
+                  <span className="px-4 py-2 bg-background rounded-full text-sm">Lease Property</span>
+                </div>
+                <div className="flex flex-wrap gap-3">
+                  <span className="px-4 py-2 bg-background rounded-full text-sm">Property Management</span>
+                  <span className="px-4 py-2 bg-background rounded-full text-sm">Property Valuation</span>
+                  <span className="px-4 py-2 bg-background rounded-full text-sm">Legal Documentation</span>
+                </div>
+                <div className="flex flex-wrap gap-3">
+                  <span className="px-4 py-2 bg-background rounded-full text-sm">Premium Property Services</span>
+                </div>
+              </div>
+
+              <h3 className="text-2xl md:text-3xl font-bold text-foreground mb-6">
+                Investment Advisory Services
+              </h3>
+              
+              <div className="space-y-3 mb-8">
+                <div className="flex flex-wrap gap-3">
+                  <span className="px-4 py-2 bg-background rounded-full text-sm">Property Investment in Hyderabad</span>
+                  <span className="px-4 py-2 bg-background rounded-full text-sm">Market Analysis Reports</span>
+                </div>
+              </div>
+
+              <h3 className="text-2xl md:text-3xl font-bold text-foreground mb-6">
+                Property Documentation
+              </h3>
+              
+              <div className="space-y-3">
+                <div className="flex flex-wrap gap-3">
+                  <span className="px-4 py-2 bg-background rounded-full text-sm">Property Legal Support</span>
+                  <span className="px-4 py-2 bg-background rounded-full text-sm">Digital Property Services</span>
+                </div>
+                <div className="flex flex-wrap gap-3">
+                  <span className="px-4 py-2 bg-background rounded-full text-sm">Instant Property Matching</span>
+                  <span className="px-4 py-2 bg-background rounded-full text-sm">Property Advisory Services</span>
+                </div>
+                <div className="flex flex-wrap gap-3">
+                  <span className="px-4 py-2 bg-background rounded-full text-sm">Zero Brokerage Properties</span>
+                </div>
+              </div>
+            </div>
+            
+            {/* Right side spacing for sticky form */}
+            <div className="hidden lg:block"></div>
+          </div>
+        </div>
+      </section>
+
     </div>
   );
 };
