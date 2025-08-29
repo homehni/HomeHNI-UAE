@@ -174,7 +174,7 @@ const PropertyCard = ({
       </div>
       
       <CardContent className="p-3">
-        <h3 className="font-semibold text-xs mb-1 h-4 truncate text-gray-900">{title} - online only</h3>
+        <h3 className="font-semibold text-xs mb-1 h-4 truncate text-gray-900">{title}</h3>
         
         <div className="flex items-center text-gray-500 mb-2">
           <MapPin size={10} className="mr-1 flex-shrink-0" />
