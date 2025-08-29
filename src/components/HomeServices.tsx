@@ -9,50 +9,59 @@ const HomeServices = () => {
 
   const services = [
     {
-      image: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=400&h=300&fit=crop&crop=center',
+      icon: '🏠',
       title: 'Loans',
+      description: 'Get the best home loan deals with competitive interest rates and quick processing.',
       onClick: () => navigate('/loans')
     },
     {
-      image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=300&fit=crop&crop=center',
+      icon: '🔒',
       title: 'Home Security Services',
+      description: 'Complete security solutions for your home with advanced monitoring systems.',
       onClick: () => navigate('/home-security-services')
     },
     {
-      image: 'https://images.unsplash.com/photo-1589994965851-a8f479c573a9?w=400&h=300&fit=crop&crop=center',
+      icon: '⚖️',
       title: 'Legal Services',
+      description: 'Expert legal assistance for property documentation and legal compliance.',
       onClick: () => navigate('/legal-services')
     },
     {
-      image: 'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?w=400&h=300&fit=crop&crop=center',
+      icon: '📋',
       title: 'Handover Services',
+      description: 'Seamless property handover with complete inspection and documentation.',
       onClick: () => navigate('/handover-services')
     },
     {
-      image: 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=400&h=300&fit=crop&crop=center',
-      title: 'Property Management Services',
+      icon: '🏢',
+      title: 'Property Management',
+      description: 'Professional property management services for hassle-free rental income.',
       onClick: () => navigate('/property-management')
     },
     {
-      image: 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=400&h=300&fit=crop&crop=center',
+      icon: '📐',
       title: 'Architects',
+      description: 'Connect with certified architects for your dream home design and construction.',
       onClick: () => navigate('/architects')
     },
     {
-      image: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=300&fit=crop&crop=center',
+      icon: '🎨',
       title: 'Interior Designers',
+      description: 'Transform your space with expert interior design and decoration services.',
       onClick: () => navigate('/interior')
     },
     {
-      image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=300&fit=crop&crop=center',
+      icon: '📦',
       title: 'Packers & Movers',
+      description: 'Reliable packing and moving services for safe relocation of your belongings.',
       onClick: () => navigate('/packers-movers')
     },
     {
-      image: 'https://images.unsplash.com/photo-1589939705384-5185137a7f0f?w=400&h=300&fit=crop&crop=center',
+      icon: '🎨',
       title: 'Painting & Cleaning',
       badge: 'FLAT 25% OFF',
       badgeColor: 'bg-amber-400',
+      description: 'Professional painting and deep cleaning services for your property.',
       onClick: () => navigate('/painting-cleaning')
     }
   ];
@@ -144,33 +153,31 @@ const HomeServices = () => {
             <div
               key={index}
               onClick={service.onClick}
-              className="flex-shrink-0 w-72 cursor-pointer group hover:scale-105 transition-all duration-300"
+              className="flex-shrink-0 w-72 cursor-pointer group transition-all duration-300"
             >
-              <div className="relative bg-white rounded-2xl shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden border border-gray-100 h-full">
-                {/* Service Image */}
-                <div className="relative h-48 overflow-hidden">
-                  <img
-                    src={service.image}
-                    alt={service.title}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                  />
-                  
-                  {/* Badge */}
-                  {service.badge && (
-                    <div className={`absolute top-4 left-4 ${service.badgeColor} text-gray-800 px-3 py-1 rounded-full text-sm font-bold shadow-md`}>
-                      {service.badge}
-                    </div>
-                  )}
-                  
-                  {/* Gradient overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+              <div className="relative bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-300 border border-gray-200 h-full p-6">
+                {/* Badge */}
+                {service.badge && (
+                  <div className={`absolute top-4 right-4 ${service.badgeColor} text-gray-800 px-2 py-1 rounded text-xs font-bold`}>
+                    {service.badge}
+                  </div>
+                )}
+                
+                {/* Service Icon */}
+                <div className="flex justify-center mb-4">
+                  <div className="text-4xl bg-gray-50 w-16 h-16 rounded-full flex items-center justify-center">
+                    {service.icon}
+                  </div>
                 </div>
 
                 {/* Service Title */}
-                <div className="p-4">
-                  <h3 className="text-lg font-bold text-gray-900 text-center">
+                <div className="text-center mb-3">
+                  <h3 className="text-lg font-bold text-gray-900 mb-2">
                     {service.title}
                   </h3>
+                  <p className="text-sm text-gray-600 leading-relaxed">
+                    {service.description}
+                  </p>
                 </div>
               </div>
             </div>
