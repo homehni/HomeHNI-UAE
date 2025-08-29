@@ -153,29 +153,29 @@ const HomeServices = () => {
             <div
               key={index}
               onClick={service.onClick}
-              className="flex-shrink-0 w-72 cursor-pointer group transition-all duration-300"
+              className="flex-shrink-0 w-60 cursor-pointer group transition-all duration-300"
             >
-              <div className="relative bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-300 border border-gray-200 h-full p-6">
+              <div className="relative bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-300 border border-gray-200 h-48 p-4">
                 {/* Badge */}
                 {service.badge && (
-                  <div className={`absolute top-4 right-4 ${service.badgeColor} text-gray-800 px-2 py-1 rounded text-xs font-bold`}>
+                  <div className={`absolute top-3 right-3 ${service.badgeColor} text-gray-800 px-2 py-1 rounded text-xs font-bold`}>
                     {service.badge}
                   </div>
                 )}
                 
                 {/* Service Icon */}
-                <div className="flex justify-center mb-4">
-                  <div className="text-4xl bg-gray-50 w-16 h-16 rounded-full flex items-center justify-center">
+                <div className="flex justify-center mb-3">
+                  <div className="text-3xl bg-gray-50 w-12 h-12 rounded-lg flex items-center justify-center">
                     {service.icon}
                   </div>
                 </div>
 
                 {/* Service Title */}
-                <div className="text-center mb-3">
-                  <h3 className="text-lg font-bold text-gray-900 mb-2">
+                <div className="text-center">
+                  <h3 className="text-base font-bold text-gray-900 mb-2">
                     {service.title}
                   </h3>
-                  <p className="text-sm text-gray-600 leading-relaxed">
+                  <p className="text-xs text-gray-600 leading-relaxed line-clamp-3">
                     {service.description}
                   </p>
                 </div>
