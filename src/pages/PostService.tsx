@@ -366,179 +366,117 @@ const PostService = () => {
         </div>
       </section>
 
-      {/* Desktop Sticky Sidebar */}
-      <div className="hidden lg:block fixed top-32 right-8 z-40 w-96">
-        <Card className="w-full rounded-xl shadow-2xl bg-background border-2 border-primary">
-          <CardContent className="p-6">
-            <h3 className="text-xl font-semibold text-foreground mb-2 text-center">Live Summary</h3>
-            <div className="space-y-2 text-sm">
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">Name:</span>
-                <span className="font-medium">{formData.name || "Not provided"}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">Location:</span>
-                <span className="font-medium">
-                  {formData.city && formData.state ? `${formData.city}, ${formData.state}` : "Not selected"}
-                </span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">Intent:</span>
-                <span className="font-medium">{formData.intent || "Not selected"}</span>
-              </div>
-              {(formData.budgetMin || formData.budgetMax) && (
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Budget:</span>
-                  <span className="font-medium">
-                    {getCurrencySymbol()} {formData.budgetMin || 0} - {getCurrencySymbol()} {formData.budgetMax || "∞"}
-                  </span>
-                </div>
-              )}
-              {formData.premiumSelected && (
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Premium:</span>
-                  <span className="font-medium text-brand-red">Active</span>
-                </div>
-              )}
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Main Form */}
-      <section className="py-12 px-4">
-        <div className="container mx-auto max-w-4xl lg:max-w-3xl lg:mr-[424px]">
-          <Card className="rounded-xl shadow-xl border-2 border-primary/20">
+      {/* Desktop Form - Static below hero */}
+      <section className="hidden lg:block px-4 py-8 bg-background">
+        <div className="container mx-auto max-w-2xl">
+          <Card className="w-full rounded-2xl shadow-xl border-2 border-primary bg-card">
             <CardContent className="p-8">
-              <form onSubmit={handleSubmit} className="space-y-6">
-                {/* Personal Details */}
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div>
-                    <Label htmlFor="name" className="text-base font-medium">Name *</Label>
-                    <Input
-                      id="name"
-                      value={formData.name}
-                      onChange={(e) => handleInputChange("name", e.target.value)}
-                      className="mt-2 h-12"
-                      placeholder="Your full name"
-                    />
-                    {errors.name && <p className="text-sm text-destructive mt-1">{errors.name}</p>}
-                  </div>
+              <h3 className="text-2xl font-bold text-foreground mb-3 text-center">Post Your Requirement</h3>
+              <p className="text-base text-muted-foreground mb-8 text-center">Fill the form & we'll match you with the best options</p>
 
-                  <div>
-                    <Label htmlFor="phone" className="text-base font-medium">Phone Number *</Label>
-                    <Input
-                      id="phone"
-                      type="tel"
-                      value={formData.phone}
-                      onChange={(e) => handleInputChange("phone", e.target.value)}
-                      className="mt-2 h-12"
-                      placeholder="Your phone number"
-                    />
-                    {errors.phone && <p className="text-sm text-destructive mt-1">{errors.phone}</p>}
-                  </div>
+              <form onSubmit={handleSubmit} className="space-y-5">
+                <Input
+                  id="name"
+                  value={formData.name}
+                  onChange={(e) => handleInputChange("name", e.target.value)}
+                  placeholder="Your full name"
+                  className="h-12 text-base bg-background"
+                  required 
+                />
+                {errors.name && <p className="text-sm text-destructive mt-1">{errors.name}</p>}
+
+                <Input
+                  id="phone"
+                  type="tel"
+                  value={formData.phone}
+                  onChange={(e) => handleInputChange("phone", e.target.value)}
+                  placeholder="Phone Number"
+                  className="h-12 text-base bg-background"
+                  required 
+                />
+                {errors.phone && <p className="text-sm text-destructive mt-1">{errors.phone}</p>}
+
+                <Input
+                  id="email"
+                  type="email"
+                  value={formData.email}
+                  onChange={(e) => handleInputChange("email", e.target.value)}
+                  placeholder="Email ID"
+                  className="h-12 text-base bg-background"
+                  required 
+                />
+                {errors.email && <p className="text-sm text-destructive mt-1">{errors.email}</p>}
+
+                <div className="flex gap-3">
+                  <Select value={formData.country} onValueChange={(value) => handleInputChange("country", value)}>
+                    <SelectTrigger className="flex-1 h-12 bg-background">
+                      <SelectValue placeholder="Country" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-background border shadow-lg">
+                      {countryOptions.map(country => (
+                        <SelectItem key={country.value} value={country.value}>
+                          {country.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+
+                  <Select 
+                    value={formData.state} 
+                    onValueChange={(value) => {
+                      handleInputChange("state", value);
+                      handleInputChange("city", "");
+                    }}
+                  >
+                    <SelectTrigger className="flex-1 h-12 bg-background">
+                      <SelectValue placeholder="State" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-background border shadow-lg">
+                      {formData.country === "India" && statesData && Object.keys(statesData).map(state => (
+                        <SelectItem key={state} value={state}>{state}</SelectItem>
+                      ))}
+                      {formData.country === "UAE" && (
+                        <>
+                          <SelectItem value="Dubai">Dubai</SelectItem>
+                          <SelectItem value="Abu Dhabi">Abu Dhabi</SelectItem>
+                          <SelectItem value="Sharjah">Sharjah</SelectItem>
+                        </>
+                      )}
+                      {formData.country === "USA" && (
+                        <>
+                          <SelectItem value="California">California</SelectItem>
+                          <SelectItem value="Texas">Texas</SelectItem>
+                          <SelectItem value="New York">New York</SelectItem>
+                        </>
+                      )}
+                    </SelectContent>
+                  </Select>
+
+                  <Select value={formData.city} onValueChange={(value) => handleInputChange("city", value)}>
+                    <SelectTrigger className="flex-1 h-12 bg-background">
+                      <SelectValue placeholder="City" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-background border shadow-lg">
+                      {cities.map(city => (
+                        <SelectItem key={city} value={city}>{city}</SelectItem>
+                      ))}
+                      {cities.length === 0 && formData.state && (
+                        <SelectItem value="Other">Other</SelectItem>
+                      )}
+                    </SelectContent>
+                  </Select>
                 </div>
 
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div>
-                    <Label htmlFor="email" className="text-base font-medium">Email *</Label>
-                    <Input
-                      id="email"
-                      type="email"
-                      value={formData.email}
-                      onChange={(e) => handleInputChange("email", e.target.value)}
-                      className="mt-2 h-12"
-                      placeholder="your.email@example.com"
-                    />
-                    {errors.email && <p className="text-sm text-destructive mt-1">{errors.email}</p>}
-                  </div>
-
-                  <div>
-                    <Label className="text-base font-medium">Country *</Label>
-                    <Select value={formData.country} onValueChange={(value) => handleInputChange("country", value)}>
-                      <SelectTrigger className="mt-2 h-12">
-                        <SelectValue placeholder="Select country" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {countryOptions.map(country => (
-                          <SelectItem key={country.value} value={country.value}>
-                            {country.label}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    {errors.country && <p className="text-sm text-destructive mt-1">{errors.country}</p>}
-                  </div>
-                </div>
-
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div>
-                    <Label className="text-base font-medium">State *</Label>
-                    <Select 
-                      value={formData.state} 
-                      onValueChange={(value) => {
-                        handleInputChange("state", value);
-                        handleInputChange("city", ""); // Reset city when state changes
-                      }}
-                    >
-                      <SelectTrigger className="mt-2 h-12">
-                        <SelectValue placeholder="Select state" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {formData.country === "India" && statesData && Object.keys(statesData).map(state => (
-                          <SelectItem key={state} value={state}>{state}</SelectItem>
-                        ))}
-                        {formData.country === "UAE" && (
-                          <>
-                            <SelectItem value="Dubai">Dubai</SelectItem>
-                            <SelectItem value="Abu Dhabi">Abu Dhabi</SelectItem>
-                            <SelectItem value="Sharjah">Sharjah</SelectItem>
-                          </>
-                        )}
-                        {formData.country === "USA" && (
-                          <>
-                            <SelectItem value="California">California</SelectItem>
-                            <SelectItem value="Texas">Texas</SelectItem>
-                            <SelectItem value="New York">New York</SelectItem>
-                          </>
-                        )}
-                      </SelectContent>
-                    </Select>
-                    {errors.state && <p className="text-sm text-destructive mt-1">{errors.state}</p>}
-                  </div>
-
-                  <div>
-                    <Label className="text-base font-medium">City *</Label>
-                    <Select value={formData.city} onValueChange={(value) => handleInputChange("city", value)}>
-                      <SelectTrigger className="mt-2 h-12">
-                        <SelectValue placeholder="Select city" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {cities.map(city => (
-                          <SelectItem key={city} value={city}>{city}</SelectItem>
-                        ))}
-                        {cities.length === 0 && formData.state && (
-                          <SelectItem value="Other">Other (Please specify in notes)</SelectItem>
-                        )}
-                      </SelectContent>
-                    </Select>
-                    {errors.city && <p className="text-sm text-destructive mt-1">{errors.city}</p>}
-                  </div>
-                </div>
-
-                {/* Intent Selection */}
-                <div>
-                  <Label className="text-base font-medium">I want to *</Label>
+                <div className="flex gap-3">
                   <Select value={formData.intent} onValueChange={(value) => {
                     handleInputChange("intent", value);
-                    // Reset dependent fields
                     handleInputChange("propertyType", "");
                     handleInputChange("services", []);
                   }}>
-                    <SelectTrigger className="mt-2 h-12">
-                      <SelectValue placeholder="What do you want to do?" />
+                    <SelectTrigger className="flex-1 h-12 bg-background">
+                      <SelectValue placeholder="I want to" />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent className="bg-background border shadow-lg">
                       {intentOptions.map(option => (
                         <SelectItem key={option.value} value={option.value}>
                           {option.label}
@@ -546,18 +484,29 @@ const PostService = () => {
                       ))}
                     </SelectContent>
                   </Select>
-                  {errors.intent && <p className="text-sm text-destructive mt-1">{errors.intent}</p>}
+
+                  <div className="relative flex-1">
+                    <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground z-10">
+                      {getCurrencySymbol()}
+                    </span>
+                    <Input
+                      type="number"
+                      value={formData.budgetMax}
+                      onChange={(e) => handleInputChange("budgetMax", e.target.value)}
+                      placeholder="Budget Required"
+                      className="h-12 text-base bg-background pl-12"
+                    />
+                  </div>
                 </div>
 
                 {/* Conditional Fields */}
                 {["Buy", "Sell", "Lease"].includes(formData.intent) && (
                   <div className="transition-all duration-300 ease-in-out">
-                    <Label className="text-base font-medium">Property Type *</Label>
                     <Select value={formData.propertyType} onValueChange={(value) => handleInputChange("propertyType", value)}>
-                      <SelectTrigger className="mt-2 h-12">
-                        <SelectValue placeholder="Select property type" />
+                      <SelectTrigger className="h-12 bg-background">
+                        <SelectValue placeholder="Property Type" />
                       </SelectTrigger>
-                      <SelectContent>
+                      <SelectContent className="bg-background border shadow-lg">
                         {propertyTypes.map(type => (
                           <SelectItem key={type} value={type}>{type}</SelectItem>
                         ))}
@@ -568,148 +517,258 @@ const PostService = () => {
                 )}
 
                 {formData.intent === "Service" && (
-                  <div className="transition-all duration-300 ease-in-out space-y-4">
-                    <div>
-                      <Label className="text-base font-medium">Services We Offer *</Label>
-                      <p className="text-sm text-muted-foreground mb-3">Select at least one service</p>
-                      <div className="grid md:grid-cols-2 gap-3">
-                        {serviceOptions.map(service => (
-                          <div key={service} className="flex items-center space-x-2">
-                            <Checkbox
-                              id={service}
-                              checked={formData.services.includes(service)}
-                              onCheckedChange={(checked) => handleServiceChange(service, checked as boolean)}
-                            />
-                            <Label htmlFor={service} className="text-sm cursor-pointer">
-                              {service}
-                            </Label>
-                          </div>
-                        ))}
-                      </div>
-                      {errors.services && <p className="text-sm text-destructive mt-1">{errors.services}</p>}
+                  <div className="transition-all duration-300 ease-in-out space-y-3">
+                    <div className="grid grid-cols-2 gap-2">
+                      {serviceOptions.slice(0, 6).map(service => (
+                        <div key={service} className="flex items-center space-x-2">
+                          <Checkbox
+                            id={service}
+                            checked={formData.services.includes(service)}
+                            onCheckedChange={(checked) => handleServiceChange(service, checked as boolean)}
+                          />
+                          <Label htmlFor={service} className="text-xs cursor-pointer">
+                            {service}
+                          </Label>
+                        </div>
+                      ))}
                     </div>
-
                     {formData.services.includes("Others") && (
-                      <div className="transition-all duration-300 ease-in-out">
-                        <Label htmlFor="otherService" className="text-base font-medium">Please specify *</Label>
-                        <Input
-                          id="otherService"
-                          value={formData.otherService}
-                          onChange={(e) => handleInputChange("otherService", e.target.value)}
-                          className="mt-2 h-12"
-                          placeholder="Describe the service you need"
-                        />
-                        {errors.otherService && <p className="text-sm text-destructive mt-1">{errors.otherService}</p>}
-                      </div>
+                      <Input
+                        value={formData.otherService}
+                        onChange={(e) => handleInputChange("otherService", e.target.value)}
+                        placeholder="Please specify"
+                        className="h-12 text-base bg-background"
+                      />
                     )}
+                    {errors.services && <p className="text-sm text-destructive mt-1">{errors.services}</p>}
                   </div>
                 )}
 
-                {/* Budget Range */}
-                <div>
-                  <Label className="text-base font-medium">Budget Range</Label>
-                  <div className="grid md:grid-cols-2 gap-4 mt-2">
-                    <div>
-                      <Label htmlFor="budgetMin" className="text-sm text-muted-foreground">Min Budget</Label>
-                      <div className="relative">
-                        <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground">
-                          {getCurrencySymbol()}
-                        </span>
-                        <Input
-                          id="budgetMin"
-                          type="number"
-                          value={formData.budgetMin}
-                          onChange={(e) => handleInputChange("budgetMin", e.target.value)}
-                          className="h-12 pl-12"
-                          placeholder="0"
-                        />
+                {formData.premiumSelected && (
+                  <div className="bg-muted p-3 rounded-lg">
+                    <p className="text-sm text-muted-foreground mb-2">Premium Service Selected - {getCurrencySymbol()}999</p>
+                    <RadioGroup 
+                      value={formData.paymentMethod} 
+                      onValueChange={(value) => handleInputChange("paymentMethod", value)}
+                      className="flex gap-4"
+                    >
+                      <div className="flex items-center space-x-1">
+                        <RadioGroupItem value="UPI" id="upi-mobile" />
+                        <Label htmlFor="upi-mobile" className="text-sm cursor-pointer">UPI</Label>
                       </div>
-                    </div>
-                    <div>
-                      <Label htmlFor="budgetMax" className="text-sm text-muted-foreground">Max Budget</Label>
-                      <div className="relative">
-                        <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground">
-                          {getCurrencySymbol()}
-                        </span>
-                        <Input
-                          id="budgetMax"
-                          type="number"
-                          value={formData.budgetMax}
-                          onChange={(e) => handleInputChange("budgetMax", e.target.value)}
-                          className="h-12 pl-12"
-                          placeholder="0"
-                        />
+                      <div className="flex items-center space-x-1">
+                        <RadioGroupItem value="Card" id="card-mobile" />
+                        <Label htmlFor="card-mobile" className="text-sm cursor-pointer">Card</Label>
                       </div>
-                    </div>
+                      <div className="flex items-center space-x-1">
+                        <RadioGroupItem value="NetBanking" id="netbanking-mobile" />
+                        <Label htmlFor="netbanking-mobile" className="text-sm cursor-pointer">Net Banking</Label>
+                      </div>
+                    </RadioGroup>
                   </div>
-                  {errors.budget && <p className="text-sm text-destructive mt-1">{errors.budget}</p>}
-                </div>
+                )}
 
-                {/* Premium Service */}
-                <div className="border rounded-lg p-4 bg-muted/30">
-                  <div className="flex items-center justify-between mb-2">
-                    <Label className="text-base font-medium">Premium Listing & Concierge Support — {getCurrencySymbol()}999 one-time</Label>
-                    <Switch
-                      checked={formData.premiumSelected}
-                      onCheckedChange={(checked) => handleInputChange("premiumSelected", checked)}
-                    />
-                  </div>
-                  {formData.premiumSelected && (
-                    <div className="mt-3 space-y-3 transition-all duration-300 ease-in-out">
-                      <p className="text-sm text-muted-foreground">
-                        Priority matching, featured placement, and a dedicated advisor.
-                      </p>
-                      <div>
-                        <Label className="text-base font-medium">Payment Method *</Label>
-                        <RadioGroup 
-                          value={formData.paymentMethod} 
-                          onValueChange={(value) => handleInputChange("paymentMethod", value)}
-                          className="mt-2"
-                        >
-                          <div className="flex items-center space-x-2">
-                            <RadioGroupItem value="UPI" id="upi" />
-                            <Label htmlFor="upi" className="cursor-pointer">UPI</Label>
-                          </div>
-                          <div className="flex items-center space-x-2">
-                            <RadioGroupItem value="Card" id="card" />
-                            <Label htmlFor="card" className="cursor-pointer">Card</Label>
-                          </div>
-                          <div className="flex items-center space-x-2">
-                            <RadioGroupItem value="NetBanking" id="netbanking" />
-                            <Label htmlFor="netbanking" className="cursor-pointer">Net Banking</Label>
-                          </div>
-                        </RadioGroup>
-                        {errors.paymentMethod && <p className="text-sm text-destructive mt-1">{errors.paymentMethod}</p>}
-                      </div>
-                    </div>
-                  )}
-                </div>
-
-                {/* Additional Notes */}
-                <div>
-                  <Label htmlFor="notes" className="text-base font-medium">Additional Notes</Label>
-                  <Textarea
-                    id="notes"
-                    value={formData.notes}
-                    onChange={(e) => handleInputChange("notes", e.target.value)}
-                    className="mt-2 min-h-[100px]"
-                    placeholder="Anything else we should know?"
-                  />
-                </div>
-
-                {/* Submit Button */}
-                <Button
-                  type="submit"
-                  className="w-full h-12 text-lg"
-                  disabled={submissionState.isSubmitting}
-                >
+                <Button type="submit" className="w-full h-12" disabled={submissionState.isSubmitting}>
                   {submissionState.isSubmitting ? (
                     <>
                       <Loader2 className="w-4 h-4 mr-2 animate-spin" />
                       {submissionState.uploadProgress}
                     </>
                   ) : (
-                    "Post Requirement"
+                    "Post Requirement Now!"
+                  )}
+                </Button>
+              </form>
+            </CardContent>
+          </Card>
+        </div>
+      </section>
+
+      {/* Mobile Form - Static below hero */}
+      <section className="lg:hidden px-4 py-8 bg-background">
+        <div className="container mx-auto max-w-xl px-4">
+          <Card className="w-full rounded-2xl shadow-xl border-2 border-primary bg-card">
+            <CardContent className="p-8">
+              <h3 className="text-2xl font-bold text-foreground mb-3 text-center">Post Your Requirement</h3>
+              <p className="text-base text-muted-foreground mb-8 text-center">Fill the form & we'll match you with the best options</p>
+
+              <form onSubmit={handleSubmit} className="space-y-5">
+                <Input
+                  value={formData.name}
+                  onChange={(e) => handleInputChange("name", e.target.value)}
+                  placeholder="Your full name"
+                  className="h-12 text-base bg-background"
+                  required 
+                />
+
+                <Input
+                  type="tel"
+                  value={formData.phone}
+                  onChange={(e) => handleInputChange("phone", e.target.value)}
+                  placeholder="Phone Number"
+                  className="h-12 text-base bg-background"
+                  required 
+                />
+
+                <Input
+                  type="email"
+                  value={formData.email}
+                  onChange={(e) => handleInputChange("email", e.target.value)}
+                  placeholder="Email ID"
+                  className="h-12 text-base bg-background"
+                  required 
+                />
+
+                <div className="flex gap-3">
+                  <Select value={formData.country} onValueChange={(value) => handleInputChange("country", value)}>
+                    <SelectTrigger className="flex-1 h-12 bg-background">
+                      <SelectValue placeholder="Country" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-background border shadow-lg">
+                      {countryOptions.map(country => (
+                        <SelectItem key={country.value} value={country.value}>
+                          {country.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+
+                  <Select 
+                    value={formData.state} 
+                    onValueChange={(value) => {
+                      handleInputChange("state", value);
+                      handleInputChange("city", "");
+                    }}
+                  >
+                    <SelectTrigger className="flex-1 h-12 bg-background">
+                      <SelectValue placeholder="State" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-background border shadow-lg">
+                      {formData.country === "India" && statesData && Object.keys(statesData).map(state => (
+                        <SelectItem key={state} value={state}>{state}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+
+                  <Select value={formData.city} onValueChange={(value) => handleInputChange("city", value)}>
+                    <SelectTrigger className="flex-1 h-12 bg-background">
+                      <SelectValue placeholder="City" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-background border shadow-lg">
+                      {cities.map(city => (
+                        <SelectItem key={city} value={city}>{city}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="flex gap-3">
+                  <Select value={formData.intent} onValueChange={(value) => {
+                    handleInputChange("intent", value);
+                    handleInputChange("propertyType", "");
+                    handleInputChange("services", []);
+                  }}>
+                    <SelectTrigger className="flex-1 h-12 bg-background">
+                      <SelectValue placeholder="I want to" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-background border shadow-lg">
+                      {intentOptions.map(option => (
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+
+                  <div className="relative flex-1">
+                    <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground z-10">
+                      {getCurrencySymbol()}
+                    </span>
+                    <Input
+                      type="number"
+                      value={formData.budgetMax}
+                      onChange={(e) => handleInputChange("budgetMax", e.target.value)}
+                      placeholder="Budget Required"
+                      className="h-12 text-base bg-background pl-12"
+                    />
+                  </div>
+                </div>
+
+                {["Buy", "Sell", "Lease"].includes(formData.intent) && (
+                  <Select value={formData.propertyType} onValueChange={(value) => handleInputChange("propertyType", value)}>
+                    <SelectTrigger className="h-12 bg-background">
+                      <SelectValue placeholder="Property Type" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-background border shadow-lg">
+                      {propertyTypes.map(type => (
+                        <SelectItem key={type} value={type}>{type}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                )}
+
+                {formData.intent === "Service" && (
+                  <div className="space-y-3">
+                    <div className="grid grid-cols-1 gap-2">
+                      {serviceOptions.slice(0, 8).map(service => (
+                        <div key={service} className="flex items-center space-x-2">
+                          <Checkbox
+                            id={`mobile-${service}`}
+                            checked={formData.services.includes(service)}
+                            onCheckedChange={(checked) => handleServiceChange(service, checked as boolean)}
+                          />
+                          <Label htmlFor={`mobile-${service}`} className="text-sm cursor-pointer">
+                            {service}
+                          </Label>
+                        </div>
+                      ))}
+                    </div>
+                    {formData.services.includes("Others") && (
+                      <Input
+                        value={formData.otherService}
+                        onChange={(e) => handleInputChange("otherService", e.target.value)}
+                        placeholder="Please specify"
+                        className="h-12 text-base bg-background"
+                      />
+                    )}
+                  </div>
+                )}
+
+                <div className="flex items-center justify-between p-3 bg-muted rounded-lg">
+                  <span className="text-sm font-medium">Premium Service - {getCurrencySymbol()}999</span>
+                  <Switch
+                    checked={formData.premiumSelected}
+                    onCheckedChange={(checked) => handleInputChange("premiumSelected", checked)}
+                  />
+                </div>
+
+                {formData.premiumSelected && (
+                  <div className="bg-muted p-3 rounded-lg">
+                    <RadioGroup 
+                      value={formData.paymentMethod} 
+                      onValueChange={(value) => handleInputChange("paymentMethod", value)}
+                      className="flex gap-4"
+                    >
+                      <div className="flex items-center space-x-1">
+                        <RadioGroupItem value="UPI" id="upi-mobile" />
+                        <Label htmlFor="upi-mobile" className="text-sm cursor-pointer">UPI</Label>
+                      </div>
+                      <div className="flex items-center space-x-1">
+                        <RadioGroupItem value="Card" id="card-mobile" />
+                        <Label htmlFor="card-mobile" className="text-sm cursor-pointer">Card</Label>
+                      </div>
+                    </RadioGroup>
+                  </div>
+                )}
+
+                <Button type="submit" className="w-full h-12" disabled={submissionState.isSubmitting}>
+                  {submissionState.isSubmitting ? (
+                    <>
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      {submissionState.uploadProgress}
+                    </>
+                  ) : (
+                    "Post Requirement Now!"
                   )}
                 </Button>
               </form>
