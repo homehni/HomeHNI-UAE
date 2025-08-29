@@ -1005,6 +1005,10 @@ export type Database = {
         }
         Returns: string
       }
+      detect_suspicious_activity: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
       get_current_user_role: {
         Args: Record<PropertyKey, never>
         Returns: Database["public"]["Enums"]["app_role"]
@@ -1083,6 +1087,15 @@ export type Database = {
         }
         Returns: undefined
       }
+      log_sensitive_data_access: {
+        Args: {
+          access_type: string
+          details?: Json
+          record_id: string
+          table_name: string
+        }
+        Returns: undefined
+      }
       toggle_property_favorite: {
         Args: { property_id: string }
         Returns: boolean
@@ -1094,6 +1107,14 @@ export type Database = {
           _user_id: string
         }
         Returns: undefined
+      }
+      validate_sensitive_access: {
+        Args: {
+          target_record_id: string
+          target_table: string
+          user_id: string
+        }
+        Returns: boolean
       }
     }
     Enums: {
