@@ -2,6 +2,7 @@ import React, { useRef } from 'react';
 import { Upload, X, Video } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
+import { useToast } from '@/hooks/use-toast';
 
 interface VideoUploadProps {
   video: File | undefined;
@@ -13,16 +14,33 @@ export const VideoUpload: React.FC<VideoUploadProps> = ({
   onVideoChange
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const { toast } = useToast();
 
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
       const isVideo = file.type.startsWith('video/');
-      const isValidSize = file.size <= 50 * 1024 * 1024; // 50MB limit
+      const isValidSize = file.size <= 5 * 1024 * 1024; // 5MB limit
       
-      if (isVideo && isValidSize) {
-        onVideoChange(file);
+      if (!isVideo) {
+        toast({
+          title: "Invalid File Type",
+          description: "Please upload a valid video file (MP4, MOV, AVI)",
+          variant: "destructive"
+        });
+        return;
       }
+      
+      if (!isValidSize) {
+        toast({
+          title: "File Too Large",
+          description: "Please choose a video file smaller than 5MB",
+          variant: "destructive"
+        });
+        return;
+      }
+      
+      onVideoChange(file);
     }
   };
 
@@ -85,7 +103,7 @@ export const VideoUpload: React.FC<VideoUploadProps> = ({
 
       <div className="text-sm text-muted-foreground">
         <p>• Upload property walkthrough video (MP4, MOV, AVI)</p>
-        <p>• Maximum file size: 50MB</p>
+        <p>• Maximum file size: 5MB</p>
         <p>• Videos help buyers get a better view of your property</p>
       </div>
     </div>
