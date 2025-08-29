@@ -9,7 +9,6 @@ import { Building2, Users, FileText, Wrench, PaintBucket, Truck, Clock, CheckCir
 import Marquee from "@/components/Marquee";
 import Header from "@/components/Header";
 import { CategorizedImageUpload } from "@/components/CategorizedImageUpload";
-
 const ServiceSuite = () => {
   const [statesData, setStatesData] = useState<any>(null);
   const [selectedState, setSelectedState] = useState("");
@@ -21,7 +20,6 @@ const ServiceSuite = () => {
     servicePortfolio: [] as File[]
   });
   const [showThankYouModal, setShowThankYouModal] = useState(false);
-
   const services = [{
     icon: Scale,
     title: "Legal Services",
@@ -47,7 +45,6 @@ const ServiceSuite = () => {
     title: "Property Management",
     description: "Complete property management and maintenance solutions."
   }];
-
   const targetAudience = [{
     icon: Home,
     title: "Property Owners",
@@ -61,7 +58,6 @@ const ServiceSuite = () => {
     title: "Tenants & Buyers",
     description: "Looking for reliable service providers"
   }];
-
   const comparisonData = [{
     feature: "One-Stop Solution",
     homeHNI: true,
@@ -95,7 +91,6 @@ const ServiceSuite = () => {
     homeHNI: true,
     others: false
   }];
-
   const testimonials = [{
     name: "Rajesh Sharma",
     role: "Property Owner",
@@ -115,7 +110,6 @@ const ServiceSuite = () => {
     rating: 5,
     text: "Best packers and movers service. They handled everything professionally and safely."
   }];
-
   const faqs = [{
     question: "What services are included in the Service Suite?",
     answer: "Our Service Suite includes legal services (rental agreements, property verification), interior design, architecture, packers & movers, painting & cleaning, property management, handover services, and more."
@@ -132,8 +126,9 @@ const ServiceSuite = () => {
     question: "Is there any guarantee on the services provided?",
     answer: "Yes, all services come with quality assurance and customer satisfaction guarantee. We also provide post-service support for any issues."
   }];
-
-  const { toast } = useToast();
+  const {
+    toast
+  } = useToast();
 
   // Load states and cities data
   useEffect(() => {
@@ -168,7 +163,6 @@ const ServiceSuite = () => {
       setCitiesDesktop([]);
     }
   }, [selectedStateDesktop, statesData]);
-
   useEffect(() => {
     const title = "Service Suite - Complete Property Services | Home HNI";
     document.title = title;
@@ -188,14 +182,12 @@ const ServiceSuite = () => {
     }
     canonical.setAttribute('href', window.location.origin + '/service-suite');
   }, []);
-
   const handleFormSubmit = (e: React.FormEvent, isMobile = false) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget as HTMLFormElement);
-    
+
     // Check if at least one image is uploaded
     const totalImages = serviceImages.gstCopy.length + serviceImages.servicePortfolio.length;
-    
     if (totalImages === 0) {
       toast({
         title: "Documents required",
@@ -204,9 +196,8 @@ const ServiceSuite = () => {
       });
       return;
     }
-
     setShowThankYouModal(true);
-    
+
     // Reset form and images
     (e.currentTarget as HTMLFormElement).reset();
     setServiceImages({
@@ -214,16 +205,14 @@ const ServiceSuite = () => {
       servicePortfolio: []
     });
   };
-
-  return (
-    <div className="min-h-screen">
+  return <div className="min-h-screen">
       <Marquee />
       <Header />
       
       {/* Hero Section */}
       <section className="relative pt-28 md:pt-32 pb-20 md:pb-32 px-4 md:px-8 text-white overflow-hidden bg-cover bg-center bg-no-repeat" style={{
-        backgroundImage: "url('/lovable-uploads/fbb0d72f-782e-49f5-bbe1-8afc1314b5f7.png')"
-      }}>
+      backgroundImage: "url('/lovable-uploads/fbb0d72f-782e-49f5-bbe1-8afc1314b5f7.png')"
+    }}>
         <div className="absolute inset-0 bg-red-900/80 pointer-events-none" />
 
         <div className="relative z-10 container mx-auto">
@@ -253,10 +242,10 @@ const ServiceSuite = () => {
       <div className="hidden lg:block fixed top-32 right-8 z-40 w-[420px]">
         <Card className="w-full rounded-xl shadow-2xl bg-background border-2 border-primary">
           <CardContent className="p-4">
-            <h3 className="text-lg font-semibold text-foreground mb-1 text-uniform-center">Need Service Providers?</h3>
+            <h3 className="text-lg font-semibold text-foreground mb-1 text-uniform-center">Are you Service Provider?</h3>
             <p className="text-xs text-muted-foreground mb-3 text-uniform-center">Submit your requirements & get matched</p>
 
-            <form className="space-y-3" onSubmit={(e) => handleFormSubmit(e, false)}>
+            <form className="space-y-3" onSubmit={e => handleFormSubmit(e, false)}>
               <div className="flex gap-2">
                 <Select defaultValue="+91" name="countryCode">
                   <SelectTrigger className="w-28"><SelectValue /></SelectTrigger>
@@ -301,31 +290,23 @@ const ServiceSuite = () => {
                 <Select name="state" onValueChange={setSelectedStateDesktop}>
                   <SelectTrigger className="flex-1"><SelectValue placeholder="State" /></SelectTrigger>
                   <SelectContent>
-                    {statesData && Object.keys(statesData).map((state: string) => (
-                      <SelectItem key={state} value={state}>
+                    {statesData && Object.keys(statesData).map((state: string) => <SelectItem key={state} value={state}>
                         {state}
-                      </SelectItem>
-                    ))}
+                      </SelectItem>)}
                   </SelectContent>
                 </Select>
 
                 <Select name="city">
                   <SelectTrigger className="flex-1"><SelectValue placeholder="City" /></SelectTrigger>
                   <SelectContent>
-                    {citiesDesktop.map((city: string) => (
-                      <SelectItem key={city} value={city}>
+                    {citiesDesktop.map((city: string) => <SelectItem key={city} value={city}>
                         {city}
-                      </SelectItem>
-                    ))}
+                      </SelectItem>)}
                   </SelectContent>
                 </Select>
               </div>
 
-              <CategorizedImageUpload 
-                images={serviceImages}
-                onImagesChange={setServiceImages}
-                className="mt-2"
-              />
+              <CategorizedImageUpload images={serviceImages} onImagesChange={setServiceImages} className="mt-2" />
 
               <Button type="submit" className="w-full h-9 text-sm">Submit Requirements</Button>
             </form>
@@ -341,7 +322,7 @@ const ServiceSuite = () => {
               <h3 className="text-xl font-bold text-foreground mb-2 text-uniform-center">Need Service Providers?</h3>
               <p className="text-sm text-muted-foreground mb-6 text-uniform-center">Submit your requirements & get matched</p>
 
-              <form className="space-y-4" onSubmit={(e) => handleFormSubmit(e, true)}>
+              <form className="space-y-4" onSubmit={e => handleFormSubmit(e, true)}>
                 <div className="flex gap-3">
                   <Select defaultValue="+91" name="countryCode">
                     <SelectTrigger className="w-32 h-12 bg-background">
@@ -353,22 +334,10 @@ const ServiceSuite = () => {
                       <SelectItem value="+44">🇬🇧 +44</SelectItem>
                     </SelectContent>
                   </Select>
-                  <Input 
-                    name="phone" 
-                    type="tel" 
-                    placeholder="Phone Number" 
-                    className="flex-1 h-12 text-base bg-background" 
-                    required 
-                  />
+                  <Input name="phone" type="tel" placeholder="Phone Number" className="flex-1 h-12 text-base bg-background" required />
                 </div>
 
-                <Input 
-                  name="email" 
-                  type="email" 
-                  placeholder="Email ID" 
-                  className="h-12 text-base bg-background"
-                  required
-                />
+                <Input name="email" type="email" placeholder="Email ID" className="h-12 text-base bg-background" required />
 
                 <Select name="serviceType" required>
                   <SelectTrigger className="h-12 bg-background">
@@ -405,11 +374,9 @@ const ServiceSuite = () => {
                       <SelectValue placeholder="State" />
                     </SelectTrigger>
                     <SelectContent className="bg-background border shadow-lg">
-                      {statesData && Object.keys(statesData).map((state: string) => (
-                        <SelectItem key={state} value={state}>
+                      {statesData && Object.keys(statesData).map((state: string) => <SelectItem key={state} value={state}>
                           {state}
-                        </SelectItem>
-                      ))}
+                        </SelectItem>)}
                     </SelectContent>
                   </Select>
 
@@ -418,20 +385,14 @@ const ServiceSuite = () => {
                       <SelectValue placeholder="City" />
                     </SelectTrigger>
                     <SelectContent className="bg-background border shadow-lg">
-                      {cities.map((city: string) => (
-                        <SelectItem key={city} value={city}>
+                      {cities.map((city: string) => <SelectItem key={city} value={city}>
                           {city}
-                        </SelectItem>
-                      ))}
+                        </SelectItem>)}
                     </SelectContent>
                   </Select>
                 </div>
 
-                <CategorizedImageUpload 
-                  images={serviceImages}
-                  onImagesChange={setServiceImages}
-                  className="mt-3"
-                />
+                <CategorizedImageUpload images={serviceImages} onImagesChange={setServiceImages} className="mt-3" />
 
                 <Button type="submit" className="w-full h-11 text-sm font-semibold bg-red-600 hover:bg-red-700 text-white mt-4">
                   Submit Requirements
@@ -575,9 +536,8 @@ const ServiceSuite = () => {
               </h2>
               <div className="grid gap-6">
                 {services.map((service, index) => {
-                  const IconComponent = service.icon;
-                  return (
-                    <div key={index} className="flex gap-4 p-6 bg-card rounded-lg border">
+                const IconComponent = service.icon;
+                return <div key={index} className="flex gap-4 p-6 bg-card rounded-lg border">
                       <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center flex-shrink-0">
                         <IconComponent className="w-6 h-6 text-red-600" />
                       </div>
@@ -585,9 +545,8 @@ const ServiceSuite = () => {
                         <h3 className="text-lg font-semibold text-foreground mb-2">{service.title}</h3>
                         <p className="text-muted-foreground text-sm">{service.description}</p>
                       </div>
-                    </div>
-                  );
-                })}
+                    </div>;
+              })}
               </div>
             </div>
             
@@ -645,25 +604,15 @@ const ServiceSuite = () => {
                   <div className="text-center">Home HNI</div>
                   <div className="text-center">Others</div>
                 </div>
-                {comparisonData.map((item, index) => (
-                  <div key={index} className="grid grid-cols-3 gap-4 p-4 border-t text-sm">
+                {comparisonData.map((item, index) => <div key={index} className="grid grid-cols-3 gap-4 p-4 border-t text-sm">
                     <div className="text-foreground">{item.feature}</div>
                     <div className="text-center">
-                      {item.homeHNI ? (
-                        <CheckCircle className="w-4 h-4 text-red-600 mx-auto" />
-                      ) : (
-                        <X className="w-4 h-4 text-red-500 mx-auto" />
-                      )}
+                      {item.homeHNI ? <CheckCircle className="w-4 h-4 text-red-600 mx-auto" /> : <X className="w-4 h-4 text-red-500 mx-auto" />}
                     </div>
                     <div className="text-center">
-                      {item.others ? (
-                        <CheckCircle className="w-4 h-4 text-red-600 mx-auto" />
-                      ) : (
-                        <X className="w-4 h-4 text-red-500 mx-auto" />
-                      )}
+                      {item.others ? <CheckCircle className="w-4 h-4 text-red-600 mx-auto" /> : <X className="w-4 h-4 text-red-500 mx-auto" />}
                     </div>
-                  </div>
-                ))}
+                  </div>)}
               </div>
             </div>
             
@@ -682,20 +631,13 @@ const ServiceSuite = () => {
                 What Our Customers Say
               </h2>
               <div className="space-y-6">
-                {testimonials.map((testimonial, index) => (
-                  <Card key={index} className="p-6">
+                {testimonials.map((testimonial, index) => <Card key={index} className="p-6">
                     <CardContent className="p-0">
                       <div className="flex items-start gap-4">
-                        <img 
-                          src={testimonial.image} 
-                          alt={testimonial.name}
-                          className="w-12 h-12 rounded-full object-cover"
-                        />
+                        <img src={testimonial.image} alt={testimonial.name} className="w-12 h-12 rounded-full object-cover" />
                         <div className="flex-1">
                           <div className="flex items-center gap-1 mb-2">
-                            {[...Array(testimonial.rating)].map((_, i) => (
-                              <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                            ))}
+                            {[...Array(testimonial.rating)].map((_, i) => <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />)}
                           </div>
                           <p className="text-muted-foreground text-sm mb-3">"{testimonial.text}"</p>
                           <div>
@@ -705,8 +647,7 @@ const ServiceSuite = () => {
                         </div>
                       </div>
                     </CardContent>
-                  </Card>
-                ))}
+                  </Card>)}
               </div>
             </div>
             
@@ -726,9 +667,8 @@ const ServiceSuite = () => {
               </h2>
               <div className="grid gap-6">
                 {targetAudience.map((audience, index) => {
-                  const IconComponent = audience.icon;
-                  return (
-                    <div key={index} className="flex gap-4 p-6 bg-card rounded-lg border">
+                const IconComponent = audience.icon;
+                return <div key={index} className="flex gap-4 p-6 bg-card rounded-lg border">
                       <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center flex-shrink-0">
                         <IconComponent className="w-6 h-6 text-red-600" />
                       </div>
@@ -736,9 +676,8 @@ const ServiceSuite = () => {
                         <h3 className="text-lg font-semibold text-foreground mb-2">{audience.title}</h3>
                         <p className="text-muted-foreground text-sm">{audience.description}</p>
                       </div>
-                    </div>
-                  );
-                })}
+                    </div>;
+              })}
               </div>
             </div>
             
@@ -757,16 +696,14 @@ const ServiceSuite = () => {
                 Frequently Asked Questions
               </h2>
               <Accordion type="single" collapsible className="space-y-4">
-                {faqs.map((faq, index) => (
-                  <AccordionItem key={index} value={`item-${index}`} className="bg-card border rounded-lg px-6">
+                {faqs.map((faq, index) => <AccordionItem key={index} value={`item-${index}`} className="bg-card border rounded-lg px-6">
                     <AccordionTrigger className="text-left font-semibold text-sm py-4">
                       {faq.question}
                     </AccordionTrigger>
                     <AccordionContent className="text-muted-foreground text-sm pb-4">
                       {faq.answer}
                     </AccordionContent>
-                  </AccordionItem>
-                ))}
+                  </AccordionItem>)}
               </Accordion>
             </div>
             
@@ -815,17 +752,15 @@ const ServiceSuite = () => {
 
               {/* <h3 className="text-2xl md:text-3xl font-bold text-foreground mb-6">
                 Get Started with Our Service Suite Today
-              </h3>
-              
-              <p className="text-muted-foreground mb-8 leading-relaxed">
+               </h3>
+                             <p className="text-muted-foreground mb-8 leading-relaxed">
                 Transform your property experience with our comprehensive service suite. 
                 Whether you're a homeowner, investor, or business owner, we have the right 
                 professionals for all your needs.
-              </p>
-
-              <Button className="bg-red-600 hover:bg-red-700 text-white px-8 py-3 text-lg font-semibold">
+               </p>
+               <Button className="bg-red-600 hover:bg-red-700 text-white px-8 py-3 text-lg font-semibold">
                 Submit Your Requirements Now
-              </Button> */}
+               </Button> */}
             </div>
             
             {/* Right side spacing for sticky form */}
@@ -835,24 +770,17 @@ const ServiceSuite = () => {
       </section>
 
       {/* Thank You Modal */}
-      {showThankYouModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+      {showThankYouModal && <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-8 max-w-md w-full mx-4 text-center">
             <h3 className="text-2xl font-semibold text-gray-900 mb-4">Thank You!</h3>
             <p className="text-gray-600 mb-6">
               Your service request has been submitted successfully. Our team will review your requirements and get back to you soon.
             </p>
-            <Button
-              onClick={() => setShowThankYouModal(false)}
-              className="bg-red-600 hover:bg-red-700 text-white font-semibold px-8 py-2"
-            >
+            <Button onClick={() => setShowThankYouModal(false)} className="bg-red-600 hover:bg-red-700 text-white font-semibold px-8 py-2">
               OK
             </Button>
           </div>
-        </div>
-      )}
-    </div>
-  );
+        </div>}
+    </div>;
 };
-
 export default ServiceSuite;
