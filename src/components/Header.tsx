@@ -282,7 +282,7 @@ const Header = () => {
   {/* Lifetime Plans Dropdown */}
   <div className="relative" onMouseEnter={handleLifetimePlansHover} onMouseLeave={handleLifetimePlansLeave}>
     <button className={`flex items-center hover:opacity-80 transition-colors duration-500 text-base font-medium uppercase ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
-      Lifetime Plans
+      Plans
       <ChevronDown className="ml-1 h-3 w-3" />
     </button>
     
