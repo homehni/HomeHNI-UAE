@@ -1122,7 +1122,18 @@ export type Database = {
       }
     }
     Enums: {
-      app_role: "admin" | "user" | "buyer" | "seller" | "consultant"
+      app_role:
+        | "admin"
+        | "user"
+        | "buyer"
+        | "seller"
+        | "consultant"
+        | "content_manager"
+        | "blog_content_creator"
+        | "static_page_manager"
+        | "sales_team"
+        | "property_moderator"
+        | "lead_manager"
       content_type:
         | "homepage"
         | "properties"
@@ -1130,6 +1141,11 @@ export type Database = {
         | "static_pages"
         | "users"
         | "settings"
+        | "homepage_sections"
+        | "testimonials"
+        | "services"
+        | "featured_properties"
+        | "marketing_content"
       permission_action: "create" | "read" | "update" | "delete"
       user_role:
         | "admin"
@@ -1264,7 +1280,19 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      app_role: ["admin", "user", "buyer", "seller", "consultant"],
+      app_role: [
+        "admin",
+        "user",
+        "buyer",
+        "seller",
+        "consultant",
+        "content_manager",
+        "blog_content_creator",
+        "static_page_manager",
+        "sales_team",
+        "property_moderator",
+        "lead_manager",
+      ],
       content_type: [
         "homepage",
         "properties",
@@ -1272,6 +1300,11 @@ export const Constants = {
         "static_pages",
         "users",
         "settings",
+        "homepage_sections",
+        "testimonials",
+        "services",
+        "featured_properties",
+        "marketing_content",
       ],
       permission_action: ["create", "read", "update", "delete"],
       user_role: [
