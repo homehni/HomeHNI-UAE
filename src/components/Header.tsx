@@ -260,6 +260,9 @@ const Header = () => {
            <button onClick={() => navigate('/home-security-services')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
             Home Security Services
           </button>
+          <button onClick={() => navigate('/packers-movers')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+            Packers & Movers
+          </button>
           <button onClick={handleLegalServicesClick} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
             Legal Services
           </button>
@@ -271,6 +274,9 @@ const Header = () => {
           </button>
           <button onClick={() => navigate('/architects')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
             Architects
+          </button>
+           <button onClick={() => navigate('/painting-cleaning')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+            Painting & Cleaning
           </button>
           <button onClick={() => navigate('/interior')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
             Interior Designers
