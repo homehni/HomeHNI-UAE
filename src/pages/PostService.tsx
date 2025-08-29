@@ -8,10 +8,9 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { useToast } from "@/hooks/use-toast";
 import { useFormSubmission } from "@/hooks/useFormSubmission";
-import { Building2, Users, CreditCard, Calculator, TrendingUp, FileText, MapPin, Crown, Clock, CheckCircle, Shield, Star, X, Plus, Minus, Globe, Shield as ShieldCheck, Headphones, Smartphone, Download, Home, Percent, DollarSign, Loader2 } from "lucide-react";
+import { Loader2, CheckCircle } from "lucide-react";
 import Marquee from "@/components/Marquee";
 import Header from "@/components/Header";
 
@@ -36,10 +35,7 @@ interface FormData {
 
 const PostService = () => {
   const [statesData, setStatesData] = useState<any>(null);
-  const [selectedState, setSelectedState] = useState("");
-  const [selectedStateDesktop, setSelectedStateDesktop] = useState("");
   const [cities, setCities] = useState<string[]>([]);
-  const [citiesDesktop, setCitiesDesktop] = useState<string[]>([]);
   const [showSuccess, setShowSuccess] = useState(false);
   const [referenceId, setReferenceId] = useState("");
   const [errors, setErrors] = useState<{[key: string]: string}>({});
@@ -63,117 +59,6 @@ const PostService = () => {
     notes: ""
   });
 
-  const services = [{
-    icon: Home,
-    title: "Property Requirements",
-    description: "Get matched with the perfect property options."
-  }, {
-    icon: Building2,
-    title: "Investment Advisory",
-    description: "Expert guidance for your property investments."
-  }, {
-    icon: Calculator,
-    title: "Market Analysis",
-    description: "Detailed market insights and property valuations."
-  }, {
-    icon: TrendingUp,
-    title: "Portfolio Management",
-    description: "Professional management of your property portfolio."
-  }, {
-    icon: CreditCard,
-    title: "Financial Planning",
-    description: "Comprehensive financial planning for property purchases."
-  }, {
-    icon: FileText,
-    title: "Legal Documentation",
-    description: "Complete legal support and documentation services."
-  }];
-
-  const targetAudience = [{
-    icon: Home,
-    title: "Property Buyers",
-    description: "Looking for their dream property with best options"
-  }, {
-    icon: TrendingUp,
-    title: "Property Investors",
-    description: "Seeking profitable investment opportunities"
-  }, {
-    icon: Building2,
-    title: "Property Sellers",
-    description: "Want to get the best value for their property"
-  }];
-
-  const comparisonData = [{
-    feature: "Instant Property Matching",
-    homeHNI: true,
-    others: false
-  }, {
-    feature: "Premium Property Options",
-    homeHNI: true,
-    others: false
-  }, {
-    feature: "Dedicated Property Advisor",
-    homeHNI: true,
-    others: false
-  }, {
-    feature: "Market Analysis Reports",
-    homeHNI: true,
-    others: false
-  }, {
-    feature: "Legal Documentation Support",
-    homeHNI: true,
-    others: false
-  }, {
-    feature: "Zero Brokerage Options",
-    homeHNI: true,
-    others: false
-  }, {
-    feature: "24/7 Customer Support",
-    homeHNI: true,
-    others: false
-  }, {
-    feature: "Property Investment Guidance",
-    homeHNI: true,
-    others: false
-  }];
-
-  const testimonials = [{
-    name: "Rajesh Kumar",
-    role: "Property Buyer",
-    image: "/lovable-uploads/46a07bb4-9f10-4614-ad52-73dfb2de4f28.png",
-    rating: 5,
-    text: "Found my perfect home in just 2 days! The team matched my requirements perfectly."
-  }, {
-    name: "Priya Sharma",
-    role: "Property Seller",
-    image: "/lovable-uploads/5b898e4e-d9b6-4366-b58f-176fc3c8a9c3.png",
-    rating: 5,
-    text: "Sold my property at the best market price. Excellent service and support!"
-  }, {
-    name: "Amit Patel",
-    role: "Property Investor",
-    image: "/lovable-uploads/6e6c47cd-700c-49d4-bfee-85a69bb8353f.png",
-    rating: 5,
-    text: "Great investment opportunities and professional guidance. Highly recommended!"
-  }];
-
-  const faqs = [{
-    question: "How does the property matching service work?",
-    answer: "We analyze your requirements and match them with our extensive database of properties. Our AI-powered system ensures you get the most relevant options based on your budget, location, and preferences."
-  }, {
-    question: "What types of properties do you handle?",
-    answer: "We handle all types of properties including residential apartments, independent houses, commercial spaces, plots, and investment properties across major cities."
-  }, {
-    question: "Is there any charge for posting requirements?",
-    answer: "Basic requirement posting is completely free. We also offer premium services with additional benefits like priority matching and dedicated advisor support."
-  }, {
-    question: "How quickly will I get matched properties?",
-    answer: "Most users receive their first set of matched properties within 24 hours of posting their requirements. Premium users get priority matching within 2-4 hours."
-  }, {
-    question: "What is included in premium service?",
-    answer: "Premium service includes priority matching, featured placement, dedicated property advisor, market analysis reports, and 24/7 support for just ₹999 one-time."
-  }];
-
   const { submissionState, setSubmitting, showSuccessToast, showErrorToast, updateProgress } = useFormSubmission();
   const { toast } = useToast();
 
@@ -191,25 +76,15 @@ const PostService = () => {
     loadStatesData();
   }, []);
 
-  // Update cities when state changes (mobile)
+  // Update cities when state changes
   useEffect(() => {
-    if (statesData && selectedState) {
-      const cities = statesData[selectedState];
-      setCities(cities || []);
+    if (statesData && formData.state && formData.country === "India") {
+      const stateCities = statesData[formData.state];
+      setCities(stateCities || []);
     } else {
       setCities([]);
     }
-  }, [selectedState, statesData]);
-
-  // Update cities when state changes (desktop)
-  useEffect(() => {
-    if (statesData && selectedStateDesktop) {
-      const cities = statesData[selectedStateDesktop];
-      setCitiesDesktop(cities || []);
-    } else {
-      setCitiesDesktop([]);
-    }
-  }, [selectedStateDesktop, statesData]);
+  }, [formData.state, statesData, formData.country]);
 
   // Update currency based on country
   useEffect(() => {
@@ -287,6 +162,8 @@ const PostService = () => {
       newErrors.email = "Please enter a valid email address";
     }
     if (!formData.country) newErrors.country = "Country is required";
+    if (!formData.state) newErrors.state = "State is required";
+    if (!formData.city) newErrors.city = "City is required";
     if (!formData.intent) newErrors.intent = "Please select what you want to do";
     
     if (["Buy", "Sell", "Lease"].includes(formData.intent) && !formData.propertyType) {
@@ -469,311 +346,156 @@ const PostService = () => {
   }
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-background">
       <Marquee />
       <Header />
       
       {/* Hero Section */}
-      <section className="relative pt-28 md:pt-32 pb-20 md:pb-32 px-4 md:px-8 text-white overflow-hidden bg-cover bg-center bg-no-repeat" style={{
-        backgroundImage: "url('/lovable-uploads/fbb0d72f-782e-49f5-bbe1-8afc1314b5f7.png')"
-      }}>
-        <div className="absolute inset-0 bg-red-900/80 pointer-events-none" />
-
-        <div className="relative z-10 container mx-auto">
-          <div className="grid lg:grid-cols-2 gap-8 items-start">
-            {/* Left: Copy */}
-            <div className="max-w-2xl">
-              <h1 className="text-4xl md:text-5xl font-bold mb-4 leading-tight">
-                Post Your Requirement
-                <br className="hidden md:block" />
-                <span className="block">& Get Perfect Matches</span>
-              </h1>
-              <p className="text-lg md:text-xl text-white/90 mb-6">
-                Tell us what you need and we'll match you with the best property options
-                from our verified network of properties and services.
-              </p>
-            </div>
-
-            {/* Right: Placeholder for form on desktop */}
-            <div className="hidden lg:block lg:justify-self-end">
-              <div className="w-full max-w-md h-80"></div>
-            </div>
-          </div>
+      <section className="pt-28 pb-12 px-4 bg-gradient-to-br from-primary/5 to-primary/10">
+        <div className="container mx-auto max-w-4xl text-center">
+          <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
+            Post Your Requirement
+          </h1>
+          <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
+            Tell us what you need and we'll match you with the best options from our verified network.
+          </p>
         </div>
       </section>
 
-      {/* Sticky Form Container for Large Screens */}
-      <div className="hidden lg:block fixed top-32 right-8 z-40 w-96">
-        <Card className="w-full rounded-xl shadow-2xl bg-background border-2 border-primary">
-          <CardContent className="p-6">
-            <h3 className="text-xl font-semibold text-foreground mb-2 text-center">Post Your Requirement</h3>
-            <p className="text-sm text-muted-foreground mb-4 text-center">Fill the form & get perfect matches</p>
-
-            <form className="space-y-4" onSubmit={handleSubmit}>
-              <Input 
-                placeholder="Name" 
-                value={formData.name}
-                onChange={(e) => handleInputChange("name", e.target.value)}
-                required 
-              />
-
-              <div className="flex gap-2">
-                <Select defaultValue="+91">
-                  <SelectTrigger className="w-28"><SelectValue /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="+91">🇮🇳 +91</SelectItem>
-                    <SelectItem value="+1">🇺🇸 +1</SelectItem>
-                    <SelectItem value="+971">🇦🇪 +971</SelectItem>
-                  </SelectContent>
-                </Select>
-                <Input 
-                  type="tel" 
-                  placeholder="Phone Number" 
-                  className="flex-1"
-                  value={formData.phone}
-                  onChange={(e) => handleInputChange("phone", e.target.value)}
-                  required 
-                />
-              </div>
-
-              <Input 
-                type="email" 
-                placeholder="Email ID"
-                value={formData.email}
-                onChange={(e) => handleInputChange("email", e.target.value)}
-                required 
-              />
-
-              <div className="flex gap-2">
-                <Select value={formData.country} onValueChange={(value) => handleInputChange("country", value)}>
-                  <SelectTrigger className="flex-1"><SelectValue placeholder="Country" /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="India">India</SelectItem>
-                    <SelectItem value="UAE">UAE</SelectItem>
-                    <SelectItem value="USA">USA</SelectItem>
-                  </SelectContent>
-                </Select>
-
-                <Select onValueChange={setSelectedStateDesktop}>
-                  <SelectTrigger className="flex-1"><SelectValue placeholder="State" /></SelectTrigger>
-                  <SelectContent>
-                    {statesData && Object.keys(statesData).map((state: string) => (
-                      <SelectItem key={state} value={state}>
-                        {state}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-
-                <Select value={formData.city} onValueChange={(value) => handleInputChange("city", value)}>
-                  <SelectTrigger className="flex-1"><SelectValue placeholder="City" /></SelectTrigger>
-                  <SelectContent>
-                    {citiesDesktop.map((city: string) => (
-                      <SelectItem key={city} value={city}>
-                        {city}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="flex gap-2">
-                <Select value={formData.intent} onValueChange={(value) => {
-                  handleInputChange("intent", value);
-                  handleInputChange("propertyType", "");
-                  handleInputChange("services", []);
-                }}>
-                  <SelectTrigger className="flex-1"><SelectValue placeholder="I want to" /></SelectTrigger>
-                  <SelectContent>
-                    {intentOptions.map(option => (
-                      <SelectItem key={option.value} value={option.value}>
-                        {option.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-
-                <div className="relative flex-1">
-                  <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground z-10">
-                    {getCurrencySymbol()}
-                  </span>
-                  <Input
-                    type="number"
-                    placeholder="Budget"
-                    className="pl-12"
-                    value={formData.budgetMax}
-                    onChange={(e) => handleInputChange("budgetMax", e.target.value)}
-                  />
-                </div>
-              </div>
-
-              {/* Conditional Fields */}
-              {["Buy", "Sell", "Lease"].includes(formData.intent) && (
-                <Select value={formData.propertyType} onValueChange={(value) => handleInputChange("propertyType", value)}>
-                  <SelectTrigger><SelectValue placeholder="Property Type" /></SelectTrigger>
-                  <SelectContent>
-                    {propertyTypes.map(type => (
-                      <SelectItem key={type} value={type}>{type}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              )}
-
-              {formData.intent === "Service" && (
-                <div className="space-y-2">
-                  <div className="grid grid-cols-1 gap-1">
-                    {serviceOptions.slice(0, 4).map(service => (
-                      <div key={service} className="flex items-center space-x-2">
-                        <Checkbox
-                          id={service}
-                          checked={formData.services.includes(service)}
-                          onCheckedChange={(checked) => handleServiceChange(service, checked as boolean)}
-                        />
-                        <Label htmlFor={service} className="text-xs cursor-pointer">
-                          {service}
-                        </Label>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Premium Toggle */}
-              <div className="flex items-center justify-between p-2 bg-muted rounded">
-                <span className="text-sm">Premium - {getCurrencySymbol()}999</span>
-                <Switch
-                  checked={formData.premiumSelected}
-                  onCheckedChange={(checked) => handleInputChange("premiumSelected", checked)}
-                />
-              </div>
-
-              {formData.premiumSelected && (
-                <RadioGroup 
-                  value={formData.paymentMethod} 
-                  onValueChange={(value) => handleInputChange("paymentMethod", value)}
-                  className="flex gap-2"
-                >
-                  <div className="flex items-center space-x-1">
-                    <RadioGroupItem value="UPI" id="upi-desktop" />
-                    <Label htmlFor="upi-desktop" className="text-xs cursor-pointer">UPI</Label>
-                  </div>
-                  <div className="flex items-center space-x-1">
-                    <RadioGroupItem value="Card" id="card-desktop" />
-                    <Label htmlFor="card-desktop" className="text-xs cursor-pointer">Card</Label>
-                  </div>
-                </RadioGroup>
-              )}
-
-              <Button type="submit" className="w-full" disabled={submissionState.isSubmitting}>
-                {submissionState.isSubmitting ? (
-                  <>
-                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    {submissionState.uploadProgress}
-                  </>
-                ) : (
-                  "Post Requirement Now!"
-                )}
-              </Button>
-            </form>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Mobile Form - Static below hero */}
-      <section className="lg:hidden px-4 py-8 bg-background">
-        <div className="container mx-auto max-w-xl px-4">
-          <Card className="w-full rounded-2xl shadow-xl border-2 border-primary bg-card">
+      {/* Form Section */}
+      <section className="py-12 px-4">
+        <div className="container mx-auto max-w-4xl">
+          <Card className="shadow-xl">
             <CardContent className="p-8">
-              <h3 className="text-2xl font-bold text-foreground mb-3 text-center">Post Your Requirement</h3>
-              <p className="text-base text-muted-foreground mb-8 text-center">Fill the form & get perfect matches</p>
+              <form onSubmit={handleSubmit} className="space-y-6">
+                {/* Personal Details */}
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div>
+                    <Label htmlFor="name" className="text-base font-medium">Name *</Label>
+                    <Input
+                      id="name"
+                      value={formData.name}
+                      onChange={(e) => handleInputChange("name", e.target.value)}
+                      className="mt-2 h-12"
+                      placeholder="Your full name"
+                    />
+                    {errors.name && <p className="text-sm text-destructive mt-1">{errors.name}</p>}
+                  </div>
 
-              <form className="space-y-5" onSubmit={handleSubmit}>
-                <Input 
-                  placeholder="Name" 
-                  className="h-12 text-base bg-background"
-                  value={formData.name}
-                  onChange={(e) => handleInputChange("name", e.target.value)}
-                  required 
-                />
-
-                <div className="flex gap-3">
-                  <Select defaultValue="+91">
-                    <SelectTrigger className="w-32 h-12 bg-background">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent className="bg-background border shadow-lg">
-                      <SelectItem value="+91">🇮🇳 +91</SelectItem>
-                      <SelectItem value="+1">🇺🇸 +1</SelectItem>
-                      <SelectItem value="+971">🇦🇪 +971</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <Input 
-                    type="tel" 
-                    placeholder="Phone Number" 
-                    className="flex-1 h-12 text-base bg-background"
-                    value={formData.phone}
-                    onChange={(e) => handleInputChange("phone", e.target.value)}
-                    required 
-                  />
+                  <div>
+                    <Label htmlFor="phone" className="text-base font-medium">Phone Number *</Label>
+                    <Input
+                      id="phone"
+                      type="tel"
+                      value={formData.phone}
+                      onChange={(e) => handleInputChange("phone", e.target.value)}
+                      className="mt-2 h-12"
+                      placeholder="Your phone number"
+                    />
+                    {errors.phone && <p className="text-sm text-destructive mt-1">{errors.phone}</p>}
+                  </div>
                 </div>
 
-                <Input 
-                  type="email" 
-                  placeholder="Email ID" 
-                  className="h-12 text-base bg-background"
-                  value={formData.email}
-                  onChange={(e) => handleInputChange("email", e.target.value)}
-                />
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div>
+                    <Label htmlFor="email" className="text-base font-medium">Email *</Label>
+                    <Input
+                      id="email"
+                      type="email"
+                      value={formData.email}
+                      onChange={(e) => handleInputChange("email", e.target.value)}
+                      className="mt-2 h-12"
+                      placeholder="your.email@example.com"
+                    />
+                    {errors.email && <p className="text-sm text-destructive mt-1">{errors.email}</p>}
+                  </div>
 
-                <div className="flex gap-3">
-                  <Select value={formData.country} onValueChange={(value) => handleInputChange("country", value)}>
-                    <SelectTrigger className="flex-1 h-12 bg-background">
-                      <SelectValue placeholder="Country" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-background border shadow-lg">
-                      <SelectItem value="India">India</SelectItem>
-                      <SelectItem value="UAE">UAE</SelectItem>
-                      <SelectItem value="USA">USA</SelectItem>
-                    </SelectContent>
-                  </Select>
-
-                  <Select onValueChange={setSelectedState}>
-                    <SelectTrigger className="flex-1 h-12 bg-background">
-                      <SelectValue placeholder="State" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-background border shadow-lg">
-                      {statesData && Object.keys(statesData).map((state: string) => (
-                        <SelectItem key={state} value={state}>
-                          {state}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-
-                  <Select value={formData.city} onValueChange={(value) => handleInputChange("city", value)}>
-                    <SelectTrigger className="flex-1 h-12 bg-background">
-                      <SelectValue placeholder="City" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-background border shadow-lg">
-                      {cities.map((city: string) => (
-                        <SelectItem key={city} value={city}>
-                          {city}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <div>
+                    <Label className="text-base font-medium">Country *</Label>
+                    <Select value={formData.country} onValueChange={(value) => handleInputChange("country", value)}>
+                      <SelectTrigger className="mt-2 h-12">
+                        <SelectValue placeholder="Select country" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {countryOptions.map(country => (
+                          <SelectItem key={country.value} value={country.value}>
+                            {country.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    {errors.country && <p className="text-sm text-destructive mt-1">{errors.country}</p>}
+                  </div>
                 </div>
 
-                <div className="flex gap-3">
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div>
+                    <Label className="text-base font-medium">State *</Label>
+                    <Select 
+                      value={formData.state} 
+                      onValueChange={(value) => {
+                        handleInputChange("state", value);
+                        handleInputChange("city", ""); // Reset city when state changes
+                      }}
+                    >
+                      <SelectTrigger className="mt-2 h-12">
+                        <SelectValue placeholder="Select state" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {formData.country === "India" && statesData && Object.keys(statesData).map(state => (
+                          <SelectItem key={state} value={state}>{state}</SelectItem>
+                        ))}
+                        {formData.country === "UAE" && (
+                          <>
+                            <SelectItem value="Dubai">Dubai</SelectItem>
+                            <SelectItem value="Abu Dhabi">Abu Dhabi</SelectItem>
+                            <SelectItem value="Sharjah">Sharjah</SelectItem>
+                          </>
+                        )}
+                        {formData.country === "USA" && (
+                          <>
+                            <SelectItem value="California">California</SelectItem>
+                            <SelectItem value="Texas">Texas</SelectItem>
+                            <SelectItem value="New York">New York</SelectItem>
+                          </>
+                        )}
+                      </SelectContent>
+                    </Select>
+                    {errors.state && <p className="text-sm text-destructive mt-1">{errors.state}</p>}
+                  </div>
+
+                  <div>
+                    <Label className="text-base font-medium">City *</Label>
+                    <Select value={formData.city} onValueChange={(value) => handleInputChange("city", value)}>
+                      <SelectTrigger className="mt-2 h-12">
+                        <SelectValue placeholder="Select city" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {cities.map(city => (
+                          <SelectItem key={city} value={city}>{city}</SelectItem>
+                        ))}
+                        {cities.length === 0 && formData.state && (
+                          <SelectItem value="Other">Other (Please specify in notes)</SelectItem>
+                        )}
+                      </SelectContent>
+                    </Select>
+                    {errors.city && <p className="text-sm text-destructive mt-1">{errors.city}</p>}
+                  </div>
+                </div>
+
+                {/* Intent Selection */}
+                <div>
+                  <Label className="text-base font-medium">I want to *</Label>
                   <Select value={formData.intent} onValueChange={(value) => {
                     handleInputChange("intent", value);
+                    // Reset dependent fields
                     handleInputChange("propertyType", "");
                     handleInputChange("services", []);
                   }}>
-                    <SelectTrigger className="flex-1 h-12 bg-background">
-                      <SelectValue placeholder="I want to" />
+                    <SelectTrigger className="mt-2 h-12">
+                      <SelectValue placeholder="What do you want to do?" />
                     </SelectTrigger>
-                    <SelectContent className="bg-background border shadow-lg">
+                    <SelectContent>
                       {intentOptions.map(option => (
                         <SelectItem key={option.value} value={option.value}>
                           {option.label}
@@ -781,96 +503,170 @@ const PostService = () => {
                       ))}
                     </SelectContent>
                   </Select>
-
-                  <div className="relative flex-1">
-                    <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground z-10">
-                      {getCurrencySymbol()}
-                    </span>
-                    <Input
-                      type="number"
-                      placeholder="Budget"
-                      className="h-12 text-base bg-background pl-12"
-                      value={formData.budgetMax}
-                      onChange={(e) => handleInputChange("budgetMax", e.target.value)}
-                    />
-                  </div>
+                  {errors.intent && <p className="text-sm text-destructive mt-1">{errors.intent}</p>}
                 </div>
 
+                {/* Conditional Fields */}
                 {["Buy", "Sell", "Lease"].includes(formData.intent) && (
-                  <Select value={formData.propertyType} onValueChange={(value) => handleInputChange("propertyType", value)}>
-                    <SelectTrigger className="h-12 bg-background">
-                      <SelectValue placeholder="Property Type" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-background border shadow-lg">
-                      {propertyTypes.map(type => (
-                        <SelectItem key={type} value={type}>{type}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <div className="transition-all duration-300 ease-in-out">
+                    <Label className="text-base font-medium">Property Type *</Label>
+                    <Select value={formData.propertyType} onValueChange={(value) => handleInputChange("propertyType", value)}>
+                      <SelectTrigger className="mt-2 h-12">
+                        <SelectValue placeholder="Select property type" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {propertyTypes.map(type => (
+                          <SelectItem key={type} value={type}>{type}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    {errors.propertyType && <p className="text-sm text-destructive mt-1">{errors.propertyType}</p>}
+                  </div>
                 )}
 
                 {formData.intent === "Service" && (
-                  <div className="space-y-3">
-                    <div className="grid grid-cols-1 gap-2">
-                      {serviceOptions.slice(0, 8).map(service => (
-                        <div key={service} className="flex items-center space-x-2">
-                          <Checkbox
-                            id={`mobile-${service}`}
-                            checked={formData.services.includes(service)}
-                            onCheckedChange={(checked) => handleServiceChange(service, checked as boolean)}
-                          />
-                          <Label htmlFor={`mobile-${service}`} className="text-sm cursor-pointer">
-                            {service}
-                          </Label>
-                        </div>
-                      ))}
+                  <div className="transition-all duration-300 ease-in-out space-y-4">
+                    <div>
+                      <Label className="text-base font-medium">Services We Offer *</Label>
+                      <p className="text-sm text-muted-foreground mb-3">Select at least one service</p>
+                      <div className="grid md:grid-cols-2 gap-3">
+                        {serviceOptions.map(service => (
+                          <div key={service} className="flex items-center space-x-2">
+                            <Checkbox
+                              id={service}
+                              checked={formData.services.includes(service)}
+                              onCheckedChange={(checked) => handleServiceChange(service, checked as boolean)}
+                            />
+                            <Label htmlFor={service} className="text-sm cursor-pointer">
+                              {service}
+                            </Label>
+                          </div>
+                        ))}
+                      </div>
+                      {errors.services && <p className="text-sm text-destructive mt-1">{errors.services}</p>}
                     </div>
+
                     {formData.services.includes("Others") && (
-                      <Input
-                        value={formData.otherService}
-                        onChange={(e) => handleInputChange("otherService", e.target.value)}
-                        placeholder="Please specify"
-                        className="h-12 text-base bg-background"
-                      />
+                      <div className="transition-all duration-300 ease-in-out">
+                        <Label htmlFor="otherService" className="text-base font-medium">Please specify *</Label>
+                        <Input
+                          id="otherService"
+                          value={formData.otherService}
+                          onChange={(e) => handleInputChange("otherService", e.target.value)}
+                          className="mt-2 h-12"
+                          placeholder="Describe the service you need"
+                        />
+                        {errors.otherService && <p className="text-sm text-destructive mt-1">{errors.otherService}</p>}
+                      </div>
                     )}
                   </div>
                 )}
 
-                <div className="flex items-center justify-between p-3 bg-muted rounded-lg">
-                  <span className="text-sm font-medium">Premium Service - {getCurrencySymbol()}999</span>
-                  <Switch
-                    checked={formData.premiumSelected}
-                    onCheckedChange={(checked) => handleInputChange("premiumSelected", checked)}
+                {/* Budget Range */}
+                <div>
+                  <Label className="text-base font-medium">Budget Range</Label>
+                  <div className="grid md:grid-cols-2 gap-4 mt-2">
+                    <div>
+                      <Label htmlFor="budgetMin" className="text-sm text-muted-foreground">Min Budget</Label>
+                      <div className="relative">
+                        <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground">
+                          {getCurrencySymbol()}
+                        </span>
+                        <Input
+                          id="budgetMin"
+                          type="number"
+                          value={formData.budgetMin}
+                          onChange={(e) => handleInputChange("budgetMin", e.target.value)}
+                          className="h-12 pl-12"
+                          placeholder="0"
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <Label htmlFor="budgetMax" className="text-sm text-muted-foreground">Max Budget</Label>
+                      <div className="relative">
+                        <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground">
+                          {getCurrencySymbol()}
+                        </span>
+                        <Input
+                          id="budgetMax"
+                          type="number"
+                          value={formData.budgetMax}
+                          onChange={(e) => handleInputChange("budgetMax", e.target.value)}
+                          className="h-12 pl-12"
+                          placeholder="0"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  {errors.budget && <p className="text-sm text-destructive mt-1">{errors.budget}</p>}
+                </div>
+
+                {/* Premium Service */}
+                <div className="border rounded-lg p-4 bg-muted/30">
+                  <div className="flex items-center justify-between mb-2">
+                    <Label className="text-base font-medium">Premium Listing & Concierge Support — {getCurrencySymbol()}999 one-time</Label>
+                    <Switch
+                      checked={formData.premiumSelected}
+                      onCheckedChange={(checked) => handleInputChange("premiumSelected", checked)}
+                    />
+                  </div>
+                  {formData.premiumSelected && (
+                    <div className="mt-3 space-y-3 transition-all duration-300 ease-in-out">
+                      <p className="text-sm text-muted-foreground">
+                        Priority matching, featured placement, and a dedicated advisor.
+                      </p>
+                      <div>
+                        <Label className="text-base font-medium">Payment Method *</Label>
+                        <RadioGroup 
+                          value={formData.paymentMethod} 
+                          onValueChange={(value) => handleInputChange("paymentMethod", value)}
+                          className="mt-2"
+                        >
+                          <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="UPI" id="upi" />
+                            <Label htmlFor="upi" className="cursor-pointer">UPI</Label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="Card" id="card" />
+                            <Label htmlFor="card" className="cursor-pointer">Card</Label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="NetBanking" id="netbanking" />
+                            <Label htmlFor="netbanking" className="cursor-pointer">Net Banking</Label>
+                          </div>
+                        </RadioGroup>
+                        {errors.paymentMethod && <p className="text-sm text-destructive mt-1">{errors.paymentMethod}</p>}
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Additional Notes */}
+                <div>
+                  <Label htmlFor="notes" className="text-base font-medium">Additional Notes</Label>
+                  <Textarea
+                    id="notes"
+                    value={formData.notes}
+                    onChange={(e) => handleInputChange("notes", e.target.value)}
+                    className="mt-2 min-h-[100px]"
+                    placeholder="Anything else we should know?"
                   />
                 </div>
 
-                {formData.premiumSelected && (
-                  <div className="bg-muted p-3 rounded-lg">
-                    <RadioGroup 
-                      value={formData.paymentMethod} 
-                      onValueChange={(value) => handleInputChange("paymentMethod", value)}
-                      className="flex gap-4"
-                    >
-                      <div className="flex items-center space-x-1">
-                        <RadioGroupItem value="UPI" id="upi-mobile" />
-                        <Label htmlFor="upi-mobile" className="text-sm cursor-pointer">UPI</Label>
-                      </div>
-                      <div className="flex items-center space-x-1">
-                        <RadioGroupItem value="Card" id="card-mobile" />
-                        <Label htmlFor="card-mobile" className="text-sm cursor-pointer">Card</Label>
-                      </div>
-                    </RadioGroup>
-                  </div>
-                )}
-
-                <Button type="submit" className="w-full h-12" disabled={submissionState.isSubmitting}>
+                {/* Submit Button */}
+                <Button
+                  type="submit"
+                  className="w-full h-12 text-lg"
+                  disabled={submissionState.isSubmitting}
+                >
                   {submissionState.isSubmitting ? (
                     <>
                       <Loader2 className="w-4 h-4 mr-2 animate-spin" />
                       {submissionState.uploadProgress}
                     </>
                   ) : (
-                    "Post Requirement Now!"
+                    "Post Requirement"
                   )}
                 </Button>
               </form>
@@ -878,255 +674,6 @@ const PostService = () => {
           </Card>
         </div>
       </section>
-
-      {/* Services Section */}
-      <section className="py-16 px-4">
-        <div className="container mx-auto">
-          <div className="grid lg:grid-cols-2 gap-16 items-start">
-            <div className="max-w-3xl">
-              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
-                Our Property Services
-              </h2>
-              <div className="grid gap-6">
-                {services.map((service, index) => {
-                  const IconComponent = service.icon;
-                  return (
-                    <div key={index} className="flex gap-4 p-6 bg-card rounded-lg border">
-                      <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                        <IconComponent className="w-6 h-6 text-red-600" />
-                      </div>
-                      <div>
-                        <h3 className="text-lg font-semibold text-foreground mb-2">{service.title}</h3>
-                        <p className="text-muted-foreground text-sm">{service.description}</p>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-            
-            {/* Right side spacing for sticky form */}
-            <div className="hidden lg:block"></div>
-          </div>
-        </div>
-      </section>
-
-      {/* Target Audience Section */}
-      <section className="py-16 px-4 bg-muted/30">
-        <div className="container mx-auto">
-          <div className="grid lg:grid-cols-2 gap-16 items-start">
-            <div className="max-w-3xl">
-              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
-                Who We Serve
-              </h2>
-              <div className="grid gap-6">
-                {targetAudience.map((audience, index) => {
-                  const IconComponent = audience.icon;
-                  return (
-                    <div key={index} className="flex gap-4 p-6 bg-card rounded-lg border">
-                      <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                        <IconComponent className="w-6 h-6 text-red-600" />
-                      </div>
-                      <div>
-                        <h3 className="text-lg font-semibold text-foreground mb-2">{audience.title}</h3>
-                        <p className="text-muted-foreground text-sm">{audience.description}</p>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-            
-            {/* Right side spacing for sticky form */}
-            <div className="hidden lg:block"></div>
-          </div>
-        </div>
-      </section>
-
-      {/* Comparison Table */}
-      <section className="py-16 px-4 bg-background">
-        <div className="container mx-auto">
-          <div className="grid lg:grid-cols-2 gap-16 items-start">
-            <div className="max-w-3xl">
-              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
-                Why Home HNI is Better
-              </h2>
-              <div className="bg-card rounded-xl border overflow-hidden">
-                <div className="grid grid-cols-3 gap-4 p-4 bg-muted/50 font-semibold text-sm">
-                  <div>Features</div>
-                  <div className="text-center">Home HNI</div>
-                  <div className="text-center">Others</div>
-                </div>
-                {comparisonData.map((item, index) => (
-                  <div key={index} className="grid grid-cols-3 gap-4 p-4 border-t text-sm">
-                    <div className="text-foreground">{item.feature}</div>
-                    <div className="text-center">
-                      {item.homeHNI ? (
-                        <CheckCircle className="w-4 h-4 text-red-600 mx-auto" />
-                      ) : (
-                        <X className="w-4 h-4 text-red-500 mx-auto" />
-                      )}
-                    </div>
-                    <div className="text-center">
-                      {item.others ? (
-                        <CheckCircle className="w-4 h-4 text-red-600 mx-auto" />
-                      ) : (
-                        <X className="w-4 h-4 text-red-500 mx-auto" />
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-            
-            {/* Right side spacing for sticky form */}
-            <div className="hidden lg:block"></div>
-          </div>
-        </div>
-      </section>
-
-      {/* Testimonials */}
-      <section className="py-16 px-4 bg-muted/30">
-        <div className="container mx-auto">
-          <div className="grid lg:grid-cols-2 gap-16 items-start">
-            <div className="max-w-3xl">
-              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
-                What Our Customers Say
-              </h2>
-              <div className="space-y-6">
-                {testimonials.map((testimonial, index) => (
-                  <Card key={index} className="p-6">
-                    <CardContent className="p-0">
-                      <div className="flex items-start gap-4">
-                        <img 
-                          src={testimonial.image} 
-                          alt={testimonial.name}
-                          className="w-12 h-12 rounded-full object-cover"
-                        />
-                        <div className="flex-1">
-                          <div className="flex items-center gap-1 mb-2">
-                            {[...Array(testimonial.rating)].map((_, i) => (
-                              <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                            ))}
-                          </div>
-                          <p className="text-muted-foreground text-sm mb-3">"{testimonial.text}"</p>
-                          <div>
-                            <p className="font-semibold text-sm">{testimonial.name}</p>
-                            <p className="text-xs text-muted-foreground">{testimonial.role}</p>
-                          </div>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            </div>
-            
-            {/* Right side spacing for sticky form */}
-            <div className="hidden lg:block"></div>
-          </div>
-        </div>
-      </section>
-
-      {/* FAQ Section */}
-      <section className="py-16 px-4 bg-background">
-        <div className="container mx-auto">
-          <div className="grid lg:grid-cols-2 gap-16 items-start">
-            <div className="max-w-3xl">
-              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
-                Frequently Asked Questions
-              </h2>
-              <Accordion type="single" collapsible className="space-y-4">
-                {faqs.map((faq, index) => (
-                  <AccordionItem key={index} value={`item-${index}`} className="bg-card border rounded-lg px-6">
-                    <AccordionTrigger className="text-left font-semibold text-sm py-4">
-                      {faq.question}
-                    </AccordionTrigger>
-                    <AccordionContent className="text-muted-foreground text-sm pb-4">
-                      {faq.answer}
-                    </AccordionContent>
-                  </AccordionItem>
-                ))}
-              </Accordion>
-            </div>
-            
-            {/* Right side spacing for sticky form */}
-            <div className="hidden lg:block"></div>
-          </div>
-        </div>
-      </section>
-
-      {/* Service Tags Section */}
-      <section className="py-16 px-4 bg-muted/30">
-        <div className="container mx-auto">
-          <div className="grid lg:grid-cols-2 gap-16 items-start">
-            <div className="max-w-3xl">
-              <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-8">
-                Property Services
-              </h2>
-              
-              <div className="space-y-6 mb-8">
-                <div className="flex flex-wrap gap-3">
-                  <span className="px-4 py-2 bg-background rounded-full text-sm">Property Requirements in Hyderabad</span>
-                  <span className="px-4 py-2 bg-background rounded-full text-sm">Property Requirements in Bangalore</span>
-                  <span className="px-4 py-2 bg-background rounded-full text-sm">Property Requirements in Mumbai</span>
-                </div>
-                <div className="flex flex-wrap gap-3">
-                  <span className="px-4 py-2 bg-background rounded-full text-sm">Property Requirements in Pune</span>
-                  <span className="px-4 py-2 bg-background rounded-full text-sm">Property Requirements in Delhi</span>
-                  <span className="px-4 py-2 bg-background rounded-full text-sm">Property Requirements in Chennai</span>
-                </div>
-                <div className="flex flex-wrap gap-3">
-                  <span className="px-4 py-2 bg-background rounded-full text-sm">Buy Property</span>
-                  <span className="px-4 py-2 bg-background rounded-full text-sm">Sell Property</span>
-                  <span className="px-4 py-2 bg-background rounded-full text-sm">Lease Property</span>
-                </div>
-                <div className="flex flex-wrap gap-3">
-                  <span className="px-4 py-2 bg-background rounded-full text-sm">Property Management</span>
-                  <span className="px-4 py-2 bg-background rounded-full text-sm">Property Valuation</span>
-                  <span className="px-4 py-2 bg-background rounded-full text-sm">Legal Documentation</span>
-                </div>
-                <div className="flex flex-wrap gap-3">
-                  <span className="px-4 py-2 bg-background rounded-full text-sm">Premium Property Services</span>
-                </div>
-              </div>
-
-              <h3 className="text-2xl md:text-3xl font-bold text-foreground mb-6">
-                Investment Advisory Services
-              </h3>
-              
-              <div className="space-y-3 mb-8">
-                <div className="flex flex-wrap gap-3">
-                  <span className="px-4 py-2 bg-background rounded-full text-sm">Property Investment in Hyderabad</span>
-                  <span className="px-4 py-2 bg-background rounded-full text-sm">Market Analysis Reports</span>
-                </div>
-              </div>
-
-              <h3 className="text-2xl md:text-3xl font-bold text-foreground mb-6">
-                Property Documentation
-              </h3>
-              
-              <div className="space-y-3">
-                <div className="flex flex-wrap gap-3">
-                  <span className="px-4 py-2 bg-background rounded-full text-sm">Property Legal Support</span>
-                  <span className="px-4 py-2 bg-background rounded-full text-sm">Digital Property Services</span>
-                </div>
-                <div className="flex flex-wrap gap-3">
-                  <span className="px-4 py-2 bg-background rounded-full text-sm">Instant Property Matching</span>
-                  <span className="px-4 py-2 bg-background rounded-full text-sm">Property Advisory Services</span>
-                </div>
-                <div className="flex flex-wrap gap-3">
-                  <span className="px-4 py-2 bg-background rounded-full text-sm">Zero Brokerage Properties</span>
-                </div>
-              </div>
-            </div>
-            
-            {/* Right side spacing for sticky form */}
-            <div className="hidden lg:block"></div>
-          </div>
-        </div>
-      </section>
-
     </div>
   );
 };
