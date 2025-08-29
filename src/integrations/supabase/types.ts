@@ -995,6 +995,14 @@ export type Database = {
         Args: { _email: string }
         Returns: undefined
       }
+      check_security_status: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          policy_count: number
+          rls_enabled: boolean
+          table_name: string
+        }[]
+      }
       create_property_lead: {
         Args: {
           interested_user_email: string
