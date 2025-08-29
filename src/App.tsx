@@ -62,6 +62,7 @@ import { AdminSEO } from "./pages/AdminSEO";
 import { AdminAudit } from "./pages/AdminAudit";
 import { AdminPageManagement } from "./pages/AdminPageManagement";
 import { AdminWebsiteCMS } from "./pages/AdminWebsiteCMS";
+import ContentManagementPage from "./pages/ContentManagement";
 import NotFound from "./pages/NotFound";
 import ScrollToTop from "./components/ScrollToTop";
 import GeolocationRedirect from "./components/GeolocationRedirect";
@@ -224,6 +225,7 @@ const App: React.FC = () => {
             }>
               <Route index element={<AdminDashboard />} />
               <Route path="users" element={<AdminUsers />} />
+              <Route path="content" element={<ContentManagementPage />} />
               <Route path="analytics" element={<AdminAnalytics />} />
               <Route path="listings" element={<AdminProperties />} />
               <Route path="leads" element={<AdminLeads />} />

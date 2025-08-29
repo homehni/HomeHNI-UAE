@@ -61,10 +61,10 @@ const navigationItems = [
     group: 'Content',
   },
   {
-    title: 'Website CMS',
-    url: '/admin/website-cms',
-    icon: Menu,
-    group: 'Website',
+    title: 'Content Management',
+    url: '/admin/content',
+    icon: FileText,
+    group: 'Content',
   },
   {
     title: 'Regions & Localization',

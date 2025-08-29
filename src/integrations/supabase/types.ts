@@ -839,21 +839,21 @@ export type Database = {
           content_type: Database["public"]["Enums"]["content_type"]
           created_at: string
           id: string
-          role: Database["public"]["Enums"]["user_role"]
+          role: Database["public"]["Enums"]["app_role"]
         }
         Insert: {
           action: Database["public"]["Enums"]["permission_action"]
           content_type: Database["public"]["Enums"]["content_type"]
           created_at?: string
           id?: string
-          role: Database["public"]["Enums"]["user_role"]
+          role: Database["public"]["Enums"]["app_role"]
         }
         Update: {
           action?: Database["public"]["Enums"]["permission_action"]
           content_type?: Database["public"]["Enums"]["content_type"]
           created_at?: string
           id?: string
-          role?: Database["public"]["Enums"]["user_role"]
+          role?: Database["public"]["Enums"]["app_role"]
         }
         Relationships: []
       }
@@ -987,6 +987,14 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: undefined
       }
+      get_available_roles: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          description: string
+          display_name: string
+          role_name: string
+        }[]
+      }
       get_current_user_role: {
         Args: Record<PropertyKey, never>
         Returns: Database["public"]["Enums"]["app_role"]
@@ -1001,6 +1009,13 @@ export type Database = {
       get_property_owner: {
         Args: { _property_id: string }
         Returns: string
+      }
+      get_role_permissions: {
+        Args: { _role: Database["public"]["Enums"]["app_role"] }
+        Returns: {
+          action: Database["public"]["Enums"]["permission_action"]
+          content_type: Database["public"]["Enums"]["content_type"]
+        }[]
       }
       get_security_recommendations: {
         Args: Record<PropertyKey, never>

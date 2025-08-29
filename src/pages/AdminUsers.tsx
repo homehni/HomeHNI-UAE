@@ -6,9 +6,10 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Search, Users, UserCheck, ShieldCheck, Building, Filter, Trash2 } from 'lucide-react';
+import { Search, Users, UserCheck, ShieldCheck, Building, Filter, Trash2, Plus, UserCog, Settings2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
+import { AddUserModal } from '@/components/admin/AddUserModal';
 
 interface User {
   id: string;
@@ -29,12 +30,14 @@ const AdminUsers = () => {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [roleFilter, setRoleFilter] = useState('all');
+  const [isAddUserModalOpen, setIsAddUserModalOpen] = useState(false);
   const [stats, setStats] = useState({
     total: 0,
     property_owners: 0,
     admins: 0,
     buyers: 0,
     sellers: 0,
+    content_managers: 0,
     active_listings: 0
   });
 
@@ -189,6 +192,9 @@ const AdminUsers = () => {
       const admins = usersData.filter(u => u.role === 'admin').length;
       const buyers = usersData.filter(u => u.role === 'buyer').length;
       const sellers = usersData.filter(u => u.role === 'seller').length;
+      const contentManagers = usersData.filter(u => 
+        ['content_manager', 'blog_content_creator', 'static_page_manager', 'sales_team', 'property_moderator', 'lead_manager'].includes(u.role)
+      ).length;
       const activeListings = Object.values(propertyCountMap).reduce((sum, count) => sum + count, 0);
 
       setStats({ 
@@ -197,6 +203,7 @@ const AdminUsers = () => {
         admins, 
         buyers, 
         sellers, 
+        content_managers: contentManagers,
         active_listings: activeListings 
       });
     } catch (error) {
@@ -234,10 +241,18 @@ const AdminUsers = () => {
     switch (role) {
       case 'admin':
         return 'destructive';
-      case 'seller':
+      case 'content_manager':
+      case 'blog_content_creator':
+      case 'static_page_manager':
         return 'default';
-      case 'buyer':
+      case 'sales_team':
+      case 'property_moderator':
+      case 'lead_manager':
         return 'secondary';
+      case 'seller':
+        return 'outline';
+      case 'buyer':
+        return 'outline';
       default:
         return 'outline';
     }
@@ -319,7 +334,7 @@ const AdminUsers = () => {
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-6 gap-4 mb-8">
         <Card className="border-border bg-card">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">Total Users</CardTitle>
@@ -337,6 +352,16 @@ const AdminUsers = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-foreground">{stats.property_owners}</div>
+          </CardContent>
+        </Card>
+
+        <Card className="border-border bg-card">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium text-muted-foreground">Content Team</CardTitle>
+            <UserCog className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold text-foreground">{stats.content_managers}</div>
           </CardContent>
         </Card>
 
@@ -380,6 +405,13 @@ const AdminUsers = () => {
               <p className="text-sm text-muted-foreground">Manage user accounts and roles</p>
             </div>
             <div className="flex gap-2 w-full sm:w-auto">
+              <Button 
+                onClick={() => setIsAddUserModalOpen(true)}
+                className="bg-primary text-primary-foreground hover:bg-primary/90 flex items-center gap-2"
+              >
+                <Plus className="h-4 w-4" />
+                Add User
+              </Button>
               <div className="relative flex-1 sm:w-64">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
                 <Input
@@ -397,6 +429,12 @@ const AdminUsers = () => {
                 <SelectContent>
                   <SelectItem value="all">All Roles</SelectItem>
                   <SelectItem value="admin">Admin</SelectItem>
+                  <SelectItem value="content_manager">Content Manager</SelectItem>
+                  <SelectItem value="blog_content_creator">Blog Creator</SelectItem>
+                  <SelectItem value="static_page_manager">Page Manager</SelectItem>
+                  <SelectItem value="sales_team">Sales Team</SelectItem>
+                  <SelectItem value="property_moderator">Property Moderator</SelectItem>
+                  <SelectItem value="lead_manager">Lead Manager</SelectItem>
                   <SelectItem value="seller">Seller</SelectItem>
                   <SelectItem value="buyer">Buyer</SelectItem>
                 </SelectContent>
@@ -513,6 +551,13 @@ const AdminUsers = () => {
           </div>
         </CardContent>
       </Card>
+
+      {/* Add User Modal */}
+      <AddUserModal 
+        isOpen={isAddUserModalOpen} 
+        onClose={() => setIsAddUserModalOpen(false)}
+        onUserAdded={fetchUsers}
+      />
     </div>
   );
 };
