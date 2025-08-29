@@ -295,8 +295,8 @@ const Header = () => {
     {/* Custom Lifetime Plans Drppopdown */}
     {isLifetimePlansDropdownOpen && <div className="absolute top-full left-0 w-48 bg-white border border-gray-200 rounded-lg shadow-xl z-[100] mt-2" onMouseEnter={handleLifetimePlansHover} onMouseLeave={handleLifetimePlansLeave}>
         <div className="py-2">
-          <button onClick={() => navigate('/agent-lifetime-plans')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
-            Agent's Lifetime Plan
+          <button onClick={() => navigate('/agent-plans')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+            Agent Plans
           </button>
           <button onClick={() => navigate('/builder-lifetime-plans')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
             Builder's Lifetime Plan

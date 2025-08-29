@@ -32,7 +32,7 @@ import SitemapXml from "./pages/SitemapXml";
 import OwnerPlans from "./pages/OwnerPlans";
 import BuyerPlans from "./pages/BuyerPlans";
 import SellerPlans from "./pages/SellerPlans";
-import AgentLifetimePlans from "@/pages/AgentLifetimePlans";
+import AgentPlans from "@/pages/AgentPlans";
 import BuilderLifetimePlans from "@/pages/BuilderLifetimePlans";
 import ServiceSuite from "@/pages/ServiceSuite";
 import CorporateEnquiry from "./pages/CorporateEnquiry";
@@ -142,7 +142,7 @@ const App: React.FC = () => {
             <Route path="/owner-plans" element={<OwnerPlans />} />
             <Route path="/buyer-plans" element={<BuyerPlans />} />
             <Route path="/seller-plans" element={<SellerPlans />} />
-        <Route path="/agent-lifetime-plans" element={<AgentLifetimePlans />} />
+        <Route path="/agent-plans" element={<AgentPlans />} />
         <Route path="/builder-lifetime-plans" element={<BuilderLifetimePlans />} />
         <Route path="/service-suite" element={<ServiceSuite />} />
             <Route path="/commercial-owner-plans" element={<CommercialOwnerPlans />} />
