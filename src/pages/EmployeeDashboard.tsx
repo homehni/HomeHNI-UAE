@@ -9,6 +9,8 @@ import { User, DollarSign, Calendar, Building, ArrowLeft, Receipt, CreditCard } 
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
 import Header from '@/components/Header';
+import { ContentManagerDashboard } from '@/components/admin/ContentManagerDashboard';
+import { QuickContentEditor } from '@/components/admin/QuickContentEditor';
 
 interface Employee {
   id: string;
@@ -224,13 +226,19 @@ export const EmployeeDashboard: React.FC = () => {
           </Card>
         </div>
 
-        {/* Tabs */}
-        <Tabs defaultValue="transactions" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="transactions">Transaction History</TabsTrigger>
-            <TabsTrigger value="payouts">Payout Requests</TabsTrigger>
-            <TabsTrigger value="profile">Employee Profile</TabsTrigger>
-          </TabsList>
+        {/* Tabs - Different based on role */}
+        {employee.role === 'content_manager' ? (
+          <div className="space-y-8">
+            <QuickContentEditor />
+            <ContentManagerDashboard />
+          </div>
+        ) : (
+          <Tabs defaultValue="transactions" className="space-y-6">
+            <TabsList className="grid w-full grid-cols-3">
+              <TabsTrigger value="transactions">Transaction History</TabsTrigger>
+              <TabsTrigger value="payouts">Payout Requests</TabsTrigger>
+              <TabsTrigger value="profile">Employee Profile</TabsTrigger>
+            </TabsList>
 
           {/* Transactions Tab */}
           <TabsContent value="transactions" className="space-y-6">
@@ -418,7 +426,8 @@ export const EmployeeDashboard: React.FC = () => {
               </CardContent>
             </Card>
           </TabsContent>
-        </Tabs>
+          </Tabs>
+        )}
       </div>
     </div>
   );
