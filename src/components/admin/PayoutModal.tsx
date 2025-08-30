@@ -9,6 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
+import { useEmployeeRole } from '@/hooks/useEmployeeRole';
 import { Loader2, DollarSign, CheckCircle, XCircle, Clock } from 'lucide-react';
 
 interface Employee {
@@ -60,9 +61,12 @@ export const PayoutModal: React.FC<PayoutModalProps> = ({
   });
 
   const { toast } = useToast();
+  const { isHRAdmin, isFinanceAdmin } = useEmployeeRole();
 
   useEffect(() => {
     if (isOpen) {
+      // Set default tab based on role
+      setActiveTab(isHRAdmin ? 'create' : 'approve');
       fetchPayoutRequests();
       if (selectedEmployee) {
         setFormData(prev => ({
@@ -71,7 +75,7 @@ export const PayoutModal: React.FC<PayoutModalProps> = ({
         }));
       }
     }
-  }, [isOpen, selectedEmployee]);
+  }, [isOpen, selectedEmployee, isHRAdmin]);
 
   const fetchPayoutRequests = async () => {
     try {
@@ -138,9 +142,10 @@ export const PayoutModal: React.FC<PayoutModalProps> = ({
 
     } catch (err: any) {
       console.error('Payout creation error:', err);
+      const details = err?.context?.error || err?.context?.message || err?.message;
       toast({
         title: 'Error',
-        description: err?.message || 'Failed to create payout request',
+        description: details || 'Failed to create payout request',
         variant: 'destructive'
       });
     } finally {
@@ -174,9 +179,10 @@ export const PayoutModal: React.FC<PayoutModalProps> = ({
 
     } catch (err: any) {
       console.error(`Payout ${action} error:`, err);
+      const details = err?.context?.error || err?.context?.message || err?.message;
       toast({
         title: 'Error',
-        description: err?.message || `Failed to ${action} payout`,
+        description: details || `Failed to ${action} payout`,
         variant: 'destructive'
       });
     } finally {
@@ -209,9 +215,10 @@ export const PayoutModal: React.FC<PayoutModalProps> = ({
 
     } catch (err: any) {
       console.error('Payout processing error:', err);
+      const details = err?.context?.error || err?.context?.message || err?.message;
       toast({
         title: 'Error',
-        description: err?.message || 'Failed to process payout',
+        description: details || 'Failed to process payout',
         variant: 'destructive'
       });
     } finally {
@@ -261,31 +268,37 @@ export const PayoutModal: React.FC<PayoutModalProps> = ({
 
         {/* Tab Navigation */}
         <div className="flex space-x-1 border-b">
-          <Button
-            variant={activeTab === 'create' ? 'default' : 'ghost'}
-            onClick={() => setActiveTab('create')}
-            className="rounded-b-none"
-          >
-            Create Payout
-          </Button>
-          <Button
-            variant={activeTab === 'approve' ? 'default' : 'ghost'}
-            onClick={() => setActiveTab('approve')}
-            className="rounded-b-none"
-          >
-            Approve/Reject
-          </Button>
-          <Button
-            variant={activeTab === 'process' ? 'default' : 'ghost'}
-            onClick={() => setActiveTab('process')}
-            className="rounded-b-none"
-          >
-            Process Payments
-          </Button>
+          {isHRAdmin && (
+            <Button
+              variant={activeTab === 'create' ? 'default' : 'ghost'}
+              onClick={() => setActiveTab('create')}
+              className="rounded-b-none"
+            >
+              Create Payout
+            </Button>
+          )}
+          {isFinanceAdmin && (
+            <>
+              <Button
+                variant={activeTab === 'approve' ? 'default' : 'ghost'}
+                onClick={() => setActiveTab('approve')}
+                className="rounded-b-none"
+              >
+                Approve/Reject
+              </Button>
+              <Button
+                variant={activeTab === 'process' ? 'default' : 'ghost'}
+                onClick={() => setActiveTab('process')}
+                className="rounded-b-none"
+              >
+                Process Payments
+              </Button>
+            </>
+          )}
         </div>
 
         {/* Create Payout Tab */}
-        {activeTab === 'create' && (
+        {activeTab === 'create' && isHRAdmin && (
           <form onSubmit={handleCreatePayout} className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
@@ -367,7 +380,7 @@ export const PayoutModal: React.FC<PayoutModalProps> = ({
         )}
 
         {/* Approve/Reject Tab */}
-        {activeTab === 'approve' && (
+        {activeTab === 'approve' && isFinanceAdmin && (
           <div className="space-y-4">
             <h3 className="text-lg font-semibold">Pending Payout Requests</h3>
             {payoutRequests
@@ -424,7 +437,7 @@ export const PayoutModal: React.FC<PayoutModalProps> = ({
         )}
 
         {/* Process Payments Tab */}
-        {activeTab === 'process' && (
+        {activeTab === 'process' && isFinanceAdmin && (
           <div className="space-y-4">
             <h3 className="text-lg font-semibold">Approved Payouts - Ready for Processing</h3>
             {payoutRequests
