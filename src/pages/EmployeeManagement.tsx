@@ -6,11 +6,12 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Search, Users, UserCheck, Building, Filter, Plus, DollarSign, Clock, CheckCircle } from 'lucide-react';
+import { Search, Users, UserCheck, Building, Filter, Plus, DollarSign, Clock, CheckCircle, Trash2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { EmployeeInviteModal } from '@/components/admin/EmployeeInviteModal';
 import { PayoutModal } from '@/components/admin/PayoutModal';
 import { TransactionHistoryModal } from '@/components/admin/TransactionHistoryModal';
+import { DeleteEmployeeModal } from '@/components/admin/DeleteEmployeeModal';
 
 interface Employee {
   id: string;
@@ -47,6 +48,7 @@ const EmployeeManagement = () => {
   const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
   const [isPayoutModalOpen, setIsPayoutModalOpen] = useState(false);
   const [isTransactionModalOpen, setIsTransactionModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(null);
   const [stats, setStats] = useState<EmployeeStats>({
     total: 0,
@@ -442,6 +444,18 @@ const EmployeeManagement = () => {
                             <DollarSign className="h-3 w-3 mr-1" />
                             Payout
                           </Button>
+                          <Button
+                            size="sm"
+                            variant="destructive"
+                            onClick={() => {
+                              setSelectedEmployee(employee);
+                              setIsDeleteModalOpen(true);
+                            }}
+                            className="h-8 px-2"
+                          >
+                            <Trash2 className="h-3 w-3 mr-1" />
+                            Delete
+                          </Button>
                         </div>
                       </TableCell>
                     </TableRow>
@@ -479,6 +493,16 @@ const EmployeeManagement = () => {
       <TransactionHistoryModal 
         isOpen={isTransactionModalOpen}
         onClose={() => setIsTransactionModalOpen(false)}
+      />
+
+      <DeleteEmployeeModal 
+        isOpen={isDeleteModalOpen}
+        onClose={() => {
+          setIsDeleteModalOpen(false);
+          setSelectedEmployee(null);
+        }}
+        employee={selectedEmployee}
+        onDeleteSuccess={fetchEmployees}
       />
     </div>
   );
