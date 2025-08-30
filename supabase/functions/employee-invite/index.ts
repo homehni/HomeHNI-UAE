@@ -23,6 +23,16 @@ const logStep = (step: string, details?: any) => {
   console.log(`[${timestamp}] [EMPLOYEE-INVITE] ${step}${details ? ` - ${JSON.stringify(details)}` : ''}`);
 };
 
+// Generate a secure temporary password
+const generateTempPassword = (): string => {
+  const chars = 'ABCDEFGHJKMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789!@#$%^&*';
+  let password = '';
+  for (let i = 0; i < 12; i++) {
+    password += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return password;
+};
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -126,6 +136,45 @@ serve(async (req) => {
 
     logStep("Employee created successfully", { employeeId: newEmployee.id, employeeIdNumber: newEmployee.employee_id });
 
+    // Generate temporary password for the new user
+    const tempPassword = generateTempPassword();
+    logStep("Generated temporary password");
+
+    // Create Supabase auth user account
+    const { data: authUser, error: authError } = await supabaseAdmin.auth.admin.createUser({
+      email: requestData.email,
+      password: tempPassword,
+      email_confirm: true, // Auto-confirm email
+      user_metadata: {
+        full_name: requestData.full_name,
+        employee_id: newEmployee.employee_id,
+        department: requestData.department,
+        role: requestData.role
+      }
+    });
+
+    if (authError) {
+      // If user creation fails, clean up the employee record
+      await supabaseAdmin
+        .from("employees")
+        .delete()
+        .eq("id", newEmployee.id);
+      
+      throw new Error(`Failed to create user account: ${authError.message}`);
+    }
+
+    logStep("Auth user created successfully", { authUserId: authUser.user?.id });
+
+    // Update employee record with the auth user ID
+    const { error: updateError } = await supabaseAdmin
+      .from("employees")
+      .update({ user_id: authUser.user?.id })
+      .eq("id", newEmployee.id);
+
+    if (updateError) {
+      logStep("Warning: Failed to link employee to auth user", { error: updateError.message });
+    }
+
     // Create a log entry for the transaction
     await supabaseAdmin
       .from("employee_transactions")
@@ -144,7 +193,15 @@ serve(async (req) => {
     return new Response(JSON.stringify({
       success: true,
       employee: newEmployee,
-      message: `Employee ${requestData.full_name} invited successfully with ID: ${newEmployee.employee_id}`
+      authUser: {
+        id: authUser.user?.id,
+        email: authUser.user?.email
+      },
+      loginCredentials: {
+        email: requestData.email,
+        temporaryPassword: tempPassword
+      },
+      message: `Employee ${requestData.full_name} invited successfully with ID: ${newEmployee.employee_id}. Login credentials generated.`
     }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
       status: 200,
