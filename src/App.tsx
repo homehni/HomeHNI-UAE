@@ -59,6 +59,7 @@ import { AdminContent } from "./pages/AdminContent";
 import { AdminLeads } from "./pages/AdminLeads";
 import FinanceOverview from "./pages/admin/FinanceOverview";
 import { FinanceProtectedRoute } from "@/components/admin/FinanceProtectedRoute";
+import { EmployeeRedirectHandler } from "@/components/admin/EmployeeRedirectHandler";
 import { AdminRegions } from "./pages/AdminRegions";
 import { AdminSEO } from "./pages/AdminSEO";
 import { AdminAudit } from "./pages/AdminAudit";
@@ -215,7 +216,9 @@ const App: React.FC = () => {
 
             <Route path="/employee-dashboard" element={
               <ProtectedRoute requireEmailVerified>
-                <EmployeeDashboard />
+                <EmployeeRedirectHandler>
+                  <EmployeeDashboard />
+                </EmployeeRedirectHandler>
               </ProtectedRoute>
             } />
             

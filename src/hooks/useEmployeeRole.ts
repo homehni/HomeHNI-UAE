@@ -43,12 +43,16 @@ export const useEmployeeRole = () => {
     }
 
     try {
+      console.log('Fetching employee role for email:', user.email);
+      
       // Check if user is an employee and get their role
       const { data: employeeData, error } = await supabase
         .from('employees')
         .select('role, status')
         .eq('email', user.email)
         .single();
+
+      console.log('Employee data response:', { employeeData, error });
 
       if (error) {
         console.log('User is not an employee or error occurred:', error.message);
@@ -64,6 +68,8 @@ export const useEmployeeRole = () => {
 
       const role = employeeData?.role as EmployeeRole;
       const isActive = employeeData?.status === 'active';
+
+      console.log('Employee role detected:', { role, isActive });
 
       setRoleState({
         employeeRole: isActive ? role : null,

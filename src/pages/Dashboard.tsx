@@ -281,7 +281,13 @@ export const Dashboard: React.FC = () => {
                 </div>
                 <Button 
                   variant="secondary" 
-                  onClick={() => navigate('/employee-dashboard')}
+                  onClick={() => {
+                    // Check if user is a finance or HR admin first
+                    if (window.location.pathname === '/dashboard') {
+                      // For now, just navigate to employee dashboard and let the redirect handler take over
+                      navigate('/employee-dashboard');
+                    }
+                  }}
                   className="bg-white text-blue-600 hover:bg-gray-100"
                 >
                   <User className="h-4 w-4 mr-2" />
