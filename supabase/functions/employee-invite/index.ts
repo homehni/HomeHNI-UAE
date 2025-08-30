@@ -92,21 +92,36 @@ serve(async (req) => {
     const requestData: InviteEmployeeRequest = await req.json();
     logStep("Request data received", requestData);
 
-    // Validate required fields
-    if (!requestData.email || !requestData.full_name || !requestData.department || 
-        !requestData.designation || !requestData.role || !requestData.join_date) {
-      throw new Error("Missing required fields");
+    // Validate minimal required fields and set defaults for optional ones
+    if (!requestData.email || !requestData.full_name) {
+      throw new Error("Missing required fields: email and full_name are required");
     }
+
+    // Apply safe defaults to avoid failures during quick entry
+    requestData.department = requestData.department && requestData.department.trim() !== '' ? requestData.department : 'General';
+    requestData.designation = requestData.designation && requestData.designation.trim() !== '' ? requestData.designation : 'Employee';
+    requestData.role = requestData.role || 'employee';
+    requestData.join_date = requestData.join_date || new Date().toISOString().slice(0, 10);
 
     // Check if employee already exists
     const { data: existingEmployee } = await supabaseAdmin
       .from("employees")
-      .select("id")
+      .select("*")
       .eq("email", requestData.email)
-      .single();
+      .maybeSingle();
 
     if (existingEmployee) {
-      throw new Error("Employee with this email already exists");
+      logStep("Employee already exists, returning existing record", { employeeId: existingEmployee.id, employeeIdNumber: existingEmployee.employee_id });
+      return new Response(JSON.stringify({
+        success: true,
+        employee: existingEmployee,
+        authUser: null,
+        loginCredentials: null,
+        message: `Employee ${existingEmployee.full_name} already exists with ID: ${existingEmployee.employee_id}.` 
+      }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 200,
+      });
     }
 
     // Create the employee record
@@ -136,44 +151,8 @@ serve(async (req) => {
 
     logStep("Employee created successfully", { employeeId: newEmployee.id, employeeIdNumber: newEmployee.employee_id });
 
-    // Generate temporary password for the new user
-    const tempPassword = generateTempPassword();
-    logStep("Generated temporary password");
-
-    // Create Supabase auth user account
-    const { data: authUser, error: authError } = await supabaseAdmin.auth.admin.createUser({
-      email: requestData.email,
-      password: tempPassword,
-      email_confirm: true, // Auto-confirm email
-      user_metadata: {
-        full_name: requestData.full_name,
-        employee_id: newEmployee.employee_id,
-        department: requestData.department,
-        role: requestData.role
-      }
-    });
-
-    if (authError) {
-      // If user creation fails, clean up the employee record
-      await supabaseAdmin
-        .from("employees")
-        .delete()
-        .eq("id", newEmployee.id);
-      
-      throw new Error(`Failed to create user account: ${authError.message}`);
-    }
-
-    logStep("Auth user created successfully", { authUserId: authUser.user?.id });
-
-    // Update employee record with the auth user ID
-    const { error: updateError } = await supabaseAdmin
-      .from("employees")
-      .update({ user_id: authUser.user?.id })
-      .eq("id", newEmployee.id);
-
-    if (updateError) {
-      logStep("Warning: Failed to link employee to auth user", { error: updateError.message });
-    }
+    // Skip creating Supabase Auth user accounts in this mode to avoid errors and allow quick employee creation
+    logStep("Skipping auth user creation per relaxed mode");
 
     // Create a log entry for the transaction
     await supabaseAdmin
@@ -193,15 +172,9 @@ serve(async (req) => {
     return new Response(JSON.stringify({
       success: true,
       employee: newEmployee,
-      authUser: {
-        id: authUser.user?.id,
-        email: authUser.user?.email
-      },
-      loginCredentials: {
-        email: requestData.email,
-        temporaryPassword: tempPassword
-      },
-      message: `Employee ${requestData.full_name} invited successfully with ID: ${newEmployee.employee_id}. Login credentials generated.`
+      authUser: null,
+      loginCredentials: null,
+      message: `Employee ${requestData.full_name} created successfully with ID: ${newEmployee.employee_id}.`
     }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
       status: 200,
