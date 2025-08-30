@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -77,14 +77,22 @@ export const PayoutModal: React.FC<PayoutModalProps> = ({
     try {
       const { data, error } = await supabase
         .from('employee_payouts')
-        .select(`
-          *,
-          employees(full_name, employee_id)
-        `)
+        .select('*')
         .order('requested_at', { ascending: false });
 
       if (error) throw error;
-      setPayoutRequests(data || []);
+
+      const mapped = (data || []).map((row: any) => {
+        const emp = employees.find(e => e.id === row.employee_id);
+        return {
+          ...row,
+          employees: {
+            full_name: emp?.full_name || 'Unknown',
+            employee_id: emp?.employee_id || ''
+          }
+        } as PayoutRequest;
+      });
+      setPayoutRequests(mapped);
     } catch (error) {
       console.error('Error fetching payout requests:', error);
       toast({
@@ -246,9 +254,9 @@ export const PayoutModal: React.FC<PayoutModalProps> = ({
       <DialogContent className="sm:max-w-[800px] max-h-[80vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Payout Management</DialogTitle>
-          <div id="dialog-description" className="text-sm text-muted-foreground">
+          <DialogDescription id="dialog-description">
             Create, approve, and process employee payouts through the system.
-          </div>
+          </DialogDescription>
         </DialogHeader>
 
         {/* Tab Navigation */}

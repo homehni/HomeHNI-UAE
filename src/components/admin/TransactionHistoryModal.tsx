@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -56,15 +56,32 @@ export const TransactionHistoryModal: React.FC<TransactionHistoryModalProps> = (
     try {
       const { data, error } = await supabase
         .from('employee_transactions')
-        .select(`
-          *,
-          employees(employee_id, full_name)
-        `)
+        .select('*')
         .order('created_at', { ascending: false })
         .limit(100);
 
       if (error) throw error;
-      setTransactions(data || []);
+
+      const employeeIds = Array.from(new Set((data || []).map((t: any) => t.employee_id))).filter(Boolean) as string[];
+
+      let employeesMap: Record<string, { employee_id: string; full_name: string }> = {};
+      if (employeeIds.length) {
+        const { data: emps, error: empErr } = await supabase
+          .from('employees')
+          .select('id, employee_id, full_name')
+          .in('id', employeeIds);
+        if (empErr) throw empErr;
+        employeesMap = Object.fromEntries(
+          (emps || []).map((e: any) => [e.id, { employee_id: e.employee_id, full_name: e.full_name }])
+        );
+      }
+
+      const mapped = (data || []).map((t: any) => ({
+        ...t,
+        employees: employeesMap[t.employee_id] || { employee_id: '', full_name: 'Unknown' }
+      })) as Transaction[];
+
+      setTransactions(mapped);
     } catch (error) {
       console.error('Error fetching transactions:', error);
       toast({
@@ -173,9 +190,9 @@ export const TransactionHistoryModal: React.FC<TransactionHistoryModalProps> = (
       <DialogContent className="sm:max-w-[900px] max-h-[80vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Transaction History</DialogTitle>
-          <div id="dialog-description" className="text-sm text-muted-foreground">
+          <DialogDescription id="dialog-description">
             View and filter all employee financial transactions.
-          </div>
+          </DialogDescription>
         </DialogHeader>
 
         {/* Filters */}
