@@ -57,6 +57,8 @@ import AdminLogin from "./pages/AdminLogin";
 import { AdminAnalytics } from "./pages/AdminAnalytics";
 import { AdminContent } from "./pages/AdminContent";
 import { AdminLeads } from "./pages/AdminLeads";
+import FinanceOverview from "./pages/admin/FinanceOverview";
+import { FinanceProtectedRoute } from "@/components/admin/FinanceProtectedRoute";
 import { AdminRegions } from "./pages/AdminRegions";
 import { AdminSEO } from "./pages/AdminSEO";
 import { AdminAudit } from "./pages/AdminAudit";
@@ -242,6 +244,33 @@ const App: React.FC = () => {
               <Route path="security" element={<AdminAudit />} />
               <Route path="settings" element={<AdminSettings />} />
               <Route path="seo" element={<AdminSEO />} />
+              
+              {/* Finance Routes - Role Protected */}
+              <Route path="finance" element={
+                <FinanceProtectedRoute>
+                  <FinanceOverview />
+                </FinanceProtectedRoute>
+              } />
+              <Route path="finance/payouts" element={
+                <FinanceProtectedRoute>
+                  <FinanceOverview />
+                </FinanceProtectedRoute>
+              } />
+              <Route path="finance/transactions" element={
+                <FinanceProtectedRoute>
+                  <FinanceOverview />
+                </FinanceProtectedRoute>
+              } />
+              <Route path="finance/payroll" element={
+                <FinanceProtectedRoute>
+                  <FinanceOverview />
+                </FinanceProtectedRoute>
+              } />
+              <Route path="finance/reports" element={
+                <FinanceProtectedRoute>
+                  <FinanceOverview />
+                </FinanceProtectedRoute>
+              } />
             </Route>
             
             <Route path="/robots.txt" element={<RobotsTxt />} />

@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
+import { useEmployeeRole } from '@/hooks/useEmployeeRole';
+import { useAdminAuth } from '@/hooks/useAdminAuth';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -15,6 +17,8 @@ import Marquee from '@/components/Marquee';
 // Auth component with separate password visibility states
 export const Auth: React.FC = () => {
   const { user, profile, signInWithGoogle, signInWithPassword, signUpWithPassword } = useAuth();
+  const { isFinanceAdmin, isHRAdmin, isEmployee, loading: employeeLoading } = useEmployeeRole();
+  const { isAdmin, loading: adminLoading } = useAdminAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const { toast } = useToast();
@@ -37,9 +41,30 @@ export const Auth: React.FC = () => {
   });
 
   useEffect(() => {
-    if (user) {
+    if (user && !employeeLoading && !adminLoading) {
       const urlParams = new URLSearchParams(location.search);
       const redirectPath = urlParams.get('redirectTo');
+      
+      // Check if user is an employee first
+      if (isEmployee) {
+        if (isFinanceAdmin) {
+          navigate('/admin/finance', { replace: true });
+          return;
+        } else if (isHRAdmin) {
+          navigate('/admin/hr', { replace: true });
+          return;
+        } else {
+          // Other employee types - redirect to general employee dashboard
+          navigate('/admin', { replace: true });
+          return;
+        }
+      }
+      
+      // Check if user is a full admin
+      if (isAdmin) {
+        navigate('/admin', { replace: true });
+        return;
+      }
       
       if (profile) {
         // Profile exists, check if user needs to select a role
@@ -59,7 +84,7 @@ export const Auth: React.FC = () => {
         }, 1000); // Wait 1 second for profile to load
       }
     }
-  }, [user, profile, navigate, location]);
+  }, [user, profile, isEmployee, isFinanceAdmin, isHRAdmin, isAdmin, employeeLoading, adminLoading, navigate, location]);
 
   const handleEmailSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
