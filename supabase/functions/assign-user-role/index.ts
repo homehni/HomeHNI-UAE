@@ -19,8 +19,23 @@ Deno.serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
+  console.log('=== ASSIGN USER ROLE FUNCTION CALLED ===');
+  console.log('Method:', req.method);
+  console.log('URL:', req.url);
+
   try {
-    const body = await req.json();
+    let body;
+    try {
+      body = await req.json();
+      console.log('Request body:', JSON.stringify(body, null, 2));
+    } catch (parseError) {
+      console.error('Failed to parse JSON:', parseError);
+      return new Response(
+        JSON.stringify({ success: false, error: 'Invalid JSON in request body' }),
+        { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 400 }
+      );
+    }
+
     const name = (body?.name ?? '').trim();
     const email = (body?.email ?? '').trim().toLowerCase();
     const password = (body?.password ?? '').trim();
@@ -37,11 +52,14 @@ Deno.serve(async (req) => {
     }
 
     if (!role || !ALLOWED_ROLES.has(role)) {
+      console.error('Invalid role provided:', role, 'Allowed:', Array.from(ALLOWED_ROLES));
       return new Response(
         JSON.stringify({ success: false, error: 'Invalid role. Allowed: content_manager, blog_content_creator, lead_manager, admin' }),
         { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 400 }
       );
     }
+
+    console.log('Role validation passed for:', role);
 
     const supabaseUrl = Deno.env.get('SUPABASE_URL');
     const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');

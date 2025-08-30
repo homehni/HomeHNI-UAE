@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -107,10 +107,12 @@ export const AssignRoleModal: React.FC<AssignRoleModalProps> = ({ isOpen, onClos
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-md bg-background border-border" aria-describedby="assign-role-description">
+      <DialogContent className="sm:max-w-md bg-background border-border">
         <DialogHeader className="pb-4 border-b border-border">
           <DialogTitle className="text-xl font-semibold text-foreground">Add a New Role</DialogTitle>
-          <p id="assign-role-description" className="sr-only">Create a new user or assign a role to an existing user</p>
+          <DialogDescription className="text-sm text-muted-foreground">
+            Create a new user or assign a role to an existing user. Provide name and password for new users, or just email for existing users.
+          </DialogDescription>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-6 pt-4">
