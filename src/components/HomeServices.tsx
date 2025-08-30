@@ -104,8 +104,8 @@ const HomeServices = () => {
         // Reset to beginning for infinite scroll
         scrollContainer.scrollLeft = 0;
       } else {
-        // Very smooth scroll - smaller increment for fluid motion
-        scrollContainer.scrollLeft += 0.5;
+        // Increased scroll speed to match RealEstateSlider
+        scrollContainer.scrollLeft += 1.5;
       }
     };
 
@@ -175,7 +175,7 @@ const HomeServices = () => {
                 </div>
 
                 {/* Service Title */}
-                <div className="p-4 text-center">
+                <div className="py-2 px-4 text-center">
                   <h3 className="text-base font-bold text-gray-900">
                     {service.title}
                   </h3>
