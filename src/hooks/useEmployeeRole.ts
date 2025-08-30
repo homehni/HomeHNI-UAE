@@ -44,18 +44,17 @@ export const useEmployeeRole = () => {
 
     try {
       console.log('Fetching employee role for email:', user.email);
-      
-      // Check if user is an employee and get their role
+      // Case-insensitive match on email; allow records without status to be treated as active
       const { data: employeeData, error } = await supabase
         .from('employees')
         .select('role, status')
-        .eq('email', user.email)
-        .single();
+        .ilike('email', user.email!)
+        .maybeSingle();
 
       console.log('Employee data response:', { employeeData, error });
 
-      if (error) {
-        console.log('User is not an employee or error occurred:', error.message);
+      if (error || !employeeData) {
+        console.log('User is not an employee or error occurred:', error?.message);
         setRoleState({
           employeeRole: null,
           loading: false,
@@ -66,17 +65,22 @@ export const useEmployeeRole = () => {
         return;
       }
 
-      const role = employeeData?.role as EmployeeRole;
-      const isActive = employeeData?.status === 'active';
+      const rawRole = (employeeData as any)?.role as string | null;
+      const normalizedRole = (rawRole || '')
+        .toString()
+        .trim()
+        .toLowerCase()
+        .replace(/\s+/g, '_');
+      const isActive = ((employeeData as any)?.status ?? 'active') === 'active';
 
-      console.log('Employee role detected:', { role, isActive });
+      console.log('Employee role detected:', { rawRole, normalizedRole, isActive });
 
       setRoleState({
-        employeeRole: isActive ? role : null,
+        employeeRole: isActive && normalizedRole ? (normalizedRole as any) : null,
         loading: false,
-        isFinanceAdmin: isActive && role === 'finance_admin',
-        isHRAdmin: isActive && role === 'hr_admin',
-        isEmployee: isActive && !!role,
+        isFinanceAdmin: isActive && (normalizedRole === 'finance_admin' || normalizedRole === 'finance'),
+        isHRAdmin: isActive && (normalizedRole === 'hr_admin' || normalizedRole === 'hr'),
+        isEmployee: isActive && !!normalizedRole,
       });
     } catch (error) {
       console.error('Error fetching employee role:', error);

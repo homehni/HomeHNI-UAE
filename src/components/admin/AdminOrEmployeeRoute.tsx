@@ -1,0 +1,55 @@
+import React from 'react';
+import { Navigate } from 'react-router-dom';
+import { useAuth } from '@/contexts/AuthContext';
+import { useAdminAuth } from '@/hooks/useAdminAuth';
+import { useEmployeeRole } from '@/hooks/useEmployeeRole';
+import { Loader2, AlertTriangle } from 'lucide-react';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+
+interface AdminOrEmployeeRouteProps {
+  children: React.ReactNode;
+}
+
+const AdminOrEmployeeRoute: React.FC<AdminOrEmployeeRouteProps> = ({ children }) => {
+  const { user } = useAuth();
+  const { isAdmin, loading: adminLoading } = useAdminAuth();
+  const { isEmployee, loading: employeeLoading } = useEmployeeRole();
+
+  const loading = adminLoading || employeeLoading;
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="text-center space-y-4">
+          <Loader2 className="h-8 w-8 animate-spin mx-auto text-primary" />
+          <p className="text-sm text-muted-foreground">Verifying access...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return <Navigate to="/admin/auth" replace />;
+  }
+
+  if (!isAdmin && !isEmployee) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background p-4">
+        <div className="max-w-md w-full space-y-4">
+          <Alert variant="destructive">
+            <AlertTriangle className="h-4 w-4" />
+            <AlertTitle>Access Restricted</AlertTitle>
+            <AlertDescription>
+              You don't have permission to access the admin portal. If you need access, please contact your administrator.
+            </AlertDescription>
+          </Alert>
+          <Navigate to="/" replace />
+        </div>
+      </div>
+    );
+  }
+
+  return <>{children}</>; 
+};
+
+export default AdminOrEmployeeRoute;

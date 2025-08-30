@@ -50,6 +50,7 @@ import AdminAuth from "./pages/AdminAuth";
 import AdminProtectedRoute from "@/components/AdminProtectedRoute";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminLayout from "@/components/admin/AdminLayout";
+import AdminOrEmployeeRoute from "@/components/admin/AdminOrEmployeeRoute";
 import AdminProperties from "./pages/AdminProperties";
 import EmployeeManagement from "./pages/EmployeeManagement";
 import AdminSettings from "./pages/AdminSettings";
@@ -230,11 +231,11 @@ const App: React.FC = () => {
             
             {/* Admin Routes - Updated */}
             <Route path="/admin/auth" element={<AdminAuth />} />
-            <Route path="/admin" element={
-              <AdminProtectedRoute>
-                <AdminLayout />
-              </AdminProtectedRoute>
-            }>
+<Route path="/admin" element={
+  <AdminOrEmployeeRoute>
+    <AdminLayout />
+  </AdminOrEmployeeRoute>
+}>
               <Route index element={<AdminDashboard />} />
               <Route path="employees" element={<EmployeeManagement />} />
               <Route path="content" element={<ContentManagementPage />} />
