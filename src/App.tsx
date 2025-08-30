@@ -51,7 +51,7 @@ import AdminProtectedRoute from "@/components/AdminProtectedRoute";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminLayout from "@/components/admin/AdminLayout";
 import AdminProperties from "./pages/AdminProperties";
-import AdminUsers from "./pages/AdminUsers";
+import EmployeeManagement from "./pages/EmployeeManagement";
 import AdminSettings from "./pages/AdminSettings";
 import AdminLogin from "./pages/AdminLogin";
 import { AdminAnalytics } from "./pages/AdminAnalytics";
@@ -224,7 +224,7 @@ const App: React.FC = () => {
               </AdminProtectedRoute>
             }>
               <Route index element={<AdminDashboard />} />
-              <Route path="users" element={<AdminUsers />} />
+              <Route path="employees" element={<EmployeeManagement />} />
               <Route path="content" element={<ContentManagementPage />} />
               <Route path="analytics" element={<AdminAnalytics />} />
               <Route path="listings" element={<AdminProperties />} />

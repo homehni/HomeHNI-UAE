@@ -37,8 +37,8 @@ const navigationItems = [
     group: 'Main',
   },
   {
-    title: 'User Management',
-    url: '/admin/users',
+    title: 'Employee Management',
+    url: '/admin/employees',
     icon: Users,
     group: 'Main',
   },

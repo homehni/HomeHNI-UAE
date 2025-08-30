@@ -17,3 +17,9 @@ verify_jwt = false
 
 [functions.assign-user-role]
 verify_jwt = false
+
+[functions.employee-invite]
+verify_jwt = true
+
+[functions.employee-payout]
+verify_jwt = true
