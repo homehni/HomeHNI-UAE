@@ -11,6 +11,7 @@ import { Badge } from '@/components/ui/badge';
 import { useAuth } from '@/contexts/AuthContext';
 import { useProfile } from '@/hooks/useProfile';
 import { Shield, MapPin, Bell, MessageCircle } from 'lucide-react';
+import { PasswordChangeCard } from '@/components/PasswordChangeCard';
 
 interface ProfileFormData {
   full_name: string;
@@ -263,6 +264,9 @@ export const ProfileForm: React.FC = () => {
           </form>
         </CardContent>
       </Card>
+
+      {/* Password Change Section */}
+      <PasswordChangeCard />
     </div>
   );
 };
