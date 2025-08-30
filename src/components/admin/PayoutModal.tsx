@@ -268,7 +268,7 @@ export const PayoutModal: React.FC<PayoutModalProps> = ({
 
         {/* Tab Navigation */}
         <div className="flex space-x-1 border-b">
-          {isHRAdmin && (
+          {(isHRAdmin || isFinanceAdmin) && (
             <Button
               variant={activeTab === 'create' ? 'default' : 'ghost'}
               onClick={() => setActiveTab('create')}
@@ -298,7 +298,7 @@ export const PayoutModal: React.FC<PayoutModalProps> = ({
         </div>
 
         {/* Create Payout Tab */}
-        {activeTab === 'create' && isHRAdmin && (
+        {activeTab === 'create' && (isHRAdmin || isFinanceAdmin) && (
           <form onSubmit={handleCreatePayout} className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
