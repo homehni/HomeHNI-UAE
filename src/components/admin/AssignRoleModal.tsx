@@ -80,7 +80,23 @@ export const AssignRoleModal: React.FC<AssignRoleModalProps> = ({ isOpen, onClos
       onClose();
     } catch (err: any) {
       console.error('Assign role error:', err);
-      toast({ title: 'Error', description: err?.message || 'Failed to assign role', variant: 'destructive' });
+      try {
+        const resp = (err as any)?.context?.response;
+        if (resp) {
+          const text = await resp.text();
+          console.error('Edge function response:', text);
+          try {
+            const json = JSON.parse(text);
+            toast({ title: 'Error', description: json?.error || 'Failed to assign role', variant: 'destructive' });
+          } catch {
+            toast({ title: 'Error', description: text || (err?.message || 'Failed to assign role'), variant: 'destructive' });
+          }
+        } else {
+          toast({ title: 'Error', description: err?.message || 'Failed to assign role', variant: 'destructive' });
+        }
+      } catch {
+        toast({ title: 'Error', description: err?.message || 'Failed to assign role', variant: 'destructive' });
+      }
     } finally {
       setIsSubmitting(false);
     }
