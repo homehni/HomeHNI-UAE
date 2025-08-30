@@ -270,6 +270,28 @@ export const Dashboard: React.FC = () => {
           </div>
         </div>
 
+        {/* Employee Panel Access */}
+        <div className="mb-6">
+          <Card className="bg-gradient-to-r from-blue-500 to-purple-600 text-white">
+            <CardContent className="p-6">
+              <div className="flex justify-between items-center">
+                <div>
+                  <h3 className="text-lg font-semibold mb-2">Employee Panel Access</h3>
+                  <p className="text-blue-100">Access your employee dashboard to view payments and role information</p>
+                </div>
+                <Button 
+                  variant="secondary" 
+                  onClick={() => navigate('/employee-dashboard')}
+                  className="bg-white text-blue-600 hover:bg-gray-100"
+                >
+                  <User className="h-4 w-4 mr-2" />
+                  Employee Panel
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <Card>

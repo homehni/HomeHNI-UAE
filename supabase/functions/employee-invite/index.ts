@@ -151,8 +151,44 @@ serve(async (req) => {
 
     logStep("Employee created successfully", { employeeId: newEmployee.id, employeeIdNumber: newEmployee.employee_id });
 
-    // Skip creating Supabase Auth user accounts in this mode to avoid errors and allow quick employee creation
-    logStep("Skipping auth user creation per relaxed mode");
+    // Generate temporary password for the new user
+    const tempPassword = generateTempPassword();
+    logStep("Generated temporary password");
+
+    // Create Supabase auth user account
+    const { data: authUser, error: authError } = await supabaseAdmin.auth.admin.createUser({
+      email: requestData.email,
+      password: tempPassword,
+      email_confirm: true, // Auto-confirm email
+      user_metadata: {
+        full_name: requestData.full_name,
+        employee_id: newEmployee.employee_id,
+        department: requestData.department,
+        role: requestData.role
+      }
+    });
+
+    if (authError) {
+      // If user creation fails, clean up the employee record
+      await supabaseAdmin
+        .from("employees")
+        .delete()
+        .eq("id", newEmployee.id);
+      
+      throw new Error(`Failed to create user account: ${authError.message}`);
+    }
+
+    logStep("Auth user created successfully", { authUserId: authUser.user?.id });
+
+    // Update employee record with the auth user ID
+    const { error: updateError } = await supabaseAdmin
+      .from("employees")
+      .update({ user_id: authUser.user?.id })
+      .eq("id", newEmployee.id);
+
+    if (updateError) {
+      logStep("Warning: Failed to link employee to auth user", { error: updateError.message });
+    }
 
     // Create a log entry for the transaction
     await supabaseAdmin
@@ -172,9 +208,15 @@ serve(async (req) => {
     return new Response(JSON.stringify({
       success: true,
       employee: newEmployee,
-      authUser: null,
-      loginCredentials: null,
-      message: `Employee ${requestData.full_name} created successfully with ID: ${newEmployee.employee_id}.`
+      authUser: {
+        id: authUser.user?.id,
+        email: authUser.user?.email
+      },
+      loginCredentials: {
+        email: requestData.email,
+        temporaryPassword: tempPassword
+      },
+      message: `Employee ${requestData.full_name} invited successfully with ID: ${newEmployee.employee_id}. Login credentials generated.`
     }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
       status: 200,
