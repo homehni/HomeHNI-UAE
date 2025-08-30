@@ -9,7 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Search, Users, UserCheck, ShieldCheck, Building, Filter, Trash2, Plus, UserCog, Settings2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
-import { AddUserModal } from '@/components/admin/AddUserModal';
+import { AssignRoleModal } from '@/components/admin/AssignRoleModal';
 
 interface User {
   id: string;
@@ -406,7 +406,7 @@ const AdminUsers = () => {
                 className="bg-primary text-primary-foreground hover:bg-primary/90 flex items-center gap-2"
               >
                 <Plus className="h-4 w-4" />
-                Add User
+                Add a new role
               </Button>
               <div className="relative flex-1 sm:w-64">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
@@ -548,8 +548,8 @@ const AdminUsers = () => {
         </CardContent>
       </Card>
 
-      {/* Add User Modal */}
-      <AddUserModal 
+      {/* Add Role Modal */}
+      <AssignRoleModal 
         isOpen={isAddUserModalOpen} 
         onClose={() => setIsAddUserModalOpen(false)}
         onUserAdded={fetchUsers}
