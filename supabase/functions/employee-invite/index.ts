@@ -81,7 +81,7 @@ serve(async (req) => {
       .eq("user_id", user.id)
       .single();
 
-    const isAuthorized = currentEmployee?.role === 'hr_admin' || userRole?.role === 'admin';
+    const isAuthorized = currentEmployee?.role === 'hr_admin' || currentEmployee?.role === 'finance_admin' || userRole?.role === 'admin';
     
     if (!isAuthorized) {
       throw new Error("Only HR admins can invite employees");
