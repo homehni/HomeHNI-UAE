@@ -111,16 +111,13 @@ serve(async (req) => {
       .maybeSingle();
 
     if (existingEmployee) {
-      logStep("Employee already exists, returning existing record", { employeeId: existingEmployee.id, employeeIdNumber: existingEmployee.employee_id });
+      logStep("Employee already exists, returning warning", { employeeId: existingEmployee.id, employeeIdNumber: existingEmployee.employee_id });
       return new Response(JSON.stringify({
-        success: true,
-        employee: existingEmployee,
-        authUser: null,
-        loginCredentials: null,
-        message: `Employee ${existingEmployee.full_name} already exists with ID: ${existingEmployee.employee_id}.` 
+        success: false,
+        error: "USE NEW email credentials to add new employee details"
       }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
-        status: 200,
+        status: 400,
       });
     }
 
