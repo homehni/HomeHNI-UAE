@@ -294,6 +294,190 @@ export type Database = {
         }
         Relationships: []
       }
+      employee_payouts: {
+        Row: {
+          amount: number
+          approved_at: string | null
+          approved_by: string | null
+          description: string | null
+          employee_id: string
+          id: string
+          paid_at: string | null
+          payout_type: Database["public"]["Enums"]["transaction_type"]
+          rejected_at: string | null
+          rejected_by: string | null
+          rejection_reason: string | null
+          requested_at: string
+          requested_by: string | null
+          status: Database["public"]["Enums"]["payout_status"]
+          stripe_payment_intent_id: string | null
+          transaction_id: string | null
+        }
+        Insert: {
+          amount: number
+          approved_at?: string | null
+          approved_by?: string | null
+          description?: string | null
+          employee_id: string
+          id?: string
+          paid_at?: string | null
+          payout_type: Database["public"]["Enums"]["transaction_type"]
+          rejected_at?: string | null
+          rejected_by?: string | null
+          rejection_reason?: string | null
+          requested_at?: string
+          requested_by?: string | null
+          status?: Database["public"]["Enums"]["payout_status"]
+          stripe_payment_intent_id?: string | null
+          transaction_id?: string | null
+        }
+        Update: {
+          amount?: number
+          approved_at?: string | null
+          approved_by?: string | null
+          description?: string | null
+          employee_id?: string
+          id?: string
+          paid_at?: string | null
+          payout_type?: Database["public"]["Enums"]["transaction_type"]
+          rejected_at?: string | null
+          rejected_by?: string | null
+          rejection_reason?: string | null
+          requested_at?: string
+          requested_by?: string | null
+          status?: Database["public"]["Enums"]["payout_status"]
+          stripe_payment_intent_id?: string | null
+          transaction_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "employee_payouts_employee_id_fkey"
+            columns: ["employee_id"]
+            isOneToOne: false
+            referencedRelation: "employees"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "employee_payouts_transaction_id_fkey"
+            columns: ["transaction_id"]
+            isOneToOne: false
+            referencedRelation: "employee_transactions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      employee_transactions: {
+        Row: {
+          amount: number
+          created_at: string
+          created_by: string | null
+          description: string | null
+          employee_id: string
+          id: string
+          reference_number: string | null
+          transaction_date: string
+          transaction_type: Database["public"]["Enums"]["transaction_type"]
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          employee_id: string
+          id?: string
+          reference_number?: string | null
+          transaction_date?: string
+          transaction_type: Database["public"]["Enums"]["transaction_type"]
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          employee_id?: string
+          id?: string
+          reference_number?: string | null
+          transaction_date?: string
+          transaction_type?: Database["public"]["Enums"]["transaction_type"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "employee_transactions_employee_id_fkey"
+            columns: ["employee_id"]
+            isOneToOne: false
+            referencedRelation: "employees"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      employees: {
+        Row: {
+          approved_at: string | null
+          approved_by: string | null
+          created_at: string
+          created_by: string | null
+          department: string
+          designation: string
+          email: string
+          employee_id: string
+          full_name: string
+          id: string
+          join_date: string
+          manager_id: string | null
+          phone: string | null
+          role: Database["public"]["Enums"]["employee_role"]
+          salary: number | null
+          status: Database["public"]["Enums"]["employee_status"]
+          updated_at: string
+        }
+        Insert: {
+          approved_at?: string | null
+          approved_by?: string | null
+          created_at?: string
+          created_by?: string | null
+          department: string
+          designation: string
+          email: string
+          employee_id: string
+          full_name: string
+          id?: string
+          join_date: string
+          manager_id?: string | null
+          phone?: string | null
+          role?: Database["public"]["Enums"]["employee_role"]
+          salary?: number | null
+          status?: Database["public"]["Enums"]["employee_status"]
+          updated_at?: string
+        }
+        Update: {
+          approved_at?: string | null
+          approved_by?: string | null
+          created_at?: string
+          created_by?: string | null
+          department?: string
+          designation?: string
+          email?: string
+          employee_id?: string
+          full_name?: string
+          id?: string
+          join_date?: string
+          manager_id?: string | null
+          phone?: string | null
+          role?: Database["public"]["Enums"]["employee_role"]
+          salary?: number | null
+          status?: Database["public"]["Enums"]["employee_status"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "employees_manager_id_fkey"
+            columns: ["manager_id"]
+            isOneToOne: false
+            referencedRelation: "employees"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       featured_properties: {
         Row: {
           created_at: string
@@ -1161,7 +1345,22 @@ export type Database = {
         | "services"
         | "featured_properties"
         | "marketing_content"
+      employee_role:
+        | "hr_admin"
+        | "finance_admin"
+        | "content_manager"
+        | "blog_manager"
+        | "employee_manager"
+        | "employee"
+      employee_status: "active" | "inactive" | "pending_approval" | "terminated"
+      payout_status: "pending" | "approved" | "rejected" | "paid"
       permission_action: "create" | "read" | "update" | "delete"
+      transaction_type:
+        | "salary"
+        | "bonus"
+        | "reimbursement"
+        | "penalty"
+        | "advance"
       user_role:
         | "admin"
         | "content_manager"
@@ -1321,7 +1520,24 @@ export const Constants = {
         "featured_properties",
         "marketing_content",
       ],
+      employee_role: [
+        "hr_admin",
+        "finance_admin",
+        "content_manager",
+        "blog_manager",
+        "employee_manager",
+        "employee",
+      ],
+      employee_status: ["active", "inactive", "pending_approval", "terminated"],
+      payout_status: ["pending", "approved", "rejected", "paid"],
       permission_action: ["create", "read", "update", "delete"],
+      transaction_type: [
+        "salary",
+        "bonus",
+        "reimbursement",
+        "penalty",
+        "advance",
+      ],
       user_role: [
         "admin",
         "content_manager",
