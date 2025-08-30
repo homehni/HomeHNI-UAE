@@ -246,6 +246,9 @@ export const PayoutModal: React.FC<PayoutModalProps> = ({
       <DialogContent className="sm:max-w-[800px] max-h-[80vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Payout Management</DialogTitle>
+          <div id="dialog-description" className="text-sm text-muted-foreground">
+            Create, approve, and process employee payouts through the system.
+          </div>
         </DialogHeader>
 
         {/* Tab Navigation */}

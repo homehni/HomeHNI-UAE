@@ -173,6 +173,9 @@ export const TransactionHistoryModal: React.FC<TransactionHistoryModalProps> = (
       <DialogContent className="sm:max-w-[900px] max-h-[80vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Transaction History</DialogTitle>
+          <div id="dialog-description" className="text-sm text-muted-foreground">
+            View and filter all employee financial transactions.
+          </div>
         </DialogHeader>
 
         {/* Filters */}

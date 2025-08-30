@@ -114,6 +114,9 @@ export const EmployeeInviteModal: React.FC<EmployeeInviteModalProps> = ({
       <DialogContent className="sm:max-w-[600px] max-h-[80vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Invite New Employee</DialogTitle>
+          <div id="dialog-description" className="text-sm text-muted-foreground">
+            Fill in the details below to invite a new employee to the system.
+          </div>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-4">

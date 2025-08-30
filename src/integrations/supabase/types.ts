@@ -1179,6 +1179,14 @@ export type Database = {
           role_name: string
         }[]
       }
+      get_current_employee_id: {
+        Args: Record<PropertyKey, never>
+        Returns: string
+      }
+      get_current_user_email: {
+        Args: Record<PropertyKey, never>
+        Returns: string
+      }
       get_current_user_role: {
         Args: Record<PropertyKey, never>
         Returns: Database["public"]["Enums"]["app_role"]
@@ -1264,6 +1272,14 @@ export type Database = {
               required_role: Database["public"]["Enums"]["user_role"]
               user_uuid: string
             }
+        Returns: boolean
+      }
+      is_finance_admin: {
+        Args: Record<PropertyKey, never>
+        Returns: boolean
+      }
+      is_hr_admin: {
+        Args: Record<PropertyKey, never>
         Returns: boolean
       }
       log_audit_event: {
