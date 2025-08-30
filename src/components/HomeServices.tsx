@@ -175,7 +175,7 @@ const HomeServices = () => {
                 </div>
 
                 {/* Service Title */}
-                <div className="py-2 px-4 text-center">
+<div className="pt-2 px-4 text-center">
                   <h3 className="text-base font-bold text-gray-900">
                     {service.title}
                   </h3>
