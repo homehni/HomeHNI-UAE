@@ -92,9 +92,9 @@ serve(async (req) => {
     logStep("User permissions", { isSuperAdmin, isHRAdmin, isFinanceAdmin });
 
     if (action === 'create') {
-      // Only HR admins can create payout requests
-      if (!isHRAdmin && !isSuperAdmin) {
-        throw new Error("Only HR admins can create payout requests");
+      // HR and Finance admins can create payout requests
+      if (!isHRAdmin && !isFinanceAdmin && !isSuperAdmin) {
+        throw new Error("Only HR or Finance admins can create payout requests");
       }
 
       const payoutData: PayoutRequest = requestData;
