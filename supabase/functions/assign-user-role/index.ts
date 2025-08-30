@@ -26,6 +26,8 @@ Deno.serve(async (req) => {
     const password = (body?.password ?? '').trim();
     const role = (body?.role ?? '').trim().toLowerCase();
 
+    console.log('assign-user-role request', { email, role, hasName: Boolean(name), hasPassword: Boolean(password) });
+
     // Basic validation
     if (!email) {
       return new Response(
@@ -111,23 +113,47 @@ Deno.serve(async (req) => {
       }
     }
 
-    // Ensure profile exists or create/update it
-    const { error: profileError } = await admin
-      .from('profiles')
-      .upsert(
-        {
+    // Ensure profile exists or create/update it (avoid upsert since user_id may not be unique)
+    let hasProfile = false;
+    try {
+      const { data: existing, error: selErr } = await admin
+        .from('profiles')
+        .select('id')
+        .eq('user_id', userId)
+        .limit(1)
+        .single();
+      if (existing?.id) hasProfile = true;
+    } catch (_e) {
+      hasProfile = false;
+    }
+
+    if (!hasProfile) {
+      const { error: insertProfErr } = await admin
+        .from('profiles')
+        .insert({
           user_id: userId,
           full_name: name || email,
           verification_status: 'unverified',
-        },
-        { onConflict: 'user_id' }
-      );
-
-    if (profileError) {
-      return new Response(
-        JSON.stringify({ success: false, error: `Profile error: ${profileError.message}` }),
-        { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 400 }
-      );
+        });
+      if (insertProfErr) {
+        console.error('Profile insert error:', insertProfErr);
+        return new Response(
+          JSON.stringify({ success: false, error: `Profile error: ${insertProfErr.message}` }),
+          { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 400 }
+        );
+      }
+    } else if (name) {
+      const { error: updateProfErr } = await admin
+        .from('profiles')
+        .update({ full_name: name })
+        .eq('user_id', userId);
+      if (updateProfErr) {
+        console.error('Profile update error:', updateProfErr);
+        return new Response(
+          JSON.stringify({ success: false, error: `Profile update error: ${updateProfErr.message}` }),
+          { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 400 }
+        );
+      }
     }
 
     // Assign the role: replace existing roles with the selected role
