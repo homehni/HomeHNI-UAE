@@ -494,10 +494,8 @@ export const VisualPageBuilder: React.FC = () => {
         />
       </div>
 
-      {/* Main Editor Area - Split View */}
-      <div className="flex-1 flex">
-        {/* Page Builder */}
-        <div className="w-1/2 flex flex-col border-r">
+      {/* Main Editor Area - Full Width */}
+      <div className="flex-1 flex flex-col">
         {/* Top Toolbar */}
         <div className="border-b p-4 bg-background/95 backdrop-blur">
           <div className="flex justify-between items-center">
@@ -531,10 +529,6 @@ export const VisualPageBuilder: React.FC = () => {
                   Unsaved Changes
                 </Badge>
               )}
-              <Button variant="outline" size="sm">
-                <Eye className="h-4 w-4 mr-2" />
-                Preview
-              </Button>
               <Button 
                 onClick={saveAllChanges} 
                 disabled={!hasChanges || loading}
@@ -617,31 +611,6 @@ export const VisualPageBuilder: React.FC = () => {
               )}
             </div>
           </ScrollArea>
-        </div>
-        </div>
-
-        {/* Live Preview */}
-        <div className="w-1/2 bg-background">
-          <LiveWebsitePreview 
-            sections={sections.map(s => ({
-              id: s.id,
-              element_type: s.element_type,
-              title: s.title,
-              content: s.content,
-              onUpdate: (id: string, content: any) => {
-                setSections(prev => prev.map(section => 
-                  section.id === id ? { ...section, content } : section
-                ));
-                setHasChanges(true);
-              }
-            }))}
-            onSectionUpdate={(id: string, content: any) => {
-              setSections(prev => prev.map(section => 
-                section.id === id ? { ...section, content } : section
-              ));
-              setHasChanges(true);
-            }}
-          />
         </div>
       </div>
     </div>
