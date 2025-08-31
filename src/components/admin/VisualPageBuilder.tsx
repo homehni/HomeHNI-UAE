@@ -151,19 +151,21 @@ export const VisualPageBuilder: React.FC = () => {
       setLoading(true);
       const data = await contentElementsService.getContentElements(selectedPage);
       
-      // Check if there are any actual featured properties
+      // Fetch active featured properties to mirror homepage state
       const { data: featuredProperties } = await supabase
         .from('featured_properties')
-        .select('*')
+        .select('property_id')
         .eq('is_active', true);
       
-      const hasFeaturedProperties = featuredProperties && featuredProperties.length > 0;
+      const activePropertyIds = new Set<string>((featuredProperties || []).map(fp => fp.property_id as string));
+      const hasFeaturedProperties = activePropertyIds.size > 0;
       
-      // Filter out individual featured_property items if no actual featured properties exist
-      // But keep the featured properties section content (like title, subtitle)
+      // Keep the Featured Properties section itself, but only show cards that match active featured property IDs
       const filteredData = data.filter(item => {
         if (item.element_type === 'featured_property' && item.element_key.startsWith('property_')) {
-          return hasFeaturedProperties;
+          if (!hasFeaturedProperties) return false;
+          const propId = (item as any).content?.id || (item as any).content?.property_id || (item as any).content?.Id || (item as any).content?.ID;
+          return propId ? activePropertyIds.has(String(propId)) : false;
         }
         return true;
       });
