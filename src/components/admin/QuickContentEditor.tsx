@@ -293,6 +293,68 @@ export const QuickContentEditor: React.FC = () => {
                 placeholder="2,143 reviews"
               />
             </div>
+            <div>
+              <Label>Owners Matched</Label>
+              <Input 
+                value={section.content?.ownersMatched || ''} 
+                onChange={(e) => setEditingSection({
+                  ...section,
+                  content: { ...section.content, ownersMatched: e.target.value }
+                })}
+                placeholder="12k+ owners matched"
+              />
+            </div>
+            <div>
+              <Label>Brokerage Saved</Label>
+              <Input 
+                value={section.content?.brokerageSaved || ''} 
+                onChange={(e) => setEditingSection({
+                  ...section,
+                  content: { ...section.content, brokerageSaved: e.target.value }
+                })}
+                placeholder="₹18+ crore brokerage saved"
+              />
+            </div>
+          </div>
+        );
+
+      case 'home_services_section':
+        return (
+          <div className="space-y-4">
+            <div>
+              <Label>Section Title</Label>
+              <Input 
+                value={section.content?.title || ''} 
+                onChange={(e) => setEditingSection({
+                  ...section,
+                  content: { ...section.content, title: e.target.value }
+                })}
+                placeholder="Home Services"
+              />
+            </div>
+            <div>
+              <Label>Services (one per line)</Label>
+              <Textarea 
+                value={section.content?.services?.map((service: any) => `${service.name}: ${service.description}`).join('\n') || ''} 
+                onChange={(e) => {
+                  const lines = e.target.value.split('\n').filter(line => line.trim());
+                  const services = lines.map(line => {
+                    const [name, ...descParts] = line.split(':');
+                    return {
+                      name: name?.trim() || '',
+                      description: descParts.join(':').trim() || ''
+                    };
+                  });
+                  setEditingSection({
+                    ...section,
+                    content: { ...section.content, services }
+                  });
+                }}
+                placeholder="Home Security Services: Professional security solutions for your property&#10;Legal Services: Expert legal assistance for property transactions"
+                rows={6}
+              />
+              <p className="text-xs text-muted-foreground">Format: Service Name: Description (one per line)</p>
+            </div>
           </div>
         );
 
