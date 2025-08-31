@@ -26,7 +26,7 @@ const MobileAppSection = () => {
             </div> */}
 
             <h2 className="text-3xl md:text-4xl font-bold text-black mb-4">
-              {cmsContent?.content?.title || 'Homes, Wherever You Are'}
+              {cmsContent?.content?.headline || cmsContent?.content?.title || 'Homes, Wherever You Are'}
             </h2>
 
             <p className="text-gray-600 text-base md:text-lg mb-8 leading-relaxed">
@@ -70,7 +70,7 @@ const MobileAppSection = () => {
             {/* Coming Soon indicator */}
             <div className="mt-4 text-center lg:text-left">
               <p className="text-sm font-bold text-[#d21404]">🚀 Coming Soon!</p>
-              <p className="text-xs text-gray-600">Get ready for the ultimate property experience</p>
+              <p className="text-xs text-gray-600">{cmsContent?.content?.comingSoon || 'Get ready for the ultimate property experience'}</p>
             </div>
 
             {/* Small trust row (optional) */}
