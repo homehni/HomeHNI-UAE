@@ -27,6 +27,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { contentElementsService, ContentElement } from '@/services/contentElementsService';
 import { useToast } from '@/hooks/use-toast';
 import { useNavigate } from 'react-router-dom';
+import { supabase } from '@/integrations/supabase/client';
 import { 
   Save, 
   Eye, 
@@ -149,7 +150,24 @@ export const VisualPageBuilder: React.FC = () => {
     try {
       setLoading(true);
       const data = await contentElementsService.getContentElements(selectedPage);
-      const formattedSections: PageSection[] = data.map((item, index) => ({
+      
+      // Check if there are any actual featured properties
+      const { data: featuredProperties } = await supabase
+        .from('featured_properties')
+        .select('*')
+        .eq('is_active', true);
+      
+      const hasFeaturedProperties = featuredProperties && featuredProperties.length > 0;
+      
+      // Filter out static featured_property content elements if no actual featured properties exist
+      const filteredData = data.filter(item => {
+        if (item.element_type === 'featured_property') {
+          return hasFeaturedProperties;
+        }
+        return true;
+      });
+      
+      const formattedSections: PageSection[] = filteredData.map((item, index) => ({
         id: item.id,
         element_type: item.element_type,
         element_key: item.element_key,
