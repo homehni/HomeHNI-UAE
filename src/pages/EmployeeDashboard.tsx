@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
-import { User, DollarSign, Calendar, Building, ArrowLeft, Receipt, CreditCard, Layout, Check } from 'lucide-react';
+import { User, DollarSign, Calendar, Building, ArrowLeft, Receipt, CreditCard, Layout, Check, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
 import Header from '@/components/Header';
@@ -482,10 +482,11 @@ export const EmployeeDashboard: React.FC = () => {
         <div className="fixed inset-0 top-0 left-0 bg-background z-50">
           <VisualPageBuilder />
           <Button 
-            className="fixed top-4 right-4 z-50"
+            className="fixed top-4 right-4 z-50 p-2 h-8 w-8"
             onClick={() => setShowVisualBuilder(false)}
+            variant="ghost"
           >
-            Close Builder
+            <X className="h-4 w-4" />
           </Button>
         </div>
       )}
