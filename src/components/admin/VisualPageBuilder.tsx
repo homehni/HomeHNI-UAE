@@ -159,9 +159,10 @@ export const VisualPageBuilder: React.FC = () => {
       
       const hasFeaturedProperties = featuredProperties && featuredProperties.length > 0;
       
-      // Filter out static featured_property content elements if no actual featured properties exist
+      // Filter out individual featured_property items if no actual featured properties exist
+      // But keep the featured properties section content (like title, subtitle)
       const filteredData = data.filter(item => {
-        if (item.element_type === 'featured_property') {
+        if (item.element_type === 'featured_property' && item.element_key.startsWith('property_')) {
           return hasFeaturedProperties;
         }
         return true;
