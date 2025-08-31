@@ -497,19 +497,19 @@ export const VisualPageBuilder: React.FC = () => {
       {/* Main Editor Area - Full Width */}
       <div className="flex-1 flex flex-col">
         {/* Top Toolbar */}
-        <div className="border-b p-4 bg-background/95 backdrop-blur">
-          <div className="flex justify-between items-center">
+        <div className="border-b p-4 bg-background/95 backdrop-blur relative">
+          {/* Close Builder Button - Top Right Corner */}
+          <Button 
+            variant="ghost" 
+            size="sm"
+            onClick={() => navigate('/employee-dashboard')}
+            className="absolute top-2 right-2 p-2 h-8 w-8"
+          >
+            <X className="h-4 w-4" />
+          </Button>
+          
+          <div className="flex justify-between items-center pr-12">
             <div className="flex items-center gap-4">
-              <Button 
-                variant="ghost" 
-                size="sm"
-                onClick={() => navigate('/employee-dashboard')}
-                className="mr-2"
-              >
-                <ArrowLeft className="h-4 w-4 mr-2" />
-                Exit Editor
-              </Button>
-              <Separator orientation="vertical" className="h-6" />
               <h1 className="text-2xl font-bold text-foreground">Visual Page Builder</h1>
               <select 
                 value={selectedPage} 
