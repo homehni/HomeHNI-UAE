@@ -27,7 +27,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { contentElementsService, ContentElement } from '@/services/contentElementsService';
 import { useToast } from '@/hooks/use-toast';
 import { useNavigate } from 'react-router-dom';
-import { supabase } from '@/integrations/supabase/client';
+
 import { 
   Save, 
   Eye, 
@@ -151,21 +151,12 @@ export const VisualPageBuilder: React.FC = () => {
       setLoading(true);
       const data = await contentElementsService.getContentElements(selectedPage);
       
-      // Fetch active featured properties to mirror homepage state
-      const { data: featuredProperties } = await supabase
-        .from('featured_properties')
-        .select('property_id')
-        .eq('is_active', true);
-      
-      const activePropertyIds = new Set<string>((featuredProperties || []).map(fp => fp.property_id as string));
-      const hasFeaturedProperties = activePropertyIds.size > 0;
-      
-      // Keep the Featured Properties section itself, but only show cards that match active featured property IDs
+      // Use content_elements as the single source of truth for featured properties on the selected page
+      // Keep the Featured Properties section; show only cards that exist (is_active=true) in content_elements for this page
       const filteredData = data.filter(item => {
-        if (item.element_type === 'featured_property' && item.element_key.startsWith('property_')) {
-          if (!hasFeaturedProperties) return false;
-          const propId = (item as any).content?.id || (item as any).content?.property_id || (item as any).content?.Id || (item as any).content?.ID;
-          return propId ? activePropertyIds.has(String(propId)) : false;
+        if (item.element_type === 'featured_property') {
+          // getContentElements already filters by page_location and is_active
+          return true;
         }
         return true;
       });
