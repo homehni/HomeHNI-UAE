@@ -101,7 +101,6 @@ import PaymentSuccess from "./pages/payments/Success";
 import PaymentFailed from "./pages/payments/Failed";
 import PostService from "./pages/PostService";
 import { EmployeeDashboard } from "./pages/EmployeeDashboard";
-import { StructuredHomepageEditor } from "./components/admin/StructuredHomepageEditor";
 
 const App: React.FC = () => {
   const [queryClient] = useState(() => new QueryClient({
@@ -249,9 +248,6 @@ const App: React.FC = () => {
               <Route path="security" element={<AdminAudit />} />
               <Route path="settings" element={<AdminSettings />} />
               <Route path="seo" element={<AdminSEO />} />
-              <Route path="structured-homepage-editor" element={
-                <StructuredHomepageEditor />
-              } />
               
               {/* Finance Routes - Role Protected */}
               <Route path="finance" element={

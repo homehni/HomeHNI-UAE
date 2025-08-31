@@ -237,41 +237,7 @@ export const EmployeeDashboard: React.FC = () => {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <Card className="cursor-pointer hover:shadow-md transition-shadow border-primary/20 hover:border-primary/40">
-                    <CardHeader>
-                      <CardTitle className="text-lg flex items-center">
-                        <Layout className="h-5 w-5 mr-2" />
-                        Homepage Content Manager
-                      </CardTitle>
-                      <CardDescription>
-                        Structured interface for editing homepage content with organized sections
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="space-y-3">
-                        <div className="flex items-center text-sm text-green-600">
-                          <Check className="h-4 w-4 mr-1" />
-                          Organized by logical sections
-                        </div>
-                        <div className="flex items-center text-sm text-green-600">
-                          <Check className="h-4 w-4 mr-1" />
-                          Intuitive editing interface
-                        </div>
-                        <div className="flex items-center text-sm text-green-600">
-                          <Check className="h-4 w-4 mr-1" />
-                          Reduced editing errors
-                        </div>
-                        <Button 
-                          className="w-full mt-4"
-                          onClick={() => navigate('/admin/structured-homepage-editor')}
-                        >
-                          Open Homepage Editor
-                        </Button>
-                      </div>
-                    </CardContent>
-                  </Card>
-
+                <div className="grid grid-cols-1 md:grid-cols-1 gap-6">
                   <Card className="cursor-pointer hover:shadow-md transition-shadow">
                     <CardHeader>
                       <CardTitle className="text-lg flex items-center">
@@ -279,11 +245,15 @@ export const EmployeeDashboard: React.FC = () => {
                         Visual Page Builder
                       </CardTitle>
                       <CardDescription>
-                        Advanced visual editor for all pages with drag-and-drop functionality
+                        Advanced visual editor for all pages with organized homepage sections
                       </CardDescription>
                     </CardHeader>
                     <CardContent>
                       <div className="space-y-3">
+                        <div className="flex items-center text-sm text-green-600">
+                          <Check className="h-4 w-4 mr-1" />
+                          Structured homepage editing
+                        </div>
                         <div className="flex items-center text-sm text-muted-foreground">
                           <Layout className="h-4 w-4 mr-1" />
                           Drag-and-drop interface
@@ -297,7 +267,6 @@ export const EmployeeDashboard: React.FC = () => {
                           All page types
                         </div>
                         <Button 
-                          variant="outline" 
                           className="w-full mt-4"
                           onClick={() => setShowVisualBuilder(true)}
                         >

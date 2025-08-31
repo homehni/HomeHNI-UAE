@@ -48,6 +48,7 @@ import {
 import { DraggableSectionItem } from './DraggableSectionItem';
 import { SectionLibrary } from './SectionLibrary';
 import { LiveWebsitePreview } from './LiveWebsitePreview';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 
 interface PageSection {
   id: string;
@@ -310,6 +311,76 @@ export const VisualPageBuilder: React.FC = () => {
     }
   };
 
+  // Group sections by logical categories for homepage
+  const groupSectionsByCategory = (sections: PageSection[]) => {
+    const categories = {
+      'Header & Navigation': sections.filter(s => s.element_type.includes('header') || s.element_type.includes('nav')),
+      'Hero Section': sections.filter(s => s.element_type.includes('hero')),
+      'Services Showcase': sections.filter(s => s.element_type.includes('service')),
+      'Featured Properties': sections.filter(s => s.element_type.includes('property') || s.element_key.includes('property')),
+      'Value Proposition': sections.filter(s => s.element_type.includes('why') || s.element_key.includes('why')),
+      'Testimonials': sections.filter(s => s.element_type.includes('testimonial')),
+      'Mobile App Promotion': sections.filter(s => s.element_type.includes('mobile') || s.element_key.includes('mobile')),
+      'Statistics': sections.filter(s => s.element_type.includes('stats')),
+      'Footer': sections.filter(s => s.element_type.includes('footer'))
+    };
+    
+    // Add any remaining sections to "Other"
+    const categorizedIds = Object.values(categories).flat().map(s => s.id);
+    const otherSections = sections.filter(s => !categorizedIds.includes(s.id));
+    if (otherSections.length > 0) {
+      categories['Other'] = otherSections;
+    }
+    
+    return categories;
+  };
+
+  const renderStructuredHomepageEditor = () => {
+    const categorizedSections = groupSectionsByCategory(sections);
+
+    return (
+      <div className="space-y-6 max-w-4xl mx-auto">
+        <div className="text-center mb-8">
+          <h2 className="text-2xl font-bold text-foreground mb-2">Homepage Content Manager</h2>
+          <p className="text-muted-foreground">Organized sections for efficient content management</p>
+        </div>
+
+        <Accordion type="multiple" className="space-y-4">
+          {Object.entries(categorizedSections).map(([categoryName, categorySections]) => (
+            categorySections.length > 0 && (
+              <AccordionItem key={categoryName} value={categoryName} className="border rounded-lg">
+                <AccordionTrigger className="px-6 py-4 hover:no-underline">
+                  <div className="flex items-center justify-between w-full mr-4">
+                    <h3 className="text-lg font-semibold text-left">{categoryName}</h3>
+                    <Badge variant="secondary">{categorySections.length} section{categorySections.length !== 1 ? 's' : ''}</Badge>
+                  </div>
+                </AccordionTrigger>
+                <AccordionContent className="px-6 pb-6">
+                  <div className="space-y-4">
+                    {categorySections.map((section) => (
+                      <div key={section.id} className="border rounded-lg p-4 bg-card">
+                        {renderEditableContent(section)}
+                      </div>
+                    ))}
+                    {categorySections.length === 0 && (
+                      <div className="text-center py-8 text-muted-foreground">
+                        <p>No sections in this category yet.</p>
+                        <Button variant="outline" size="sm" className="mt-2">
+                          <Plus className="h-4 w-4 mr-2" />
+                          Add Section
+                        </Button>
+                      </div>
+                    )}
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+            )
+          ))}
+        </Accordion>
+      </div>
+    );
+  };
+
   const renderEditableContent = (section: PageSection) => {
     const isEditing = editingSection === section.id;
     const content = isEditing ? editingContent : section.content;
@@ -435,21 +506,11 @@ export const VisualPageBuilder: React.FC = () => {
                 onChange={(e) => setSelectedPage(e.target.value)}
                 className="px-3 py-2 border rounded-md bg-background text-foreground"
               >
-                <option value="homepage">Homepage (Use Structured Editor)</option>
+                <option value="homepage">Homepage</option>
                 <option value="about">About Page</option>
                 <option value="services">Services Page</option>
                 <option value="contact">Contact Page</option>
               </select>
-              {selectedPage === 'homepage' && (
-                <Button 
-                  variant="default" 
-                  size="sm"
-                  onClick={() => navigate('/admin/structured-homepage-editor')}
-                  className="ml-2"
-                >
-                  Switch to Structured Editor
-                </Button>
-              )}
             </div>
             
             <div className="flex items-center gap-2">
@@ -482,6 +543,8 @@ export const VisualPageBuilder: React.FC = () => {
                 <div className="flex items-center justify-center h-64">
                   <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
                 </div>
+              ) : selectedPage === 'homepage' ? (
+                renderStructuredHomepageEditor()
               ) : (
                 <DndContext
                   sensors={sensors}
