@@ -368,7 +368,7 @@ export const LiveWebsitePreview: React.FC<LiveWebsitePreviewProps> = ({
       <header className="border-b bg-background/95 backdrop-blur sticky top-0 z-40">
         <div className="max-w-6xl mx-auto px-4 py-4">
           <div className="flex justify-between items-center">
-            <div className="text-2xl font-bold text-primary">PropertyHub</div>
+            <div className="text-2xl font-bold text-primary">Real Estate Platform</div>
             <nav className="hidden md:flex space-x-8">
               <a href="#" className="text-foreground hover:text-primary">Home</a>
               <a href="#" className="text-foreground hover:text-primary">Properties</a>
@@ -406,7 +406,7 @@ export const LiveWebsitePreview: React.FC<LiveWebsitePreviewProps> = ({
         <div className="max-w-6xl mx-auto px-4 py-12">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
-              <h3 className="font-bold text-lg mb-4">PropertyHub</h3>
+              <h3 className="font-bold text-lg mb-4">About Us</h3>
               <p className="text-muted-foreground">
                 Your trusted real estate partner
               </p>
@@ -436,7 +436,7 @@ export const LiveWebsitePreview: React.FC<LiveWebsitePreviewProps> = ({
                 </p>
                 <p className="flex items-center gap-2">
                   <Mail className="h-4 w-4" />
-                  hello@propertyhub.com
+                  contact@example.com
                 </p>
               </div>
             </div>
