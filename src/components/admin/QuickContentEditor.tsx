@@ -53,7 +53,8 @@ export const QuickContentEditor: React.FC = () => {
           'mobile_app_section',
           'testimonials_section',
           'stats_section',
-          'home_services_section'
+          'home_services_section',
+          'featured_property'
         ]);
 
       if (error) throw error;
@@ -89,6 +90,7 @@ export const QuickContentEditor: React.FC = () => {
       case 'testimonials_section': return 'Customer Testimonials';
       case 'stats_section': return 'Platform Statistics';
       case 'home_services_section': return 'Home Services';
+      case 'featured_property': return 'Featured Property';
       default: return 'Content Section';
     }
   };
@@ -99,6 +101,7 @@ export const QuickContentEditor: React.FC = () => {
       case 'testimonials_section': return 'Edit customer reviews and testimonials';
       case 'stats_section': return 'Update platform statistics and achievements';
       case 'home_services_section': return 'Manage service offerings and descriptions';
+      case 'featured_property': return 'Edit featured property details';
       default: return 'Edit section content';
     }
   };
@@ -109,6 +112,7 @@ export const QuickContentEditor: React.FC = () => {
       case 'testimonials_section': return <Star className="h-5 w-5" />;
       case 'stats_section': return <BarChart className="h-5 w-5" />;
       case 'home_services_section': return <Wrench className="h-5 w-5" />;
+      case 'featured_property': return <Edit2 className="h-5 w-5" />;
       default: return <Edit2 className="h-5 w-5" />;
     }
   };
@@ -354,6 +358,93 @@ export const QuickContentEditor: React.FC = () => {
                 rows={6}
               />
               <p className="text-xs text-muted-foreground">Format: Service Name: Description (one per line)</p>
+            </div>
+          </div>
+        );
+
+      case 'featured_property':
+        return (
+          <div className="space-y-4">
+            <div>
+              <Label>Property Title</Label>
+              <Input 
+                value={section.content?.title || ''} 
+                onChange={(e) => setEditingSection({
+                  ...section,
+                  content: { ...section.content, title: e.target.value }
+                })}
+                placeholder="Luxury 3BHK Apartment"
+              />
+            </div>
+            <div>
+              <Label>Location</Label>
+              <Input 
+                value={section.content?.location || ''} 
+                onChange={(e) => setEditingSection({
+                  ...section,
+                  content: { ...section.content, location: e.target.value }
+                })}
+                placeholder="Whitefield, Bangalore"
+              />
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label>BHK</Label>
+                <Input 
+                  value={section.content?.bhk || ''} 
+                  onChange={(e) => setEditingSection({
+                    ...section,
+                    content: { ...section.content, bhk: e.target.value }
+                  })}
+                  placeholder="3bhk"
+                />
+              </div>
+              <div>
+                <Label>Size</Label>
+                <Input 
+                  value={section.content?.size || ''} 
+                  onChange={(e) => setEditingSection({
+                    ...section,
+                    content: { ...section.content, size: e.target.value }
+                  })}
+                  placeholder="1200 sq ft"
+                />
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label>Price</Label>
+                <Input 
+                  value={section.content?.price || ''} 
+                  onChange={(e) => setEditingSection({
+                    ...section,
+                    content: { ...section.content, price: e.target.value }
+                  })}
+                  placeholder="₹85,00,000"
+                />
+              </div>
+              <div>
+                <Label>Property Type</Label>
+                <Input 
+                  value={section.content?.propertyType || ''} 
+                  onChange={(e) => setEditingSection({
+                    ...section,
+                    content: { ...section.content, propertyType: e.target.value }
+                  })}
+                  placeholder="apartment"
+                />
+              </div>
+            </div>
+            <div>
+              <Label>Image URL</Label>
+              <Input 
+                value={section.content?.image || ''} 
+                onChange={(e) => setEditingSection({
+                  ...section,
+                  content: { ...section.content, image: e.target.value }
+                })}
+                placeholder="/placeholder.svg"
+              />
             </div>
           </div>
         );
