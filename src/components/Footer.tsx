@@ -2,6 +2,7 @@ import { MapPin, Phone, Mail, Facebook, Twitter, Instagram, Linkedin } from 'luc
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useState } from 'react';
+import { useCMSContent } from '@/hooks/useCMSContent';
 interface FooterProps {
   searchSectionRef?: React.RefObject<{
     focusSearchInput: () => void;
@@ -10,6 +11,7 @@ interface FooterProps {
 const Footer = ({
   searchSectionRef
 }: FooterProps) => {
+  const { content: cmsContent } = useCMSContent('footer_content');
   const {
     user
   } = useAuth();
@@ -370,6 +372,40 @@ const Footer = ({
             <a href="/sitemap.xml" className="text-gray-600 hover:text-brand-red transition-colors">Sitemap</a>
             <Link to="/about?tab=faq" className="text-gray-600 hover:text-brand-red transition-colors">FAQs</Link>
           </div>
+
+          {/* Company Info from CMS */}
+          {cmsContent?.content && (
+            <div className="text-center mb-6 p-6 bg-gray-50 rounded-lg">
+              {cmsContent.content.companyName && (
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                  {cmsContent.content.companyName}
+                </h3>
+              )}
+              {cmsContent.content.description && (
+                <p className="text-gray-600 mb-4 max-w-2xl mx-auto">
+                  {cmsContent.content.description}
+                </p>
+              )}
+              {cmsContent.content.address && (
+                <div className="flex items-center justify-center gap-2 text-sm text-gray-600 mb-2">
+                  <MapPin className="w-4 h-4" />
+                  <span>{cmsContent.content.address}</span>
+                </div>
+              )}
+              {cmsContent.content.phone && (
+                <div className="flex items-center justify-center gap-2 text-sm text-gray-600 mb-2">
+                  <Phone className="w-4 h-4" />
+                  <span>{cmsContent.content.phone}</span>
+                </div>
+              )}
+              {cmsContent.content.email && (
+                <div className="flex items-center justify-center gap-2 text-sm text-gray-600">
+                  <Mail className="w-4 h-4" />
+                  <span>{cmsContent.content.email}</span>
+                </div>
+              )}
+            </div>
+          )}
 
           {/* App store badges */}
           <div className="flex flex-col items-center gap-2 mb-6">

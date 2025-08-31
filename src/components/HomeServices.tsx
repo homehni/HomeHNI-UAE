@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { useCMSContent } from '@/hooks/useCMSContent';
 
 // Import service images
 import homeSecurityImage from '@/assets/home-security-services.jpg';
@@ -14,6 +15,7 @@ import paintingCleaningImage from '@/assets/painting-cleaning.jpg';
 import loansImage from '@/assets/loans.jpg';
 
 const HomeServices = () => {
+  const { content: cmsContent } = useCMSContent('home_services_section');
   const navigate = useNavigate();
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [isHovered, setIsHovered] = useState(false);
@@ -125,7 +127,9 @@ const HomeServices = () => {
     <section className="py-8 md:py-12 bg-white relative">
       <div className="container mx-auto px-4">
         <div className="flex justify-center items-center mb-6 md:mb-8">
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-900">Home Services</h2>
+          <h2 className="text-2xl md:text-3xl font-bold text-gray-900">
+            {cmsContent?.content?.heading || cmsContent?.content?.title || 'Home Services'}
+          </h2>
         </div>
 
         {/* Scroll Navigation Buttons - Hidden on mobile */}

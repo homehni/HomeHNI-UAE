@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Star, ShieldCheck, Play, Users, BadgeIndianRupee } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
+import { useCMSContent } from '@/hooks/useCMSContent';
 
 /** 
  * 🔗 ADD YOUR VIDEO URL HERE (use the GitHub "raw" file URL)
@@ -279,16 +280,18 @@ function AutoScrollTestimonials() {
 }
 
 export function TestimonialsSection() {
+  const { content: cmsContent } = useCMSContent('testimonials_section');
+  
   return (
     <section className="py-16 bg-white">
       <div className="mx-auto max-w-7xl px-4">
         {/* Header */}
         <div className="text-center mb-12">
           <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-3">
-            Our customers love us
+            {cmsContent?.content?.heading || cmsContent?.content?.title || 'Our customers love us'}
           </h2>
           <p className="text-gray-600 mb-6">
-            Real stories from verified buyers & owners.
+            {cmsContent?.content?.description || 'Real stories from verified buyers & owners.'}
           </p>
           <TrustMetricsRow />
           <div className="flex justify-center mt-6">
