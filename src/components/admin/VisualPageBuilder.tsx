@@ -498,15 +498,6 @@ export const VisualPageBuilder: React.FC = () => {
       <div className="flex-1 flex flex-col">
         {/* Top Toolbar */}
         <div className="border-b p-4 bg-background/95 backdrop-blur relative">
-          {/* Close Builder Button - Top Right Corner */}
-          <Button 
-            variant="ghost" 
-            size="sm"
-            onClick={() => navigate('/employee-dashboard')}
-            className="absolute top-2 right-2 p-2 h-8 w-8"
-          >
-            <X className="h-4 w-4" />
-          </Button>
           
           <div className="flex justify-between items-center pr-12">
             <div className="flex items-center gap-4">
