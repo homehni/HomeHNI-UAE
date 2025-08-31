@@ -1277,6 +1277,10 @@ export type Database = {
             }
         Returns: boolean
       }
+      is_content_manager: {
+        Args: Record<PropertyKey, never>
+        Returns: boolean
+      }
       is_finance_admin: {
         Args: Record<PropertyKey, never>
         Returns: boolean
