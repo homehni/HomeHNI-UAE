@@ -368,7 +368,7 @@ export const LiveWebsitePreview: React.FC<LiveWebsitePreviewProps> = ({
       <header className="border-b bg-background/95 backdrop-blur sticky top-0 z-40">
         <div className="max-w-6xl mx-auto px-4 py-4">
           <div className="flex justify-between items-center">
-            <div className="text-2xl font-bold text-primary">Real Estate Platform</div>
+            <div className="text-2xl font-bold text-primary"></div>
             <nav className="hidden md:flex space-x-8">
               <a href="#" className="text-foreground hover:text-primary">Home</a>
               <a href="#" className="text-foreground hover:text-primary">Properties</a>
