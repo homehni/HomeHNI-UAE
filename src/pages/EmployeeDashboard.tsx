@@ -9,8 +9,7 @@ import { User, DollarSign, Calendar, Building, ArrowLeft, Receipt, CreditCard } 
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
 import Header from '@/components/Header';
-import { ContentManagerDashboard } from '@/components/admin/ContentManagerDashboard';
-import { QuickContentEditor } from '@/components/admin/QuickContentEditor';
+import { VisualPageBuilder } from '@/components/admin/VisualPageBuilder';
 
 interface Employee {
   id: string;
@@ -228,9 +227,8 @@ export const EmployeeDashboard: React.FC = () => {
 
         {/* Tabs - Different based on role */}
         {employee.role === 'content_manager' ? (
-          <div className="space-y-8">
-            <QuickContentEditor />
-            <ContentManagerDashboard />
+          <div className="fixed inset-0 top-0 left-0 bg-background z-50">
+            <VisualPageBuilder />
           </div>
         ) : (
           <Tabs defaultValue="transactions" className="space-y-6">
