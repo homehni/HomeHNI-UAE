@@ -240,6 +240,7 @@ const DynamicPage: React.FC = () => {
           </section>
         );
       
+      case 'mobile_app_section':
       case 'mobile-app':
         return <MobileAppSection key={section.id} />;
         

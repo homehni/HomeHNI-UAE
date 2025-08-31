@@ -3,7 +3,7 @@ import { useCMSContent } from '@/hooks/useCMSContent';
 import { useToast } from '@/hooks/use-toast';
 
 const MobileAppSection = () => {
-  const { content: cmsContent } = useCMSContent('mobile-app');
+  const { content: cmsContent } = useCMSContent('mobile_app_section');
   const { toast } = useToast();
 
   const handleDownloadClick = () => {
