@@ -435,11 +435,21 @@ export const VisualPageBuilder: React.FC = () => {
                 onChange={(e) => setSelectedPage(e.target.value)}
                 className="px-3 py-2 border rounded-md bg-background text-foreground"
               >
-                <option value="homepage">Homepage</option>
+                <option value="homepage">Homepage (Use Structured Editor)</option>
                 <option value="about">About Page</option>
                 <option value="services">Services Page</option>
                 <option value="contact">Contact Page</option>
               </select>
+              {selectedPage === 'homepage' && (
+                <Button 
+                  variant="default" 
+                  size="sm"
+                  onClick={() => navigate('/admin/structured-homepage-editor')}
+                  className="ml-2"
+                >
+                  Switch to Structured Editor
+                </Button>
+              )}
             </div>
             
             <div className="flex items-center gap-2">

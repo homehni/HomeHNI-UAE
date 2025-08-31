@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
-import { User, DollarSign, Calendar, Building, ArrowLeft, Receipt, CreditCard } from 'lucide-react';
+import { User, DollarSign, Calendar, Building, ArrowLeft, Receipt, CreditCard, Layout, Check } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
 import Header from '@/components/Header';
@@ -58,6 +58,7 @@ export const EmployeeDashboard: React.FC = () => {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [payoutRequests, setPayoutRequests] = useState<PayoutRequest[]>([]);
   const [loading, setLoading] = useState(true);
+  const [showVisualBuilder, setShowVisualBuilder] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -227,8 +228,87 @@ export const EmployeeDashboard: React.FC = () => {
 
         {/* Tabs - Different based on role */}
         {employee.role === 'content_manager' ? (
-          <div className="fixed inset-0 top-0 left-0 bg-background z-50">
-            <VisualPageBuilder />
+          <div className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Content Management Tools</CardTitle>
+                <CardDescription>
+                  Choose the content management interface that best suits your needs
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <Card className="cursor-pointer hover:shadow-md transition-shadow border-primary/20 hover:border-primary/40">
+                    <CardHeader>
+                      <CardTitle className="text-lg flex items-center">
+                        <Layout className="h-5 w-5 mr-2" />
+                        Homepage Content Manager
+                      </CardTitle>
+                      <CardDescription>
+                        Structured interface for editing homepage content with organized sections
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-3">
+                        <div className="flex items-center text-sm text-green-600">
+                          <Check className="h-4 w-4 mr-1" />
+                          Organized by logical sections
+                        </div>
+                        <div className="flex items-center text-sm text-green-600">
+                          <Check className="h-4 w-4 mr-1" />
+                          Intuitive editing interface
+                        </div>
+                        <div className="flex items-center text-sm text-green-600">
+                          <Check className="h-4 w-4 mr-1" />
+                          Reduced editing errors
+                        </div>
+                        <Button 
+                          className="w-full mt-4"
+                          onClick={() => navigate('/admin/structured-homepage-editor')}
+                        >
+                          Open Homepage Editor
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  <Card className="cursor-pointer hover:shadow-md transition-shadow">
+                    <CardHeader>
+                      <CardTitle className="text-lg flex items-center">
+                        <Building className="h-5 w-5 mr-2" />
+                        Visual Page Builder
+                      </CardTitle>
+                      <CardDescription>
+                        Advanced visual editor for all pages with drag-and-drop functionality
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-3">
+                        <div className="flex items-center text-sm text-muted-foreground">
+                          <Layout className="h-4 w-4 mr-1" />
+                          Drag-and-drop interface
+                        </div>
+                        <div className="flex items-center text-sm text-muted-foreground">
+                          <Layout className="h-4 w-4 mr-1" />
+                          Live preview
+                        </div>
+                        <div className="flex items-center text-sm text-muted-foreground">
+                          <Layout className="h-4 w-4 mr-1" />
+                          All page types
+                        </div>
+                        <Button 
+                          variant="outline" 
+                          className="w-full mt-4"
+                          onClick={() => setShowVisualBuilder(true)}
+                        >
+                          Open Visual Builder
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+              </CardContent>
+            </Card>
           </div>
         ) : (
           <Tabs defaultValue="transactions" className="space-y-6">
@@ -427,6 +507,19 @@ export const EmployeeDashboard: React.FC = () => {
           </Tabs>
         )}
       </div>
+      
+      {/* Visual Builder Modal */}
+      {showVisualBuilder && (
+        <div className="fixed inset-0 top-0 left-0 bg-background z-50">
+          <VisualPageBuilder />
+          <Button 
+            className="fixed top-4 right-4 z-50"
+            onClick={() => setShowVisualBuilder(false)}
+          >
+            Close Builder
+          </Button>
+        </div>
+      )}
     </div>
   );
 };
