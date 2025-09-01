@@ -21,7 +21,7 @@ const AgentPlans = () => {
     basic: [
       {
         name: "Basic Monthly",
-        price: "₹2,999/month",
+        price: "₹999/month",
         gst: "+18% GST",
         badge: "GETTING STARTED",
         badgeColor: "bg-blue-500",
