@@ -25,7 +25,7 @@ const AgentPlans = () => {
         gst: "+18% GST",
         badge: "GETTING STARTED",
         badgeColor: "bg-blue-500",
-        amountPaise: 299900, // ₹2,999 in paise
+        amountPaise: 99900, // ₹2,999 in paise
       },
       {
         name: "Basic Quarterly", 
