@@ -5,7 +5,7 @@ import { contentElementsService } from '@/services/contentElementsService';
 import { mapPropertyType } from '@/utils/propertyMappings';
 
 export interface PropertySearchQuery {
-  intent: 'buy' | 'sell' | 'lease' | '';
+  intent: 'buy' | 'sell' | 'lease' | 'rent' | 'new-launch' | 'pg' | 'commercial' | 'plots' | 'projects' | '';
   propertyType: string;
   country: string;
   state: string;
@@ -159,24 +159,46 @@ export const usePropertySearch = () => {
           return false;
         }
 
-        // Filter by intent (listing_type)
-        const intentMatch = (() => {
-          if (query.intent === 'buy') return property.listing_type === 'sale';
-          if (query.intent === 'sell') return property.listing_type === 'sale';
-          if (query.intent === 'lease') return property.listing_type === 'rent';
-          return false;
+        // Filter by intent and property type based on search bar selection
+        const searchBarMatch = (() => {
+          switch (query.intent) {
+            case 'buy':
+              return property.listing_type === 'sale' && 
+                     ['apartment', 'house', 'villa', 'studio'].includes(property.property_type);
+            case 'rent':
+              return property.listing_type === 'rent' && 
+                     ['apartment', 'house', 'villa', 'studio'].includes(property.property_type);
+            case 'new-launch':
+              return property.listing_type === 'sale' && 
+                     ['apartment', 'house', 'villa'].includes(property.property_type);
+            case 'pg':
+              return property.property_type === 'pg';
+            case 'commercial':
+              return ['office', 'retail', 'showroom', 'warehouse', 'coworking'].includes(property.property_type);
+            case 'plots':
+              return property.property_type === 'plot';
+            case 'projects':
+              return property.listing_type === 'sale' && 
+                     ['apartment', 'house', 'villa'].includes(property.property_type);
+            case 'sell':
+              return property.listing_type === 'sale';
+            case 'lease':
+              return property.listing_type === 'rent';
+            default:
+              return true;
+          }
         })();
         
-        if (!intentMatch) {
-          console.log(`❌ Property ${property.id} rejected: intent mismatch. Query: ${query.intent}, Property: ${property.listing_type}`);
+        if (!searchBarMatch) {
+          console.log(`❌ Property ${property.id} rejected: search bar type mismatch. Query: ${query.intent}, Property: ${property.listing_type}/${property.property_type}`);
           return false;
         }
 
-        // Filter by property type with mapping
+        // Additional property type filter if specified
         if (query.propertyType && query.propertyType !== 'Others') {
           const mappedQueryType = mapPropertyType(query.propertyType);
           if (property.property_type !== mappedQueryType) {
-            console.log(`❌ Property ${property.id} rejected: type mismatch. Query: ${query.propertyType} (mapped to ${mappedQueryType}), Property: ${property.property_type}`);
+            console.log(`❌ Property ${property.id} rejected: specific type mismatch. Query: ${query.propertyType} (mapped to ${mappedQueryType}), Property: ${property.property_type}`);
             return false;
           }
         }
@@ -187,10 +209,20 @@ export const usePropertySearch = () => {
           return false;
         }
 
-        // Filter by city (optional - partial match)
-        if (query.city && !property.city.toLowerCase().includes(query.city.toLowerCase())) {
-          console.log(`❌ Property ${property.id} rejected: city mismatch. Query: ${query.city}, Property: ${property.city}`);
-          return false;
+        // Filter by city - exact match preferred, then contains match
+        if (query.city) {
+          const queryCity = query.city.toLowerCase().trim();
+          const propertyCity = property.city.toLowerCase().trim();
+          
+          // Check for exact match or contains match
+          const cityMatch = propertyCity === queryCity || 
+                           propertyCity.includes(queryCity) || 
+                           queryCity.includes(propertyCity);
+          
+          if (!cityMatch) {
+            console.log(`❌ Property ${property.id} rejected: city mismatch. Query: "${query.city}", Property: "${property.city}"`);
+            return false;
+          }
         }
 
         // Filter by budget

@@ -240,7 +240,7 @@ const PostService = () => {
 
   // Debounced search effect
   const searchQuery = useMemo<PropertySearchQuery>(() => ({
-    intent: formData.intent.toLowerCase() as 'buy' | 'sell' | 'lease' | '',
+    intent: formData.intent.toLowerCase() as 'buy' | 'sell' | 'lease' | 'rent' | 'new-launch' | 'pg' | 'commercial' | 'plots' | 'projects' | '',
     propertyType: formData.propertyType,
     country: formData.country,
     state: formData.state,
@@ -261,13 +261,35 @@ const PostService = () => {
         clearResults();
       }
     } else if (['Buy', 'Sell', 'Lease'].includes(formData.intent)) {
-      if (searchQuery.intent && searchQuery.country && searchQuery.state) {
-        debouncedSearchProperties(searchQuery);
+      // Map form intent to search bar type for proper filtering
+      let mappedIntent = formData.intent.toLowerCase();
+      if (formData.intent === 'Buy') {
+        // Map property type to search bar categories
+        if (formData.propertyType === 'Plot/Land') {
+          mappedIntent = 'plots';
+        } else if (['Office', 'Retail/Shop', 'Showroom', 'Industrial/Warehouse', 'Co-working'].includes(formData.propertyType)) {
+          mappedIntent = 'commercial';
+        } else {
+          mappedIntent = 'buy';
+        }
+      } else if (formData.intent === 'Sell') {
+        mappedIntent = 'sell';
+      } else if (formData.intent === 'Lease') {
+        mappedIntent = 'rent';
+      }
+      
+      const enhancedQuery = {
+        ...searchQuery,
+        intent: mappedIntent as 'buy' | 'sell' | 'lease' | 'rent' | 'new-launch' | 'pg' | 'commercial' | 'plots' | 'projects' | ''
+      };
+      
+      if (enhancedQuery.intent && enhancedQuery.country && enhancedQuery.state) {
+        debouncedSearchProperties(enhancedQuery);
       } else {
         clearResults();
       }
     }
-  }, [formData.intent, formData.serviceCategory, searchQuery, debouncedSearchProperties, debouncedSearchServices, clearResults]);
+  }, [formData.intent, formData.serviceCategory, formData.propertyType, searchQuery, debouncedSearchProperties, debouncedSearchServices, clearResults]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
