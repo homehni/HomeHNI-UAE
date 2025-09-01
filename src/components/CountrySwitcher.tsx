@@ -42,43 +42,32 @@ const CountrySwitcher: React.FC = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // Organized countries by regions
+  // Organized countries by regions - only connected domains
   const regions: RegionData[] = [
     {
       name: 'NORTH AMERICA',
       countries: [
         { code: 'US', name: 'United States', domain: 'homehni.us', flag: '🇺🇸', displayCode: 'United States' },
-        { code: 'CA', name: 'Canada', domain: 'homehni.ca', flag: '🇨🇦', displayCode: 'Canada' },
       ]
     },
     {
       name: 'APAC',
       countries: [
-        { code: 'AU', name: 'Australia', domain: 'homehni.com.au', flag: '🇦🇺', displayCode: 'Australia' },
-        { code: 'HK', name: 'Hong Kong', domain: 'homehni.hk', flag: '🇭🇰', displayCode: 'Hong Kong' },
         { code: 'IN', name: 'India', domain: 'homehni.in', flag: '🇮🇳', displayCode: 'India' },
-        { code: 'JP', name: 'Japan', domain: 'homehni.jp', flag: '🇯🇵', displayCode: 'Japan' },
-        { code: 'MY', name: 'Malaysia', domain: 'homehni.my', flag: '🇲🇾', displayCode: 'Malaysia' },
       ]
     },
     {
       name: 'EUROPE',
       countries: [
-        { code: 'FR', name: 'France', domain: 'homehni.fr', flag: '🇫🇷', displayCode: 'France' },
+        { code: 'GB', name: 'United Kingdom', domain: 'homehni.co.uk', flag: '🇬🇧', displayCode: 'United Kingdom' },
         { code: 'DE', name: 'Germany', domain: 'homehni.de', flag: '🇩🇪', displayCode: 'Germany' },
-        { code: 'IT', name: 'Italy', domain: 'homehni.it', flag: '🇮🇹', displayCode: 'Italy' },
-        { code: 'NL', name: 'Netherlands', domain: 'homehni.nl', flag: '🇳🇱', displayCode: 'Netherlands' },
-        { code: 'ES', name: 'Spain', domain: 'homehni.es', flag: '🇪🇸', displayCode: 'Spain' },
       ]
     },
     {
-      name: 'LATAM',
+      name: 'MIDDLE EAST & AFRICA',
       countries: [
-        { code: 'AR', name: 'Argentina', domain: 'homehni.com.ar', flag: '🇦🇷', displayCode: 'Argentina' },
-        { code: 'BR', name: 'Brazil', domain: 'homehni.com.br', flag: '🇧🇷', displayCode: 'Brazil' },
-        { code: 'CL', name: 'Chile', domain: 'homehni.cl', flag: '🇨🇱', displayCode: 'Chile' },
-        { code: 'CO', name: 'Colombia', domain: 'homehni.com.co', flag: '🇨🇴', displayCode: 'Colombia' },
-        { code: 'MX', name: 'Mexico', domain: 'homehni.mx', flag: '🇲🇽', displayCode: 'Mexico' },
+        { code: 'AE', name: 'United Arab Emirates', domain: 'homehni.ae', flag: '🇦🇪', displayCode: 'United Arab Emirates' },
+        { code: 'ZA', name: 'South Africa', domain: 'homehni.co.za', flag: '🇿🇦', displayCode: 'South Africa' },
       ]
     }
   ];
