@@ -83,6 +83,18 @@ export const usePropertySearch = () => {
       // Fetch all properties from the database
       const allProperties = await fetchPublicProperties();
       
+      // If we have very few properties, also include featured properties as fallback
+      let propertiesWithFallback = allProperties;
+      if (allProperties.length < 5) {
+        const { fetchFeaturedProperties } = await import('@/services/propertyService');
+        const featuredProperties = await fetchFeaturedProperties();
+        // Add featured properties that aren't already in the list
+        const existingIds = new Set(allProperties.map(p => p.id));
+        const uniqueFeatured = featuredProperties.filter(p => !existingIds.has(p.id));
+        propertiesWithFallback = [...allProperties, ...uniqueFeatured];
+        console.log(`🎯 Added ${uniqueFeatured.length} featured properties as fallback`);
+      }
+      
       console.log(`🔍 Search Query:`, {
         intent: query.intent,
         propertyType: query.propertyType,
@@ -92,12 +104,12 @@ export const usePropertySearch = () => {
         budgetRange: `₹${query.budgetMin} - ₹${query.budgetMax}`
       });
       
-      console.log(`📊 Total properties in DB:`, allProperties.length);
-      console.log(`📋 Property types in DB:`, [...new Set(allProperties.map(p => p.property_type))]);
-      console.log(`🎯 Property statuses in DB:`, [...new Set(allProperties.map(p => p.status))]);
+      console.log(`📊 Total properties in DB:`, propertiesWithFallback.length);
+      console.log(`📋 Property types in DB:`, [...new Set(propertiesWithFallback.map(p => p.property_type))]);
+      console.log(`🎯 Property statuses in DB:`, [...new Set(propertiesWithFallback.map(p => p.status))]);
       
       // Filter properties based on search criteria
-      let filteredProperties = allProperties.filter(property => {
+      let filteredProperties = propertiesWithFallback.filter(property => {
         console.log(`🏠 Checking property:`, {
           id: property.id,
           title: property.title,
