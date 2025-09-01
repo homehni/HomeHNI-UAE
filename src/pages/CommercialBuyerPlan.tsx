@@ -21,7 +21,7 @@ const CommercialBuyerPlan = () => {
     residential: [
       {
         name: "Silver Plan",
-        price: "₹1,999",
+        price: "₹999",
         gst: "+18% GST",
         badge: "BASIC SUPPORT",
         badgeColor: "bg-red-600",
@@ -44,7 +44,7 @@ const CommercialBuyerPlan = () => {
     commercial: [
       {
         name: "Business Silver",
-        price: "₹4,999",
+        price: "₹999",
         gst: "+18% GST",
         badge: "COMMERCIAL SEARCH",
         badgeColor: "bg-blue-500",
@@ -67,7 +67,7 @@ const CommercialBuyerPlan = () => {
     industrial: [
       {
         name: "Industrial Silver",
-        price: "₹7,999",
+        price: "₹999",
         gst: "+18% GST",
         badge: "INDUSTRIAL SEARCH",
         badgeColor: "bg-gray-600",
@@ -90,7 +90,7 @@ const CommercialBuyerPlan = () => {
     agricultural: [
       {
         name: "Farm Silver",
-        price: "₹2,999",
+        price: "₹999",
         gst: "+18% GST",
         badge: "AGRICULTURAL SEARCH",
         badgeColor: "bg-green-600",
