@@ -1,88 +1,54 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Star, ShieldCheck, Play, Users, BadgeIndianRupee } from 'lucide-react';
+import { Star, ShieldCheck, Play, Users, BadgeIndianRupee, Quote } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useCMSContent } from '@/hooks/useCMSContent';
 
-/** 
- * 🔗 ADD YOUR VIDEO URL HERE (use the GitHub "raw" file URL)
- * Example: https://raw.githubusercontent.com/your/repo/branch/public/videos/testimonials.mp4
+/**
+ * Media
  */
 const VIDEO_SRC = "/lovable-uploads/Property Listing.mp4";
-const VIDEO_POSTER = "/lovable-uploads/fbb0d72f-782e-49f5-bbe1-8afc1314b5f7.png"; // optional fallback image
+const VIDEO_POSTER = "/lovable-uploads/fbb0d72f-782e-49f5-bbe1-8afc1314b5f7.png";
 
-// Sample data
+/**
+ * Demo testimonials (replace with CMS later if you want)
+ */
 const testimonials = [
-  {
-    name: "Rajesh Kumar",
-    roleCity: "Buyer • Bengaluru",
-    rating: 5,
-    text: "Home HNI made my property search incredibly smooth. The verified listings and transparent process saved me months of searching. I found my dream home in just 3 weeks!",
-    date: "Aug 2025",
-    verified: true,
-    initial: "R"
-  },
-  {
-    name: "Priya Sharma",
-    roleCity: "Owner • Pune",
-    rating: 5,
-    text: "Excellent service! They helped me sell my property at the best market price. The legal support and documentation process was handled professionally.",
-    date: "Jul 2025",
-    verified: true,
-    initial: "P"
-  },
-  {
-    name: "Amit Patel",
-    roleCity: "Buyer • Mumbai",
-    rating: 5,
-    text: "Zero brokerage and complete transparency. The team guided me through every step of the buying process. Highly recommended for first-time buyers!",
-    date: "Sep 2025",
-    verified: true,
-    initial: "A"
-  },
-  {
-    name: "Sunita Reddy",
-    roleCity: "Owner • Hyderabad",
-    rating: 5,
-    text: "Professional service from start to finish. They found genuine buyers quickly and handled all the paperwork efficiently. Great experience overall!",
-    date: "Aug 2025",
-    verified: true,
-    initial: "S"
-  }
+  { name: "Rajesh Kumar", roleCity: "Buyer • Bengaluru", rating: 5, text: "Home HNI made my property search incredibly smooth. The verified listings and transparent process saved me months of searching. I found my dream home in just 3 weeks!", date: "Aug 2025", verified: true, initial: "R" },
+  { name: "Priya Sharma", roleCity: "Owner • Pune", rating: 5, text: "Excellent service! They helped me sell my property at the best market price. The legal support and documentation process was handled professionally.", date: "Jul 2025", verified: true, initial: "P" },
+  { name: "Amit Patel", roleCity: "Buyer • Mumbai", rating: 5, text: "Zero brokerage and complete transparency. The team guided me through every step of the buying process. Highly recommended for first-time buyers!", date: "Sep 2025", verified: true, initial: "A" },
+  { name: "Sunita Reddy", roleCity: "Owner • Hyderabad", rating: 5, text: "Professional service from start to finish. They found genuine buyers quickly and handled all the paperwork efficiently. Great experience overall!", date: "Aug 2025", verified: true, initial: "S" }
 ];
 
+/* ------------------------------------------
+   Trust KPIs — now styled as premium chips
+------------------------------------------- */
 export function TrustMetricsRow() {
+  const Item = ({ icon: Icon, children }: any) => (
+    <div className="flex items-center gap-2 rounded-full border border-gray-200/70 bg-white/70 backdrop-blur px-3 py-1.5 shadow-sm">
+      <Icon className="w-4 h-4 text-[#d21404]" />
+      <span className="text-sm text-gray-800">{children}</span>
+    </div>
+  );
+
   return (
-    <div className="flex flex-wrap items-center gap-6 text-sm text-gray-700 mb-8">
-      <div className="flex items-center gap-2">
-        <Star className="w-4 h-4 text-[#d21404] fill-current" />
-        <span>4.8/5 (2,143 reviews)</span>
-      </div>
-      <div className="hidden sm:block w-px h-4 bg-gray-300" />
-      <div className="flex items-center gap-2">
-        <Users className="w-4 h-4 text-[#d21404]" />
-        <span>12k+ owners matched</span>
-      </div>
-      <div className="hidden sm:block w-px h-4 bg-gray-300" />
-      <div className="flex items-center gap-2">
-        <BadgeIndianRupee className="w-4 h-4 text-[#d21404]" />
-        <span>₹18+ crore brokerage saved</span>
-      </div>
+    <div className="flex flex-wrap items-center gap-3 justify-center">
+      <Item icon={Star}>4.8/5 (2,143 reviews)</Item>
+      <Item icon={Users}>12k+ owners matched</Item>
+      <Item icon={BadgeIndianRupee}>₹18+ crore brokerage saved</Item>
     </div>
   );
 }
 
-/** ===========================
- *  VideoTile — actual <video>
- *  =========================== */
+/* ------------------------------------------
+   VideoTile — elevated, with subtle overlay
+------------------------------------------- */
 export function VideoTile({
-  src = "",
+  src = VIDEO_SRC,
   title = "Customer Success Stories",
   poster = VIDEO_POSTER,
 }: {
-  src?: string;
-  title?: string;
-  poster?: string;
+  src?: string; title?: string; poster?: string;
 }) {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -90,18 +56,12 @@ export function VideoTile({
   const togglePlay = () => {
     const v = videoRef.current;
     if (!v) return;
-    if (v.paused) {
-      v.play();
-      setIsPlaying(true);
-    } else {
-      v.pause();
-      setIsPlaying(false);
-    }
+    if (v.paused) { v.play(); setIsPlaying(true); } else { v.pause(); setIsPlaying(false); }
   };
 
   return (
-    <div className="space-y-3">
-      <div className="relative aspect-video overflow-hidden rounded-2xl border border-gray-200 bg-black shadow-sm">
+    <div className="group relative rounded-3xl overflow-hidden border border-gray-200 bg-white shadow-[0_10px_30px_rgba(2,8,23,0.06)]">
+      <div className="relative aspect-video">
         <video
           ref={videoRef}
           src={src}
@@ -109,217 +69,205 @@ export function VideoTile({
           preload="metadata"
           playsInline
           muted
-          // show controls only while playing for a clean look
           controls={isPlaying}
-          className="w-full h-full object-cover"
+          className="h-full w-full object-cover"
           onEnded={() => setIsPlaying(false)}
         />
-        {!isPlaying && (
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
-        )}
-
-        {/* Overlay Play button (hidden while playing) */}
         {!isPlaying && (
           <button
             type="button"
             onClick={togglePlay}
-            className="absolute inset-0 flex items-center justify-center group focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#d21404] rounded-2xl"
             aria-label="Play video"
+            className="absolute inset-0 grid place-items-center"
           >
-            <div className="w-16 h-16 bg-white rounded-full shadow-lg ring-4 ring-white/20 flex items-center justify-center group-hover:scale-105 transition-transform">
-              <Play className="w-6 h-6 text-[#d21404] fill-current ml-1" />
-            </div>
+            <span className="grid place-items-center w-16 h-16 rounded-full bg-white shadow-lg ring-4 ring-white/20 transition-transform group-hover:scale-105">
+              <Play className="w-6 h-6 text-[#d21404] fill-current ml-0.5" />
+            </span>
           </button>
         )}
+        {/* gradient gloss */}
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent opacity-70 group-hover:opacity-90 transition-opacity" />
       </div>
-
-      {/* Caption */}
-      <div className="flex items-center gap-1 text-gray-700">
-        <Play className="w-3 h-3 text-[#d21404]" />
-        <span className="text-sm">{title}</span>
+      <div className="flex items-center gap-2 p-3">
+        <Play className="w-4 h-4 text-[#d21404]" />
+        <p className="text-sm text-gray-700">{title}</p>
       </div>
     </div>
   );
 }
+
+/* ------------------------------------------
+   Testimonial Card — upgraded visual style
+------------------------------------------- */
+type Testimonial = {
+  name: string; roleCity: string; rating: number; text: string; date: string; verified?: boolean; initial: string;
+};
 
 export function TestimonialCard({
-  name,
-  roleCity,
-  rating,
-  text,
-  date,
-  verified,
-  initial
-}) {
+  name, roleCity, rating, text, date, verified, initial
+}: Testimonial) {
   return (
-    <div className="rounded-2xl border border-gray-200 bg-white shadow-sm hover:shadow-md transition-shadow p-4 sm:p-6 min-h-[280px] sm:min-h-[240px] flex flex-col">
-      {/* Header */}
-      <div className="flex items-start gap-3 mb-4">
-        <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center flex-shrink-0">
-          <span className="text-sm font-semibold text-gray-700">{initial}</span>
+    <div className="relative rounded-3xl border border-gray-200 bg-white p-6 shadow-[0_8px_24px_rgba(2,8,23,0.05)] hover:shadow-[0_12px_30px_rgba(2,8,23,0.08)] transition-shadow">
+      {/* top quote icon */}
+      <Quote className="absolute -top-3 -left-3 w-8 h-8 text-[#d21404]/10" />
+      {/* head */}
+      <div className="flex items-start gap-4">
+        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-gray-100 to-gray-200 grid place-items-center text-gray-700 font-semibold">
+          {initial}
         </div>
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2 mb-1">
-            <h4 className="font-semibold text-gray-900 text-sm">{name}</h4>
+        <div className="min-w-0 flex-1">
+          <div className="flex flex-wrap items-center gap-2">
+            <h4 className="font-semibold text-gray-900">{name}</h4>
             <div className="flex">
-              {[...Array(rating)].map((_, i) => (
-                <Star key={i} className="w-3 h-3 text-[#d21404] fill-current" />
+              {Array.from({ length: rating }).map((_, i) => (
+                <Star key={i} className="w-3.5 h-3.5 text-[#d21404] fill-current" />
               ))}
             </div>
-          </div>
-          <div className="flex items-center gap-2 text-xs text-gray-600">
             {verified && (
-              <div className="flex items-center gap-1 bg-emerald-50 text-emerald-600 px-2 py-0.5 rounded-full">
-                <ShieldCheck className="w-3 h-3" />
-                <span>Verified</span>
-              </div>
+              <span className="flex items-center gap-1 rounded-full bg-emerald-50 text-emerald-600 px-2 py-0.5 text-xs">
+                <ShieldCheck className="w-3.5 h-3.5" /> Verified
+              </span>
             )}
-            <span>{roleCity}</span>
-            <span>•</span>
-            <span>{date}</span>
           </div>
+          <div className="text-xs text-gray-600 mt-0.5">{roleCity} • {date}</div>
         </div>
       </div>
-
-      {/* Quote */}
-      <div className="flex-1 flex items-start">
-        <p className="text-gray-700 text-sm leading-relaxed text-left">
-          "{text}"
-        </p>
-      </div>
+      {/* body */}
+      <p className="mt-4 text-gray-700 leading-relaxed">“{text}”</p>
     </div>
   );
 }
 
-/** ===========================
- *  Mobile/Tablet slider
- *  =========================== */
-function AutoScrollTestimonials() {
+/* ------------------------------------------
+   Mobile carousel with snap & momentum
+------------------------------------------- */
+function MobileCarousel() {
   const scrollRef = useRef<HTMLDivElement>(null);
-  const itemRefs = useRef<HTMLDivElement[]>([]);
-  itemRefs.current = [];
+  const [index, setIndex] = useState(0);
 
   useEffect(() => {
     const scroller = scrollRef.current;
     if (!scroller) return;
 
     let i = 0;
-    let busy = false;
     let timer: ReturnType<typeof setInterval> | null = null;
 
-    const goto = (idx: number) => {
-      if (busy || !scroller) return;
-      const el = itemRefs.current[idx];
-      if (!el) return;
-      busy = true;
-      scroller.scrollTo({ left: el.offsetLeft, behavior: "smooth" });
-      setTimeout(() => (busy = false), 600);
+    const to = (n: number) => {
+      const width = scroller.clientWidth;
+      scroller.scrollTo({ left: n * (width + 16), behavior: 'smooth' });
+      setIndex(n);
     };
 
     const start = () => {
       stop();
       timer = setInterval(() => {
         i = (i + 1) % testimonials.length;
-        goto(i);
+        to(i);
       }, 4000);
     };
+
     const stop = () => { if (timer) clearInterval(timer); timer = null; };
 
-    const ro = new ResizeObserver(() => goto(i));
-    ro.observe(scroller);
+    start();
+    scroller.addEventListener('pointerdown', stop);
+    scroller.addEventListener('pointerup', start);
+    scroller.addEventListener('mouseenter', stop);
+    scroller.addEventListener('mouseleave', start);
 
-    const init = setTimeout(start, 800);
-
-    scroller.addEventListener("pointerdown", stop);
-    scroller.addEventListener("pointerup", start);
-    scroller.addEventListener("mouseenter", stop);
-    scroller.addEventListener("mouseleave", start);
-
-    return () => {
-      clearTimeout(init);
-      stop();
-      ro.disconnect();
-      scroller.removeEventListener("pointerdown", stop);
-      scroller.removeEventListener("pointerup", start);
-      scroller.removeEventListener("mouseenter", stop);
-      scroller.removeEventListener("mouseleave", start);
-    };
+    return () => { stop(); };
   }, []);
-
-  const setItemRef = (el: HTMLDivElement | null) => {
-    if (el && !itemRefs.current.includes(el)) itemRefs.current.push(el);
-  };
 
   return (
     <div className="relative">
       <div
         ref={scrollRef}
-        className="overflow-x-auto px-4 pb-2 snap-x snap-mandatory scroll-smooth hide-scroll"
-        style={{
-          scrollPaddingLeft: "1rem",
-          scrollPaddingRight: "1rem",
-          WebkitOverflowScrolling: "touch",
-        }}
+        className="flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-smooth px-1 [-ms-overflow-style:none] [scrollbar-width:none]"
+        style={{ WebkitOverflowScrolling: 'touch' }}
       >
-        <div className="flex gap-4">
-          {testimonials.map((t, idx) => (
-            <div
-              key={idx}
-              ref={setItemRef}
-              className="snap-start shrink-0 box-border basis-[92%] sm:basis-[85%] md:basis-[75%]"
-            >
-              <TestimonialCard {...t} />
-            </div>
-          ))}
-        </div>
+        {testimonials.map((t, i) => (
+          <div key={i} className="snap-start shrink-0 basis-[calc(100%-1rem)]">
+            <TestimonialCard {...t} />
+          </div>
+        ))}
       </div>
 
-      <style>{`.hide-scroll::-webkit-scrollbar{display:none}`}</style>
+      {/* dots */}
+      <div className="mt-3 flex items-center justify-center gap-1.5">
+        {testimonials.map((_, i) => (
+          <span
+            key={i}
+            className={`h-1.5 rounded-full transition-all ${i === index ? 'w-6 bg-[#d21404]' : 'w-2 bg-gray-300'}`}
+          />
+        ))}
+      </div>
     </div>
   );
 }
 
+/* ------------------------------------------
+   SECTION (structure dramatically improved)
+------------------------------------------- */
 export function TestimonialsSection() {
   const { content: cmsContent } = useCMSContent('testimonials_section');
-  
+  const title = cmsContent?.content?.heading || cmsContent?.content?.title || 'Our customers love us';
+  const desc  = cmsContent?.content?.description || 'Real stories from verified buyers & owners.';
+
   return (
-    <section className="py-16 bg-white">
+    <section
+      className="
+        relative py-14 sm:py-16
+        bg-[radial-gradient(90%_60%_at_50%_-10%,#fff,rgba(210,20,4,0.06)_40%,rgba(210,20,4,0.08)_65%,#fff_100%)]
+      "
+    >
       <div className="mx-auto max-w-7xl px-4">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-3">
-            {cmsContent?.content?.heading || cmsContent?.content?.title || 'Our customers love us'}
-          </h2>
-          <p className="text-gray-600 mb-6">
-            {cmsContent?.content?.description || 'Real stories from verified buyers & owners.'}
-          </p>
-          <TrustMetricsRow />
-          <div className="flex justify-center mt-6">
-            <Button asChild variant="outline" size="lg">
-              <Link to="/testimonials">See All Testimonials</Link>
+        {/* top headline + actions */}
+        <div className="text-center max-w-3xl mx-auto">
+          <span className="inline-block text-xs tracking-wider uppercase text-[#d21404]/80 font-semibold mb-2">
+            Testimonials
+          </span>
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900">{title}</h2>
+          <p className="mt-3 text-gray-600">{desc}</p>
+          <div className="mt-6 flex items-center justify-center gap-3">
+            <Button asChild size="lg" variant="default" className="bg-[#d21404] hover:bg-[#b71104]">
+              <Link to="/testimonials">See All</Link>
+            </Button>
+            <Button asChild size="lg" variant="outline">
+              <Link to="/reviews/new">Write a Review</Link>
             </Button>
           </div>
-        </div>
-
-        {/* Desktop Layout */}
-        <div className="hidden lg:grid lg:grid-cols-2 gap-12 items-start">
-          {/* Left Column - Video */}
-          <VideoTile src={VIDEO_SRC} poster={VIDEO_POSTER} title="Customer Success Stories" />
-
-          {/* Right Column - Testimonials */}
-          <div className="space-y-6">
-            {testimonials.slice(0, 3).map((testimonial, index) => (
-              <TestimonialCard key={index} {...testimonial} />
-            ))}
+          <div className="mt-6">
+            <TrustMetricsRow />
           </div>
         </div>
 
-        {/* Mobile & Tablet Layout */}
-        <div className="lg:hidden">
-          <div className="mb-8">
-            <VideoTile src={VIDEO_SRC} poster={VIDEO_POSTER} title="Customer Success Stories" />
+        {/* main split: featured video + mosaic */}
+        <div className="mt-12 grid grid-cols-1 lg:grid-cols-12 gap-8">
+          {/* Left: Featured video & caption */}
+          <div className="lg:col-span-5">
+            <VideoTile />
+            <div className="mt-4 rounded-2xl border border-gray-200 bg-white/70 backdrop-blur p-4 text-sm text-gray-700 shadow-sm">
+              <p>
+                “Watch quick stories of how buyers and owners closed deals faster with verified listings,
+                concierge support and transparent documentation.”
+              </p>
+            </div>
           </div>
-          <AutoScrollTestimonials />
+
+          {/* Right: masonry-like grid on desktop */}
+          <div className="lg:col-span-7 hidden lg:grid grid-cols-1 sm:grid-cols-2 gap-6 content-start">
+            {/* Make one card taller for visual rhythm */}
+            <div className="sm:row-span-2">
+              <TestimonialCard {...testimonials[0]} />
+            </div>
+            <TestimonialCard {...testimonials[1]} />
+            <TestimonialCard {...testimonials[2]} />
+            <TestimonialCard {...testimonials[3]} />
+          </div>
+        </div>
+
+        {/* Mobile/Tablet carousel */}
+        <div className="mt-10 lg:hidden">
+          <MobileCarousel />
         </div>
       </div>
     </section>
