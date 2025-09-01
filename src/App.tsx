@@ -249,6 +249,7 @@ const App: React.FC = () => {
               <Route path="settings" element={<AdminSettings />} />
               <Route path="seo" element={<AdminSEO />} />
               <Route path="pages" element={<AdminPageManagement />} />
+              <Route path="page-management" element={<Navigate to="/admin/pages" replace />} />
               
               {/* Finance Routes - Role Protected */}
               <Route path="finance" element={

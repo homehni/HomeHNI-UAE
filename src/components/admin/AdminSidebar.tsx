@@ -69,7 +69,7 @@ const navigationItems = [
   },
   {
     title: 'Page Management',
-    url: '/admin/page-management',
+    url: '/admin/pages',
     icon: Layout,
     group: 'Content',
   },
