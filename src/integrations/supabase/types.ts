@@ -945,6 +945,45 @@ export type Database = {
         }
         Relationships: []
       }
+      property_real: {
+        Row: {
+          content: Json | null
+          element_key: string | null
+          element_type: string | null
+          id: string | null
+          images: string | null
+          is_active: boolean | null
+          location: string | null
+          property_type: string | null
+          title: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          content?: Json | null
+          element_key?: string | null
+          element_type?: string | null
+          id?: string | null
+          images?: string | null
+          is_active?: boolean | null
+          location?: string | null
+          property_type?: string | null
+          title?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          content?: Json | null
+          element_key?: string | null
+          element_type?: string | null
+          id?: string | null
+          images?: string | null
+          is_active?: boolean | null
+          location?: string | null
+          property_type?: string | null
+          title?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       property_submissions: {
         Row: {
           city: string | null
