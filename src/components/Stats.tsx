@@ -31,7 +31,38 @@ const Stats = () => {
     }
   ];
 
-  const stats = cmsContent?.content?.stats || defaultStats;
+  const content = cmsContent?.content as any;
+  const stats = (() => {
+    // If CMS provides an array of stats, normalize and use it
+    if (Array.isArray(content?.stats) && content.stats.length) {
+      return content.stats.map((s: any, idx: number) => ({
+        icon: defaultStats[idx]?.icon || Home,
+        number: s.number ?? s.value ?? defaultStats[idx]?.number,
+        label: s.label ?? defaultStats[idx]?.label,
+        color: defaultStats[idx]?.color || defaultStats[idx]?.color,
+      }));
+    }
+
+    // Otherwise, support flat fields edited in the Visual Page Builder
+    if (content) {
+      const mapping = [
+        { key: 'PropertiesListed', label: 'Properties Listed' },
+        { key: 'HappyCustomers', label: 'Happy Customers' },
+        { key: 'CountriesCovered', label: 'Countries Covered' },
+        { key: 'AwardsWon', label: 'Awards Won' },
+      ];
+
+      return mapping.map((m, idx) => ({
+        icon: defaultStats[idx].icon,
+        number: content[m.key] ?? content[m.key.toLowerCase()] ?? defaultStats[idx].number,
+        label: content[`${m.key}Label`] ?? m.label,
+        color: defaultStats[idx].color,
+      }));
+    }
+
+    // Fallback to defaults
+    return defaultStats;
+  })();
 
   return (
     <section className="py-16 gradient-red-maroon">
