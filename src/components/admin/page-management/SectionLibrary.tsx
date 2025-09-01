@@ -17,26 +17,77 @@ interface SectionTemplate {
 
 const sectionTemplates: SectionTemplate[] = [
   {
-    id: 'hero-banner',
-    name: 'Hero Banner',
-    type: 'hero',
-    description: 'Large banner with title, subtitle, and call-to-action button',
+    id: 'hero-search',
+    name: 'Hero Search Section',
+    type: 'hero_search',
+    description: 'Hero banner with property search tabs and location-based search',
     category: 'Headers',
-    previewImage: '/lovable-uploads/hero-preview.jpg',
+    previewImage: '/lovable-uploads/hero-search-preview.jpg',
     schema: {
-      title: 'string',
-      subtitle: 'string',
-      cta_text: 'string',
-      cta_url: 'string',
-      background_image: 'image'
+      hero_image: 'image',
+      search_placeholder: 'string',
+      tabs: 'array'
+    }
+  },
+  {
+    id: 'featured-properties',
+    name: 'Featured Properties Grid',
+    type: 'featured_properties',
+    description: 'Grid layout showcasing featured properties with filters and real-time updates',
+    category: 'Real Estate',
+    previewImage: '/lovable-uploads/featured-properties-preview.jpg',
+    schema: {
+      heading: 'string',
+      description: 'string',
+      show_filters: 'boolean',
+      max_properties: 'number'
+    }
+  },
+  {
+    id: 'services-grid',
+    name: 'Services Grid',
+    type: 'services_grid',
+    description: 'Grid of services with icons and descriptions',
+    category: 'Content',
+    previewImage: '/lovable-uploads/services-preview.jpg',
+    schema: {
+      heading: 'string',
+      description: 'string',
+      services: 'array'
+    }
+  },
+  {
+    id: 'stats-section',
+    name: 'Statistics Counter',
+    type: 'stats_section',
+    description: 'Animated counters displaying key business metrics',
+    category: 'Data',
+    previewImage: '/lovable-uploads/stats-preview.jpg',
+    schema: {
+      stats: 'array',
+      background_style: 'select'
+    }
+  },
+  {
+    id: 'testimonials-section',
+    name: 'Customer Testimonials',
+    type: 'testimonials_section',
+    description: 'Customer reviews with video testimonials and trust metrics',
+    category: 'Social Proof',
+    previewImage: '/lovable-uploads/testimonials-preview.jpg',
+    schema: {
+      heading: 'string',
+      description: 'string',
+      show_video: 'boolean',
+      testimonials: 'array'
     }
   },
   {
     id: 'property-grid',
     name: 'Property Listings Grid',
     type: 'property_grid',
-    description: 'Grid layout showcasing featured properties with filters',
-    category: 'Content',
+    description: 'Customizable property listings with advanced filtering',
+    category: 'Real Estate',
     previewImage: '/lovable-uploads/property-grid-preview.jpg',
     schema: {
       title: 'string',
@@ -85,19 +136,6 @@ const sectionTemplates: SectionTemplate[] = [
     }
   },
   {
-    id: 'testimonials',
-    name: 'Testimonials',
-    type: 'testimonials',
-    description: 'Customer reviews and testimonials carousel',
-    category: 'Social Proof',
-    previewImage: '/lovable-uploads/testimonials-preview.jpg',
-    schema: {
-      title: 'string',
-      layout: 'select',
-      auto_scroll: 'boolean'
-    }
-  },
-  {
     id: 'blog-section',
     name: 'Blog Section',
     type: 'blog',
@@ -137,19 +175,6 @@ const sectionTemplates: SectionTemplate[] = [
     }
   },
   {
-    id: 'stats-counter',
-    name: 'Statistics Counter',
-    type: 'stats',
-    description: 'Animated counters displaying key metrics',
-    category: 'Data',
-    previewImage: '/lovable-uploads/stats-preview.jpg',
-    schema: {
-      title: 'string',
-      stats: 'array',
-      animate_on_scroll: 'boolean'
-    }
-  },
-  {
     id: 'image-gallery',
     name: 'Image Gallery',
     type: 'gallery',
@@ -178,7 +203,7 @@ const sectionTemplates: SectionTemplate[] = [
   }
 ];
 
-const categories = ['All', 'Headers', 'Content', 'Interactive', 'People', 'Social Proof', 'Forms', 'Data', 'Media', 'Footers'];
+const categories = ['All', 'Headers', 'Real Estate', 'Content', 'Interactive', 'People', 'Social Proof', 'Forms', 'Data', 'Media', 'Footers'];
 
 interface SectionLibraryProps {
   onSelectSection: (sectionType: string) => void;

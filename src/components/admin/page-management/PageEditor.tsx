@@ -8,6 +8,7 @@ import { Switch } from '@/components/ui/switch';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Plus, Settings, Trash2, GripVertical } from 'lucide-react';
+import { SectionEditor } from './SectionEditor';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
 import { RichTextEditor } from '@/components/RichTextEditor';
@@ -61,6 +62,7 @@ export const PageEditor: React.FC<PageEditorProps> = ({
 
   const [sections, setSections] = useState<PageSection[]>([]);
   const [saving, setSaving] = useState(false);
+  const [editingSection, setEditingSection] = useState<PageSection | null>(null);
 
   useEffect(() => {
     if (page && !isCreating) {
@@ -191,10 +193,97 @@ export const PageEditor: React.FC<PageEditorProps> = ({
   };
 
   const addSection = (type: string) => {
+    let defaultContent = {};
+    
+    // Set default content based on section type
+    switch(type) {
+      case 'hero_search':
+        defaultContent = {
+          hero_image: '/lovable-uploads/02fc42a2-c12f-49f1-92b7-9fdee8f3a419.png',
+          search_placeholder: 'Search \'Sector 150 Noida\''
+        };
+        break;
+      case 'featured_properties':
+        defaultContent = {
+          heading: 'Featured Properties',
+          description: 'Discover our handpicked selection of premium properties across India\'s top cities',
+          show_filters: true,
+          max_properties: 20
+        };
+        break;
+      case 'services_grid':
+        defaultContent = {
+          heading: 'Our Services',
+          description: 'Comprehensive real estate solutions tailored to meet all your property needs',
+          services: [
+            {
+              title: 'Property Search',
+              description: 'Find your perfect property with our advanced search filters and personalized recommendations.',
+              icon: 'search'
+            },
+            {
+              title: 'Verified Listings',
+              description: 'All our properties are verified and come with authentic documents for your peace of mind.',
+              icon: 'shield'
+            },
+            {
+              title: 'Legal Assistance',
+              description: 'Get expert legal guidance for property documentation and registration processes.',
+              icon: 'file-text'
+            }
+          ]
+        };
+        break;
+      case 'stats_section':
+        defaultContent = {
+          background_style: 'gradient',
+          stats: [
+            { number: '1,000+', label: 'Properties Listed', icon: 'home' },
+            { number: '10,000+', label: 'Happy Customers', icon: 'users' },
+            { number: '15+', label: 'Countries Covered', icon: 'building' },
+            { number: '50+', label: 'Awards Won', icon: 'award' }
+          ]
+        };
+        break;
+      case 'testimonials_section':
+        defaultContent = {
+          heading: 'Our customers love us',
+          description: 'Real stories from verified buyers & owners.',
+          show_video: true
+        };
+        break;
+      case 'steps':
+        defaultContent = {
+          title: 'How It Works',
+          steps: [
+            { title: 'Search Properties', description: 'Browse through thousands of verified listings' },
+            { title: 'Schedule Visit', description: 'Book a convenient time to visit your shortlisted properties' },
+            { title: 'Make Decision', description: 'Get expert guidance to make the right choice' }
+          ]
+        };
+        break;
+      case 'team':
+        defaultContent = {
+          title: 'Our Team',
+          show_contact_info: true,
+          agents: [
+            { name: 'John Doe', role: 'Senior Property Consultant', contact: '+91 9876543210' },
+            { name: 'Jane Smith', role: 'Real Estate Expert', contact: '+91 9876543211' },
+            { name: 'Mike Johnson', role: 'Property Manager', contact: '+91 9876543212' }
+          ]
+        };
+        break;
+      default:
+        defaultContent = {
+          title: `New ${type.replace('_', ' ')} Section`,
+          description: 'Section description'
+        };
+    }
+
     const newSection: PageSection = {
       id: `temp_${Date.now()}`,
       section_type: type,
-      content: {},
+      content: defaultContent,
       sort_order: sections.length,
       page_id: page?.id || '',
       is_active: true,
@@ -206,6 +295,15 @@ export const PageEditor: React.FC<PageEditorProps> = ({
 
   const removeSection = (sectionId: string) => {
     setSections(sections.filter(s => s.id !== sectionId));
+  };
+
+  const updateSection = (updatedSection: PageSection) => {
+    setSections(sections.map(s => s.id === updatedSection.id ? updatedSection : s));
+    setEditingSection(null);
+  };
+
+  const editSection = (section: PageSection) => {
+    setEditingSection(section);
   };
 
   return (
@@ -278,6 +376,7 @@ export const PageEditor: React.FC<PageEditorProps> = ({
                     <Button
                       variant="ghost"
                       size="sm"
+                      onClick={() => editSection(section)}
                       className="h-8 w-8 p-0"
                     >
                       <Settings className="h-4 w-4" />
@@ -297,6 +396,19 @@ export const PageEditor: React.FC<PageEditorProps> = ({
           </CardContent>
         </Card>
       </div>
+
+      {/* Section Editor Modal */}
+      {editingSection && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="max-h-[90vh] overflow-y-auto">
+            <SectionEditor
+              section={editingSection}
+              onUpdate={updateSection}
+              onClose={() => setEditingSection(null)}
+            />
+          </div>
+        </div>
+      )}
 
       {/* Sidebar */}
       <div className="space-y-6">
