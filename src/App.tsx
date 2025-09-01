@@ -64,7 +64,7 @@ import { EmployeeRedirectHandler } from "@/components/admin/EmployeeRedirectHand
 import { AdminRegions } from "./pages/AdminRegions";
 import { AdminSEO } from "./pages/AdminSEO";
 import { AdminAudit } from "./pages/AdminAudit";
-import { AdminPageManagement } from "./pages/AdminPageManagement";
+import AdminPageManagement from "./pages/AdminPageManagement";
 import { AdminWebsiteCMS } from "./pages/AdminWebsiteCMS";
 import ContentManagementPage from "./pages/ContentManagement";
 import NotFound from "./pages/NotFound";
@@ -248,6 +248,7 @@ const App: React.FC = () => {
               <Route path="security" element={<AdminAudit />} />
               <Route path="settings" element={<AdminSettings />} />
               <Route path="seo" element={<AdminSEO />} />
+              <Route path="pages" element={<AdminPageManagement />} />
               
               {/* Finance Routes - Role Protected */}
               <Route path="finance" element={
