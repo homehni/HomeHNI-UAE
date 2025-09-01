@@ -21,7 +21,7 @@ const SellerPlans: React.FC = () => {
     residential: [
       {
         name: "Silver Plan",
-        price: "₹6,499",
+        price: "₹999",
         gst: "+18% GST",
         badge: "BASIC PROMOTION",
         badgeColor: "bg-yellow-500",
@@ -51,7 +51,7 @@ const SellerPlans: React.FC = () => {
     commercial: [
       {
         name: "Business Silver",
-        price: "₹12,999",
+        price: "₹999",
         gst: "+18% GST",
         badge: "COMMERCIAL MARKETING",
         badgeColor: "bg-blue-500",
@@ -74,7 +74,7 @@ const SellerPlans: React.FC = () => {
     industrial: [
       {
         name: "Industrial Basic",
-        price: "₹15,999",
+        price: "₹999",
         gst: "+18% GST",
         badge: "INDUSTRIAL PROMOTION",
         badgeColor: "bg-gray-600",
@@ -97,7 +97,7 @@ const SellerPlans: React.FC = () => {
     agricultural: [
       {
         name: "Farm Silver",
-        price: "₹8,999",
+        price: "₹999",
         gst: "+18% GST",
         badge: "FARM MARKETING",
         badgeColor: "bg-green-600",
