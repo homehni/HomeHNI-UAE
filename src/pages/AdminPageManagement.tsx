@@ -26,6 +26,7 @@ const AdminPageManagement = () => {
   const [currentView, setCurrentView] = useState<PageManagementView>('dashboard');
   const [selectedPage, setSelectedPage] = useState<ContentPage | null>(null);
   const [isCreating, setIsCreating] = useState(false);
+  const [addSectionCallback, setAddSectionCallback] = useState<((type: string) => void) | null>(null);
 
   const handleCreatePage = () => {
     setSelectedPage(null);
@@ -129,13 +130,16 @@ const AdminPageManagement = () => {
             isCreating={isCreating}
             onSave={handleBackToDashboard}
             onSelectSections={() => setCurrentView('sections')}
+            onAddSectionReady={setAddSectionCallback}
           />
         );
       case 'sections':
         return (
           <SectionLibrary
             onSelectSection={(sectionType) => {
-              // Handle section selection
+              if (addSectionCallback) {
+                addSectionCallback(sectionType);
+              }
               setCurrentView('editor');
             }}
           />

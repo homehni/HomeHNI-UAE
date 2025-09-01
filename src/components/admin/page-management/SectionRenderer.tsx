@@ -31,11 +31,7 @@ export const SectionRenderer: React.FC<SectionRendererProps> = ({ section }) => 
         return <SearchSection />;
       
       case 'featured_properties':
-        return (
-          <FeaturedProperties 
-            properties={section.content?.properties}
-          />
-        );
+        return <FeaturedProperties />;
       
       case 'services_grid':
         return <Services />;

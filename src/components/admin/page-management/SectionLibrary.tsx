@@ -259,9 +259,16 @@ export const SectionLibrary: React.FC<SectionLibraryProps> = ({ onSelectSection 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredTemplates.map(template => (
               <Card key={template.id} className="overflow-hidden hover:shadow-md transition-shadow">
-                <div className="aspect-video bg-muted flex items-center justify-center">
-                  <div className="text-muted-foreground text-sm">
-                    {template.name} Preview
+                <div className="aspect-video bg-gradient-to-br from-primary/10 to-primary/20 flex items-center justify-center border-b">
+                  <div className="text-center p-4">
+                    <div className="w-12 h-12 bg-primary/20 rounded-lg flex items-center justify-center mx-auto mb-2">
+                      <div className="text-primary font-bold">
+                        {template.category.slice(0, 2)}
+                      </div>
+                    </div>
+                    <div className="text-sm font-medium text-foreground">
+                      {template.name}
+                    </div>
                   </div>
                 </div>
                 <CardContent className="p-4">

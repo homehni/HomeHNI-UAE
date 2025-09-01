@@ -42,13 +42,15 @@ interface PageEditorProps {
   isCreating: boolean;
   onSave: () => void;
   onSelectSections: () => void;
+  onAddSectionReady?: (addSection: (type: string) => void) => void;
 }
 
 export const PageEditor: React.FC<PageEditorProps> = ({
   page,
   isCreating,
   onSave,
-  onSelectSections
+  onSelectSections,
+  onAddSectionReady
 }) => {
   const [formData, setFormData] = useState({
     title: '',
@@ -90,6 +92,13 @@ export const PageEditor: React.FC<PageEditorProps> = ({
       setSections([]);
     }
   }, [page, isCreating]);
+
+  // Pass addSection function to parent component
+  useEffect(() => {
+    if (onAddSectionReady) {
+      onAddSectionReady(addSection);
+    }
+  }, [onAddSectionReady]);
 
   const fetchPageSections = async (pageId: string) => {
     try {
@@ -154,12 +163,17 @@ export const PageEditor: React.FC<PageEditorProps> = ({
         content: formData.content
       };
 
+      let pageId = page?.id;
+
       if (isCreating) {
-        const { error } = await supabase
+        const { data, error } = await supabase
           .from('content_pages')
-          .insert([pageData]);
+          .insert([pageData])
+          .select()
+          .single();
         
         if (error) throw error;
+        pageId = data.id;
         
         toast({
           title: 'Success',
@@ -179,6 +193,28 @@ export const PageEditor: React.FC<PageEditorProps> = ({
         });
       }
 
+      // Save temporary sections to database
+      if (pageId) {
+        const tempSections = sections.filter(s => s.id.startsWith('temp_'));
+        if (tempSections.length > 0) {
+          const sectionsToInsert = tempSections.map(section => ({
+            page_id: pageId,
+            section_type: section.section_type,
+            content: section.content,
+            sort_order: section.sort_order,
+            is_active: section.is_active
+          }));
+
+          const { error: sectionsError } = await supabase
+            .from('page_sections')
+            .insert(sectionsToInsert);
+
+          if (sectionsError) {
+            console.error('Error saving sections:', sectionsError);
+          }
+        }
+      }
+
       onSave();
     } catch (error) {
       console.error('Error saving page:', error);
@@ -192,7 +228,7 @@ export const PageEditor: React.FC<PageEditorProps> = ({
     }
   };
 
-  const addSection = (type: string) => {
+  const addSection = async (type: string) => {
     let defaultContent = {};
     
     // Set default content based on section type
@@ -280,17 +316,50 @@ export const PageEditor: React.FC<PageEditorProps> = ({
         };
     }
 
-    const newSection: PageSection = {
-      id: `temp_${Date.now()}`,
-      section_type: type,
-      content: defaultContent,
-      sort_order: sections.length,
-      page_id: page?.id || '',
-      is_active: true,
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString()
-    };
-    setSections([...sections, newSection]);
+    // If we have a page ID, save the section to database immediately
+    if (page?.id) {
+      try {
+        const { data, error } = await supabase
+          .from('page_sections')
+          .insert([{
+            page_id: page.id,
+            section_type: type,
+            content: defaultContent,
+            sort_order: sections.length,
+            is_active: true
+          }])
+          .select()
+          .single();
+
+        if (error) throw error;
+
+        setSections([...sections, data]);
+        toast({
+          title: 'Success',
+          description: 'Section added successfully'
+        });
+      } catch (error) {
+        console.error('Error adding section:', error);
+        toast({
+          title: 'Error',
+          description: 'Failed to add section',
+          variant: 'destructive'
+        });
+      }
+    } else {
+      // For new pages, add as temporary section
+      const newSection: PageSection = {
+        id: `temp_${Date.now()}`,
+        section_type: type,
+        content: defaultContent,
+        sort_order: sections.length,
+        page_id: page?.id || '',
+        is_active: true,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      };
+      setSections([...sections, newSection]);
+    }
   };
 
   const removeSection = (sectionId: string) => {
