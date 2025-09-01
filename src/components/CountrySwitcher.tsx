@@ -121,17 +121,21 @@ const CountrySwitcher: React.FC = () => {
   const currentCountryData = getCurrentCountry();
 
   return (
-    <div className="relative" ref={dropdownRef}>
+    <div 
+      className="relative" 
+      ref={dropdownRef}
+      onMouseEnter={() => setIsOpen(true)}
+      onMouseLeave={() => setIsOpen(false)}
+    >
       <button
         type="button"
-        onClick={() => setIsOpen(!isOpen)}
         className={`flex items-center gap-2 text-sm rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all duration-500 cursor-pointer min-w-[100px] ${
           isScrolled 
             ? 'bg-gray-100 text-gray-800 hover:bg-gray-200 border border-gray-300' 
             : 'bg-white/20 backdrop-blur-sm text-white border border-white/30 hover:bg-white/30'
         }`}
       >
-        <span>{currentCountryData?.displayCode || 'India'}</span>
+        <span>Global</span>
         <ChevronDown 
           className={`w-4 h-4 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''} ${
             isScrolled ? 'text-gray-600' : 'text-white'
@@ -140,38 +144,48 @@ const CountrySwitcher: React.FC = () => {
       </button>
 
       {isOpen && (
-        <div className={`absolute top-full left-0 mt-1 min-w-[800px] rounded-md shadow-xl z-50 border transition-all duration-200 ${
-          isScrolled 
-            ? 'bg-white border-gray-200' 
-            : 'bg-gray-900 border-gray-700'
-        }`}>
+        <div 
+          className={`absolute top-full left-0 mt-1 min-w-[800px] rounded-lg shadow-2xl z-50 border transition-all duration-200 ${
+            isScrolled 
+              ? 'bg-white border-gray-200' 
+              : 'bg-gray-900 border-gray-700'
+          }`}
+          onMouseEnter={() => setIsOpen(true)}
+          onMouseLeave={() => setIsOpen(false)}
+        >
           <div className="grid grid-cols-4 gap-8 p-8">
             {regions.map((region) => (
               <div key={region.name} className="space-y-4">
-                <h3 className={`text-sm font-semibold tracking-wide ${
-                  isScrolled ? 'text-gray-900' : 'text-white'
-                }`}>
-                  {region.name}
-                </h3>
+                <div className={`border-b pb-2 ${isScrolled ? 'border-gray-200' : 'border-gray-700'}`}>
+                  <h3 className={`text-sm font-bold tracking-wide uppercase ${
+                    isScrolled ? 'text-brand-red' : 'text-red-400'
+                  }`}>
+                    {region.name}
+                  </h3>
+                </div>
                 <div className="space-y-2">
                   {region.countries.map((country) => (
                     <button
                       key={country.code}
                       type="button"
                       onClick={() => handleCountryChange(country.code)}
-                      className={`block w-full text-left text-sm transition-colors duration-200 py-1 ${
+                      className={`block w-full text-left text-sm transition-all duration-200 py-2 px-2 rounded hover:bg-opacity-10 ${
                         currentCountry === country.code
                           ? isScrolled 
-                            ? 'text-orange-600 font-medium' 
-                            : 'text-orange-400 font-medium'
+                            ? 'text-red-600 font-medium bg-red-50' 
+                            : 'text-red-400 font-medium bg-red-900/20'
                           : isScrolled
-                            ? 'text-gray-700 hover:text-gray-900'
-                            : 'text-gray-300 hover:text-white'
+                            ? 'text-gray-700 hover:text-brand-red hover:bg-red-50'
+                            : 'text-gray-300 hover:text-white hover:bg-white/10'
                       }`}
                     >
-                      <span className="flex items-center gap-1">
-                        <span className="text-xs">{country.flag}</span>
-                        {country.displayCode}
+                      <span className="flex items-center justify-between">
+                        <span>{country.displayCode}</span>
+                        {currentCountry === country.code && (
+                          <span className={`w-2 h-2 rounded-full ${
+                            isScrolled ? 'bg-red-600' : 'bg-red-400'
+                          }`} />
+                        )}
                       </span>
                     </button>
                   ))}
