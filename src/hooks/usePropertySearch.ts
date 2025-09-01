@@ -163,88 +163,62 @@ export const usePropertySearch = () => {
       console.log(`⭐ Featured properties:`, propertiesPool.filter(p => p.is_featured).length);
       console.log(`📊 Total properties in pool:`, propertiesPool.length);
       
-      // Filter properties based on search criteria
+      // Filter properties using string-based search on property_type and location fields
       let filteredProperties = propertiesPool.filter(property => {
         console.log(`🏠 Checking property:`, {
           id: property.id,
           title: property.title,
           type: property.property_type,
-          listing_type: property.listing_type,
+          location: `${property.city}, ${property.state}`,
           status: property.status,
-          price: property.expected_price,
-          city: property.city,
-          state: property.state
+          price: property.expected_price
         });
+
         // Filter by status - only approved properties
         if (property.status !== 'approved') {
           console.log(`❌ Property ${property.id} rejected: status is ${property.status}, not approved`);
           return false;
         }
 
-      // Filter by search bar tab instead of individual intent/type matching
-      const searchBarMatch = (() => {
-        switch (query.intent) {
-          case 'buy':
-            // Buy tab shows all residential properties for sale
-            return property.listing_type === 'sale' && 
-                   ['apartment', 'independent_house', 'villa', 'studio', 'builder_floor'].includes(property.property_type);
-          case 'rent':
-            // Rent tab shows residential properties for rent  
-            return property.listing_type === 'rent' && 
-                   ['apartment', 'independent_house', 'villa', 'studio', 'builder_floor'].includes(property.property_type);
-          case 'commercial':
-            // Commercial tab shows commercial properties (buy or rent)
-            return ['office', 'retail', 'retail_shop', 'shop', 'showroom', 'warehouse', 'coworking', 'commercial'].includes(property.property_type);
-          case 'plots':
-            // Plots tab shows only plots/land
-            return property.property_type === 'plot';
-          case 'new-launch':
-            // New launch shows new residential properties for sale
-            return property.listing_type === 'sale' && 
-                   ['apartment', 'independent_house', 'villa'].includes(property.property_type) &&
-                   property.availability_type === 'immediate'; // New properties
-          case 'pg':
-            // PG tab shows PG properties  
-            return property.property_type === 'pg';
-          case 'projects':
-            // Projects show under-construction properties
-            return property.listing_type === 'sale' && 
-                   ['apartment', 'independent_house', 'villa'].includes(property.property_type) &&
-                   property.availability_type === 'under_construction';
-          default:
-            return true;
+        // String-based property type matching
+        if (query.propertyType && query.propertyType !== 'Others') {
+          const queryType = query.propertyType.toLowerCase().trim();
+          const propertyType = (property.property_type || '').toLowerCase().trim();
+          
+          // Check if property type contains the search term or vice versa
+          const typeMatch = propertyType.includes(queryType) || 
+                           queryType.includes(propertyType) ||
+                           propertyType === queryType;
+          
+          if (!typeMatch) {
+            console.log(`❌ Property ${property.id} rejected: property type mismatch. Query: "${query.propertyType}", Property: "${property.property_type}"`);
+            return false;
+          }
         }
-      })();
-      
-      if (!searchBarMatch) {
-        console.log(`❌ Property ${property.id} rejected: search bar tab mismatch. Tab: ${query.intent}, Property: ${property.listing_type}/${property.property_type}`);
-        return false;
-      }
 
+        // String-based location matching (state and city)
+        const locationString = `${property.city || ''} ${property.state || ''}`.toLowerCase().trim();
+        
         // Filter by state
-        if (query.state && property.state !== query.state) {
-          console.log(`❌ Property ${property.id} rejected: state mismatch. Query: ${query.state}, Property: ${property.state}`);
-          return false;
+        if (query.state) {
+          const queryState = query.state.toLowerCase().trim();
+          if (!locationString.includes(queryState) && !(property.state || '').toLowerCase().includes(queryState)) {
+            console.log(`❌ Property ${property.id} rejected: state mismatch. Query: ${query.state}, Property: ${property.state}`);
+            return false;
+          }
         }
 
-        // Filter by city - exact match preferred, then contains match
+        // Filter by city
         if (query.city) {
           const queryCity = query.city.toLowerCase().trim();
-          const propertyCity = property.city.toLowerCase().trim();
-          
-          // Check for exact match or contains match
-          const cityMatch = propertyCity === queryCity || 
-                           propertyCity.includes(queryCity) || 
-                           queryCity.includes(propertyCity);
-          
-          if (!cityMatch) {
+          if (!locationString.includes(queryCity) && !(property.city || '').toLowerCase().includes(queryCity)) {
             console.log(`❌ Property ${property.id} rejected: city mismatch. Query: "${query.city}", Property: "${property.city}"`);
             return false;
           }
         }
 
         // Filter by budget
-        if (property.expected_price) {
+        if (property.expected_price && (query.budgetMin > 0 || query.budgetMax < 50000000)) {
           if (property.expected_price < query.budgetMin || property.expected_price > query.budgetMax) {
             console.log(`❌ Property ${property.id} rejected: budget mismatch. Query: ₹${query.budgetMin}-₹${query.budgetMax}, Property: ₹${property.expected_price}`);
             return false;
