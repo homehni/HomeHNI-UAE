@@ -127,14 +127,98 @@ const SECTION_TEMPLATES = [
 
 // Canonical CMS keys used by live site components and their metadata
 const KEY_METADATA: Record<string, { element_type: string; title: string; defaultContent: any }> = {
-  'stats': { element_type: 'stats_section', title: 'Statistics', defaultContent: {} },
-  'testimonials_section': { element_type: 'testimonials_section', title: 'Testimonials', defaultContent: {} },
-  'mobile_app_section': { element_type: 'mobile_app_section', title: 'Mobile App Promotion', defaultContent: {} },
-  'why-use': { element_type: 'why_use_section', title: 'Why Use Section', defaultContent: {} },
-  'home_services_section': { element_type: 'services_showcase', title: 'Services Showcase', defaultContent: {} },
-  'featured_properties_header': { element_type: 'featured_properties_header', title: 'Featured Properties Header', defaultContent: {} },
-  'hero-search': { element_type: 'hero_section', title: 'Hero Search', defaultContent: {} },
-  'footer_content': { element_type: 'footer', title: 'Footer', defaultContent: {} },
+  'stats': { 
+    element_type: 'stats_section', 
+    title: 'Statistics', 
+    defaultContent: {
+      PropertiesListed: '1,000',
+      HappyCustomers: '50,000',
+      CountriesCovered: '100',
+      AwardsWon: '25'
+    }
+  },
+  'testimonials_section': { 
+    element_type: 'testimonials_section', 
+    title: 'Testimonials', 
+    defaultContent: {
+      heading: 'What Our Customers Say',
+      subtitle: 'Trusted by thousands of property seekers',
+      testimonials: [
+        {
+          name: 'John Doe',
+          rating: '5.0',
+          review: 'Excellent service and great experience!',
+          location: 'Mumbai, India'
+        }
+      ]
+    }
+  },
+  'mobile_app_section': { 
+    element_type: 'mobile_app_section', 
+    title: 'Mobile App Promotion', 
+    defaultContent: {
+      heading: 'Get Our Mobile App',
+      subtitle: 'Download now for the best property experience',
+      description: 'Find your dream property on the go with our mobile app.',
+      buttonText: 'Download App'
+    }
+  },
+  'why-use': { 
+    element_type: 'why_use_section', 
+    title: 'Why Use Section', 
+    defaultContent: {
+      heading: 'Why Choose Us',
+      subtitle: 'Your trusted property partner',
+      description: 'Discover the benefits of using our platform',
+      features: [
+        {
+          title: 'Verified Properties',
+          description: 'All properties are verified for authenticity'
+        },
+        {
+          title: 'Expert Support',
+          description: '24/7 customer support from property experts'
+        }
+      ]
+    }
+  },
+  'home_services_section': { 
+    element_type: 'services_showcase', 
+    title: 'Services Showcase', 
+    defaultContent: {
+      heading: 'Our Services',
+      subtitle: 'Complete property solutions',
+      description: 'From buying to selling, we have you covered'
+    }
+  },
+  'featured_properties_header': { 
+    element_type: 'featured_properties_header', 
+    title: 'Featured Properties Header', 
+    defaultContent: {
+      heading: 'Featured Properties',
+      subtitle: 'Handpicked properties just for you'
+    }
+  },
+  'hero-search': { 
+    element_type: 'hero_section', 
+    title: 'Hero Search', 
+    defaultContent: {
+      heroImage: '/lovable-uploads/02fc42a2-c12f-49f1-92b7-9fdee8f3a419.png',
+      heading: 'Find Your Dream Property',
+      subtitle: 'Search from thousands of verified properties'
+    }
+  },
+  'footer_content': { 
+    element_type: 'footer', 
+    title: 'Footer', 
+    defaultContent: {
+      companyName: 'Property Portal',
+      description: 'Your trusted partner in finding the perfect property',
+      address: '123 Business Street, City, State 12345',
+      phone: '+1 (555) 123-4567',
+      email: 'contact@propertyportal.com'
+    }
+  },
 };
 
 // Map of known homepage elements (by element_key) used across the site components
