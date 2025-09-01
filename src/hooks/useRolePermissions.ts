@@ -23,32 +23,44 @@ export const useRolePermissions = () => {
     if (!user) return;
 
     try {
-      // Get user's role
+      // First check user_roles table
       const { data: roleData, error: roleError } = await supabase
         .from('user_roles')
         .select('role')
         .eq('user_id', user.id)
         .single();
 
-      if (roleError) {
-        console.error('Error fetching user role:', roleError);
-        return;
+      let role = roleData?.role;
+
+      // If no role in user_roles, check employees table for content manager role
+      if (!role || roleError) {
+        const { data: employeeData, error: employeeError } = await supabase
+          .from('employees')
+          .select('role')
+          .eq('email', user.email)
+          .eq('status', 'active')
+          .single();
+
+        if (employeeData?.role === 'content_manager') {
+          role = 'content_manager'; // Map employee content_manager to user content_manager
+        }
       }
 
-      const role = roleData?.role;
-      setUserRole(role);
+      setUserRole(role || null);
 
       if (role) {
-        // Get role permissions
-        const { data: permissionsData, error: permissionsError } = await supabase
-          .rpc('get_role_permissions', { _role: role });
+        // Get role permissions - only if it's a user role, not employee role
+        try {
+          const { data: permissionsData, error: permissionsError } = await supabase
+            .rpc('get_role_permissions', { _role: role });
 
-        if (permissionsError) {
-          console.error('Error fetching permissions:', permissionsError);
-          return;
+          if (!permissionsError && permissionsData) {
+            setPermissions(permissionsData || []);
+          }
+        } catch (error) {
+          console.log('No permissions found for role:', role);
+          setPermissions([]);
         }
-
-        setPermissions(permissionsData || []);
       }
     } catch (error) {
       console.error('Error fetching role and permissions:', error);
@@ -69,12 +81,12 @@ export const useRolePermissions = () => {
     return hasPermission(contentType, 'update') || hasPermission(contentType, 'create');
   };
 
-  const isAdmin = (): boolean => {
-    return userRole === 'admin';
+  const hasRole = (role: string): boolean => {
+    return userRole === role;
   };
 
-  const isContentManager = (): boolean => {
-    return ['content_manager', 'blog_content_creator', 'static_page_manager'].includes(userRole || '');
+  const hasAnyRole = (roles: string[]): boolean => {
+    return userRole ? roles.includes(userRole) : false;
   };
 
   return {
@@ -83,8 +95,10 @@ export const useRolePermissions = () => {
     loading,
     hasPermission,
     canManageContent,
-    isAdmin,
-    isContentManager,
+    hasRole,
+    hasAnyRole,
+    isAdmin: () => userRole === 'admin',
+    isContentManager: () => ['content_manager', 'blog_content_creator', 'static_page_manager'].includes(userRole || ''),
     refetch: fetchUserRoleAndPermissions
   };
 };
