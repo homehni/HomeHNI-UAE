@@ -22,7 +22,7 @@ const CommercialOwnerPlans = () => {
     residential: [
       {
         name: "Silver Plan",
-        price: "₹3,499",
+        price: "₹999",
         gst: "+18% GST",
         badge: "BASIC ASSISTANCE",
         badgeColor: "bg-yellow-500",
@@ -52,7 +52,7 @@ const CommercialOwnerPlans = () => {
     commercial: [
       {
         name: "Business Silver",
-        price: "₹8,999",
+        price: "₹999",
         gst: "+18% GST",
         badge: "COMMERCIAL BASICS",
         badgeColor: "bg-blue-500",
@@ -75,7 +75,7 @@ const CommercialOwnerPlans = () => {
     industrial: [
       {
         name: "Industrial Basic",
-        price: "₹12,999",
+        price: "₹999",
         gst: "+18% GST",
         badge: "INDUSTRIAL START",
         badgeColor: "bg-gray-600",
@@ -98,7 +98,7 @@ const CommercialOwnerPlans = () => {
     agricultural: [
       {
         name: "Farm Basic",
-        price: "₹5,999",
+        price: "₹999",
         gst: "+18% GST",
         badge: "FARM ESSENTIALS",
         badgeColor: "bg-green-600",
