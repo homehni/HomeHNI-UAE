@@ -9,6 +9,11 @@ interface CountryOption {
   displayCode: string;
 }
 
+interface RegionData {
+  name: string;
+  countries: CountryOption[];
+}
+
 const CountrySwitcher: React.FC = () => {
   const [currentCountry, setCurrentCountry] = useState<string>('');
   const [isScrolled, setIsScrolled] = useState(false);
@@ -37,16 +42,49 @@ const CountrySwitcher: React.FC = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // Country options with flags and domains
-  const countries: CountryOption[] = [
-    { code: 'GLOBAL', name: 'Global', domain: 'homehni.com', flag: '🌍', displayCode: 'Global' },
-    { code: 'IN', name: 'India', domain: 'homehni.in', flag: '🇮🇳', displayCode: 'IN' },
-    { code: 'US', name: 'United States', domain: 'homehni.us', flag: '🇺🇸', displayCode: 'US' },
-    { code: 'GB', name: 'United Kingdom', domain: 'homehni.co.uk', flag: '🇬🇧', displayCode: 'UK' },
-    { code: 'AE', name: 'United Arab Emirates', domain: 'homehni.ae', flag: '🇦🇪', displayCode: 'UAE' },
-    { code: 'DE', name: 'Germany', domain: 'homehni.de', flag: '🇩🇪', displayCode: 'DE' },
-    { code: 'ZA', name: 'South Africa', domain: 'homehni.co.za', flag: '🇿🇦', displayCode: 'ZA' }
+  // Organized countries by regions
+  const regions: RegionData[] = [
+    {
+      name: 'NORTH AMERICA',
+      countries: [
+        { code: 'US', name: 'United States', domain: 'homehni.us', flag: '🇺🇸', displayCode: 'United States' },
+        { code: 'CA', name: 'Canada', domain: 'homehni.ca', flag: '🇨🇦', displayCode: 'Canada' },
+      ]
+    },
+    {
+      name: 'APAC',
+      countries: [
+        { code: 'AU', name: 'Australia', domain: 'homehni.com.au', flag: '🇦🇺', displayCode: 'Australia' },
+        { code: 'HK', name: 'Hong Kong', domain: 'homehni.hk', flag: '🇭🇰', displayCode: 'Hong Kong' },
+        { code: 'IN', name: 'India', domain: 'homehni.in', flag: '🇮🇳', displayCode: 'India' },
+        { code: 'JP', name: 'Japan', domain: 'homehni.jp', flag: '🇯🇵', displayCode: 'Japan' },
+        { code: 'MY', name: 'Malaysia', domain: 'homehni.my', flag: '🇲🇾', displayCode: 'Malaysia' },
+      ]
+    },
+    {
+      name: 'EUROPE',
+      countries: [
+        { code: 'FR', name: 'France', domain: 'homehni.fr', flag: '🇫🇷', displayCode: 'France' },
+        { code: 'DE', name: 'Germany', domain: 'homehni.de', flag: '🇩🇪', displayCode: 'Germany' },
+        { code: 'IT', name: 'Italy', domain: 'homehni.it', flag: '🇮🇹', displayCode: 'Italy' },
+        { code: 'NL', name: 'Netherlands', domain: 'homehni.nl', flag: '🇳🇱', displayCode: 'Netherlands' },
+        { code: 'ES', name: 'Spain', domain: 'homehni.es', flag: '🇪🇸', displayCode: 'Spain' },
+      ]
+    },
+    {
+      name: 'LATAM',
+      countries: [
+        { code: 'AR', name: 'Argentina', domain: 'homehni.com.ar', flag: '🇦🇷', displayCode: 'Argentina' },
+        { code: 'BR', name: 'Brazil', domain: 'homehni.com.br', flag: '🇧🇷', displayCode: 'Brazil' },
+        { code: 'CL', name: 'Chile', domain: 'homehni.cl', flag: '🇨🇱', displayCode: 'Chile' },
+        { code: 'CO', name: 'Colombia', domain: 'homehni.com.co', flag: '🇨🇴', displayCode: 'Colombia' },
+        { code: 'MX', name: 'Mexico', domain: 'homehni.mx', flag: '🇲🇽', displayCode: 'Mexico' },
+      ]
+    }
   ];
+
+  // Get all countries in a flat array for easy lookup
+  const allCountries = regions.flatMap(region => region.countries);
 
   const PREF_KEY = 'homehni_country_pref_v1';
 
@@ -56,34 +94,28 @@ const CountrySwitcher: React.FC = () => {
     const savedCountry = localStorage.getItem(PREF_KEY);
     
     if (hostname === 'homehni.com') {
-      setCurrentCountry(savedCountry || 'GLOBAL');
+      setCurrentCountry(savedCountry || 'IN'); // Default to India
     } else {
       // Find country by domain
-      const country = countries.find(c => c.domain === hostname);
-      setCurrentCountry(country?.code || 'GLOBAL');
+      const country = allCountries.find(c => c.domain === hostname);
+      setCurrentCountry(country?.code || 'IN');
     }
   }, []);
 
   const handleCountryChange = (selectedCode: string) => {
-    const selectedCountry = countries.find(c => c.code === selectedCode);
+    const selectedCountry = allCountries.find(c => c.code === selectedCode);
     
     if (!selectedCountry) return;
 
     setIsOpen(false);
 
-    if (selectedCode === 'GLOBAL') {
-      // Remove preference and go to global domain
-      localStorage.removeItem(PREF_KEY);
-      window.location.href = 'https://homehni.com' + window.location.pathname + window.location.search + window.location.hash;
-    } else {
-      // Save preference and redirect to country domain
-      localStorage.setItem(PREF_KEY, selectedCode);
-      window.location.href = 'https://' + selectedCountry.domain + window.location.pathname + window.location.search + window.location.hash;
-    }
+    // Save preference and redirect to country domain
+    localStorage.setItem(PREF_KEY, selectedCode);
+    window.location.href = 'https://' + selectedCountry.domain + window.location.pathname + window.location.search + window.location.hash;
   };
 
   const getCurrentCountry = () => {
-    return countries.find(c => c.code === currentCountry) || countries[0];
+    return allCountries.find(c => c.code === currentCountry) || allCountries.find(c => c.code === 'IN');
   };
 
   const currentCountryData = getCurrentCountry();
@@ -99,7 +131,7 @@ const CountrySwitcher: React.FC = () => {
             : 'bg-white/20 backdrop-blur-sm text-white border border-white/30 hover:bg-white/30'
         }`}
       >
-        <span>{currentCountryData.flag} {currentCountryData.displayCode}</span>
+        <span>{currentCountryData?.displayCode || 'India'}</span>
         <ChevronDown 
           className={`w-4 h-4 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''} ${
             isScrolled ? 'text-gray-600' : 'text-white'
@@ -108,29 +140,43 @@ const CountrySwitcher: React.FC = () => {
       </button>
 
       {isOpen && (
-        <div className={`absolute top-full left-0 mt-1 min-w-full rounded-md shadow-lg z-50 border transition-all duration-500 ${
+        <div className={`absolute top-full left-0 mt-1 min-w-[800px] rounded-md shadow-xl z-50 border transition-all duration-200 ${
           isScrolled 
-            ? 'bg-white/95 backdrop-blur-sm border-gray-200' 
-            : 'bg-red-800/95 backdrop-blur-sm border-white/20'
+            ? 'bg-white border-gray-200' 
+            : 'bg-gray-900 border-gray-700'
         }`}>
-          <div className="py-1">
-            {countries.map((country) => (
-              <button
-                key={country.code}
-                type="button"
-                onClick={() => handleCountryChange(country.code)}
-                className={`w-full text-left px-3 py-2 text-sm transition-colors duration-200 flex items-center gap-2 ${
-                  currentCountry === country.code
-                    ? isScrolled 
-                      ? 'bg-gray-100 text-gray-900' 
-                      : 'bg-white/20 text-white'
-                    : isScrolled
-                      ? 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
-                      : 'text-white hover:bg-white/20'
-                }`}
-              >
-                <span>{country.flag} {country.displayCode}</span>
-              </button>
+          <div className="grid grid-cols-4 gap-8 p-8">
+            {regions.map((region) => (
+              <div key={region.name} className="space-y-4">
+                <h3 className={`text-sm font-semibold tracking-wide ${
+                  isScrolled ? 'text-gray-900' : 'text-white'
+                }`}>
+                  {region.name}
+                </h3>
+                <div className="space-y-2">
+                  {region.countries.map((country) => (
+                    <button
+                      key={country.code}
+                      type="button"
+                      onClick={() => handleCountryChange(country.code)}
+                      className={`block w-full text-left text-sm transition-colors duration-200 py-1 ${
+                        currentCountry === country.code
+                          ? isScrolled 
+                            ? 'text-orange-600 font-medium' 
+                            : 'text-orange-400 font-medium'
+                          : isScrolled
+                            ? 'text-gray-700 hover:text-gray-900'
+                            : 'text-gray-300 hover:text-white'
+                      }`}
+                    >
+                      <span className="flex items-center gap-1">
+                        <span className="text-xs">{country.flag}</span>
+                        {country.displayCode}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              </div>
             ))}
           </div>
         </div>
