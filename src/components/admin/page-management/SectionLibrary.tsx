@@ -20,190 +20,137 @@ const sectionTemplates: SectionTemplate[] = [
     id: 'hero-search',
     name: 'Hero Search Section',
     type: 'hero_search',
-    description: 'Hero banner with property search tabs and location-based search',
-    category: 'Headers',
-    previewImage: '/lovable-uploads/hero-search-preview.jpg',
+    description: 'Main hero banner with property search tabs and location-based search functionality',
+    category: 'Hero',
+    previewImage: '/lovable-uploads/a83d7fd3-19d0-43ed-9c71-0158ae789ae2.png',
     schema: {
-      hero_image: 'image',
-      search_placeholder: 'string',
-      tabs: 'array'
+      title: 'string',
+      subtitle: 'string',
+      background_image: 'image',
+      search_placeholder: 'string'
     }
   },
   {
-    id: 'featured-properties',
-    name: 'Featured Properties Grid',
-    type: 'featured_properties',
-    description: 'Grid layout showcasing featured properties with filters and real-time updates',
-    category: 'Real Estate',
-    previewImage: '/lovable-uploads/featured-properties-preview.jpg',
+    id: 'our-services',
+    name: 'Our Services Grid',
+    type: 'services',
+    description: 'Comprehensive real estate services with 6 key service offerings',
+    category: 'Services',
+    previewImage: '/lovable-uploads/dddc344b-7d00-4537-98d1-558ec4fc90a7.png',
     schema: {
-      heading: 'string',
-      description: 'string',
-      show_filters: 'boolean',
-      max_properties: 'number'
-    }
-  },
-  {
-    id: 'services-grid',
-    name: 'Services Grid',
-    type: 'services_grid',
-    description: 'Grid of services with icons and descriptions',
-    category: 'Content',
-    previewImage: '/lovable-uploads/services-preview.jpg',
-    schema: {
-      heading: 'string',
-      description: 'string',
+      title: 'string',
+      subtitle: 'string',
       services: 'array'
     }
   },
   {
-    id: 'stats-section',
+    id: 'stats-counter',
     name: 'Statistics Counter',
-    type: 'stats_section',
-    description: 'Animated counters displaying key business metrics',
-    category: 'Data',
-    previewImage: '/lovable-uploads/stats-preview.jpg',
+    type: 'stats',
+    description: 'Business metrics with animated counters on red background',
+    category: 'Statistics',
+    previewImage: '/lovable-uploads/77255b7d-3088-40d7-8bff-d64bf3d0b561.png',
     schema: {
       stats: 'array',
-      background_style: 'select'
+      background_color: 'string'
     }
   },
   {
-    id: 'testimonials-section',
-    name: 'Customer Testimonials',
-    type: 'testimonials_section',
-    description: 'Customer reviews with video testimonials and trust metrics',
-    category: 'Social Proof',
-    previewImage: '/lovable-uploads/testimonials-preview.jpg',
+    id: 'property-directory',
+    name: 'Property Directory',
+    type: 'directory',
+    description: 'Comprehensive property listings organized by location and type',
+    category: 'Listings',
+    previewImage: '/lovable-uploads/afeb45dd-0383-4b96-91d5-c7fa678d488c.png',
     schema: {
-      heading: 'string',
-      description: 'string',
-      show_video: 'boolean',
-      testimonials: 'array'
+      show_tabs: 'boolean',
+      locations: 'array',
+      property_types: 'array'
     }
   },
   {
-    id: 'property-grid',
-    name: 'Property Listings Grid',
-    type: 'property_grid',
-    description: 'Customizable property listings with advanced filtering',
-    category: 'Real Estate',
+    id: 'real-estate-slider',
+    name: 'Real Estate Builders Slider',
+    type: 'real_estate_slider',
+    description: 'Carousel showcasing trusted real estate builders and developers',
+    category: 'Showcase',
+    previewImage: '/lovable-uploads/eed6e505-e2ef-4267-b0b6-ebe159e3a167.png',
+    schema: {
+      title: 'string',
+      builders: 'array',
+      auto_scroll: 'boolean'
+    }
+  },
+  {
+    id: 'home-services',
+    name: 'Home Services',
+    type: 'home_services',
+    description: 'Various home and property-related services with visual cards',
+    category: 'Services',
+    previewImage: '/lovable-uploads/eed6e505-e2ef-4267-b0b6-ebe159e3a167.png',
+    schema: {
+      title: 'string',
+      services: 'array',
+      show_offers: 'boolean'
+    }
+  },
+  {
+    id: 'featured-properties',
+    name: 'Featured Properties',
+    type: 'featured_properties',
+    description: 'Showcase of premium and featured property listings',
+    category: 'Properties',
     previewImage: '/lovable-uploads/property-grid-preview.jpg',
     schema: {
       title: 'string',
-      show_filters: 'boolean',
-      grid_columns: 'number',
-      properties_count: 'number'
+      description: 'string',
+      max_properties: 'number',
+      show_filters: 'boolean'
     }
   },
   {
-    id: 'search-bar',
-    name: 'Search Bar with Filters',
-    type: 'search',
-    description: 'Advanced search interface with location and property filters',
-    category: 'Interactive',
-    previewImage: '/lovable-uploads/search-preview.jpg',
-    schema: {
-      placeholder_text: 'string',
-      show_location_filter: 'boolean',
-      show_price_filter: 'boolean',
-      show_property_type: 'boolean'
-    }
-  },
-  {
-    id: 'how-it-works',
-    name: 'How It Works',
-    type: 'steps',
-    description: 'Step-by-step process explanation with icons',
-    category: 'Content',
-    previewImage: '/lovable-uploads/steps-preview.jpg',
+    id: 'customer-testimonials',
+    name: 'Customer Testimonials',
+    type: 'testimonials',
+    description: 'Customer reviews and success stories with ratings',
+    category: 'Social Proof',
+    previewImage: '/lovable-uploads/testimonials-preview.jpg',
     schema: {
       title: 'string',
-      steps: 'array'
+      testimonials: 'array',
+      show_ratings: 'boolean'
     }
   },
   {
-    id: 'agent-profiles',
-    name: 'Agent Profiles',
-    type: 'team',
-    description: 'Grid of agent profiles with photos and contact information',
-    category: 'People',
-    previewImage: '/lovable-uploads/agents-preview.jpg',
-    schema: {
-      title: 'string',
-      show_contact_info: 'boolean',
-      agents: 'array'
-    }
-  },
-  {
-    id: 'blog-section',
-    name: 'Blog Section',
-    type: 'blog',
-    description: 'Latest blog posts with featured images',
-    category: 'Content',
-    previewImage: '/lovable-uploads/blog-preview.jpg',
-    schema: {
-      title: 'string',
-      posts_count: 'number',
-      show_excerpt: 'boolean'
-    }
-  },
-  {
-    id: 'faq-accordion',
-    name: 'FAQ Accordion',
-    type: 'faq',
-    description: 'Expandable frequently asked questions',
-    category: 'Content',
-    previewImage: '/lovable-uploads/faq-preview.jpg',
-    schema: {
-      title: 'string',
-      faqs: 'array',
-      allow_multiple_open: 'boolean'
-    }
-  },
-  {
-    id: 'contact-form',
-    name: 'Contact Form',
-    type: 'contact',
-    description: 'Contact form with validation and customizable fields',
-    category: 'Forms',
-    previewImage: '/lovable-uploads/contact-preview.jpg',
-    schema: {
-      title: 'string',
-      fields: 'array',
-      success_message: 'string'
-    }
-  },
-  {
-    id: 'image-gallery',
-    name: 'Image Gallery',
-    type: 'gallery',
-    description: 'Responsive image gallery with lightbox',
-    category: 'Media',
-    previewImage: '/lovable-uploads/gallery-preview.jpg',
-    schema: {
-      title: 'string',
-      images: 'array',
-      columns: 'number'
-    }
-  },
-  {
-    id: 'footer-banner',
-    name: 'Footer Banner',
-    type: 'footer_banner',
-    description: 'Call-to-action banner for page footer',
-    category: 'Footers',
-    previewImage: '/lovable-uploads/footer-banner-preview.jpg',
+    id: 'mobile-app-section',
+    name: 'Mobile App Promotion',
+    type: 'mobile_app',
+    description: 'Mobile app download section with app store links',
+    category: 'Promotion',
+    previewImage: '/lovable-uploads/c0b01943-436f-4e6d-a35f-752876e4e8a4.png',
     schema: {
       title: 'string',
       description: 'string',
-      cta_text: 'string',
-      cta_url: 'string'
+      app_store_link: 'string',
+      play_store_link: 'string'
+    }
+  },
+  {
+    id: 'why-use-section',
+    name: 'Why Choose Us',
+    type: 'why_use',
+    description: 'Benefits and advantages of using the platform',
+    category: 'Benefits',
+    previewImage: '/lovable-uploads/benefits-preview.jpg',
+    schema: {
+      title: 'string',
+      benefits: 'array',
+      show_icons: 'boolean'
     }
   }
 ];
 
-const categories = ['All', 'Headers', 'Real Estate', 'Content', 'Interactive', 'People', 'Social Proof', 'Forms', 'Data', 'Media', 'Footers'];
+const categories = ['All', 'Hero', 'Services', 'Statistics', 'Listings', 'Showcase', 'Properties', 'Social Proof', 'Promotion', 'Benefits'];
 
 interface SectionLibraryProps {
   onSelectSection: (sectionType: string) => void;

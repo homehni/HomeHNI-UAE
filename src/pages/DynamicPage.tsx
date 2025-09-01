@@ -3,6 +3,8 @@ import { useParams } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { SectionRenderer } from '@/components/admin/page-management/SectionRenderer';
 import { Helmet } from 'react-helmet';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 
 interface ContentPage {
   id: string;
@@ -85,34 +87,42 @@ const DynamicPage: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-red mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading page...</p>
+      <div className="min-h-screen bg-white">
+        <Header />
+        <div className="flex items-center justify-center py-32">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-red mx-auto mb-4"></div>
+            <p className="text-gray-600">Loading page...</p>
+          </div>
         </div>
+        <Footer />
       </div>
     );
   }
 
   if (error || !page) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">404</h1>
-          <p className="text-xl text-gray-600 mb-8">{error || 'Page not found'}</p>
-          <a 
-            href="/" 
-            className="inline-block bg-brand-red text-white px-6 py-3 rounded-lg hover:bg-brand-red-dark transition-colors"
-          >
-            Back to Home
-          </a>
+      <div className="min-h-screen bg-white">
+        <Header />
+        <div className="flex items-center justify-center py-32">
+          <div className="text-center">
+            <h1 className="text-4xl font-bold text-gray-900 mb-4">404</h1>
+            <p className="text-xl text-gray-600 mb-8">{error || 'Page not found'}</p>
+            <a 
+              href="/" 
+              className="inline-block bg-brand-red text-white px-6 py-3 rounded-lg hover:bg-brand-red-dark transition-colors"
+            >
+              Back to Home
+            </a>
+          </div>
         </div>
+        <Footer />
       </div>
     );
   }
 
   return (
-    <>
+    <div className="min-h-screen bg-white">
       <Helmet>
         <title>{page.meta_title || page.title}</title>
         {page.meta_description && (
@@ -129,7 +139,11 @@ const DynamicPage: React.FC = () => {
         <link rel="canonical" href={`${window.location.origin}/${slug}`} />
       </Helmet>
 
-      <div className="min-h-screen">
+      {/* Consistent Header */}
+      <Header />
+
+      {/* Dynamic Content */}
+      <main>
         {/* Page Header (optional) */}
         {page.content?.description && (
           <div className="bg-gray-50 py-12">
@@ -157,8 +171,11 @@ const DynamicPage: React.FC = () => {
             <p className="text-gray-600">This page is under construction.</p>
           </div>
         )}
-      </div>
-    </>
+      </main>
+
+      {/* Consistent Footer */}
+      <Footer />
+    </div>
   );
 };
 
