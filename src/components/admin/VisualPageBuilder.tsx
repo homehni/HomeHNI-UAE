@@ -125,15 +125,29 @@ const SECTION_TEMPLATES = [
   }
 ]; 
 
+// Canonical CMS keys used by live site components and their metadata
+const KEY_METADATA: Record<string, { element_type: string; title: string; defaultContent: any }> = {
+  'stats': { element_type: 'stats_section', title: 'Statistics', defaultContent: {} },
+  'testimonials_section': { element_type: 'testimonials_section', title: 'Testimonials', defaultContent: {} },
+  'mobile_app_section': { element_type: 'mobile_app_section', title: 'Mobile App Promotion', defaultContent: {} },
+  'why-use': { element_type: 'why_use_section', title: 'Why Use Section', defaultContent: {} },
+  'home_services_section': { element_type: 'services_showcase', title: 'Services Showcase', defaultContent: {} },
+  'featured_properties_header': { element_type: 'featured_properties_header', title: 'Featured Properties Header', defaultContent: {} },
+  'hero-search': { element_type: 'hero_section', title: 'Hero Search', defaultContent: {} },
+  'footer_content': { element_type: 'footer', title: 'Footer', defaultContent: {} },
+};
+
 // Map of known homepage elements (by element_key) used across the site components
 const PAGE_ELEMENT_KEYS: Record<string, string[]> = {
   homepage: [
+    'hero-search',
     'stats',
     'testimonials_section',
     'mobile_app_section',
     'why-use',
     'home_services_section',
-    'featured_properties_header'
+    'featured_properties_header',
+    'footer_content',
   ],
   about: [],
   services: [],
@@ -180,6 +194,42 @@ export const VisualPageBuilder: React.FC = () => {
           .eq('is_active', true);
         if (!keyError && keyData) {
           globalByKeys = keyData as ContentElement[];
+        }
+
+        // Auto-create any missing canonical keys so they become editable instantly
+        const presentKeys = new Set<string>([
+          ...pageScoped.map(e => e.element_key),
+          ...globalByKeys.map(e => e.element_key),
+        ]);
+        const missingKeys = keys.filter(k => !presentKeys.has(k));
+
+        if (missingKeys.length > 0) {
+          const rows = missingKeys.map(k => ({
+            element_key: k,
+            element_type: KEY_METADATA[k]?.element_type || 'section',
+            title: KEY_METADATA[k]?.title || k,
+            content: KEY_METADATA[k]?.defaultContent ?? {},
+            sort_order: 0,
+            is_active: true,
+            page_location: selectedPage,
+            section_location: 'main',
+          }));
+
+          const { error: insertError } = await supabase
+            .from('content_elements')
+            .insert(rows);
+
+          if (!insertError) {
+            const { data: inserted } = await supabase
+              .from('content_elements')
+              .select('*')
+              .in('element_key', missingKeys);
+            if (inserted) {
+              globalByKeys = [...globalByKeys, ...(inserted as any)];
+            }
+          } else {
+            console.error('Error creating missing content elements', insertError);
+          }
         }
       }
 
