@@ -56,11 +56,11 @@ const OwnerPlans = () => {
     commercial: [
       {
         name: "Business Basic",
-        price: "₹8,999",
+        price: "₹999",
         gst: "+18% GST",
         badge: "COMMERCIAL SUPPORT",
         badgeColor: "bg-blue-500",
-        amountPaise: 899900,
+        amountPaise: 99900,
       },
       {
         name: "Business Pro",
@@ -108,7 +108,7 @@ const OwnerPlans = () => {
     agricultural: [
       {
         name: "Farm Basic",
-        price: "₹4,999",
+        price: "₹999",
         gst: "+18% GST",
         badge: "AGRICULTURAL LAND",
         badgeColor: "bg-green-600",
