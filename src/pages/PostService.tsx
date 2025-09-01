@@ -16,6 +16,7 @@ import Marquee from "@/components/Marquee";
 import Header from "@/components/Header";
 import { SearchResultsPanel } from "@/components/SearchResultsPanel";
 import { usePropertySearch, PropertySearchQuery } from "@/hooks/usePropertySearch";
+import { getSortedPropertyTypes } from "@/services/propertyTypeService";
 
 interface FormData {
   name: string;
@@ -42,6 +43,7 @@ const PostService = () => {
   const [showSuccess, setShowSuccess] = useState(false);
   const [referenceId, setReferenceId] = useState("");
   const [errors, setErrors] = useState<{[key: string]: string}>({});
+  const [propertyTypes, setPropertyTypes] = useState<string[]>([]);
 
   const [formData, setFormData] = useState<FormData>({
     name: "",
@@ -89,6 +91,34 @@ const PostService = () => {
     loadStatesData();
   }, []);
 
+  // Load sorted property types from database
+  useEffect(() => {
+    const loadPropertyTypes = async () => {
+      try {
+        const sortedTypes = await getSortedPropertyTypes();
+        setPropertyTypes(sortedTypes);
+      } catch (error) {
+        console.error('Failed to load property types:', error);
+        // Use fallback if error occurs
+        setPropertyTypes([
+          "Apartment/Flat",
+          "Independent House/Villa",
+          "Plot/Land",
+          "Farmhouse",
+          "Studio",
+          "Office",
+          "Retail/Shop",
+          "Showroom",
+          "Industrial/Warehouse",
+          "Co-working",
+          "Agricultural Land",
+          "Hospitality/Hotel"
+        ]);
+      }
+    };
+    loadPropertyTypes();
+  }, []);
+
   // Update cities when state changes
   useEffect(() => {
     if (statesData && formData.state && formData.country === "India") {
@@ -124,24 +154,7 @@ const PostService = () => {
     { value: "Service", label: "Service" }
   ];
 
-  // Property types based on intent (same for Buy/Sell/Lease)
-  const propertyTypes = [
-    // Residential
-    "Apartment/Flat",
-    "Independent House/Villa",
-    "Plot/Land",
-    "Farmhouse",
-    "Studio",
-    // Commercial
-    "Office",
-    "Retail/Shop",
-    "Showroom",
-    "Industrial/Warehouse",
-    "Co-working",
-    // Others
-    "Agricultural Land",
-    "Hospitality/Hotel"
-  ];
+  // Property types are now loaded dynamically from database in useEffect above
 
   const serviceCategories = [
     "Property Management",
