@@ -163,119 +163,177 @@ export const usePropertySearch = () => {
       console.log(`⭐ Featured properties:`, propertiesPool.filter(p => p.is_featured).length);
       console.log(`📊 Total properties in pool:`, propertiesPool.length);
       
-      // Filter properties using string-based search on property_type and location fields
-      let filteredProperties = propertiesPool.filter(property => {
-        console.log(`🏠 Checking property:`, {
-          id: property.id,
-          title: property.title,
-          type: property.property_type,
-          location: `${property.city}, ${property.state}`,
-          status: property.status,
-          price: property.expected_price
-        });
-
-        // Filter by status - only approved properties
-        if (property.status !== 'approved') {
-          console.log(`❌ Property ${property.id} rejected: status is ${property.status}, not approved`);
-          return false;
-        }
-
-        // String-based property type matching
-        if (query.propertyType && query.propertyType !== 'Others') {
-          const queryType = query.propertyType.toLowerCase().trim();
-          const propertyType = (property.property_type || '').toLowerCase().trim();
-          
-          // Check if property type contains the search term or vice versa
-          const typeMatch = propertyType.includes(queryType) || 
-                           queryType.includes(propertyType) ||
-                           propertyType === queryType;
-          
-          if (!typeMatch) {
-            console.log(`❌ Property ${property.id} rejected: property type mismatch. Query: "${query.propertyType}", Property: "${property.property_type}"`);
-            return false;
-          }
-        }
-
-        // String-based location matching (state and city)
-        const locationString = `${property.city || ''} ${property.state || ''}`.toLowerCase().trim();
+      // Calculate keyword-based relevance score for each property
+      const calculateRelevanceScore = (property: any) => {
+        let score = 0;
         
-        // Filter by state
-        if (query.state) {
-          const queryState = query.state.toLowerCase().trim();
-          if (!locationString.includes(queryState) && !(property.state || '').toLowerCase().includes(queryState)) {
-            console.log(`❌ Property ${property.id} rejected: state mismatch. Query: ${query.state}, Property: ${property.state}`);
-            return false;
-          }
-        }
-
-        // Filter by city
-        if (query.city) {
-          const queryCity = query.city.toLowerCase().trim();
-          if (!locationString.includes(queryCity) && !(property.city || '').toLowerCase().includes(queryCity)) {
-            console.log(`❌ Property ${property.id} rejected: city mismatch. Query: "${query.city}", Property: "${property.city}"`);
-            return false;
-          }
-        }
-
-        // Filter by budget
-        if (property.expected_price && (query.budgetMin > 0 || query.budgetMax < 50000000)) {
-          if (property.expected_price < query.budgetMin || property.expected_price > query.budgetMax) {
-            console.log(`❌ Property ${property.id} rejected: budget mismatch. Query: ₹${query.budgetMin}-₹${query.budgetMax}, Property: ₹${property.expected_price}`);
-            return false;
-          }
-        }
-
-        console.log(`✅ Property ${property.id} matches all criteria!`);
-        return true;
-      });
-
-      // Fallback: if no exact matches, relax filters to show recommended/featured in same state
-      if (filteredProperties.length === 0) {
-        console.log('ℹ️ No exact matches found; showing recommended/featured properties in the same state as fallback');
-        const fallback = propertiesPool.filter(p => 
-          p.status === 'approved' && (!query.state || p.state === query.state)
-        );
-        // Prioritize: recommended > featured > exact city match
-        fallback.sort((a, b) => {
-          const aScore = (a.isRecommended ? 2 : 0) + (a.is_featured ? 1 : 0) + (query.city && a.city.toLowerCase() === query.city.toLowerCase() ? 0.5 : 0);
-          const bScore = (b.isRecommended ? 2 : 0) + (b.is_featured ? 1 : 0) + (query.city && b.city.toLowerCase() === query.city.toLowerCase() ? 0.5 : 0);
-          return bScore - aScore;
-        });
-        filteredProperties = fallback;
-      }
-
-      // Sort by relevance with enhanced priority system
-      filteredProperties.sort((a, b) => {
-        // 1st Priority: Recommended properties from content_elements
-        if (a.isRecommended && !b.isRecommended) return -1;
-        if (!a.isRecommended && b.isRecommended) return 1;
-
-        // 2nd Priority: Exact city matches
-        if (query.city) {
-          const aExactMatch = a.city.toLowerCase() === query.city.toLowerCase();
-          const bExactMatch = b.city.toLowerCase() === query.city.toLowerCase();
-          if (aExactMatch && !bExactMatch) return -1;
-          if (!aExactMatch && bExactMatch) return 1;
-        }
-
-        // 3rd Priority: Featured properties
-        if (a.is_featured && !b.is_featured) return -1;
-        if (!a.is_featured && b.is_featured) return 1;
-        
-        // 3rd Priority: Exact property type match (if both are featured or both are not)
-        if (query.propertyType && query.propertyType !== 'Others') {
-          const mappedQueryType = mapPropertyType(query.propertyType);
-          const aExactTypeMatch = a.property_type === mappedQueryType;
-          const bExactTypeMatch = b.property_type === mappedQueryType;
-          if (aExactTypeMatch && !bExactTypeMatch) return -1;
-          if (!aExactTypeMatch && bExactTypeMatch) return 1;
-        }
-
-        // 4th Priority: Price sorting
-        if (query.intent === 'sell') {
-          return (b.expected_price || 0) - (a.expected_price || 0); // Descending for sell
+        // Base score for approved properties
+        if (property.status === 'approved') {
+          score += 100;
         } else {
-          return (a.expected_price || 0) - (b.expected_price || 0); // Ascending for buy/lease
+          return 0; // Skip non-approved properties
+        }
+        
+        // Property type keyword matching
+        if (query.propertyType && query.propertyType !== 'Others') {
+          const queryTypeKeywords = query.propertyType.toLowerCase().split(/\s+|[-_]/);
+          const propertyTypeKeywords = (property.property_type || '').toLowerCase().split(/\s+|[-_]/);
+          
+          // Exact match bonus
+          if (property.property_type?.toLowerCase() === query.propertyType.toLowerCase()) {
+            score += 50;
+          }
+          
+          // Keyword overlap scoring
+          queryTypeKeywords.forEach(queryKeyword => {
+            propertyTypeKeywords.forEach(propKeyword => {
+              if (queryKeyword === propKeyword) {
+                score += 30; // Exact keyword match
+              } else if (queryKeyword.includes(propKeyword) || propKeyword.includes(queryKeyword)) {
+                score += 15; // Partial keyword match
+              }
+            });
+          });
+        }
+        
+        // Location keyword matching
+        const propertyLocationText = `${property.city || ''} ${property.state || ''}`.toLowerCase();
+        
+        // City keyword matching
+        if (query.city) {
+          const queryCityKeywords = query.city.toLowerCase().split(/\s+|[-_]/);
+          const propertyCityKeywords = (property.city || '').toLowerCase().split(/\s+|[-_]/);
+          
+          // Exact city match bonus
+          if (property.city?.toLowerCase() === query.city.toLowerCase()) {
+            score += 40;
+          }
+          
+          // City keyword overlap
+          queryCityKeywords.forEach(queryKeyword => {
+            propertyCityKeywords.forEach(propKeyword => {
+              if (queryKeyword === propKeyword) {
+                score += 25;
+              } else if (queryKeyword.includes(propKeyword) || propKeyword.includes(queryKeyword)) {
+                score += 12;
+              }
+            });
+          });
+          
+          // General location text match
+          if (propertyLocationText.includes(query.city.toLowerCase())) {
+            score += 20;
+          }
+        }
+        
+        // State keyword matching
+        if (query.state) {
+          const queryStateKeywords = query.state.toLowerCase().split(/\s+|[-_]/);
+          const propertyStateKeywords = (property.state || '').toLowerCase().split(/\s+|[-_]/);
+          
+          // Exact state match bonus
+          if (property.state?.toLowerCase() === query.state.toLowerCase()) {
+            score += 35;
+          }
+          
+          // State keyword overlap
+          queryStateKeywords.forEach(queryKeyword => {
+            propertyStateKeywords.forEach(propKeyword => {
+              if (queryKeyword === propKeyword) {
+                score += 20;
+              } else if (queryKeyword.includes(propKeyword) || propKeyword.includes(queryKeyword)) {
+                score += 10;
+              }
+            });
+          });
+          
+          // General location text match
+          if (propertyLocationText.includes(query.state.toLowerCase())) {
+            score += 15;
+          }
+        }
+        
+        // Budget relevance scoring
+        if (property.expected_price && (query.budgetMin > 0 || query.budgetMax < 50000000)) {
+          if (property.expected_price >= query.budgetMin && property.expected_price <= query.budgetMax) {
+            score += 30; // Within budget range
+            
+            // Bonus for being closer to middle of range
+            const budgetMid = (query.budgetMin + query.budgetMax) / 2;
+            const distanceFromMid = Math.abs(property.expected_price - budgetMid);
+            const maxDistance = (query.budgetMax - query.budgetMin) / 2;
+            const proximityScore = Math.max(0, 20 * (1 - distanceFromMid / maxDistance));
+            score += proximityScore;
+          } else {
+            // Penalty for being outside budget range
+            score -= 10;
+          }
+        }
+        
+        // Special property status bonuses
+        if (property.isRecommended) {
+          score += 60; // High bonus for recommended
+        }
+        
+        if (property.is_featured) {
+          score += 45; // Bonus for featured
+        }
+        
+        // Title keyword matching (additional relevance)
+        const titleText = (property.title || '').toLowerCase();
+        const allQueryKeywords = [
+          ...(query.propertyType ? query.propertyType.toLowerCase().split(/\s+|[-_]/) : []),
+          ...(query.city ? query.city.toLowerCase().split(/\s+|[-_]/) : []),
+          ...(query.state ? query.state.toLowerCase().split(/\s+|[-_]/) : [])
+        ];
+        
+        allQueryKeywords.forEach(keyword => {
+          if (titleText.includes(keyword)) {
+            score += 8;
+          }
+        });
+        
+        return Math.max(0, score);
+      };
+      
+      // Score all properties and sort by relevance
+      const scoredProperties = propertiesPool.map(property => ({
+        ...property,
+        relevanceScore: calculateRelevanceScore(property)
+      }));
+      
+      // Filter out properties with zero relevance score (non-approved or completely irrelevant)
+      let filteredProperties = scoredProperties.filter(property => property.relevanceScore > 0);
+      
+      console.log(`🎯 Relevance Scoring Results:`, {
+        totalProperties: propertiesPool.length,
+        scoredProperties: scoredProperties.length,
+        filteredProperties: filteredProperties.length,
+        topScores: filteredProperties
+          .slice(0, 5)
+          .map(p => ({ 
+            id: p.id, 
+            title: p.title, 
+            type: p.property_type,
+            location: `${p.city}, ${p.state}`,
+            score: p.relevanceScore,
+            recommended: p.isRecommended,
+            featured: p.is_featured
+          }))
+      });
+      
+      // Sort by relevance score (highest first)
+      filteredProperties.sort((a, b) => {
+        // Primary sort: relevance score
+        if (b.relevanceScore !== a.relevanceScore) {
+          return b.relevanceScore - a.relevanceScore;
+        }
+        
+        // Secondary sort: price based on intent
+        if (query.intent === 'sell') {
+          return (b.expected_price || 0) - (a.expected_price || 0);
+        } else {
+          return (a.expected_price || 0) - (b.expected_price || 0);
         }
       });
 
