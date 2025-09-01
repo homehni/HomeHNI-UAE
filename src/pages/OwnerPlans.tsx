@@ -22,11 +22,11 @@ const OwnerPlans = () => {
     residential: [
       {
         name: "Silver",
-        price: "₹3,399",
+        price: "₹999",
         gst: "+18% GST",
         badge: "ON CALL ASSISTANCE",
         badgeColor: "bg-yellow-500",
-        amountPaise: 339900,
+        amountPaise: 9900,
       },
       {
         name: "Gold",
@@ -82,11 +82,11 @@ const OwnerPlans = () => {
     industrial: [
       {
         name: "Industrial Starter",
-        price: "₹12,999",
+        price: "₹999",
         gst: "+18% GST",
         badge: "INDUSTRIAL FOCUS",
         badgeColor: "bg-gray-600",
-        amountPaise: 1299900,
+        amountPaise: 99900,
       },
       {
         name: "Industrial Growth",
@@ -112,7 +112,7 @@ const OwnerPlans = () => {
         gst: "+18% GST",
         badge: "AGRICULTURAL LAND",
         badgeColor: "bg-green-600",
-        amountPaise: 499900,
+        amountPaise: 99900,
       },
       {
         name: "Farm Pro",
