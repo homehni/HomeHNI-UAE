@@ -419,8 +419,136 @@ export const VisualPageBuilder: React.FC = () => {
               <label className="text-sm font-medium text-muted-foreground capitalize mb-1 block">
                 {key.replace(/_/g, ' ')}
               </label>
-              {typeof value === 'string' && value.length > 50 ? (
+
+              {Array.isArray(value) ? (
+                value.length > 0 && typeof value[0] === 'object' ? (
+                  <div className="space-y-2">
+                    {(value as any[]).map((item, idx) => (
+                      <div key={idx} className="p-3 border rounded-md space-y-2">
+                        {(item?.name !== undefined || item?.title !== undefined) ? (
+                          <>
+                            <Input
+                              placeholder="Name / Title"
+                              value={item?.name ?? item?.title ?? ''}
+                              onChange={(e) =>
+                                setEditingContent((prev: any) => {
+                                  const arr = Array.isArray(prev[key]) ? [...prev[key]] : [];
+                                  const current = { ...(arr[idx] || {}) };
+                                  if (item?.name !== undefined || current?.name !== undefined) current.name = e.target.value;
+                                  else current.title = e.target.value;
+                                  arr[idx] = current;
+                                  return { ...prev, [key]: arr };
+                                })
+                              }
+                            />
+                            {'description' in item && (
+                              <Textarea
+                                placeholder="Description"
+                                value={(item as any)?.description ?? ''}
+                                onChange={(e) =>
+                                  setEditingContent((prev: any) => {
+                                    const arr = Array.isArray(prev[key]) ? [...prev[key]] : [];
+                                    const current = { ...(arr[idx] || {}) } as any;
+                                    current.description = e.target.value;
+                                    arr[idx] = current;
+                                    return { ...prev, [key]: arr };
+                                  })
+                                }
+                                rows={3}
+                              />
+                            )}
+                        </>
+                        ) : (
+                          <Textarea
+                            rows={4}
+                            value={JSON.stringify(item, null, 2)}
+                            onChange={(e) => {
+                              try {
+                                const parsed = JSON.parse(e.target.value);
+                                setEditingContent((prev: any) => {
+                                  const arr = Array.isArray(prev[key]) ? [...prev[key]] : [];
+                                  arr[idx] = parsed;
+                                  return { ...prev, [key]: arr };
+                                });
+                              } catch {}
+                            }}
+                          />
+                        )}
+
+                        <div className="flex justify-end">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() =>
+                              setEditingContent((prev: any) => {
+                                const arr = Array.isArray(prev[key]) ? [...prev[key]] : [];
+                                arr.splice(idx, 1);
+                                return { ...prev, [key]: arr };
+                              })
+                            }
+                          >
+                            <Trash2 className="h-3 w-3 mr-1" /> Remove
+                          </Button>
+                        </div>
+                      </div>
+                    ))}
+
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() =>
+                        setEditingContent((prev: any) => ({
+                          ...prev,
+                          [key]: [...(prev?.[key] || []), { name: '', description: '' }]
+                        }))
+                      }
+                    >
+                      <Plus className="h-3 w-3 mr-1" /> Add Item
+                    </Button>
+                  </div>
+                ) : (
+                  <Textarea
+                    value={(value as any[]).join('\n')}
+                    onChange={(e) =>
+                      setEditingContent((prev: any) => ({
+                        ...prev,
+                        [key]: e.target.value.split('\n')
+                      }))
+                    }
+                    className="w-full"
+                    rows={3}
+                  />
+                )
+              ) : (value && typeof value === 'object') ? (
                 <Textarea
+                  value={JSON.stringify(value, null, 2)}
+                  onChange={(e) => {
+                    try {
+                      const parsed = JSON.parse(e.target.value);
+                      setEditingContent((prev: any) => ({ ...prev, [key]: parsed }));
+                    } catch {}
+                  }}
+                  className="w-full font-mono"
+                  rows={6}
+                />
+              ) : (
+                typeof value === 'string' && value.length > 50 ? (
+                  <Textarea
+                    value={value as string}
+                    onChange={(e) => setEditingContent((prev: any) => ({ ...prev, [key]: e.target.value }))}
+                    className="w-full"
+                    rows={3}
+                  />
+                ) : (
+                  <Input
+                    value={String(value ?? '')}
+                    onChange={(e) => setEditingContent((prev: any) => ({ ...prev, [key]: e.target.value }))}
+                    className="w-full"
+                  />
+                )
+              )}
+            </div>
+          ))
                   value={value}
                   onChange={(e) => setEditingContent(prev => ({ ...prev, [key]: e.target.value }))}
                   className="w-full"
@@ -474,8 +602,16 @@ export const VisualPageBuilder: React.FC = () => {
                 {key.replace(/_/g, ' ')}:
               </span>
               <span className="truncate">
-                {String(value).substring(0, 50)}
-                {String(value).length > 50 && '...'}
+                {Array.isArray(value)
+                  ? (value.length > 0 && typeof value[0] === 'object'
+                      ? (value as any[])
+                          .map((v: any) => v?.name || v?.title || '')
+                          .filter(Boolean)
+                          .join(', ')
+                      : (value as any[]).join(', '))
+                  : (value && typeof value === 'object')
+                    ? JSON.stringify(value)
+                    : String(value ?? '')}
               </span>
             </div>
           ))}
