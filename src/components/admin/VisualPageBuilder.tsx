@@ -27,6 +27,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { contentElementsService, ContentElement } from '@/services/contentElementsService';
 import { useToast } from '@/hooks/use-toast';
 import { useNavigate } from 'react-router-dom';
+import { supabase } from '@/integrations/supabase/client';
 
 import { 
   Save, 
@@ -122,7 +123,22 @@ const SECTION_TEMPLATES = [
       }
     }
   }
-];
+]; 
+
+// Map of known homepage elements (by element_key) used across the site components
+const PAGE_ELEMENT_KEYS: Record<string, string[]> = {
+  homepage: [
+    'stats',
+    'testimonials_section',
+    'mobile_app_section',
+    'why-use',
+    'home_services_section',
+    'featured_properties_header'
+  ],
+  about: [],
+  services: [],
+  contact: []
+};
 
 export const VisualPageBuilder: React.FC = () => {
   const [sections, setSections] = useState<PageSection[]>([]);
@@ -149,30 +165,55 @@ export const VisualPageBuilder: React.FC = () => {
   const loadPageSections = async () => {
     try {
       setLoading(true);
-      const data = await contentElementsService.getContentElements(selectedPage);
-      
-      // Use content_elements as the single source of truth for featured properties on the selected page
-      // Keep the Featured Properties section; show only cards that exist (is_active=true) in content_elements for this page
-      const filteredData = data.filter(item => {
-        if (item.element_type === 'featured_property') {
-          // getContentElements already filters by page_location and is_active
-          return true;
+
+      // 1) Fetch page-scoped elements
+      const pageScoped = await contentElementsService.getContentElements(selectedPage);
+
+      // 2) Fetch globally-scoped elements by known keys for this page (so components using useCMSContent match)
+      const keys = PAGE_ELEMENT_KEYS[selectedPage] || [];
+      let globalByKeys: ContentElement[] = [];
+      if (keys.length > 0) {
+        const { data: keyData, error: keyError } = await supabase
+          .from('content_elements')
+          .select('*')
+          .in('element_key', keys)
+          .eq('is_active', true);
+        if (!keyError && keyData) {
+          globalByKeys = keyData as ContentElement[];
         }
-        return true;
+      }
+
+      // 3) Merge, preferring page-scoped versions when duplicate keys exist
+      const byKey: Record<string, ContentElement> = {};
+      [...globalByKeys, ...pageScoped].forEach((item) => {
+        const existing = byKey[item.element_key];
+        if (!existing) {
+          byKey[item.element_key] = item;
+        } else {
+          // Prefer the item explicitly tied to this page
+          if (existing.page_location !== selectedPage && item.page_location === selectedPage) {
+            byKey[item.element_key] = item;
+          }
+        }
       });
-      
-      const formattedSections: PageSection[] = filteredData.map((item, index) => ({
-        id: item.id,
-        element_type: item.element_type,
-        element_key: item.element_key,
-        title: item.title || item.element_key,
-        content: item.content,
-        sort_order: item.sort_order || index,
-        is_active: item.is_active,
-        page_location: item.page_location || selectedPage,
-        section_location: item.section_location || 'main'
-      }));
-      setSections(formattedSections.sort((a, b) => a.sort_order - b.sort_order));
+
+      const merged = Object.values(byKey);
+
+      const formattedSections: PageSection[] = merged
+        .map((item, index) => ({
+          id: item.id,
+          element_type: item.element_type,
+          element_key: item.element_key,
+          title: item.title || item.element_key,
+          content: item.content,
+          sort_order: item.sort_order ?? index,
+          is_active: item.is_active,
+          page_location: item.page_location || selectedPage,
+          section_location: item.section_location || 'main'
+        }))
+        .sort((a, b) => a.sort_order - b.sort_order);
+
+      setSections(formattedSections);
     } catch (error) {
       console.error('Error loading sections:', error);
       toast({
