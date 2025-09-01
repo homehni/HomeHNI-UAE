@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { fetchPublicProperties, PublicProperty } from '@/services/propertyService';
+import { mapPropertyType } from '@/utils/propertyMappings';
 
 export interface PropertySearchQuery {
   intent: 'buy' | 'sell' | 'lease' | '';
@@ -82,8 +83,37 @@ export const usePropertySearch = () => {
       // Fetch all properties from the database
       const allProperties = await fetchPublicProperties();
       
+      console.log(`🔍 Search Query:`, {
+        intent: query.intent,
+        propertyType: query.propertyType,
+        mappedPropertyType: query.propertyType ? mapPropertyType(query.propertyType) : null,
+        state: query.state,
+        city: query.city,
+        budgetRange: `₹${query.budgetMin} - ₹${query.budgetMax}`
+      });
+      
+      console.log(`📊 Total properties in DB:`, allProperties.length);
+      console.log(`📋 Property types in DB:`, [...new Set(allProperties.map(p => p.property_type))]);
+      console.log(`🎯 Property statuses in DB:`, [...new Set(allProperties.map(p => p.status))]);
+      
       // Filter properties based on search criteria
       let filteredProperties = allProperties.filter(property => {
+        console.log(`🏠 Checking property:`, {
+          id: property.id,
+          title: property.title,
+          type: property.property_type,
+          listing_type: property.listing_type,
+          status: property.status,
+          price: property.expected_price,
+          city: property.city,
+          state: property.state
+        });
+        // Filter by status - only approved properties
+        if (property.status !== 'approved') {
+          console.log(`❌ Property ${property.id} rejected: status is ${property.status}, not approved`);
+          return false;
+        }
+
         // Filter by intent (listing_type)
         const intentMatch = (() => {
           if (query.intent === 'buy') return property.listing_type === 'sale';
@@ -92,26 +122,41 @@ export const usePropertySearch = () => {
           return false;
         })();
         
-        if (!intentMatch) return false;
-
-        // Filter by property type
-        if (query.propertyType && query.propertyType !== 'Others') {
-          if (property.property_type !== query.propertyType) return false;
+        if (!intentMatch) {
+          console.log(`❌ Property ${property.id} rejected: intent mismatch. Query: ${query.intent}, Property: ${property.listing_type}`);
+          return false;
         }
 
-        // Filter by state
-        if (query.state && property.state !== query.state) return false;
-
-        // Filter by city (optional - partial match)
-        if (query.city && !property.city.toLowerCase().includes(query.city.toLowerCase())) return false;
-
-        // Filter by budget
-        if (property.expected_price) {
-          if (property.expected_price < query.budgetMin || property.expected_price > query.budgetMax) {
+        // Filter by property type with mapping
+        if (query.propertyType && query.propertyType !== 'Others') {
+          const mappedQueryType = mapPropertyType(query.propertyType);
+          if (property.property_type !== mappedQueryType) {
+            console.log(`❌ Property ${property.id} rejected: type mismatch. Query: ${query.propertyType} (mapped to ${mappedQueryType}), Property: ${property.property_type}`);
             return false;
           }
         }
 
+        // Filter by state
+        if (query.state && property.state !== query.state) {
+          console.log(`❌ Property ${property.id} rejected: state mismatch. Query: ${query.state}, Property: ${property.state}`);
+          return false;
+        }
+
+        // Filter by city (optional - partial match)
+        if (query.city && !property.city.toLowerCase().includes(query.city.toLowerCase())) {
+          console.log(`❌ Property ${property.id} rejected: city mismatch. Query: ${query.city}, Property: ${property.city}`);
+          return false;
+        }
+
+        // Filter by budget
+        if (property.expected_price) {
+          if (property.expected_price < query.budgetMin || property.expected_price > query.budgetMax) {
+            console.log(`❌ Property ${property.id} rejected: budget mismatch. Query: ₹${query.budgetMin}-₹${query.budgetMax}, Property: ₹${property.expected_price}`);
+            return false;
+          }
+        }
+
+        console.log(`✅ Property ${property.id} matches all criteria!`);
         return true;
       });
 
@@ -173,7 +218,8 @@ export const usePropertySearch = () => {
 
       setCurrentPage(page);
       
-      console.log(`Found ${paginatedResults.length} properties out of ${transformedProperties.length} matching properties`);
+      console.log(`🎉 Search Results: Found ${paginatedResults.length} properties out of ${transformedProperties.length} matching properties from ${allProperties.length} total`);
+      console.log('📱 Matching properties:', paginatedResults.map(p => ({ id: p.id, title: p.title, type: p.type, price: p.priceInr })));
 
     } catch (error: any) {
       if (error.name !== 'AbortError') {

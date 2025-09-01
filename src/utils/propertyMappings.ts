@@ -24,11 +24,13 @@ export const mapBhkType = (bhkType: string): string => {
 export const mapPropertyType = (propertyType: string): string => {
   const propertyMappings: { [key: string]: string } = {
     'Apartment': 'apartment',
+    'Apartment/Flat': 'apartment', // Map form value to DB value
     'Villa': 'villa',
     'House': 'independent_house', // Map "House" to 'independent_house'
     'Independent House': 'independent_house',
     'Builder Floor': 'builder_floor',
     'Plot': 'plot',
+    'Plot/Land': 'plot', // Map form value to DB value
     'Commercial': 'commercial',
     'Office': 'office',
     'Office Space': 'office', // Map "Office Space" to 'office'
