@@ -8,6 +8,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
 import { useToast } from '@/hooks/use-toast';
+import { useCMSContent } from '@/hooks/useCMSContent';
 import Logo from './Logo';
 import Sidebar from './Sidebar';
 import MegaMenu from './MegaMenu';
@@ -39,6 +40,25 @@ const Header = () => {
   const {
     toast
   } = useToast();
+
+  // Fetch CMS content for header navigation
+  const { content: headerNavContent, refreshContent } = useCMSContent('header_nav');
+
+  // Debug: Log CMS content when it changes
+  useEffect(() => {
+    console.log('Header CMS content updated:', headerNavContent);
+  }, [headerNavContent]);
+
+  // Manual refresh function for testing
+  const handleRefreshHeader = () => {
+    console.log('Manually refreshing header content...');
+    refreshContent();
+  };
+
+  const handleLegalServicesClick = () => {
+    setIsLegalFormOpen(true);
+  };
+
   const handleRentalHover = () => {
     if (rentalHoverTimeoutRef.current) {
       clearTimeout(rentalHoverTimeoutRef.current);
@@ -109,9 +129,6 @@ const Header = () => {
     };
     fetchStatesData();
   }, []);
-  const handleLegalServicesClick = () => {
-    setIsLegalFormOpen(true);
-  };
   const handleAboutUsClick = () => {
     if (location.pathname === '/about-us') {
       // If already on About Us page, scroll to top smoothly
@@ -196,149 +213,165 @@ const Header = () => {
 
               {/* Desktop Navigation Links - Show everywhere */}
               {<nav className="hidden lg:flex items-center space-x-5">
-  {/* <MegaMenu isScrolled={isScrolled} /> */}
-  
-  {/* Sellers Dropdown */}
-  {/* <div className="relative" onMouseEnter={handleSellersHover} onMouseLeave={handleSellersLeave}>
-    <button className={`flex items-center hover:opacity-80 transition-colors duration-500 text-base font-medium uppercase ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
-      Sellers
-      <ChevronDown className="ml-1 h-3 w-3" />
-    </button>
-    
-    Custom Sellers Dropdown
-    {isSellersDropdownOpen && <div className="absolute top-full left-0 w-32 bg-white border border-gray-200 rounded-lg shadow-xl z-[100] mt-2" onMouseEnter={handleSellersHover} onMouseLeave={handleSellersLeave}>
-        <div className="py-2">
-          <button onClick={() => handlePostPropertyClick('Owner')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
-            Owners
-          </button>
-          <button onClick={() => handlePostPropertyClick('Agent')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
-            Agents
-          </button>
-          <button onClick={() => handlePostPropertyClick('Builder')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
-            Builders
-          </button>
-        </div>
-      </div>}
-  </div> */}
-  
+                {/* Dynamic CMS-based navigation */}
+                {headerNavContent?.content?.nav_items?.map((item: any, index: number) => (
+                  <div key={index}>
+                    {item.submenu ? (
+                      // Dropdown menu item
+                      <div className="relative" onMouseEnter={() => {
+                        if (item.label === 'Services') {
+                          handleServicesHover();
+                        } else if (item.label === 'Plans') {
+                          handleLifetimePlansHover();
+                        }
+                      }} onMouseLeave={() => {
+                        if (item.label === 'Services') {
+                          handleServicesLeave();
+                        } else if (item.label === 'Plans') {
+                          handleLifetimePlansLeave();
+                        }
+                      }}>
+                        <button className={`flex items-center hover:opacity-80 transition-colors duration-500 text-base font-medium uppercase ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
+                          {item.label}
+                          <ChevronDown className="ml-1 h-3 w-3" />
+                        </button>
+                        
+                        {/* Dynamic dropdown content based on CMS */}
+                        {item.label === 'Services' && isServicesDropdownOpen && (
+                          <div className="absolute top-full left-0 w-56 bg-white border border-gray-200 rounded-lg shadow-xl z-[100] mt-2" onMouseEnter={handleServicesHover} onMouseLeave={handleServicesLeave}>
+                            <div className="py-2">
+                              {item.submenu.map((subItem: any, subIndex: number) => (
+                                <button 
+                                  key={subIndex}
+                                  onClick={() => navigate(subItem.link)} 
+                                  className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                                >
+                                  {subItem.label}
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                        
+                        {item.label === 'Plans' && isLifetimePlansDropdownOpen && (
+                          <div className="absolute top-full left-0 w-48 bg-white border border-gray-200 rounded-lg shadow-xl z-[100] mt-2" onMouseEnter={handleLifetimePlansHover} onMouseLeave={handleLifetimePlansLeave}>
+                            <div className="py-2">
+                              {item.submenu.map((subItem: any, subIndex: number) => (
+                                <button 
+                                  key={subIndex}
+                                  onClick={() => navigate(subItem.link)} 
+                                  className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                                >
+                                  {subItem.label}
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    ) : (
+                      // Regular link item
+                      <a 
+                        href={item.link} 
+                        onClick={(e) => {
+                          e.preventDefault();
+                          navigate(item.link);
+                        }}
+                        className={`hover:opacity-80 transition-colors duration-500 text-base font-medium uppercase ${isScrolled ? 'text-gray-800' : 'text-white'}`}
+                      >
+                        {item.label}
+                      </a>
+                    )}
+                  </div>
+                )) || (
+                  // Fallback to hardcoded navigation if CMS content is not available
+                  <>
+                    {/* Services Dropdown */}
+                    <div className="relative" onMouseEnter={handleServicesHover} onMouseLeave={handleServicesLeave}>
+                      <button className={`flex items-center hover:opacity-80 transition-colors duration-500 text-base font-medium uppercase ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
+                        Services
+                        <ChevronDown className="ml-1 h-3 w-3" />
+                      </button>
+                      
+                      {/* Custom Services Dropdown */}
+                      {isServicesDropdownOpen && <div className="absolute top-full left-0 w-56 bg-white border border-gray-200 rounded-lg shadow-xl z-[100] mt-2" onMouseEnter={handleServicesHover} onMouseLeave={handleServicesLeave}>
+                          <div className="py-2">
+                            <button onClick={() => navigate('/loans')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+                              Loans
+                            </button>
+                             <button onClick={() => navigate('/home-security-services')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+                              Home Security Services
+                            </button>
+                            <button onClick={() => navigate('/packers-movers')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+                              Packers & Movers
+                            </button>
+                            <button onClick={handleLegalServicesClick} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+                              Legal Services
+                            </button>
+                            <button onClick={() => navigate('/handover-services')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+                              Handover Services
+                            </button>
+                            <button onClick={() => navigate('/property-management')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+                              Property Management
+                            </button>
+                            <button onClick={() => navigate('/architects')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+                              Architects
+                            </button>
+                             <button onClick={() => navigate('/painting-cleaning')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+                              Painting & Cleaning
+                            </button>
+                            <button onClick={() => navigate('/interior')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+                              Interior Designers
+                            </button>
+                          </div>
+                        </div>}
+                    </div>
 
+                    {/* Lifetime Plans Dropdown */}
+                    <div className="relative" onMouseEnter={handleLifetimePlansHover} onMouseLeave={handleLifetimePlansLeave}>
+                      <button className={`flex items-center hover:opacity-80 transition-colors duration-500 text-base font-medium uppercase ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
+                        Plans
+                        <ChevronDown className="ml-1 h-3 w-3" />
+                      </button>
+                      
+                      {/* Custom Lifetime Plans Dropdown */}
+                      {isLifetimePlansDropdownOpen && <div className="absolute top-full left-0 w-48 bg-white border border-gray-200 rounded-lg shadow-xl z-[100] mt-2" onMouseEnter={handleLifetimePlansHover} onMouseLeave={handleLifetimePlansLeave}>
+                          <div className="py-2">
+                            <button onClick={() => navigate('/agent-plans')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+                              Agent Plans
+                            </button>
+                            <button onClick={() => navigate('/builder-lifetime-plans')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+                              Builder's Lifetime Plan
+                            </button>
 
+                            <button onClick={() => navigate('/owner-plans')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+                             Property Renting Owner Plans
+                            </button>
 
-              {/* <div className="relative" onMouseEnter={handleRentalHover} onMouseLeave={handleRentalLeave}>
-    <button className={`flex items-center hover:opacity-80 transition-colors duration-500 text-base font-medium uppercase ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
-      Rental
-      <ChevronDown className="ml-1 h-3 w-3" />
-    </button>
-    
-    Custom Rental Dropdown
-    {isRentalDropdownOpen && <div className="absolute top-full left-0 w-32 bg-white border border-gray-200 rounded-lg shadow-xl z-[100] mt-2" onMouseEnter={handleRentalHover} onMouseLeave={handleRentalLeave}>
-        <div className="py-2">
-          <button onClick={() => handlePostPropertyClick('Owner')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
-           Owners
-          </button>
-          <button onClick={() => handlePostPropertyClick('Tenant')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
-            Tenants
-          </button>
-          
-        </div>
-      </div>}
-  </div> */}
-  
-  {/* Services Dropdown */}
-  <div className="relative" onMouseEnter={handleServicesHover} onMouseLeave={handleServicesLeave}>
-    <button className={`flex items-center hover:opacity-80 transition-colors duration-500 text-base font-medium uppercase ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
-      Services
-      <ChevronDown className="ml-1 h-3 w-3" />
-    </button>
-    
-    {/* Custom Services Dropdown */}
-    {isServicesDropdownOpen && <div className="absolute top-full left-0 w-56 bg-white border border-gray-200 rounded-lg shadow-xl z-[100] mt-2" onMouseEnter={handleServicesHover} onMouseLeave={handleServicesLeave}>
-        <div className="py-2">
-          <button onClick={() => navigate('/loans')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
-            Loans
-          </button>
-           <button onClick={() => navigate('/home-security-services')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
-            Home Security Services
-          </button>
-          <button onClick={() => navigate('/packers-movers')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
-            Packers & Movers
-          </button>
-          <button onClick={handleLegalServicesClick} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
-            Legal Services
-          </button>
-          <button onClick={() => navigate('/handover-services')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
-            Handover Services
-          </button>
-          <button onClick={() => navigate('/property-management')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
-            Property Management
-          </button>
-          <button onClick={() => navigate('/architects')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
-            Architects
-          </button>
-           <button onClick={() => navigate('/painting-cleaning')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
-            Painting & Cleaning
-          </button>
-          <button onClick={() => navigate('/interior')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
-            Interior Designers
-          </button>
-        </div>
-      </div>}
-  </div>
+                            <button onClick={() => navigate('/buyer-plans')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+                             Property Seller Plans
+                            </button>
 
-  {/* Lifetime Plans Dropdown */}
-  <div className="relative" onMouseEnter={handleLifetimePlansHover} onMouseLeave={handleLifetimePlansLeave}>
-    <button className={`flex items-center hover:opacity-80 transition-colors duration-500 text-base font-medium uppercase ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
-      Plans
-      <ChevronDown className="ml-1 h-3 w-3" />
-    </button>
-    
-    {/* Custom Lifetime Plans Drppopdown */}
-    {isLifetimePlansDropdownOpen && <div className="absolute top-full left-0 w-48 bg-white border border-gray-200 rounded-lg shadow-xl z-[100] mt-2" onMouseEnter={handleLifetimePlansHover} onMouseLeave={handleLifetimePlansLeave}>
-        <div className="py-2">
-          <button onClick={() => navigate('/agent-plans')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
-            Agent Plans
-          </button>
-          <button onClick={() => navigate('/builder-lifetime-plans')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
-            Builder's Lifetime Plan
-          </button>
+                            <button onClick={() => navigate('/seller-plans')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+                             Property Owner Plans
+                            </button>
+                          </div>
+                        </div>}
+                    </div>
+                    
+                    <a href="/service-suite" onClick={e => {
+                      e.preventDefault();
+                      navigate('/service-suite');
+                    }} className={`hover:opacity-80 transition-colors duration-500 text-base font-medium uppercase ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
+                      Service Provider
+                    </a>
 
-          <button onClick={() => navigate('/owner-plans')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
-           Property Renting Owner Plans
-          </button>
-
-          <button onClick={() => navigate('/buyer-plans')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
-           Property Seller Plans
-          </button>
-
-          <button onClick={() => navigate('/seller-plans')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
-           Property Owner Plans
-          </button>
-
-          {/* <button onClick={() => navigate('/commercial-owner-plans')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
-          Commercial Owner Plans
-          </button>
-
-          <button onClick={() => navigate('/commercial-buyer-plan')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
-           Commercial Buyer Plans
-          </button>
-
-          <button onClick={() => navigate('/commercial-seller-plans')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
-           Commercial Seller Plans
-          </button> */}
-        </div>
-      </div>}
-  </div>
-                <a href="/service-suite" onClick={e => {
-                e.preventDefault();
-                navigate('/service-suite');
-              }} className={`hover:opacity-80 transition-colors duration-500 text-base font-medium uppercase ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
-                  Service Provider
-                </a>
-
-              {<a href="/careers" className={`hover:opacity-80 transition-colors duration-500 text-base font-medium uppercase ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
-     Jobs
-  </a>}
-             </nav>}
+                    <a href="/careers" className={`hover:opacity-80 transition-colors duration-500 text-base font-medium uppercase ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
+                      Jobs
+                    </a>
+                  </>
+                )}
+              </nav>}
 
             </div>
 

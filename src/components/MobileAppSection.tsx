@@ -13,6 +13,31 @@ const MobileAppSection = () => {
     });
   };
 
+  // Get the heading from multiple possible field names
+  const getHeading = () => {
+    return cmsContent?.content?.heading || 
+           cmsContent?.content?.headline || 
+           cmsContent?.content?.title || 
+           'Homes, Wherever You Are!';
+  };
+
+  // Get the description from multiple possible field names
+  const getDescription = () => {
+    return cmsContent?.content?.description ||
+           cmsContent?.content?.subtitle ||
+           'Download our app and discover properties anytime, anywhere. Get instant notifications for new listings that match your preferences.';
+  };
+
+  // Get the button text
+  const getButtonText = () => {
+    return cmsContent?.content?.buttonText || 'Download App';
+  };
+
+  // Get the coming soon message
+  const getComingSoon = () => {
+    return cmsContent?.content?.comingSoon || 'Coming Soon! Get ready for the ultimate property experience!';
+  };
+
   return (
     <section className="py-1 bg-gradient-to-br from-rose-50 to-white">
       <div className="container mx-auto px-2">
@@ -26,12 +51,11 @@ const MobileAppSection = () => {
             </div> */}
 
             <h2 className="text-3xl md:text-4xl font-bold text-black mb-4">
-              {cmsContent?.content?.headline || cmsContent?.content?.title || 'Homes, Wherever You Are'}
+              {getHeading()}
             </h2>
 
             <p className="text-gray-600 text-base md:text-lg mb-8 leading-relaxed">
-              {cmsContent?.content?.description ||
-                'Download our app and discover properties anytime, anywhere. Get instant notifications for new listings that match your preferences.'}
+              {getDescription()}
             </p>
 
             {/* Buttons — cherry red */}
@@ -70,7 +94,7 @@ const MobileAppSection = () => {
             {/* Coming Soon indicator */}
             <div className="mt-4 text-center lg:text-left">
               <p className="text-sm font-bold text-[#d21404]">🚀 Coming Soon!</p>
-              <p className="text-xs text-gray-600">{cmsContent?.content?.comingSoon || 'Get ready for the ultimate property experience'}</p>
+              <p className="text-xs text-gray-600">{getComingSoon()}</p>
             </div>
 
             {/* Small trust row (optional) */}

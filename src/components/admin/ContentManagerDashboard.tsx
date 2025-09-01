@@ -178,14 +178,265 @@ export const ContentManagerDashboard: React.FC = () => {
     setFeaturedProperties(data || []);
   };
 
+  // Function to sync current live website content to CMS
+  const syncLiveContentToCMS = async () => {
+    try {
+      console.log('Starting content sync...');
+      
+      // Define the content elements that should exist based on live website components
+      const requiredContentElements = [
+        {
+          element_key: 'header_nav',
+          element_type: 'navigation',
+          title: 'Main Navigation',
+          content: {
+            logo: "/lovable-uploads/main-logo-final.png",
+            nav_items: [
+              {"label": "Buy", "link": "/search?type=buy", "active": true},
+              {"label": "Rent", "link": "/search?type=rent", "active": true}, 
+              {"label": "Sell", "link": "/post-property", "active": true},
+              {"label": "Services", "submenu": [
+                {"label": "Loans", "link": "/loans"},
+                {"label": "Home Security Services", "link": "/home-security-services"},
+                {"label": "Packers & Movers", "link": "/packers-movers"},
+                {"label": "Legal Services", "link": "/legal-services"},
+                {"label": "Handover Services", "link": "/handover-services"},
+                {"label": "Property Management", "link": "/property-management"},
+                {"label": "Architects", "link": "/architects"},
+                {"label": "Painting & Cleaning", "link": "/painting-cleaning"},
+                {"label": "Interior Designers", "link": "/interior"}
+              ]},
+              {"label": "Plans", "submenu": [
+                {"label": "Agent Plans", "link": "/agent-plans"},
+                {"label": "Builder's Lifetime Plan", "link": "/builder-lifetime-plans"},
+                {"label": "Property Renting Owner Plans", "link": "/owner-plans"},
+                {"label": "Property Seller Plans", "link": "/buyer-plans"},
+                {"label": "Property Owner Plans", "link": "/seller-plans"}
+              ]},
+              {"label": "Service Provider", "link": "/service-suite", "active": true},
+              {"label": "Jobs", "link": "/careers", "active": true}
+            ]
+          },
+          page_location: 'homepage',
+          section_location: 'header',
+          sort_order: 0
+        },
+        {
+          element_key: 'hero-search',
+          element_type: 'hero_search',
+          title: 'Hero Search Section',
+          content: {
+            title: "Find Your Dream Property",
+            subtitle: "Buy, Rent, New Launch, PG/Co-living, Commercial & Plots",
+            background_image: "/lovable-uploads/02fc42a2-c12f-49f1-92b7-9fdee8f3a419.png",
+            search_placeholder: "Search Sector 150 Noida",
+            tabs: ["BUY", "RENT", "NEW LAUNCH", "PG / CO-LIVING", "COMMERCIAL", "PLOTS/LAND", "PROJECTS"]
+          },
+          page_location: 'homepage',
+          section_location: 'hero',
+          sort_order: 1
+        },
+        {
+          element_key: 'footer_content',
+          element_type: 'footer',
+          title: 'Footer Content',
+          content: {
+            company_info: {
+              name: "HomeHNI",
+              description: "Your trusted partner in real estate",
+              logo: "/lovable-uploads/main-logo-final.png"
+            },
+            quick_links: [
+              {"label": "About Us", "link": "/about-us"},
+              {"label": "Contact", "link": "/contact-us"},
+              {"label": "Privacy Policy", "link": "/privacy-policy"},
+              {"label": "Terms & Conditions", "link": "/terms-and-conditions"}
+            ],
+            services: [
+              {"label": "Buy Property", "link": "/search?type=buy"},
+              {"label": "Rent Property", "link": "/search?type=rent"},
+              {"label": "Sell Property", "link": "/post-property"},
+              {"label": "Property Management", "link": "/property-management"}
+            ],
+            contact: {
+              phone: "+91-XXXXX-XXXXX",
+              email: "info@homehni.com",
+              address: "Delhi NCR, India"
+            },
+            social: {
+              facebook: "#",
+              twitter: "#", 
+              instagram: "#",
+              linkedin: "#"
+            }
+          },
+          page_location: 'homepage',
+          section_location: 'footer',
+          sort_order: 2
+        },
+        {
+          element_key: 'stats',
+          element_type: 'stats',
+          title: 'Platform Statistics',
+          content: {
+            propertiesListed: '1,000+',
+            happyCustomers: '10,000+',
+            countriesCovered: '15+',
+            awardsWon: '50+'
+          },
+          page_location: 'homepage',
+          section_location: 'statistics',
+          sort_order: 3
+        },
+        {
+          element_key: 'testimonials_section',
+          element_type: 'testimonial',
+          title: 'Customer Testimonials',
+          content: {
+            title: 'Our customers love us',
+            subtitle: 'Real stories from verified buyers & owners.',
+            rating: '4.8/5',
+            reviewCount: '2,143 reviews',
+            ownersMatched: '12k+ owners matched',
+            brokerageSaved: '₹18+ crore brokerage saved'
+          },
+          page_location: 'homepage',
+          section_location: 'testimonials',
+          sort_order: 4
+        },
+        {
+          element_key: 'home_services_section',
+          element_type: 'service',
+          title: 'Home Services',
+          content: {
+            title: 'Home Services',
+            services: [
+              {"name": "Home Security Services", "description": "Professional security solutions for your property"},
+              {"name": "Legal Services", "description": "Expert legal assistance for property transactions"},
+              {"name": "Handover Services", "description": "Smooth property handover and documentation"},
+              {"name": "Property Management", "description": "Complete property management solutions"}
+            ]
+          },
+          page_location: 'homepage',
+          section_location: 'services',
+          sort_order: 5
+        },
+        {
+          element_key: 'why-use',
+          element_type: 'feature',
+          title: 'Why Use HomeHNI',
+          content: {
+            title: 'Why Choose HomeHNI?',
+            subtitle: 'Your trusted partner in real estate',
+            features: [
+              "Verified Properties",
+              "Expert Support",
+              "Transparent Pricing",
+              "24/7 Assistance"
+            ]
+          },
+          page_location: 'homepage',
+          section_location: 'features',
+          sort_order: 6
+        },
+        {
+          element_key: 'mobile_app_section',
+          element_type: 'mobile_app',
+          title: 'Mobile App Promotion',
+          content: {
+            headline: 'Homes, Wherever You Are',
+            description: 'Download our app and discover properties anytime, anywhere. Get instant notifications for new listings that match your preferences.',
+            googlePlayLink: 'https://play.google.com/store/apps',
+            appStoreLink: 'https://apps.apple.com/',
+            comingSoon: 'Coming Soon! Get ready for the ultimate property experience'
+          },
+          page_location: 'homepage',
+          section_location: 'mobile_app',
+          sort_order: 7
+        }
+      ];
+
+      console.log('Syncing', requiredContentElements.length, 'content elements...');
+
+      // Upsert each required content element
+      for (const element of requiredContentElements) {
+        const { data: existing, error: selectError } = await supabase
+          .from('content_elements')
+          .select('id')
+          .eq('element_key', element.element_key)
+          .eq('page_location', element.page_location)
+          .maybeSingle();
+
+        if (selectError) {
+          console.error('Error checking existing element:', selectError);
+          continue;
+        }
+
+        if (existing) {
+          // Update existing element
+          const { error: updateError } = await supabase
+            .from('content_elements')
+            .update({
+              content: element.content,
+              title: element.title,
+              element_type: element.element_type,
+              section_location: element.section_location,
+              sort_order: element.sort_order,
+              updated_at: new Date().toISOString()
+            })
+            .eq('id', existing.id);
+
+          if (updateError) {
+            console.error('Error updating element:', updateError);
+          } else {
+            console.log('Updated:', element.element_key);
+          }
+        } else {
+          // Create new element
+          const { error: insertError } = await supabase
+            .from('content_elements')
+            .insert({
+              ...element,
+              is_active: true,
+              created_at: new Date().toISOString(),
+              updated_at: new Date().toISOString()
+            });
+
+          if (insertError) {
+            console.error('Error creating element:', insertError);
+          } else {
+            console.log('Created:', element.element_key);
+          }
+        }
+      }
+
+      console.log('Content sync completed');
+      
+      // Refresh the content elements list
+      await fetchContentElements();
+      
+    } catch (error) {
+      console.error('Content sync failed:', error);
+      throw error;
+    }
+  };
+
   const updateContentElement = async (element: ContentElement, updates: Partial<ContentElement>) => {
     try {
-      const { error } = await supabase
+      console.log('Updating content element:', element.id, 'with updates:', updates);
+      
+      const { data, error } = await supabase
         .from('content_elements')
         .update(updates)
-        .eq('id', element.id);
+        .eq('id', element.id)
+        .select();
 
-      if (error) throw error;
+      if (error) {
+        console.error('Supabase error:', error);
+        throw error;
+      }
+
+      console.log('Update successful, new data:', data);
 
       toast({
         title: "Success",
@@ -312,6 +563,93 @@ export const ContentManagerDashboard: React.FC = () => {
           <p className="text-muted-foreground">Manage all website content and make real-time updates</p>
         </div>
         <div className="flex gap-2">
+          <Button 
+            variant="outline"
+            onClick={() => {
+              // Debug function to show all content elements
+              console.log('=== ALL CONTENT ELEMENTS ===');
+              contentElements.forEach((element, index) => {
+                console.log(`${index + 1}. ${element.element_key} (${element.element_type})`);
+                console.log('   Content:', element.content);
+                console.log('   Active:', element.is_active);
+                console.log('   Location:', element.page_location, '/', element.section_location);
+                console.log('---');
+              });
+              
+              toast({
+                title: "Debug Info",
+                description: `Logged ${contentElements.length} content elements to console. Check browser console for details.`,
+              });
+            }}
+          >
+            Debug Content
+          </Button>
+          <Button 
+            variant="outline"
+            onClick={async () => {
+              try {
+                // Sync current live website content to CMS
+                await syncLiveContentToCMS();
+                toast({
+                  title: "Sync Complete",
+                  description: "Live website content has been synced to CMS. Refresh to see changes.",
+                });
+              } catch (error) {
+                console.error('Sync failed:', error);
+                toast({
+                  title: "Sync Failed",
+                  description: "Failed to sync content. Check console for details.",
+                  variant: "destructive",
+                });
+              }
+            }}
+          >
+            Sync Live Content
+          </Button>
+          <Button 
+            variant="outline"
+            onClick={() => {
+              // Check what content the live website is actually using
+              console.log('=== LIVE WEBSITE CONTENT CHECK ===');
+              console.log('This will show what content elements the live website is trying to load');
+              console.log('Check the browser console for any CMS-related errors or missing content');
+              
+              // Try to fetch some key content elements
+              const checkContent = async () => {
+                const keys = ['header_nav', 'hero-search', 'footer_content', 'stats', 'testimonials_section'];
+                
+                for (const key of keys) {
+                  try {
+                    const { data, error } = await supabase
+                      .from('content_elements')
+                      .select('*')
+                      .eq('element_key', key)
+                      .eq('is_active', true)
+                      .maybeSingle();
+                    
+                    if (error) {
+                      console.error(`Error fetching ${key}:`, error);
+                    } else if (data) {
+                      console.log(`✅ ${key}: Found`, data);
+                    } else {
+                      console.log(`❌ ${key}: Not found or not active`);
+                    }
+                  } catch (err) {
+                    console.error(`Exception fetching ${key}:`, err);
+                  }
+                }
+              };
+              
+              checkContent();
+              
+              toast({
+                title: "Content Check",
+                description: "Checking live website content. See console for results.",
+              });
+            }}
+          >
+            Check Live Content
+          </Button>
           <Dialog>
             <DialogTrigger asChild>
               <Button>

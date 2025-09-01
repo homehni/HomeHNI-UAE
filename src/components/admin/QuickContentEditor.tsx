@@ -152,14 +152,49 @@ export const QuickContentEditor: React.FC = () => {
         return (
           <div className="space-y-4">
             <div>
-              <Label>Main Headline</Label>
+              <Label>Heading</Label>
               <Input 
-                value={section.content?.headline || ''} 
+                value={section.content?.heading || section.content?.headline || ''} 
                 onChange={(e) => setEditingSection({
                   ...section,
-                  content: { ...section.content, headline: e.target.value }
+                  content: { ...section.content, heading: e.target.value, headline: e.target.value }
                 })}
-                placeholder="Homes, Wherever You Are"
+                placeholder="Homes, Wherever You Are!"
+              />
+            </div>
+            <div>
+              <Label>Subtitle</Label>
+              <Textarea 
+                value={section.content?.subtitle || ''} 
+                onChange={(e) => setEditingSection({
+                  ...section,
+                  content: { ...section.content, subtitle: e.target.value }
+                })}
+                placeholder="Download our app and discover properties anytime, anywhere"
+                rows={2}
+              />
+            </div>
+            <div>
+              <Label>ButtonText</Label>
+              <Input 
+                value={section.content?.buttonText || ''} 
+                onChange={(e) => setEditingSection({
+                  ...section,
+                  content: { ...section.content, buttonText: e.target.value }
+                })}
+                placeholder="Download App"
+              />
+            </div>
+            <div>
+              <Label>ComingSoon</Label>
+              <Textarea 
+                value={section.content?.comingSoon || ''} 
+                onChange={(e) => setEditingSection({
+                  ...section,
+                  content: { ...section.content, comingSoon: e.target.value }
+                })}
+                placeholder="Coming Soon! Get ready for the ultimate property experience!!"
+                rows={2}
               />
             </div>
             <div>
@@ -170,7 +205,8 @@ export const QuickContentEditor: React.FC = () => {
                   ...section,
                   content: { ...section.content, description: e.target.value }
                 })}
-                placeholder="Download our app and discover properties anytime, anywhere..."
+                placeholder="Get instant notifications for new listings that match your preferences!"
+                rows={3}
               />
             </div>
             <div>
