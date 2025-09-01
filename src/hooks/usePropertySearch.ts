@@ -172,7 +172,7 @@ export const usePropertySearch = () => {
                    ['apartment', 'independent_house', 'villa', 'studio', 'builder_floor'].includes(property.property_type);
           case 'commercial':
             // Commercial tab shows commercial properties (buy or rent)
-            return ['office', 'retail', 'showroom', 'warehouse', 'coworking', 'commercial'].includes(property.property_type);
+            return ['office', 'retail', 'retail_shop', 'shop', 'showroom', 'warehouse', 'coworking', 'commercial'].includes(property.property_type);
           case 'plots':
             // Plots tab shows only plots/land
             return property.property_type === 'plot';
@@ -232,6 +232,21 @@ export const usePropertySearch = () => {
         console.log(`✅ Property ${property.id} matches all criteria!`);
         return true;
       });
+
+      // Fallback: if no exact matches, relax filters to show recommended/featured in same state
+      if (filteredProperties.length === 0) {
+        console.log('ℹ️ No exact matches found; showing recommended/featured properties in the same state as fallback');
+        const fallback = propertiesPool.filter(p => 
+          p.status === 'approved' && (!query.state || p.state === query.state)
+        );
+        // Prioritize: recommended > featured > exact city match
+        fallback.sort((a, b) => {
+          const aScore = (a.isRecommended ? 2 : 0) + (a.is_featured ? 1 : 0) + (query.city && a.city.toLowerCase() === query.city.toLowerCase() ? 0.5 : 0);
+          const bScore = (b.isRecommended ? 2 : 0) + (b.is_featured ? 1 : 0) + (query.city && b.city.toLowerCase() === query.city.toLowerCase() ? 0.5 : 0);
+          return bScore - aScore;
+        });
+        filteredProperties = fallback;
+      }
 
       // Sort by relevance with enhanced priority system
       filteredProperties.sort((a, b) => {
