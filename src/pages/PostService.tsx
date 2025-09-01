@@ -261,35 +261,60 @@ const PostService = () => {
         clearResults();
       }
     } else if (['Buy', 'Sell', 'Lease'].includes(formData.intent)) {
-      // Map form intent to search bar type for proper filtering
-      let mappedIntent = formData.intent.toLowerCase();
-      if (formData.intent === 'Buy') {
-        // Map property type to search bar categories
-        if (formData.propertyType === 'Plot/Land') {
-          mappedIntent = 'plots';
-        } else if (['Office', 'Retail/Shop', 'Showroom', 'Industrial/Warehouse', 'Co-working'].includes(formData.propertyType)) {
-          mappedIntent = 'commercial';
-        } else {
-          mappedIntent = 'buy';
-        }
-      } else if (formData.intent === 'Sell') {
-        mappedIntent = 'sell';
-      } else if (formData.intent === 'Lease') {
-        mappedIntent = 'rent';
+      // Map form selections to main search bar tabs exactly like the homepage
+      let searchBarTab = '';
+      
+      switch (formData.intent) {
+        case 'Buy':
+          // Map property types to search bar tabs
+          if (formData.propertyType === 'Plot/Land' || formData.propertyType === 'Agricultural Land') {
+            searchBarTab = 'plots';
+          } else if (['Office', 'Retail/Shop', 'Showroom', 'Industrial/Warehouse', 'Co-working'].includes(formData.propertyType)) {
+            searchBarTab = 'commercial';
+          } else {
+            searchBarTab = 'buy'; // Residential properties
+          }
+          break;
+        case 'Sell':
+          // For sell, we still need to categorize by property type
+          if (formData.propertyType === 'Plot/Land' || formData.propertyType === 'Agricultural Land') {
+            searchBarTab = 'plots';
+          } else if (['Office', 'Retail/Shop', 'Showroom', 'Industrial/Warehouse', 'Co-working'].includes(formData.propertyType)) {
+            searchBarTab = 'commercial';
+          } else {
+            searchBarTab = 'buy'; // Treat sell as buy for filtering purposes
+          }
+          break;
+        case 'Lease':
+          if (['Office', 'Retail/Shop', 'Showroom', 'Industrial/Warehouse', 'Co-working'].includes(formData.propertyType)) {
+            searchBarTab = 'commercial';
+          } else {
+            searchBarTab = 'rent'; // Residential lease
+          }
+          break;
       }
       
-      const enhancedQuery = {
-        ...searchQuery,
-        intent: mappedIntent as 'buy' | 'sell' | 'lease' | 'rent' | 'new-launch' | 'pg' | 'commercial' | 'plots' | 'projects' | ''
+      // Use the main search filtering logic with location + tab
+      const searchLocation = `${formData.city}, ${formData.state}`;
+      
+      // Create a query that matches the main search bar format
+      const mainSearchQuery = {
+        intent: searchBarTab as 'buy' | 'rent' | 'commercial' | 'plots' | 'new-launch' | 'pg' | 'projects',
+        propertyType: '', // Let the tab handle the filtering
+        country: formData.country,
+        state: formData.state,
+        city: formData.city,
+        budgetMin: formData.budgetRange[0],
+        budgetMax: formData.budgetRange[1]
       };
       
-      if (enhancedQuery.intent && enhancedQuery.country && enhancedQuery.state) {
-        debouncedSearchProperties(enhancedQuery);
+      if (mainSearchQuery.intent && formData.country && formData.state) {
+        debouncedSearchProperties(mainSearchQuery);
       } else {
         clearResults();
       }
     }
-  }, [formData.intent, formData.serviceCategory, formData.propertyType, searchQuery, debouncedSearchProperties, debouncedSearchServices, clearResults]);
+  }, [formData.intent, formData.serviceCategory, formData.propertyType, formData.country, formData.state, formData.city, formData.budgetRange, debouncedSearchProperties, debouncedSearchServices, clearResults]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
