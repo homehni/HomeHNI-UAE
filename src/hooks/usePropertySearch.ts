@@ -1,7 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { fetchPublicProperties, fetchFeaturedProperties, PublicProperty } from '@/services/propertyService';
-import { contentElementsService } from '@/services/contentElementsService';
 import { mapPropertyType } from '@/utils/propertyMappings';
 
 export interface PropertySearchQuery {
@@ -81,51 +79,77 @@ export const usePropertySearch = () => {
       setIsLoading(true);
       setError(null);
 
-      // Fetch recommended properties from content_elements as primary source
-      const [allProperties, featuredProperties, recommendedElements] = await Promise.all([
-        fetchPublicProperties(),
-        fetchFeaturedProperties(),
-        contentElementsService.getContentElements('post-service', 'recommended_properties')
-      ]);
-      
-      // Process recommended properties from content_elements
-      let propertiesPool = [];
-      const existingIds = new Set();
-      
-      // 1st: Add recommended properties from content_elements
-      if (recommendedElements && recommendedElements.length > 0) {
-        for (const element of recommendedElements) {
-          if (element.content && element.content.property_ids) {
-            for (const propertyId of element.content.property_ids) {
-              const property = allProperties.find(p => p.id === propertyId);
-              if (property && !existingIds.has(property.id)) {
-                propertiesPool.push({ ...property, isRecommended: true });
-                existingIds.add(property.id);
-              }
-            }
+      // Fetch properties from Supabase property_real (single source of truth)
+      const { data: prRows, error: prError } = await (supabase as any)
+        .from('property_real')
+        .select('id, element_type, element_key, title, property_type, location, images, content, updated_at')
+        .limit(500);
+
+      if (prError) {
+        throw new Error(prError.message);
+      }
+
+      type AnyRow = {
+        id?: string | null;
+        element_type?: string | null;
+        element_key?: string | null;
+        title?: string | null;
+        property_type?: string | null;
+        location?: string | null;
+        images?: any;
+        content?: any;
+        updated_at?: string | null;
+      };
+
+      const toArray = (v: any): string[] => {
+        if (!v) return [];
+        if (Array.isArray(v)) return v.filter(Boolean);
+        if (typeof v === 'string') {
+          try {
+            // handle stringified JSON arrays
+            const parsed = JSON.parse(v);
+            return Array.isArray(parsed) ? parsed.filter(Boolean) : [v];
+          } catch {
+            return v.split(',').map((s) => s.trim()).filter(Boolean);
           }
         }
-      }
-      
-      // 2nd: Add featured properties
-      featuredProperties.forEach(property => {
-        if (!existingIds.has(property.id)) {
-          propertiesPool.push(property);
-          existingIds.add(property.id);
+        return [];
+      };
+
+      let propertiesPool: any[] = [];
+      (prRows as AnyRow[] | null)?.forEach((row) => {
+        const c = (row.content ?? {}) as any;
+
+        // Extract city/state from content or from location text ("City, State, Country")
+        let city = (c.city ?? '').toString().trim();
+        let state = (c.state ?? '').toString().trim();
+        if ((!city || !state) && row.location) {
+          const parts = row.location.split(',').map((s) => s.trim());
+          city = city || (parts[0] ?? '');
+          state = state || (parts[1] ?? '');
         }
+
+        const images = toArray(c.images ?? row.images);
+
+        propertiesPool.push({
+          id: c.id ?? row.id,
+          title: row.title ?? c.title ?? 'Property',
+          property_type: (c.property_type ?? row.property_type ?? '').toLowerCase(),
+          listing_type: (c.listing_type ?? 'sale').toLowerCase(),
+          status: (c.status ?? 'approved').toLowerCase(),
+          expected_price: c.expected_price != null ? Number(c.expected_price) : null,
+          city,
+          state,
+          availability_type: (c.availability_type ?? '').toLowerCase(),
+          is_featured: Boolean(c.is_featured) || /featured/i.test(row.element_key ?? ''),
+          isRecommended: Boolean(c.isRecommended) || /recommended/i.test(row.element_key ?? ''),
+          furnishing: c.furnishing ?? null,
+          super_area: c.super_area ?? null,
+          images,
+        });
       });
-      
-      // 3rd: Add remaining non-featured properties
-      allProperties.forEach(property => {
-        if (!existingIds.has(property.id)) {
-          propertiesPool.push(property);
-        }
-      });
-      
-      console.log(`🎯 Recommended Properties loaded as primary source: ${propertiesPool.filter(p => p.isRecommended).length}`);
-      console.log(`🌟 Featured Properties added: ${featuredProperties.length}`);
-      console.log(`📋 Additional properties added: ${allProperties.length - propertiesPool.length}`);
-      
+
+      console.log(`📦 Loaded from property_real: ${propertiesPool.length}`);
       console.log(`🔍 Search Query:`, {
         intent: query.intent,
         propertyType: query.propertyType,
@@ -133,13 +157,11 @@ export const usePropertySearch = () => {
         state: query.state,
         city: query.city,
         budgetRange: `₹${query.budgetMin} - ₹${query.budgetMax}`,
-        featuredFirst: true
       });
-      
-      console.log(`📊 Total properties in pool:`, propertiesPool.length);
-      console.log(`📋 Property types available:`, [...new Set(propertiesPool.map(p => p.property_type))]);
+      console.log(`📊 Property types available:`, [...new Set(propertiesPool.map(p => p.property_type))]);
       console.log(`🎯 Property statuses:`, [...new Set(propertiesPool.map(p => p.status))]);
-      console.log(`⭐ Featured properties (primary):`, propertiesPool.filter(p => p.is_featured).length);
+      console.log(`⭐ Featured properties:`, propertiesPool.filter(p => p.is_featured).length);
+      console.log(`📊 Total properties in pool:`, propertiesPool.length);
       
       // Filter properties based on search criteria
       let filteredProperties = propertiesPool.filter(property => {
