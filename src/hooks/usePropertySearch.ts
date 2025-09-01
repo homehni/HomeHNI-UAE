@@ -80,25 +80,31 @@ export const usePropertySearch = () => {
       setIsLoading(true);
       setError(null);
 
-      // Fetch all properties from the database
-      const allProperties = await fetchPublicProperties();
+      // Fetch properties with Featured Properties as primary source
+      const [allProperties, featuredProperties] = await Promise.all([
+        fetchPublicProperties(),
+        fetchFeaturedProperties()
+      ]);
       
-      // If we have very few matching properties, include featured properties as fallback
-      let propertiesPool = allProperties;
-      const shouldIncludeFallback = allProperties.length < 10; // Include fallback if less than 10 total properties
+      // Always prioritize Featured Properties for real-time matches
+      let propertiesPool = [];
+      const existingIds = new Set();
       
-      if (shouldIncludeFallback) {
-        try {
-          const featuredProperties = await fetchFeaturedProperties();
-          // Add featured properties that aren't already in the list
-          const existingIds = new Set(allProperties.map(p => p.id));
-          const uniqueFeatured = featuredProperties.filter(p => !existingIds.has(p.id));
-          propertiesPool = [...allProperties, ...uniqueFeatured];
-          console.log(`🎯 Added ${uniqueFeatured.length} featured properties as fallback from total ${featuredProperties.length} featured`);
-        } catch (error) {
-          console.warn('Could not fetch featured properties:', error);
+      // 1st: Add all featured properties (main source for real-time matches)
+      featuredProperties.forEach(property => {
+        propertiesPool.push(property);
+        existingIds.add(property.id);
+      });
+      
+      // 2nd: Add remaining non-featured properties
+      allProperties.forEach(property => {
+        if (!existingIds.has(property.id)) {
+          propertiesPool.push(property);
         }
-      }
+      });
+      
+      console.log(`🌟 Featured Properties loaded as primary source: ${featuredProperties.length}`);
+      console.log(`📋 Additional properties added: ${allProperties.length - featuredProperties.filter(fp => allProperties.find(ap => ap.id === fp.id)).length}`);
       
       console.log(`🔍 Search Query:`, {
         intent: query.intent,
@@ -107,13 +113,13 @@ export const usePropertySearch = () => {
         state: query.state,
         city: query.city,
         budgetRange: `₹${query.budgetMin} - ₹${query.budgetMax}`,
-        fallbackEnabled: shouldIncludeFallback
+        featuredFirst: true
       });
       
       console.log(`📊 Total properties in pool:`, propertiesPool.length);
       console.log(`📋 Property types available:`, [...new Set(propertiesPool.map(p => p.property_type))]);
       console.log(`🎯 Property statuses:`, [...new Set(propertiesPool.map(p => p.status))]);
-      console.log(`⭐ Featured properties:`, propertiesPool.filter(p => p.is_featured).length);
+      console.log(`⭐ Featured properties (primary):`, propertiesPool.filter(p => p.is_featured).length);
       
       // Filter properties based on search criteria
       let filteredProperties = propertiesPool.filter(property => {
@@ -227,8 +233,7 @@ export const usePropertySearch = () => {
           property.furnishing && `${property.furnishing}`,
           property.availability_type && `${property.availability_type}`,
           property.super_area && `${property.super_area} sq ft`,
-          property.is_featured && 'Featured',
-          shouldIncludeFallback && !allProperties.find(p => p.id === property.id) && 'Popular' // Mark fallback properties
+          property.is_featured && 'Featured'
         ].filter(Boolean),
         url: `/property/${property.id}`
       }));
@@ -247,13 +252,14 @@ export const usePropertySearch = () => {
 
       setCurrentPage(page);
       
-      console.log(`🎉 Search Results: Found ${paginatedResults.length} properties out of ${transformedProperties.length} matching properties from ${propertiesPool.length} total in pool (${allProperties.length} direct + ${propertiesPool.length - allProperties.length} featured fallback)`);
+      console.log(`🎉 Search Results: Found ${paginatedResults.length} properties out of ${transformedProperties.length} matching properties (Featured Properties as primary source)`);
       console.log('📱 Matching properties:', paginatedResults.map(p => ({ 
         id: p.id, 
         title: p.title, 
         type: p.type, 
         price: p.priceInr,
-        badges: p.badges
+        badges: p.badges,
+        featured: p.badges.includes('Featured')
       })));
 
     } catch (error: any) {
