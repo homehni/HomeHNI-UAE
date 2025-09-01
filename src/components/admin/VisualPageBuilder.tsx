@@ -548,20 +548,6 @@ export const VisualPageBuilder: React.FC = () => {
                 )
               )}
             </div>
-          ))
-                  value={value}
-                  onChange={(e) => setEditingContent(prev => ({ ...prev, [key]: e.target.value }))}
-                  className="w-full"
-                  rows={3}
-                />
-              ) : (
-                <Input
-                  value={String(value || '')}
-                  onChange={(e) => setEditingContent(prev => ({ ...prev, [key]: e.target.value }))}
-                  className="w-full"
-                />
-              )}
-            </div>
           ))}
         </div>
       );
