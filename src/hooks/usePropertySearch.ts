@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { fetchPublicProperties, PublicProperty } from '@/services/propertyService';
+import { fetchPublicProperties, fetchFeaturedProperties, PublicProperty } from '@/services/propertyService';
 import { mapPropertyType } from '@/utils/propertyMappings';
 
 export interface PropertySearchQuery {
@@ -83,16 +83,21 @@ export const usePropertySearch = () => {
       // Fetch all properties from the database
       const allProperties = await fetchPublicProperties();
       
-      // If we have very few properties, also include featured properties as fallback
-      let propertiesWithFallback = allProperties;
-      if (allProperties.length < 5) {
-        const { fetchFeaturedProperties } = await import('@/services/propertyService');
-        const featuredProperties = await fetchFeaturedProperties();
-        // Add featured properties that aren't already in the list
-        const existingIds = new Set(allProperties.map(p => p.id));
-        const uniqueFeatured = featuredProperties.filter(p => !existingIds.has(p.id));
-        propertiesWithFallback = [...allProperties, ...uniqueFeatured];
-        console.log(`🎯 Added ${uniqueFeatured.length} featured properties as fallback`);
+      // If we have very few matching properties, include featured properties as fallback
+      let propertiesPool = allProperties;
+      const shouldIncludeFallback = allProperties.length < 10; // Include fallback if less than 10 total properties
+      
+      if (shouldIncludeFallback) {
+        try {
+          const featuredProperties = await fetchFeaturedProperties();
+          // Add featured properties that aren't already in the list
+          const existingIds = new Set(allProperties.map(p => p.id));
+          const uniqueFeatured = featuredProperties.filter(p => !existingIds.has(p.id));
+          propertiesPool = [...allProperties, ...uniqueFeatured];
+          console.log(`🎯 Added ${uniqueFeatured.length} featured properties as fallback from total ${featuredProperties.length} featured`);
+        } catch (error) {
+          console.warn('Could not fetch featured properties:', error);
+        }
       }
       
       console.log(`🔍 Search Query:`, {
@@ -101,15 +106,17 @@ export const usePropertySearch = () => {
         mappedPropertyType: query.propertyType ? mapPropertyType(query.propertyType) : null,
         state: query.state,
         city: query.city,
-        budgetRange: `₹${query.budgetMin} - ₹${query.budgetMax}`
+        budgetRange: `₹${query.budgetMin} - ₹${query.budgetMax}`,
+        fallbackEnabled: shouldIncludeFallback
       });
       
-      console.log(`📊 Total properties in DB:`, propertiesWithFallback.length);
-      console.log(`📋 Property types in DB:`, [...new Set(propertiesWithFallback.map(p => p.property_type))]);
-      console.log(`🎯 Property statuses in DB:`, [...new Set(propertiesWithFallback.map(p => p.status))]);
+      console.log(`📊 Total properties in pool:`, propertiesPool.length);
+      console.log(`📋 Property types available:`, [...new Set(propertiesPool.map(p => p.property_type))]);
+      console.log(`🎯 Property statuses:`, [...new Set(propertiesPool.map(p => p.status))]);
+      console.log(`⭐ Featured properties:`, propertiesPool.filter(p => p.is_featured).length);
       
       // Filter properties based on search criteria
-      let filteredProperties = propertiesWithFallback.filter(property => {
+      let filteredProperties = propertiesPool.filter(property => {
         console.log(`🏠 Checking property:`, {
           id: property.id,
           title: property.title,
@@ -172,9 +179,9 @@ export const usePropertySearch = () => {
         return true;
       });
 
-      // Sort by relevance (city match > featured > price)
+      // Sort by relevance with enhanced priority system
       filteredProperties.sort((a, b) => {
-        // Prioritize exact city matches
+        // 1st Priority: Exact city matches
         if (query.city) {
           const aExactMatch = a.city.toLowerCase() === query.city.toLowerCase();
           const bExactMatch = b.city.toLowerCase() === query.city.toLowerCase();
@@ -182,15 +189,24 @@ export const usePropertySearch = () => {
           if (!aExactMatch && bExactMatch) return 1;
         }
 
-        // Then prioritize featured properties
+        // 2nd Priority: Featured properties
         if (a.is_featured && !b.is_featured) return -1;
         if (!a.is_featured && b.is_featured) return 1;
+        
+        // 3rd Priority: Exact property type match (if both are featured or both are not)
+        if (query.propertyType && query.propertyType !== 'Others') {
+          const mappedQueryType = mapPropertyType(query.propertyType);
+          const aExactTypeMatch = a.property_type === mappedQueryType;
+          const bExactTypeMatch = b.property_type === mappedQueryType;
+          if (aExactTypeMatch && !bExactTypeMatch) return -1;
+          if (!aExactTypeMatch && bExactTypeMatch) return 1;
+        }
 
-        // Then by price (ascending for buy/lease, descending for sell)
+        // 4th Priority: Price sorting
         if (query.intent === 'sell') {
-          return (b.expected_price || 0) - (a.expected_price || 0);
+          return (b.expected_price || 0) - (a.expected_price || 0); // Descending for sell
         } else {
-          return (a.expected_price || 0) - (b.expected_price || 0);
+          return (a.expected_price || 0) - (b.expected_price || 0); // Ascending for buy/lease
         }
       });
 
@@ -211,7 +227,8 @@ export const usePropertySearch = () => {
           property.furnishing && `${property.furnishing}`,
           property.availability_type && `${property.availability_type}`,
           property.super_area && `${property.super_area} sq ft`,
-          property.is_featured && 'Featured'
+          property.is_featured && 'Featured',
+          shouldIncludeFallback && !allProperties.find(p => p.id === property.id) && 'Popular' // Mark fallback properties
         ].filter(Boolean),
         url: `/property/${property.id}`
       }));
@@ -230,8 +247,14 @@ export const usePropertySearch = () => {
 
       setCurrentPage(page);
       
-      console.log(`🎉 Search Results: Found ${paginatedResults.length} properties out of ${transformedProperties.length} matching properties from ${allProperties.length} total`);
-      console.log('📱 Matching properties:', paginatedResults.map(p => ({ id: p.id, title: p.title, type: p.type, price: p.priceInr })));
+      console.log(`🎉 Search Results: Found ${paginatedResults.length} properties out of ${transformedProperties.length} matching properties from ${propertiesPool.length} total in pool (${allProperties.length} direct + ${propertiesPool.length - allProperties.length} featured fallback)`);
+      console.log('📱 Matching properties:', paginatedResults.map(p => ({ 
+        id: p.id, 
+        title: p.title, 
+        type: p.type, 
+        price: p.priceInr,
+        badges: p.badges
+      })));
 
     } catch (error: any) {
       if (error.name !== 'AbortError') {
