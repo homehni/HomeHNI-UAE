@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { fetchPublicProperties, fetchFeaturedProperties, PublicProperty } from '@/services/propertyService';
+import { contentElementsService } from '@/services/contentElementsService';
 import { mapPropertyType } from '@/utils/propertyMappings';
 
 export interface PropertySearchQuery {
@@ -80,31 +81,50 @@ export const usePropertySearch = () => {
       setIsLoading(true);
       setError(null);
 
-      // Fetch properties with Featured Properties as primary source
-      const [allProperties, featuredProperties] = await Promise.all([
+      // Fetch recommended properties from content_elements as primary source
+      const [allProperties, featuredProperties, recommendedElements] = await Promise.all([
         fetchPublicProperties(),
-        fetchFeaturedProperties()
+        fetchFeaturedProperties(),
+        contentElementsService.getContentElements('post-service', 'recommended_properties')
       ]);
       
-      // Always prioritize Featured Properties for real-time matches
+      // Process recommended properties from content_elements
       let propertiesPool = [];
       const existingIds = new Set();
       
-      // 1st: Add all featured properties (main source for real-time matches)
+      // 1st: Add recommended properties from content_elements
+      if (recommendedElements && recommendedElements.length > 0) {
+        for (const element of recommendedElements) {
+          if (element.content && element.content.property_ids) {
+            for (const propertyId of element.content.property_ids) {
+              const property = allProperties.find(p => p.id === propertyId);
+              if (property && !existingIds.has(property.id)) {
+                propertiesPool.push({ ...property, isRecommended: true });
+                existingIds.add(property.id);
+              }
+            }
+          }
+        }
+      }
+      
+      // 2nd: Add featured properties
       featuredProperties.forEach(property => {
-        propertiesPool.push(property);
-        existingIds.add(property.id);
+        if (!existingIds.has(property.id)) {
+          propertiesPool.push(property);
+          existingIds.add(property.id);
+        }
       });
       
-      // 2nd: Add remaining non-featured properties
+      // 3rd: Add remaining non-featured properties
       allProperties.forEach(property => {
         if (!existingIds.has(property.id)) {
           propertiesPool.push(property);
         }
       });
       
-      console.log(`🌟 Featured Properties loaded as primary source: ${featuredProperties.length}`);
-      console.log(`📋 Additional properties added: ${allProperties.length - featuredProperties.filter(fp => allProperties.find(ap => ap.id === fp.id)).length}`);
+      console.log(`🎯 Recommended Properties loaded as primary source: ${propertiesPool.filter(p => p.isRecommended).length}`);
+      console.log(`🌟 Featured Properties added: ${featuredProperties.length}`);
+      console.log(`📋 Additional properties added: ${allProperties.length - propertiesPool.length}`);
       
       console.log(`🔍 Search Query:`, {
         intent: query.intent,
@@ -187,7 +207,11 @@ export const usePropertySearch = () => {
 
       // Sort by relevance with enhanced priority system
       filteredProperties.sort((a, b) => {
-        // 1st Priority: Exact city matches
+        // 1st Priority: Recommended properties from content_elements
+        if (a.isRecommended && !b.isRecommended) return -1;
+        if (!a.isRecommended && b.isRecommended) return 1;
+
+        // 2nd Priority: Exact city matches
         if (query.city) {
           const aExactMatch = a.city.toLowerCase() === query.city.toLowerCase();
           const bExactMatch = b.city.toLowerCase() === query.city.toLowerCase();
@@ -195,7 +219,7 @@ export const usePropertySearch = () => {
           if (!aExactMatch && bExactMatch) return 1;
         }
 
-        // 2nd Priority: Featured properties
+        // 3rd Priority: Featured properties
         if (a.is_featured && !b.is_featured) return -1;
         if (!a.is_featured && b.is_featured) return 1;
         
@@ -230,6 +254,7 @@ export const usePropertySearch = () => {
           ? property.images[0] 
           : 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=300&h=200&fit=crop',
         badges: [
+          property.isRecommended && 'Recommended',
           property.furnishing && `${property.furnishing}`,
           property.availability_type && `${property.availability_type}`,
           property.super_area && `${property.super_area} sq ft`,
@@ -252,13 +277,14 @@ export const usePropertySearch = () => {
 
       setCurrentPage(page);
       
-      console.log(`🎉 Search Results: Found ${paginatedResults.length} properties out of ${transformedProperties.length} matching properties (Featured Properties as primary source)`);
+      console.log(`🎉 Search Results: Found ${paginatedResults.length} properties out of ${transformedProperties.length} matching properties (Recommended Properties as primary source)`);
       console.log('📱 Matching properties:', paginatedResults.map(p => ({ 
         id: p.id, 
         title: p.title, 
         type: p.type, 
         price: p.priceInr,
         badges: p.badges,
+        recommended: p.badges.includes('Recommended'),
         featured: p.badges.includes('Featured')
       })));
 
