@@ -8,6 +8,7 @@ interface CMSElement {
   title?: string;
   content: any;
   images?: string[];
+  is_active?: boolean;
 }
 
 export const useCMSContent = (elementKey: string) => {
