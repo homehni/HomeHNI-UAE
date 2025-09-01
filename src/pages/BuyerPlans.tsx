@@ -399,7 +399,7 @@ const BuyerPlans = () => {
       </section>
 
       {/* Final CTA */}
-      <section className="py-16 px-4 gradient-red-maroon text-white">
+      {/* <section className="py-16 px-4 gradient-red-maroon text-white">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-6">
             Let's Find You the Perfect Home — At Zero Brokerage!
@@ -408,7 +408,7 @@ const BuyerPlans = () => {
             Start Your Free Plan
           </Button>
         </div>
-      </section>
+      </section> */}
 
       <Footer />
     </div>
