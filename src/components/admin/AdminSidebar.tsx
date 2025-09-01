@@ -14,6 +14,7 @@ import {
   Building2,
   TrendingUp,
   Calendar,
+  Layout,
 } from 'lucide-react';
 import {
   Sidebar,
@@ -64,6 +65,12 @@ const navigationItems = [
     title: 'Content Management',
     url: '/admin/content',
     icon: FileText,
+    group: 'Content',
+  },
+  {
+    title: 'Page Management',
+    url: '/admin/page-management',
+    icon: Layout,
     group: 'Content',
   },
   {
