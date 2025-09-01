@@ -28,15 +28,23 @@ export const mapPropertyType = (propertyType: string): string => {
     'Villa': 'villa',
     'House': 'independent_house', // Map "House" to 'independent_house'
     'Independent House': 'independent_house',
+    'Independent House/Villa': 'independent_house', // Map form value to DB value
     'Builder Floor': 'builder_floor',
     'Plot': 'plot',
     'Plot/Land': 'plot', // Map form value to DB value
+    'Agricultural Land': 'plot', // Map Agricultural Land to plot
+    'Farmhouse': 'plot', // Map Farmhouse to plot
+    'Studio': 'studio',
     'Commercial': 'commercial',
     'Office': 'office',
     'Office Space': 'office', // Map "Office Space" to 'office'
+    'Retail/Shop': 'shop', // Map form value to DB value
     'Shop': 'shop',
     'Warehouse': 'warehouse',
-    'Showroom': 'showroom'
+    'Industrial/Warehouse': 'warehouse', // Map form value to DB value
+    'Showroom': 'showroom',
+    'Co-working': 'coworking', // Map form value to DB value
+    'Hospitality/Hotel': 'hotel' // Map form value to DB value
   };
   
   if (!propertyType) return 'commercial';
@@ -71,7 +79,7 @@ export const validateMappedValues = (data: {
   }
   
   // Validate property type
-  const validPropertyTypes = ['apartment', 'villa', 'independent_house', 'builder_floor', 'plot', 'commercial', 'office', 'shop', 'warehouse', 'showroom'];
+  const validPropertyTypes = ['apartment', 'villa', 'independent_house', 'builder_floor', 'plot', 'studio', 'commercial', 'office', 'shop', 'warehouse', 'showroom', 'coworking', 'hotel'];
   const mappedPropertyType = mapPropertyType(data.propertyType);
   if (!validPropertyTypes.includes(mappedPropertyType)) {
     errors.push(`Invalid property type: ${data.propertyType}`);
