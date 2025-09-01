@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -14,6 +14,8 @@ import { useFormSubmission } from "@/hooks/useFormSubmission";
 import { Loader2, CheckCircle } from "lucide-react";
 import Marquee from "@/components/Marquee";
 import Header from "@/components/Header";
+import { SearchResultsPanel } from "@/components/SearchResultsPanel";
+import { usePropertySearch, PropertySearchQuery } from "@/hooks/usePropertySearch";
 
 interface FormData {
   name: string;
@@ -24,6 +26,7 @@ interface FormData {
   city: string;
   intent: string;
   propertyType: string;
+  serviceCategory: string;
   services: string[];
   otherService: string;
   budgetRange: number[];
@@ -49,6 +52,7 @@ const PostService = () => {
     city: "",
     intent: "",
     propertyType: "",
+    serviceCategory: "",
     services: [],
     otherService: "",
     budgetRange: [0, 50000000],
@@ -60,6 +64,16 @@ const PostService = () => {
 
   const { submissionState, setSubmitting, showSuccessToast, showErrorToast, updateProgress } = useFormSubmission();
   const { toast } = useToast();
+  
+  const {
+    results,
+    isLoading: searchLoading,
+    error: searchError,
+    debouncedSearchProperties,
+    debouncedSearchServices,
+    loadMore,
+    clearResults
+  } = usePropertySearch();
 
   // Load states and cities data
   useEffect(() => {
@@ -110,19 +124,26 @@ const PostService = () => {
     { value: "Service", label: "Service" }
   ];
 
+  // Property types based on intent (same for Buy/Sell/Lease)
   const propertyTypes = [
+    // Residential
     "Apartment/Flat",
-    "Independent House/Villa", 
+    "Independent House/Villa",
     "Plot/Land",
+    "Farmhouse",
+    "Studio",
+    // Commercial
     "Office",
     "Retail/Shop",
-    "Warehouse",
-    "Industrial",
+    "Showroom",
+    "Industrial/Warehouse",
     "Co-working",
-    "Others"
+    // Others
+    "Agricultural Land",
+    "Hospitality/Hotel"
   ];
 
-  const serviceOptions = [
+  const serviceCategories = [
     "Property Management",
     "Tenant Management", 
     "Rental & Leasing",
@@ -135,6 +156,13 @@ const PostService = () => {
     "Sale Advisory",
     "Buy Advisory", 
     "Due Diligence",
+    "RCC Contractor",
+    "Interior",
+    "Movers",
+    "Legal",
+    "Finance",
+    "Vastu",
+    "Home Inspection",
     "Others"
   ];
 
@@ -182,12 +210,8 @@ const PostService = () => {
       newErrors.propertyType = "Property type is required";
     }
     
-    if (formData.intent === "Service" && formData.services.length === 0) {
-      newErrors.services = "Please select at least one service";
-    }
-    
-    if (formData.services.includes("Others") && !formData.otherService.trim()) {
-      newErrors.otherService = "Please specify the service";
+    if (formData.intent === "Service" && !formData.serviceCategory) {
+      newErrors.serviceCategory = "Please select a service category";
     }
 
     if (formData.budgetRange[0] > formData.budgetRange[1]) {
@@ -203,24 +227,47 @@ const PostService = () => {
     if (errors[field]) {
       setErrors(prev => ({ ...prev, [field]: "" }));
     }
-  };
 
-  const handleServiceChange = (service: string, checked: boolean) => {
-    let newServices = [...formData.services];
-    if (checked) {
-      newServices.push(service);
-    } else {
-      newServices = newServices.filter(s => s !== service);
+    // Clear property type when switching between intents
+    if (field === 'intent') {
+      if (value === 'Service') {
+        setFormData(prev => ({ ...prev, propertyType: "" }));
+      } else {
+        setFormData(prev => ({ ...prev, serviceCategory: "" }));
+      }
     }
-    handleInputChange("services", newServices);
   };
 
-  const initiatePayment = async (amount: number, currency: string): Promise<boolean> => {
-    // Mock payment function - replace with real payment gateway
-    updateProgress("Processing payment...");
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    return true;
-  };
+  // Debounced search effect
+  const searchQuery = useMemo<PropertySearchQuery>(() => ({
+    intent: formData.intent.toLowerCase() as 'buy' | 'sell' | 'lease' | '',
+    propertyType: formData.propertyType,
+    country: formData.country,
+    state: formData.state,
+    city: formData.city,
+    budgetMin: formData.budgetRange[0],
+    budgetMax: formData.budgetRange[1]
+  }), [formData.intent, formData.propertyType, formData.country, formData.state, formData.city, formData.budgetRange]);
+
+  useEffect(() => {
+    if (formData.intent === 'Service') {
+      if (formData.serviceCategory && formData.country && formData.state) {
+        debouncedSearchServices(formData.serviceCategory, {
+          country: formData.country,
+          state: formData.state,
+          city: formData.city
+        });
+      } else {
+        clearResults();
+      }
+    } else if (['Buy', 'Sell', 'Lease'].includes(formData.intent)) {
+      if (searchQuery.intent && searchQuery.country && searchQuery.state) {
+        debouncedSearchProperties(searchQuery);
+      } else {
+        clearResults();
+      }
+    }
+  }, [formData.intent, formData.serviceCategory, searchQuery, debouncedSearchProperties, debouncedSearchServices, clearResults]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -233,15 +280,6 @@ const PostService = () => {
     setSubmitting(true);
     
     try {
-      // Handle premium payment if selected
-      if (formData.premiumSelected) {
-        updateProgress("Processing payment...");
-        const paymentSuccess = await initiatePayment(999, formData.currency);
-        if (!paymentSuccess) {
-          throw new Error("Payment failed");
-        }
-      }
-
       // Submit form data
       updateProgress("Submitting your requirement...");
       
@@ -254,15 +292,13 @@ const PostService = () => {
         city: formData.city,
         intent: formData.intent,
         ...(["Buy", "Sell", "Lease"].includes(formData.intent) && { propertyType: formData.propertyType }),
-        ...(formData.intent === "Service" && { services: formData.services }),
-        ...(formData.services.includes("Others") && { otherService: formData.otherService }),
+        ...(formData.intent === "Service" && { serviceCategory: formData.serviceCategory }),
         budget: {
           min: formData.budgetRange[0],
           max: formData.budgetRange[1],
           currency: formData.currency
         },
         premiumSelected: formData.premiumSelected,
-        paymentMethod: formData.premiumSelected ? formData.paymentMethod : null,
         notes: formData.notes
       };
 
@@ -274,11 +310,7 @@ const PostService = () => {
       setReferenceId(refId);
       setShowSuccess(true);
       
-      if (formData.premiumSelected) {
-        showSuccessToast("Success", "Payment captured (test) - Your requirement has been posted!");
-      } else {
-        showSuccessToast("Success", "Your requirement has been posted successfully!");
-      }
+      showSuccessToast("Success", "Your requirement has been posted successfully!");
 
     } catch (error) {
       showErrorToast("Submission Failed", "Please try again or contact support");
@@ -331,9 +363,6 @@ const PostService = () => {
                   {formData.budgetRange[0] > 0 && formData.budgetRange[1] > 0 && (
                     <p><strong>Budget:</strong> {formatBudgetAmount(formData.budgetRange[0])} - {formatBudgetAmount(formData.budgetRange[1])}</p>
                   )}
-                  {formData.premiumSelected && (
-                    <p><strong>Premium Service:</strong> Active</p>
-                  )}
                 </div>
                 <div className="flex gap-4">
                   <Button onClick={() => setShowSuccess(false)} variant="outline">
@@ -351,6 +380,9 @@ const PostService = () => {
     );
   }
 
+  const isPropertySearch = ['Buy', 'Sell', 'Lease'].includes(formData.intent);
+  const searchType = formData.intent === 'Service' ? 'service' : 'property';
+
   return (
     <div className="min-h-screen bg-background">
       <Marquee />
@@ -358,7 +390,7 @@ const PostService = () => {
       
       {/* Hero Section */}
       <section className="pt-28 pb-12 px-4 bg-gradient-to-br from-primary/5 to-primary/10">
-        <div className="container mx-auto max-w-4xl text-center">
+        <div className="container mx-auto max-w-7xl text-center">
           <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
             Post Your Requirement
           </h1>
@@ -368,324 +400,253 @@ const PostService = () => {
         </div>
       </section>
 
-      {/* Form Section */}
+      {/* Main Content */}
       <section className="py-12 px-4">
-        <div className="container mx-auto max-w-4xl">
-          <Card className="shadow-xl">
-            <CardContent className="p-8">
-              <form onSubmit={handleSubmit} className="space-y-6">
-                {/* Personal Details */}
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div>
-                    <Label htmlFor="name" className="text-base font-medium">Name *</Label>
-                    <Input
-                      id="name"
-                      value={formData.name}
-                      onChange={(e) => handleInputChange("name", e.target.value)}
-                      className="mt-2 h-12"
-                      placeholder="Your full name"
-                    />
-                    {errors.name && <p className="text-sm text-destructive mt-1">{errors.name}</p>}
-                  </div>
-
-                  <div>
-                    <Label htmlFor="phone" className="text-base font-medium">Phone Number *</Label>
-                    <Input
-                      id="phone"
-                      type="tel"
-                      value={formData.phone}
-                      onChange={(e) => handleInputChange("phone", e.target.value)}
-                      className="mt-2 h-12"
-                      placeholder="Your phone number"
-                    />
-                    {errors.phone && <p className="text-sm text-destructive mt-1">{errors.phone}</p>}
-                  </div>
-                </div>
-
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div>
-                    <Label htmlFor="email" className="text-base font-medium">Email *</Label>
-                    <Input
-                      id="email"
-                      type="email"
-                      value={formData.email}
-                      onChange={(e) => handleInputChange("email", e.target.value)}
-                      className="mt-2 h-12"
-                      placeholder="your.email@example.com"
-                    />
-                    {errors.email && <p className="text-sm text-destructive mt-1">{errors.email}</p>}
-                  </div>
-
-                  <div>
-                    <Label className="text-base font-medium">Country *</Label>
-                    <Select value={formData.country} onValueChange={(value) => handleInputChange("country", value)}>
-                      <SelectTrigger className="mt-2 h-12">
-                        <SelectValue placeholder="Select country" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {countryOptions.map(country => (
-                          <SelectItem key={country.value} value={country.value}>
-                            {country.label}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    {errors.country && <p className="text-sm text-destructive mt-1">{errors.country}</p>}
-                  </div>
-                </div>
-
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div>
-                    <Label className="text-base font-medium">State *</Label>
-                    <Select 
-                      value={formData.state} 
-                      onValueChange={(value) => {
-                        handleInputChange("state", value);
-                        handleInputChange("city", ""); // Reset city when state changes
-                      }}
-                    >
-                      <SelectTrigger className="mt-2 h-12">
-                        <SelectValue placeholder="Select state" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {formData.country === "India" && statesData && Object.keys(statesData).map(state => (
-                          <SelectItem key={state} value={state}>{state}</SelectItem>
-                        ))}
-                        {formData.country === "UAE" && (
-                          <>
-                            <SelectItem value="Dubai">Dubai</SelectItem>
-                            <SelectItem value="Abu Dhabi">Abu Dhabi</SelectItem>
-                            <SelectItem value="Sharjah">Sharjah</SelectItem>
-                          </>
-                        )}
-                        {formData.country === "USA" && (
-                          <>
-                            <SelectItem value="California">California</SelectItem>
-                            <SelectItem value="Texas">Texas</SelectItem>
-                            <SelectItem value="New York">New York</SelectItem>
-                          </>
-                        )}
-                      </SelectContent>
-                    </Select>
-                    {errors.state && <p className="text-sm text-destructive mt-1">{errors.state}</p>}
-                  </div>
-
-                  <div>
-                    <Label className="text-base font-medium">City *</Label>
-                    <Select value={formData.city} onValueChange={(value) => handleInputChange("city", value)}>
-                      <SelectTrigger className="mt-2 h-12">
-                        <SelectValue placeholder="Select city" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {cities.map(city => (
-                          <SelectItem key={city} value={city}>{city}</SelectItem>
-                        ))}
-                        {cities.length === 0 && formData.state && (
-                          <SelectItem value="Other">Other (Please specify in notes)</SelectItem>
-                        )}
-                      </SelectContent>
-                    </Select>
-                    {errors.city && <p className="text-sm text-destructive mt-1">{errors.city}</p>}
-                  </div>
-                </div>
-
-                {/* Intent Selection */}
-                <div>
-                  <Label className="text-base font-medium">I want to *</Label>
-                  <Select value={formData.intent} onValueChange={(value) => {
-                    handleInputChange("intent", value);
-                    // Reset dependent fields
-                    handleInputChange("propertyType", "");
-                    handleInputChange("services", []);
-                  }}>
-                    <SelectTrigger className="mt-2 h-12">
-                      <SelectValue placeholder="What do you want to do?" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {intentOptions.map(option => (
-                        <SelectItem key={option.value} value={option.value}>
-                          {option.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  {errors.intent && <p className="text-sm text-destructive mt-1">{errors.intent}</p>}
-                </div>
-
-                {/* Conditional Fields */}
-                {["Buy", "Sell", "Lease"].includes(formData.intent) && (
-                  <div className="transition-all duration-300 ease-in-out">
-                    <Label className="text-base font-medium">Property Type *</Label>
-                    <Select value={formData.propertyType} onValueChange={(value) => handleInputChange("propertyType", value)}>
-                      <SelectTrigger className="mt-2 h-12">
-                        <SelectValue placeholder="Select property type" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {propertyTypes.map(type => (
-                          <SelectItem key={type} value={type}>{type}</SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    {errors.propertyType && <p className="text-sm text-destructive mt-1">{errors.propertyType}</p>}
-                  </div>
-                )}
-
-                {formData.intent === "Service" && (
-                  <div className="transition-all duration-300 ease-in-out space-y-4">
-                    <div>
-                      <Label className="text-base font-medium">Services We Offer *</Label>
-                      <p className="text-sm text-muted-foreground mb-3">Select at least one service</p>
-                      <div className="grid md:grid-cols-2 gap-3">
-                        {serviceOptions.map(service => (
-                          <div key={service} className="flex items-center space-x-2">
-                            <Checkbox
-                              id={service}
-                              checked={formData.services.includes(service)}
-                              onCheckedChange={(checked) => handleServiceChange(service, checked as boolean)}
-                            />
-                            <Label htmlFor={service} className="text-sm cursor-pointer">
-                              {service}
-                            </Label>
-                          </div>
-                        ))}
+        <div className="container mx-auto max-w-7xl">
+          <div className="grid lg:grid-cols-2 gap-8">
+            {/* Form Section */}
+            <div>
+              <Card className="shadow-xl">
+                <CardContent className="p-8">
+                  <form onSubmit={handleSubmit} className="space-y-6">
+                    {/* Personal Details */}
+                    <div className="grid md:grid-cols-2 gap-6">
+                      <div>
+                        <Label htmlFor="name" className="text-base font-medium">Name *</Label>
+                        <Input
+                          id="name"
+                          value={formData.name}
+                          onChange={(e) => handleInputChange("name", e.target.value)}
+                          className="mt-2 h-12"
+                          placeholder="Your full name"
+                        />
+                        {errors.name && <p className="text-sm text-destructive mt-1">{errors.name}</p>}
                       </div>
-                      {errors.services && <p className="text-sm text-destructive mt-1">{errors.services}</p>}
+
+                      <div>
+                        <Label htmlFor="phone" className="text-base font-medium">Phone Number *</Label>
+                        <Input
+                          id="phone"
+                          type="tel"
+                          value={formData.phone}
+                          onChange={(e) => handleInputChange("phone", e.target.value)}
+                          className="mt-2 h-12"
+                          placeholder="Your phone number"
+                        />
+                        {errors.phone && <p className="text-sm text-destructive mt-1">{errors.phone}</p>}
+                      </div>
                     </div>
 
-                    {formData.services.includes("Others") && (
-                      <div className="transition-all duration-300 ease-in-out">
-                        <Label htmlFor="otherService" className="text-base font-medium">Please specify *</Label>
+                    <div className="grid md:grid-cols-2 gap-6">
+                      <div>
+                        <Label htmlFor="email" className="text-base font-medium">Email *</Label>
                         <Input
-                          id="otherService"
-                          value={formData.otherService}
-                          onChange={(e) => handleInputChange("otherService", e.target.value)}
+                          id="email"
+                          type="email"
+                          value={formData.email}
+                          onChange={(e) => handleInputChange("email", e.target.value)}
                           className="mt-2 h-12"
-                          placeholder="Describe the service you need"
+                          placeholder="your.email@example.com"
                         />
-                        {errors.otherService && <p className="text-sm text-destructive mt-1">{errors.otherService}</p>}
+                        {errors.email && <p className="text-sm text-destructive mt-1">{errors.email}</p>}
+                      </div>
+
+                      <div>
+                        <Label className="text-base font-medium">Country *</Label>
+                        <Select value={formData.country} onValueChange={(value) => handleInputChange("country", value)}>
+                          <SelectTrigger className="mt-2 h-12">
+                            <SelectValue placeholder="Select country" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {countryOptions.map(country => (
+                              <SelectItem key={country.value} value={country.value}>
+                                {country.label}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        {errors.country && <p className="text-sm text-destructive mt-1">{errors.country}</p>}
+                      </div>
+                    </div>
+
+                    {/* Location Details */}
+                    <div className="grid md:grid-cols-2 gap-6">
+                      <div>
+                        <Label className="text-base font-medium">State *</Label>
+                        <Select 
+                          value={formData.state} 
+                          onValueChange={(value) => {
+                            handleInputChange("state", value);
+                            handleInputChange("city", ""); // Reset city when state changes
+                          }}
+                        >
+                          <SelectTrigger className="mt-2 h-12">
+                            <SelectValue placeholder="Select state" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {formData.country === "India" && statesData && Object.keys(statesData).map(state => (
+                              <SelectItem key={state} value={state}>{state}</SelectItem>
+                            ))}
+                            {formData.country === "UAE" && (
+                              <>
+                                <SelectItem value="Dubai">Dubai</SelectItem>
+                                <SelectItem value="Abu Dhabi">Abu Dhabi</SelectItem>
+                                <SelectItem value="Sharjah">Sharjah</SelectItem>
+                              </>
+                            )}
+                            {formData.country === "USA" && (
+                              <>
+                                <SelectItem value="California">California</SelectItem>
+                                <SelectItem value="Texas">Texas</SelectItem>
+                                <SelectItem value="New York">New York</SelectItem>
+                              </>
+                            )}
+                          </SelectContent>
+                        </Select>
+                        {errors.state && <p className="text-sm text-destructive mt-1">{errors.state}</p>}
+                      </div>
+
+                      <div>
+                        <Label className="text-base font-medium">City *</Label>
+                        <Select value={formData.city} onValueChange={(value) => handleInputChange("city", value)}>
+                          <SelectTrigger className="mt-2 h-12">
+                            <SelectValue placeholder="Select city" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {cities.map(city => (
+                              <SelectItem key={city} value={city}>{city}</SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        {errors.city && <p className="text-sm text-destructive mt-1">{errors.city}</p>}
+                      </div>
+                    </div>
+
+                    {/* Intent Selection */}
+                    <div>
+                      <Label className="text-base font-medium">I want to *</Label>
+                      <Select value={formData.intent} onValueChange={(value) => handleInputChange("intent", value)}>
+                        <SelectTrigger className="mt-2 h-12">
+                          <SelectValue placeholder="Select what you want to do" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {intentOptions.map(option => (
+                            <SelectItem key={option.value} value={option.value}>
+                              {option.label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      {errors.intent && <p className="text-sm text-destructive mt-1">{errors.intent}</p>}
+                    </div>
+
+                    {/* Conditional Property Type / Service Category */}
+                    {isPropertySearch && (
+                      <div>
+                        <Label className="text-base font-medium">Property Type *</Label>
+                        <Select value={formData.propertyType} onValueChange={(value) => handleInputChange("propertyType", value)}>
+                          <SelectTrigger className="mt-2 h-12">
+                            <SelectValue placeholder="Select property type" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {propertyTypes.map(type => (
+                              <SelectItem key={type} value={type}>
+                                {type}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        {errors.propertyType && <p className="text-sm text-destructive mt-1">{errors.propertyType}</p>}
                       </div>
                     )}
-                  </div>
-                )}
 
-                {/* Budget Range */}
-                <div>
-                  <Label className="text-base font-medium">Budget Range</Label>
-                  <div className="mt-4 space-y-4">
-                    <div className="px-4">
-                      <Slider
-                        value={formData.budgetRange}
-                        onValueChange={(value) => handleInputChange("budgetRange", value)}
-                        max={50000000}
-                        min={0}
-                        step={100000}
-                        className="w-full"
+                    {formData.intent === 'Service' && (
+                      <div>
+                        <Label className="text-base font-medium">Service Category *</Label>
+                        <Select value={formData.serviceCategory} onValueChange={(value) => handleInputChange("serviceCategory", value)}>
+                          <SelectTrigger className="mt-2 h-12">
+                            <SelectValue placeholder="Select service category" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {serviceCategories.map(category => (
+                              <SelectItem key={category} value={category}>
+                                {category}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        {errors.serviceCategory && <p className="text-sm text-destructive mt-1">{errors.serviceCategory}</p>}
+                      </div>
+                    )}
+
+                    {/* Budget Range */}
+                    <div>
+                      <Label className="text-base font-medium">Budget Range</Label>
+                      <div className="mt-4">
+                        <Slider
+                          value={formData.budgetRange}
+                          onValueChange={(value) => handleInputChange("budgetRange", value)}
+                          max={50000000}
+                          min={0}
+                          step={100000}
+                          className="mb-4"
+                        />
+                        <div className="flex justify-between text-sm text-muted-foreground">
+                          <span>{formatBudgetAmount(formData.budgetRange[0])}</span>
+                          <span>{formatBudgetAmount(formData.budgetRange[1])}</span>
+                        </div>
+                        <p className="text-xs text-muted-foreground mt-1">
+                          Range: {formatBudgetAmount(formData.budgetRange[0])} – {formatBudgetAmount(formData.budgetRange[1])}
+                        </p>
+                      </div>
+                      {errors.budget && <p className="text-sm text-destructive mt-1">{errors.budget}</p>}
+                    </div>
+
+                    {/* Additional Notes */}
+                    <div>
+                      <Label htmlFor="notes" className="text-base font-medium">Additional Requirements</Label>
+                      <Textarea
+                        id="notes"
+                        value={formData.notes}
+                        onChange={(e) => handleInputChange("notes", e.target.value)}
+                        className="mt-2"
+                        placeholder="Any specific requirements or additional details..."
+                        rows={3}
                       />
                     </div>
-                    <div className="flex justify-between items-center text-sm text-muted-foreground">
-                      <span>{formatBudgetAmount(formData.budgetRange[0])}</span>
-                      <span>{formatBudgetAmount(formData.budgetRange[1])}</span>
-                    </div>
-                    <div className="text-center text-xs text-muted-foreground">
-                      Range: {formatBudgetAmount(formData.budgetRange[0])} - {formatBudgetAmount(formData.budgetRange[1])}
-                    </div>
-                  </div>
-                  {errors.budget && <p className="text-sm text-destructive mt-1">{errors.budget}</p>}
-                </div>
 
-                {/* Premium Service */}
-                <div className="border rounded-lg p-4 bg-muted/30">
-                  <div className="flex items-center justify-between mb-2">
-                    <Label className="text-base font-medium">Premium Listing & Concierge Support — {getCurrencySymbol()}999 one-time</Label>
-                    <Switch
-                      checked={formData.premiumSelected}
-                      onCheckedChange={(checked) => handleInputChange("premiumSelected", checked)}
-                    />
-                  </div>
-                   {formData.premiumSelected && (
-                     <div className="mt-4 space-y-4 transition-all duration-300 ease-in-out">
-                       {/* Premium Service Features are now shown below the form */}
-                     </div>
-                   )}
-                </div>
+                    {/* Submit Button */}
+                    <Button 
+                      type="submit" 
+                      disabled={submissionState.isSubmitting}
+                      className="w-full h-12 text-base font-medium"
+                    >
+                      {submissionState.isSubmitting ? (
+                        <>
+                          <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                          Submitting...
+                        </>
+                      ) : (
+                        "Post Requirement"
+                      )}
+                    </Button>
+                  </form>
+                </CardContent>
+              </Card>
+            </div>
 
-                {/* Additional Notes */}
-                <div>
-                  <Label htmlFor="notes" className="text-base font-medium">Additional Notes</Label>
-                  <Textarea
-                    id="notes"
-                    value={formData.notes}
-                    onChange={(e) => handleInputChange("notes", e.target.value)}
-                    className="mt-2 min-h-[100px]"
-                    placeholder="Anything else we should know?"
-                  />
-                </div>
-
-                {/* Submit Button */}
-                <Button
-                  type="submit"
-                  className="w-full h-12 text-lg"
-                  disabled={submissionState.isSubmitting}
-                >
-                  {submissionState.isSubmitting ? (
-                    <>
-                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                      {submissionState.uploadProgress}
-                    </>
-                  ) : (
-                    "Post Requirement"
-                  )}
-                </Button>
-               </form>
-               
-               {/* Premium Service Features moved below the form */}
-               {formData.premiumSelected && (
-                 <div className="mt-6 space-y-4 transition-all duration-300 ease-in-out">
-                   <div className="bg-primary/5 p-4 rounded-lg">
-                     <h4 className="font-semibold text-primary mb-3">Premium Service Features:</h4>
-                     <div className="grid md:grid-cols-2 gap-6">
-                       <ul className="space-y-2 text-sm">
-                         <li className="flex items-center gap-2">
-                           <div className="w-2 h-2 bg-primary rounded-full"></div>
-                           <span>Dedicated Relationship Manager (RM)</span>
-                         </li>
-                         <li className="flex items-center gap-2">
-                           <div className="w-2 h-2 bg-primary rounded-full"></div>
-                           <span>Regular Updates via WhatsApp</span>
-                         </li>
-                         <li className="flex items-center gap-2">
-                           <div className="w-2 h-2 bg-primary rounded-full"></div>
-                           <span>Regular Updates via Email and SMS</span>
-                         </li>
-                         <li className="flex items-center gap-2">
-                           <div className="w-2 h-2 bg-primary rounded-full"></div>
-                           <span>IVR Support for Priority Assistance</span>
-                         </li>
-                       </ul>
-                       <ul className="space-y-2 text-sm">
-                         <li className="flex items-center gap-2">
-                           <div className="w-2 h-2 bg-primary rounded-full"></div>
-                           <span>Weekly Lead Reports</span>
-                         </li>
-                         <li className="flex items-center gap-2">
-                           <div className="w-2 h-2 bg-primary rounded-full"></div>
-                           <span>Free Consultation Credits</span>
-                         </li>
-                         <li className="flex items-center gap-2">
-                           <div className="w-2 h-2 bg-primary rounded-full"></div>
-                           <span>Verified Tag for Priority Visibility</span>
-                         </li>
-                          <li className="flex items-center gap-2">
-                           <div className="w-2 h-2 bg-primary rounded-full"></div>
-                           <span>Verified Leads & Top Rated Service Providers</span>
-                         </li>
-                       </ul>
-                     </div>
-                   </div>
-                 </div>
-               )}
-            </CardContent>
-          </Card>
+            {/* Search Results Panel */}
+            <div className="lg:sticky lg:top-4 h-fit">
+              <SearchResultsPanel
+                results={results}
+                isLoading={searchLoading}
+                error={searchError}
+                searchType={searchType}
+                onLoadMore={loadMore}
+                onClearFilters={clearResults}
+              />
+            </div>
+          </div>
         </div>
       </section>
     </div>
