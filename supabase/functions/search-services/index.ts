@@ -21,9 +21,8 @@ serve(async (req) => {
   }
 
   try {
-    const url = new URL(req.url);
-    const params = Object.fromEntries(url.searchParams) as ServiceSearchParams;
-    
+    // Parse the request body
+    const requestBody = await req.json();
     const {
       category,
       country,
@@ -31,9 +30,9 @@ serve(async (req) => {
       city,
       page = '1',
       pageSize = '10'
-    } = params;
+    } = requestBody;
 
-    console.log('Service search params:', params);
+    console.log('Service search params (from body):', requestBody);
 
     // Mock service provider data - in real implementation, this would come from a database
     const mockServiceProviders = [

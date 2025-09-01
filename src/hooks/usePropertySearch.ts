@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { supabase } from '@/integrations/supabase/client';
 
 export interface PropertySearchQuery {
   intent: 'buy' | 'sell' | 'lease' | '';
@@ -77,27 +78,23 @@ export const usePropertySearch = () => {
       setIsLoading(true);
       setError(null);
 
-      const params = new URLSearchParams({
-        intent: query.intent,
-        propertyType: query.propertyType,
-        country: query.country,
-        state: query.state,
-        city: query.city,
-        budgetMin: query.budgetMin.toString(),
-        budgetMax: query.budgetMax.toString(),
-        page: page.toString(),
-        pageSize: '10'
+      const { data, error: funcError } = await supabase.functions.invoke('search-listings', {
+        body: {
+          intent: query.intent,
+          propertyType: query.propertyType,
+          country: query.country,
+          state: query.state,
+          city: query.city,
+          budgetMin: query.budgetMin.toString(),
+          budgetMax: query.budgetMax.toString(),
+          page: page.toString(),
+          pageSize: '10'
+        }
       });
 
-      const response = await fetch(`/supabase/functions/v1/search-listings?${params}`, {
-        signal: abortControllerRef.current.signal
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to fetch properties');
+      if (funcError) {
+        throw new Error(funcError.message || 'Failed to fetch properties');
       }
-
-      const data = await response.json();
 
       setResults(prev => ({
         items: append ? [...prev.items, ...data.items] : data.items,
@@ -133,24 +130,20 @@ export const usePropertySearch = () => {
       setIsLoading(true);
       setError(null);
 
-      const params = new URLSearchParams({
-        category,
-        country: location.country,
-        state: location.state,
-        city: location.city,
-        page: page.toString(),
-        pageSize: '10'
+      const { data, error: funcError } = await supabase.functions.invoke('search-services', {
+        body: {
+          category,
+          country: location.country,
+          state: location.state,
+          city: location.city,
+          page: page.toString(),
+          pageSize: '10'
+        }
       });
 
-      const response = await fetch(`/supabase/functions/v1/search-services?${params}`, {
-        signal: abortControllerRef.current.signal
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to fetch services');
+      if (funcError) {
+        throw new Error(funcError.message || 'Failed to fetch services');
       }
-
-      const data = await response.json();
 
       setResults(prev => ({
         items: append ? [...prev.items, ...data.items] : data.items,

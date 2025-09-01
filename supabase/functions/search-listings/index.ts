@@ -25,9 +25,8 @@ serve(async (req) => {
   }
 
   try {
-    const url = new URL(req.url);
-    const params = Object.fromEntries(url.searchParams) as PropertySearchParams;
-    
+    // Parse the request body
+    const requestBody = await req.json();
     const {
       intent,
       propertyType,
@@ -38,9 +37,9 @@ serve(async (req) => {
       budgetMax,
       page = '1',
       pageSize = '10'
-    } = params;
+    } = requestBody;
 
-    console.log('Search params:', params);
+    console.log('Search params (from body):', requestBody);
 
     // Initialize Supabase client
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
