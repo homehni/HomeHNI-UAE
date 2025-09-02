@@ -111,7 +111,7 @@ const CountrySwitcher: React.FC = () => {
 
   return (
     <div 
-      className="relative" 
+      className="relative hidden md:block" 
       ref={dropdownRef}
       onMouseEnter={() => setIsOpen(true)}
       onMouseLeave={() => setIsOpen(false)}
