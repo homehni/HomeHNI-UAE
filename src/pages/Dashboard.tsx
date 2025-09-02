@@ -213,11 +213,16 @@ export const Dashboard: React.FC = () => {
 
   const fetchPropertyRequirements = async () => {
     try {
+      console.log('🔍 Fetching property requirements for user:', user?.id);
+      
       const { data, error } = await supabase
         .from('property_submissions')
         .select('*')
         .eq('user_id', user?.id)
         .order('created_at', { ascending: false });
+
+      console.log('📊 Raw property_submissions data:', data);
+      console.log('❌ Query error:', error);
 
       if (error) throw error;
       
@@ -225,17 +230,30 @@ export const Dashboard: React.FC = () => {
       const requirementData = (data || []).filter(item => {
         try {
           const payload = typeof item.payload === 'string' ? JSON.parse(item.payload) : item.payload;
-          return payload && typeof payload === 'object' && 
+          console.log('📝 Processing item:', {
+            id: item.id,
+            title: item.title,
+            payload: payload,
+            intent: payload?.intent
+          });
+          
+          const isRequirement = payload && typeof payload === 'object' && 
                  (payload.intent === 'Buy' || payload.intent === 'Sell');
+          
+          console.log('✅ Is requirement:', isRequirement);
+          return isRequirement;
         } catch (e) {
           console.error('Error parsing payload:', e, item);
           return false;
         }
       });
       
+      console.log('🎯 Filtered requirements:', requirementData);
+      console.log('📈 Total requirements found:', requirementData.length);
+      
       setPropertyRequirements(requirementData);
     } catch (error) {
-      console.error('Error fetching property requirements:', error);
+      console.error('💥 Error fetching property requirements:', error);
     }
   };
 
