@@ -221,26 +221,26 @@ export const PageEditor: React.FC<PageEditorProps> = ({
         });
       }
 
-      // Save temporary sections to database
+      // Save sections to database for this page
       if (pageId) {
-        console.log('=== Saving temporary sections ===');
+        console.log('=== Saving sections ===');
         console.log('All sections:', sections);
         console.log('Page ID:', pageId);
         
-        const tempSections = sections.filter(s => s.id.startsWith('temp_'));
-        console.log('Temporary sections to save:', tempSections);
-        
-        if (tempSections.length > 0) {
-          const sectionsToInsert = tempSections.map((section, index) => ({
-            page_id: pageId,
+        // Insert sections that are not yet persisted (no page_id or temp ids)
+        const sectionsToInsert = sections
+          .filter(s => !s.page_id || s.page_id === '' || s.id.startsWith('temp_'))
+          .map((section, index) => ({
+            page_id: pageId as string,
             section_type: section.section_type,
             content: section.content,
-            sort_order: index, // Use index for proper ordering
-            is_active: section.is_active || true
+            sort_order: index, // preserve current order
+            is_active: section.is_active ?? true,
           }));
 
-          console.log('Sections to insert:', sectionsToInsert);
+        console.log('Sections to insert:', sectionsToInsert);
 
+        if (sectionsToInsert.length > 0) {
           const { data: insertedSections, error: sectionsError } = await supabase
             .from('page_sections')
             .insert(sectionsToInsert)
@@ -257,11 +257,11 @@ export const PageEditor: React.FC<PageEditorProps> = ({
             console.log('Sections saved successfully:', insertedSections);
             toast({
               title: 'Success',
-              description: `${tempSections.length} sections saved successfully`
+              description: `${sectionsToInsert.length} section(s) saved successfully`
             });
           }
         } else {
-          console.log('No temporary sections to save');
+          console.log('No new sections to save');
         }
       }
 

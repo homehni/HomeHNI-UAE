@@ -513,13 +513,12 @@ export const PagePreview: React.FC<PagePreviewProps> = ({ page, sections = [] })
               </p>
             </div>
             <div className="flex items-center gap-2">
-              <Badge variant={page.is_published ? "default" : "secondary"}>
-                {page.is_published ? "Published" : "Draft"}
-              </Badge>
-              <Button variant="outline" size="sm">
-                <ExternalLink className="h-4 w-4 mr-2" />
-                View Live
-              </Button>
+              <a href={`/${page.slug}`} target="_blank" rel="noopener noreferrer">
+                <Button variant="outline" size="sm">
+                  <ExternalLink className="h-4 w-4 mr-2" />
+                  View Live
+                </Button>
+              </a>
             </div>
           </div>
         </CardHeader>
