@@ -128,22 +128,17 @@ const PropertyCard = ({
     owner_role: undefined,
   };
 
-  // Handle different image formats
+  // Handle different image formats with Supabase public URL resolution
   const getImageUrl = () => {
     if (Array.isArray(image)) {
-      // If it's an array, get the first image
-      const firstImage = image[0];
-      if (typeof firstImage === 'string') {
-        return firstImage.startsWith('http') ? firstImage : '/placeholder.svg';
-      }
-      return firstImage?.url || '/placeholder.svg';
+      const first = image[0];
+      const url = typeof first === 'string' ? resolveUrlFromString(first) : resolveUrlFromString((first as any)?.url);
+      return url || '/placeholder.svg';
     }
     if (typeof image === 'string') {
-      // Check if it's a full URL or just an ID
-      return image.startsWith('http') ? image : '/placeholder.svg';
+      return resolveUrlFromString(image) || '/placeholder.svg';
     }
-    // If it's an object with url property
-    return image?.url || '/placeholder.svg';
+    return resolveUrlFromString((image as any)?.url) || '/placeholder.svg';
   };
 
   return (

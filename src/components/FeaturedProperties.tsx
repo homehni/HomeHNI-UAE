@@ -73,7 +73,7 @@ const FeaturedProperties = ({
           area: element.content?.area || element.content?.size || '0 sq ft',
           bedrooms: element.content?.bedrooms || parseInt(element.content?.bhk?.replace(/[^\d]/g, '') || '0'),
           bathrooms: element.content?.bathrooms || 0,
-          image: element.content?.image || element.images?.[0] || 'photo-1560518883-ce09059eeffa',
+          image: element.images?.[0] || element.content?.image || '/placeholder.svg',
           propertyType: element.content?.propertyType || 'Property',
           isNew: element.content?.isNew || false
         }));
