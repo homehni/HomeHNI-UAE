@@ -532,6 +532,16 @@ export const PagePreview: React.FC<PagePreviewProps> = ({ page, sections = [] })
               )}
             </div>
 
+            {/* Page Content */}
+            {page.content && (
+              <div className="bg-white rounded-lg border p-6">
+                <div 
+                  className="prose max-w-none" 
+                  dangerouslySetInnerHTML={{ __html: page.content }} 
+                />
+              </div>
+            )}
+
             {/* Page Sections */}
             <div className="space-y-6">
               {sections.length > 0 ? (
