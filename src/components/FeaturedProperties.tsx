@@ -176,7 +176,7 @@ const FeaturedProperties = ({
     area: '1,200 sq ft',
     bedrooms: 3,
     bathrooms: 2,
-    image: 'photo-1560518883-ce09059eeffa',
+    image: 'apartment1.jpg',
     propertyType: 'Apartment',
     isNew: true
   }, {
@@ -187,7 +187,7 @@ const FeaturedProperties = ({
     area: '2,400 sq ft',
     bedrooms: 4,
     bathrooms: 3,
-    image: 'photo-1613490493576-7fde63acd811',
+    image: 'villa1.jpg',
     propertyType: 'Villa'
   }, {
     id: '3',
@@ -197,7 +197,7 @@ const FeaturedProperties = ({
     area: '950 sq ft',
     bedrooms: 2,
     bathrooms: 2,
-    image: 'photo-1512917774080-9991f1c4c750',
+    image: 'apartment2.jpg',
     propertyType: 'Apartment'
   }, {
     id: '4',
@@ -207,7 +207,7 @@ const FeaturedProperties = ({
     area: '800 sq ft',
     bedrooms: 0,
     bathrooms: 1,
-    image: 'photo-1497366216548-37526070297c',
+    image: 'commercial1.jpg',
     propertyType: 'Commercial',
     isNew: true
   }, {
@@ -218,7 +218,7 @@ const FeaturedProperties = ({
     area: '1,350 sq ft',
     bedrooms: 3,
     bathrooms: 2,
-    image: 'photo-1522708323590-d24dbb6b0267',
+    image: 'apartment3.jpg',
     propertyType: 'Apartment'
   }, {
     id: '6',
@@ -228,7 +228,7 @@ const FeaturedProperties = ({
     area: '1,800 sq ft',
     bedrooms: 4,
     bathrooms: 3,
-    image: 'photo-1568605114967-8130f3a36994',
+    image: 'house1.jpg',
     propertyType: 'House'
   }, {
     id: '7',
@@ -238,7 +238,7 @@ const FeaturedProperties = ({
     area: '1,100 sq ft',
     bedrooms: 2,
     bathrooms: 2,
-    image: 'photo-1512917774080-9991f1c4c750',
+    image: 'apartment4.jpg',
     propertyType: 'Apartment',
     isNew: true
   }, {
@@ -249,7 +249,7 @@ const FeaturedProperties = ({
     area: '2,800 sq ft',
     bedrooms: 4,
     bathrooms: 4,
-    image: 'photo-1613490493576-7fde63acd811',
+    image: 'penthouse1.jpg',
     propertyType: 'Penthouse'
   }, {
     id: '9',
@@ -259,7 +259,7 @@ const FeaturedProperties = ({
     area: '2,400 sq ft',
     bedrooms: 0,
     bathrooms: 0,
-    image: 'photo-1497366216548-37526070297c',
+    image: 'plot1.jpg',
     propertyType: 'Plot',
     isNew: true
   }, {
@@ -270,7 +270,7 @@ const FeaturedProperties = ({
     area: '1,900 sq ft',
     bedrooms: 4,
     bathrooms: 3,
-    image: 'photo-1568605114967-8130f3a36994',
+    image: 'independent-house1.jpg',
     propertyType: 'Independent House'
   }, {
     id: '11',
@@ -280,7 +280,7 @@ const FeaturedProperties = ({
     area: '5 acres',
     bedrooms: 0,
     bathrooms: 0,
-    image: 'photo-1497366216548-37526070297c',
+    image: 'agricultural-lands1.jpg',
     propertyType: 'Agriculture Lands',
     isNew: true
   }, {
@@ -291,7 +291,7 @@ const FeaturedProperties = ({
     area: '650 sq ft',
     bedrooms: 1,
     bathrooms: 1,
-    image: 'photo-1560518883-ce09059eeffa',
+    image: 'apartment5.jpg',
     propertyType: 'Apartment',
     isNew: true
   }, {
@@ -302,7 +302,7 @@ const FeaturedProperties = ({
     area: '1,000 sq ft',
     bedrooms: 0,
     bathrooms: 2,
-    image: 'photo-1497366216548-37526070297c',
+    image: 'commercial2.jpg',
     propertyType: 'Commercial'
   }, {
     id: '14',
@@ -312,7 +312,7 @@ const FeaturedProperties = ({
     area: '3,200 sq ft',
     bedrooms: 5,
     bathrooms: 4,
-    image: 'photo-1568605114967-8130f3a36994',
+    image: 'house2.jpg',
     propertyType: 'House',
     isNew: true
   }, {
@@ -323,7 +323,7 @@ const FeaturedProperties = ({
     area: '550 sq ft',
     bedrooms: 1,
     bathrooms: 1,
-    image: 'photo-1512917774080-9991f1c4c750',
+    image: 'apartment6.jpg',
     propertyType: 'Apartment'
   }, {
     id: '16',
@@ -333,7 +333,7 @@ const FeaturedProperties = ({
     area: '2 acres',
     bedrooms: 3,
     bathrooms: 2,
-    image: 'photo-1497366216548-37526070297c',
+    image: 'farmhouse1.jpg',
     propertyType: 'Farm House'
   }, {
     id: '17',
@@ -343,7 +343,7 @@ const FeaturedProperties = ({
     area: '1,600 sq ft',
     bedrooms: 4,
     bathrooms: 3,
-    image: 'photo-1522708323590-d24dbb6b0267',
+    image: 'apartment7.jpg',
     propertyType: 'Apartment',
     isNew: true
   }, {
@@ -354,7 +354,7 @@ const FeaturedProperties = ({
     area: '5,000 sq ft',
     bedrooms: 0,
     bathrooms: 2,
-    image: 'photo-1497366216548-37526070297c',
+    image: 'commercial3.jpg',
     propertyType: 'Commercial'
   }, {
     id: '19',
@@ -364,7 +364,7 @@ const FeaturedProperties = ({
     area: '1,800 sq ft',
     bedrooms: 3,
     bathrooms: 3,
-    image: 'photo-1560518883-ce09059eeffa',
+    image: 'apartment8.jpg',
     propertyType: 'Apartment',
     isNew: true
   }];
