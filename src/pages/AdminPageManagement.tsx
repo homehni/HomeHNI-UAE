@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import AdminLayout from '@/components/admin/AdminLayout';
 import { PagesDashboard } from '@/components/admin/page-management/PagesDashboard';
 import { PageEditor } from '@/components/admin/page-management/PageEditor';
@@ -22,11 +22,28 @@ interface ContentPage {
   updated_at: string;
 }
 
+interface PageSection {
+  id: string;
+  section_type: string;
+  content: any;
+  sort_order: number;
+  page_id: string;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
 const AdminPageManagement = () => {
   const [currentView, setCurrentView] = useState<PageManagementView>('dashboard');
   const [selectedPage, setSelectedPage] = useState<ContentPage | null>(null);
   const [isCreating, setIsCreating] = useState(false);
-  const [addSectionCallback, setAddSectionCallback] = useState<((type: string) => void) | null>(null);
+  const [sections, setSections] = useState<PageSection[]>([]);
+  const addSectionCallbackRef = useRef<((type: string) => void) | null>(null);
+  
+  // Debug: Log when callback is set
+  useEffect(() => {
+    console.log('addSectionCallback ref changed:', addSectionCallbackRef.current);
+  }, []); // Empty dependency array since ref.current doesn't trigger re-renders
 
   const handleCreatePage = () => {
     setSelectedPage(null);
@@ -49,6 +66,20 @@ const AdminPageManagement = () => {
   const handlePreviewPage = (page: ContentPage) => {
     setSelectedPage(page);
     setCurrentView('preview');
+  };
+
+  // Helper function to get current callback value
+  const getCurrentCallback = () => {
+    const callback = addSectionCallbackRef.current;
+    console.log('Getting current callback:', callback);
+    console.log('Callback type:', typeof callback);
+    return callback;
+  };
+
+  // Callback to update sections from PageEditor
+  const handleSectionsUpdate = (newSections: PageSection[]) => {
+    console.log('AdminPageManagement: Sections updated:', newSections);
+    setSections(newSections);
   };
 
   const renderHeader = () => {
@@ -130,15 +161,46 @@ const AdminPageManagement = () => {
             isCreating={isCreating}
             onSave={handleBackToDashboard}
             onSelectSections={() => setCurrentView('sections')}
-            onAddSectionReady={setAddSectionCallback}
+            onSectionsUpdate={handleSectionsUpdate}
+            onAddSectionReady={(callback) => {
+              console.log('AdminPageManagement: onAddSectionReady called with:', callback);
+              console.log('Callback type:', typeof callback);
+              if (typeof callback === 'function') {
+                console.log('Setting addSectionCallback to function');
+                addSectionCallbackRef.current = callback;
+              } else {
+                console.error('AdminPageManagement: Invalid callback received:', callback);
+              }
+            }}
           />
         );
       case 'sections':
         return (
           <SectionLibrary
             onSelectSection={(sectionType) => {
-              if (addSectionCallback) {
-                addSectionCallback(sectionType);
+              console.log('SectionLibrary onSelectSection called with:', sectionType);
+              console.log('addSectionCallback exists:', !!addSectionCallbackRef.current);
+              if (addSectionCallbackRef.current) {
+                console.log('Calling addSectionCallback...');
+                console.log('addSectionCallback function:', addSectionCallbackRef.current);
+                console.log('sectionType being passed:', sectionType);
+                try {
+                  // Check if addSectionCallback is actually a function
+                  if (typeof addSectionCallbackRef.current !== 'function') {
+                    console.error('addSectionCallback is not a function, it is:', typeof addSectionCallbackRef.current);
+                    console.error('addSectionCallback value:', addSectionCallbackRef.current);
+                    return;
+                  }
+                  
+                  // Call the function (it now returns void, not a promise)
+                  addSectionCallbackRef.current(sectionType);
+                  console.log('addSectionCallback executed successfully');
+                } catch (error) {
+                  console.error('Error executing addSectionCallback:', error);
+                  console.error('Error stack:', error.stack);
+                }
+              } else {
+                console.error('addSectionCallback is null/undefined!');
               }
               setCurrentView('editor');
             }}
@@ -146,7 +208,7 @@ const AdminPageManagement = () => {
         );
       case 'preview':
         return (
-          <PagePreview page={selectedPage} />
+          <PagePreview page={selectedPage} sections={sections} />
         );
       default:
         return (

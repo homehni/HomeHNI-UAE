@@ -44,6 +44,27 @@ export const useEmployeeRole = () => {
 
     try {
       console.log('Fetching employee role for email:', user.email);
+      
+      // First check if user is an admin in user_roles table
+      const { data: adminData, error: adminError } = await supabase
+        .from('user_roles')
+        .select('role')
+        .eq('user_id', user.id)
+        .eq('role', 'admin')
+        .maybeSingle();
+
+      if (adminData?.role === 'admin') {
+        console.log('User is an admin, granting employee access');
+        setRoleState({
+          employeeRole: 'content_manager', // Give admin content manager role
+          loading: false,
+          isFinanceAdmin: false,
+          isHRAdmin: false,
+          isEmployee: true,
+        });
+        return;
+      }
+
       // Case-insensitive match on email; allow records without status to be treated as active
       const { data: employeeData, error } = await supabase
         .from('employees')

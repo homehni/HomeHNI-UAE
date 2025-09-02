@@ -1,156 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import { Search, Plus } from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Search, Plus, FileText, Home, Scale, Mail, Building2 } from 'lucide-react';
+import { getAllExtractedSections, getSectionsBySourcePage, ExtractedSection } from '@/services/sectionExtractor';
 
-interface SectionTemplate {
-  id: string;
-  name: string;
-  type: string;
-  description: string;
-  category: string;
-  previewImage: string;
-  schema: any;
-}
-
-const sectionTemplates: SectionTemplate[] = [
-  {
-    id: 'hero-search',
-    name: 'Hero Search Section',
-    type: 'hero_search',
-    description: 'Main hero banner with property search tabs and location-based search functionality',
-    category: 'Hero',
-    previewImage: '/lovable-uploads/a83d7fd3-19d0-43ed-9c71-0158ae789ae2.png',
-    schema: {
-      title: 'string',
-      subtitle: 'string',
-      background_image: 'image',
-      search_placeholder: 'string'
-    }
-  },
-  {
-    id: 'our-services',
-    name: 'Our Services Grid',
-    type: 'services',
-    description: 'Comprehensive real estate services with 6 key service offerings',
-    category: 'Services',
-    previewImage: '/lovable-uploads/dddc344b-7d00-4537-98d1-558ec4fc90a7.png',
-    schema: {
-      title: 'string',
-      subtitle: 'string',
-      services: 'array'
-    }
-  },
-  {
-    id: 'stats-counter',
-    name: 'Statistics Counter',
-    type: 'stats',
-    description: 'Business metrics with animated counters on red background',
-    category: 'Statistics',
-    previewImage: '/lovable-uploads/77255b7d-3088-40d7-8bff-d64bf3d0b561.png',
-    schema: {
-      stats: 'array',
-      background_color: 'string'
-    }
-  },
-  {
-    id: 'property-directory',
-    name: 'Property Directory',
-    type: 'directory',
-    description: 'Comprehensive property listings organized by location and type',
-    category: 'Listings',
-    previewImage: '/lovable-uploads/afeb45dd-0383-4b96-91d5-c7fa678d488c.png',
-    schema: {
-      show_tabs: 'boolean',
-      locations: 'array',
-      property_types: 'array'
-    }
-  },
-  {
-    id: 'real-estate-slider',
-    name: 'Real Estate Builders Slider',
-    type: 'real_estate_slider',
-    description: 'Carousel showcasing trusted real estate builders and developers',
-    category: 'Showcase',
-    previewImage: '/lovable-uploads/eed6e505-e2ef-4267-b0b6-ebe159e3a167.png',
-    schema: {
-      title: 'string',
-      builders: 'array',
-      auto_scroll: 'boolean'
-    }
-  },
-  {
-    id: 'home-services',
-    name: 'Home Services',
-    type: 'home_services',
-    description: 'Various home and property-related services with visual cards',
-    category: 'Services',
-    previewImage: '/lovable-uploads/eed6e505-e2ef-4267-b0b6-ebe159e3a167.png',
-    schema: {
-      title: 'string',
-      services: 'array',
-      show_offers: 'boolean'
-    }
-  },
-  {
-    id: 'featured-properties',
-    name: 'Featured Properties',
-    type: 'featured_properties',
-    description: 'Showcase of premium and featured property listings',
-    category: 'Properties',
-    previewImage: '/lovable-uploads/property-grid-preview.jpg',
-    schema: {
-      title: 'string',
-      description: 'string',
-      max_properties: 'number',
-      show_filters: 'boolean'
-    }
-  },
-  {
-    id: 'customer-testimonials',
-    name: 'Customer Testimonials',
-    type: 'testimonials',
-    description: 'Customer reviews and success stories with ratings',
-    category: 'Social Proof',
-    previewImage: '/lovable-uploads/testimonials-preview.jpg',
-    schema: {
-      title: 'string',
-      testimonials: 'array',
-      show_ratings: 'boolean'
-    }
-  },
-  {
-    id: 'mobile-app-section',
-    name: 'Mobile App Promotion',
-    type: 'mobile_app',
-    description: 'Mobile app download section with app store links',
-    category: 'Promotion',
-    previewImage: '/lovable-uploads/c0b01943-436f-4e6d-a35f-752876e4e8a4.png',
-    schema: {
-      title: 'string',
-      description: 'string',
-      app_store_link: 'string',
-      play_store_link: 'string'
-    }
-  },
-  {
-    id: 'why-use-section',
-    name: 'Why Choose Us',
-    type: 'why_use',
-    description: 'Benefits and advantages of using the platform',
-    category: 'Benefits',
-    previewImage: '/lovable-uploads/benefits-preview.jpg',
-    schema: {
-      title: 'string',
-      benefits: 'array',
-      show_icons: 'boolean'
-    }
-  }
+// Source page options with icons
+const sourcePages = [
+  { value: 'All', label: 'All Pages', icon: Home },
+  { value: 'Homepage', label: 'Homepage', icon: Home },
+  { value: 'About Us', label: 'About Us', icon: FileText },
+  { value: 'Legal Services', label: 'Legal Services', icon: Scale },
+  { value: 'Contact Us', label: 'Contact Us', icon: Mail },
+  { value: 'Property Management', label: 'Property Management', icon: Building2 }
 ];
 
-const categories = ['All', 'Hero', 'Services', 'Statistics', 'Listings', 'Showcase', 'Properties', 'Social Proof', 'Promotion', 'Benefits'];
+// Get all unique categories from extracted sections
+const getAllCategories = (sections: ExtractedSection[]): string[] => {
+  const categories = new Set(sections.map(section => section.category));
+  return ['All', ...Array.from(categories).sort()];
+};
 
 interface SectionLibraryProps {
   onSelectSection: (sectionType: string) => void;
@@ -159,37 +30,93 @@ interface SectionLibraryProps {
 export const SectionLibrary: React.FC<SectionLibraryProps> = ({ onSelectSection }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
+  const [selectedSourcePage, setSelectedSourcePage] = useState('All');
 
-  const filteredTemplates = sectionTemplates.filter(template => {
-    const matchesSearch = template.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         template.description.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesCategory = selectedCategory === 'All' || template.category === selectedCategory;
-    return matchesSearch && matchesCategory;
-  });
+  // Get all extracted sections
+  const allSections = useMemo(() => getAllExtractedSections(), []);
+  
+  // Get categories dynamically from sections
+  const categories = useMemo(() => getAllCategories(allSections), [allSections]);
+
+  // Filter sections based on search, category, and source page
+  const filteredSections = useMemo(() => {
+    return allSections.filter(section => {
+      const matchesSearch = section.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                           section.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                           section.type.toLowerCase().includes(searchQuery.toLowerCase());
+      
+      const matchesCategory = selectedCategory === 'All' || section.category === selectedCategory;
+      const matchesSourcePage = selectedSourcePage === 'All' || section.sourcePage === selectedSourcePage;
+      
+      return matchesSearch && matchesCategory && matchesSourcePage;
+    });
+  }, [allSections, searchQuery, selectedCategory, selectedSourcePage]);
 
   return (
     <div className="space-y-6">
       <Card>
         <CardHeader>
-          <CardTitle>Choose from Section Templates</CardTitle>
+          <CardTitle>Choose from Real Website Sections</CardTitle>
           <p className="text-sm text-muted-foreground">
-            Select pre-designed sections to build your page. All templates are bound to your website data.
+            Select sections extracted from your existing website pages. All content comes from real pages with actual data and structure.
           </p>
         </CardHeader>
         <CardContent>
           {/* Search and Filter */}
-          <div className="flex flex-col sm:flex-row gap-4 mb-6">
-            <div className="relative flex-1">
+          <div className="space-y-4 mb-6">
+            <div className="relative">
               <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
               <Input
-                placeholder="Search section templates..."
+                placeholder="Search sections by name, description, or type..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="pl-10"
               />
             </div>
+            
+            <div className="flex flex-col sm:flex-row gap-4">
+              {/* Source Page Filter */}
+              <div className="flex-1">
+                <Select value={selectedSourcePage} onValueChange={setSelectedSourcePage}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Filter by source page" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {sourcePages.map(page => {
+                      const IconComponent = page.icon;
+                      return (
+                        <SelectItem key={page.value} value={page.value}>
+                          <div className="flex items-center gap-2">
+                            <IconComponent className="h-4 w-4" />
+                            {page.label}
+                          </div>
+                        </SelectItem>
+                      );
+                    })}
+                  </SelectContent>
+                </Select>
+              </div>
+              
+              {/* Category Filter */}
+              <div className="flex-1">
+                <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Filter by category" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {categories.map(category => (
+                      <SelectItem key={category} value={category}>
+                        {category}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+            
+            {/* Category Badges for quick selection */}
             <div className="flex gap-2 flex-wrap">
-              {categories.map(category => (
+              {categories.slice(0, 8).map(category => (
                 <Badge
                   key={category}
                   variant={selectedCategory === category ? "default" : "outline"}
@@ -202,34 +129,56 @@ export const SectionLibrary: React.FC<SectionLibraryProps> = ({ onSelectSection 
             </div>
           </div>
 
-          {/* Templates Grid */}
+          {/* Sections Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredTemplates.map(template => (
-              <Card key={template.id} className="overflow-hidden hover:shadow-md transition-shadow">
-                <div className="aspect-video bg-gradient-to-br from-primary/10 to-primary/20 flex items-center justify-center border-b">
-                  <div className="text-center p-4">
+            {filteredSections.map(section => (
+              <Card key={section.id} className="overflow-hidden hover:shadow-md transition-shadow">
+                <div className="aspect-video bg-gradient-to-br from-primary/10 to-primary/20 flex items-center justify-center border-b relative">
+                  {section.previewImage && (
+                    <div 
+                      className="absolute inset-0 bg-cover bg-center opacity-20"
+                      style={{ backgroundImage: `url(${section.previewImage})` }}
+                    />
+                  )}
+                  <div className="text-center p-4 relative z-10">
                     <div className="w-12 h-12 bg-primary/20 rounded-lg flex items-center justify-center mx-auto mb-2">
-                      <div className="text-primary font-bold">
-                        {template.category.slice(0, 2)}
+                      <div className="text-primary font-bold text-xs">
+                        {section.category.slice(0, 2).toUpperCase()}
                       </div>
                     </div>
                     <div className="text-sm font-medium text-foreground">
-                      {template.name}
+                      {section.name}
+                    </div>
+                    <div className="text-xs text-muted-foreground mt-1">
+                      from {section.sourcePage}
                     </div>
                   </div>
                 </div>
                 <CardContent className="p-4">
                   <div className="flex items-start justify-between mb-2">
-                    <h4 className="font-semibold">{template.name}</h4>
-                    <Badge variant="outline" className="text-xs">
-                      {template.category}
-                    </Badge>
+                    <h4 className="font-semibold text-sm">{section.name}</h4>
+                    <div className="flex flex-col gap-1">
+                      <Badge variant="outline" className="text-xs">
+                        {section.category}
+                      </Badge>
+                      <Badge variant="secondary" className="text-xs">
+                        {section.sourcePage}
+                      </Badge>
+                    </div>
                   </div>
-                  <p className="text-sm text-muted-foreground mb-4">
-                    {template.description}
+                  <p className="text-sm text-muted-foreground mb-3">
+                    {section.description}
                   </p>
+                  <div className="text-xs text-muted-foreground mb-4">
+                    <strong>Type:</strong> {section.type}
+                  </div>
                   <Button
-                    onClick={() => onSelectSection(template.type)}
+                    onClick={() => {
+                      console.log('Real section selected:', section);
+                      console.log('Section type being passed:', section.type);
+                      console.log('onSelectSection function:', onSelectSection);
+                      onSelectSection(section.type);
+                    }}
                     className="w-full flex items-center gap-2"
                     size="sm"
                   >
@@ -241,10 +190,13 @@ export const SectionLibrary: React.FC<SectionLibraryProps> = ({ onSelectSection 
             ))}
           </div>
 
-          {filteredTemplates.length === 0 && (
+          {filteredSections.length === 0 && (
             <div className="text-center py-12">
               <p className="text-muted-foreground">
-                No templates found matching your criteria.
+                No sections found matching your criteria.
+              </p>
+              <p className="text-sm text-muted-foreground mt-2">
+                Try adjusting your search terms or filters.
               </p>
             </div>
           )}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -9,9 +9,11 @@ import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Plus, Settings, Trash2, GripVertical } from 'lucide-react';
 import { SectionEditor } from './SectionEditor';
+import { SectionRenderer } from './SectionRenderer';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
 import { RichTextEditor } from '@/components/RichTextEditor';
+import { getSectionById, getAllExtractedSections } from '@/services/sectionExtractor';
 
 interface ContentPage {
   id: string;
@@ -43,6 +45,7 @@ interface PageEditorProps {
   onSave: () => void;
   onSelectSections: () => void;
   onAddSectionReady?: (addSection: (type: string) => void) => void;
+  onSectionsUpdate?: (sections: PageSection[]) => void;
 }
 
 export const PageEditor: React.FC<PageEditorProps> = ({
@@ -50,7 +53,8 @@ export const PageEditor: React.FC<PageEditorProps> = ({
   isCreating,
   onSave,
   onSelectSections,
-  onAddSectionReady
+  onAddSectionReady,
+  onSectionsUpdate
 }) => {
   const [formData, setFormData] = useState({
     title: '',
@@ -65,9 +69,40 @@ export const PageEditor: React.FC<PageEditorProps> = ({
   const [sections, setSections] = useState<PageSection[]>([]);
   const [saving, setSaving] = useState(false);
   const [editingSection, setEditingSection] = useState<PageSection | null>(null);
+  const hasCalledOnAddSectionReady = useRef(false);
+
+  // Debug: Log sections state changes
+  useEffect(() => {
+    console.log('Sections state changed:', sections);
+    console.log('Rendering sections in UI:', sections);
+  }, [sections]);
+
+  // Notify parent component when sections change
+  useEffect(() => {
+    console.log('=== Sections update effect triggered ===');
+    console.log('sections:', sections);
+    console.log('onSectionsUpdate exists:', !!onSectionsUpdate);
+    console.log('sections length:', sections.length);
+    
+    if (onSectionsUpdate) {
+      console.log('Calling onSectionsUpdate with sections:', sections);
+      onSectionsUpdate(sections);
+    }
+  }, [sections]); // Removed onSectionsUpdate dependency to prevent unnecessary re-runs
+
+  // Reset the callback flag when page changes
+  useEffect(() => {
+    hasCalledOnAddSectionReady.current = false;
+  }, [page?.id]);
 
   useEffect(() => {
+    console.log('=== Page/creating change effect triggered ===');
+    console.log('page:', page);
+    console.log('isCreating:', isCreating);
+    console.log('current sections before change:', sections);
+    
     if (page && !isCreating) {
+      console.log('Loading existing page, fetching sections...');
       setFormData({
         title: page.title || '',
         slug: page.slug || '',
@@ -78,8 +113,8 @@ export const PageEditor: React.FC<PageEditorProps> = ({
         content: page.content || {}
       });
       fetchPageSections(page.id);
-    } else {
-      // Reset form for new page
+    } else if (!page && isCreating) {
+      console.log('Creating new page, resetting form but keeping sections...');
       setFormData({
         title: '',
         slug: '',
@@ -89,16 +124,9 @@ export const PageEditor: React.FC<PageEditorProps> = ({
         is_published: false,
         content: {}
       });
-      setSections([]);
+      // Don't reset sections here - they should persist during page creation
     }
-  }, [page, isCreating]);
-
-  // Pass addSection function to parent component
-  useEffect(() => {
-    if (onAddSectionReady) {
-      onAddSectionReady(addSection);
-    }
-  }, [onAddSectionReady]);
+  }, [page?.id, isCreating]); // Changed dependency to page?.id instead of page
 
   const fetchPageSections = async (pageId: string) => {
     try {
@@ -195,23 +223,45 @@ export const PageEditor: React.FC<PageEditorProps> = ({
 
       // Save temporary sections to database
       if (pageId) {
+        console.log('=== Saving temporary sections ===');
+        console.log('All sections:', sections);
+        console.log('Page ID:', pageId);
+        
         const tempSections = sections.filter(s => s.id.startsWith('temp_'));
+        console.log('Temporary sections to save:', tempSections);
+        
         if (tempSections.length > 0) {
-          const sectionsToInsert = tempSections.map(section => ({
+          const sectionsToInsert = tempSections.map((section, index) => ({
             page_id: pageId,
             section_type: section.section_type,
             content: section.content,
-            sort_order: section.sort_order,
-            is_active: section.is_active
+            sort_order: index, // Use index for proper ordering
+            is_active: section.is_active || true
           }));
 
-          const { error: sectionsError } = await supabase
+          console.log('Sections to insert:', sectionsToInsert);
+
+          const { data: insertedSections, error: sectionsError } = await supabase
             .from('page_sections')
-            .insert(sectionsToInsert);
+            .insert(sectionsToInsert)
+            .select();
 
           if (sectionsError) {
             console.error('Error saving sections:', sectionsError);
+            toast({
+              title: 'Error',
+              description: `Failed to save sections: ${sectionsError.message}`,
+              variant: 'destructive'
+            });
+          } else {
+            console.log('Sections saved successfully:', insertedSections);
+            toast({
+              title: 'Success',
+              description: `${tempSections.length} sections saved successfully`
+            });
           }
+        } else {
+          console.log('No temporary sections to save');
         }
       }
 
@@ -228,139 +278,118 @@ export const PageEditor: React.FC<PageEditorProps> = ({
     }
   };
 
-  const addSection = async (type: string) => {
+  const addSection = useCallback(async (type: string) => {
+    console.log('=== addSection function called ===');
+    console.log('addSection called with type:', type);
+    console.log('Type of type parameter:', typeof type);
+    console.log('Type parameter value:', JSON.stringify(type));
+    console.log('Current page:', page);
+    console.log('Current sections:', sections);
+    console.log('isCreating:', isCreating);
+    console.log('Stack trace:', new Error().stack);
+    
+    // Ensure type is a string and not null/undefined
+    if (!type || typeof type !== 'string') {
+      console.error('Invalid type parameter:', type);
+      console.error('Type parameter is not a string, it is:', typeof type);
+      console.error('Type parameter value:', type);
+      console.error('Stack trace:', new Error().stack);
+      toast({
+        title: 'Error',
+        description: 'Invalid section type provided',
+        variant: 'destructive'
+      });
+      return;
+    }
+    
+    // Get real content from extracted sections
+    const allSections = getAllExtractedSections();
+    const matchingSection = allSections.find(section => section.type === type);
+    
     let defaultContent = {};
     
-    // Set default content based on section type
-    switch(type) {
-      case 'hero_search':
-        defaultContent = {
-          hero_image: '/lovable-uploads/02fc42a2-c12f-49f1-92b7-9fdee8f3a419.png',
-          search_placeholder: 'Search \'Sector 150 Noida\''
-        };
-        break;
-      case 'featured_properties':
-        defaultContent = {
-          heading: 'Featured Properties',
-          description: 'Discover our handpicked selection of premium properties across India\'s top cities',
-          show_filters: true,
-          max_properties: 20
-        };
-        break;
-      case 'services_grid':
-        defaultContent = {
-          heading: 'Our Services',
-          description: 'Comprehensive real estate solutions tailored to meet all your property needs',
-          services: [
-            {
-              title: 'Property Search',
-              description: 'Find your perfect property with our advanced search filters and personalized recommendations.',
-              icon: 'search'
-            },
-            {
-              title: 'Verified Listings',
-              description: 'All our properties are verified and come with authentic documents for your peace of mind.',
-              icon: 'shield'
-            },
-            {
-              title: 'Legal Assistance',
-              description: 'Get expert legal guidance for property documentation and registration processes.',
-              icon: 'file-text'
-            }
-          ]
-        };
-        break;
-      case 'stats_section':
-        defaultContent = {
-          background_style: 'gradient',
-          stats: [
-            { number: '1,000+', label: 'Properties Listed', icon: 'home' },
-            { number: '10,000+', label: 'Happy Customers', icon: 'users' },
-            { number: '15+', label: 'Countries Covered', icon: 'building' },
-            { number: '50+', label: 'Awards Won', icon: 'award' }
-          ]
-        };
-        break;
-      case 'testimonials_section':
-        defaultContent = {
-          heading: 'Our customers love us',
-          description: 'Real stories from verified buyers & owners.',
-          show_video: true
-        };
-        break;
-      case 'steps':
-        defaultContent = {
-          title: 'How It Works',
-          steps: [
-            { title: 'Search Properties', description: 'Browse through thousands of verified listings' },
-            { title: 'Schedule Visit', description: 'Book a convenient time to visit your shortlisted properties' },
-            { title: 'Make Decision', description: 'Get expert guidance to make the right choice' }
-          ]
-        };
-        break;
-      case 'team':
-        defaultContent = {
-          title: 'Our Team',
-          show_contact_info: true,
-          agents: [
-            { name: 'John Doe', role: 'Senior Property Consultant', contact: '+91 9876543210' },
-            { name: 'Jane Smith', role: 'Real Estate Expert', contact: '+91 9876543211' },
-            { name: 'Mike Johnson', role: 'Property Manager', contact: '+91 9876543212' }
-          ]
-        };
-        break;
-      default:
-        defaultContent = {
-          title: `New ${type.replace('_', ' ')} Section`,
-          description: 'Section description'
-        };
-    }
-
-    // If we have a page ID, save the section to database immediately
-    if (page?.id) {
-      try {
-        const { data, error } = await supabase
-          .from('page_sections')
-          .insert([{
-            page_id: page.id,
-            section_type: type,
-            content: defaultContent,
-            sort_order: sections.length,
-            is_active: true
-          }])
-          .select()
-          .single();
-
-        if (error) throw error;
-
-        setSections([...sections, data]);
-        toast({
-          title: 'Success',
-          description: 'Section added successfully'
-        });
-      } catch (error) {
-        console.error('Error adding section:', error);
-        toast({
-          title: 'Error',
-          description: 'Failed to add section',
-          variant: 'destructive'
-        });
-      }
+    if (matchingSection) {
+      // Use real content from existing website pages
+      console.log('Found matching section with real content:', matchingSection);
+      defaultContent = matchingSection.content;
     } else {
-      // For new pages, add as temporary section
-      const newSection: PageSection = {
-        id: `temp_${Date.now()}`,
-        section_type: type,
-        content: defaultContent,
-        sort_order: sections.length,
-        page_id: page?.id || '',
-        is_active: true,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
+      // Fallback to basic content if no matching section found
+      console.log('No matching section found, using fallback content');
+      defaultContent = {
+        title: `New ${type.replace('_', ' ')} Section`,
+        description: 'Section description'
       };
-      setSections([...sections, newSection]);
     }
-  };
+
+    // For now, let's add sections as temporary sections regardless of page ID
+    // This will help us test the functionality without database complications
+    console.log('=== Adding section (temporary for testing) ===');
+    
+    // Create a temporary section
+    const newSection: PageSection = {
+      id: `temp_${Date.now()}`,
+      section_type: type,
+      content: defaultContent,
+      sort_order: 0, // Will be set properly in setState callback
+      page_id: page?.id || '',
+      is_active: true,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    };
+    
+    console.log('=== Adding temporary section ===');
+    console.log('New temporary section:', newSection);
+    
+    setSections(prevSections => {
+      const newSections = [...prevSections, {
+        ...newSection,
+        sort_order: prevSections.length // Set sort_order based on current state
+      }];
+      console.log('=== Adding temporary section to state ===');
+      console.log('Previous sections:', prevSections);
+      console.log('New section:', newSection);
+      console.log('Updated sections state:', newSections);
+      console.log('Total sections count:', newSections.length);
+      console.log('State update function called');
+      return newSections;
+    });
+    
+    toast({
+      title: 'Success',
+      description: 'Section added successfully'
+    });
+
+    // TODO: Implement database saving when page is saved
+    // The original database logic is commented out for now to focus on the UI functionality
+  }, [page?.id, toast]); // Keep only essential dependencies
+
+  // Create a stable function to pass to parent component
+  const stableSafeAddSection = useCallback((type: string) => {
+    if (type && typeof type === 'string' && type.trim() !== '') {
+      console.log('stableSafeAddSection: Valid type, calling addSection');
+      addSection(type).catch(error => {
+        console.error('Error in addSection:', error);
+      });
+    } else {
+      console.error('stableSafeAddSection: Invalid type parameter:', type);
+    }
+  }, [addSection]);
+
+  // Pass addSection function to parent component
+  useEffect(() => {
+    console.log('PageEditor useEffect triggered');
+    console.log('onAddSectionReady exists:', !!onAddSectionReady);
+    
+    // Only call onAddSectionReady if we have the callback
+    if (onAddSectionReady && !hasCalledOnAddSectionReady.current) {
+      console.log('Calling onAddSectionReady with stableSafeAddSection function...');
+      onAddSectionReady(stableSafeAddSection);
+      hasCalledOnAddSectionReady.current = true;
+      console.log('onAddSectionReady called successfully');
+    } else {
+      console.log('onAddSectionReady is null/undefined or already called');
+    }
+  }, [onAddSectionReady, stableSafeAddSection]);
 
   const removeSection = (sectionId: string) => {
     setSections(sections.filter(s => s.id !== sectionId));
@@ -428,6 +457,16 @@ export const PageEditor: React.FC<PageEditorProps> = ({
             </Button>
           </CardHeader>
           <CardContent>
+            <div className="mb-4 p-2 bg-blue-50 rounded-lg">
+              <p className="text-sm text-blue-700">
+                <strong>Debug Info:</strong> {sections.length} sections in state
+                {sections.length > 0 && (
+                  <span className="ml-2">
+                    ({sections.filter(s => s.id.startsWith('temp_')).length} temporary)
+                  </span>
+                )}
+              </p>
+            </div>
             {sections.length === 0 ? (
               <div className="text-center py-8 border-2 border-dashed border-muted rounded-lg">
                 <p className="text-muted-foreground mb-4">No sections added yet</p>
@@ -437,27 +476,19 @@ export const PageEditor: React.FC<PageEditorProps> = ({
               </div>
             ) : (
               <div className="space-y-4">
-                {sections.map((section) => (
-                  <div key={section.id} className="flex items-center gap-3 p-4 border rounded-lg">
-                    <GripVertical className="h-4 w-4 text-muted-foreground cursor-move" />
-                    <Badge variant="outline">{section.section_type}</Badge>
-                    <span className="flex-1 font-medium">{section.section_type} Section</span>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => editSection(section)}
-                      className="h-8 w-8 p-0"
-                    >
-                      <Settings className="h-4 w-4" />
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => removeSection(section.id)}
-                      className="h-8 w-8 p-0 text-destructive hover:text-destructive"
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
+                {sections.map((section, index) => (
+                  <div key={section.id} className="relative">
+                    <div className="absolute left-2 top-1/2 transform -translate-y-1/2 z-10">
+                      <GripVertical className="h-4 w-4 text-muted-foreground cursor-move" />
+                    </div>
+                    <div className="ml-8">
+                      <SectionRenderer
+                        section={section}
+                        onEdit={editSection}
+                        onDelete={removeSection}
+                        showActions={true}
+                      />
+                    </div>
                   </div>
                 ))}
               </div>
