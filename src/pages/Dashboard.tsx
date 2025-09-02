@@ -226,7 +226,7 @@ export const Dashboard: React.FC = () => {
 
       if (error) throw error;
       
-      // Filter for property requirements (those with intent Buy or Sell)
+      // Filter for property requirements (those with intent Buy, Sell, or Lease)
       const requirementData = (data || []).filter(item => {
         try {
           const payload = typeof item.payload === 'string' ? JSON.parse(item.payload) : item.payload;
@@ -238,7 +238,7 @@ export const Dashboard: React.FC = () => {
           });
           
           const isRequirement = payload && typeof payload === 'object' && 
-                 (payload.intent === 'Buy' || payload.intent === 'Sell');
+                 (payload.intent === 'Buy' || payload.intent === 'Sell' || payload.intent === 'Lease');
           
           console.log('✅ Is requirement:', isRequirement);
           return isRequirement;
@@ -586,7 +586,9 @@ export const Dashboard: React.FC = () => {
                         <CardHeader className="pb-3">
                           <div className="flex justify-between items-start">
                             <Badge 
-                              variant={payload?.intent === 'Buy' ? 'default' : 'secondary'}
+                              variant={payload?.intent === 'Buy' ? 'default' : 
+                                      payload?.intent === 'Sell' ? 'secondary' : 
+                                      payload?.intent === 'Lease' ? 'outline' : 'secondary'}
                               className="mb-2"
                             >
                               {payload?.intent || 'Requirement'}
