@@ -635,14 +635,16 @@ export const Dashboard: React.FC = () => {
                 {/* Pagination */}
                 {propertyRequirements.length > requirementsPerPage && (
                   <div className="flex justify-center items-center space-x-2 mt-6">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => setRequirementsPage(prev => Math.max(prev - 1, 1))}
-                      disabled={requirementsPage === 1}
-                    >
-                      Previous
-                    </Button>
+                    {/* Previous button - only show if not on first page */}
+                    {requirementsPage > 1 && (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setRequirementsPage(prev => Math.max(prev - 1, 1))}
+                      >
+                        Previous
+                      </Button>
+                    )}
                     
                     {/* Page number buttons */}
                     {Array.from({ length: Math.ceil(propertyRequirements.length / requirementsPerPage) }, (_, i) => i + 1).map((pageNum) => (
@@ -657,16 +659,18 @@ export const Dashboard: React.FC = () => {
                       </Button>
                     ))}
                     
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => setRequirementsPage(prev => 
-                        Math.min(prev + 1, Math.ceil(propertyRequirements.length / requirementsPerPage))
-                      )}
-                      disabled={requirementsPage === Math.ceil(propertyRequirements.length / requirementsPerPage)}
-                    >
-                      Next
-                    </Button>
+                    {/* Next button - only show if not on last page */}
+                    {requirementsPage < Math.ceil(propertyRequirements.length / requirementsPerPage) && (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setRequirementsPage(prev => 
+                          Math.min(prev + 1, Math.ceil(propertyRequirements.length / requirementsPerPage))
+                        )}
+                      >
+                        Next
+                      </Button>
+                    )}
                   </div>
                 )}
               </>
