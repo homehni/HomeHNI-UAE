@@ -74,12 +74,35 @@ const PropertyCard = ({
   };
   const cityMeta = cityInfoMap[detectedCity] || { state: 'Delhi', pincode: '110001' };
 
-  // Build preview images prioritizing the provided image(s)
+  // Map property type to storage folder names inside property-media/content-images
+  const typeToFolder = (type: string) => {
+    const t = (type || '').toLowerCase().trim();
+    const map: Record<string, string> = {
+      'apartment': 'apartment',
+      'flat': 'apartment',
+      'independent house': 'independent-house',
+      'house': 'house',
+      'villa': 'villa',
+      'penthouse': 'penthouse',
+      'commercial': 'commercial',
+      'plot': 'plot',
+      'agriculture lands': 'agricultural-lands',
+      'agricultural lands': 'agricultural-lands',
+      'farm house': 'farmhouse',
+      'farmhouse': 'farmhouse',
+    };
+    return map[t] || t.replace(/\s+/g, '-');
+  };
+
+  const baseFolder = `content-images/${typeToFolder(propertyType)}`;
+
+  // Build public URL; if only a filename is provided (e.g., apt1.jpg), prefix with folder
   const resolveUrlFromString = (s: string): string | undefined => {
     if (!s) return undefined;
     if (s.startsWith('http')) return s;
+    const path = s.includes('/') ? s : `${baseFolder}/${s}`;
     try {
-      const { data } = supabase.storage.from('property-media').getPublicUrl(s);
+      const { data } = supabase.storage.from('property-media').getPublicUrl(path);
       return data.publicUrl;
     } catch {
       return undefined;
