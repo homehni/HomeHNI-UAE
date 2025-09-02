@@ -160,7 +160,11 @@ const App: React.FC = () => {
             <Route path="/interior" element={<Interior />} />
             <Route path="/loans" element={<Loans />} />
             <Route path="/home-security-services" element={<HomeSecurityServices />} />
-            <Route path="/post-service" element={<PostService />} />
+            <Route path="/post-service" element={
+              <ProtectedRoute>
+                <PostService />
+              </ProtectedRoute>
+            } />
             
             {/* Service Pages */}
             <Route path="/nri-services" element={<NRIServices />} />

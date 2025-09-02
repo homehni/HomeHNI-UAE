@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
+import type { Json } from '@/integrations/supabase/types';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -53,6 +54,18 @@ interface Lead {
   };
 }
 
+interface ServiceSubmission {
+  id: string;
+  title: string | null;
+  payload: Json;
+  status: string;
+  created_at: string;
+  updated_at: string;
+  city: string | null;
+  state: string | null;
+  user_id: string | null;
+}
+
 export const Dashboard: React.FC = () => {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
@@ -66,6 +79,7 @@ export const Dashboard: React.FC = () => {
   
   const [properties, setProperties] = useState<Property[]>([]);
   const [leads, setLeads] = useState<Lead[]>([]);
+  const [serviceSubmissions, setServiceSubmissions] = useState<ServiceSubmission[]>([]);
   const [loading, setLoading] = useState(true);
   const [deleteModal, setDeleteModal] = useState<{
     isOpen: boolean;
@@ -98,6 +112,7 @@ export const Dashboard: React.FC = () => {
     if (user) {
       fetchProperties();
       fetchLeads();
+      fetchServiceSubmissions();
     }
   }, [user]);
 
@@ -151,6 +166,32 @@ export const Dashboard: React.FC = () => {
       setLeads(data || []);
     } catch (error) {
       console.error('Error fetching leads:', error);
+    }
+  };
+
+  const fetchServiceSubmissions = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('property_submissions')
+        .select('*')
+        .eq('user_id', user?.id)
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      
+      // Filter for service submissions (those with serviceType in payload)
+      const serviceData = (data || []).filter(item => {
+        try {
+          const payload = typeof item.payload === 'string' ? JSON.parse(item.payload) : item.payload;
+          return payload && typeof payload === 'object' && payload.serviceType;
+        } catch {
+          return false;
+        }
+      });
+      
+      setServiceSubmissions(serviceData);
+    } catch (error) {
+      console.error('Error fetching service submissions:', error);
     }
   };
 
@@ -335,8 +376,9 @@ export const Dashboard: React.FC = () => {
 
         {/* Tabs */}
         <Tabs value={activeTab} onValueChange={handleTabChange} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3">
+          <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="properties">My Listings</TabsTrigger>
+            <TabsTrigger value="requirements">My Requirements</TabsTrigger>
             <TabsTrigger value="leads">Contact Leads</TabsTrigger>
             <TabsTrigger value="profile">Profile</TabsTrigger>
           </TabsList>
@@ -439,6 +481,81 @@ export const Dashboard: React.FC = () => {
             )}
           </TabsContent>
 
+          {/* Requirements Tab */}
+          <TabsContent value="requirements" className="space-y-6">
+            <div className="flex justify-between items-center">
+              <h2 className="text-xl font-semibold">My Requirements</h2>
+              <Button onClick={() => navigate('/post-service')}>
+                <Plus className="h-4 w-4 mr-2" />
+                Post New Requirement
+              </Button>
+            </div>
+
+            {serviceSubmissions.length === 0 ? (
+              <Card>
+                <CardContent className="text-center py-8">
+                  <FileText className="h-12 w-12 mx-auto text-gray-400 mb-4" />
+                  <h3 className="text-lg font-medium text-gray-900 mb-2">No requirements posted yet</h3>
+                  <p className="text-gray-500 mb-4">Start by posting your first service requirement</p>
+                  <Button onClick={() => navigate('/post-service')}>
+                    <Plus className="h-4 w-4 mr-2" />
+                    Post Your First Requirement
+                  </Button>
+                </CardContent>
+              </Card>
+            ) : (
+              <div className="grid gap-4">
+                {serviceSubmissions.map((submission) => {
+                  let payload: any = {};
+                  
+                  try {
+                    payload = typeof submission.payload === 'string' 
+                      ? JSON.parse(submission.payload) 
+                      : submission.payload || {};
+                  } catch (e) {
+                    console.error('Error parsing payload:', e);
+                    payload = {};
+                  }
+                  
+                  return (
+                    <Card key={submission.id}>
+                      <CardContent className="p-6">
+                        <div className="flex justify-between items-start">
+                          <div className="flex-1">
+                            <h3 className="text-lg font-medium text-gray-900 mb-2">
+                              {submission.title || payload?.serviceType || 'Service Requirement'}
+                            </h3>
+                            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm text-gray-600 mb-2">
+                              <div>Service: {payload?.serviceType || 'Not specified'}</div>
+                              <div>Location: {payload?.selectedState || 'Not specified'}, {payload?.selectedCity || ''}</div>
+                              <div>Submitted: {new Date(submission.created_at).toLocaleDateString()}</div>
+                            </div>
+                            {payload?.message && (
+                              <div className="bg-gray-50 p-3 rounded-lg mb-2">
+                                <p className="text-sm text-gray-700">{payload.message}</p>
+                              </div>
+                            )}
+                          </div>
+                          <div className="ml-4">
+                            <Badge 
+                              variant={submission.status === 'new' ? 'default' : 
+                                      submission.status === 'in-progress' ? 'secondary' : 
+                                      submission.status === 'completed' ? 'default' : 'outline'}
+                              className={submission.status === 'new' ? 'bg-blue-100 text-blue-800' :
+                                        submission.status === 'in-progress' ? 'bg-yellow-100 text-yellow-800' :
+                                        submission.status === 'completed' ? 'bg-green-100 text-green-800' : ''}
+                            >
+                              {submission.status}
+                            </Badge>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  );
+                })}
+              </div>
+            )}
+          </TabsContent>
 
           {/* Leads Tab */}
           <TabsContent value="leads" className="space-y-6">

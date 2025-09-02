@@ -1,4 +1,6 @@
 import { useEffect, useState, useCallback, useMemo } from "react";
+import { useAuth } from '@/contexts/AuthContext';
+import { supabase } from '@/integrations/supabase/client';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -35,6 +37,7 @@ interface FormData {
 }
 
 const PostService = () => {
+  const { user } = useAuth();
   const [statesData, setStatesData] = useState<any>(null);
   const [cities, setCities] = useState<string[]>([]);
   const [showSuccess, setShowSuccess] = useState(false);
@@ -237,10 +240,10 @@ const PostService = () => {
     setSubmitting(true);
     
     try {
-      // Submit form data
+      // Submit form data to Supabase
       updateProgress("Submitting your requirement...");
       
-      const submissionData = {
+      const submissionPayload = {
         name: formData.name,
         phone: formData.phone,
         email: formData.email,
@@ -249,21 +252,37 @@ const PostService = () => {
         city: formData.city,
         intent: formData.intent,
         ...(["Buy", "Sell", "Lease"].includes(formData.intent) && { propertyType: formData.propertyType }),
-        ...(formData.intent === "Service" && { serviceCategory: formData.serviceCategory }),
+        ...(formData.intent === "Service" && { serviceType: formData.serviceCategory }),
         budget: {
           min: formData.budgetRange[0],
           max: formData.budgetRange[1],
           currency: formData.currency
         },
         premiumSelected: formData.premiumSelected,
-        notes: formData.notes
+        notes: formData.notes,
+        submittedAt: new Date().toISOString()
       };
 
-      // Mock API call - replace with real endpoint
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      // Insert into property_submissions table with service-specific data
+      const { data, error } = await supabase
+        .from('property_submissions')
+        .insert({
+          user_id: user?.id,
+          title: `${formData.intent} Requirement - ${formData.serviceCategory || formData.propertyType}`,
+          city: formData.city,
+          state: formData.state,
+          status: 'new',
+          payload: submissionPayload
+        })
+        .select()
+        .single();
+
+      if (error) {
+        throw error;
+      }
       
-      // Generate reference ID
-      const refId = `REQ${Date.now().toString().slice(-6)}`;
+      // Generate reference ID from database ID
+      const refId = `REQ${data.id.slice(-6).toUpperCase()}`;
       setReferenceId(refId);
       setShowSuccess(true);
       
