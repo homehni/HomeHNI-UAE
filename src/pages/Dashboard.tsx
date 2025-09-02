@@ -643,9 +643,20 @@ export const Dashboard: React.FC = () => {
                     >
                       Previous
                     </Button>
-                    <span className="text-sm text-gray-600">
-                      Page {requirementsPage} of {Math.ceil(propertyRequirements.length / requirementsPerPage)}
-                    </span>
+                    
+                    {/* Page number buttons */}
+                    {Array.from({ length: Math.ceil(propertyRequirements.length / requirementsPerPage) }, (_, i) => i + 1).map((pageNum) => (
+                      <Button
+                        key={pageNum}
+                        variant={requirementsPage === pageNum ? "default" : "outline"}
+                        size="sm"
+                        onClick={() => setRequirementsPage(pageNum)}
+                        className="min-w-10"
+                      >
+                        {pageNum}
+                      </Button>
+                    ))}
+                    
                     <Button
                       variant="outline"
                       size="sm"
