@@ -135,10 +135,15 @@ const PropertyCard = ({
     return typeof v === 'string' ? resolveUrlFromString(v) : resolveUrlFromString(v.url);
   };
 
-  const fallbackUrls = [
-    '/placeholder.svg',
-    '/placeholder.svg',
-  ];
+  const fallbackUrls = [1, 2, 3].map((i) => {
+    const path = `${baseFolder}/${typeToFolder(propertyType)}${i}.jpg`;
+    try {
+      const { data } = supabase.storage.from('property-media').getPublicUrl(path);
+      return data.publicUrl;
+    } catch {
+      return '/placeholder.svg';
+    }
+  });
 
   let imagesForPage: string[] = [];
   if (Array.isArray(image)) {
