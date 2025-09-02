@@ -164,11 +164,10 @@ const DynamicPage: React.FC = () => {
           ))}
         </div>
 
-        {/* Empty State */}
+        {/* Empty State - No message shown */}
         {sections.length === 0 && (
-          <div className="py-24 text-center">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">{page.title}</h2>
-            <p className="text-gray-600">This page is under construction.</p>
+          <div className="py-8">
+            {/* Page content already rendered above if available */}
           </div>
         )}
       </main>

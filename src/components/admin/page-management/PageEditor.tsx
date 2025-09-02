@@ -160,15 +160,6 @@ export const PageEditor: React.FC<PageEditorProps> = ({
   };
 
   const handleSave = async () => {
-    if (!formData.title.trim()) {
-      toast({
-        title: 'Error',
-        description: 'Page title is required',
-        variant: 'destructive'
-      });
-      return;
-    }
-
     if (!formData.slug.trim()) {
       toast({
         title: 'Error',
@@ -464,7 +455,7 @@ export const PageEditor: React.FC<PageEditorProps> = ({
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="title">Page Title *</Label>
+              <Label htmlFor="title">Page Title</Label>
               <Input
                 id="title"
                 value={formData.title}
