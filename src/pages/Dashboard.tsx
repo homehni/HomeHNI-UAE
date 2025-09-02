@@ -92,6 +92,8 @@ export const Dashboard: React.FC = () => {
   const [leads, setLeads] = useState<Lead[]>([]);
   const [serviceSubmissions, setServiceSubmissions] = useState<ServiceSubmission[]>([]);
   const [propertyRequirements, setPropertyRequirements] = useState<PropertyRequirement[]>([]);
+  const [requirementsPage, setRequirementsPage] = useState(1);
+  const requirementsPerPage = 6;
   const [loading, setLoading] = useState(true);
   const [deleteModal, setDeleteModal] = useState<{
     isOpen: boolean;
@@ -546,41 +548,31 @@ export const Dashboard: React.FC = () => {
                 </CardContent>
               </Card>
             ) : (
-              <div className="grid gap-4">
-                {propertyRequirements.map((submission) => {
-                  let payload: any = {};
-                  
-                  try {
-                    payload = typeof submission.payload === 'string' 
-                      ? JSON.parse(submission.payload) 
-                      : submission.payload || {};
-                  } catch (e) {
-                    console.error('Error parsing payload:', e);
-                    payload = {};
-                  }
-                  
-                  return (
-                    <Card key={submission.id}>
-                      <CardContent className="p-6">
-                        <div className="flex justify-between items-start">
-                          <div className="flex-1">
-                             <h3 className="text-lg font-medium text-gray-900 mb-2">
-                               {submission.title || `${payload?.intent} Requirement` || 'Property Requirement'}
-                             </h3>
-                             <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm text-gray-600 mb-2">
-                               <div>Type: {payload?.intent || 'Not specified'}</div>
-                               <div>Property: {payload?.propertyType || 'Not specified'}</div>
-                               <div>Location: {payload?.city || 'Not specified'}, {payload?.state || ''}</div>
-                               <div>Budget: ₹{payload?.budget?.min?.toLocaleString() || '0'} - ₹{payload?.budget?.max?.toLocaleString() || '0'}</div>
-                               <div>Submitted: {new Date(submission.created_at).toLocaleDateString()}</div>
-                             </div>
-                             {payload?.notes && (
-                               <div className="bg-gray-50 p-3 rounded-lg mb-2">
-                                 <p className="text-sm text-gray-700">{payload.notes}</p>
-                               </div>
-                             )}
-                          </div>
-                          <div className="ml-4">
+              <>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {propertyRequirements
+                    .slice((requirementsPage - 1) * requirementsPerPage, requirementsPage * requirementsPerPage)
+                    .map((submission) => {
+                    let payload: any = {};
+                    try {
+                      payload = typeof submission.payload === 'string' 
+                        ? JSON.parse(submission.payload) 
+                        : submission.payload || {};
+                    } catch (e) {
+                      console.error('Error parsing payload:', e);
+                      payload = {};
+                    }
+
+                    return (
+                      <Card key={submission.id} className="aspect-square flex flex-col">
+                        <CardHeader className="pb-3">
+                          <div className="flex justify-between items-start">
+                            <Badge 
+                              variant={payload?.intent === 'Buy' ? 'default' : 'secondary'}
+                              className="mb-2"
+                            >
+                              {payload?.intent || 'Requirement'}
+                            </Badge>
                             <Badge 
                               variant={submission.status === 'new' ? 'default' : 
                                       submission.status === 'in-progress' ? 'secondary' : 
@@ -592,12 +584,61 @@ export const Dashboard: React.FC = () => {
                               {submission.status}
                             </Badge>
                           </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  );
-                })}
-              </div>
+                          <CardTitle className="text-base line-clamp-2">
+                            {submission.title || `${payload?.propertyType} ${payload?.intent}` || 'Property Requirement'}
+                          </CardTitle>
+                        </CardHeader>
+                        <CardContent className="flex-1 flex flex-col justify-between p-4 pt-0">
+                          <div className="space-y-2 text-sm text-gray-600">
+                            <div className="flex items-center gap-2">
+                              <Building className="h-4 w-4" />
+                              <span>{payload?.propertyType || 'Not specified'}</span>
+                            </div>
+                            <div>
+                              📍 {payload?.city || 'Not specified'}, {payload?.state || ''}
+                            </div>
+                            <div className="font-medium text-primary">
+                              ₹{payload?.budget?.min?.toLocaleString() || '0'} - ₹{payload?.budget?.max?.toLocaleString() || '0'}
+                            </div>
+                          </div>
+                          <div className="mt-4 pt-3 border-t border-gray-100">
+                            <div className="text-xs text-gray-500">
+                              {new Date(submission.created_at).toLocaleDateString()}
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    );
+                  })}
+                </div>
+                
+                {/* Pagination */}
+                {propertyRequirements.length > requirementsPerPage && (
+                  <div className="flex justify-center items-center space-x-2 mt-6">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setRequirementsPage(prev => Math.max(prev - 1, 1))}
+                      disabled={requirementsPage === 1}
+                    >
+                      Previous
+                    </Button>
+                    <span className="text-sm text-gray-600">
+                      Page {requirementsPage} of {Math.ceil(propertyRequirements.length / requirementsPerPage)}
+                    </span>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setRequirementsPage(prev => 
+                        Math.min(prev + 1, Math.ceil(propertyRequirements.length / requirementsPerPage))
+                      )}
+                      disabled={requirementsPage === Math.ceil(propertyRequirements.length / requirementsPerPage)}
+                    >
+                      Next
+                    </Button>
+                  </div>
+                )}
+              </>
             )}
           </TabsContent>
 
