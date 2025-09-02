@@ -96,11 +96,25 @@ const PropertyCard = ({
 
   const baseFolder = `content-images/${typeToFolder(propertyType)}`;
 
-  // Build public URL; if only a filename is provided (e.g., apt1.jpg), prefix with folder
+  // Build public URL robustly; handle various path formats and prefixes
   const resolveUrlFromString = (s: string): string | undefined => {
     if (!s) return undefined;
-    if (s.startsWith('http')) return s;
-    const path = s.includes('/') ? s : `${baseFolder}/${s}`;
+    // If it's already a full URL, return as-is
+    if (/^https?:\/\//i.test(s)) return s;
+
+    // Normalize common prefixes that may be stored in DB
+    let cleaned = s.trim();
+    // Remove leading domain-style public path if present
+    cleaned = cleaned.replace(/^\/?storage\/v1\/object\/public\/property-media\//i, '');
+    // Remove leading bucket name if included
+    cleaned = cleaned.replace(/^property-media\//i, '');
+    // Remove generic public prefix
+    cleaned = cleaned.replace(/^public\//i, '');
+
+    // If only a filename was provided, prefix with type folder
+    const needsFolder = !cleaned.includes('/');
+    const path = needsFolder ? `${baseFolder}/${cleaned}` : cleaned;
+
     try {
       const { data } = supabase.storage.from('property-media').getPublicUrl(path);
       return data.publicUrl;
