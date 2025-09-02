@@ -171,11 +171,16 @@ export const Dashboard: React.FC = () => {
 
   const fetchServiceSubmissions = async () => {
     try {
+      console.log('Fetching service submissions for user:', user?.id);
+      
       const { data, error } = await supabase
         .from('property_submissions')
         .select('*')
         .eq('user_id', user?.id)
         .order('created_at', { ascending: false });
+
+      console.log('Raw property_submissions data:', data);
+      console.log('Query error:', error);
 
       if (error) throw error;
       
@@ -183,12 +188,17 @@ export const Dashboard: React.FC = () => {
       const serviceData = (data || []).filter(item => {
         try {
           const payload = typeof item.payload === 'string' ? JSON.parse(item.payload) : item.payload;
-          return payload && typeof payload === 'object' && payload.serviceType;
-        } catch {
+          console.log('Processing item payload:', payload);
+          const hasServiceType = payload && typeof payload === 'object' && (payload.serviceType || payload.intent === 'Service');
+          console.log('Has service type:', hasServiceType);
+          return hasServiceType;
+        } catch (e) {
+          console.error('Error parsing payload:', e, item);
           return false;
         }
       });
       
+      console.log('Filtered service data:', serviceData);
       setServiceSubmissions(serviceData);
     } catch (error) {
       console.error('Error fetching service submissions:', error);
