@@ -369,10 +369,7 @@ const FeaturedProperties = ({
     isNew: true
   }];
 
-  // Use real database properties if available, otherwise fall back to default
-  const properties: FeaturedProperty[] = propsProperties ?? (
-    featuredProperties.length > 0 ? featuredProperties : defaultProperties
-  );
+  const properties: FeaturedProperty[] = propsProperties ?? featuredProperties;
 
   // Compute available types dynamically so it works if properties change in the future
   const availableTypes = useMemo(() => {
