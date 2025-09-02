@@ -113,7 +113,8 @@ export const PageEditor: React.FC<PageEditorProps> = ({
         content: page.content || {}
       });
       fetchPageSections(page.id);
-    } else if (!page && isCreating) {
+    } else if (!page && isCreating && sections.length === 0) {
+      // Only reset form if we're creating a new page AND don't have sections yet
       console.log('Creating new page, resetting form but keeping sections...');
       setFormData({
         title: '',
@@ -124,9 +125,8 @@ export const PageEditor: React.FC<PageEditorProps> = ({
         is_published: false,
         content: {}
       });
-      // Don't reset sections here - they should persist during page creation
     }
-  }, [page?.id, isCreating]); // Changed dependency to page?.id instead of page
+  }, [page?.id, isCreating, sections.length]); // Add sections.length to prevent unnecessary resets
 
   const fetchPageSections = async (pageId: string) => {
     try {
@@ -401,6 +401,7 @@ export const PageEditor: React.FC<PageEditorProps> = ({
   };
 
   const editSection = (section: PageSection) => {
+    console.log('Opening section editor for:', section);
     setEditingSection(section);
   };
 
@@ -462,7 +463,7 @@ export const PageEditor: React.FC<PageEditorProps> = ({
                 <strong>Debug Info:</strong> {sections.length} sections in state
                 {sections.length > 0 && (
                   <span className="ml-2">
-                    ({sections.filter(s => s.id.startsWith('temp_')).length} temporary)
+                    ({sections.filter(s => s.id.startsWith('temp_')).length} temporary, {sections.filter(s => !s.id.startsWith('temp_')).length} saved)
                   </span>
                 )}
               </p>
