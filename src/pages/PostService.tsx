@@ -264,7 +264,7 @@ const PostService = () => {
       };
 
       // Insert into property_submissions table with service-specific data
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from('property_submissions')
         .insert({
           user_id: user?.id,
@@ -273,16 +273,15 @@ const PostService = () => {
           state: formData.state,
           status: 'new',
           payload: submissionPayload
-        })
-        .select()
-        .single();
+        });
 
       if (error) {
+        console.error('Submission error:', error);
         throw error;
       }
       
-      // Generate reference ID from database ID
-      const refId = `REQ${data.id.slice(-6).toUpperCase()}`;
+      // Generate reference ID
+      const refId = `REQ${Date.now().toString().slice(-6)}`;
       setReferenceId(refId);
       setShowSuccess(true);
       
