@@ -54,14 +54,14 @@ const formatPrice = (price: number | null, intent?: string) => {
 };
 
 const MatchCard: React.FC<{ match: RequirementMatch }> = ({ match }) => (
-  <Card className="hover:shadow-md transition-shadow cursor-pointer">
-    <CardContent className="p-3">
-      <div className="flex gap-3">
-        <div className="relative w-16 h-12 flex-shrink-0">
+  <Card className="hover:shadow-md transition-all duration-200 cursor-pointer border border-border/50 bg-card/50 backdrop-blur-sm">
+    <CardContent className="p-4 h-[120px]">
+      <div className="flex gap-4 h-full">
+        <div className="relative w-20 h-16 flex-shrink-0">
           <img 
             src={match.image || '/placeholder.svg'} 
             alt={match.title}
-            className="w-full h-full object-cover rounded-md"
+            className="w-full h-full object-cover rounded-lg border border-border/20"
             onError={(e) => {
               (e.target as HTMLImageElement).src = '/placeholder.svg';
             }}
@@ -69,49 +69,53 @@ const MatchCard: React.FC<{ match: RequirementMatch }> = ({ match }) => (
           {match.intent && (
             <Badge 
               variant="secondary" 
-              className="absolute -top-1 -right-1 text-xs px-1 py-0"
+              className="absolute -top-1 -right-1 text-xs px-1.5 py-0.5 bg-primary text-primary-foreground"
             >
               {match.intent}
             </Badge>
           )}
         </div>
         
-        <div className="flex-1 min-w-0">
-          <h4 className="font-medium text-sm leading-tight mb-1 truncate">
-            {match.title}
-          </h4>
-          
-          <div className="flex items-center gap-1 text-xs text-muted-foreground mb-1">
-            <MapPin className="w-3 h-3" />
-            <span className="truncate">{match.location}</span>
-          </div>
-          
-          <div className="flex items-center justify-between">
-            <div className="text-sm font-semibold text-primary">
+        <div className="flex-1 min-w-0 flex flex-col justify-between">
+          <div className="space-y-1">
+            <h4 className="font-semibold text-sm leading-tight truncate text-foreground">
+              {match.title}
+            </h4>
+            
+            <div className="flex items-center gap-1 text-xs text-muted-foreground">
+              <MapPin className="w-3 h-3 flex-shrink-0" />
+              <span className="truncate">{match.location}</span>
+            </div>
+            
+            <div className="text-sm font-bold text-primary truncate">
               {match.price ? formatPrice(match.price, match.intent.toLowerCase()) : 'Contact for Price'}
               {match.intent === 'Lease' && match.price && '/month'}
             </div>
+          </div>
+          
+          <div className="flex items-center justify-between mt-2">
+            <div className="flex gap-1 min-h-[20px]">
+              {match.badges && match.badges.length > 0 && (
+                <>
+                  {match.badges.slice(0, 2).map((badge, index) => (
+                    <Badge key={index} variant="outline" className="text-xs px-1.5 py-0.5 bg-secondary/50">
+                      {badge}
+                    </Badge>
+                  ))}
+                </>
+              )}
+            </div>
             
-            <div className="flex gap-1">
-              <Button size="sm" variant="outline" className="h-6 px-2 text-xs">
+            <div className="flex gap-1 flex-shrink-0">
+              <Button size="sm" variant="outline" className="h-7 px-2 text-xs border-primary/20 hover:border-primary hover:bg-primary/5">
                 <Eye className="w-3 h-3 mr-1" />
                 View
               </Button>
-              <Button size="sm" variant="ghost" className="h-6 w-6 p-0">
+              <Button size="sm" variant="ghost" className="h-7 w-7 p-0 hover:bg-primary/10">
                 <MessageCircle className="w-3 h-3" />
               </Button>
             </div>
           </div>
-          
-          {match.badges && match.badges.length > 0 && (
-            <div className="flex gap-1 mt-1">
-              {match.badges.slice(0, 2).map((badge, index) => (
-                <Badge key={index} variant="outline" className="text-xs px-1 py-0">
-                  {badge}
-                </Badge>
-              ))}
-            </div>
-          )}
         </div>
       </div>
     </CardContent>
