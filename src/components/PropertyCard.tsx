@@ -185,34 +185,24 @@ const PropertyCard = ({
     return resolveUrlFromString((image as any)?.url) || '/placeholder.svg';
   };
 
-  return (
+   return (
     <Card className="w-full overflow-hidden card-border hover-lift cursor-pointer bg-white border-2 border-primary" onClick={() => navigate(`/property/${id}`, { state: propertyForPage })}>
-      <div className="relative">
-        <div className="h-24 overflow-hidden">
-          <img
-            src={getImageUrl()}
-            alt={title}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-            onError={(e) => {
-              e.currentTarget.src = '/placeholder.svg';
-              e.currentTarget.alt = 'Image not available';
-            }}
-          />
-        </div>
-        <FavoriteButton 
-          propertyId={id}
-          size="sm"
-          className="absolute top-2 right-2 bg-white/90 hover:bg-white"
-        />
-        {isNew && (
-          <div className="absolute top-2 left-2 bg-red-600 text-white px-2 py-1 rounded-md text-xs font-medium">
-            New
-          </div>
-        )}
-      </div>
-      
       <CardContent className="p-3">
-        <h3 className="font-semibold text-xs mb-1 h-4 truncate text-gray-900">{title}</h3>
+        <div className="flex justify-between items-start mb-2">
+          <h3 className="font-semibold text-xs mb-1 h-4 truncate text-gray-900">{title}</h3>
+          <div className="flex items-center gap-1">
+            <FavoriteButton 
+              propertyId={id}
+              size="sm"
+              className="bg-white/90 hover:bg-white"
+            />
+            {isNew && (
+              <div className="bg-red-600 text-white px-2 py-1 rounded-md text-xs font-medium">
+                New
+              </div>
+            )}
+          </div>
+        </div>
         
         <div className="flex items-center text-gray-500 mb-2">
           <MapPin size={10} className="mr-1 flex-shrink-0" />
