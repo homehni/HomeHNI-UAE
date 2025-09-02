@@ -14,8 +14,6 @@ import { useFormSubmission } from "@/hooks/useFormSubmission";
 import { Loader2, CheckCircle } from "lucide-react";
 import Marquee from "@/components/Marquee";
 import Header from "@/components/Header";
-import { SearchResultsPanel } from "@/components/SearchResultsPanel";
-import { usePropertySearch, PropertySearchQuery } from "@/hooks/usePropertySearch";
 
 interface FormData {
   name: string;
@@ -64,16 +62,6 @@ const PostService = () => {
 
   const { submissionState, setSubmitting, showSuccessToast, showErrorToast, updateProgress } = useFormSubmission();
   const { toast } = useToast();
-  
-  const {
-    results,
-    isLoading: searchLoading,
-    error: searchError,
-    debouncedSearchProperties,
-    debouncedSearchServices,
-    loadMore,
-    clearResults
-  } = usePropertySearch();
 
   // Load states and cities data
   useEffect(() => {
@@ -238,84 +226,6 @@ const PostService = () => {
     }
   };
 
-  // Debounced search effect
-  const searchQuery = useMemo<PropertySearchQuery>(() => ({
-    intent: formData.intent.toLowerCase() as 'buy' | 'sell' | 'lease' | 'rent' | 'new-launch' | 'pg' | 'commercial' | 'plots' | 'projects' | '',
-    propertyType: formData.propertyType,
-    country: formData.country,
-    state: formData.state,
-    city: formData.city,
-    budgetMin: formData.budgetRange[0],
-    budgetMax: formData.budgetRange[1]
-  }), [formData.intent, formData.propertyType, formData.country, formData.state, formData.city, formData.budgetRange]);
-
-  useEffect(() => {
-    if (formData.intent === 'Service') {
-      if (formData.serviceCategory && formData.country && formData.state) {
-        debouncedSearchServices(formData.serviceCategory, {
-          country: formData.country,
-          state: formData.state,
-          city: formData.city
-        });
-      } else {
-        clearResults();
-      }
-    } else if (['Buy', 'Sell', 'Lease'].includes(formData.intent)) {
-      // Map form selections to main search bar tabs exactly like the homepage
-      let searchBarTab = '';
-      
-      switch (formData.intent) {
-        case 'Buy':
-          // Map property types to search bar tabs
-          if (formData.propertyType === 'Plot/Land' || formData.propertyType === 'Agricultural Land') {
-            searchBarTab = 'plots';
-          } else if (['Office', 'Retail/Shop', 'Showroom', 'Industrial/Warehouse', 'Co-working'].includes(formData.propertyType)) {
-            searchBarTab = 'commercial';
-          } else {
-            searchBarTab = 'buy'; // Residential properties
-          }
-          break;
-        case 'Sell':
-          // For sell, we still need to categorize by property type
-          if (formData.propertyType === 'Plot/Land' || formData.propertyType === 'Agricultural Land') {
-            searchBarTab = 'plots';
-          } else if (['Office', 'Retail/Shop', 'Showroom', 'Industrial/Warehouse', 'Co-working'].includes(formData.propertyType)) {
-            searchBarTab = 'commercial';
-          } else {
-            searchBarTab = 'buy'; // Treat sell as buy for filtering purposes
-          }
-          break;
-        case 'Lease':
-          if (['Office', 'Retail/Shop', 'Showroom', 'Industrial/Warehouse', 'Co-working'].includes(formData.propertyType)) {
-            searchBarTab = 'commercial';
-          } else {
-            searchBarTab = 'rent'; // Residential lease
-          }
-          break;
-      }
-      
-      // Use the main search filtering logic with location + tab
-      const searchLocation = `${formData.city}, ${formData.state}`;
-      
-      // Create a query that matches the main search bar format
-      const mainSearchQuery = {
-        intent: searchBarTab as 'buy' | 'rent' | 'commercial' | 'plots' | 'new-launch' | 'pg' | 'projects',
-        propertyType: '', // Let the tab handle the filtering
-        country: formData.country,
-        state: formData.state,
-        city: formData.city,
-        budgetMin: formData.budgetRange[0],
-        budgetMax: formData.budgetRange[1]
-      };
-      
-      if (mainSearchQuery.intent && formData.country && formData.state) {
-        debouncedSearchProperties(mainSearchQuery);
-      } else {
-        clearResults();
-      }
-    }
-  }, [formData.intent, formData.serviceCategory, formData.propertyType, formData.country, formData.state, formData.city, formData.budgetRange, debouncedSearchProperties, debouncedSearchServices, clearResults]);
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -427,9 +337,6 @@ const PostService = () => {
     );
   }
 
-  const isPropertySearch = ['Buy', 'Sell', 'Lease'].includes(formData.intent);
-  const searchType = formData.intent === 'Service' ? 'service' : 'property';
-
   return (
     <div className="min-h-screen bg-background">
       <Marquee />
@@ -449,13 +356,10 @@ const PostService = () => {
 
       {/* Main Content */}
       <section className="py-12 px-4">
-        <div className="container mx-auto max-w-7xl">
-          <div className="grid lg:grid-cols-2 gap-8">
-            {/* Form Section */}
-            <div>
-              <Card className="shadow-xl">
-                <CardContent className="p-8">
-                  <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="container mx-auto max-w-4xl">
+          <Card className="shadow-xl">
+            <CardContent className="p-8">
+              <form onSubmit={handleSubmit} className="space-y-6">
                     {/* Personal Details */}
                     <div className="grid md:grid-cols-2 gap-6">
                       <div>
@@ -588,7 +492,7 @@ const PostService = () => {
                     </div>
 
                     {/* Conditional Property Type / Service Category */}
-                    {isPropertySearch && (
+                    {['Buy', 'Sell', 'Lease'].includes(formData.intent) && (
                       <div>
                         <Label className="text-base font-medium">Property Type *</Label>
                         <Select value={formData.propertyType} onValueChange={(value) => handleInputChange("propertyType", value)}>
@@ -740,25 +644,11 @@ const PostService = () => {
                     )}
                   </form>
                 </CardContent>
-              </Card>
+               </Card>
             </div>
-
-            {/* Search Results Panel */}
-            <div className="lg:sticky lg:top-4 h-fit">
-              <SearchResultsPanel
-                results={results}
-                isLoading={searchLoading}
-                error={searchError}
-                searchType={searchType}
-                onLoadMore={loadMore}
-                onClearFilters={clearResults}
-              />
-            </div>
-          </div>
+          </section>
         </div>
-      </section>
-    </div>
-  );
+      );
 };
 
 export default PostService;
