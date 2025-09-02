@@ -109,12 +109,12 @@ export const PropertyHero: React.FC<PropertyHeroProps> = ({
                 className="col-span-3 relative cursor-pointer group"
                 onClick={() => handleImageClick(0)}
               >
-                <img
-                  src={property.images?.[0] || '/placeholder-property.jpg'}
-                  alt={property.title}
-                  className="w-full h-full object-cover rounded-xl transition-opacity group-hover:opacity-90"
-                  loading="lazy"
-                />
+                  <img
+                    src={property.images?.[0] || '/placeholder.svg'}
+                    alt={property.title}
+                    className="w-full h-full object-cover rounded-xl transition-opacity group-hover:opacity-90"
+                    loading="lazy"
+                  />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-xl" />
                 <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition-all duration-200 flex items-center justify-center rounded-xl">
                   <Image className="h-8 w-8 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
@@ -128,7 +128,7 @@ export const PropertyHero: React.FC<PropertyHeroProps> = ({
                   onClick={() => handleImageClick(1)}
                 >
                   <img
-                    src={property.images?.[1] || '/placeholder-property.jpg'}
+                    src={property.images?.[1] || '/placeholder.svg'}
                     alt={`${property.title} - Image 2`}
                     className="w-full h-full object-cover rounded-xl transition-opacity group-hover:opacity-90"
                     loading="lazy"
@@ -142,7 +142,7 @@ export const PropertyHero: React.FC<PropertyHeroProps> = ({
                   onClick={() => handleImageClick(2)}
                 >
                   <img
-                    src={property.images?.[2] || '/placeholder-property.jpg'}
+                    src={property.images?.[2] || '/placeholder.svg'}
                     alt={`${property.title} - Image 3`}
                     className="w-full h-full object-cover rounded-xl transition-opacity group-hover:opacity-90"
                     loading="lazy"
