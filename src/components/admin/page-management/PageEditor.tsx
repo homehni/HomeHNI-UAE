@@ -391,8 +391,57 @@ export const PageEditor: React.FC<PageEditorProps> = ({
     }
   }, [onAddSectionReady, stableSafeAddSection]);
 
-  const removeSection = (sectionId: string) => {
-    setSections(sections.filter(s => s.id !== sectionId));
+  const removeSection = async (sectionId: string) => {
+    console.log('=== Removing section ===');
+    console.log('Section ID to remove:', sectionId);
+    console.log('Current sections:', sections);
+    
+    // Check if this is a saved section (not temporary)
+    const sectionToRemove = sections.find(s => s.id === sectionId);
+    
+    if (sectionToRemove && !sectionToRemove.id.startsWith('temp_') && sectionToRemove.page_id) {
+      // This is a saved section, remove from database
+      try {
+        const { error } = await supabase
+          .from('page_sections')
+          .delete()
+          .eq('id', sectionId);
+          
+        if (error) {
+          console.error('Error deleting section from database:', error);
+          toast({
+            title: 'Error',
+            description: 'Failed to delete section from database',
+            variant: 'destructive'
+          });
+          return;
+        }
+        
+        toast({
+          title: 'Success',
+          description: 'Section deleted successfully'
+        });
+      } catch (error) {
+        console.error('Error deleting section:', error);
+        toast({
+          title: 'Error',
+          description: 'Failed to delete section',
+          variant: 'destructive'
+        });
+        return;
+      }
+    } else {
+      // Temporary section, just show success message
+      toast({
+        title: 'Success',
+        description: 'Section removed successfully'
+      });
+    }
+    
+    // Remove from local state
+    const updatedSections = sections.filter(s => s.id !== sectionId);
+    console.log('Updated sections after removal:', updatedSections);
+    setSections(updatedSections);
   };
 
   const updateSection = (updatedSection: PageSection) => {
