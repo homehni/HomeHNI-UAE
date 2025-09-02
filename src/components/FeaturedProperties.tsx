@@ -30,9 +30,12 @@ const FeaturedProperties = ({
   const [featuredProperties, setFeaturedProperties] = useState<FeaturedProperty[]>([]);
   const [sectionHeader, setSectionHeader] = useState<ContentElement | null>(null);
   
-  // Fetch real featured properties from database
+  // Fetch real featured properties from database with slight delay for better UX
   useEffect(() => {
-    const fetchContent = async () => {
+    let propertiesChannel: any = null;
+    
+    // Defer heavy operations to allow initial render
+    const timer = setTimeout(async () => {
       try {
         // Get featured properties from both sources
         // 1. From content_elements table (existing property_1 to property_19)
@@ -105,65 +108,66 @@ const FeaturedProperties = ({
         // Get header content
         const headerContent = await contentElementsService.getSectionContent('homepage', 'featured_properties', 'featured_properties_header');
         setSectionHeader(headerContent);
+
+        // Set up real-time subscription for featured properties after initial load
+        propertiesChannel = supabase
+          .channel('featured-properties-realtime')
+          .on(
+            'postgres_changes',
+            {
+              event: '*',
+              schema: 'public',
+              table: 'properties'
+            },
+            (payload) => {
+              console.log('Property change detected:', payload);
+
+              if (payload.eventType === 'DELETE') {
+                const deletedId = payload.old?.id;
+                if (deletedId) {
+                  setFeaturedProperties(prev => prev.filter(p => p.id !== deletedId));
+                }
+                return;
+              }
+
+              const record = payload.new as any;
+              if (!record) return;
+
+              const qualifies = record.status === 'approved' && record.is_featured === true;
+              if (qualifies) {
+                const newProperty = {
+                  id: record.id,
+                  title: record.title,
+                  location: `${record.locality}, ${record.city}`,
+                  price: `₹${(record.expected_price / 100000).toFixed(1)}L`,
+                  area: `${record.super_area} sq ft`,
+                  bedrooms: parseInt(record.bhk_type?.replace(/[^\d]/g, '') || '0'),
+                  bathrooms: record.bathrooms || 0,
+                  image: record.images?.[0] || 'photo-1560518883-ce09059eeffa',
+                  propertyType: record.property_type?.replace(/_/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase()) || 'Property',
+                  isNew: true
+                };
+                setFeaturedProperties(prev => {
+                  const without = prev.filter(p => p.id !== newProperty.id);
+                  return [newProperty, ...without].slice(0, 50);
+                });
+              } else {
+                // If it no longer qualifies, remove it from the list
+                setFeaturedProperties(prev => prev.filter(p => p.id !== record.id));
+              }
+            }
+          )
+          .subscribe();
       } catch (error) {
         console.error('Error fetching featured properties:', error);
       }
-    };
-
-    fetchContent();
-
-    // Set up real-time subscription for featured properties
-    const propertiesChannel = supabase
-      .channel('featured-properties-realtime')
-      .on(
-        'postgres_changes',
-        {
-          event: '*',
-          schema: 'public',
-          table: 'properties'
-        },
-        (payload) => {
-          console.log('Property change detected:', payload);
-
-          if (payload.eventType === 'DELETE') {
-            const deletedId = payload.old?.id;
-            if (deletedId) {
-              setFeaturedProperties(prev => prev.filter(p => p.id !== deletedId));
-            }
-            return;
-          }
-
-          const record = payload.new as any;
-          if (!record) return;
-
-          const qualifies = record.status === 'approved' && record.is_featured === true;
-          if (qualifies) {
-            const newProperty = {
-              id: record.id,
-              title: record.title,
-              location: `${record.locality}, ${record.city}`,
-              price: `₹${(record.expected_price / 100000).toFixed(1)}L`,
-              area: `${record.super_area} sq ft`,
-              bedrooms: parseInt(record.bhk_type?.replace(/[^\d]/g, '') || '0'),
-              bathrooms: record.bathrooms || 0,
-              image: record.images?.[0] || 'photo-1560518883-ce09059eeffa',
-              propertyType: record.property_type?.replace(/_/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase()) || 'Property',
-              isNew: true
-            };
-            setFeaturedProperties(prev => {
-              const without = prev.filter(p => p.id !== newProperty.id);
-              return [newProperty, ...without].slice(0, 50);
-            });
-          } else {
-            // If it no longer qualifies, remove it from the list
-            setFeaturedProperties(prev => prev.filter(p => p.id !== record.id));
-          }
-        }
-      )
-      .subscribe();
+    }, 100);
 
     return () => {
-      supabase.removeChannel(propertiesChannel);
+      clearTimeout(timer);
+      if (propertiesChannel) {
+        supabase.removeChannel(propertiesChannel);
+      }
     };
   }, []);
 

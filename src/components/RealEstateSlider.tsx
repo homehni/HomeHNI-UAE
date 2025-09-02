@@ -122,7 +122,7 @@ const RealEstateSlider = () => {
                 onClick={() => handleCompanyClick(company.id)}
               >
                 <div className="h-32 overflow-hidden bg-white flex items-center justify-center p-4">
-                  <img src={company.logo} alt={`${company.name} logo`} className="w-full h-full object-contain" />
+                  <img src={company.logo} alt={`${company.name} logo`} loading="lazy" className="w-full h-full object-contain" />
                 </div>
                 <div className="p-4">
                   <h3 className="text-sm font-bold text-foreground text-center mb-1">
