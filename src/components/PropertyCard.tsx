@@ -7,7 +7,6 @@ import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { FavoriteButton } from '@/components/FavoriteButton';
 import { ContactOwnerModal } from '@/components/ContactOwnerModal';
-import { PropertyImageModal } from '@/components/PropertyImageModal';
 import { supabase } from '@/integrations/supabase/client';
 
 interface PropertyCardProps {
@@ -39,7 +38,6 @@ const PropertyCard = ({
 }: PropertyCardProps) => {
   const navigate = useNavigate();
   const [showContactModal, setShowContactModal] = useState(false);
-  const [showImageModal, setShowImageModal] = useState(false);
 
   const parsePriceToNumber = (priceStr: string) => {
     const lower = priceStr.toLowerCase();
@@ -195,13 +193,7 @@ const PropertyCard = ({
   return (
     <Card className="w-full overflow-hidden card-border hover-lift cursor-pointer bg-white border-2 border-primary" onClick={() => navigate(`/property/${id}`, { state: propertyForPage })}>
       <div className="relative">
-        <div 
-          className="h-24 overflow-hidden cursor-pointer"
-          onClick={(e) => {
-            e.stopPropagation();
-            setShowImageModal(true);
-          }}
-        >
+        <div className="h-24 overflow-hidden">
           <img
             src={getImageUrl()}
             alt={title}
@@ -213,11 +205,6 @@ const PropertyCard = ({
               e.currentTarget.alt = 'Image not available';
             }}
           />
-          {imagesForPage.length > 1 && (
-            <div className="absolute bottom-2 right-2 bg-black/70 text-white px-2 py-1 rounded text-xs">
-              {imagesForPage.length} photos
-            </div>
-          )}
         </div>
         <FavoriteButton 
           propertyId={id}
@@ -264,14 +251,6 @@ const PropertyCard = ({
         isOpen={showContactModal}
         onClose={() => setShowContactModal(false)}
         propertyId={id}
-        propertyTitle={title}
-      />
-
-      <PropertyImageModal
-        images={imagesForPage}
-        isOpen={showImageModal}
-        onClose={() => setShowImageModal(false)}
-        initialIndex={0}
         propertyTitle={title}
       />
     </Card>
