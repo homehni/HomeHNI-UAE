@@ -8,39 +8,6 @@ import { contentElementsService, ContentElement } from '@/services/contentElemen
 import { fetchFeaturedProperties } from '@/services/propertyService';
 import { supabase } from '@/integrations/supabase/client';
 
-// Helpers for folder mapping and deterministic image selection
-const typeToFolder = (type: string) => {
-  const t = (type || '').toLowerCase().trim();
-  const map: Record<string, string> = {
-    apartment: 'apartment',
-    flat: 'apartment',
-    villa: 'villa',
-    commercial: 'commercial',
-    house: 'house',
-    'independent house': 'independent-house',
-    penthouse: 'penthouse',
-    plot: 'plot',
-    'agriculture lands': 'agricultural-lands',
-    'agricultural lands': 'agricultural-lands',
-    farmhouse: 'farmhouse',
-    'farm house': 'farmhouse',
-  };
-  return map[t] || t.replace(/\s+/g, '-');
-};
-const knownFolders = [
-  'apartment',
-  'villa',
-  'commercial',
-  'house',
-  'independent-house',
-  'penthouse',
-  'plot',
-  'farmhouse',
-  'agricultural-lands'
-];
-const hashString = (s: string) => s.split('').reduce((a, c) => (a + c.charCodeAt(0)) | 0, 0);
-
-
 // Minimal type for featured properties
  type FeaturedProperty = {
    id: string;
@@ -97,67 +64,33 @@ const FeaturedProperties = ({
           return validPropertyIdSet.has(refId);
         });
 
-        // List images from storage folders for fallbacks
-        const listResults = await Promise.all(
-          knownFolders.map(async (folder) => {
-            const { data } = await supabase.storage
-              .from('property-media')
-              .list(`content-images/${folder}`, { limit: 100 });
-            const files = (data || [])
-              .filter((f) => /\.(png|jpe?g|webp|avif|gif)$/i.test(f.name))
-              .map((f) => `content-images/${folder}/${f.name}`);
-            return [folder, files] as const;
-          })
-        );
-        const folderImages = Object.fromEntries(listResults) as Record<string, string[]>;
-        const pickFolderImage = (folder: string, id: string) => {
-          const arr = folderImages[folder];
-          if (!arr || arr.length === 0) return undefined;
-          const idx = Math.abs(hashString(id)) % arr.length;
-          return arr[idx];
-        };
-
         // Transform filtered content_elements to FeaturedProperty format
-        const contentElementProperties = filteredContentElements.map(element => {
-          const typeRaw = element.content?.propertyType || element.content?.property_type || '';
-          const folder = typeToFolder(typeRaw.replace(/_/g, ' '));
-          const chosen = (!element.images?.[0] && !element.content?.image)
-            ? pickFolderImage(folder, element.content?.id || element.id)
-            : undefined;
-          return {
-            id: element.content?.id || element.id,
-            title: element.title || element.content?.title || 'Property',
-            location: element.content?.location || 'Location',
-            price: element.content?.price || '₹0',
-            area: element.content?.area || element.content?.size || '0 sq ft',
-            bedrooms: element.content?.bedrooms || parseInt(element.content?.bhk?.replace(/[^\d]/g, '') || '0'),
-            bathrooms: element.content?.bathrooms || 0,
-            image: element.images?.[0] || element.content?.image || chosen || '/placeholder.svg',
-            propertyType: typeRaw || 'Property',
-            isNew: element.content?.isNew || false
-          } as FeaturedProperty;
-        });
+        const contentElementProperties = filteredContentElements.map(element => ({
+          id: element.content?.id || element.id,
+          title: element.title || element.content?.title || 'Property',
+          location: element.content?.location || 'Location',
+          price: element.content?.price || '₹0',
+          area: element.content?.area || element.content?.size || '0 sq ft',
+          bedrooms: element.content?.bedrooms || parseInt(element.content?.bhk?.replace(/[^\d]/g, '') || '0'),
+          bathrooms: element.content?.bathrooms || 0,
+          image: element.images?.[0] || element.content?.image || '/placeholder.svg',
+          propertyType: element.content?.propertyType || 'Property',
+          isNew: element.content?.isNew || false
+        }));
         
         // Transform properties table data to FeaturedProperty format
-        const transformedProperties = propertiesData.map(property => {
-          const typeHuman = property.property_type?.replace(/_/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase()) || 'Property';
-          const folder = typeToFolder(typeHuman);
-          const chosen = (!property.images || property.images.length === 0)
-            ? pickFolderImage(folder, property.id)
-            : undefined;
-          return {
-            id: property.id,
-            title: property.title,
-            location: `${property.locality}, ${property.city}`,
-            price: `₹${(property.expected_price / 100000).toFixed(1)}L`,
-            area: `${property.super_area || 0} sq ft`,
-            bedrooms: parseInt(property.bhk_type?.replace(/[^\d]/g, '') || '0'),
-            bathrooms: property.bathrooms || 0,
-            image: property.images?.[0] || chosen || '/placeholder.svg',
-            propertyType: typeHuman,
-            isNew: new Date(property.created_at) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
-          } as FeaturedProperty;
-        });
+        const transformedProperties = propertiesData.map(property => ({
+          id: property.id,
+          title: property.title,
+          location: `${property.locality}, ${property.city}`,
+          price: `₹${(property.expected_price / 100000).toFixed(1)}L`,
+          area: `${property.super_area || 0} sq ft`,
+          bedrooms: parseInt(property.bhk_type?.replace(/[^\d]/g, '') || '0'),
+          bathrooms: property.bathrooms || 0,
+          image: property.images?.[0] || 'photo-1560518883-ce09059eeffa',
+          propertyType: property.property_type?.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) || 'Property',
+          isNew: new Date(property.created_at) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) // New if created within last 7 days
+        }));
 
         // Combine both sources, with newer properties first
         const allProperties = [...transformedProperties, ...contentElementProperties];
