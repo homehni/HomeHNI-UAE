@@ -54,14 +54,14 @@ const formatPrice = (price: number | null, intent?: string) => {
 };
 
 const MatchCard: React.FC<{ match: RequirementMatch }> = ({ match }) => (
-  <Card className="hover:shadow-md transition-shadow cursor-pointer">
-    <CardContent className="p-3">
-      <div className="flex gap-3">
-        <div className="relative w-16 h-12 flex-shrink-0">
+  <Card className="hover:shadow-md transition-all duration-200 border-l-2 border-l-transparent hover:border-l-primary">
+    <CardContent className="p-4">
+      <div className="flex gap-4">
+        <div className="relative w-20 h-16 flex-shrink-0">
           <img 
             src={match.image || '/placeholder.svg'} 
             alt={match.title}
-            className="w-full h-full object-cover rounded-md"
+            className="w-full h-full object-cover rounded-lg"
             onError={(e) => {
               (e.target as HTMLImageElement).src = '/placeholder.svg';
             }}
@@ -69,7 +69,7 @@ const MatchCard: React.FC<{ match: RequirementMatch }> = ({ match }) => (
           {match.intent && (
             <Badge 
               variant="secondary" 
-              className="absolute -top-1 -right-1 text-xs px-1 py-0"
+              className="absolute -top-1 -right-1 text-xs px-1.5 py-0.5 font-medium"
             >
               {match.intent}
             </Badge>
@@ -77,13 +77,23 @@ const MatchCard: React.FC<{ match: RequirementMatch }> = ({ match }) => (
         </div>
         
         <div className="flex-1 min-w-0">
-          <h4 className="font-medium text-sm leading-tight mb-1 truncate">
+          <h4 className="font-semibold text-sm leading-tight mb-2 truncate text-foreground">
             {match.title}
           </h4>
           
-          <div className="flex items-center gap-1 text-xs text-muted-foreground mb-1">
-            <MapPin className="w-3 h-3" />
-            <span className="truncate">{match.location}</span>
+          <div className="space-y-2 mb-3">
+            <div className="flex items-center gap-2 text-xs text-muted-foreground">
+              <MapPin className="w-3 h-3" />
+              <span className="truncate">{match.location}</span>
+            </div>
+            
+            {match.rating && (
+              <div className="flex items-center gap-2 text-xs">
+                <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
+                <span className="font-medium">{match.rating}</span>
+                <span className="text-muted-foreground">rating</span>
+              </div>
+            )}
           </div>
           
           <div className="flex items-center justify-between">
@@ -93,20 +103,20 @@ const MatchCard: React.FC<{ match: RequirementMatch }> = ({ match }) => (
             </div>
             
             <div className="flex gap-1">
-              <Button size="sm" variant="outline" className="h-6 px-2 text-xs">
+              <Button size="sm" variant="outline" className="h-7 px-2 text-xs">
                 <Eye className="w-3 h-3 mr-1" />
                 View
               </Button>
-              <Button size="sm" variant="ghost" className="h-6 w-6 p-0">
+              <Button size="sm" variant="ghost" className="h-7 w-7 p-0">
                 <MessageCircle className="w-3 h-3" />
               </Button>
             </div>
           </div>
           
           {match.badges && match.badges.length > 0 && (
-            <div className="flex gap-1 mt-1">
-              {match.badges.slice(0, 2).map((badge, index) => (
-                <Badge key={index} variant="outline" className="text-xs px-1 py-0">
+            <div className="flex gap-1 mt-2">
+              {match.badges.slice(0, 3).map((badge, index) => (
+                <Badge key={index} variant="outline" className="text-xs px-2 py-0">
                   {badge}
                 </Badge>
               ))}
@@ -149,6 +159,7 @@ export const RequirementMatches: React.FC<RequirementMatchesProps> = ({
   const [matches, setMatches] = useState<RequirementMatch[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isExpanded, setIsExpanded] = useState(false);
 
   const fetchMatches = async () => {
     setIsLoading(true);
@@ -159,7 +170,6 @@ export const RequirementMatches: React.FC<RequirementMatchesProps> = ({
       
       if (payload.intent === 'Service') {
         // For service requirements, find matching service providers
-        // This is a mock implementation - you can enhance with real service providers
         const mockServices: RequirementMatch[] = [
           {
             id: '1',
@@ -182,6 +192,17 @@ export const RequirementMatches: React.FC<RequirementMatchesProps> = ({
             badges: ['Trusted'],
             contact: { phone: '+91 98765 43211', whatsapp: true },
             image: '/placeholder.svg'
+          },
+          {
+            id: '3',
+            title: 'Reliable Home Solutions',
+            location: `${payload.city}, ${payload.state}`,
+            type: payload.serviceType || 'Service',
+            intent: 'Service',
+            rating: 4.7,
+            badges: ['Top Rated'],
+            contact: { phone: '+91 98765 43212', whatsapp: true },
+            image: '/placeholder.svg'
           }
         ];
         
@@ -193,7 +214,7 @@ export const RequirementMatches: React.FC<RequirementMatchesProps> = ({
           .select('*')
           .eq('status', 'approved')
           .ilike('city', `%${payload.city}%`)
-          .limit(5);
+          .limit(8);
 
         if (propertyError) throw propertyError;
 
@@ -227,56 +248,80 @@ export const RequirementMatches: React.FC<RequirementMatchesProps> = ({
     fetchMatches();
   }, [requirement]);
 
+  const displayedMatches = isExpanded ? matches : matches.slice(0, 3);
+
   return (
-    <Card className="mt-4">
-      <CardHeader className="pb-3">
+    <Card className="border-l-4 border-l-primary/30 shadow-sm">
+      <CardHeader className="pb-4 bg-gradient-to-r from-primary/5 to-transparent">
         <div className="flex items-center justify-between">
-          <CardTitle className="text-sm font-medium flex items-center gap-2">
-            <Building className="w-4 h-4" />
-            Real-time Matches ({matches.length})
-          </CardTitle>
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
+              <Building className="w-5 h-5 text-primary" />
+            </div>
+            <div>
+              <CardTitle className="text-base font-semibold text-foreground">
+                Real-time Matches
+              </CardTitle>
+              <p className="text-sm text-muted-foreground">
+                {matches.length} {matches.length === 1 ? 'match' : 'matches'} found
+              </p>
+            </div>
+          </div>
           <Button 
             variant="ghost" 
             size="sm" 
             onClick={fetchMatches}
-            className="h-6 w-6 p-0"
+            className="h-8 w-8 p-0 hover:bg-primary/10"
           >
-            <RefreshCw className="w-3 h-3" />
+            <RefreshCw className="w-4 h-4" />
           </Button>
         </div>
-        <p className="text-xs text-muted-foreground">
-          Properties and services matching your requirements
-        </p>
       </CardHeader>
       
       <CardContent className="pt-0">
         {isLoading ? (
           <LoadingSkeleton />
         ) : error ? (
-          <div className="text-center py-4">
-            <p className="text-xs text-destructive mb-2">{error}</p>
+          <div className="text-center py-6">
+            <div className="w-12 h-12 bg-destructive/10 rounded-full flex items-center justify-center mx-auto mb-3">
+              <ExternalLink className="w-6 h-6 text-destructive" />
+            </div>
+            <p className="text-sm text-destructive mb-3">{error}</p>
             <Button variant="outline" size="sm" onClick={fetchMatches}>
+              <RefreshCw className="w-4 h-4 mr-2" />
               Try Again
             </Button>
           </div>
         ) : matches.length === 0 ? (
-          <div className="text-center py-4">
-            <ExternalLink className="w-8 h-8 mx-auto mb-2 opacity-50" />
-            <p className="text-xs text-muted-foreground">No matches found yet</p>
-            <p className="text-xs text-muted-foreground">We'll notify you when we find matches</p>
+          <div className="text-center py-6">
+            <div className="w-12 h-12 bg-muted rounded-full flex items-center justify-center mx-auto mb-3">
+              <ExternalLink className="w-6 h-6 text-muted-foreground" />
+            </div>
+            <p className="text-sm font-medium text-foreground mb-1">No matches found yet</p>
+            <p className="text-xs text-muted-foreground">We'll notify you when we find relevant matches</p>
           </div>
         ) : (
-          <div className="space-y-2 max-h-64 overflow-y-auto">
-            {matches.map((match) => (
-              <MatchCard key={match.id} match={match} />
-            ))}
+          <>
+            <div className="grid grid-cols-1 gap-3">
+              {displayedMatches.map((match) => (
+                <MatchCard key={match.id} match={match} />
+              ))}
+            </div>
             
-            {matches.length >= 5 && (
-              <Button variant="outline" size="sm" className="w-full text-xs mt-2">
-                View All Matches ({matches.length + 10}+)
-              </Button>
+            {matches.length > 3 && (
+              <div className="pt-4 border-t border-border mt-4">
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  onClick={() => setIsExpanded(!isExpanded)}
+                  className="w-full text-primary hover:bg-primary/5"
+                >
+                  {isExpanded ? 'Show Less' : `View All ${matches.length} Matches`}
+                  <Eye className="w-4 h-4 ml-2" />
+                </Button>
+              </div>
             )}
-          </div>
+          </>
         )}
       </CardContent>
     </Card>

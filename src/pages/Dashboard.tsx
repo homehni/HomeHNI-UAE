@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
-import { Building, MessageSquare, User, LogOut, Plus, Eye, Edit, Trash, FileText, Shield } from 'lucide-react';
+import { Building, MessageSquare, User, LogOut, Plus, Eye, Edit, Trash, FileText, Shield, Clock, MapPin, MessageCircle } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
 import { DeleteConfirmationModal } from '@/components/DeleteConfirmationModal';
@@ -94,7 +94,7 @@ export const Dashboard: React.FC = () => {
   const [serviceSubmissions, setServiceSubmissions] = useState<ServiceSubmission[]>([]);
   const [propertyRequirements, setPropertyRequirements] = useState<PropertyRequirement[]>([]);
   const [requirementsPage, setRequirementsPage] = useState(1);
-  const requirementsPerPage = 3;
+  const requirementsPerPage = 2;
   const [loading, setLoading] = useState(true);
   const [deleteModal, setDeleteModal] = useState<{
     isOpen: boolean;
@@ -568,7 +568,7 @@ export const Dashboard: React.FC = () => {
               </Card>
             ) : (
               <>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                   {propertyRequirements
                     .slice((requirementsPage - 1) * requirementsPerPage, requirementsPage * requirementsPerPage)
                     .map((submission) => {
@@ -584,15 +584,16 @@ export const Dashboard: React.FC = () => {
 
                     return (
                       <div key={submission.id} className="space-y-4">
-                        <Card className="flex flex-col h-64">
-                          <CardHeader className="pb-3">
-                            <div className="flex justify-between items-start">
+                        {/* Main Requirement Card */}
+                        <Card className="overflow-hidden hover:shadow-lg transition-all duration-200">
+                          <CardHeader className="bg-gradient-to-r from-primary/5 to-primary/10 pb-4">
+                            <div className="flex justify-between items-start mb-3">
                               <Badge 
                                 variant={payload?.intent === 'Buy' ? 'default' : 
                                         payload?.intent === 'Sell' ? 'secondary' : 
                                         payload?.intent === 'Lease' ? 'outline' :
                                         payload?.intent === 'Service' ? 'destructive' : 'secondary'}
-                                className="mb-2"
+                                className="text-xs px-3 py-1 font-medium"
                               >
                                 {payload?.intent || 'Requirement'}
                               </Badge>
@@ -600,34 +601,85 @@ export const Dashboard: React.FC = () => {
                                 variant={submission.status === 'new' ? 'default' : 
                                         submission.status === 'in-progress' ? 'secondary' : 
                                         submission.status === 'completed' ? 'default' : 'outline'}
-                                className={submission.status === 'new' ? 'bg-blue-100 text-blue-800' :
-                                          submission.status === 'in-progress' ? 'bg-yellow-100 text-yellow-800' :
-                                          submission.status === 'completed' ? 'bg-green-100 text-green-800' : ''}
+                                className={`text-xs px-3 py-1 font-medium ${
+                                  submission.status === 'new' ? 'bg-blue-100 text-blue-800' :
+                                  submission.status === 'in-progress' ? 'bg-yellow-100 text-yellow-800' :
+                                  submission.status === 'completed' ? 'bg-green-100 text-green-800' : ''
+                                }`}
                               >
                                 {submission.status}
                               </Badge>
                             </div>
-                            <CardTitle className="text-base line-clamp-2">
-                              {submission.title || `${payload?.propertyType} ${payload?.intent}` || 'Property Requirement'}
+                            <CardTitle className="text-lg font-semibold line-clamp-2 text-foreground">
+                              {submission.title || `${payload?.propertyType || payload?.serviceType} ${payload?.intent}` || 'Property Requirement'}
                             </CardTitle>
                           </CardHeader>
-                          <CardContent className="flex-1 flex flex-col justify-between p-4 pt-0 h-32">
-                            <div className="space-y-2 text-sm text-gray-600">
-                              <div className="flex items-center gap-2">
-                                <Building className="h-4 w-4" />
-                                <span>{payload?.propertyType || payload?.serviceType || 'Not specified'}</span>
+                          
+                          <CardContent className="p-6">
+                            <div className="grid grid-cols-2 gap-4 mb-6">
+                              <div className="space-y-3">
+                                <div className="flex items-center gap-3 text-sm">
+                                  <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center">
+                                    <Building className="h-4 w-4 text-primary" />
+                                  </div>
+                                  <div>
+                                    <p className="text-xs text-muted-foreground">Type</p>
+                                    <p className="font-medium">{payload?.propertyType || payload?.serviceType || 'Not specified'}</p>
+                                  </div>
+                                </div>
+                                
+                                <div className="flex items-center gap-3 text-sm">
+                                  <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                                    <MapPin className="h-4 w-4 text-green-600" />
+                                  </div>
+                                  <div>
+                                    <p className="text-xs text-muted-foreground">Location</p>
+                                    <p className="font-medium">{payload?.city || 'Not specified'}, {payload?.state || ''}</p>
+                                  </div>
+                                </div>
                               </div>
-                              <div>
-                                📍 {payload?.city || 'Not specified'}, {payload?.state || ''}
-                              </div>
-                              <div className="font-medium text-primary">
-                                ₹{payload?.budget?.min?.toLocaleString() || '0'} - ₹{payload?.budget?.max?.toLocaleString() || '0'}
+                              
+                              <div className="space-y-3">
+                                <div className="flex items-center gap-3 text-sm">
+                                  <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                                    <span className="text-blue-600 font-bold text-xs">₹</span>
+                                  </div>
+                                  <div>
+                                    <p className="text-xs text-muted-foreground">Budget Range</p>
+                                    <p className="font-medium text-primary">
+                                      ₹{payload?.budget?.min?.toLocaleString() || '0'} - ₹{payload?.budget?.max?.toLocaleString() || '0'}
+                                    </p>
+                                  </div>
+                                </div>
+                                
+                                <div className="flex items-center gap-3 text-sm">
+                                  <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
+                                    <Clock className="h-4 w-4 text-purple-600" />
+                                  </div>
+                                  <div>
+                                    <p className="text-xs text-muted-foreground">Posted On</p>
+                                    <p className="font-medium">{new Date(submission.created_at).toLocaleDateString()}</p>
+                                  </div>
+                                </div>
                               </div>
                             </div>
-                            <div className="mt-4 pt-3 border-t border-gray-100">
-                              <div className="text-xs text-gray-500">
-                                {new Date(submission.created_at).toLocaleDateString()}
+                            
+                            {payload?.notes && (
+                              <div className="bg-muted/50 p-4 rounded-lg mb-4">
+                                <p className="text-xs text-muted-foreground mb-1">Additional Notes</p>
+                                <p className="text-sm">{payload.notes}</p>
                               </div>
+                            )}
+                            
+                            <div className="flex gap-2 pt-4 border-t border-border">
+                              <Button variant="outline" size="sm" className="flex-1">
+                                <Eye className="h-4 w-4 mr-2" />
+                                View Details
+                              </Button>
+                              <Button variant="ghost" size="sm" className="flex-1">
+                                <MessageCircle className="h-4 w-4 mr-2" />
+                                Contact
+                              </Button>
                             </div>
                           </CardContent>
                         </Card>
