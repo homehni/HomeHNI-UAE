@@ -66,6 +66,17 @@ interface ServiceSubmission {
   user_id: string | null;
 }
 
+interface PropertyRequirement {
+  id: string;
+  user_id: string;
+  title: string;
+  payload: Json;
+  status: string;
+  created_at: string;
+  city?: string;
+  state?: string;
+}
+
 export const Dashboard: React.FC = () => {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
@@ -80,6 +91,7 @@ export const Dashboard: React.FC = () => {
   const [properties, setProperties] = useState<Property[]>([]);
   const [leads, setLeads] = useState<Lead[]>([]);
   const [serviceSubmissions, setServiceSubmissions] = useState<ServiceSubmission[]>([]);
+  const [propertyRequirements, setPropertyRequirements] = useState<PropertyRequirement[]>([]);
   const [loading, setLoading] = useState(true);
   const [deleteModal, setDeleteModal] = useState<{
     isOpen: boolean;
@@ -113,6 +125,7 @@ export const Dashboard: React.FC = () => {
       fetchProperties();
       fetchLeads();
       fetchServiceSubmissions();
+      fetchPropertyRequirements();
     }
   }, [user]);
 
@@ -171,16 +184,11 @@ export const Dashboard: React.FC = () => {
 
   const fetchServiceSubmissions = async () => {
     try {
-      console.log('Fetching service submissions for user:', user?.id);
-      
       const { data, error } = await supabase
         .from('property_submissions')
         .select('*')
         .eq('user_id', user?.id)
         .order('created_at', { ascending: false });
-
-      console.log('Raw property_submissions data:', data);
-      console.log('Query error:', error);
 
       if (error) throw error;
       
@@ -188,20 +196,44 @@ export const Dashboard: React.FC = () => {
       const serviceData = (data || []).filter(item => {
         try {
           const payload = typeof item.payload === 'string' ? JSON.parse(item.payload) : item.payload;
-          console.log('Processing item payload:', payload);
-          const hasServiceType = payload && typeof payload === 'object' && (payload.serviceType || payload.intent === 'Service');
-          console.log('Has service type:', hasServiceType);
-          return hasServiceType;
+          return payload && typeof payload === 'object' && (payload.serviceType || payload.intent === 'Service');
         } catch (e) {
           console.error('Error parsing payload:', e, item);
           return false;
         }
       });
       
-      console.log('Filtered service data:', serviceData);
       setServiceSubmissions(serviceData);
     } catch (error) {
       console.error('Error fetching service submissions:', error);
+    }
+  };
+
+  const fetchPropertyRequirements = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('property_submissions')
+        .select('*')
+        .eq('user_id', user?.id)
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      
+      // Filter for property requirements (those with intent Buy or Sell)
+      const requirementData = (data || []).filter(item => {
+        try {
+          const payload = typeof item.payload === 'string' ? JSON.parse(item.payload) : item.payload;
+          return payload && typeof payload === 'object' && 
+                 (payload.intent === 'Buy' || payload.intent === 'Sell');
+        } catch (e) {
+          console.error('Error parsing payload:', e, item);
+          return false;
+        }
+      });
+      
+      setPropertyRequirements(requirementData);
+    } catch (error) {
+      console.error('Error fetching property requirements:', error);
     }
   };
 
@@ -495,19 +527,19 @@ export const Dashboard: React.FC = () => {
           <TabsContent value="requirements" className="space-y-6">
             <div className="flex justify-between items-center">
               <h2 className="text-xl font-semibold">My Requirements</h2>
-              <Button onClick={() => navigate('/post-service')}>
+              <Button onClick={() => navigate('/post-property')}>
                 <Plus className="h-4 w-4 mr-2" />
                 Post New Requirement
               </Button>
             </div>
 
-            {serviceSubmissions.length === 0 ? (
+            {propertyRequirements.length === 0 ? (
               <Card>
                 <CardContent className="text-center py-8">
                   <FileText className="h-12 w-12 mx-auto text-gray-400 mb-4" />
                   <h3 className="text-lg font-medium text-gray-900 mb-2">No requirements posted yet</h3>
-                  <p className="text-gray-500 mb-4">Start by posting your first service requirement</p>
-                  <Button onClick={() => navigate('/post-service')}>
+                  <p className="text-gray-500 mb-4">Start by posting your first property requirement</p>
+                  <Button onClick={() => navigate('/post-property')}>
                     <Plus className="h-4 w-4 mr-2" />
                     Post Your First Requirement
                   </Button>
@@ -515,7 +547,7 @@ export const Dashboard: React.FC = () => {
               </Card>
             ) : (
               <div className="grid gap-4">
-                {serviceSubmissions.map((submission) => {
+                {propertyRequirements.map((submission) => {
                   let payload: any = {};
                   
                   try {
@@ -532,19 +564,21 @@ export const Dashboard: React.FC = () => {
                       <CardContent className="p-6">
                         <div className="flex justify-between items-start">
                           <div className="flex-1">
-                            <h3 className="text-lg font-medium text-gray-900 mb-2">
-                              {submission.title || payload?.serviceType || 'Service Requirement'}
-                            </h3>
-                            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm text-gray-600 mb-2">
-                              <div>Service: {payload?.serviceType || 'Not specified'}</div>
-                              <div>Location: {payload?.selectedState || 'Not specified'}, {payload?.selectedCity || ''}</div>
-                              <div>Submitted: {new Date(submission.created_at).toLocaleDateString()}</div>
-                            </div>
-                            {payload?.message && (
-                              <div className="bg-gray-50 p-3 rounded-lg mb-2">
-                                <p className="text-sm text-gray-700">{payload.message}</p>
-                              </div>
-                            )}
+                             <h3 className="text-lg font-medium text-gray-900 mb-2">
+                               {submission.title || `${payload?.intent} Requirement` || 'Property Requirement'}
+                             </h3>
+                             <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm text-gray-600 mb-2">
+                               <div>Type: {payload?.intent || 'Not specified'}</div>
+                               <div>Property: {payload?.propertyType || 'Not specified'}</div>
+                               <div>Location: {payload?.city || 'Not specified'}, {payload?.state || ''}</div>
+                               <div>Budget: ₹{payload?.budget?.min?.toLocaleString() || '0'} - ₹{payload?.budget?.max?.toLocaleString() || '0'}</div>
+                               <div>Submitted: {new Date(submission.created_at).toLocaleDateString()}</div>
+                             </div>
+                             {payload?.notes && (
+                               <div className="bg-gray-50 p-3 rounded-lg mb-2">
+                                 <p className="text-sm text-gray-700">{payload.notes}</p>
+                               </div>
+                             )}
                           </div>
                           <div className="ml-4">
                             <Badge 
