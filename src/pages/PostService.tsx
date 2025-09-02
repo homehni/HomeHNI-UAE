@@ -649,6 +649,26 @@ const PostService = () => {
                       {errors.budget && <p className="text-sm text-destructive mt-1">{errors.budget}</p>}
                     </div>
 
+                    {/* Premium Service Toggle */}
+                    <div className="p-4 border rounded-lg bg-gradient-to-r from-primary/5 to-primary/10">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <Label className="text-base font-medium text-foreground">Premium Service</Label>
+                          <p className="text-sm text-muted-foreground mt-1">
+                            Get priority response within 2 hours & dedicated relationship manager
+                          </p>
+                        </div>
+                        <div className="flex items-center space-x-3">
+                          <span className="text-lg font-semibold text-primary">₹999</span>
+                          <Switch
+                            id="premium-toggle"
+                            checked={formData.premiumSelected}
+                            onCheckedChange={(checked) => handleInputChange("premiumSelected", checked)}
+                          />
+                        </div>
+                      </div>
+                    </div>
+
                     {/* Additional Notes */}
                     <div>
                       <Label htmlFor="notes" className="text-base font-medium">Additional Requirements</Label>
