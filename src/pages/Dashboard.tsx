@@ -93,7 +93,7 @@ export const Dashboard: React.FC = () => {
   const [serviceSubmissions, setServiceSubmissions] = useState<ServiceSubmission[]>([]);
   const [propertyRequirements, setPropertyRequirements] = useState<PropertyRequirement[]>([]);
   const [requirementsPage, setRequirementsPage] = useState(1);
-  const requirementsPerPage = 6;
+  const requirementsPerPage = 3;
   const [loading, setLoading] = useState(true);
   const [deleteModal, setDeleteModal] = useState<{
     isOpen: boolean;
