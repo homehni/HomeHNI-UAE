@@ -57,7 +57,7 @@ const PostService = () => {
     otherService: "",
     budgetRange: [0, 50000000],
     currency: "INR",
-    premiumSelected: false,
+    premiumSelected: true,
     paymentMethod: "",
     notes: ""
   });
@@ -667,47 +667,6 @@ const PostService = () => {
                           />
                         </div>
                       </div>
-                      
-                      {/* Premium Benefits */}
-                      {formData.premiumSelected && (
-                        <div className="mt-4 pt-4 border-t border-border/50">
-                          <h4 className="text-sm font-semibold text-foreground mb-3">Premium Benefits Include:</h4>
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm text-muted-foreground">
-                            <div className="flex items-center space-x-2">
-                              <div className="w-1.5 h-1.5 bg-primary rounded-full"></div>
-                              <span>Priority response within 2 hours</span>
-                            </div>
-                            <div className="flex items-center space-x-2">
-                              <div className="w-1.5 h-1.5 bg-primary rounded-full"></div>
-                              <span>Dedicated relationship manager</span>
-                            </div>
-                            <div className="flex items-center space-x-2">
-                              <div className="w-1.5 h-1.5 bg-primary rounded-full"></div>
-                              <span>Verified property listings only</span>
-                            </div>
-                            <div className="flex items-center space-x-2">
-                              <div className="w-1.5 h-1.5 bg-primary rounded-full"></div>
-                              <span>Negotiation assistance included</span>
-                            </div>
-                            <div className="flex items-center space-x-2">
-                              <div className="w-1.5 h-1.5 bg-primary rounded-full"></div>
-                              <span>Legal documentation support</span>
-                            </div>
-                            <div className="flex items-center space-x-2">
-                              <div className="w-1.5 h-1.5 bg-primary rounded-full"></div>
-                              <span>Site visit coordination</span>
-                            </div>
-                            <div className="flex items-center space-x-2">
-                              <div className="w-1.5 h-1.5 bg-primary rounded-full"></div>
-                              <span>Market analysis report</span>
-                            </div>
-                            <div className="flex items-center space-x-2">
-                              <div className="w-1.5 h-1.5 bg-primary rounded-full"></div>
-                              <span>24/7 customer support</span>
-                            </div>
-                          </div>
-                        </div>
-                      )}
                     </div>
 
                     {/* Additional Notes */}
@@ -738,6 +697,47 @@ const PostService = () => {
                         "Post Requirement"
                       )}
                     </Button>
+                    
+                    {/* Premium Benefits */}
+                    {formData.premiumSelected && (
+                      <div className="mt-6 p-4 border rounded-lg bg-gradient-to-r from-primary/5 to-primary/10">
+                        <h4 className="text-base font-semibold text-foreground mb-4">Premium Benefits Include:</h4>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm text-muted-foreground">
+                          <div className="flex items-center space-x-2">
+                            <div className="w-1.5 h-1.5 bg-primary rounded-full"></div>
+                            <span>Priority response within 2 hours</span>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <div className="w-1.5 h-1.5 bg-primary rounded-full"></div>
+                            <span>Dedicated relationship manager</span>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <div className="w-1.5 h-1.5 bg-primary rounded-full"></div>
+                            <span>Verified property listings only</span>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <div className="w-1.5 h-1.5 bg-primary rounded-full"></div>
+                            <span>Negotiation assistance included</span>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <div className="w-1.5 h-1.5 bg-primary rounded-full"></div>
+                            <span>Legal documentation support</span>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <div className="w-1.5 h-1.5 bg-primary rounded-full"></div>
+                            <span>Site visit coordination</span>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <div className="w-1.5 h-1.5 bg-primary rounded-full"></div>
+                            <span>Market analysis report</span>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <div className="w-1.5 h-1.5 bg-primary rounded-full"></div>
+                            <span>24/7 customer support</span>
+                          </div>
+                        </div>
+                      </div>
+                    )}
                   </form>
                 </CardContent>
               </Card>
