@@ -4,7 +4,9 @@ import { Card, CardContent } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 import { RECOMMENDED_CARD_WIDTH, RECOMMENDED_IMAGE_HEIGHT } from '@/constants/ui';
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 import { FavoriteButton } from '@/components/FavoriteButton';
+import { ContactOwnerModal } from '@/components/ContactOwnerModal';
 import { supabase } from '@/integrations/supabase/client';
 
 interface PropertyCardProps {
@@ -35,6 +37,7 @@ const PropertyCard = ({
   size = 'default'
 }: PropertyCardProps) => {
   const navigate = useNavigate();
+  const [showContactModal, setShowContactModal] = useState(false);
 
   const parsePriceToNumber = (priceStr: string) => {
     const lower = priceStr.toLowerCase();
@@ -183,7 +186,10 @@ const PropertyCard = ({
             variant="outline"
             size="sm"
             className="w-12 h-6 text-xs border-gray-200 hover:bg-gray-50 px-1 card-border"
-            onClick={(e) => e.stopPropagation()}
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowContactModal(true);
+            }}
           >
             <Phone size={8} />
           </Button>
@@ -195,6 +201,13 @@ const PropertyCard = ({
           </Button>
         </div>
       </CardContent>
+
+      <ContactOwnerModal
+        isOpen={showContactModal}
+        onClose={() => setShowContactModal(false)}
+        propertyId={id}
+        propertyTitle={title}
+      />
     </Card>
   );
 };
