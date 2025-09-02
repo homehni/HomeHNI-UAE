@@ -8,6 +8,26 @@ import { contentElementsService, ContentElement } from '@/services/contentElemen
 import { fetchFeaturedProperties } from '@/services/propertyService';
 import { supabase } from '@/integrations/supabase/client';
 
+// Helper function to extract image URL from various formats
+const extractImageUrl = (imageData: any): string => {
+  if (!imageData) return 'photo-1560518883-ce09059eeffa';
+  
+  if (Array.isArray(imageData) && imageData.length > 0) {
+    const firstImage = imageData[0];
+    if (typeof firstImage === 'string') return firstImage;
+    if (typeof firstImage === 'object' && firstImage !== null && 'url' in firstImage) {
+      return firstImage.url;
+    }
+  }
+  
+  if (typeof imageData === 'string') return imageData;
+  if (typeof imageData === 'object' && imageData !== null && 'url' in imageData) {
+    return imageData.url;
+  }
+  
+  return 'photo-1560518883-ce09059eeffa';
+};
+
 // Minimal type for featured properties
  type FeaturedProperty = {
    id: string;
@@ -90,7 +110,7 @@ const FeaturedProperties = ({
           area: `${property.super_area || 0} sq ft`,
           bedrooms: parseInt(property.bhk_type?.replace(/[^\d]/g, '') || '0'),
           bathrooms: property.bathrooms || 0,
-          image: property.images?.[0] || 'photo-1560518883-ce09059eeffa',
+          image: extractImageUrl(property.images),
           propertyType: property.property_type?.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) || 'Property',
           isNew: new Date(property.created_at) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) // New if created within last 7 days
         }));
@@ -143,7 +163,7 @@ const FeaturedProperties = ({
                   area: `${record.super_area} sq ft`,
                   bedrooms: parseInt(record.bhk_type?.replace(/[^\d]/g, '') || '0'),
                   bathrooms: record.bathrooms || 0,
-                  image: record.images?.[0] || 'photo-1560518883-ce09059eeffa',
+                  image: extractImageUrl(record.images),
                   propertyType: record.property_type?.replace(/_/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase()) || 'Property',
                   isNew: true
                 };

@@ -147,9 +147,20 @@ const PropertyCard = ({
 
   let imagesForPage: string[] = [];
   if (Array.isArray(image)) {
-    imagesForPage = image.map((it) => (typeof it === 'string' ? toUrl(it) : toUrl(it?.url ? it : undefined))).filter(Boolean) as string[];
-  } else {
-    imagesForPage = [toUrl(typeof image === 'string' ? image : image?.url)].filter(Boolean) as string[];
+    imagesForPage = image.map((it) => {
+      if (typeof it === 'string') {
+        return it.startsWith('http') ? it : toUrl(it);
+      }
+      if (it && typeof it === 'object' && 'url' in it) {
+        return (it as any).url;
+      }
+      return undefined;
+    }).filter(Boolean) as string[];
+  } else if (typeof image === 'string') {
+    const url = image.startsWith('http') ? image : toUrl(image);
+    if (url) imagesForPage = [url];
+  } else if (image && typeof image === 'object' && 'url' in image) {
+    imagesForPage = [(image as any).url];
   }
   imagesForPage = [...imagesForPage, ...fallbackUrls].slice(0, 3);
 
@@ -177,17 +188,29 @@ const PropertyCard = ({
     owner_role: undefined,
   };
 
-  // Handle different image formats with Supabase public URL resolution
+  // Handle different image formats - prioritize direct URLs from database
   const getImageUrl = () => {
     if (Array.isArray(image)) {
       const first = image[0];
-      const url = typeof first === 'string' ? resolveUrlFromString(first) : resolveUrlFromString((first as any)?.url);
-      return url || '/placeholder.svg';
+      if (typeof first === 'string') {
+        // If it's a direct URL, use it as-is
+        return first.startsWith('http') ? first : (resolveUrlFromString(first) || '/placeholder.svg');
+      }
+      if (first && typeof first === 'object' && 'url' in first) {
+        // Handle object format with url property (from database)
+        return (first as any).url || '/placeholder.svg';
+      }
+      return '/placeholder.svg';
     }
     if (typeof image === 'string') {
-      return resolveUrlFromString(image) || '/placeholder.svg';
+      // If it's a direct URL, use it as-is
+      return image.startsWith('http') ? image : (resolveUrlFromString(image) || '/placeholder.svg');
     }
-    return resolveUrlFromString((image as any)?.url) || '/placeholder.svg';
+    if (image && typeof image === 'object' && 'url' in image) {
+      // Handle object format with url property (from database)
+      return (image as any).url || '/placeholder.svg';
+    }
+    return '/placeholder.svg';
   };
 
   return (
