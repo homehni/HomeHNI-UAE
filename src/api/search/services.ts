@@ -34,7 +34,7 @@ const mockServiceProviders: ServiceProvider[] = [
     state: 'Telangana',
     phone: '+91-9876541234',
     whatsapp: '+91-9876541234',
-    image: 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=300&h=200&fit=crop',
+    image: '/placeholder.svg',
     url: '/service/1',
     rating: 4.8,
     experience: '8+ years'
@@ -47,7 +47,7 @@ const mockServiceProviders: ServiceProvider[] = [
     state: 'Karnataka',
     phone: '+91-9876541235',
     whatsapp: '+91-9876541235',
-    image: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=300&h=200&fit=crop',
+    image: '/placeholder.svg',
     url: '/service/2',
     rating: 4.6,
     experience: '5+ years'
@@ -60,7 +60,7 @@ const mockServiceProviders: ServiceProvider[] = [
     state: 'Maharashtra',
     phone: '+91-9876541236',
     whatsapp: '+91-9876541236',
-    image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=300&h=200&fit=crop',
+    image: '/placeholder.svg',
     url: '/service/3',
     rating: 4.9,
     experience: '12+ years'
@@ -73,7 +73,7 @@ const mockServiceProviders: ServiceProvider[] = [
     state: 'Delhi',
     phone: '+91-9876541237',
     whatsapp: '+91-9876541237',
-    image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=300&h=200&fit=crop',
+    image: '/placeholder.svg',
     url: '/service/4',
     rating: 4.7,
     experience: '6+ years'
@@ -86,7 +86,7 @@ const mockServiceProviders: ServiceProvider[] = [
     state: 'Maharashtra',
     phone: '+91-9876541238',
     whatsapp: '+91-9876541238',
-    image: 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=300&h=200&fit=crop',
+    image: '/placeholder.svg',
     url: '/service/5',
     rating: 4.5,
     experience: '10+ years'
@@ -99,7 +99,7 @@ const mockServiceProviders: ServiceProvider[] = [
     state: 'Tamil Nadu',
     phone: '+91-9876541239',
     whatsapp: '+91-9876541239',
-    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=200&fit=crop',
+    image: '/placeholder.svg',
     url: '/service/6',
     rating: 4.8,
     experience: '15+ years'
@@ -112,7 +112,7 @@ const mockServiceProviders: ServiceProvider[] = [
     state: 'Haryana',
     phone: '+91-9876541240',
     whatsapp: '+91-9876541240',
-    image: 'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=300&h=200&fit=crop',
+    image: '/placeholder.svg',
     url: '/service/7',
     rating: 4.4,
     experience: '7+ years'
@@ -125,7 +125,7 @@ const mockServiceProviders: ServiceProvider[] = [
     state: 'West Bengal',
     phone: '+91-9876541241',
     whatsapp: '+91-9876541241',
-    image: 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=300&h=200&fit=crop',
+    image: '/placeholder.svg',
     url: '/service/8',
     rating: 4.6,
     experience: '9+ years'

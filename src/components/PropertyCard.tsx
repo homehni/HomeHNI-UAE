@@ -78,7 +78,6 @@ const PropertyCard = ({
   const resolveUrlFromString = (s: string): string | undefined => {
     if (!s) return undefined;
     if (s.startsWith('http')) return s;
-    if (s.startsWith('photo-')) return `https://images.unsplash.com/${s}?auto=format&fit=crop&w=1200&q=80`;
     try {
       const { data } = supabase.storage.from('property-media').getPublicUrl(s);
       return data.publicUrl;
@@ -93,8 +92,8 @@ const PropertyCard = ({
   };
 
   const fallbackUrls = [
-    'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=80',
-    'https://images.unsplash.com/photo-1568605114967-8130f3a36994?auto=format&fit=crop&w=1200&q=80',
+    '/placeholder.svg',
+    '/placeholder.svg',
   ];
 
   let imagesForPage: string[] = [];
@@ -135,13 +134,13 @@ const PropertyCard = ({
       // If it's an array, get the first image
       const firstImage = image[0];
       if (typeof firstImage === 'string') {
-        return firstImage.startsWith('http') ? firstImage : `https://images.unsplash.com/${firstImage}?auto=format&fit=crop&w=400&q=80`;
+        return firstImage.startsWith('http') ? firstImage : '/placeholder.svg';
       }
       return firstImage?.url || '/placeholder.svg';
     }
     if (typeof image === 'string') {
       // Check if it's a full URL or just an ID
-      return image.startsWith('http') ? image : `https://images.unsplash.com/${image}?auto=format&fit=crop&w=400&q=80`;
+      return image.startsWith('http') ? image : '/placeholder.svg';
     }
     // If it's an object with url property
     return image?.url || '/placeholder.svg';

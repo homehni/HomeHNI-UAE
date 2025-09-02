@@ -38,7 +38,7 @@ const mockProperties: PropertyListing[] = [
     city: 'Hyderabad',
     state: 'Telangana',
     country: 'India',
-    image: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=300&h=200&fit=crop',
+    image: '/placeholder.svg',
     badges: ['Ready to Move', 'Gated Community'],
     url: '/property/1'
   },
@@ -51,7 +51,7 @@ const mockProperties: PropertyListing[] = [
     city: 'Gurgaon',
     state: 'Haryana',
     country: 'India',
-    image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=300&h=200&fit=crop',
+    image: '/placeholder.svg',
     badges: ['Furnished', 'IT Park'],
     url: '/property/2'
   },
@@ -64,7 +64,7 @@ const mockProperties: PropertyListing[] = [
     city: 'Bangalore',
     state: 'Karnataka',
     country: 'India',
-    image: 'https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=300&h=200&fit=crop',
+    image: '/placeholder.svg',
     badges: ['Swimming Pool', 'Parking'],
     url: '/property/3'
   },
@@ -77,7 +77,7 @@ const mockProperties: PropertyListing[] = [
     city: 'Gurgaon',
     state: 'Haryana',
     country: 'India',
-    image: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=300&h=200&fit=crop',
+    image: '/placeholder.svg',
     badges: ['Corner Plot', 'Approved'],
     url: '/property/4'
   },
@@ -90,7 +90,7 @@ const mockProperties: PropertyListing[] = [
     city: 'Mumbai',
     state: 'Maharashtra',
     country: 'India',
-    image: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=300&h=200&fit=crop',
+    image: '/placeholder.svg',
     badges: ['High Footfall', 'Ground Floor'],
     url: '/property/5'
   },
@@ -103,7 +103,7 @@ const mockProperties: PropertyListing[] = [
     city: 'Pune',
     state: 'Maharashtra',
     country: 'India',
-    image: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=300&h=200&fit=crop',
+    image: '/placeholder.svg',
     badges: ['New Construction', 'Metro Nearby'],
     url: '/property/6'
   },
@@ -116,7 +116,7 @@ const mockProperties: PropertyListing[] = [
     city: 'Chennai',
     state: 'Tamil Nadu',
     country: 'India',
-    image: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=300&h=200&fit=crop',
+    image: '/placeholder.svg',
     badges: ['24x7 Security', 'Truck Access'],
     url: '/property/7'
   },
@@ -129,7 +129,7 @@ const mockProperties: PropertyListing[] = [
     city: 'Mumbai',
     state: 'Maharashtra',
     country: 'India',
-    image: 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=300&h=200&fit=crop',
+    image: '/placeholder.svg',
     badges: ['Luxury', 'Sea View'],
     url: '/property/8'
   }

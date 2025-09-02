@@ -349,7 +349,7 @@ export const usePropertySearch = () => {
         country: 'India', // Assuming India for now
         image: property.images && property.images.length > 0 
           ? property.images[0] 
-          : 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=300&h=200&fit=crop',
+          : '/placeholder.svg',
         badges: [
           property.isRecommended && 'Recommended',
           property.furnishing && `${property.furnishing}`,

@@ -8,25 +8,25 @@ const ImageSlider = () => {
   const slides = [
     {
       id: 1,
-      image: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=1920&q=80",
+      image: "/placeholder.svg",
       title: "Luxury Homes",
       subtitle: "Find your perfect home"
     },
     {
       id: 2,
-      image: "https://images.unsplash.com/photo-1605146769289-440113cc3d00?auto=format&fit=crop&w=1920&q=80",
+      image: "/placeholder.svg",
       title: "Modern Apartments",
       subtitle: "Contemporary living spaces"
     },
     {
       id: 3,
-      image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1920&q=80",
+      image: "/placeholder.svg",
       title: "Commercial Spaces",
       subtitle: "Prime business locations"
     },
     {
       id: 4,
-      image: "https://images.unsplash.com/photo-1500076656116-558758c991c1?auto=format&fit=crop&w=1920&q=80",
+      image: "/placeholder.svg",
       title: "Agricultural Land",
       subtitle: "Fertile farming opportunities"
     }
