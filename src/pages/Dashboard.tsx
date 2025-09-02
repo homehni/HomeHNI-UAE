@@ -567,7 +567,7 @@ export const Dashboard: React.FC = () => {
               </Card>
             ) : (
               <>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   {propertyRequirements
                     .slice((requirementsPage - 1) * requirementsPerPage, requirementsPage * requirementsPerPage)
                     .map((submission) => {
@@ -582,7 +582,7 @@ export const Dashboard: React.FC = () => {
                     }
 
                     return (
-                      <Card key={submission.id} className="aspect-square flex flex-col">
+                      <Card key={submission.id} className="flex flex-col h-64">
                         <CardHeader className="pb-3">
                           <div className="flex justify-between items-start">
                             <Badge 
@@ -608,7 +608,7 @@ export const Dashboard: React.FC = () => {
                             {submission.title || `${payload?.propertyType} ${payload?.intent}` || 'Property Requirement'}
                           </CardTitle>
                         </CardHeader>
-                        <CardContent className="flex-1 flex flex-col justify-between p-4 pt-0">
+                        <CardContent className="flex-1 flex flex-col justify-between p-4 pt-0 h-32">
                           <div className="space-y-2 text-sm text-gray-600">
                             <div className="flex items-center gap-2">
                               <Building className="h-4 w-4" />
