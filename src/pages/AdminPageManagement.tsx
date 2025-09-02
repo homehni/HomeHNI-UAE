@@ -179,30 +179,25 @@ const AdminPageManagement = () => {
           <SectionLibrary
             onSelectSection={(sectionType) => {
               console.log('SectionLibrary onSelectSection called with:', sectionType);
-              console.log('addSectionCallback exists:', !!addSectionCallbackRef.current);
-              if (addSectionCallbackRef.current) {
-                console.log('Calling addSectionCallback...');
-                console.log('addSectionCallback function:', addSectionCallbackRef.current);
-                console.log('sectionType being passed:', sectionType);
-                try {
-                  // Check if addSectionCallback is actually a function
-                  if (typeof addSectionCallbackRef.current !== 'function') {
-                    console.error('addSectionCallback is not a function, it is:', typeof addSectionCallbackRef.current);
-                    console.error('addSectionCallback value:', addSectionCallbackRef.current);
-                    return;
-                  }
-                  
-                  // Call the function (it now returns void, not a promise)
-                  addSectionCallbackRef.current(sectionType);
-                  console.log('addSectionCallback executed successfully');
-                } catch (error) {
-                  console.error('Error executing addSectionCallback:', error);
-                  console.error('Error stack:', error.stack);
-                }
-              } else {
-                console.error('addSectionCallback is null/undefined!');
-              }
+              // Ensure the editor is mounted before invoking the callback
               setCurrentView('editor');
+
+              // Defer to the next tick so PageEditor mounts and registers the callback
+              setTimeout(() => {
+                const cb = addSectionCallbackRef.current;
+                console.log('addSectionCallback exists:', !!cb);
+                if (typeof cb === 'function') {
+                  try {
+                    console.log('Calling addSectionCallback after returning to editor...');
+                    cb(sectionType);
+                    console.log('addSectionCallback executed successfully');
+                  } catch (error) {
+                    console.error('Error executing addSectionCallback:', error as any);
+                  }
+                } else {
+                  console.error('addSectionCallback is null/undefined or not a function!', cb);
+                }
+              }, 0);
             }}
           />
         );
