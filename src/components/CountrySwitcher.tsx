@@ -134,21 +134,15 @@ const CountrySwitcher: React.FC = () => {
 
       {isOpen && (
         <div 
-          className={`absolute top-full left-0 mt-1 min-w-[800px] rounded-lg shadow-2xl z-50 border transition-all duration-200 ${
-            isScrolled 
-              ? 'bg-white border-gray-200' 
-              : 'bg-gray-900 border-gray-700'
-          }`}
+          className="absolute top-full left-0 mt-1 min-w-[800px] rounded-lg shadow-2xl z-50 border bg-white border-gray-200 transition-all duration-200"
           onMouseEnter={() => setIsOpen(true)}
           onMouseLeave={() => setIsOpen(false)}
         >
           <div className="grid grid-cols-4 gap-8 p-8">
             {regions.map((region) => (
               <div key={region.name} className="space-y-4">
-                <div className={`border-b pb-2 ${isScrolled ? 'border-gray-200' : 'border-gray-700'}`}>
-                  <h3 className={`text-sm font-bold tracking-wide uppercase ${
-                    isScrolled ? 'text-brand-red' : 'text-red-400'
-                  }`}>
+                <div className="border-b border-gray-200 pb-2">
+                  <h3 className="text-sm font-bold tracking-wide uppercase text-brand-red">
                     {region.name}
                   </h3>
                 </div>
@@ -160,20 +154,14 @@ const CountrySwitcher: React.FC = () => {
                       onClick={() => handleCountryChange(country.code)}
                       className={`block w-full text-left text-sm transition-all duration-200 py-2 px-2 rounded hover:bg-opacity-10 ${
                         currentCountry === country.code
-                          ? isScrolled 
-                            ? 'text-red-600 font-medium bg-red-50' 
-                            : 'text-red-400 font-medium bg-red-900/20'
-                          : isScrolled
-                            ? 'text-gray-700 hover:text-brand-red hover:bg-red-50'
-                            : 'text-gray-300 hover:text-white hover:bg-white/10'
+                          ? 'text-red-600 font-medium bg-red-50' 
+                          : 'text-black hover:text-brand-red hover:bg-red-50'
                       }`}
                     >
                       <span className="flex items-center justify-between">
                         <span>{country.displayCode}</span>
                         {currentCountry === country.code && (
-                          <span className={`w-2 h-2 rounded-full ${
-                            isScrolled ? 'bg-red-600' : 'bg-red-400'
-                          }`} />
+                          <span className="w-2 h-2 rounded-full bg-red-600" />
                         )}
                       </span>
                     </button>
