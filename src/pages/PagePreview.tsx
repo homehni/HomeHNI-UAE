@@ -236,14 +236,26 @@ const PagePreview: React.FC = () => {
             <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6 mt-4">
               {page.title}
             </h1>
-            {page.content?.html && (
-              <div 
-                className="prose prose-lg max-w-4xl mx-auto text-muted-foreground"
-                dangerouslySetInnerHTML={{ __html: page.content.html }}
-              />
+            {page.meta_description && (
+              <p className="max-w-3xl mx-auto text-muted-foreground">
+                {page.meta_description}
+              </p>
             )}
           </div>
         </section>
+
+        {/* Rich Content from editor (always below title) */}
+        {(typeof page.content === 'string' || page.content?.html || page.content?.description) && (
+          <section className="py-8">
+            <div className="container mx-auto px-4">
+              <div 
+                className="prose prose-lg max-w-4xl mx-auto text-muted-foreground"
+                dangerouslySetInnerHTML={{ __html: typeof page.content === 'string' ? page.content : (page.content?.html || page.content?.description || '') }}
+              />
+            </div>
+          </section>
+        )}
+
 
         {/* Page Sections */}
         {sections.map((section) => (
