@@ -99,17 +99,24 @@ const PropertyCard = ({
   // Build public URL robustly; handle various path formats and prefixes
   const resolveUrlFromString = (s: string): string | undefined => {
     if (!s) return undefined;
-    // If it's already a full URL, return as-is
-    if (/^https?:\/\//i.test(s)) return s;
+    const raw = s.trim();
+
+    // Already absolute URL or data URI → use as-is
+    if (/^https?:\/\//i.test(raw) || /^data:/i.test(raw)) return raw;
+
+    // App-hosted public assets (e.g., /lovable-uploads/..., /images/..., /placeholder.svg)
+    if (/^\//.test(raw)) return raw;
 
     // Normalize common prefixes that may be stored in DB
-    let cleaned = s.trim();
-    // Remove leading domain-style public path if present
-    cleaned = cleaned.replace(/^\/?storage\/v1\/object\/public\/property-media\//i, '');
-    // Remove leading bucket name if included
-    cleaned = cleaned.replace(/^property-media\//i, '');
-    // Remove generic public prefix
-    cleaned = cleaned.replace(/^public\//i, '');
+    let cleaned = raw
+      .replace(/^\/?storage\/v1\/object\/public\/property-media\//i, '')
+      .replace(/^property-media\//i, '')
+      .replace(/^public\//i, '');
+
+    // If path points to public uploads folder but lacks leading slash, add it
+    if (/^(lovable-uploads|images|img|assets)\//i.test(cleaned)) {
+      return `/${cleaned}`;
+    }
 
     // If only a filename was provided, prefix with type folder
     const needsFolder = !cleaned.includes('/');

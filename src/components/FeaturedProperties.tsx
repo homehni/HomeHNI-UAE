@@ -88,7 +88,7 @@ const FeaturedProperties = ({
           bedrooms: parseInt(property.bhk_type?.replace(/[^\d]/g, '') || '0'),
           bathrooms: property.bathrooms || 0,
           image: property.images?.[0] || 'photo-1560518883-ce09059eeffa',
-          propertyType: property.property_type?.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase()) || 'Property',
+          propertyType: property.property_type?.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) || 'Property',
           isNew: new Date(property.created_at) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) // New if created within last 7 days
         }));
 
@@ -147,7 +147,7 @@ const FeaturedProperties = ({
               bedrooms: parseInt(record.bhk_type?.replace(/[^\d]/g, '') || '0'),
               bathrooms: record.bathrooms || 0,
               image: record.images?.[0] || 'photo-1560518883-ce09059eeffa',
-              propertyType: record.property_type?.replace('_', ' ').replace(/\b\w/g, (l: string) => l.toUpperCase()) || 'Property',
+              propertyType: record.property_type?.replace(/_/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase()) || 'Property',
               isNew: true
             };
             setFeaturedProperties(prev => {
