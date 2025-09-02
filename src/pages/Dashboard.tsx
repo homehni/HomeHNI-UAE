@@ -226,7 +226,7 @@ export const Dashboard: React.FC = () => {
 
       if (error) throw error;
       
-      // Filter for property requirements (those with intent Buy, Sell, or Lease)
+      // Filter for property requirements (those with intent Buy, Sell, Lease, or Service)
       const requirementData = (data || []).filter(item => {
         try {
           const payload = typeof item.payload === 'string' ? JSON.parse(item.payload) : item.payload;
@@ -238,7 +238,7 @@ export const Dashboard: React.FC = () => {
           });
           
           const isRequirement = payload && typeof payload === 'object' && 
-                 (payload.intent === 'Buy' || payload.intent === 'Sell' || payload.intent === 'Lease');
+                 (payload.intent === 'Buy' || payload.intent === 'Sell' || payload.intent === 'Lease' || payload.intent === 'Service');
           
           console.log('✅ Is requirement:', isRequirement);
           return isRequirement;
@@ -588,7 +588,8 @@ export const Dashboard: React.FC = () => {
                             <Badge 
                               variant={payload?.intent === 'Buy' ? 'default' : 
                                       payload?.intent === 'Sell' ? 'secondary' : 
-                                      payload?.intent === 'Lease' ? 'outline' : 'secondary'}
+                                      payload?.intent === 'Lease' ? 'outline' :
+                                      payload?.intent === 'Service' ? 'destructive' : 'secondary'}
                               className="mb-2"
                             >
                               {payload?.intent || 'Requirement'}
@@ -612,7 +613,7 @@ export const Dashboard: React.FC = () => {
                           <div className="space-y-2 text-sm text-gray-600">
                             <div className="flex items-center gap-2">
                               <Building className="h-4 w-4" />
-                              <span>{payload?.propertyType || 'Not specified'}</span>
+                              <span>{payload?.propertyType || payload?.serviceType || 'Not specified'}</span>
                             </div>
                             <div>
                               📍 {payload?.city || 'Not specified'}, {payload?.state || ''}
