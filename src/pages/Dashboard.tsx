@@ -12,6 +12,7 @@ import { useToast } from '@/hooks/use-toast';
 import { DeleteConfirmationModal } from '@/components/DeleteConfirmationModal';
 import { PropertyDetailModal } from '@/components/PropertyDetailModal';
 import { PropertyEditModal } from '@/components/PropertyEditModal';
+import { RequirementMatches } from '@/components/RequirementMatches';
 import Header from '@/components/Header';
 import Marquee from '@/components/Marquee';
 
@@ -582,53 +583,64 @@ export const Dashboard: React.FC = () => {
                     }
 
                     return (
-                      <Card key={submission.id} className="flex flex-col h-64">
-                        <CardHeader className="pb-3">
-                          <div className="flex justify-between items-start">
-                            <Badge 
-                              variant={payload?.intent === 'Buy' ? 'default' : 
-                                      payload?.intent === 'Sell' ? 'secondary' : 
-                                      payload?.intent === 'Lease' ? 'outline' :
-                                      payload?.intent === 'Service' ? 'destructive' : 'secondary'}
-                              className="mb-2"
-                            >
-                              {payload?.intent || 'Requirement'}
-                            </Badge>
-                            <Badge 
-                              variant={submission.status === 'new' ? 'default' : 
-                                      submission.status === 'in-progress' ? 'secondary' : 
-                                      submission.status === 'completed' ? 'default' : 'outline'}
-                              className={submission.status === 'new' ? 'bg-blue-100 text-blue-800' :
-                                        submission.status === 'in-progress' ? 'bg-yellow-100 text-yellow-800' :
-                                        submission.status === 'completed' ? 'bg-green-100 text-green-800' : ''}
-                            >
-                              {submission.status}
-                            </Badge>
-                          </div>
-                          <CardTitle className="text-base line-clamp-2">
-                            {submission.title || `${payload?.propertyType} ${payload?.intent}` || 'Property Requirement'}
-                          </CardTitle>
-                        </CardHeader>
-                        <CardContent className="flex-1 flex flex-col justify-between p-4 pt-0 h-32">
-                          <div className="space-y-2 text-sm text-gray-600">
-                            <div className="flex items-center gap-2">
-                              <Building className="h-4 w-4" />
-                              <span>{payload?.propertyType || payload?.serviceType || 'Not specified'}</span>
+                      <div key={submission.id} className="space-y-4">
+                        <Card className="flex flex-col h-64">
+                          <CardHeader className="pb-3">
+                            <div className="flex justify-between items-start">
+                              <Badge 
+                                variant={payload?.intent === 'Buy' ? 'default' : 
+                                        payload?.intent === 'Sell' ? 'secondary' : 
+                                        payload?.intent === 'Lease' ? 'outline' :
+                                        payload?.intent === 'Service' ? 'destructive' : 'secondary'}
+                                className="mb-2"
+                              >
+                                {payload?.intent || 'Requirement'}
+                              </Badge>
+                              <Badge 
+                                variant={submission.status === 'new' ? 'default' : 
+                                        submission.status === 'in-progress' ? 'secondary' : 
+                                        submission.status === 'completed' ? 'default' : 'outline'}
+                                className={submission.status === 'new' ? 'bg-blue-100 text-blue-800' :
+                                          submission.status === 'in-progress' ? 'bg-yellow-100 text-yellow-800' :
+                                          submission.status === 'completed' ? 'bg-green-100 text-green-800' : ''}
+                              >
+                                {submission.status}
+                              </Badge>
                             </div>
-                            <div>
-                              📍 {payload?.city || 'Not specified'}, {payload?.state || ''}
+                            <CardTitle className="text-base line-clamp-2">
+                              {submission.title || `${payload?.propertyType} ${payload?.intent}` || 'Property Requirement'}
+                            </CardTitle>
+                          </CardHeader>
+                          <CardContent className="flex-1 flex flex-col justify-between p-4 pt-0 h-32">
+                            <div className="space-y-2 text-sm text-gray-600">
+                              <div className="flex items-center gap-2">
+                                <Building className="h-4 w-4" />
+                                <span>{payload?.propertyType || payload?.serviceType || 'Not specified'}</span>
+                              </div>
+                              <div>
+                                📍 {payload?.city || 'Not specified'}, {payload?.state || ''}
+                              </div>
+                              <div className="font-medium text-primary">
+                                ₹{payload?.budget?.min?.toLocaleString() || '0'} - ₹{payload?.budget?.max?.toLocaleString() || '0'}
+                              </div>
                             </div>
-                            <div className="font-medium text-primary">
-                              ₹{payload?.budget?.min?.toLocaleString() || '0'} - ₹{payload?.budget?.max?.toLocaleString() || '0'}
+                            <div className="mt-4 pt-3 border-t border-gray-100">
+                              <div className="text-xs text-gray-500">
+                                {new Date(submission.created_at).toLocaleDateString()}
+                              </div>
                             </div>
-                          </div>
-                          <div className="mt-4 pt-3 border-t border-gray-100">
-                            <div className="text-xs text-gray-500">
-                              {new Date(submission.created_at).toLocaleDateString()}
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
+                          </CardContent>
+                        </Card>
+                        
+                        {/* Real-time Matches Component */}
+                        <RequirementMatches 
+                          requirement={{
+                            id: submission.id,
+                            title: submission.title || 'Property Requirement',
+                            payload: payload
+                          }}
+                        />
+                      </div>
                     );
                   })}
                 </div>
