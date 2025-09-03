@@ -9,26 +9,58 @@ interface PropertyDetailsCardProps {
     carpet_area?: number;
     bathrooms?: number;
     balconies?: number;
+    floor_no?: number;
+    total_floors?: number;
+    furnishing?: string;
+    maintenance_charges?: number;
+    owner_role?: string;
+    listing_type?: string;
+    state?: string;
+    city?: string;
+    locality?: string;
+    description?: string;
   };
 }
 
 export const PropertyDetailsCard: React.FC<PropertyDetailsCardProps> = ({ property }) => {
+  const formatMaintenance = (charges?: number) => {
+    if (!charges) return 'Not specified';
+    return `₹${charges.toLocaleString()}/month`;
+  };
+
+  const formatOwnership = (role?: string) => {
+    if (!role) return 'Not specified';
+    return role === 'Owner' ? 'Self Owned' : role;
+  };
+
+  const formatArea = (superArea?: number, carpetArea?: number) => {
+    const area = superArea || carpetArea;
+    return area ? `${area.toLocaleString()} sqft` : 'Not specified';
+  };
+
+  const formatFloor = (floorNo?: number, totalFloors?: number) => {
+    if (floorNo !== undefined && totalFloors) {
+      return `${floorNo}/${totalFloors}`;
+    }
+    return 'Not specified';
+  };
+
   const details = [
-    { label: 'Type', value: property.property_type.replace('_', ' ') },
-    { label: 'Bathrooms', value: property.bathrooms?.toString() || 'N/A' },
-    { label: 'Ownership', value: 'Self Owned' },
-    { label: 'Maintenance', value: '₹ 2.8 / Sq.Ft/M' },
-    { label: 'Flooring', value: 'Vitrified Tiles' },
-    { label: 'Built-up Area', value: `${property.super_area || property.carpet_area || 'N/A'} sqft` },
-    { label: 'Facing', value: 'West' },
-    { label: 'Parking', value: 'Bike and Car' },
-  ].filter(item => item.value !== 'N/A');
+    { label: 'Type', value: property.property_type?.replace('_', ' ') || 'Not specified' },
+    { label: 'Bathrooms', value: property.bathrooms?.toString() || 'Not specified' },
+    { label: 'Balconies', value: property.balconies?.toString() || 'Not specified' },
+    { label: 'Ownership', value: formatOwnership(property.owner_role) },
+    { label: 'Maintenance', value: formatMaintenance(property.maintenance_charges) },
+    { label: 'Built-up Area', value: formatArea(property.super_area, property.carpet_area) },
+    { label: 'Floor', value: formatFloor(property.floor_no, property.total_floors) },
+    { label: 'Furnishing', value: property.furnishing || 'Not specified' },
+  ].filter(item => item.value !== 'Not specified');
 
   const quickFacts = [
     property.bhk_type,
-    `${property.super_area || property.carpet_area || 0} sqft`,
-    'Semi-Furnished'
-  ].filter(Boolean);
+    formatArea(property.super_area, property.carpet_area),
+    property.furnishing || 'Not specified'
+  ].filter(fact => fact && fact !== 'Not specified');
 
   return (
     <div className="rounded-2xl border-2 border-red-500 bg-white shadow-lg">
