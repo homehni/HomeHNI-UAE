@@ -63,6 +63,7 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
   const [onMainRoad, setOnMainRoad] = useState(form.watch('onMainRoad'));
   const [cornerProperty, setCornerProperty] = useState(form.watch('cornerProperty'));
   const floorType = form.watch('floorType');
+  const floorNoWatch = form.watch('floorNo');
 
   // Reset floor number when floor type changes
   React.useEffect(() => {
@@ -71,6 +72,17 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
       form.clearErrors('floorNo');
     }
   }, [floorType, form]);
+
+  // Live-validate floor selection against floor type
+  React.useEffect(() => {
+    const allowed = getFloorOptions(floorType || '').map((o) => o.value);
+    const selected = typeof floorNoWatch === 'number' ? floorNoWatch.toString() : (floorNoWatch ?? '').toString();
+    if (floorType && selected && !allowed.includes(selected)) {
+      form.setError('floorNo', { type: 'validate', message: 'Choose the correct floor' });
+    } else {
+      form.clearErrors('floorNo');
+    }
+  }, [floorType, floorNoWatch, form]);
 
   // Helper function to get floor options based on floor type
   const getFloorOptions = (floorType: string) => {
@@ -281,6 +293,8 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
                     onValueChange={(value) => {
                       const allowed = getFloorOptions(floorType || '').map((o) => o.value);
                       if (!allowed.includes(value)) {
+                        // Reflect user's selection and show an inline warning
+                        field.onChange(value);
                         form.setError('floorNo', { type: 'validate', message: 'Choose the correct floor' });
                         return;
                       }
@@ -292,7 +306,7 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
                         field.onChange(Number.isNaN(asNum) ? value : asNum);
                       }
                     }}
-                    defaultValue={field.value?.toString()}
+                    value={field.value === undefined ? undefined : field.value.toString()}
                   >
                     <FormControl>
                       <SelectTrigger className="h-12">
