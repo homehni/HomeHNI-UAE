@@ -164,7 +164,7 @@ export const Auth: React.FC = () => {
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl"></div>
         
         <div className="relative flex items-center justify-center p-4 min-h-screen">
-          <Card className="w-full max-w-md backdrop-blur-sm bg-white/95 border-2 border-primary shadow-2xl shadow-black/10 rounded-2xl animate-fade-in">
+          <Card className="w-full max-w-md backdrop-blur-sm bg-white/95 border-2 border-brand-red/30 shadow-2xl shadow-brand-red/10 rounded-2xl animate-fade-in hover:border-brand-red/50 transition-colors duration-300">
             <CardHeader className="text-center pb-6 pt-8">
               <div className="flex items-center justify-center mb-6">
                 <div className="p-3 bg-gradient-to-br from-brand-red to-brand-red-dark rounded-2xl shadow-lg">
