@@ -10,32 +10,79 @@ import { supabase } from '@/integrations/supabase/client';
 
 // Helper function to extract image URL from various formats
 const extractImageUrl = (imageData: any): string => {
-  console.log('Extracting image URL from:', imageData);
-  
+  // Attempt to normalize any string path into a usable public URL
+  const resolveUrlFromString = (rawIn: string | undefined | null): string | null => {
+    if (!rawIn) return null;
+    const raw = String(rawIn).trim();
+
+    // Absolute or data URL
+    if (/^https?:\/\//i.test(raw) || /^data:/i.test(raw)) return raw;
+
+    // App-hosted public assets
+    if (/^\//.test(raw)) return raw;
+
+    // Clean common prefixes that may be stored in DB
+    let cleaned = raw
+      .replace(/^\/?storage\/v1\/object\/public\/property-media\//i, '')
+      .replace(/^property-media\//i, '')
+      .replace(/^public\//i, '');
+
+    // If points to known public folders under app, add leading slash
+    if (/^(lovable-uploads|images|img|assets)\//i.test(cleaned)) {
+      return `/${cleaned}`;
+    }
+
+    // Otherwise treat as a path inside the property-media bucket
+    try {
+      const { data } = supabase.storage.from('property-media').getPublicUrl(cleaned);
+      return data.publicUrl || null;
+    } catch {
+      return null;
+    }
+  };
+
+  const tryFromObject = (obj: any): string | null => {
+    if (!obj || typeof obj !== 'object') return null;
+    // Common keys that may hold a URL/path
+    const candidates = [obj.url, obj.publicUrl, obj.public_url, obj.path, obj.storage_path, obj.name];
+    for (const c of candidates) {
+      const url = typeof c === 'string' ? resolveUrlFromString(c) : null;
+      if (url) return url;
+    }
+    // If a bucket is specified with a path
+    if (obj.bucket && obj.path) {
+      try {
+        const { data } = supabase.storage.from(String(obj.bucket)).getPublicUrl(String(obj.path));
+        return data.publicUrl || null;
+      } catch {}
+    }
+    return null;
+  };
+
+  // Start resolving
   if (!imageData) return '/placeholder.svg';
-  
+
   if (Array.isArray(imageData) && imageData.length > 0) {
-    const firstImage = imageData[0];
-    if (typeof firstImage === 'string') {
-      console.log('Found string image:', firstImage);
-      return firstImage;
-    }
-    if (typeof firstImage === 'object' && firstImage !== null && 'url' in firstImage) {
-      console.log('Found object with URL:', firstImage.url);
-      return firstImage.url;
+    for (const entry of imageData) {
+      if (typeof entry === 'string') {
+        const url = resolveUrlFromString(entry);
+        if (url) return url;
+      } else if (entry && typeof entry === 'object') {
+        const url = tryFromObject(entry);
+        if (url) return url;
+      }
     }
   }
-  
+
   if (typeof imageData === 'string') {
-    console.log('Image is string:', imageData);
-    return imageData;
+    const url = resolveUrlFromString(imageData);
+    if (url) return url;
   }
-  if (typeof imageData === 'object' && imageData !== null && 'url' in imageData) {
-    console.log('Image object with URL:', imageData.url);
-    return imageData.url;
+  if (typeof imageData === 'object') {
+    const url = tryFromObject(imageData);
+    if (url) return url;
   }
-  
-  console.log('No valid image found, using placeholder');
+
   return '/placeholder.svg';
 };
 
