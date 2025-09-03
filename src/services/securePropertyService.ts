@@ -52,17 +52,8 @@ export class SecurePropertyService {
    */
   static async getPublicProperties(): Promise<{ data: PublicProperty[] | null; error: any }> {
     const { data, error } = await supabase
-      .from('properties')
-      .select(`
-        id, title, property_type, listing_type, bhk_type, expected_price, 
-        super_area, carpet_area, bathrooms, balconies, floor_no, total_floors, 
-        furnishing, availability_type, availability_date, price_negotiable, 
-        maintenance_charges, security_deposit, city, locality, state, pincode, 
-        street_address, landmarks, description, images, videos, status, 
-        created_at, updated_at, is_featured
-      `)
-      .order('created_at', { ascending: false });
-    
+      .rpc('get_public_properties');
+      
     return { data, error };
   }
 
@@ -71,19 +62,10 @@ export class SecurePropertyService {
    */
   static async getPublicProperty(id: string): Promise<{ data: PublicProperty | null; error: any }> {
     const { data, error } = await supabase
-      .from('properties')
-      .select(`
-        id, title, property_type, listing_type, bhk_type, expected_price, 
-        super_area, carpet_area, bathrooms, balconies, floor_no, total_floors, 
-        furnishing, availability_type, availability_date, price_negotiable, 
-        maintenance_charges, security_deposit, city, locality, state, pincode, 
-        street_address, landmarks, description, images, videos, status, 
-        created_at, updated_at, is_featured
-      `)
-      .eq('id', id)
-      .maybeSingle();
-    
-    return { data, error };
+      .rpc('get_public_property_by_id', { property_id: id });
+      
+    const result = data && data.length > 0 ? data[0] : null;
+    return { data: result, error };
   }
 
   /**
@@ -97,41 +79,37 @@ export class SecurePropertyService {
     maxPrice?: number;
     bhkType?: string;
   }): Promise<{ data: PublicProperty[] | null; error: any }> {
-    let query = supabase
-      .from('properties')
-      .select(`
-        id, title, property_type, listing_type, bhk_type, expected_price, 
-        super_area, carpet_area, bathrooms, balconies, floor_no, total_floors, 
-        furnishing, availability_type, availability_date, price_negotiable, 
-        maintenance_charges, security_deposit, city, locality, state, pincode, 
-        street_address, landmarks, description, images, videos, status, 
-        created_at, updated_at, is_featured
-      `);
+    // Get all public properties first using secure function
+    const { data, error } = await supabase.rpc('get_public_properties');
+    
+    if (error) return { data: null, error };
+    if (!data) return { data: [], error: null };
 
-    // Apply filters
+    // Apply filters client-side
+    let filteredData = data;
+
     if (filters.city) {
-      query = query.ilike('city', `%${filters.city}%`);
+      filteredData = filteredData.filter(p => 
+        p.city.toLowerCase().includes(filters.city!.toLowerCase())
+      );
     }
     if (filters.propertyType) {
-      query = query.eq('property_type', filters.propertyType);
+      filteredData = filteredData.filter(p => p.property_type === filters.propertyType);
     }
     if (filters.listingType) {
-      query = query.eq('listing_type', filters.listingType);
+      filteredData = filteredData.filter(p => p.listing_type === filters.listingType);
     }
     if (filters.minPrice) {
-      query = query.gte('expected_price', filters.minPrice);
+      filteredData = filteredData.filter(p => p.expected_price >= filters.minPrice!);
     }
     if (filters.maxPrice) {
-      query = query.lte('expected_price', filters.maxPrice);
+      filteredData = filteredData.filter(p => p.expected_price <= filters.maxPrice!);
     }
     if (filters.bhkType) {
-      query = query.eq('bhk_type', filters.bhkType);
+      filteredData = filteredData.filter(p => p.bhk_type === filters.bhkType);
     }
 
-    query = query.order('created_at', { ascending: false });
-
-    const { data, error } = await query;
-    return { data, error };
+    return { data: filteredData, error: null };
   }
 
   /**
@@ -168,24 +146,24 @@ export class SecurePropertyService {
    * Get properties by location (for map view, etc.)
    */
   static async getPropertiesByLocation(city: string, state?: string): Promise<{ data: PublicProperty[] | null; error: any }> {
-    let query = supabase
-      .from('properties')
-      .select(`
-        id, title, property_type, listing_type, bhk_type, expected_price, 
-        super_area, carpet_area, bathrooms, balconies, floor_no, total_floors, 
-        furnishing, availability_type, availability_date, price_negotiable, 
-        maintenance_charges, security_deposit, city, locality, state, pincode, 
-        street_address, landmarks, description, images, videos, status, 
-        created_at, updated_at, is_featured
-      `)
-      .ilike('city', `%${city}%`);
+    // Get all public properties first using secure function
+    const { data, error } = await supabase.rpc('get_public_properties');
+    
+    if (error) return { data: null, error };
+    if (!data) return { data: [], error: null };
+
+    // Filter by location client-side
+    let filteredData = data.filter(p => 
+      p.city.toLowerCase().includes(city.toLowerCase())
+    );
 
     if (state) {
-      query = query.ilike('state', `%${state}%`);
+      filteredData = filteredData.filter(p => 
+        p.state.toLowerCase().includes(state.toLowerCase())
+      );
     }
 
-    const { data, error } = await query;
-    return { data, error };
+    return { data: filteredData, error: null };
   }
 
   /**
@@ -193,19 +171,15 @@ export class SecurePropertyService {
    */
   static async getFeaturedProperties(limit: number = 6): Promise<{ data: PublicProperty[] | null; error: any }> {
     const { data, error } = await supabase
-      .from('properties')
-      .select(`
-        id, title, property_type, listing_type, bhk_type, expected_price, 
-        super_area, carpet_area, bathrooms, balconies, floor_no, total_floors, 
-        furnishing, availability_type, availability_date, price_negotiable, 
-        maintenance_charges, security_deposit, city, locality, state, pincode, 
-        street_address, landmarks, description, images, videos, status, 
-        created_at, updated_at, is_featured
-      `)
-      .order('created_at', { ascending: false })
-      .limit(limit);
-
-    return { data, error };
+      .rpc('get_public_properties');
+      
+    if (error) {
+      return { data: null, error };
+    }
+    
+    // Filter for featured properties and apply limit
+    const featuredData = (data || []).filter(property => property.is_featured).slice(0, limit);
+    return { data: featuredData, error: null };
   }
 
   /**
@@ -219,9 +193,8 @@ export class SecurePropertyService {
     } | null; 
     error: any 
   }> {
-    const { data, error } = await supabase
-      .from('properties')
-      .select('expected_price, city');
+    // Use secure function to get property data
+    const { data, error } = await supabase.rpc('get_public_properties');
 
     if (error) return { data: null, error };
     if (!data) return { data: null, error: null };

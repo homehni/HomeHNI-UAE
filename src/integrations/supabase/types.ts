@@ -1286,6 +1286,102 @@ export type Database = {
         Args: { _property_id: string }
         Returns: string
       }
+      get_public_properties: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          additional_documents: Json
+          amenities: Json
+          availability_date: string
+          availability_type: string
+          balconies: number
+          bathrooms: number
+          bhk_type: string
+          booking_amount: number
+          carpet_area: number
+          city: string
+          created_at: string
+          current_property_condition: string
+          description: string
+          expected_price: number
+          facing_direction: string
+          floor_no: number
+          floor_type: string
+          furnishing: string
+          gated_security: boolean
+          home_loan_available: boolean
+          id: string
+          images: string[]
+          is_featured: boolean
+          landmarks: string
+          listing_type: string
+          locality: string
+          maintenance_charges: number
+          pincode: string
+          power_backup: string
+          price_negotiable: boolean
+          property_age: string
+          property_type: string
+          registration_status: string
+          security_deposit: number
+          state: string
+          status: string
+          street_address: string
+          super_area: number
+          title: string
+          total_floors: number
+          updated_at: string
+          videos: string[]
+          water_supply: string
+        }[]
+      }
+      get_public_property_by_id: {
+        Args: { property_id: string }
+        Returns: {
+          additional_documents: Json
+          amenities: Json
+          availability_date: string
+          availability_type: string
+          balconies: number
+          bathrooms: number
+          bhk_type: string
+          booking_amount: number
+          carpet_area: number
+          city: string
+          created_at: string
+          current_property_condition: string
+          description: string
+          expected_price: number
+          facing_direction: string
+          floor_no: number
+          floor_type: string
+          furnishing: string
+          gated_security: boolean
+          home_loan_available: boolean
+          id: string
+          images: string[]
+          is_featured: boolean
+          landmarks: string
+          listing_type: string
+          locality: string
+          maintenance_charges: number
+          pincode: string
+          power_backup: string
+          price_negotiable: boolean
+          property_age: string
+          property_type: string
+          registration_status: string
+          security_deposit: number
+          state: string
+          status: string
+          street_address: string
+          super_area: number
+          title: string
+          total_floors: number
+          updated_at: string
+          videos: string[]
+          water_supply: string
+        }[]
+      }
       get_role_permissions: {
         Args: { _role: Database["public"]["Enums"]["app_role"] }
         Returns: {

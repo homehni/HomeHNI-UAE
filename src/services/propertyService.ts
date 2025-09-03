@@ -34,19 +34,10 @@ export interface PublicProperty {
   is_featured?: boolean;
 }
 
-// Service to fetch public properties (no sensitive owner data)
+// Service to fetch public properties (no sensitive owner data) - uses secure database function
 export const fetchPublicProperties = async () => {
   const { data, error } = await supabase
-    .from('properties')
-    .select(`
-      id, title, property_type, listing_type, bhk_type, expected_price, 
-      super_area, carpet_area, bathrooms, balconies, floor_no, total_floors, 
-      furnishing, availability_type, availability_date, price_negotiable, 
-      maintenance_charges, security_deposit, city, locality, state, pincode, 
-      street_address, landmarks, description, images, videos, status, 
-      created_at, updated_at, is_featured
-    `)
-    .order('created_at', { ascending: false });
+    .rpc('get_public_properties');
     
   if (error) {
     console.error('Error fetching public properties:', error);
@@ -56,50 +47,30 @@ export const fetchPublicProperties = async () => {
   return data || [];
 };
 
-// Service to fetch featured properties for the home page
+// Service to fetch featured properties for the home page - uses secure database function
 export const fetchFeaturedProperties = async () => {
   const { data, error } = await supabase
-    .from('properties')
-    .select(`
-      id, title, property_type, listing_type, bhk_type, expected_price, 
-      super_area, carpet_area, bathrooms, balconies, floor_no, total_floors, 
-      furnishing, availability_type, availability_date, price_negotiable, 
-      maintenance_charges, security_deposit, city, locality, state, pincode, 
-      street_address, landmarks, description, images, videos, status, 
-      created_at, updated_at, is_featured
-    `)
-    .eq('status', 'approved')
-    .eq('is_featured', true)
-    .order('created_at', { ascending: false })
-    .limit(20);
+    .rpc('get_public_properties');
     
   if (error) {
     console.error('Error fetching featured properties:', error);
     throw error;
   }
   
-  return data || [];
+  // Filter for featured properties
+  const featuredData = (data || []).filter(property => property.is_featured).slice(0, 20);
+  return featuredData;
 };
 
-// Service to fetch a single public property by ID
+// Service to fetch a single public property by ID - uses secure database function
 export const fetchPublicPropertyById = async (id: string) => {
   const { data, error } = await supabase
-    .from('properties')
-    .select(`
-      id, title, property_type, listing_type, bhk_type, expected_price, 
-      super_area, carpet_area, bathrooms, balconies, floor_no, total_floors, 
-      furnishing, availability_type, availability_date, price_negotiable, 
-      maintenance_charges, security_deposit, city, locality, state, pincode, 
-      street_address, landmarks, description, images, videos, status, 
-      created_at, updated_at, is_featured
-    `)
-    .eq('id', id)
-    .maybeSingle();
+    .rpc('get_public_property_by_id', { property_id: id });
     
   if (error) {
     console.error('Error fetching public property:', error);
     return null;
   }
   
-  return data;
+  return data && data.length > 0 ? data[0] : null;
 };
