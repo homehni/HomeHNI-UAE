@@ -156,7 +156,7 @@ const AboutSidebar = () => {
                     </ul>
                     
                     <p className="text-sm">
-                      If you are a landlord interested in posting your apartments to Home HNI, please email us at <a href="mailto:contact@homehni.com" className="text-blue-600 hover:underline">contact@homehni.com</a> and we will get in touch to help you list the property.
+                      If you are a landlord interested in posting your apartments to Home HNI, please email us at <a href="mailto:homehni8@gmail.com" className="text-blue-600 hover:underline">homehni8@gmail.com</a> and we will get in touch to help you list the property.
                     </p>
                     
                     <p className="text-sm pb-8">
