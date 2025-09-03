@@ -258,6 +258,35 @@ const AdminProperties = () => {
 
       // Insert into main properties table for homepage display
       console.log('Attempting to insert property with user_id:', userIdToAssign);
+
+      // Normalize images from submission payload to string public URLs
+      const resolveUrlFromString = (raw?: string): string | null => {
+        if (!raw) return null;
+        const s = String(raw).trim();
+        if (/^https?:\/\//i.test(s) || s.startsWith('/')) return s;
+        const cleaned = s
+          .replace(/^\/?storage\/v1\/object\/public\/property-media\//i, '')
+          .replace(/^property-media\//i, '')
+          .replace(/^public\//i, '');
+        try {
+          const { data } = supabase.storage.from('property-media').getPublicUrl(cleaned);
+          return data.publicUrl || null;
+        } catch {
+          return null;
+        }
+      };
+      const imagesNormalized: string[] = Array.isArray(payload.images)
+        ? (payload.images as any[])
+            .map((img: any) => {
+              if (typeof img === 'string') return resolveUrlFromString(img);
+              if (img && typeof img === 'object') {
+                return resolveUrlFromString(img.url || img.publicUrl || img.path || img.name);
+              }
+              return null;
+            })
+            .filter(Boolean) as string[]
+        : [];
+
       const { data: insertedProperty, error: insertError } = await supabase
         .from('properties')
         .insert({
@@ -286,7 +315,7 @@ const AdminProperties = () => {
           price_negotiable: payload.price_negotiable !== false,
           maintenance_charges: Math.max(Number(payload.maintenance_charges) || 0, 0),
           security_deposit: Math.max(Number(payload.security_deposit) || 0, 0),
-          images: payload.images || [],
+          images: imagesNormalized,
           videos: payload.videos || [],
           owner_name: payload.owner_name || '',
           owner_email: payload.owner_email || '',

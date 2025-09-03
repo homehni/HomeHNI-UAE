@@ -299,7 +299,7 @@ export const PostProperty: React.FC = () => {
           status: 'new',
           payload: {
             ...propertyData,
-            images: imageUrls.map(img => ({ url: img.url })),
+            images: imageUrls.map(img => img.url),
             videos: videoUrls,
             originalFormData: {
               ownerInfo: JSON.parse(JSON.stringify(data.ownerInfo)),
