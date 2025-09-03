@@ -108,6 +108,24 @@ export const PropertyDetailsCard: React.FC<PropertyDetailsCardProps> = ({ proper
     property.furnishing || 'Not specified'
   ].filter(fact => fact && fact !== 'Not specified');
 
+  // Normalize additional_documents values and prepare labels
+  const isTruthy = (v: any) =>
+    v === true ||
+    v === 1 ||
+    v === '1' ||
+    (typeof v === 'string' && ['yes', 'true', 'y'].includes(v.toLowerCase()));
+
+  const docLabelMap: Record<string, string> = {
+    allotmentLetter: 'Allotment Letter',
+    saleDeedCertificate: 'Sale Deed Certificate',
+    propertyTaxPaid: 'Property Tax Paid',
+    occupancyCertificate: 'Occupancy Certificate',
+  };
+
+  const documentEntries = property.additional_documents
+    ? Object.entries(property.additional_documents).filter(([_, val]) => isTruthy(val as any))
+    : [];
+
   return (
     <div className="rounded-2xl border-2 border-red-500 bg-white shadow-lg">
       <div className="flex items-center justify-between p-5 border-b border-gray-200">
@@ -146,21 +164,20 @@ export const PropertyDetailsCard: React.FC<PropertyDetailsCardProps> = ({ proper
         
         
         {/* Documents Section */}
-        {property.additional_documents && Object.values(property.additional_documents).some(Boolean) && (
+        {documentEntries.length > 0 && (
           <div className="mt-6">
             <h3 className="text-md font-semibold text-gray-900 mb-3">Available Documents</h3>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-              {Object.entries(property.additional_documents)
-                .filter(([_, value]) => value === true)
-                .map(([key, _]) => (
-                  <div key={key} className="flex items-center gap-2 text-sm text-gray-700">
-                    <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                    <span className="capitalize">{key.replace(/([A-Z])/g, ' $1').trim()}</span>
-                  </div>
-                ))}
+              {documentEntries.map(([key]) => (
+                <div key={key} className="flex items-center gap-2 text-sm text-gray-700">
+                  <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                  <span>{docLabelMap[key] ?? key.replace(/([A-Z])/g, ' $1').trim()}</span>
+                </div>
+              ))}
             </div>
           </div>
         )}
+
       </div>
     </div>
   );
