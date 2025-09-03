@@ -162,7 +162,13 @@ const PropertyCard = ({
   } else if (image && typeof image === 'object' && 'url' in image) {
     imagesForPage = [(image as any).url];
   }
-  imagesForPage = [...imagesForPage, ...fallbackUrls].slice(0, 3);
+  
+  // Only add fallbacks if we have fewer than 3 real images
+  const realImagesCount = imagesForPage.length;
+  if (realImagesCount < 3) {
+    const fallbacksNeeded = 3 - realImagesCount;
+    imagesForPage = [...imagesForPage, ...fallbackUrls.slice(0, fallbacksNeeded)];
+  }
 
   const propertyForPage = {
     id,

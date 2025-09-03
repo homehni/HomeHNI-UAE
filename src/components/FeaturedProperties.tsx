@@ -168,7 +168,7 @@ const FeaturedProperties = ({
           area: `${property.super_area || 0} sq ft`,
           bedrooms: parseInt(property.bhk_type?.replace(/[^\d]/g, '') || '0'),
           bathrooms: property.bathrooms || 0,
-          image: extractImageUrl(property.images),
+          image: property.images || [],
           propertyType: property.property_type?.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) || 'Property',
           isNew: new Date(property.created_at) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) // New if created within last 7 days
         }));
@@ -221,7 +221,7 @@ const FeaturedProperties = ({
                   area: `${record.super_area} sq ft`,
                   bedrooms: parseInt(record.bhk_type?.replace(/[^\d]/g, '') || '0'),
                   bathrooms: record.bathrooms || 0,
-                  image: extractImageUrl(record.images),
+                  image: record.images || [],
                   propertyType: record.property_type?.replace(/_/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase()) || 'Property',
                   isNew: true
                 };
