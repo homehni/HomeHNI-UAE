@@ -17,6 +17,7 @@ export interface PropertyDetails {
   bathrooms: number;
   balconies: number;
   propertyAge: string;
+  floorType?: string;
   totalFloors: number;
   floorNo: number;
   furnishingStatus: string;

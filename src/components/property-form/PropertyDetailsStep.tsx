@@ -15,6 +15,7 @@ const propertyDetailsSchema = z.object({
   propertyType: z.string().optional(),
   buildingType: z.string().optional(),
   propertyAge: z.string().optional(),
+  floorType: z.string().optional(),
   totalFloors: z.union([z.number(), z.string()]).optional(),
   floorNo: z.union([z.number(), z.string()]).optional(),
   furnishingStatus: z.string().optional(),
@@ -48,6 +49,7 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
       propertyType: initialData.propertyType || '',
       buildingType: initialData.buildingType || '',
       propertyAge: initialData.propertyAge || '',
+      floorType: initialData.floorType || '',
       totalFloors: initialData.totalFloors || 1,
       floorNo: initialData.floorNo || 0,
       furnishingStatus: initialData.furnishingStatus || '',
@@ -60,6 +62,53 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
 
   const [onMainRoad, setOnMainRoad] = useState(form.watch('onMainRoad'));
   const [cornerProperty, setCornerProperty] = useState(form.watch('cornerProperty'));
+  const floorType = form.watch('floorType');
+
+  // Helper function to get floor options based on floor type
+  const getFloorOptions = (floorType: string) => {
+    switch (floorType) {
+      case 'Lower Basement':
+        return [{ value: 'lower', label: 'Lower Basement' }];
+      case 'Upper Basement':
+        return [
+          { value: 'lower', label: 'Lower Basement' },
+          { value: 'upper', label: 'Upper Basement' }
+        ];
+      case 'Ground Floor':
+        return [{ value: '0', label: 'Ground Floor' }];
+      case 'Low Rise (1-3)':
+        return [
+          { value: '1', label: '1' },
+          { value: '2', label: '2' },
+          { value: '3', label: '3' }
+        ];
+      case 'Mid Rise (4-9)':
+        return Array.from({ length: 6 }, (_, i) => ({
+          value: (i + 4).toString(),
+          label: (i + 4).toString()
+        }));
+      case 'High Rise (10+)':
+        return [
+          ...Array.from({ length: 89 }, (_, i) => ({
+            value: (i + 10).toString(),
+            label: (i + 10).toString()
+          })),
+          { value: '99+', label: '99+' }
+        ];
+      default:
+        return [
+          { value: 'lower', label: 'Lower Basement' },
+          { value: 'upper', label: 'Upper Basement' },
+          { value: '0', label: 'Ground Floor' },
+          { value: 'full', label: 'Full Building' },
+          ...Array.from({ length: 99 }, (_, i) => ({
+            value: (i + 1).toString(),
+            label: (i + 1).toString()
+          })),
+          { value: '99+', label: '99+' }
+        ];
+    }
+  };
 
   const onSubmit = (data: PropertyDetailsFormData) => {
     // Pass the form data merged with initial data and toggle states to maintain all PropertyDetails fields
@@ -153,14 +202,40 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
             />
           </div>
 
-          {/* Age of Property, Floor, Total Floor */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {/* Floor Type, Age of Property, Floor, Total Floor */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <FormField
+              control={form.control}
+              name="floorType"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-sm font-medium">Floor Type</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger className="h-12">
+                        <SelectValue placeholder="Select Floor Type" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="Lower Basement">Lower Basement</SelectItem>
+                      <SelectItem value="Upper Basement">Upper Basement</SelectItem>
+                      <SelectItem value="Ground Floor">Ground Floor</SelectItem>
+                      <SelectItem value="Low Rise (1-3)">Low Rise (1-3)</SelectItem>
+                      <SelectItem value="Mid Rise (4-9)">Mid Rise (4-9)</SelectItem>
+                      <SelectItem value="High Rise (10+)">High Rise (10+)</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
             <FormField
               control={form.control}
               name="propertyAge"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-sm font-medium">Age of Property</FormLabel>
+                  <FormLabel className="text-sm font-medium">Property Age</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger className="h-12">
@@ -200,19 +275,11 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="lower">Lower Basement</SelectItem>
-                      <SelectItem value="upper">Upper Basement</SelectItem>
-                      <SelectItem value="0">Ground Floor</SelectItem>
-                      <SelectItem value="full">Full Building</SelectItem>
-                      {[...Array(99)].map((_, i) => {
-                        const floor = i + 1;
-                        return (
-                          <SelectItem key={floor} value={floor.toString()}>
-                            {floor}
-                          </SelectItem>
-                        );
-                      })}
-                      <SelectItem value="99+">99+</SelectItem>
+                      {getFloorOptions(floorType || '').map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                   <FormMessage />
@@ -254,6 +321,7 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
                 </FormItem>
               )}
             />
+
           </div>
 
           {/* Super Built Up Area and Furnishing */}
