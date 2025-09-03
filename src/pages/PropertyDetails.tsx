@@ -14,7 +14,7 @@ import { PropertyDetailsCard } from '@/components/property-details/PropertyDetai
 import { LocationCard } from '@/components/property-details/LocationCard';
 import { OverviewCard } from '@/components/property-details/OverviewCard';
 import { ServicesStrip } from '@/components/property-details/ServicesStrip';
-import { DescriptionCard } from '@/components/property-details/DescriptionCard';
+
 import { AmenitiesCard } from '@/components/property-details/AmenitiesCard';
 import { NeighborhoodCard } from '@/components/property-details/NeighborhoodCard';
 import { MobileStickyCTA } from '@/components/property-details/MobileStickyCTA';
@@ -130,11 +130,6 @@ const PropertyDetails: React.FC = () => {
             {/* Overview */}
             <OverviewCard property={property} />
             
-            {/* Description */}
-            <DescriptionCard 
-              description={property.description}
-              fallbackDescription={fallbackDescription}
-            />
             
             {/* Amenities */}
             <AmenitiesCard amenities={amenitiesData} />
