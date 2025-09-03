@@ -294,6 +294,13 @@ const AdminProperties = () => {
       const rentalDetails = originalFormData.propertyInfo?.rentalDetails || {};
       const additionalInfo = originalFormData.propertyInfo?.additionalInfo || {};
       const amenities = originalFormData.propertyInfo?.amenities || {};
+      
+      console.log('Mapping property data:', {
+        propertyDetails,
+        saleDetails, 
+        amenities,
+        additionalInfo
+      });
 
       const { data: insertedProperty, error: insertError } = await supabase
         .from('properties')
@@ -324,10 +331,10 @@ const AdminProperties = () => {
           
           // Property specifications
           description: payload.description || additionalInfo.description || '',
-          bathrooms: payload.bathrooms || propertyDetails.bathrooms || 0,
-          balconies: payload.balconies || propertyDetails.balconies || 0,
-          floor_no: payload.floor_no || propertyDetails.floorNo || null,
-          total_floors: payload.total_floors || propertyDetails.totalFloors || null,
+          bathrooms: amenities.bathrooms || payload.bathrooms || propertyDetails.bathrooms || 0,
+          balconies: amenities.balcony || payload.balconies || propertyDetails.balconies || 0,
+          floor_no: propertyDetails.floorNo || payload.floor_no || null,
+          total_floors: propertyDetails.totalFloors || payload.total_floors || null,
           super_area: Math.max(Number(payload.super_area || propertyDetails.superBuiltUpArea) || 0, 1),
           carpet_area: payload.carpet_area || null,
           
@@ -345,7 +352,7 @@ const AdminProperties = () => {
           // NEW: Property services and amenities
           water_supply: amenities.waterSupply || null,
           power_backup: amenities.powerBackup || null,
-          gated_security: amenities.gatedSecurity === true || amenities.gatedSecurity === 'Yes',
+          gated_security: amenities.gatedSecurity === true || amenities.gatedSecurity === 'Yes' || amenities.gatedSecurity === 'yes',
           who_will_show: amenities.whoWillShow || additionalInfo.whoWillShow || null,
           current_property_condition: amenities.currentPropertyCondition || null,
           secondary_phone: additionalInfo.secondaryNumber || null,
