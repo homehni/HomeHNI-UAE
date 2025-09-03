@@ -79,7 +79,7 @@ const PropertyDetails: React.FC = () => {
         console.error('Failed to load amenities', err);
       }
     };
-    if (!(property as any)?.amenities) {
+    if (!(property as any)?.amenities || !(property as any)?.additional_documents) {
       loadAmenities();
     }
   }, [id]);
