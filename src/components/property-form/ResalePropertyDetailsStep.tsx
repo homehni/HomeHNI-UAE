@@ -49,83 +49,13 @@ export const ResalePropertyDetailsStep: React.FC<ResalePropertyDetailsStepProps>
       propertyAge: initialData.propertyAge || '',
       facing: (initialData as any).facing || '',
       floorType: (initialData as any).floorType || '',
-      floorNo: initialData.floorNo ?? undefined,
+      floorNo: initialData.floorNo || 0,
       totalFloors: initialData.totalFloors || 1,
     },
   });
 
   const [onMainRoad, setOnMainRoad] = useState(initialData.onMainRoad || false);
   const [cornerProperty, setCornerProperty] = useState(initialData.cornerProperty || false);
-  const floorType = form.watch('floorType');
-
-  // Helper function to get floor options based on floor type
-  const getFloorOptions = (floorType: string) => {
-    if (!floorType || floorType.trim() === '') {
-      return [];
-    }
-    
-    switch (floorType) {
-      case 'Lower Basement':
-        return [{ value: 'lower', label: 'Lower Basement' }];
-      case 'Upper Basement':
-        return [
-          { value: 'lower', label: 'Lower Basement' },
-          { value: 'upper', label: 'Upper Basement' }
-        ];
-      case 'Ground Floor':
-        return [{ value: '0', label: 'Ground Floor' }];
-      case 'Low Rise (1-3)':
-        return [
-          { value: 'lower', label: 'Lower Basement' },
-          { value: 'upper', label: 'Upper Basement' },
-          { value: '0', label: 'Ground Floor' },
-          { value: '1', label: '1' },
-          { value: '2', label: '2' },
-          { value: '3', label: '3' }
-        ];
-      case 'Mid Rise (4-9)':
-        return [
-          { value: 'lower', label: 'Lower Basement' },
-          { value: 'upper', label: 'Upper Basement' },
-          { value: '0', label: 'Ground Floor' },
-          ...Array.from({ length: 9 }, (_, i) => ({
-            value: (i + 1).toString(),
-            label: (i + 1).toString()
-          }))
-        ];
-      case 'High Rise (10+)':
-        return [
-          { value: 'lower', label: 'Lower Basement' },
-          { value: 'upper', label: 'Upper Basement' },
-          { value: '0', label: 'Ground Floor' },
-          ...Array.from({ length: 99 }, (_, i) => ({
-            value: (i + 1).toString(),
-            label: (i + 1).toString()
-          })),
-          { value: '99+', label: '99+' }
-        ];
-      default:
-        return [
-          { value: 'lower', label: 'Lower Basement' },
-          { value: 'upper', label: 'Upper Basement' },
-          { value: '0', label: 'Ground Floor' },
-          { value: 'full', label: 'Full Building' },
-          ...Array.from({ length: 99 }, (_, i) => ({
-            value: (i + 1).toString(),
-            label: (i + 1).toString()
-          })),
-          { value: '99+', label: '99+' }
-        ];
-    }
-  };
-
-  // Reset floor number when floor type changes
-  React.useEffect(() => {
-    if (floorType && floorType.trim() !== '') {
-      form.setValue('floorNo', undefined);
-      form.clearErrors('floorNo');
-    }
-  }, [floorType, form]);
 
   const onSubmit = (data: ResalePropertyDetailsFormData) => {
     onNext({
@@ -421,35 +351,31 @@ export const ResalePropertyDetailsStep: React.FC<ResalePropertyDetailsStepProps>
                 <FormItem>
                   <FormLabel className="text-sm font-medium">Floor</FormLabel>
                   <Select
-                    onValueChange={(value) => {
-                      form.clearErrors('floorNo');
-                      if (value === 'full' || value === 'lower' || value === 'upper' || value === '99+') {
-                        field.onChange(value);
-                      } else {
-                        const asNum = parseInt(value, 10);
-                        field.onChange(Number.isNaN(asNum) ? value : asNum);
-                      }
-                    }}
-                    value={field.value === undefined ? "" : field.value.toString()}
-                    disabled={!floorType || floorType.trim() === ''}
+                    onValueChange={(value) =>
+                      value === 'lower' || value === 'upper' || value === '99+'
+                        ? field.onChange(value)
+                        : field.onChange(parseInt(value))
+                    }
+                    defaultValue={field.value?.toString()}
                   >
                     <FormControl>
                       <SelectTrigger className="h-12">
-                        <SelectValue placeholder={floorType && floorType.trim() !== '' ? "Select Floor" : "Select Floor Type first"} />
+                        <SelectValue placeholder="Select Floor" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {floorType && floorType.trim() !== '' ? (
-                        getFloorOptions(floorType).map((option) => (
-                          <SelectItem key={option.value} value={option.value || 'empty'}>
-                            {option.label}
+                      <SelectItem value="lower">Lower Basement</SelectItem>
+                      <SelectItem value="upper">Upper Basement</SelectItem>
+                      <SelectItem value="0">Ground Floor</SelectItem>
+                      {[...Array(50)].map((_, i) => {
+                        const floor = i + 1;
+                        return (
+                          <SelectItem key={floor} value={floor.toString()}>
+                            {floor}
                           </SelectItem>
-                        ))
-                      ) : (
-                        <SelectItem value="disabled" disabled>
-                          Please select Floor Type first
-                        </SelectItem>
-                      )}
+                        );
+                      })}
+                      <SelectItem value="99+">50+</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />
