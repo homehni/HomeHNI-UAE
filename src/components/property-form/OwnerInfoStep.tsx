@@ -231,11 +231,11 @@ export const OwnerInfoStep: React.FC<OwnerInfoStepProps> = ({
               {getListingTypes().map((type) => {
                 let buttonText = type;
                 if (type === 'Rent') {
-                  buttonText = 'Rent Out / Find Rental';
+                  buttonText = 'Rent';
                 } else if (type === 'PG/Hostel') {
                   buttonText = 'List PG/Hostel';
                 } else if (type === 'Flatmates') {
-                  buttonText = 'Find Flatmates';
+                  buttonText = 'Flatmates';
                 }
                 
                 return (
