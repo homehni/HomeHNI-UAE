@@ -51,7 +51,7 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
       propertyAge: initialData.propertyAge || '',
       floorType: initialData.floorType || '',
       totalFloors: initialData.totalFloors || 1,
-      floorNo: initialData.floorNo || 0,
+      floorNo: initialData.floorNo ?? undefined,
       furnishingStatus: initialData.furnishingStatus || '',
       parkingType: initialData.parkingType || '',
       superBuiltUpArea: initialData.superBuiltUpArea ?? undefined,
@@ -63,30 +63,22 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
   const [onMainRoad, setOnMainRoad] = useState(form.watch('onMainRoad'));
   const [cornerProperty, setCornerProperty] = useState(form.watch('cornerProperty'));
   const floorType = form.watch('floorType');
-  const floorNoWatch = form.watch('floorNo');
-  const [floorError, setFloorError] = React.useState<string | null>(null);
-
+  
   // Reset floor number when floor type changes
-  React.useEffect(() => {
-    if (floorType) {
-      form.setValue('floorNo', undefined);
-      form.clearErrors('floorNo');
-      setFloorError(null);
+  React.useEffect(() =>    if (floorType) {
+      const currentFloorNo = form.getValues('floorNo');
+      const allowedFloors = getFloorOptions(floorType).map(option => option.value);
+      const currentFloorStr = typeof currentFloorNo === 'number' ? currentFloorNo.toString() : (currentFloorNo ?? '').toString();
+      
+      // Only reset if current floor is not valid for the new floor type
+      if (currentFloorStr && !allowedFloors.includes(currentFloorStr)) {
+        form.setValue('floorNo', undefined);
+        form.clearErrors('floorNo');
+      }
     }
   }, [floorType, form]);
 
-  // Live-validate floor selection against floor type
-  React.useEffect(() => {
-    const allowed = getFloorOptions(floorType || '').map((o) => o.value);
-    const selected = typeof floorNoWatch === 'number' ? floorNoWatch.toString() : (floorNoWatch ?? '').toString();
-    if (floorType && selected && !allowed.includes(selected)) {
-      form.setError('floorNo', { type: 'validate', message: 'Choose the correct floor' });
-      setFloorError('Choose the correct floor');
-    } else {
-      form.clearErrors('floorNo');
-      setFloorError(null);
-    }
-  }, [floorType, floorNoWatch, form]);
+
 
   // Helper function to get floor options based on floor type
   const getFloorOptions = (floorType: string) => {
@@ -102,20 +94,31 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
         return [{ value: '0', label: 'Ground Floor' }];
       case 'Low Rise (1-3)':
         return [
+          { value: 'lower', label: 'Lower Basement' },
+          { value: 'upper', label: 'Upper Basement' },
+          { value: '0', label: 'Ground Floor' },
           { value: '1', label: '1' },
           { value: '2', label: '2' },
           { value: '3', label: '3' }
         ];
       case 'Mid Rise (4-9)':
-        return Array.from({ length: 6 }, (_, i) => ({
-          value: (i + 4).toString(),
-          label: (i + 4).toString()
-        }));
+        return [
+          { value: 'lower', label: 'Lower Basement' },
+          { value: 'upper', label: 'Upper Basement' },
+          { value: '0', label: 'Ground Floor' },
+          ...Array.from({ length: 9 }, (_, i) => ({
+            value: (i + 1).toString(),
+            label: (i + 1).toString()
+          }))
+        ];
       case 'High Rise (10+)':
         return [
-          ...Array.from({ length: 89 }, (_, i) => ({
-            value: (i + 10).toString(),
-            label: (i + 10).toString()
+          { value: 'lower', label: 'Lower Basement' },
+          { value: 'upper', label: 'Upper Basement' },
+          { value: '0', label: 'Ground Floor' },
+          ...Array.from({ length: 99 }, (_, i) => ({
+            value: (i + 1).toString(),
+            label: (i + 1).toString()
           })),
           { value: '99+', label: '99+' }
         ];
@@ -136,11 +139,13 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
 
   const onSubmit = (data: PropertyDetailsFormData) => {
     // Validate floor selection against floor type
-    const allowed = getFloorOptions(data.floorType || '').map((o) => o.value);
-    const selected = typeof data.floorNo === 'number' ? data.floorNo.toString() : (data.floorNo ?? '').toString();
-    if (data.floorType && selected && !allowed.includes(selected)) {
-      form.setError('floorNo', { type: 'validate', message: 'Choose the correct floor' });
-      return;
+    if (data.floorType && data.floorNo !== undefined) {
+      const allowed = getFloorOptions(data.floorType).map((o) => o.value);
+      const selected = typeof data.floorNo === 'number' ? data.floorNo.toString() : (data.floorNo ?? '').toString();
+      if (!allowed.includes(selected)) {
+        form.setError('floorNo', { type: 'validate', message: 'Please select a valid floor for the chosen floor type' });
+        return;
+      }
     }
 
     // Pass the form data merged with initial data and toggle states to maintain all PropertyDetails fields
@@ -295,16 +300,7 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
                   <FormLabel className="text-sm font-medium">Floor</FormLabel>
                   <Select
                     onValueChange={(value) => {
-                      const allowed = getFloorOptions(floorType || '').map((o) => o.value);
-                      if (!allowed.includes(value)) {
-                        // Reflect user's selection and show an inline warning
-                        field.onChange(value);
-                        form.setError('floorNo', { type: 'validate', message: 'Choose the correct floor' });
-                        setFloorError('Choose the correct floor');
-                        return;
-                      }
                       form.clearErrors('floorNo');
-                      setFloorError(null);
                       if (value === 'full' || value === 'lower' || value === 'upper' || value === '99+') {
                         field.onChange(value);
                       } else {
@@ -312,27 +308,29 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
                         field.onChange(Number.isNaN(asNum) ? value : asNum);
                       }
                     }}
-                    value={field.value === undefined ? undefined : field.value.toString()}
+                    value={field.value === undefined ? "" : field.value.toString()}
+                    disabled={!floorType}
                   >
                     <FormControl>
                       <SelectTrigger className="h-12">
-                        <SelectValue placeholder="Select Floor" />
+                        <SelectValue placeholder={floorType ? "Select Floor" : "Select Floor Type first"} />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {getFloorOptions(floorType || '').map((option) => (
-                        <SelectItem key={option.value} value={option.value}>
-                          {option.label}
+                      {floorType ? (
+                        getFloorOptions(floorType).map((option) => (
+                          <SelectItem key={option.value} value={option.value}>
+                            {option.label}
+                          </SelectItem>
+                        ))
+                      ) : (
+                        <SelectItem value="" disabled>
+                          Please select Floor Type first
                         </SelectItem>
-                      ))}
+                      )}
                     </SelectContent>
                   </Select>
                   <FormMessage />
-                  {(form.formState.errors.floorNo?.message || floorError) ? (
-                    <p className="text-sm text-destructive mt-1" role="alert" aria-live="polite">
-                      {form.formState.errors.floorNo?.message ?? floorError}
-                    </p>
-                  ) : null}
                 </FormItem>
               )}
             />

@@ -19,7 +19,7 @@ export const ProgressIndicator: React.FC<ProgressIndicatorProps> = ({
       {/* Simple Step Numbers Progress */}
       <div className="flex items-center justify-center space-x-2">
         {steps.map((step, index) => (
-          <React.Fragment key={step}>
+          <div key={step} className="flex items-center">
             <div
               className={`
                 flex items-center justify-center w-8 h-8 rounded-full text-sm font-medium transition-all duration-300
@@ -36,7 +36,7 @@ export const ProgressIndicator: React.FC<ProgressIndicatorProps> = ({
             {index < steps.length - 1 && (
               <div className="flex-1 h-px bg-gray-300 min-w-[20px] max-w-[40px]" />
             )}
-          </React.Fragment>
+          </div>
         ))}
       </div>
     </div>
