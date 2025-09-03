@@ -15,7 +15,7 @@ import { LandPlotFormData } from '@/types/landPlotProperty';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
-import { uploadFilesToStorage, uploadSingleFile } from '@/services/fileUploadService';
+import { uploadSingleFile, uploadPropertyImagesByType } from '@/services/fileUploadService';
 import { validatePropertySubmission } from '@/utils/propertyValidation';
 import { mapBhkType, mapPropertyType, mapListingType, validateMappedValues } from '@/utils/propertyMappings';
 import Header from '@/components/Header';
@@ -191,15 +191,17 @@ export const PostProperty: React.FC = () => {
         console.warn('Non-blocking validation issues:', validation.errors);
       }
 
-      // Upload images to storage
-      toast({
-        title: "Uploading Images...",
-        description: "Please wait while we upload your property images.",
-      });
+      // Determine property type for storage folder
+      const propertyTypeRawForFolder = ('propertyDetails' in (data as any).propertyInfo)
+        ? (data as any).propertyInfo.propertyDetails.propertyType
+        : (('plotDetails' in (data as any).propertyInfo)
+          ? (data as any).propertyInfo.plotDetails.propertyType
+          : 'Commercial');
 
-      const imageUrls = await uploadFilesToStorage(
-        (data as any)?.propertyInfo?.gallery?.images || [],
-        'images',
+      // Upload images to typed folder under property-media/content-images/<type>
+      const imageUrls = await uploadPropertyImagesByType(
+        ((data as any)?.propertyInfo?.gallery?.images || []) as File[],
+        propertyTypeRawForFolder,
         user.id
       );
 

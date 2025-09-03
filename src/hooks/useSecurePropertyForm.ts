@@ -4,6 +4,7 @@ import { useToast } from '@/hooks/use-toast';
 import { validatePropertySubmission } from '@/utils/propertyValidation';
 import { OwnerInfo, PropertyInfo } from '@/types/property';
 import { supabase } from '@/integrations/supabase/client';
+import { mapPropertyType } from '@/utils/propertyMappings';
 
 export interface SecureSubmissionState {
   isSubmitting: boolean;
@@ -110,31 +111,27 @@ export const useSecurePropertyForm = () => {
       const imageUrls: string[] = [];
       
       if (propertyInfo.gallery?.images) {
+        const typeSlug = mapPropertyType(propertyInfo.propertyDetails.propertyType).replace(/_/g, '-');
+        const basePath = `content-images/${typeSlug}`;
         for (let i = 0; i < propertyInfo.gallery.images.length; i++) {
           const image = propertyInfo.gallery.images[i];
-          
-          // Generate secure filename
           const fileExt = image.name.split('.').pop()?.toLowerCase();
-          const secureFileName = `${user.id}/${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`;
-          
+          const unique = `${Date.now()}_${i}_${user.id.substring(0,8)}.${fileExt}`;
+          const path = `${basePath}/${unique}`;
+
           updateProgress(`Uploading image ${i + 1} of ${propertyInfo.gallery.images.length}...`);
-          
-          const { data: uploadData, error: uploadError } = await supabase.storage
+
+          const { error: uploadError } = await supabase.storage
             .from('property-media')
-            .upload(secureFileName, image, {
-              cacheControl: '3600',
-              upsert: false
-            });
+            .upload(path, image, { cacheControl: '3600', upsert: false });
 
           if (uploadError) {
             throw new Error(`Image upload failed: ${uploadError.message}`);
           }
 
-          // Get public URL
           const { data: { publicUrl } } = supabase.storage
             .from('property-media')
-            .getPublicUrl(uploadData.path);
-          
+            .getPublicUrl(path);
           imageUrls.push(publicUrl);
         }
       }
