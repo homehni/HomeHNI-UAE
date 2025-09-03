@@ -68,6 +68,7 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
   React.useEffect(() => {
     if (floorType) {
       form.setValue('floorNo', undefined);
+      form.clearErrors('floorNo');
     }
   }, [floorType, form]);
 
@@ -118,6 +119,14 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
   };
 
   const onSubmit = (data: PropertyDetailsFormData) => {
+    // Validate floor selection against floor type
+    const allowed = getFloorOptions(data.floorType || '').map((o) => o.value);
+    const selected = typeof data.floorNo === 'number' ? data.floorNo.toString() : (data.floorNo ?? '').toString();
+    if (data.floorType && selected && !allowed.includes(selected)) {
+      form.setError('floorNo', { type: 'validate', message: 'Choose the correct floor' });
+      return;
+    }
+
     // Pass the form data merged with initial data and toggle states to maintain all PropertyDetails fields
     onNext({
       ...initialData, // Keep existing fields like title, bhkType, etc.
@@ -269,11 +278,20 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
                 <FormItem>
                   <FormLabel className="text-sm font-medium">Floor</FormLabel>
                   <Select
-                    onValueChange={(value) =>
-                      value === 'full' || value === 'lower' || value === 'upper' || value === '99+'
-                        ? field.onChange(value)
-                        : field.onChange(parseInt(value))
-                    }
+                    onValueChange={(value) => {
+                      const allowed = getFloorOptions(floorType || '').map((o) => o.value);
+                      if (!allowed.includes(value)) {
+                        form.setError('floorNo', { type: 'validate', message: 'Choose the correct floor' });
+                        return;
+                      }
+                      form.clearErrors('floorNo');
+                      if (value === 'full' || value === 'lower' || value === 'upper' || value === '99+') {
+                        field.onChange(value);
+                      } else {
+                        const asNum = parseInt(value, 10);
+                        field.onChange(Number.isNaN(asNum) ? value : asNum);
+                      }
+                    }}
                     defaultValue={field.value?.toString()}
                   >
                     <FormControl>
