@@ -13,6 +13,7 @@ import { DeleteConfirmationModal } from '@/components/DeleteConfirmationModal';
 import { PropertyDetailModal } from '@/components/PropertyDetailModal';
 import { PropertyEditModal } from '@/components/PropertyEditModal';
 import { RequirementMatches } from '@/components/RequirementMatches';
+import { RequirementsChatLayout } from '@/components/requirements/RequirementsChatLayout';
 import Header from '@/components/Header';
 import Marquee from '@/components/Marquee';
 
@@ -545,149 +546,8 @@ export const Dashboard: React.FC = () => {
           </TabsContent>
 
           {/* Requirements Tab */}
-          <TabsContent value="requirements" className="space-y-6">
-            <div className="flex justify-between items-center">
-              <h2 className="text-xl font-semibold">My Requirements</h2>
-              <Button onClick={() => navigate('/post-property')}>
-                <Plus className="h-4 w-4 mr-2" />
-                Post New Requirement
-              </Button>
-            </div>
-
-            {propertyRequirements.length === 0 ? (
-              <Card>
-                <CardContent className="text-center py-8">
-                  <FileText className="h-12 w-12 mx-auto text-gray-400 mb-4" />
-                  <h3 className="text-lg font-medium text-gray-900 mb-2">No requirements posted yet</h3>
-                  <p className="text-gray-500 mb-4">Start by posting your first property requirement</p>
-                  <Button onClick={() => navigate('/post-property')}>
-                    <Plus className="h-4 w-4 mr-2" />
-                    Post Your First Requirement
-                  </Button>
-                </CardContent>
-              </Card>
-            ) : (
-              <>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  {propertyRequirements
-                    .slice((requirementsPage - 1) * requirementsPerPage, requirementsPage * requirementsPerPage)
-                    .map((submission) => {
-                    let payload: any = {};
-                    try {
-                      payload = typeof submission.payload === 'string' 
-                        ? JSON.parse(submission.payload) 
-                        : submission.payload || {};
-                    } catch (e) {
-                      console.error('Error parsing payload:', e);
-                      payload = {};
-                    }
-
-                    return (
-                      <div key={submission.id} className="space-y-4">
-                        <Card className="flex flex-col h-64">
-                          <CardHeader className="pb-3">
-                            <div className="flex justify-between items-start">
-                              <Badge 
-                                variant={payload?.intent === 'Buy' ? 'default' : 
-                                        payload?.intent === 'Sell' ? 'secondary' : 
-                                        payload?.intent === 'Lease' ? 'outline' :
-                                        payload?.intent === 'Service' ? 'destructive' : 'secondary'}
-                                className="mb-2"
-                              >
-                                {payload?.intent || 'Requirement'}
-                              </Badge>
-                              <Badge 
-                                variant={submission.status === 'new' ? 'default' : 
-                                        submission.status === 'in-progress' ? 'secondary' : 
-                                        submission.status === 'completed' ? 'default' : 'outline'}
-                                className={submission.status === 'new' ? 'bg-blue-100 text-blue-800' :
-                                          submission.status === 'in-progress' ? 'bg-yellow-100 text-yellow-800' :
-                                          submission.status === 'completed' ? 'bg-green-100 text-green-800' : ''}
-                              >
-                                {submission.status}
-                              </Badge>
-                            </div>
-                            <CardTitle className="text-base line-clamp-2">
-                              {submission.title || `${payload?.propertyType} ${payload?.intent}` || 'Property Requirement'}
-                            </CardTitle>
-                          </CardHeader>
-                          <CardContent className="flex-1 flex flex-col justify-between p-4 pt-0 h-32">
-                            <div className="space-y-2 text-sm text-gray-600">
-                              <div className="flex items-center gap-2">
-                                <Building className="h-4 w-4" />
-                                <span>{payload?.propertyType || payload?.serviceType || 'Not specified'}</span>
-                              </div>
-                              <div>
-                                📍 {payload?.city || 'Not specified'}, {payload?.state || ''}
-                              </div>
-                              <div className="font-medium text-primary">
-                                ₹{payload?.budget?.min?.toLocaleString() || '0'} - ₹{payload?.budget?.max?.toLocaleString() || '0'}
-                              </div>
-                            </div>
-                            <div className="mt-4 pt-3 border-t border-gray-100">
-                              <div className="text-xs text-gray-500">
-                                {new Date(submission.created_at).toLocaleDateString()}
-                              </div>
-                            </div>
-                          </CardContent>
-                        </Card>
-                        
-                        {/* Real-time Matches Component */}
-                        <RequirementMatches 
-                          requirement={{
-                            id: submission.id,
-                            title: submission.title || 'Property Requirement',
-                            payload: payload
-                          }}
-                        />
-                      </div>
-                    );
-                  })}
-                </div>
-                
-                {/* Pagination */}
-                {propertyRequirements.length > requirementsPerPage && (
-                  <div className="flex justify-center items-center space-x-2 mt-6">
-                    {/* Previous button - only show if not on first page */}
-                    {requirementsPage > 1 && (
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => setRequirementsPage(prev => Math.max(prev - 1, 1))}
-                      >
-                        Previous
-                      </Button>
-                    )}
-                    
-                    {/* Page number buttons */}
-                    {Array.from({ length: Math.ceil(propertyRequirements.length / requirementsPerPage) }, (_, i) => i + 1).map((pageNum) => (
-                      <Button
-                        key={pageNum}
-                        variant={requirementsPage === pageNum ? "default" : "outline"}
-                        size="sm"
-                        onClick={() => setRequirementsPage(pageNum)}
-                        className="min-w-10"
-                      >
-                        {pageNum}
-                      </Button>
-                    ))}
-                    
-                    {/* Next button - only show if not on last page */}
-                    {requirementsPage < Math.ceil(propertyRequirements.length / requirementsPerPage) && (
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => setRequirementsPage(prev => 
-                          Math.min(prev + 1, Math.ceil(propertyRequirements.length / requirementsPerPage))
-                        )}
-                      >
-                        Next
-                      </Button>
-                    )}
-                  </div>
-                )}
-              </>
-            )}
+          <TabsContent value="requirements" className="space-y-0 p-0 h-[calc(100vh-200px)]">
+            <RequirementsChatLayout requirements={propertyRequirements} />
           </TabsContent>
 
           {/* Leads Tab */}
