@@ -32,6 +32,7 @@ export const mapPropertyType = (propertyType: string): string => {
     'Builder Floor': 'builder_floor',
     'Plot': 'plot',
     'Plot/Land': 'plot', // Map form value to DB value
+    'Land/Plot': 'plot', // Map form value to DB value (alternate label)
     'Agricultural Land': 'plot', // Map Agricultural Land to plot
     'Farmhouse': 'plot', // Map Farmhouse to plot
     'Studio': 'studio',
