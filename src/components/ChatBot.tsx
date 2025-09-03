@@ -328,7 +328,7 @@ const ChatBot = () => {
       )}
 
       {isOpen && (
-        <Card className="w-[calc(100vw-2rem)] max-w-96 h-[calc(100vh-8rem)] max-h-[500px] shadow-2xl border-0 bg-white sm:w-96 sm:h-[500px]">
+        <Card className="w-[calc(100vw-2rem)] max-w-96 h-[calc(100vh-8rem)] max-h-[500px] shadow-2xl border-2 border-brand-red/30 bg-white sm:w-96 sm:h-[500px]">
           <CardHeader className="bg-brand-red text-white p-3 sm:p-4 rounded-t-lg">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">

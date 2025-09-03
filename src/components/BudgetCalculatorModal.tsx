@@ -202,7 +202,7 @@ const BudgetCalculatorModal: React.FC<BudgetCalculatorModalProps> = ({
 
           {/* Results Section */}
           <div className="space-y-6">
-            <Card className="bg-primary/5">
+            <Card className="bg-brand-red/5 border-2 border-brand-red/30">
               <CardContent className="p-6 text-center">
                 <div className="text-2xl font-bold text-primary mb-2">
                   ₹{totalBudget.toLocaleString('en-IN', { maximumFractionDigits: 0 })}
