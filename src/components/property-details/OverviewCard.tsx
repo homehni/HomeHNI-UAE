@@ -66,7 +66,25 @@ export const OverviewCard: React.FC<OverviewCardProps> = ({ property }) => {
     return `₹${amount.toLocaleString()}`;
   };
 
-  const overviewItems = [
+  // Check if property is a plot/land
+  const isPlotProperty = property.property_type?.toLowerCase().includes('plot') || 
+                        property.property_type?.toLowerCase().includes('land');
+
+  const overviewItems = isPlotProperty ? [
+    { label: 'Property Type', value: property.property_type?.replace('_', ' ') || 'Not specified' },
+    { label: 'Plot Area', value: formatArea(property.super_area, property.carpet_area) },
+    { label: 'Ownership Type', value: formatOwnership(property.owner_role) },
+    { label: 'Expected Price', value: formatPrice(property.expected_price) },
+    { label: 'Price Negotiable', value: property.price_negotiable ? 'Yes' : 'No' },
+    { label: 'Gated Security', value: property.gated_security ? 'Yes' : 'No' },
+    { label: 'Home Loan Available', value: property.home_loan_available ? 'Yes' : 'No' },
+    { label: 'Water Connection', value: property.water_supply || 'Not specified' },
+    { label: 'Power Backup', value: property.power_backup || 'Not specified' },
+    { label: 'Registration Status', value: property.registration_status || 'Not specified' },
+    { label: 'Property Condition', value: property.current_property_condition || 'Not specified' },
+    { label: 'Who Shows Property', value: property.who_will_show || 'Not specified' },
+    { label: 'Secondary Contact', value: property.secondary_phone || 'Not specified' },
+  ] : [
     { label: 'Property Type', value: property.property_type?.replace('_', ' ') || 'Not specified' },
     { label: 'BHK Type', value: property.bhk_type || 'Not specified' },
     { label: 'Ownership Type', value: formatOwnership(property.owner_role) },
@@ -77,7 +95,6 @@ export const OverviewCard: React.FC<OverviewCardProps> = ({ property }) => {
     { label: 'Bathrooms', value: property.bathrooms?.toString() || 'Not specified' },
     { label: 'Balconies', value: property.balconies?.toString() || 'Not specified' },
     { label: 'Availability', value: property.availability_type || 'Not specified' },
-    // NEW: Enhanced property overview details
     { label: 'Property Age', value: property.property_age || 'Not specified' },
     { label: 'Facing Direction', value: property.facing_direction || 'Not specified' },
     { label: 'Floor Type', value: property.floor_type || 'Not specified' },
@@ -93,7 +110,9 @@ export const OverviewCard: React.FC<OverviewCardProps> = ({ property }) => {
     { label: 'Property Condition', value: property.current_property_condition || 'Not specified' },
     { label: 'Who Shows Property', value: property.who_will_show || 'Not specified' },
     { label: 'Secondary Contact', value: property.secondary_phone || 'Not specified' },
-  ].filter(item => item.value !== 'Not specified');
+  ];
+
+  const filteredOverviewItems = overviewItems.filter(item => item.value !== 'Not specified');
 
   return (
     <div className="rounded-2xl border-2 border-red-500 bg-white shadow-lg">
@@ -103,7 +122,7 @@ export const OverviewCard: React.FC<OverviewCardProps> = ({ property }) => {
       
       <div className="p-5 pt-4">
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
-          {overviewItems.map((item, index) => (
+          {filteredOverviewItems.map((item, index) => (
             <div
               key={index}
               className="bg-gray-50/70 p-3 rounded-lg ring-1 ring-gray-100"

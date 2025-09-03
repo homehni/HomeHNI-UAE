@@ -79,7 +79,23 @@ export const PropertyDetailsCard: React.FC<PropertyDetailsCardProps> = ({ proper
     return 'Not specified';
   };
 
-  const details = [
+  // Check if property is a plot/land
+  const isPlotProperty = property.property_type?.toLowerCase().includes('plot') || 
+                        property.property_type?.toLowerCase().includes('land');
+
+  // Different details for plots vs regular properties
+  const details = isPlotProperty ? [
+    { label: 'Type', value: property.property_type?.replace('_', ' ') || 'Not specified' },
+    { label: 'Plot Area', value: formatArea(property.super_area, property.carpet_area) },
+    { label: 'Ownership', value: formatOwnership(property.owner_role) },
+    { label: 'Gated Security', value: property.gated_security ? 'Yes' : 'No' },
+    { label: 'Water Connection', value: property.water_supply || 'Not specified' },
+    { label: 'Electricity', value: property.power_backup || 'Available' },
+    { label: 'Registration', value: property.registration_status || 'Not specified' },
+    { label: 'Property Condition', value: property.current_property_condition || 'Not specified' },
+    { label: 'Who Shows Property', value: property.who_will_show || 'Not specified' },
+    { label: 'Home Loan Available', value: property.home_loan_available ? 'Yes' : 'No' },
+  ] : [
     { label: 'Type', value: property.property_type?.replace('_', ' ') || 'Not specified' },
     { label: 'BHK', value: property.bhk_type || 'Not specified' },
     { label: 'Bathrooms', value: property.bathrooms?.toString() || 'Not specified' },
@@ -89,7 +105,6 @@ export const PropertyDetailsCard: React.FC<PropertyDetailsCardProps> = ({ proper
     { label: 'Built-up Area', value: formatArea(property.super_area, property.carpet_area) },
     { label: 'Floor', value: formatFloor(property.floor_no, property.total_floors) },
     { label: 'Furnishing', value: property.furnishing || 'Not specified' },
-    // NEW: Additional property details
     { label: 'Property Age', value: property.property_age || 'Not specified' },
     { label: 'Facing', value: property.facing_direction || 'Not specified' },
     { label: 'Floor Type', value: property.floor_type || 'Not specified' },
@@ -100,9 +115,15 @@ export const PropertyDetailsCard: React.FC<PropertyDetailsCardProps> = ({ proper
     { label: 'Property Condition', value: property.current_property_condition || 'Not specified' },
     { label: 'Who Shows Property', value: property.who_will_show || 'Not specified' },
     { label: 'Home Loan Available', value: property.home_loan_available ? 'Yes' : 'No' },
-  ].filter(item => item.value !== 'Not specified');
+  ];
 
-  const quickFacts = [
+  const filteredDetails = details.filter(item => item.value !== 'Not specified');
+
+  const quickFacts = isPlotProperty ? [
+    formatArea(property.super_area, property.carpet_area),
+    property.gated_security ? 'Gated' : 'Open',
+    property.registration_status || 'Registration status'
+  ].filter(fact => fact && fact !== 'Not specified') : [
     property.bhk_type,
     formatArea(property.super_area, property.carpet_area),
     property.furnishing || 'Not specified'
@@ -147,7 +168,7 @@ export const PropertyDetailsCard: React.FC<PropertyDetailsCardProps> = ({ proper
       
       <div className="p-5 pt-4">
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-          {details.map((detail, index) => (
+          {filteredDetails.map((detail, index) => (
             <div
               key={index}
               className="bg-gray-50/70 p-3 rounded-lg ring-1 ring-gray-100"
