@@ -308,6 +308,12 @@ const AdminProperties = () => {
           furnishing: payload.furnishing ? (['unfurnished','semi-furnished','semi furnished','furnished'].includes(String(payload.furnishing).toLowerCase()) ? String(payload.furnishing).toLowerCase().replace(' ','-') : null) : null,
           availability_type: payload.availability_type || 'immediate',
           
+          // NEW: Additional property characteristics
+          property_age: propertyDetails.propertyAge || saleDetails.propertyAge || null,
+          facing_direction: propertyDetails.facing || null,
+          floor_type: propertyDetails.floorType || null,
+          registration_status: saleDetails.registrationStatus || null,
+          
           // Location details
           state: submission.state || payload.state || '',
           city: submission.city || payload.city || '',
@@ -331,6 +337,41 @@ const AdminProperties = () => {
           price_negotiable: payload.price_negotiable !== false,
           maintenance_charges: Math.max(Number(payload.maintenance_charges || saleDetails.maintenanceCharges || rentalDetails.maintenanceCharges) || 0, 0),
           security_deposit: Math.max(Number(payload.security_deposit || saleDetails.bookingAmount || rentalDetails.securityDeposit) || 0, 0),
+          
+          // NEW: Additional financial and service details
+          booking_amount: Math.max(Number(saleDetails.bookingAmount) || 0, 0),
+          home_loan_available: saleDetails.homeLoanAvailable === true || saleDetails.homeLoanAvailable === 'Yes',
+          
+          // NEW: Property services and amenities
+          water_supply: amenities.waterSupply || null,
+          power_backup: amenities.powerBackup || null,
+          gated_security: amenities.gatedSecurity === true || amenities.gatedSecurity === 'Yes',
+          who_will_show: amenities.whoWillShow || additionalInfo.whoWillShow || null,
+          current_property_condition: amenities.currentPropertyCondition || null,
+          secondary_phone: additionalInfo.secondaryNumber || null,
+          
+          // NEW: Store amenities and documents as JSON
+          amenities: {
+            gym: amenities.gym,
+            clubHouse: amenities.clubHouse,
+            swimmingPool: amenities.swimmingPool,
+            lift: amenities.lift,
+            intercom: amenities.intercom,
+            sewageTreatmentPlant: amenities.sewageTreatmentPlant,
+            fireSafety: amenities.fireSafety,
+            shoppingCenter: amenities.shoppingCenter,
+            childrenPlayArea: amenities.childrenPlayArea,
+            visitorParking: amenities.visitorParking,
+            gasPipeline: amenities.gasPipeline,
+            park: amenities.park,
+            internetProvider: amenities.internetProvider
+          },
+          additional_documents: {
+            allotmentLetter: additionalInfo.allotmentLetter,
+            saleDeedCertificate: additionalInfo.saleDeedCertificate,
+            propertyTaxPaid: additionalInfo.propertyTaxPaid,
+            occupancyCertificate: additionalInfo.occupancyCertificate
+          },
           
           // Media
           images: imagesNormalized,

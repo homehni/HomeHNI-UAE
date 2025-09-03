@@ -19,6 +19,40 @@ interface PropertyDetailsCardProps {
     city?: string;
     locality?: string;
     description?: string;
+    // NEW: Additional fields now stored in database
+    property_age?: string;
+    facing_direction?: string;
+    floor_type?: string;
+    registration_status?: string;
+    booking_amount?: number;
+    home_loan_available?: boolean;
+    water_supply?: string;
+    power_backup?: string;
+    gated_security?: boolean;
+    who_will_show?: string;
+    current_property_condition?: string;
+    secondary_phone?: string;
+    amenities?: {
+      gym?: boolean;
+      clubHouse?: boolean;
+      swimmingPool?: boolean;
+      lift?: boolean;
+      intercom?: boolean;
+      sewageTreatmentPlant?: boolean;
+      fireSafety?: boolean;
+      shoppingCenter?: boolean;
+      childrenPlayArea?: boolean;
+      visitorParking?: boolean;
+      gasPipeline?: boolean;
+      park?: boolean;
+      internetProvider?: boolean;
+    };
+    additional_documents?: {
+      allotmentLetter?: boolean;
+      saleDeedCertificate?: boolean;
+      propertyTaxPaid?: boolean;
+      occupancyCertificate?: boolean;
+    };
   };
 }
 
@@ -47,6 +81,7 @@ export const PropertyDetailsCard: React.FC<PropertyDetailsCardProps> = ({ proper
 
   const details = [
     { label: 'Type', value: property.property_type?.replace('_', ' ') || 'Not specified' },
+    { label: 'BHK', value: property.bhk_type || 'Not specified' },
     { label: 'Bathrooms', value: property.bathrooms?.toString() || 'Not specified' },
     { label: 'Balconies', value: property.balconies?.toString() || 'Not specified' },
     { label: 'Ownership', value: formatOwnership(property.owner_role) },
@@ -54,6 +89,17 @@ export const PropertyDetailsCard: React.FC<PropertyDetailsCardProps> = ({ proper
     { label: 'Built-up Area', value: formatArea(property.super_area, property.carpet_area) },
     { label: 'Floor', value: formatFloor(property.floor_no, property.total_floors) },
     { label: 'Furnishing', value: property.furnishing || 'Not specified' },
+    // NEW: Additional property details
+    { label: 'Property Age', value: property.property_age || 'Not specified' },
+    { label: 'Facing', value: property.facing_direction || 'Not specified' },
+    { label: 'Floor Type', value: property.floor_type || 'Not specified' },
+    { label: 'Registration', value: property.registration_status || 'Not specified' },
+    { label: 'Water Supply', value: property.water_supply || 'Not specified' },
+    { label: 'Power Backup', value: property.power_backup || 'Not specified' },
+    { label: 'Gated Security', value: property.gated_security ? 'Yes' : 'No' },
+    { label: 'Property Condition', value: property.current_property_condition || 'Not specified' },
+    { label: 'Who Shows Property', value: property.who_will_show || 'Not specified' },
+    { label: 'Home Loan Available', value: property.home_loan_available ? 'Yes' : 'No' },
   ].filter(item => item.value !== 'Not specified');
 
   const quickFacts = [
@@ -97,6 +143,40 @@ export const PropertyDetailsCard: React.FC<PropertyDetailsCardProps> = ({ proper
             </div>
           ))}
         </div>
+        
+        {/* Amenities Section */}
+        {property.amenities && Object.values(property.amenities).some(Boolean) && (
+          <div className="mt-6">
+            <h3 className="text-md font-semibold text-gray-900 mb-3">Available Amenities</h3>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
+              {Object.entries(property.amenities)
+                .filter(([_, value]) => value === true)
+                .map(([key, _]) => (
+                  <div key={key} className="flex items-center gap-2 text-sm text-gray-700">
+                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                    <span className="capitalize">{key.replace(/([A-Z])/g, ' $1').trim()}</span>
+                  </div>
+                ))}
+            </div>
+          </div>
+        )}
+        
+        {/* Documents Section */}
+        {property.additional_documents && Object.values(property.additional_documents).some(Boolean) && (
+          <div className="mt-6">
+            <h3 className="text-md font-semibold text-gray-900 mb-3">Available Documents</h3>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+              {Object.entries(property.additional_documents)
+                .filter(([_, value]) => value === true)
+                .map(([key, _]) => (
+                  <div key={key} className="flex items-center gap-2 text-sm text-gray-700">
+                    <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                    <span className="capitalize">{key.replace(/([A-Z])/g, ' $1').trim()}</span>
+                  </div>
+                ))}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

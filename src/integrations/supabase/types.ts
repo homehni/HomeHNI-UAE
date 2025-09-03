@@ -696,20 +696,28 @@ export type Database = {
       }
       properties: {
         Row: {
+          additional_documents: Json | null
           admin_reviewed_at: string | null
           admin_reviewed_by: string | null
+          amenities: Json | null
           availability_date: string | null
           availability_type: string
           balconies: number | null
           bathrooms: number | null
           bhk_type: string | null
+          booking_amount: number | null
           carpet_area: number | null
           city: string
           created_at: string
+          current_property_condition: string | null
           description: string | null
           expected_price: number
+          facing_direction: string | null
           floor_no: number | null
+          floor_type: string | null
           furnishing: string | null
+          gated_security: boolean | null
+          home_loan_available: boolean | null
           id: string
           images: string[] | null
           is_featured: boolean
@@ -722,9 +730,13 @@ export type Database = {
           owner_phone: string | null
           owner_role: string | null
           pincode: string
+          power_backup: string | null
           price_negotiable: boolean | null
+          property_age: string | null
           property_type: string
+          registration_status: string | null
           rejection_reason: string | null
+          secondary_phone: string | null
           security_deposit: number | null
           state: string
           status: string | null
@@ -735,22 +747,32 @@ export type Database = {
           updated_at: string
           user_id: string
           videos: string[] | null
+          water_supply: string | null
+          who_will_show: string | null
         }
         Insert: {
+          additional_documents?: Json | null
           admin_reviewed_at?: string | null
           admin_reviewed_by?: string | null
+          amenities?: Json | null
           availability_date?: string | null
           availability_type: string
           balconies?: number | null
           bathrooms?: number | null
           bhk_type?: string | null
+          booking_amount?: number | null
           carpet_area?: number | null
           city: string
           created_at?: string
+          current_property_condition?: string | null
           description?: string | null
           expected_price: number
+          facing_direction?: string | null
           floor_no?: number | null
+          floor_type?: string | null
           furnishing?: string | null
+          gated_security?: boolean | null
+          home_loan_available?: boolean | null
           id?: string
           images?: string[] | null
           is_featured?: boolean
@@ -763,9 +785,13 @@ export type Database = {
           owner_phone?: string | null
           owner_role?: string | null
           pincode: string
+          power_backup?: string | null
           price_negotiable?: boolean | null
+          property_age?: string | null
           property_type: string
+          registration_status?: string | null
           rejection_reason?: string | null
+          secondary_phone?: string | null
           security_deposit?: number | null
           state: string
           status?: string | null
@@ -776,22 +802,32 @@ export type Database = {
           updated_at?: string
           user_id: string
           videos?: string[] | null
+          water_supply?: string | null
+          who_will_show?: string | null
         }
         Update: {
+          additional_documents?: Json | null
           admin_reviewed_at?: string | null
           admin_reviewed_by?: string | null
+          amenities?: Json | null
           availability_date?: string | null
           availability_type?: string
           balconies?: number | null
           bathrooms?: number | null
           bhk_type?: string | null
+          booking_amount?: number | null
           carpet_area?: number | null
           city?: string
           created_at?: string
+          current_property_condition?: string | null
           description?: string | null
           expected_price?: number
+          facing_direction?: string | null
           floor_no?: number | null
+          floor_type?: string | null
           furnishing?: string | null
+          gated_security?: boolean | null
+          home_loan_available?: boolean | null
           id?: string
           images?: string[] | null
           is_featured?: boolean
@@ -804,9 +840,13 @@ export type Database = {
           owner_phone?: string | null
           owner_role?: string | null
           pincode?: string
+          power_backup?: string | null
           price_negotiable?: boolean | null
+          property_age?: string | null
           property_type?: string
+          registration_status?: string | null
           rejection_reason?: string | null
+          secondary_phone?: string | null
           security_deposit?: number | null
           state?: string
           status?: string | null
@@ -817,6 +857,8 @@ export type Database = {
           updated_at?: string
           user_id?: string
           videos?: string[] | null
+          water_supply?: string | null
+          who_will_show?: string | null
         }
         Relationships: []
       }
