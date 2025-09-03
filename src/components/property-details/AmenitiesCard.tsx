@@ -56,7 +56,14 @@ export const AmenitiesCard: React.FC<AmenitiesCardProps> = ({ amenities }) => {
       
       Object.entries(amenities).forEach(([key, value]) => {
         // Include amenity if value is true, 'yes', or other truthy string values
-        if (value === true || value === 'yes' || value === 'Yes' || value === 'TRUE') {
+        if (
+          value === true ||
+          value === 1 ||
+          value === '1' ||
+          value === 'yes' || value === 'Yes' ||
+          value === 'true' || value === 'True' || value === 'TRUE' ||
+          value === 'y' || value === 'Y'
+        ) {
           const displayName = amenityKeyMap[key] || key.charAt(0).toUpperCase() + key.slice(1);
           availableAmenities.push(displayName);
         }

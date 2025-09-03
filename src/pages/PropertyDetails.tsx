@@ -18,6 +18,7 @@ import { DescriptionCard } from '@/components/property-details/DescriptionCard';
 import { AmenitiesCard } from '@/components/property-details/AmenitiesCard';
 import { NeighborhoodCard } from '@/components/property-details/NeighborhoodCard';
 import { MobileStickyCTA } from '@/components/property-details/MobileStickyCTA';
+import { supabase } from '@/integrations/supabase/client';
 interface Property {
   id: string;
   title: string;
@@ -38,6 +39,8 @@ interface Property {
   videos?: string[];
   status: string;
   created_at: string;
+  amenities?: any; // May come as JSONB object
+  additional_documents?: Record<string, boolean>;
   // Note: Owner contact info removed for security
 }
 const PropertyDetails: React.FC = () => {
@@ -51,12 +54,40 @@ const PropertyDetails: React.FC = () => {
   const [showScheduleVisitModal, setShowScheduleVisitModal] = React.useState(false);
   const [showEMICalculatorModal, setShowEMICalculatorModal] = React.useState(false);
   const [showLegalServicesModal, setShowLegalServicesModal] = React.useState(false);
+  const [dbAmenities, setDbAmenities] = React.useState<any | null>(null);
+  const [dbAdditionalDocs, setDbAdditionalDocs] = React.useState<Record<string, boolean> | null>(null);
   
   React.useEffect(() => {
     document.title = property ? `${property.title} | Property Details` : 'Property Details';
   }, [property]);
+  
+  // Fetch full amenities from DB if they weren't passed via navigation state
+  React.useEffect(() => {
+    const loadAmenities = async () => {
+      if (!id) return;
+      try {
+        const { data, error } = await supabase
+          .from('properties')
+          .select('amenities, additional_documents')
+          .eq('id', id)
+          .maybeSingle();
+        if (!error && data) {
+          setDbAmenities((data as any).amenities ?? null);
+          setDbAdditionalDocs((data as any).additional_documents ?? null);
+        }
+      } catch (err) {
+        console.error('Failed to load amenities', err);
+      }
+    };
+    if (!(property as any)?.amenities) {
+      loadAmenities();
+    }
+  }, [id]);
+  
   const fallbackDescription = `This beautifully maintained ${property?.bhk_type ?? ''} ${property?.property_type?.replace('_', ' ') ?? 'apartment'} offers a spacious layout with abundant natural light and excellent connectivity to local conveniences. Situated in a prime locality, it features well-ventilated rooms, ample storage and proximity to schools, hospitals and public transport. A perfect choice for families looking for comfort and convenience.`;
-  const amenities = ['Lift', 'Internet provider', 'Security', 'Park', 'Sewage treatment', 'Visitor parking'];
+  const amenitiesData = (property as any)?.amenities ?? dbAmenities ?? undefined;
+  const mergedProperty = property ? { ...(property as any), amenities: amenitiesData, additional_documents: (property as any)?.additional_documents ?? dbAdditionalDocs ?? undefined } : property;
+  
   if (!property) {
     return <div className="min-h-screen flex flex-col">
         <Marquee />
@@ -91,7 +122,7 @@ const PropertyDetails: React.FC = () => {
             <ServicesStrip onLegalServices={() => setShowLegalServicesModal(true)} />
             
             {/* Property Details */}
-            <PropertyDetailsCard property={property} />
+            <PropertyDetailsCard property={mergedProperty as any} />
             
             {/* Location */}
             <LocationCard property={property} />
@@ -106,7 +137,7 @@ const PropertyDetails: React.FC = () => {
             />
             
             {/* Amenities */}
-            <AmenitiesCard amenities={amenities} />
+            <AmenitiesCard amenities={amenitiesData} />
             
             {/* Neighborhood */}
             <NeighborhoodCard property={property} />
