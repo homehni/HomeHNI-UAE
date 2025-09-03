@@ -322,6 +322,11 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
                     </SelectContent>
                   </Select>
                   <FormMessage />
+                  {form.formState.errors.floorNo?.message ? (
+                    <p className="text-sm text-destructive mt-1" role="alert" aria-live="polite">
+                      {form.formState.errors.floorNo.message}
+                    </p>
+                  ) : null}
                 </FormItem>
               )}
             />
