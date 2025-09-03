@@ -64,12 +64,14 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
   const [cornerProperty, setCornerProperty] = useState(form.watch('cornerProperty'));
   const floorType = form.watch('floorType');
   const floorNoWatch = form.watch('floorNo');
+  const [floorError, setFloorError] = React.useState<string | null>(null);
 
   // Reset floor number when floor type changes
   React.useEffect(() => {
     if (floorType) {
       form.setValue('floorNo', undefined);
       form.clearErrors('floorNo');
+      setFloorError(null);
     }
   }, [floorType, form]);
 
@@ -79,8 +81,10 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
     const selected = typeof floorNoWatch === 'number' ? floorNoWatch.toString() : (floorNoWatch ?? '').toString();
     if (floorType && selected && !allowed.includes(selected)) {
       form.setError('floorNo', { type: 'validate', message: 'Choose the correct floor' });
+      setFloorError('Choose the correct floor');
     } else {
       form.clearErrors('floorNo');
+      setFloorError(null);
     }
   }, [floorType, floorNoWatch, form]);
 
@@ -296,9 +300,11 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
                         // Reflect user's selection and show an inline warning
                         field.onChange(value);
                         form.setError('floorNo', { type: 'validate', message: 'Choose the correct floor' });
+                        setFloorError('Choose the correct floor');
                         return;
                       }
                       form.clearErrors('floorNo');
+                      setFloorError(null);
                       if (value === 'full' || value === 'lower' || value === 'upper' || value === '99+') {
                         field.onChange(value);
                       } else {
@@ -322,9 +328,9 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
                     </SelectContent>
                   </Select>
                   <FormMessage />
-                  {form.formState.errors.floorNo?.message ? (
+                  {(form.formState.errors.floorNo?.message || floorError) ? (
                     <p className="text-sm text-destructive mt-1" role="alert" aria-live="polite">
-                      {form.formState.errors.floorNo.message}
+                      {form.formState.errors.floorNo?.message ?? floorError}
                     </p>
                   ) : null}
                 </FormItem>
