@@ -64,6 +64,13 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
   const [cornerProperty, setCornerProperty] = useState(form.watch('cornerProperty'));
   const floorType = form.watch('floorType');
 
+  // Reset floor number when floor type changes
+  React.useEffect(() => {
+    if (floorType) {
+      form.setValue('floorNo', undefined);
+    }
+  }, [floorType, form]);
+
   // Helper function to get floor options based on floor type
   const getFloorOptions = (floorType: string) => {
     switch (floorType) {
