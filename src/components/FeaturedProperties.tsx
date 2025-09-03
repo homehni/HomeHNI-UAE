@@ -10,22 +10,33 @@ import { supabase } from '@/integrations/supabase/client';
 
 // Helper function to extract image URL from various formats
 const extractImageUrl = (imageData: any): string => {
-  if (!imageData) return 'photo-1560518883-ce09059eeffa';
+  console.log('Extracting image URL from:', imageData);
+  
+  if (!imageData) return '/placeholder.svg';
   
   if (Array.isArray(imageData) && imageData.length > 0) {
     const firstImage = imageData[0];
-    if (typeof firstImage === 'string') return firstImage;
+    if (typeof firstImage === 'string') {
+      console.log('Found string image:', firstImage);
+      return firstImage;
+    }
     if (typeof firstImage === 'object' && firstImage !== null && 'url' in firstImage) {
+      console.log('Found object with URL:', firstImage.url);
       return firstImage.url;
     }
   }
   
-  if (typeof imageData === 'string') return imageData;
+  if (typeof imageData === 'string') {
+    console.log('Image is string:', imageData);
+    return imageData;
+  }
   if (typeof imageData === 'object' && imageData !== null && 'url' in imageData) {
+    console.log('Image object with URL:', imageData.url);
     return imageData.url;
   }
   
-  return 'photo-1560518883-ce09059eeffa';
+  console.log('No valid image found, using placeholder');
+  return '/placeholder.svg';
 };
 
 // Minimal type for featured properties
