@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { RequirementsSidebar } from './RequirementsSidebar';
 import { RequirementDetails } from './RequirementDetails';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
@@ -28,9 +28,9 @@ export const RequirementsChatLayout: React.FC<RequirementsChatLayoutProps> = ({
   const [selectedRequirement, setSelectedRequirement] = useState<PropertyRequirement | null>(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   // Use custom breakpoint for this layout (1024px)
-  const [isMobile, setIsMobile] = React.useState<boolean>(false);
+  const [isMobile, setIsMobile] = useState<boolean>(false);
   
-  React.useEffect(() => {
+  useEffect(() => {
     const mql = window.matchMedia('(max-width: 1023px)');
     const onChange = () => setIsMobile(mql.matches);
     mql.addEventListener('change', onChange);
