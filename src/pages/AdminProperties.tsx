@@ -287,6 +287,14 @@ const AdminProperties = () => {
             .filter(Boolean) as string[]
         : [];
 
+      // Extract additional details from form data stored in payload
+      const originalFormData = payload.originalFormData || {};
+      const propertyDetails = originalFormData.propertyInfo?.propertyDetails || {};
+      const saleDetails = originalFormData.propertyInfo?.saleDetails || {};
+      const rentalDetails = originalFormData.propertyInfo?.rentalDetails || {};
+      const additionalInfo = originalFormData.propertyInfo?.additionalInfo || {};
+      const amenities = originalFormData.propertyInfo?.amenities || {};
+
       const { data: insertedProperty, error: insertError } = await supabase
         .from('properties')
         .insert({
@@ -295,32 +303,45 @@ const AdminProperties = () => {
           property_type: mappedPropertyType,
           listing_type: mappedListingType,
           bhk_type: bhkValue,
+          
+          // Enhanced property details mapping
           furnishing: payload.furnishing ? (['unfurnished','semi-furnished','semi furnished','furnished'].includes(String(payload.furnishing).toLowerCase()) ? String(payload.furnishing).toLowerCase().replace(' ','-') : null) : null,
           availability_type: payload.availability_type || 'immediate',
+          
+          // Location details
           state: submission.state || payload.state || '',
           city: submission.city || payload.city || '',
           locality: payload.locality || '',
           street_address: payload.street_address || '',
           pincode: payload.pincode || '',
-          landmarks: payload.landmarks || '',
-          description: payload.description || '',
-          bathrooms: payload.bathrooms || 0,
-          balconies: payload.balconies || 0,
-          floor_no: payload.floor_no || null,
-          total_floors: payload.total_floors || null,
-          super_area: Math.max(Number(payload.super_area) || 0, 1),
+          landmarks: payload.landmarks || additionalInfo.directionsTip || '',
+          
+          // Property specifications
+          description: payload.description || additionalInfo.description || '',
+          bathrooms: payload.bathrooms || propertyDetails.bathrooms || 0,
+          balconies: payload.balconies || propertyDetails.balconies || 0,
+          floor_no: payload.floor_no || propertyDetails.floorNo || null,
+          total_floors: payload.total_floors || propertyDetails.totalFloors || null,
+          super_area: Math.max(Number(payload.super_area || propertyDetails.superBuiltUpArea) || 0, 1),
           carpet_area: payload.carpet_area || null,
-          availability_date: payload.availability_date || null,
-          expected_price: Math.max(payload.expected_price || 1, 1),
+          
+          // Financial details
+          availability_date: payload.availability_date || saleDetails.possessionDate || rentalDetails.availableFrom || null,
+          expected_price: Math.max(payload.expected_price || saleDetails.expectedPrice || rentalDetails.expectedPrice || 1, 1),
           price_negotiable: payload.price_negotiable !== false,
-          maintenance_charges: Math.max(Number(payload.maintenance_charges) || 0, 0),
-          security_deposit: Math.max(Number(payload.security_deposit) || 0, 0),
+          maintenance_charges: Math.max(Number(payload.maintenance_charges || saleDetails.maintenanceCharges || rentalDetails.maintenanceCharges) || 0, 0),
+          security_deposit: Math.max(Number(payload.security_deposit || saleDetails.bookingAmount || rentalDetails.securityDeposit) || 0, 0),
+          
+          // Media
           images: imagesNormalized,
           videos: payload.videos || [],
-          owner_name: payload.owner_name || '',
-          owner_email: payload.owner_email || '',
-          owner_phone: payload.owner_phone || '',
-          owner_role: payload.owner_role || 'Owner',
+          
+          // Owner information
+          owner_name: payload.owner_name || originalFormData.ownerInfo?.fullName || '',
+          owner_email: payload.owner_email || originalFormData.ownerInfo?.email || '',
+          owner_phone: payload.owner_phone || originalFormData.ownerInfo?.phoneNumber || '',
+          owner_role: payload.owner_role || originalFormData.ownerInfo?.role || 'Owner',
+          
           status: 'approved',
           is_featured: payload.is_featured || false
         })
