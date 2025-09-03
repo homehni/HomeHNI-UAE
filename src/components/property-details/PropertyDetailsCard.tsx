@@ -144,22 +144,6 @@ export const PropertyDetailsCard: React.FC<PropertyDetailsCardProps> = ({ proper
           ))}
         </div>
         
-        {/* Amenities Section */}
-        {property.amenities && Object.values(property.amenities).some(Boolean) && (
-          <div className="mt-6">
-            <h3 className="text-md font-semibold text-gray-900 mb-3">Available Amenities</h3>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
-              {Object.entries(property.amenities)
-                .filter(([_, value]) => value === true)
-                .map(([key, _]) => (
-                  <div key={key} className="flex items-center gap-2 text-sm text-gray-700">
-                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                    <span className="capitalize">{key.replace(/([A-Z])/g, ' $1').trim()}</span>
-                  </div>
-                ))}
-            </div>
-          </div>
-        )}
         
         {/* Documents Section */}
         {property.additional_documents && Object.values(property.additional_documents).some(Boolean) && (
