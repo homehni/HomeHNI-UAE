@@ -237,7 +237,7 @@ const DeveloperPage = () => {
       {/* Hero Section */}
       <section className="pt-32 pb-16 px-4 bg-gradient-to-br from-red-600 to-red-800 text-white">
         <div className="container mx-auto max-w-6xl">
-          <div className="flex flex-col md:flex-row items-center gap-8">
+          <div className="flex flex-col md:flex-row items-center gap-8 min-h-[180px] md:min-h-[200px]">
             <div className="flex-shrink-0">
               <div className="w-32 h-32 md:w-40 md:h-40 bg-white rounded-2xl p-6 shadow-2xl">
                 <img 
@@ -247,7 +247,7 @@ const DeveloperPage = () => {
                 />
               </div>
             </div>
-            <div className="flex-1 text-center md:text-left flex flex-col justify-center">
+            <div className="flex-1 text-center md:text-left h-full flex flex-col justify-center">
               <h1 className="text-4xl md:text-6xl font-bold mb-4">{developer.name}</h1>
               <p className="text-xl text-white/90 max-w-3xl">
                 {developer.highlights}
