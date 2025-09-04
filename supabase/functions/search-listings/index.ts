@@ -84,19 +84,29 @@ serve(async (req) => {
 
     // Filter by property type with proper mapping
     if (propertyType && propertyType !== 'Others' && propertyType !== 'All Residential') {
-      // Map frontend property types to database values
+      // Map frontend property types to database values (matching exact filter titles)
       const propertyTypeMap: { [key: string]: string } = {
+        'APARTMENT': 'apartment',
+        'VILLA': 'villa',
+        'PLOT': 'plot',
+        'HOUSE': 'house',
+        'INDEPENDENT HOUSE': 'independent_house',
+        'PENTHOUSE': 'penthouse',
+        'COMMERCIAL': 'commercial',
+        'AGRICULTURE LANDS': 'agriculture_lands',
+        'FARM HOUSE': 'farm_house',
+        // Legacy mappings for backward compatibility
         'Flat/Apartment': 'apartment',
         'Independent Building/Floor': 'independent_building',
         'Independent House': 'independent_house', 
         'Villa': 'villa',
         'Plots': 'plot',
-        'Farm House': 'farmhouse',
+        'Farm House': 'farm_house',
         'Industrial Space/Building': 'industrial',
         'Commercial Space/Building': 'commercial'
       };
       
-      const mappedType = propertyTypeMap[propertyType] || propertyType.toLowerCase();
+      const mappedType = propertyTypeMap[propertyType] || propertyType.toLowerCase().replace(/\s+/g, '_');
       query = query.eq('property_type', mappedType);
     }
 
