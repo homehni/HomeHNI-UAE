@@ -4,7 +4,6 @@ import Marquee from '@/components/Marquee';
 import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { Calendar } from 'lucide-react';
 import { ContactOwnerModal } from '@/components/ContactOwnerModal';
 import { ScheduleVisitModal } from '@/components/ScheduleVisitModal';
 import EMICalculatorModal from '@/components/EMICalculatorModal';
@@ -137,13 +136,6 @@ const PropertyDetails: React.FC = () => {
             {/* Neighborhood */}
             <NeighborhoodCard property={property} />
 
-            {/* Listed on */}
-            <div className="pt-6 border-t border-gray-200">
-              <div className="flex items-center text-sm text-gray-500">
-                <Calendar className="h-4 w-4 mr-2" />
-                Listed on {new Date(property.created_at).toLocaleDateString()}
-              </div>
-            </div>
           </div>
         </section>
 
