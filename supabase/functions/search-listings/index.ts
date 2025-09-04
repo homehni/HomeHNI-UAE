@@ -113,6 +113,25 @@ serve(async (req) => {
 
     // Filter by property type with proper mapping (supports multiple selections)
     {
+      // 1) Try to load mapping from CMS (content_elements)
+      let cmsMap: Record<string, string[] | string> | null = null;
+      try {
+        const { data: cmsMapping } = await supabase
+          .from('content_elements')
+          .select('content, element_key')
+          .in('element_key', ['search_property_type_mapping', 'property_type_mappings'])
+          .eq('is_active', true)
+          .order('updated_at', { ascending: false })
+          .limit(1)
+          .maybeSingle();
+        if (cmsMapping && cmsMapping.content && typeof cmsMapping.content === 'object') {
+          cmsMap = cmsMapping.content as Record<string, string[] | string>;
+        }
+      } catch (e) {
+        console.log('CMS mapping not found, using defaults');
+      }
+
+      // 2) Default hard-coded fallback mapping (used if CMS not configured)
       const propertyTypeMap: { [key: string]: string } = {
         'APARTMENT': 'apartment',
         'VILLA': 'villa',
@@ -136,32 +155,59 @@ serve(async (req) => {
         'Commercial Space/Building': 'commercial'
       };
 
+      const normalizeToDbTypes = (key: string): string[] => {
+        const k = key.toLowerCase();
+        if (k === 'agriculture_lands' || k === 'agricultural_lands' || k === 'agriculture_land' || k === 'agricultural_land' || k === 'agriculture') {
+          return ['agriculture_lands', 'agricultural_lands', 'agriculture_land', 'agricultural_land'];
+        }
+        return [k];
+      };
+
+      const getCmsMappedTypes = (label: string): string[] => {
+        if (!cmsMap) return [];
+        const candidates = [label, label.toUpperCase(), label.toLowerCase(), label.replace(/\s+/g, '_').toLowerCase()];
+        for (const c of candidates) {
+          const v = (cmsMap as any)[c];
+          if (Array.isArray(v)) return v.flatMap((t: string) => normalizeToDbTypes(String(t)));
+          if (typeof v === 'string') return normalizeToDbTypes(String(v));
+        }
+        return [];
+      };
+
       const selectedTypes: string[] = [];
 
       if (Array.isArray((requestBody as any).propertyTypes)) {
         for (const t of (requestBody as any).propertyTypes as string[]) {
           if (!t || t === 'Others' || t === 'All Residential') continue;
-          const key = propertyTypeMap[t] || propertyTypeMap[t.toUpperCase()] || t.toLowerCase().replace(/\s+/g, '_');
-          if (key === 'agriculture_lands') {
-            selectedTypes.push('agriculture_lands', 'agricultural_lands', 'agriculture_land', 'agricultural_land');
-          } else {
-            selectedTypes.push(key);
+
+          // Prefer CMS mapping if available
+          const cmsTypes = getCmsMappedTypes(t);
+          if (cmsTypes.length > 0) {
+            selectedTypes.push(...cmsTypes);
+            continue;
           }
+
+          // Fallback to default mapping
+          const key = propertyTypeMap[t] || propertyTypeMap[t.toUpperCase()] || t.toLowerCase().replace(/\s+/g, '_');
+          selectedTypes.push(...normalizeToDbTypes(key));
         }
       }
 
       // Fallback to single propertyType
       if (selectedTypes.length === 0 && propertyType && propertyType !== 'Others' && propertyType !== 'All Residential') {
-        const mappedType = propertyTypeMap[propertyType] || propertyTypeMap[propertyType.toUpperCase()] || propertyType.toLowerCase().replace(/\s+/g, '_');
-        if (mappedType === 'agriculture_lands') {
-          selectedTypes.push('agriculture_lands', 'agricultural_lands', 'agriculture_land', 'agricultural_land');
+        const cmsTypes = getCmsMappedTypes(propertyType);
+        if (cmsTypes.length > 0) {
+          selectedTypes.push(...cmsTypes);
         } else {
-          selectedTypes.push(mappedType);
+          const mappedType = propertyTypeMap[propertyType] || propertyTypeMap[propertyType.toUpperCase()] || propertyType.toLowerCase().replace(/\s+/g, '_');
+          selectedTypes.push(...normalizeToDbTypes(mappedType));
         }
       }
 
       if (selectedTypes.length > 0) {
-        query = query.in('property_type', Array.from(new Set(selectedTypes)));
+        const unique = Array.from(new Set(selectedTypes));
+        console.log('Applying property_type filter:', unique);
+        query = query.in('property_type', unique);
       }
     }
 
