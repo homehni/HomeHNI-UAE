@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { PriceInput } from '@/components/ui/price-input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -98,22 +99,20 @@ export function PgHostelRoomDetailsStep({
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div className="space-y-2">
                   <Label htmlFor="expectedRent" className="text-base font-medium">Expected Rent</Label>
-                  <Input
+                  <PriceInput
                     id="expectedRent"
-                    type="number"
-                    value={formData.expectedRent || ''}
-                    onChange={(e) => setFormData({ ...formData, expectedRent: e.target.value ? Number(e.target.value) : undefined })}
+                    value={formData.expectedRent}
+                    onChange={(value) => setFormData({ ...formData, expectedRent: value })}
                     placeholder="Enter monthly rent amount"
                     className="h-14 text-lg"
                   />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="expectedDeposit" className="text-base font-medium">Expected Deposit</Label>
-                  <Input
+                  <PriceInput
                     id="expectedDeposit"
-                    type="number"
-                    value={formData.expectedDeposit || ''}
-                    onChange={(e) => setFormData({ ...formData, expectedDeposit: e.target.value ? Number(e.target.value) : undefined })}
+                    value={formData.expectedDeposit}
+                    onChange={(value) => setFormData({ ...formData, expectedDeposit: value })}
                     placeholder="Enter security deposit amount"
                     className="h-14 text-lg"
                   />

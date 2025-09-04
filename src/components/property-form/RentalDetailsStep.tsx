@@ -7,6 +7,7 @@ import { CalendarIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { PriceInput } from '@/components/ui/price-input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Badge } from '@/components/ui/badge';
@@ -122,22 +123,17 @@ export const RentalDetailsStep: React.FC<RentalDetailsStepProps> = ({
                         <FormItem>
                           <FormLabel className="text-sm font-medium">Expected Rent</FormLabel>
                           <div className="flex items-center space-x-4">
-                            <div className="flex-1 relative">
-                              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">₹</span>
-                              <FormControl>
-                                <Input 
-                                  type="text" 
-                                  placeholder="Enter Amount"
-                                  className="pl-8 h-12"
-                                 onChange={(e) => {
-                                   const value = e.target.value.replace(/[^0-9]/g, '');
-                                   field.onChange(value ? parseInt(value) : undefined);
-                                 }}
-                                 value={field.value ? String(field.value) : ''}
-                                />
-                              </FormControl>
-                              <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500">/ Month</span>
-                            </div>
+                             <div className="flex-1 relative">
+                               <FormControl>
+                                 <PriceInput 
+                                   placeholder="Enter Amount"
+                                   className="h-12 pr-20"
+                                   value={field.value}
+                                   onChange={field.onChange}
+                                 />
+                               </FormControl>
+                               <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500">/ Month</span>
+                             </div>
                           </div>
                           <div className="flex items-center space-x-6 mt-2">
                             <FormField
@@ -183,21 +179,14 @@ export const RentalDetailsStep: React.FC<RentalDetailsStepProps> = ({
                                 render={({ field }) => (
                                   <FormItem>
                                     <FormLabel className="text-sm font-medium">Maintenance Amount (₹/month)</FormLabel>
-                                    <div className="relative">
-                                      <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">₹</span>
-                                      <FormControl>
-                                        <Input 
-                                          type="text" 
-                                          placeholder="Enter maintenance amount"
-                                          className="pl-8 h-12"
-                                         onChange={(e) => {
-                                           const value = e.target.value.replace(/[^0-9]/g, '');
-                                           field.onChange(value ? parseInt(value) : undefined);
-                                         }}
-                                         value={field.value ? String(field.value) : ''}
-                                        />
-                                      </FormControl>
-                                    </div>
+                                     <FormControl>
+                                       <PriceInput 
+                                         placeholder="Enter maintenance amount"
+                                         className="h-12"
+                                         value={field.value}
+                                         onChange={field.onChange}
+                                       />
+                                     </FormControl>
                                     <FormMessage />
                                   </FormItem>
                                 )}
@@ -218,21 +207,14 @@ export const RentalDetailsStep: React.FC<RentalDetailsStepProps> = ({
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel className="text-sm font-medium">Deposit Amount (INR)</FormLabel>
-                          <div className="relative">
-                            <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">₹</span>
-                            <FormControl>
-                              <Input 
-                                type="text" 
-                                placeholder="Enter Amount"
-                                className="pl-8 h-12"
-                                 onChange={(e) => {
-                                   const value = e.target.value.replace(/[^0-9]/g, '');
-                                   field.onChange(value ? parseInt(value) : undefined);
-                                 }}
-                                 value={field.value ? String(field.value) : ''}
-                              />
-                            </FormControl>
-                          </div>
+                           <FormControl>
+                             <PriceInput 
+                               placeholder="Enter Amount"
+                               className="h-12"
+                               value={field.value}
+                               onChange={field.onChange}
+                             />
+                           </FormControl>
                           <div className="mt-2">
                             <FormField
                               control={form.control}

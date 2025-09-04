@@ -1,0 +1,47 @@
+import * as React from "react"
+import { cn } from "@/lib/utils"
+import { formatPriceDisplay } from "@/utils/priceFormatter"
+
+export interface PriceInputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
+  value?: number | string
+  onChange?: (value: number | undefined) => void
+  showFormatted?: boolean
+}
+
+const PriceInput = React.forwardRef<HTMLInputElement, PriceInputProps>(
+  ({ className, value, onChange, showFormatted = true, ...props }, ref) => {
+    const displayValue = typeof value === 'number' ? value.toString() : value || ''
+    const formattedPrice = showFormatted ? formatPriceDisplay(value || 0) : ''
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const inputValue = e.target.value.replace(/[^0-9]/g, '')
+      const numericValue = inputValue ? parseInt(inputValue) : undefined
+      onChange?.(numericValue)
+    }
+
+    return (
+      <div className="relative">
+        <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground z-10">₹</span>
+        <input
+          type="text"
+          className={cn(
+            "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm pl-8 pr-16",
+            className
+          )}
+          value={displayValue}
+          onChange={handleChange}
+          ref={ref}
+          {...props}
+        />
+        {showFormatted && formattedPrice && (
+          <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-sm text-muted-foreground font-medium">
+            {formattedPrice.replace('₹ ', '')}
+          </div>
+        )}
+      </div>
+    )
+  }
+)
+PriceInput.displayName = "PriceInput"
+
+export { PriceInput }

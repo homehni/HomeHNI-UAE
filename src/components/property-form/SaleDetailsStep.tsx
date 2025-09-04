@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { PriceInput } from '@/components/ui/price-input';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -100,13 +101,13 @@ export const SaleDetailsStep: React.FC<SaleDetailsStepProps> = ({
             <Label htmlFor="expectedPrice" className="text-sm font-medium">
               Sale Price (₹) <span className="text-muted-foreground">(Optional)</span>
             </Label>
-            <Input
+            <PriceInput
               id="expectedPrice"
-              type="number"
-              placeholder="e.g. 5000000"
-              {...register('expectedPrice', { valueAsNumber: true })}
+              placeholder="Enter Amount"
+              value={watchedValues.expectedPrice}
+              onChange={(value) => setValue('expectedPrice', value)}
               className="mt-1 h-12"
-                />
+            />
             {errors.expectedPrice && (
               <p className="text-red-500 text-sm mt-1">{errors.expectedPrice.message}</p>
             )}

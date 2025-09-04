@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { PriceInput } from '@/components/ui/price-input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -71,16 +72,12 @@ export const LandPlotSaleDetailsStep: React.FC<LandPlotSaleDetailsStepProps> = (
                 <Label htmlFor="expectedPrice" className="text-sm font-medium text-gray-700">
                   Expected Price
                 </Label>
-                <div className="relative">
-                  <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">₹</span>
-                  <Input
+                  <PriceInput
                     id="expectedPrice"
-                    type="number"
-                    {...register('expectedPrice', { valueAsNumber: true })}
                     placeholder="Enter Amount"
-                    className="pl-8"
+                    value={watch('expectedPrice')}
+                    onChange={(value) => setValue('expectedPrice', value)}
                   />
-                </div>
                 {errors.expectedPrice && (
                   <p className="text-red-500 text-sm">{errors.expectedPrice.message}</p>
                 )}

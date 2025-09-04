@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { PriceInput } from '@/components/ui/price-input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Card, CardContent } from '@/components/ui/card';
@@ -74,17 +75,12 @@ export function FlattmatesRentalDetailsStep({
                   <div className="space-y-2">
                     <Label htmlFor="expectedRent">Expected Rent</Label>
                     <div className="relative">
-                      <span className="absolute left-4 top-1/2 transform -translate-y-1/2 text-muted-foreground">
-                        ₹
-                      </span>
-                      <Input
+                      <PriceInput
                         id="expectedRent"
-                        type="number"
-                        value={formData.expectedRent || ''}
-                        onChange={(e) => setFormData({ ...formData, expectedRent: parseInt(e.target.value) || 0 })}
+                        value={formData.expectedRent}
+                        onChange={(value) => setFormData({ ...formData, expectedRent: value || 0 })}
                         placeholder="Enter Amount"
-                        className="h-12 pl-8 pr-20"
-                        min="1"
+                        className="h-12 pr-20"
                       />
                       <span className="absolute right-4 top-1/2 transform -translate-y-1/2 text-muted-foreground">
                         / Month
@@ -94,20 +90,13 @@ export function FlattmatesRentalDetailsStep({
 
                   <div className="space-y-2">
                     <Label htmlFor="expectedDeposit">Expected Deposit</Label>
-                    <div className="relative">
-                      <span className="absolute left-4 top-1/2 transform -translate-y-1/2 text-muted-foreground">
-                        ₹
-                      </span>
-                      <Input
-                        id="expectedDeposit"
-                        type="number"
-                        value={formData.expectedDeposit || ''}
-                        onChange={(e) => setFormData({ ...formData, expectedDeposit: parseInt(e.target.value) || 0 })}
-                        placeholder="Enter Amount"
-                        className="h-12 pl-8"
-                        min="0"
-                      />
-                    </div>
+                    <PriceInput
+                      id="expectedDeposit"
+                      value={formData.expectedDeposit}
+                      onChange={(value) => setFormData({ ...formData, expectedDeposit: value || 0 })}
+                      placeholder="Enter Amount"
+                      className="h-12"
+                    />
                   </div>
                 </div>
 
