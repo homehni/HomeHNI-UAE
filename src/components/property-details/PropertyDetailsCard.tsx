@@ -99,17 +99,19 @@ export const PropertyDetailsCard: React.FC<PropertyDetailsCardProps> = ({ proper
     { label: 'Home Loan Available', value: property.home_loan_available ? 'Yes' : 'No' },
   ] : isPGHostelProperty ? [
     { label: 'Type', value: property.property_type?.replace('_', ' ') || 'PG Hostel' },
-    { label: 'Room Type', value: property.bhk_type === 'multiple' ? 'Multiple Room Types' : property.bhk_type || 'Not specified' },
-    { label: 'Built-up Area', value: formatArea(property.super_area, property.carpet_area) },
-    { label: 'Bathrooms', value: property.bathrooms?.toString() || 'Shared' },
+    { label: 'Room Types Available', value: property.bhk_type === 'multiple' ? 'Multiple Room Types' : property.bhk_type || 'Not specified' },
+    { label: 'Total Area', value: formatArea(property.super_area, property.carpet_area) },
+    { label: 'Bathroom Facilities', value: property.bathrooms?.toString() === '1' ? 'Attached Bathroom' : 'Shared Bathrooms' },
+    { label: 'Preferred Guests', value: property.facing_direction || 'Students & Professionals' },
+    { label: 'Food Included', value: property.furnishing === 'fully_furnished' ? 'Yes' : 'No' },
+    { label: 'Available For', value: property.floor_type || 'Male & Female' },
+    { label: 'Gate Closing Time', value: property.registration_status || '11:00 PM' },
     { label: 'Gated Security', value: property.gated_security ? 'Yes' : 'No' },
-    { label: 'Furnishing', value: property.furnishing || 'Not specified' },
-    { label: 'Water Supply', value: property.water_supply || 'Not specified' },
-    { label: 'Power Backup', value: property.power_backup || 'Not specified' },
-    { label: 'Property Age', value: property.property_age || 'Not specified' },
-    { label: 'Property Condition', value: property.current_property_condition || 'Not specified' },
-    { label: 'Who Shows Property', value: property.who_will_show || 'Not specified' },
-    { label: 'Home Loan Available', value: property.home_loan_available ? 'Yes' : 'No' },
+    { label: 'Water Supply', value: property.water_supply || '24/7 Available' },
+    { label: 'Power Backup', value: property.power_backup || 'Available' },
+    { label: 'Property Age', value: property.property_age || 'Recently Built' },
+    { label: 'Property Condition', value: property.current_property_condition || 'Well Maintained' },
+    { label: 'Who Shows Property', value: property.who_will_show || 'Warden/Owner' },
   ] : [
     { label: 'Type', value: property.property_type?.replace('_', ' ') || 'Not specified' },
     { label: 'BHK', value: property.bhk_type || 'Not specified' },
@@ -202,7 +204,86 @@ export const PropertyDetailsCard: React.FC<PropertyDetailsCardProps> = ({ proper
           ))}
         </div>
         
-        
+        {/* PG/Hostel Amenities Section */}
+        {isPGHostelProperty && property.amenities && (
+          <div className="mt-6">
+            <h3 className="text-md font-semibold text-gray-900 mb-3">Available Amenities & Services</h3>
+            
+            {/* Services */}
+            <div className="mb-4">
+              <h4 className="text-sm font-medium text-gray-700 mb-2">Available Services</h4>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                <div className="flex items-center gap-2 text-sm text-gray-700">
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span>Laundry Service</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm text-gray-700">
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span>Room Cleaning</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm text-gray-700">
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span>Warden Facility</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Amenities */}
+            <div className="mb-4">
+              <h4 className="text-sm font-medium text-gray-700 mb-2">Amenities</h4>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                {property.amenities.lift && (
+                  <div className="flex items-center gap-2 text-sm text-gray-700">
+                    <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                    <span>Lift</span>
+                  </div>
+                )}
+                {property.amenities.internetProvider && (
+                  <div className="flex items-center gap-2 text-sm text-gray-700">
+                    <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                    <span>WiFi</span>
+                  </div>
+                )}
+                <div className="flex items-center gap-2 text-sm text-gray-700">
+                  <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                  <span>Common TV</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm text-gray-700">
+                  <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                  <span>Refrigerator</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm text-gray-700">
+                  <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                  <span>Mess Facility</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm text-gray-700">
+                  <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                  <span>Cooking Allowed</span>
+                </div>
+              </div>
+            </div>
+
+            {/* PG Rules */}
+            <div>
+              <h4 className="text-sm font-medium text-gray-700 mb-2">PG/Hostel Rules</h4>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                <div className="flex items-center gap-2 text-sm text-gray-700">
+                  <div className="w-2 h-2 bg-red-500 rounded-full"></div>
+                  <span>No Smoking</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm text-gray-700">
+                  <div className="w-2 h-2 bg-red-500 rounded-full"></div>
+                  <span>No Drinking</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm text-gray-700">
+                  <div className="w-2 h-2 bg-red-500 rounded-full"></div>
+                  <span>No Girl's Entry</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Documents Section */}
         {documentEntries.length > 0 && (
           <div className="mt-6">
