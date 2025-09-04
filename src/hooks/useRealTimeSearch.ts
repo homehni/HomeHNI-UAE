@@ -95,17 +95,18 @@ export const useRealTimeSearch = () => {
         setIsLoading(true);
         setError(null);
         
-        // Query property_real table directly to get all featured properties
-        const { data: propertyRealData, error: propertyError } = await supabase
-          .from('property_real')
+        // Query content_elements table to get all featured properties
+        const { data: contentElementsData, error: contentError } = await supabase
+          .from('content_elements')
           .select('*')
+          .eq('element_key', 'featured_property')
           .eq('is_active', true)
-          .limit(50);
+          .order('sort_order');
 
-        if (propertyError) throw propertyError;
+        if (contentError) throw contentError;
 
-        // Transform property_real data to match Property interface
-        const transformedProperties: Property[] = (propertyRealData || []).map((prop: any) => {
+        // Transform content_elements data to match Property interface
+        const transformedProperties: Property[] = (contentElementsData || []).map((prop: any) => {
           const content = prop.content || {};
           return {
             id: prop.id || '',
