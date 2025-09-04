@@ -49,13 +49,22 @@ serve(async (req) => {
       ageOfProperty,
       locality,
       sortBy = 'relevance'
-    } = requestBody;
-
+     } = requestBody;
+ 
+     // Determine if land-like property is requested to relax irrelevant filters (e.g., BHK)
+     const landRequested = (() => {
+       const list: string[] = Array.isArray((requestBody as any).propertyTypes) ? (requestBody as any).propertyTypes : [];
+       const single = propertyType || '';
+       const labels = [...list, single].map((s: string) => String(s || '').toLowerCase());
+       const hasLandLabel = labels.some(l => ['plot', 'plots', 'agricultural lands', 'agriculture lands', 'agricultural land', 'agriculture land', 'farm house', 'farmhouse', 'plots/land', 'plots & land'].includes(l));
+       return hasLandLabel || intent === 'plots';
+     })();
+ 
     console.log('Search params (from body):', requestBody);
     console.log('Mapped filters will be:', {
       propertyTypes: Array.isArray(requestBody.propertyTypes) && requestBody.propertyTypes.length > 0 ? requestBody.propertyTypes : (propertyType ? [propertyType] : []),
-      bhkType: bhkType && bhkType !== 'All' ? 
-        ({'2 BHK': '2bhk', '3 BHK': '3bhk', '4 BHK': '4bhk'}[bhkType] || bhkType.toLowerCase().replace(/\s+/g, '').replace(/\+/, '')) : 'no filter'
+      bhkType: bhkType && bhkType !== 'All' ? ({ '2 BHK': '2bhk', '3 BHK': '3bhk', '4 BHK': '4bhk' }[bhkType] || bhkType.toLowerCase().replace(/\s+/g, '').replace(/\+/, '')) : 'no filter',
+      landRequested,
     });
 
     // Initialize Supabase client
@@ -231,8 +240,8 @@ serve(async (req) => {
       query = query.or(`locality.ilike.%${locality}%,city.ilike.%${locality}%`);
     }
 
-    // Filter by BHK type
-    if (bhkType && bhkType !== 'All') {
+    // Filter by BHK type (skip for land/plots searches)
+    if (!landRequested && bhkType && bhkType !== 'All') {
       // Handle BHK type mapping to match database format (e.g., "2 BHK" -> "2bhk")
       const bhkMap: { [key: string]: string } = {
         '1 RK': '1rk',
@@ -242,7 +251,6 @@ serve(async (req) => {
         '4 BHK': '4bhk',
         '5+ BHK': '5bhk'
       };
-      
       const mappedBhk = bhkMap[bhkType] || bhkType.toLowerCase().replace(/\s+/g, '').replace(/\+/, '');
       query = query.eq('bhk_type', mappedBhk);
     }
