@@ -179,7 +179,7 @@ This certifies that the deal has been completed successfully through HomeHNI pla
           {/* Header */}
           <div className="mb-6 py-8 text-center">
             <h1 className="text-2xl font-bold text-brand-red mb-2">HomeHNI — Matched Property Dashboard</h1>
-            <p className="text-muted-foreground">Two vertical panels • One horizontal Deal Room</p>
+            {/* <p className="text-muted-foreground">Two vertical panels • One horizontal Deal Room</p> */}
           </div>
 
           {/* Top Panels - Buyer and Seller */}
