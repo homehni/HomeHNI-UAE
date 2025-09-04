@@ -52,6 +52,12 @@ serve(async (req) => {
     } = requestBody;
 
     console.log('Search params (from body):', requestBody);
+    console.log('Mapped filters will be:', {
+      propertyType: propertyType && propertyType !== 'Others' && propertyType !== 'All Residential' ? 
+        ({'Flat/Apartment': 'apartment', 'Villa': 'villa', 'Plots': 'plot'}[propertyType] || propertyType.toLowerCase()) : 'no filter',
+      bhkType: bhkType && bhkType !== 'All' ? 
+        ({'2 BHK': '2bhk', '3 BHK': '3bhk', '4 BHK': '4bhk'}[bhkType] || bhkType.toLowerCase().replace(/\s+/g, '').replace(/\+/, '')) : 'no filter'
+    });
 
     // Initialize Supabase client
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
@@ -76,9 +82,22 @@ serve(async (req) => {
       query = query.eq('listing_type', listingType);
     }
 
-    // Filter by property type
-    if (propertyType && propertyType !== 'Others') {
-      query = query.eq('property_type', propertyType);
+    // Filter by property type with proper mapping
+    if (propertyType && propertyType !== 'Others' && propertyType !== 'All Residential') {
+      // Map frontend property types to database values
+      const propertyTypeMap: { [key: string]: string } = {
+        'Flat/Apartment': 'apartment',
+        'Independent Building/Floor': 'independent_building',
+        'Independent House': 'independent_house', 
+        'Villa': 'villa',
+        'Plots': 'plot',
+        'Farm House': 'farmhouse',
+        'Industrial Space/Building': 'industrial',
+        'Commercial Space/Building': 'commercial'
+      };
+      
+      const mappedType = propertyTypeMap[propertyType] || propertyType.toLowerCase();
+      query = query.eq('property_type', mappedType);
     }
 
     // Filter by state
@@ -98,12 +117,30 @@ serve(async (req) => {
 
     // Filter by BHK type
     if (bhkType && bhkType !== 'All') {
-      query = query.eq('bhk_type', bhkType);
+      // Handle BHK type mapping to match database format (e.g., "2 BHK" -> "2bhk")
+      const bhkMap: { [key: string]: string } = {
+        '1 RK': '1rk',
+        '1 BHK': '1bhk',
+        '2 BHK': '2bhk', 
+        '3 BHK': '3bhk',
+        '4 BHK': '4bhk',
+        '5+ BHK': '5bhk'
+      };
+      
+      const mappedBhk = bhkMap[bhkType] || bhkType.toLowerCase().replace(/\s+/g, '').replace(/\+/, '');
+      query = query.eq('bhk_type', mappedBhk);
     }
 
-    // Filter by furnished status
+    // Filter by furnished status  
     if (furnished && furnished !== 'All') {
-      query = query.eq('furnishing', furnished);
+      const furnishedMap: { [key: string]: string } = {
+        'Furnished': 'furnished',
+        'Semi-Furnished': 'semi_furnished', 
+        'Unfurnished': 'unfurnished'
+      };
+      
+      const mappedFurnished = furnishedMap[furnished] || furnished.toLowerCase();
+      query = query.eq('furnishing', mappedFurnished);
     }
 
     // Filter by availability type
@@ -112,6 +149,9 @@ serve(async (req) => {
         query = query.eq('availability_type', 'immediate');
       } else if (availability === 'Under Construction') {
         query = query.eq('availability_type', 'under_construction');
+      } else {
+        const mappedAvailability = availability.toLowerCase().replace(/\s+/g, '_');
+        query = query.eq('availability_type', mappedAvailability);
       }
     }
 
