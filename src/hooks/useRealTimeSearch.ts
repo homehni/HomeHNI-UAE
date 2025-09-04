@@ -99,7 +99,8 @@ export const useRealTimeSearch = () => {
         const { data: contentElementsData, error: contentError } = await supabase
           .from('content_elements')
           .select('*')
-          .eq('element_key', 'featured_property')
+          .eq('page_location', 'homepage')
+          .eq('section_location', 'featured_properties')
           .eq('is_active', true)
           .order('sort_order');
 
@@ -111,17 +112,17 @@ export const useRealTimeSearch = () => {
           return {
             id: prop.id || '',
             title: prop.title || content.title || 'Untitled Property',
-            location: prop.location || content.location || '',
+            location: content.location || '',
             price: content.price || '₹0',
             priceNumber: parseFloat(content.price?.replace(/[^\d]/g, '') || '0'),
             area: content.area || content.size || '0 sq ft',
             areaNumber: parseFloat(content.area?.replace(/[^\d]/g, '') || content.size?.replace(/[^\d]/g, '') || '0'),
             bedrooms: content.bedrooms || 0,
             bathrooms: content.bathrooms || 0,
-            image: content.image || prop.images?.[0] || '/placeholder.svg',
-            propertyType: prop.property_type || content.propertyType || 'Unknown',
-            locality: prop.location?.split(', ')[0] || '',
-            city: prop.location?.split(', ').pop() || '',
+            image: content.image || '/placeholder.svg',
+            propertyType: content.propertyType || 'Unknown',
+            locality: content.location?.split(', ')[0] || '',
+            city: content.location?.split(', ').pop() || '',
             bhkType: content.bhk || '1bhk',
             isNew: content.isNew || false
           };
