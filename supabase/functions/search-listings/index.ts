@@ -16,6 +16,12 @@ interface PropertySearchParams {
   budgetMax: string;
   page: string;
   pageSize: string;
+  bhkType?: string;
+  furnished?: string;
+  availability?: string;
+  ageOfProperty?: string;
+  locality?: string;
+  sortBy?: string;
 }
 
 serve(async (req) => {
@@ -36,7 +42,13 @@ serve(async (req) => {
       budgetMin,
       budgetMax,
       page = '1',
-      pageSize = '10'
+      pageSize = '10',
+      bhkType,
+      furnished,
+      availability,
+      ageOfProperty,
+      locality,
+      sortBy = 'relevance'
     } = requestBody;
 
     console.log('Search params (from body):', requestBody);
@@ -51,9 +63,10 @@ serve(async (req) => {
       .from('properties')
       .select(`
         id, title, property_type, listing_type, expected_price, 
-        city, locality, state, images, 
+        city, locality, state, images, bhk_type,
         bathrooms, balconies, furnishing, availability_type, 
-        super_area, carpet_area, created_at
+        super_area, carpet_area, created_at, property_age,
+        current_property_condition, is_featured
       `)
       .eq('status', 'approved');
 
@@ -73,9 +86,38 @@ serve(async (req) => {
       query = query.eq('state', state);
     }
 
-    // Filter by city (optional)
+    // Filter by city or locality
     if (city) {
-      query = query.ilike('city', `%${city}%`);
+      query = query.or(`city.ilike.%${city}%,locality.ilike.%${city}%`);
+    }
+
+    // Filter by specific locality
+    if (locality) {
+      query = query.or(`locality.ilike.%${locality}%,city.ilike.%${locality}%`);
+    }
+
+    // Filter by BHK type
+    if (bhkType && bhkType !== 'All') {
+      query = query.eq('bhk_type', bhkType);
+    }
+
+    // Filter by furnished status
+    if (furnished && furnished !== 'All') {
+      query = query.eq('furnishing', furnished);
+    }
+
+    // Filter by availability type
+    if (availability && availability !== 'All') {
+      if (availability === 'Ready to Move') {
+        query = query.eq('availability_type', 'immediate');
+      } else if (availability === 'Under Construction') {
+        query = query.eq('availability_type', 'under_construction');
+      }
+    }
+
+    // Filter by property age
+    if (ageOfProperty && ageOfProperty !== 'All') {
+      query = query.eq('property_age', ageOfProperty.toLowerCase().replace(/\s+/g, '_'));
     }
 
     // Filter by budget
@@ -89,6 +131,27 @@ serve(async (req) => {
       query = query.lte('expected_price', maxBudget);
     }
 
+    // Apply sorting
+    switch (sortBy) {
+      case 'price-low':
+        query = query.order('expected_price', { ascending: true });
+        break;
+      case 'price-high':
+        query = query.order('expected_price', { ascending: false });
+        break;
+      case 'area':
+        query = query.order('super_area', { ascending: false });
+        break;
+      case 'newest':
+        query = query.order('created_at', { ascending: false });
+        break;
+      default:
+        // Relevance - prioritize featured properties
+        query = query.order('is_featured', { ascending: false })
+                    .order('created_at', { ascending: false });
+        break;
+    }
+
     // Apply pagination
     const pageNum = parseInt(page) || 1;
     const size = parseInt(pageSize) || 10;
@@ -97,9 +160,6 @@ serve(async (req) => {
 
     query = query.range(from, to);
 
-    // Order by created_at for now (can be improved with relevance scoring)
-    query = query.order('created_at', { ascending: false });
-
     const { data: properties, error, count } = await query;
 
     if (error) {
@@ -107,26 +167,31 @@ serve(async (req) => {
       throw error;
     }
 
-    // Transform the data to match the expected format
-    const items = (properties || []).map(property => ({
-      id: property.id,
-      title: property.title,
-      type: property.property_type,
-      intent: property.listing_type === 'sale' ? 'buy' : property.listing_type,
-      priceInr: property.expected_price,
-      city: property.city,
-      state: property.state,
-      country: 'India', // Assuming India for now
-      image: property.images && property.images.length > 0 
-        ? property.images[0] 
-        : 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=300&h=200&fit=crop',
-      badges: [
-        property.furnishing && `${property.furnishing}`,
-        property.availability_type && `${property.availability_type}`,
-        property.super_area && `${property.super_area} sq ft`
-      ].filter(Boolean),
-      url: `/property/${property.id}`
-    }));
+    // Transform the data to match PropertyCard format
+    const items = (properties || []).map(property => {
+      // Format price for display
+      const formatPrice = (price) => {
+        if (!price) return 'Price on Request';
+        if (price >= 10000000) return `₹${(price / 10000000).toFixed(1)} Cr`;
+        if (price >= 100000) return `₹${(price / 100000).toFixed(1)} L`;
+        return `₹${price.toLocaleString()}`;
+      };
+
+      return {
+        id: property.id,
+        title: property.title,
+        location: `${property.locality}, ${property.city}, ${property.state}`,
+        price: formatPrice(property.expected_price),
+        area: property.super_area ? `${property.super_area} sq ft` : 'Area not specified',
+        bedrooms: property.bhk_type ? parseInt(property.bhk_type) || 0 : 0,
+        bathrooms: property.bathrooms || 0,
+        image: property.images && property.images.length > 0 
+          ? property.images[0] 
+          : '/placeholder.svg',
+        propertyType: property.property_type,
+        isNew: property.is_featured || false
+      };
+    });
 
     // Get total count for pagination
     let totalCount = count || 0;

@@ -3,176 +3,40 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Phone, MessageCircle, ExternalLink, Star, MapPin } from 'lucide-react';
-import { PropertyListing, ServiceProvider, SearchResults } from '@/hooks/usePropertySearch';
+import { ExternalLink } from 'lucide-react';
+import PropertyCard from '@/components/PropertyCard';
+
+interface PropertyResult {
+  id: string;
+  title: string;
+  location: string;
+  price: string;
+  area: string;
+  bedrooms: number;
+  bathrooms: number;
+  image: string | string[];
+  propertyType: string;
+  isNew?: boolean;
+}
+
+interface SearchResults {
+  items: PropertyResult[];
+  total: number;
+  hasMore: boolean;
+}
 
 interface SearchResultsPanelProps {
   results: SearchResults;
   isLoading: boolean;
   error: string | null;
-  searchType: 'property' | 'service';
   onLoadMore: () => void;
   onClearFilters: () => void;
 }
 
-const formatPrice = (price: number | null, intent?: string) => {
-  if (price === null) return 'On Request';
-  
-  if (price >= 10000000) {
-    return `₹${(price / 10000000).toFixed(1)}Cr`;
-  } else if (price >= 100000) {
-    return `₹${(price / 100000).toFixed(1)}L`;
-  } else if (price >= 1000) {
-    return `₹${(price / 1000).toFixed(0)}K`;
-  } else {
-    return `₹${price.toLocaleString()}`;
-  }
-};
-
-const PropertyCard: React.FC<{ property: PropertyListing }> = ({ property }) => (
-  <Card className="hover:shadow-md transition-shadow">
-    <CardContent className="p-4">
-      <div className="flex gap-3">
-        <div className="relative w-20 h-16 flex-shrink-0">
-          <img 
-            src={property.image} 
-            alt={property.title}
-            className="w-full h-full object-cover rounded-lg"
-          />
-          <Badge 
-            variant="secondary" 
-            className="absolute -top-1 -right-1 text-xs px-1 py-0"
-          >
-            {property.type.split('/')[0]}
-          </Badge>
-        </div>
-        
-        <div className="flex-1 min-w-0">
-          <h3 className="font-medium text-sm leading-tight mb-1 truncate">
-            {property.title}
-          </h3>
-          
-          <div className="flex items-center gap-1 text-xs text-muted-foreground mb-2">
-            <MapPin className="w-3 h-3" />
-            <span className="truncate">{property.city}, {property.state}</span>
-          </div>
-          
-          <div className="flex items-center justify-between">
-            <div className="text-sm font-semibold text-primary">
-              {formatPrice(property.priceInr, property.intent)}
-              {property.intent === 'lease' && '/month'}
-            </div>
-            
-            <div className="flex gap-1">
-              <Button size="sm" variant="outline" className="h-6 px-2 text-xs">
-                Details
-              </Button>
-              <Button size="sm" variant="ghost" className="h-6 w-6 p-0">
-                <MessageCircle className="w-3 h-3" />
-              </Button>
-            </div>
-          </div>
-          
-          {property.badges.length > 0 && (
-            <div className="flex gap-1 mt-2">
-              {property.badges.slice(0, 2).map((badge, index) => (
-                <Badge key={index} variant="outline" className="text-xs px-1 py-0">
-                  {badge}
-                </Badge>
-              ))}
-            </div>
-          )}
-        </div>
-      </div>
-    </CardContent>
-  </Card>
-);
-
-const ServiceCard: React.FC<{ service: ServiceProvider }> = ({ service }) => (
-  <Card className="hover:shadow-md transition-shadow">
-    <CardContent className="p-4">
-      <div className="flex gap-3">
-        <div className="relative w-20 h-16 flex-shrink-0">
-          <img 
-            src={service.image} 
-            alt={service.name}
-            className="w-full h-full object-cover rounded-lg"
-          />
-          {service.rating && (
-            <Badge 
-              variant="secondary" 
-              className="absolute -top-1 -right-1 text-xs px-1 py-0 flex items-center gap-1"
-            >
-              <Star className="w-2 h-2 fill-current" />
-              {service.rating}
-            </Badge>
-          )}
-        </div>
-        
-        <div className="flex-1 min-w-0">
-          <h3 className="font-medium text-sm leading-tight mb-1 truncate">
-            {service.name}
-          </h3>
-          
-          <div className="flex items-center gap-1 text-xs text-muted-foreground mb-1">
-            <MapPin className="w-3 h-3" />
-            <span className="truncate">{service.city}, {service.state}</span>
-          </div>
-          
-          <div className="text-xs text-primary mb-2">
-            {service.category}
-          </div>
-          
-          <div className="flex items-center justify-between">
-            {service.experience && (
-              <div className="text-xs text-muted-foreground">
-                {service.experience}
-              </div>
-            )}
-            
-            <div className="flex gap-1">
-              <Button size="sm" variant="outline" className="h-6 px-2 text-xs">
-                Details
-              </Button>
-              {service.phone && (
-                <Button size="sm" variant="ghost" className="h-6 w-6 p-0">
-                  <Phone className="w-3 h-3" />
-                </Button>
-              )}
-              {service.whatsapp && (
-                <Button size="sm" variant="ghost" className="h-6 w-6 p-0">
-                  <MessageCircle className="w-3 h-3" />
-                </Button>
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
-    </CardContent>
-  </Card>
-);
-
 const LoadingSkeleton: React.FC = () => (
   <div className="space-y-3">
     {[1, 2, 3].map((index) => (
-      <Card key={index}>
-        <CardContent className="p-4">
-          <div className="flex gap-3">
-            <Skeleton className="w-20 h-16 rounded-lg" />
-            <div className="flex-1 space-y-2">
-              <Skeleton className="h-4 w-3/4" />
-              <Skeleton className="h-3 w-1/2" />
-              <div className="flex justify-between items-center">
-                <Skeleton className="h-3 w-1/4" />
-                <div className="flex gap-1">
-                  <Skeleton className="h-6 w-12" />
-                  <Skeleton className="h-6 w-6" />
-                </div>
-              </div>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+      <div key={index} className="bg-gray-100 animate-pulse rounded-lg h-80"></div>
     ))}
   </div>
 );
@@ -199,7 +63,6 @@ export const SearchResultsPanel: React.FC<SearchResultsPanelProps> = ({
   results,
   isLoading,
   error,
-  searchType,
   onLoadMore,
   onClearFilters
 }) => {
@@ -210,7 +73,7 @@ export const SearchResultsPanel: React.FC<SearchResultsPanelProps> = ({
           Real-time matches
         </h2>
         <p className="text-sm text-muted-foreground">
-          Top providers & property partners near you
+          Top property matches near you
         </p>
       </div>
 
@@ -235,15 +98,24 @@ export const SearchResultsPanel: React.FC<SearchResultsPanelProps> = ({
           <EmptyState onClearFilters={onClearFilters} />
         ) : (
           <>
-            {results.items.map((item) => (
-              <div key={item.id}>
-                {searchType === 'property' ? (
-                  <PropertyCard property={item as PropertyListing} />
-                ) : (
-                  <ServiceCard service={item as ServiceProvider} />
-                )}
-              </div>
-            ))}
+            <div className="grid gap-3">
+              {results.items.map((property) => (
+                <PropertyCard
+                  key={property.id}
+                  id={property.id}
+                  title={property.title}
+                  location={property.location}
+                  price={property.price}
+                  area={property.area}
+                  bedrooms={property.bedrooms}
+                  bathrooms={property.bathrooms}
+                  image={property.image}
+                  propertyType={property.propertyType}
+                  isNew={property.isNew}
+                  size="compact"
+                />
+              ))}
+            </div>
             
             {results.hasMore && (
               <div className="pt-2">
