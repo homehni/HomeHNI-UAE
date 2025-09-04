@@ -167,17 +167,24 @@ export const OwnerInfoStep: React.FC<OwnerInfoStepProps> = ({
                   onValueChange={(value) => setValue('city', value)}
                 >
                   <SelectTrigger className={errors.city && touchedFields.city ? 'border-destructive' : ''}>
-                    <SelectValue placeholder="Select your city" />
+                    <SelectValue placeholder="Select City" />
                   </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="mumbai">Mumbai</SelectItem>
-                    <SelectItem value="delhi">Delhi</SelectItem>
-                    <SelectItem value="bangalore">Bangalore</SelectItem>
-                    <SelectItem value="pune">Pune</SelectItem>
-                    <SelectItem value="chennai">Chennai</SelectItem>
-                    <SelectItem value="kolkata">Kolkata</SelectItem>
-                    <SelectItem value="hyderabad">Hyderabad</SelectItem>
-                    <SelectItem value="ahmedabad">Ahmedabad</SelectItem>
+                  <SelectContent className="w-80">
+                    <div className="grid grid-cols-2 gap-1 p-2">
+                      <SelectItem value="bangalore" className="justify-start">Bangalore</SelectItem>
+                      <SelectItem value="mumbai" className="justify-start">Mumbai</SelectItem>
+                      <SelectItem value="pune" className="justify-start">Pune</SelectItem>
+                      <SelectItem value="chennai" className="justify-start">Chennai</SelectItem>
+                      <SelectItem value="gurgaon" className="justify-start">Gurgaon</SelectItem>
+                      <SelectItem value="hyderabad" className="justify-start">Hyderabad</SelectItem>
+                      <SelectItem value="delhi" className="justify-start">Delhi</SelectItem>
+                      <SelectItem value="faridabad" className="justify-start">Faridabad</SelectItem>
+                      <SelectItem value="ghaziabad" className="justify-start">Ghaziabad</SelectItem>
+                      <SelectItem value="noida" className="justify-start">Noida</SelectItem>
+                      <SelectItem value="greater-noida" className="justify-start">Greater Noida</SelectItem>
+                      <SelectItem value="kolkata" className="justify-start">Kolkata</SelectItem>
+                      <SelectItem value="ahmedabad" className="justify-start">Ahmedabad</SelectItem>
+                    </div>
                   </SelectContent>
                 </Select>
                 {errors.city && touchedFields.city && (
