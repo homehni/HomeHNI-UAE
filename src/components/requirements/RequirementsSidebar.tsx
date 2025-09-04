@@ -83,10 +83,15 @@ export const RequirementsSidebar: React.FC<RequirementsSidebarProps> = ({
       <div className="p-4 border-b border-border">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg font-semibold">Requirements ({requirements.length})</h2>
-          <Button size="sm" onClick={() => navigate('/post-service')}>
-            <Plus className="h-4 w-4 mr-2" />
-            Post New
-          </Button>
+          <div className="flex gap-2">
+            <Button size="sm" variant="outline" onClick={() => navigate('/deal-room')}>
+              Deal Room
+            </Button>
+            <Button size="sm" onClick={() => navigate('/post-service')}>
+              <Plus className="h-4 w-4 mr-2" />
+              Post New
+            </Button>
+          </div>
         </div>
         
         {/* Search */}

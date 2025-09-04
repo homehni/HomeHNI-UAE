@@ -42,6 +42,7 @@ import CommercialSellerPlans from "./pages/CommercialSellerPlans";
 import Blog from "./pages/Blog";
 import { Auth } from "./pages/Auth";
 import { Profile } from "./pages/Profile";
+import { DealRoom } from "./pages/DealRoom";
 import { VerifyEmail } from "./pages/VerifyEmail";
 import { Dashboard } from "./pages/Dashboard";
 import { PostProperty } from "./pages/PostProperty";
@@ -191,6 +192,13 @@ const App: React.FC = () => {
             <Route path="/profile" element={
               <ProtectedRoute>
                 <Profile />
+              </ProtectedRoute>
+            } />
+            
+            {/* Deal Room Route */}
+            <Route path="/deal-room" element={
+              <ProtectedRoute>
+                <DealRoom />
               </ProtectedRoute>
             } />
             
