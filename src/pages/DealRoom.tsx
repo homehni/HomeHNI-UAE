@@ -27,7 +27,7 @@ interface Service {
 export const DealRoom: React.FC = () => {
   // Buyer state
   const [buyerLoginId, setBuyerLoginId] = useState('');
-  const [buyerPropertyId, setBuyerPropertyId] = useState('HNI123456');
+  const [buyerPropertyId, setBuyerPropertyId] = useState('BUY-XXXX');
   const [buyerMatchedProperty, setBuyerMatchedProperty] = useState('');
   const [buyerDocType, setBuyerDocType] = useState('ID Proof');
   const [buyerNotes, setBuyerNotes] = useState('');
