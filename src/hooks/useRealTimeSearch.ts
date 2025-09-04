@@ -89,33 +89,44 @@ export const useRealTimeSearch = () => {
       filters.budget[0] > 0 || 
       filters.budget[1] < 50000000;
 
-    // If "All Residential" is selected or no criteria, show all residential properties
+    // If "All Residential" is selected or no criteria, show all properties from property_real table
     if (isAllResidential || !hasSearchCriteria) {
       try {
         setIsLoading(true);
         setError(null);
-        const { data, error: funcError } = await supabase.functions.invoke('search-listings', {
-          body: {
-            intent: activeTab,
-            propertyType: '',
-            propertyTypes: [], // Empty to get all property types
-            country: 'India',
-            state: '',
-            city: debouncedLocation || '',
-            budgetMin: filters.budget[0].toString(),
-            budgetMax: filters.budget[1].toString(),
-            page: '1',
-            pageSize: '20',
-            bhkType: filters.bhkType.length > 0 ? filters.bhkType[0] : '',
-            furnished: filters.furnished.length > 0 ? filters.furnished[0] : '',
-            availability: filters.availability.length > 0 ? filters.availability[0] : '',
-            ageOfProperty: filters.construction.length > 0 ? filters.construction[0] : '',
-            locality: filters.locality.length > 0 ? filters.locality[0] : '',
-            sortBy: 'relevance'
-          }
+        
+        // Query property_real table directly to get all featured properties
+        const { data: propertyRealData, error: propertyError } = await supabase
+          .from('property_real')
+          .select('*')
+          .eq('is_active', true)
+          .limit(50);
+
+        if (propertyError) throw propertyError;
+
+        // Transform property_real data to match Property interface
+        const transformedProperties: Property[] = (propertyRealData || []).map((prop: any) => {
+          const content = prop.content || {};
+          return {
+            id: prop.id || '',
+            title: prop.title || content.title || 'Untitled Property',
+            location: prop.location || content.location || '',
+            price: content.price || '₹0',
+            priceNumber: parseFloat(content.price?.replace(/[^\d]/g, '') || '0'),
+            area: content.area || content.size || '0 sq ft',
+            areaNumber: parseFloat(content.area?.replace(/[^\d]/g, '') || content.size?.replace(/[^\d]/g, '') || '0'),
+            bedrooms: content.bedrooms || 0,
+            bathrooms: content.bathrooms || 0,
+            image: content.image || prop.images?.[0] || '/placeholder.svg',
+            propertyType: prop.property_type || content.propertyType || 'Unknown',
+            locality: prop.location?.split(', ')[0] || '',
+            city: prop.location?.split(', ').pop() || '',
+            bhkType: content.bhk || '1bhk',
+            isNew: content.isNew || false
+          };
         });
-        if (funcError) throw new Error(funcError.message || 'Failed to search properties');
-        setProperties(data.items || []);
+
+        setProperties(transformedProperties);
       } catch (err: any) {
         setError(err.message || 'Failed to load properties');
         setProperties([]);
