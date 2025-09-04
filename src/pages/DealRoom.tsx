@@ -458,7 +458,7 @@ This certifies that the deal has been completed successfully through HomeHNI pla
               {/* MOU and Certificate Section */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {/* Create MOU */}
-                <div>
+                <div className="h-full">
                   <h3 className="text-foreground font-medium mb-4">Create MOU</h3>
                   <div className="space-y-3 mb-4">
                     <div className="grid grid-cols-2 gap-2">
@@ -529,14 +529,14 @@ This certifies that the deal has been completed successfully through HomeHNI pla
                 </div>
 
                 {/* HomeHNI Certificate & Totals */}
-                <div>
+                <div className="h-full flex flex-col">
                   <h3 className="text-foreground font-medium mb-4">HomeHNI Certificate & Totals</h3>
                   
                   <Textarea
                     placeholder="Certificate text..."
                     value={certText}
                     onChange={(e) => setCertText(e.target.value)}
-                    className="h-40 mb-4"
+                    className="h-64 mb-4 flex-1"
                   />
                   
                   <div className="flex gap-2 mb-4">
