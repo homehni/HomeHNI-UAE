@@ -53,8 +53,7 @@ serve(async (req) => {
 
     console.log('Search params (from body):', requestBody);
     console.log('Mapped filters will be:', {
-      propertyType: propertyType && propertyType !== 'Others' && propertyType !== 'All Residential' ? 
-        ({'Flat/Apartment': 'apartment', 'Villa': 'villa', 'Plots': 'plot'}[propertyType] || propertyType.toLowerCase()) : 'no filter',
+      propertyTypes: Array.isArray(requestBody.propertyTypes) && requestBody.propertyTypes.length > 0 ? requestBody.propertyTypes : (propertyType ? [propertyType] : []),
       bhkType: bhkType && bhkType !== 'All' ? 
         ({'2 BHK': '2bhk', '3 BHK': '3bhk', '4 BHK': '4bhk'}[bhkType] || bhkType.toLowerCase().replace(/\s+/g, '').replace(/\+/, '')) : 'no filter'
     });
@@ -112,9 +111,8 @@ serve(async (req) => {
       }
     }
 
-    // Filter by property type with proper mapping
-    if (propertyType && propertyType !== 'Others' && propertyType !== 'All Residential') {
-      // Map frontend property types to database values (matching exact filter titles)
+    // Filter by property type with proper mapping (supports multiple selections)
+    {
       const propertyTypeMap: { [key: string]: string } = {
         'APARTMENT': 'apartment',
         'VILLA': 'villa',
@@ -124,6 +122,7 @@ serve(async (req) => {
         'PENTHOUSE': 'penthouse',
         'COMMERCIAL': 'commercial',
         'AGRICULTURE LANDS': 'agriculture_lands',
+        'AGRICULTURAL LANDS': 'agriculture_lands',
         'FARM HOUSE': 'farm_house',
         'Agricultural Lands': 'agriculture_lands',
         // Legacy mappings for backward compatibility
@@ -136,9 +135,34 @@ serve(async (req) => {
         'Industrial Space/Building': 'industrial',
         'Commercial Space/Building': 'commercial'
       };
-      
-      const mappedType = propertyTypeMap[propertyType] || propertyType.toLowerCase().replace(/\s+/g, '_');
-      query = query.eq('property_type', mappedType);
+
+      const selectedTypes: string[] = [];
+
+      if (Array.isArray((requestBody as any).propertyTypes)) {
+        for (const t of (requestBody as any).propertyTypes as string[]) {
+          if (!t || t === 'Others' || t === 'All Residential') continue;
+          const key = propertyTypeMap[t] || propertyTypeMap[t.toUpperCase()] || t.toLowerCase().replace(/\s+/g, '_');
+          if (key === 'agriculture_lands') {
+            selectedTypes.push('agriculture_lands', 'agricultural_lands', 'agriculture_land', 'agricultural_land');
+          } else {
+            selectedTypes.push(key);
+          }
+        }
+      }
+
+      // Fallback to single propertyType
+      if (selectedTypes.length === 0 && propertyType && propertyType !== 'Others' && propertyType !== 'All Residential') {
+        const mappedType = propertyTypeMap[propertyType] || propertyTypeMap[propertyType.toUpperCase()] || propertyType.toLowerCase().replace(/\s+/g, '_');
+        if (mappedType === 'agriculture_lands') {
+          selectedTypes.push('agriculture_lands', 'agricultural_lands', 'agriculture_land', 'agricultural_land');
+        } else {
+          selectedTypes.push(mappedType);
+        }
+      }
+
+      if (selectedTypes.length > 0) {
+        query = query.in('property_type', Array.from(new Set(selectedTypes)));
+      }
     }
 
     // Filter by state

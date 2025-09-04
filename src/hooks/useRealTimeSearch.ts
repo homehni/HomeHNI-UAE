@@ -80,8 +80,11 @@ export const useRealTimeSearch = () => {
     try {
       const searchBody = {
         intent: activeTab,
-        propertyType: filters.propertyType.length > 0 && !filters.propertyType.includes('All Residential') 
-          ? filters.propertyType[0] : '',
+        // Send both single and multiple types for backward compatibility
+        propertyType: filters.propertyType.length > 0 && !filters.propertyType.includes('All Residential')
+          ? filters.propertyType[0]
+          : '',
+        propertyTypes: filters.propertyType.filter((t) => t && t !== 'All Residential'),
         country: 'India',
         state: '', // Let the backend handle state detection
         city: debouncedLocation || '',
