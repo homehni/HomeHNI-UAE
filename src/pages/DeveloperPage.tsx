@@ -5,6 +5,12 @@ import { Card, CardContent } from "@/components/ui/card";
 import Header from "@/components/Header";
 import Marquee from "@/components/Marquee";
 import Footer from "@/components/Footer";
+import prestigeGroupLogo from '@/assets/prestige-group-logo.jpg';
+import godrejPropertiesLogo from '@/assets/godrej-properties-logo.jpg';
+import ramkyGroupLogo from '@/assets/ramky-group-logo.jpg';
+import brigadeGroupLogo from '@/assets/brigade-group-logo.jpg';
+import aparnaConstructionsLogo from '@/assets/aparna-constructions-logo.jpg';
+import aliensGroupLogo from '@/assets/aliens-group-logo.jpg';
 
 const DeveloperPage = () => {
   const { developerId } = useParams();
@@ -12,6 +18,7 @@ const DeveloperPage = () => {
   const developers = {
     'prestige-group': {
       name: 'Prestige Group',
+      logo: prestigeGroupLogo,
       rank: 1,
       founded: '1986',
       headquarters: 'Bangalore, India',
@@ -44,6 +51,7 @@ const DeveloperPage = () => {
     },
     'godrej-properties': {
       name: 'Godrej Properties',
+      logo: godrejPropertiesLogo,
       rank: 2,
       founded: '1990',
       headquarters: 'Mumbai, India',
@@ -76,6 +84,7 @@ const DeveloperPage = () => {
     },
     'ramky-group': {
       name: 'Ramky Group',
+      logo: ramkyGroupLogo,
       rank: 3,
       founded: '1994',
       headquarters: 'Hyderabad, India',
@@ -108,6 +117,7 @@ const DeveloperPage = () => {
     },
     'brigade-group': {
       name: 'Brigade Group',
+      logo: brigadeGroupLogo,
       rank: 4,
       founded: '1986',
       headquarters: 'Bangalore, India',
@@ -140,6 +150,7 @@ const DeveloperPage = () => {
     },
     'aparna-constructions': {
       name: 'Aparna Constructions',
+      logo: aparnaConstructionsLogo,
       rank: 5,
       founded: '1996',
       headquarters: 'Hyderabad, India',
@@ -172,6 +183,7 @@ const DeveloperPage = () => {
     },
     'aliens-group': {
       name: 'Aliens Group',
+      logo: aliensGroupLogo,
       rank: 6,
       founded: '2006',
       headquarters: 'Hyderabad, India',
@@ -226,7 +238,16 @@ const DeveloperPage = () => {
       <section className="pt-32 pb-16 px-4 bg-gradient-to-br from-red-600 to-red-800 text-white">
         <div className="container mx-auto max-w-6xl">
           <div className="text-center">
-            <h1 className="text-4xl md:text-6xl font-bold mb-4">{developer.name}</h1>
+            <div className="flex flex-col items-center mb-8">
+              <div className="w-32 h-32 md:w-40 md:h-40 bg-white rounded-2xl p-6 mb-6 shadow-2xl">
+                <img 
+                  src={developer.logo} 
+                  alt={`${developer.name} logo`} 
+                  className="w-full h-full object-contain"
+                />
+              </div>
+              <h1 className="text-4xl md:text-6xl font-bold mb-4">{developer.name}</h1>
+            </div>
             <p className="text-xl text-white/90 mb-8 max-w-3xl mx-auto">
               {developer.highlights}
             </p>
