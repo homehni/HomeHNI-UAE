@@ -413,11 +413,15 @@ This certifies that the deal has been completed successfully through HomeHNI pla
                         <tr key={index} className="border-t">
                           <td className="p-3 text-foreground">{service.name}</td>
                           <td className="p-3 text-muted-foreground">{service.requiredDoc}</td>
-                          <td className="p-3">
+                           <td className="p-3">
                             <Input
                               type="number"
+                              min="0"
                               value={service.price}
-                              onChange={(e) => updateServicePrice(index, parseFloat(e.target.value) || 0)}
+                              onChange={(e) => {
+                                const value = parseFloat(e.target.value) || 0;
+                                updateServicePrice(index, Math.max(0, value));
+                              }}
                               className="w-20 text-sm"
                             />
                           </td>
