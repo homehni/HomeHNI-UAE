@@ -100,11 +100,9 @@ export const PropertyDetailsCard: React.FC<PropertyDetailsCardProps> = ({ proper
   ] : isPGHostelProperty ? [
     { label: 'Type', value: property.property_type?.replace('_', ' ') || 'PG Hostel' },
     { label: 'Room Types Available', value: property.bhk_type === 'multiple' ? 'Multiple Room Types' : property.bhk_type || 'Not specified' },
-    { label: 'Bathroom Facilities', value: property.bathrooms?.toString() === '1' ? 'Attached Bathroom' : 'Shared Bathrooms' },
     { label: 'Food Included', value: property.furnishing === 'fully_furnished' ? 'Yes' : 'No' },
     { label: 'Available For', value: property.floor_type || 'Male & Female' },
     { label: 'Gate Closing Time', value: property.registration_status || '11:00 PM' },
-    { label: 'Who Shows Property', value: property.who_will_show || 'Warden/Owner' },
   ] : [
     { label: 'Type', value: property.property_type?.replace('_', ' ') || 'Not specified' },
     { label: 'BHK', value: property.bhk_type || 'Not specified' },
