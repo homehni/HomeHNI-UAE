@@ -93,6 +93,20 @@ export const useRealTimeSearch = () => {
       return;
     }
 
+    // Limit preview: only show for Buy (sale) + Apartment type
+    if (activeTab !== 'buy') {
+      setProperties([]);
+      setIsLoading(false);
+      setError(null);
+      return;
+    }
+    if (filters.propertyType.length > 0 && !filters.propertyType.includes('Apartment')) {
+      setProperties([]);
+      setIsLoading(false);
+      setError(null);
+      return;
+    }
+
     setIsLoading(true);
     setError(null);
 
