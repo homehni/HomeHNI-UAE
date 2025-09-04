@@ -76,10 +76,40 @@ serve(async (req) => {
       `)
       .eq('status', 'approved');
 
-    // Filter by intent (listing_type)
+    // Filter by intent - handle different tab types
     if (intent) {
-      const listingType = intent === 'buy' ? 'sale' : intent;
-      query = query.eq('listing_type', listingType);
+      switch (intent) {
+        case 'buy':
+          query = query.eq('listing_type', 'sale');
+          break;
+        case 'rent':
+          query = query.eq('listing_type', 'rent');
+          break;
+        case 'commercial':
+          // Commercial is a property type filter, not listing type
+          query = query.eq('property_type', 'commercial');
+          break;
+        case 'plots':
+          // Plots is a property type filter
+          query = query.eq('property_type', 'plot');
+          break;
+        case 'new-launch':
+          // New launch properties - filter by availability type
+          query = query.eq('availability_type', 'under_construction');
+          break;
+        case 'projects':
+          // Projects - could be under construction or new properties
+          query = query.or('availability_type.eq.under_construction,is_featured.eq.true');
+          break;
+        case 'pg':
+          // PG/Hostel - this might need a specific property type
+          query = query.eq('property_type', 'pg');
+          break;
+        default:
+          // For any other intent, treat as listing type
+          query = query.eq('listing_type', intent);
+          break;
+      }
     }
 
     // Filter by property type with proper mapping
