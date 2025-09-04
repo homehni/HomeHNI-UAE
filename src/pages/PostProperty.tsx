@@ -117,8 +117,8 @@ export const PostProperty: React.FC = () => {
         listingType = (data.propertyInfo as any).pgDetails.listingType;
       } else if ('flattmatesDetails' in data.propertyInfo) {
         listingType = (data.propertyInfo as any).flattmatesDetails.listingType;
-      } else if ('commercialDetails' in data.propertyInfo) {
-        listingType = (data.propertyInfo as any).commercialDetails.listingType || 'Rent';
+      } else if ('rentalDetails' in data.propertyInfo && (data.propertyInfo as any).rentalDetails) {
+        listingType = (data.propertyInfo as any).rentalDetails.listingType || 'Rent';
       } else if ('commercialSaleDetails' in data.propertyInfo) {
         listingType = (data.propertyInfo as any).commercialSaleDetails.listingType || 'Sale';
       }
@@ -251,7 +251,9 @@ export const PostProperty: React.FC = () => {
                  : 'Untitled'),
         property_type: mapPropertyType(('propertyDetails' in data.propertyInfo) ? 
                                      data.propertyInfo.propertyDetails.propertyType : 
-                                     data.propertyInfo.plotDetails.propertyType),
+                                     ('plotDetails' in data.propertyInfo) ? 
+                                     data.propertyInfo.plotDetails.propertyType : 
+                                     listingType),
         listing_type: mapListingType(listingType),
         bhk_type: ('propertyDetails' in data.propertyInfo && 'bhkType' in data.propertyInfo.propertyDetails) ? 
                  mapBhkType(data.propertyInfo.propertyDetails.bhkType) : null,
@@ -377,10 +379,10 @@ export const PostProperty: React.FC = () => {
                  ? (data.propertyInfo.plotDetails.title || 'Untitled')
                  : 'Untitled'),
         property_type: ('propertyDetails' in data.propertyInfo)
-                      ? (data.propertyInfo.propertyDetails.propertyType || 'Commercial')
+                      ? (data.propertyInfo.propertyDetails.propertyType || 'Residential')
                       : (('plotDetails' in data.propertyInfo)
-                        ? (data.propertyInfo.plotDetails.propertyType || 'Commercial')
-                        : 'Commercial'),
+                        ? (data.propertyInfo.plotDetails.propertyType || 'Land/Plot')
+                        : listingType === 'PG/Hostel' ? 'PG/Hostel' : listingType === 'Flatmates' ? 'Flatmates' : 'Commercial'),
         listing_type: priceDetailsDraft?.listingType || 'Sale',
         bhk_type: ('propertyDetails' in data.propertyInfo && 'bhkType' in data.propertyInfo.propertyDetails) ? 
                  data.propertyInfo.propertyDetails.bhkType : null,
