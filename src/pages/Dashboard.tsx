@@ -440,11 +440,11 @@ export const Dashboard: React.FC = () => {
 
         {/* Tabs */}
         <Tabs value={activeTab} onValueChange={handleTabChange} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-2 md:grid-cols-4">
-            <TabsTrigger value="properties">My Listings</TabsTrigger>
-            <TabsTrigger value="requirements">My Requirements</TabsTrigger>
-            <TabsTrigger value="leads">Contact Leads</TabsTrigger>
-            <TabsTrigger value="profile">Profile</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 h-auto p-1">
+            <TabsTrigger value="properties" className="text-xs md:text-sm">My Listings</TabsTrigger>
+            <TabsTrigger value="requirements" className="text-xs md:text-sm">My Requirements</TabsTrigger>
+            <TabsTrigger value="leads" className="text-xs md:text-sm">Contact Leads</TabsTrigger>
+            <TabsTrigger value="profile" className="text-xs md:text-sm">Profile</TabsTrigger>
           </TabsList>
 
           {/* Properties Tab */}
