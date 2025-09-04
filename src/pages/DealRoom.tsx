@@ -80,7 +80,7 @@ export const DealRoom: React.FC = () => {
 
   const clearBuyer = () => {
     setBuyerLoginId('');
-    setBuyerPropertyId('HNI123456');
+    setBuyerPropertyId('BUY-XXXX');
     setBuyerMatchedProperty('');
     setBuyerDocType('ID Proof');
     setBuyerNotes('');
