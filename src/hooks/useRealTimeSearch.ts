@@ -74,7 +74,7 @@ export const useRealTimeSearch = () => {
 
   // Search properties using the edge function
   const searchProperties = async () => {
-    // Check if we should show empty results (no search criteria)
+    // Determine if user has provided any criteria
     const hasSearchCriteria = 
       debouncedLocation || 
       filters.propertyType.length > 0 || 
@@ -86,24 +86,39 @@ export const useRealTimeSearch = () => {
       filters.budget[0] > 0 || 
       filters.budget[1] < 50000000;
 
+    // If no criteria, preview Apartments for Sale by default
     if (!hasSearchCriteria) {
-      setProperties([]);
-      setIsLoading(false);
-      setError(null);
-      return;
-    }
-
-    // Limit preview: only show for Buy (sale) + Apartment type
-    if (activeTab !== 'buy') {
-      setProperties([]);
-      setIsLoading(false);
-      setError(null);
-      return;
-    }
-    if (filters.propertyType.length > 0 && !filters.propertyType.includes('Apartment')) {
-      setProperties([]);
-      setIsLoading(false);
-      setError(null);
+      try {
+        setIsLoading(true);
+        setError(null);
+        const { data, error: funcError } = await supabase.functions.invoke('search-listings', {
+          body: {
+            intent: 'buy',
+            propertyType: 'Apartment',
+            propertyTypes: ['Apartment'],
+            country: 'India',
+            state: '',
+            city: '',
+            budgetMin: '0',
+            budgetMax: '50000000',
+            page: '1',
+            pageSize: '20',
+            bhkType: '',
+            furnished: '',
+            availability: '',
+            ageOfProperty: '',
+            locality: '',
+            sortBy: 'relevance'
+          }
+        });
+        if (funcError) throw new Error(funcError.message || 'Failed to search properties');
+        setProperties(data.items || []);
+      } catch (err: any) {
+        setError(err.message || 'Failed to load properties');
+        setProperties([]);
+      } finally {
+        setIsLoading(false);
+      }
       return;
     }
 
