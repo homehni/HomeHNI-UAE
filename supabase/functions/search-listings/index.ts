@@ -90,8 +90,8 @@ serve(async (req) => {
           query = query.eq('property_type', 'commercial');
           break;
         case 'plots':
-          // Plots is a property type filter
-          query = query.eq('property_type', 'plot');
+          // Plots/Land includes multiple land-related property types
+          query = query.in('property_type', ['plot', 'agriculture_lands', 'farm_house']);
           break;
         case 'new-launch':
           // New launch properties - filter by availability type
