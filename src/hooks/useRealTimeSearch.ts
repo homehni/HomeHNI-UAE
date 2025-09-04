@@ -74,10 +74,13 @@ export const useRealTimeSearch = () => {
 
   // Search properties using the edge function
   const searchProperties = async () => {
-    // Determine if user has provided any criteria
+    // Check if "All Residential" is selected
+    const isAllResidential = filters.propertyType.includes('All Residential');
+    
+    // Determine if user has provided any criteria (excluding "All Residential" as it's our default)
     const hasSearchCriteria = 
       debouncedLocation || 
-      filters.propertyType.length > 0 || 
+      (filters.propertyType.length > 0 && !isAllResidential) || 
       filters.bhkType.length > 0 || 
       filters.locality.length > 0 || 
       filters.furnished.length > 0 || 
@@ -86,28 +89,28 @@ export const useRealTimeSearch = () => {
       filters.budget[0] > 0 || 
       filters.budget[1] < 50000000;
 
-    // If no criteria, preview Apartments for Sale by default
-    if (!hasSearchCriteria) {
+    // If "All Residential" is selected or no criteria, show all residential properties
+    if (isAllResidential || !hasSearchCriteria) {
       try {
         setIsLoading(true);
         setError(null);
         const { data, error: funcError } = await supabase.functions.invoke('search-listings', {
           body: {
-            intent: 'buy',
-            propertyType: 'Apartment',
-            propertyTypes: ['Apartment'],
+            intent: activeTab,
+            propertyType: '',
+            propertyTypes: [], // Empty to get all property types
             country: 'India',
             state: '',
-            city: '',
-            budgetMin: '0',
-            budgetMax: '50000000',
+            city: debouncedLocation || '',
+            budgetMin: filters.budget[0].toString(),
+            budgetMax: filters.budget[1].toString(),
             page: '1',
             pageSize: '20',
-            bhkType: '',
-            furnished: '',
-            availability: '',
-            ageOfProperty: '',
-            locality: '',
+            bhkType: filters.bhkType.length > 0 ? filters.bhkType[0] : '',
+            furnished: filters.furnished.length > 0 ? filters.furnished[0] : '',
+            availability: filters.availability.length > 0 ? filters.availability[0] : '',
+            ageOfProperty: filters.construction.length > 0 ? filters.construction[0] : '',
+            locality: filters.locality.length > 0 ? filters.locality[0] : '',
             sortBy: 'relevance'
           }
         });
