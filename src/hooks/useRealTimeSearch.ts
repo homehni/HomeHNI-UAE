@@ -91,28 +91,78 @@ export const useRealTimeSearch = () => {
       try {
         setIsLoading(true);
         setError(null);
-        const { data, error: funcError } = await supabase.functions.invoke('search-listings', {
-          body: {
-            intent: 'buy',
-            propertyType: 'Apartment',
-            propertyTypes: ['Apartment'],
-            country: 'India',
-            state: '',
-            city: '',
-            budgetMin: '0',
-            budgetMax: '50000000',
-            page: '1',
-            pageSize: '20',
-            bhkType: '',
-            furnished: '',
-            availability: '',
-            ageOfProperty: '',
-            locality: '',
-            sortBy: 'relevance'
-          }
-        });
-        if (funcError) throw new Error(funcError.message || 'Failed to search properties');
-        setProperties(data.items || []);
+        const { data, error: previewError } = await supabase
+          .from('property_real')
+          .select('id,title,location,images,property_type,is_active')
+          .eq('property_type', 'apartment')
+          .eq('is_active', true)
+          .limit(100);
+        if (previewError) throw previewError;
+
+        const mapped: Property[] = (data || []).map((r: any) => ({
+          id: String(r.id),
+          title: r.title || 'Apartment',
+          location: r.location || 'India',
+          price: 'Price on Request',
+          priceNumber: 0,
+          area: '',
+          areaNumber: 0,
+          bedrooms: 0,
+          bathrooms: 0,
+          image: Array.isArray(r.images) ? r.images[0] : (r.images || '/placeholder.svg'),
+          propertyType: 'apartment',
+          furnished: undefined,
+          availability: undefined,
+          ageOfProperty: undefined,
+          locality: '',
+          city: '',
+          bhkType: '',
+          isNew: true,
+        }));
+
+        setProperties(mapped);
+      } catch (err: any) {
+        setError(err.message || 'Failed to load properties');
+        setProperties([]);
+      } finally {
+        setIsLoading(false);
+      }
+      return;
+    }
+
+    // If explicitly selecting Apartment in Buy tab, list all preview apartments
+    if (activeTab === 'buy' && (filters.propertyType.includes('Flat/Apartment') || filters.propertyType.includes('Apartment'))) {
+      try {
+        setIsLoading(true);
+        setError(null);
+        const { data, error: previewError } = await supabase
+          .from('property_real')
+          .select('id,title,location,images,property_type,is_active')
+          .eq('property_type', 'apartment')
+          .eq('is_active', true)
+          .limit(100);
+        if (previewError) throw previewError;
+        const mapped: Property[] = (data || []).map((r: any) => ({
+          id: String(r.id),
+          title: r.title || 'Apartment',
+          location: r.location || 'India',
+          price: 'Price on Request',
+          priceNumber: 0,
+          area: '',
+          areaNumber: 0,
+          bedrooms: 0,
+          bathrooms: 0,
+          image: Array.isArray(r.images) ? r.images[0] : (r.images || '/placeholder.svg'),
+          propertyType: 'apartment',
+          furnished: undefined,
+          availability: undefined,
+          ageOfProperty: undefined,
+          locality: '',
+          city: '',
+          bhkType: '',
+          isNew: true,
+        }));
+        setProperties(mapped);
       } catch (err: any) {
         setError(err.message || 'Failed to load properties');
         setProperties([]);
