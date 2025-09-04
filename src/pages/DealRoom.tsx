@@ -169,6 +169,22 @@ This certifies that the deal has been completed successfully through HomeHNI pla
     );
   };
 
+  const updateServiceDuration = (index: number, duration: string) => {
+    setServices(prev => 
+      prev.map((service, i) => 
+        i === index ? { ...service, duration } : service
+      )
+    );
+  };
+
+  const updateServiceRequiredDoc = (index: number, requiredDoc: string) => {
+    setServices(prev => 
+      prev.map((service, i) => 
+        i === index ? { ...service, requiredDoc } : service
+      )
+    );
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <Marquee />
@@ -412,7 +428,30 @@ This certifies that the deal has been completed successfully through HomeHNI pla
                       {services.map((service, index) => (
                         <tr key={index} className="border-t">
                           <td className="p-3 text-foreground">{service.name}</td>
-                          <td className="p-3 text-muted-foreground">{service.requiredDoc}</td>
+                          <td className="p-3">
+                            <Select
+                              value={service.requiredDoc}
+                              onValueChange={(value: string) => updateServiceRequiredDoc(index, value)}
+                            >
+                              <SelectTrigger className="w-32 text-xs">
+                                <SelectValue />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="Title Deed">Title Deed</SelectItem>
+                                <SelectItem value="Sale Deed">Sale Deed</SelectItem>
+                                <SelectItem value="Encumbrance Certificate">Encumbrance Certificate</SelectItem>
+                                <SelectItem value="ID Proof">ID Proof</SelectItem>
+                                <SelectItem value="Address Proof">Address Proof</SelectItem>
+                                <SelectItem value="Income Proof">Income Proof</SelectItem>
+                                <SelectItem value="Aadhar">Aadhar</SelectItem>
+                                <SelectItem value="PAN">PAN</SelectItem>
+                                <SelectItem value="Photos">Photos</SelectItem>
+                                <SelectItem value="EC Application">EC Application</SelectItem>
+                                <SelectItem value="Govt ID, PAN">Govt ID, PAN</SelectItem>
+                                <SelectItem value="Aadhar, Photos">Aadhar, Photos</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </td>
                            <td className="p-3">
                             <Input
                               type="number"
@@ -425,7 +464,26 @@ This certifies that the deal has been completed successfully through HomeHNI pla
                               className="w-20 text-sm"
                             />
                           </td>
-                          <td className="p-3 text-muted-foreground text-sm">{service.duration}</td>
+                          <td className="p-3">
+                            <Select
+                              value={service.duration}
+                              onValueChange={(value: string) => updateServiceDuration(index, value)}
+                            >
+                              <SelectTrigger className="w-24 text-xs">
+                                <SelectValue />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="1 day">1 day</SelectItem>
+                                <SelectItem value="1-2 days">1-2 days</SelectItem>
+                                <SelectItem value="2-3 days">2-3 days</SelectItem>
+                                <SelectItem value="2-4 days">2-4 days</SelectItem>
+                                <SelectItem value="3-5 days">3-5 days</SelectItem>
+                                <SelectItem value="5-7 days">5-7 days</SelectItem>
+                                <SelectItem value="1-2 weeks">1-2 weeks</SelectItem>
+                                <SelectItem value="Varies">Varies</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </td>
                           <td className="p-3">
                             <Select
                               value={service.status}
