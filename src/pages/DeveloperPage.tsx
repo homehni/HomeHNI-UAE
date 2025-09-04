@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import { Building2, MapPin, Calendar, Users, Award, Leaf, Star, Phone, Mail, Globe } from "lucide-react";
 import { useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -5,6 +6,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import Header from "@/components/Header";
 import Marquee from "@/components/Marquee";
 import Footer from "@/components/Footer";
+import { DeveloperContactForm } from "@/components/DeveloperContactForm";
 import prestigeGroupLogo from '@/assets/prestige-group-logo.jpg';
 import godrejPropertiesLogo from '@/assets/godrej-properties-logo.jpg';
 import ramkyGroupLogo from '@/assets/ramky-group-logo.jpg';
@@ -14,6 +16,7 @@ import aliensGroupLogo from '@/assets/aliens-group-logo.jpg';
 
 const DeveloperPage = () => {
   const { developerId } = useParams();
+  const [isContactFormOpen, setIsContactFormOpen] = useState(false);
 
   const developers = {
     'prestige-group': {
@@ -390,7 +393,10 @@ const DeveloperPage = () => {
                   <p className="text-red-700 mb-6 text-sm">
                     Get in touch with {developer.name} for investment opportunities and project details.
                   </p>
-                  <Button className="w-full bg-red-600 hover:bg-red-700">
+                  <Button 
+                    className="w-full bg-red-600 hover:bg-red-700"
+                    onClick={() => setIsContactFormOpen(true)}
+                  >
                     Contact Developer
                   </Button>
                 </CardContent>
@@ -402,6 +408,13 @@ const DeveloperPage = () => {
       </section>
       
       <Footer />
+
+      {/* Contact Form Modal */}
+      <DeveloperContactForm 
+        isOpen={isContactFormOpen}
+        onClose={() => setIsContactFormOpen(false)}
+        developerName={developer.name}
+      />
     </div>
   );
 };
