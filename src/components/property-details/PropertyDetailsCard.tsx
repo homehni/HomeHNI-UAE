@@ -79,11 +79,13 @@ export const PropertyDetailsCard: React.FC<PropertyDetailsCardProps> = ({ proper
     return 'Not specified';
   };
 
-  // Check if property is a plot/land
+  // Check property types
   const isPlotProperty = property.property_type?.toLowerCase().includes('plot') || 
                         property.property_type?.toLowerCase().includes('land');
+  const isPGHostelProperty = property.property_type?.toLowerCase() === 'pg_hostel' ||
+                            property.property_type?.toLowerCase() === 'pg/hostel';
 
-  // Different details for plots vs regular properties
+  // Different details for different property types
   const details = isPlotProperty ? [
     { label: 'Type', value: property.property_type?.replace('_', ' ') || 'Not specified' },
     { label: 'Plot Area', value: formatArea(property.super_area, property.carpet_area) },
@@ -92,6 +94,19 @@ export const PropertyDetailsCard: React.FC<PropertyDetailsCardProps> = ({ proper
     { label: 'Water Connection', value: property.water_supply || 'Not specified' },
     { label: 'Electricity', value: property.power_backup || 'Available' },
     { label: 'Registration', value: property.registration_status || 'Not specified' },
+    { label: 'Property Condition', value: property.current_property_condition || 'Not specified' },
+    { label: 'Who Shows Property', value: property.who_will_show || 'Not specified' },
+    { label: 'Home Loan Available', value: property.home_loan_available ? 'Yes' : 'No' },
+  ] : isPGHostelProperty ? [
+    { label: 'Type', value: property.property_type?.replace('_', ' ') || 'PG Hostel' },
+    { label: 'Room Type', value: property.bhk_type === 'multiple' ? 'Multiple Room Types' : property.bhk_type || 'Not specified' },
+    { label: 'Built-up Area', value: formatArea(property.super_area, property.carpet_area) },
+    { label: 'Bathrooms', value: property.bathrooms?.toString() || 'Shared' },
+    { label: 'Gated Security', value: property.gated_security ? 'Yes' : 'No' },
+    { label: 'Furnishing', value: property.furnishing || 'Not specified' },
+    { label: 'Water Supply', value: property.water_supply || 'Not specified' },
+    { label: 'Power Backup', value: property.power_backup || 'Not specified' },
+    { label: 'Property Age', value: property.property_age || 'Not specified' },
     { label: 'Property Condition', value: property.current_property_condition || 'Not specified' },
     { label: 'Who Shows Property', value: property.who_will_show || 'Not specified' },
     { label: 'Home Loan Available', value: property.home_loan_available ? 'Yes' : 'No' },
@@ -123,6 +138,10 @@ export const PropertyDetailsCard: React.FC<PropertyDetailsCardProps> = ({ proper
     formatArea(property.super_area, property.carpet_area),
     property.gated_security ? 'Gated' : 'Open',
     property.registration_status || 'Registration status'
+  ].filter(fact => fact && fact !== 'Not specified') : isPGHostelProperty ? [
+    property.bhk_type === 'multiple' ? 'Multiple Rooms' : property.bhk_type,
+    formatArea(property.super_area, property.carpet_area),
+    property.gated_security ? 'Gated' : 'Open Access'
   ].filter(fact => fact && fact !== 'Not specified') : [
     property.bhk_type,
     formatArea(property.super_area, property.carpet_area),
