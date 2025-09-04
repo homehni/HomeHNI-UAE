@@ -158,7 +158,12 @@ serve(async (req) => {
       const normalizeToDbTypes = (key: string): string[] => {
         const k = key.toLowerCase();
         if (k === 'agriculture_lands' || k === 'agricultural_lands' || k === 'agriculture_land' || k === 'agricultural_land' || k === 'agriculture') {
-          return ['agriculture_lands', 'agricultural_lands', 'agriculture_land', 'agricultural_land'];
+          // Current DB stores agricultural lands under 'plot' in many cases; include it to avoid empty results
+          return ['agriculture_lands', 'agricultural_lands', 'agriculture_land', 'agricultural_land', 'plot'];
+        }
+        if (k === 'farm_house' || k === 'farmhouse') {
+          // Some datasets use 'plot' for farm houses; include both
+          return ['farm_house', 'plot'];
         }
         return [k];
       };
