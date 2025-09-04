@@ -40,6 +40,7 @@ const PropertySearch = () => {
     'Independent House',
     'Villa',
     'Plots',
+    'Agricultural Lands',
     'Farm House',
     'Industrial Space/Building',
     'Commercial Space/Building'

@@ -125,6 +125,7 @@ serve(async (req) => {
         'COMMERCIAL': 'commercial',
         'AGRICULTURE LANDS': 'agriculture_lands',
         'FARM HOUSE': 'farm_house',
+        'Agricultural Lands': 'agriculture_lands',
         // Legacy mappings for backward compatibility
         'Flat/Apartment': 'apartment',
         'Independent Building/Floor': 'independent_building',
