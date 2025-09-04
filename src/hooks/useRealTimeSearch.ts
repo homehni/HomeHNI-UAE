@@ -74,6 +74,25 @@ export const useRealTimeSearch = () => {
 
   // Search properties using the edge function
   const searchProperties = async () => {
+    // Check if we should show empty results (no search criteria)
+    const hasSearchCriteria = 
+      debouncedLocation || 
+      filters.propertyType.length > 0 || 
+      filters.bhkType.length > 0 || 
+      filters.locality.length > 0 || 
+      filters.furnished.length > 0 || 
+      filters.availability.length > 0 || 
+      filters.construction.length > 0 ||
+      filters.budget[0] > 0 || 
+      filters.budget[1] < 50000000;
+
+    if (!hasSearchCriteria) {
+      setProperties([]);
+      setIsLoading(false);
+      setError(null);
+      return;
+    }
+
     setIsLoading(true);
     setError(null);
 
