@@ -74,8 +74,8 @@ export const useRealTimeSearch = () => {
 
   // Search properties using the edge function
   const searchProperties = async () => {
-    // Check if "All Residential" is selected
-    const isAllResidential = filters.propertyType.includes('All Residential');
+    // Check if "ALL" is selected
+    const isAllResidential = filters.propertyType.includes('ALL');
     
     // Determine if user has provided any criteria (excluding "All Residential" as it's our default)
     const hasSearchCriteria = 
@@ -89,7 +89,7 @@ export const useRealTimeSearch = () => {
       filters.budget[0] > 0 || 
       filters.budget[1] < 50000000;
 
-    // If "All Residential" is selected or no criteria, show all properties from property_real table
+    // If "ALL" is selected or no criteria, show all properties from content_elements table
     if (isAllResidential || !hasSearchCriteria) {
       try {
         setIsLoading(true);
@@ -144,10 +144,10 @@ export const useRealTimeSearch = () => {
       const searchBody = {
         intent: activeTab,
         // Send both single and multiple types for backward compatibility
-        propertyType: filters.propertyType.length > 0 && !filters.propertyType.includes('All Residential')
+        propertyType: filters.propertyType.length > 0 && !filters.propertyType.includes('ALL')
           ? filters.propertyType[0]
           : '',
-        propertyTypes: filters.propertyType.filter((t) => t && t !== 'All Residential'),
+        propertyTypes: filters.propertyType.filter((t) => t && t !== 'ALL'),
         country: 'India',
         state: '', // Let the backend handle state detection
         city: debouncedLocation || '',

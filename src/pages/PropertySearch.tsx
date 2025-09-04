@@ -34,16 +34,16 @@ const PropertySearch = () => {
   } = useRealTimeSearch();
 
   const propertyTypes = [
-    'All Residential',
-    'Flat/Apartment', 
-    'Independent Building/Floor',
-    'Independent House',
-    'Villa',
-    'Plots',
-    'Agricultural Lands',
-    'Farm House',
-    'Industrial Space/Building',
-    'Commercial Space/Building'
+    'ALL',
+    'PLOT',
+    'VILLA', 
+    'APARTMENT',
+    'COMMERCIAL',
+    'HOUSE',
+    'PENTHOUSE',
+    'INDEPENDENT HOUSE',
+    'AGRICULTURE LANDS',
+    'FARM HOUSE'
   ];
 
   const bhkTypes = ['1 RK', '1 BHK', '2 BHK', '3 BHK', '4 BHK', '5+ BHK'];
@@ -380,10 +380,10 @@ const PropertySearch = () => {
                 <h1 className="text-2xl font-bold text-gray-900">
                   {(() => {
                     // Get property type context
-                    const hasPropertyTypeFilter = filters.propertyType.length > 0 && !filters.propertyType.includes('All Residential');
+                    const hasPropertyTypeFilter = filters.propertyType.length > 0 && !filters.propertyType.includes('ALL');
                     const propertyTypeText = hasPropertyTypeFilter ? 
                       filters.propertyType.length === 1 ? 
-                        filters.propertyType[0].toLowerCase().replace('/', '/').replace('flat/apartment', 'flats/apartments').replace('independent house', 'independent houses').replace('villa', 'villas').replace('plots', 'plots/land').replace('commercial space/building', 'commercial spaces').replace('industrial space/building', 'industrial spaces') 
+                        filters.propertyType[0].toLowerCase().replace('plot', 'plots').replace('apartment', 'apartments').replace('villa', 'villas').replace('commercial', 'commercial properties').replace('house', 'houses').replace('penthouse', 'penthouses').replace('independent house', 'independent houses').replace('agriculture lands', 'agriculture lands').replace('farm house', 'farm houses') 
                         : 'properties'
                       : 'properties';
                     
