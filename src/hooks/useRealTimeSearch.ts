@@ -89,46 +89,111 @@ export const useRealTimeSearch = () => {
       filters.budget[0] > 0 || 
       filters.budget[1] < 50000000;
 
-    // If "ALL" is selected or no criteria, show all properties from content_elements table
+    // If "ALL" is selected or no criteria, show exact same properties as homepage Featured Properties
     if (isAllResidential || !hasSearchCriteria) {
       try {
         setIsLoading(true);
         setError(null);
         
-        // Query content_elements table to get all featured properties
+        // Use the same logic as FeaturedProperties component
+        // 1. Get content elements (curated featured properties)
         const { data: contentElementsData, error: contentError } = await supabase
           .from('content_elements')
           .select('*')
           .eq('page_location', 'homepage')
           .eq('section_location', 'featured_properties')
+          .eq('element_type', 'featured_property')
           .eq('is_active', true)
           .order('sort_order');
 
         if (contentError) throw contentError;
 
-        // Transform content_elements data to match Property interface
-        const transformedProperties: Property[] = (contentElementsData || []).map((prop: any) => {
-          const content = prop.content || {};
-          return {
-            id: prop.id || '',
-            title: prop.title || content.title || 'Untitled Property',
-            location: content.location || '',
-            price: content.price || '₹0',
-            priceNumber: parseFloat(content.price?.replace(/[^\d]/g, '') || '0'),
-            area: content.area || content.size || '0 sq ft',
-            areaNumber: parseFloat(content.area?.replace(/[^\d]/g, '') || content.size?.replace(/[^\d]/g, '') || '0'),
-            bedrooms: content.bedrooms || 0,
-            bathrooms: content.bathrooms || 0,
-            image: content.image || '/placeholder.svg',
-            propertyType: content.propertyType || 'Unknown',
-            locality: content.location?.split(', ')[0] || '',
-            city: content.location?.split(', ').pop() || '',
-            bhkType: content.bhk || '1bhk',
-            isNew: content.isNew || false
-          };
+        // 2. Get featured properties from properties table
+        const { data: propertiesData, error: propertiesError } = await supabase
+          .rpc('get_public_properties');
+
+        if (propertiesError) throw propertiesError;
+
+        // Filter for featured properties only
+        const featuredPropertiesData = (propertiesData || []).filter(property => property.is_featured);
+
+        // Validate content elements referencing properties against current database
+        const referencedPropertyIds = (contentElementsData || [])
+          .map(e => {
+            const content = e.content as any;
+            return content?.id;
+          })
+          .filter((id): id is string => Boolean(id));
+
+        let validPropertyIdSet = new Set<string>();
+        if (referencedPropertyIds.length > 0) {
+          const { data: existingProps, error: existingErr } = await supabase
+            .from('properties')
+            .select('id, status')
+            .in('id', referencedPropertyIds);
+          if (!existingErr && existingProps) {
+            validPropertyIdSet = new Set(existingProps.filter(p => p.status === 'approved').map(p => p.id));
+          }
+        }
+
+        // Filter out content elements that point to deleted/unapproved properties
+        const filteredContentElements = (contentElementsData || []).filter(e => {
+          const content = e.content as any;
+          const refId = content?.id as string | undefined;
+          if (!refId) return true; // keep static curated tiles
+          return validPropertyIdSet.has(refId);
         });
 
-        setProperties(transformedProperties);
+        // Transform content elements to Property format
+        const contentElementProperties = filteredContentElements.map((element: any) => {
+          const content = element.content as any || {};
+          return {
+            id: content?.id || element.id,
+            title: element.title || content?.title || 'Property',
+            location: content?.location || 'Location',
+            price: content?.price || '₹0',
+            priceNumber: parseFloat(content?.price?.replace(/[^\d]/g, '') || '0'),
+            area: content?.area || content?.size || '0 sq ft',
+            areaNumber: parseFloat(content?.area?.replace(/[^\d]/g, '') || content?.size?.replace(/[^\d]/g, '') || '0'),
+            bedrooms: content?.bedrooms || parseInt(content?.bhk?.replace(/[^\d]/g, '') || '0'),
+            bathrooms: content?.bathrooms || 0,
+            image: element.images?.[0] || content?.image || '/placeholder.svg',
+            propertyType: content?.propertyType || 'Property',
+            locality: content?.location?.split(', ')[0] || '',
+            city: content?.location?.split(', ').pop() || '',
+            bhkType: content?.bhk || '1bhk',
+            isNew: content?.isNew || false
+          };
+        });
+        
+        // Transform properties table data to Property format
+        const transformedPropertiesData = featuredPropertiesData.map((property: any) => ({
+          id: property.id,
+          title: property.title,
+          location: `${property.locality}, ${property.city}`,
+          price: `₹${(property.expected_price / 100000).toFixed(1)}L`,
+          priceNumber: property.expected_price || 0,
+          area: `${property.super_area || 0} sq ft`,
+          areaNumber: property.super_area || 0,
+          bedrooms: parseInt(property.bhk_type?.replace(/[^\d]/g, '') || '0'),
+          bathrooms: property.bathrooms || 0,
+          image: property.images || '/placeholder.svg',
+          propertyType: property.property_type?.replace(/_/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase()) || 'Property',
+          locality: property.locality || '',
+          city: property.city || '',
+          bhkType: property.bhk_type || '1bhk',
+          isNew: new Date(property.created_at) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) // New if created within last 7 days
+        }));
+
+        // Combine both sources, with newer properties first (same logic as FeaturedProperties)
+        const allProperties = [...transformedPropertiesData, ...contentElementProperties];
+        
+        // Remove duplicates based on ID and limit to same as homepage (20 properties)
+        const uniqueProperties = allProperties.filter((property, index, self) => 
+          index === self.findIndex(p => p.id === property.id)
+        ).slice(0, 20); // Same limit as homepage
+
+        setProperties(uniqueProperties);
       } catch (err: any) {
         setError(err.message || 'Failed to load properties');
         setProperties([]);
