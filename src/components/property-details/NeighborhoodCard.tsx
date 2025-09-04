@@ -25,36 +25,6 @@ export const NeighborhoodCard: React.FC<NeighborhoodCardProps> = ({ property }) 
             src={`https://www.google.com/maps?q=${encodeURIComponent(`${property.locality}, ${property.city}`)}&output=embed`}
           />
         </div>
-        
-        {/* Legend */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <div>
-            <h3 className="font-semibold text-gray-900 mb-2">Transit</h3>
-            <ul className="space-y-1 text-sm text-gray-600">
-              <li>Bus Stations nearby</li>
-              <li>Metro access</li>
-              <li>Taxi services</li>
-            </ul>
-          </div>
-          
-          <div>
-            <h3 className="font-semibold text-gray-900 mb-2">Essentials</h3>
-            <ul className="space-y-1 text-sm text-gray-600">
-              <li>Schools & Hospitals</li>
-              <li>ATMs & Banks</li>
-              <li>Parks & Markets</li>
-            </ul>
-          </div>
-          
-          <div>
-            <h3 className="font-semibold text-gray-900 mb-2">Utilities</h3>
-            <ul className="space-y-1 text-sm text-gray-600">
-              <li>24x7 Water supply</li>
-              <li>Power backup</li>
-              <li>Internet connectivity</li>
-            </ul>
-          </div>
-        </div>
       </div>
     </div>
   );
