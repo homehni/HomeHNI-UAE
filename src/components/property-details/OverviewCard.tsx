@@ -69,8 +69,24 @@ export const OverviewCard: React.FC<OverviewCardProps> = ({ property }) => {
   // Check if property is a plot/land
   const isPlotProperty = property.property_type?.toLowerCase().includes('plot') || 
                         property.property_type?.toLowerCase().includes('land');
+  
+  // Check if property is PG/Hostel/Coliving
+  const isPGHostelProperty = property.property_type?.toLowerCase().includes('pg') || 
+                            property.property_type?.toLowerCase().includes('hostel') ||
+                            property.property_type?.toLowerCase().includes('coliving');
 
-  const overviewItems = isPlotProperty ? [
+  const overviewItems = isPGHostelProperty ? [
+    { label: 'Property Type', value: property.property_type?.replace('_', ' ') || 'Not specified' },
+    { label: 'Furnishing', value: property.furnishing || 'Not specified' },
+    { label: 'Floor', value: formatFloor(property.floor_no, property.total_floors) },
+    { label: 'Balconies', value: property.balconies?.toString() || 'Not specified' },
+    { label: 'Property Age', value: property.property_age || 'Not specified' },
+    { label: 'Facing Direction', value: property.facing_direction || 'Not specified' },
+    { label: 'Floor Type', value: property.floor_type || 'Not specified' },
+    { label: 'Water Supply', value: property.water_supply || 'Not specified' },
+    { label: 'Power Backup', value: property.power_backup || 'Not specified' },
+    { label: 'Property Condition', value: property.current_property_condition || 'Not specified' },
+  ] : isPlotProperty ? [
     { label: 'Property Type', value: property.property_type?.replace('_', ' ') || 'Not specified' },
     { label: 'Plot Area', value: formatArea(property.super_area, property.carpet_area) },
     { label: 'Ownership Type', value: formatOwnership(property.owner_role) },
