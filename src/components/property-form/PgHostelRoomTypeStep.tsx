@@ -11,6 +11,7 @@ interface PgHostelRoomType {
 interface PgHostelRoomTypeStepProps {
   initialData?: Partial<PgHostelRoomType>;
   onNext: (data: PgHostelRoomType) => void;
+  onBack?: () => void;
   currentStep: number;
   totalSteps: number;
 }
@@ -18,6 +19,7 @@ interface PgHostelRoomTypeStepProps {
 export function PgHostelRoomTypeStep({ 
   initialData, 
   onNext, 
+  onBack,
   currentStep, 
   totalSteps 
 }: PgHostelRoomTypeStepProps) {
@@ -122,8 +124,13 @@ export function PgHostelRoomTypeStep({
               })}
             </div>
 
-            <div className="flex justify-end pt-6">
-              <Button type="submit">
+            <div className="flex justify-between pt-6">
+              {onBack && (
+                <Button type="button" variant="outline" onClick={onBack}>
+                  Back
+                </Button>
+              )}
+              <Button type="submit" className={onBack ? "" : "ml-auto"}>
                 Save & Continue
               </Button>
             </div>

@@ -3,6 +3,7 @@ import { Badge } from '@/components/ui/badge';
 import { ProgressIndicator } from './ProgressIndicator';
 import { PgHostelSidebar } from './PgHostelSidebar';
 import { PgHostelOwnerInfoStep } from './PgHostelOwnerInfoStep';
+import { PgHostelPropertyInfoStep } from './PgHostelPropertyInfoStep';
 import { PgHostelRoomTypeStep } from './PgHostelRoomTypeStep';
 
 import { PgHostelRoomDetailsStep } from './PgHostelRoomDetailsStep';
@@ -47,6 +48,19 @@ export const PGHostelMultiStepForm: React.FC<PGHostelMultiStepFormProps> = ({
     city: '',
     whatsappUpdates: false,
     ...initialOwnerInfo
+  });
+
+  const [propertyInfo, setPropertyInfo] = useState({
+    title: '',
+    propertyType: '',
+    buildingType: '',
+    ageOfProperty: '',
+    floorNo: 0,
+    totalFloors: 0,
+    superBuiltUpArea: 0,
+    furnishing: '',
+    onMainRoad: false,
+    cornerProperty: false,
   });
 
   const [roomTypes, setRoomTypes] = useState({
@@ -143,51 +157,58 @@ export const PGHostelMultiStepForm: React.FC<PGHostelMultiStepFormProps> = ({
     scrollToTop();
   };
 
-  const handleRoomTypesNext = (data: any) => {
-    setRoomTypes(data);
+  const handlePropertyInfoNext = (data: any) => {
+    setPropertyInfo(data);
     setCompletedSteps(prev => [...prev.filter(step => step !== 2), 2]);
     setCurrentStep(3);
     scrollToTop();
   };
 
-  const handleRoomDetailsNext = (data: any) => {
-    setRoomDetails(data);
+  const handleRoomTypesNext = (data: any) => {
+    setRoomTypes(data);
     setCompletedSteps(prev => [...prev.filter(step => step !== 3), 3]);
     setCurrentStep(4);
     scrollToTop();
   };
 
-  const handleLocalityDetailsNext = (data: any) => {
-    setLocalityDetails(data);
+  const handleRoomDetailsNext = (data: any) => {
+    setRoomDetails(data);
     setCompletedSteps(prev => [...prev.filter(step => step !== 4), 4]);
     setCurrentStep(5);
     scrollToTop();
   };
 
-  const handlePgDetailsNext = (data: any) => {
-    setPgDetails(data);
+  const handleLocalityDetailsNext = (data: any) => {
+    setLocalityDetails(data);
     setCompletedSteps(prev => [...prev.filter(step => step !== 5), 5]);
     setCurrentStep(6);
     scrollToTop();
   };
 
-  const handleAmenitiesNext = (data: any) => {
-    setAmenities(data);
+  const handlePgDetailsNext = (data: any) => {
+    setPgDetails(data);
     setCompletedSteps(prev => [...prev.filter(step => step !== 6), 6]);
     setCurrentStep(7);
     scrollToTop();
   };
 
-  const handleGalleryNext = (data: any) => {
-    setGallery(data);
+  const handleAmenitiesNext = (data: any) => {
+    setAmenities(data);
     setCompletedSteps(prev => [...prev.filter(step => step !== 7), 7]);
     setCurrentStep(8);
     scrollToTop();
   };
 
+  const handleGalleryNext = (data: any) => {
+    setGallery(data);
+    setCompletedSteps(prev => [...prev.filter(step => step !== 8), 8]);
+    setCurrentStep(9);
+    scrollToTop();
+  };
+
   const handleScheduleNext = (data: any) => {
     setScheduleInfo(data);
-    setCompletedSteps(prev => [...prev.filter(step => step !== 8), 8]);
+    setCompletedSteps(prev => [...prev.filter(step => step !== 9), 9]);
     // Form complete, submit
     handleSubmit();
   };
@@ -207,7 +228,7 @@ export const PGHostelMultiStepForm: React.FC<PGHostelMultiStepFormProps> = ({
     },
     propertyInfo: {
       propertyDetails: {
-        title: `PG/Hostel with multiple room types`,
+        title: propertyInfo.title || 'PG/Hostel Property',
         propertyType: 'PG/Hostel',
         buildingType: 'PG',
         bhkType: 'Multiple',
@@ -306,72 +327,83 @@ export const PGHostelMultiStepForm: React.FC<PGHostelMultiStepFormProps> = ({
         )}
 
         {currentStep === 2 && (
-          <PgHostelRoomTypeStep
-            initialData={roomTypes}
-            onNext={handleRoomTypesNext}
+          <PgHostelPropertyInfoStep
+            initialData={propertyInfo}
+            onNext={handlePropertyInfoNext}
+            onBack={prevStep}
             currentStep={1}
-            totalSteps={7}
+            totalSteps={8}
           />
         )}
 
         {currentStep === 3 && (
+          <PgHostelRoomTypeStep
+            initialData={roomTypes}
+            onNext={handleRoomTypesNext}
+            onBack={prevStep}
+            currentStep={2}
+            totalSteps={8}
+          />
+        )}
+
+        {currentStep === 4 && (
           <PgHostelRoomDetailsStep
             initialData={roomDetails}
             roomTypes={roomTypes}
             onNext={handleRoomDetailsNext}
             onBack={prevStep}
-            currentStep={2}
-            totalSteps={7}
-          />
-        )}
-
-        {currentStep === 4 && (
-          <PgHostelLocalityDetailsStep
-            initialData={localityDetails}
-            onNext={handleLocalityDetailsNext}
-            onBack={prevStep}
             currentStep={3}
-            totalSteps={7}
+            totalSteps={8}
           />
         )}
 
         {currentStep === 5 && (
-          <PgHostelPgDetailsStep
-            initialData={pgDetails}
-            onNext={handlePgDetailsNext}
+          <PgHostelLocalityDetailsStep
+            initialData={localityDetails}
+            onNext={handleLocalityDetailsNext}
             onBack={prevStep}
             currentStep={4}
-            totalSteps={7}
+            totalSteps={8}
           />
         )}
 
         {currentStep === 6 && (
-          <PgHostelAmenitiesStep
-            initialData={amenities}
-            onNext={handleAmenitiesNext}
+          <PgHostelPgDetailsStep
+            initialData={pgDetails}
+            onNext={handlePgDetailsNext}
             onBack={prevStep}
             currentStep={5}
-            totalSteps={7}
+            totalSteps={8}
           />
         )}
 
         {currentStep === 7 && (
-          <PgHostelGalleryStep
-            initialData={gallery}
-            onNext={handleGalleryNext}
+          <PgHostelAmenitiesStep
+            initialData={amenities}
+            onNext={handleAmenitiesNext}
             onBack={prevStep}
             currentStep={6}
-            totalSteps={7}
+            totalSteps={8}
           />
         )}
 
         {currentStep === 8 && (
+          <PgHostelGalleryStep
+            initialData={gallery}
+            onNext={handleGalleryNext}
+            onBack={prevStep}
+            currentStep={7}
+            totalSteps={8}
+          />
+        )}
+
+        {currentStep === 9 && (
           <PgHostelScheduleStep
             initialData={scheduleInfo}
             onNext={handleScheduleNext}
             onBack={prevStep}
-            currentStep={7}
-            totalSteps={7}
+            currentStep={8}
+            totalSteps={8}
           />
         )}
           </div>

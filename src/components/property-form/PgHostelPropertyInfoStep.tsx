@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 
 interface PgHostelPropertyInfo {
+  title: string;
   propertyType: string;
   buildingType: string;
   ageOfProperty: string;
@@ -34,6 +35,7 @@ export function PgHostelPropertyInfoStep({
   totalSteps 
 }: PgHostelPropertyInfoStepProps) {
   const [formData, setFormData] = useState<PgHostelPropertyInfo>({
+    title: '',
     propertyType: '',
     buildingType: '',
     ageOfProperty: '',
@@ -54,7 +56,8 @@ export function PgHostelPropertyInfoStep({
   };
 
   const isFormValid = () => {
-    return formData.propertyType && 
+    return formData.title.trim() && 
+           formData.propertyType && 
            formData.buildingType && 
            formData.ageOfProperty &&
            formData.floorNo > 0 &&
@@ -80,6 +83,19 @@ export function PgHostelPropertyInfoStep({
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Property Title */}
+            <div className="space-y-2">
+              <Label htmlFor="title">Property Title *</Label>
+              <Input
+                id="title"
+                value={formData.title}
+                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                placeholder="Enter a catchy title for your PG/Hostel"
+                className="h-12"
+                required
+              />
+            </div>
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
                 <Label htmlFor="propertyType">Property Type *</Label>
