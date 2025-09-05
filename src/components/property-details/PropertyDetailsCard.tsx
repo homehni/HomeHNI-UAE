@@ -273,49 +273,36 @@ export const PropertyDetailsCard: React.FC<PropertyDetailsCardProps> = ({ proper
                 </div>
               )}
               
-              {/* Amenities */}
-              {property.amenities?.gym && (
-                <div className="flex items-center gap-2 text-sm text-gray-700">
+              {/* Amenities - Check if it's an array of strings or object */}
+              {Array.isArray(property.amenities) && property.amenities.map((amenity: string, index: number) => (
+                <div key={index} className="flex items-center gap-2 text-sm text-gray-700">
                   <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                  <span>Common TV</span>
+                  <span>{amenity}</span>
                 </div>
-              )}
-              {property.amenities?.clubHouse && (
-                <div className="flex items-center gap-2 text-sm text-gray-700">
-                  <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                  <span>Mess</span>
-                </div>
-              )}
-              {property.amenities?.lift && (
-                <div className="flex items-center gap-2 text-sm text-gray-700">
-                  <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                  <span>Lift</span>
-                </div>
-              )}
-              {property.amenities?.intercom && (
-                <div className="flex items-center gap-2 text-sm text-gray-700">
-                  <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                  <span>Refrigerator</span>
-                </div>
-              )}
-              {property.amenities?.internetProvider && (
-                <div className="flex items-center gap-2 text-sm text-gray-700">
-                  <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                  <span>WiFi</span>
-                </div>
-              )}
-              {property.amenities?.gasPipeline && (
-                <div className="flex items-center gap-2 text-sm text-gray-700">
-                  <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                  <span>Cooking Allowed</span>
-                </div>
-              )}
-              {property.amenities?.sewageTreatmentPlant && (
-                <div className="flex items-center gap-2 text-sm text-gray-700">
-                  <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                  <span>Power Backup</span>
-                </div>
-              )}
+              ))}
+              
+              {/* Handle amenities as object (original structure) */}
+              {!Array.isArray(property.amenities) && property.amenities && Object.entries(property.amenities).map(([key, value]) => {
+                if (!value) return null;
+                
+                // Map specific keys to display names for PG/Hostel
+                const amenityDisplayNames: Record<string, string> = {
+                  gym: 'Common TV',
+                  clubHouse: 'Mess',
+                  lift: 'Lift',
+                  intercom: 'Refrigerator',
+                  internetProvider: 'WiFi',
+                  gasPipeline: 'Cooking Allowed',
+                  sewageTreatmentPlant: 'Power Backup',
+                };
+                
+                return (
+                  <div key={key} className="flex items-center gap-2 text-sm text-gray-700">
+                    <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                    <span>{amenityDisplayNames[key] || key.replace(/([A-Z])/g, ' $1').trim()}</span>
+                  </div>
+                );
+              })}
               
               {/* Parking */}
               {property.parking && property.parking !== 'none' && (

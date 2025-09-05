@@ -60,32 +60,83 @@ const PropertyDetails: React.FC = () => {
     document.title = property ? `${property.title} | Property Details` : 'Property Details';
   }, [property]);
   
-  // Fetch full amenities from DB if they weren't passed via navigation state
+  // Fetch full amenities and PG/Hostel data from DB if they weren't passed via navigation state
   React.useEffect(() => {
-    const loadAmenities = async () => {
+    const loadPropertyData = async () => {
       if (!id) return;
       try {
-        const { data, error } = await supabase
-          .from('properties')
-          .select('amenities, additional_documents')
-          .eq('id', id)
-          .maybeSingle();
-        if (!error && data) {
-          setDbAmenities((data as any).amenities ?? null);
-          setDbAdditionalDocs((data as any).additional_documents ?? null);
+        // Check if it's a PG/Hostel property first
+        const isPGHostel = property?.property_type?.toLowerCase() === 'pg_hostel' || 
+                          property?.property_type?.toLowerCase() === 'pg/hostel';
+        
+        if (isPGHostel) {
+          // Fetch from pg_hostel_properties table
+          const { data, error } = await supabase
+            .from('pg_hostel_properties')
+            .select('*')
+            .eq('id', id)
+            .maybeSingle();
+          
+          if (!error && data) {
+            // Transform PG/Hostel data to match PropertyDetailsCard interface
+            const transformedData = {
+              ...property,
+              expected_rent: data.expected_rent,
+              expected_deposit: data.expected_deposit,
+              place_available_for: data.place_available_for,
+              preferred_guests: data.preferred_guests,
+              available_from: data.available_from,
+              food_included: data.food_included,
+              gate_closing_time: data.gate_closing_time,
+              description: data.description,
+              amenities: data.amenities,
+              available_services: data.available_services,
+              parking: data.parking,
+              landmark: data.landmark,
+              state: data.state,
+              city: data.city,
+              locality: data.locality,
+            };
+            setDbAmenities(data.amenities ?? null);
+            // Store the PG/Hostel specific data for PropertyDetailsCard
+            (window as any).__pgHostelData = transformedData;
+          }
+        } else {
+          // Regular property - fetch amenities and additional_documents
+          const { data, error } = await supabase
+            .from('properties')
+            .select('amenities, additional_documents')
+            .eq('id', id)
+            .maybeSingle();
+          if (!error && data) {
+            setDbAmenities((data as any).amenities ?? null);
+            setDbAdditionalDocs((data as any).additional_documents ?? null);
+          }
         }
       } catch (err) {
-        console.error('Failed to load amenities', err);
+        console.error('Failed to load property data', err);
       }
     };
-    if (!(property as any)?.amenities || !(property as any)?.additional_documents) {
-      loadAmenities();
+    if (!(property as any)?.amenities || !(property as any)?.additional_documents || 
+        (property?.property_type?.toLowerCase() === 'pg_hostel' || property?.property_type?.toLowerCase() === 'pg/hostel')) {
+      loadPropertyData();
     }
-  }, [id]);
+  }, [id, property]);
   
   const fallbackDescription = `This beautifully maintained ${property?.bhk_type ?? ''} ${property?.property_type?.replace('_', ' ') ?? 'apartment'} offers a spacious layout with abundant natural light and excellent connectivity to local conveniences. Situated in a prime locality, it features well-ventilated rooms, ample storage and proximity to schools, hospitals and public transport. A perfect choice for families looking for comfort and convenience.`;
   const amenitiesData = (property as any)?.amenities ?? dbAmenities ?? undefined;
-  const mergedProperty = property ? { ...(property as any), amenities: amenitiesData, additional_documents: (property as any)?.additional_documents ?? dbAdditionalDocs ?? undefined } : property;
+  
+  // Check if it's a PG/Hostel property and use the correct data
+  const isPGHostel = property?.property_type?.toLowerCase() === 'pg_hostel' || 
+                    property?.property_type?.toLowerCase() === 'pg/hostel';
+  
+  const mergedProperty = property ? {
+    ...(property as any),
+    amenities: amenitiesData,
+    additional_documents: (property as any)?.additional_documents ?? dbAdditionalDocs ?? undefined,
+    // Include PG/Hostel specific data if available
+    ...((window as any).__pgHostelData || {})
+  } : property;
   
   if (!property) {
     return <div className="min-h-screen flex flex-col">
