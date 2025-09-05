@@ -55,6 +55,7 @@ const PropertyDetails: React.FC = () => {
   const [showLegalServicesModal, setShowLegalServicesModal] = React.useState(false);
   const [dbAmenities, setDbAmenities] = React.useState<any | null>(null);
   const [dbAdditionalDocs, setDbAdditionalDocs] = React.useState<Record<string, boolean> | null>(null);
+  const [pgHostelData, setPgHostelData] = React.useState<any | null>(null);
   
   React.useEffect(() => {
     document.title = property ? `${property.title} | Property Details` : 'Property Details';
@@ -65,9 +66,9 @@ const PropertyDetails: React.FC = () => {
     const loadPropertyData = async () => {
       if (!id) return;
       try {
-        // Check if it's a PG/Hostel property first
-        const isPGHostel = property?.property_type?.toLowerCase() === 'pg_hostel' || 
-                          property?.property_type?.toLowerCase() === 'pg/hostel';
+        // Check if it's a PG/Hostel/Coliving property
+        const type = property?.property_type?.toLowerCase() || '';
+        const isPGHostel = type.includes('pg') || type.includes('hostel') || type.includes('coliving');
         
         if (isPGHostel) {
           // Fetch from pg_hostel_properties table
@@ -96,10 +97,10 @@ const PropertyDetails: React.FC = () => {
               state: data.state,
               city: data.city,
               locality: data.locality,
+              property_type: data.property_type || property?.property_type,
             };
             setDbAmenities(data.amenities ?? null);
-            // Store the PG/Hostel specific data for PropertyDetailsCard
-            (window as any).__pgHostelData = transformedData;
+            setPgHostelData(transformedData);
           }
         } else {
           // Regular property - fetch amenities and additional_documents
@@ -117,8 +118,9 @@ const PropertyDetails: React.FC = () => {
         console.error('Failed to load property data', err);
       }
     };
+    const typeCheck = property?.property_type?.toLowerCase() || '';
     if (!(property as any)?.amenities || !(property as any)?.additional_documents || 
-        (property?.property_type?.toLowerCase() === 'pg_hostel' || property?.property_type?.toLowerCase() === 'pg/hostel')) {
+        typeCheck.includes('pg') || typeCheck.includes('hostel') || typeCheck.includes('coliving')) {
       loadPropertyData();
     }
   }, [id, property]);
@@ -126,19 +128,18 @@ const PropertyDetails: React.FC = () => {
   const fallbackDescription = `This beautifully maintained ${property?.bhk_type ?? ''} ${property?.property_type?.replace('_', ' ') ?? 'apartment'} offers a spacious layout with abundant natural light and excellent connectivity to local conveniences. Situated in a prime locality, it features well-ventilated rooms, ample storage and proximity to schools, hospitals and public transport. A perfect choice for families looking for comfort and convenience.`;
   
   // Prepare merged property (including PG/Hostel specific if loaded)
-  const isPGHostel = property?.property_type?.toLowerCase() === 'pg_hostel' || 
-                    property?.property_type?.toLowerCase() === 'pg/hostel' ||
-                    property?.property_type?.toLowerCase().includes('pg') ||
-                    property?.property_type?.toLowerCase().includes('hostel');
+  const isPGHostel = property?.property_type?.toLowerCase().includes('pg') || 
+                    property?.property_type?.toLowerCase().includes('hostel') ||
+                    property?.property_type?.toLowerCase().includes('coliving');
   const mergedProperty = property ? {
     ...(property as any),
     amenities: (property as any)?.amenities ?? dbAmenities ?? undefined,
     additional_documents: (property as any)?.additional_documents ?? dbAdditionalDocs ?? undefined,
-    ...((window as any).__pgHostelData || {})
+    ...(pgHostelData || {})
   } : property;
 
   // Compute amenities for card: merge PG amenities + available services when applicable
-  const pgData: any = (window as any).__pgHostelData || {};
+  const pgData: any = pgHostelData || {};
   const mergedAmenities = isPGHostel
     ? { ...(pgData?.amenities || {}), ...(pgData?.available_services || {}) }
     : ((property as any)?.amenities ?? dbAmenities ?? undefined);

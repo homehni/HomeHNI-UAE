@@ -8,15 +8,18 @@ interface LocationCardProps {
     state: string;
     locality: string;
     pincode: string;
+    property_type?: string;
   };
 }
 
 export const LocationCard: React.FC<LocationCardProps> = ({ property }) => {
+  const type = property.property_type?.toLowerCase() || '';
+  const isPG = type.includes('pg') || type.includes('hostel') || type.includes('coliving');
   const locationDetails = [
     { label: 'City', value: property.city },
     { label: 'State', value: property.state },
     { label: 'Locality', value: property.locality },
-    { label: 'Pincode', value: property.pincode },
+    ...(!isPG && property.pincode ? [{ label: 'Pincode', value: property.pincode }] : [])
   ];
 
   return (

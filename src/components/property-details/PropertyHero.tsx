@@ -79,12 +79,16 @@ export const PropertyHero: React.FC<PropertyHeroProps> = ({
           </div>
           <div className="flex items-center gap-2 text-sm text-gray-600">
             {property.bhk_type && <span>{property.bhk_type}</span>}
-            {property.super_area && (
-              <>
-                <span>•</span>
-                <span>{property.super_area} sqft</span>
-              </>
-            )}
+            {(() => {
+              const t = property.property_type?.toLowerCase() || '';
+              const isPG = t.includes('pg') || t.includes('hostel') || t.includes('coliving');
+              return !isPG && property.super_area ? (
+                <>
+                  <span>•</span>
+                  <span>{property.super_area} sqft</span>
+                </>
+              ) : null;
+            })()}
           </div>
         </div>
         

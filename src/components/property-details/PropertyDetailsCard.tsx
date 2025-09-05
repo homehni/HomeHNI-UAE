@@ -254,19 +254,19 @@ export const PropertyDetailsCard: React.FC<PropertyDetailsCardProps> = ({ proper
             <h3 className="text-md font-semibold text-gray-900 mb-3">Amenities & Available Services</h3>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
               {/* Available Services */}
-              {property.available_services?.laundry && (
+              {isTruthy((property as any).available_services?.laundry) && (
                 <div className="flex items-center gap-2 text-sm text-gray-700">
                   <div className="w-2 h-2 bg-green-500 rounded-full"></div>
                   <span>Laundry</span>
                 </div>
               )}
-              {property.available_services?.room_cleaning && (
+              {isTruthy((property as any).available_services?.room_cleaning) && (
                 <div className="flex items-center gap-2 text-sm text-gray-700">
                   <div className="w-2 h-2 bg-green-500 rounded-full"></div>
                   <span>Room Cleaning</span>
                 </div>
               )}
-              {property.available_services?.warden_facility && (
+              {isTruthy((property as any).available_services?.warden_facility) && (
                 <div className="flex items-center gap-2 text-sm text-gray-700">
                   <div className="w-2 h-2 bg-green-500 rounded-full"></div>
                   <span>Warden Facility</span>
@@ -283,7 +283,7 @@ export const PropertyDetailsCard: React.FC<PropertyDetailsCardProps> = ({ proper
               
               {/* Handle amenities as object (original structure) */}
               {!Array.isArray(property.amenities) && property.amenities && Object.entries(property.amenities).map(([key, value]) => {
-                if (!value) return null;
+                if (!isTruthy(value as any)) return null;
                 
                 // Map specific keys to display names for PG/Hostel
                 const amenityDisplayNames: Record<string, string> = {
