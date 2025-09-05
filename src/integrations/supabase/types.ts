@@ -610,6 +610,87 @@ export type Database = {
           },
         ]
       }
+      pg_hostel_properties: {
+        Row: {
+          amenities: Json | null
+          available_from: string | null
+          available_services: Json | null
+          city: string
+          created_at: string
+          description: string | null
+          expected_deposit: number
+          expected_rent: number
+          food_included: boolean
+          gate_closing_time: string | null
+          id: string
+          images: string[] | null
+          landmark: string | null
+          locality: string
+          parking: string | null
+          place_available_for: string
+          preferred_guests: string
+          property_type: string
+          state: string
+          status: string | null
+          title: string
+          updated_at: string
+          user_id: string
+          videos: string[] | null
+        }
+        Insert: {
+          amenities?: Json | null
+          available_from?: string | null
+          available_services?: Json | null
+          city: string
+          created_at?: string
+          description?: string | null
+          expected_deposit: number
+          expected_rent: number
+          food_included?: boolean
+          gate_closing_time?: string | null
+          id?: string
+          images?: string[] | null
+          landmark?: string | null
+          locality: string
+          parking?: string | null
+          place_available_for: string
+          preferred_guests: string
+          property_type?: string
+          state: string
+          status?: string | null
+          title: string
+          updated_at?: string
+          user_id: string
+          videos?: string[] | null
+        }
+        Update: {
+          amenities?: Json | null
+          available_from?: string | null
+          available_services?: Json | null
+          city?: string
+          created_at?: string
+          description?: string | null
+          expected_deposit?: number
+          expected_rent?: number
+          food_included?: boolean
+          gate_closing_time?: string | null
+          id?: string
+          images?: string[] | null
+          landmark?: string | null
+          locality?: string
+          parking?: string | null
+          place_available_for?: string
+          preferred_guests?: string
+          property_type?: string
+          state?: string
+          status?: string | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+          videos?: string[] | null
+        }
+        Relationships: []
+      }
       platform_settings: {
         Row: {
           created_at: string
@@ -1285,6 +1366,62 @@ export type Database = {
       get_property_owner: {
         Args: { _property_id: string }
         Returns: string
+      }
+      get_public_pg_hostel_properties: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          amenities: Json
+          available_from: string
+          available_services: Json
+          city: string
+          created_at: string
+          description: string
+          expected_deposit: number
+          expected_rent: number
+          food_included: boolean
+          gate_closing_time: string
+          id: string
+          images: string[]
+          landmark: string
+          locality: string
+          parking: string
+          place_available_for: string
+          preferred_guests: string
+          property_type: string
+          state: string
+          status: string
+          title: string
+          updated_at: string
+          videos: string[]
+        }[]
+      }
+      get_public_pg_hostel_property_by_id: {
+        Args: { property_id: string }
+        Returns: {
+          amenities: Json
+          available_from: string
+          available_services: Json
+          city: string
+          created_at: string
+          description: string
+          expected_deposit: number
+          expected_rent: number
+          food_included: boolean
+          gate_closing_time: string
+          id: string
+          images: string[]
+          landmark: string
+          locality: string
+          parking: string
+          place_available_for: string
+          preferred_guests: string
+          property_type: string
+          state: string
+          status: string
+          title: string
+          updated_at: string
+          videos: string[]
+        }[]
       }
       get_public_properties: {
         Args: Record<PropertyKey, never>

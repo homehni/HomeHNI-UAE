@@ -4,6 +4,7 @@ import { Building2 } from 'lucide-react';
 interface PropertyDetailsCardProps {
   property: {
     property_type: string;
+    // Regular property fields
     bhk_type?: string;
     super_area?: number;
     carpet_area?: number;
@@ -19,7 +20,6 @@ interface PropertyDetailsCardProps {
     city?: string;
     locality?: string;
     description?: string;
-    // NEW: Additional fields now stored in database
     property_age?: string;
     facing_direction?: string;
     floor_type?: string;
@@ -53,6 +53,22 @@ interface PropertyDetailsCardProps {
       propertyTaxPaid?: boolean;
       occupancyCertificate?: boolean;
     };
+    
+    // PG/Hostel specific fields
+    expected_rent?: number;
+    expected_deposit?: number;
+    landmark?: string;
+    place_available_for?: string;
+    preferred_guests?: string;
+    available_from?: string;
+    food_included?: boolean;
+    gate_closing_time?: string;
+    available_services?: {
+      laundry?: boolean;
+      room_cleaning?: boolean;
+      warden_facility?: boolean;
+    };
+    parking?: string;
   };
 }
 
@@ -85,6 +101,24 @@ export const PropertyDetailsCard: React.FC<PropertyDetailsCardProps> = ({ proper
   const isPGHostelProperty = property.property_type?.toLowerCase() === 'pg_hostel' ||
                             property.property_type?.toLowerCase() === 'pg/hostel';
 
+  // Helper functions for PG/Hostel properties
+  const formatCurrency = (amount?: number) => {
+    if (!amount) return 'Not specified';
+    return `₹${amount.toLocaleString()}`;
+  };
+
+  const formatDate = (dateStr?: string) => {
+    if (!dateStr) return 'Not specified';
+    return new Date(dateStr).toLocaleDateString('en-IN');
+  };
+
+  const formatLocation = (state?: string, city?: string, locality?: string, landmark?: string) => {
+    const parts = [locality, city, state].filter(Boolean);
+    let location = parts.join(', ') || 'Not specified';
+    if (landmark) location += ` (Near ${landmark})`;
+    return location;
+  };
+
   // Different details for different property types
   const details = isPlotProperty ? [
     { label: 'Type', value: property.property_type?.replace('_', ' ') || 'Not specified' },
@@ -98,12 +132,15 @@ export const PropertyDetailsCard: React.FC<PropertyDetailsCardProps> = ({ proper
     { label: 'Who Shows Property', value: property.who_will_show || 'Not specified' },
     { label: 'Home Loan Available', value: property.home_loan_available ? 'Yes' : 'No' },
   ] : isPGHostelProperty ? [
-    { label: 'Type', value: property.property_type?.replace('_', ' ') || 'PG Hostel' },
-    { label: 'Room Type', value: property.bhk_type || 'Not specified' },
-    { label: 'Available For', value: property.floor_type || 'Not specified' },
-    { label: 'Preferred Guests', value: property.facing_direction || 'Not specified' },
-    { label: 'Food Included', value: property.furnishing === 'fully_furnished' ? 'Yes' : 'No' },
-    { label: 'Gate Closing Time', value: property.registration_status || 'Not specified' },
+    { label: 'Property Type', value: 'PG/Hostel' },
+    { label: 'Expected Rent', value: formatCurrency(property.expected_rent) },
+    { label: 'Expected Deposit', value: formatCurrency(property.expected_deposit) },
+    { label: 'Location', value: formatLocation(property.state, property.city, property.locality, property.landmark) },
+    { label: 'Available For', value: property.place_available_for || 'Not specified' },
+    { label: 'Preferred Guests', value: property.preferred_guests || 'Not specified' },
+    { label: 'Available From', value: formatDate(property.available_from) },
+    { label: 'Food Included', value: property.food_included ? 'Yes' : 'No' },
+    { label: 'Gate Closing Time', value: property.gate_closing_time || 'Not specified' },
   ] : [
     { label: 'Type', value: property.property_type?.replace('_', ' ') || 'Not specified' },
     { label: 'BHK', value: property.bhk_type || 'Not specified' },
@@ -133,7 +170,9 @@ export const PropertyDetailsCard: React.FC<PropertyDetailsCardProps> = ({ proper
     property.gated_security ? 'Gated' : 'Open',
     property.registration_status || 'Registration status'
   ].filter(fact => fact && fact !== 'Not specified') : isPGHostelProperty ? [
-    property.bhk_type === 'multiple' ? 'Multiple Rooms' : property.bhk_type
+    formatCurrency(property.expected_rent),
+    property.place_available_for,
+    property.food_included ? 'Food Included' : 'Food Not Included'
   ].filter(fact => fact && fact !== 'Not specified') : [
     property.bhk_type,
     formatArea(property.super_area, property.carpet_area),
@@ -205,6 +244,86 @@ export const PropertyDetailsCard: React.FC<PropertyDetailsCardProps> = ({ proper
                   <span>{docLabelMap[key] ?? key.replace(/([A-Z])/g, ' $1').trim()}</span>
                 </div>
               ))}
+            </div>
+          </div>
+        )}
+
+        {/* Amenities & Services Section for PG/Hostel */}
+        {isPGHostelProperty && (property.available_services || property.amenities) && (
+          <div className="mt-6">
+            <h3 className="text-md font-semibold text-gray-900 mb-3">Amenities & Available Services</h3>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+              {/* Available Services */}
+              {property.available_services?.laundry && (
+                <div className="flex items-center gap-2 text-sm text-gray-700">
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span>Laundry</span>
+                </div>
+              )}
+              {property.available_services?.room_cleaning && (
+                <div className="flex items-center gap-2 text-sm text-gray-700">
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span>Room Cleaning</span>
+                </div>
+              )}
+              {property.available_services?.warden_facility && (
+                <div className="flex items-center gap-2 text-sm text-gray-700">
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span>Warden Facility</span>
+                </div>
+              )}
+              
+              {/* Amenities */}
+              {property.amenities?.gym && (
+                <div className="flex items-center gap-2 text-sm text-gray-700">
+                  <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                  <span>Common TV</span>
+                </div>
+              )}
+              {property.amenities?.clubHouse && (
+                <div className="flex items-center gap-2 text-sm text-gray-700">
+                  <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                  <span>Mess</span>
+                </div>
+              )}
+              {property.amenities?.lift && (
+                <div className="flex items-center gap-2 text-sm text-gray-700">
+                  <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                  <span>Lift</span>
+                </div>
+              )}
+              {property.amenities?.intercom && (
+                <div className="flex items-center gap-2 text-sm text-gray-700">
+                  <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                  <span>Refrigerator</span>
+                </div>
+              )}
+              {property.amenities?.internetProvider && (
+                <div className="flex items-center gap-2 text-sm text-gray-700">
+                  <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                  <span>WiFi</span>
+                </div>
+              )}
+              {property.amenities?.gasPipeline && (
+                <div className="flex items-center gap-2 text-sm text-gray-700">
+                  <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                  <span>Cooking Allowed</span>
+                </div>
+              )}
+              {property.amenities?.sewageTreatmentPlant && (
+                <div className="flex items-center gap-2 text-sm text-gray-700">
+                  <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                  <span>Power Backup</span>
+                </div>
+              )}
+              
+              {/* Parking */}
+              {property.parking && property.parking !== 'none' && (
+                <div className="flex items-center gap-2 text-sm text-gray-700">
+                  <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+                  <span>Parking: {property.parking}</span>
+                </div>
+              )}
             </div>
           </div>
         )}
