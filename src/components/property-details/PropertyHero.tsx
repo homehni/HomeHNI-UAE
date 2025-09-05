@@ -8,14 +8,17 @@ interface PropertyHeroProps {
   property: {
     id: string;
     title: string;
+    property_type?: string;
     bhk_type?: string;
     super_area?: number;
     carpet_area?: number;
     locality: string;
     city: string;
     state: string;
-    expected_price: number;
-    listing_type: string;
+    expected_price?: number;
+    expected_rent?: number;
+    expected_deposit?: number;
+    listing_type?: string;
     images?: string[];
     status: string;
   };
@@ -178,10 +181,22 @@ export const PropertyHero: React.FC<PropertyHeroProps> = ({
           <div className="rounded-2xl border border-gray-200 bg-white shadow-sm p-5">
             <div className="text-center mb-6">
               <div className="text-3xl font-bold text-gray-900 mb-1">
-                ₹{property.expected_price.toLocaleString()}
+                {(() => {
+                  const isPG = property.property_type?.toLowerCase().includes('pg') ||
+                               property.property_type?.toLowerCase().includes('hostel') ||
+                               property.property_type?.toLowerCase().includes('coliving');
+                  const price = isPG ? property.expected_rent : property.expected_price;
+                  return price ? `₹${price.toLocaleString()}` : '—';
+                })()}
               </div>
               <div className="text-sm text-gray-600">
-                {property.listing_type === 'sale' ? 'Total Price' : 'Monthly Rent'}
+                {(() => {
+                  const isPG = property.property_type?.toLowerCase().includes('pg') ||
+                               property.property_type?.toLowerCase().includes('hostel') ||
+                               property.property_type?.toLowerCase().includes('coliving');
+                  if (isPG) return 'Monthly Rent';
+                  return property.listing_type === 'sale' ? 'Total Price' : 'Monthly Rent';
+                })()}
               </div>
             </div>
 

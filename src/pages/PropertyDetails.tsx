@@ -124,19 +124,25 @@ const PropertyDetails: React.FC = () => {
   }, [id, property]);
   
   const fallbackDescription = `This beautifully maintained ${property?.bhk_type ?? ''} ${property?.property_type?.replace('_', ' ') ?? 'apartment'} offers a spacious layout with abundant natural light and excellent connectivity to local conveniences. Situated in a prime locality, it features well-ventilated rooms, ample storage and proximity to schools, hospitals and public transport. A perfect choice for families looking for comfort and convenience.`;
-  const amenitiesData = (property as any)?.amenities ?? dbAmenities ?? undefined;
   
-  // Check if it's a PG/Hostel property and use the correct data
+  // Prepare merged property (including PG/Hostel specific if loaded)
   const isPGHostel = property?.property_type?.toLowerCase() === 'pg_hostel' || 
-                    property?.property_type?.toLowerCase() === 'pg/hostel';
-  
+                    property?.property_type?.toLowerCase() === 'pg/hostel' ||
+                    property?.property_type?.toLowerCase().includes('pg') ||
+                    property?.property_type?.toLowerCase().includes('hostel');
   const mergedProperty = property ? {
     ...(property as any),
-    amenities: amenitiesData,
+    amenities: (property as any)?.amenities ?? dbAmenities ?? undefined,
     additional_documents: (property as any)?.additional_documents ?? dbAdditionalDocs ?? undefined,
-    // Include PG/Hostel specific data if available
     ...((window as any).__pgHostelData || {})
   } : property;
+
+  // Compute amenities for card: merge PG amenities + available services when applicable
+  const pgData: any = (window as any).__pgHostelData || {};
+  const mergedAmenities = isPGHostel
+    ? { ...(pgData?.amenities || {}), ...(pgData?.available_services || {}) }
+    : ((property as any)?.amenities ?? dbAmenities ?? undefined);
+
   
   if (!property) {
     return <div className="min-h-screen flex flex-col">
@@ -157,7 +163,7 @@ const PropertyDetails: React.FC = () => {
         {/* Hero Section */}
         <section className="bg-gray-50 border-b py-6">
           <PropertyHero
-            property={property}
+            property={mergedProperty as any}
             onContactOwner={() => setShowContactModal(true)}
             onScheduleVisit={() => setShowScheduleVisitModal(true)}
             onEMICalculator={() => setShowEMICalculatorModal(true)}
@@ -175,14 +181,14 @@ const PropertyDetails: React.FC = () => {
             <PropertyDetailsCard property={mergedProperty as any} />
             
             {/* Location */}
-            <LocationCard property={property} />
+            <LocationCard property={mergedProperty as any} />
             
             {/* Overview */}
-            <OverviewCard property={property} />
+            <OverviewCard property={mergedProperty as any} />
             
             
             {/* Amenities */}
-            <AmenitiesCard amenities={amenitiesData} />
+            <AmenitiesCard amenities={mergedAmenities} />
             
             {/* Neighborhood */}
             <NeighborhoodCard property={property} />
@@ -215,18 +221,18 @@ const PropertyDetails: React.FC = () => {
           propertyArea={property.super_area ? `${property.super_area} sq.ft` : property.carpet_area ? `${property.carpet_area} sq.ft` : undefined}
           bhkType={property.bhk_type}
           city={property.city}
-          expectedPrice={property.expected_price}
+          expectedPrice={(mergedProperty as any)?.expected_rent ?? property.expected_price}
         />
       )}
       
-      {/* EMI Calculator Modal */}
-      {property && (
-        <EMICalculatorModal
-          isOpen={showEMICalculatorModal}
-          onClose={() => setShowEMICalculatorModal(false)}
-          propertyPrice={property.expected_price}
-        />
-      )}
+        {/* EMI Calculator Modal */}
+        {property && (
+          <EMICalculatorModal
+            isOpen={showEMICalculatorModal}
+            onClose={() => setShowEMICalculatorModal(false)}
+            propertyPrice={(mergedProperty as any)?.expected_rent ?? property.expected_price}
+          />
+        )}
       
       {/* Legal Services Modal */}
       <LegalServicesForm

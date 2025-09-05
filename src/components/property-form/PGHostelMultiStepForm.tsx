@@ -50,18 +50,10 @@ export const PGHostelMultiStepForm: React.FC<PGHostelMultiStepFormProps> = ({
     ...initialOwnerInfo
   });
 
-  const [propertyInfo, setPropertyInfo] = useState({
-    title: '',
-    propertyType: '',
-    buildingType: '',
-    ageOfProperty: '',
-    floorNo: 0,
-    totalFloors: 0,
-    superBuiltUpArea: 0,
-    furnishing: '',
-    onMainRoad: false,
-    cornerProperty: false,
-  });
+const [propertyInfo, setPropertyInfo] = useState({
+  title: '',
+  propertyType: '',
+});
 
   const [roomTypes, setRoomTypes] = useState({
     selectedType: '' as 'single' | 'double' | 'three' | 'four' | '',
@@ -239,7 +231,7 @@ export const PGHostelMultiStepForm: React.FC<PGHostelMultiStepFormProps> = ({
         floorNo: 1,
         furnishingStatus: 'Furnished',
         parkingType: amenities.parking !== 'none' ? 'Available' : 'Not Available',
-        superBuiltUpArea: 1000,
+        superBuiltUpArea: 0,
         onMainRoad: false,
         cornerProperty: false
       },

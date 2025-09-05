@@ -10,6 +10,7 @@ interface PgHostelLocalityDetails {
   city: string;
   locality: string;
   landmark?: string;
+  // pincode is intentionally not required for PG/Hostel
 }
 
 interface PgHostelLocalityDetailsStepProps {

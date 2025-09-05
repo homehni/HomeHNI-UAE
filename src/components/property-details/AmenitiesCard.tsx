@@ -5,7 +5,7 @@ interface AmenitiesCardProps {
 }
 
 export const AmenitiesCard: React.FC<AmenitiesCardProps> = ({ amenities }) => {
-  // Mapping from database keys to display names
+  // Mapping from database keys to display names (supports PG/Hostel too)
   const amenityKeyMap: Record<string, string> = {
     lift: 'Lift',
     internetProvider: 'Internet Provider',
@@ -37,12 +37,28 @@ export const AmenitiesCard: React.FC<AmenitiesCardProps> = ({ amenities }) => {
     skating: 'Skating Rink',
     basketball: 'Basketball Court',
     vastu: 'Vastu Compliant',
-    feng: 'Feng Shui'
+    feng: 'Feng Shui',
+    // PG/Hostel common
+    cupboard: 'Cupboard',
+    geyser: 'Geyser',
+    gyser: 'Geyser',
+    tv: 'TV',
+    ac: 'AC',
+    bedding: 'Bedding',
+    attachedBathroom: 'Attached Bathroom',
+    attached_bathroom: 'Attached Bathroom',
+    wifi: 'WiFi',
+    refrigerator: 'Refrigerator',
+    cookingAllowed: 'Cooking Allowed',
+    cooking_allowed: 'Cooking Allowed',
+    room_cleaning: 'Room Cleaning',
+    laundry: 'Laundry',
+    warden_facility: 'Warden Facility'
   };
 
   const getDisplayAmenities = () => {
     if (!amenities) {
-      return ['Lift', 'Internet Provider', 'Security', 'Park', 'Sewage Treatment', 'Visitor Parking'];
+      return ['No amenities listed'];
     }
 
     // If amenities is already an array of strings
@@ -53,22 +69,23 @@ export const AmenitiesCard: React.FC<AmenitiesCardProps> = ({ amenities }) => {
     // If amenities is a JSONB object from database
     if (typeof amenities === 'object') {
       const availableAmenities: string[] = [];
-      
-      Object.entries(amenities).forEach(([key, value]) => {
-        // Include amenity if value is true, 'yes', or other truthy string values
-        if (
+      Object.entries(amenities).forEach(([rawKey, value]) => {
+        const key = String(rawKey);
+        const truthy = (
           value === true ||
           value === 1 ||
           value === '1' ||
-          value === 'yes' || value === 'Yes' ||
-          value === 'true' || value === 'True' || value === 'TRUE' ||
-          value === 'y' || value === 'Y'
-        ) {
-          const displayName = amenityKeyMap[key] || key.charAt(0).toUpperCase() + key.slice(1);
-          availableAmenities.push(displayName);
+          (typeof value === 'string' && ['yes','true','y','included','available','daily','bike','car','both'].includes(value.toLowerCase()))
+        );
+        if (truthy) {
+          const mapped = amenityKeyMap[key];
+          const humanized = mapped || key
+            .replace(/[_-]/g, ' ')
+            .replace(/([a-z])([A-Z])/g, '$1 $2')
+            .replace(/^\w|\s\w/g, (m) => m.toUpperCase());
+          availableAmenities.push(humanized);
         }
       });
-
       return availableAmenities.length > 0 ? availableAmenities : ['No amenities listed'];
     }
 
