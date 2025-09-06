@@ -4,10 +4,8 @@ import { Button } from '@/components/ui/button';
 
 interface LocationCardProps {
   property: {
-    city: string;
-    state: string;
     locality: string;
-    pincode: string;
+    landmark?: string;
     property_type?: string;
   };
 }
@@ -16,10 +14,8 @@ export const LocationCard: React.FC<LocationCardProps> = ({ property }) => {
   const type = property.property_type?.toLowerCase() || '';
   const isPG = type.includes('pg') || type.includes('hostel') || type.includes('coliving');
   const locationDetails = [
-    { label: 'City', value: property.city },
-    { label: 'State', value: property.state },
-    { label: 'Locality', value: property.locality },
-    ...(!isPG && property.pincode ? [{ label: 'Pincode', value: property.pincode }] : [])
+    { label: 'Location', value: property.locality },
+    ...(property.landmark ? [{ label: 'Landmark', value: property.landmark }] : [])
   ];
 
   return (
@@ -37,7 +33,7 @@ export const LocationCard: React.FC<LocationCardProps> = ({ property }) => {
       </div>
       
       <div className="p-5 pt-4">
-        <div className="grid grid-cols-2 gap-3">
+        <div className="space-y-3">
           {locationDetails.map((detail, index) => (
             <div
               key={index}

@@ -52,7 +52,7 @@ export const usePropertyForm = () => {
     setOwnerInfo(prev => ({ ...prev, ...data }));
   };
 
-  const updatePropertyDetails = (data: Partial<PropertyDetails>) => {
+    const updatePropertyDetails = (data: Partial<PropertyDetails>) => {
     console.log('Updating property details with:', data);
     setPropertyDetails(prev => {
       const updated = { ...prev, ...data };
@@ -70,7 +70,12 @@ export const usePropertyForm = () => {
   };
 
   const updateAmenities = (data: Partial<PropertyAmenities>) => {
-    setAmenities(prev => ({ ...prev, ...data }));
+    console.log('Updating amenities with:', data);
+    setAmenities(prev => {
+      const updated = { ...prev, ...data };
+      console.log('Updated amenities:', updated);
+      return updated;
+    });
   };
 
   const updateGallery = (data: Partial<PropertyGallery>) => {

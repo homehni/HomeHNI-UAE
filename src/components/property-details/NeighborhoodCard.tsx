@@ -22,7 +22,7 @@ export const NeighborhoodCard: React.FC<NeighborhoodCardProps> = ({ property }) 
             width="100%"
             height="100%"
             loading="lazy"
-            src={`https://www.google.com/maps?q=${encodeURIComponent(`${property.locality}, ${property.city}`)}&output=embed`}
+            src={`https://www.google.com/maps?q=${encodeURIComponent(property.locality)}&output=embed`}
           />
         </div>
       </div>

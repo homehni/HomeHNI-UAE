@@ -19,7 +19,7 @@ import { Home, MapPin, Building, Sparkles, Camera, FileText, Calendar as Calenda
 
 const rentalDetailsSchema = z.object({
   listingType: z.enum(['Sale', 'Rent']).optional(),
-  expectedPrice: z.number().optional(),
+  expectedPrice: z.number().min(1, "Expected rent is required and must be greater than 0"),
   rentNegotiable: z.boolean().optional(),
   maintenanceExtra: z.boolean().optional(),
   maintenanceCharges: z.number().optional(),
@@ -48,9 +48,6 @@ export const RentalDetailsStep: React.FC<RentalDetailsStepProps> = ({
   currentStep,
   totalSteps
 }) => {
-  const [customTag, setCustomTag] = useState('');
-  const [selectedTags, setSelectedTags] = useState<string[]>(initialData.idealFor || []);
-
   const [showMaintenanceInput, setShowMaintenanceInput] = useState(initialData.maintenanceExtra || false);
 
   const form = useForm<RentalDetailsForm>({
@@ -70,25 +67,6 @@ export const RentalDetailsStep: React.FC<RentalDetailsStepProps> = ({
     },
   });
 
-  const predefinedTags = ['Bank', 'Service Center', 'Show Room', 'ATM', 'Retail'];
-
-
-  const toggleTag = (tag: string) => {
-    const newTags = selectedTags.includes(tag)
-      ? selectedTags.filter(t => t !== tag)
-      : [...selectedTags, tag];
-    setSelectedTags(newTags);
-    form.setValue('idealFor', newTags);
-  };
-
-  const addCustomTag = () => {
-    if (customTag.trim() && !selectedTags.includes(customTag.trim())) {
-      const newTags = [...selectedTags, customTag.trim()];
-      setSelectedTags(newTags);
-      form.setValue('idealFor', newTags);
-      setCustomTag('');
-    }
-  };
 
   const onSubmit = (data: RentalDetailsForm) => {
     // Convert form data to RentalDetails format
@@ -103,7 +81,7 @@ export const RentalDetailsStep: React.FC<RentalDetailsStepProps> = ({
       leaseDuration: data.leaseDuration || '',
       lockinPeriod: data.lockinPeriod || '',
       availableFrom: data.availableFrom || '',
-      idealFor: selectedTags,
+      idealFor: [],
     };
     onNext(rentalData);
   };
@@ -334,58 +312,6 @@ export const RentalDetailsStep: React.FC<RentalDetailsStepProps> = ({
                   />
 
 
-                   {/* Ideal For */}
-                   <div>
-                     <FormLabel className="text-sm font-medium">Ideal For</FormLabel>
-                    <div className="mt-2 space-y-4">
-                      <div className="flex flex-wrap gap-2">
-                        {predefinedTags.map((tag) => (
-                          <Badge
-                            key={tag}
-                            variant={selectedTags.includes(tag) ? "default" : "outline"}
-                            className="cursor-pointer px-4 py-2"
-                            onClick={() => toggleTag(tag)}
-                          >
-                            {tag}
-                          </Badge>
-                        ))}
-                      </div>
-                      
-                      <div className="flex items-center space-x-2">
-                        <Input
-                          type="text"
-                          placeholder="Add other tags"
-                          value={customTag}
-                          onChange={(e) => setCustomTag(e.target.value)}
-                          onKeyPress={(e) => e.key === 'Enter' && addCustomTag()}
-                          className="flex-1"
-                        />
-                        <Button
-                          type="button"
-                          variant="link"
-                          onClick={addCustomTag}
-                          className="text-primary"
-                        >
-                          create new tag
-                        </Button>
-                      </div>
-
-                      {selectedTags.length > 0 && (
-                        <div className="flex flex-wrap gap-2">
-                          {selectedTags.map((tag) => (
-                            <Badge
-                              key={tag}
-                              variant="default"
-                              className="cursor-pointer"
-                              onClick={() => toggleTag(tag)}
-                            >
-                              {tag} ×
-                            </Badge>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  </div>
 
                   <div className="flex justify-between pt-6">
                     <Button type="button" variant="outline" onClick={onBack} className="px-8">

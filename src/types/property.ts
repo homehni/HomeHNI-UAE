@@ -2,8 +2,7 @@ export interface OwnerInfo {
   fullName: string;
   phoneNumber: string;
   email: string;
-  role: 'Owner' | 'Agent' | 'Builder' | 'Tenant';
-  city: string;
+  role: 'Owner' | 'Agent' | 'Builder';
   whatsappUpdates: boolean;
   propertyType: 'Residential' | 'Commercial' | 'Land/Plot';
   listingType: 'Rent' | 'Resale' | 'PG/Hostel' | 'Flatmates' | 'Sale';
@@ -28,10 +27,10 @@ export interface PropertyDetails {
 }
 
 export interface LocationDetails {
-  state: string;
-  city: string;
-  locality: string;
-  pincode: string;
+  state?: string; // Optional, not used in UI
+  city?: string; // Optional, not used in UI
+  locality: string; // Main location field
+  pincode?: string;
   societyName?: string;
   landmark?: string;
 }
@@ -56,12 +55,10 @@ export interface PropertyAmenities {
   powerBackup?: string;
   lift?: string;
   parking?: string;
-  washrooms?: string;
   waterStorageFacility?: string;
   security?: string;
   wifi?: string;
   currentPropertyCondition?: string;
-  currentBusiness?: string;
   moreSimilarUnits?: boolean;
   directionsTip?: string;
 }

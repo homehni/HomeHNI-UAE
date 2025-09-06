@@ -113,9 +113,14 @@ export const PropertyDetailsCard: React.FC<PropertyDetailsCardProps> = ({ proper
   };
 
   const formatLocation = (state?: string, city?: string, locality?: string, landmark?: string) => {
-    const parts = [locality, city, state].filter(Boolean);
+    const parts = [locality].filter(Boolean);
     let location = parts.join(', ') || 'Not specified';
-    if (landmark) location += ` (Near ${landmark})`;
+    if (landmark) {
+      const landmarkText = landmark.toLowerCase().startsWith('near') ? 
+        landmark : 
+        `Near ${landmark}`;
+      location += ` (${landmarkText})`;
+    }
     return location;
   };
 
@@ -135,32 +140,25 @@ export const PropertyDetailsCard: React.FC<PropertyDetailsCardProps> = ({ proper
     { label: 'Property Type', value: 'PG/Hostel' },
     { label: 'Expected Rent', value: formatCurrency(property.expected_rent) },
     { label: 'Expected Deposit', value: formatCurrency(property.expected_deposit) },
-    { label: 'Location', value: formatLocation(property.state, property.city, property.locality, property.landmark) },
+    { label: 'Location', value: formatLocation(undefined, undefined, property.locality, property.landmark) },
     { label: 'Available For', value: property.place_available_for || 'Not specified' },
     { label: 'Preferred Guests', value: property.preferred_guests || 'Not specified' },
     { label: 'Available From', value: formatDate(property.available_from) },
     { label: 'Food Included', value: property.food_included ? 'Yes' : 'No' },
     { label: 'Gate Closing Time', value: property.gate_closing_time || 'Not specified' },
   ] : [
+    // Basic property specifications only
     { label: 'Type', value: property.property_type?.replace('_', ' ') || 'Not specified' },
     { label: 'BHK', value: property.bhk_type || 'Not specified' },
     { label: 'Bathrooms', value: property.bathrooms?.toString() || 'Not specified' },
     { label: 'Balconies', value: property.balconies?.toString() || 'Not specified' },
-    { label: 'Ownership', value: formatOwnership(property.owner_role) },
-    { label: 'Maintenance', value: formatMaintenance(property.maintenance_charges) },
     { label: 'Built-up Area', value: formatArea(property.super_area, property.carpet_area) },
     { label: 'Floor', value: formatFloor(property.floor_no, property.total_floors) },
     { label: 'Furnishing', value: property.furnishing || 'Not specified' },
     { label: 'Property Age', value: property.property_age || 'Not specified' },
     { label: 'Facing', value: property.facing_direction || 'Not specified' },
     { label: 'Floor Type', value: property.floor_type || 'Not specified' },
-    { label: 'Registration', value: property.registration_status || 'Not specified' },
-    { label: 'Water Supply', value: property.water_supply || 'Not specified' },
-    { label: 'Power Backup', value: property.power_backup || 'Not specified' },
-    { label: 'Gated Security', value: property.gated_security ? 'Yes' : 'No' },
     { label: 'Property Condition', value: property.current_property_condition || 'Not specified' },
-    { label: 'Who Shows Property', value: property.who_will_show || 'Not specified' },
-    { label: 'Home Loan Available', value: property.home_loan_available ? 'Yes' : 'No' },
   ];
 
   const filteredDetails = details.filter(item => item.value !== 'Not specified');

@@ -192,7 +192,7 @@ export const RequirementMatches: React.FC<RequirementMatchesProps> = ({
         const propertyMatches: RequirementMatch[] = (properties || []).map(property => ({
           id: property.id,
           title: property.title,
-          location: `${property.locality}, ${property.city}`,
+          location: property.locality || '',
           price: property.expected_price,
           type: property.property_type,
           intent: property.listing_type === 'sale' ? 'Sell' : 

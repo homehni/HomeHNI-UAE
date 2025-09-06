@@ -301,6 +301,12 @@ const AdminProperties = () => {
         amenities,
         additionalInfo
       });
+      
+      console.log('Bathrooms data:', {
+        'propertyDetails.bathrooms': propertyDetails.bathrooms,
+        'payload.bathrooms': payload.bathrooms,
+        'amenities.bathrooms': amenities.bathrooms
+      });
 
       const { data: insertedProperty, error: insertError } = await supabase
         .from('properties')
@@ -331,8 +337,8 @@ const AdminProperties = () => {
           
           // Property specifications
           description: payload.description || additionalInfo.description || '',
-          bathrooms: amenities.bathrooms || payload.bathrooms || propertyDetails.bathrooms || 0,
-          balconies: amenities.balcony || payload.balconies || propertyDetails.balconies || 0,
+          bathrooms: propertyDetails.bathrooms || payload.bathrooms || amenities.bathrooms || 0,
+          balconies: propertyDetails.balconies || payload.balconies || amenities.balcony || 0,
           floor_no: propertyDetails.floorNo || payload.floor_no || null,
           total_floors: propertyDetails.totalFloors || payload.total_floors || null,
           super_area: Math.max(Number(payload.super_area || propertyDetails.superBuiltUpArea) || 0, 1),
@@ -359,6 +365,7 @@ const AdminProperties = () => {
           
           // NEW: Store amenities and documents as JSON
           amenities: {
+            // Original amenities
             gym: amenities.gym,
             clubHouse: amenities.clubHouse,
             swimmingPool: amenities.swimmingPool,
@@ -371,7 +378,14 @@ const AdminProperties = () => {
             visitorParking: amenities.visitorParking,
             gasPipeline: amenities.gasPipeline,
             park: amenities.park,
-            internetProvider: amenities.internetProvider
+            internetProvider: amenities.internetProvider,
+            // "What You Get" section amenities
+            powerBackup: amenities.powerBackup,
+            parking: amenities.parking,
+            waterStorageFacility: amenities.waterStorageFacility,
+            security: amenities.security,
+            wifi: amenities.wifi,
+            currentPropertyCondition: amenities.currentPropertyCondition
           },
           additional_documents: {
             allotmentLetter: additionalInfo.allotmentLetter,
@@ -438,7 +452,7 @@ const AdminProperties = () => {
           id: insertedProperty.id,
           title: insertedProperty.title,
           price: `₹${insertedProperty.expected_price}`,
-          location: `${insertedProperty.locality}, ${insertedProperty.city}`,
+          location: insertedProperty.locality || '',
           propertyType: insertedProperty.property_type,
           bhk: insertedProperty.bhk_type,
           size: `${insertedProperty.super_area} sq ft`,

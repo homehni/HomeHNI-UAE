@@ -53,26 +53,6 @@ const PropertyCard = ({
     return Math.round(num);
   };
 
-  const parts = location.split(',').map((s) => s.trim());
-
-  // Derive city, state and pincode from location/title
-  const cities = ['Bangalore', 'Gurgaon', 'Noida', 'Mumbai', 'Pune', 'Delhi'] as const;
-  const cityFromParts = parts[parts.length - 1] || '';
-  const detectedCity =
-    (cities.find((c) => cityFromParts.toLowerCase().includes(c.toLowerCase())) ||
-      cities.find((c) => location.toLowerCase().includes(c.toLowerCase())) ||
-      cities.find((c) => title.toLowerCase().includes(c.toLowerCase())) ||
-      'Delhi');
-
-  const cityInfoMap: Record<string, { state: string; pincode: string }> = {
-    Bangalore: { state: 'Karnataka', pincode: '560001' },
-    Gurgaon: { state: 'Haryana', pincode: '122001' },
-    Noida: { state: 'Uttar Pradesh', pincode: '201301' },
-    Mumbai: { state: 'Maharashtra', pincode: '400001' },
-    Pune: { state: 'Maharashtra', pincode: '411001' },
-    Delhi: { state: 'Delhi', pincode: '110001' },
-  };
-  const cityMeta = cityInfoMap[detectedCity] || { state: 'Delhi', pincode: '110001' };
 
   // Map property type to storage folder names inside property-media/content-images
   const typeToFolder = (type: string) => {
@@ -170,19 +150,19 @@ const PropertyCard = ({
     imagesForPage = [...imagesForPage, ...fallbackUrls.slice(0, fallbacksNeeded)];
   }
 
+  // Handle PG/Hostel properties specially
+  const isPGHostel = propertyType.toLowerCase().includes('pg') || propertyType.toLowerCase().includes('hostel');
+  
   const propertyForPage = {
     id,
     title,
     property_type: propertyType.toLowerCase().replace(/\s+/g, '_'),
-    listing_type: 'sale',
-    bhk_type: bedrooms ? `${bedrooms} BHK` : undefined,
+    listing_type: isPGHostel ? 'rent' : 'sale',
+    bhk_type: isPGHostel ? 'PG/Hostel' : (bedrooms ? `${bedrooms} BHK` : undefined),
     expected_price: parsePriceToNumber(price),
-    super_area: parseAreaToNumber(area),
+    super_area: isPGHostel ? parseAreaToNumber(area.replace(/[^\d]/g, '')) || 1 : parseAreaToNumber(area),
     bathrooms,
-    city: detectedCity,
-    locality: parts[0] || location,
-    state: cityMeta.state,
-    pincode: cityMeta.pincode,
+    locality: location,
     description: undefined,
     images: imagesForPage,
     videos: [],

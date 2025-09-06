@@ -94,8 +94,9 @@ serve(async (req) => {
           query = query.eq('listing_type', 'rent');
           break;
         case 'commercial':
-          // Commercial is a property type filter, not listing type
-          query = query.eq('property_type', 'commercial');
+          // Commercial properties - don't filter by listing type here
+          // The property type filtering will be handled by the propertyType parameter
+          // and listing type will be determined by the context (buy/rent tab)
           break;
         case 'plots':
           // Plots/Land includes multiple land-related property types
@@ -167,12 +168,12 @@ serve(async (req) => {
       const normalizeToDbTypes = (key: string): string[] => {
         const k = key.toLowerCase();
         if (k === 'agriculture_lands' || k === 'agricultural_lands' || k === 'agriculture_land' || k === 'agricultural_land' || k === 'agriculture') {
-          // Current DB stores agricultural lands under 'plot' in many cases; include it to avoid empty results
-          return ['agriculture_lands', 'agricultural_lands', 'agriculture_land', 'agricultural_land', 'plot'];
+          // Only return agriculture-specific types, not plot
+          return ['agriculture_lands', 'agricultural_lands', 'agriculture_land', 'agricultural_land'];
         }
         if (k === 'farm_house' || k === 'farmhouse') {
-          // Some datasets use 'plot' for farm houses; include both
-          return ['farm_house', 'plot'];
+          // Only return farmhouse-specific types, not plot
+          return ['farm_house', 'farmhouse'];
         }
         return [k];
       };

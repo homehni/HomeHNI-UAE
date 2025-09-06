@@ -139,9 +139,13 @@ export const ResalePreviewStep: React.FC<ResalePreviewStepProps> = ({
             <div className="flex items-start gap-2">
               <MapPin className="h-5 w-5 text-muted-foreground mt-0.5" />
               <div>
-                <p className="font-medium">{propertyInfo?.locationDetails?.locality}, {propertyInfo?.locationDetails?.city}</p>
+                <p className="font-medium">{propertyInfo?.locationDetails?.locality}</p>
                 <p className="text-sm text-muted-foreground">
-                  {propertyInfo?.locationDetails?.state} - {propertyInfo?.locationDetails?.pincode}
+                  {propertyInfo?.locationDetails?.landmark ? 
+                    (propertyInfo.locationDetails.landmark.toLowerCase().startsWith('near') ? 
+                      propertyInfo.locationDetails.landmark : 
+                      `Near ${propertyInfo.locationDetails.landmark}`) : 
+                    'Location details'}
                 </p>
                 {propertyInfo?.locationDetails?.societyName && (
                   <p className="text-sm text-muted-foreground">{propertyInfo.locationDetails.societyName}</p>

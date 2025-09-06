@@ -225,7 +225,7 @@ export const PropertyReviewModal: React.FC<PropertyReviewModalProps> = ({
                   <div>
                     <p className="font-medium text-sm">Location</p>
                     <p className="text-sm text-muted-foreground">
-                      {property.locality}, {property.city}, {property.state}
+                      {property.locality}
                     </p>
                   </div>
                 </div>

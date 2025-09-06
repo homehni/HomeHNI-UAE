@@ -25,6 +25,35 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
   isSubmitting = false,
   initialOwnerInfo = {}
 }) => {
+  // Helper function to get state from city
+  const getStateFromCity = (city: string | undefined): string | undefined => {
+    if (!city) return undefined;
+    
+    const cityStateMap: { [key: string]: string } = {
+      'mumbai': 'Maharashtra',
+      'delhi': 'Delhi',
+      'bangalore': 'Karnataka',
+      'pune': 'Maharashtra',
+      'chennai': 'Tamil Nadu',
+      'kolkata': 'West Bengal',
+      'hyderabad': 'Telangana',
+      'ahmedabad': 'Gujarat',
+      'gurgaon': 'Haryana',
+      'noida': 'Uttar Pradesh',
+      'jaipur': 'Rajasthan',
+      'chandigarh': 'Chandigarh',
+      'kochi': 'Kerala',
+      'indore': 'Madhya Pradesh',
+      'bhopal': 'Madhya Pradesh',
+      'visakhapatnam': 'Andhra Pradesh',
+      'vadodara': 'Gujarat',
+      'coimbatore': 'Tamil Nadu',
+      'nashik': 'Maharashtra',
+      'rajkot': 'Gujarat'
+    };
+    
+    return cityStateMap[city.toLowerCase()] || undefined;
+  };
   
   
   const {
@@ -177,7 +206,11 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
             {currentStep === 2 && (
               <div className="p-6 md:p-8">
                 <LocationDetailsStep
-                  initialData={locationDetails}
+                  initialData={{
+                    ...locationDetails,
+                    city: ownerInfo.city || locationDetails.city,
+                    state: getStateFromCity(ownerInfo.city) || locationDetails.state
+                  }}
                   onNext={handleLocationDetailsNext}
                   onBack={prevStep}
                   currentStep={currentStep}

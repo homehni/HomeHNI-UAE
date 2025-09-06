@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -10,7 +10,7 @@ import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import PropertyCard from '@/components/PropertyCard';
-import { MapPin, Filter, Grid3X3, List, Map, Bookmark, Share2, Mic, X } from 'lucide-react';
+import { MapPin, Filter, Grid3X3, List, Map, Bookmark, Share2, X } from 'lucide-react';
 import Header from '@/components/Header';
 import Marquee from '@/components/Marquee';
 import Footer from '@/components/Footer';
@@ -21,6 +21,7 @@ const PropertySearch = () => {
   const navigate = useNavigate();
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [showMap, setShowMap] = useState(false);
+  const locationInputRef = useRef<HTMLInputElement>(null);
   
   const {
     filters,
@@ -33,23 +34,192 @@ const PropertySearch = () => {
     isLoading
   } = useRealTimeSearch();
 
+  // Property types that match the database schema and FeaturedProperties component
   const propertyTypes = [
     'ALL',
-    'PLOT',
-    'VILLA', 
+    'DUPLEX',
+    'PENTHOUSE', 
     'APARTMENT',
-    'COMMERCIAL',
-    'HOUSE',
-    'PENTHOUSE',
+    'VILLA',
+    'PLOT',
+    'PG HOSTEL',
     'INDEPENDENT HOUSE',
-    'AGRICULTURE LANDS',
-    'FARM HOUSE'
+    'COMMERCIAL'
   ];
 
   const bhkTypes = ['1 RK', '1 BHK', '2 BHK', '3 BHK', '4 BHK', '5+ BHK'];
   const furnishedOptions = ['Furnished', 'Semi-Furnished', 'Unfurnished'];
   const availabilityOptions = ['Ready to Move', 'Under Construction'];
   const constructionOptions = ['New Project', '1-5 Years Old', '5-10 Years Old', '10+ Years Old'];
+
+  // Function to normalize location for better search matching
+  const normalizeLocation = (location: string) => {
+    if (!location) return '';
+    
+    // Common location name mappings for better matching
+    const locationMappings: { [key: string]: string } = {
+      'bangalore': 'Bangalore',
+      'bengaluru': 'Bangalore',
+      'mumbai': 'Mumbai',
+      'delhi': 'Delhi',
+      'new delhi': 'Delhi',
+      'gurgaon': 'Gurgaon',
+      'gurugram': 'Gurgaon',
+      'noida': 'Noida',
+      'pune': 'Pune',
+      'hyderabad': 'Hyderabad',
+      'chennai': 'Chennai',
+      'kolkata': 'Kolkata',
+      'ahmedabad': 'Ahmedabad',
+      'jaipur': 'Jaipur',
+      'lucknow': 'Lucknow',
+      'kanpur': 'Kanpur',
+      'nagpur': 'Nagpur',
+      'indore': 'Indore',
+      'thane': 'Thane',
+      'bhopal': 'Bhopal',
+      'visakhapatnam': 'Visakhapatnam',
+      'pimpri': 'Pimpri',
+      'patna': 'Patna',
+      'vadodara': 'Vadodara',
+      'ludhiana': 'Ludhiana',
+      'agra': 'Agra',
+      'nashik': 'Nashik',
+      'faridabad': 'Faridabad',
+      'meerut': 'Meerut',
+      'rajkot': 'Rajkot',
+      'kalyan': 'Kalyan',
+      'vasai': 'Vasai',
+      'varanasi': 'Varanasi',
+      'srinagar': 'Srinagar',
+      'aurangabad': 'Aurangabad',
+      'solapur': 'Solapur',
+      'vijayawada': 'Vijayawada',
+      'kolhapur': 'Kolhapur',
+      'amravati': 'Amravati',
+      'nanded': 'Nanded',
+      'sangli': 'Sangli',
+      'malegaon': 'Malegaon',
+      'ulhasnagar': 'Ulhasnagar',
+      'jalgaon': 'Jalgaon',
+      'latur': 'Latur',
+      'dhule': 'Dhule',
+      'ahmednagar': 'Ahmednagar',
+      'chandrapur': 'Chandrapur',
+      'parbhani': 'Parbhani',
+      'ichalkaranji': 'Ichalkaranji',
+      'jalna': 'Jalna',
+      'bhusawal': 'Bhusawal',
+      'panvel': 'Panvel',
+      'satara': 'Satara',
+      'beed': 'Beed',
+      'yavatmal': 'Yavatmal',
+      'kamptee': 'Kamptee',
+      'gondia': 'Gondia',
+      'barshi': 'Barshi',
+      'achalpur': 'Achalpur',
+      'osmanabad': 'Osmanabad',
+      'nandurbar': 'Nandurbar',
+      'wardha': 'Wardha',
+      'udgir': 'Udgir',
+      'amalner': 'Amalner',
+      'akola': 'Akola',
+      'pulgaon': 'Pulgaon'
+    };
+    
+    const normalized = location.toLowerCase().trim();
+    return locationMappings[normalized] || location;
+  };
+
+  // Initialize Google Maps Places Autocomplete
+  useEffect(() => {
+    const apiKey = 'AIzaSyD2rlXeHN4cm0CQD-y4YGTsob9a_27YcwY';
+    
+    const loadGoogleMaps = () => {
+      return new Promise((resolve, reject) => {
+        if ((window as any).google?.maps?.places) {
+          resolve(true);
+          return;
+        }
+        
+        const script = document.createElement('script');
+        script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places`;
+        script.async = true;
+        script.defer = true;
+        script.onload = () => resolve(true);
+        script.onerror = () => reject(new Error('Failed to load Google Maps'));
+        document.head.appendChild(script);
+      });
+    };
+
+    const initAutocomplete = () => {
+      if (!(window as any).google?.maps?.places || !locationInputRef.current) return;
+      
+      const options = {
+        fields: ['formatted_address', 'geometry', 'name', 'address_components'],
+        types: ['geocode'],
+        componentRestrictions: {
+          country: 'in' as const
+        }
+      };
+
+      const autocomplete = new (window as any).google.maps.places.Autocomplete(
+        locationInputRef.current, 
+        options
+      );
+
+      autocomplete.addListener('place_changed', () => {
+        const place = autocomplete.getPlace();
+        let locationValue = place?.formatted_address || place?.name || '';
+        
+        // Extract location components for better search matching
+        if (place?.address_components) {
+          const addressComponents = place.address_components;
+          
+          // Extract different levels of location information
+          const localityComponent = addressComponents.find((comp: any) => 
+            comp.types.includes('locality') || 
+            comp.types.includes('sublocality') ||
+            comp.types.includes('sublocality_level_1')
+          );
+          
+          const cityComponent = addressComponents.find((comp: any) => 
+            comp.types.includes('administrative_area_level_2')
+          );
+          
+          const stateComponent = addressComponents.find((comp: any) => 
+            comp.types.includes('administrative_area_level_1')
+          );
+          
+          // Prioritize locality for more specific property matching
+          if (localityComponent) {
+            locationValue = localityComponent.long_name;
+            // Add city if available for better context
+            if (cityComponent && cityComponent.long_name !== localityComponent.long_name) {
+              locationValue += `, ${cityComponent.long_name}`;
+            }
+          } else if (cityComponent) {
+            locationValue = cityComponent.long_name;
+          }
+          
+          // Add state for better disambiguation
+          if (stateComponent && !locationValue.includes(stateComponent.long_name)) {
+            locationValue += `, ${stateComponent.long_name}`;
+          }
+        }
+        
+        if (locationValue) {
+          // Normalize the location for better search matching
+          const normalizedLocation = normalizeLocation(locationValue);
+          updateFilter('location', normalizedLocation);
+        }
+      });
+    };
+
+    loadGoogleMaps()
+      .then(initAutocomplete)
+      .catch(console.error);
+  }, [updateFilter]);
 
 
   return (
@@ -64,29 +234,29 @@ const PropertySearch = () => {
           <div className="flex flex-col lg:flex-row gap-4 items-center pt-4">
             {/* Search Tabs */}
             <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full lg:w-auto">
-              <TabsList className="grid w-full lg:w-auto grid-cols-4 lg:grid-cols-7 bg-gray-100">
+              <TabsList className="grid w-full lg:w-auto grid-cols-3 bg-gray-100">
                 <TabsTrigger value="buy" className="text-xs lg:text-sm">Buy</TabsTrigger>
                 <TabsTrigger value="rent" className="text-xs lg:text-sm">Rent</TabsTrigger>
-                <TabsTrigger value="new-launch" className="text-xs lg:text-sm">New Launch</TabsTrigger>
                 <TabsTrigger value="commercial" className="text-xs lg:text-sm">Commercial</TabsTrigger>
-                <TabsTrigger value="plots" className="hidden lg:block text-xs lg:text-sm">Plots/Land</TabsTrigger>
-                <TabsTrigger value="pg" className="hidden lg:block text-xs lg:text-sm">PG</TabsTrigger>
-                <TabsTrigger value="projects" className="hidden lg:block text-xs lg:text-sm">Projects</TabsTrigger>
               </TabsList>
             </Tabs>
 
-            {/* Location Search with real-time functionality */}
+            {/* Location Search with Google Maps Places Autocomplete */}
             <div className="flex-1 flex gap-2">
               <div className="relative flex-1">
                 <MapPin className="absolute left-3 top-3 text-brand-red" size={20} />
                 <Input 
+                  ref={locationInputRef}
                   value={filters.location}
-                  onChange={(e) => updateFilter('location', e.target.value)}
-                  placeholder="Search 'Noida, Gurgaon, Mumbai'..." 
-                  className="pl-10 pr-20 h-12 border-brand-red"
+                  onChange={(e) => {
+                    const normalizedLocation = normalizeLocation(e.target.value);
+                    updateFilter('location', normalizedLocation);
+                  }}
+                  placeholder="Search 'Bellandur, Koramangala, Whitefield'..." 
+                  className="pl-10 pr-4 h-12 border-brand-red focus:ring-2 focus:ring-brand-red/20"
                 />
-                <div className="absolute right-3 top-3 flex items-center gap-2">
-                  {filters.location && (
+                {filters.location && (
+                  <div className="absolute right-3 top-3">
                     <Button
                       variant="ghost"
                       size="sm"
@@ -95,10 +265,11 @@ const PropertySearch = () => {
                     >
                       <X size={14} />
                     </Button>
-                  )}
-                  <Button variant="ghost" size="sm" className="h-6 w-6 p-0 hover:bg-brand-red/10">
-                    <Mic size={14} className="text-brand-red" />
-                  </Button>
+                  </div>
+                )}
+                {/* Google Maps attribution */}
+                <div className="absolute -bottom-6 right-0 text-xs text-gray-400">
+                  powered by Google
                 </div>
               </div>
             </div>
@@ -210,26 +381,29 @@ const PropertySearch = () => {
 
                 <Separator />
 
-                {/* Property Type Filter */}
+                {/* Property Type Filter - List layout with tab styling */}
                 <div>
                   <h4 className="font-semibold mb-3">Property Type</h4>
                   <div className="space-y-2">
                     {propertyTypes.map((type) => (
                       <div key={type} className="flex items-center space-x-2">
-                        <Checkbox
-                          id={type}
-                          checked={filters.propertyType.includes(type)}
-                          onCheckedChange={(checked) => {
-                            if (checked) {
-                              updateFilter('propertyType', [...filters.propertyType, type]);
+                        <button
+                          onClick={() => {
+                            if (type === 'ALL') {
+                              updateFilter('propertyType', []);
                             } else {
-                              updateFilter('propertyType', filters.propertyType.filter(t => t !== type));
+                              updateFilter('propertyType', [type]);
                             }
                           }}
-                        />
-                        <label htmlFor={type} className="text-sm text-gray-700 cursor-pointer">
+                          className={`w-full text-left px-3 py-2 rounded-full text-sm font-medium transition-colors ${
+                            (filters.propertyType.length === 0 && type === 'ALL') || 
+                            (filters.propertyType.length > 0 && filters.propertyType[0] === type)
+                              ? 'bg-primary text-primary-foreground shadow'
+                              : 'bg-muted/60 hover:bg-muted/80 text-foreground'
+                          }`}
+                        >
                           {type}
-                        </label>
+                        </button>
                       </div>
                     ))}
                   </div>
@@ -383,7 +557,7 @@ const PropertySearch = () => {
                     const hasPropertyTypeFilter = filters.propertyType.length > 0 && !filters.propertyType.includes('ALL');
                     const propertyTypeText = hasPropertyTypeFilter ? 
                       filters.propertyType.length === 1 ? 
-                        filters.propertyType[0].toLowerCase().replace('plot', 'plots').replace('apartment', 'apartments').replace('villa', 'villas').replace('commercial', 'commercial properties').replace('house', 'houses').replace('penthouse', 'penthouses').replace('independent house', 'independent houses').replace('agriculture lands', 'agriculture lands').replace('farm house', 'farm houses') 
+                        filters.propertyType[0].toLowerCase().replace('plot', 'plots').replace('apartment', 'apartments').replace('villa', 'villas').replace('commercial', 'commercial properties').replace('house', 'houses').replace('penthouse', 'penthouses').replace('independent house', 'independent houses').replace('pg hostel', 'pg hostels').replace('duplex', 'duplexes')
                         : 'properties'
                       : 'properties';
                     
@@ -399,20 +573,10 @@ const PropertySearch = () => {
                         return hasPropertyTypeFilter ? 
                           `${propertyTypeText.charAt(0).toUpperCase() + propertyTypeText.slice(1)} for Rent${locationText}` :
                           `Properties for Rent${locationText || ' in All Locations'}`;
-                      case 'new-launch':
-                        return hasPropertyTypeFilter ? 
-                          `Newly launched ${propertyTypeText}${locationText}` :
-                          `Newly Launched Properties${locationText || ' in All Locations'}`;
                       case 'commercial':
                         return hasPropertyTypeFilter ? 
-                          `${propertyTypeText.charAt(0).toUpperCase() + propertyTypeText.slice(1)}${locationText}` :
-                          `Commercial Spaces${locationText || ' in All Locations'}`;
-                      case 'plots':
-                        return `Plots/Land for Sale${locationText || ' in All Locations'}`;
-                      case 'pg':
-                        return `PG's${locationText || ' in All Locations'}`;
-                      case 'projects':
-                        return `Other Projects${locationText || ' in All Locations'}`;
+                          `${propertyTypeText.charAt(0).toUpperCase() + propertyTypeText.slice(1)} Commercial${locationText}` :
+                          `Commercial Properties${locationText || ' in All Locations'}`;
                       default:
                         return `Properties for Sale${locationText || ' in All Locations'}`;
                     }
@@ -450,7 +614,7 @@ const PropertySearch = () => {
             </div>
 
             {/* Active Filters - Show all active filters */}
-            {(filters.propertyType.length > 0 || 
+            {(filters.propertyType.length > 0 && !filters.propertyType.includes('ALL') || 
               filters.bhkType.length > 0 || 
               filters.furnished.length > 0 || 
               filters.availability.length > 0 ||
@@ -478,11 +642,11 @@ const PropertySearch = () => {
                   </Badge>
                 )}
                 
-                {filters.propertyType.map((type) => (
+                {filters.propertyType.filter(type => type !== 'ALL').map((type) => (
                   <Badge key={type} variant="secondary" className="flex items-center gap-1">
                     {type}
                     <button 
-                      onClick={() => updateFilter('propertyType', filters.propertyType.filter(t => t !== type))}
+                      onClick={() => updateFilter('propertyType', [])}
                       className="ml-1 hover:bg-gray-300 rounded-full p-0.5"
                     >
                       <X size={12} />

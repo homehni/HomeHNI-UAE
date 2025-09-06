@@ -104,7 +104,6 @@ export const GalleryStep: React.FC<GalleryStepProps> = ({
                         {/* Upload Images Title */}
                         <div className="text-center">
                           <h2 className="text-xl font-semibold text-foreground mb-4">Upload Property Images by Category</h2>
-                          <p className="text-sm text-muted-foreground">Organize your property photos by room type for better presentation</p>
                         </div>
                         
                         {/* Categorized Image Upload Component */}
@@ -112,7 +111,6 @@ export const GalleryStep: React.FC<GalleryStepProps> = ({
                           images={field.value as any}
                           onImagesChange={field.onChange}
                           maxImagesPerCategory={5}
-                          minTotalImages={3}
                         />
                       </div>
                     </FormControl>

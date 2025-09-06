@@ -160,18 +160,29 @@ const FeaturedProperties = ({
         }));
         
         // Transform properties table data to FeaturedProperty format
-        const transformedProperties = propertiesData.map(property => ({
-          id: property.id,
-          title: property.title,
-          location: `${property.locality}, ${property.city}`,
-          price: `₹${(property.expected_price / 100000).toFixed(1)}L`,
-          area: `${property.super_area || 0} sq ft`,
-          bedrooms: parseInt(property.bhk_type?.replace(/[^\d]/g, '') || '0'),
-          bathrooms: property.bathrooms || 0,
-          image: property.images || [],
-          propertyType: property.property_type?.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) || 'Property',
-          isNew: new Date(property.created_at) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) // New if created within last 7 days
-        }));
+        const transformedProperties = propertiesData.map(property => {
+          // Handle PG/Hostel properties specially
+          const isPGHostel = property.property_type === 'PG/Hostel' || property.listing_type === 'PG/Hostel';
+          
+          return {
+            id: property.id,
+            title: property.title,
+            location: property.locality || '',
+            price: isPGHostel 
+              ? `₹${property.expected_price.toLocaleString()}/month`
+              : `₹${(property.expected_price / 100000).toFixed(1)}L`,
+            area: isPGHostel 
+              ? `${property.super_area || 1} Room${(property.super_area || 1) > 1 ? 's' : ''}`
+              : `${property.super_area || 0} sq ft`,
+            bedrooms: isPGHostel 
+              ? 1  // PG/Hostel shows as 1 room
+              : parseInt(property.bhk_type?.replace(/[^\d]/g, '') || '0'),
+            bathrooms: property.bathrooms || 0,
+            image: property.images || [],
+            propertyType: property.property_type?.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) || 'Property',
+            isNew: new Date(property.created_at) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) // New if created within last 7 days
+          };
+        });
 
         // Combine both sources, with newer properties first
         const allProperties = [...transformedProperties, ...contentElementProperties];
@@ -213,13 +224,22 @@ const FeaturedProperties = ({
 
               const qualifies = record.status === 'approved' && record.is_featured === true;
               if (qualifies) {
+                // Handle PG/Hostel properties specially
+                const isPGHostel = record.property_type === 'PG/Hostel' || record.listing_type === 'PG/Hostel';
+                
                 const newProperty = {
                   id: record.id,
                   title: record.title,
-                  location: `${record.locality}, ${record.city}`,
-                  price: `₹${(record.expected_price / 100000).toFixed(1)}L`,
-                  area: `${record.super_area} sq ft`,
-                  bedrooms: parseInt(record.bhk_type?.replace(/[^\d]/g, '') || '0'),
+                  location: record.locality || '',
+                  price: isPGHostel 
+                    ? `₹${record.expected_price.toLocaleString()}/month`
+                    : `₹${(record.expected_price / 100000).toFixed(1)}L`,
+                  area: isPGHostel 
+                    ? `${record.super_area || 1} Room${(record.super_area || 1) > 1 ? 's' : ''}`
+                    : `${record.super_area} sq ft`,
+                  bedrooms: isPGHostel 
+                    ? 1  // PG/Hostel shows as 1 room
+                    : parseInt(record.bhk_type?.replace(/[^\d]/g, '') || '0'),
                   bathrooms: record.bathrooms || 0,
                   image: record.images || [],
                   propertyType: record.property_type?.replace(/_/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase()) || 'Property',

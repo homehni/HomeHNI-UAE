@@ -10,6 +10,7 @@ import { Bed, ShowerHead, Tv, Wind, Shirt, ShoppingBag, DollarSign } from 'lucid
 interface PgHostelRoomDetails {
   expectedRent: number;
   expectedDeposit: number;
+  roomCount: number;
   roomAmenities: {
     cupboard: boolean;
     geyser: boolean;
@@ -44,6 +45,7 @@ export function PgHostelRoomDetailsStep({
   const [formData, setFormData] = useState<PgHostelRoomDetails>({
     expectedRent: initialData?.expectedRent || undefined,
     expectedDeposit: initialData?.expectedDeposit || undefined,
+    roomCount: initialData?.roomCount || 1,
     roomAmenities: {
       cupboard: false,
       geyser: false,
@@ -95,8 +97,8 @@ export function PgHostelRoomDetailsStep({
           </CardHeader>
           <CardContent className="px-0">
             <form onSubmit={handleSubmit} className="space-y-8">
-              {/* Rent and Deposit */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {/* Rent, Deposit and Room Count */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <div className="space-y-2">
                   <Label htmlFor="expectedRent" className="text-base font-medium">Expected Rent</Label>
                   <PriceInput
@@ -114,6 +116,19 @@ export function PgHostelRoomDetailsStep({
                     value={formData.expectedDeposit}
                     onChange={(value) => setFormData({ ...formData, expectedDeposit: value })}
                     placeholder="Enter security deposit amount"
+                    className="h-14 text-lg"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="roomCount" className="text-base font-medium">Number of Rooms</Label>
+                  <Input
+                    id="roomCount"
+                    type="number"
+                    min="1"
+                    max="20"
+                    value={formData.roomCount}
+                    onChange={(e) => setFormData({ ...formData, roomCount: parseInt(e.target.value) || 1 })}
+                    placeholder="Enter number of rooms"
                     className="h-14 text-lg"
                   />
                 </div>

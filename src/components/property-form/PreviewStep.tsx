@@ -25,6 +25,17 @@ export const PreviewStep: React.FC<PreviewStepProps> = ({
   const [showThankYou, setShowThankYou] = useState(false);
   const navigate = useNavigate();
   const { ownerInfo, propertyInfo } = formData;
+  
+  // Extract nested data for easier access
+  const propertyDetails = propertyInfo?.propertyDetails || {};
+  const locationDetails = propertyInfo?.locationDetails || {};
+  const rentalDetails = propertyInfo?.rentalDetails || {};
+  const amenities = propertyInfo?.amenities || {};
+  const gallery = propertyInfo?.gallery || {};
+  const additionalInfo = propertyInfo?.additionalInfo || {};
+
+  // Debug: Log the amenities data
+  console.log('PreviewStep amenities data:', amenities);
 
   const handleSubmit = () => {
     onSubmit();
@@ -40,6 +51,70 @@ export const PreviewStep: React.FC<PreviewStepProps> = ({
     return `₹${price.toLocaleString()}`;
   };
 
+  const formatAmenityValue = (key: string, value: string) => {
+    const amenityLabels: { [key: string]: { [value: string]: string } } = {
+      powerBackup: {
+        'full': 'Full Power Backup',
+        'partial': 'Partial Power Backup',
+        'dg-backup': 'DG Backup',
+        'no-backup': 'No Power Backup'
+      },
+      lift: {
+        'available': 'Lift Available',
+        'not-available': 'No Lift'
+      },
+      parking: {
+        'bike': 'Bike Parking',
+        'car': 'Car Parking',
+        'both': 'Both Bike & Car Parking',
+        'none': 'No Parking'
+      },
+      waterStorageFacility: {
+        'overhead-tank': 'Overhead Tank',
+        'underground-tank': 'Underground Tank',
+        'both': 'Both Overhead & Underground',
+        'borewell': 'Borewell',
+        'none': 'No Water Storage'
+      },
+      security: {
+        'yes': 'Security Available',
+        'no': 'No Security'
+      },
+      wifi: {
+        'available': 'WiFi Available',
+        'not-available': 'No WiFi'
+      },
+      currentPropertyCondition: {
+        'excellent': 'Excellent Condition',
+        'good': 'Good Condition',
+        'average': 'Average Condition',
+        'needs-renovation': 'Needs Renovation'
+      }
+    };
+
+    return amenityLabels[key]?.[value] || value;
+  };
+
+  const getSelectedAmenities = () => {
+    const selectedAmenities: string[] = [];
+    
+    Object.entries(amenities).forEach(([key, value]) => {
+      if (value && typeof value === 'string' && value.trim() !== '') {
+        const formattedValue = formatAmenityValue(key, value);
+        // Only show amenities that are positive (not "No" or "None" options)
+        if (formattedValue && 
+            !formattedValue.includes('No ') && 
+            !formattedValue.includes('None') &&
+            !formattedValue.includes('not-available') &&
+            !formattedValue.includes('no-backup')) {
+          selectedAmenities.push(formattedValue);
+        }
+      }
+    });
+
+    return selectedAmenities;
+  };
+
   return (
     <>
       <Card className="w-full max-w-4xl mx-auto">
@@ -48,9 +123,9 @@ export const PreviewStep: React.FC<PreviewStepProps> = ({
         </CardHeader>
         <CardContent className="space-y-6">
           {/* Property Images */}
-          {propertyInfo?.images && propertyInfo.images.length > 0 && (
+          {gallery?.images && gallery.images.length > 0 && (
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-              {propertyInfo.images.slice(0, 6).map((image, index) => (
+              {gallery.images.slice(0, 6).map((image, index) => (
                 <div key={index} className="aspect-square rounded-lg overflow-hidden">
                   <img
                     src={URL.createObjectURL(image)}
@@ -59,9 +134,9 @@ export const PreviewStep: React.FC<PreviewStepProps> = ({
                   />
                 </div>
               ))}
-              {propertyInfo.images.length > 6 && (
+              {gallery.images.length > 6 && (
                 <div className="aspect-square rounded-lg bg-muted flex items-center justify-center">
-                  <span className="text-muted-foreground">+{propertyInfo.images.length - 6} more</span>
+                  <span className="text-muted-foreground">+{gallery.images.length - 6} more</span>
                 </div>
               )}
             </div>
@@ -69,39 +144,39 @@ export const PreviewStep: React.FC<PreviewStepProps> = ({
 
           {/* Property Title & Price */}
           <div className="space-y-2">
-            <h2 className="text-2xl font-bold">{propertyInfo?.title}</h2>
+            <h2 className="text-2xl font-bold">{propertyDetails?.title || 'Untitled Property'}</h2>
             <div className="flex items-center gap-4">
               <span className="text-3xl font-bold text-primary">
-                {propertyInfo?.expectedPrice && formatPrice(propertyInfo.expectedPrice)}
+                {rentalDetails?.expectedPrice && formatPrice(rentalDetails.expectedPrice)}
               </span>
               <Badge variant="secondary" className="text-sm">
-                For {propertyInfo?.listingType}
+                For {rentalDetails?.listingType || 'Rent'}
               </Badge>
             </div>
           </div>
 
           {/* Property Details */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {propertyInfo?.bhkType && (
+            {propertyDetails?.bhkType && (
               <div className="flex items-center gap-2">
                 <Home className="h-5 w-5 text-muted-foreground" />
-                <span>{propertyInfo.bhkType}</span>
+                <span>{propertyDetails.bhkType}</span>
               </div>
             )}
-            {propertyInfo?.bathrooms !== undefined && (
+            {propertyDetails?.bathrooms !== undefined && (
               <div className="flex items-center gap-2">
                 <Bath className="h-5 w-5 text-muted-foreground" />
-                <span>{propertyInfo.bathrooms} Bathrooms</span>
+                <span>{propertyDetails.bathrooms} Bathrooms</span>
               </div>
             )}
             <div className="flex items-center gap-2">
               <Square className="h-5 w-5 text-muted-foreground" />
-              <span>{propertyInfo?.superArea} sqft</span>
+              <span>{propertyDetails?.superBuiltUpArea || 0} sqft</span>
             </div>
-            {propertyInfo?.balconies !== undefined && (
+            {propertyDetails?.balconies !== undefined && (
               <div className="flex items-center gap-2">
                 <Calendar className="h-5 w-5 text-muted-foreground" />
-                <span>{propertyInfo.balconies} Balconies</span>
+                <span>{propertyDetails.balconies} Balconies</span>
               </div>
             )}
           </div>
@@ -110,18 +185,36 @@ export const PreviewStep: React.FC<PreviewStepProps> = ({
           <div className="flex items-start gap-2">
             <MapPin className="h-5 w-5 text-muted-foreground mt-0.5" />
             <div>
-              <p className="font-medium">{propertyInfo?.locality}, {propertyInfo?.city}</p>
+              <p className="font-medium">{locationDetails?.locality || 'N/A'}</p>
               <p className="text-sm text-muted-foreground">
-                {propertyInfo?.state} - {propertyInfo?.pincode}
+                {locationDetails?.landmark ? 
+                  (locationDetails.landmark.toLowerCase().startsWith('near') ? 
+                    locationDetails.landmark : 
+                    `Near ${locationDetails.landmark}`) : 
+                  'Location details'}
               </p>
             </div>
           </div>
 
+          {/* What You Get */}
+          {getSelectedAmenities().length > 0 && (
+            <div>
+              <h3 className="font-semibold mb-3">What You Get</h3>
+              <div className="flex flex-wrap gap-2">
+                {getSelectedAmenities().map((amenity, index) => (
+                  <Badge key={index} variant="secondary" className="px-3 py-1">
+                    {amenity}
+                  </Badge>
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* Description */}
-          {propertyInfo?.description && (
+          {additionalInfo?.description && (
             <div>
               <h3 className="font-semibold mb-2">Description</h3>
-              <p className="text-muted-foreground">{propertyInfo.description}</p>
+              <p className="text-muted-foreground">{additionalInfo.description}</p>
             </div>
           )}
 

@@ -15,7 +15,8 @@ export const mapBhkType = (bhkType: string): string => {
     '8 BHK': '8bhk',
     '9 BHK': '9bhk',
     '10 BHK': '10bhk',
-    'Multiple': 'multiple'
+    'Multiple': 'multiple',
+    'PG/Hostel': 'pg_hostel'
   };
   
   if (!bhkType) return '';
@@ -31,11 +32,14 @@ export const mapPropertyType = (propertyType: string): string => {
     'Independent House': 'independent_house',
     'Independent House/Villa': 'independent_house', // Map form value to DB value
     'Builder Floor': 'builder_floor',
+    'Studio Apartment': 'studio_apartment', // Map Studio Apartment to studio_apartment
+    'Penthouse': 'penthouse', // Map Penthouse to penthouse
+    'Duplex': 'duplex', // Map Duplex to duplex
     'Plot': 'plot',
     'Plot/Land': 'plot', // Map form value to DB value
     'Land/Plot': 'plot', // Map form value to DB value (alternate label)
-    'Agricultural Land': 'plot', // Map Agricultural Land to plot
-    'Farmhouse': 'plot', // Map Farmhouse to plot
+    'Agricultural Land': 'agriculture_lands', // Map Agricultural Land to agriculture_lands
+    'Farmhouse': 'farm_house', // Map Farmhouse to farm_house
     'Studio': 'studio',
     'PG/Hostel': 'pg_hostel', // Map form value to DB value
     'Flatmates': 'flatmates', // Map form value to DB value
@@ -77,7 +81,7 @@ export const validateMappedValues = (data: {
   
   // Validate BHK type if provided
   if (data.bhkType) {
-    const validBhkTypes = ['studio', '1rk', '1bhk', '2bhk', '3bhk', '4bhk', '5bhk', '5bhk+', '6bhk', '7bhk', '8bhk', '9bhk', '10bhk', 'multiple'];
+    const validBhkTypes = ['studio', '1rk', '1bhk', '2bhk', '3bhk', '4bhk', '5bhk', '5bhk+', '6bhk', '7bhk', '8bhk', '9bhk', '10bhk', 'multiple', 'pg_hostel'];
     const mappedBhk = mapBhkType(data.bhkType);
     if (!validBhkTypes.includes(mappedBhk)) {
       errors.push(`Invalid BHK type: ${data.bhkType}`);
@@ -85,7 +89,7 @@ export const validateMappedValues = (data: {
   }
   
   // Validate property type
-  const validPropertyTypes = ['apartment', 'villa', 'independent_house', 'builder_floor', 'plot', 'studio', 'pg_hostel', 'flatmates', 'commercial', 'office', 'shop', 'warehouse', 'showroom', 'coworking', 'hotel'];
+  const validPropertyTypes = ['apartment', 'villa', 'independent_house', 'builder_floor', 'studio_apartment', 'penthouse', 'duplex', 'plot', 'studio', 'pg_hostel', 'flatmates', 'commercial', 'office', 'shop', 'warehouse', 'showroom', 'coworking', 'hotel'];
   const mappedPropertyType = mapPropertyType(data.propertyType);
   if (!validPropertyTypes.includes(mappedPropertyType)) {
     errors.push(`Invalid property type: ${data.propertyType}`);

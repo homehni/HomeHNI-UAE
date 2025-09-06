@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, forwardRef, useImperativeHandle } from 're
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { MapPin, Mic } from 'lucide-react';
+import { MapPin } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useCMSContent } from '@/hooks/useCMSContent';
 export interface SearchSectionRef {
@@ -20,6 +20,15 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
       type: activeTab,
       location: searchQuery.trim()
     });
+    
+    // For commercial search, we need to determine if user wants to buy or rent
+    // Since commercial can be both, we'll default to 'buy' for now
+    // The user can then switch tabs on the search page
+    if (activeTab === 'commercial') {
+      params.set('type', 'buy'); // Default to buy for commercial
+      params.set('propertyType', 'COMMERCIAL');
+    }
+    
     navigate(`/search?${params.toString()}`);
   };
 
@@ -35,20 +44,8 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
     id: 'rent',
     label: 'RENT'
   }, {
-    id: 'new-launch',
-    label: 'NEW LAUNCH'
-  }, {
-    id: 'pg',
-    label: 'PG / CO-LIVING'
-  }, {
     id: 'commercial',
     label: 'COMMERCIAL'
-  }, {
-    id: 'plots',
-    label: 'PLOTS/LAND'
-  }, {
-    id: 'projects',
-    label: 'PROJECTS'
   }];
   useEffect(() => {
     const apiKey = 'AIzaSyD2rlXeHN4cm0CQD-y4YGTsob9a_27YcwY';
@@ -140,11 +137,8 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onKeyPress={handleKeyPress}
-                  className="w-full pl-10 pr-12 py-3 bg-gray-50 border border-brand-red rounded-lg text-brand-red placeholder-brand-red/60 focus:outline-none focus:ring-2 focus:ring-brand-red focus:border-transparent" 
+                  className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-brand-red rounded-lg text-brand-red placeholder-brand-red/60 focus:outline-none focus:ring-2 focus:ring-brand-red focus:border-transparent" 
                 />
-                <button className="absolute right-3 top-1/2 transform -translate-y-1/2 p-1 hover:bg-brand-red/10 rounded-full transition-colors">
-                  <Mic className="w-5 h-5 text-brand-red" />
-                </button>
               </div>
               
               <Button 
@@ -166,10 +160,9 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
               <div className="bg-white rounded-t-lg shadow-xl border border-gray-100 overflow-hidden">
                 {/* Tab Navigation - matching screenshot design exactly */}
                 <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-                  <TabsList className="grid w-full grid-cols-7 bg-transparent p-0 h-auto rounded-none border-b border-gray-200">
-                    {navigationTabs.map(tab => <TabsTrigger key={tab.id} value={tab.id} className={`px-6 py-4 text-sm font-medium transition-all rounded-none border-b-2 border-transparent data-[state=active]:border-brand-red data-[state=active]:text-brand-red data-[state=active]:bg-brand-red/5 data-[state=active]:font-bold hover:bg-brand-red/5 ${tab.id === 'new-launch' ? 'relative' : ''}`}>
+                  <TabsList className="grid w-full grid-cols-3 bg-transparent p-0 h-auto rounded-none border-b border-gray-200">
+                    {navigationTabs.map(tab => <TabsTrigger key={tab.id} value={tab.id} className="px-6 py-4 text-sm font-medium transition-all rounded-none border-b-2 border-transparent data-[state=active]:border-brand-red data-[state=active]:text-brand-red data-[state=active]:bg-brand-red/5 data-[state=active]:font-bold hover:bg-brand-red/5">
                         {tab.label}
-                        {tab.id === 'new-launch'}
                       </TabsTrigger>)}
                   </TabsList>
 
@@ -186,14 +179,6 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                            onKeyPress={handleKeyPress}
                            className="pl-10 h-12 border-brand-red text-brand-red placeholder-brand-red/60" 
                          />
-                         <div className="absolute right-3 top-3 flex gap-2">
-                          <button className="p-1 hover:bg-brand-red/10 rounded">
-                            
-                          </button>
-                          <button className="p-1 hover:bg-brand-red/10 rounded">
-                            <Mic className="w-5 h-5 text-brand-red" />
-                          </button>
-                        </div>
                       </div>
                       
                       <Button 

@@ -15,12 +15,10 @@ const amenitiesSchema = z.object({
   powerBackup: z.string().optional(),
   lift: z.string().optional(),
   parking: z.string().optional(),
-  washrooms: z.string().optional(),
   waterStorageFacility: z.string().optional(),
   security: z.string().optional(),
   wifi: z.string().optional(),
   currentPropertyCondition: z.string().optional(),
-  currentBusiness: z.string().optional(),
   moreSimilarUnits: z.boolean().optional(),
   directionsTip: z.string().optional(),
 });
@@ -46,26 +44,25 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
       powerBackup: initialData.powerBackup || '',
       lift: initialData.lift || '',
       parking: initialData.parking || '',
-      washrooms: initialData.washrooms || '',
       waterStorageFacility: initialData.waterStorageFacility || '',
       security: initialData.security || '',
       wifi: initialData.wifi || '',
       currentPropertyCondition: initialData.currentPropertyCondition || '',
-      currentBusiness: initialData.currentBusiness || '',
       moreSimilarUnits: initialData.moreSimilarUnits || false,
       directionsTip: initialData.directionsTip || '',
     },
   });
 
   const onSubmit = (data: PropertyAmenities) => {
+    console.log('AmenitiesStep submitting data:', data);
     onNext(data);
   };
 
   return (
     <div className="bg-background rounded-lg border p-8">
       <div className="text-center mb-8">
-        <h2 className="text-2xl font-bold text-foreground mb-2">Amenities</h2>
-        <p className="text-muted-foreground">Select the amenities and features of your property</p>
+        <h2 className="text-2xl font-bold text-foreground mb-2">What You Get</h2>
+        <p className="text-muted-foreground">Select the amenities and features included with your property</p>
       </div>
 
               <Form {...form}>
@@ -144,31 +141,6 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
                       )}
                     />
 
-                    {/* Washrooms */}
-                    <FormField
-                      control={form.control}
-                      name="washrooms"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Washroom(s)</FormLabel>
-                          <Select onValueChange={field.onChange} defaultValue={field.value}>
-                            <FormControl>
-                              <SelectTrigger>
-                                <SelectValue placeholder="Select" />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              <SelectItem value="1">1</SelectItem>
-                              <SelectItem value="2">2</SelectItem>
-                              <SelectItem value="3">3</SelectItem>
-                              <SelectItem value="4">4</SelectItem>
-                              <SelectItem value="5+">5+</SelectItem>
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
 
                     {/* Water Storage Facility */}
                     <FormField
@@ -267,31 +239,6 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
                       )}
                     />
 
-                    {/* Current Business */}
-                    <FormField
-                      control={form.control}
-                      name="currentBusiness"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>What business is currently running?</FormLabel>
-                          <Select onValueChange={field.onChange} defaultValue={field.value}>
-                            <FormControl>
-                              <SelectTrigger>
-                                <SelectValue placeholder="Select" />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              <SelectItem value="none">None</SelectItem>
-                              <SelectItem value="retail">Retail</SelectItem>
-                              <SelectItem value="office">Office</SelectItem>
-                              <SelectItem value="restaurant">Restaurant</SelectItem>
-                              <SelectItem value="other">Other</SelectItem>
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
                   </div>
 
                   {/* More Similar Units */}

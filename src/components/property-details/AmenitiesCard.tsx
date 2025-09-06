@@ -53,7 +53,10 @@ export const AmenitiesCard: React.FC<AmenitiesCardProps> = ({ amenities }) => {
     cooking_allowed: 'Cooking Allowed',
     room_cleaning: 'Room Cleaning',
     laundry: 'Laundry',
-    warden_facility: 'Warden Facility'
+    warden_facility: 'Warden Facility',
+    // "What You Get" section amenities
+    waterStorageFacility: 'Water Storage Facility',
+    currentPropertyCondition: 'Property Condition'
   };
 
   const getDisplayAmenities = () => {
@@ -75,15 +78,69 @@ export const AmenitiesCard: React.FC<AmenitiesCardProps> = ({ amenities }) => {
           value === true ||
           value === 1 ||
           value === '1' ||
-          (typeof value === 'string' && ['yes','true','y','included','available','daily','bike','car','both'].includes(value.toLowerCase()))
+          (typeof value === 'string' && [
+            'yes','true','y','included','available','daily','bike','car','both',
+            // "What You Get" section values
+            'full','partial','dg-backup','available','bike','car','both',
+            'overhead-tank','underground-tank','borewell','excellent','good','average'
+          ].includes(value.toLowerCase()))
         );
         if (truthy) {
           const mapped = amenityKeyMap[key];
-          const humanized = mapped || key
+          let displayName = mapped || key
             .replace(/[_-]/g, ' ')
             .replace(/([a-z])([A-Z])/g, '$1 $2')
             .replace(/^\w|\s\w/g, (m) => m.toUpperCase());
-          availableAmenities.push(humanized);
+          
+          // Format specific amenity values for better display
+          if (key === 'powerBackup' && typeof value === 'string') {
+            const powerBackupMap: Record<string, string> = {
+              'full': 'Full Power Backup',
+              'partial': 'Partial Power Backup',
+              'dg-backup': 'DG Backup'
+            };
+            displayName = powerBackupMap[value] || displayName;
+          } else if (key === 'lift' && typeof value === 'string') {
+            const liftMap: Record<string, string> = {
+              'available': 'Lift Available'
+            };
+            displayName = liftMap[value] || displayName;
+          } else if (key === 'parking' && typeof value === 'string') {
+            const parkingMap: Record<string, string> = {
+              'bike': 'Bike Parking',
+              'car': 'Car Parking',
+              'both': 'Both Bike & Car Parking'
+            };
+            displayName = parkingMap[value] || displayName;
+          } else if (key === 'waterStorageFacility' && typeof value === 'string') {
+            const waterMap: Record<string, string> = {
+              'overhead-tank': 'Overhead Tank',
+              'underground-tank': 'Underground Tank',
+              'both': 'Both Overhead & Underground',
+              'borewell': 'Borewell'
+            };
+            displayName = waterMap[value] || displayName;
+          } else if (key === 'security' && typeof value === 'string') {
+            const securityMap: Record<string, string> = {
+              'yes': 'Security Available'
+            };
+            displayName = securityMap[value] || displayName;
+          } else if (key === 'wifi' && typeof value === 'string') {
+            const wifiMap: Record<string, string> = {
+              'available': 'WiFi Available'
+            };
+            displayName = wifiMap[value] || displayName;
+          } else if (key === 'currentPropertyCondition' && typeof value === 'string') {
+            const conditionMap: Record<string, string> = {
+              'excellent': 'Excellent Condition',
+              'good': 'Good Condition',
+              'average': 'Average Condition',
+              'needs-renovation': 'Needs Renovation'
+            };
+            displayName = conditionMap[value] || displayName;
+          }
+          
+          availableAmenities.push(displayName);
         }
       });
       return availableAmenities.length > 0 ? availableAmenities : ['No amenities listed'];

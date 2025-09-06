@@ -90,7 +90,7 @@ export const OwnerInfoStep: React.FC<OwnerInfoStepProps> = ({
   const isFormValid = () => {
     const values = getValues();
     return !!(values.phoneNumber && values.role && 
-             values.city && values.propertyType && values.listingType);
+             values.propertyType && values.listingType);
   };
 
   const handleBlur = () => {
@@ -129,61 +129,34 @@ export const OwnerInfoStep: React.FC<OwnerInfoStepProps> = ({
             <h3 className="text-lg font-semibold text-foreground">Personal Information</h3>
             
 
-            {/* Mobile Number and City Row */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="phoneNumber">Mobile Number *</Label>
-                <div className="flex gap-2">
-                  <Select defaultValue="+91">
-                    <SelectTrigger className="w-20">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="+91">+91</SelectItem>
-                      <SelectItem value="+1">+1</SelectItem>
-                      <SelectItem value="+44">+44</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <Input
-                    id="phoneNumber"
-                    type="tel"
-                    {...register('phoneNumber')}
-                    placeholder="Enter your mobile number"
-                    className={`flex-1 ${errors.phoneNumber && touchedFields.phoneNumber ? 'border-destructive' : ''}`}
-                    onBlur={handleBlur}
-                    onInput={handleBlur}
-                    autoComplete="tel"
-                  />
-                </div>
-                {errors.phoneNumber && touchedFields.phoneNumber && (
-                  <p className="text-sm text-destructive">{errors.phoneNumber.message}</p>
-                )}
-              </div>
-
-              <div className="space-y-2">
-                <Label>City *</Label>
-                <Select 
-                  value={watch('city')} 
-                  onValueChange={(value) => setValue('city', value)}
-                >
-                  <SelectTrigger className={errors.city && touchedFields.city ? 'border-destructive' : ''}>
-                    <SelectValue placeholder="Select your city" />
+            {/* Mobile Number */}
+            <div className="space-y-2">
+              <Label htmlFor="phoneNumber">Mobile Number *</Label>
+              <div className="flex gap-2">
+                <Select defaultValue="+91">
+                  <SelectTrigger className="w-20">
+                    <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="mumbai">Mumbai</SelectItem>
-                    <SelectItem value="delhi">Delhi</SelectItem>
-                    <SelectItem value="bangalore">Bangalore</SelectItem>
-                    <SelectItem value="pune">Pune</SelectItem>
-                    <SelectItem value="chennai">Chennai</SelectItem>
-                    <SelectItem value="kolkata">Kolkata</SelectItem>
-                    <SelectItem value="hyderabad">Hyderabad</SelectItem>
-                    <SelectItem value="ahmedabad">Ahmedabad</SelectItem>
+                    <SelectItem value="+91">+91</SelectItem>
+                    <SelectItem value="+1">+1</SelectItem>
+                    <SelectItem value="+44">+44</SelectItem>
                   </SelectContent>
                 </Select>
-                {errors.city && touchedFields.city && (
-                  <p className="text-sm text-destructive">{errors.city.message}</p>
-                )}
+                <Input
+                  id="phoneNumber"
+                  type="tel"
+                  {...register('phoneNumber')}
+                  placeholder="Enter your mobile number"
+                  className={`flex-1 ${errors.phoneNumber && touchedFields.phoneNumber ? 'border-destructive' : ''}`}
+                  onBlur={handleBlur}
+                  onInput={handleBlur}
+                  autoComplete="tel"
+                />
               </div>
+              {errors.phoneNumber && touchedFields.phoneNumber && (
+                <p className="text-sm text-destructive">{errors.phoneNumber.message}</p>
+              )}
             </div>
 
             {/* WhatsApp Updates Toggle */}
@@ -266,35 +239,31 @@ export const OwnerInfoStep: React.FC<OwnerInfoStepProps> = ({
               <Select 
                 value={selectedRole} 
                 onValueChange={(value) => {
-                  setValue('role', value as 'Owner' | 'Agent' | 'Builder' | 'Tenant');
+                  setValue('role', value as 'Owner' | 'Agent' | 'Builder');
                   trigger('role');
                 }}
               >
               <SelectTrigger className={errors.role ? 'border-destructive' : ''}>
-                <SelectValue placeholder={
-                  selectedListingType === 'Rent' ? 
-                    "Are you Owner or Tenant?" : 
-                    "Select your role"
-                } />
+                <SelectValue placeholder="Select your role" />
               </SelectTrigger>
                <SelectContent>
                 {selectedListingType === 'Rent' ? (
                   <>
                     <SelectItem value="Owner">Property Owner</SelectItem>
-                    <SelectItem value="Tenant">Tenant (Looking for Rental)</SelectItem>
                     <SelectItem value="Agent">Agent</SelectItem>
+                    <SelectItem value="Builder">Builder</SelectItem>
                   </>
                 ) : selectedListingType === 'PG/Hostel' ? (
                   <>
-                    <SelectItem value="Tenant">Tenant (In the PG)</SelectItem>
                     <SelectItem value="Owner">Owner (of Building)</SelectItem>
                     <SelectItem value="Agent">Agent</SelectItem>
+                    <SelectItem value="Builder">Builder</SelectItem>
                   </>
                 ) : selectedListingType === 'Flatmates' ? (
                   <>
-                    <SelectItem value="Tenant">Tenant</SelectItem>
                     <SelectItem value="Owner">Owner (of the flat)</SelectItem>
                     <SelectItem value="Agent">Agent</SelectItem>
+                    <SelectItem value="Builder">Builder</SelectItem>
                   </>
                 ) : (
                   <>
@@ -319,7 +288,7 @@ export const OwnerInfoStep: React.FC<OwnerInfoStepProps> = ({
               size="lg"
             >
               {selectedListingType === 'Rent' ? 
-                (selectedRole === 'Tenant' ? 'Start Finding Your Dream Rental' : 'List Your Property For FREE') :
+                'List Your Property For FREE' :
                 'Start Posting Your Property For FREE'
               }
             </Button>

@@ -485,7 +485,7 @@ export const Dashboard: React.FC = () => {
                               <div>Type: {property.property_type}</div>
                               <div>For: {property.listing_type}</div>
                               <div>Price: ₹{property.expected_price.toLocaleString()}</div>
-                              <div>Location: {property.locality}, {property.city}</div>
+                              <div>Location: {property.locality}</div>
                             </div>
                             {/* Show owner information only to the property owner (for their own listings) */}
                             {user && property.user_id === user.id && (property.owner_name || property.owner_email || property.owner_phone) && (

@@ -56,7 +56,7 @@ export const LandPlotPreviewStep: React.FC<LandPlotPreviewStepProps> = ({
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
             <div className="flex items-center gap-2">
               <MapPin className="h-4 w-4 text-red-600" />
-              <span>{locationDetails.locality}, {locationDetails.city}</span>
+              <span>{locationDetails.locality}</span>
             </div>
             <div className="flex items-center gap-2">
               <DollarSign className="h-4 w-4 text-green-600" />
@@ -148,7 +148,7 @@ export const LandPlotPreviewStep: React.FC<LandPlotPreviewStepProps> = ({
               <span className="font-medium">Address:</span> {locationDetails.address}
             </div>
             <div>
-              <span className="font-medium">City:</span> {locationDetails.city}, {locationDetails.state} - {locationDetails.pincode}
+              <span className="font-medium">Location:</span> {locationDetails.locality}
             </div>
             {locationDetails.landmark && (
               <div>

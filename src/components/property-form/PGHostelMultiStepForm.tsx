@@ -223,7 +223,7 @@ const [propertyInfo, setPropertyInfo] = useState({
         title: propertyInfo.title || 'PG/Hostel Property',
         propertyType: 'PG/Hostel',
         buildingType: 'PG',
-        bhkType: 'Multiple',
+        bhkType: 'PG/Hostel',
         bathrooms: roomDetails.attachedBathroom ? 1 : 0,
         balconies: 0,
         propertyAge: 'New',
@@ -231,7 +231,7 @@ const [propertyInfo, setPropertyInfo] = useState({
         floorNo: 1,
         furnishingStatus: 'Furnished',
         parkingType: amenities.parking !== 'none' ? 'Available' : 'Not Available',
-        superBuiltUpArea: 0,
+        superBuiltUpArea: roomDetails.roomCount || 1,
         onMainRoad: false,
         cornerProperty: false
       },

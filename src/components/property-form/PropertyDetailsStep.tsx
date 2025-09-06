@@ -13,14 +13,17 @@ import { Phone } from 'lucide-react';
 const propertyDetailsSchema = z.object({
   title: z.string().min(1, "Property name is required"),
   propertyType: z.string().optional(),
+  bhkType: z.string().optional(),
   buildingType: z.string().optional(),
   propertyAge: z.string().optional(),
   floorType: z.string().optional(),
   totalFloors: z.union([z.number(), z.string()]).optional(),
   floorNo: z.union([z.number(), z.string()]).optional(),
   furnishingStatus: z.string().optional(),
+  bathrooms: z.number().optional(),
+  balconies: z.number().optional(),
   parkingType: z.string().optional(),
-  superBuiltUpArea: z.number().optional(),
+  superBuiltUpArea: z.number().min(1, "Super built up area is required and must be greater than 0"),
   onMainRoad: z.boolean().optional(),
   cornerProperty: z.boolean().optional(),
 });
@@ -47,12 +50,15 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
     defaultValues: {
       title: initialData.title || '',
       propertyType: initialData.propertyType || '',
+      bhkType: initialData.bhkType || '',
       buildingType: initialData.buildingType || '',
       propertyAge: initialData.propertyAge || '',
       floorType: initialData.floorType || '',
       totalFloors: initialData.totalFloors || 1,
       floorNo: initialData.floorNo || 0,
       furnishingStatus: initialData.furnishingStatus || '',
+      bathrooms: initialData.bathrooms || 0,
+      balconies: initialData.balconies || 0,
       parkingType: initialData.parkingType || '',
       superBuiltUpArea: initialData.superBuiltUpArea ?? undefined,
       onMainRoad: initialData.onMainRoad || false,
@@ -60,95 +66,17 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
     },
   });
 
-  const [onMainRoad, setOnMainRoad] = useState(form.watch('onMainRoad'));
-  const [cornerProperty, setCornerProperty] = useState(form.watch('cornerProperty'));
-  const floorType = form.watch('floorType');
-  const floorNoWatch = form.watch('floorNo');
-  const [floorError, setFloorError] = React.useState<string | null>(null);
-
-  // Reset floor number when floor type changes
-  React.useEffect(() => {
-    if (floorType) {
-      form.setValue('floorNo', undefined);
-      form.clearErrors('floorNo');
-      setFloorError(null);
-    }
-  }, [floorType, form]);
-
-  // Live-validate floor selection against floor type
-  React.useEffect(() => {
-    const allowed = getFloorOptions(floorType || '').map((o) => o.value);
-    const selected = typeof floorNoWatch === 'number' ? floorNoWatch.toString() : (floorNoWatch ?? '').toString();
-    if (floorType && selected && !allowed.includes(selected)) {
-      form.setError('floorNo', { type: 'validate', message: 'Choose the correct floor' });
-      setFloorError('Choose the correct floor');
-    } else {
-      form.clearErrors('floorNo');
-      setFloorError(null);
-    }
-  }, [floorType, floorNoWatch, form]);
-
-  // Helper function to get floor options based on floor type
-  const getFloorOptions = (floorType: string) => {
-    switch (floorType) {
-      case 'Lower Basement':
-        return [{ value: 'lower', label: 'Lower Basement' }];
-      case 'Upper Basement':
-        return [
-          { value: 'lower', label: 'Lower Basement' },
-          { value: 'upper', label: 'Upper Basement' }
-        ];
-      case 'Ground Floor':
-        return [{ value: '0', label: 'Ground Floor' }];
-      case 'Low Rise (1-3)':
-        return [
-          { value: '1', label: '1' },
-          { value: '2', label: '2' },
-          { value: '3', label: '3' }
-        ];
-      case 'Mid Rise (4-9)':
-        return Array.from({ length: 6 }, (_, i) => ({
-          value: (i + 4).toString(),
-          label: (i + 4).toString()
-        }));
-      case 'High Rise (10+)':
-        return [
-          ...Array.from({ length: 89 }, (_, i) => ({
-            value: (i + 10).toString(),
-            label: (i + 10).toString()
-          })),
-          { value: '99+', label: '99+' }
-        ];
-      default:
-        return [
-          { value: 'lower', label: 'Lower Basement' },
-          { value: 'upper', label: 'Upper Basement' },
-          { value: '0', label: 'Ground Floor' },
-          { value: 'full', label: 'Full Building' },
-          ...Array.from({ length: 99 }, (_, i) => ({
-            value: (i + 1).toString(),
-            label: (i + 1).toString()
-          })),
-          { value: '99+', label: '99+' }
-        ];
-    }
-  };
 
   const onSubmit = (data: PropertyDetailsFormData) => {
-    // Validate floor selection against floor type
-    const allowed = getFloorOptions(data.floorType || '').map((o) => o.value);
-    const selected = typeof data.floorNo === 'number' ? data.floorNo.toString() : (data.floorNo ?? '').toString();
-    if (data.floorType && selected && !allowed.includes(selected)) {
-      form.setError('floorNo', { type: 'validate', message: 'Choose the correct floor' });
-      return;
-    }
-
-    // Pass the form data merged with initial data and toggle states to maintain all PropertyDetails fields
+    console.log('PropertyDetailsStep submitting data:', data);
+    console.log('Bathrooms value:', data.bathrooms, 'Type:', typeof data.bathrooms);
+    
+    // Pass the form data merged with initial data to maintain all PropertyDetails fields
     onNext({
       ...initialData, // Keep existing fields like title, bhkType, etc.
       ...data,
-      onMainRoad,
-      cornerProperty,
+      onMainRoad: data.onMainRoad || false,
+      cornerProperty: data.cornerProperty || false,
     } as PropertyDetails);
   };
 
@@ -177,8 +105,8 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
             )}
           />
 
-          {/* Property Type and Building Type */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {/* Property Type and BHK Type */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <FormField
               control={form.control}
               name="propertyType"
@@ -193,12 +121,10 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
                     </FormControl>
                     <SelectContent>
                       <SelectItem value="Apartment">Apartment</SelectItem>
-                      <SelectItem value="Co-Living">Co-Living</SelectItem>
                       <SelectItem value="Villa">Villa</SelectItem>
                       <SelectItem value="Independent House">Independent House</SelectItem>
                       <SelectItem value="Builder Floor">Builder Floor</SelectItem>
                       <SelectItem value="Studio Apartment">Studio Apartment</SelectItem>
-                      <SelectItem value="Co-Working">Co-Working</SelectItem>
                       <SelectItem value="Penthouse">Penthouse</SelectItem>
                       <SelectItem value="Duplex">Duplex</SelectItem>
                     </SelectContent>
@@ -210,22 +136,25 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
 
             <FormField
               control={form.control}
-              name="buildingType"
+              name="bhkType"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-sm font-medium">Building Type</FormLabel>
+                  <FormLabel className="text-sm font-medium">BHK Type</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger className="h-12">
-                        <SelectValue placeholder="Select Building Type" />
+                        <SelectValue placeholder="Select BHK Type" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="Apartment Complex">Apartment Complex</SelectItem>
-                      <SelectItem value="Independent Building">Independent Building</SelectItem>
-                      <SelectItem value="Gated Community">Gated Community</SelectItem>
-                      <SelectItem value="Villa Complex">Villa Complex</SelectItem>
-                      <SelectItem value="Standalone Building">Standalone Building</SelectItem>
+                      <SelectItem value="Studio">Studio</SelectItem>
+                      <SelectItem value="1 RK">1 RK</SelectItem>
+                      <SelectItem value="1 BHK">1 BHK</SelectItem>
+                      <SelectItem value="2 BHK">2 BHK</SelectItem>
+                      <SelectItem value="3 BHK">3 BHK</SelectItem>
+                      <SelectItem value="4 BHK">4 BHK</SelectItem>
+                      <SelectItem value="5 BHK">5 BHK</SelectItem>
+                      <SelectItem value="5+ BHK">5+ BHK</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />
@@ -234,34 +163,8 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
             />
           </div>
 
-          {/* Floor Type, Age of Property, Floor, Total Floor */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <FormField
-              control={form.control}
-              name="floorType"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-sm font-medium">Floor Type</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <FormControl>
-                      <SelectTrigger className="h-12">
-                        <SelectValue placeholder="Select Floor Type" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="Lower Basement">Lower Basement</SelectItem>
-                      <SelectItem value="Upper Basement">Upper Basement</SelectItem>
-                      <SelectItem value="Ground Floor">Ground Floor</SelectItem>
-                      <SelectItem value="Low Rise (1-3)">Low Rise (1-3)</SelectItem>
-                      <SelectItem value="Mid Rise (4-9)">Mid Rise (4-9)</SelectItem>
-                      <SelectItem value="High Rise (10+)">High Rise (10+)</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
+          {/* Property Age, Floor, Total Floors */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <FormField
               control={form.control}
               name="propertyAge"
@@ -275,9 +178,10 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="Less than a Year">Less than a Year</SelectItem>
-                      <SelectItem value="1-2 Years">1-2 Years</SelectItem>
-                      <SelectItem value="3-5 Years">3-5 Years</SelectItem>
+                      <SelectItem value="Under Construction">Under Construction</SelectItem>
+                      <SelectItem value="Ready to Move">Ready to Move</SelectItem>
+                      <SelectItem value="0-1 Year">0-1 Year</SelectItem>
+                      <SelectItem value="1-5 Years">1-5 Years</SelectItem>
                       <SelectItem value="5-10 Years">5-10 Years</SelectItem>
                       <SelectItem value="10+ Years">10+ Years</SelectItem>
                     </SelectContent>
@@ -295,21 +199,12 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
                   <FormLabel className="text-sm font-medium">Floor</FormLabel>
                   <Select
                     onValueChange={(value) => {
-                      const allowed = getFloorOptions(floorType || '').map((o) => o.value);
-                      if (!allowed.includes(value)) {
-                        // Reflect user's selection and show an inline warning
-                        field.onChange(value);
-                        form.setError('floorNo', { type: 'validate', message: 'Choose the correct floor' });
-                        setFloorError('Choose the correct floor');
-                        return;
-                      }
-                      form.clearErrors('floorNo');
-                      setFloorError(null);
-                      if (value === 'full' || value === 'lower' || value === 'upper' || value === '99+') {
-                        field.onChange(value);
+                      if (value === 'ground') {
+                        field.onChange(0);
+                      } else if (value === 'basement') {
+                        field.onChange('basement');
                       } else {
-                        const asNum = parseInt(value, 10);
-                        field.onChange(Number.isNaN(asNum) ? value : asNum);
+                        field.onChange(parseInt(value));
                       }
                     }}
                     value={field.value === undefined ? undefined : field.value.toString()}
@@ -320,19 +215,19 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {getFloorOptions(floorType || '').map((option) => (
-                        <SelectItem key={option.value} value={option.value}>
-                          {option.label}
-                        </SelectItem>
-                      ))}
+                      <SelectItem value="basement">Basement</SelectItem>
+                      <SelectItem value="ground">Ground Floor</SelectItem>
+                      {[...Array(50)].map((_, i) => {
+                        const floor = i + 1;
+                        return (
+                          <SelectItem key={floor} value={floor.toString()}>
+                            {floor}
+                          </SelectItem>
+                        );
+                      })}
                     </SelectContent>
                   </Select>
                   <FormMessage />
-                  {(form.formState.errors.floorNo?.message || floorError) ? (
-                    <p className="text-sm text-destructive mt-1" role="alert" aria-live="polite">
-                      {form.formState.errors.floorNo?.message ?? floorError}
-                    </p>
-                  ) : null}
                 </FormItem>
               )}
             />
@@ -344,9 +239,7 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
                 <FormItem>
                   <FormLabel className="text-sm font-medium">Total Floors</FormLabel>
                   <Select
-                    onValueChange={(value) =>
-                      value === '99+' ? field.onChange(value) : field.onChange(parseInt(value))
-                    }
+                    onValueChange={(value) => field.onChange(parseInt(value))}
                     defaultValue={field.value?.toString()}
                   >
                     <FormControl>
@@ -355,8 +248,7 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="0">Ground</SelectItem>
-                      {[...Array(99)].map((_, i) => {
+                      {[...Array(50)].map((_, i) => {
                         const floor = i + 1;
                         return (
                           <SelectItem key={floor} value={floor.toString()}>
@@ -364,18 +256,16 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
                           </SelectItem>
                         );
                       })}
-                      <SelectItem value="99+">99+</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />
                 </FormItem>
               )}
             />
-
           </div>
 
-          {/* Super Built Up Area and Furnishing */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {/* Super Built Up Area, Bathrooms, Balconies */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <FormField
               control={form.control}
               name="superBuiltUpArea"
@@ -403,14 +293,79 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
 
             <FormField
               control={form.control}
+              name="bathrooms"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-sm font-medium">Bathrooms</FormLabel>
+                  <Select
+                    onValueChange={(value) => field.onChange(parseInt(value))}
+                    defaultValue={field.value?.toString()}
+                  >
+                    <FormControl>
+                      <SelectTrigger className="h-12">
+                        <SelectValue placeholder="Select Bathrooms" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {[...Array(10)].map((_, i) => {
+                        const count = i + 1;
+                        return (
+                          <SelectItem key={count} value={count.toString()}>
+                            {count}
+                          </SelectItem>
+                        );
+                      })}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="balconies"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-sm font-medium">Balconies</FormLabel>
+                  <Select
+                    onValueChange={(value) => field.onChange(parseInt(value))}
+                    defaultValue={field.value?.toString()}
+                  >
+                    <FormControl>
+                      <SelectTrigger className="h-12">
+                        <SelectValue placeholder="Select Balconies" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {[...Array(6)].map((_, i) => {
+                        const count = i;
+                        return (
+                          <SelectItem key={count} value={count.toString()}>
+                            {count}
+                          </SelectItem>
+                        );
+                      })}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+
+          {/* Furnishing Status */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <FormField
+              control={form.control}
               name="furnishingStatus"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-sm font-medium">Furnishing</FormLabel>
+                  <FormLabel className="text-sm font-medium">Furnishing Status</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger className="h-12">
-                        <SelectValue placeholder="Select Furnishing" />
+                        <SelectValue placeholder="Select Furnishing Status" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -423,28 +378,32 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
                 </FormItem>
               )}
             />
+
+            <FormField
+              control={form.control}
+              name="parkingType"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-sm font-medium">Parking</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger className="h-12">
+                        <SelectValue placeholder="Select Parking" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="Covered">Covered</SelectItem>
+                      <SelectItem value="Open">Open</SelectItem>
+                      <SelectItem value="Both">Both</SelectItem>
+                      <SelectItem value="None">None</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </div>
 
-          {/* Other Features */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-medium">Other Features</h3>
-            <div className="flex gap-4">
-              <Badge
-                variant={onMainRoad ? "default" : "outline"}
-                className="cursor-pointer px-4 py-2 text-sm"
-                onClick={() => setOnMainRoad(!onMainRoad)}
-              >
-                On Main Road
-              </Badge>
-              <Badge
-                variant={cornerProperty ? "default" : "outline"}
-                className="cursor-pointer px-4 py-2 text-sm"
-                onClick={() => setCornerProperty(!cornerProperty)}
-              >
-                Corner Property
-              </Badge>
-            </div>
-          </div>
 
           {/* Help Section */}
           <div className="bg-orange-50 border border-orange-200 rounded-lg p-4 flex items-center justify-between">

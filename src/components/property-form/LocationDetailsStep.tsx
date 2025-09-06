@@ -5,14 +5,11 @@ import { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { LocationDetails } from '@/types/property';
-import { ArrowLeft, ArrowRight, Home } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Home, MapPin } from 'lucide-react';
 
 
 const locationDetailsSchema = z.object({
-  state: z.string().optional(),
-  city: z.string().optional(),
   locality: z.string().optional(),
   landmark: z.string().optional(),
 });
@@ -34,10 +31,7 @@ export const LocationDetailsStep: React.FC<LocationDetailsStepProps> = ({
   currentStep,
   totalSteps
 }) => {
-  const [statesData, setStatesData] = useState<any>({});
-  const [cities, setCities] = useState<string[]>([]);
   const localityInputRef = useRef<HTMLInputElement | null>(null);
-  const landmarkInputRef = useRef<HTMLInputElement | null>(null);
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<any>(null);
   const markerRef = useRef<any>(null);
@@ -45,40 +39,21 @@ export const LocationDetailsStep: React.FC<LocationDetailsStepProps> = ({
   const form = useForm<LocationDetailsFormData>({
     resolver: zodResolver(locationDetailsSchema),
     defaultValues: {
-      state: initialData.state || '',
-      city: initialData.city || '',
       locality: initialData.locality || '',
       landmark: initialData.landmark || '',
     },
   });
 
-  const selectedState = form.watch('state');
-
+  // Update form values when initialData changes
   useEffect(() => {
-    const loadStatesData = async () => {
-      try {
-        const response = await fetch('/data/india_states_cities.json');
-        const data = await response.json();
-        setStatesData(data);
-      } catch (error) {
-        console.error('Error loading states data:', error);
-      }
-    };
-    loadStatesData();
-  }, []);
-
-  useEffect(() => {
-    if (selectedState && statesData[selectedState]) {
-      setCities(statesData[selectedState]);
-      // Reset city if current city is not in the new state
-      const currentCity = form.getValues('city');
-      if (currentCity && !statesData[selectedState].includes(currentCity)) {
-        form.setValue('city', '');
-      }
-    } else {
-      setCities([]);
+    if (initialData.locality) {
+      form.setValue('locality', initialData.locality);
     }
-  }, [selectedState, statesData, form]);
+    if (initialData.landmark) {
+      form.setValue('landmark', initialData.landmark);
+    }
+  }, [initialData, form]);
+
 
   // Google Maps Places Autocomplete and Map preview
   useEffect(() => {
@@ -159,47 +134,20 @@ export const LocationDetailsStep: React.FC<LocationDetailsStepProps> = ({
           el.value = value;
           form.setValue('locality', value, { shouldValidate: true });
         }
-        const comps = place?.address_components || [];
-        const stateCandidate = getComponent(comps, 'administrative_area_level_1');
-        const cityCandidate = getComponent(comps, 'locality') || getComponent(comps, 'administrative_area_level_2') || getComponent(comps, 'sublocality') || getComponent(comps, 'sublocality_level_1');
-        if (stateCandidate) {
-          const matchedState = Object.keys(statesData).find((s) => s.toLowerCase() === stateCandidate.toLowerCase());
-          if (matchedState) {
-            handleStateChange(matchedState);
-            const possibleCities = (statesData[matchedState] as string[]) || [];
-            const matchedCity = possibleCities.find((c) => c.toLowerCase() === (cityCandidate || '').toLowerCase());
-            if (matchedCity) {
-              form.setValue('city', matchedCity, { shouldValidate: true });
-            }
-          }
-        }
         const loc = place?.geometry?.location;
         if (loc) setMapTo(loc.lat(), loc.lng(), place?.name || 'Selected location');
       });
 
-      attach(landmarkInputRef.current, (place, el) => {
-        const value = place?.formatted_address || place?.name || '';
-        if (value) {
-          el.value = value;
-          form.setValue('landmark', value, { shouldValidate: true });
-        }
-        const loc = place?.geometry?.location;
-        if (loc) setMapTo(loc.lat(), loc.lng(), place?.name || 'Selected landmark');
-      });
     };
 
     loadGoogleMaps().then(initAutocomplete).catch(console.error);
-  }, [statesData, form]);
+  }, [form]);
 
-  const handleStateChange = (value: string) => {
-    form.setValue('state', value);
-    form.setValue('city', ''); // Reset city when state changes
-  };
   const onSubmit = (data: LocationDetailsFormData) => {
     // Convert to LocationDetails format and add missing fields as empty/default values
     const locationData: LocationDetails = {
-      state: data.state || '',
-      city: data.city || '',
+      state: '', // No longer used
+      city: '', // No longer used
       locality: data.locality || '',
       landmark: data.landmark || '',
       pincode: initialData.pincode || '',
@@ -208,67 +156,12 @@ export const LocationDetailsStep: React.FC<LocationDetailsStepProps> = ({
     onNext(locationData);
   };
 
-  const stateNames = Object.keys(statesData);
-
   return (
     <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
       <h1 className="text-2xl font-semibold text-primary mb-6">Location Details</h1>
 
               <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                  {/* State and City */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <FormField
-                      control={form.control}
-                      name="state"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className="text-sm font-medium">State</FormLabel>
-                          <Select onValueChange={handleStateChange} defaultValue={field.value}>
-                            <FormControl>
-                              <SelectTrigger className="h-12">
-                                <SelectValue placeholder="Select State" />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              {stateNames.map((state) => (
-                                <SelectItem key={state} value={state}>
-                                  {state}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={form.control}
-                      name="city"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className="text-sm font-medium">City</FormLabel>
-                          <Select onValueChange={field.onChange} defaultValue={field.value}>
-                            <FormControl>
-                              <SelectTrigger className="h-12">
-                                <SelectValue placeholder="Select City" />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              {cities.map((city) => (
-                                <SelectItem key={city} value={city}>
-                                  {city}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-
                   {/* Locality/Area and Landmark */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <FormField
@@ -276,18 +169,27 @@ export const LocationDetailsStep: React.FC<LocationDetailsStepProps> = ({
                       name="locality"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-sm font-medium">Locality/Area</FormLabel>
+                          <FormLabel className="text-sm font-medium flex items-center gap-2">
+                            <MapPin className="h-4 w-4 text-primary" />
+                            Locality/Area *
+                          </FormLabel>
                           <FormControl>
-                            <Input
-                              placeholder="e.g., Sector 12, Koramangala"
-                              className="h-12"
-                              {...field}
-                              ref={(el) => {
-                                field.ref(el)
-                                localityInputRef.current = el
-                              }}
-                            />
+                            <div className="relative">
+                              <Input
+                                placeholder="Search 'Bellandur, Bengaluru, Karnataka'..."
+                                className="h-12 pl-10"
+                                {...field}
+                                ref={(el) => {
+                                  field.ref(el)
+                                  localityInputRef.current = el
+                                }}
+                              />
+                              <MapPin className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                            </div>
                           </FormControl>
+                          <p className="text-xs text-muted-foreground">
+                            Start typing to search for your property location with Google Maps autocomplete.
+                          </p>
                           <FormMessage />
                         </FormItem>
                       )}
@@ -304,10 +206,6 @@ export const LocationDetailsStep: React.FC<LocationDetailsStepProps> = ({
                               placeholder="e.g., Near Metro Station"
                               className="h-12"
                               {...field}
-                              ref={(el) => {
-                                field.ref(el)
-                                landmarkInputRef.current = el
-                              }}
                             />
                           </FormControl>
                           <FormMessage />

@@ -19,7 +19,6 @@ interface CategorizedImageUploadProps {
   images: CategorizedImages;
   onImagesChange: (images: CategorizedImages) => void;
   maxImagesPerCategory?: number;
-  minTotalImages?: number;
 }
 
 const categories = [
@@ -35,8 +34,7 @@ const categories = [
 export const CategorizedImageUpload: React.FC<CategorizedImageUploadProps> = ({
   images,
   onImagesChange,
-  maxImagesPerCategory = 5,
-  minTotalImages = 3
+  maxImagesPerCategory = 5
 }) => {
   const fileInputRefs = useRef<{ [key: string]: HTMLInputElement | null }>({});
   const [activeCategory, setActiveCategory] = useState<keyof CategorizedImages | null>(null);
@@ -82,16 +80,12 @@ export const CategorizedImageUpload: React.FC<CategorizedImageUploadProps> = ({
     <div className="space-y-6">
       {/* Header with total count */}
       <div className="text-center space-y-2">
-        <h3 className="text-lg font-semibold">Add Property Images by Category</h3>
         <p className="text-sm text-muted-foreground">
           Upload images for different areas of your property. All categories are optional.
         </p>
         <div className="flex items-center justify-center gap-2">
           <Badge variant="outline" className="text-sm">
             Total Images: {getTotalImages()}
-          </Badge>
-          <Badge variant={getTotalImages() >= minTotalImages ? "default" : "destructive"} className="text-sm">
-            Minimum: {minTotalImages}
           </Badge>
         </div>
       </div>
@@ -204,18 +198,9 @@ export const CategorizedImageUpload: React.FC<CategorizedImageUploadProps> = ({
         <p>• Upload high-quality images (JPEG, PNG)</p>
         <p>• Maximum file size: 5MB per image</p>
         <p>• Up to {maxImagesPerCategory} images per category</p>
-        <p>• Minimum {minTotalImages} total images required</p>
         <p>• All categories are optional - add images where relevant</p>
       </div>
 
-      {/* Warning if minimum not met */}
-      {getTotalImages() < minTotalImages && (
-        <div className="bg-destructive/10 border border-destructive/20 rounded-lg p-4 text-center">
-          <p className="text-sm text-destructive font-medium">
-            Please upload at least {minTotalImages - getTotalImages()} more image(s) to continue
-          </p>
-        </div>
-      )}
     </div>
   );
 };

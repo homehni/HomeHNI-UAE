@@ -403,7 +403,7 @@ export const MyInterests: React.FC = () => {
                       {/* Location */}
                       <div className="flex items-center text-gray-600 mb-3">
                         <MapPin className="h-4 w-4 mr-1" />
-                        <span className="text-sm">{property.locality}, {property.city}</span>
+                        <span className="text-sm">{property.locality}</span>
                       </div>
 
                       {/* Property Details */}

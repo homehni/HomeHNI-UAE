@@ -74,10 +74,10 @@ export const useRealTimeSearch = () => {
 
   // Search properties using the edge function
   const searchProperties = async () => {
-    // Check if "ALL" is selected
-    const isAllResidential = filters.propertyType.includes('ALL');
+    // Check if "ALL" is selected or no property type is selected
+    const isAllResidential = filters.propertyType.includes('ALL') || filters.propertyType.length === 0;
     
-    // Determine if user has provided any criteria (excluding "All Residential" as it's our default)
+    // Determine if user has provided any criteria (excluding "All" as it's our default)
     const hasSearchCriteria = 
       debouncedLocation || 
       (filters.propertyType.length > 0 && !isAllResidential) || 
@@ -89,14 +89,40 @@ export const useRealTimeSearch = () => {
       filters.budget[0] > 0 || 
       filters.budget[1] < 50000000;
 
-    // If "ALL" is selected or no criteria, show exact same properties as homepage Featured Properties
+    // If "ALL" is selected or no criteria, show properties based on active tab (Buy/Rent/Commercial)
     if (isAllResidential || !hasSearchCriteria) {
       try {
         setIsLoading(true);
         setError(null);
         
-        // Use the same logic as FeaturedProperties component
-        // 1. Get content elements (curated featured properties)
+        // Get properties based on active tab (Buy/Rent/Commercial)
+        const { data: propertiesData, error: propertiesError } = await supabase
+          .rpc('get_public_properties');
+
+        if (propertiesError) throw propertiesError;
+
+        // Filter properties based on active tab
+        let filteredPropertiesData = propertiesData || [];
+        
+        if (activeTab === 'buy') {
+          filteredPropertiesData = filteredPropertiesData.filter(property => 
+            property.listing_type === 'sale' || property.listing_type === 'buy'
+          );
+        } else if (activeTab === 'rent') {
+          filteredPropertiesData = filteredPropertiesData.filter(property => 
+            property.listing_type === 'rent'
+          );
+        } else if (activeTab === 'commercial') {
+          filteredPropertiesData = filteredPropertiesData.filter(property => 
+            property.property_type === 'commercial' || 
+            property.property_type === 'office' || 
+            property.property_type === 'shop' || 
+            property.property_type === 'warehouse' || 
+            property.property_type === 'showroom'
+          );
+        }
+
+        // Also get content elements for featured properties (but filter by active tab)
         const { data: contentElementsData, error: contentError } = await supabase
           .from('content_elements')
           .select('*')
@@ -107,15 +133,6 @@ export const useRealTimeSearch = () => {
           .order('sort_order');
 
         if (contentError) throw contentError;
-
-        // 2. Get featured properties from properties table
-        const { data: propertiesData, error: propertiesError } = await supabase
-          .rpc('get_public_properties');
-
-        if (propertiesError) throw propertiesError;
-
-        // Filter for featured properties only
-        const featuredPropertiesData = (propertiesData || []).filter(property => property.is_featured);
 
         // Validate content elements referencing properties against current database
         const referencedPropertyIds = (contentElementsData || [])
@@ -144,8 +161,28 @@ export const useRealTimeSearch = () => {
           return validPropertyIdSet.has(refId);
         });
 
+        // Filter content elements by active tab
+        const tabFilteredContentElements = filteredContentElements.filter(element => {
+          const content = element.content as any;
+          const propertyType = content?.propertyType?.toLowerCase() || '';
+          const listingType = content?.listingType?.toLowerCase() || 'sale'; // Default to sale
+          
+          if (activeTab === 'buy') {
+            return listingType === 'sale' || listingType === 'buy' || !listingType;
+          } else if (activeTab === 'rent') {
+            return listingType === 'rent';
+          } else if (activeTab === 'commercial') {
+            return propertyType.includes('commercial') || 
+                   propertyType.includes('office') || 
+                   propertyType.includes('shop') || 
+                   propertyType.includes('warehouse') || 
+                   propertyType.includes('showroom');
+          }
+          return true;
+        });
+
         // Transform content elements to Property format
-        const contentElementProperties = filteredContentElements.map((element: any) => {
+        const contentElementProperties = tabFilteredContentElements.map((element: any) => {
           const content = element.content as any || {};
           return {
             id: content?.id || element.id,
@@ -167,31 +204,42 @@ export const useRealTimeSearch = () => {
         });
         
         // Transform properties table data to Property format
-        const transformedPropertiesData = featuredPropertiesData.map((property: any) => ({
-          id: property.id,
-          title: property.title,
-          location: `${property.locality}, ${property.city}`,
-          price: `₹${(property.expected_price / 100000).toFixed(1)}L`,
-          priceNumber: property.expected_price || 0,
-          area: `${property.super_area || 0} sq ft`,
-          areaNumber: property.super_area || 0,
-          bedrooms: parseInt(property.bhk_type?.replace(/[^\d]/g, '') || '0'),
-          bathrooms: property.bathrooms || 0,
-          image: property.images || '/placeholder.svg',
-          propertyType: property.property_type?.replace(/_/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase()) || 'Property',
-          locality: property.locality || '',
-          city: property.city || '',
-          bhkType: property.bhk_type || '1bhk',
-          isNew: new Date(property.created_at) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) // New if created within last 7 days
-        }));
+        const transformedPropertiesData = filteredPropertiesData.map((property: any) => {
+          // Handle PG/Hostel properties specially
+          const isPGHostel = property.property_type === 'pg_hostel' || property.property_type === 'PG/Hostel';
+          
+          return {
+            id: property.id,
+            title: property.title,
+            location: property.locality || '',
+            price: isPGHostel 
+              ? `₹${property.expected_price.toLocaleString()}/month`
+              : `₹${(property.expected_price / 100000).toFixed(1)}L`,
+            priceNumber: property.expected_price || 0,
+            area: isPGHostel 
+              ? `${property.super_area || 1} Room${(property.super_area || 1) > 1 ? 's' : ''}`
+              : `${property.super_area || 0} sq ft`,
+            areaNumber: property.super_area || 0,
+            bedrooms: isPGHostel 
+              ? 1  // PG/Hostel shows as 1 room
+              : parseInt(property.bhk_type?.replace(/[^\d]/g, '') || '0'),
+            bathrooms: property.bathrooms || 0,
+            image: property.images || '/placeholder.svg',
+            propertyType: property.property_type?.replace(/_/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase()) || 'Property',
+            locality: property.locality || '',
+            city: property.city || '',
+            bhkType: property.bhk_type || '1bhk',
+            isNew: new Date(property.created_at) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) // New if created within last 7 days
+          };
+        });
 
-        // Combine both sources, with newer properties first (same logic as FeaturedProperties)
+        // Combine both sources, with newer properties first
         const allProperties = [...transformedPropertiesData, ...contentElementProperties];
         
-        // Remove duplicates based on ID and limit to same as homepage (20 properties)
+        // Remove duplicates based on ID and limit to reasonable number
         const uniqueProperties = allProperties.filter((property, index, self) => 
           index === self.findIndex(p => p.id === property.id)
-        ).slice(0, 20); // Same limit as homepage
+        ).slice(0, 50); // Limit to 50 properties max
 
         setProperties(uniqueProperties);
       } catch (err: any) {
@@ -207,13 +255,28 @@ export const useRealTimeSearch = () => {
     setError(null);
 
     try {
+      // Map property types to database format
+      const mapPropertyTypeToDb = (type: string) => {
+        const mapping: { [key: string]: string } = {
+          'DUPLEX': 'duplex',
+          'PENTHOUSE': 'penthouse',
+          'APARTMENT': 'apartment',
+          'VILLA': 'villa',
+          'PLOT': 'plot',
+          'PG HOSTEL': 'pg_hostel',
+          'INDEPENDENT HOUSE': 'independent_house',
+          'COMMERCIAL': 'commercial'
+        };
+        return mapping[type] || type.toLowerCase();
+      };
+
       const searchBody = {
         intent: activeTab,
         // Send both single and multiple types for backward compatibility
         propertyType: filters.propertyType.length > 0 && !filters.propertyType.includes('ALL')
-          ? filters.propertyType[0]
+          ? mapPropertyTypeToDb(filters.propertyType[0])
           : '',
-        propertyTypes: filters.propertyType.filter((t) => t && t !== 'ALL'),
+        propertyTypes: filters.propertyType.filter((t) => t && t !== 'ALL').map(mapPropertyTypeToDb),
         country: 'India',
         state: '', // Let the backend handle state detection
         city: debouncedLocation || '',
@@ -237,7 +300,21 @@ export const useRealTimeSearch = () => {
         throw new Error(funcError.message || 'Failed to search properties');
       }
 
-      setProperties(data.items || []);
+      // Transform search results to match PropertyCard interface
+      const transformedSearchResults = (data.items || []).map((property: any) => ({
+        id: property.id,
+        title: property.title,
+        location: property.location,
+        price: property.price,
+        area: property.area,
+        bedrooms: property.bedrooms || 0,
+        bathrooms: property.bathrooms || 0,
+        image: property.image || '/placeholder.svg',
+        propertyType: property.property_type?.replace(/_/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase()) || 'Property',
+        isNew: property.isNew || false
+      }));
+
+      setProperties(transformedSearchResults);
     } catch (err: any) {
       setError(err.message || 'Failed to load properties');
       setProperties([]);
@@ -270,7 +347,7 @@ export const useRealTimeSearch = () => {
 
   const clearAllFilters = () => {
     setFilters({
-      propertyType: [],
+      propertyType: [], // This will show "ALL" tab as selected
       bhkType: [],
       budget: [0, 50000000],
       locality: [],
