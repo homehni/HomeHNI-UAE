@@ -6,16 +6,13 @@ import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Input } from '@/components/ui/input';
 import { AdditionalInfo } from '@/types/property';
 
 const formSchema = z.object({
   description: z.string().optional(),
   previousOccupancy: z.string().optional(),
-  whoWillShow: z.string().optional(),
   paintingRequired: z.string().optional(),
   cleaningRequired: z.string().optional(),
-  secondaryNumber: z.string().optional(),
 });
 
 type FormData = z.infer<typeof formSchema>;
@@ -36,10 +33,8 @@ export const AdditionalInfoStep: React.FC<AdditionalInfoStepProps> = ({
     defaultValues: {
       description: initialData.description || '',
       previousOccupancy: initialData.previousOccupancy || '',
-      whoWillShow: initialData.whoWillShow || '',
       paintingRequired: initialData.paintingRequired || '',
       cleaningRequired: initialData.cleaningRequired || '',
-      secondaryNumber: initialData.secondaryNumber || '',
     },
   });
 
@@ -100,29 +95,6 @@ export const AdditionalInfoStep: React.FC<AdditionalInfoStepProps> = ({
               )}
             />
 
-            {/* Who will show */}
-            <FormField
-              control={form.control}
-              name="whoWillShow"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-sm font-medium">Who will show the property?</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <FormControl>
-                      <SelectTrigger className="h-12">
-                        <SelectValue placeholder="I will show" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="owner">I will show</SelectItem>
-                      <SelectItem value="agent">Agent will show</SelectItem>
-                      <SelectItem value="tenant">Current tenant will show</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </FormItem>
-              )}
-            />
-
             {/* Painting */}
             <FormField
               control={form.control}
@@ -169,30 +141,6 @@ export const AdditionalInfoStep: React.FC<AdditionalInfoStepProps> = ({
               )}
             />
           </div>
-
-          {/* Secondary Number */}
-          <FormField
-            control={form.control}
-            name="secondaryNumber"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-sm font-medium">Secondary Number</FormLabel>
-                <FormControl>
-                  <div className="flex">
-                    <div className="flex items-center px-3 border border-r-0 rounded-l-md bg-muted h-12">
-                      <span className="text-sm">🇮🇳</span>
-                      <span className="ml-2 text-sm">+91</span>
-                    </div>
-                    <Input
-                      placeholder="Secondary Number"
-                      className="rounded-l-none h-12"
-                      {...field}
-                    />
-                  </div>
-                </FormControl>
-              </FormItem>
-            )}
-          />
 
           {/* Navigation Buttons */}
           <div className="flex justify-between pt-6">

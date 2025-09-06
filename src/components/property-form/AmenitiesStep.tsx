@@ -19,7 +19,6 @@ const amenitiesSchema = z.object({
   security: z.string().optional(),
   wifi: z.string().optional(),
   currentPropertyCondition: z.string().optional(),
-  moreSimilarUnits: z.boolean().optional(),
   directionsTip: z.string().optional(),
 });
 
@@ -48,7 +47,6 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
       security: initialData.security || '',
       wifi: initialData.wifi || '',
       currentPropertyCondition: initialData.currentPropertyCondition || '',
-      moreSimilarUnits: initialData.moreSimilarUnits || false,
       directionsTip: initialData.directionsTip || '',
     },
   });

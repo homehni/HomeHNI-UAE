@@ -41,7 +41,6 @@ export const LandPlotAmenitiesStep: React.FC<LandPlotAmenitiesStepProps> = ({
       electricityConnection: 'available',
       sewageConnection: 'connected',
       roadWidth: undefined,
-      moreSimilarUnits: false,
       gatedSecurity: false,
       directionsToProperty: '',
     }

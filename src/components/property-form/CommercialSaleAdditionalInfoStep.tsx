@@ -2,7 +2,6 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Textarea } from '@/components/ui/textarea';
@@ -11,10 +10,8 @@ import { AdditionalInfo } from '@/types/property';
 const commercialSaleAdditionalInfoSchema = z.object({
   description: z.string().optional(),
   previousOccupancy: z.string().optional(),
-  whoWillShow: z.string().optional(),
   paintingRequired: z.string().optional(),
   cleaningRequired: z.string().optional(),
-  secondaryNumber: z.string().optional(),
 });
 
 type CommercialSaleAdditionalInfoForm = z.infer<typeof commercialSaleAdditionalInfoSchema>;
@@ -39,10 +36,8 @@ export const CommercialSaleAdditionalInfoStep = ({
     defaultValues: {
       description: initialData?.description || '',
       previousOccupancy: initialData?.previousOccupancy || '',
-      whoWillShow: initialData?.whoWillShow || '',
       paintingRequired: initialData?.paintingRequired || '',
       cleaningRequired: initialData?.cleaningRequired || '',
-      secondaryNumber: initialData?.secondaryNumber || '',
     },
   });
 
@@ -107,32 +102,6 @@ export const CommercialSaleAdditionalInfoStep = ({
 
             <FormField
               control={form.control}
-              name="whoWillShow"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Who will show the property?</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select who will show" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="owner">Owner</SelectItem>
-                      <SelectItem value="agent">Agent</SelectItem>
-                      <SelectItem value="tenant">Current Tenant</SelectItem>
-                      <SelectItem value="property-manager">Property Manager</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <FormField
-              control={form.control}
               name="paintingRequired"
               render={({ field }) => (
                 <FormItem>
@@ -179,23 +148,6 @@ export const CommercialSaleAdditionalInfoStep = ({
               )}
             />
           </div>
-
-          <FormField
-            control={form.control}
-            name="secondaryNumber"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Secondary Contact Number</FormLabel>
-                <FormControl>
-                  <Input 
-                    placeholder="e.g., +91 9876543210"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
 
           <div className="flex justify-between pt-6">
             <Button type="button" variant="outline" onClick={onBack}>

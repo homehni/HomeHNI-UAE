@@ -76,8 +76,6 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
     drinkingAllowed: false,
     gym: false,
     gatedSecurity: false,
-    whoWillShow: '',
-    secondaryNumber: '',
     waterSupply: '',
     directionsTip: '',
     selectedAmenities: []
@@ -91,10 +89,8 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
   const [additionalInfo, setAdditionalInfo] = useState<AdditionalInfo>({
     description: '',
     previousOccupancy: '',
-    whoWillShow: '',
     paintingRequired: '',
-    cleaningRequired: '',
-    secondaryNumber: ''
+    cleaningRequired: ''
   });
 
   const [scheduleInfo, setScheduleInfo] = useState<ScheduleInfo>({
@@ -223,9 +219,7 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
       gallery,
       additionalInfo: {
         ...additionalInfo,
-        description: rentalDetails.description,
-        whoWillShow: amenities.whoWillShow,
-        secondaryNumber: amenities.secondaryNumber
+        description: rentalDetails.description
       },
       scheduleInfo
     }
@@ -287,9 +281,6 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
             initialData={amenities}
             onNext={handleAmenitiesNext}
             onBack={prevStep}
-            currentStep={4}
-            totalSteps={6}
-            completedSteps={completedSteps}
           />
         )}
 
