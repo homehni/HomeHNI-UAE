@@ -239,33 +239,6 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
 
                   </div>
 
-                  {/* More Similar Units */}
-                  <FormField
-                    control={form.control}
-                    name="moreSimilarUnits"
-                    render={({ field }) => (
-                      <FormItem className="space-y-3">
-                        <FormLabel>Do you have more similar units/properties available?</FormLabel>
-                        <FormControl>
-                          <RadioGroup
-                            onValueChange={(value) => field.onChange(value === "true")}
-                            defaultValue={field.value ? "true" : "false"}
-                            className="flex flex-row space-x-6"
-                          >
-                            <div className="flex items-center space-x-2">
-                              <RadioGroupItem value="false" id="no" />
-                              <FormLabel htmlFor="no">No</FormLabel>
-                            </div>
-                            <div className="flex items-center space-x-2">
-                              <RadioGroupItem value="true" id="yes" />
-                              <FormLabel htmlFor="yes">Yes</FormLabel>
-                            </div>
-                          </RadioGroup>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
 
                   {/* Directions Tip */}
                   <FormField

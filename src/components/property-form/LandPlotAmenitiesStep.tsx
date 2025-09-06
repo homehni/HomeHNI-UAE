@@ -16,7 +16,7 @@ const amenitiesSchema = z.object({
   electricityConnection: z.enum(['available', 'nearby', 'none']).optional(),
   sewageConnection: z.enum(['connected', 'septic_tank', 'none']).optional(),
   roadWidth: z.number().optional().or(z.nan()).transform(val => isNaN(val) ? undefined : val),
-  moreSimilarUnits: z.boolean().optional(),
+  
   gatedSecurity: z.boolean().optional(),
   directionsToProperty: z.string().optional(),
 });
@@ -123,40 +123,6 @@ export const LandPlotAmenitiesStep: React.FC<LandPlotAmenitiesStepProps> = ({
             </div>
           </div>
 
-          {/* Similar Units Question */}
-          <div className="space-y-4">
-            <Label className="text-sm font-medium text-gray-700">
-              Do you have more similar units/properties available?
-            </Label>
-            <div className="flex space-x-4">
-              <div className="flex items-center space-x-2">
-                <input
-                  type="radio"
-                  id="moreSimilarUnits-no"
-                  name="moreSimilarUnits"
-                  value="false"
-                  onChange={() => setValue('moreSimilarUnits', false)}
-                  className="w-4 h-4 text-red-600"
-                />
-                <Label htmlFor="moreSimilarUnits-no" className="text-sm text-gray-700">
-                  No
-                </Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <input
-                  type="radio"
-                  id="moreSimilarUnits-yes"
-                  name="moreSimilarUnits"
-                  value="true"
-                  onChange={() => setValue('moreSimilarUnits', true)}
-                  className="w-4 h-4 text-red-600"
-                />
-                <Label htmlFor="moreSimilarUnits-yes" className="text-sm text-gray-700">
-                  Yes
-                </Label>
-              </div>
-            </div>
-          </div>
 
           {/* Gated Security */}
           <div className="space-y-4">

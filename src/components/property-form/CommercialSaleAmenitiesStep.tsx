@@ -18,7 +18,7 @@ const commercialSaleAmenitiesSchema = z.object({
   security: z.string().optional(),
   currentPropertyCondition: z.string().optional(),
   currentBusiness: z.string().optional(),
-  moreSimilarUnits: z.boolean().optional(),
+  
   directionsTip: z.string().optional(),
 });
 
@@ -50,7 +50,7 @@ export const CommercialSaleAmenitiesStep = ({
       security: String(initialData?.security || ''),
       currentPropertyCondition: initialData?.currentPropertyCondition || '',
       currentBusiness: initialData?.currentBusiness || '',
-      moreSimilarUnits: initialData?.moreSimilarUnits || false,
+      
       directionsTip: initialData?.directionsTip || '',
     },
   });
@@ -274,34 +274,6 @@ export const CommercialSaleAmenitiesStep = ({
             />
           </div>
 
-          <FormField
-            control={form.control}
-            name="moreSimilarUnits"
-            render={({ field }) => (
-              <FormItem className="space-y-4">
-                <FormLabel>Do you have more similar units/properties available?</FormLabel>
-                <div className="flex items-center space-x-4">
-                  <div className="flex items-center space-x-2">
-                    <Checkbox
-                      id="no"
-                      checked={!field.value}
-                      onCheckedChange={(checked) => field.onChange(!checked)}
-                    />
-                    <label htmlFor="no" className="text-sm font-medium">No</label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Checkbox
-                      id="yes"
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
-                    <label htmlFor="yes" className="text-sm font-medium">Yes</label>
-                  </div>
-                </div>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
 
           <FormField
             control={form.control}
