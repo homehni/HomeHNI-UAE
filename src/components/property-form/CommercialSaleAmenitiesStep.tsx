@@ -274,7 +274,7 @@ export const CommercialSaleAmenitiesStep = ({
             />
           </div>
 
-          <FormField
+          {/* <FormField
             control={form.control}
             name="moreSimilarUnits"
             render={({ field }) => (
@@ -301,7 +301,7 @@ export const CommercialSaleAmenitiesStep = ({
                 <FormMessage />
               </FormItem>
             )}
-          />
+          /> */}
 
           <FormField
             control={form.control}

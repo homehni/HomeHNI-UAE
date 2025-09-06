@@ -346,7 +346,7 @@ export const ResaleAmenitiesStep: React.FC<ResaleAmenitiesStepProps> = ({
 
             {/* Secondary Number */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <FormField
+              {/* <FormField
                 control={form.control}
                 name="secondaryNumber"
                 render={({ field }) => (
@@ -368,11 +368,11 @@ export const ResaleAmenitiesStep: React.FC<ResaleAmenitiesStepProps> = ({
                   </FormItem>
                 )}
               />
-            </div>
+            </div> */}
 
             {/* More Similar Units */}
             <div>
-              <FormField
+              {/* <FormField
                 control={form.control}
                 name="moreSimilarUnits"
                 render={({ field }) => (
@@ -399,7 +399,7 @@ export const ResaleAmenitiesStep: React.FC<ResaleAmenitiesStepProps> = ({
                     <FormMessage />
                   </FormItem>
                 )}
-              />
+              /> */}
             </div>
 
             {/* Directions */}
