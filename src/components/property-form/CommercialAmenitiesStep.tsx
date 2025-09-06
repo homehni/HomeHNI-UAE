@@ -268,7 +268,7 @@ export const CommercialAmenitiesStep: React.FC<CommercialAmenitiesStepProps> = (
               </div>
 
               <div className="space-y-4">
-                {/* <FormField
+                <FormField
                   control={form.control}
                   name="moreSimilarUnits"
                   render={({ field }) => (
@@ -301,7 +301,7 @@ export const CommercialAmenitiesStep: React.FC<CommercialAmenitiesStepProps> = (
                       <FormMessage />
                     </FormItem>
                   )}
-                /> */}
+                />
 
                 <FormField
                   control={form.control}
