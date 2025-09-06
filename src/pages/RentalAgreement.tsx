@@ -74,28 +74,41 @@ const RentalAgreement = () => {
       <Header />
       
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-blue-50 to-indigo-100 pt-24 pb-16 overflow-hidden">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-              Create Your Rental Agreement
-              <span className="block text-brand-red">Anywhere in India</span>
-            </h1>
-            <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
-              100% Legally Valid | Delivered at Your Doorstep | Stamp Paper Included
-            </p>
-            <Button 
-              onClick={scrollToForm}
-              size="lg" 
-              className="bg-brand-red hover:bg-brand-red-dark text-white px-8 py-3 text-lg"
-            >
-              Get Started Now
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
+      <section className="relative pt-32 md:pt-36 pb-24 md:pb-28 px-4 md:px-8 text-white overflow-hidden bg-cover bg-center bg-no-repeat" style={{
+        backgroundImage: "url('/lovable-uploads/fbb0d72f-782e-49f5-bbe1-8afc1314b5f7.png')"
+      }}>
+        <div className="absolute inset-0 bg-red-900/80 pointer-events-none" />
+
+        <div className="relative z-10 container mx-auto">
+          <div className="grid lg:grid-cols-2 gap-8 items-start">
+            {/* Left: Copy */}
+            <div className="max-w-2xl">
+              <h1 className="text-4xl md:text-5xl font-bold mb-4 leading-tight">
+                Create Your Rental
+                <br className="hidden md:block" />
+                <span className="block">Agreement</span>
+              </h1>
+              <p className="text-lg md:text-xl text-white/90 mb-6">
+                100% Legally Valid | Delivered at Your Doorstep | Stamp Paper Included
+                <br />
+                Available anywhere in India with complete legal compliance.
+              </p>
+              <Button 
+                onClick={scrollToForm}
+                size="lg" 
+                className="bg-white text-brand-red hover:bg-gray-100 px-8 py-3 text-lg"
+              >
+                Get Started Now
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Button>
+            </div>
+
+            {/* Right: Placeholder for form on desktop */}
+            <div className="hidden lg:block lg:justify-self-end">
+              <div className="w-full max-w-md h-64"></div>
+            </div>
           </div>
         </div>
-        <div className="absolute top-0 right-0 w-64 h-64 bg-blue-200 rounded-full opacity-20 -translate-y-32 translate-x-32"></div>
-        <div className="absolute bottom-0 left-0 w-48 h-48 bg-indigo-200 rounded-full opacity-20 translate-y-24 -translate-x-24"></div>
       </section>
 
       {/* How It Works */}
