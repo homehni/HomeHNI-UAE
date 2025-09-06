@@ -207,9 +207,7 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
               <div className="p-6 md:p-8">
                 <LocationDetailsStep
                   initialData={{
-                    ...locationDetails,
-                    city: ownerInfo.city || locationDetails.city,
-                    state: getStateFromCity(ownerInfo.city) || locationDetails.state
+                    ...locationDetails
                   }}
                   onNext={handleLocationDetailsNext}
                   onBack={prevStep}

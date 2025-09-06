@@ -173,11 +173,13 @@ export const CommercialMultiStepForm: React.FC<CommercialMultiStepFormProps> = (
         );
       case 7:
         return (
-          <CommercialAdditionalInfoStep
-            initialData={additionalInfo}
-            onNext={handleAdditionalInfoNext}
-            onBack={prevStep}
-          />
+              <CommercialAdditionalInfoStep
+                initialData={additionalInfo}
+                onNext={handleAdditionalInfoNext}
+                onBack={prevStep}
+                currentStep={currentStep}
+                totalSteps={7}
+              />
         );
       case 8:
         return (

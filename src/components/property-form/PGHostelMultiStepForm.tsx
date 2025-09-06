@@ -212,8 +212,7 @@ const [propertyInfo, setPropertyInfo] = useState({
       fullName: ownerInfo.fullName,
       phoneNumber: ownerInfo.phoneNumber,
       email: ownerInfo.email,
-      role: ownerInfo.role,
-      city: ownerInfo.city,
+      role: ownerInfo.role === 'Tenant' ? 'Owner' : ownerInfo.role,
       whatsappUpdates: ownerInfo.whatsappUpdates,
       propertyType: 'Residential',
       listingType: 'PG/Hostel'
@@ -231,7 +230,7 @@ const [propertyInfo, setPropertyInfo] = useState({
         floorNo: 1,
         furnishingStatus: 'Furnished',
         parkingType: amenities.parking !== 'none' ? 'Available' : 'Not Available',
-        superBuiltUpArea: roomDetails.roomCount || 1,
+        superBuiltUpArea: 1,
         onMainRoad: false,
         cornerProperty: false
       },
@@ -260,7 +259,6 @@ const [propertyInfo, setPropertyInfo] = useState({
         powerBackup: amenities.powerBackup ? 'Available' : 'Not Available',
         lift: amenities.lift ? 'Available' : 'Not Available',
         parking: amenities.parking !== 'none' ? 'Available' : 'Not Available',
-        washrooms: 'Available',
         waterStorageFacility: 'Available',
         security: 'Available',
         wifi: amenities.wifi ? 'Available' : 'Not Available',
@@ -268,19 +266,14 @@ const [propertyInfo, setPropertyInfo] = useState({
         laundry: amenities.laundry === 'yes' ? 'included' : 'not-available',
         commonArea: amenities.commonTv ? 'tv-room' : undefined,
         cleaning: amenities.roomCleaning === 'yes' ? 'daily' : 'self',
-        currentPropertyCondition: '',
-        currentBusiness: '',
-        moreSimilarUnits: false,
         directionsTip: amenities.directionsTip
       },
       gallery,
       additionalInfo: {
         description: '',
         previousOccupancy: '',
-        whoWillShow: '',
         paintingRequired: '',
         cleaningRequired: '',
-        secondaryNumber: ''
       },
       scheduleInfo
     }
