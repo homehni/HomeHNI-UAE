@@ -96,19 +96,22 @@ const HomeServices = () => {
     const scrollContainer = scrollContainerRef.current;
     if (!scrollContainer) return;
 
+    let scrollPosition = 0;
+    const scrollSpeed = 0.5; // Reduced speed for smoother scrolling
+    const singleServiceWidth = 256; // 240px card + 16px gap
+
     const autoScroll = () => {
       if (isHovered) return;
       
+      scrollPosition += scrollSpeed;
       const maxScroll = scrollContainer.scrollWidth - scrollContainer.clientWidth;
-      const currentScroll = scrollContainer.scrollLeft;
       
-      if (currentScroll >= maxScroll * 0.66) {
-        // Reset to beginning for infinite scroll
-        scrollContainer.scrollLeft = 0;
-      } else {
-        // Increased scroll speed to match RealEstateSlider
-        scrollContainer.scrollLeft += 1.5;
+      // Smooth infinite scroll - reset when we've scrolled through one set of services
+      if (scrollPosition >= singleServiceWidth * services.length) {
+        scrollPosition = 0;
       }
+      
+      scrollContainer.scrollLeft = scrollPosition;
     };
 
     // Use requestAnimationFrame for smoothest scrolling
@@ -152,8 +155,13 @@ const HomeServices = () => {
           ref={scrollContainerRef}
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
-          className="flex gap-6 overflow-x-auto scrollbar-hide scroll-smooth"
-          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+          className="flex gap-6 overflow-x-auto scrollbar-hide"
+          style={{ 
+            scrollbarWidth: 'none', 
+            msOverflowStyle: 'none',
+            scrollBehavior: 'auto',
+            willChange: 'scroll-position'
+          }}
         >
           {infiniteServices.map((service, index) => (
             <div
