@@ -173,7 +173,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                          <MapPin className="absolute left-3 top-3 text-brand-red" size={20} />
                          <Input 
                            ref={inputRef} 
-                           placeholder="Search 'Noida'" 
+                           placeholder="Search 'Anything'" 
                            value={searchQuery}
                            onChange={(e) => setSearchQuery(e.target.value)}
                            onKeyPress={handleKeyPress}
