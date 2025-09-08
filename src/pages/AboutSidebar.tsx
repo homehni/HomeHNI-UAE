@@ -176,7 +176,7 @@ const AboutSidebar = () => {
                     </p>
                     
                     <p className="text-sm">
-                      Our trusted network of real-estate and legal experts will personally assist you in completing a seamless, end-to-end transaction for a nominal service fee. This service is available for both buyers and sellers—simply drop us a note at <a href="mailto:contact@homehni.com" className="text-blue-600 hover:underline">contact@homehni.com</a> and we will take care of the rest.
+                      Our trusted network of real-estate and legal experts will personally assist you in completing a seamless, end-to-end transaction for a nominal service fee. This service is available for both buyers and sellers—simply drop us a note at <a href="mailto:homehni8@gmail.com" className="text-blue-600 hover:underline">homehni8@gmail.com</a> and we will take care of the rest.
                     </p>
                     
                     <p className="font-medium text-sm">We will handle the following on your behalf:</p>
@@ -250,7 +250,7 @@ const AboutSidebar = () => {
                     </p>
                     
                     <p className="text-sm pb-8">
-                      If you have a luxury property to list, click on the 'List Your Property' button in the top right corner of the page or email us at <a href="mailto:contact@homehni.com" className="text-blue-600 hover:underline">contact@homehni.com</a> and we'll handle the rest.
+                      If you have a luxury property to list, click on the 'List Your Property' button in the top right corner of the page or email us at <a href="mailto:homehni8@gmail.com" className="text-blue-600 hover:underline">homehni8@gmail.com</a> and we'll handle the rest.
                     </p>
                   </div>
                 </>
