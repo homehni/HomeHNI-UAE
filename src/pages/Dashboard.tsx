@@ -16,6 +16,10 @@ import { RequirementMatches } from '@/components/RequirementMatches';
 import { RequirementsChatLayout } from '@/components/requirements/RequirementsChatLayout';
 import Header from '@/components/Header';
 import Marquee from '@/components/Marquee';
+import { NotificationManager } from '@/components/notifications/NotificationManager';
+import { PropertyProgressCompact } from '@/components/notifications/PropertyProgressCompact';
+import { MissingImagesNotification } from '@/components/notifications/MissingImagesNotification';
+import { calculatePropertyCompletion, calculatePGPropertyCompletion } from '@/utils/propertyCompletion';
 
 interface Property {
   id: string;
@@ -38,6 +42,7 @@ interface Property {
   videos?: string[];
   status: string;
   created_at: string;
+  updated_at?: string;
   owner_name?: string;
   owner_email?: string;
   owner_phone?: string;
@@ -340,10 +345,7 @@ export const Dashboard: React.FC = () => {
   };
 
   const handleEditProperty = (property: Property) => {
-    setEditPropertyModal({
-      isOpen: true,
-      property
-    });
+    navigate(`/edit-property/${property.id}`);
   };
 
   const closeEditModal = () => {
@@ -374,6 +376,7 @@ export const Dashboard: React.FC = () => {
             <p className="text-gray-600">Welcome back, {user.user_metadata?.full_name || user.email}</p>
           </div>
         </div>
+
 
         {/* Employee Panel Access */}
         <div className="mb-6">
@@ -504,15 +507,56 @@ export const Dashboard: React.FC = () => {
                                 )}
                               </div>
                             )}
-                           <div className="mt-2">
+                           <div className="mt-2 flex items-center gap-2">
                              <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
-                               property.status === 'active' 
+                               property.status === 'approved' 
                                  ? 'bg-green-100 text-green-800'
+                                 : property.status === 'pending'
+                                 ? 'bg-yellow-100 text-yellow-800'
                                  : 'bg-gray-100 text-gray-800'
                              }`}>
                                {property.status}
                              </span>
+                             
+                             {/* Property edited recently flag */}
+                             {property.status === 'pending' && property.updated_at && property.created_at && 
+                              new Date(property.updated_at) > new Date(property.created_at) && (
+                               <span className="inline-flex px-2 py-1 text-xs font-medium rounded-full bg-orange-100 text-orange-800" title={`Last edited: ${new Date(property.updated_at).toLocaleString()}`}>
+                                 ✏️ Property edited recently
+                               </span>
+                             )}
                            </div>
+                           
+                           {/* Property Notifications */}
+                           {property.status === 'approved' && (
+                             <>
+                               {/* Missing Images Notification - Priority */}
+                               {(!property.images || property.images.length === 0) && (
+                                 <MissingImagesNotification
+                                   propertyId={property.id}
+                                   propertyTitle={property.title}
+                                 />
+                               )}
+                               
+                               {/* Progress Notification - Only if has images but other fields missing */}
+                               {property.images && property.images.length > 0 && (
+                                 <PropertyProgressCompact
+                                   propertyId={property.id}
+                                   completionPercentage={
+                                     property.property_type === 'pg_hostel' 
+                                       ? calculatePGPropertyCompletion(property as any).percentage
+                                       : calculatePropertyCompletion(property).percentage
+                                   }
+                                   missingFields={
+                                     property.property_type === 'pg_hostel' 
+                                       ? calculatePGPropertyCompletion(property as any).missingFields
+                                       : calculatePropertyCompletion(property).missingFields
+                                   }
+                                   propertyType={property.property_type}
+                                 />
+                               )}
+                             </>
+                           )}
                          </div>
                         <div className="flex space-x-2">
                           <Button 

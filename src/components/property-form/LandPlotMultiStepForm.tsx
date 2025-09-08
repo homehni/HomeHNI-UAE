@@ -17,12 +17,14 @@ interface LandPlotMultiStepFormProps {
   onSubmit: (data: LandPlotFormData) => void;
   isSubmitting?: boolean;
   initialOwnerInfo?: Partial<OwnerInfo>;
+  targetStep?: number | null;
 }
 
 export const LandPlotMultiStepForm: React.FC<LandPlotMultiStepFormProps> = ({
   onSubmit,
   isSubmitting = false,
-  initialOwnerInfo = {}
+  initialOwnerInfo = {},
+  targetStep = null
 }) => {
   const {
     currentStep,
@@ -55,6 +57,14 @@ export const LandPlotMultiStepForm: React.FC<LandPlotMultiStepFormProps> = ({
       updateOwnerInfo(initialOwnerInfo);
     }
   }, [initialOwnerInfo, updateOwnerInfo]);
+
+  // Navigate to target step if provided
+  React.useEffect(() => {
+    if (targetStep && targetStep > 0 && targetStep <= 8) {
+      console.log('Navigating to target step:', targetStep);
+      goToStep(targetStep);
+    }
+  }, [targetStep, goToStep]);
 
   const completedSteps = React.useMemo(() => {
     const completed: number[] = [];
@@ -119,11 +129,6 @@ export const LandPlotMultiStepForm: React.FC<LandPlotMultiStepFormProps> = ({
     <div className="max-w-7xl mx-auto px-4 py-8">
       {/* Page Header */}
       <div className="text-center mb-8 animate-fade-in">
-        <div className="flex justify-center mb-4">
-          <Badge variant="secondary" className="bg-green-100 text-green-700 px-4 py-2 text-sm font-medium">
-            🏞️ LAND/PLOT SALE FORM
-          </Badge>
-        </div>
         <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
           List Your Land/Plot for Sale
         </h1>

@@ -1,232 +1,237 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Button } from '@/components/ui/button';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { LandPlotLocationDetails } from '@/types/landPlotProperty';
+import { LocationDetails } from '@/types/property';
+import { ArrowLeft, ArrowRight, MapPin } from 'lucide-react';
 
-const locationDetailsSchema = z.object({
-  state: z.string().optional(),
-  city: z.string().optional(),
+const landPlotLocationSchema = z.object({
   locality: z.string().optional(),
-  societyName: z.string().optional(),
+  landmark: z.string().optional(),
 });
 
-type LocationDetailsForm = z.infer<typeof locationDetailsSchema>;
+type LandPlotLocationData = z.infer<typeof landPlotLocationSchema>;
 
 interface LandPlotLocationDetailsStepProps {
-  initialData: Partial<LandPlotLocationDetails>;
-  onNext: (data: LocationDetailsForm) => void;
+  initialData?: Partial<LocationDetails>;
+  onNext: (data: LocationDetails) => void;
   onBack: () => void;
+  currentStep: number;
+  totalSteps: number;
 }
 
 export const LandPlotLocationDetailsStep: React.FC<LandPlotLocationDetailsStepProps> = ({
-  initialData,
+  initialData = {},
   onNext,
   onBack,
+  currentStep,
+  totalSteps
 }) => {
-  const [statesData, setStatesData] = useState<any>({});
-  const [cities, setCities] = useState<string[]>([]);
+  const localityInputRef = useRef<HTMLInputElement | null>(null);
+  const mapContainerRef = useRef<HTMLDivElement | null>(null);
+  const mapRef = useRef<any>(null);
+  const markerRef = useRef<any>(null);
+  const [showMap, setShowMap] = useState(false);
 
-  const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm<LocationDetailsForm>({
-    resolver: zodResolver(locationDetailsSchema),
-    defaultValues: initialData,
+  const form = useForm<LandPlotLocationData>({
+    resolver: zodResolver(landPlotLocationSchema),
+    defaultValues: {
+      locality: initialData.locality || '',
+      landmark: initialData.landmark || '',
+    },
   });
 
-  const selectedState = watch('state');
-
-  // Load states and cities data
+  // Update form values when initialData changes
   useEffect(() => {
-    const loadStatesData = async () => {
-      try {
-        const response = await fetch('/data/india_states_cities.json');
-        const data = await response.json();
-        setStatesData(data);
-      } catch (error) {
-        console.error('Error loading states data:', error);
-      }
-    };
-    loadStatesData();
-  }, []);
-
-  // Update cities when state changes
-  useEffect(() => {
-    if (selectedState && statesData[selectedState]) {
-      setCities(statesData[selectedState]);
-      // Clear city selection when state changes
-      setValue('city', '');
+    if (initialData.locality) {
+      form.setValue('locality', initialData.locality);
     }
-  }, [selectedState, statesData, setValue]);
+    if (initialData.landmark) {
+      form.setValue('landmark', initialData.landmark);
+    }
+  }, [initialData, form]);
+
+  // Google Maps Places Autocomplete and Map preview
+  useEffect(() => {
+    const apiKey = 'AIzaSyD2rlXeHN4cm0CQD-y4YGTsob9a_27YcwY';
+
+    const loadGoogleMaps = () => new Promise<void>((resolve, reject) => {
+      if ((window as any).google?.maps?.places) {
+        resolve();
+        return;
+      }
+      const existing = document.querySelector('script[data-gmaps]') as HTMLScriptElement | null;
+      if (existing) {
+        existing.addEventListener('load', () => resolve());
+        return;
+      }
+      const script = document.createElement('script');
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&region=IN&language=en-IN`;
+      script.async = true;
+      script.defer = true;
+      script.setAttribute('data-gmaps', 'true');
+      script.onload = () => resolve();
+      script.onerror = () => reject(new Error('Google Maps failed to load'));
+      document.head.appendChild(script);
+    });
+
+    const getComponent = (components: any[], type: string) =>
+      components.find((c) => c.types?.includes(type))?.long_name as string | undefined;
+
+    const setMapTo = (lat: number, lng: number, title?: string) => {
+      const google = (window as any).google;
+      if (!google || !mapContainerRef.current) return;
+      if (!mapRef.current) {
+        mapRef.current = new google.maps.Map(mapContainerRef.current, {
+          center: { lat, lng },
+          zoom: 15,
+          mapTypeControl: false,
+          streetViewControl: false,
+          fullscreenControl: false,
+        });
+        markerRef.current = new google.maps.Marker({
+          position: { lat, lng },
+          map: mapRef.current,
+          title: title || 'Selected location',
+        });
+      } else {
+        mapRef.current.setCenter({ lat, lng });
+        if (markerRef.current) {
+          markerRef.current.setPosition({ lat, lng });
+          if (title) markerRef.current.setTitle(title);
+        } else {
+          markerRef.current = new google.maps.Marker({ position: { lat, lng }, map: mapRef.current, title });
+        }
+      }
+      setShowMap(true);
+    };
+
+    const initAutocomplete = () => {
+      const google = (window as any).google;
+      if (!google?.maps?.places) return;
+      const options = {
+        fields: ['formatted_address', 'geometry', 'name', 'address_components'],
+        types: ['geocode'],
+        componentRestrictions: { country: 'in' as const },
+      };
+
+      const attach = (el: HTMLInputElement | null, onPlace: (place: any, el: HTMLInputElement) => void) => {
+        if (!el) return;
+        const ac = new google.maps.places.Autocomplete(el, options);
+        ac.addListener('place_changed', () => {
+          const place = ac.getPlace();
+          onPlace(place, el);
+        });
+      };
+
+      attach(localityInputRef.current, (place, el) => {
+        const value = place?.formatted_address || place?.name || '';
+        if (value) {
+          el.value = value;
+          form.setValue('locality', value, { shouldValidate: true });
+        }
+        const loc = place?.geometry?.location;
+        if (loc) setMapTo(loc.lat(), loc.lng(), place?.name || 'Selected location');
+      });
+
+    };
+
+    loadGoogleMaps().then(initAutocomplete).catch(console.error);
+  }, [form]);
+
+  const onSubmit = (data: LandPlotLocationData) => {
+    // Convert to LocationDetails format and add missing fields as empty/default values
+    const locationData: LocationDetails = {
+      state: '', // No longer used
+      city: '', // No longer used
+      locality: data.locality || '',
+      landmark: data.landmark || '',
+      pincode: initialData.pincode || '',
+      societyName: initialData.societyName || ''
+    };
+    onNext(locationData);
+  };
 
   return (
-    <Card className="w-full max-w-4xl mx-auto">
-      <CardHeader>
-        <CardTitle className="text-2xl font-bold text-gray-900">
-          Location Details
-        </CardTitle>
-        <p className="text-gray-600">
-          Provide the complete location information for your land/plot
-        </p>
-      </CardHeader>
-      <CardContent>
-        <form onSubmit={handleSubmit(onNext)} className="space-y-6">
-          {/* State and City */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="state" className="text-sm font-medium text-gray-700">
-                State
-              </Label>
-              <Select onValueChange={(value) => setValue('state', value)}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select state" />
-                </SelectTrigger>
-                <SelectContent>
-                  {Object.keys(statesData).map((state) => (
-                    <SelectItem key={state} value={state}>
-                      {state}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              {errors.state && (
-                <p className="text-red-500 text-sm">{errors.state.message}</p>
+    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
+      <h1 className="text-2xl font-semibold text-primary mb-6">Location Details</h1>
+
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          {/* Locality/Area and Landmark */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <FormField
+              control={form.control}
+              name="locality"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-sm font-medium flex items-center gap-2">
+                    <MapPin className="h-4 w-4 text-primary" />
+                    Locality/Area *
+                  </FormLabel>
+                  <FormControl>
+                    <div className="relative">
+                      <Input
+                        placeholder="Search 'Sector 18, Gurgaon'..."
+                        className="h-12 pl-10"
+                        {...field}
+                        ref={(el) => {
+                          field.ref(el)
+                          localityInputRef.current = el
+                        }}
+                      />
+                      <MapPin className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                    </div>
+                  </FormControl>
+                  <p className="text-xs text-red-500 animate-pulse font-bold">
+                    Type the name of the apartment/ the area of property/anything that could help us 😊
+                  </p>
+                  <FormMessage />
+                </FormItem>
               )}
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="city" className="text-sm font-medium text-gray-700">
-                City
-              </Label>
-              <Select onValueChange={(value) => setValue('city', value)} disabled={!selectedState}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select city" />
-                </SelectTrigger>
-                <SelectContent>
-                  {cities.map((city) => (
-                    <SelectItem key={city} value={city}>
-                      {city}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              {errors.city && (
-                <p className="text-red-500 text-sm">{errors.city.message}</p>
+            />
+
+            <FormField
+              control={form.control}
+              name="landmark"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-sm font-medium">Landmark (Optional)</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="e.g., Near Highway"
+                      className="h-12"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
               )}
-            </div>
+            />
           </div>
 
-          {/* Locality and Society */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="locality" className="text-sm font-medium text-gray-700">
-                Locality/Area
-              </Label>
-              <Input
-                id="locality"
-                {...register('locality')}
-                placeholder="e.g., Sector 18, JP Nagar"
-                className="w-full"
-              />
-              {errors.locality && (
-                <p className="text-red-500 text-sm">{errors.locality.message}</p>
-              )}
+          {showMap && (
+            <div className="w-full h-64 md:h-80 rounded-lg border overflow-hidden">
+              <div ref={mapContainerRef} className="w-full h-full" />
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="societyName" className="text-sm font-medium text-gray-700">
-                Society/Project Name
-              </Label>
-              <Input
-                id="societyName"
-                {...register('societyName')}
-                placeholder="e.g., Green Valley Plots"
-                className="w-full"
-              />
-            </div>
-          </div>
-
-          {/* Pincode and Landmark */}
-          {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="pincode" className="text-sm font-medium text-gray-700">
-                Pincode *
-              </Label>
-              <Input
-                id="pincode"
-                {...register('pincode')}
-                placeholder="e.g., 560078"
-                maxLength={6}
-                className="w-full"
-              />
-              {errors.pincode && (
-                <p className="text-red-500 text-sm">{errors.pincode.message}</p>
-              )}
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="landmark" className="text-sm font-medium text-gray-700">
-                Landmark
-              </Label>
-              <Input
-                id="landmark"
-                {...register('landmark')}
-                placeholder="e.g., Near Metro Station"
-                className="w-full"
-              />
-            </div>
-          </div> */}
-
-          {/* Full Address */}
-          {/* <div className="space-y-2">
-            <Label htmlFor="address" className="text-sm font-medium text-gray-700">
-              Complete Address *
-            </Label>
-            <Textarea
-              id="address"
-              {...register('address')}
-              placeholder="Enter the complete address of the plot"
-              rows={3}
-              className="w-full"
-            />
-            {errors.address && (
-              <p className="text-red-500 text-sm">{errors.address.message}</p>
-            )}
-          </div> */}
-
-          {/* Nearby Places */}
-          {/* <div className="space-y-2">
-            <Label htmlFor="nearbyPlaces" className="text-sm font-medium text-gray-700">
-              Nearby Places (Optional)
-            </Label>
-            <Textarea
-              id="nearbyPlaces"
-              {...register('nearbyPlaces')}
-              placeholder="e.g., 2 km from main market, 500m from school, adjacent to park"
-              rows={2}
-              className="w-full"
-            />
-            <p className="text-gray-500 text-xs">
-              Mention important places like schools, hospitals, markets, transportation hubs nearby
-            </p>
-          </div> */}
+          )}
 
           {/* Navigation Buttons */}
           <div className="flex justify-between pt-6">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={onBack}
-            >
+            <Button type="button" variant="outline" onClick={onBack} className="h-12 px-8">
+              <ArrowLeft className="h-4 w-4 mr-2" />
               Back
             </Button>
-            <Button type="submit" className="bg-red-600 hover:bg-red-700 text-white">
-              Next: Sale Details
+            <Button type="submit" className="h-12 px-8">
+              Save & Continue
+              <ArrowRight className="h-4 w-4 ml-2" />
             </Button>
           </div>
         </form>
-      </CardContent>
-    </Card>
+      </Form>
+    </div>
   );
 };

@@ -28,19 +28,160 @@ export const PostProperty: React.FC = () => {
   const [currentStep, setCurrentStep] = useState<FormStep>('owner-info');
   const [ownerInfo, setOwnerInfo] = useState<OwnerInfo | null>(null);
   const [initialOwnerData, setInitialOwnerData] = useState<Partial<OwnerInfo>>({});
+  const [targetStep, setTargetStep] = useState<number | null>(null);
   const { user } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const { toast } = useToast();
 
-  // Extract role from URL parameters
+  // Extract role, edit mode, and step from URL parameters
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
     const role = searchParams.get('role');
+    const editPropertyId = searchParams.get('edit');
+    const step = searchParams.get('step');
+    
     if (role && ['Owner', 'Agent', 'Builder'].includes(role)) {
       setInitialOwnerData({ role: role as 'Owner' | 'Agent' | 'Builder' });
     }
+    
+    // Handle edit mode from sessionStorage
+    const editData = sessionStorage.getItem('editPropertyData');
+    if (editData) {
+      try {
+        const { propertyId, formType, propertyData, initialFormData } = JSON.parse(editData);
+        console.log('Edit mode from sessionStorage:', { propertyId, formType, propertyData });
+        
+        // Set initial owner data from property
+        setInitialOwnerData({
+          fullName: propertyData.owner_name || '',
+          email: propertyData.owner_email || '',
+          phoneNumber: propertyData.owner_phone || '',
+          role: propertyData.owner_role || 'Owner'
+        });
+        
+        // Determine the form step based on form type
+        switch (formType) {
+          case 'rental':
+            setCurrentStep('rental-form');
+            break;
+          case 'resale':
+            setCurrentStep('resale-form');
+            break;
+          case 'pg-hostel':
+            setCurrentStep('pg-hostel-form');
+            break;
+          case 'flatmates':
+            setCurrentStep('flatmates-form');
+            break;
+          case 'commercial-rental':
+            setCurrentStep('commercial-rental-form');
+            break;
+          case 'commercial-sale':
+            setCurrentStep('commercial-sale-form');
+            break;
+          case 'land-plot':
+            setCurrentStep('land-plot-form');
+            break;
+          default:
+            setCurrentStep('rental-form');
+        }
+        
+        // Clear the sessionStorage data
+        sessionStorage.removeItem('editPropertyData');
+        return;
+      } catch (error) {
+        console.error('Error parsing edit data from sessionStorage:', error);
+        sessionStorage.removeItem('editPropertyData');
+      }
+    }
+    
+    // Handle edit mode from URL parameters
+    if (editPropertyId) {
+      console.log('Edit mode for property:', editPropertyId);
+      loadPropertyForEdit(editPropertyId);
+    }
+    
+    // Handle step navigation
+    if (step) {
+      console.log('Navigate to step:', step);
+      // Map step names to step numbers
+      const stepMap: { [key: string]: number } = {
+        'gallery': 5, // Gallery step is step 5 in most forms
+        'images': 5,
+        'upload': 5
+      };
+      const stepNumber = stepMap[step.toLowerCase()] || parseInt(step);
+      if (stepNumber && stepNumber > 0) {
+        setTargetStep(stepNumber);
+      }
+    }
   }, [location.search]);
+
+  // Function to load property data for editing
+  const loadPropertyForEdit = async (propertyId: string) => {
+    try {
+      console.log('Loading property data for editing:', propertyId);
+      
+      // Fetch property data from database
+      const { data: propertyData, error } = await supabase
+        .from('properties')
+        .select('*')
+        .eq('id', propertyId)
+        .eq('user_id', user?.id) // Ensure user can only edit their own properties
+        .single();
+
+      if (error) {
+        console.error('Error loading property for edit:', error);
+        toast({
+          title: "Error",
+          description: "Failed to load property data for editing.",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      if (propertyData) {
+        console.log('Property data loaded:', propertyData);
+        
+        // Set the owner info from the property data
+        const ownerInfoData = {
+          fullName: propertyData.owner_name || '',
+          email: propertyData.owner_email || '',
+          phoneNumber: propertyData.owner_phone || '',
+          role: (propertyData.owner_role as 'Owner' | 'Agent' | 'Builder') || 'Owner',
+          whatsappUpdates: false,
+          propertyType: (propertyData.property_type === 'commercial' ? 'Commercial' : 
+                       propertyData.property_type === 'plot' ? 'Land/Plot' : 'Residential') as 'Residential' | 'Commercial' | 'Land/Plot',
+          listingType: (propertyData.listing_type === 'sale' ? 'Sale' : 
+                      propertyData.listing_type === 'rent' ? 'Rent' : 
+                      propertyData.listing_type === 'apartment' ? 'Flatmates' : 'Rent') as 'Sale' | 'Rent' | 'Flatmates'
+        };
+        
+        setOwnerInfo(ownerInfoData);
+
+        // Store property data globally for child forms to access
+        (window as any).editingPropertyData = propertyData;
+        
+        // Auto-proceed to the correct form step
+        setTimeout(() => {
+          handleOwnerInfoNext(ownerInfoData);
+        }, 100);
+        
+        toast({
+          title: "Edit Mode",
+          description: `Loaded property "${propertyData.title}" for editing.`,
+        });
+      }
+    } catch (error) {
+      console.error('Error in loadPropertyForEdit:', error);
+      toast({
+        title: "Error",
+        description: "Failed to load property for editing.",
+        variant: "destructive",
+      });
+    }
+  };
 
   const handleOwnerInfoNext = (data: OwnerInfo) => {
     setOwnerInfo(data);
@@ -85,6 +226,10 @@ export const PostProperty: React.FC = () => {
     }
 
     setIsSubmitting(true);
+
+    // Check if we're in edit mode
+    const isEditMode = !!(window as any).editingPropertyData;
+    const editingPropertyId = isEditMode ? (window as any).editingPropertyData.id : null;
 
     try {
       console.log('Starting property submission with data:', data);
@@ -305,25 +450,79 @@ export const PostProperty: React.FC = () => {
         description: "Almost done! Saving your property listing.",
       });
 
-      // Insert property into database without returning the row (avoids SELECT RLS issues for non-admins)
-      const { error } = await supabase
-        .from('property_submissions')
-        .insert({
-          user_id: user.id,
-          title: propertyData.title || 'New Property Submission',
-          city: propertyData.city || 'Unknown',
-          state: propertyData.state || 'Unknown', 
-          status: 'new',
-          payload: {
-            ...propertyData,
+      // Insert or update property in database
+      let error;
+      if (isEditMode && editingPropertyId) {
+        // Update existing property
+        const { error: updateError } = await supabase
+          .from('properties')
+          .update({
+            title: propertyData.title || 'Updated Property',
+            property_type: propertyData.property_type,
+            listing_type: propertyData.listing_type,
+            bhk_type: propertyData.bhk_type,
+            expected_price: propertyData.expected_price,
+            super_area: propertyData.super_area,
+            carpet_area: propertyData.carpet_area,
+            bathrooms: propertyData.bathrooms,
+            balconies: propertyData.balconies,
+            city: propertyData.city || 'Unknown',
+            locality: propertyData.locality || 'Unknown',
+            state: propertyData.state || 'Unknown',
+            pincode: propertyData.pincode || '',
+            description: propertyData.description || '',
             images: imageUrls.map(img => img.url),
             videos: videoUrls,
-            originalFormData: {
-              ownerInfo: JSON.parse(JSON.stringify(data.ownerInfo)),
-              propertyInfo: JSON.parse(JSON.stringify(data.propertyInfo))
+            owner_name: data.ownerInfo.fullName || 'Anonymous',
+            owner_email: data.ownerInfo.email || '',
+            owner_phone: data.ownerInfo.phoneNumber || '',
+            owner_role: data.ownerInfo.role || 'Owner',
+            status: 'pending', // Reset to pending for review
+            updated_at: new Date().toISOString(),
+            // Additional fields - access from the original property data
+            furnishing_status: (window as any).editingPropertyData?.furnishing_status,
+            building_type: (window as any).editingPropertyData?.building_type,
+            property_age: (window as any).editingPropertyData?.property_age,
+            floor_type: (window as any).editingPropertyData?.floor_type,
+            total_floors: (window as any).editingPropertyData?.total_floors,
+            floor_no: (window as any).editingPropertyData?.floor_no,
+            parking_type: (window as any).editingPropertyData?.parking_type,
+            on_main_road: (window as any).editingPropertyData?.on_main_road,
+            corner_property: (window as any).editingPropertyData?.corner_property,
+            amenities: (window as any).editingPropertyData?.amenities,
+            commercial_type: (window as any).editingPropertyData?.commercial_type,
+            land_type: (window as any).editingPropertyData?.land_type,
+            pg_type: (window as any).editingPropertyData?.pg_type,
+            room_type: (window as any).editingPropertyData?.room_type,
+            flatmates_type: (window as any).editingPropertyData?.flatmates_type
+          })
+          .eq('id', editingPropertyId)
+          .eq('user_id', user.id);
+        
+        error = updateError;
+      } else {
+        // Insert new property submission
+        const { error: insertError } = await supabase
+          .from('property_submissions')
+          .insert({
+            user_id: user.id,
+            title: propertyData.title || 'New Property Submission',
+            city: propertyData.city || 'Unknown',
+            state: propertyData.state || 'Unknown', 
+            status: 'new',
+            payload: {
+              ...propertyData,
+              images: imageUrls.map(img => img.url),
+              videos: videoUrls,
+              originalFormData: {
+                ownerInfo: JSON.parse(JSON.stringify(data.ownerInfo)),
+                propertyInfo: JSON.parse(JSON.stringify(data.propertyInfo))
+              }
             }
-          }
-        });
+          });
+        
+        error = insertError;
+      }
 
       if (error) {
         console.error('Database insertion error - Full details:', {
@@ -419,9 +618,16 @@ export const PostProperty: React.FC = () => {
       }
 
       toast({
-        title: "Success!",
-        description: "Your property has been submitted successfully.",
+        title: isEditMode ? "Property Updated!" : "Success!",
+        description: isEditMode 
+          ? "Your property has been updated successfully and is pending review."
+          : "Your property has been submitted successfully.",
       });
+
+      // Navigate to dashboard after successful submission/update
+      setTimeout(() => {
+        navigate('/dashboard?tab=properties');
+      }, 2000);
 
     } catch (error: any) {
       console.error('Error submitting property:', error);
@@ -449,6 +655,7 @@ export const PostProperty: React.FC = () => {
             onSubmit={handleSubmit as (data: { ownerInfo: OwnerInfo; propertyInfo: PropertyInfo }) => void}
             isSubmitting={isSubmitting}
             initialOwnerInfo={ownerInfo || {}}
+            targetStep={targetStep}
           />
         );
       case 'resale-form':
@@ -457,6 +664,7 @@ export const PostProperty: React.FC = () => {
             onSubmit={handleSubmit as (data: SalePropertyFormData) => void}
             isSubmitting={isSubmitting}
             initialOwnerInfo={ownerInfo || {}}
+            targetStep={targetStep}
           />
         );
       case 'pg-hostel-form':
@@ -465,6 +673,7 @@ export const PostProperty: React.FC = () => {
             onSubmit={handleSubmit as (data: PGHostelFormData) => void}
             isSubmitting={isSubmitting}
             initialOwnerInfo={ownerInfo || {}}
+            targetStep={targetStep}
           />
         );
       case 'flatmates-form':
@@ -473,6 +682,7 @@ export const PostProperty: React.FC = () => {
             onSubmit={handleSubmit as (data: FlattmatesFormData) => void}
             isSubmitting={isSubmitting}
             initialOwnerInfo={ownerInfo || {}}
+            targetStep={targetStep}
           />
         );
       case 'commercial-rental-form':
@@ -481,6 +691,7 @@ export const PostProperty: React.FC = () => {
             onSubmit={handleSubmit as (data: CommercialFormData) => void}
             isSubmitting={isSubmitting}
             initialOwnerInfo={ownerInfo || {}}
+            targetStep={targetStep}
           />
         );
       case 'commercial-sale-form':
@@ -489,6 +700,7 @@ export const PostProperty: React.FC = () => {
             onSubmit={handleSubmit as (data: CommercialSaleFormData) => void}
             isSubmitting={isSubmitting}
             initialOwnerInfo={ownerInfo || {}}
+            targetStep={targetStep}
           />
         );
       case 'land-plot-form':
@@ -497,6 +709,7 @@ export const PostProperty: React.FC = () => {
             onSubmit={handleSubmit as (data: LandPlotFormData) => void}
             isSubmitting={isSubmitting}
             initialOwnerInfo={ownerInfo || {}}
+            targetStep={targetStep}
           />
         );
       default:

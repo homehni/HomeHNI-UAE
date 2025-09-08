@@ -42,7 +42,7 @@ export const mapPropertyType = (propertyType: string): string => {
     'Farmhouse': 'farm_house', // Map Farmhouse to farm_house
     'Studio': 'studio',
     'PG/Hostel': 'pg_hostel', // Map form value to DB value
-    'Flatmates': 'flatmates', // Map form value to DB value
+    'Flatmates': 'apartment', // Map form value to DB value - Flatmates are apartments
     'Commercial': 'commercial',
     'Office': 'office',
     'Office Space': 'office', // Map "Office Space" to 'office'
@@ -65,7 +65,29 @@ export const mapListingType = (listingType: string): string => {
     'Resale': 'sale', // Map "Resale" to 'sale'
     'Rent': 'rent',
     'PG/Hostel': 'rent', // Treat PG/Hostel flows as rentals
-    'Flatmates': 'rent' // Treat Flatmates flows as rentals
+    // Property types should map to themselves
+    'Apartment': 'apartment',
+    'Apartment/Flat': 'apartment',
+    'Villa': 'villa',
+    'House': 'independent_house',
+    'Independent House': 'independent_house',
+    'Builder Floor': 'builder_floor',
+    'Studio Apartment': 'studio_apartment',
+    'Penthouse': 'penthouse',
+    'Duplex': 'duplex',
+    'Plot': 'plot',
+    'Plot/Land': 'plot',
+    'Land/Plot': 'plot',
+    'Commercial': 'commercial',
+    'Office': 'office',
+    'Office Space': 'office',
+    'Retail/Shop': 'shop',
+    'Shop': 'shop',
+    'Warehouse': 'warehouse',
+    'Industrial/Warehouse': 'warehouse',
+    'Showroom': 'showroom',
+    'Co-working': 'coworking',
+    'Hospitality/Hotel': 'hotel'
   };
   
   if (!listingType) return 'sale';

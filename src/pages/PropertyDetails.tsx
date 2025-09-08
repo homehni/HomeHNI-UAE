@@ -48,7 +48,8 @@ const PropertyDetails: React.FC = () => {
   } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
-  const property = location.state as Property | undefined || null;
+  const propertyFromState = location.state as Property | undefined || null;
+  const [property, setProperty] = React.useState<Property | null>(propertyFromState);
   const [showContactModal, setShowContactModal] = React.useState(false);
   const [showScheduleVisitModal, setShowScheduleVisitModal] = React.useState(false);
   const [showEMICalculatorModal, setShowEMICalculatorModal] = React.useState(false);
@@ -56,10 +57,131 @@ const PropertyDetails: React.FC = () => {
   const [dbAmenities, setDbAmenities] = React.useState<any | null>(null);
   const [dbAdditionalDocs, setDbAdditionalDocs] = React.useState<Record<string, boolean> | null>(null);
   const [pgHostelData, setPgHostelData] = React.useState<any | null>(null);
+  const [loading, setLoading] = React.useState(false);
   
   React.useEffect(() => {
     document.title = property ? `${property.title} | Property Details` : 'Property Details';
   }, [property]);
+  
+  // Function to fetch latest property data from database
+  const fetchLatestPropertyData = async () => {
+    if (!id) return;
+    
+    setLoading(true);
+    try {
+      // First try to fetch from properties table (approved properties)
+      const { data: propertyData, error: propertyError } = await supabase
+        .from('properties')
+        .select('*')
+        .eq('id', id)
+        .single();
+
+      if (propertyData && !propertyError) {
+        console.log('Latest property data fetched from properties table:', propertyData);
+        console.log('Images array from properties table:', propertyData.images);
+        console.log('Images array length:', propertyData.images?.length);
+        setProperty(propertyData as Property);
+        return;
+      }
+
+      // If not found in properties table, try property_submissions table
+      console.log('Property not found in properties table, checking property_submissions...');
+      const { data: submissionData, error: submissionError } = await supabase
+        .from('property_submissions')
+        .select('*')
+        .eq('id', id)
+        .single();
+
+      if (submissionData && !submissionError) {
+        console.log('Property data found in submissions table:', submissionData);
+        
+        // Extract property data from the payload
+        const payload = submissionData.payload;
+        if (payload && payload.images) {
+          const propertyFromSubmission = {
+            id: submissionData.id,
+            title: submissionData.title || payload.title || 'Untitled Property',
+            property_type: payload.property_type || 'apartment',
+            listing_type: payload.listing_type || 'rent',
+            bhk_type: payload.bhk_type,
+            expected_price: payload.expected_price || 0,
+            super_area: payload.super_area,
+            carpet_area: payload.carpet_area,
+            bathrooms: payload.bathrooms,
+            balconies: payload.balconies,
+            city: submissionData.city || payload.city || 'Unknown',
+            locality: payload.locality || 'Unknown',
+            state: submissionData.state || payload.state || 'Unknown',
+            pincode: payload.pincode || '000000',
+            description: payload.description,
+            images: payload.images || [], // This should contain the uploaded image URLs
+            videos: payload.videos || [],
+            status: submissionData.status || 'pending',
+            created_at: submissionData.created_at
+          };
+          
+          console.log('Converted submission to property format:', propertyFromSubmission);
+          console.log('Images array from submission:', payload.images);
+          console.log('Images array length:', payload.images?.length);
+          setProperty(propertyFromSubmission as Property);
+          return;
+        }
+      }
+
+      // If neither table has the property
+      if (propertyError && submissionError) {
+        console.error('Property not found in either table:', { propertyError, submissionError });
+      }
+    } catch (err) {
+      console.error('Failed to fetch latest property data', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Fetch latest property data on component mount
+  React.useEffect(() => {
+    fetchLatestPropertyData();
+  }, [id]);
+
+  // Check for refresh parameter in URL and refetch data
+  React.useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const shouldRefresh = searchParams.get('refresh');
+    
+    if (shouldRefresh === 'true') {
+      console.log('Refresh parameter detected, refetching property data...');
+      fetchLatestPropertyData();
+      
+      // Remove the refresh parameter from URL without causing a page reload
+      const newUrl = new URL(window.location.href);
+      newUrl.searchParams.delete('refresh');
+      window.history.replaceState({}, '', newUrl.toString());
+    }
+  }, [location.search]);
+
+  // Refetch data when user returns to the page (e.g., after editing)
+  React.useEffect(() => {
+    const handleFocus = () => {
+      console.log('Page focused, refetching property data...');
+      fetchLatestPropertyData();
+    };
+
+    const handleVisibilityChange = () => {
+      if (!document.hidden) {
+        console.log('Page visible, refetching property data...');
+        fetchLatestPropertyData();
+      }
+    };
+
+    window.addEventListener('focus', handleFocus);
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    return () => {
+      window.removeEventListener('focus', handleFocus);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, [id]);
   
   // Fetch full amenities and PG/Hostel data from DB if they weren't passed via navigation state
   React.useEffect(() => {
@@ -150,9 +272,19 @@ const PropertyDetails: React.FC = () => {
         <Marquee />
         <Header />
         <main className="flex-1 container mx-auto px-4 py-12 text-center">
-          <h1 className="text-2xl font-semibold mb-4">Property not found</h1>
-          <p className="text-gray-600 mb-6">We couldn't load this property. Please go back and try again.</p>
-          <Button onClick={() => navigate(-1)}>Go Back</Button>
+          {loading ? (
+            <div className="flex flex-col items-center justify-center py-12">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-600 mb-4"></div>
+              <h1 className="text-2xl font-semibold mb-4">Loading property...</h1>
+              <p className="text-gray-600">Fetching the latest property details...</p>
+            </div>
+          ) : (
+            <>
+              <h1 className="text-2xl font-semibold mb-4">Property not found</h1>
+              <p className="text-gray-600 mb-6">We couldn't load this property. Please go back and try again.</p>
+              <Button onClick={() => navigate(-1)}>Go Back</Button>
+            </>
+          )}
         </main>
         <Footer />
       </div>;
@@ -161,6 +293,16 @@ const PropertyDetails: React.FC = () => {
       <Marquee />
       <Header />
       <main className="flex-1">
+        {/* Loading indicator for data refresh */}
+        {loading && (
+          <div className="bg-blue-50 border-b border-blue-200 py-2">
+            <div className="container mx-auto px-4 flex items-center justify-center">
+              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600 mr-2"></div>
+              <span className="text-sm text-blue-700">Refreshing property data...</span>
+            </div>
+          </div>
+        )}
+        
         {/* Hero Section */}
         <section className="bg-gray-50 border-b py-6">
           <PropertyHero

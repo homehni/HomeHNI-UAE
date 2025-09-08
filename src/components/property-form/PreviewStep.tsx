@@ -29,7 +29,7 @@ export const PreviewStep: React.FC<PreviewStepProps> = ({
   // Extract nested data for easier access
   const propertyDetails = propertyInfo?.propertyDetails || {};
   const locationDetails = propertyInfo?.locationDetails || {};
-  const rentalDetails = propertyInfo?.rentalDetails || {};
+  const rentalDetails = propertyInfo?.rentalDetails || propertyInfo?.flattmatesDetails || {};
   const amenities = propertyInfo?.amenities || {};
   const gallery = propertyInfo?.gallery || {};
   const additionalInfo = propertyInfo?.additionalInfo || {};

@@ -18,12 +18,14 @@ interface ResaleMultiStepFormProps {
   onSubmit: (data: SalePropertyFormData) => void;
   isSubmitting?: boolean;
   initialOwnerInfo?: Partial<OwnerInfo>;
+  targetStep?: number | null;
 }
 
 export const ResaleMultiStepForm: React.FC<ResaleMultiStepFormProps> = ({
   onSubmit,
   isSubmitting = false,
-  initialOwnerInfo = {}
+  initialOwnerInfo = {},
+  targetStep = null
 }) => {
   const {
     currentStep,
@@ -56,6 +58,14 @@ export const ResaleMultiStepForm: React.FC<ResaleMultiStepFormProps> = ({
       updateOwnerInfo(initialOwnerInfo);
     }
   }, [initialOwnerInfo, updateOwnerInfo]);
+
+  // Navigate to target step if provided
+  React.useEffect(() => {
+    if (targetStep && targetStep > 0 && targetStep <= 8) {
+      console.log('Navigating to target step:', targetStep);
+      goToStep(targetStep);
+    }
+  }, [targetStep, goToStep]);
 
   const completedSteps = React.useMemo(() => {
     const completed: number[] = [];
@@ -228,6 +238,8 @@ export const ResaleMultiStepForm: React.FC<ResaleMultiStepFormProps> = ({
                 initialData={gallery}
                 onNext={handleGalleryNext}
                 onBack={prevStep}
+                onSubmit={handleSubmit}
+                isSubmitting={isSubmitting}
               />
             )}
 

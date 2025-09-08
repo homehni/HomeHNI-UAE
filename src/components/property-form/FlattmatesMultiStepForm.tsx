@@ -15,12 +15,14 @@ interface FlattmatesMultiStepFormProps {
   onSubmit: (data: FlattmatesFormData) => void;
   isSubmitting?: boolean;
   initialOwnerInfo?: Partial<OwnerInfo>;
+  targetStep?: number | null;
 }
 
 export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = ({
   onSubmit,
   isSubmitting = false,
-  initialOwnerInfo = {}
+  initialOwnerInfo = {},
+  targetStep = null
 }) => {
   const [currentStep, setCurrentStep] = useState(1);
   const [completedSteps, setCompletedSteps] = useState<number[]>([]);
@@ -62,23 +64,18 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
     rentNegotiable: false,
     monthlyMaintenance: '',
     availableFrom: '',
-    furnishing: '',
-    parking: '',
     description: ''
   });
 
   const [amenities, setAmenities] = useState({
-    attachedBathroom: false,
-    acRoom: false,
-    balcony: false,
-    nonVegAllowed: false,
-    smokingAllowed: false,
-    drinkingAllowed: false,
-    gym: false,
-    gatedSecurity: false,
-    waterSupply: '',
-    directionsTip: '',
-    selectedAmenities: []
+    powerBackup: '',
+    lift: '',
+    parking: '',
+    waterStorageFacility: '',
+    security: '',
+    wifi: '',
+    currentPropertyCondition: '',
+    directionsTip: ''
   });
 
   const [gallery, setGallery] = useState<PropertyGallery>({
@@ -110,6 +107,14 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
       }
     }
   }, [initialOwnerInfo]);
+
+  // Navigate to target step if provided
+  useEffect(() => {
+    if (targetStep && targetStep > 0 && targetStep <= 7) {
+      console.log('Navigating to target step:', targetStep);
+      setCurrentStep(targetStep);
+    }
+  }, [targetStep]);
 
   const scrollToTop = () => {
     window.scrollTo({ top: 150, behavior: 'smooth' });
@@ -166,29 +171,29 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
     propertyInfo: {
       propertyDetails: {
         title: `${propertyDetails.bhkType} ${propertyDetails.apartmentType} for Flatmates`,
-        propertyType: 'Flatmates',
+        propertyType: 'apartment',
         buildingType: propertyDetails.apartmentType,
         bhkType: propertyDetails.bhkType,
-        bathrooms: amenities.attachedBathroom ? 1 : 0,
-        balconies: amenities.balcony ? 1 : 0,
+        bathrooms: 1, // Default for flatmates
+        balconies: 0,
         propertyAge: propertyDetails.propertyAge,
         totalFloors: propertyDetails.totalFloors,
         floorNo: propertyDetails.floorNo,
-        furnishingStatus: rentalDetails.furnishing,
-        parkingType: rentalDetails.parking,
+        furnishingStatus: 'Semi Furnished', // Default
+        parkingType: amenities.parking,
         superBuiltUpArea: propertyDetails.builtUpArea,
         onMainRoad: false,
         cornerProperty: false
       },
       locationDetails,
       flattmatesDetails: {
-        listingType: 'Flatmates',
+        listingType: propertyDetails.apartmentType, // Match the property type
         expectedPrice: rentalDetails.expectedRent,
         existingFlatmates: 1,
         genderPreference: propertyDetails.tenantType === 'Male' ? 'male' : propertyDetails.tenantType === 'Female' ? 'female' : 'any',
         occupation: 'any',
         lifestylePreference: 'mixed',
-        smokingAllowed: amenities.smokingAllowed,
+        smokingAllowed: false,
         petsAllowed: false,
         rentNegotiable: rentalDetails.rentNegotiable,
         maintenanceExtra: rentalDetails.monthlyMaintenance === 'Extra',
@@ -203,18 +208,18 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
         idealFor: []
       },
       amenities: {
-        powerBackup: amenities.selectedAmenities.includes('power-backup') ? 'Yes' : 'No',
-        lift: amenities.selectedAmenities.includes('lift') ? 'Yes' : 'No',
-        parking: rentalDetails.parking,
-        waterStorageFacility: amenities.waterSupply,
-        security: amenities.gatedSecurity ? 'Yes' : 'No',
-        wifi: '',
-        currentPropertyCondition: '',
+        powerBackup: amenities.powerBackup,
+        lift: amenities.lift,
+        parking: amenities.parking,
+        waterStorageFacility: amenities.waterStorageFacility,
+        security: amenities.security,
+        wifi: amenities.wifi,
+        currentPropertyCondition: amenities.currentPropertyCondition,
         directionsTip: amenities.directionsTip,
         sharedKitchen: true,
         sharedLivingRoom: true,
-        dedicatedBathroom: amenities.attachedBathroom,
-        sharedParking: rentalDetails.parking !== 'None'
+        dedicatedBathroom: true,
+        sharedParking: amenities.parking !== 'none'
       },
       gallery,
       additionalInfo: {
@@ -252,7 +257,7 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
             onNext={handlePropertyDetailsNext}
             onBack={() => {}}
             currentStep={1}
-            totalSteps={6}
+            totalSteps={7}
             completedSteps={completedSteps}
           />
         )}
@@ -271,7 +276,7 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
             onNext={handleRentalDetailsNext}
             onBack={prevStep}
             currentStep={3}
-            totalSteps={6}
+            totalSteps={7}
             completedSteps={completedSteps}
           />
         )}
@@ -290,7 +295,9 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
             onNext={handleGalleryNext}
             onBack={prevStep}
             currentStep={5}
-            totalSteps={6}
+            totalSteps={7}
+            onSubmit={handleSubmit}
+            isSubmitting={isSubmitting}
           />
         )}
 

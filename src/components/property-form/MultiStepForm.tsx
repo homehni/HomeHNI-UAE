@@ -18,12 +18,14 @@ interface MultiStepFormProps {
   onSubmit: (data: { ownerInfo: OwnerInfo; propertyInfo: PropertyInfo }) => void;
   isSubmitting?: boolean;
   initialOwnerInfo?: Partial<OwnerInfo>;
+  targetStep?: number | null;
 }
 
 export const MultiStepForm: React.FC<MultiStepFormProps> = ({
   onSubmit,
   isSubmitting = false,
-  initialOwnerInfo = {}
+  initialOwnerInfo = {},
+  targetStep = null
 }) => {
   // Helper function to get state from city
   const getStateFromCity = (city: string | undefined): string | undefined => {
@@ -87,6 +89,14 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
       updateOwnerInfo(initialOwnerInfo);
     }
   }, [initialOwnerInfo, updateOwnerInfo]);
+
+  // Navigate to target step if provided
+  React.useEffect(() => {
+    if (targetStep && targetStep > 0 && targetStep <= 8) {
+      console.log('Navigating to target step:', targetStep);
+      goToStep(targetStep);
+    }
+  }, [targetStep, goToStep]);
 
 
   const completedSteps = React.useMemo(() => {
@@ -245,6 +255,8 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
                   initialData={gallery}
                   onNext={handleGalleryNext}
                   onBack={prevStep}
+                  onSubmit={handleSubmit}
+                  isSubmitting={isSubmitting}
                 />
               </div>
             )}

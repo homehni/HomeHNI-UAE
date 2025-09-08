@@ -15,12 +15,14 @@ interface CommercialSaleMultiStepFormProps {
   onSubmit: (data: any) => void;
   isSubmitting: boolean;
   initialOwnerInfo?: Partial<OwnerInfo>;
+  targetStep?: number | null;
 }
 
 export const CommercialSaleMultiStepForm = ({
   onSubmit,
   isSubmitting,
-  initialOwnerInfo
+  initialOwnerInfo,
+  targetStep = null
 }: CommercialSaleMultiStepFormProps) => {
   const {
     currentStep,
@@ -52,6 +54,14 @@ export const CommercialSaleMultiStepForm = ({
       updateOwnerInfo(initialOwnerInfo);
     }
   }, [initialOwnerInfo, updateOwnerInfo]);
+
+  // Navigate to target step if provided
+  useEffect(() => {
+    if (targetStep && targetStep > 0 && targetStep <= 8) {
+      console.log('Navigating to target step:', targetStep);
+      goToStep(targetStep);
+    }
+  }, [targetStep, goToStep]);
 
   const completedSteps = useMemo(() => {
     const completed = [];

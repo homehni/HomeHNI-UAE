@@ -31,6 +31,8 @@ interface PropertySubmission {
   owner_phone?: string;
   owner_role?: string;
   is_featured?: boolean;
+  is_edited?: boolean;
+  updated_at?: string;
 }
 
 const AdminProperties = () => {
@@ -111,16 +113,28 @@ const AdminProperties = () => {
 
   const fetchProperties = async () => {
     try {
-      // Fetch all property submissions from new table
-      const { data: submissionsData, error } = await supabase
-        .from('property_submissions')
-        .select('*')
-        .order('created_at', { ascending: false });
+      // Fetch both property submissions AND edited properties that need re-approval
+      const [submissionsResult, editedPropertiesResult] = await Promise.all([
+        // Fetch new property submissions
+        supabase
+          .from('property_submissions')
+          .select('*')
+          .order('created_at', { ascending: false }),
+        
+        // Fetch edited properties that are pending re-approval
+        supabase
+          .from('properties')
+          .select('*')
+          .eq('status', 'pending')
+          .not('updated_at', 'is', null)
+          .order('updated_at', { ascending: false })
+      ]);
 
-      if (error) throw error;
+      if (submissionsResult.error) throw submissionsResult.error;
+      if (editedPropertiesResult.error) throw editedPropertiesResult.error;
 
       // Transform submissions to match PropertyTable interface
-      const transformedProperties = submissionsData?.map(submission => {
+      const transformedSubmissions = submissionsResult.data?.map(submission => {
         // Parse the payload if it's a string
         let payload: any = {};
         try {
@@ -151,14 +165,39 @@ const AdminProperties = () => {
         };
       }) || [];
 
-      setProperties(transformedProperties);
+      // Transform edited properties to match PropertyTable interface
+      const transformedEditedProperties = editedPropertiesResult.data?.map(property => {
+        // Check if this property was edited (updated_at > created_at)
+        const wasEdited = property.updated_at && property.created_at && 
+                         new Date(property.updated_at) > new Date(property.created_at);
+        
+        return {
+          ...property,
+          // Mark as edited for identification
+          is_edited: wasEdited,
+          // Ensure status is 'new' for admin review workflow
+          status: 'new'
+        };
+      }) || [];
+
+      // Combine both submissions and edited properties
+      const allProperties = [...transformedSubmissions, ...transformedEditedProperties];
       
-      // Calculate stats based on new status system
-      const total = transformedProperties?.length || 0;
-      const pending = transformedProperties?.filter(p => p.status === 'new').length || 0;
-      const approved = transformedProperties?.filter(p => p.status === 'approved').length || 0;
-      const rejected = transformedProperties?.filter(p => p.status === 'rejected').length || 0;
-      const deleted = transformedProperties?.filter(p => p.status === 'deleted').length || 0;
+      // Sort by date (newest first)
+      allProperties.sort((a, b) => {
+        const dateA = new Date(a.created_at || a.updated_at || 0);
+        const dateB = new Date(b.created_at || b.updated_at || 0);
+        return dateB.getTime() - dateA.getTime();
+      });
+
+      setProperties(allProperties);
+      
+      // Calculate stats based on combined data
+      const total = allProperties?.length || 0;
+      const pending = allProperties?.filter(p => p.status === 'new').length || 0;
+      const approved = allProperties?.filter(p => p.status === 'approved').length || 0;
+      const rejected = allProperties?.filter(p => p.status === 'rejected').length || 0;
+      const deleted = allProperties?.filter(p => p.status === 'deleted').length || 0;
       const featuredPending = 0; // Not applicable for submissions
 
       setStats({ total, pending, approved, rejected, deleted, featuredPending });
@@ -190,6 +229,9 @@ const AdminProperties = () => {
     if (statusFilter !== 'all') {
       if (statusFilter === 'pending') {
         filtered = filtered.filter(property => property.status === 'new');
+      } else if (statusFilter === 'edited-recently') {
+        // Show only edited properties
+        filtered = filtered.filter(property => property.is_edited === true);
       } else {
         filtered = filtered.filter(property => property.status === statusFilter);
       }
@@ -219,17 +261,40 @@ const AdminProperties = () => {
         throw new Error('Only administrators can approve property submissions');
       }
 
-      // First, get the submission data
-      const { data: submission, error: fetchError } = await supabase
-        .from('property_submissions')
-        .select('*')
-        .eq('id', propertyId)
-        .single();
+      // Check if this is an edited property or a new submission
+      const property = properties.find(p => p.id === propertyId);
+      const isEditedProperty = property?.is_edited;
 
-      if (fetchError) {
-        console.error('Error fetching submission:', fetchError);
-        throw fetchError;
-      }
+      if (isEditedProperty) {
+        // Handle edited property approval - update the properties table
+        const { error } = await supabase
+          .from('properties')
+          .update({
+            status: 'approved',
+            admin_reviewed_at: new Date().toISOString(),
+            rejection_reason: null
+          })
+          .eq('id', propertyId);
+
+        if (error) throw error;
+
+        toast({
+          title: 'Success',
+          description: 'Edited property approved successfully'
+        });
+      } else {
+        // Handle new submission approval - existing logic
+        // First, get the submission data
+        const { data: submission, error: fetchError } = await supabase
+          .from('property_submissions')
+          .select('*')
+          .eq('id', propertyId)
+          .single();
+
+        if (fetchError) {
+          console.error('Error fetching submission:', fetchError);
+          throw fetchError;
+        }
 
       // Parse the payload
       let payload: any = {};
@@ -519,8 +584,9 @@ const AdminProperties = () => {
 
       if (updateError) throw updateError;
 
-      setReviewModalOpen(false);
-      fetchProperties();
+        setReviewModalOpen(false);
+        fetchProperties();
+      }
     } catch (error) {
       console.error('Error approving property submission:', error);
       toast({
@@ -536,33 +602,57 @@ const AdminProperties = () => {
   const handleReject = async (propertyId: string, reason: string) => {
     setActionLoading(true);
     try {
-      // Parse existing payload and add rejection reason
-      let updatedPayload: any = {};
-      try {
-        updatedPayload = typeof selectedProperty?.payload === 'string' 
-          ? JSON.parse(selectedProperty.payload) 
-          : selectedProperty?.payload || {};
-      } catch (e) {
-        console.warn('Error parsing payload for rejection:', e);
-        updatedPayload = {};
+      // Check if this is an edited property or a new submission
+      const property = properties.find(p => p.id === propertyId);
+      const isEditedProperty = property?.is_edited;
+
+      if (isEditedProperty) {
+        // Handle edited property rejection - update the properties table
+        const { error } = await supabase
+          .from('properties')
+          .update({
+            status: 'rejected',
+            rejection_reason: reason,
+            admin_reviewed_at: new Date().toISOString()
+          })
+          .eq('id', propertyId);
+
+        if (error) throw error;
+
+        toast({
+          title: 'Success',
+          description: 'Edited property rejected successfully'
+        });
+      } else {
+        // Handle new submission rejection - existing logic
+        // Parse existing payload and add rejection reason
+        let updatedPayload: any = {};
+        try {
+          updatedPayload = typeof selectedProperty?.payload === 'string' 
+            ? JSON.parse(selectedProperty.payload) 
+            : selectedProperty?.payload || {};
+        } catch (e) {
+          console.warn('Error parsing payload for rejection:', e);
+          updatedPayload = {};
+        }
+        
+        updatedPayload.rejection_reason = reason;
+        
+        const { error } = await supabase
+          .from('property_submissions')
+          .update({
+            status: 'rejected',
+            payload: JSON.stringify(updatedPayload)
+          })
+          .eq('id', propertyId);
+
+        if (error) throw error;
+
+        toast({
+          title: 'Success',
+          description: 'Property submission rejected successfully'
+        });
       }
-      
-      updatedPayload.rejection_reason = reason;
-      
-      const { error } = await supabase
-        .from('property_submissions')
-        .update({
-          status: 'rejected',
-          payload: JSON.stringify(updatedPayload)
-        })
-        .eq('id', propertyId);
-
-      if (error) throw error;
-
-      toast({
-        title: 'Success',
-        description: 'Property submission rejected successfully'
-      });
 
       setReviewModalOpen(false);
       fetchProperties();

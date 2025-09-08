@@ -38,6 +38,16 @@ export const PropertyHero: React.FC<PropertyHeroProps> = ({
   const [showImageModal, setShowImageModal] = useState(false);
   const [initialImageIndex, setInitialImageIndex] = useState(0);
 
+  // Debug logging for images
+  React.useEffect(() => {
+    console.log('PropertyHero received property:', property);
+    console.log('PropertyHero images array:', property.images);
+    console.log('PropertyHero images length:', property.images?.length);
+    if (property.images && property.images.length > 0) {
+      console.log('First image URL:', property.images[0]);
+    }
+  }, [property]);
+
   const handleImageClick = (index: number) => {
     setInitialImageIndex(index);
     setShowImageModal(true);

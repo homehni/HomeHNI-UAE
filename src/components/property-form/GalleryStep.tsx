@@ -44,6 +44,8 @@ interface GalleryStepProps {
   onBack: () => void;
   currentStep?: number;
   totalSteps?: number;
+  onSubmit?: () => void;
+  isSubmitting?: boolean;
 }
 
 export const GalleryStep: React.FC<GalleryStepProps> = ({
@@ -51,7 +53,9 @@ export const GalleryStep: React.FC<GalleryStepProps> = ({
   onNext,
   onBack,
   currentStep = 6,
-  totalSteps = 8
+  totalSteps = 8,
+  onSubmit,
+  isSubmitting = false
 }) => {
   const form = useForm({
     resolver: zodResolver(gallerySchema),
@@ -69,7 +73,10 @@ export const GalleryStep: React.FC<GalleryStepProps> = ({
     },
   });
 
-  const onSubmit = (data: any) => {
+  // Check if we're in edit mode by looking for existing property data
+  const isEditMode = (window as any).editingPropertyData !== undefined;
+
+  const handleFormSubmit = (data: any) => {
     // Convert categorized images to flat array for backward compatibility
     const allImages = [
       ...data.images.bathroom,
@@ -89,11 +96,41 @@ export const GalleryStep: React.FC<GalleryStepProps> = ({
     onNext(propertyGalleryData);
   };
 
+  const handleSubmitProperty = () => {
+    // First, capture the current form data and update the parent form state
+    const currentFormData = form.getValues();
+    
+    // Convert categorized images to flat array for backward compatibility
+    const allImages = [
+      ...currentFormData.images.bathroom,
+      ...currentFormData.images.bedroom,
+      ...currentFormData.images.hall,
+      ...currentFormData.images.kitchen,
+      ...currentFormData.images.frontView,
+      ...currentFormData.images.balcony,
+      ...currentFormData.images.others
+    ];
+    
+    const propertyGalleryData: PropertyGallery = {
+      images: allImages,
+      categorizedImages: currentFormData.images as any, // Store categorized structure
+      video: currentFormData.video
+    };
+    
+    // Update the parent form state with current gallery data
+    onNext(propertyGalleryData);
+    
+    // Then submit the property
+    if (onSubmit) {
+      onSubmit();
+    }
+  };
+
   return (
     <Card>
       <CardContent className="p-8">
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+            <form onSubmit={form.handleSubmit(handleFormSubmit)} className="space-y-8">
               <FormField
                 control={form.control}
                 name="images"
@@ -141,9 +178,28 @@ export const GalleryStep: React.FC<GalleryStepProps> = ({
                 <Button type="button" variant="outline" onClick={onBack} className="bg-muted text-muted-foreground">
                   Back
                 </Button>
-                <Button type="submit" className="bg-primary text-primary-foreground">
-                  Save & Continue
-                </Button>
+                <div className="flex gap-3">
+                  {isEditMode && onSubmit && (
+                    <Button 
+                      type="button" 
+                      onClick={handleSubmitProperty}
+                      disabled={isSubmitting}
+                      className="bg-green-600 hover:bg-green-700 text-white"
+                    >
+                      {isSubmitting ? (
+                        <div className="flex items-center gap-2">
+                          <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
+                          <span>Submitting...</span>
+                        </div>
+                      ) : (
+                        'Submit Property'
+                      )}
+                    </Button>
+                  )}
+                  <Button type="submit" className="bg-primary text-primary-foreground">
+                    Save & Continue
+                  </Button>
+                </div>
               </div>
             </form>
           </Form>

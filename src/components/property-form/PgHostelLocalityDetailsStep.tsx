@@ -1,162 +1,237 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 import { Button } from '@/components/ui/button';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { LocationDetails } from '@/types/property';
+import { ArrowLeft, ArrowRight, MapPin } from 'lucide-react';
 
-interface PgHostelLocalityDetails {
-  state: string;
-  city: string;
-  locality: string;
-  landmark?: string;
-  // pincode is intentionally not required for PG/Hostel
-}
+const pgHostelLocationSchema = z.object({
+  locality: z.string().optional(),
+  landmark: z.string().optional(),
+});
+
+type PgHostelLocationData = z.infer<typeof pgHostelLocationSchema>;
 
 interface PgHostelLocalityDetailsStepProps {
-  initialData?: Partial<PgHostelLocalityDetails>;
-  onNext: (data: PgHostelLocalityDetails) => void;
+  initialData?: Partial<LocationDetails>;
+  onNext: (data: LocationDetails) => void;
   onBack: () => void;
   currentStep: number;
   totalSteps: number;
 }
 
-export function PgHostelLocalityDetailsStep({ 
-  initialData, 
-  onNext, 
-  onBack, 
-  currentStep, 
-  totalSteps 
+export function PgHostelLocalityDetailsStep({
+  initialData = {},
+  onNext,
+  onBack,
+  currentStep,
+  totalSteps
 }: PgHostelLocalityDetailsStepProps) {
-  const [formData, setFormData] = useState<PgHostelLocalityDetails>({
-    state: '',
-    city: '',
-    locality: '',
-    landmark: '',
-    ...initialData,
+  const localityInputRef = useRef<HTMLInputElement | null>(null);
+  const mapContainerRef = useRef<HTMLDivElement | null>(null);
+  const mapRef = useRef<any>(null);
+  const markerRef = useRef<any>(null);
+  const [showMap, setShowMap] = useState(false);
+
+  const form = useForm<PgHostelLocationData>({
+    resolver: zodResolver(pgHostelLocationSchema),
+    defaultValues: {
+      locality: initialData.locality || '',
+      landmark: initialData.landmark || '',
+    },
   });
 
-  const [indiaData, setIndiaData] = useState<any>({});
-  const [cities, setCities] = useState<string[]>([]);
-
+  // Update form values when initialData changes
   useEffect(() => {
-    // Load India states and cities data
-    fetch('/data/india_states_cities.json')
-      .then(response => response.json())
-      .then(data => {
-        setIndiaData(data);
-      })
-      .catch(error => {
-        console.error('Error loading states and cities data:', error);
+    if (initialData.locality) {
+      form.setValue('locality', initialData.locality);
+    }
+    if (initialData.landmark) {
+      form.setValue('landmark', initialData.landmark);
+    }
+  }, [initialData, form]);
+
+  // Google Maps Places Autocomplete and Map preview
+  useEffect(() => {
+    const apiKey = 'AIzaSyD2rlXeHN4cm0CQD-y4YGTsob9a_27YcwY';
+
+    const loadGoogleMaps = () => new Promise<void>((resolve, reject) => {
+      if ((window as any).google?.maps?.places) {
+        resolve();
+        return;
+      }
+      const existing = document.querySelector('script[data-gmaps]') as HTMLScriptElement | null;
+      if (existing) {
+        existing.addEventListener('load', () => resolve());
+        return;
+      }
+      const script = document.createElement('script');
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&region=IN&language=en-IN`;
+      script.async = true;
+      script.defer = true;
+      script.setAttribute('data-gmaps', 'true');
+      script.onload = () => resolve();
+      script.onerror = () => reject(new Error('Google Maps failed to load'));
+      document.head.appendChild(script);
+    });
+
+    const getComponent = (components: any[], type: string) =>
+      components.find((c) => c.types?.includes(type))?.long_name as string | undefined;
+
+    const setMapTo = (lat: number, lng: number, title?: string) => {
+      const google = (window as any).google;
+      if (!google || !mapContainerRef.current) return;
+      if (!mapRef.current) {
+        mapRef.current = new google.maps.Map(mapContainerRef.current, {
+          center: { lat, lng },
+          zoom: 15,
+          mapTypeControl: false,
+          streetViewControl: false,
+          fullscreenControl: false,
+        });
+        markerRef.current = new google.maps.Marker({
+          position: { lat, lng },
+          map: mapRef.current,
+          title: title || 'Selected location',
+        });
+      } else {
+        mapRef.current.setCenter({ lat, lng });
+        if (markerRef.current) {
+          markerRef.current.setPosition({ lat, lng });
+          if (title) markerRef.current.setTitle(title);
+        } else {
+          markerRef.current = new google.maps.Marker({ position: { lat, lng }, map: mapRef.current, title });
+        }
+      }
+      setShowMap(true);
+    };
+
+    const initAutocomplete = () => {
+      const google = (window as any).google;
+      if (!google?.maps?.places) return;
+      const options = {
+        fields: ['formatted_address', 'geometry', 'name', 'address_components'],
+        types: ['geocode'],
+        componentRestrictions: { country: 'in' as const },
+      };
+
+      const attach = (el: HTMLInputElement | null, onPlace: (place: any, el: HTMLInputElement) => void) => {
+        if (!el) return;
+        const ac = new google.maps.places.Autocomplete(el, options);
+        ac.addListener('place_changed', () => {
+          const place = ac.getPlace();
+          onPlace(place, el);
+        });
+      };
+
+      attach(localityInputRef.current, (place, el) => {
+        const value = place?.formatted_address || place?.name || '';
+        if (value) {
+          el.value = value;
+          form.setValue('locality', value, { shouldValidate: true });
+        }
+        const loc = place?.geometry?.location;
+        if (loc) setMapTo(loc.lat(), loc.lng(), place?.name || 'Selected location');
       });
-  }, []);
 
-  useEffect(() => {
-    if (formData.state && indiaData[formData.state]) {
-      setCities(indiaData[formData.state]);
-    } else {
-      setCities([]);
-    }
-  }, [formData.state, indiaData]);
+    };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (isFormValid()) {
-      onNext(formData);
-    }
-  };
+    loadGoogleMaps().then(initAutocomplete).catch(console.error);
+  }, [form]);
 
-  const isFormValid = () => {
-    return true;
+  const onSubmit = (data: PgHostelLocationData) => {
+    // Convert to LocationDetails format and add missing fields as empty/default values
+    const locationData: LocationDetails = {
+      state: '', // No longer used
+      city: '', // No longer used
+      locality: data.locality || '',
+      landmark: data.landmark || '',
+      pincode: initialData.pincode || '',
+      societyName: initialData.societyName || ''
+    };
+    onNext(locationData);
   };
 
   return (
-    <div className="max-w-2xl mx-auto space-y-6">
-      <div className="text-center mb-8">
-        <h2 className="text-2xl font-bold text-foreground mb-2">Locality Details</h2>
-        <p className="text-muted-foreground">Where is your PG/Hostel located?</p>
-      </div>
+    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
+      <h1 className="text-2xl font-semibold text-primary mb-6">Location Details</h1>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Location Information</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="state">State</Label>
-                <Select
-                  value={formData.state}
-                  onValueChange={(value) => {
-                    setFormData({ ...formData, state: value, city: '' });
-                  }}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select state" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {Object.keys(indiaData).map((state) => (
-                      <SelectItem key={state} value={state}>
-                        {state}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          {/* Locality/Area and Landmark */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <FormField
+              control={form.control}
+              name="locality"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-sm font-medium flex items-center gap-2">
+                    <MapPin className="h-4 w-4 text-primary" />
+                    Locality/Area *
+                  </FormLabel>
+                  <FormControl>
+                    <div className="relative">
+                      <Input
+                        placeholder="Search 'Koramangala, Bengaluru'..."
+                        className="h-12 pl-10"
+                        {...field}
+                        ref={(el) => {
+                          field.ref(el)
+                          localityInputRef.current = el
+                        }}
+                      />
+                      <MapPin className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                    </div>
+                  </FormControl>
+                  <p className="text-xs text-red-500 animate-pulse font-bold">
+                    Type the name of the apartment/ the area of property/anything that could help us 😊
+                  </p>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-              <div className="space-y-2">
-                <Label htmlFor="city">City</Label>
-                <Select
-                  value={formData.city}
-                  onValueChange={(value) => setFormData({ ...formData, city: value })}
-                  disabled={!formData.state}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select city" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {cities.map((city) => (
-                      <SelectItem key={city} value={city}>
-                        {city}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+            <FormField
+              control={form.control}
+              name="landmark"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-sm font-medium">Landmark (Optional)</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="e.g., Near Metro Station"
+                      className="h-12"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="locality">Locality</Label>
-                <Input
-                  id="locality"
-                  value={formData.locality}
-                  onChange={(e) => setFormData({ ...formData, locality: e.target.value })}
-                  placeholder="Enter locality/area"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="landmark">Landmark</Label>
-                <Input
-                  id="landmark"
-                  value={formData.landmark}
-                  onChange={(e) => setFormData({ ...formData, landmark: e.target.value })}
-                  placeholder="Enter nearby landmark"
-                />
-              </div>
+          {showMap && (
+            <div className="w-full h-64 md:h-80 rounded-lg border overflow-hidden">
+              <div ref={mapContainerRef} className="w-full h-full" />
             </div>
+          )}
 
-            <div className="flex justify-between pt-6">
-              <Button type="button" variant="outline" onClick={onBack}>
-                Back
-              </Button>
-              <Button type="submit">
-                Save & Continue
-              </Button>
-            </div>
-          </form>
-        </CardContent>
-      </Card>
+          {/* Navigation Buttons */}
+          <div className="flex justify-between pt-6">
+            <Button type="button" variant="outline" onClick={onBack} className="h-12 px-8">
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Back
+            </Button>
+            <Button type="submit" className="h-12 px-8">
+              Save & Continue
+              <ArrowRight className="h-4 w-4 ml-2" />
+            </Button>
+          </div>
+        </form>
+      </Form>
     </div>
   );
 }

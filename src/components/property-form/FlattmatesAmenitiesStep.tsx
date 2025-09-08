@@ -1,50 +1,32 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Switch } from '@/components/ui/switch';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { 
-  Bed, 
-  Bath, 
-  Car, 
-  Wifi, 
-  Zap, 
-  Shield,
-  Droplets,
-  Plus,
-  ArrowLeft,
-  ArrowRight
-} from 'lucide-react';
+import { Textarea } from '@/components/ui/textarea';
 
-// Define the interface without whoWillShow and secondaryNumber
+const amenitiesSchema = z.object({
+  powerBackup: z.string().optional(),
+  lift: z.string().optional(),
+  parking: z.string().optional(),
+  waterStorageFacility: z.string().optional(),
+  security: z.string().optional(),
+  wifi: z.string().optional(),
+  currentPropertyCondition: z.string().optional(),
+  directionsTip: z.string().optional(),
+});
+
 interface FlattmatesAmenities {
-  // Living Arrangements
-  attachedBathroom: boolean;
-  balcony: boolean;
-  
-  // Furnishing
-  bed: boolean;
-  wardrobe: boolean;
-  ac: boolean;
-  geyser: boolean;
-  
-  // Property Features
-  powerBackup: boolean;
-  wifi: boolean;
+  powerBackup: string;
+  lift: string;
   parking: string;
-  lift: boolean;
-  
-  // Security & Utilities
-  gatedSecurity: boolean;
-  waterSupply: string;
+  waterStorageFacility: string;
+  security: string;
+  wifi: string;
+  currentPropertyCondition: string;
   directionsTip: string;
-  
-  // Available Amenities
-  selectedAmenities: string[];
 }
 
 interface FlattmatesAmenitiesStepProps {
@@ -58,328 +40,246 @@ export const FlattmatesAmenitiesStep: React.FC<FlattmatesAmenitiesStepProps> = (
   onNext,
   onBack
 }) => {
-  const [formData, setFormData] = useState<FlattmatesAmenities>({
-    // Living Arrangements
-    attachedBathroom: initialData.attachedBathroom || false,
-    balcony: initialData.balcony || false,
-    
-    // Furnishing
-    bed: initialData.bed || false,
-    wardrobe: initialData.wardrobe || false,
-    ac: initialData.ac || false,
-    geyser: initialData.geyser || false,
-    
-    // Property Features
-    powerBackup: initialData.powerBackup || false,
-    wifi: initialData.wifi || false,
-    parking: initialData.parking || 'none',
-    lift: initialData.lift || false,
-    
-    // Security & Utilities
-    gatedSecurity: initialData.gatedSecurity || false,
-    waterSupply: initialData.waterSupply || '',
-    directionsTip: initialData.directionsTip || '',
-    
-    // Available Amenities
-    selectedAmenities: initialData.selectedAmenities || [],
+  const form = useForm<FlattmatesAmenities>({
+    resolver: zodResolver(amenitiesSchema),
+    defaultValues: {
+      powerBackup: initialData.powerBackup || '',
+      lift: initialData.lift || '',
+      parking: initialData.parking || '',
+      waterStorageFacility: initialData.waterStorageFacility || '',
+      security: initialData.security || '',
+      wifi: initialData.wifi || '',
+      currentPropertyCondition: initialData.currentPropertyCondition || '',
+      directionsTip: initialData.directionsTip || '',
+    },
   });
 
-  const handleSwitchChange = (field: keyof FlattmatesAmenities) => (value: boolean) => {
-    setFormData(prev => ({
-      ...prev,
-      [field]: value
-    }));
-  };
-
-  const handleInputChange = (field: keyof FlattmatesAmenities) => (value: string) => {
-    setFormData(prev => ({
-      ...prev,
-      [field]: value
-    }));
-  };
-
-  const handleSubmit = () => {
-    onNext(formData);
-  };
-
-  const amenityOptions = [
-    { id: 'gym', label: 'Gym', icon: '🏋️' },
-    { id: 'swimming-pool', label: 'Swimming Pool', icon: '🏊' },
-    { id: 'garden', label: 'Garden', icon: '🌿' },
-    { id: 'clubhouse', label: 'Clubhouse', icon: '🏛️' },
-    { id: 'park', label: 'Park', icon: '🌳' },
-    { id: 'security', label: '24/7 Security', icon: '🛡️' },
-    { id: 'power-backup', label: 'Power Backup', icon: '⚡' },
-    { id: 'lift', label: 'Lift', icon: '🛗' },
-    { id: 'parking', label: 'Parking', icon: '🚗' },
-    { id: 'water-supply', label: 'Water Supply', icon: '💧' },
-  ];
-
-  const toggleAmenity = (amenityId: string) => {
-    setFormData(prev => ({
-      ...prev,
-      selectedAmenities: prev.selectedAmenities.includes(amenityId)
-        ? prev.selectedAmenities.filter(id => id !== amenityId)
-        : [...prev.selectedAmenities, amenityId]
-    }));
+  const onSubmit = (data: FlattmatesAmenities) => {
+    console.log('FlattmatesAmenitiesStep submitting data:', data);
+    onNext(data);
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6 space-y-8">
-      {/* Header */}
-      <div className="text-center space-y-2">
-        <h2 className="text-3xl font-bold text-gray-900">Property Amenities</h2>
-        <p className="text-gray-600">Select the amenities and facilities available in your property</p>
+    <div className="bg-background rounded-lg border p-8">
+      <div className="text-center mb-8">
+        <h2 className="text-2xl font-bold text-foreground mb-2">What You Get</h2>
+        <p className="text-muted-foreground">Select the amenities and features included with your property</p>
       </div>
 
-      {/* Living Arrangements */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Bed className="w-5 h-5" />
-            Living Arrangements
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="flex items-center justify-between">
-              <Label htmlFor="attachedBathroom" className="flex items-center space-x-2">
-                <Bath className="w-4 h-4" />
-                <span>Attached Bathroom</span>
-              </Label>
-              <Switch
-                id="attachedBathroom"
-                checked={formData.attachedBathroom}
-                onCheckedChange={handleSwitchChange('attachedBathroom')}
-              />
-            </div>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Power Backup */}
+            <FormField
+              control={form.control}
+              name="powerBackup"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Power Backup</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="full">Full Power Backup</SelectItem>
+                      <SelectItem value="partial">Partial Power Backup</SelectItem>
+                      <SelectItem value="dg-backup">DG Backup</SelectItem>
+                      <SelectItem value="no-backup">No Power Backup</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-            <div className="flex items-center justify-between">
-              <Label htmlFor="balcony" className="flex items-center space-x-2">
-                <span>🪟</span>
-                <span>Balcony</span>
-              </Label>
-              <Switch
-                id="balcony"
-                checked={formData.balcony}
-                onCheckedChange={handleSwitchChange('balcony')}
-              />
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+            {/* Lift */}
+            <FormField
+              control={form.control}
+              name="lift"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Lift</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="available">Yes</SelectItem>
+                      <SelectItem value="not-available">No</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-      {/* Furnishing */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Furnishing</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="flex items-center justify-between">
-              <Label htmlFor="bed">Bed</Label>
-              <Switch
-                id="bed"
-                checked={formData.bed}
-                onCheckedChange={handleSwitchChange('bed')}
-              />
-            </div>
+            {/* Parking */}
+            <FormField
+              control={form.control}
+              name="parking"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Parking</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="bike">Bike Parking</SelectItem>
+                      <SelectItem value="car">Car Parking</SelectItem>
+                      <SelectItem value="both">Both</SelectItem>
+                      <SelectItem value="none">No Parking</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-            <div className="flex items-center justify-between">
-              <Label htmlFor="wardrobe">Wardrobe</Label>
-              <Switch
-                id="wardrobe"
-                checked={formData.wardrobe}
-                onCheckedChange={handleSwitchChange('wardrobe')}
-              />
-            </div>
+            {/* Water Storage Facility */}
+            <FormField
+              control={form.control}
+              name="waterStorageFacility"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Water Storage Facility</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="overhead-tank">Overhead Tank</SelectItem>
+                      <SelectItem value="underground-tank">Underground Tank</SelectItem>
+                      <SelectItem value="both">Both</SelectItem>
+                      <SelectItem value="borewell">Borewell</SelectItem>
+                      <SelectItem value="none">None</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-            <div className="flex items-center justify-between">
-              <Label htmlFor="ac">AC</Label>
-              <Switch
-                id="ac"
-                checked={formData.ac}
-                onCheckedChange={handleSwitchChange('ac')}
-              />
-            </div>
+            {/* Security */}
+            <FormField
+              control={form.control}
+              name="security"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Security</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="yes">Yes</SelectItem>
+                      <SelectItem value="no">No</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-            <div className="flex items-center justify-between">
-              <Label htmlFor="geyser">Geyser</Label>
-              <Switch
-                id="geyser"
-                checked={formData.geyser}
-                onCheckedChange={handleSwitchChange('geyser')}
-              />
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+            {/* WiFi */}
+            <FormField
+              control={form.control}
+              name="wifi"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Wifi</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="available">Yes</SelectItem>
+                      <SelectItem value="not-available">No</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-      {/* Property Features */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Property Features</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="flex items-center justify-between">
-              <Label htmlFor="powerBackup" className="flex items-center space-x-2">
-                <Zap className="w-4 h-4" />
-                <span>Power Backup</span>
-              </Label>
-              <Switch
-                id="powerBackup"
-                checked={formData.powerBackup}
-                onCheckedChange={handleSwitchChange('powerBackup')}
-              />
-            </div>
-
-            <div className="flex items-center justify-between">
-              <Label htmlFor="wifi" className="flex items-center space-x-2">
-                <Wifi className="w-4 h-4" />
-                <span>WiFi</span>
-              </Label>
-              <Switch
-                id="wifi"
-                checked={formData.wifi}
-                onCheckedChange={handleSwitchChange('wifi')}
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="parking" className="flex items-center space-x-2">
-                <Car className="w-4 h-4" />
-                <span>Parking</span>
-              </Label>
-              <Select
-                value={formData.parking}
-                onValueChange={handleInputChange('parking')}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select parking type" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="none">No Parking</SelectItem>
-                  <SelectItem value="bike">Bike Parking</SelectItem>
-                  <SelectItem value="car">Car Parking</SelectItem>
-                  <SelectItem value="both">Both</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="flex items-center justify-between">
-              <Label htmlFor="lift">Lift</Label>
-              <Switch
-                id="lift"
-                checked={formData.lift}
-                onCheckedChange={handleSwitchChange('lift')}
-              />
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Security & Utilities */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Security & Utilities</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="flex items-center justify-between">
-              <Label htmlFor="gatedSecurity" className="flex items-center space-x-2">
-                <Shield className="w-4 h-4" />
-                <span>Gated Security</span>
-              </Label>
-              <Switch
-                id="gatedSecurity"
-                checked={formData.gatedSecurity}
-                onCheckedChange={handleSwitchChange('gatedSecurity')}
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="waterSupply" className="flex items-center space-x-2">
-                <Droplets className="w-4 h-4" />
-                <span>Water Supply</span>
-              </Label>
-              <Select
-                value={formData.waterSupply}
-                onValueChange={handleInputChange('waterSupply')}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select water supply" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Municipal">Municipal Water</SelectItem>
-                  <SelectItem value="Borewell">Borewell</SelectItem>
-                  <SelectItem value="Both">Both</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Available Amenities */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Available Amenities</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
-            {amenityOptions.map((amenity) => (
-              <div
-                key={amenity.id}
-                onClick={() => toggleAmenity(amenity.id)}
-                className={`p-3 rounded-lg border-2 cursor-pointer transition-all text-center ${
-                  formData.selectedAmenities.includes(amenity.id)
-                    ? 'border-primary bg-primary/10 text-primary'
-                    : 'border-gray-200 hover:border-gray-300'
-                }`}
-              >
-                <div className="text-2xl mb-1">{amenity.icon}</div>
-                <div className="text-sm font-medium">{amenity.label}</div>
-              </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Directions Tip */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Plus className="w-5 h-5" />
-            Directions Tip
-            <Badge variant="secondary">Optional</Badge>
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-2">
-            <Label htmlFor="directionsTip">Add directions for tenants</Label>
-            <Textarea
-              id="directionsTip"
-              value={formData.directionsTip}
-              onChange={(e) => handleInputChange('directionsTip')(e.target.value)}
-              placeholder="Provide helpful directions to reach your property..."
-              className="min-h-[100px]"
+            {/* Current Property Condition */}
+            <FormField
+              control={form.control}
+              name="currentPropertyCondition"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Current Property Condition?</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="excellent">Excellent</SelectItem>
+                      <SelectItem value="good">Good</SelectItem>
+                      <SelectItem value="average">Average</SelectItem>
+                      <SelectItem value="needs-renovation">Needs Renovation</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
           </div>
-        </CardContent>
-      </Card>
 
-      {/* Navigation Buttons */}
-      <div className="flex justify-between pt-6">
-        <Button type="button" variant="outline" onClick={onBack} className="flex items-center gap-2">
-          <ArrowLeft className="w-4 h-4" />
-          Back
-        </Button>
-        <Button onClick={handleSubmit} className="flex items-center gap-2">
-          Continue
-          <ArrowRight className="w-4 h-4" />
-        </Button>
-      </div>
+          {/* Directions Tip */}
+          <FormField
+            control={form.control}
+            name="directionsTip"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>
+                  Add Directions Tip for your tenants <span className="bg-red-500 text-white text-xs px-2 py-1 rounded">NEW</span>
+                </FormLabel>
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                  <div className="flex items-start space-x-2">
+                    <div className="text-blue-600 mt-1">ℹ️</div>
+                    <div>
+                      <p className="text-sm text-blue-800">Don't want calls asking location?</p>
+                      <p className="text-sm text-blue-600">Add directions to reach using landmarks</p>
+                    </div>
+                  </div>
+                </div>
+                <FormControl>
+                  <Textarea
+                    placeholder="Eg. Take the road opposite to Amrita College, take right after 300m..."
+                    {...field}
+                    rows={4}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <div className="flex justify-between pt-6">
+            <Button type="button" variant="outline" onClick={onBack} className="bg-muted text-muted-foreground">
+              Back
+            </Button>
+            <Button type="submit" className="bg-primary text-primary-foreground">
+              Save & Continue
+            </Button>
+          </div>
+        </form>
+      </Form>
     </div>
   );
 };

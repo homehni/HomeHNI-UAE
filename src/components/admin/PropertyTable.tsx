@@ -31,12 +31,14 @@ interface Property {
   images: string[];
   status: string;
   created_at: string;
+  updated_at?: string;
   rejection_reason?: string;
   user_id: string;
   owner_name?: string;
   owner_email?: string;
   owner_phone?: string;
   is_featured?: boolean;
+  is_edited?: boolean;
 }
 
 interface PropertyTableProps {
@@ -115,6 +117,7 @@ export const PropertyTable: React.FC<PropertyTableProps> = ({
             <SelectContent>
               <SelectItem value="all">All Status</SelectItem>
               <SelectItem value="pending">Pending ({stats?.pending || 0})</SelectItem>
+              <SelectItem value="edited-recently">Edited Recently</SelectItem>
               <SelectItem value="featured-pending">Featured Pending ({stats?.featuredPending || 0})</SelectItem>
               <SelectItem value="approved">Approved ({stats?.approved || 0})</SelectItem>
               <SelectItem value="rejected">Rejected ({stats?.rejected || 0})</SelectItem>
@@ -139,19 +142,19 @@ export const PropertyTable: React.FC<PropertyTableProps> = ({
         </div>
       </CardHeader>
       
-      <CardContent>
+      <CardContent className="p-0">
         <div className="rounded-md border border-border overflow-hidden">
           <Table>
             <TableHeader>
               <TableRow className="bg-muted/50">
-                <TableHead className="font-semibold">Property</TableHead>
-                <TableHead className="font-semibold">Owner</TableHead>
-                <TableHead className="font-semibold">Location</TableHead>
-                <TableHead className="font-semibold">Type</TableHead>
-                <TableHead className="font-semibold">Price</TableHead>
-                <TableHead className="font-semibold">Status</TableHead>
-                <TableHead className="font-semibold">Date</TableHead>
-                <TableHead className="font-semibold text-center">Actions</TableHead>
+                <TableHead className="font-semibold w-[300px]">Property</TableHead>
+                <TableHead className="font-semibold w-[200px]">Owner</TableHead>
+                <TableHead className="font-semibold w-[150px]">Location</TableHead>
+                <TableHead className="font-semibold w-[120px]">Type</TableHead>
+                <TableHead className="font-semibold w-[120px]">Price</TableHead>
+                <TableHead className="font-semibold w-[180px]">Status</TableHead>
+                <TableHead className="font-semibold w-[120px]">Date</TableHead>
+                <TableHead className="font-semibold text-center w-[140px]">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -160,32 +163,41 @@ export const PropertyTable: React.FC<PropertyTableProps> = ({
                   key={property.id} 
                   className="hover:bg-muted/30 transition-colors"
                 >
-                  <TableCell className="font-medium">
-                    <div className="space-y-1">
-                      <div className="font-medium text-foreground truncate max-w-[200px] flex items-center gap-2">
+                  <TableCell className="font-medium py-4 px-4">
+                    <div className="space-y-2">
+                      <div className="font-medium text-foreground text-sm leading-tight">
                         {property.title}
-                        {property.is_featured && (
-                          <Badge variant="secondary" className="text-xs">Featured</Badge>
-                        )}
                       </div>
-                      <div className="text-xs text-muted-foreground">
+                      <div className="text-xs text-muted-foreground mb-2">
                         {property.bhk_type}
+                      </div>
+                      <div className="flex flex-wrap gap-1">
+                        {property.is_edited && (
+                          <Badge variant="outline" className="text-xs bg-orange-100 text-orange-800 border-orange-300 font-medium px-2 py-1">
+                            ✏️ EDITED
+                          </Badge>
+                        )}
+                        {property.is_featured && (
+                          <Badge variant="secondary" className="text-xs font-medium px-2 py-1">
+                            ⭐ Featured
+                          </Badge>
+                        )}
                       </div>
                     </div>
                   </TableCell>
-                  <TableCell>
-                    <div className="space-y-1">
-                      <div className="font-medium text-sm truncate max-w-[150px]">
+                  <TableCell className="py-4 px-4">
+                    <div className="space-y-2">
+                      <div className="font-medium text-sm">
                         {property.owner_name || 'N/A'}
                       </div>
-                      <div className="text-xs truncate max-w-[150px]">
+                      <div className="text-xs text-muted-foreground">
                         <SecureDataMask 
                           data={property.owner_email || ''} 
                           type="email"
                           className="text-xs"
                         />
                       </div>
-                      <div className="text-xs">
+                      <div className="text-xs text-muted-foreground">
                         <SecureDataMask 
                           data={property.owner_phone || ''} 
                           type="phone"
@@ -194,38 +206,50 @@ export const PropertyTable: React.FC<PropertyTableProps> = ({
                       </div>
                     </div>
                   </TableCell>
-                  <TableCell>
+                  <TableCell className="py-4 px-4">
                     <div className="space-y-1">
                       <div className="font-medium text-sm">{property.city}</div>
                       <div className="text-xs text-muted-foreground">{property.state}</div>
                     </div>
                   </TableCell>
-                  <TableCell>
+                  <TableCell className="py-4 px-4">
                     <div className="space-y-1">
                       <div className="text-sm font-medium">{property.property_type}</div>
                       <div className="text-xs text-muted-foreground">{property.listing_type}</div>
                     </div>
                   </TableCell>
-                  <TableCell>
+                  <TableCell className="py-4 px-4">
                     <div className="font-semibold text-foreground">
                       ₹{property.expected_price?.toLocaleString()}
                     </div>
                   </TableCell>
-                  <TableCell>
-                    {getStatusBadge(property.status)}
+                  <TableCell className="py-4 px-4">
+                    <div className="space-y-2">
+                      <div>
+                        {getStatusBadge(property.status)}
+                      </div>
+                      {/* Property edited recently flag */}
+                      {property.status === 'pending' && property.updated_at && property.created_at && 
+                       new Date(property.updated_at) > new Date(property.created_at) && (
+                        <Badge variant="outline" className="text-xs bg-orange-50 text-orange-700 border-orange-300 font-medium px-2 py-1">
+                          ✏️ Edited recently
+                        </Badge>
+                      )}
+                    </div>
                   </TableCell>
-                  <TableCell>
+                  <TableCell className="py-4 px-4">
                     <div className="text-sm text-muted-foreground">
                       {format(new Date(property.created_at), 'MMM dd, yyyy')}
                     </div>
                   </TableCell>
-                  <TableCell>
-                    <div className="flex items-center justify-center space-x-1">
+                  <TableCell className="py-4 px-4">
+                    <div className="flex items-center justify-center space-x-2">
                       <Button
                         size="sm"
                         variant="ghost"
                         onClick={() => onView(property)}
-                        className="h-8 w-8 p-0 hover:bg-blue-50 hover:text-blue-600"
+                        className="h-9 w-9 p-0 hover:bg-blue-50 hover:text-blue-600"
+                        title="View Property"
                       >
                         <Eye className="h-4 w-4" />
                       </Button>
@@ -237,7 +261,8 @@ export const PropertyTable: React.FC<PropertyTableProps> = ({
                             variant="ghost"
                             onClick={() => onApprove(property.id)}
                             disabled={actionLoading}
-                            className="h-8 w-8 p-0 hover:bg-green-50 hover:text-green-600"
+                            className="h-9 w-9 p-0 hover:bg-green-50 hover:text-green-600"
+                            title="Approve Property"
                           >
                             <CheckCircle className="h-4 w-4" />
                           </Button>
@@ -247,7 +272,8 @@ export const PropertyTable: React.FC<PropertyTableProps> = ({
                             variant="ghost"
                             onClick={() => onReject(property)}
                             disabled={actionLoading}
-                            className="h-8 w-8 p-0 hover:bg-red-50 hover:text-red-600"
+                            className="h-9 w-9 p-0 hover:bg-red-50 hover:text-red-600"
+                            title="Reject Property"
                           >
                             <XCircle className="h-4 w-4" />
                           </Button>
@@ -259,7 +285,8 @@ export const PropertyTable: React.FC<PropertyTableProps> = ({
                           <Button
                             size="sm"
                             variant="ghost"
-                            className="h-8 w-8 p-0"
+                            className="h-9 w-9 p-0 hover:bg-gray-50"
+                            title="More Options"
                           >
                             <MoreHorizontal className="h-4 w-4" />
                           </Button>

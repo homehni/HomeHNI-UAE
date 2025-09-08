@@ -28,12 +28,14 @@ interface PGHostelMultiStepFormProps {
   onSubmit: (data: PGHostelFormData) => void;
   isSubmitting?: boolean;
   initialOwnerInfo?: Partial<LocalOwnerInfo>;
+  targetStep?: number | null;
 }
 
 export const PGHostelMultiStepForm: React.FC<PGHostelMultiStepFormProps> = ({
   onSubmit,
   isSubmitting = false,
-  initialOwnerInfo = {}
+  initialOwnerInfo = {},
+  targetStep = null
 }) => {
   // Skip owner info - start from room types
   const hasOwnerInfo = initialOwnerInfo && Object.keys(initialOwnerInfo).length > 0;
@@ -134,6 +136,14 @@ const [propertyInfo, setPropertyInfo] = useState({
       }
     }
   }, [initialOwnerInfo, hasOwnerInfo]);
+
+  // Navigate to target step if provided
+  useEffect(() => {
+    if (targetStep && targetStep > 0 && targetStep <= 7) {
+      console.log('Navigating to target step:', targetStep);
+      setCurrentStep(targetStep);
+    }
+  }, [targetStep]);
 
   const [completedSteps, setCompletedSteps] = useState<number[]>([]);
 

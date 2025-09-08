@@ -21,6 +21,7 @@ interface Property {
   images: string[];
   status: string;
   created_at: string;
+  updated_at?: string;
   rejection_reason?: string;
   user_id: string;
   owner_name?: string;
@@ -132,7 +133,16 @@ const Admin = () => {
 
     // Filter by status
     if (statusFilter !== 'all') {
-      filtered = filtered.filter(property => property.status === statusFilter);
+      if (statusFilter === 'edited-recently') {
+        filtered = filtered.filter(property => 
+          property.status === 'pending' && 
+          property.updated_at && 
+          property.created_at && 
+          new Date(property.updated_at) > new Date(property.created_at)
+        );
+      } else {
+        filtered = filtered.filter(property => property.status === statusFilter);
+      }
     }
 
     setFilteredProperties(filtered);

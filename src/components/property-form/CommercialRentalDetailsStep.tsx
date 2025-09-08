@@ -142,16 +142,15 @@ export const CommercialRentalDetailsStep: React.FC<CommercialRentalDetailsStepPr
                   <FormItem>
                     <FormLabel className="text-sm font-medium">Expected Rent</FormLabel>
                     <div className="flex items-center space-x-4">
-                       <div className="flex-1 relative">
+                       <div className="flex-1">
                          <FormControl>
                            <PriceInput 
                              placeholder="Enter Amount"
-                             className="h-12 pr-20"
+                             className="h-12"
                              value={field.value}
                              onChange={field.onChange}
                            />
                          </FormControl>
-                         <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500">/ Month</span>
                        </div>
                     </div>
                     <div className="flex items-center space-x-6 mt-2">

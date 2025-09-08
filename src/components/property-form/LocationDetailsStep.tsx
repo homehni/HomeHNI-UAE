@@ -187,8 +187,8 @@ export const LocationDetailsStep: React.FC<LocationDetailsStepProps> = ({
                               <MapPin className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                             </div>
                           </FormControl>
-                          <p className="text-xs text-muted-foreground">
-                            Start typing to search for your property location with Google Maps autocomplete.
+                          <p className="text-xs text-red-500 animate-pulse font-bold">
+                            Type the name of the apartment/ the area of property/anything that could help us 😊
                           </p>
                           <FormMessage />
                         </FormItem>

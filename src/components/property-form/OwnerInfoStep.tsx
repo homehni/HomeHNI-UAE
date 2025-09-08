@@ -261,9 +261,9 @@ export const OwnerInfoStep: React.FC<OwnerInfoStepProps> = ({
                   </>
                 ) : selectedListingType === 'Flatmates' ? (
                   <>
-                    <SelectItem value="Owner">Owner (of the flat)</SelectItem>
-                    <SelectItem value="Agent">Agent</SelectItem>
-                    <SelectItem value="Builder">Builder</SelectItem>
+                    <SelectItem value="Owner">Student</SelectItem>
+                    <SelectItem value="Agent">Working professional</SelectItem>
+                    <SelectItem value="Builder">Tenant</SelectItem>
                   </>
                 ) : (
                   <>
