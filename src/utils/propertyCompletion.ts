@@ -200,6 +200,26 @@ export const calculatePropertyCompletion = (property: PropertyData): CompletionR
       // Amenities & Features (10% weight)
       { key: 'amenities', weight: 10, required: false },
     ];
+  } else if (propertyType === 'plot' || propertyType === 'land') {
+    // Plot/Land property fields (only fields that exist in database)
+    fields = [
+      // Basic Information (40% weight)
+      { key: 'title', weight: 8, required: true },
+      { key: 'property_type', weight: 4, required: true },
+      { key: 'listing_type', weight: 4, required: true },
+      { key: 'expected_price', weight: 12, required: true },
+      { key: 'super_area', weight: 12, required: true },
+      
+      // Location Details (30% weight)
+      { key: 'city', weight: 8, required: true },
+      { key: 'locality', weight: 8, required: true },
+      { key: 'state', weight: 7, required: true },
+      { key: 'pincode', weight: 7, required: true },
+      
+      // Media & Description (30% weight)
+      { key: 'images', weight: 20, required: false },
+      { key: 'description', weight: 10, required: false },
+    ];
   } else {
     // Residential property fields (default)
     fields = [

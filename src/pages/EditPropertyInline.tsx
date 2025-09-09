@@ -48,6 +48,19 @@ interface Property {
   amenities?: string[];
   // Location specific fields
   landmark?: string;
+  // Plot/Land specific fields (matching Post Property form)
+  plot_area?: number;
+  length?: number;
+  width?: number;
+  boundary_wall?: string;
+  floors_allowed?: number;
+  gated_project?: string;
+  water_supply?: string;
+  electricity_connection?: string;
+  sewage_connection?: string;
+  road_width?: number;
+  gated_security?: boolean | string;
+  directions?: string;
 }
 
 interface PGProperty {
@@ -117,12 +130,16 @@ export const EditPropertyInline: React.FC = () => {
         return original !== edited;
       });
     } else {
-      // Compare regular property fields
+      // Compare regular property fields (including plot-specific fields)
       const fieldsToCompare: (keyof Property)[] = [
         'title', 'property_type', 'listing_type', 'bhk_type', 'expected_price',
         'super_area', 'carpet_area', 'bathrooms', 'balconies', 'floor_no',
         'city', 'locality', 'state', 'pincode', 'description', 'images', 'videos',
-        'landmark', 'property_age', 'floor_type', 'total_floors', 'amenities'
+        'landmark', 'property_age', 'floor_type', 'total_floors', 'amenities',
+        // Plot/Land specific fields
+        'plot_area', 'length', 'width', 'boundary_wall', 'floors_allowed', 
+        'gated_project', 'water_supply', 'electricity_connection', 'sewage_connection',
+        'road_width', 'gated_security', 'directions'
       ];
       
       return fieldsToCompare.some(field => {
@@ -601,36 +618,45 @@ export const EditPropertyInline: React.FC = () => {
 
         if (error) throw error;
       } else {
-        // Update regular property
+        // Update regular property - only include fields that exist in the database
+        const updateData: any = {
+          title: editedProperty.title,
+          property_type: editedProperty.property_type,
+          listing_type: (editedProperty as Property).listing_type,
+          expected_price: (editedProperty as Property).expected_price,
+          city: editedProperty.city,
+          locality: editedProperty.locality,
+          state: editedProperty.state,
+          pincode: (editedProperty as Property).pincode,
+          description: editedProperty.description,
+          landmarks: (editedProperty as Property).landmark, // Map landmark to landmarks (database field)
+          images: editedProperty.images,
+          videos: editedProperty.videos,
+          status: 'pending', // Reset to pending for review
+          updated_at: new Date().toISOString()
+        };
+
+        // Only include fields that exist in the database for the specific property type
+        if (editedProperty.property_type === 'plot' || editedProperty.property_type === 'land') {
+          // For plot/land properties, use super_area to store plot_area
+          updateData.super_area = (editedProperty as Property).plot_area || (editedProperty as Property).super_area;
+        } else {
+          // For other property types, include the standard fields
+          updateData.bhk_type = (editedProperty as Property).bhk_type;
+          updateData.super_area = (editedProperty as Property).super_area;
+          updateData.carpet_area = (editedProperty as Property).carpet_area;
+          updateData.bathrooms = (editedProperty as Property).bathrooms;
+          updateData.balconies = (editedProperty as Property).balconies;
+          updateData.property_age = (editedProperty as Property).property_age;
+          updateData.floor_type = (editedProperty as Property).floor_type;
+          updateData.total_floors = (editedProperty as Property).total_floors;
+          updateData.floor_no = (editedProperty as Property).floor_no;
+          updateData.amenities = (editedProperty as Property).amenities;
+        }
+
         const { error } = await supabase
           .from('properties')
-          .update({
-            title: editedProperty.title,
-            property_type: editedProperty.property_type,
-            listing_type: (editedProperty as Property).listing_type,
-            bhk_type: (editedProperty as Property).bhk_type,
-            expected_price: (editedProperty as Property).expected_price,
-            super_area: (editedProperty as Property).super_area,
-            carpet_area: (editedProperty as Property).carpet_area,
-            bathrooms: (editedProperty as Property).bathrooms,
-            balconies: (editedProperty as Property).balconies,
-            city: editedProperty.city,
-            locality: editedProperty.locality,
-            state: editedProperty.state,
-            pincode: (editedProperty as Property).pincode,
-            description: editedProperty.description,
-            landmarks: (editedProperty as Property).landmark, // Map landmark to landmarks (database field)
-            images: editedProperty.images,
-            videos: editedProperty.videos,
-            status: 'pending', // Reset to pending for review
-            updated_at: new Date().toISOString(),
-            // Only include fields that exist in the database
-            property_age: (editedProperty as Property).property_age,
-            floor_type: (editedProperty as Property).floor_type,
-            total_floors: (editedProperty as Property).total_floors,
-            floor_no: (editedProperty as Property).floor_no,
-            amenities: (editedProperty as Property).amenities
-          })
+          .update(updateData)
           .eq('id', editedProperty.id)
           .eq('user_id', user.id);
 
@@ -995,6 +1021,51 @@ export const EditPropertyInline: React.FC = () => {
                     </div>
                   </CardContent>
                 </Card>
+                
+                {/* Save Changes Button for Basic Info Tab */}
+                <div className="mt-6 flex justify-between items-center">
+                  {hasChanges() && (
+                    <div className="text-sm text-orange-600 flex items-center">
+                      <div className="w-2 h-2 bg-orange-500 rounded-full mr-2"></div>
+                      You have unsaved changes
+                    </div>
+                  )}
+                  <div className="flex space-x-4">
+                    <Button
+                      variant="outline"
+                      onClick={() => {
+                        if (hasChanges()) {
+                          const confirmLeave = window.confirm('You have unsaved changes. Are you sure you want to leave?');
+                          if (confirmLeave) {
+                            localStorage.removeItem(`edit-property-${propertyId}`);
+                            navigate('/dashboard?tab=properties');
+                          }
+                        } else {
+                          navigate('/dashboard?tab=properties');
+                        }
+                      }}
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      onClick={handleSave}
+                      disabled={isSubmitting || !hasChanges()}
+                      className="bg-blue-600 hover:bg-blue-700"
+                    >
+                      {isSubmitting ? (
+                        <>
+                          <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                          Saving...
+                        </>
+                      ) : (
+                        <>
+                          <Save className="h-4 w-4 mr-2" />
+                          Save Changes
+                        </>
+                      )}
+                    </Button>
+                  </div>
+                </div>
               </TabsContent>
 
               <TabsContent value="location" className="space-y-4">
@@ -1063,6 +1134,51 @@ export const EditPropertyInline: React.FC = () => {
                     </div>
                   </CardContent>
                 </Card>
+                
+                {/* Save Changes Button for Location Tab */}
+                <div className="mt-6 flex justify-between items-center">
+                  {hasChanges() && (
+                    <div className="text-sm text-orange-600 flex items-center">
+                      <div className="w-2 h-2 bg-orange-500 rounded-full mr-2"></div>
+                      You have unsaved changes
+                    </div>
+                  )}
+                  <div className="flex space-x-4">
+                    <Button
+                      variant="outline"
+                      onClick={() => {
+                        if (hasChanges()) {
+                          const confirmLeave = window.confirm('You have unsaved changes. Are you sure you want to leave?');
+                          if (confirmLeave) {
+                            localStorage.removeItem(`edit-property-${propertyId}`);
+                            navigate('/dashboard?tab=properties');
+                          }
+                        } else {
+                          navigate('/dashboard?tab=properties');
+                        }
+                      }}
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      onClick={handleSave}
+                      disabled={isSubmitting || !hasChanges()}
+                      className="bg-blue-600 hover:bg-blue-700"
+                    >
+                      {isSubmitting ? (
+                        <>
+                          <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                          Saving...
+                        </>
+                      ) : (
+                        <>
+                          <Save className="h-4 w-4 mr-2" />
+                          Save Changes
+                        </>
+                      )}
+                    </Button>
+                  </div>
+                </div>
               </TabsContent>
 
               <TabsContent value="details" className="space-y-4">
@@ -1071,65 +1187,296 @@ export const EditPropertyInline: React.FC = () => {
                     <CardTitle>Property Details</CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <Label htmlFor="super_area">Super Area (sq ft)</Label>
-                        <Input
-                          id="super_area"
-                          type="number"
-                          value={editedProperty.super_area || ''}
-                          onChange={(e) => handleFieldChange('super_area', Number(e.target.value))}
-                          placeholder="Enter super area"
-                        />
-                      </div>
-                      <div>
-                        <Label htmlFor="carpet_area">Carpet Area (sq ft)</Label>
-                        <Input
-                          id="carpet_area"
-                          type="number"
-                          value={editedProperty.carpet_area || ''}
-                          onChange={(e) => handleFieldChange('carpet_area', Number(e.target.value))}
-                          placeholder="Enter carpet area"
-                        />
-                      </div>
-                    </div>
-
                     {/* Note: Commercial-specific fields are not available in current database schema */}
 
-                    <div className="grid grid-cols-3 gap-4">
-                      <div>
-                        <Label htmlFor="bathrooms">Bathrooms</Label>
-                        <Input
-                          id="bathrooms"
-                          type="number"
-                          value={editedProperty.bathrooms || ''}
-                          onChange={(e) => handleFieldChange('bathrooms', Number(e.target.value))}
-                          placeholder="No. of bathrooms"
-                        />
+                    {/* Only show bathroom, balcony, floor fields for non-plot properties */}
+                    {editedProperty.property_type !== 'plot' && editedProperty.property_type !== 'land' && (
+                      <div className="grid grid-cols-3 gap-4">
+                        <div>
+                          <Label htmlFor="bathrooms">Bathrooms</Label>
+                          <Input
+                            id="bathrooms"
+                            type="number"
+                            value={editedProperty.bathrooms || ''}
+                            onChange={(e) => handleFieldChange('bathrooms', Number(e.target.value))}
+                            placeholder="No. of bathrooms"
+                          />
+                        </div>
+                        <div>
+                          <Label htmlFor="balconies">Balconies</Label>
+                          <Input
+                            id="balconies"
+                            type="number"
+                            value={editedProperty.balconies || ''}
+                            onChange={(e) => handleFieldChange('balconies', Number(e.target.value))}
+                            placeholder="No. of balconies"
+                          />
+                        </div>
+                        <div>
+                          <Label htmlFor="floor_no">Floor Number</Label>
+                          <Input
+                            id="floor_no"
+                            type="number"
+                            value={editedProperty.floor_no || ''}
+                            onChange={(e) => handleFieldChange('floor_no', Number(e.target.value))}
+                            placeholder="Floor number"
+                          />
+                        </div>
                       </div>
-                      <div>
-                        <Label htmlFor="balconies">Balconies</Label>
-                        <Input
-                          id="balconies"
-                          type="number"
-                          value={editedProperty.balconies || ''}
-                          onChange={(e) => handleFieldChange('balconies', Number(e.target.value))}
-                          placeholder="No. of balconies"
-                        />
+                    )}
+
+                    {/* Show plot-specific fields for plot/land properties */}
+                    {(editedProperty.property_type === 'plot' || editedProperty.property_type === 'land') && (
+                      <div className="space-y-6">
+                        {/* Land/Plot Details */}
+                        <div>
+                          <h4 className="text-lg font-semibold mb-4">Land/Plot Details</h4>
+                          <div className="grid grid-cols-2 gap-4">
+                            <div>
+                              <Label htmlFor="plot_area">Plot Area (sq.ft)</Label>
+                              <Input
+                                id="plot_area"
+                                type="number"
+                                value={editedProperty.plot_area || ''}
+                                onChange={(e) => handleFieldChange('plot_area', Number(e.target.value))}
+                                placeholder="e.g., 1200"
+                              />
+                            </div>
+                            <div>
+                              <Label htmlFor="boundary_wall">Boundary Wall</Label>
+                              <Select
+                                value={editedProperty.boundary_wall || ''}
+                                onValueChange={(value) => handleFieldChange('boundary_wall', value)}
+                              >
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select boundary wall status" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="yes">Yes - Complete</SelectItem>
+                                  <SelectItem value="partial">Partial</SelectItem>
+                                  <SelectItem value="no">No</SelectItem>
+                                </SelectContent>
+                              </Select>
+                            </div>
+                          </div>
+                          
+                          <div className="grid grid-cols-2 gap-4 mt-4">
+                            <div>
+                              <Label htmlFor="length">Length (ft)</Label>
+                              <Input
+                                id="length"
+                                type="number"
+                                value={editedProperty.length || ''}
+                                onChange={(e) => handleFieldChange('length', Number(e.target.value))}
+                                placeholder="e.g., 60"
+                              />
+                            </div>
+                            <div>
+                              <Label htmlFor="width">Width (ft)</Label>
+                              <Input
+                                id="width"
+                                type="number"
+                                value={editedProperty.width || ''}
+                                onChange={(e) => handleFieldChange('width', Number(e.target.value))}
+                                placeholder="e.g., 40"
+                              />
+                            </div>
+                          </div>
+                          
+                          <div className="grid grid-cols-2 gap-4 mt-4">
+                            <div>
+                              <Label htmlFor="floors_allowed">Floors allowed for construction</Label>
+                              <Input
+                                id="floors_allowed"
+                                type="number"
+                                value={editedProperty.floors_allowed || ''}
+                                onChange={(e) => handleFieldChange('floors_allowed', Number(e.target.value))}
+                                placeholder="3"
+                              />
+                            </div>
+                            <div>
+                              <Label htmlFor="gated_project">Is the Land/Plot inside a gated project?</Label>
+                              <Select
+                                value={editedProperty.gated_project || ''}
+                                onValueChange={(value) => handleFieldChange('gated_project', value)}
+                              >
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="no">No</SelectItem>
+                                  <SelectItem value="yes">Yes</SelectItem>
+                                </SelectContent>
+                              </Select>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Infrastructure & Amenities */}
+                        <div>
+                          <h4 className="text-lg font-semibold mb-4">Infrastructure & Amenities</h4>
+                          <div className="grid grid-cols-2 gap-4">
+                            <div>
+                              <Label htmlFor="water_supply">Water Supply</Label>
+                              <Select
+                                value={editedProperty.water_supply || ''}
+                                onValueChange={(value) => handleFieldChange('water_supply', value)}
+                              >
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="municipal">Municipal Supply</SelectItem>
+                                  <SelectItem value="borewell">Borewell</SelectItem>
+                                  <SelectItem value="tank">Water Tank</SelectItem>
+                                  <SelectItem value="none">None</SelectItem>
+                                </SelectContent>
+                              </Select>
+                            </div>
+                            <div>
+                              <Label htmlFor="electricity_connection">Electricity Connection</Label>
+                              <Select
+                                value={editedProperty.electricity_connection || ''}
+                                onValueChange={(value) => handleFieldChange('electricity_connection', value)}
+                              >
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="available">Available</SelectItem>
+                                  <SelectItem value="nearby">Nearby</SelectItem>
+                                  <SelectItem value="none">None</SelectItem>
+                                </SelectContent>
+                              </Select>
+                            </div>
+                          </div>
+                          
+                          <div className="grid grid-cols-2 gap-4 mt-4">
+                            <div>
+                              <Label htmlFor="sewage_connection">Sewage Connection</Label>
+                              <Select
+                                value={editedProperty.sewage_connection || ''}
+                                onValueChange={(value) => handleFieldChange('sewage_connection', value)}
+                              >
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="connected">Connected</SelectItem>
+                                  <SelectItem value="septic_tank">Septic Tank</SelectItem>
+                                  <SelectItem value="none">None</SelectItem>
+                                </SelectContent>
+                              </Select>
+                            </div>
+                            <div>
+                              <Label htmlFor="road_width">Width of Facing Road (ft.)</Label>
+                              <Input
+                                id="road_width"
+                                type="number"
+                                value={editedProperty.road_width || ''}
+                                onChange={(e) => handleFieldChange('road_width', Number(e.target.value))}
+                                placeholder="Width of facing road"
+                              />
+                            </div>
+                          </div>
+                          
+                          <div className="mt-4">
+                            <Label htmlFor="gated_security">Gated Security</Label>
+                            <div className="flex space-x-4 mt-2">
+                              <label className="flex items-center space-x-2">
+                                <input
+                                  type="radio"
+                                  name="gated_security"
+                                  value="false"
+                                  checked={editedProperty.gated_security === 'false' || editedProperty.gated_security === false}
+                                  onChange={(e) => handleFieldChange('gated_security', e.target.value)}
+                                />
+                                <span>No</span>
+                              </label>
+                              <label className="flex items-center space-x-2">
+                                <input
+                                  type="radio"
+                                  name="gated_security"
+                                  value="true"
+                                  checked={editedProperty.gated_security === 'true' || editedProperty.gated_security === true}
+                                  onChange={(e) => handleFieldChange('gated_security', e.target.value)}
+                                />
+                                <span>Yes</span>
+                              </label>
+                            </div>
+                          </div>
+                          
+                          <div className="mt-4">
+                            <div className="flex items-center space-x-2 mb-2">
+                              <Label htmlFor="directions">Add Directions Tip for your buyers</Label>
+                              <span className="bg-orange-100 text-orange-800 text-xs px-2 py-1 rounded-full font-semibold">
+                                NEW
+                              </span>
+                            </div>
+                            <p className="text-sm text-gray-500 mb-2">
+                              Don't want calls asking location?
+                            </p>
+                            <p className="text-sm text-gray-600 mb-3">
+                              Add directions to reach using landmarks
+                            </p>
+                            <textarea
+                              id="directions"
+                              className="w-full p-3 border border-gray-300 rounded-md resize-none min-h-[100px]"
+                              value={editedProperty.directions || ''}
+                              onChange={(e) => handleFieldChange('directions', e.target.value)}
+                              placeholder="Eg. Take the road opposite to Amrita College, take right after 300m..."
+                            />
+                          </div>
+                        </div>
                       </div>
-                      <div>
-                        <Label htmlFor="floor_no">Floor Number</Label>
-                        <Input
-                          id="floor_no"
-                          type="number"
-                          value={editedProperty.floor_no || ''}
-                          onChange={(e) => handleFieldChange('floor_no', Number(e.target.value))}
-                          placeholder="Floor number"
-                        />
-                      </div>
-                    </div>
+                    )}
                   </CardContent>
                 </Card>
+                
+                {/* Save Changes Button for Details Tab */}
+                <div className="mt-6 flex justify-between items-center">
+                  {hasChanges() && (
+                    <div className="text-sm text-orange-600 flex items-center">
+                      <div className="w-2 h-2 bg-orange-500 rounded-full mr-2"></div>
+                      You have unsaved changes
+                    </div>
+                  )}
+                  <div className="flex space-x-4">
+                    <Button
+                      variant="outline"
+                      onClick={() => {
+                        if (hasChanges()) {
+                          const confirmLeave = window.confirm('You have unsaved changes. Are you sure you want to leave?');
+                          if (confirmLeave) {
+                            localStorage.removeItem(`edit-property-${propertyId}`);
+                            navigate('/dashboard?tab=properties');
+                          }
+                        } else {
+                          navigate('/dashboard?tab=properties');
+                        }
+                      }}
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      onClick={handleSave}
+                      disabled={isSubmitting || !hasChanges()}
+                      className="bg-blue-600 hover:bg-blue-700"
+                    >
+                      {isSubmitting ? (
+                        <>
+                          <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                          Saving...
+                        </>
+                      ) : (
+                        <>
+                          <Save className="h-4 w-4 mr-2" />
+                          Save Changes
+                        </>
+                      )}
+                    </Button>
+                  </div>
+                </div>
               </TabsContent>
 
               {isPGProperty && (
@@ -1248,6 +1595,51 @@ export const EditPropertyInline: React.FC = () => {
                       </div>
                     </CardContent>
                   </Card>
+                  
+                  {/* Save Changes Button for PG Details Tab */}
+                  <div className="mt-6 flex justify-between items-center">
+                    {hasChanges() && (
+                      <div className="text-sm text-orange-600 flex items-center">
+                        <div className="w-2 h-2 bg-orange-500 rounded-full mr-2"></div>
+                        You have unsaved changes
+                      </div>
+                    )}
+                    <div className="flex space-x-4">
+                      <Button
+                        variant="outline"
+                        onClick={() => {
+                          if (hasChanges()) {
+                            const confirmLeave = window.confirm('You have unsaved changes. Are you sure you want to leave?');
+                            if (confirmLeave) {
+                              localStorage.removeItem(`edit-property-${propertyId}`);
+                              navigate('/dashboard?tab=properties');
+                            }
+                          } else {
+                            navigate('/dashboard?tab=properties');
+                          }
+                        }}
+                      >
+                        Cancel
+                      </Button>
+                      <Button
+                        onClick={handleSave}
+                        disabled={isSubmitting || !hasChanges()}
+                        className="bg-blue-600 hover:bg-blue-700"
+                      >
+                        {isSubmitting ? (
+                          <>
+                            <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                            Saving...
+                          </>
+                        ) : (
+                          <>
+                            <Save className="h-4 w-4 mr-2" />
+                            Save Changes
+                          </>
+                        )}
+                      </Button>
+                    </div>
+                  </div>
                 </TabsContent>
               )}
 
@@ -1341,52 +1733,53 @@ export const EditPropertyInline: React.FC = () => {
                     )}
                   </CardContent>
                 </Card>
+                
+                {/* Save Changes Button for Images Tab */}
+                <div className="mt-6 flex justify-between items-center">
+                  {hasChanges() && (
+                    <div className="text-sm text-orange-600 flex items-center">
+                      <div className="w-2 h-2 bg-orange-500 rounded-full mr-2"></div>
+                      You have unsaved changes
+                    </div>
+                  )}
+                  <div className="flex space-x-4">
+                    <Button
+                      variant="outline"
+                      onClick={() => {
+                        if (hasChanges()) {
+                          const confirmLeave = window.confirm('You have unsaved changes. Are you sure you want to leave?');
+                          if (confirmLeave) {
+                            localStorage.removeItem(`edit-property-${propertyId}`);
+                            navigate('/dashboard?tab=properties');
+                          }
+                        } else {
+                          navigate('/dashboard?tab=properties');
+                        }
+                      }}
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      onClick={handleSave}
+                      disabled={isSubmitting || !hasChanges()}
+                      className="bg-blue-600 hover:bg-blue-700"
+                    >
+                      {isSubmitting ? (
+                        <>
+                          <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                          Saving...
+                        </>
+                      ) : (
+                        <>
+                          <Save className="h-4 w-4 mr-2" />
+                          Save Changes
+                        </>
+                      )}
+                    </Button>
+                  </div>
+                </div>
               </TabsContent>
             </Tabs>
-
-            <div className="mt-6 flex justify-between items-center">
-              {hasChanges() && (
-                <div className="text-sm text-orange-600 flex items-center">
-                  <div className="w-2 h-2 bg-orange-500 rounded-full mr-2"></div>
-                  You have unsaved changes
-                </div>
-              )}
-              <div className="flex space-x-4">
-                <Button
-                  variant="outline"
-                  onClick={() => {
-                    if (hasChanges()) {
-                      const confirmLeave = window.confirm('You have unsaved changes. Are you sure you want to leave?');
-                      if (confirmLeave) {
-                        localStorage.removeItem(`edit-property-${propertyId}`);
-                        navigate('/dashboard?tab=properties');
-                      }
-                    } else {
-                      navigate('/dashboard?tab=properties');
-                    }
-                  }}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  onClick={handleSave}
-                  disabled={isSubmitting || !hasChanges()}
-                  className="bg-blue-600 hover:bg-blue-700"
-                >
-                  {isSubmitting ? (
-                    <>
-                      <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                      Saving...
-                    </>
-                  ) : (
-                    <>
-                      <Save className="h-4 w-4 mr-2" />
-                      Save Changes
-                    </>
-                  )}
-                </Button>
-              </div>
-            </div>
           </div>
         </div>
       </div>

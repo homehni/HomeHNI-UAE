@@ -46,7 +46,6 @@ import { DealRoom } from "./pages/DealRoom";
 import { VerifyEmail } from "./pages/VerifyEmail";
 import { Dashboard } from "./pages/Dashboard";
 import { PostProperty } from "./pages/PostProperty";
-import { EditPropertyInline as EditProperty } from "./pages/EditPropertyInline";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import AdminAuth from "./pages/AdminAuth";
 import AdminProtectedRoute from "@/components/AdminProtectedRoute";
@@ -103,6 +102,7 @@ import PaymentSuccess from "./pages/payments/Success";
 import PaymentFailed from "./pages/payments/Failed";
 import PostService from "./pages/PostService";
 import { EmployeeDashboard } from "./pages/EmployeeDashboard";
+import Plans from "./pages/Plans";
 
 const App: React.FC = () => {
   const [queryClient] = useState(() => new QueryClient({
@@ -127,6 +127,7 @@ const App: React.FC = () => {
             <Route path="/" element={<Index />} />
             <Route path="/about-us" element={<AboutUs />} />
             <Route path="/about" element={<AboutSidebar />} />
+            <Route path="/plans" element={<Plans />} />
             <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route path="/careers" element={<Careers />} />
@@ -207,11 +208,6 @@ const App: React.FC = () => {
             <Route path="/property/:id" element={<PropertyDetails />} />
             <Route path="/search" element={<PropertySearch />} />
             <Route path="/property-search" element={<PropertySearch />} />
-            <Route path="/edit-property/:propertyId" element={
-              <ProtectedRoute>
-                <EditProperty />
-              </ProtectedRoute>
-            } />
             
             {/* My Interests Route */}
             <Route path="/my-interests" element={

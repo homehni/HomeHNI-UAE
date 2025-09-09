@@ -1,14 +1,11 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Star, CheckCircle, Phone, Clock, Users, Shield, UserCheck, Globe, Camera, Lock, FileText, TrendingUp, Target } from 'lucide-react';
+import { Star, Check, Phone, Clock, Users, Shield, UserCheck, Globe, Camera, Lock, FileText, TrendingUp, Target } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
-import Marquee from '@/components/Marquee';
 
 const CommercialOwnerPlans = () => {
   const [selectedPlans, setSelectedPlans] = useState({
@@ -233,7 +230,7 @@ const CommercialOwnerPlans = () => {
     ]
   };
 
-const keyBenefits = [
+  const keyBenefits = [
   {
     icon: Target,
     title: "Verified Tenant Connect",
@@ -250,7 +247,7 @@ const keyBenefits = [
     description: "Dedicated support throughout your journey"
   },
   {
-    icon: CheckCircle,
+    icon: Check,
     title: "Expert Rental Consultation",
     description: "Professional guidance on pricing and market trends"
   },
@@ -376,57 +373,17 @@ const keyBenefits = [
   ];
 
   return (
-    <div className="min-h-screen bg-background">
-      <Header />
-      <Marquee />
-      
-      {/* Hero Section */}
-      <section 
-        className="text-white py-20 pt-32 relative bg-cover bg-center bg-no-repeat"
-        style={{
-          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('/lovable-uploads/a37b9b71-093e-4303-b129-0e15546b07a8.png')`
-        }}
-      >
-        <div className="container mx-auto px-4 text-center">
-          <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
-            Get a Commercial Tenant Fast — Save ₹50,000 on Brokerage
-          </h1>
-          <p className="text-xl md:text-2xl mb-4 opacity-90">
-            Trusted by 3 Lakh+ property owners across India
-          </p>
-          <p className="text-lg md:text-xl mb-8 max-w-3xl mx-auto opacity-80">
-            Our Commercial Owner Plans help you close deals faster, with complete support and zero brokerage.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" variant="secondary" className="text-brand-red bg-white hover:bg-gray-100">
-              View Plans
-            </Button>
-<Button
-  size="lg"
-  variant="outline"
-  className="text-brand-red border-white hover:bg-white hover:text-brand-red transition-all duration-300"
->
-  <span className="flex items-center">
-    <Phone className="w-5 h-5 mr-2 text-brand-red transition-colors" />
-    Call +91 80740 17388
-  </span>
-</Button>
-
-
-          </div>
-        </div>
-      </section>
-
+    <div className="bg-background">
       {/* Commercial Owner Plans with Tabs */}
-      <section className="py-16 px-4 bg-gray-50" id="pricing">
+      <section className="py-8 px-4 bg-gray-50" id="pricing">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-4">
+          <h2 className="text-2xl md:text-3xl font-bold text-center mb-2">
             Choose Your Commercial Owner Plan
           </h2>
-          <p className="text-lg text-muted-foreground text-center mb-12">Select the category that best fits your property needs</p>
+          <p className="text-sm text-muted-foreground text-center mb-8">Select the category that best fits your property needs</p>
 
           <Tabs defaultValue="residential" className="w-full">
-            <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 mb-8">
+            <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 mb-6">
               <TabsTrigger value="residential" className="text-sm md:text-base">Residential</TabsTrigger>
               <TabsTrigger value="commercial" className="text-sm md:text-base">Commercial</TabsTrigger>
               <TabsTrigger value="industrial" className="text-sm md:text-base">Industrial</TabsTrigger>
@@ -554,18 +511,6 @@ const keyBenefits = [
         </div>
       </section>
 
-      {/* Support Callout */}
-      <section className="py-12 px-4 bg-brand-red text-primary-foreground">
-        <div className="max-w-4xl mx-auto text-center">
-          <Phone className="w-8 h-8 mx-auto mb-4" />
-          <h3 className="text-2xl font-bold mb-4">Need Assistance?</h3>
-          <p className="text-lg mb-4">For assistance, call us at</p>
-          <a href="tel:+918074017388" className="text-2xl font-bold hover:underline">
-            +91 80740 17388
-          </a>
-        </div>
-      </section>
-
       {/* FAQ Section */}
       <section className="py-16">
         <div className="container mx-auto px-4">
@@ -588,8 +533,6 @@ const keyBenefits = [
           </div>
         </div>
       </section>
-
-      <Footer />
     </div>
   );
 };

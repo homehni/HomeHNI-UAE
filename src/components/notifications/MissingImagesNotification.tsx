@@ -17,9 +17,9 @@ export const MissingImagesNotification: React.FC<MissingImagesNotificationProps>
   const navigate = useNavigate();
 
   const handleUploadImages = () => {
-    // Navigate to the property editing form with step parameter to go directly to gallery
+    // Navigate to the edit property page with images tab
     console.log('Upload images clicked for property:', propertyId);
-    navigate(`/post-property?edit=${propertyId}&step=gallery`);
+    navigate(`/edit-property/${propertyId}?tab=images`);
   };
 
   return (

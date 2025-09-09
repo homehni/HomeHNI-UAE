@@ -9,7 +9,9 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Marquee from "@/components/Marquee";
 import { Link } from "react-router-dom";
-const SellerPlans: React.FC = () => {
+
+interface SellerPlansProps { embedded?: boolean }
+const SellerPlans: React.FC<SellerPlansProps> = ({ embedded }) => {
   const [selectedPlans, setSelectedPlans] = useState({
     residential: 0,
     commercial: 0, 
@@ -272,11 +274,12 @@ const SellerPlans: React.FC = () => {
     description: "Sell your property quickly at a fractional cost."
   }];
   return (
-    <div className="min-h-screen bg-background">
-      <Marquee />
-      <Header />
+    <div className={embedded ? "" : "min-h-screen bg-background"}>
+      {!embedded && <Marquee />}
+      {!embedded && <Header />}
       
       {/* Hero Section */}
+    {!embedded && (
     <section 
       className="py-20 md:py-28 relative bg-cover bg-center bg-no-repeat"
       style={{
@@ -299,19 +302,19 @@ const SellerPlans: React.FC = () => {
           </div>
   </div>
 </section>
-
+)}
 
 
 
 
       {/* Seller Plans with Tabs */}
-      <section className="py-16 px-4 bg-gray-50">
+      <section className={embedded ? "py-8 px-4 bg-gray-50" : "py-16 px-4 bg-gray-50"}>
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+          <div className={embedded ? "text-center mb-6" : "text-center mb-12"}>
+            <h2 className={embedded ? "text-2xl md:text-3xl font-bold text-foreground mb-2" : "text-3xl md:text-4xl font-bold text-foreground mb-4"}>
               Seller Plans
             </h2>
-            <p className="text-lg text-muted-foreground">Select the category that best fits your property selling needs</p>
+            <p className={embedded ? "text-sm text-muted-foreground" : "text-lg text-muted-foreground"}>Select the category that best fits your property selling needs</p>
           </div>
 
           <Tabs defaultValue="residential" className="w-full">
@@ -399,9 +402,9 @@ const SellerPlans: React.FC = () => {
       
 
       {/* How It Works */}
-      <section className="py-16 bg-background">
+      <section className={embedded ? "py-8 bg-background" : "py-16 bg-background"}>
         <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
+          <div className={embedded ? "text-center mb-6" : "text-center mb-12"}>
             <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
               How Assisted Plans Work
             </h2>
@@ -457,7 +460,7 @@ const SellerPlans: React.FC = () => {
         </div>
       </section> */}
 
-      <Footer />
+      {!embedded && <Footer />}
     </div>
   );
 };

@@ -10,7 +10,6 @@ import { Building, MessageSquare, User, LogOut, Plus, Eye, Edit, Trash, FileText
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
 import { DeleteConfirmationModal } from '@/components/DeleteConfirmationModal';
-import { PropertyDetailModal } from '@/components/PropertyDetailModal';
 import { PropertyEditModal } from '@/components/PropertyEditModal';
 import { RequirementMatches } from '@/components/RequirementMatches';
 import { RequirementsChatLayout } from '@/components/requirements/RequirementsChatLayout';
@@ -114,13 +113,6 @@ export const Dashboard: React.FC = () => {
     title: ''
   });
   const [isDeleting, setIsDeleting] = useState(false);
-  const [viewPropertyModal, setViewPropertyModal] = useState<{
-    isOpen: boolean;
-    property: Property | null;
-  }>({
-    isOpen: false,
-    property: null
-  });
   const [editPropertyModal, setEditPropertyModal] = useState<{
     isOpen: boolean;
     property: Property | null;
@@ -331,18 +323,10 @@ export const Dashboard: React.FC = () => {
   };
 
   const handleViewProperty = (property: Property) => {
-    setViewPropertyModal({
-      isOpen: true,
-      property
-    });
+    // Navigate to the property's individual details page
+    navigate(`/property/${property.id}`);
   };
 
-  const closeViewModal = () => {
-    setViewPropertyModal({
-      isOpen: false,
-      property: null
-    });
-  };
 
   const handleEditProperty = (property: Property) => {
     navigate(`/edit-property/${property.id}`);
@@ -479,16 +463,137 @@ export const Dashboard: React.FC = () => {
                 {properties.map((property) => (
                   <Card key={property.id}>
                     <CardContent className="p-6">
-                      <div className="flex justify-between items-start">
-                         <div className="flex-1">
-                            <h3 className="text-lg font-medium text-gray-900 mb-2">
-                              {property.title}
-                            </h3>
-                            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm text-gray-600 mb-2">
-                              <div>Type: {property.property_type}</div>
-                              <div>For: {property.listing_type}</div>
-                              <div>Price: ₹{property.expected_price.toLocaleString()}</div>
-                              <div>Location: {property.locality}</div>
+                      <div className="flex justify-between items-start gap-4">
+                         <div className="flex-1 min-w-0">
+                            {/* Title and Actions Row */}
+                            <div className="flex justify-between items-start mb-3">
+                              <h3 className="text-lg font-semibold text-gray-900 flex-1 min-w-0 pr-4">
+                                {property.title}
+                              </h3>
+                              <div className="flex space-x-2 flex-shrink-0">
+                                <Button 
+                                  variant="outline" 
+                                  size="sm"
+                                  onClick={() => handleViewProperty(property)}
+                                  className="flex items-center gap-1"
+                                >
+                                  <Eye className="h-4 w-4" />
+                                  <span className="hidden sm:inline">View</span>
+                                </Button>
+                                <Button 
+                                  variant="outline" 
+                                  size="sm"
+                                  onClick={() => handleEditProperty(property)}
+                                  className="flex items-center gap-1"
+                                >
+                                  <Edit className="h-4 w-4" />
+                                  <span className="hidden sm:inline">Edit</span>
+                                </Button>
+                                <Button 
+                                  className="bg-red-500 hover:bg-red-600 text-white"
+                                  size="sm"
+                                  onClick={() => openDeleteModal('property', property.id, property.title)}
+                                >
+                                  <Trash className="h-4 w-4" />
+                                </Button>
+                              </div>
+                            </div>
+
+                            {/* Main Property Details */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
+                              <div className="space-y-2">
+                                <div className="flex items-center justify-between">
+                                  <span className="text-sm font-medium text-gray-700">Type:</span>
+                                  <span className="text-sm text-gray-900 capitalize">{property.property_type}</span>
+                                </div>
+                                <div className="flex items-center justify-between">
+                                  <span className="text-sm font-medium text-gray-700">For:</span>
+                                  <span className="text-sm text-gray-900 capitalize">{property.listing_type}</span>
+                                </div>
+                                <div className="flex items-center justify-between">
+                                  <span className="text-sm font-medium text-gray-700">Price:</span>
+                                  <span className="text-sm font-semibold text-green-600">₹{property.expected_price.toLocaleString()}</span>
+                                </div>
+                              </div>
+                              <div className="space-y-2">
+                                <div className="flex items-center justify-between">
+                                  <span className="text-sm font-medium text-gray-700">Location:</span>
+                                  <span className="text-sm text-gray-900 text-right max-w-48 truncate" title={property.locality}>
+                                    {property.locality}
+                                  </span>
+                                </div>
+                                {property.super_area && (
+                                  <div className="flex items-center justify-between">
+                                    <span className="text-sm font-medium text-gray-700">Area:</span>
+                                    <span className="text-sm text-gray-900">{property.super_area} sq.ft</span>
+                                  </div>
+                                )}
+                                {property.bhk_type && (
+                                  <div className="flex items-center justify-between">
+                                    <span className="text-sm font-medium text-gray-700">BHK:</span>
+                                    <span className="text-sm text-gray-900">{property.bhk_type}</span>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+
+                            {/* Additional Details and Stats */}
+                            <div className="flex flex-wrap items-center justify-between gap-4 text-xs text-gray-500 mb-3">
+                              <div className="flex items-center gap-4">
+                                {property.images && property.images.length > 0 && (
+                                  <div className="flex items-center">
+                                    <span className="font-medium">Images:</span>
+                                    <span className="ml-1">{property.images.length} photos</span>
+                                  </div>
+                                )}
+                                <div className="flex items-center">
+                                  <Eye className="h-3 w-3 mr-1" />
+                                  <span>Views: 0</span>
+                                </div>
+                                <div className="flex items-center">
+                                  <MessageSquare className="h-3 w-3 mr-1" />
+                                  <span>Leads: 0</span>
+                                </div>
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <span>Expires: {new Date(new Date(property.created_at).getTime() + 90 * 24 * 60 * 60 * 1000).toLocaleDateString()}</span>
+                                <Button 
+                                  variant="ghost" 
+                                  size="sm"
+                                  className="text-xs text-blue-600 hover:text-blue-800 hover:bg-blue-50"
+                                  onClick={() => {
+                                    navigator.clipboard.writeText(`${window.location.origin}/property/${property.id}`);
+                                    toast({
+                                      title: "Link copied!",
+                                      description: "Property link copied to clipboard",
+                                    });
+                                  }}
+                                >
+                                  📋 Copy Link
+                                </Button>
+                                <Button 
+                                  variant="ghost" 
+                                  size="sm"
+                                  className="text-xs text-green-600 hover:text-green-800 hover:bg-green-50"
+                                  onClick={() => {
+                                    if (navigator.share) {
+                                      navigator.share({
+                                        title: property.title,
+                                        text: `Check out this property: ${property.title}`,
+                                        url: `${window.location.origin}/property/${property.id}`
+                                      });
+                                    } else {
+                                      navigator.clipboard.writeText(`${window.location.origin}/property/${property.id}`);
+                                      toast({
+                                        title: "Link copied!",
+                                        description: "Share this link with potential buyers/tenants",
+                                      });
+                                    }
+                                  }}
+                                >
+                                  📤 Share
+                                </Button>
+                              </div>
                             </div>
                             {/* Show owner information only to the property owner (for their own listings) */}
                             {user && property.user_id === user.id && (property.owner_name || property.owner_email || property.owner_phone) && (
@@ -507,26 +612,40 @@ export const Dashboard: React.FC = () => {
                                 )}
                               </div>
                             )}
-                           <div className="mt-2 flex items-center gap-2">
-                             <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
+                           <div className="mt-2 flex items-center gap-2 flex-wrap">
+                             {/* Enhanced Status Badge */}
+                             <span className={`inline-flex items-center px-3 py-1 text-xs font-semibold rounded-full ${
                                property.status === 'approved' 
-                                 ? 'bg-green-100 text-green-800'
+                                 ? 'bg-emerald-100 text-emerald-800 border border-emerald-200'
                                  : property.status === 'pending'
-                                 ? 'bg-yellow-100 text-yellow-800'
-                                 : 'bg-gray-100 text-gray-800'
+                                 ? 'bg-amber-100 text-amber-800 border border-amber-200'
+                                 : 'bg-gray-100 text-gray-800 border border-gray-200'
                              }`}>
-                               {property.status}
+                               {property.status === 'approved' ? '🟢 Active' : 
+                                property.status === 'pending' ? '🟡 Under Review' : 
+                                '⚪ ' + property.status}
                              </span>
                              
                              {/* Property edited recently flag */}
                              {property.status === 'pending' && property.updated_at && property.created_at && 
                               new Date(property.updated_at) > new Date(property.created_at) && (
-                               <span className="inline-flex px-2 py-1 text-xs font-medium rounded-full bg-orange-100 text-orange-800" title={`Last edited: ${new Date(property.updated_at).toLocaleString()}`}>
-                                 ✏️ Property edited recently
+                               <span className="inline-flex items-center px-2 py-1 text-xs font-medium rounded-full bg-orange-100 text-orange-800 border border-orange-200" title={`Last edited: ${new Date(property.updated_at).toLocaleString()}`}>
+                                 ✏️ Recently Edited
                                </span>
                              )}
+
+                             {/* Listing ID Badge */}
+                             <span className="inline-flex items-center px-2 py-1 text-xs font-mono bg-gray-100 text-gray-600 rounded border">
+                               ID: {property.id.slice(-8).toUpperCase()}
+                             </span>
+
+                             {/* Posted Date */}
+                             <span className="text-xs text-gray-500">
+                               Posted: {new Date(property.created_at).toLocaleDateString()}
+                             </span>
                            </div>
                            
+
                            {/* Property Notifications */}
                            {property.status === 'approved' && (
                              <>
@@ -558,29 +677,6 @@ export const Dashboard: React.FC = () => {
                              </>
                            )}
                          </div>
-                        <div className="flex space-x-2">
-                          <Button 
-                            variant="outline" 
-                            size="sm"
-                            onClick={() => handleViewProperty(property)}
-                          >
-                            <Eye className="h-4 w-4" />
-                          </Button>
-                          <Button 
-                            variant="outline" 
-                            size="sm"
-                            onClick={() => handleEditProperty(property)}
-                          >
-                            <Edit className="h-4 w-4" />
-                          </Button>
-                          <Button 
-                            className="bg-brand-red hover:bg-brand-red-dark text-white"
-                            size="sm"
-                            onClick={() => openDeleteModal('property', property.id, property.title)}
-                          >
-                            <Trash className="h-4 w-4" />
-                          </Button>
-                        </div>
                       </div>
                     </CardContent>
                   </Card>
@@ -689,12 +785,6 @@ export const Dashboard: React.FC = () => {
         isDeleting={isDeleting}
       />
 
-      {/* Property Detail Modal */}
-      <PropertyDetailModal
-        property={viewPropertyModal.property}
-        isOpen={viewPropertyModal.isOpen}
-        onClose={closeViewModal}
-      />
 
       {/* Property Edit Modal */}
       <PropertyEditModal

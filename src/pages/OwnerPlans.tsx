@@ -10,7 +10,9 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Marquee from '@/components/Marquee';
 import PayButton from '@/components/PayButton';
-const OwnerPlans = () => {
+
+interface OwnerPlansProps { embedded?: boolean }
+const OwnerPlans = ({ embedded }: OwnerPlansProps) => {
   const [selectedPlans, setSelectedPlans] = useState({
     residential: 0,
     commercial: 0, 
@@ -274,11 +276,12 @@ const OwnerPlans = () => {
   }];
 
   return (
-    <div className="min-h-screen bg-background">
-      <Marquee />
-      <Header />
+    <div className={embedded ? "" : "min-h-screen bg-background"}>
+      {!embedded && <Marquee />}
+      {!embedded && <Header />}
       
       {/* Hero Section */}
+      {!embedded && (
       <section 
         className="relative text-white py-16 px-4 pt-24 bg-cover bg-center bg-no-repeat"
         style={{
@@ -300,13 +303,14 @@ const OwnerPlans = () => {
           </div>
         </div>
       </section>
+      )}
 
       {/* Pricing Plans with Tabs */}
-      <section className="py-16 px-4 bg-gray-50">
+      <section className={embedded ? "py-8 px-4 bg-gray-50" : "py-16 px-4 bg-gray-50"}>
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Choose Your Perfect Plan</h2>
-            <p className="text-lg text-muted-foreground">Select the category that best fits your property needs</p>
+          <div className={embedded ? "text-center mb-6" : "text-center mb-12"}>
+            <h2 className={embedded ? "text-2xl font-bold mb-2" : "text-3xl font-bold mb-4"}>Choose Your Perfect Plan</h2>
+            <p className={embedded ? "text-sm text-muted-foreground" : "text-lg text-muted-foreground"}>Select the category that best fits your property needs</p>
           </div>
 
           <Tabs defaultValue="residential" className="w-full">
@@ -449,7 +453,7 @@ const OwnerPlans = () => {
         </div>
       </section>
 
-      <Footer />
+      {!embedded && <Footer />}
     </div>
   );
 };

@@ -5,9 +5,6 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
-import Marquee from '@/components/Marquee';
 
 const CommercialBuyerPlan = () => {
   const [selectedPlans, setSelectedPlans] = useState({
@@ -268,50 +265,17 @@ const CommercialBuyerPlan = () => {
     answer: "No hidden charges whatsoever! All costs are transparently mentioned upfront with no surprises."
   }];
 
-  const scrollToPricing = () => {
-    document.getElementById('pricing')?.scrollIntoView({
-      behavior: 'smooth'
-    });
-  };
-
-  return <div className="min-h-screen bg-background">
-      <Header />
-      <Marquee />
-      
-      {/* Hero Section */}
-      <section 
-        className="text-white py-20 pt-32 relative bg-cover bg-center bg-no-repeat"
-        style={{
-          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('/lovable-uploads/ad6e5d82-c08a-4e73-8459-edb904417654.png')`
-        }}
-      >
-        <div className="container mx-auto px-4 text-center">
-          <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
-            Get Expert Help to Buy or Lease Commercial Property 
-           
-          </h1>
-          <p className="text-xl md:text-2xl mb-8 text-red-100">
-            Trusted by 3 Lakh+ Buyers & Tenants across India
-          </p>
-          
-          <Button onClick={scrollToPricing} size="lg" className="bg-white text-brand-red hover:bg-red-50 px-8 py-4 text-lg font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all">
-            Get Started Now
-          </Button>
-        </div>
-      </section>
-
-     
-
+  return <div className="bg-background">
       {/* Commercial Buyer Plans with Tabs */}
-      <section id="pricing" className="py-16 px-4 bg-gray-50">
+      <section id="pricing" className="py-8 px-4 bg-gray-50">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-4">
+          <h2 className="text-2xl md:text-3xl font-bold text-center mb-2">
             Choose Your Plan
           </h2>
-          <p className="text-lg text-muted-foreground text-center mb-12">Select the category that best fits your property search needs</p>
+          <p className="text-sm text-muted-foreground text-center mb-8">Select the category that best fits your property search needs</p>
           
           <Tabs defaultValue="residential" className="w-full">
-            <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 mb-8">
+            <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 mb-6">
               <TabsTrigger value="residential" className="text-sm md:text-base">Residential</TabsTrigger>
               <TabsTrigger value="commercial" className="text-sm md:text-base">Commercial</TabsTrigger>
               <TabsTrigger value="industrial" className="text-sm md:text-base">Industrial</TabsTrigger>
@@ -391,11 +355,8 @@ const CommercialBuyerPlan = () => {
         </div>
       </section>
 
-
-
-
-     {/* Benefits Section */}
-      <section className="py-20 bg-muted/30">
+      {/* Benefits Section */}
+      <section className="py-16 bg-muted/30">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-4">
             Why Choose Our Commercial Buyer Plan?
@@ -460,8 +421,6 @@ const CommercialBuyerPlan = () => {
           </Accordion>
         </div>
       </section>
-
-      <Footer />
     </div>;
 };
 

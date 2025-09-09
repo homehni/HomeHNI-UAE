@@ -5,9 +5,6 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
-import Marquee from '@/components/Marquee';
 
 const CommercialSellerPlans = () => {
   const [selectedPlans, setSelectedPlans] = useState({
@@ -201,50 +198,17 @@ const CommercialSellerPlans = () => {
     answer: "Absolutely! You can list your property and gauge market interest without any commitment. Our team will provide market insights and help you make an informed decision about selling."
   }];
 
-  const scrollToPricing = () => {
-    document.getElementById('pricing')?.scrollIntoView({
-      behavior: 'smooth'
-    });
-  };
-
-  return <div className="min-h-screen bg-background">
-      <Header />
-      <Marquee />
-      
-      {/* Hero Section */}
-      <section 
-        className="text-white py-20 pt-32 relative bg-cover bg-center bg-no-repeat"
-        style={{
-          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('/lovable-uploads/ad6e5d82-c08a-4e73-8459-edb904417654.png')`
-        }}
-      >
-        <div className="container mx-auto px-4 text-center">
-          <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
-             Get Commercial Property Seller Support!
-          </h1>
-          <p className="text-xl md:text-2xl mb-4 text-red-100">
-            ⭐️⭐️⭐️⭐️⭐️ — Trusted by 3 Lacs+ Sellers like you!
-          </p>
-          <p className="text-lg md:text-xl mb-8 text-red-100">
-            List your property confidently with dedicated assistance.
-          </p>
-          
-          <Button onClick={scrollToPricing} size="lg" className="bg-white text-brand-red hover:bg-red-50 px-8 py-4 text-lg font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all">
-            See Seller Plans
-          </Button>
-        </div>
-      </section>
-
+  return <div className="bg-background">
       {/* Commercial Seller Plans with Tabs */}
-      <section id="pricing" className="py-16 px-4 bg-gray-50">
+      <section id="pricing" className="py-8 px-4 bg-gray-50">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-4 text-gray-900">
+          <h2 className="text-2xl md:text-3xl font-bold text-center mb-2 text-gray-900">
              Commercial Seller Plans
           </h2>
-          <p className="text-lg text-muted-foreground text-center mb-12">Select the category that best fits your property selling needs</p>
-      
+          <p className="text-sm text-muted-foreground text-center mb-8">Select the category that best fits your property selling needs</p>
+     
           <Tabs defaultValue="residential" className="w-full">
-            <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 mb-8">
+            <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 mb-6">
               <TabsTrigger value="residential" className="text-sm md:text-base">Residential</TabsTrigger>
               <TabsTrigger value="commercial" className="text-sm md:text-base">Commercial</TabsTrigger>
               <TabsTrigger value="industrial" className="text-sm md:text-base">Industrial</TabsTrigger>
@@ -368,8 +332,6 @@ const CommercialSellerPlans = () => {
           </Accordion>
         </div>
       </section>
-
-      <Footer />
     </div>;
 };
 

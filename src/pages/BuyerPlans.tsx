@@ -9,7 +9,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Marquee from '@/components/Marquee';
-const BuyerPlans = () => {
+
+interface BuyerPlansProps { embedded?: boolean }
+const BuyerPlans = ({ embedded }: BuyerPlansProps) => {
   const [selectedPlans, setSelectedPlans] = useState({
     residential: 0,
     commercial: 0, 
@@ -236,11 +238,12 @@ const BuyerPlans = () => {
     answer: "For now, it's FREE. Later pricing models may change."
   }];
   return (
-    <div className="min-h-screen bg-background">
-      <Marquee />
-      <Header />
+    <div className={embedded ? "" : "min-h-screen bg-background"}>
+      {!embedded && <Marquee />}
+      {!embedded && <Header />}
       
       {/* Hero Section */}
+      {!embedded && (
       <section 
         className="relative text-white py-16 px-4 pt-28 bg-cover bg-center bg-no-repeat"
         style={{
@@ -265,15 +268,16 @@ const BuyerPlans = () => {
          
         </div>
       </section>
+      )}
 
       {/* Buyer Plans with Tabs */}
-      <section className="py-16 px-4 bg-gray-50">
+      <section className={embedded ? "py-8 px-4 bg-gray-50" : "py-16 px-4 bg-gray-50"}>
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+          <div className={embedded ? "text-center mb-6" : "text-center mb-12"}>
+            <h2 className={embedded ? "text-2xl md:text-3xl font-bold text-foreground mb-2" : "text-3xl md:text-4xl font-bold text-foreground mb-4"}>
               Buyer Plans
             </h2>
-            <p className="text-lg text-muted-foreground">Select the category that best fits your property search needs</p>
+            <p className={embedded ? "text-sm text-muted-foreground" : "text-lg text-muted-foreground"}>Select the category that best fits your property search needs</p>
           </div>
 
           <Tabs defaultValue="residential" className="w-full">
@@ -361,9 +365,9 @@ const BuyerPlans = () => {
       
 
       {/* How Our Assisted Plans Work */}
-      <section className="py-16 px-4 bg-gray-50">
+      <section className={embedded ? "py-8 px-4 bg-gray-50" : "py-16 px-4 bg-gray-50"}>
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12">
+          <div className={embedded ? "text-center mb-6" : "text-center mb-12"}>
             <h2 className="text-3xl font-bold mb-4">👋 Say Hello to Your House-Hunt Assistant</h2>
             <p className="text-lg text-muted-foreground">Here's how we help you find your dream home</p>
           </div>
@@ -404,13 +408,13 @@ const BuyerPlans = () => {
           <h2 className="text-3xl md:text-4xl font-bold mb-6">
             Let's Find You the Perfect Home — At Zero Brokerage!
           </h2>
-          <Button className="bg-white text-brand-red hover:bg-gray-100 text-lg px-8 py-3">
+          <Button className="bg白 text-brand-red hover:bg-gray-100 text-lg px-8 py-3">
             Start Your Free Plan
           </Button>
         </div>
       </section> */}
 
-      <Footer />
+      {!embedded && <Footer />}
     </div>
   );
 };
