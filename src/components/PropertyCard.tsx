@@ -150,8 +150,11 @@ const PropertyCard = ({
     imagesForPage = [...imagesForPage, ...fallbackUrls.slice(0, fallbacksNeeded)];
   }
 
-  // Handle PG/Hostel properties specially
-  const isPGHostel = propertyType.toLowerCase().includes('pg') || propertyType.toLowerCase().includes('hostel');
+  // Handle PG/Hostel properties specially - comprehensive detection
+  const isPGHostel = propertyType.toLowerCase().includes('pg') || 
+                    propertyType.toLowerCase().includes('hostel') ||
+                    title.toLowerCase().includes('pg') ||
+                    title.toLowerCase().includes('hostel');
   
   const propertyForPage = {
     id,

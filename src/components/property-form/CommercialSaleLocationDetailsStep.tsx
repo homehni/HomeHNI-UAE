@@ -133,6 +133,30 @@ export const CommercialSaleLocationDetailsStep: React.FC<CommercialSaleLocationD
           el.value = value;
           form.setValue('locality', value, { shouldValidate: true });
         }
+        
+        // Parse address components to extract city, state, and pincode
+        if (place?.address_components) {
+          let city = '';
+          let state = '';
+          let pincode = '';
+          
+          place.address_components.forEach((component: any) => {
+            const types = component.types;
+            if (types.includes('locality') || types.includes('administrative_area_level_2')) {
+              city = component.long_name;
+            } else if (types.includes('administrative_area_level_1')) {
+              state = component.long_name;
+            } else if (types.includes('postal_code')) {
+              pincode = component.long_name;
+            }
+          });
+          
+          // Update the form fields
+          if (city) form.setValue('city', city, { shouldValidate: true });
+          if (state) form.setValue('state', state, { shouldValidate: true });
+          if (pincode) form.setValue('pincode', pincode, { shouldValidate: true });
+        }
+        
         const loc = place?.geometry?.location;
         if (loc) setMapTo(loc.lat(), loc.lng(), place?.name || 'Selected location');
       });
@@ -143,13 +167,13 @@ export const CommercialSaleLocationDetailsStep: React.FC<CommercialSaleLocationD
   }, [form]);
 
   const onSubmit = (data: CommercialSaleLocationDetailsForm) => {
-    // Convert to LocationDetails format and add missing fields as empty/default values
+    // Convert to LocationDetails format and include parsed city, state, pincode
     const locationData: LocationDetails = {
-      state: '', // No longer used
-      city: '', // No longer used
+      state: data.state || '',
+      city: data.city || '',
       locality: data.locality || '',
       landmark: data.landmark || '',
-      pincode: initialData.pincode || '',
+      pincode: data.pincode || '',
       societyName: initialData.societyName || ''
     };
     onNext(locationData);

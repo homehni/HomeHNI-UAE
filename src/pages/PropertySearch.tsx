@@ -334,7 +334,61 @@ const PropertySearch = () => {
                       <span>₹{filters.budget[0] === 0 ? '0' : filters.budget[0] >= 10000000 ? (filters.budget[0] / 10000000).toFixed(filters.budget[0] % 10000000 === 0 ? 0 : 1) + ' Cr' : (filters.budget[0] / 100000).toFixed(filters.budget[0] % 100000 === 0 ? 0 : 1) + ' L'}</span>
                       <span>₹{filters.budget[1] >= 100000000 ? '10Cr +' : filters.budget[1] >= 10000000 ? (filters.budget[1] / 10000000).toFixed(filters.budget[1] % 10000000 === 0 ? 0 : 1) + ' Cr' : (filters.budget[1] / 100000).toFixed(filters.budget[1] % 100000 === 0 ? 0 : 1) + ' L'}</span>
                     </div>
+                    
+                    {/* Manual Budget Input Fields */}
+                    <div className="space-y-2 mb-3">
+                      <div className="text-sm font-medium text-gray-700">Enter Budget Range</div>
+                      <div className="grid grid-cols-2 gap-2">
+                        <div>
+                          <label className="text-xs text-gray-500 mb-1 block">Min Budget</label>
+                          <Input
+                            type="number"
+                            placeholder="Enter min budget"
+                            value={filters.budget[0].toString()}
+                            onChange={(e) => {
+                              const value = parseInt(e.target.value) || 0;
+                              if (value <= filters.budget[1]) {
+                                updateFilter('budget', [value, filters.budget[1]]);
+                              }
+                            }}
+                            className="h-8 text-sm"
+                          />
+                        </div>
+                        <div>
+                          <label className="text-xs text-gray-500 mb-1 block">Max Budget</label>
+                          <Input
+                            type="number"
+                            placeholder="Enter max budget"
+                            value={filters.budget[1].toString()}
+                            onChange={(e) => {
+                              const value = parseInt(e.target.value) || 0;
+                              if (value >= filters.budget[0]) {
+                                updateFilter('budget', [filters.budget[0], Math.min(value, 100000000)]);
+                              }
+                            }}
+                            className="h-8 text-sm"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    
                     <div className="grid grid-cols-3 gap-2 mt-3">
+                      <Button
+                        variant={filters.budget[0] === 0 && filters.budget[1] === 50000 ? "default" : "outline"}
+                        size="sm"
+                        onClick={() => updateFilter('budget', [0, 50000])}
+                        className="text-xs h-8"
+                      >
+                        Under 50K
+                      </Button>
+                      <Button
+                        variant={filters.budget[0] === 0 && filters.budget[1] === 100000 ? "default" : "outline"}
+                        size="sm"
+                        onClick={() => updateFilter('budget', [0, 100000])}
+                        className="text-xs h-8"
+                      >
+                        Under 1L
+                      </Button>
                       <Button
                         variant={filters.budget[0] === 0 && filters.budget[1] === 5000000 ? "default" : "outline"}
                         size="sm"

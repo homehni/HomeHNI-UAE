@@ -46,6 +46,7 @@ import { DealRoom } from "./pages/DealRoom";
 import { VerifyEmail } from "./pages/VerifyEmail";
 import { Dashboard } from "./pages/Dashboard";
 import { PostProperty } from "./pages/PostProperty";
+import { EditPropertyInline } from "./pages/EditPropertyInline";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import AdminAuth from "./pages/AdminAuth";
 import AdminProtectedRoute from "@/components/AdminProtectedRoute";
@@ -240,6 +241,12 @@ const App: React.FC = () => {
             <Route path="/post-property" element={
               <ProtectedRoute>
                 <PostProperty />
+              </ProtectedRoute>
+            } />
+            
+            <Route path="/edit-property/:propertyId" element={
+              <ProtectedRoute>
+                <EditPropertyInline />
               </ProtectedRoute>
             } />
             

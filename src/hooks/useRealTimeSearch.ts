@@ -75,12 +75,12 @@ export const useRealTimeSearch = () => {
   // Search properties using the edge function
   const searchProperties = async () => {
     // Check if "ALL" is selected or no property type is selected
-    const isAllResidential = filters.propertyType.includes('ALL') || filters.propertyType.length === 0;
+    const isAllResidential = filters.propertyType.length === 0;
     
     // Determine if user has provided any criteria (excluding "All" as it's our default)
     const hasSearchCriteria = 
       debouncedLocation || 
-      (filters.propertyType.length > 0 && !isAllResidential) || 
+      filters.propertyType.length > 0 || 
       filters.bhkType.length > 0 || 
       filters.locality.length > 0 || 
       filters.furnished.length > 0 || 
@@ -165,10 +165,11 @@ export const useRealTimeSearch = () => {
         const tabFilteredContentElements = filteredContentElements.filter(element => {
           const content = element.content as any;
           const propertyType = content?.propertyType?.toLowerCase() || '';
-          const listingType = content?.listingType?.toLowerCase() || 'sale'; // Default to sale
+          const listingType = content?.listingType?.toLowerCase();
           
           if (activeTab === 'buy') {
-            return listingType === 'sale' || listingType === 'buy' || !listingType;
+            // Only show properties explicitly marked for sale/buy, exclude rent properties
+            return listingType === 'sale' || listingType === 'buy';
           } else if (activeTab === 'rent') {
             return listingType === 'rent';
           } else if (activeTab === 'commercial') {
@@ -205,8 +206,20 @@ export const useRealTimeSearch = () => {
         
         // Transform properties table data to Property format
         const transformedPropertiesData = filteredPropertiesData.map((property: any) => {
-          // Handle PG/Hostel properties specially
-          const isPGHostel = property.property_type === 'pg_hostel' || property.property_type === 'PG/Hostel';
+          // Handle PG/Hostel properties specially - check multiple conditions
+          const isPGHostel = property.property_type === 'pg_hostel' || 
+                            property.property_type === 'PG/Hostel' || 
+                            property.listing_type === 'PG/Hostel' ||
+                            property.title?.toLowerCase().includes('pg') ||
+                            property.title?.toLowerCase().includes('hostel');
+          
+          // Determine the correct property type for filtering
+          let displayPropertyType = property.property_type?.replace(/_/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase()) || 'Property';
+          
+          // Override property type for PG/Hostel properties
+          if (isPGHostel) {
+            displayPropertyType = 'PG/Hostel';
+          }
           
           return {
             id: property.id,
@@ -225,7 +238,7 @@ export const useRealTimeSearch = () => {
               : parseInt(property.bhk_type?.replace(/[^\d]/g, '') || '0'),
             bathrooms: property.bathrooms || 0,
             image: property.images || '/placeholder.svg',
-            propertyType: property.property_type?.replace(/_/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase()) || 'Property',
+            propertyType: displayPropertyType,
             locality: property.locality || '',
             city: property.city || '',
             bhkType: property.bhk_type || '1bhk',
@@ -273,10 +286,10 @@ export const useRealTimeSearch = () => {
       const searchBody = {
         intent: activeTab,
         // Send both single and multiple types for backward compatibility
-        propertyType: filters.propertyType.length > 0 && !filters.propertyType.includes('ALL')
+        propertyType: filters.propertyType.length > 0
           ? mapPropertyTypeToDb(filters.propertyType[0])
           : '',
-        propertyTypes: filters.propertyType.filter((t) => t && t !== 'ALL').map(mapPropertyTypeToDb),
+        propertyTypes: filters.propertyType.map(mapPropertyTypeToDb),
         country: 'India',
         state: '', // Let the backend handle state detection
         city: debouncedLocation || '',
@@ -301,7 +314,16 @@ export const useRealTimeSearch = () => {
       }
 
       // Transform search results to match PropertyCard interface
-      const transformedSearchResults = (data.items || []).map((property: any) => ({
+      // Filter to only show approved and featured properties for specific property type searches
+      const filteredSearchResults = (data.items || []).filter((property: any) => {
+        // For specific property type searches, only show approved and featured properties
+        if (filters.propertyType.length > 0) {
+          return property.status === 'approved' && property.is_featured;
+        }
+        return true; // For "ALL" searches, show all approved properties
+      });
+
+      const transformedSearchResults = filteredSearchResults.map((property: any) => ({
         id: property.id,
         title: property.title,
         location: property.location,
@@ -314,7 +336,100 @@ export const useRealTimeSearch = () => {
         isNew: property.isNew || false
       }));
 
-      setProperties(transformedSearchResults);
+      // Also get content elements for the specific property type
+      const { data: contentElementsData, error: contentError } = await supabase
+        .from('content_elements')
+        .select('*')
+        .eq('page_location', 'homepage')
+        .eq('section_location', 'featured_properties')
+        .eq('element_type', 'featured_property')
+        .eq('is_active', true)
+        .order('sort_order');
+
+      if (!contentError && contentElementsData) {
+        // Filter content elements by the selected property type and active tab
+        const filteredContentElements = contentElementsData.filter(element => {
+          const content = element.content as any;
+          const propertyType = content?.propertyType?.toLowerCase() || '';
+          const listingType = content?.listingType?.toLowerCase();
+          const title = element.title?.toLowerCase() || '';
+          
+          // Enhanced PG/Hostel detection for content elements
+          const isPGHostel = propertyType.includes('pg') || 
+                            propertyType.includes('hostel') ||
+                            title.includes('pg') ||
+                            title.includes('hostel') ||
+                            content?.title?.toLowerCase().includes('pg') ||
+                            content?.title?.toLowerCase().includes('hostel');
+          
+          // Check if this content element matches the selected property type
+          const matchesPropertyType = filters.propertyType.length > 0 
+            ? filters.propertyType.some(type => {
+                const normalizedType = type.toLowerCase().replace(/\s+/g, '_');
+                const typeLower = type.toLowerCase();
+                
+                // Special handling for PG HOSTEL
+                if (typeLower === 'pg hostel' || typeLower === 'pg/hostel') {
+                  return isPGHostel;
+                }
+                
+                return propertyType.includes(normalizedType) || 
+                       propertyType.includes(typeLower) ||
+                       title.includes(typeLower) ||
+                       content?.title?.toLowerCase().includes(typeLower);
+              })
+            : true;
+          
+          // Check if it matches the active tab
+          const matchesActiveTab = activeTab === 'buy' 
+            ? (listingType === 'sale' || listingType === 'buy' || !listingType)
+            : activeTab === 'rent' 
+            ? (listingType === 'rent' || isPGHostel) // PG/Hostel properties are typically for rent
+            : activeTab === 'commercial'
+            ? (propertyType.includes('commercial') || 
+               propertyType.includes('office') || 
+               propertyType.includes('shop') || 
+               propertyType.includes('warehouse') || 
+               propertyType.includes('showroom'))
+            : true;
+          
+          return matchesPropertyType && matchesActiveTab;
+        });
+
+        // Transform content elements to Property format
+        const contentElementProperties = filteredContentElements.map((element: any) => {
+          const content = element.content as any || {};
+          return {
+            id: content?.id || element.id,
+            title: element.title || content?.title || 'Property',
+            location: content?.location || 'Location',
+            price: content?.price || '₹0',
+            priceNumber: parseFloat(content?.price?.replace(/[^\d]/g, '') || '0'),
+            area: content?.area || content?.size || '0 sq ft',
+            areaNumber: parseFloat(content?.area?.replace(/[^\d]/g, '') || content?.size?.replace(/[^\d]/g, '') || '0'),
+            bedrooms: content?.bedrooms || parseInt(content?.bhk?.replace(/[^\d]/g, '') || '0'),
+            bathrooms: content?.bathrooms || 0,
+            image: element.images?.[0] || content?.image || '/placeholder.svg',
+            propertyType: content?.propertyType || 'Property',
+            locality: content?.location?.split(', ')[0] || '',
+            city: content?.location?.split(', ').pop() || '',
+            bhkType: content?.bhk || '1bhk',
+            isNew: content?.isNew || false
+          };
+        });
+
+        // Combine search results with content elements
+        const allResults = [...transformedSearchResults, ...contentElementProperties];
+        
+        // Remove duplicates based on ID
+        const uniqueResults = allResults.filter((property, index, self) => 
+          index === self.findIndex(p => p.id === property.id)
+        );
+
+        setProperties(uniqueResults);
+      } else {
+        setProperties(transformedSearchResults);
+      }
     } catch (err: any) {
       setError(err.message || 'Failed to load properties');
       setProperties([]);

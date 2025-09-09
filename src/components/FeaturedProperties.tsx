@@ -161,8 +161,20 @@ const FeaturedProperties = ({
         
         // Transform properties table data to FeaturedProperty format
         const transformedProperties = propertiesData.map(property => {
-          // Handle PG/Hostel properties specially
-          const isPGHostel = property.property_type === 'PG/Hostel' || property.listing_type === 'PG/Hostel';
+          // Handle PG/Hostel properties specially - check multiple conditions
+          const isPGHostel = property.property_type === 'pg_hostel' || 
+                            property.property_type === 'PG/Hostel' || 
+                            property.listing_type === 'PG/Hostel' ||
+                            property.title?.toLowerCase().includes('pg') ||
+                            property.title?.toLowerCase().includes('hostel');
+          
+          // Determine the correct property type for filtering
+          let displayPropertyType = property.property_type?.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) || 'Property';
+          
+          // Override property type for PG/Hostel properties
+          if (isPGHostel) {
+            displayPropertyType = 'PG/Hostel';
+          }
           
           return {
             id: property.id,
@@ -179,7 +191,7 @@ const FeaturedProperties = ({
               : parseInt(property.bhk_type?.replace(/[^\d]/g, '') || '0'),
             bathrooms: property.bathrooms || 0,
             image: property.images || [],
-            propertyType: property.property_type?.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) || 'Property',
+            propertyType: displayPropertyType,
             isNew: new Date(property.created_at) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) // New if created within last 7 days
           };
         });

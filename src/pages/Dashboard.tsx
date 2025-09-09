@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
-import { Building, MessageSquare, User, LogOut, Plus, Eye, Edit, Trash, FileText, Shield } from 'lucide-react';
+import { Building, MessageSquare, User, LogOut, Plus, Eye, Edit, Trash, FileText, Shield, MapPin } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
 import { DeleteConfirmationModal } from '@/components/DeleteConfirmationModal';
@@ -460,227 +460,164 @@ export const Dashboard: React.FC = () => {
               </Card>
             ) : (
               <div className="grid gap-4">
-                {properties.map((property) => (
-                  <Card key={property.id}>
-                    <CardContent className="p-6">
-                      <div className="flex justify-between items-start gap-4">
-                         <div className="flex-1 min-w-0">
-                            {/* Title and Actions Row */}
-                            <div className="flex justify-between items-start mb-3">
-                              <h3 className="text-lg font-semibold text-gray-900 flex-1 min-w-0 pr-4">
+                {properties.map((property) => {
+                  // Get the first image for preview
+                  const getImageUrl = () => {
+                    if (property.images && property.images.length > 0) {
+                      const firstImage = property.images[0];
+                      if (typeof firstImage === 'string') {
+                        return firstImage.startsWith('http') ? firstImage : firstImage;
+                      }
+                      if (firstImage && typeof firstImage === 'object' && 'url' in firstImage) {
+                        return (firstImage as any).url;
+                      }
+                    }
+                    return '/placeholder.svg';
+                  };
+
+                  return (
+                    <Card key={property.id} className="relative overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200">
+                      {/* Ribbon for For Sale/For Rent */}
+                      <div className={`absolute top-0 left-0 z-10 px-3 py-1.5 text-xs font-semibold text-white shadow-md ${
+                        property.listing_type === 'sale' ? 'bg-green-600' : 'bg-orange-500'
+                      }`}>
+                        {property.listing_type === 'sale' ? 'For Sale' : 'For Rent'}
+                      </div>
+                      
+                      {/* Action Buttons - Top Right Corner */}
+                      <div className="absolute top-0 right-0 z-10 flex flex-col gap-1 p-2">
+                        {/* Primary Actions Row */}
+                        <div className="flex gap-1">
+                          <Button 
+                            variant="outline" 
+                            size="sm"
+                            onClick={() => handleViewProperty(property)}
+                            className="flex items-center gap-1 px-2 py-1 h-7 text-xs bg-white/90 hover:bg-white shadow-sm"
+                          >
+                            <Eye className="h-3 w-3" />
+                            <span className="hidden sm:inline">View</span>
+                          </Button>
+                          <Button 
+                            variant="outline" 
+                            size="sm"
+                            onClick={() => handleEditProperty(property)}
+                            className="flex items-center gap-1 px-2 py-1 h-7 text-xs bg-white/90 hover:bg-white shadow-sm"
+                          >
+                            <Edit className="h-3 w-3" />
+                            <span className="hidden sm:inline">Edit</span>
+                          </Button>
+                          <Button 
+                            className="bg-red-500 hover:bg-red-600 text-white px-2 py-1 h-7 shadow-sm"
+                            size="sm"
+                            onClick={() => openDeleteModal('property', property.id, property.title)}
+                          >
+                            <Trash className="h-3 w-3" />
+                          </Button>
+                        </div>
+                        
+                        {/* Secondary Actions Row */}
+                        <div className="flex gap-1">
+                          <Button 
+                            variant="ghost" 
+                            size="sm"
+                            className="text-xs text-blue-600 hover:text-blue-800 hover:bg-blue-50 px-2 py-1 h-6 bg-white/90 shadow-sm"
+                            onClick={() => {
+                              navigator.clipboard.writeText(`${window.location.origin}/property/${property.id}`);
+                              toast({
+                                title: "Link copied!",
+                                description: "Property link copied to clipboard",
+                              });
+                            }}
+                          >
+                            📋 Copy
+                          </Button>
+                          <Button 
+                            variant="ghost" 
+                            size="sm"
+                            className="text-xs text-green-600 hover:text-green-800 hover:bg-green-50 px-2 py-1 h-6 bg-white/90 shadow-sm"
+                            onClick={() => {
+                              if (navigator.share) {
+                                navigator.share({
+                                  title: property.title,
+                                  text: `Check out this property: ${property.title}`,
+                                  url: `${window.location.origin}/property/${property.id}`
+                                });
+                              } else {
+                                navigator.clipboard.writeText(`${window.location.origin}/property/${property.id}`);
+                                toast({
+                                  title: "Link copied!",
+                                  description: "Share this link with potential buyers/tenants",
+                                });
+                              }
+                            }}
+                          >
+                            📤 Share
+                          </Button>
+                        </div>
+                      </div>
+                      
+                      <CardContent className="p-0">
+                        <div className="flex h-56">
+                          {/* Image Preview - Extra Large */}
+                          <div className="w-56 h-56 flex-shrink-0 relative">
+                            <img
+                              src={getImageUrl()}
+                              alt={property.title}
+                              className="w-full h-full object-cover"
+                              onError={(e) => {
+                                e.currentTarget.src = '/placeholder.svg';
+                                e.currentTarget.alt = 'Image not available';
+                              }}
+                            />
+                          </div>
+                          
+                          {/* Content - Extra Large */}
+                          <div className="flex-1 p-6 flex flex-col justify-between min-w-0">
+                            <div className="min-w-0 pr-28">
+                              {/* Title */}
+                              <h3 className="text-xl font-bold text-gray-900 mb-4 leading-tight truncate">
                                 {property.title}
                               </h3>
-                              <div className="flex space-x-2 flex-shrink-0">
-                                <Button 
-                                  variant="outline" 
-                                  size="sm"
-                                  onClick={() => handleViewProperty(property)}
-                                  className="flex items-center gap-1"
-                                >
-                                  <Eye className="h-4 w-4" />
-                                  <span className="hidden sm:inline">View</span>
-                                </Button>
-                                <Button 
-                                  variant="outline" 
-                                  size="sm"
-                                  onClick={() => handleEditProperty(property)}
-                                  className="flex items-center gap-1"
-                                >
-                                  <Edit className="h-4 w-4" />
-                                  <span className="hidden sm:inline">Edit</span>
-                                </Button>
-                                <Button 
-                                  className="bg-red-500 hover:bg-red-600 text-white"
-                                  size="sm"
-                                  onClick={() => openDeleteModal('property', property.id, property.title)}
-                                >
-                                  <Trash className="h-4 w-4" />
-                                </Button>
+                              
+                              {/* Location */}
+                              <div className="flex items-start text-gray-600 mb-4">
+                                <MapPin className="h-5 w-5 mr-2 flex-shrink-0 mt-0.5" />
+                                <span className="text-sm leading-relaxed" title={property.locality}>
+                                  {property.locality}
+                                </span>
+                              </div>
+                              
+                              {/* Price */}
+                              <div className="text-xl font-bold text-green-600 mb-4">
+                                ₹{property.expected_price.toLocaleString()}
+                              </div>
+                              
+                              {/* Posted Date */}
+                              <div className="text-sm text-gray-500 mb-5">
+                                Posted: {new Date(property.created_at).toLocaleDateString()}
                               </div>
                             </div>
-
-                            {/* Main Property Details */}
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
-                              <div className="space-y-2">
-                                <div className="flex items-center justify-between">
-                                  <span className="text-sm font-medium text-gray-700">Type:</span>
-                                  <span className="text-sm text-gray-900 capitalize">{property.property_type}</span>
-                                </div>
-                                <div className="flex items-center justify-between">
-                                  <span className="text-sm font-medium text-gray-700">For:</span>
-                                  <span className="text-sm text-gray-900 capitalize">{property.listing_type}</span>
-                                </div>
-                                <div className="flex items-center justify-between">
-                                  <span className="text-sm font-medium text-gray-700">Price:</span>
-                                  <span className="text-sm font-semibold text-green-600">₹{property.expected_price.toLocaleString()}</span>
-                                </div>
-                              </div>
-                              <div className="space-y-2">
-                                <div className="flex items-center justify-between">
-                                  <span className="text-sm font-medium text-gray-700">Location:</span>
-                                  <span className="text-sm text-gray-900 text-right max-w-48 truncate" title={property.locality}>
-                                    {property.locality}
-                                  </span>
-                                </div>
-                                {property.super_area && (
-                                  <div className="flex items-center justify-between">
-                                    <span className="text-sm font-medium text-gray-700">Area:</span>
-                                    <span className="text-sm text-gray-900">{property.super_area} sq.ft</span>
-                                  </div>
-                                )}
-                                {property.bhk_type && (
-                                  <div className="flex items-center justify-between">
-                                    <span className="text-sm font-medium text-gray-700">BHK:</span>
-                                    <span className="text-sm text-gray-900">{property.bhk_type}</span>
-                                  </div>
-                                )}
-                              </div>
+                            
+                            {/* Bottom Section - Status Only */}
+                            <div className="flex items-center">
+                              <span className={`inline-flex items-center px-4 py-2 text-sm font-semibold rounded-full ${
+                                property.status === 'approved' 
+                                  ? 'bg-emerald-100 text-emerald-800 border border-emerald-200'
+                                  : property.status === 'pending'
+                                  ? 'bg-amber-100 text-amber-800 border border-amber-200'
+                                  : 'bg-gray-100 text-gray-800 border border-gray-200'
+                              }`}>
+                                {property.status === 'approved' ? '🟢 Active' : 
+                                 property.status === 'pending' ? '🟡 Under Review' : 
+                                 '⚪ ' + property.status}
+                              </span>
                             </div>
-
-                            {/* Additional Details and Stats */}
-                            <div className="flex flex-wrap items-center justify-between gap-4 text-xs text-gray-500 mb-3">
-                              <div className="flex items-center gap-4">
-                                {property.images && property.images.length > 0 && (
-                                  <div className="flex items-center">
-                                    <span className="font-medium">Images:</span>
-                                    <span className="ml-1">{property.images.length} photos</span>
-                                  </div>
-                                )}
-                                <div className="flex items-center">
-                                  <Eye className="h-3 w-3 mr-1" />
-                                  <span>Views: 0</span>
-                                </div>
-                                <div className="flex items-center">
-                                  <MessageSquare className="h-3 w-3 mr-1" />
-                                  <span>Leads: 0</span>
-                                </div>
-                              </div>
-                              <div className="flex items-center gap-2">
-                                <span>Expires: {new Date(new Date(property.created_at).getTime() + 90 * 24 * 60 * 60 * 1000).toLocaleDateString()}</span>
-                                <Button 
-                                  variant="ghost" 
-                                  size="sm"
-                                  className="text-xs text-blue-600 hover:text-blue-800 hover:bg-blue-50"
-                                  onClick={() => {
-                                    navigator.clipboard.writeText(`${window.location.origin}/property/${property.id}`);
-                                    toast({
-                                      title: "Link copied!",
-                                      description: "Property link copied to clipboard",
-                                    });
-                                  }}
-                                >
-                                  📋 Copy Link
-                                </Button>
-                                <Button 
-                                  variant="ghost" 
-                                  size="sm"
-                                  className="text-xs text-green-600 hover:text-green-800 hover:bg-green-50"
-                                  onClick={() => {
-                                    if (navigator.share) {
-                                      navigator.share({
-                                        title: property.title,
-                                        text: `Check out this property: ${property.title}`,
-                                        url: `${window.location.origin}/property/${property.id}`
-                                      });
-                                    } else {
-                                      navigator.clipboard.writeText(`${window.location.origin}/property/${property.id}`);
-                                      toast({
-                                        title: "Link copied!",
-                                        description: "Share this link with potential buyers/tenants",
-                                      });
-                                    }
-                                  }}
-                                >
-                                  📤 Share
-                                </Button>
-                              </div>
-                            </div>
-                            {/* Show owner information only to the property owner (for their own listings) */}
-                            {user && property.user_id === user.id && (property.owner_name || property.owner_email || property.owner_phone) && (
-                              <div className="bg-blue-50 p-3 rounded-lg mb-2 border border-blue-200">
-                                <h4 className="text-sm font-medium text-blue-700 mb-1 flex items-center">
-                                  <Shield className="h-4 w-4 mr-1" />
-                                  Your Contact Information (Private)
-                                </h4>
-                                <div className="grid grid-cols-1 md:grid-cols-3 gap-2 text-sm text-blue-600">
-                                  {property.owner_name && <div>Name: {property.owner_name}</div>}
-                                  {property.owner_email && <div>Email: {property.owner_email}</div>}
-                                  {property.owner_phone && <div>Phone: {property.owner_phone}</div>}
-                                </div>
-                                {property.owner_role && (
-                                  <div className="text-sm text-blue-600 mt-1">Role: {property.owner_role}</div>
-                                )}
-                              </div>
-                            )}
-                           <div className="mt-2 flex items-center gap-2 flex-wrap">
-                             {/* Enhanced Status Badge */}
-                             <span className={`inline-flex items-center px-3 py-1 text-xs font-semibold rounded-full ${
-                               property.status === 'approved' 
-                                 ? 'bg-emerald-100 text-emerald-800 border border-emerald-200'
-                                 : property.status === 'pending'
-                                 ? 'bg-amber-100 text-amber-800 border border-amber-200'
-                                 : 'bg-gray-100 text-gray-800 border border-gray-200'
-                             }`}>
-                               {property.status === 'approved' ? '🟢 Active' : 
-                                property.status === 'pending' ? '🟡 Under Review' : 
-                                '⚪ ' + property.status}
-                             </span>
-                             
-                             {/* Property edited recently flag */}
-                             {property.status === 'pending' && property.updated_at && property.created_at && 
-                              new Date(property.updated_at) > new Date(property.created_at) && (
-                               <span className="inline-flex items-center px-2 py-1 text-xs font-medium rounded-full bg-orange-100 text-orange-800 border border-orange-200" title={`Last edited: ${new Date(property.updated_at).toLocaleString()}`}>
-                                 ✏️ Recently Edited
-                               </span>
-                             )}
-
-                             {/* Listing ID Badge */}
-                             <span className="inline-flex items-center px-2 py-1 text-xs font-mono bg-gray-100 text-gray-600 rounded border">
-                               ID: {property.id.slice(-8).toUpperCase()}
-                             </span>
-
-                             {/* Posted Date */}
-                             <span className="text-xs text-gray-500">
-                               Posted: {new Date(property.created_at).toLocaleDateString()}
-                             </span>
-                           </div>
-                           
-
-                           {/* Property Notifications */}
-                           {property.status === 'approved' && (
-                             <>
-                               {/* Missing Images Notification - Priority */}
-                               {(!property.images || property.images.length === 0) && (
-                                 <MissingImagesNotification
-                                   propertyId={property.id}
-                                   propertyTitle={property.title}
-                                 />
-                               )}
-                               
-                               {/* Progress Notification - Only if has images but other fields missing */}
-                               {property.images && property.images.length > 0 && (
-                                 <PropertyProgressCompact
-                                   propertyId={property.id}
-                                   completionPercentage={
-                                     property.property_type === 'pg_hostel' 
-                                       ? calculatePGPropertyCompletion(property as any).percentage
-                                       : calculatePropertyCompletion(property).percentage
-                                   }
-                                   missingFields={
-                                     property.property_type === 'pg_hostel' 
-                                       ? calculatePGPropertyCompletion(property as any).missingFields
-                                       : calculatePropertyCompletion(property).missingFields
-                                   }
-                                   propertyType={property.property_type}
-                                 />
-                               )}
-                             </>
-                           )}
-                         </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  );
+                })}
               </div>
             )}
           </TabsContent>

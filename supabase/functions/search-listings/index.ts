@@ -150,6 +150,8 @@ serve(async (req) => {
         'INDEPENDENT HOUSE': 'independent_house',
         'PENTHOUSE': 'penthouse',
         'COMMERCIAL': 'commercial',
+        'PG HOSTEL': 'pg_hostel',
+        'PG/HOSTEL': 'pg_hostel',
         'AGRICULTURE LANDS': 'agriculture_lands',
         'AGRICULTURAL LANDS': 'agriculture_lands',
         'FARM HOUSE': 'farm_house',
@@ -174,6 +176,10 @@ serve(async (req) => {
         if (k === 'farm_house' || k === 'farmhouse') {
           // Only return farmhouse-specific types, not plot
           return ['farm_house', 'farmhouse'];
+        }
+        if (k === 'pg_hostel' || k === 'pg/hostel' || k === 'pg' || k === 'hostel') {
+          // Return PG/Hostel-specific types
+          return ['pg_hostel', 'pg/hostel'];
         }
         return [k];
       };
@@ -221,7 +227,6 @@ serve(async (req) => {
 
       if (selectedTypes.length > 0) {
         const unique = Array.from(new Set(selectedTypes));
-        console.log('Applying property_type filter:', unique);
         query = query.in('property_type', unique);
       }
     }
