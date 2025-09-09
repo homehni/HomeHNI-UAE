@@ -25,10 +25,13 @@ const OwnerPlans = ({ embedded }: OwnerPlansProps) => {
       {
         name: "Silver",
         price: "₹999",
+        originalPrice: "₹999",
+        freePrice: "FREE",
         gst: "+18% GST",
         badge: "ON CALL ASSISTANCE",
         badgeColor: "bg-yellow-500",
         amountPaise: 9900,
+        isFree: true,
       },
       {
         name: "Gold",
@@ -59,10 +62,13 @@ const OwnerPlans = ({ embedded }: OwnerPlansProps) => {
       {
         name: "Business Basic",
         price: "₹999",
+        originalPrice: "₹999",
+        freePrice: "FREE",
         gst: "+18% GST",
         badge: "COMMERCIAL SUPPORT",
         badgeColor: "bg-blue-500",
         amountPaise: 99900,
+        isFree: true,
       },
       {
         name: "Business Pro",
@@ -85,10 +91,13 @@ const OwnerPlans = ({ embedded }: OwnerPlansProps) => {
       {
         name: "Industrial Starter",
         price: "₹999",
+        originalPrice: "₹999",
+        freePrice: "FREE",
         gst: "+18% GST",
         badge: "INDUSTRIAL FOCUS",
         badgeColor: "bg-gray-600",
         amountPaise: 99900,
+        isFree: true,
       },
       {
         name: "Industrial Growth",
@@ -111,10 +120,13 @@ const OwnerPlans = ({ embedded }: OwnerPlansProps) => {
       {
         name: "Farm Basic",
         price: "₹999",
+        originalPrice: "₹999",
+        freePrice: "FREE",
         gst: "+18% GST",
         badge: "AGRICULTURAL LAND",
         badgeColor: "bg-green-600",
         amountPaise: 99900,
+        isFree: true,
       },
       {
         name: "Farm Pro",
@@ -342,8 +354,20 @@ const OwnerPlans = ({ embedded }: OwnerPlansProps) => {
                       <CardContent className="pt-16 pb-6 px-6">
                         <h3 className="text-xl font-bold text-gray-900 mb-3">{plan.name}</h3>
                         <div className="mb-6">
-                          <span className="text-2xl font-bold text-gray-900">{plan.price}</span>
-                          <div className="text-sm text-gray-500">{plan.gst}</div>
+                          {plan.isFree ? (
+                            <div className="space-y-1">
+                              <div className="flex items-center gap-2">
+                                <span className="text-lg text-gray-400 line-through">{plan.originalPrice}</span>
+                                <span className="text-2xl font-bold text-green-600">{plan.freePrice}</span>
+                              </div>
+                              <div className="text-sm text-gray-500">{plan.gst}</div>
+                            </div>
+                          ) : (
+                            <>
+                              <span className="text-2xl font-bold text-gray-900">{plan.price}</span>
+                              <div className="text-sm text-gray-500">{plan.gst}</div>
+                            </>
+                          )}
                         </div>
                         
                         <PayButton

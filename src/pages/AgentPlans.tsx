@@ -18,10 +18,13 @@ const AgentPlans = () => {
       {
         name: "Basic Monthly",
         price: "₹999/month",
+        originalPrice: "₹999/month",
+        freePrice: "FREE",
         gst: "+18% GST",
         badge: "GETTING STARTED",
         badgeColor: "bg-blue-500",
         amountPaise: 99900,
+        isFree: true,
       },
       {
         name: "Basic Quarterly", 
@@ -213,8 +216,20 @@ const AgentPlans = () => {
                       <CardContent className="pt-16 pb-6 px-6">
                         <h3 className="text-xl font-bold text-gray-900 mb-3">{plan.name}</h3>
                         <div className="mb-4">
-                          <span className="text-2xl font-bold text-gray-900">{plan.price}</span>
-                          <div className="text-sm text-gray-500">{plan.gst}</div>
+                          {plan.isFree ? (
+                            <div className="space-y-1">
+                              <div className="flex items-center gap-2">
+                                <span className="text-lg text-gray-400 line-through">{plan.originalPrice}</span>
+                                <span className="text-2xl font-bold text-green-600">{plan.freePrice}</span>
+                              </div>
+                              <div className="text-sm text-gray-500">{plan.gst}</div>
+                            </div>
+                          ) : (
+                            <>
+                              <span className="text-2xl font-bold text-gray-900">{plan.price}</span>
+                              <div className="text-sm text-gray-500">{plan.gst}</div>
+                            </>
+                          )}
                         </div>
                         
                         <div className="mb-6 text-sm text-gray-600">

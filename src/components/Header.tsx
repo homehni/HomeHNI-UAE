@@ -236,35 +236,68 @@ const Header = () => {
                           <ChevronDown className="ml-1 h-3 w-3" />
                         </button>
                         
-                        {/* Dynamic dropdown content based on CMS */}
-                        {item.label === 'Services' && isServicesDropdownOpen && (
-                          <div className="absolute top-full left-0 w-56 bg-white border border-gray-200 rounded-lg shadow-xl z-[100] mt-2" onMouseEnter={handleServicesHover} onMouseLeave={handleServicesLeave}>
-                            <div className="py-2">
-                              {item.submenu.map((subItem: any, subIndex: number) => (
-                                <button 
-                                  key={subIndex}
-                                  onClick={() => navigate(subItem.link)} 
-                                  className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors"
-                                >
-                                  {subItem.label}
-                                </button>
-                              ))}
-                            </div>
-                          </div>
-                        )}
+                         {/* Dynamic dropdown content based on CMS */}
+                         {item.label === 'Services' && isServicesDropdownOpen && (
+                           <div className="absolute top-full left-0 w-56 bg-white border border-gray-200 rounded-lg shadow-xl z-[100] mt-2" onMouseEnter={handleServicesHover} onMouseLeave={handleServicesLeave}>
+                             <div className="py-2">
+                               <button onClick={() => navigate('/services?tab=loans')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+                                 Loans
+                               </button>
+                               <button onClick={() => navigate('/services?tab=home-security')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+                                 Home Security Services
+                               </button>
+                               <button onClick={() => navigate('/services?tab=packers-movers')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+                                 Packers & Movers
+                               </button>
+                               <button onClick={() => navigate('/services?tab=legal-services')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+                                 Legal Services
+                               </button>
+                               <button onClick={() => navigate('/services?tab=handover-services')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+                                 Handover Services
+                               </button>
+                               <button onClick={() => navigate('/services?tab=property-management')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+                                 Property Management
+                               </button>
+                               <button onClick={() => navigate('/services?tab=architects')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+                                 Architects
+                               </button>
+                               <button onClick={() => navigate('/services?tab=painting-cleaning')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+                                 Painting & Cleaning
+                               </button>
+                               <button onClick={() => navigate('/services?tab=interior-design')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+                                 Interior Designers
+                               </button>
+                             </div>
+                           </div>
+                         )}
                         
                         {item.label === 'Plans' && isLifetimePlansDropdownOpen && (
                           <div className="absolute top-full left-0 w-48 bg-white border border-gray-200 rounded-lg shadow-xl z-[100] mt-2" onMouseEnter={handleLifetimePlansHover} onMouseLeave={handleLifetimePlansLeave}>
                             <div className="py-2">
-                              {item.submenu.map((subItem: any, subIndex: number) => (
-                                <button 
-                                  key={subIndex}
-                                  onClick={() => navigate(subItem.link)} 
-                                  className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors"
-                                >
-                                  {subItem.label}
-                                </button>
-                              ))}
+                              <button onClick={() => window.location.href = '/plans?tab=agent'} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+                                Agent Plans
+                              </button>
+                              <button onClick={() => window.location.href = '/plans?tab=builder-lifetime'} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+                                Builder Lifetime Plans
+                              </button>
+                              <button onClick={() => window.location.href = '/plans?tab=buyer'} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+                                Buyer Plans
+                              </button>
+                              <button onClick={() => window.location.href = '/plans?tab=seller'} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+                                Seller Plans
+                              </button>
+                              <button onClick={() => window.location.href = '/plans?tab=owner'} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+                                Owner Plans
+                              </button>
+                              <button onClick={() => window.location.href = '/plans?tab=commercial-buyer'} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+                                Commercial Buyer Plans
+                              </button>
+                              <button onClick={() => window.location.href = '/plans?tab=commercial-seller'} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+                                Commercial Seller Plans
+                              </button>
+                              <button onClick={() => window.location.href = '/plans?tab=commercial-owner'} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+                                Commercial Owner Plans
+                              </button>
                             </div>
                           </div>
                         )}
@@ -296,33 +329,33 @@ const Header = () => {
                       {/* Custom Services Dropdown */}
                       {isServicesDropdownOpen && <div className="absolute top-full left-0 w-56 bg-white border border-gray-200 rounded-lg shadow-xl z-[100] mt-2" onMouseEnter={handleServicesHover} onMouseLeave={handleServicesLeave}>
                           <div className="py-2">
-                            <button onClick={() => navigate('/loans')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
-                              Loans
-                            </button>
-                             <button onClick={() => navigate('/home-security-services')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
-                              Home Security Services
-                            </button>
-                            <button onClick={() => navigate('/packers-movers')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
-                              Packers & Movers
-                            </button>
-                            <button onClick={handleLegalServicesClick} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
-                              Legal Services
-                            </button>
-                            <button onClick={() => navigate('/handover-services')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
-                              Handover Services
-                            </button>
-                            <button onClick={() => navigate('/property-management')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
-                              Property Management
-                            </button>
-                            <button onClick={() => navigate('/architects')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
-                              Architects
-                            </button>
-                             <button onClick={() => navigate('/painting-cleaning')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
-                              Painting & Cleaning
-                            </button>
-                            <button onClick={() => navigate('/interior')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
-                              Interior Designers
-                            </button>
+                             <button onClick={() => navigate('/services?tab=loans')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+                               Loans
+                             </button>
+                              <button onClick={() => navigate('/services?tab=home-security')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+                               Home Security Services
+                             </button>
+                             <button onClick={() => navigate('/services?tab=packers-movers')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+                               Packers & Movers
+                             </button>
+                             <button onClick={() => navigate('/services?tab=legal-services')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+                               Legal Services
+                             </button>
+                             <button onClick={() => navigate('/services?tab=handover-services')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+                               Handover Services
+                             </button>
+                             <button onClick={() => navigate('/services?tab=property-management')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+                               Property Management
+                             </button>
+                             <button onClick={() => navigate('/services?tab=architects')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+                               Architects
+                             </button>
+                              <button onClick={() => navigate('/services?tab=painting-cleaning')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+                               Painting & Cleaning
+                             </button>
+                             <button onClick={() => navigate('/services?tab=interior-design')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+                               Interior Designers
+                             </button>
                           </div>
                         </div>}
                     </div>
@@ -337,28 +370,41 @@ const Header = () => {
                       {/* Custom Lifetime Plans Dropdown */}
                       {isLifetimePlansDropdownOpen && <div className="absolute top-full left-0 w-48 bg-white border border-gray-200 rounded-lg shadow-xl z-[100] mt-2" onMouseEnter={handleLifetimePlansHover} onMouseLeave={handleLifetimePlansLeave}>
                           <div className="py-2">
-                            <button onClick={() => navigate('/agent-plans')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+                            <button onClick={() => window.location.href = '/plans?tab=agent'} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
                               Agent Plans
                             </button>
-                            <button onClick={() => navigate('/builder-lifetime-plans')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
-                              Builder's Lifetime Plan
+                            <button onClick={() => window.location.href = '/plans?tab=builder-lifetime'} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+                              Builder Lifetime Plans
                             </button>
-
-                            <button onClick={() => navigate('/owner-plans')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
-                             Property Renting Owner Plans
+                            <button onClick={() => window.location.href = '/plans?tab=buyer'} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+                              Buyer Plans
                             </button>
-
-                            <button onClick={() => navigate('/buyer-plans')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
-                             Property Seller Plans
+                            <button onClick={() => window.location.href = '/plans?tab=seller'} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+                              Seller Plans
                             </button>
-
-                            <button onClick={() => navigate('/seller-plans')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
-                             Property Owner Plans
+                            <button onClick={() => window.location.href = '/plans?tab=owner'} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+                              Owner Plans
+                            </button>
+                            <button onClick={() => window.location.href = '/plans?tab=commercial-buyer'} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+                              Commercial Buyer Plans
+                            </button>
+                            <button onClick={() => window.location.href = '/plans?tab=commercial-seller'} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+                              Commercial Seller Plans
+                            </button>
+                            <button onClick={() => window.location.href = '/plans?tab=commercial-owner'} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+                              Commercial Owner Plans
                             </button>
                           </div>
                         </div>}
                     </div>
                     
+                    <a href="/services" onClick={e => {
+                      e.preventDefault();
+                      navigate('/services');
+                    }} className={`hover:opacity-80 transition-colors duration-500 text-base font-medium uppercase ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
+                      Services
+                    </a>
+
                     <a href="/service-suite" onClick={e => {
                       e.preventDefault();
                       navigate('/service-suite');

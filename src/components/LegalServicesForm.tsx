@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
-import { ChevronLeft, ChevronRight, X } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import PersonalDetailsStep from './legal-form/PersonalDetailsStep';
 import PropertyInformationStep from './legal-form/PropertyInformationStep';
@@ -204,14 +204,6 @@ const LegalServicesForm = ({ isOpen, onClose }: LegalServicesFormProps) => {
                   Step {currentStep} of {totalSteps}: {steps.find(step => step.id === currentStep)?.title}
                 </p>
               </div>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={onClose}
-                className="flex-shrink-0 ml-4"
-              >
-                <X size={20} />
-              </Button>
             </div>
 
             {/* Progress Bar - Mobile responsive */}

@@ -3,6 +3,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Marquee from '@/components/Marquee';
 import { Link } from 'react-router-dom';
+import { ArrowRight } from 'lucide-react';
 import BuyerPlans from './BuyerPlans';
 import SellerPlans from './SellerPlans';
 import OwnerPlans from './OwnerPlans';
@@ -31,16 +32,23 @@ const Plans = () => {
     document.title = 'Plans – Buyer, Seller, Owner and Commercial Plans';
     const params = new URLSearchParams(window.location.search);
     const tab = params.get('tab');
-    if (tab && sections.some((s) => s.id === tab)) setActive(tab);
+    console.log('URL tab parameter:', tab); // Debug log
+    if (tab && sections.some((s) => s.id === tab)) {
+      console.log('Setting active tab to:', tab); // Debug log
+      setActive(tab);
+    } else {
+      console.log('No valid tab found, staying with:', active); // Debug log
+    }
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+  const handleTabClick = (id: string) => {
+    setActive(id);
+    // Update URL when user manually clicks a tab
     const url = new URL(window.location.href);
-    url.searchParams.set('tab', active);
+    url.searchParams.set('tab', id);
     window.history.pushState(null, '', url.toString());
-  }, [active]);
+  };
 
   const NavItem = useMemo(
     () =>
@@ -48,7 +56,7 @@ const Plans = () => {
         const isActive = active === id;
         return (
           <button
-            onClick={() => setActive(id)}
+            onClick={() => handleTabClick(id)}
             className={`w-full text-left px-3 py-2 mb-1 rounded-md transition-colors text-sm ${
               isActive
                 ? 'bg-secondary text-secondary-foreground font-medium shadow-sm'
@@ -64,16 +72,23 @@ const Plans = () => {
   );
 
   const PlanLink = ({ to, label, desc }: { to: string; label: string; desc: string }) => (
-    <div className="p-4 border rounded-md bg-card hover:shadow-sm transition-shadow">
+    <div className="group p-3 border rounded-lg bg-card hover:shadow-lg hover:border-brand-red/20 transition-all duration-300 cursor-pointer">
       <div className="flex items-center justify-between">
-        <div>
-          <p className="font-semibold text-sm text-foreground">{label}</p>
-          <p className="text-xs text-muted-foreground mt-1">{desc}</p>
+        <div className="flex-1">
+          <p className="font-semibold text-base text-foreground group-hover:text-brand-red transition-colors duration-300">{label}</p>
+          <p className="text-sm text-muted-foreground mt-1 leading-relaxed">{desc}</p>
         </div>
-        <Link to={to} className="text-brand-red underline text-sm" onClick={(e) => {
-          e.preventDefault();
-          window.location.href = to;
-        }}>Open</Link>
+        <Link 
+          to={to} 
+          className="ml-2 flex items-center gap-2 px-2.5 py-1 bg-brand-red text-white text-sm font-medium rounded-lg hover:bg-brand-red-dark hover:shadow-md transition-all duration-300 group-hover:scale-105" 
+          onClick={(e) => {
+            e.preventDefault();
+            window.location.href = to;
+          }}
+        >
+          <span>Open</span>
+          <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
+        </Link>
       </div>
     </div>
   );
