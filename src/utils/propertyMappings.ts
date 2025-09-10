@@ -65,33 +65,20 @@ export const mapListingType = (listingType: string): string => {
     'Resale': 'sale', // Map "Resale" to 'sale'
     'Rent': 'rent',
     'PG/Hostel': 'rent', // Treat PG/Hostel flows as rentals
-    // Property types should map to themselves
-    'Apartment': 'apartment',
-    'Apartment/Flat': 'apartment',
-    'Villa': 'villa',
-    'House': 'independent_house',
-    'Independent House': 'independent_house',
-    'Builder Floor': 'builder_floor',
-    'Studio Apartment': 'studio_apartment',
-    'Penthouse': 'penthouse',
-    'Duplex': 'duplex',
-    'Plot': 'plot',
-    'Plot/Land': 'plot',
-    'Land/Plot': 'plot',
-    'Commercial': 'commercial',
-    'Office': 'office',
-    'Office Space': 'office',
-    'Retail/Shop': 'shop',
-    'Shop': 'shop',
-    'Warehouse': 'warehouse',
-    'Industrial/Warehouse': 'warehouse',
-    'Showroom': 'showroom',
-    'Co-working': 'coworking',
-    'Hospitality/Hotel': 'hotel'
+    'Buy': 'sale', // Map "Buy" to 'sale'
+    'Lease': 'rent', // Map "Lease" to 'rent'
   };
   
   if (!listingType) return 'sale';
-  return listingMappings[listingType] || listingType.toLowerCase();
+  
+  // Only map actual listing types, not property types
+  const mappedValue = listingMappings[listingType];
+  if (mappedValue) {
+    return mappedValue;
+  }
+  
+  // For any other values, default to lowercase
+  return listingType.toLowerCase();
 };
 
 export const validateMappedValues = (data: {

@@ -179,6 +179,16 @@ const PropertyCard = ({
 
   // Handle different image formats - prioritize direct URLs from database
   const getImageUrl = () => {
+    // Debug logging
+    console.log('PropertyCard image data:', {
+      id,
+      title,
+      image,
+      imageType: typeof image,
+      isArray: Array.isArray(image),
+      imageLength: Array.isArray(image) ? image.length : 'N/A'
+    });
+    
     if (Array.isArray(image)) {
       const first = image[0];
       if (typeof first === 'string') {

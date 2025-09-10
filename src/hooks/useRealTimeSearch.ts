@@ -113,13 +113,15 @@ export const useRealTimeSearch = () => {
             property.listing_type === 'rent'
           );
         } else if (activeTab === 'commercial') {
-          filteredPropertiesData = filteredPropertiesData.filter(property => 
-            property.property_type === 'commercial' || 
-            property.property_type === 'office' || 
-            property.property_type === 'shop' || 
-            property.property_type === 'warehouse' || 
-            property.property_type === 'showroom'
-          );
+          // For commercial tab, show ALL commercial properties (both sale and rent)
+          // The commercial tab is independent and shows all commercial listings
+          filteredPropertiesData = filteredPropertiesData.filter(property => {
+            return property.property_type === 'commercial' || 
+              property.property_type === 'office' || 
+              property.property_type === 'shop' || 
+              property.property_type === 'warehouse' || 
+              property.property_type === 'showroom';
+          });
         }
 
         // Also get content elements for featured properties (but filter by active tab)
@@ -206,6 +208,15 @@ export const useRealTimeSearch = () => {
         
         // Transform properties table data to Property format
         const transformedPropertiesData = filteredPropertiesData.map((property: any) => {
+          // Debug logging for image data
+          console.log('Property data from database:', {
+            id: property.id,
+            title: property.title,
+            images: property.images,
+            imagesType: typeof property.images,
+            imagesLength: Array.isArray(property.images) ? property.images.length : 'N/A'
+          });
+          
           // Handle PG/Hostel properties specially - check multiple conditions
           const isPGHostel = property.property_type === 'pg_hostel' || 
                             property.property_type === 'PG/Hostel' || 
@@ -220,6 +231,9 @@ export const useRealTimeSearch = () => {
           if (isPGHostel) {
             displayPropertyType = 'PG/Hostel';
           }
+          
+          const imageUrl = (property.images && property.images.length > 0) ? property.images[0] : '/placeholder.svg';
+          console.log('Final image URL for property:', { id: property.id, title: property.title, imageUrl });
           
           return {
             id: property.id,
@@ -237,7 +251,7 @@ export const useRealTimeSearch = () => {
               ? 1  // PG/Hostel shows as 1 room
               : parseInt(property.bhk_type?.replace(/[^\d]/g, '') || '0'),
             bathrooms: property.bathrooms || 0,
-            image: property.images || '/placeholder.svg',
+            image: imageUrl,
             propertyType: displayPropertyType,
             locality: property.locality || '',
             city: property.city || '',
@@ -331,7 +345,7 @@ export const useRealTimeSearch = () => {
         area: property.area,
         bedrooms: property.bedrooms || 0,
         bathrooms: property.bathrooms || 0,
-        image: property.image || '/placeholder.svg',
+        image: (property.images && property.images.length > 0) ? property.images[0] : '/placeholder.svg',
         propertyType: property.property_type?.replace(/_/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase()) || 'Property',
         isNew: property.isNew || false
       }));

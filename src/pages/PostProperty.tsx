@@ -477,7 +477,7 @@ export const PostProperty: React.FC = () => {
             owner_email: data.ownerInfo.email || '',
             owner_phone: data.ownerInfo.phoneNumber || '',
             owner_role: data.ownerInfo.role || 'Owner',
-            status: 'pending', // Reset to pending for review
+            status: 'pending', // Reset to pending for review - CRITICAL: prevents public visibility
             updated_at: new Date().toISOString(),
             // Additional fields - access from the original property data
             furnishing_status: (window as any).editingPropertyData?.furnishing_status,
@@ -500,6 +500,28 @@ export const PostProperty: React.FC = () => {
           .eq('user_id', user.id);
         
         error = updateError;
+        
+        // Verify the status was actually updated to prevent public visibility
+        if (!error) {
+          const { data: verifyData, error: verifyError } = await supabase
+            .from('properties')
+            .select('status')
+            .eq('id', editingPropertyId)
+            .eq('user_id', user.id)
+            .single();
+            
+          if (verifyError) {
+            console.error('Failed to verify property status update:', verifyError);
+          } else if (verifyData?.status !== 'pending') {
+            console.error('Property status was not properly updated to pending:', verifyData);
+            // Force update the status again
+            await supabase
+              .from('properties')
+              .update({ status: 'pending' })
+              .eq('id', editingPropertyId)
+              .eq('user_id', user.id);
+          }
+        }
       } else {
         // Insert new property submission
         const { error: insertError } = await supabase

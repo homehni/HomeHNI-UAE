@@ -48,6 +48,11 @@ interface Property {
   owner_role?: string;
 }
 
+type CombinedProperty = Property & {
+  isSubmission?: boolean;
+  submissionId?: string;
+};
+
 interface Lead {
   id: string;
   interested_user_name: string;
@@ -94,7 +99,7 @@ export const Dashboard: React.FC = () => {
   const initialTab = searchParams.get('tab') || 'properties';
   const [activeTab, setActiveTab] = useState(initialTab);
   
-  const [properties, setProperties] = useState<Property[]>([]);
+  const [properties, setProperties] = useState<CombinedProperty[]>([]);
   const [leads, setLeads] = useState<Lead[]>([]);
   const [serviceSubmissions, setServiceSubmissions] = useState<ServiceSubmission[]>([]);
   const [propertyRequirements, setPropertyRequirements] = useState<PropertyRequirement[]>([]);
@@ -147,7 +152,7 @@ export const Dashboard: React.FC = () => {
 
   const fetchProperties = async () => {
     try {
-      // Fetch all properties for the current user with owner information
+      // 1) Fetch approved/pending properties belonging to user
       const { data: propertiesData, error: propertiesError } = await supabase
         .from('properties')
         .select('*')
@@ -156,8 +161,63 @@ export const Dashboard: React.FC = () => {
 
       if (propertiesError) throw propertiesError;
 
-      // Owner information is now stored directly in properties table
-      setProperties(propertiesData || []);
+      // 2) Fetch user's submissions that are still under review
+      const { data: submissionsData, error: submissionsError } = await supabase
+        .from('property_submissions')
+        .select('*')
+        .eq('user_id', user?.id)
+        .in('status', ['new', 'review', 'pending'])
+        .order('created_at', { ascending: false });
+
+      if (submissionsError) throw submissionsError;
+
+      // Map submissions to CombinedProperty shape for dashboard display
+      const mappedSubmissions: CombinedProperty[] = (submissionsData || []).map((sub: any) => {
+        let payload: any = {};
+        try {
+          payload = typeof sub.payload === 'string' ? JSON.parse(sub.payload) : (sub.payload || {});
+        } catch {
+          payload = {};
+        }
+        return {
+          id: sub.id, // use submission id; flagged by isSubmission
+          submissionId: sub.id,
+          isSubmission: true,
+          user_id: user!.id,
+          title: payload.title || sub.title || 'Untitled',
+          property_type: payload.property_type || payload.propertyType || 'residential',
+          listing_type: payload.listing_type || payload.listingType || 'sale',
+          bhk_type: payload.bhk_type || null as any,
+          expected_price: Number(payload.expected_price) || 0,
+          super_area: Number(payload.super_area) || undefined,
+          carpet_area: Number(payload.carpet_area) || undefined,
+          bathrooms: payload.bathrooms || undefined,
+          balconies: payload.balconies || undefined,
+          city: payload.city || 'Unknown',
+          locality: payload.locality || '',
+          state: payload.state || 'Unknown',
+          pincode: payload.pincode || '000000',
+          description: payload.description || '',
+          images: Array.isArray(payload.images) ? payload.images : [],
+          videos: Array.isArray(payload.videos) ? payload.videos : [],
+          status: 'pending',
+          created_at: sub.created_at,
+          updated_at: sub.updated_at,
+          owner_name: undefined,
+          owner_email: undefined,
+          owner_phone: undefined,
+          owner_role: undefined,
+        } as CombinedProperty;
+      });
+
+      const combined: CombinedProperty[] = [
+        ...(propertiesData || []),
+        ...mappedSubmissions,
+      ]
+      // Sort newest first consistently
+      .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+
+      setProperties(combined);
     } catch (error) {
       console.error('Error fetching properties:', error);
     } finally {
@@ -322,13 +382,19 @@ export const Dashboard: React.FC = () => {
     }
   };
 
-  const handleViewProperty = (property: Property) => {
+  const handleViewProperty = (property: CombinedProperty) => {
     // Navigate to the property's individual details page
+    if (property.isSubmission) return; // No public detail page yet
     navigate(`/property/${property.id}`);
   };
 
 
-  const handleEditProperty = (property: Property) => {
+  const handleEditProperty = (property: CombinedProperty) => {
+    if (property.isSubmission) {
+      // Route the user back to post-property to continue improving the listing
+      navigate(`/post-property?step=images`);
+      return;
+    }
     navigate(`/edit-property/${property.id}`);
   };
 
@@ -484,86 +550,16 @@ export const Dashboard: React.FC = () => {
                         {property.listing_type === 'sale' ? 'For Sale' : 'For Rent'}
                       </div>
                       
-                      {/* Action Buttons - Top Right Corner */}
-                      <div className="absolute top-0 right-0 z-10 flex flex-col gap-1 p-2">
-                        {/* Primary Actions Row */}
-                        <div className="flex gap-1">
-                          <Button 
-                            variant="outline" 
-                            size="sm"
-                            onClick={() => handleViewProperty(property)}
-                            className="flex items-center gap-1 px-2 py-1 h-7 text-xs bg-white/90 hover:bg-white shadow-sm"
-                          >
-                            <Eye className="h-3 w-3" />
-                            <span className="hidden sm:inline">View</span>
-                          </Button>
-                          <Button 
-                            variant="outline" 
-                            size="sm"
-                            onClick={() => handleEditProperty(property)}
-                            className="flex items-center gap-1 px-2 py-1 h-7 text-xs bg-white/90 hover:bg-white shadow-sm"
-                          >
-                            <Edit className="h-3 w-3" />
-                            <span className="hidden sm:inline">Edit</span>
-                          </Button>
-                          <Button 
-                            className="bg-red-500 hover:bg-red-600 text-white px-2 py-1 h-7 shadow-sm"
-                            size="sm"
-                            onClick={() => openDeleteModal('property', property.id, property.title)}
-                          >
-                            <Trash className="h-3 w-3" />
-                          </Button>
-                        </div>
-                        
-                        {/* Secondary Actions Row */}
-                        <div className="flex gap-1">
-                          <Button 
-                            variant="ghost" 
-                            size="sm"
-                            className="text-xs text-blue-600 hover:text-blue-800 hover:bg-blue-50 px-2 py-1 h-6 bg-white/90 shadow-sm"
-                            onClick={() => {
-                              navigator.clipboard.writeText(`${window.location.origin}/property/${property.id}`);
-                              toast({
-                                title: "Link copied!",
-                                description: "Property link copied to clipboard",
-                              });
-                            }}
-                          >
-                            📋 Copy
-                          </Button>
-                          <Button 
-                            variant="ghost" 
-                            size="sm"
-                            className="text-xs text-green-600 hover:text-green-800 hover:bg-green-50 px-2 py-1 h-6 bg-white/90 shadow-sm"
-                            onClick={() => {
-                              if (navigator.share) {
-                                navigator.share({
-                                  title: property.title,
-                                  text: `Check out this property: ${property.title}`,
-                                  url: `${window.location.origin}/property/${property.id}`
-                                });
-                              } else {
-                                navigator.clipboard.writeText(`${window.location.origin}/property/${property.id}`);
-                                toast({
-                                  title: "Link copied!",
-                                  description: "Share this link with potential buyers/tenants",
-                                });
-                              }
-                            }}
-                          >
-                            📤 Share
-                          </Button>
-                        </div>
-                      </div>
+                      
                       
                       <CardContent className="p-0">
-                        <div className="flex h-56">
-                          {/* Image Preview - Extra Large */}
-                          <div className="w-56 h-56 flex-shrink-0 relative">
+                        <div className="flex min-h-56 items-stretch">
+                          {/* Image Preview - Full-height column */}
+                          <div className="w-56 flex-shrink-0 relative">
                             <img
                               src={getImageUrl()}
                               alt={property.title}
-                              className="w-full h-full object-cover"
+                              className="absolute inset-0 w-full h-full object-cover rounded-l-lg"
                               onError={(e) => {
                                 e.currentTarget.src = '/placeholder.svg';
                                 e.currentTarget.alt = 'Image not available';
@@ -571,46 +567,117 @@ export const Dashboard: React.FC = () => {
                             />
                           </div>
                           
-                          {/* Content - Extra Large */}
-                          <div className="flex-1 p-6 flex flex-col justify-between min-w-0">
-                            <div className="min-w-0 pr-28">
-                              {/* Title */}
-                              <h3 className="text-xl font-bold text-gray-900 mb-4 leading-tight truncate">
+                          {/* Content - Sleek Layout */}
+                          <div className="flex-1 p-5 flex flex-col min-w-0">
+                            {/* Header row: title left, actions + status right */}
+                            <div className="flex items-start justify-between gap-3 mb-2">
+                              <h3 className="text-xl font-semibold text-gray-900 leading-tight truncate pr-2">
                                 {property.title}
                               </h3>
-                              
-                              {/* Location */}
-                              <div className="flex items-start text-gray-600 mb-4">
-                                <MapPin className="h-5 w-5 mr-2 flex-shrink-0 mt-0.5" />
-                                <span className="text-sm leading-relaxed" title={property.locality}>
-                                  {property.locality}
-                                </span>
-                              </div>
-                              
-                              {/* Price */}
-                              <div className="text-xl font-bold text-green-600 mb-4">
-                                ₹{property.expected_price.toLocaleString()}
-                              </div>
-                              
-                              {/* Posted Date */}
-                              <div className="text-sm text-gray-500 mb-5">
-                                Posted: {new Date(property.created_at).toLocaleDateString()}
+                              <div className="flex items-center gap-2 flex-shrink-0">
+                                {(!('isSubmission' in property) && property.status === 'approved') && (
+                                  <span className={`inline-flex items-center px-3 py-1.5 text-xs font-medium rounded-full border bg-emerald-50 text-emerald-700 border-emerald-200`}>
+                                    Active
+                                  </span>
+                                )}
+                                <div className="hidden sm:flex items-center gap-1">
+                                  <Button
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={() => handleViewProperty(property)}
+                                    className="px-2 h-8 text-xs"
+                                  >
+                                    <Eye className="h-3.5 w-3.5 mr-1" />View
+                                  </Button>
+                                  <Button
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={() => handleEditProperty(property)}
+                                    className="px-2 h-8 text-xs"
+                                  >
+                                    <Edit className="h-3.5 w-3.5 mr-1" />{('isSubmission' in property) ? 'Improve' : 'Edit'}
+                                  </Button>
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    className="px-2 h-8 text-xs text-blue-600 hover:text-blue-800"
+                                    onClick={() => {
+                                      navigator.clipboard.writeText(`${window.location.origin}/property/${property.id}`);
+                                      toast({ title: 'Link copied!', description: 'Property link copied to clipboard' });
+                                    }}
+                                  >
+                                    Copy
+                                  </Button>
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    className="px-2 h-8 text-xs text-green-600 hover:text-green-800"
+                                    onClick={() => {
+                                      if (navigator.share) {
+                                        navigator.share({
+                                          title: property.title,
+                                          text: `Check out this property: ${property.title}`,
+                                          url: `${window.location.origin}/property/${property.id}`
+                                        });
+                                      } else {
+                                        navigator.clipboard.writeText(`${window.location.origin}/property/${property.id}`);
+                                        toast({ title: 'Link copied!', description: 'Share this link with potential buyers/tenants' });
+                                      }
+                                    }}
+                                  >
+                                    Share
+                                  </Button>
+                                  <Button
+                                    size="sm"
+                                    className="px-2 h-8 text-xs bg-red-500 hover:bg-red-600 text-white"
+                                    onClick={() => openDeleteModal('property', property.id, property.title)}
+                                  >
+                                    <Trash className="h-3.5 w-3.5" />
+                                  </Button>
+                                </div>
                               </div>
                             </div>
-                            
-                            {/* Bottom Section - Status Only */}
-                            <div className="flex items-center">
-                              <span className={`inline-flex items-center px-4 py-2 text-sm font-semibold rounded-full ${
-                                property.status === 'approved' 
-                                  ? 'bg-emerald-100 text-emerald-800 border border-emerald-200'
-                                  : property.status === 'pending'
-                                  ? 'bg-amber-100 text-amber-800 border border-amber-200'
-                                  : 'bg-gray-100 text-gray-800 border border-gray-200'
-                              }`}>
-                                {property.status === 'approved' ? '🟢 Active' : 
-                                 property.status === 'pending' ? '🟡 Under Review' : 
-                                 '⚪ ' + property.status}
+
+                            {/* Location */}
+                            <div className="flex items-center text-gray-600 mb-3 min-w-0">
+                              <MapPin className="h-4 w-4 mr-2 flex-shrink-0" />
+                              <span className="text-sm truncate" title={property.locality}>
+                                {property.locality}
                               </span>
+                            </div>
+                            
+                            {/* Price + Date */}
+                            <div className="flex items-center justify-between flex-wrap gap-3 mb-4">
+                              <div className="text-xl font-bold text-green-600">₹{property.expected_price.toLocaleString()}</div>
+                              <div className="text-sm text-gray-500">Posted: {new Date(property.created_at).toLocaleDateString()}</div>
+                            </div>
+                            
+                            {/* Bottom Section - Progress Only */}
+                            <div className="mt-auto pt-2 border-t border-gray-100">
+                              {/* Property Progress Bar - Show for submissions and low-completion approved listings */}
+                              {((property as any).isSubmission || property.status === 'approved' || property.status === 'active') && (() => {
+                                const completion = calculatePropertyCompletion(property);
+                                console.log('Property completion:', {
+                                  id: property.id,
+                                  title: property.title,
+                                  status: property.status,
+                                  percentage: completion.percentage,
+                                  missingFields: completion.missingFields,
+                                  propertyType: property.property_type
+                                });
+                                
+                                // Show when completion is below threshold
+                                const shouldShow = completion.percentage < 80;
+                                
+                                return shouldShow ? (
+                                  <PropertyProgressCompact
+                                    propertyId={property.id}
+                                    completionPercentage={completion.percentage}
+                                    missingFields={completion.missingFields}
+                                    propertyType={property.property_type}
+                                  />
+                                ) : null;
+                              })()}
                             </div>
                           </div>
                         </div>

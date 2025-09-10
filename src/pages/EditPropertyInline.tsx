@@ -610,7 +610,7 @@ export const EditPropertyInline: React.FC = () => {
             parking: (editedProperty as PGProperty).parking,
             images: editedProperty.images,
             videos: editedProperty.videos,
-            status: 'pending', // Reset to pending for review
+            status: 'pending', // Reset to pending for review - CRITICAL: prevents public visibility
             updated_at: new Date().toISOString()
           })
           .eq('id', editedProperty.id)
@@ -632,7 +632,7 @@ export const EditPropertyInline: React.FC = () => {
           landmarks: (editedProperty as Property).landmark, // Map landmark to landmarks (database field)
           images: editedProperty.images,
           videos: editedProperty.videos,
-          status: 'pending', // Reset to pending for review
+          status: 'pending', // Reset to pending for review - CRITICAL: prevents public visibility
           updated_at: new Date().toISOString()
         };
 
@@ -661,6 +661,26 @@ export const EditPropertyInline: React.FC = () => {
           .eq('user_id', user.id);
 
         if (error) throw error;
+        
+        // Verify the status was actually updated to prevent public visibility
+        const { data: verifyData, error: verifyError } = await supabase
+          .from('properties')
+          .select('status')
+          .eq('id', editedProperty.id)
+          .eq('user_id', user.id)
+          .single();
+          
+        if (verifyError) {
+          console.error('Failed to verify property status update:', verifyError);
+        } else if (verifyData?.status !== 'pending') {
+          console.error('Property status was not properly updated to pending:', verifyData);
+          // Force update the status again
+          await supabase
+            .from('properties')
+            .update({ status: 'pending' })
+            .eq('id', editedProperty.id)
+            .eq('user_id', user.id);
+        }
       }
 
       toast({
