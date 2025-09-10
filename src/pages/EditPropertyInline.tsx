@@ -355,7 +355,79 @@ export const EditPropertyInline: React.FC = () => {
         return;
       }
 
-      // If not found in properties table, try pg_hostel_properties table
+      // If not found in properties table, try property_submissions table
+      const { data: submissionData, error: submissionError } = await supabase
+        .from('property_submissions')
+        .select('*')
+        .eq('id', propertyId)
+        .eq('user_id', user?.id)
+        .single();
+
+
+      if (submissionData && !submissionError) {
+        // Parse the payload to get the actual property data
+        let payload: any = {};
+        try {
+          payload = typeof submissionData.payload === 'string' ? JSON.parse(submissionData.payload) : (submissionData.payload || {});
+        } catch {
+          payload = {};
+        }
+
+        // Convert submission data to property format
+        const propertyFromSubmission = {
+          id: submissionData.id,
+          user_id: submissionData.user_id,
+          title: payload.title || submissionData.title || 'Untitled',
+          property_type: payload.property_type || payload.propertyType || 'residential',
+          listing_type: payload.listing_type || payload.listingType || 'sale',
+          bhk_type: payload.bhk_type || null,
+          expected_price: Number(payload.expected_price) || 0,
+          super_area: Number(payload.super_area) || undefined,
+          carpet_area: Number(payload.carpet_area) || undefined,
+          bathrooms: payload.bathrooms || undefined,
+          balconies: payload.balconies || undefined,
+          city: payload.city || 'Unknown',
+          locality: payload.locality || '',
+          state: payload.state || 'Unknown',
+          pincode: payload.pincode || '000000',
+          description: payload.description || '',
+          images: Array.isArray(payload.images) ? payload.images : [],
+          videos: Array.isArray(payload.videos) ? payload.videos : [],
+          status: submissionData.status,
+          created_at: submissionData.created_at,
+          updated_at: submissionData.updated_at,
+          owner_name: payload.owner_name || undefined,
+          owner_email: payload.owner_email || undefined,
+          owner_phone: payload.owner_phone || undefined,
+          owner_role: payload.owner_role || undefined,
+          // Additional fields from payload
+          property_age: payload.property_age,
+          floor_type: payload.floor_type,
+          total_floors: payload.total_floors,
+          floor_no: payload.floor_no,
+          amenities: payload.amenities,
+          landmark: payload.landmark,
+          plot_area: payload.plot_area,
+          length: payload.length,
+          width: payload.width,
+          boundary_wall: payload.boundary_wall,
+          floors_allowed: payload.floors_allowed,
+          gated_project: payload.gated_project,
+          water_supply: payload.water_supply,
+          electricity_connection: payload.electricity_connection,
+          sewage_connection: payload.sewage_connection,
+          road_width: payload.road_width,
+          gated_security: payload.gated_security,
+          directions: payload.directions,
+        };
+
+        setProperty(propertyFromSubmission);
+        setEditedProperty(propertyFromSubmission);
+        setIsPGProperty(false);
+        return;
+      }
+
+      // If not found in property_submissions table, try pg_hostel_properties table
       const { data: pgData, error: pgError } = await supabase
         .from('pg_hostel_properties')
         .select('*')
@@ -363,12 +435,21 @@ export const EditPropertyInline: React.FC = () => {
         .eq('user_id', user?.id)
         .single();
 
+
       if (pgData && !pgError) {
         setProperty(pgData);
         setEditedProperty(pgData);
         setIsPGProperty(true);
         return;
       }
+
+      // If neither table has the property, try without user_id filter to see if property exists
+      const { data: anyPropertyData, error: anyPropertyError } = await supabase
+        .from('properties')
+        .select('*')
+        .eq('id', propertyId)
+        .single();
+
 
       // If neither table has the property
       toast({
@@ -587,7 +668,65 @@ export const EditPropertyInline: React.FC = () => {
 
     setIsSubmitting(true);
     try {
-      if (isPGProperty) {
+      // Check if this is a property submission (not yet approved)
+      const isSubmission = property?.status === 'new' || property?.status === 'review' || property?.status === 'pending';
+      
+      if (isSubmission) {
+        // Update property submission
+        const updateData = {
+          title: editedProperty.title,
+          city: editedProperty.city,
+          state: editedProperty.state,
+          status: 'pending', // Keep as pending for review
+          updated_at: new Date().toISOString(),
+          payload: {
+            ...editedProperty,
+            // Ensure all the property data is preserved in the payload
+            title: editedProperty.title,
+            property_type: editedProperty.property_type,
+            listing_type: editedProperty.listing_type,
+            bhk_type: editedProperty.bhk_type,
+            expected_price: editedProperty.expected_price,
+            super_area: editedProperty.super_area,
+            carpet_area: editedProperty.carpet_area,
+            bathrooms: editedProperty.bathrooms,
+            balconies: editedProperty.balconies,
+            city: editedProperty.city,
+            locality: editedProperty.locality,
+            state: editedProperty.state,
+            pincode: editedProperty.pincode,
+            description: editedProperty.description,
+            images: editedProperty.images,
+            videos: editedProperty.videos,
+            property_age: editedProperty.property_age,
+            floor_type: editedProperty.floor_type,
+            total_floors: editedProperty.total_floors,
+            floor_no: editedProperty.floor_no,
+            amenities: editedProperty.amenities,
+            landmark: editedProperty.landmark,
+            plot_area: editedProperty.plot_area,
+            length: editedProperty.length,
+            width: editedProperty.width,
+            boundary_wall: editedProperty.boundary_wall,
+            floors_allowed: editedProperty.floors_allowed,
+            gated_project: editedProperty.gated_project,
+            water_supply: editedProperty.water_supply,
+            electricity_connection: editedProperty.electricity_connection,
+            sewage_connection: editedProperty.sewage_connection,
+            road_width: editedProperty.road_width,
+            gated_security: editedProperty.gated_security,
+            directions: editedProperty.directions,
+          }
+        };
+
+        const { error } = await supabase
+          .from('property_submissions')
+          .update(updateData)
+          .eq('id', editedProperty.id)
+          .eq('user_id', user.id);
+
+        if (error) throw error;
+      } else if (isPGProperty) {
         // Update PG/Hostel property
         const { error } = await supabase
           .from('pg_hostel_properties')

@@ -187,7 +187,7 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
       },
       locationDetails,
       flattmatesDetails: {
-        listingType: propertyDetails.apartmentType, // Match the property type
+        listingType: 'Flatmates', // Fixed: should be 'Flatmates', not apartmentType
         expectedPrice: rentalDetails.expectedRent,
         existingFlatmates: 1,
         genderPreference: propertyDetails.tenantType === 'Male' ? 'male' : propertyDetails.tenantType === 'Female' ? 'female' : 'any',

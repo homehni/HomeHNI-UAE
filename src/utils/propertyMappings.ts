@@ -65,6 +65,7 @@ export const mapListingType = (listingType: string): string => {
     'Resale': 'sale', // Map "Resale" to 'sale'
     'Rent': 'rent',
     'PG/Hostel': 'rent', // Treat PG/Hostel flows as rentals
+    'Flatmates': 'rent', // Treat Flatmates as rentals
     'Buy': 'sale', // Map "Buy" to 'sale'
     'Lease': 'rent', // Map "Lease" to 'rent'
   };

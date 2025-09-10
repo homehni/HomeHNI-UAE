@@ -21,12 +21,10 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
       location: searchQuery.trim()
     });
     
-    // For commercial search, we need to determine if user wants to buy or rent
-    // Since commercial can be both, we'll default to 'buy' for now
-    // The user can then switch tabs on the search page
+    // For commercial search, show all property types regardless of sale/rent
     if (activeTab === 'commercial') {
-      params.set('type', 'buy'); // Default to buy for commercial
-      params.set('propertyType', 'COMMERCIAL');
+      // Don't set a specific property type - let it show all property types
+      // Don't set a specific listing type - let it show both sale and rent
     }
     
     navigate(`/search?${params.toString()}`);

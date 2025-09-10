@@ -10,7 +10,7 @@ import { Badge } from '@/components/ui/badge';
 import { CommercialPropertyDetails } from '@/types/property';
 
 const commercialSalePropertyDetailsSchema = z.object({
-  title: z.string().min(1, "Property name is required"),
+  title: z.string().optional(), // Made optional - will be auto-generated
   spaceType: z.enum(['office', 'retail', 'warehouse', 'showroom', 'restaurant', 'co-working', 'industrial', 'medical', 'educational']).optional(),
   buildingType: z.string().optional(),
   propertyAge: z.string().optional(),
@@ -98,10 +98,10 @@ export const CommercialSalePropertyDetailsStep = ({
             name="title"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Name of Property *</FormLabel>
+                <FormLabel>Name of Property (Optional)</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="e.g., Premium Office Space in Business District"
+                    placeholder="Leave empty for auto-generated name based on property details"
                     {...field}
                   />
                 </FormControl>

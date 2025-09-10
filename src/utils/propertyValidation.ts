@@ -73,16 +73,15 @@ export const validatePropertySubmission = (
   };
 
   // Minimal property validation - only require at least one meaningful field
-  const hasPropertyInfo = sanitizedProperty.title || sanitizedProperty.propertyType || 
+  const hasPropertyInfo = sanitizedProperty.propertyType || 
                           sanitizedProperty.state || sanitizedProperty.city || 
                           sanitizedProperty.locality || sanitizedProperty.expectedPrice > 0;
   
   if (!hasPropertyInfo) {
-    errors.push('At least one property detail is required (title, type, location, or price)');
+    errors.push('At least one property detail is required (type, location, or price)');
   }
   
-  // Gentle warnings for missing important fields
-  if (!sanitizedProperty.title) warnings.push('Property title is recommended for better visibility');
+  // Note: Title is now optional and will be auto-generated if not provided
   if (!sanitizedProperty.propertyType) warnings.push('Property type helps categorize your listing');
   if (!sanitizedProperty.state || !sanitizedProperty.city) warnings.push('Location details help buyers find your property');
 

@@ -18,6 +18,7 @@ import { useToast } from '@/hooks/use-toast';
 import { uploadSingleFile, uploadPropertyImagesByType } from '@/services/fileUploadService';
 import { validatePropertySubmission } from '@/utils/propertyValidation';
 import { mapBhkType, mapPropertyType, mapListingType, validateMappedValues } from '@/utils/propertyMappings';
+import { generatePropertyName } from '@/utils/propertyNameGenerator';
 import Header from '@/components/Header';
 import Marquee from '@/components/Marquee';
 
@@ -104,16 +105,19 @@ export const PostProperty: React.FC = () => {
     
     // Handle step navigation
     if (step) {
-      console.log('Navigate to step:', step);
+      console.log('PostProperty - Navigate to step:', step);
       // Map step names to step numbers
       const stepMap: { [key: string]: number } = {
         'gallery': 5, // Gallery step is step 5 in most forms
         'images': 5,
-        'upload': 5
+        'upload': 5,
+        'amenities': 4 // Amenities step is step 4 in most forms
       };
       const stepNumber = stepMap[step.toLowerCase()] || parseInt(step);
+      console.log('PostProperty - Mapped step number:', stepNumber);
       if (stepNumber && stepNumber > 0) {
         setTargetStep(stepNumber);
+        console.log('PostProperty - Set target step to:', stepNumber);
       }
     }
   }, [location.search]);
@@ -398,13 +402,36 @@ export const PostProperty: React.FC = () => {
         safeExpectedPrice = 1; // Set to 1 instead of 0 to satisfy > 0 constraint
       }
       
+      // Generate property name if not provided
+      let propertyTitle = '';
+      if ('propertyDetails' in data.propertyInfo) {
+        propertyTitle = data.propertyInfo.propertyDetails.title || '';
+      } else if ('plotDetails' in data.propertyInfo) {
+        propertyTitle = data.propertyInfo.plotDetails.title || '';
+      }
+      
+      // If no title provided, generate one based on property details
+      if (!propertyTitle || propertyTitle.trim() === '') {
+        const nameData = {
+          bhkType: ('propertyDetails' in data.propertyInfo && 'bhkType' in data.propertyInfo.propertyDetails) 
+                   ? data.propertyInfo.propertyDetails.bhkType 
+                   : undefined,
+          propertyType: ('propertyDetails' in data.propertyInfo) 
+                       ? data.propertyInfo.propertyDetails.propertyType 
+                       : ('plotDetails' in data.propertyInfo) 
+                         ? data.propertyInfo.plotDetails.propertyType 
+                         : 'Commercial',
+          listingType: listingType,
+          commercialType: ('propertyDetails' in data.propertyInfo && 'spaceType' in data.propertyInfo.propertyDetails) 
+                         ? (data.propertyInfo.propertyDetails as any).spaceType 
+                         : undefined
+        };
+        propertyTitle = generatePropertyName(nameData);
+      }
+
       const propertyData = {
         user_id: user.id,
-        title: ('propertyDetails' in data.propertyInfo)
-               ? (data.propertyInfo.propertyDetails.title || 'Untitled')
-               : (('plotDetails' in data.propertyInfo)
-                 ? (data.propertyInfo.plotDetails.title || 'Untitled')
-                 : 'Untitled'),
+        title: propertyTitle,
         property_type: mapPropertyType(('propertyDetails' in data.propertyInfo) ? 
                                      data.propertyInfo.propertyDetails.propertyType : 
                                      ('plotDetails' in data.propertyInfo) ? 
@@ -609,11 +636,7 @@ export const PostProperty: React.FC = () => {
         owner_email: data.ownerInfo.email || '',
         owner_phone: data.ownerInfo.phoneNumber || '',
         owner_role: data.ownerInfo.role || 'Owner',
-        title: ('propertyDetails' in data.propertyInfo)
-               ? (data.propertyInfo.propertyDetails.title || 'Untitled')
-               : (('plotDetails' in data.propertyInfo)
-                 ? (data.propertyInfo.plotDetails.title || 'Untitled')
-                 : 'Untitled'),
+        title: propertyTitle, // Use the same generated title
         property_type: ('propertyDetails' in data.propertyInfo)
                       ? (data.propertyInfo.propertyDetails.propertyType || 'Residential')
                       : (('plotDetails' in data.propertyInfo)

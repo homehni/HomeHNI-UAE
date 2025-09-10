@@ -543,31 +543,6 @@ const AdminProperties = () => {
           description: 'Property approved successfully (content element creation failed)'
         });
       } else {
-        // Also add to type-specific featured section
-        const typeSectionMap: Record<string, string> = {
-          apartment: 'featured_apartments',
-          villa: 'featured_villas',
-          independent_house: 'featured_houses',
-          builder_floor: 'featured_builder_floors',
-          plot: 'featured_plots',
-          commercial: 'featured_commercial',
-          office: 'featured_offices',
-          shop: 'featured_shops',
-          warehouse: 'featured_warehouses',
-          showroom: 'featured_showrooms'
-        };
-        const typeSection = typeSectionMap[mappedPropertyType] || 'featured_properties';
-        const typedElement = {
-          ...contentElement,
-          element_key: `${mappedPropertyType}_property_${nextPropertyNumber}`,
-          section_location: typeSection
-        };
-        const { error: typeInsertError } = await supabase
-          .from('content_elements')
-          .insert(typedElement);
-        if (typeInsertError) {
-          console.warn('Type-specific content element insert failed:', typeInsertError);
-        }
         toast({
           title: 'Success',
           description: 'Property approved and added to featured properties'

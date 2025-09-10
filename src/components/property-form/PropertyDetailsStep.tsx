@@ -11,7 +11,7 @@ import { PropertyDetails } from '@/types/property';
 import { Phone } from 'lucide-react';
 
 const propertyDetailsSchema = z.object({
-  title: z.string().min(1, "Property name is required"),
+  title: z.string().optional(), // Made optional - will be auto-generated
   propertyType: z.string().optional(),
   bhkType: z.string().optional(),
   buildingType: z.string().optional(),
@@ -86,21 +86,24 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
       
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-          {/* Property Name */}
+          {/* Property Name - Optional */}
           <FormField
             control={form.control}
             name="title"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-sm font-medium">Name of Property *</FormLabel>
+                <FormLabel className="text-sm font-medium">Name of Property (Optional)</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="e.g., Luxury 2BHK Apartment in Prime Location"
+                    placeholder="Leave empty for auto-generated name based on property details"
                     className="h-12"
                     {...field}
                   />
                 </FormControl>
                 <FormMessage />
+                <p className="text-xs text-muted-foreground">
+                  If left empty, a name will be automatically generated based on your property details
+                </p>
               </FormItem>
             )}
           />

@@ -9,7 +9,7 @@ export const ownerInfoSchema = z.object({
 });
 
 export const propertyInfoSchema = z.object({
-  title: z.string().optional(),
+  title: z.string().optional(), // Made optional - will be auto-generated
   propertyType: z.string().optional(),
   listingType: z.enum(['Sale', 'Rent']).optional(),
   bhkType: z.string().optional(),

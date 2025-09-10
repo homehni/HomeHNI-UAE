@@ -67,6 +67,7 @@ const PropertyDetails: React.FC = () => {
   const fetchLatestPropertyData = async () => {
     if (!id) return;
     
+    console.log('Fetching property data for ID:', id);
     setLoading(true);
     try {
       // First try to fetch from properties table (approved properties)
@@ -75,6 +76,8 @@ const PropertyDetails: React.FC = () => {
         .select('*')
         .eq('id', id)
         .single();
+
+      console.log('Properties table query result:', { propertyData, propertyError });
 
       if (propertyData && !propertyError) {
         console.log('Latest property data fetched from properties table:', propertyData);
@@ -91,6 +94,8 @@ const PropertyDetails: React.FC = () => {
         .select('*')
         .eq('id', id)
         .single();
+
+      console.log('Property submissions table query result:', { submissionData, submissionError });
 
       if (submissionData && !submissionError) {
         console.log('Property data found in submissions table:', submissionData);

@@ -384,17 +384,28 @@ export const Dashboard: React.FC = () => {
 
   const handleViewProperty = (property: CombinedProperty) => {
     // Navigate to the property's individual details page
-    if (property.isSubmission) return; // No public detail page yet
+    // Both approved properties and submissions can be viewed
     navigate(`/property/${property.id}`);
   };
 
 
   const handleEditProperty = (property: CombinedProperty) => {
     if (property.isSubmission) {
-      // Route the user back to post-property to continue improving the listing
-      navigate(`/post-property?step=images`);
+      // For flatmates properties, route to amenities step (step 4)
+      // For other properties, route to images step (step 5)
+      console.log('Property data:', property);
+      console.log('Property type:', property.property_type);
+      console.log('Listing type:', property.listing_type);
+      
+      const targetStep = property.property_type === 'apartment' && property.listing_type === 'rent' 
+        ? 'amenities' 
+        : 'images';
+      
+      console.log('Target step:', targetStep);
+      navigate(`/post-property?step=${targetStep}`);
       return;
     }
+    // For approved properties, go to the edit page
     navigate(`/edit-property/${property.id}`);
   };
 
@@ -407,6 +418,35 @@ export const Dashboard: React.FC = () => {
 
   const handlePropertyUpdated = () => {
     fetchProperties(); // Refresh the properties list
+  };
+
+  const handleUpgradeProperty = (property: CombinedProperty) => {
+    // Determine the appropriate pricing plan based on property type and listing type
+    const isCommercial = property.property_type === 'commercial' || 
+                        property.property_type === 'office' || 
+                        property.property_type === 'shop' || 
+                        property.property_type === 'warehouse' || 
+                        property.property_type === 'showroom';
+    
+    const isRent = property.listing_type === 'rent';
+    
+    let planTab = '';
+    
+    if (isCommercial) {
+      if (isRent) {
+        planTab = 'commercial-owner';
+      } else {
+        planTab = 'commercial-seller';
+      }
+    } else {
+      if (isRent) {
+        planTab = 'owner';
+      } else {
+        planTab = 'seller';
+      }
+    }
+    
+    navigate(`/plans?tab=${planTab}`);
   };
 
   if (!user) {
@@ -652,32 +692,44 @@ export const Dashboard: React.FC = () => {
                               <div className="text-sm text-gray-500">Posted: {new Date(property.created_at).toLocaleDateString()}</div>
                             </div>
                             
-                            {/* Bottom Section - Progress Only */}
+                            {/* Bottom Section - Progress and Upgrade Button */}
                             <div className="mt-auto pt-2 border-t border-gray-100">
-                              {/* Property Progress Bar - Show for submissions and low-completion approved listings */}
-                              {((property as any).isSubmission || property.status === 'approved' || property.status === 'active') && (() => {
-                                const completion = calculatePropertyCompletion(property);
-                                console.log('Property completion:', {
-                                  id: property.id,
-                                  title: property.title,
-                                  status: property.status,
-                                  percentage: completion.percentage,
-                                  missingFields: completion.missingFields,
-                                  propertyType: property.property_type
-                                });
+                              <div className="flex justify-between items-center">
+                                {/* Property Progress Bar - Show for submissions and low-completion approved listings */}
+                                <div className="flex-1">
+                                  {((property as any).isSubmission || property.status === 'approved' || property.status === 'active') && (() => {
+                                    const completion = calculatePropertyCompletion(property);
+                                    console.log('Property completion:', {
+                                      id: property.id,
+                                      title: property.title,
+                                      status: property.status,
+                                      percentage: completion.percentage,
+                                      missingFields: completion.missingFields,
+                                      propertyType: property.property_type
+                                    });
+                                    
+                                    // Show when completion is below threshold
+                                    const shouldShow = completion.percentage < 80;
+                                    
+                                    return shouldShow ? (
+                                      <PropertyProgressCompact
+                                        propertyId={property.id}
+                                        completionPercentage={completion.percentage}
+                                        missingFields={completion.missingFields}
+                                        propertyType={property.property_type}
+                                      />
+                                    ) : null;
+                                  })()}
+                                </div>
                                 
-                                // Show when completion is below threshold
-                                const shouldShow = completion.percentage < 80;
-                                
-                                return shouldShow ? (
-                                  <PropertyProgressCompact
-                                    propertyId={property.id}
-                                    completionPercentage={completion.percentage}
-                                    missingFields={completion.missingFields}
-                                    propertyType={property.property_type}
-                                  />
-                                ) : null;
-                              })()}
+                                {/* Upgrade Button */}
+                                <Button
+                                  onClick={() => handleUpgradeProperty(property)}
+                                  className="ml-4 bg-red-600 hover:bg-red-700 text-white px-4 py-2 text-sm font-medium"
+                                >
+                                  Upgrade
+                                </Button>
+                              </div>
                             </div>
                           </div>
                         </div>

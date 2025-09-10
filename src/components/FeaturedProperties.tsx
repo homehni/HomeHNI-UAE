@@ -314,18 +314,7 @@ const FeaturedProperties = ({
     image: 'apartment2.jpg',
     propertyType: 'Apartment'
   }, {
-    id: '4',
-    title: 'Premium Office Space',
-    location: 'Cyber City, Gurgaon',
-    price: '₹45 L',
-    area: '800 sq ft',
-    bedrooms: 0,
-    bathrooms: 1,
-    image: 'commercial1.jpg',
-    propertyType: 'Commercial',
-    isNew: true
-  }, {
-    id: '5',
+    id: '13',
     title: 'Spacious 3BHK with Balcony',
     location: 'Whitefield, Bangalore',
     price: '₹95 L',
@@ -335,7 +324,7 @@ const FeaturedProperties = ({
     image: 'apartment3.jpg',
     propertyType: 'Apartment'
   }, {
-    id: '6',
+    id: '13',
     title: 'Independent House with Parking',
     location: 'Sector 15, Noida',
     price: '₹1.8 Cr',
@@ -345,7 +334,7 @@ const FeaturedProperties = ({
     image: 'house1.jpg',
     propertyType: 'House'
   }, {
-    id: '7',
+    id: '13',
     title: 'Modern 2BHK with City View',
     location: 'Bandra West, Mumbai',
     price: '₹1.5 Cr',
@@ -356,7 +345,7 @@ const FeaturedProperties = ({
     propertyType: 'Apartment',
     isNew: true
   }, {
-    id: '8',
+    id: '13',
     title: 'Luxury Penthouse with Terrace',
     location: 'Koramangala, Bangalore',
     price: '₹3.2 Cr',
@@ -366,7 +355,7 @@ const FeaturedProperties = ({
     image: 'penthouse1.jpg',
     propertyType: 'Penthouse'
   }, {
-    id: '9',
+    id: '13',
     title: 'Prime Residential Plot in Gated Community',
     location: 'Hinjewadi, Pune',
     price: '₹60 L',
@@ -377,7 +366,7 @@ const FeaturedProperties = ({
     propertyType: 'Plot',
     isNew: true
   }, {
-    id: '10',
+    id: '13',
     title: 'Independent House with Private Garden',
     location: 'Vijayanagar, Bangalore',
     price: '₹1.7 Cr',
@@ -387,7 +376,7 @@ const FeaturedProperties = ({
     image: 'independent-house1.jpg',
     propertyType: 'Independent House'
   }, {
-    id: '11',
+    id: '13',
     title: 'Fertile Agricultural Land with Water Source',
     location: 'Kharif Valley, Punjab',
     price: '₹25 L',
@@ -398,7 +387,7 @@ const FeaturedProperties = ({
     propertyType: 'Agriculture Lands',
     isNew: true
   }, {
-    id: '12',
+    id: '13',
     title: 'Luxury Studio Apartment with Pool',
     location: 'Powai, Mumbai',
     price: '₹85 L',
@@ -410,16 +399,6 @@ const FeaturedProperties = ({
     isNew: true
   }, {
     id: '13',
-    title: 'Commercial Space in IT Park',
-    location: 'HITEC City, Hyderabad',
-    price: '₹55 L',
-    area: '1,000 sq ft',
-    bedrooms: 0,
-    bathrooms: 2,
-    image: 'commercial2.jpg',
-    propertyType: 'Commercial'
-  }, {
-    id: '14',
     title: 'Duplex House with Garden',
     location: 'Jubilee Hills, Hyderabad',
     price: '₹2.8 Cr',
@@ -430,7 +409,7 @@ const FeaturedProperties = ({
     propertyType: 'House',
     isNew: true
   }, {
-    id: '15',
+    id: '14',
     title: 'Affordable 1BHK Near Metro',
     location: 'Dwarka, Delhi',
     price: '₹45 L',
@@ -440,7 +419,7 @@ const FeaturedProperties = ({
     image: 'apartment6.jpg',
     propertyType: 'Apartment'
   }, {
-    id: '16',
+    id: '15',
     title: 'Farmhouse with Orchard',
     location: 'Lonavala, Maharashtra',
     price: '₹1.2 Cr',
@@ -450,7 +429,7 @@ const FeaturedProperties = ({
     image: 'farmhouse1.jpg',
     propertyType: 'Farm House'
   }, {
-    id: '17',
+    id: '16',
     title: 'Modern 4BHK with Amenities',
     location: 'New Town, Kolkata',
     price: '₹1.1 Cr',
@@ -461,17 +440,7 @@ const FeaturedProperties = ({
     propertyType: 'Apartment',
     isNew: true
   }, {
-    id: '18',
-    title: 'Warehouse Space with Loading Dock',
-    location: 'Manesar, Gurgaon',
-    price: '₹75 L',
-    area: '5,000 sq ft',
-    bedrooms: 0,
-    bathrooms: 2,
-    image: 'commercial3.jpg',
-    propertyType: 'Commercial'
-  }, {
-    id: '19',
+    id: '17',
     title: 'Sea View Apartment with Balcony',
     location: 'Marine Drive, Mumbai',
     price: '₹4.5 Cr',
@@ -485,9 +454,37 @@ const FeaturedProperties = ({
 
   const properties: FeaturedProperty[] = propsProperties ?? featuredProperties;
 
+  // Normalize property types to prevent duplicates
+  const normalizePropertyType = (type: string): string => {
+    if (!type) return '';
+    
+    const normalized = type.toLowerCase().trim();
+    
+    const typeMap: { [key: string]: string } = {
+      'plot': 'Plot',
+      'land': 'Plot',
+      'land/plot': 'Plot',
+      'apartment': 'Apartment',
+      'flat': 'Apartment',
+      'villa': 'Villa',
+      'independent_house': 'Independent House',
+      'house': 'Independent House',
+      'builder_floor': 'Builder Floor',
+      'studio_apartment': 'Studio Apartment',
+      'studio': 'Studio Apartment',
+      'penthouse': 'Penthouse',
+      'duplex': 'Duplex',
+      'pg/hostel': 'PG/Hostel',
+      'pg_hostel': 'PG/Hostel'
+    };
+    
+    return typeMap[normalized] || type;
+  };
+
   // Compute available types dynamically so it works if properties change in the future
   const availableTypes = useMemo(() => {
-    const set = new Set(properties.map(p => p.propertyType).filter(Boolean));
+    const normalizedTypes = properties.map(p => normalizePropertyType(p.propertyType)).filter(Boolean);
+    const set = new Set(normalizedTypes);
     return ['All', ...Array.from(set)];
   }, [properties]);
   const [activeType, setActiveType] = useState<string>('All');
@@ -498,7 +495,10 @@ const FeaturedProperties = ({
       setActiveType('All');
     }
   }, [availableTypes, activeType]);
-  const filtered = useMemo(() => activeType === 'All' ? properties : properties.filter(p => p.propertyType === activeType), [activeType, properties]);
+  const filtered = useMemo(() => {
+    if (activeType === 'All') return properties;
+    return properties.filter(p => normalizePropertyType(p.propertyType) === activeType);
+  }, [activeType, properties, normalizePropertyType]);
   
   // Show only first 20 properties initially, all when showAll is true
   const displayedProperties = useMemo(() => {

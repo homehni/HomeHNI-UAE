@@ -11,7 +11,7 @@ import { PropertyDetails } from '@/types/property';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 
 const resalePropertyDetailsSchema = z.object({
-  title: z.string().min(1, "Property name is required"),
+  title: z.string().optional(), // Made optional - will be auto-generated
   propertyType: z.string().optional(),
   bhkType: z.string().optional(),
   ownershipType: z.string().optional(),
@@ -92,10 +92,10 @@ export const ResalePropertyDetailsStep: React.FC<ResalePropertyDetailsStepProps>
             name="title"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-sm font-medium">Name of Property *</FormLabel>
+                <FormLabel className="text-sm font-medium">Name of Property (Optional)</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="e.g., Spacious 3BHK Villa for Sale"
+                    placeholder="Leave empty for auto-generated name based on property details"
                     className="h-12"
                     {...field}
                   />
