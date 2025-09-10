@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import PayButton from '@/components/PayButton';
 
 const AgentPlans = () => {
@@ -12,6 +13,7 @@ const AgentPlans = () => {
     basic: 0,
     lifetime: 0
   });
+  const [isTermsModalOpen, setIsTermsModalOpen] = useState(false);
 
   const tabPlans = {
     basic: [
@@ -232,7 +234,15 @@ const AgentPlans = () => {
                           )}
                         </div>
                         
-                        <div className="mb-6 text-sm text-gray-600">
+                        <div className={`mb-6 text-sm p-3 rounded-lg ${
+                          plan.badgeColor === 'bg-blue-500' ? 'bg-blue-50 text-blue-800' :
+                          plan.badgeColor === 'bg-green-500' ? 'bg-green-50 text-green-800' :
+                          plan.badgeColor === 'bg-purple-500' ? 'bg-purple-50 text-purple-800' :
+                          plan.badgeColor === 'bg-yellow-500' ? 'bg-yellow-50 text-yellow-800' :
+                          plan.badgeColor === 'bg-red-500' ? 'bg-red-50 text-red-800' :
+                          plan.badgeColor === 'bg-indigo-500' ? 'bg-indigo-50 text-indigo-800' :
+                          'bg-gray-50 text-gray-800'
+                        }`}>
                           <strong>Best For:</strong> {bestForDescriptions[tabKey as keyof typeof bestForDescriptions][index]}
                         </div>
                         
@@ -253,17 +263,155 @@ const AgentPlans = () => {
                 </div>
 
                 {/* Selected Plan Details */}
-                <div className="bg-white rounded-lg border p-6">
+                <div className={`rounded-lg border p-6 ${
+                  plans[selectedPlans[tabKey as keyof typeof selectedPlans]].badgeColor === 'bg-blue-500' ? 'bg-blue-50' :
+                  plans[selectedPlans[tabKey as keyof typeof selectedPlans]].badgeColor === 'bg-green-500' ? 'bg-green-50' :
+                  plans[selectedPlans[tabKey as keyof typeof selectedPlans]].badgeColor === 'bg-purple-500' ? 'bg-purple-50' :
+                  plans[selectedPlans[tabKey as keyof typeof selectedPlans]].badgeColor === 'bg-yellow-500' ? 'bg-yellow-50' :
+                  plans[selectedPlans[tabKey as keyof typeof selectedPlans]].badgeColor === 'bg-red-500' ? 'bg-red-50' :
+                  plans[selectedPlans[tabKey as keyof typeof selectedPlans]].badgeColor === 'bg-indigo-500' ? 'bg-indigo-50' :
+                  'bg-white'
+                }`}>
                   <h3 className="text-xl font-bold mb-4">
                     {plans[selectedPlans[tabKey as keyof typeof selectedPlans]].name} Features
                   </h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                     {planDetails[tabKey as keyof typeof planDetails][selectedPlans[tabKey as keyof typeof selectedPlans]].map((feature, index) => (
-                      <div key={index} className="flex items-center space-x-3">
-                        <div className="text-brand-red">{feature.icon}</div>
-                        <span className="text-sm text-gray-700">{feature.text}</span>
+                      <div key={index} className="flex items-start gap-3">
+                        <div className="text-brand-red mt-1">
+                          {feature.icon}
+                        </div>
+                        <span className="text-sm text-foreground leading-relaxed">
+                          {feature.text}
+                        </span>
                       </div>
                     ))}
+                  </div>
+                  
+                  {/* Contact Info inside features section */}
+                  <div className="mt-6 pt-6 border-t">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                      {/* Phone number - center aligned */}
+                      <div className="text-center sm:text-center sm:flex-1">
+                        <span className="text-gray-600">For assistance call us at: </span>
+                        <a 
+                          href="tel:+918074017388" 
+                          className="text-brand-red font-semibold text-base hover:text-brand-red-dark transition-colors cursor-pointer"
+                        >
+                          +91 80740 17388
+                        </a>
+                      </div>
+                      
+                      {/* Terms & Conditions - right aligned */}
+                      <div className="text-right">
+                        <Dialog open={isTermsModalOpen} onOpenChange={setIsTermsModalOpen}>
+                          <DialogTrigger asChild>
+                            <span className="text-sm text-gray-500 underline cursor-pointer hover:text-gray-700">
+                              Terms & Conditions Apply
+                            </span>
+                          </DialogTrigger>
+                          <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+                            <DialogHeader>
+                              <DialogTitle className="text-xl font-bold border-b pb-2">Terms and Conditions</DialogTitle>
+                            </DialogHeader>
+                            <div className="mt-4 space-y-6">
+                              <div className="space-y-4">
+                                <h3 className="font-semibold text-lg text-brand-red">Order Summary:</h3>
+                                <p className="text-sm leading-relaxed">
+                                  Ensure your Order ID, User Name, Plan, and Total Payable are correct before proceeding with payment.
+                                </p>
+                              </div>
+
+                              <div className="space-y-4">
+                                <h3 className="font-semibold text-lg text-brand-red">Accepted Payment Methods:</h3>
+                                <p className="text-sm leading-relaxed">
+                                  Payments can be made using UPI (Google Pay, PhonePe, Paytm), Credit/Debit Cards, Net Banking, and Wallets.
+                                </p>
+                              </div>
+
+                              <div className="space-y-4">
+                                <h3 className="font-semibold text-lg text-brand-red">Payment Process:</h3>
+                                <ul className="space-y-2 text-sm leading-relaxed">
+                                  <li className="flex items-start gap-2">
+                                    <span className="text-brand-red mt-1">•</span>
+                                    <span>Click Proceed to Pay, verify the details, select your payment method, and complete authentication.</span>
+                                  </li>
+                                  <li className="flex items-start gap-2">
+                                    <span className="text-brand-red mt-1">•</span>
+                                    <span>Wait for automatic redirection and confirmation.</span>
+                                  </li>
+                                </ul>
+                              </div>
+
+                              <div className="space-y-4">
+                                <h3 className="font-semibold text-lg text-brand-red">GST Invoices:</h3>
+                                <ul className="space-y-2 text-sm leading-relaxed">
+                                  <li className="flex items-start gap-2">
+                                    <span className="text-brand-red mt-1">•</span>
+                                    <span>All successful payments will receive a GST-compliant invoice.</span>
+                                  </li>
+                                  <li className="flex items-start gap-2">
+                                    <span className="text-brand-red mt-1">•</span>
+                                    <span>Provide your GSTIN (if applicable) before payment.</span>
+                                  </li>
+                                </ul>
+                              </div>
+
+                              <div className="space-y-4">
+                                <h3 className="font-semibold text-lg text-brand-red">Subscription Auto-Renewal:</h3>
+                                <p className="text-sm leading-relaxed">
+                                  Subscriptions may auto-renew at the end of the billing cycle. You can cancel auto-renewal anytime from your account settings.
+                                </p>
+                              </div>
+
+                              <div className="space-y-4">
+                                <h3 className="font-semibold text-lg text-brand-red">Refunds & Cancellations:</h3>
+                                <ul className="space-y-2 text-sm leading-relaxed">
+                                  <li className="flex items-start gap-2">
+                                    <span className="text-brand-red mt-1">•</span>
+                                    <span>No refunds unless there's a duplicate payment or failed activation. Requests must be submitted within 7 days of the issue.</span>
+                                  </li>
+                                  <li className="flex items-start gap-2">
+                                    <span className="text-brand-red mt-1">•</span>
+                                    <span>Submit refund requests to <a href="mailto:support@homehni.com" className="text-brand-red underline hover:text-brand-red-dark">support@homehni.com</a> with proof of payment.</span>
+                                  </li>
+                                </ul>
+                              </div>
+
+                              <div className="space-y-4">
+                                <h3 className="font-semibold text-lg text-brand-red">Security & Fraud Protection:</h3>
+                                <p className="text-sm leading-relaxed">
+                                  Payments are processed via secure, PCI-DSS compliant gateways. Do not share your OTP, CVV, or passwords via email or calls.
+                                </p>
+                              </div>
+
+                              <div className="space-y-4">
+                                <h3 className="font-semibold text-lg text-brand-red">Payment Failures:</h3>
+                                <p className="text-sm leading-relaxed">
+                                  In case of payment failure, allow up to 2 hours for reconciliation. Contact your bank if the payment is not reversed in 3-5 business days.
+                                </p>
+                              </div>
+
+                              <div className="space-y-4">
+                                <h3 className="font-semibold text-lg text-brand-red">Customer Support:</h3>
+                                <p className="text-sm leading-relaxed">
+                                  For issues, contact <a href="mailto:support@homehni.com" className="text-brand-red underline hover:text-brand-red-dark">support@homehni.com</a> or call the customer support number.
+                                </p>
+                              </div>
+                              
+                              <div className="mt-6 pt-4 border-t text-center">
+                                <a 
+                                  href="/terms-and-conditions" 
+                                  className="text-brand-red underline hover:text-brand-red-dark cursor-pointer"
+                                >
+                                  Click here for detailed Terms & Conditions
+                                </a>
+                              </div>
+                            </div>
+                          </DialogContent>
+                        </Dialog>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </TabsContent>

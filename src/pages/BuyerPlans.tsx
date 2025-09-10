@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Marquee from '@/components/Marquee';
@@ -18,6 +19,7 @@ const BuyerPlans = ({ embedded }: BuyerPlansProps) => {
     industrial: 0,
     agricultural: 0
   });
+  const [isTermsModalOpen, setIsTermsModalOpen] = useState(false);
 
   const tabPlans = {
     residential: [
@@ -368,20 +370,137 @@ const BuyerPlans = ({ embedded }: BuyerPlansProps) => {
                       </div>
                     ))}
                   </div>
+                  
+                  {/* Contact Info inside features section */}
+                  <div className="mt-6">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                      {/* Phone number - center aligned */}
+                      <div className="text-center sm:text-center sm:flex-1">
+                        <span className="text-gray-600">For assistance call us at: </span>
+                        <a 
+                          href="tel:+918074017388" 
+                          className="text-brand-red font-semibold text-base hover:text-brand-red-dark transition-colors cursor-pointer"
+                        >
+                          +91 80740 17388
+                        </a>
+                      </div>
+                      
+                      {/* Terms & Conditions - right aligned */}
+                      <div className="text-right">
+                        <Dialog open={isTermsModalOpen} onOpenChange={setIsTermsModalOpen}>
+                          <DialogTrigger asChild>
+                            <span className="text-sm text-gray-500 underline cursor-pointer hover:text-gray-700">
+                              Terms & Conditions Apply
+                            </span>
+                          </DialogTrigger>
+                          <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+                            <DialogHeader>
+                              <DialogTitle className="text-xl font-bold border-b pb-2">Terms and Conditions</DialogTitle>
+                            </DialogHeader>
+                            <div className="mt-4 space-y-6">
+                              <div className="space-y-4">
+                                <h3 className="font-semibold text-lg text-brand-red">Order Summary:</h3>
+                                <p className="text-sm leading-relaxed">
+                                  Ensure your Order ID, User Name, Plan, and Total Payable are correct before proceeding with payment.
+                                </p>
+                              </div>
+
+                              <div className="space-y-4">
+                                <h3 className="font-semibold text-lg text-brand-red">Accepted Payment Methods:</h3>
+                                <p className="text-sm leading-relaxed">
+                                  Payments can be made using UPI (Google Pay, PhonePe, Paytm), Credit/Debit Cards, Net Banking, and Wallets.
+                                </p>
+                              </div>
+
+                              <div className="space-y-4">
+                                <h3 className="font-semibold text-lg text-brand-red">Payment Process:</h3>
+                                <ul className="space-y-2 text-sm leading-relaxed">
+                                  <li className="flex items-start gap-2">
+                                    <span className="text-brand-red mt-1">•</span>
+                                    <span>Click Proceed to Pay, verify the details, select your payment method, and complete authentication.</span>
+                                  </li>
+                                  <li className="flex items-start gap-2">
+                                    <span className="text-brand-red mt-1">•</span>
+                                    <span>Wait for automatic redirection and confirmation.</span>
+                                  </li>
+                                </ul>
+                              </div>
+
+                              <div className="space-y-4">
+                                <h3 className="font-semibold text-lg text-brand-red">GST Invoices:</h3>
+                                <ul className="space-y-2 text-sm leading-relaxed">
+                                  <li className="flex items-start gap-2">
+                                    <span className="text-brand-red mt-1">•</span>
+                                    <span>All successful payments will receive a GST-compliant invoice.</span>
+                                  </li>
+                                  <li className="flex items-start gap-2">
+                                    <span className="text-brand-red mt-1">•</span>
+                                    <span>Provide your GSTIN (if applicable) before payment.</span>
+                                  </li>
+                                </ul>
+                              </div>
+
+                              <div className="space-y-4">
+                                <h3 className="font-semibold text-lg text-brand-red">Subscription Auto-Renewal:</h3>
+                                <p className="text-sm leading-relaxed">
+                                  Subscriptions may auto-renew at the end of the billing cycle. You can cancel auto-renewal anytime from your account settings.
+                                </p>
+                              </div>
+
+                              <div className="space-y-4">
+                                <h3 className="font-semibold text-lg text-brand-red">Refunds & Cancellations:</h3>
+                                <ul className="space-y-2 text-sm leading-relaxed">
+                                  <li className="flex items-start gap-2">
+                                    <span className="text-brand-red mt-1">•</span>
+                                    <span>No refunds unless there's a duplicate payment or failed activation. Requests must be submitted within 7 days of the issue.</span>
+                                  </li>
+                                  <li className="flex items-start gap-2">
+                                    <span className="text-brand-red mt-1">•</span>
+                                    <span>Submit refund requests to <a href="mailto:support@homehni.com" className="text-brand-red underline hover:text-brand-red-dark">support@homehni.com</a> with proof of payment.</span>
+                                  </li>
+                                </ul>
+                              </div>
+
+                              <div className="space-y-4">
+                                <h3 className="font-semibold text-lg text-brand-red">Security & Fraud Protection:</h3>
+                                <p className="text-sm leading-relaxed">
+                                  Payments are processed via secure, PCI-DSS compliant gateways. Do not share your OTP, CVV, or passwords via email or calls.
+                                </p>
+                              </div>
+
+                              <div className="space-y-4">
+                                <h3 className="font-semibold text-lg text-brand-red">Payment Failures:</h3>
+                                <p className="text-sm leading-relaxed">
+                                  In case of payment failure, allow up to 2 hours for reconciliation. Contact your bank if the payment is not reversed in 3-5 business days.
+                                </p>
+                              </div>
+
+                              <div className="space-y-4">
+                                <h3 className="font-semibold text-lg text-brand-red">Customer Support:</h3>
+                                <p className="text-sm leading-relaxed">
+                                  For issues, contact <a href="mailto:support@homehni.com" className="text-brand-red underline hover:text-brand-red-dark">support@homehni.com</a> or call the customer support number.
+                                </p>
+                              </div>
+                              
+                              <div className="mt-6 pt-4 border-t text-center">
+                                <a 
+                                  href="/terms-and-conditions" 
+                                  className="text-brand-red underline hover:text-brand-red-dark cursor-pointer"
+                                >
+                                  Click here for detailed Terms & Conditions
+                                </a>
+                              </div>
+                            </div>
+                          </DialogContent>
+                        </Dialog>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </TabsContent>
             ))}
           </Tabs>
 
-          {/* Contact Info */}
-          <div className="mt-8 text-center">
-            <p className="text-gray-600 mb-2">
-              For assistance call us at: <span className="text-brand-red font-semibold">+91 80740 17388</span>
-            </p>
-            <p className="text-sm text-gray-500">
-              <span className="underline cursor-pointer hover:text-gray-700">Terms & Conditions Apply</span>
-            </p>
-          </div>
         </div>
       </section>
 

@@ -3,7 +3,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Marquee from '@/components/Marquee';
 import { Link } from 'react-router-dom';
-import { ExternalLink, ArrowRight } from 'lucide-react';
+import { ExternalLink, ArrowRight, Menu, X } from 'lucide-react';
 import LoansEmbedded from './services/LoansEmbedded';
 import HomeSecurityEmbedded from './services/HomeSecurityEmbedded';
 import PackersMoversEmbedded from './services/PackersMoversEmbedded';
@@ -15,7 +15,6 @@ import PaintingCleaningEmbedded from './services/PaintingCleaningEmbedded';
 import InteriorDesignersEmbedded from './services/InteriorDesignersEmbedded';
 
 const sections = [
-  { id: 'overview', label: 'All Services' },
   { id: 'loans', label: 'Loans' },
   { id: 'home-security', label: 'Home Security Services' },
   { id: 'packers-movers', label: 'Packers & Movers' },
@@ -28,7 +27,8 @@ const sections = [
 ];
 
 const Services = () => {
-  const [active, setActive] = useState<string>('overview');
+  const [active, setActive] = useState<string>('loans');
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     document.title = 'Services – Loans, Security, Legal, Property Management & More';
@@ -39,13 +39,15 @@ const Services = () => {
       console.log('Setting active service tab to:', tab); // Debug log
       setActive(tab);
     } else {
-      console.log('No valid tab found, staying with:', active); // Debug log
+      console.log('No valid tab found, defaulting to loans'); // Debug log
+      setActive('loans');
     }
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
   const handleTabClick = (id: string) => {
     setActive(id);
+    setIsMobileMenuOpen(false); // Close mobile menu when tab is selected
     // Update URL when user manually clicks a tab
     const url = new URL(window.location.href);
     url.searchParams.set('tab', id);
@@ -59,14 +61,14 @@ const Services = () => {
         return (
           <button
             onClick={() => handleTabClick(id)}
-            className={`w-full text-left px-3 py-2 mb-1 rounded-md transition-colors text-sm ${
+            className={`w-full text-left px-3 py-3 md:py-2 mb-1 rounded-md transition-colors text-sm md:text-sm ${
               isActive
                 ? 'bg-secondary text-secondary-foreground font-medium shadow-sm'
                 : 'text-gray-700 hover:bg-gray-200 hover:text-gray-900'
             }`}
             aria-current={isActive ? 'page' : undefined}
           >
-            {label}
+            <span className="block truncate">{label}</span>
           </button>
         );
       },
@@ -74,22 +76,22 @@ const Services = () => {
   );
 
   const ServiceLink = ({ label, desc, to }: { label: string; desc: string; to: string }) => (
-    <div className="group p-4 border rounded-lg bg-card hover:shadow-lg hover:border-brand-red/20 transition-all duration-300 cursor-pointer">
-      <div className="flex items-center justify-between">
+    <div className="group p-3 md:p-4 border rounded-lg bg-card hover:shadow-lg hover:border-brand-red/20 transition-all duration-300 cursor-pointer">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div className="flex-1">
-          <p className="font-semibold text-base text-foreground group-hover:text-brand-red transition-colors duration-300">{label}</p>
-          <p className="text-sm text-muted-foreground mt-1 leading-relaxed">{desc}</p>
+          <p className="font-semibold text-sm md:text-base text-foreground group-hover:text-brand-red transition-colors duration-300">{label}</p>
+          <p className="text-xs md:text-sm text-muted-foreground mt-1 leading-relaxed">{desc}</p>
         </div>
         <Link 
           to={to} 
-          className="ml-3 flex items-center gap-2 px-3 py-1.5 bg-brand-red text-white text-sm font-medium rounded-lg hover:bg-brand-red-dark hover:shadow-md transition-all duration-300 group-hover:scale-105" 
+          className="flex items-center justify-center gap-2 px-3 py-2 bg-brand-red text-white text-xs md:text-sm font-medium rounded-lg hover:bg-brand-red-dark hover:shadow-md transition-all duration-300 group-hover:scale-105 w-full sm:w-auto" 
           onClick={(e) => {
             e.preventDefault();
             window.location.href = to;
           }}
         >
           <span>Open</span>
-          <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
+          <ArrowRight className="w-3 h-3 md:w-4 md:h-4 group-hover:translate-x-1 transition-transform duration-300" />
         </Link>
       </div>
     </div>
@@ -101,77 +103,49 @@ const Services = () => {
       <Header />
 
       <main className="pt-24">
-        <div className="container mx-auto px-4 pt-12 pb-10">
+        <div className="container mx-auto px-4 pt-6 md:pt-12 pb-10">
           <div className="card-border-red hover-lift bg-background shadow-sm">
-            <div className="grid grid-cols-[120px_1fr] md:grid-cols-12 gap-0">
-              <aside className="border-r border-border bg-muted/30 md:col-span-3 lg:col-span-2">
+            {/* Mobile Header with Menu Button */}
+            <div className="md:hidden p-4 border-b border-border bg-muted/30">
+              <div className="flex items-center justify-between">
+                <h1 className="text-xl font-bold text-foreground">Services</h1>
+                <button
+                  onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                  className="p-2 rounded-md bg-secondary text-secondary-foreground hover:bg-secondary/80 transition-colors"
+                  aria-label="Toggle services menu"
+                >
+                  {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+                </button>
+              </div>
+            </div>
+
+            {/* Mobile Navigation Menu */}
+            {isMobileMenuOpen && (
+              <div className="md:hidden border-b border-border bg-muted/30">
                 <nav aria-label="Services sections" className="p-4">
-                  {sections.map((s) => (
-                    <NavItem key={s.id} id={s.id} label={s.label} />
-                  ))}
+                  <div className="grid grid-cols-1 gap-2">
+                    {sections.map((s) => (
+                      <NavItem key={s.id} id={s.id} label={s.label} />
+                    ))}
+                  </div>
+                </nav>
+              </div>
+            )}
+
+            <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] lg:grid-cols-[250px_1fr] gap-0">
+              {/* Desktop Sidebar */}
+              <aside className="hidden md:block border-r border-border bg-muted/30">
+                <nav aria-label="Services sections" className="p-4">
+                  <h2 className="text-lg font-semibold text-foreground mb-4 px-3">Services</h2>
+                  <div className="space-y-1">
+                    {sections.map((s) => (
+                      <NavItem key={s.id} id={s.id} label={s.label} />
+                    ))}
+                  </div>
                 </nav>
               </aside>
 
-              <section className="md:col-span-9 lg:col-span-10 p-0">
-                {active === 'overview' && (
-                  <div className="p-6">
-                    <div className="mb-8">
-                      <h1 className="text-3xl font-bold text-gray-900 mb-4">Our Services</h1>
-                      <p className="text-gray-600 mb-6">
-                        Comprehensive real estate services to meet all your property needs. From loans and security to legal services and property management.
-                      </p>
-                    </div>
-
-                    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                      <ServiceLink 
-                        label="Loans" 
-                        desc="Home loans, personal loans, and financial assistance" 
-                        to="/loans" 
-                      />
-                      <ServiceLink 
-                        label="Home Security Services" 
-                        desc="Professional security solutions for your property" 
-                        to="/home-security-services" 
-                      />
-                      <ServiceLink 
-                        label="Packers & Movers" 
-                        desc="Reliable moving and packing services" 
-                        to="/packers-movers" 
-                      />
-                      <ServiceLink 
-                        label="Legal Services" 
-                        desc="Property legal documentation and consultation" 
-                        to="/legal-services" 
-                      />
-                      <ServiceLink 
-                        label="Handover Services" 
-                        desc="Smooth property handover and possession services" 
-                        to="/handover-services" 
-                      />
-                      <ServiceLink 
-                        label="Property Management" 
-                        desc="Complete property management solutions" 
-                        to="/property-management" 
-                      />
-                      <ServiceLink 
-                        label="Architects" 
-                        desc="Professional architectural design services" 
-                        to="/architects" 
-                      />
-                      <ServiceLink 
-                        label="Painting & Cleaning" 
-                        desc="Interior and exterior painting and cleaning" 
-                        to="/painting-cleaning" 
-                      />
-                      <ServiceLink 
-                        label="Interior Designers" 
-                        desc="Creative interior design and decoration" 
-                        to="/interior" 
-                      />
-                    </div>
-                  </div>
-                )}
-
+              <section className="min-h-[600px] p-0">
                 {active === 'loans' && <LoansEmbedded />}
 
                 {active === 'home-security' && <HomeSecurityEmbedded />}
