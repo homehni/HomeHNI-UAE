@@ -252,7 +252,7 @@ const PropertyCard = ({
           <Button
             variant="outline"
             size="sm"
-            className="h-6 text-xs border-gray-200 hover:bg-gray-50 px-1 card-border"
+            className="h-6 text-xs border-gray-200 hover:bg-gray-50 px-2 card-border"
             onClick={(e) => {
               e.stopPropagation();
               setShowContactModal(true);
