@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { ChevronDown, HelpCircle, Settings, Menu, X, UserPlus, LogIn, LogOut, User, MessageCircle, Users, Heart } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -484,12 +484,38 @@ const Header = () => {
                     <DropdownMenuItem onClick={() => navigate('/dashboard?tab=profile')}>
                       <span>Profile</span>
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => navigate('/residential-plan')}>
-                      <span>Residential Plan</span>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => navigate('/commercial-plan')}>
-                      <span>Commercial Plan</span>
-                    </DropdownMenuItem>
+                    <DropdownMenuSub>
+                      <DropdownMenuSubTrigger>
+                        <span>Residential Plan</span>
+                      </DropdownMenuSubTrigger>
+                      <DropdownMenuSubContent>
+                        <DropdownMenuItem onClick={() => navigate('/plans?tab=buyer')}>
+                          <span>Buyer Plan</span>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => navigate('/plans?tab=seller')}>
+                          <span>Seller Plan</span>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => navigate('/plans?tab=owner')}>
+                          <span>Owner Plan</span>
+                        </DropdownMenuItem>
+                      </DropdownMenuSubContent>
+                    </DropdownMenuSub>
+                    <DropdownMenuSub>
+                      <DropdownMenuSubTrigger>
+                        <span>Commercial Plan</span>
+                      </DropdownMenuSubTrigger>
+                      <DropdownMenuSubContent>
+                        <DropdownMenuItem onClick={() => navigate('/plans?tab=commercial-buyer')}>
+                          <span>Commercial Buyer Plan</span>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => navigate('/plans?tab=commercial-seller')}>
+                          <span>Commercial Seller Plan</span>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => navigate('/plans?tab=commercial-owner')}>
+                          <span>Commercial Owner Plan</span>
+                        </DropdownMenuItem>
+                      </DropdownMenuSubContent>
+                    </DropdownMenuSub>
                     <DropdownMenuItem onClick={() => navigate('/dashboard')}>
                       <span>Dashboard</span>
                     </DropdownMenuItem>
