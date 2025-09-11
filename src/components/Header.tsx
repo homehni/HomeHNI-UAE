@@ -469,44 +469,35 @@ const Header = () => {
                {/* Profile Avatar - Only visible for authenticated users */}
               {user && <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" className={`p-2 transition-colors duration-500 ${isScrolled ? 'text-gray-800 hover:bg-gray-100' : 'text-white hover:bg-white/10'}`}>
+                    <Button variant="ghost" className={`flex items-center space-x-2 p-2 transition-colors duration-500 ${isScrolled ? 'text-gray-800 hover:bg-gray-100' : 'text-white hover:bg-white/10'}`}>
                       <Avatar className="h-8 w-8">
                         <AvatarImage src={user.user_metadata?.avatar_url} alt={user.user_metadata?.full_name || user.email} />
                         <AvatarFallback className="bg-brand-red text-white">
                           {user.user_metadata?.full_name?.charAt(0) || user.email?.charAt(0) || 'U'}
                         </AvatarFallback>
                       </Avatar>
+                      <ChevronDown className={`h-4 w-4 ${isScrolled ? 'text-gray-800' : 'text-white'}`} />
                     </Button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="w-56">
+                  <DropdownMenuContent align="end" className="w-56 bg-white border border-gray-200 shadow-lg">
+                    <DropdownMenuItem onClick={() => navigate('/profile')}>
+                      <span>Profile</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => navigate('/residential-plan')}>
+                      <span>Residential Plan</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => navigate('/commercial-plan')}>
+                      <span>Commercial Plan</span>
+                    </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => navigate('/dashboard')}>
-                      <User className="mr-2 h-4 w-4" />
                       <span>Dashboard</span>
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => navigate('/dashboard?tab=profile')}>
-                      <Settings className="mr-2 h-4 w-4" />
-                      <span>My Profile</span>
+                    <DropdownMenuItem onClick={() => navigate('/my-listings')}>
+                      <span>My Listings</span>
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => navigate('/dashboard?tab=properties')}>
-                      <Settings className="mr-2 h-4 w-4" />
-                      <span>My Properties</span>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => navigate('/dashboard?tab=leads')}>
-                      <MessageCircle className="mr-2 h-4 w-4" />
-                      <span>Contact Leads</span>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => navigate('/my-interests')}>
-                      <Heart className="mr-2 h-4 w-4" />
-                      <span>My Interest</span>
-                    </DropdownMenuItem>
-                    {isAdmin && <DropdownMenuItem onClick={() => navigate('/admin')}>
-                        <Settings className="mr-2 h-4 w-4" />
-                        <span>Admin Panel</span>
-                      </DropdownMenuItem>}
                     <DropdownMenuSeparator />
                     <DropdownMenuItem onClick={handleSignOut}>
-                      <LogOut className="mr-2 h-4 w-4" />
-                      <span>Sign out</span>
+                      <span>Sign Out</span>
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>}
