@@ -20,9 +20,9 @@ export default {
 		},
 		extend: {
 			fontFamily: {
-				'montserrat': ['Montserrat', 'sans-serif'],
+				'poppins': ['Poppins', 'sans-serif'],
 				'open-sans': ['Open Sans', 'sans-serif'],
-				'heading': ['Montserrat', 'sans-serif'],
+				'heading': ['Poppins', 'sans-serif'],
 				'body': ['Open Sans', 'sans-serif'],
 			},
 			colors: {

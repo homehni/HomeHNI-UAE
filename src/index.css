@@ -107,7 +107,7 @@ All colors MUST be HSL.
 
   /* Typography System - Professional Real Estate Fonts */
   h1, h2, h3, h4, h5, h6, .heading {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Poppins', sans-serif;
     font-weight: 600;
     line-height: 1.2;
     letter-spacing: -0.025em;
@@ -173,14 +173,14 @@ All colors MUST be HSL.
 
   /* Headings with brand styling */
   .heading-primary {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Poppins', sans-serif;
     font-weight: 700;
     line-height: 1.1;
     letter-spacing: -0.025em;
   }
 
   .heading-secondary {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Poppins', sans-serif;
     font-weight: 600;
     line-height: 1.15;
     letter-spacing: -0.025em;
