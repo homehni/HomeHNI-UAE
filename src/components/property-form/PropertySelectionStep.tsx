@@ -57,13 +57,6 @@ export const PropertySelectionStep: React.FC<PropertySelectionStepProps> = ({
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-2xl mx-auto px-4">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-2xl font-semibold text-gray-800 mb-2">
-            You have already posted 7 properties on NoBroker{' '}
-            <span className="text-teal-600 underline cursor-pointer">view all</span>
-          </h1>
-        </div>
 
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 space-y-6">
           {/* City Selection */}
