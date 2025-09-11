@@ -98,7 +98,7 @@ export const NotificationManager: React.FC<NotificationManagerProps> = ({
               createdAt: property.created_at,
               completionPercentage: completion.percentage,
               missingFields: completion.missingFields,
-              propertyType: property.property_type
+              propertyType: property.property_type || 'property'
             });
           }
         }

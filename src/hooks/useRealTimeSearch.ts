@@ -300,7 +300,7 @@ export const useRealTimeSearch = () => {
           index === self.findIndex(p => p.id === property.id)
         ).slice(0, 50); // Limit to 50 properties max
 
-        setProperties(uniqueProperties);
+        setProperties(filteredProperties.slice(0, 50)); // Apply UI filters and limit results
       } catch (err: any) {
         setError(err.message || 'Failed to load properties');
         setProperties([]);

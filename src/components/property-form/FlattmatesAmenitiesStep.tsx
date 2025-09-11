@@ -19,14 +19,14 @@ const amenitiesSchema = z.object({
 });
 
 interface FlattmatesAmenities {
-  powerBackup: string;
-  lift: string;
-  parking: string;
-  waterStorageFacility: string;
-  security: string;
-  wifi: string;
-  currentPropertyCondition: string;
-  directionsTip: string;
+  powerBackup?: string;
+  lift?: string;
+  parking?: string;
+  waterStorageFacility?: string;
+  security?: string;
+  wifi?: string;
+  currentPropertyCondition?: string;
+  directionsTip?: string;
 }
 
 interface FlattmatesAmenitiesStepProps {

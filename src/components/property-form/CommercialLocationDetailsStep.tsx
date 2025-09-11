@@ -11,6 +11,9 @@ import { ArrowLeft, ArrowRight, MapPin } from 'lucide-react';
 const commercialLocationDetailsSchema = z.object({
   locality: z.string().optional(),
   landmark: z.string().optional(),
+  city: z.string().optional(),
+  state: z.string().optional(),
+  pincode: z.string().optional(),
 });
 
 type CommercialLocationDetailsForm = z.infer<typeof commercialLocationDetailsSchema>;
@@ -41,6 +44,9 @@ export const CommercialLocationDetailsStep: React.FC<CommercialLocationDetailsSt
     defaultValues: {
       locality: initialData.locality || '',
       landmark: initialData.landmark || '',
+      city: initialData.city || '',
+      state: initialData.state || '',
+      pincode: initialData.pincode || '',
     },
   });
 

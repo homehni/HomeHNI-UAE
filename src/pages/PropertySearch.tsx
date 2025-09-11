@@ -15,7 +15,7 @@ import Header from '@/components/Header';
 import Marquee from '@/components/Marquee';
 import Footer from '@/components/Footer';
 import PropertyTools from '@/components/PropertyTools';
-import { useRealTimeSearch } from '@/hooks/useRealTimeSearch';
+import { useSimplifiedSearch } from '@/hooks/useSimplifiedSearch';
 
 const PropertySearch = () => {
   const navigate = useNavigate();
@@ -32,7 +32,7 @@ const PropertySearch = () => {
     clearAllFilters,
     availableLocalities,
     isLoading
-  } = useRealTimeSearch();
+  } = useSimplifiedSearch();
 
   // Property types that match the database schema and FeaturedProperties component
   const propertyTypes = [
