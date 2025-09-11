@@ -5,6 +5,14 @@ import Marquee from '@/components/Marquee';
 import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 import { ContactOwnerModal } from '@/components/ContactOwnerModal';
 import { ScheduleVisitModal } from '@/components/ScheduleVisitModal';
 import EMICalculatorModal from '@/components/EMICalculatorModal';
@@ -337,6 +345,27 @@ const PropertyDetails: React.FC = () => {
             </div>
           </div>
         )}
+        
+        {/* Breadcrumbs */}
+        <section className="bg-background border-b py-4">
+          <div className="container mx-auto px-4">
+            <Breadcrumb>
+              <BreadcrumbList>
+                <BreadcrumbItem>
+                  <BreadcrumbLink href="/">Home</BreadcrumbLink>
+                </BreadcrumbItem>
+                <BreadcrumbSeparator />
+                <BreadcrumbItem>
+                  <BreadcrumbLink href="/#properties">Properties</BreadcrumbLink>
+                </BreadcrumbItem>
+                <BreadcrumbSeparator />
+                <BreadcrumbItem>
+                  <BreadcrumbPage>{property.title}</BreadcrumbPage>
+                </BreadcrumbItem>
+              </BreadcrumbList>
+            </Breadcrumb>
+          </div>
+        </section>
         
         {/* Hero Section */}
         <section className="bg-gray-50 border-b py-6">
