@@ -182,7 +182,18 @@ const FeaturedProperties = ({
             location: property.locality || '',
             price: isPGHostel 
               ? `₹${property.expected_price.toLocaleString()}/month`
-              : `₹${(property.expected_price / 100000).toFixed(1)}L`,
+              : (() => {
+                  const price = property.expected_price;
+                  if (price >= 10000000) {
+                    return `₹${(price / 10000000).toFixed(1)} Cr`;
+                  } else if (price >= 100000) {
+                    return `₹${(price / 100000).toFixed(1)} L`;
+                  } else if (price >= 1000) {
+                    return `₹${(price / 1000).toFixed(0)} K`;
+                  } else {
+                    return `₹${price.toLocaleString()}`;
+                  }
+                })(),
             area: isPGHostel 
               ? `${property.super_area || 1} Room${(property.super_area || 1) > 1 ? 's' : ''}`
               : `${property.super_area || 0} sq ft`,

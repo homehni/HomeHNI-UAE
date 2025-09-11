@@ -248,24 +248,24 @@ const PropertyCard = ({
           <span className="text-xs line-clamp-1 text-uniform">{location}</span>
         </div>
         
-        <div className="flex gap-1 mt-auto">
+        <div className="flex justify-between items-end mt-auto">
           <Button
             variant="outline"
             size="sm"
-            className="w-12 h-6 text-xs border-gray-200 hover:bg-gray-50 px-1 card-border"
+            className="h-6 text-xs border-gray-200 hover:bg-gray-50 px-1 card-border"
             onClick={(e) => {
               e.stopPropagation();
               setShowContactModal(true);
             }}
           >
-            <Phone size={8} />
+            <Phone size={8} className="mr-1" />
+            Contact
           </Button>
-          <Button
-            size="sm"
-            className="flex-1 h-6 text-xs bg-red-600 hover:bg-red-700 text-white px-1"
-          >
-            Details
-          </Button>
+          
+          {/* Price Display - Bottom Right */}
+          <div className="text-sm font-bold text-black">
+            {price}
+          </div>
         </div>
       </CardContent>
 
