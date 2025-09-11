@@ -51,7 +51,7 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
       propertyType: initialData.propertyType || '',
       bhkType: initialData.bhkType || '',
       buildingType: initialData.buildingType || '',
-      propertyAge: initialData.propertyAge || '',
+      // propertyAge removed - not part of the schema
       floorType: initialData.floorType || '',
       totalFloors: initialData.totalFloors || 1,
       floorNo: initialData.floorNo || 0,

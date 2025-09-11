@@ -11,6 +11,9 @@ import { ArrowLeft, ArrowRight, MapPin } from 'lucide-react';
 const landPlotLocationSchema = z.object({
   locality: z.string().optional(),
   landmark: z.string().optional(),
+  city: z.string().optional(),
+  state: z.string().optional(),
+  pincode: z.string().optional(),
 });
 
 type LandPlotLocationData = z.infer<typeof landPlotLocationSchema>;

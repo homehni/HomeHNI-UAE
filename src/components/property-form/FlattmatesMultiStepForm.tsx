@@ -267,6 +267,8 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
             initialData={locationDetails}
             onNext={handleLocationDetailsNext}
             onBack={prevStep}
+            currentStep={2}
+            totalSteps={7}
           />
         )}
 

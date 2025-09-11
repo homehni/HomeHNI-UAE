@@ -214,6 +214,8 @@ export const ResaleMultiStepForm: React.FC<ResaleMultiStepFormProps> = ({
                 initialData={locationDetails}
                 onNext={handleLocationDetailsNext}
                 onBack={prevStep}
+                currentStep={2}
+                totalSteps={4}
               />
             )}
 

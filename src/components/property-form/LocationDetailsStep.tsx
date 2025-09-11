@@ -12,6 +12,9 @@ import { ArrowLeft, ArrowRight, Home, MapPin } from 'lucide-react';
 const locationDetailsSchema = z.object({
   locality: z.string().optional(),
   landmark: z.string().optional(),
+  city: z.string().optional(),
+  state: z.string().optional(),
+  pincode: z.string().optional(),
 });
 
 type LocationDetailsFormData = z.infer<typeof locationDetailsSchema>;

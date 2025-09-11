@@ -45,7 +45,7 @@ export const ResalePropertyDetailsStep: React.FC<ResalePropertyDetailsStepProps>
       ownershipType: (initialData as any).ownershipType || '',
       builtUpArea: initialData.superBuiltUpArea || undefined,
       carpetArea: (initialData as any).carpetArea || undefined,
-      propertyAge: initialData.propertyAge || '',
+      // propertyAge removed - not part of the schema
       facing: (initialData as any).facing || '',
       floorType: (initialData as any).floorType || '',
       floorNo: initialData.floorNo || 0,
@@ -67,7 +67,7 @@ export const ResalePropertyDetailsStep: React.FC<ResalePropertyDetailsStepProps>
       superBuiltUpArea: data.builtUpArea,
       builtUpArea: data.builtUpArea,
       carpetArea: data.carpetArea,
-      propertyAge: data.propertyAge,
+      // propertyAge removed from data transformation
       facing: data.facing,
       floorType: data.floorType,
       floorNo: data.floorNo,

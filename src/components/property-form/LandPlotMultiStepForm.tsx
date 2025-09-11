@@ -207,6 +207,8 @@ export const LandPlotMultiStepForm: React.FC<LandPlotMultiStepFormProps> = ({
                 initialData={locationDetails}
                 onNext={handleLocationDetailsNext}
                 onBack={prevStep}
+                currentStep={2}
+                totalSteps={4}
               />
             )}
 

@@ -11,6 +11,9 @@ import { ArrowLeft, ArrowRight, MapPin } from 'lucide-react';
 const pgHostelLocationSchema = z.object({
   locality: z.string().optional(),
   landmark: z.string().optional(),
+  city: z.string().optional(),
+  state: z.string().optional(),
+  pincode: z.string().optional(),
 });
 
 type PgHostelLocationData = z.infer<typeof pgHostelLocationSchema>;

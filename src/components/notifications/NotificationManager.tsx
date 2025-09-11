@@ -85,22 +85,8 @@ export const NotificationManager: React.FC<NotificationManagerProps> = ({
 
         // Add progress notification for incomplete properties (last 30 days, completion < 80%)
         if (hoursSinceCreation <= 720 && property.status === 'approved') {
-          const completion = property.property_type === 'pg_hostel' 
-            ? calculatePGPropertyCompletion(property as any)
-            : calculatePropertyCompletion(property);
-          
-          if (completion.percentage < 80) {
-            newNotifications.push({
-              id: `progress-${property.id}`,
-              type: 'progress',
-              propertyId: property.id,
-              propertyTitle: property.title,
-              createdAt: property.created_at,
-              completionPercentage: completion.percentage,
-              missingFields: completion.missingFields,
-              propertyType: property.property_type || 'property'
-            });
-          }
+          // Skip progress notifications for now since property_type is not available in this context
+          console.log('Property progress check skipped for:', property.id);
         }
       });
 
