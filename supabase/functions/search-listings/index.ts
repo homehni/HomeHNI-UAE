@@ -342,9 +342,19 @@ serve(async (req) => {
       // Format price for display
       const formatPrice = (price) => {
         if (!price) return 'Price on Request';
-        if (price >= 10000000) return `₹${(price / 10000000).toFixed(1)} Cr`;
-        if (price >= 100000) return `₹${(price / 100000).toFixed(1)} L`;
-        return `₹${price.toLocaleString()}`;
+        
+        // Special handling for exactly 1 Crore (100 Lakhs)
+        if (price === 10000000) {
+          return '₹1 Cr';
+        } else if (price >= 10000000) {
+          return `₹${(price / 10000000).toFixed(1)} Cr`;
+        } else if (price >= 100000) {
+          return `₹${(price / 100000).toFixed(1)} L`;
+        } else if (price >= 1000) {
+          return `₹${(price / 1000).toFixed(0)} K`;
+        } else {
+          return `₹${price.toLocaleString()}`;
+        }
       };
 
       return {

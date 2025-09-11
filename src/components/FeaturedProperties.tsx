@@ -146,18 +146,44 @@ const FeaturedProperties = ({
         });
 
         // Transform filtered content_elements to FeaturedProperty format
-        const contentElementProperties = filteredContentElements.map(element => ({
-          id: element.content?.id || element.id,
-          title: element.title || element.content?.title || 'Property',
-          location: element.content?.location || 'Location',
-          price: element.content?.price || '₹0',
-          area: element.content?.area || element.content?.size || '0 sq ft',
-          bedrooms: element.content?.bedrooms || parseInt(element.content?.bhk?.replace(/[^\d]/g, '') || '0'),
-          bathrooms: element.content?.bathrooms || 0,
-          image: element.images?.[0] || element.content?.image || '/placeholder.svg',
-          propertyType: element.content?.propertyType || 'Property',
-          isNew: element.content?.isNew || false
-        }));
+        const contentElementProperties = filteredContentElements.map(element => {
+          const rawPrice = element.content?.price || '₹0';
+          
+          // Format price if it's a raw number
+          const formatPrice = (priceStr: string) => {
+            // Remove ₹ symbol and extract numeric value
+            const numericStr = priceStr.replace(/[₹,]/g, '');
+            const numericPrice = parseFloat(numericStr);
+            
+            if (isNaN(numericPrice)) return priceStr; // Return original if not a number
+            
+            // Special handling for exactly 1 Crore (100 Lakhs)
+            if (numericPrice === 10000000) {
+              return '₹1 Cr';
+            } else if (numericPrice >= 10000000) {
+              return `₹${(numericPrice / 10000000).toFixed(1)} Cr`;
+            } else if (numericPrice >= 100000) {
+              return `₹${(numericPrice / 100000).toFixed(1)} L`;
+            } else if (numericPrice >= 1000) {
+              return `₹${(numericPrice / 1000).toFixed(0)} K`;
+            } else {
+              return `₹${numericPrice.toLocaleString()}`;
+            }
+          };
+          
+          return {
+            id: element.content?.id || element.id,
+            title: element.title || element.content?.title || 'Property',
+            location: element.content?.location || 'Location',
+            price: formatPrice(rawPrice),
+            area: element.content?.area || element.content?.size || '0 sq ft',
+            bedrooms: element.content?.bedrooms || parseInt(element.content?.bhk?.replace(/[^\d]/g, '') || '0'),
+            bathrooms: element.content?.bathrooms || 0,
+            image: element.images?.[0] || element.content?.image || '/placeholder.svg',
+            propertyType: element.content?.propertyType || 'Property',
+            isNew: element.content?.isNew || false
+          };
+        });
         
         // Transform properties table data to FeaturedProperty format
         const transformedProperties = propertiesData.map(property => {
@@ -184,14 +210,21 @@ const FeaturedProperties = ({
               ? `₹${property.expected_price.toLocaleString()}/month`
               : (() => {
                   const price = property.expected_price;
-                  if (price >= 10000000) {
-                    return `₹${(price / 10000000).toFixed(1)} Cr`;
-                  } else if (price >= 100000) {
-                    return `₹${(price / 100000).toFixed(1)} L`;
-                  } else if (price >= 1000) {
-                    return `₹${(price / 1000).toFixed(0)} K`;
+                  
+                  // Ensure price is a number
+                  const numericPrice = typeof price === 'string' ? parseFloat(price) : price;
+                  
+                  // Special handling for exactly 1 Crore (100 Lakhs)
+                  if (numericPrice === 10000000) {
+                    return '₹1 Cr';
+                  } else if (numericPrice >= 10000000) {
+                    return `₹${(numericPrice / 10000000).toFixed(1)} Cr`;
+                  } else if (numericPrice >= 100000) {
+                    return `₹${(numericPrice / 100000).toFixed(1)} L`;
+                  } else if (numericPrice >= 1000) {
+                    return `₹${(numericPrice / 1000).toFixed(0)} K`;
                   } else {
-                    return `₹${price.toLocaleString()}`;
+                    return `₹${numericPrice.toLocaleString()}`;
                   }
                 })(),
             area: isPGHostel 
