@@ -213,7 +213,10 @@ const PropertyCard = ({
   };
 
   return (
-    <Card className="w-full overflow-hidden card-border hover-lift cursor-pointer bg-white border-2 border-brand-red/30 hover:border-brand-red/60" onClick={() => navigate(`/property/${id}`, { state: propertyForPage })}>
+    <Card className="w-full overflow-hidden card-border hover-lift cursor-pointer bg-white border-2 border-brand-red/30 hover:border-brand-red/60" onClick={() => {
+      sessionStorage.setItem(`property-${id}`, JSON.stringify(propertyForPage));
+      window.open(`/property/${id}`, '_blank');
+    }}>
       <div className="relative">
         <div className="h-24 overflow-hidden">
           <img
