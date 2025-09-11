@@ -366,6 +366,30 @@ const PropertyDetails: React.FC = () => {
                 </BreadcrumbItem>
                 <BreadcrumbSeparator />
                 <BreadcrumbItem>
+                  <BreadcrumbLink 
+                    href={`/properties?type=${property.property_type}`}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      navigate(`/properties?type=${property.property_type}`);
+                    }}
+                  >
+                    {property.property_type?.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) || 'Property'}
+                  </BreadcrumbLink>
+                </BreadcrumbItem>
+                <BreadcrumbSeparator />
+                <BreadcrumbItem>
+                  <BreadcrumbLink 
+                    href={`/properties?location=${property.city}`}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      navigate(`/properties?location=${property.city}`);
+                    }}
+                  >
+                    {property.locality}, {property.city}
+                  </BreadcrumbLink>
+                </BreadcrumbItem>
+                <BreadcrumbSeparator />
+                <BreadcrumbItem>
                   <BreadcrumbPage>
                     {property.title}
                   </BreadcrumbPage>

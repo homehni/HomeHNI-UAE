@@ -59,12 +59,6 @@ export const PropertyHero: React.FC<PropertyHeroProps> = ({
   };
   return (
     <div className="mx-auto max-w-7xl px-4">
-      {/* Breadcrumb */}
-      <nav className="text-xs text-gray-500 mb-4">
-        <Link to="/" className="hover:text-[#d21404]">Home</Link>
-        <span className="mx-2">›</span>
-        <Link to={`/property-search?location=${property.locality}`} className="hover:text-[#d21404]">{property.locality}</Link>
-      </nav>
 
       {/* Title Block */}
       <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-6">
@@ -100,17 +94,6 @@ export const PropertyHero: React.FC<PropertyHeroProps> = ({
           </div>
         </div>
         
-        {/* Action buttons */}
-        <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm" className="ring-1 ring-gray-300 hover:bg-gray-50 rounded-lg px-4 py-2 text-gray-800">
-            <Share2 className="w-4 h-4 mr-1" />
-            Share
-          </Button>
-          <Button variant="outline" size="sm" className="ring-1 ring-gray-300 hover:bg-gray-50 rounded-lg px-4 py-2 text-gray-800">
-            <Heart className="w-4 h-4 mr-1" />
-            Save
-          </Button>
-        </div>
       </div>
 
       {/* Main Grid */}
