@@ -10,12 +10,12 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { PropertyAmenities } from '@/types/property';
 
 const resaleAmenitiesSchema = z.object({
-  powerBackup: z.string().optional(),
-  lift: z.string().optional(),
+  powerBackup: z.boolean().optional(),
+  lift: z.boolean().optional(),
   parking: z.string().optional(),
   waterStorageFacility: z.string().optional(),
   security: z.string().optional(),
-  wifi: z.string().optional(),
+  wifi: z.boolean().optional(),
   currentPropertyCondition: z.string().optional(),
   directionsTip: z.string().optional(),
 });
@@ -36,12 +36,12 @@ export const ResaleAmenitiesStep: React.FC<ResaleAmenitiesStepProps> = ({
   const form = useForm<ResaleAmenitiesForm>({
     resolver: zodResolver(resaleAmenitiesSchema),
     defaultValues: {
-      powerBackup: initialData.powerBackup || '',
-      lift: initialData.lift || '',
+      powerBackup: initialData.powerBackup || false,
+      lift: initialData.lift || false,
       parking: initialData.parking || '',
       waterStorageFacility: initialData.waterStorageFacility || '',
       security: initialData.security || '',
-      wifi: initialData.wifi || '',
+      wifi: initialData.wifi || false,
       currentPropertyCondition: initialData.currentPropertyCondition || '',
       directionsTip: initialData.directionsTip || '',
     },

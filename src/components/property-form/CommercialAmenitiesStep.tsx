@@ -9,8 +9,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { CommercialAmenities } from '@/types/property';
 
 const commercialAmenitiesSchema = z.object({
-  powerBackup: z.string().optional(),
-  lift: z.string().optional(),
+  powerBackup: z.boolean().optional(),
+  lift: z.boolean().optional(),
   parking: z.string().optional(),
   waterStorageFacility: z.string().optional(),
   security: z.string().optional(),
@@ -38,8 +38,8 @@ export const CommercialAmenitiesStep: React.FC<CommercialAmenitiesStepProps> = (
   const form = useForm<CommercialAmenitiesForm>({
     resolver: zodResolver(commercialAmenitiesSchema),
     defaultValues: {
-      powerBackup: initialData.powerBackup || '',
-      lift: initialData.lift || '',
+      powerBackup: initialData.powerBackup || false,
+      lift: initialData.lift || false,
       parking: initialData.parking || '',
       waterStorageFacility: initialData.waterStorageFacility || '',
       security: initialData.security || '',
