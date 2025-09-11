@@ -167,13 +167,18 @@ export const Auth: React.FC = () => {
           <Card className="w-full max-w-md backdrop-blur-sm bg-white/95 border-2 border-brand-red/30 shadow-2xl shadow-brand-red/10 rounded-2xl animate-fade-in hover:border-brand-red/50 transition-colors duration-300">
             <CardHeader className="text-center pb-6 pt-8">
               <div className="flex items-center justify-center mb-6">
-                <img 
-                  src="/lovable-uploads/6ed9d7a9-fbcd-498d-9cab-b60907c86e4b.png"
-                  alt="Home HNI Logo" 
-                  className="h-12 w-auto"
-                />
+                <div className="p-3 bg-gradient-to-br from-brand-red to-brand-red-dark rounded-2xl shadow-lg">
+                  <img 
+                    src="/lovable-uploads/main-logo-final.png"
+                    alt="Home HNI Logo" 
+                    className="h-10 w-auto filter brightness-0 invert"
+                  />
+                </div>
               </div>
               <div className="space-y-2">
+                <h1 className="text-3xl font-bold bg-gradient-to-r from-brand-red to-brand-red-dark bg-clip-text text-transparent">
+                  Home HNI
+                </h1>
                 <p className="text-sm text-muted-foreground">Your premium property partner</p>
               </div>
             </CardHeader>
