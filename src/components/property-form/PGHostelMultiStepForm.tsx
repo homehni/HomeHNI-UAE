@@ -266,12 +266,12 @@ const [propertyInfo, setPropertyInfo] = useState({
         idealFor: []
       },
       amenities: {
-        powerBackup: amenities.powerBackup,
-        lift: amenities.lift,
+        powerBackup: amenities.powerBackup ? 'Available' : 'Not Available',
+        lift: amenities.lift ? 'Available' : 'Not Available',
         parking: amenities.parking !== 'none' ? 'Available' : 'Not Available',
         waterStorageFacility: 'Available',
         security: 'Available',
-        wifi: amenities.wifi,
+        wifi: amenities.wifi ? 'Available' : 'Not Available',
         meals: amenities.mess ? 'breakfast' : 'none',
         laundry: amenities.laundry === 'yes' ? 'included' : 'not-available',
         commonArea: amenities.commonTv ? 'tv-room' : undefined,

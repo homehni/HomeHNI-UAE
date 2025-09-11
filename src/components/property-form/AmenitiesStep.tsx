@@ -23,8 +23,10 @@ const amenitiesSchema = z.object({
   secondaryNumber: z.string().optional(),
   moreSimilarUnits: z.boolean().optional(),
   directionsTip: z.string().optional(),
-  // Available amenities
+  // Available amenities - use boolean for checkboxes
   lift: z.boolean().optional(),
+  wifi: z.boolean().optional(),
+  powerBackup: z.boolean().optional(),
   internetServices: z.boolean().optional(),
   airConditioner: z.boolean().optional(),
   clubHouse: z.boolean().optional(),
@@ -39,9 +41,10 @@ const amenitiesSchema = z.object({
   rainWaterHarvesting: z.boolean().optional(),
   sewageTreatmentPlant: z.boolean().optional(),
   houseKeeping: z.boolean().optional(),
-  powerBackup: z.boolean().optional(),
   visitorParking: z.boolean().optional(),
 });
+
+type AmenitiesFormData = z.infer<typeof amenitiesSchema>;
 
 interface AmenitiesStepProps {
   initialData?: Partial<PropertyAmenities>;
@@ -61,7 +64,7 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
   const [bathrooms, setBathrooms] = useState(initialData.bathrooms || 0);
   const [balconies, setBalconies] = useState(initialData.balconies || 0);
 
-  const form = useForm<PropertyAmenities>({
+  const form = useForm<AmenitiesFormData>({
     resolver: zodResolver(amenitiesSchema),
     defaultValues: {
       bathrooms: initialData.bathrooms || 0,
@@ -77,7 +80,7 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
       moreSimilarUnits: initialData.moreSimilarUnits || false,
       directionsTip: initialData.directionsTip || '',
       // Available amenities
-      lift: initialData.lift || false,
+      lift: typeof initialData.lift === 'string' ? initialData.lift === 'Available' : (initialData.lift || false),
       internetServices: initialData.internetServices || false,
       airConditioner: initialData.airConditioner || false,
       clubHouse: initialData.clubHouse || false,
@@ -92,14 +95,24 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
       rainWaterHarvesting: initialData.rainWaterHarvesting || false,
       sewageTreatmentPlant: initialData.sewageTreatmentPlant || false,
       houseKeeping: initialData.houseKeeping || false,
-      powerBackup: initialData.powerBackup || false,
+      powerBackup: typeof initialData.powerBackup === 'string' ? initialData.powerBackup === 'Available' : (initialData.powerBackup || false),
       visitorParking: initialData.visitorParking || false,
+      wifi: typeof initialData.wifi === 'string' ? initialData.wifi === 'Available' : (initialData.wifi || false),
     },
   });
 
-  const onSubmit = (data: PropertyAmenities) => {
+  const onSubmit = (data: AmenitiesFormData) => {
     console.log('AmenitiesStep submitting data:', data);
-    onNext(data);
+    
+    // Convert form data to PropertyAmenities format
+    const convertedData: PropertyAmenities = {
+      ...data,
+      lift: data.lift ? 'Available' : 'Not Available',
+      powerBackup: data.powerBackup ? 'Available' : 'Not Available',
+      wifi: data.wifi ? 'Available' : 'Not Available',
+    };
+    
+    onNext(convertedData);
   };
 
   return (

@@ -54,12 +54,12 @@ export interface RentalDetails {
 }
 
 export interface PropertyAmenities {
-  powerBackup?: boolean;
-  lift?: boolean;
+  powerBackup?: string;
+  lift?: string;
   parking?: string;
   waterStorageFacility?: string;
   security?: string;
-  wifi?: boolean;
+  wifi?: string;
   currentPropertyCondition?: string;
   moreSimilarUnits?: boolean;
   directionsTip?: string;
@@ -234,8 +234,8 @@ export interface CommercialRentalDetails extends Omit<RentalDetails, 'preferredT
 }
 
 export interface CommercialSaleAmenities {
-  powerBackup?: boolean;
-  lift?: boolean;
+  powerBackup?: string;
+  lift?: string;
   parking?: string;
   washrooms?: string;
   waterStorageFacility?: string;
