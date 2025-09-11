@@ -20,6 +20,7 @@ interface Property {
   locality: string;
   city: string;
   bhkType: string;
+  listingType: string;
   isNew?: boolean;
 }
 
@@ -116,6 +117,7 @@ export const useSimplifiedSearch = () => {
             locality: property.locality || '',
             city: property.city || '',
             bhkType: property.bhk_type || '1bhk',
+            listingType: property.listing_type || 'sale',
             isNew: new Date(property.created_at) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
           };
         });
@@ -135,24 +137,35 @@ export const useSimplifiedSearch = () => {
   const filteredProperties = useMemo(() => {
     let filtered = [...allProperties];
 
-    // Filter by active tab (buy/rent/commercial)
+    // Filter by active tab (buy/rent/commercial) using listing_type
     if (activeTab === 'buy') {
-      // For buy tab, exclude PG Hostels and rentals
-      filtered = filtered.filter(property => 
-        !property.propertyType.toLowerCase().includes('pg') &&
-        !property.propertyType.toLowerCase().includes('hostel')
-      );
+      // For buy tab, show only sale properties
+      filtered = filtered.filter(property => {
+        const listingType = property.listingType?.toLowerCase();
+        return listingType === 'sale' || listingType === 'resale';
+      });
     } else if (activeTab === 'rent') {
-      // For rent tab, show all properties including PG Hostels
-      // Note: We'd need listing_type data to filter properly
+      // For rent tab, show rental properties and PG/Hostels
+      filtered = filtered.filter(property => {
+        const listingType = property.listingType?.toLowerCase();
+        const propertyType = property.propertyType.toLowerCase();
+        return listingType === 'rent' || 
+               listingType === 'pg/hostel' || 
+               propertyType.includes('pg') || 
+               propertyType.includes('hostel');
+      });
     } else if (activeTab === 'commercial') {
-      filtered = filtered.filter(property => 
-        property.propertyType.toLowerCase().includes('commercial') ||
-        property.propertyType.toLowerCase().includes('office') ||
-        property.propertyType.toLowerCase().includes('shop') ||
-        property.propertyType.toLowerCase().includes('warehouse') ||
-        property.propertyType.toLowerCase().includes('showroom')
-      );
+      // For commercial tab, show commercial properties
+      filtered = filtered.filter(property => {
+        const listingType = property.listingType?.toLowerCase();
+        const propertyType = property.propertyType.toLowerCase();
+        return listingType === 'commercial' ||
+               propertyType.includes('commercial') ||
+               propertyType.includes('office') ||
+               propertyType.includes('shop') ||
+               propertyType.includes('warehouse') ||
+               propertyType.includes('showroom');
+      });
     }
 
     // Apply property type filter
