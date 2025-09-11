@@ -488,7 +488,14 @@ const Header = () => {
                      </DropdownMenuItem>
                      
                      {/* Residential Plan with custom dropdown */}
-                     <DropdownMenuItem onClick={() => setIsResidentialPlanOpen(!isResidentialPlanOpen)}>
+                     <DropdownMenuItem 
+                       onClick={(e) => {
+                         e.preventDefault();
+                         e.stopPropagation();
+                         setIsResidentialPlanOpen(!isResidentialPlanOpen);
+                       }}
+                       onSelect={(e) => e.preventDefault()}
+                     >
                        <div className="flex items-center justify-between w-full">
                          <span>Residential Plan</span>
                          <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${isResidentialPlanOpen ? 'rotate-180' : ''}`} />
@@ -510,7 +517,14 @@ const Header = () => {
                      )}
                      
                      {/* Commercial Plan with custom dropdown */}
-                     <DropdownMenuItem onClick={() => setIsCommercialPlanOpen(!isCommercialPlanOpen)}>
+                     <DropdownMenuItem 
+                       onClick={(e) => {
+                         e.preventDefault();
+                         e.stopPropagation();
+                         setIsCommercialPlanOpen(!isCommercialPlanOpen);
+                       }}
+                       onSelect={(e) => e.preventDefault()}
+                     >
                        <div className="flex items-center justify-between w-full">
                          <span>Commercial Plan</span>
                          <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${isCommercialPlanOpen ? 'rotate-180' : ''}`} />
