@@ -183,7 +183,7 @@ export const Auth: React.FC = () => {
                 <TabsList className="grid w-full grid-cols-2 mb-6 bg-gray-100/80 p-1 rounded-xl">
                   <TabsTrigger value="signin" className="flex items-center space-x-2 rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm">
                     <LogIn size={16} />
-                    <span>Sign In</span>
+                    <span>Login</span>
                   </TabsTrigger>
                   <TabsTrigger value="signup" className="flex items-center space-x-2 rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm">
                     <UserPlus size={16} />
@@ -240,7 +240,7 @@ export const Auth: React.FC = () => {
                     </div>
 
                     <Button type="submit" className="w-full h-12 rounded-xl bg-gradient-to-r from-brand-red to-brand-red-dark hover:shadow-lg transition-all duration-200" size="lg">
-                      Sign In
+                      Login
                     </Button>
                   </form>
 
