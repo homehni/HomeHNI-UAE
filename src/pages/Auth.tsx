@@ -195,7 +195,7 @@ export const Auth: React.FC = () => {
                   <div className="text-center">
                     <CardTitle className="text-2xl font-semibold text-gray-800">Welcome Back</CardTitle>
                     <CardDescription className="mt-2 text-gray-600">
-                      Sign in to access your account and all features
+                      Login to access your account and all features
                     </CardDescription>
                   </div>
                   
