@@ -30,6 +30,7 @@ const Header = () => {
   const [isServicesDropdownOpen, setIsServicesDropdownOpen] = useState(false);
   const [isSellersDropdownOpen, setIsSellersDropdownOpen] = useState(false);
   const [isLifetimePlansDropdownOpen, setIsLifetimePlansDropdownOpen] = useState(false);
+  const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
   const [statesData, setStatesData] = useState<Record<string, string[]>>({});
   const rentalHoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const servicesHoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -467,7 +468,7 @@ const Header = () => {
                </div>}
 
                {/* Profile Avatar - Only visible for authenticated users */}
-              {user && <DropdownMenu>
+              {user && <DropdownMenu onOpenChange={setIsUserDropdownOpen}>
                   <DropdownMenuTrigger asChild>
                     <Button variant="ghost" className={`flex items-center space-x-2 p-2 transition-colors duration-500 ${isScrolled ? 'text-gray-800 hover:bg-gray-100' : 'text-white hover:bg-white/10'}`}>
                       <Avatar className="h-8 w-8">
@@ -476,11 +477,11 @@ const Header = () => {
                           {user.user_metadata?.full_name?.charAt(0) || user.email?.charAt(0) || 'U'}
                         </AvatarFallback>
                       </Avatar>
-                      <ChevronDown className={`h-4 w-4 ${isScrolled ? 'text-gray-800' : 'text-white'}`} />
+                      <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${isUserDropdownOpen ? 'rotate-180' : ''} ${isScrolled ? 'text-gray-800' : 'text-white'}`} />
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" className="w-56 bg-white border border-gray-200 shadow-lg">
-                    <DropdownMenuItem onClick={() => navigate('/profile')}>
+                    <DropdownMenuItem onClick={() => navigate('/dashboard?tab=profile')}>
                       <span>Profile</span>
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => navigate('/residential-plan')}>
@@ -494,6 +495,9 @@ const Header = () => {
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => navigate('/my-listings')}>
                       <span>My Listings</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => navigate('/my-interests')}>
+                      <span>My Interest</span>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem onClick={handleSignOut}>
