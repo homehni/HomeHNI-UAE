@@ -467,7 +467,9 @@ export const PostProperty: React.FC = () => {
         owner_name: data.ownerInfo.fullName || 'Anonymous',
         owner_email: data.ownerInfo.email || '',
         owner_phone: data.ownerInfo.phoneNumber || '',
-        owner_role: data.ownerInfo.role || 'Owner'
+        owner_role: data.ownerInfo.role || 'Owner',
+        // Add amenities data
+        amenities: (data.propertyInfo as any).amenities || null
       };
 
       console.log('Prepared property data for database:', propertyData);
@@ -504,6 +506,7 @@ export const PostProperty: React.FC = () => {
             owner_email: data.ownerInfo.email || '',
             owner_phone: data.ownerInfo.phoneNumber || '',
             owner_role: data.ownerInfo.role || 'Owner',
+            amenities: (data.propertyInfo as any).amenities || null,
             status: 'pending', // Reset to pending for review - CRITICAL: prevents public visibility
             updated_at: new Date().toISOString(),
             // Additional fields - access from the original property data

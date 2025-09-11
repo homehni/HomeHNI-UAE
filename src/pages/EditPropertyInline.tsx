@@ -305,6 +305,7 @@ export const EditPropertyInline: React.FC = () => {
           });
           
           // Update the fields
+          console.log('Google Maps extracted location data:', { city, state, pincode });
           if (city) handleFieldChange('city', city);
           if (state) handleFieldChange('state', state);
           if (pincode) handleFieldChange('pincode', pincode);
@@ -420,6 +421,17 @@ export const EditPropertyInline: React.FC = () => {
           gated_security: payload.gated_security,
           directions: payload.directions,
         };
+
+        console.log('Property from submission:', propertyFromSubmission);
+        console.log('Floor number from payload:', payload.floor_no);
+        console.log('Total floors from payload:', payload.total_floors);
+        console.log('Amenities from payload:', payload.amenities);
+        console.log('Location data from payload:', {
+          city: payload.city,
+          state: payload.state,
+          pincode: payload.pincode,
+          locality: payload.locality
+        });
 
         setProperty(propertyFromSubmission);
         setEditedProperty(propertyFromSubmission);
@@ -793,6 +805,11 @@ export const EditPropertyInline: React.FC = () => {
           updateData.amenities = (editedProperty as Property).amenities;
         }
 
+        console.log('EditPropertyInline saving amenities:', {
+          amenities: updateData.amenities,
+          updateData
+        });
+
         const { error } = await supabase
           .from('properties')
           .update(updateData)
@@ -919,8 +936,17 @@ export const EditPropertyInline: React.FC = () => {
                   </div>
                   
                   <div className="text-sm text-gray-600">
-                    <p>{editedProperty.locality}, {editedProperty.city}</p>
-                    <p>{editedProperty.state} - {editedProperty.pincode}</p>
+                    <p>
+                      {editedProperty.locality}
+                      {editedProperty.city && editedProperty.city !== 'Unknown' && `, ${editedProperty.city}`}
+                    </p>
+                    <p>
+                      {editedProperty.state && editedProperty.state !== 'Unknown' ? editedProperty.state : ''}
+                      {editedProperty.pincode && editedProperty.pincode !== '000000' && editedProperty.pincode !== 'Unknown' ? 
+                        (editedProperty.state && editedProperty.state !== 'Unknown' ? ` - ${editedProperty.pincode}` : editedProperty.pincode) : 
+                        ''
+                      }
+                    </p>
                   </div>
                   
                   {editedProperty.images && editedProperty.images.length > 0 && (
@@ -1253,6 +1279,13 @@ export const EditPropertyInline: React.FC = () => {
                       <p className="text-xs text-red-500 animate-pulse font-bold">
                         Type the name of the apartment/ the area of property/anything that could help us 😊
                       </p>
+                      {(editedProperty.city === 'Unknown' || editedProperty.state === 'Unknown' || editedProperty.pincode === '000000') && (
+                        <div className="mt-2 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+                          <p className="text-sm text-yellow-800">
+                            <strong>Location Data Missing:</strong> Please re-select your location from the dropdown suggestions to automatically extract city, state, and pincode information.
+                          </p>
+                        </div>
+                      )}
                     </div>
 
                     {/* Landmark Input */}
@@ -1350,7 +1383,7 @@ export const EditPropertyInline: React.FC = () => {
 
                     {/* Only show bathroom, balcony, floor fields for non-plot properties */}
                     {editedProperty.property_type !== 'plot' && editedProperty.property_type !== 'land' && (
-                      <div className="grid grid-cols-3 gap-4">
+                      <div className="grid grid-cols-2 gap-4">
                         <div>
                           <Label htmlFor="bathrooms">Bathrooms</Label>
                           <Input
@@ -1373,13 +1406,225 @@ export const EditPropertyInline: React.FC = () => {
                         </div>
                         <div>
                           <Label htmlFor="floor_no">Floor Number</Label>
+                          <Select
+                            value={
+                              editedProperty.floor_no === 0 ? 'ground' :
+                              editedProperty.floor_no === 'basement' ? 'basement' :
+                              editedProperty.floor_no === '99+' ? '99+' :
+                              editedProperty.floor_no?.toString() || ''
+                            }
+                            onValueChange={(value) => {
+                              if (value === 'ground') {
+                                handleFieldChange('floor_no', 0);
+                              } else if (value === 'basement') {
+                                handleFieldChange('floor_no', 'basement');
+                              } else if (value === '99+') {
+                                handleFieldChange('floor_no', '99+');
+                              } else {
+                                handleFieldChange('floor_no', parseInt(value));
+                              }
+                            }}
+                          >
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select Floor" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="basement">Basement</SelectItem>
+                              <SelectItem value="ground">Ground Floor</SelectItem>
+                              {[...Array(50)].map((_, i) => {
+                                const floor = i + 1;
+                                return (
+                                  <SelectItem key={floor} value={floor.toString()}>
+                                    {floor}
+                                  </SelectItem>
+                                );
+                              })}
+                              <SelectItem value="99+">50+</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div>
+                          <Label htmlFor="total_floors">Total Floors</Label>
                           <Input
-                            id="floor_no"
+                            id="total_floors"
                             type="number"
-                            value={editedProperty.floor_no || ''}
-                            onChange={(e) => handleFieldChange('floor_no', Number(e.target.value))}
-                            placeholder="Floor number"
+                            value={editedProperty.total_floors || ''}
+                            onChange={(e) => handleFieldChange('total_floors', Number(e.target.value))}
+                            placeholder="Total floors in building"
                           />
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Show editable amenities for regular properties */}
+                    {editedProperty.property_type !== 'plot' && editedProperty.property_type !== 'land' && (
+                      <div className="mt-6">
+                        <h4 className="text-lg font-semibold mb-4">Amenities</h4>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                          {/* Power Backup */}
+                          <div>
+                            <Label htmlFor="powerBackup">Power Backup</Label>
+                            <Select
+                              value={editedProperty.amenities?.powerBackup || ''}
+                              onValueChange={(value) => handleFieldChange('amenities', {
+                                ...editedProperty.amenities,
+                                powerBackup: value
+                              })}
+                            >
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="full">Full Power Backup</SelectItem>
+                                <SelectItem value="partial">Partial Power Backup</SelectItem>
+                                <SelectItem value="dg-backup">DG Backup</SelectItem>
+                                <SelectItem value="no-backup">No Power Backup</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+
+                          {/* Lift */}
+                          <div>
+                            <Label htmlFor="lift">Lift</Label>
+                            <Select
+                              value={editedProperty.amenities?.lift || ''}
+                              onValueChange={(value) => handleFieldChange('amenities', {
+                                ...editedProperty.amenities,
+                                lift: value
+                              })}
+                            >
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="available">Yes</SelectItem>
+                                <SelectItem value="not-available">No</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+
+                          {/* Parking */}
+                          <div>
+                            <Label htmlFor="parking">Parking</Label>
+                            <Select
+                              value={editedProperty.amenities?.parking || ''}
+                              onValueChange={(value) => handleFieldChange('amenities', {
+                                ...editedProperty.amenities,
+                                parking: value
+                              })}
+                            >
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="bike">Bike Parking</SelectItem>
+                                <SelectItem value="car">Car Parking</SelectItem>
+                                <SelectItem value="both">Both</SelectItem>
+                                <SelectItem value="none">No Parking</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+
+                          {/* Water Storage Facility */}
+                          <div>
+                            <Label htmlFor="waterStorageFacility">Water Storage Facility</Label>
+                            <Select
+                              value={editedProperty.amenities?.waterStorageFacility || ''}
+                              onValueChange={(value) => handleFieldChange('amenities', {
+                                ...editedProperty.amenities,
+                                waterStorageFacility: value
+                              })}
+                            >
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="overhead-tank">Overhead Tank</SelectItem>
+                                <SelectItem value="underground-tank">Underground Tank</SelectItem>
+                                <SelectItem value="both">Both</SelectItem>
+                                <SelectItem value="borewell">Borewell</SelectItem>
+                                <SelectItem value="none">None</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+
+                          {/* Security */}
+                          <div>
+                            <Label htmlFor="security">Security</Label>
+                            <Select
+                              value={editedProperty.amenities?.security || ''}
+                              onValueChange={(value) => handleFieldChange('amenities', {
+                                ...editedProperty.amenities,
+                                security: value
+                              })}
+                            >
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="yes">Yes</SelectItem>
+                                <SelectItem value="no">No</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+
+                          {/* WiFi */}
+                          <div>
+                            <Label htmlFor="wifi">WiFi</Label>
+                            <Select
+                              value={editedProperty.amenities?.wifi || ''}
+                              onValueChange={(value) => handleFieldChange('amenities', {
+                                ...editedProperty.amenities,
+                                wifi: value
+                              })}
+                            >
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="available">Yes</SelectItem>
+                                <SelectItem value="not-available">No</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+
+                          {/* Current Property Condition */}
+                          <div>
+                            <Label htmlFor="currentPropertyCondition">Current Property Condition</Label>
+                            <Select
+                              value={editedProperty.amenities?.currentPropertyCondition || ''}
+                              onValueChange={(value) => handleFieldChange('amenities', {
+                                ...editedProperty.amenities,
+                                currentPropertyCondition: value
+                              })}
+                            >
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="excellent">Excellent</SelectItem>
+                                <SelectItem value="good">Good</SelectItem>
+                                <SelectItem value="average">Average</SelectItem>
+                                <SelectItem value="needs-renovation">Needs Renovation</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+
+                          {/* Directions Tip */}
+                          <div className="md:col-span-2">
+                            <Label htmlFor="directionsTip">Directions Tip</Label>
+                            <Textarea
+                              id="directionsTip"
+                              className="mt-1"
+                              value={editedProperty.amenities?.directionsTip || ''}
+                              onChange={(e) => handleFieldChange('amenities', {
+                                ...editedProperty.amenities,
+                                directionsTip: e.target.value
+                              })}
+                              placeholder="Eg. Take the road opposite to Amrita College, take right after 300m..."
+                              rows={3}
+                            />
+                          </div>
                         </div>
                       </div>
                     )}

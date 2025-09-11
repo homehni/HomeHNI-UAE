@@ -11,6 +11,9 @@ import { ArrowLeft, ArrowRight, Home, MapPin } from 'lucide-react';
 const resaleLocationSchema = z.object({
   locality: z.string().optional(),
   landmark: z.string().optional(),
+  city: z.string().optional(),
+  state: z.string().optional(),
+  pincode: z.string().optional(),
 });
 
 type ResaleLocationData = z.infer<typeof resaleLocationSchema>;
@@ -41,6 +44,9 @@ export const ResaleLocationDetailsStep: React.FC<ResaleLocationDetailsStepProps>
     defaultValues: {
       locality: initialData.locality || '',
       landmark: initialData.landmark || '',
+      city: initialData.city || '',
+      state: initialData.state || '',
+      pincode: initialData.pincode || '',
     },
   });
 
@@ -51,6 +57,15 @@ export const ResaleLocationDetailsStep: React.FC<ResaleLocationDetailsStepProps>
     }
     if (initialData.landmark) {
       form.setValue('landmark', initialData.landmark);
+    }
+    if (initialData.city) {
+      form.setValue('city', initialData.city);
+    }
+    if (initialData.state) {
+      form.setValue('state', initialData.state);
+    }
+    if (initialData.pincode) {
+      form.setValue('pincode', initialData.pincode);
     }
   }, [initialData, form]);
 
@@ -176,6 +191,7 @@ export const ResaleLocationDetailsStep: React.FC<ResaleLocationDetailsStepProps>
       pincode: data.pincode || '',
       societyName: initialData.societyName || ''
     };
+    console.log('ResaleLocationDetailsStep submitting:', locationData);
     onNext(locationData);
   };
 

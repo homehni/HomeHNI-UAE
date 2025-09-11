@@ -22,6 +22,8 @@ export interface PropertyDetails {
   furnishingStatus: string;
   parkingType: string;
   superBuiltUpArea: number;
+  builtUpArea?: number;
+  carpetArea?: number;
   onMainRoad: boolean;
   cornerProperty: boolean;
 }

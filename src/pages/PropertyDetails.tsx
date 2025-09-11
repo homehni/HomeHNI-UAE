@@ -121,6 +121,7 @@ const PropertyDetails: React.FC = () => {
             description: payload.description,
             images: payload.images || [], // This should contain the uploaded image URLs
             videos: payload.videos || [],
+            amenities: payload.amenities || null, // Add amenities from payload
             status: submissionData.status || 'pending',
             created_at: submissionData.created_at
           };
@@ -237,6 +238,10 @@ const PropertyDetails: React.FC = () => {
             .eq('id', id)
             .maybeSingle();
           if (!error && data) {
+            console.log('PropertyDetails loaded amenities from database:', {
+              amenities: (data as any).amenities,
+              additional_documents: (data as any).additional_documents
+            });
             setDbAmenities((data as any).amenities ?? null);
             setDbAdditionalDocs((data as any).additional_documents ?? null);
           }
@@ -270,6 +275,13 @@ const PropertyDetails: React.FC = () => {
   const mergedAmenities = isPGHostel
     ? { ...(pgData?.amenities || {}), ...(pgData?.available_services || {}) }
     : ((property as any)?.amenities ?? dbAmenities ?? undefined);
+
+  console.log('PropertyDetails amenities debug:', {
+    propertyAmenities: (property as any)?.amenities,
+    dbAmenities,
+    mergedAmenities,
+    isPGHostel
+  });
 
   
   if (!property) {

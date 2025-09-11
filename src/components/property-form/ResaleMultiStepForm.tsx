@@ -220,6 +220,7 @@ export const ResaleMultiStepForm: React.FC<ResaleMultiStepFormProps> = ({
             {currentStep === 3 && (
               <SaleDetailsStep
                 initialData={saleDetails}
+                propertyDetails={propertyDetails}
                 onNext={handleSaleDetailsNext}
                 onBack={prevStep}
               />

@@ -13,7 +13,6 @@ const commercialSalePropertyDetailsSchema = z.object({
   title: z.string().optional(), // Made optional - will be auto-generated
   spaceType: z.enum(['office', 'retail', 'warehouse', 'showroom', 'restaurant', 'co-working', 'industrial', 'medical', 'educational']).optional(),
   buildingType: z.string().optional(),
-  propertyAge: z.string().optional(),
   floorNo: z.string().optional(),
   totalFloors: z.string().optional(),
   superBuiltUpArea: z.string().optional(),
@@ -168,33 +167,7 @@ export const CommercialSalePropertyDetailsStep = ({
             />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <FormField
-              control={form.control}
-              name="propertyAge"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Property Age</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select age" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="0-1">0-1 Years</SelectItem>
-                      <SelectItem value="1-5">1-5 Years</SelectItem>
-                      <SelectItem value="5-10">5-10 Years</SelectItem>
-                      <SelectItem value="10-15">10-15 Years</SelectItem>
-                      <SelectItem value="15-20">15-20 Years</SelectItem>
-                      <SelectItem value="20+">20+ Years</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <FormField
               control={form.control}
               name="floorNo"

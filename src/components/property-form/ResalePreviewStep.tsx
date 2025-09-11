@@ -184,6 +184,77 @@ export const ResalePreviewStep: React.FC<ResalePreviewStepProps> = ({
               </div>
             </div>
 
+            {/* Amenities */}
+            {propertyInfo?.amenities && (
+              <div className="space-y-3">
+                <h3 className="font-semibold">Amenities</h3>
+                <div className="flex flex-wrap gap-2">
+                  {Object.entries(propertyInfo.amenities).map(([key, value]) => {
+                    if (value && typeof value === 'string' && value.trim() !== '') {
+                      // Format amenity display
+                      const amenityLabels: Record<string, Record<string, string>> = {
+                        powerBackup: {
+                          'full': 'Full Power Backup',
+                          'partial': 'Partial Power Backup',
+                          'dg-backup': 'DG Backup',
+                          'available': 'Power Backup Available'
+                        },
+                        lift: {
+                          'available': 'Lift Available',
+                          'not-available': 'No Lift'
+                        },
+                        parking: {
+                          'covered': 'Covered Parking',
+                          'open': 'Open Parking',
+                          'both': 'Both Covered & Open',
+                          'not-available': 'No Parking'
+                        },
+                        waterStorageFacility: {
+                          'overhead-tank': 'Overhead Tank',
+                          'underground-tank': 'Underground Tank',
+                          'both': 'Both Overhead & Underground',
+                          'borewell': 'Borewell'
+                        },
+                        security: {
+                          '24x7-security': '24x7 Security',
+                          'security-guard': 'Security Guard',
+                          'not-available': 'No Security'
+                        },
+                        wifi: {
+                          'available': 'WiFi Available',
+                          'not-available': 'No WiFi'
+                        },
+                        currentPropertyCondition: {
+                          'excellent': 'Excellent Condition',
+                          'good': 'Good Condition',
+                          'average': 'Average Condition',
+                          'needs-renovation': 'Needs Renovation'
+                        }
+                      };
+                      
+                      const formattedValue = amenityLabels[key]?.[value] || value;
+                      
+                      // Only show positive amenities
+                      if (formattedValue && 
+                          !formattedValue.includes('No ') && 
+                          !formattedValue.includes('None') &&
+                          !formattedValue.includes('not-available')) {
+                        return (
+                          <div
+                            key={key}
+                            className="inline-flex items-center rounded-full bg-gray-100 px-3 py-1 text-sm text-gray-700"
+                          >
+                            {formattedValue}
+                          </div>
+                        );
+                      }
+                    }
+                    return null;
+                  })}
+                </div>
+              </div>
+            )}
+
             {/* Description */}
             {propertyInfo?.additionalInfo?.description && (
               <div>

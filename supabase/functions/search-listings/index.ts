@@ -62,15 +62,41 @@ serve(async (req) => {
  
     console.log('Search params (from body):', requestBody);
     console.log('Mapped filters will be:', {
-      propertyTypes: Array.isArray(requestBody.propertyTypes) && requestBody.propertyTypes.length > 0 ? requestBody.propertyTypes : (propertyType ? [propertyType] : []),
-      bhkType: bhkType && bhkType !== 'All' ? ({ '2 BHK': '2bhk', '3 BHK': '3bhk', '4 BHK': '4bhk' }[bhkType] || bhkType.toLowerCase().replace(/\s+/g, '').replace(/\+/, '')) : 'no filter',
-      landRequested,
-    });
+        propertyTypes: Array.isArray(requestBody.propertyTypes) && requestBody.propertyTypes.length > 0 ? requestBody.propertyTypes : (propertyType ? [propertyType] : []),
+        bhkType: bhkType && bhkType !== 'All' ? ({ '2 BHK': '2bhk', '3 BHK': '3bhk', '4 BHK': '4bhk' }[bhkType] || bhkType.toLowerCase().replace(/\s+/g, '').replace(/\+/, '')) : 'no filter',
+        landRequested,
+        intent,
+        budgetMin,
+        budgetMax,
+        furnished,
+        availability,
+        selectedTypes: selectedTypes.length > 0 ? selectedTypes : 'none'
+      });
 
     // Initialize Supabase client
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
     const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
     const supabase = createClient(supabaseUrl, supabaseKey);
+
+    // Debug: Check if there are any approved properties at all
+    const { data: allApprovedProperties, error: debugError } = await supabase
+      .from('properties')
+      .select('id, title, property_type, listing_type, status, expected_price')
+      .eq('status', 'approved')
+      .limit(5);
+    
+    console.log('Debug - All approved properties:', {
+      count: allApprovedProperties?.length || 0,
+      properties: allApprovedProperties?.map(p => ({
+        id: p.id,
+        title: p.title,
+        property_type: p.property_type,
+        listing_type: p.listing_type,
+        status: p.status,
+        expected_price: p.expected_price
+      })) || [],
+      debugError: debugError?.message || 'none'
+    });
 
     // Build the query
     let query = supabase
@@ -149,6 +175,7 @@ serve(async (req) => {
         'HOUSE': 'house',
         'INDEPENDENT HOUSE': 'independent_house',
         'PENTHOUSE': 'penthouse',
+        'DUPLEX': 'duplex',
         'COMMERCIAL': 'commercial',
         'PG HOSTEL': 'pg_hostel',
         'PG/HOSTEL': 'pg_hostel',
@@ -210,6 +237,7 @@ serve(async (req) => {
 
           // Fallback to default mapping
           const key = propertyTypeMap[t] || propertyTypeMap[t.toUpperCase()] || t.toLowerCase().replace(/\s+/g, '_');
+          console.log('Property type mapping:', { input: t, mapped: key });
           selectedTypes.push(...normalizeToDbTypes(key));
         }
       }
@@ -221,12 +249,14 @@ serve(async (req) => {
           selectedTypes.push(...cmsTypes);
         } else {
           const mappedType = propertyTypeMap[propertyType] || propertyTypeMap[propertyType.toUpperCase()] || propertyType.toLowerCase().replace(/\s+/g, '_');
+          console.log('Single property type mapping:', { input: propertyType, mapped: mappedType });
           selectedTypes.push(...normalizeToDbTypes(mappedType));
         }
       }
 
       if (selectedTypes.length > 0) {
         const unique = Array.from(new Set(selectedTypes));
+        console.log('Applied property type filter:', unique);
         query = query.in('property_type', unique);
       }
     }
@@ -255,9 +285,16 @@ serve(async (req) => {
         '2 BHK': '2bhk', 
         '3 BHK': '3bhk',
         '4 BHK': '4bhk',
-        '5+ BHK': '5bhk'
+        '5+ BHK': '5bhk',
+        '5 BHK': '5bhk',
+        '6 BHK': '6bhk',
+        '7 BHK': '7bhk',
+        '8 BHK': '8bhk',
+        '9 BHK': '9bhk',
+        '10 BHK': '10bhk'
       };
       const mappedBhk = bhkMap[bhkType] || bhkType.toLowerCase().replace(/\s+/g, '').replace(/\+/, '');
+      console.log('BHK filtering:', { bhkType, mappedBhk });
       query = query.eq('bhk_type', mappedBhk);
     }
 
@@ -265,11 +302,13 @@ serve(async (req) => {
     if (furnished && furnished !== 'All') {
       const furnishedMap: { [key: string]: string } = {
         'Furnished': 'furnished',
-        'Semi-Furnished': 'semi_furnished', 
+        'Semi-Furnished': 'semi-furnished', 
+        'Semi Furnished': 'semi-furnished',
         'Unfurnished': 'unfurnished'
       };
       
-      const mappedFurnished = furnishedMap[furnished] || furnished.toLowerCase();
+      const mappedFurnished = furnishedMap[furnished] || furnished.toLowerCase().replace(/\s+/g, '-');
+      console.log('Furnished filtering:', { furnished, mappedFurnished });
       query = query.eq('furnishing', mappedFurnished);
     }
 
@@ -294,11 +333,15 @@ serve(async (req) => {
     const minBudget = parseInt(budgetMin) || 0;
     const maxBudget = parseInt(budgetMax) || 999999999;
     
+    console.log('Budget filtering:', { minBudget, maxBudget, budgetMin, budgetMax });
+    
     if (minBudget > 0) {
       query = query.gte('expected_price', minBudget);
+      console.log('Applied min budget filter:', minBudget);
     }
     if (maxBudget < 999999999) {
       query = query.lte('expected_price', maxBudget);
+      console.log('Applied max budget filter:', maxBudget);
     }
 
     // Apply sorting
@@ -332,6 +375,26 @@ serve(async (req) => {
 
     const { data: properties, error, count } = await query;
 
+    console.log('Search query results:', {
+      propertiesCount: properties?.length || 0,
+      error: error?.message || 'none',
+      queryFilters: {
+        status: 'approved',
+        intent,
+        propertyType,
+        budgetMin,
+        budgetMax,
+        selectedTypes: selectedTypes.length > 0 ? selectedTypes : 'none'
+      },
+      sampleProperties: properties?.slice(0, 3).map(p => ({
+        id: p.id,
+        title: p.title,
+        property_type: p.property_type,
+        expected_price: p.expected_price,
+        status: p.status
+      })) || []
+    });
+
     if (error) {
       console.error('Database error:', error);
       throw error;
@@ -357,19 +420,42 @@ serve(async (req) => {
         }
       };
 
+      // Handle PG/Hostel properties specially
+      const isPGHostel = property.property_type === 'pg_hostel' || 
+                        property.property_type === 'PG/Hostel' || 
+                        property.listing_type === 'PG/Hostel' ||
+                        property.title?.toLowerCase().includes('pg') ||
+                        property.title?.toLowerCase().includes('hostel');
+
       return {
         id: property.id,
-        title: property.title,
-        location: `${property.locality}, ${property.city}, ${property.state}`,
-        price: formatPrice(property.expected_price),
-        area: property.super_area ? `${property.super_area} sq ft` : 'Area not specified',
-        bedrooms: property.bhk_type ? parseInt(property.bhk_type) || 0 : 0,
+        title: property.title || 'Untitled Property',
+        location: `${property.locality || ''}, ${property.city || ''}`.replace(/^,\s*|,\s*$/g, ''),
+        price: isPGHostel 
+          ? `₹${property.expected_price?.toLocaleString() || '0'}/month`
+          : formatPrice(property.expected_price),
+        priceNumber: property.expected_price || 0,
+        area: isPGHostel 
+          ? `${property.super_area || 1} Room${(property.super_area || 1) > 1 ? 's' : ''}`
+          : property.super_area ? `${property.super_area} sq ft` : 'Area not specified',
+        areaNumber: property.super_area || 0,
+        bedrooms: isPGHostel 
+          ? 1  // PG/Hostel shows as 1 room
+          : property.bhk_type ? parseInt(property.bhk_type.replace(/[^\d]/g, '')) || 0 : 0,
         bathrooms: property.bathrooms || 0,
         image: property.images && property.images.length > 0 
           ? property.images[0] 
           : '/placeholder.svg',
-        propertyType: property.property_type,
-        isNew: property.is_featured || false
+        propertyType: property.property_type?.replace(/_/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase()) || 'Property',
+        furnished: property.furnishing?.replace(/_/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase()) || 'Unfurnished',
+        availability: property.availability_type?.replace(/_/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase()) || 'Ready to Move',
+        ageOfProperty: property.property_age?.replace(/_/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase()) || 'New Project',
+        locality: property.locality || '',
+        city: property.city || '',
+        bhkType: property.bhk_type || '1bhk',
+        isNew: new Date(property.created_at) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
+        status: property.status || 'approved',
+        is_featured: property.is_featured || false
       };
     });
 

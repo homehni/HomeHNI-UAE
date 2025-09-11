@@ -17,7 +17,6 @@ const resalePropertyDetailsSchema = z.object({
   ownershipType: z.string().optional(),
   builtUpArea: z.number().optional(),
   carpetArea: z.number().optional(),
-  propertyAge: z.string().optional(),
   facing: z.string().optional(),
   floorType: z.string().optional(),
   floorNo: z.union([z.number(), z.string()]).optional(),
@@ -66,6 +65,7 @@ export const ResalePropertyDetailsStep: React.FC<ResalePropertyDetailsStepProps>
       bhkType: data.bhkType,
       ownershipType: data.ownershipType,
       superBuiltUpArea: data.builtUpArea,
+      builtUpArea: data.builtUpArea,
       carpetArea: data.carpetArea,
       propertyAge: data.propertyAge,
       facing: data.facing,
@@ -257,36 +257,8 @@ export const ResalePropertyDetailsStep: React.FC<ResalePropertyDetailsStepProps>
             />
           </div>
 
-          {/* Property Age and Facing */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <FormField
-              control={form.control}
-              name="propertyAge"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-sm font-medium">Property Age</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <FormControl>
-                      <SelectTrigger className="h-12">
-                        <SelectValue placeholder="Select Property Age" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="Under Construction">Under Construction</SelectItem>
-                      <SelectItem value="Ready to Move">Ready to Move</SelectItem>
-                      <SelectItem value="0-1 Year">0-1 Year</SelectItem>
-                      <SelectItem value="1-5 Years">1-5 Years</SelectItem>
-                      <SelectItem value="5-10 Years">5-10 Years</SelectItem>
-                      <SelectItem value="10-15 Years">10-15 Years</SelectItem>
-                      <SelectItem value="15-20 Years">15-20 Years</SelectItem>
-                      <SelectItem value="20+ Years">20+ Years</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
+          {/* Facing */}
+          <div className="grid grid-cols-1 md:grid-cols-1 gap-6">
             <FormField
               control={form.control}
               name="facing"

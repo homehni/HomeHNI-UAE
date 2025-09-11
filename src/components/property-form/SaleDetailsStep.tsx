@@ -16,6 +16,77 @@ import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import { SaleDetails } from '@/types/saleProperty';
 
+// Helper function to convert number to words
+const numberToWords = (num: number): string => {
+  if (num === 0) return 'Zero';
+  
+  const ones = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine'];
+  const tens = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+  const teens = ['Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'];
+  
+  const convertHundreds = (n: number): string => {
+    let result = '';
+    
+    if (n >= 100) {
+      result += ones[Math.floor(n / 100)] + ' Hundred';
+      n %= 100;
+      if (n > 0) result += ' ';
+    }
+    
+    if (n >= 20) {
+      result += tens[Math.floor(n / 10)];
+      n %= 10;
+      if (n > 0) result += ' ' + ones[n];
+    } else if (n >= 10) {
+      result += teens[n - 10];
+    } else if (n > 0) {
+      result += ones[n];
+    }
+    
+    return result;
+  };
+  
+  let result = '';
+  
+  // Crores
+  if (num >= 10000000) {
+    const crores = Math.floor(num / 10000000);
+    result += convertHundreds(crores) + ' Crore';
+    num %= 10000000;
+    if (num > 0) result += ' ';
+  }
+  
+  // Lakhs
+  if (num >= 100000) {
+    const lakhs = Math.floor(num / 100000);
+    result += convertHundreds(lakhs) + ' Lakh';
+    num %= 100000;
+    if (num > 0) result += ' ';
+  }
+  
+  // Thousands
+  if (num >= 1000) {
+    const thousands = Math.floor(num / 1000);
+    result += convertHundreds(thousands) + ' Thousand';
+    num %= 1000;
+    if (num > 0) result += ' ';
+  }
+  
+  // Hundreds and below
+  if (num > 0) {
+    result += convertHundreds(num);
+  }
+  
+  return result;
+};
+
+// Helper function to format price per sq.ft
+const formatPricePerSqFt = (price: number, area: number): string => {
+  if (!price || !area || area === 0) return '';
+  const pricePerSqFt = Math.round(price / area);
+  return pricePerSqFt.toLocaleString();
+};
+
 const saleDetailsSchema = z.object({
   expectedPrice: z.union([z.number(), z.nan(), z.undefined()]).optional().transform(val => isNaN(val as number) ? undefined : val),
   priceNegotiable: z.boolean().optional(),
@@ -32,12 +103,14 @@ type SaleDetailsForm = z.infer<typeof saleDetailsSchema>;
 
 interface SaleDetailsStepProps {
   initialData: Partial<SaleDetails>;
+  propertyDetails?: Partial<import('@/types/property').PropertyDetails>;
   onNext: (data: SaleDetails) => void;
   onBack: () => void;
 }
 
 export const SaleDetailsStep: React.FC<SaleDetailsStepProps> = ({
   initialData,
+  propertyDetails,
   onNext,
   onBack,
 }) => {
@@ -108,6 +181,19 @@ export const SaleDetailsStep: React.FC<SaleDetailsStepProps> = ({
               onChange={(value) => setValue('expectedPrice', value)}
               className="mt-1 h-12"
             />
+            {/* Price in words display */}
+            {watchedValues.expectedPrice && watchedValues.expectedPrice > 0 && (
+              <div className="mt-2">
+                <p className="text-sm text-black">
+                  ₹ {numberToWords(watchedValues.expectedPrice)}
+                  {propertyDetails?.builtUpArea && (
+                    <span className="text-gray-600">
+                      {' '}(₹ {formatPricePerSqFt(watchedValues.expectedPrice, propertyDetails.builtUpArea)} per sq.ft)
+                    </span>
+                  )}
+                </p>
+              </div>
+            )}
             {errors.expectedPrice && (
               <p className="text-red-500 text-sm mt-1">{errors.expectedPrice.message}</p>
             )}
@@ -121,9 +207,34 @@ export const SaleDetailsStep: React.FC<SaleDetailsStepProps> = ({
               id="pricePerSqFt"
               type="number"
               placeholder="e.g. 4500"
-              {...register('pricePerSqFt', { valueAsNumber: true })}
+              value={
+                watchedValues.expectedPrice && propertyDetails?.builtUpArea
+                  ? Math.round(watchedValues.expectedPrice / propertyDetails.builtUpArea)
+                  : watchedValues.pricePerSqFt || ''
+              }
+              onChange={(e) => {
+                const value = e.target.value ? Number(e.target.value) : undefined;
+                setValue('pricePerSqFt', value);
+              }}
               className="mt-1 h-12"
             />
+            {/* Auto-calculated price per sq.ft display */}
+            {watchedValues.expectedPrice && (propertyDetails?.builtUpArea || propertyDetails?.carpetArea) && (
+              <div className="mt-2">
+                <div className="space-y-1">
+                  {propertyDetails?.builtUpArea && (
+                    <p className="text-sm text-gray-700">
+                      Built-up Area: ₹{formatPricePerSqFt(watchedValues.expectedPrice, propertyDetails.builtUpArea)} per sq.ft
+                    </p>
+                  )}
+                  {propertyDetails?.carpetArea && (
+                    <p className="text-sm text-gray-700">
+                      Carpet Area: ₹{formatPricePerSqFt(watchedValues.expectedPrice, propertyDetails.carpetArea)} per sq.ft
+                    </p>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
@@ -169,7 +280,7 @@ export const SaleDetailsStep: React.FC<SaleDetailsStepProps> = ({
 
           <div>
             <Label htmlFor="registrationStatus" className="text-sm font-medium">
-              Registration Status
+              Availability Status
             </Label>
             <Select
               value={watchedValues.registrationStatus}

@@ -12,7 +12,6 @@ interface FlattmatesPropertyDetails {
   totalFloors: number | string;
   roomType: string;
   tenantType: string;
-  propertyAge: string;
   facing: string;
   builtUpArea: number;
 }
@@ -41,7 +40,6 @@ export function FlattmatesPropertyDetailsStep({
     totalFloors: 0,
     roomType: '',
     tenantType: '',
-    propertyAge: '',
     facing: '',
     builtUpArea: 0,
     ...initialData,
@@ -209,27 +207,8 @@ export function FlattmatesPropertyDetailsStep({
                   </div>
                 </div>
 
-                {/* Property Age and Facing */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="propertyAge">Property Age</Label>
-                    <Select
-                      value={formData.propertyAge}
-                      onValueChange={(value) => setFormData({ ...formData, propertyAge: value })}
-                    >
-                      <SelectTrigger className="h-12">
-                        <SelectValue placeholder="Select property age range" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="Under Construction">Under Construction</SelectItem>
-                        <SelectItem value="0-1 Year">0-1 Year</SelectItem>
-                        <SelectItem value="1-5 Years">1-5 Years</SelectItem>
-                        <SelectItem value="5-10 Years">5-10 Years</SelectItem>
-                        <SelectItem value="10+ Years">10+ Years</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-
+                {/* Facing */}
+                <div className="grid grid-cols-1 md:grid-cols-1 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="facing">Facing</Label>
                     <Select

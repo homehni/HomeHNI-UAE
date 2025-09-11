@@ -89,8 +89,25 @@ export const useRealTimeSearch = () => {
       filters.budget[0] > 0 || 
       filters.budget[1] < 50000000;
 
+    console.log('useRealTimeSearch debug:', {
+      isAllResidential,
+      hasSearchCriteria,
+      filters: {
+        propertyType: filters.propertyType,
+        budget: filters.budget,
+        bhkType: filters.bhkType,
+        furnished: filters.furnished,
+        availability: filters.availability,
+        construction: filters.construction,
+        locality: filters.locality,
+        location: debouncedLocation
+      },
+      willUseSearchFunction: !isAllResidential && hasSearchCriteria
+    });
+
     // If "ALL" is selected or no criteria, show properties based on active tab (Buy/Rent/Commercial)
     if (isAllResidential || !hasSearchCriteria) {
+      console.log('Using get_public_properties RPC (no search function)');
       try {
         setIsLoading(true);
         setError(null);
@@ -293,6 +310,7 @@ export const useRealTimeSearch = () => {
       return;
     }
 
+    console.log('Using search-listings function');
     setIsLoading(true);
     setError(null);
 
@@ -334,6 +352,8 @@ export const useRealTimeSearch = () => {
         sortBy: filters.sortBy
       };
 
+      console.log('Search body being sent:', searchBody);
+
       const { data, error: funcError } = await supabase.functions.invoke('search-listings', {
         body: searchBody
       });
@@ -343,13 +363,10 @@ export const useRealTimeSearch = () => {
       }
 
       // Transform search results to match PropertyCard interface
-      // Filter to only show approved and featured properties for specific property type searches
+      // Show all approved properties (not just featured ones)
       const filteredSearchResults = (data.items || []).filter((property: any) => {
-        // For specific property type searches, only show approved and featured properties
-        if (filters.propertyType.length > 0) {
-          return property.status === 'approved' && property.is_featured;
-        }
-        return true; // For "ALL" searches, show all approved properties
+        // Show all approved properties regardless of featured status
+        return property.status === 'approved';
       });
 
       const transformedSearchResults = filteredSearchResults.map((property: any) => ({
