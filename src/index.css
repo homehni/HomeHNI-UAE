@@ -100,6 +100,90 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 400;
+    line-height: 1.6;
+  }
+
+  /* Typography System - Professional Real Estate Fonts */
+  h1, h2, h3, h4, h5, h6, .heading {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.025em;
+  }
+
+  h1, .text-4xl, .text-5xl, .text-6xl {
+    font-weight: 700;
+    line-height: 1.1;
+  }
+
+  h2, .text-3xl {
+    font-weight: 600;
+    line-height: 1.15;
+  }
+
+  h3, .text-2xl {
+    font-weight: 600;
+    line-height: 1.2;
+  }
+
+  h4, .text-xl {
+    font-weight: 500;
+    line-height: 1.25;
+  }
+
+  h5, .text-lg {
+    font-weight: 500;
+    line-height: 1.3;
+  }
+
+  h6, .text-base {
+    font-weight: 500;
+    line-height: 1.4;
+  }
+
+  p, .body-text, .text-sm, .text-xs {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 400;
+    line-height: 1.6;
+  }
+
+  /* Professional Typography Utilities */
+  .font-light {
+    font-weight: 300;
+  }
+
+  .font-medium {
+    font-weight: 500;
+  }
+
+  .font-semibold {
+    font-weight: 600;
+  }
+
+  .font-bold {
+    font-weight: 700;
+  }
+
+  /* Ensure buttons and inputs use proper fonts */
+  button, input, textarea, select, .button, .input {
+    font-family: 'Open Sans', sans-serif;
+  }
+
+  /* Headings with brand styling */
+  .heading-primary {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.025em;
+  }
+
+  .heading-secondary {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    line-height: 1.15;
+    letter-spacing: -0.025em;
   }
 }
 
