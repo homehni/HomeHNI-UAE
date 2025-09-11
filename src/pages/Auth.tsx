@@ -168,7 +168,11 @@ export const Auth: React.FC = () => {
             <CardHeader className="text-center pb-6 pt-8">
               <div className="flex items-center justify-center mb-6">
                 <div className="p-3 bg-gradient-to-br from-brand-red to-brand-red-dark rounded-2xl shadow-lg">
-                  <Home className="h-10 w-10 text-white" />
+                  <img 
+                    src="/lovable-uploads/main-logo-final.png"
+                    alt="Home HNI Logo" 
+                    className="h-10 w-auto filter brightness-0 invert"
+                  />
                 </div>
               </div>
               <div className="space-y-2">
