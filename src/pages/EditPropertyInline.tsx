@@ -103,6 +103,7 @@ export const EditPropertyInline: React.FC = () => {
   const [editedProperty, setEditedProperty] = useState<Property | PGProperty | null>(null);
   const [isPGProperty, setIsPGProperty] = useState(false);
   const [activeTab, setActiveTab] = useState('basic');
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
   
   // Function to check if there are actual changes between original and edited property
   const hasChanges = () => {
@@ -350,8 +351,17 @@ export const EditPropertyInline: React.FC = () => {
         .single();
 
       if (propertyData && !propertyError) {
-        setProperty(propertyData);
-        setEditedProperty(propertyData);
+        // Handle amenities type conversion from Json to string[]
+        const processedProperty = {
+          ...propertyData,
+          amenities: Array.isArray(propertyData.amenities) 
+            ? propertyData.amenities 
+            : typeof propertyData.amenities === 'object' && propertyData.amenities
+              ? Object.keys(propertyData.amenities).filter(key => propertyData.amenities[key])
+              : []
+        } as Property;
+        setProperty(processedProperty);
+        setEditedProperty(processedProperty);
         setIsPGProperty(false);
         return;
       }
@@ -497,51 +507,91 @@ export const EditPropertyInline: React.FC = () => {
     if (!editedProperty || !user || !hasChanges()) return;
 
     try {
-      const { error } = await supabase
-        .from('properties')
-        .update({
-          title: editedProperty.title,
-          property_type: editedProperty.property_type,
-          listing_type: editedProperty.listing_type,
-          bhk_type: editedProperty.bhk_type,
-          expected_price: editedProperty.expected_price,
-          super_area: editedProperty.super_area,
-          carpet_area: editedProperty.carpet_area,
-          bathrooms: editedProperty.bathrooms,
-          balconies: editedProperty.balconies,
-          city: editedProperty.city,
-          locality: editedProperty.locality,
-          state: editedProperty.state,
-          pincode: editedProperty.pincode,
-          description: editedProperty.description,
-          images: editedProperty.images,
-          videos: editedProperty.videos,
-          owner_name: editedProperty.owner_name,
-          owner_email: editedProperty.owner_email,
-          owner_phone: editedProperty.owner_phone,
-          owner_role: editedProperty.owner_role,
-          updated_at: new Date().toISOString(),
-          // Additional fields
-          furnishing_status: editedProperty.furnishing_status,
-          building_type: editedProperty.building_type,
-          property_age: editedProperty.property_age,
-          floor_type: editedProperty.floor_type,
-          total_floors: editedProperty.total_floors,
-          floor_no: editedProperty.floor_no,
-          parking_type: editedProperty.parking_type,
-          on_main_road: editedProperty.on_main_road,
-          corner_property: editedProperty.corner_property,
-          amenities: editedProperty.amenities,
-          commercial_type: editedProperty.commercial_type,
-          land_type: editedProperty.land_type,
-          pg_type: editedProperty.pg_type,
-          room_type: editedProperty.room_type,
-          flatmates_type: editedProperty.flatmates_type
-        })
-        .eq('id', editedProperty.id)
-        .eq('user_id', user.id);
+      if (isPGProperty) {
+        // Handle PG property auto-save
+        const pgProperty = editedProperty as PGProperty;
+        const { error } = await supabase
+          .from('pg_hostel_properties')
+          .update({
+            title: pgProperty.title,
+            expected_rent: pgProperty.expected_rent,
+            expected_deposit: pgProperty.expected_deposit,
+            state: pgProperty.state,
+            city: pgProperty.city,
+            locality: pgProperty.locality,
+            landmark: pgProperty.landmark,
+            place_available_for: pgProperty.place_available_for,  
+            preferred_guests: pgProperty.preferred_guests,
+            available_from: pgProperty.available_from,
+            food_included: pgProperty.food_included,
+            gate_closing_time: pgProperty.gate_closing_time,
+            description: pgProperty.description,
+            available_services: pgProperty.available_services,
+            amenities: pgProperty.amenities,
+            parking: pgProperty.parking,
+            images: pgProperty.images,
+            videos: pgProperty.videos,
+            updated_at: new Date().toISOString()
+          })
+          .eq('id', pgProperty.id)
+          .eq('user_id', user.id);
 
-      if (error) throw error;
+        if (error) throw error;
+      } else {
+        // Handle regular property auto-save
+        const regularProperty = editedProperty as Property;
+        const { error } = await supabase
+          .from('properties')
+          .update({
+            title: regularProperty.title,
+            property_type: regularProperty.property_type,
+            listing_type: regularProperty.listing_type,
+            bhk_type: regularProperty.bhk_type,
+            expected_price: regularProperty.expected_price,
+            super_area: regularProperty.super_area,
+            carpet_area: regularProperty.carpet_area,
+            bathrooms: regularProperty.bathrooms,
+            balconies: regularProperty.balconies,
+            city: regularProperty.city,
+            locality: regularProperty.locality,
+            state: regularProperty.state,
+            pincode: regularProperty.pincode,
+            description: regularProperty.description,
+            images: regularProperty.images,
+            videos: regularProperty.videos,
+            owner_name: regularProperty.owner_name,
+            owner_email: regularProperty.owner_email,
+            owner_phone: regularProperty.owner_phone,
+            owner_role: regularProperty.owner_role,
+            updated_at: new Date().toISOString(),
+            // Additional fields
+            property_age: regularProperty.property_age,
+            floor_type: regularProperty.floor_type,
+            total_floors: regularProperty.total_floors,
+            floor_no: regularProperty.floor_no,
+            amenities: regularProperty.amenities,
+            landmark: regularProperty.landmark,
+            // Plot/Land specific fields
+            plot_area: regularProperty.plot_area,
+            length: regularProperty.length,
+            width: regularProperty.width,
+            boundary_wall: regularProperty.boundary_wall,
+            floors_allowed: regularProperty.floors_allowed,
+            gated_project: regularProperty.gated_project,
+            water_supply: regularProperty.water_supply,
+            electricity_connection: regularProperty.electricity_connection,
+            sewage_connection: regularProperty.sewage_connection,
+            road_width: regularProperty.road_width,
+            gated_security: typeof regularProperty.gated_security === 'boolean' 
+              ? regularProperty.gated_security 
+              : regularProperty.gated_security === 'true' || regularProperty.gated_security === 'Yes',
+            directions: regularProperty.directions
+          })
+          .eq('id', regularProperty.id)
+          .eq('user_id', user.id);
+
+        if (error) throw error;
+      }
 
       setHasUnsavedChanges(false);
       // Clear localStorage after successful save
@@ -691,44 +741,44 @@ export const EditPropertyInline: React.FC = () => {
           state: editedProperty.state,
           status: 'pending', // Keep as pending for review
           updated_at: new Date().toISOString(),
-          payload: {
+          payload: JSON.parse(JSON.stringify(isPGProperty ? editedProperty : {
             ...editedProperty,
             // Ensure all the property data is preserved in the payload
             title: editedProperty.title,
             property_type: editedProperty.property_type,
-            listing_type: editedProperty.listing_type,
-            bhk_type: editedProperty.bhk_type,
-            expected_price: editedProperty.expected_price,
-            super_area: editedProperty.super_area,
-            carpet_area: editedProperty.carpet_area,
-            bathrooms: editedProperty.bathrooms,
-            balconies: editedProperty.balconies,
+            ...(editedProperty as Property).listing_type && { listing_type: (editedProperty as Property).listing_type },
+            ...(editedProperty as Property).bhk_type && { bhk_type: (editedProperty as Property).bhk_type },
+            ...(editedProperty as Property).expected_price && { expected_price: (editedProperty as Property).expected_price },
+            ...(editedProperty as Property).super_area && { super_area: (editedProperty as Property).super_area },
+            ...(editedProperty as Property).carpet_area && { carpet_area: (editedProperty as Property).carpet_area },
+            ...(editedProperty as Property).bathrooms && { bathrooms: (editedProperty as Property).bathrooms },
+            ...(editedProperty as Property).balconies && { balconies: (editedProperty as Property).balconies },
             city: editedProperty.city,
             locality: editedProperty.locality,
             state: editedProperty.state,
-            pincode: editedProperty.pincode,
+            ...(editedProperty as Property).pincode && { pincode: (editedProperty as Property).pincode },
             description: editedProperty.description,
             images: editedProperty.images,
             videos: editedProperty.videos,
-            property_age: editedProperty.property_age,
-            floor_type: editedProperty.floor_type,
-            total_floors: editedProperty.total_floors,
-            floor_no: editedProperty.floor_no,
+            ...(editedProperty as Property).property_age && { property_age: (editedProperty as Property).property_age },
+            ...(editedProperty as Property).floor_type && { floor_type: (editedProperty as Property).floor_type },
+            ...(editedProperty as Property).total_floors && { total_floors: (editedProperty as Property).total_floors },
+            ...(editedProperty as Property).floor_no && { floor_no: (editedProperty as Property).floor_no },
             amenities: editedProperty.amenities,
-            landmark: editedProperty.landmark,
-            plot_area: editedProperty.plot_area,
-            length: editedProperty.length,
-            width: editedProperty.width,
-            boundary_wall: editedProperty.boundary_wall,
-            floors_allowed: editedProperty.floors_allowed,
-            gated_project: editedProperty.gated_project,
-            water_supply: editedProperty.water_supply,
-            electricity_connection: editedProperty.electricity_connection,
-            sewage_connection: editedProperty.sewage_connection,
-            road_width: editedProperty.road_width,
-            gated_security: editedProperty.gated_security,
-            directions: editedProperty.directions,
-          }
+            ...(editedProperty as Property).landmark && { landmark: (editedProperty as Property).landmark },
+            ...(editedProperty as Property).plot_area && { plot_area: (editedProperty as Property).plot_area },
+            ...(editedProperty as Property).length && { length: (editedProperty as Property).length },
+            ...(editedProperty as Property).width && { width: (editedProperty as Property).width },
+            ...(editedProperty as Property).boundary_wall && { boundary_wall: (editedProperty as Property).boundary_wall },
+            ...(editedProperty as Property).floors_allowed && { floors_allowed: (editedProperty as Property).floors_allowed },
+            ...(editedProperty as Property).gated_project && { gated_project: (editedProperty as Property).gated_project },
+            ...(editedProperty as Property).water_supply && { water_supply: (editedProperty as Property).water_supply },
+            ...(editedProperty as Property).electricity_connection && { electricity_connection: (editedProperty as Property).electricity_connection },
+            ...(editedProperty as Property).sewage_connection && { sewage_connection: (editedProperty as Property).sewage_connection },
+            ...(editedProperty as Property).road_width && { road_width: (editedProperty as Property).road_width },
+            ...(editedProperty as Property).gated_security !== undefined && { gated_security: (editedProperty as Property).gated_security },
+            ...(editedProperty as Property).directions && { directions: (editedProperty as Property).directions },
+          }))
         };
 
         const { error } = await supabase

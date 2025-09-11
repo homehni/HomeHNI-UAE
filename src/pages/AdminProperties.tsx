@@ -190,7 +190,7 @@ const AdminProperties = () => {
         return dateB.getTime() - dateA.getTime();
       });
 
-      setProperties(allProperties);
+      setProperties(allProperties as PropertySubmission[]);
       
       // Calculate stats based on combined data
       const total = allProperties?.length || 0;
