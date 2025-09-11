@@ -506,7 +506,7 @@ export const PostProperty: React.FC = () => {
             owner_email: data.ownerInfo.email || '',
             owner_phone: data.ownerInfo.phoneNumber || '',
             owner_role: data.ownerInfo.role || 'Owner',
-            amenities: (data.propertyInfo as any).amenities || null,
+            amenities: (window as any).editingPropertyData?.amenities || (data.propertyInfo as any).amenities || null,
             status: 'pending', // Reset to pending for review - CRITICAL: prevents public visibility
             updated_at: new Date().toISOString(),
             // Additional fields - access from the original property data
@@ -519,7 +519,6 @@ export const PostProperty: React.FC = () => {
             parking_type: (window as any).editingPropertyData?.parking_type,
             on_main_road: (window as any).editingPropertyData?.on_main_road,
             corner_property: (window as any).editingPropertyData?.corner_property,
-            amenities: (window as any).editingPropertyData?.amenities,
             commercial_type: (window as any).editingPropertyData?.commercial_type,
             land_type: (window as any).editingPropertyData?.land_type,
             pg_type: (window as any).editingPropertyData?.pg_type,

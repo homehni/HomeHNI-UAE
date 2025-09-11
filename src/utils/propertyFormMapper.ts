@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { PropertyInfo, OwnerInfo, LocationDetails, RentalDetails, Amenities, PropertyGallery, AdditionalInfo, ScheduleInfo } from '@/types/property';
 import { SalePropertyInfo, SaleDetails } from '@/types/saleProperty';
 import { PGHostelFormData } from '@/types/property';

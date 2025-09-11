@@ -60,52 +60,48 @@ export const useSimplifiedSearch = () => {
     const loadProperties = async () => {
       setIsLoading(true);
       try {
-        const { data: propertiesData, error } = await supabase
-          .rpc('get_public_properties');
+        // Load both regular properties and PG/Hostel properties
+        const [propertiesResult, pgResult] = await Promise.all([
+          supabase.rpc('get_public_properties'),
+          supabase.rpc('get_public_pg_hostel_properties')
+        ]);
 
-        if (error) throw error;
+        if (propertiesResult.error) throw propertiesResult.error;
+        if (pgResult.error) throw pgResult.error;
 
-        const transformedProperties = (propertiesData || []).map((property: any) => {
-          const isPGHostel = property.property_type === 'pg_hostel' || 
-                            property.property_type === 'PG/Hostel' || 
-                            property.listing_type === 'PG/Hostel' ||
-                            property.title?.toLowerCase().includes('pg') ||
-                            property.title?.toLowerCase().includes('hostel');
+        // Transform regular properties
+        const transformedProperties = (propertiesResult.data || []).map((property: any) => {
+          console.log('🏠 Regular Property:', {
+            id: property.id,
+            title: property.title,
+            listing_type: property.listing_type,
+            property_type: property.property_type
+          });
           
           let displayPropertyType = property.property_type?.replace(/_/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase()) || 'Property';
-          
-          if (isPGHostel) {
-            displayPropertyType = 'PG Hostel';
-          }
           
           return {
             id: property.id,
             title: property.title,
             location: `${property.locality || ''}, ${property.city || ''}`.replace(/^,\s*|,\s*$/g, ''),
-            price: isPGHostel 
-              ? `₹${property.expected_price?.toLocaleString() || '0'}/month`
-              : (() => {
-                  const price = property.expected_price;
-                  if (price === 10000000) {
-                    return '₹1 Cr';
-                  } else if (price >= 10000000) {
-                    return `₹${(price / 10000000).toFixed(1)} Cr`;
-                  } else if (price >= 100000) {
-                    return `₹${(price / 100000).toFixed(1)} L`;
-                  } else if (price >= 1000) {
-                    return `₹${(price / 1000).toFixed(0)} K`;
-                  } else {
-                    return `₹${price?.toLocaleString() || '0'}`;
-                  }
-                })(),
+            price: (() => {
+              const price = property.expected_price;
+              if (price === 10000000) {
+                return '₹1 Cr';
+              } else if (price >= 10000000) {
+                return `₹${(price / 10000000).toFixed(1)} Cr`;
+              } else if (price >= 100000) {
+                return `₹${(price / 100000).toFixed(1)} L`;
+              } else if (price >= 1000) {
+                return `₹${(price / 1000).toFixed(0)} K`;
+              } else {
+                return `₹${price?.toLocaleString() || '0'}`;
+              }
+            })(),
             priceNumber: property.expected_price || 0,
-            area: isPGHostel 
-              ? `${property.super_area || 1} Room${(property.super_area || 1) > 1 ? 's' : ''}`
-              : `${property.super_area || 0} sq ft`,
+            area: `${property.super_area || 0} sq ft`,
             areaNumber: property.super_area || 0,
-            bedrooms: isPGHostel 
-              ? 1
-              : parseInt(property.bhk_type?.replace(/[^\d]/g, '') || '0'),
+            bedrooms: parseInt(property.bhk_type?.replace(/[^\d]/g, '') || '0'),
             bathrooms: property.bathrooms || 0,
             image: property.images && property.images.length > 0 
               ? property.images[0] 
@@ -122,7 +118,46 @@ export const useSimplifiedSearch = () => {
           };
         });
 
-        setAllProperties(transformedProperties);
+        // Transform PG/Hostel properties
+        const transformedPGProperties = (pgResult.data || []).map((property: any) => {
+          console.log('🏠 PG Property:', {
+            id: property.id,
+            title: property.title,
+            property_type: property.property_type,
+            expected_rent: property.expected_rent
+          });
+          
+          return {
+            id: property.id,
+            title: property.title,
+            location: `${property.locality || ''}, ${property.city || ''}`.replace(/^,\s*|,\s*$/g, ''),
+            price: `₹${property.expected_rent?.toLocaleString() || '0'}/month`,
+            priceNumber: property.expected_rent || 0,
+            area: `PG/Hostel`,
+            areaNumber: 1,
+            bedrooms: 1,
+            bathrooms: 1,
+            image: property.images && property.images.length > 0 
+              ? property.images[0] 
+              : '/placeholder.svg',
+            propertyType: 'PG Hostel',
+            furnished: 'Furnished',
+            availability: 'Available',
+            ageOfProperty: 'New',
+            locality: property.locality || '',
+            city: property.city || '',
+            bhkType: '1rk',
+            listingType: 'rent', // PG/Hostels are always rentals
+            isNew: new Date(property.created_at) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
+          };
+        });
+
+        // Combine both types
+        const allTransformedProperties = [...transformedProperties, ...transformedPGProperties];
+        console.log('📊 Total properties loaded:', allTransformedProperties.length);
+        console.log('📊 Listing types:', [...new Set(allTransformedProperties.map(p => p.listingType))]);
+        
+        setAllProperties(allTransformedProperties);
       } catch (error) {
         console.error('Error loading properties:', error);
       } finally {
@@ -138,35 +173,52 @@ export const useSimplifiedSearch = () => {
     let filtered = [...allProperties];
 
     // Filter by active tab (buy/rent/commercial) using listing_type
+    console.log('🔍 Filtering by activeTab:', activeTab);
+    console.log('📊 Total properties before filter:', filtered.length);
+    
     if (activeTab === 'buy') {
       // For buy tab, show only sale properties
       filtered = filtered.filter(property => {
         const listingType = property.listingType?.toLowerCase();
-        return listingType === 'sale' || listingType === 'resale';
+        const isMatch = listingType === 'sale' || listingType === 'resale';
+        if (!isMatch) {
+          console.log('❌ Filtered out for buy:', property.title, 'listing_type:', listingType);
+        }
+        return isMatch;
       });
     } else if (activeTab === 'rent') {
       // For rent tab, show rental properties and PG/Hostels
       filtered = filtered.filter(property => {
         const listingType = property.listingType?.toLowerCase();
         const propertyType = property.propertyType.toLowerCase();
-        return listingType === 'rent' || 
+        const isMatch = listingType === 'rent' || 
                listingType === 'pg/hostel' || 
                propertyType.includes('pg') || 
                propertyType.includes('hostel');
+        if (!isMatch) {
+          console.log('❌ Filtered out for rent:', property.title, 'listing_type:', listingType, 'property_type:', propertyType);
+        }
+        return isMatch;
       });
     } else if (activeTab === 'commercial') {
       // For commercial tab, show commercial properties
       filtered = filtered.filter(property => {
         const listingType = property.listingType?.toLowerCase();
         const propertyType = property.propertyType.toLowerCase();
-        return listingType === 'commercial' ||
+        const isMatch = listingType === 'commercial' ||
                propertyType.includes('commercial') ||
                propertyType.includes('office') ||
                propertyType.includes('shop') ||
                propertyType.includes('warehouse') ||
                propertyType.includes('showroom');
+        if (!isMatch) {
+          console.log('❌ Filtered out for commercial:', property.title, 'listing_type:', listingType, 'property_type:', propertyType);
+        }
+        return isMatch;
       });
     }
+    
+    console.log('📊 Properties after tab filter:', filtered.length);
 
     // Apply property type filter
     if (filters.propertyType.length > 0 && !filters.propertyType.includes('ALL')) {
