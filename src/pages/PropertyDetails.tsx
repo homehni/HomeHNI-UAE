@@ -50,7 +50,24 @@ const PropertyDetails: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const propertyFromState = location.state as Property | undefined || null;
-  const [property, setProperty] = React.useState<Property | null>(propertyFromState);
+  
+  // Also check sessionStorage for property data (when opened in new tab)
+  const getInitialProperty = () => {
+    if (propertyFromState) return propertyFromState;
+    if (id) {
+      const stored = sessionStorage.getItem(`property-${id}`);
+      if (stored) {
+        try {
+          return JSON.parse(stored) as Property;
+        } catch (e) {
+          console.error('Failed to parse stored property data:', e);
+        }
+      }
+    }
+    return null;
+  };
+  
+  const [property, setProperty] = React.useState<Property | null>(getInitialProperty());
   const [showContactModal, setShowContactModal] = React.useState(false);
   const [showScheduleVisitModal, setShowScheduleVisitModal] = React.useState(false);
   const [showEMICalculatorModal, setShowEMICalculatorModal] = React.useState(false);
