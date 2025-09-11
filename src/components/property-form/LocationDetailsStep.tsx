@@ -5,6 +5,7 @@ import { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { LocationDetails } from '@/types/property';
 import { ArrowLeft, ArrowRight, Home, MapPin } from 'lucide-react';
 
@@ -185,81 +186,137 @@ export const LocationDetailsStep: React.FC<LocationDetailsStepProps> = ({
 
   return (
     <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
-      <h1 className="text-2xl font-semibold text-primary mb-6">Location Details</h1>
+      <h1 className="text-2xl font-semibold text-primary mb-6">Locality Details</h1>
 
-              <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                  {/* Locality/Area and Landmark */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <FormField
-                      control={form.control}
-                      name="locality"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className="text-sm font-medium flex items-center gap-2">
-                            <MapPin className="h-4 w-4 text-primary" />
-                            Locality/Area *
-                          </FormLabel>
-                          <FormControl>
-                            <div className="relative">
-                              <Input
-                                placeholder="Search 'Bellandur, Bengaluru, Karnataka'..."
-                                className="h-12 pl-10"
-                                {...field}
-                                ref={(el) => {
-                                  field.ref(el)
-                                  localityInputRef.current = el
-                                }}
-                              />
-                              <MapPin className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                            </div>
-                          </FormControl>
-                          <p className="text-xs text-red-500 animate-pulse font-bold">
-                            Type the name of the apartment/ the area of property/anything that could help us 😊
-                          </p>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          {/* City and Locality */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <FormField
+              control={form.control}
+              name="city"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-sm font-medium">City *</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger className="h-12">
+                        <SelectValue placeholder="Bangalore" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="Bangalore">Bangalore</SelectItem>
+                      <SelectItem value="Mumbai">Mumbai</SelectItem>
+                      <SelectItem value="Delhi">Delhi</SelectItem>
+                      <SelectItem value="Pune">Pune</SelectItem>
+                      <SelectItem value="Hyderabad">Hyderabad</SelectItem>
+                      <SelectItem value="Chennai">Chennai</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-                    <FormField
-                      control={form.control}
-                      name="landmark"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className="text-sm font-medium">Landmark (Optional)</FormLabel>
-                          <FormControl>
-                            <Input
-                              placeholder="e.g., Near Metro Station"
-                              className="h-12"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-
-                  {showMap && (
-                    <div className="w-full h-64 md:h-80 rounded-lg border overflow-hidden">
-                      <div ref={mapContainerRef} className="w-full h-full" />
+            <FormField
+              control={form.control}
+              name="locality"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-sm font-medium flex items-center gap-2">
+                    <MapPin className="h-4 w-4 text-primary" />
+                    Locality *
+                  </FormLabel>
+                  <FormControl>
+                    <div className="relative">
+                      <Input
+                        placeholder="Sarjapur"
+                        className="h-12 pl-10"
+                        {...field}
+                        ref={(el) => {
+                          field.ref(el)
+                          localityInputRef.current = el
+                        }}
+                      />
+                      <MapPin className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                      <button type="button" className="absolute right-3 top-3 h-4 w-4 text-muted-foreground">
+                        ×
+                      </button>
                     </div>
-                  )}
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
 
-                  {/* Navigation Buttons */}
-                  <div className="flex justify-between pt-6">
-                    <Button type="button" variant="outline" onClick={onBack} className="h-12 px-8">
-                      <ArrowLeft className="h-4 w-4 mr-2" />
-                      Back
-                    </Button>
-                    <Button type="submit" className="h-12 px-8">
-                      Save & Continue
-                      <ArrowRight className="h-4 w-4 ml-2" />
-                    </Button>
+          {/* Landmark / Street */}
+          <FormField
+            control={form.control}
+            name="landmark"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-sm font-medium">Landmark / Street *</FormLabel>
+                <FormControl>
+                  <div className="relative">
+                    <Input
+                      placeholder="Sarjapura Main Road"
+                      className="h-12 pr-10"
+                      {...field}
+                    />
+                    <button type="button" className="absolute right-3 top-3 h-4 w-4 text-muted-foreground">
+                      ×
+                    </button>
                   </div>
-                </form>
-              </Form>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          {/* Mark Locality on Map */}
+          <div className="space-y-4">
+            <div className="flex items-center gap-2">
+              <MapPin className="h-5 w-5 text-primary" />
+              <span className="font-medium text-primary">Mark Locality on Map</span>
+            </div>
+            <p className="text-sm text-gray-600">Set property location by using search box and move the map</p>
+            
+            {/* Map Container */}
+            <div className="relative">
+              <div className="w-full h-64 md:h-80 rounded-lg border overflow-hidden bg-gray-100">
+                <div ref={mapContainerRef} className="w-full h-full" />
+                {!showMap && (
+                  <div className="flex items-center justify-center h-full">
+                    <p className="text-gray-500">Map will appear when you enter locality</p>
+                  </div>
+                )}
+              </div>
+              
+              {/* Search box overlay on map */}
+              <div className="absolute top-4 left-4 right-4">
+                <div className="relative">
+                  <MapPin className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                  <Input
+                    placeholder="Search your society or nearest landmark"
+                    className="h-12 pl-10 bg-white shadow-md"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Navigation Buttons */}
+          <div className="flex justify-between pt-6">
+            <Button type="button" variant="outline" onClick={onBack} className="h-12 px-8">
+              Back
+            </Button>
+            <Button type="submit" className="h-12 px-8 bg-red-500 hover:bg-red-600 text-white">
+              Save & Continue
+            </Button>
+          </div>
+        </form>
+      </Form>
     </div>
   );
 };

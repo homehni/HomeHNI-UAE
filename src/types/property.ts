@@ -63,6 +63,14 @@ export interface PropertyAmenities {
   currentPropertyCondition?: string;
   moreSimilarUnits?: boolean;
   directionsTip?: string;
+  bathrooms?: number;
+  balconies?: number;
+  petAllowed?: boolean;
+  nonVegAllowed?: boolean;
+  gym?: boolean;
+  gatedSecurity?: boolean;
+  whoWillShowProperty?: string;
+  secondaryNumber?: string;
 }
 
 export interface CategorizedImages {
