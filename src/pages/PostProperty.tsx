@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { PropertySelectionStep } from '@/components/property-form/PropertySelectionStep';
 import { OwnerInfoStep } from '@/components/property-form/OwnerInfoStep';
 import { MultiStepForm } from '@/components/property-form/MultiStepForm';
 import { ResaleMultiStepForm } from '@/components/property-form/ResaleMultiStepForm';
@@ -22,13 +23,19 @@ import { generatePropertyName } from '@/utils/propertyNameGenerator';
 import Header from '@/components/Header';
 import Marquee from '@/components/Marquee';
 
-type FormStep = 'owner-info' | 'rental-form' | 'resale-form' | 'pg-hostel-form' | 'flatmates-form' | 'commercial-rental-form' | 'commercial-sale-form' | 'land-plot-form';
+type FormStep = 'property-selection' | 'owner-info' | 'rental-form' | 'resale-form' | 'pg-hostel-form' | 'flatmates-form' | 'commercial-rental-form' | 'commercial-sale-form' | 'land-plot-form';
 
 export const PostProperty: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [currentStep, setCurrentStep] = useState<FormStep>('owner-info');
+  const [currentStep, setCurrentStep] = useState<FormStep>('property-selection');
   const [ownerInfo, setOwnerInfo] = useState<OwnerInfo | null>(null);
   const [initialOwnerData, setInitialOwnerData] = useState<Partial<OwnerInfo>>({});
+  const [propertySelectionData, setPropertySelectionData] = useState<{
+    city: string;
+    whatsappUpdates: boolean;
+    propertyType: 'Residential' | 'Commercial' | 'Land/Plot';
+    listingType: 'Rent' | 'Resale' | 'PG/Hostel' | 'Flatmates';
+  } | null>(null);
   const [targetStep, setTargetStep] = useState<number | null>(null);
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -185,6 +192,21 @@ export const PostProperty: React.FC = () => {
         variant: "destructive",
       });
     }
+  };
+
+  const handlePropertySelectionNext = (data: {
+    city: string;
+    whatsappUpdates: boolean;
+    propertyType: 'Residential' | 'Commercial' | 'Land/Plot';
+    listingType: 'Rent' | 'Resale' | 'PG/Hostel' | 'Flatmates';
+  }) => {
+    setPropertySelectionData(data);
+    setInitialOwnerData({
+      whatsappUpdates: data.whatsappUpdates,
+      propertyType: data.propertyType,
+      listingType: data.listingType
+    });
+    setCurrentStep('owner-info');
   };
 
   const handleOwnerInfoNext = (data: OwnerInfo) => {
@@ -694,6 +716,8 @@ export const PostProperty: React.FC = () => {
 
   const renderCurrentStep = () => {
     switch (currentStep) {
+      case 'property-selection':
+        return <PropertySelectionStep onNext={handlePropertySelectionNext} />;
       case 'owner-info':
         return <OwnerInfoStep initialData={initialOwnerData} onNext={handleOwnerInfoNext} />;
       case 'rental-form':
@@ -760,20 +784,13 @@ export const PostProperty: React.FC = () => {
           />
         );
       default:
-        return <OwnerInfoStep initialData={{}} onNext={handleOwnerInfoNext} />;
+        return <PropertySelectionStep onNext={handlePropertySelectionNext} />;
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50/30 to-indigo-100/30">
-      {/* Marquee at the very top */}
-      <Marquee />
-      {/* Header overlapping with content */}
-      <Header />
-      {/* Content starts with proper spacing */}
-      <div className="pt-32">
-        {renderCurrentStep()}
-      </div>
+    <div className="min-h-screen">
+      {renderCurrentStep()}
     </div>
   );
 };

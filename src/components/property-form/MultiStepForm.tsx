@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { usePropertyForm } from '@/hooks/usePropertyForm';
 import { ProgressIndicator } from './ProgressIndicator';
+import { PropertyFormSidebar } from './PropertyFormSidebar';
 import { PropertyDetailsStep } from './PropertyDetailsStep';
 import { LocationDetailsStep } from './LocationDetailsStep';
 import { RentalDetailsStep } from './RentalDetailsStep';
@@ -9,7 +10,7 @@ import { GalleryStep } from './GalleryStep';
 import { AdditionalInfoStep } from './AdditionalInfoStep';
 import { ScheduleStep } from './ScheduleStep';
 import { PreviewStep } from './PreviewStep';
-import { RentalSidebar } from './RentalSidebar';
+import { Home, MapPin, DollarSign, Sparkles, Camera, Info, Calendar, CheckCircle } from 'lucide-react';
 
 import { OwnerInfo, PropertyInfo } from '@/types/property';
 import { Badge } from '@/components/ui/badge';
@@ -171,38 +172,47 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
     }
   };
 
-  return (
-    <div className="max-w-7xl mx-auto px-4 py-8">
-      {/* Page Header */}
-      <div className="text-center mb-8 animate-fade-in">
-        <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-          List Your Property for Rent
-        </h1>
-        <p className="text-gray-600 text-lg">
-          Fill in the details below to list your property for rent on our platform
-        </p>
-      </div>
+  const sidebarSteps = [
+    { title: "Property Details", icon: <Home className="w-4 h-4" /> },
+    { title: "Locality Details", icon: <MapPin className="w-4 h-4" /> },
+    { title: "Rental Details", icon: <DollarSign className="w-4 h-4" /> },
+    { title: "Amenities", icon: <Sparkles className="w-4 h-4" /> },
+    { title: "Gallery", icon: <Camera className="w-4 h-4" /> },
+    { title: "Schedule", icon: <Calendar className="w-4 h-4" /> },
+  ];
 
-      {/* Form Container */}
-      <div className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden animate-scale-in">
-        {/* Progress Indicator inside container */}
-        <div className="px-6 md:px-8 pt-6 md:pt-8 pb-4">
-          <ProgressIndicator
-            currentStep={currentStep}
-            totalSteps={8}
-            completedSteps={completedSteps}
-          />
-        </div>
-        <div className="flex">
-          {/* Sidebar - Hidden on mobile and tablet, visible on desktop */}
-          <div className="hidden lg:block">
-            <RentalSidebar currentStep={currentStep} />
+  return (
+    <div className="min-h-screen bg-gray-50">
+      <div className="flex">
+        {/* Sidebar */}
+        <PropertyFormSidebar
+          currentStep={currentStep}
+          completedSteps={completedSteps}
+          steps={sidebarSteps}
+        />
+
+        {/* Main Content */}
+        <div className="flex-1">
+          {/* Progress Bar */}
+          <div className="bg-white border-b border-gray-200 px-6 py-4">
+            <div className="max-w-4xl mx-auto">
+              <div className="flex items-center justify-between mb-2">
+                <h1 className="text-xl font-semibold text-gray-900">Property Details</h1>
+                <span className="text-sm text-gray-500">{currentStep}/8</span>
+              </div>
+              <div className="w-full bg-gray-200 rounded-full h-2">
+                <div 
+                  className="bg-teal-600 h-2 rounded-full transition-all duration-300"
+                  style={{ width: `${(currentStep / 8) * 100}%` }}
+                ></div>
+              </div>
+            </div>
           </div>
-          
-          {/* Main Content */}
-          <div className="flex-1">
-            {currentStep === 1 && (
-              <div className="p-6 md:p-8">
+
+          {/* Form Content */}
+          <div className="p-6">
+            <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+              {currentStep === 1 && (
                 <PropertyDetailsStep
                   initialData={propertyDetails}
                   onNext={handlePropertyDetailsNext}
@@ -210,11 +220,9 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
                   currentStep={currentStep}
                   totalSteps={8}
                 />
-              </div>
-            )}
+              )}
 
-            {currentStep === 2 && (
-              <div className="p-6 md:p-8">
+              {currentStep === 2 && (
                 <LocationDetailsStep
                   initialData={{
                     ...locationDetails
@@ -224,11 +232,9 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
                   currentStep={currentStep}
                   totalSteps={8}
                 />
-              </div>
-            )}
+              )}
 
-            {currentStep === 3 && (
-              <div className="p-6 md:p-8">
+              {currentStep === 3 && (
                 <RentalDetailsStep
                   initialData={rentalDetails}
                   onNext={handleRentalDetailsNext}
@@ -236,21 +242,17 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
                   currentStep={currentStep}
                   totalSteps={8}
                 />
-              </div>
-            )}
+              )}
 
-            {currentStep === 4 && (
-              <div className="p-6 md:p-8">
+              {currentStep === 4 && (
                 <AmenitiesStep
                   initialData={amenities}
                   onNext={handleAmenitiesNext}
                   onBack={prevStep}
                 />
-              </div>
-            )}
+              )}
 
-            {currentStep === 5 && (
-              <div className="p-6 md:p-8">
+              {currentStep === 5 && (
                 <GalleryStep
                   initialData={gallery}
                   onNext={handleGalleryNext}
@@ -258,31 +260,25 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
                   onSubmit={handleSubmit}
                   isSubmitting={isSubmitting}
                 />
-              </div>
-            )}
+              )}
 
-            {currentStep === 6 && (
-              <div className="p-6 md:p-8">
+              {currentStep === 6 && (
                 <AdditionalInfoStep
                   initialData={additionalInfo}
                   onNext={handleAdditionalInfoNext}
                   onBack={prevStep}
                 />
-              </div>
-            )}
+              )}
 
-            {currentStep === 7 && (
-              <div className="p-6 md:p-8">
+              {currentStep === 7 && (
                 <ScheduleStep
                   initialData={scheduleInfo}
                   onNext={handleScheduleNext}
                   onBack={prevStep}
                 />
-              </div>
-            )}
+              )}
 
-            {currentStep === 8 && (
-              <div className="p-6 md:p-8">
+              {currentStep === 8 && (
                 <PreviewStep
                   formData={getFormData()}
                   onBack={prevStep}
@@ -290,12 +286,11 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
                   onSubmit={handleSubmit}
                   isSubmitting={isSubmitting}
                 />
-              </div>
-            )}
+              )}
+            </div>
           </div>
         </div>
       </div>
-
     </div>
   );
 };

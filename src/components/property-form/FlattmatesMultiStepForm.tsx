@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { ProgressIndicator } from './ProgressIndicator';
+import { PropertyFormSidebar } from './PropertyFormSidebar';
 import { FlattmatesPropertyDetailsStep } from './FlattmatesPropertyDetailsStep';
 import { FlattmatesLocationDetailsStep } from './FlattmatesLocationDetailsStep';
 import { FlattmatesRentalDetailsStep } from './FlattmatesRentalDetailsStep';
@@ -8,7 +9,7 @@ import { FlattmatesAmenitiesStep } from './FlattmatesAmenitiesStep';
 import { GalleryStep } from './GalleryStep';
 import { ScheduleStep } from './ScheduleStep';
 import { PreviewStep } from './PreviewStep';
-import { FlattmatesSidebar } from './FlattmatesSidebar';
+import { Home, MapPin, DollarSign, Sparkles, Camera, Calendar } from 'lucide-react';
 import { OwnerInfo, PropertyDetails, LocationDetails, PropertyGallery, AdditionalInfo, ScheduleInfo, FlattmatesFormData } from '@/types/property';
 
 interface FlattmatesMultiStepFormProps {
@@ -235,91 +236,118 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
     onSubmit(formData);
   };
 
+  const sidebarSteps = [
+    { title: "Property Details", icon: <Home className="w-4 h-4" /> },
+    { title: "Locality Details", icon: <MapPin className="w-4 h-4" /> },
+    { title: "Rental Details", icon: <DollarSign className="w-4 h-4" /> },
+    { title: "Amenities", icon: <Sparkles className="w-4 h-4" /> },
+    { title: "Gallery", icon: <Camera className="w-4 h-4" /> },
+    { title: "Schedule", icon: <Calendar className="w-4 h-4" /> },
+  ];
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50/30 to-teal-100/30">      
-      <div className="flex min-h-screen">
-        <FlattmatesSidebar 
-          currentStep={currentStep} 
-          completedSteps={completedSteps} 
+    <div className="min-h-screen bg-gray-50">
+      <div className="flex">
+        {/* Sidebar */}
+        <PropertyFormSidebar
+          currentStep={currentStep}
+          completedSteps={completedSteps}
+          steps={sidebarSteps}
         />
         
-        <div className="flex-1 p-4 lg:p-8">
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 lg:p-8">
-            <ProgressIndicator 
-              currentStep={currentStep} 
-              totalSteps={7} 
-              completedSteps={completedSteps} 
-            />
-        
-        {currentStep === 1 && (
-          <FlattmatesPropertyDetailsStep
-            initialData={propertyDetails}
-            onNext={handlePropertyDetailsNext}
-            onBack={() => {}}
-            currentStep={1}
-            totalSteps={7}
-            completedSteps={completedSteps}
-          />
-        )}
+        {/* Main Content */}
+        <div className="flex-1">
+          {/* Progress Bar */}
+          <div className="bg-white border-b border-gray-200 px-6 py-4">
+            <div className="max-w-4xl mx-auto">
+              <div className="flex items-center justify-between mb-2">
+                <h1 className="text-xl font-semibold text-gray-900">
+                  Provide additional details about your property to get maximum visibility
+                </h1>
+                <span className="text-sm text-gray-500">{currentStep}/6</span>
+              </div>
+              <div className="w-full bg-gray-200 rounded-full h-2">
+                <div 
+                  className="bg-teal-600 h-2 rounded-full transition-all duration-300"
+                  style={{ width: `${(currentStep / 6) * 100}%` }}
+                ></div>
+              </div>
+            </div>
+          </div>
 
-        {currentStep === 2 && (
-          <FlattmatesLocationDetailsStep
-            initialData={locationDetails}
-            onNext={handleLocationDetailsNext}
-            onBack={prevStep}
-            currentStep={2}
-            totalSteps={7}
-          />
-        )}
+          {/* Form Content */}
+          <div className="p-6">
+            <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+              {currentStep === 1 && (
+                <FlattmatesPropertyDetailsStep
+                  initialData={propertyDetails}
+                  onNext={handlePropertyDetailsNext}
+                  onBack={() => {}}
+                  currentStep={1}
+                  totalSteps={7}
+                  completedSteps={completedSteps}
+                />
+              )}
 
-        {currentStep === 3 && (
-          <FlattmatesRentalDetailsStep
-            initialData={rentalDetails}
-            onNext={handleRentalDetailsNext}
-            onBack={prevStep}
-            currentStep={3}
-            totalSteps={7}
-            completedSteps={completedSteps}
-          />
-        )}
+              {currentStep === 2 && (
+                <FlattmatesLocationDetailsStep
+                  initialData={locationDetails}
+                  onNext={handleLocationDetailsNext}
+                  onBack={prevStep}
+                  currentStep={2}
+                  totalSteps={7}
+                />
+              )}
 
-        {currentStep === 4 && (
-          <FlattmatesAmenitiesStep
-            initialData={amenities}
-            onNext={handleAmenitiesNext}
-            onBack={prevStep}
-          />
-        )}
+              {currentStep === 3 && (
+                <FlattmatesRentalDetailsStep
+                  initialData={rentalDetails}
+                  onNext={handleRentalDetailsNext}
+                  onBack={prevStep}
+                  currentStep={3}
+                  totalSteps={7}
+                  completedSteps={completedSteps}
+                />
+              )}
 
-        {currentStep === 5 && (
-          <GalleryStep
-            initialData={gallery}
-            onNext={handleGalleryNext}
-            onBack={prevStep}
-            currentStep={5}
-            totalSteps={7}
-            onSubmit={handleSubmit}
-            isSubmitting={isSubmitting}
-          />
-        )}
+              {currentStep === 4 && (
+                <FlattmatesAmenitiesStep
+                  initialData={amenities}
+                  onNext={handleAmenitiesNext}
+                  onBack={prevStep}
+                />
+              )}
 
-        {currentStep === 6 && (
-          <ScheduleStep
-            initialData={scheduleInfo}
-            onNext={handleScheduleNext}
-            onBack={prevStep}
-          />
-        )}
+              {currentStep === 5 && (
+                <GalleryStep
+                  initialData={gallery}
+                  onNext={handleGalleryNext}
+                  onBack={prevStep}
+                  currentStep={5}
+                  totalSteps={7}
+                  onSubmit={handleSubmit}
+                  isSubmitting={isSubmitting}
+                />
+              )}
 
-        {currentStep === 7 && (
-          <PreviewStep
-            formData={getFormData()}
-            onBack={prevStep}
-            onEdit={goToStep}
-            onSubmit={handleSubmit}
-            isSubmitting={isSubmitting}
-          />
-        )}
+              {currentStep === 6 && (
+                <ScheduleStep
+                  initialData={scheduleInfo}
+                  onNext={handleScheduleNext}
+                  onBack={prevStep}
+                />
+              )}
+
+              {currentStep === 7 && (
+                <PreviewStep
+                  formData={getFormData()}
+                  onBack={prevStep}
+                  onEdit={goToStep}
+                  onSubmit={handleSubmit}
+                  isSubmitting={isSubmitting}
+                />
+              )}
+            </div>
           </div>
         </div>
       </div>

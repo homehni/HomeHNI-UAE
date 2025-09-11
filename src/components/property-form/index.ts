@@ -1,4 +1,5 @@
 export { MultiStepForm } from './MultiStepForm';
+export { PropertySelectionStep } from './PropertySelectionStep';
 export { OwnerInfoStep } from './OwnerInfoStep';
 export { PropertyDetailsStep } from './PropertyDetailsStep';
 export { LocationDetailsStep } from './LocationDetailsStep';
@@ -20,7 +21,7 @@ export { PgHostelRoomDetailsStep } from './PgHostelRoomDetailsStep';
 export { PgHostelLocalityDetailsStep } from './PgHostelLocalityDetailsStep';
 export { PgHostelPgDetailsStep } from './PgHostelPgDetailsStep';
 export { PgHostelAmenitiesStep } from './PgHostelAmenitiesStep';
-export { PgHostelGalleryStep } from './PgHostelGalleryStep';
+export { PropertyFormSidebar } from './PropertyFormSidebar';
 export { PgHostelScheduleStep } from './PgHostelScheduleStep';
 export { FlattmatesMultiStepForm } from './FlattmatesMultiStepForm';
 export { ResaleMultiStepForm } from './ResaleMultiStepForm';
