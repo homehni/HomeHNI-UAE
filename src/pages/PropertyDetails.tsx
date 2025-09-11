@@ -5,6 +5,14 @@ import Marquee from '@/components/Marquee';
 import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import {
+  Breadcrumb,
+  BreadcrumbList,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbSeparator,
+  BreadcrumbPage,
+} from '@/components/ui/breadcrumb';
 import { ContactOwnerModal } from '@/components/ContactOwnerModal';
 import { ScheduleVisitModal } from '@/components/ScheduleVisitModal';
 import EMICalculatorModal from '@/components/EMICalculatorModal';
@@ -328,6 +336,45 @@ const PropertyDetails: React.FC = () => {
       <Marquee />
       <Header />
       <main className="flex-1">
+        {/* Breadcrumb Navigation */}
+        <section className="bg-background border-b">
+          <div className="container mx-auto px-4 py-4">
+            <Breadcrumb>
+              <BreadcrumbList>
+                <BreadcrumbItem>
+                  <BreadcrumbLink 
+                    href="/" 
+                    onClick={(e) => {
+                      e.preventDefault();
+                      navigate('/');
+                    }}
+                  >
+                    Home
+                  </BreadcrumbLink>
+                </BreadcrumbItem>
+                <BreadcrumbSeparator />
+                <BreadcrumbItem>
+                  <BreadcrumbLink 
+                    href="/properties" 
+                    onClick={(e) => {
+                      e.preventDefault();
+                      navigate('/properties');
+                    }}
+                  >
+                    Properties
+                  </BreadcrumbLink>
+                </BreadcrumbItem>
+                <BreadcrumbSeparator />
+                <BreadcrumbItem>
+                  <BreadcrumbPage>
+                    {property.title}
+                  </BreadcrumbPage>
+                </BreadcrumbItem>
+              </BreadcrumbList>
+            </Breadcrumb>
+          </div>
+        </section>
+
         {/* Loading indicator for data refresh */}
         {loading && (
           <div className="bg-blue-50 border-b border-blue-200 py-2">
