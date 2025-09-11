@@ -168,7 +168,7 @@ export const Auth: React.FC = () => {
             <CardHeader className="text-center pb-6 pt-8">
               <div className="flex items-center justify-center mb-6">
                 <img 
-                  src="/lovable-uploads/509b029e-6089-4158-baa9-ab0b79aba805.png"
+                  src="/lovable-uploads/b90cb5cf-9777-4b49-b4e5-6fb3a504a2b0.png"
                   alt="Home HNI Logo" 
                   className="h-16 w-auto"
                 />
