@@ -176,25 +176,14 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
               name="apartmentName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-sm font-medium">
-                    Apartment Name <span className="text-red-500">(Please select from dropdown)*</span>
-                  </FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <FormControl>
-                      <SelectTrigger className="h-12">
-                        <SelectValue placeholder="e.g. Ajmera Enclave" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="Ajmera Enclave">Ajmera Enclave</SelectItem>
-                      <SelectItem value="DLF Phase 1">DLF Phase 1</SelectItem>
-                      <SelectItem value="Brigade Gateway">Brigade Gateway</SelectItem>
-                      <SelectItem value="Prestige Shantiniketan">Prestige Shantiniketan</SelectItem>
-                      <SelectItem value="Sobha City">Sobha City</SelectItem>
-                      <SelectItem value="Mantri Espana">Mantri Espana</SelectItem>
-                      <SelectItem value="Other">Other</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <FormLabel className="text-sm font-medium">Apartment Name</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="e.g. Ajmera Enclave"
+                      className="h-12"
+                      {...field}
+                    />
+                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
