@@ -141,7 +141,7 @@ export const ResaleMultiStepForm: React.FC<ResaleMultiStepFormProps> = ({
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="flex">
+      <div className="flex max-w-7xl mx-auto">
         {/* Sidebar */}
         <PropertyFormSidebar
           currentStep={currentStep}
@@ -150,26 +150,24 @@ export const ResaleMultiStepForm: React.FC<ResaleMultiStepFormProps> = ({
         />
 
         {/* Main Content */}
-        <div className="flex-1">
+        <div className="flex-1 min-w-0">
           {/* Progress Bar */}
-          <div className="bg-white border-b border-gray-200 px-6 py-4">
-            <div className="max-w-4xl mx-auto">
-              <div className="flex items-center justify-between mb-2">
-                <h1 className="text-xl font-semibold text-gray-900">Property Details</h1>
-                <span className="text-sm text-gray-500">{currentStep}/6</span>
-              </div>
-              <div className="w-full bg-gray-200 rounded-full h-2">
-                <div 
-                  className="bg-teal-600 h-2 rounded-full transition-all duration-300"
-                  style={{ width: `${(currentStep / 6) * 100}%` }}
-                ></div>
-              </div>
+          <div className="bg-white border-b border-gray-200 px-8 py-6">
+            <div className="flex items-center justify-between mb-4">
+              <h1 className="text-2xl font-semibold text-gray-900">Property Details</h1>
+              <span className="text-sm text-gray-500 bg-gray-100 px-3 py-1 rounded-full">{currentStep}/6</span>
+            </div>
+            <div className="w-full bg-gray-200 rounded-full h-2">
+              <div 
+                className="bg-teal-600 h-2 rounded-full transition-all duration-300"
+                style={{ width: `${(currentStep / 6) * 100}%` }}
+              ></div>
             </div>
           </div>
 
           {/* Form Content */}
-          <div className="p-6">
-            <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <div className="p-8">
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
               {currentStep === 1 && (
                 <ResalePropertyDetailsStep
                   initialData={propertyDetails}

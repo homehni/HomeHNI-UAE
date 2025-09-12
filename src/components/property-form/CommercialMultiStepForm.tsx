@@ -201,30 +201,32 @@ export const CommercialMultiStepForm: React.FC<CommercialMultiStepFormProps> = (
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <div className="bg-white border-b border-gray-200 px-6 py-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <Badge variant="secondary" className="px-3 py-1">Commercial</Badge>
-            <span className="text-lg font-semibold">Post Your Commercial Property</span>
-          </div>
-          <div className="flex items-center space-x-4">
-            <span className="text-sm text-gray-600">
-              Step {currentStep} of 7
-            </span>
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="bg-white border-b border-gray-200 px-8 py-6">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <Badge variant="secondary" className="px-3 py-1 text-sm">Commercial</Badge>
+              <span className="text-2xl font-semibold text-gray-900">Post Your Commercial Property</span>
+            </div>
+            <div className="flex items-center space-x-4">
+              <span className="text-sm text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
+                Step {currentStep} of 7
+              </span>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div className="flex">
-        <CommercialSidebar
-          currentStep={currentStep}
-          completedSteps={completedSteps}
-          onStepClick={goToStep}
-        />
-        
-        <div className="flex-1 p-4 lg:p-6">
-          {renderCurrentStep()}
+        <div className="flex">
+          <CommercialSidebar
+            currentStep={currentStep}
+            completedSteps={completedSteps}
+            onStepClick={goToStep}
+          />
+          
+          <div className="flex-1 min-w-0 p-8">
+            {renderCurrentStep()}
+          </div>
         </div>
       </div>
     </div>
