@@ -290,8 +290,8 @@ const PropertyDetails: React.FC = () => {
                     property?.property_type?.toLowerCase().includes('coliving');
   const mergedProperty = property ? {
     ...(property as any),
-    amenities: (property as any)?.amenities ?? dbAmenities ?? undefined,
-    additional_documents: (property as any)?.additional_documents ?? dbAdditionalDocs ?? undefined,
+    amenities: (property as any)?.amenities || dbAmenities || undefined,
+    additional_documents: (property as any)?.additional_documents || dbAdditionalDocs || undefined,
     ...(pgHostelData || {})
   } : property;
 
@@ -299,7 +299,7 @@ const PropertyDetails: React.FC = () => {
   const pgData: any = pgHostelData || {};
   const mergedAmenities = isPGHostel
     ? { ...(pgData?.amenities || {}), ...(pgData?.available_services || {}) }
-    : ((property as any)?.amenities ?? dbAmenities ?? undefined);
+    : ((property as any)?.amenities || dbAmenities || undefined);
 
   console.log('PropertyDetails amenities debug:', {
     propertyAmenities: (property as any)?.amenities,
