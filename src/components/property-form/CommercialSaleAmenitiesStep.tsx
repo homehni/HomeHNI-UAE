@@ -47,7 +47,7 @@ export const CommercialSaleAmenitiesStep = ({
       parking: initialData?.parking || '',
       washrooms: initialData?.washrooms || '',
       waterStorageFacility: initialData?.waterStorageFacility || '',
-      security: String(initialData?.security || ''),
+      security: initialData?.security || '',
       currentPropertyCondition: initialData?.currentPropertyCondition || '',
       currentBusiness: initialData?.currentBusiness || '',
       

@@ -34,10 +34,10 @@ const amenitiesSchema = z.object({
   
   // Amenities
   lift: z.boolean().optional(),
-  internetServices: z.boolean().optional(),
-  airConditioner: z.boolean().optional(),
-  clubHouse: z.boolean().optional(),
-  intercom: z.boolean().optional(),
+  powerBackup: z.boolean().optional(),
+  waterStorageFacility: z.boolean().optional(),
+  security: z.boolean().optional(),
+  wifi: z.boolean().optional(),
   swimmingPool: z.boolean().optional(),
   childrenPlayArea: z.boolean().optional(),
   fireSafety: z.boolean().optional(),

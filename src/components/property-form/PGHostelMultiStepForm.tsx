@@ -261,9 +261,9 @@ const [propertyInfo, setPropertyInfo] = useState({
       amenities: {
         powerBackup: amenities.powerBackup ? 'Available' : 'Not Available',
         lift: amenities.lift ? 'Available' : 'Not Available',
-        parking: amenities.parking !== 'none' ? 'Available' : 'Not Available',
-        waterStorageFacility: 'Available',
-        security: 'Available',
+        parking: amenities.parking || 'Not Available',
+        waterStorageFacility: amenities.waterStorageFacility ? 'Available' : 'Not Available',
+        security: amenities.security ? 'Available' : 'Not Available',
         wifi: amenities.wifi ? 'Available' : 'Not Available',
         meals: amenities.mess ? 'breakfast' : 'none',
         laundry: amenities.laundry === 'yes' ? 'included' : 'not-available',

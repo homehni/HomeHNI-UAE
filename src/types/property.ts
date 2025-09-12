@@ -51,15 +51,42 @@ export interface RentalDetails {
 }
 
 export interface PropertyAmenities {
-  powerBackup?: string;
-  lift?: string;
-  parking?: string;
-  waterStorageFacility?: string;
-  security?: string;
-  wifi?: string;
+  bathrooms?: number;
+  balconies?: number;
+  waterSupply?: string;
+  petAllowed?: boolean;
+  gym?: boolean;
+  nonVegAllowed?: boolean;
+  gatedSecurity?: boolean;
+  whoWillShow?: string;
   currentPropertyCondition?: string;
+  secondaryNumber?: string;
   moreSimilarUnits?: boolean;
   directionsTip?: string;
+  
+  // Amenities (boolean for consistency with AmenitiesStep)
+  lift?: boolean;
+  powerBackup?: boolean;
+  waterStorageFacility?: boolean;
+  security?: boolean;
+  wifi?: boolean;
+  parking?: string;
+  internetServices?: boolean;
+  airConditioner?: boolean;
+  clubHouse?: boolean;
+  intercom?: boolean;
+  swimmingPool?: boolean;
+  childrenPlayArea?: boolean;
+  fireSafety?: boolean;
+  servantRoom?: boolean;
+  shoppingCenter?: boolean;
+  gasPipeline?: boolean;
+  park?: boolean;
+  rainWaterHarvesting?: boolean;
+  sewageTreatmentPlant?: boolean;
+  houseKeeping?: boolean;
+  vastu?: boolean;
+  visitorParking?: boolean;
 }
 
 export interface CategorizedImages {

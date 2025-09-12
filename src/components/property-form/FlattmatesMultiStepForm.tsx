@@ -204,12 +204,12 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
         idealFor: []
       },
       amenities: {
-        powerBackup: amenities.powerBackup,
-        lift: amenities.lift,
+        powerBackup: amenities.powerBackup ? 'Available' : 'Not Available',
+        lift: amenities.lift ? 'Available' : 'Not Available',
         parking: amenities.parking,
-        waterStorageFacility: amenities.waterStorageFacility,
-        security: amenities.security,
-        wifi: amenities.wifi,
+        waterStorageFacility: amenities.waterStorageFacility ? 'Available' : 'Not Available',
+        security: amenities.security ? 'Available' : 'Not Available',
+        wifi: amenities.wifi ? 'Available' : 'Not Available',
         currentPropertyCondition: amenities.currentPropertyCondition,
         directionsTip: amenities.directionsTip,
         sharedKitchen: true,
