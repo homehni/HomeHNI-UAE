@@ -200,17 +200,17 @@ export const CommercialMultiStepForm: React.FC<CommercialMultiStepFormProps> = (
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-6xl mx-auto h-screen flex flex-col">
+    <div className="h-screen bg-gray-50 overflow-hidden">
+      <div className="max-w-6xl mx-auto h-full flex flex-col">
         {/* Header */}
-        <div className="bg-white border-b border-gray-200 px-6 py-3">
+        <div className="bg-white border-b border-gray-200 px-4 py-2 flex-shrink-0">
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <Badge variant="secondary" className="px-3 py-1 text-sm">Commercial</Badge>
-              <span className="text-lg font-semibold text-gray-900">Post Your Commercial Property</span>
+            <div className="flex items-center space-x-2">
+              <Badge variant="secondary" className="px-2 py-1 text-xs">Commercial</Badge>
+              <span className="text-base font-semibold text-gray-900">Post Your Commercial Property</span>
             </div>
-            <div className="flex items-center space-x-4">
-              <span className="text-sm text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
+            <div className="flex items-center space-x-2">
+              <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
                 Step {currentStep} of 7
               </span>
             </div>
@@ -224,7 +224,7 @@ export const CommercialMultiStepForm: React.FC<CommercialMultiStepFormProps> = (
             onStepClick={goToStep}
           />
           
-          <div className="flex-1 min-w-0 p-4 bg-white overflow-y-auto">
+          <div className="flex-1 min-w-0 p-3 bg-white overflow-hidden">
             {renderCurrentStep()}
           </div>
         </div>
