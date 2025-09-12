@@ -157,61 +157,63 @@ export const ResaleScheduleStep: React.FC<ResaleScheduleStepProps> = ({
                           onCheckedChange={(checked) => {
                             field.onChange(checked);
                             if (checked) {
-                              form.setValue('startTime', '');
-                              form.setValue('endTime', '');
+                              form.setValue('startTime', '10:00');
+                              form.setValue('endTime', '19:00');
                             }
                           }}
                         />
                       </FormControl>
                       <FormLabel className="text-sm font-medium cursor-pointer">
-                        Available All Day (9 AM to 7 PM)
+                        Available All Day (10 AM to 7 PM)
                       </FormLabel>
                     </FormItem>
                   )}
                 />
                 
-                {!watchAvailableAllDay && (
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <FormField
-                      control={form.control}
-                      name="startTime"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className="text-sm font-medium">Start Time</FormLabel>
-                          <FormControl>
-                            <div className="relative">
-                              <Clock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                              <Input
-                                type="time"
-                                className="pl-10 h-11"
-                                {...field}
-                              />
-                            </div>
-                          </FormControl>
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="endTime"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className="text-sm font-medium">End Time</FormLabel>
-                          <FormControl>
-                            <div className="relative">
-                              <Clock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                              <Input
-                                type="time"
-                                className="pl-10 h-11"
-                                {...field}
-                              />
-                            </div>
-                          </FormControl>
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                )}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <FormField
+                    control={form.control}
+                    name="startTime"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-sm font-medium">Start Time</FormLabel>
+                        <FormControl>
+                          <div className="relative">
+                            <Clock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                            <Input
+                              type="time"
+                              className="pl-10 h-11"
+                              disabled={watchAvailableAllDay}
+                              value={watchAvailableAllDay ? '10:00' : field.value}
+                              onChange={!watchAvailableAllDay ? field.onChange : undefined}
+                            />
+                          </div>
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="endTime"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-sm font-medium">End Time</FormLabel>
+                        <FormControl>
+                          <div className="relative">
+                            <Clock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                            <Input
+                              type="time"
+                              className="pl-10 h-11"
+                              disabled={watchAvailableAllDay}
+                              value={watchAvailableAllDay ? '19:00' : field.value}
+                              onChange={!watchAvailableAllDay ? field.onChange : undefined}
+                            />
+                          </div>
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
+                </div>
               </div>
             </div>
 

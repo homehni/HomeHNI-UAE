@@ -250,7 +250,6 @@ export const CommercialSaleScheduleStep = ({
             <div>
               <h3 className="text-lg font-semibold mb-4">Select Time Schedule</h3>
               <div className="space-y-4">
-                {!watchAvailableAllDay && (
                   <div className="grid grid-cols-2 gap-4">
                     <div className="flex items-center space-x-2 border rounded-lg p-3">
                       <div className="w-5 h-5 rounded-full border-2 border-gray-300 flex items-center justify-center">
@@ -262,8 +261,9 @@ export const CommercialSaleScheduleStep = ({
                         render={({ field }) => (
                           <Input
                             type="time"
-                            defaultValue="07:00"
-                            {...field}
+                            value={watchAvailableAllDay ? '10:00' : field.value}
+                            disabled={watchAvailableAllDay}
+                            onChange={!watchAvailableAllDay ? field.onChange : undefined}
                             className="border-0 p-0 h-auto"
                           />
                         )}
@@ -279,15 +279,15 @@ export const CommercialSaleScheduleStep = ({
                         render={({ field }) => (
                           <Input
                             type="time"
-                            defaultValue="22:00"
-                            {...field}
+                            value={watchAvailableAllDay ? '19:00' : field.value}
+                            disabled={watchAvailableAllDay}
+                            onChange={!watchAvailableAllDay ? field.onChange : undefined}
                             className="border-0 p-0 h-auto"
                           />
                         )}
                       />
                     </div>
                   </div>
-                )}
                 <FormField
                   control={form.control}
                   name="availableAllDay"

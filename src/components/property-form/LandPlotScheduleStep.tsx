@@ -37,13 +37,15 @@ export const LandPlotScheduleStep: React.FC<LandPlotScheduleStepProps> = ({
     defaultValues: {
       availableAllDay: initialData.availableAllDay ?? true,
       availability: initialData.availability,
-      startTime: initialData.startTime,
-      endTime: initialData.endTime,
+      startTime: initialData.startTime || '10:00',
+      endTime: initialData.endTime || '19:00',
     }
   });
 
   const availability = watch('availability');
   const availableAllDay = watch('availableAllDay');
+  const startTime = watch('startTime');
+  const endTime = watch('endTime');
 
   return (
     <Card className="w-full max-w-4xl mx-auto">
@@ -173,7 +175,6 @@ export const LandPlotScheduleStep: React.FC<LandPlotScheduleStepProps> = ({
             <div>
               <h3 className="text-lg font-semibold text-foreground mb-4">Select Time Schedule</h3>
               <div className="space-y-4">
-                {!availableAllDay && (
                   <div className="grid grid-cols-2 gap-4">
                     <div className="flex items-center space-x-2 border rounded-lg p-3">
                       <div className="w-5 h-5 rounded-full border-2 border-gray-300 flex items-center justify-center">
@@ -181,8 +182,9 @@ export const LandPlotScheduleStep: React.FC<LandPlotScheduleStepProps> = ({
                       </div>
                       <Input
                         type="time"
-                        defaultValue="07:00"
-                        {...register('startTime')}
+                        value={availableAllDay ? '10:00' : startTime || '10:00'}
+                        disabled={availableAllDay}
+                        onChange={(e) => !availableAllDay && setValue('startTime', e.target.value)}
                         className="border-0 p-0 h-auto"
                       />
                     </div>
@@ -192,13 +194,13 @@ export const LandPlotScheduleStep: React.FC<LandPlotScheduleStepProps> = ({
                       </div>
                       <Input
                         type="time"
-                        defaultValue="22:00"
-                        {...register('endTime')}
+                        value={availableAllDay ? '19:00' : endTime || '19:00'}
+                        disabled={availableAllDay}
+                        onChange={(e) => !availableAllDay && setValue('endTime', e.target.value)}
                         className="border-0 p-0 h-auto"
                       />
                     </div>
                   </div>
-                )}
                 <div className="flex items-center space-x-2">
                   <Checkbox
                     id="availableAllDay"
