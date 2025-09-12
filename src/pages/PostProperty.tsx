@@ -154,7 +154,6 @@ export const PostProperty: React.FC = () => {
           fullName: propertyData.owner_name || '',
           email: propertyData.owner_email || '',
           phoneNumber: propertyData.owner_phone || '',
-          role: (propertyData.owner_role as 'Owner' | 'Agent' | 'Builder') || 'Owner',
           whatsappUpdates: false,
           propertyType: (propertyData.property_type === 'commercial' ? 'Commercial' : 
                        propertyData.property_type === 'plot' ? 'Land/Plot' : 'Residential') as 'Residential' | 'Commercial' | 'Land/Plot',
