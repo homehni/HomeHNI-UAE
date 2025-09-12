@@ -373,10 +373,14 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
                         <SelectValue placeholder="Select" />
                       </SelectTrigger>
                     </FormControl>
-                    <SelectContent>
-                      <SelectItem value="owner">Owner</SelectItem>
-                      <SelectItem value="broker">Broker</SelectItem>
-                      <SelectItem value="agent">Agent</SelectItem>
+                    <SelectContent className="bg-background border shadow-lg z-50">
+                      <SelectItem value="need-help">Need help</SelectItem>
+                      <SelectItem value="i-will-show">I will show</SelectItem>
+                      <SelectItem value="neighbours">Neighbours</SelectItem>
+                      <SelectItem value="friends-relatives">Friends/Relatives</SelectItem>
+                      <SelectItem value="security">Security</SelectItem>
+                      <SelectItem value="tenants">Tenants</SelectItem>
+                      <SelectItem value="others">Others</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />
