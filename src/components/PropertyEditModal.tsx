@@ -81,6 +81,10 @@ interface PropertyFormData extends Partial<Property> {
   houseKeeping?: string;
   powerBackup?: string;
   visitorParking?: string;
+  waterStorageFacility?: string;
+  security?: string;
+  wifi?: string;
+  parking?: string;
 }
 
 interface PropertyEditModalProps {
