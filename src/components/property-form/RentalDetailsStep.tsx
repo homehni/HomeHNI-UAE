@@ -270,15 +270,15 @@ export const RentalDetailsStep: React.FC<RentalDetailsStepProps> = ({
                     <FormLabel className="text-sm font-medium text-gray-900">Maintenance Amount *</FormLabel>
                     <FormControl>
                       <div className="relative">
-                        <span className="absolute left-3 top-3 text-gray-500">₹</span>
+                        <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">₹</span>
                         <Input 
                           placeholder="Enter Amount"
-                          className="h-12 pl-8"
+                          className="h-12 pl-8 pr-20"
                           type="number"
                           value={field.value || ''}
                           onChange={(e) => field.onChange(e.target.value ? Number(e.target.value) : undefined)}
                         />
-                        <span className="absolute right-3 top-3 text-gray-500">/ Month</span>
+                        <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-sm text-gray-500">/ Month</span>
                       </div>
                     </FormControl>
                     <FormMessage />
