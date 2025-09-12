@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Compass } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
 import { CommercialPropertyDetails } from '@/types/property';
@@ -15,6 +16,7 @@ const commercialPropertyDetailsSchema = z.object({
   spaceType: z.string().optional(),
   buildingType: z.string().optional(),
   propertyAge: z.string().optional(),
+  facing: z.string().optional(),
   totalFloors: z.union([z.number(), z.string()]).optional(),
   floorNo: z.union([z.number(), z.string()]).optional(),
   furnishingStatus: z.string().optional(),
@@ -51,6 +53,7 @@ export const CommercialPropertyDetailsStep: React.FC<CommercialPropertyDetailsSt
       spaceType: initialData.spaceType || '',
       buildingType: initialData.buildingType || '',
       propertyAge: initialData.propertyAge || '',
+      facing: (initialData as any).facing || '',
       totalFloors: initialData.totalFloors || 1,
       floorNo: initialData.floorNo || 0,
       superBuiltUpArea: initialData.superBuiltUpArea || undefined,
@@ -140,8 +143,8 @@ export const CommercialPropertyDetailsStep: React.FC<CommercialPropertyDetailsSt
               />
             </div>
 
-            {/* Age, Floor, Total Floor */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* Age, Facing */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <FormField
                 control={form.control}
                 name="propertyAge"
@@ -167,6 +170,40 @@ export const CommercialPropertyDetailsStep: React.FC<CommercialPropertyDetailsSt
                 )}
               />
 
+              <FormField
+                control={form.control}
+                name="facing"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-sm font-medium">Facing</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormControl>
+                        <SelectTrigger className="h-12">
+                          <div className="flex items-center gap-2">
+                            <Compass className="h-4 w-4 text-muted-foreground" />
+                            <SelectValue placeholder="Select" />
+                          </div>
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="North">North</SelectItem>
+                        <SelectItem value="South">South</SelectItem>
+                        <SelectItem value="East">East</SelectItem>
+                        <SelectItem value="West">West</SelectItem>
+                        <SelectItem value="North-East">North-East</SelectItem>
+                        <SelectItem value="North-West">North-West</SelectItem>
+                        <SelectItem value="South-East">South-East</SelectItem>
+                        <SelectItem value="South-West">South-West</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            {/* Floor, Total Floor */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <FormField
                 control={form.control}
                 name="floorNo"

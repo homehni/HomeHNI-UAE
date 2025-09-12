@@ -49,7 +49,8 @@ export const CommercialSalePropertyDetailsStep = ({
       title: initialData?.title || '',
       spaceType: (initialData?.spaceType as any) || 'office',
       buildingType: initialData?.buildingType || '',
-      // propertyAge field removed
+      propertyAge: (initialData as any)?.propertyAge || '',
+      facing: (initialData as any)?.facing || '',
       floorNo: initialData?.floorNo?.toString() || '0',
       totalFloors: initialData?.totalFloors?.toString() || '1',
       superBuiltUpArea: initialData?.superBuiltUpArea?.toString() || '',

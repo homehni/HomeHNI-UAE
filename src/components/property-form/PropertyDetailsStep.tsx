@@ -8,7 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { PropertyDetails } from '@/types/property';
-import { Phone } from 'lucide-react';
+import { Phone, Compass } from 'lucide-react';
 
 const propertyDetailsSchema = z.object({
   title: z.string().optional(), // Made optional - will be auto-generated
@@ -16,6 +16,8 @@ const propertyDetailsSchema = z.object({
   apartmentName: z.string().optional(),
   bhkType: z.string().optional(),
   buildingType: z.string().optional(),
+  propertyAge: z.string().min(1, "Property age is required"),
+  facing: z.string().optional(),
   floorType: z.string().optional(),
   totalFloors: z.union([z.number(), z.string()]).optional(),
   floorNo: z.union([z.number(), z.string()]).optional(),
@@ -49,6 +51,8 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
       apartmentName: initialData.apartmentName || '',
       bhkType: initialData.bhkType || '',
       buildingType: initialData.buildingType || '',
+      propertyAge: initialData.propertyAge || '',
+      facing: initialData.facing || '',
       // propertyAge removed - not part of the schema
       floorType: initialData.floorType || '',
       totalFloors: initialData.totalFloors || 1,
@@ -196,6 +200,67 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
               )}
             />
           )}
+
+          {/* Property Age and Facing */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <FormField
+              control={form.control}
+              name="propertyAge"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-sm font-medium">Property Age*</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger className="h-12">
+                        <SelectValue placeholder="Select" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="Under Construction">Under Construction</SelectItem>
+                      <SelectItem value="Ready to Move">Ready to Move</SelectItem>
+                      <SelectItem value="0-1 Years">0-1 Years</SelectItem>
+                      <SelectItem value="1-3 Years">1-3 Years</SelectItem>
+                      <SelectItem value="3-5 Years">3-5 Years</SelectItem>
+                      <SelectItem value="5-10 Years">5-10 Years</SelectItem>
+                      <SelectItem value="10+ Years">10+ Years</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="facing"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-sm font-medium">Facing</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger className="h-12">
+                        <div className="flex items-center gap-2">
+                          <Compass className="h-4 w-4 text-muted-foreground" />
+                          <SelectValue placeholder="Select" />
+                        </div>
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="North">North</SelectItem>
+                      <SelectItem value="South">South</SelectItem>
+                      <SelectItem value="East">East</SelectItem>
+                      <SelectItem value="West">West</SelectItem>
+                      <SelectItem value="North-East">North-East</SelectItem>
+                      <SelectItem value="North-West">North-West</SelectItem>
+                      <SelectItem value="South-East">South-East</SelectItem>
+                      <SelectItem value="South-West">South-West</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
 
           {/* Floor, Total Floors / No. of Floors */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

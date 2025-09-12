@@ -14,6 +14,7 @@ export interface PropertyDetails {
   buildingType: string;
   bhkType: string;
   propertyAge: string;
+  facing?: string;
   floorType?: string;
   totalFloors: number;
   floorNo: number;
