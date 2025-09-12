@@ -101,6 +101,13 @@ export const calculatePGPropertyCompletion = (property: PGPropertyData): Complet
     if (field.key === 'images') {
       isCompleted = Array.isArray(value) && value.length > 0;
     } else if (field.key === 'amenities') {
+      console.log('Checking PG amenities:', { 
+        value, 
+        type: typeof value, 
+        isObject: typeof value === 'object' && value !== null,
+        hasKeys: value && typeof value === 'object' ? Object.keys(value) : [],
+        propertyTitle: property.title || 'Unknown'
+      });
       isCompleted = value && (
         (typeof value === 'object' && Object.keys(value).length > 0) ||
         (Array.isArray(value) && value.length > 0) ||
@@ -268,6 +275,13 @@ export const calculatePropertyCompletion = (property: PropertyData): CompletionR
     if (field.key === 'images') {
       isCompleted = Array.isArray(value) && value.length > 0;
     } else if (field.key === 'amenities') {
+      console.log('Checking amenities:', { 
+        value, 
+        type: typeof value, 
+        isObject: typeof value === 'object' && value !== null,
+        hasKeys: value && typeof value === 'object' ? Object.keys(value) : [],
+        propertyTitle: property.title || 'Unknown'
+      });
       isCompleted = value && (
         (typeof value === 'object' && Object.keys(value).length > 0) ||
         (Array.isArray(value) && value.length > 0) ||
