@@ -101,6 +101,7 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
                     <FormControl>
                       <Input
                         className="h-10"
+                        placeholder="optional"
                         {...field}
                       />
                     </FormControl>
