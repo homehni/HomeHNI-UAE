@@ -170,7 +170,7 @@ export const PropertySelectionStep: React.FC<PropertySelectionStepProps> = ({
 
           {/* Terms and Conditions */}
           <div className="p-4 bg-transparent">
-            <p className="text-sm text-gray-500 text-center leading-relaxed">
+            <p className="text-sm text-gray-500 text-left leading-relaxed">
               By clicking 'Start Posting Your Ad' you acknowledge that you have agreed to the{' '}
               <span className="text-red-600 underline cursor-pointer">Terms & Conditions</span>.
             </p>
