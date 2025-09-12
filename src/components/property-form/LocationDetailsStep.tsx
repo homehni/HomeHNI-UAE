@@ -339,9 +339,7 @@ export const LocationDetailsStep: React.FC<LocationDetailsStepProps> = ({
                               <MapPin className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                             </div>
                           </FormControl>
-                          <p className="text-xs text-red-500 animate-pulse font-bold">
-                            Type the name of the apartment/ the area of property/anything that could help us 😊
-                          </p>
+                          <FormMessage />
                           {locationMismatchWarning && (
                             <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-lg">
                               <div className="w-6 h-6 bg-red-100 rounded flex items-center justify-center flex-shrink-0">
@@ -350,7 +348,6 @@ export const LocationDetailsStep: React.FC<LocationDetailsStepProps> = ({
                               <p className="text-sm text-red-600">{locationMismatchWarning}</p>
                             </div>
                           )}
-                          <FormMessage />
                         </FormItem>
                       )}
                     />
