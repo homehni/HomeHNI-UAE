@@ -117,12 +117,16 @@ export const PreviewStep: React.FC<PreviewStepProps> = ({
 
   return (
     <>
-      <Card className="w-full max-w-4xl mx-auto">
-        <CardHeader>
-          <CardTitle className="text-center text-primary">Preview Your Listing</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-6">
-          {/* Property Images */}
+      <div className="space-y-6">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold text-gray-900">Preview Your Listing</h2>
+          <p className="text-gray-600 mt-2">Review your property details before publishing</p>
+        </div>
+        
+        <Card className="w-full">
+          <CardContent className="p-6">
+            <div className="space-y-6">
+              {/* Property Images */}
           {gallery?.images && gallery.images.length > 0 && (
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
               {gallery.images.slice(0, 6).map((image, index) => (
@@ -239,34 +243,36 @@ export const PreviewStep: React.FC<PreviewStepProps> = ({
             </div>
           </div>
 
-          {/* Action Buttons */}
-          <div className="flex justify-between pt-6 border-t">
-            <Button variant="outline" onClick={onBack}>
-              Back
-            </Button>
-            <div className="space-x-4">
-              <Button variant="ghost" onClick={() => onEdit(2)}>
-                <Edit className="h-4 w-4 mr-2" />
-                Edit Info
-              </Button>
-              <Button
-                onClick={handleSubmit}
-                disabled={isSubmitting}
-                className="bg-primary hover:bg-primary/90 min-w-[140px]"
-              >
-                {isSubmitting ? (
-                  <div className="flex items-center gap-2">
-                    <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
-                    <span>Submitting...</span>
-                  </div>
-                ) : (
-                  'Submit Listing'
-                )}
-              </Button>
+              {/* Action Buttons */}
+              <div className="flex justify-between pt-6 border-t">
+                <Button variant="outline" onClick={onBack} className="h-12 px-8">
+                  Back
+                </Button>
+                <div className="space-x-4">
+                  <Button variant="ghost" onClick={() => onEdit(2)} className="h-12">
+                    <Edit className="h-4 w-4 mr-2" />
+                    Edit Info
+                  </Button>
+                  <Button
+                    onClick={handleSubmit}
+                    disabled={isSubmitting}
+                    className="bg-primary hover:bg-primary/90 min-w-[140px] h-12"
+                  >
+                    {isSubmitting ? (
+                      <div className="flex items-center gap-2">
+                        <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
+                        <span>Submitting...</span>
+                      </div>
+                    ) : (
+                      'Submit Listing'
+                    )}
+                  </Button>
+                </div>
+              </div>
             </div>
-          </div>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      </div>
 
       {/* Thank You Modal */}
       <Dialog open={showThankYou} onOpenChange={() => {}}>
