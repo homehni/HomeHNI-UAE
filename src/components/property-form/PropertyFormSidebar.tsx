@@ -29,43 +29,41 @@ export const PropertyFormSidebar: React.FC<PropertyFormSidebarProps> = ({
   }));
 
   return (
-    <div className="w-80 bg-white border-r border-gray-200 min-h-screen p-6">
+    <div className="w-72 bg-white border-r border-gray-200 min-h-screen p-4">
       {/* Logo/Header */}
-      <div className="mb-8 p-4">
-        <div className="w-14 h-14 bg-red-500 rounded-xl flex items-center justify-center">
-          <Home className="w-7 h-7 text-white" />
+      <div className="mb-6 p-2">
+        <div className="w-12 h-12 bg-red-500 rounded-lg flex items-center justify-center">
+          <Home className="w-6 h-6 text-white" />
         </div>
       </div>
 
       {/* Steps */}
-      <div className="space-y-3">
+      <div className="space-y-2">
         {sidebarSteps.map((step) => (
           <div
             key={step.number}
-            className={`flex items-center gap-4 p-4 rounded-xl transition-all duration-200 ${
+            className={`flex items-center gap-3 p-3 rounded-lg transition-all duration-200 ${
               step.active 
-                ? 'bg-teal-50 border border-teal-200 shadow-sm' 
+                ? 'bg-teal-50 border-l-4 border-teal-500' 
                 : step.completed 
                   ? 'hover:bg-gray-50' 
                   : 'text-gray-400'
             }`}
           >
-            <div className={`flex items-center justify-center w-10 h-10 rounded-xl ${
+            <div className={`flex items-center justify-center w-8 h-8 rounded-lg ${
               step.active 
-                ? 'bg-teal-100 text-teal-600' 
+                ? 'text-teal-600' 
                 : step.completed 
-                  ? 'bg-green-100 text-green-600' 
-                  : 'bg-gray-100 text-gray-400'
+                  ? 'text-green-600' 
+                  : 'text-gray-400'
             }`}>
               {step.completed ? (
-                <CheckCircle className="w-6 h-6" />
+                <CheckCircle className="w-5 h-5" />
               ) : (
-                <div className="text-lg">
-                  {step.icon}
-                </div>
+                step.icon
               )}
             </div>
-            <span className={`text-base font-medium ${
+            <span className={`text-sm font-medium ${
               step.active 
                 ? 'text-teal-700' 
                 : step.completed 

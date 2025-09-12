@@ -201,13 +201,13 @@ export const CommercialMultiStepForm: React.FC<CommercialMultiStepFormProps> = (
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-6xl mx-auto">
         {/* Header */}
-        <div className="bg-white border-b border-gray-200 px-8 py-6">
+        <div className="bg-white border-b border-gray-200 px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
               <Badge variant="secondary" className="px-3 py-1 text-sm">Commercial</Badge>
-              <span className="text-2xl font-semibold text-gray-900">Post Your Commercial Property</span>
+              <span className="text-xl font-semibold text-gray-900">Post Your Commercial Property</span>
             </div>
             <div className="flex items-center space-x-4">
               <span className="text-sm text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
@@ -224,7 +224,7 @@ export const CommercialMultiStepForm: React.FC<CommercialMultiStepFormProps> = (
             onStepClick={goToStep}
           />
           
-          <div className="flex-1 min-w-0 p-8">
+          <div className="flex-1 min-w-0 p-6 bg-white">
             {renderCurrentStep()}
           </div>
         </div>
