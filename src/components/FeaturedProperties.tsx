@@ -134,7 +134,7 @@ const FeaturedProperties = ({
             .select('id, status')
             .in('id', referencedPropertyIds);
           if (!existingErr && existingProps) {
-            validPropertyIdSet = new Set(existingProps.filter(p => p.status === 'approved').map(p => p.id));
+            validPropertyIdSet = new Set(existingProps.map((p: any) => p.id));
           }
         }
 
@@ -278,7 +278,7 @@ const FeaturedProperties = ({
               const record = payload.new as any;
               if (!record) return;
 
-              const qualifies = record.status === 'approved' && record.is_featured === true;
+              const qualifies = record.is_featured === true;
               if (qualifies) {
                 // Handle PG/Hostel properties specially
                 const isPGHostel = record.property_type === 'PG/Hostel' || record.listing_type === 'PG/Hostel';

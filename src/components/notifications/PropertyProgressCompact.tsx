@@ -35,8 +35,8 @@ export const PropertyProgressCompact: React.FC<PropertyProgressCompactProps> = (
                         propertyType === 'shop' || propertyType === 'warehouse' || propertyType === 'showroom';
     
     const priorityOrder = isCommercial 
-      ? ['images', 'amenities', 'locality', 'super_area', 'description', 'expected_price']
-      : ['images', 'amenities', 'locality', 'super_area', 'bhk_type', 'expected_price'];
+      ? ['images', 'locality', 'super_area', 'description', 'expected_price']
+      : ['images', 'locality', 'super_area', 'bhk_type', 'expected_price'];
     
     const topField = priorityOrder.find(field => missingFields.includes(field));
     
@@ -57,8 +57,8 @@ export const PropertyProgressCompact: React.FC<PropertyProgressCompactProps> = (
                         propertyType === 'shop' || propertyType === 'warehouse' || propertyType === 'showroom';
     
     const priorityOrder = isCommercial 
-      ? ['images', 'amenities', 'locality', 'super_area', 'description', 'expected_price']
-      : ['images', 'amenities', 'locality', 'super_area', 'bhk_type', 'expected_price'];
+      ? ['images', 'locality', 'super_area', 'description', 'expected_price']
+      : ['images', 'locality', 'super_area', 'bhk_type', 'expected_price'];
     
     const topField = priorityOrder.find(field => missingFields.includes(field));
     

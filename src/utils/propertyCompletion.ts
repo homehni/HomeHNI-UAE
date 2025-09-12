@@ -101,18 +101,18 @@ export const calculatePGPropertyCompletion = (property: PGPropertyData): Complet
     if (field.key === 'images') {
       isCompleted = Array.isArray(value) && value.length > 0;
     } else if (field.key === 'amenities') {
-      console.log('Checking PG amenities:', { 
-        value, 
-        type: typeof value, 
-        isObject: typeof value === 'object' && value !== null,
-        hasKeys: value && typeof value === 'object' ? Object.keys(value) : [],
-        propertyTitle: property.title || 'Unknown'
-      });
-      isCompleted = value && (
-        (typeof value === 'object' && Object.keys(value).length > 0) ||
-        (Array.isArray(value) && value.length > 0) ||
-        (typeof value === 'string' && value.length > 0)
-      );
+      const v: any = value;
+      const hasTruthyInObject = v && typeof v === 'object' && !Array.isArray(v)
+        ? Object.values(v).some((val: any) => {
+            if (Array.isArray(val)) return val.length > 0;
+            if (typeof val === 'boolean') return val === true;
+            if (typeof val === 'number') return val > 0;
+            if (typeof val === 'string') return val.trim().length > 0 && !['no', 'none', 'false'].includes(val.trim().toLowerCase());
+            if (val && typeof val === 'object') return Object.values(val).some((vv: any) => Boolean(vv));
+            return false;
+          })
+        : false;
+      isCompleted = (Array.isArray(v) && v.length > 0) || hasTruthyInObject || (typeof v === 'string' && v.trim().length > 0);
     } else if (field.key === 'available_services') {
       isCompleted = value && (
         (typeof value === 'object' && Object.keys(value).length > 0) ||
@@ -284,18 +284,18 @@ export const calculatePropertyCompletion = (property: PropertyData): CompletionR
     if (field.key === 'images') {
       isCompleted = Array.isArray(value) && value.length > 0;
     } else if (field.key === 'amenities') {
-      console.log('Checking amenities:', { 
-        value, 
-        type: typeof value, 
-        isObject: typeof value === 'object' && value !== null,
-        hasKeys: value && typeof value === 'object' ? Object.keys(value) : [],
-        propertyTitle: property.title || 'Unknown'
-      });
-      isCompleted = value && (
-        (typeof value === 'object' && Object.keys(value).length > 0) ||
-        (Array.isArray(value) && value.length > 0) ||
-        (typeof value === 'string' && value.length > 0)
-      );
+      const v: any = value;
+      const hasTruthyInObject = v && typeof v === 'object' && !Array.isArray(v)
+        ? Object.values(v).some((val: any) => {
+            if (Array.isArray(val)) return val.length > 0;
+            if (typeof val === 'boolean') return val === true;
+            if (typeof val === 'number') return val > 0;
+            if (typeof val === 'string') return val.trim().length > 0 && !['no', 'none', 'false'].includes(val.trim().toLowerCase());
+            if (val && typeof val === 'object') return Object.values(val).some((vv: any) => Boolean(vv));
+            return false;
+          })
+        : false;
+      isCompleted = (Array.isArray(v) && v.length > 0) || hasTruthyInObject || (typeof v === 'string') && v.trim().length > 0;
     } else if (field.key === 'expected_price') {
       isCompleted = typeof value === 'number' && value > 0; // Any positive price is valid
     } else if (field.key === 'super_area') {
