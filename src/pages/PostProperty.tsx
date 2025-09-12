@@ -355,8 +355,8 @@ export const PostProperty: React.FC = () => {
                        ('plotDetails' in data.propertyInfo) ? data.propertyInfo.plotDetails.propertyType : '',
           superBuiltUpArea: ('propertyDetails' in data.propertyInfo) ? Number(data.propertyInfo.propertyDetails.superBuiltUpArea) :
                            ('plotDetails' in data.propertyInfo) ? Number((data.propertyInfo as any).plotDetails.plotArea) : 0,
-          bathrooms: ('propertyDetails' in data.propertyInfo && 'bathrooms' in data.propertyInfo.propertyDetails) ? Number(data.propertyInfo.propertyDetails.bathrooms) : 0,
-          balconies: ('propertyDetails' in data.propertyInfo && 'balconies' in data.propertyInfo.propertyDetails) ? Number(data.propertyInfo.propertyDetails.balconies) : 0,
+          bathrooms: ('amenities' in data.propertyInfo) ? Number((data.propertyInfo as any).amenities.bathrooms) || 0 : 0,
+          balconies: ('amenities' in data.propertyInfo) ? Number((data.propertyInfo as any).amenities.balconies) || 0 : 0,
           bhkType: ('propertyDetails' in data.propertyInfo && 'bhkType' in data.propertyInfo.propertyDetails) ? data.propertyInfo.propertyDetails.bhkType : '',
           furnishingStatus: ('propertyDetails' in data.propertyInfo && 'furnishingStatus' in data.propertyInfo.propertyDetails) ? data.propertyInfo.propertyDetails.furnishingStatus : '',
           propertyAge: ('propertyDetails' in data.propertyInfo && 'propertyAge' in data.propertyInfo.propertyDetails) ? data.propertyInfo.propertyDetails.propertyAge : '',
