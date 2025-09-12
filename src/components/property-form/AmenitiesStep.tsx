@@ -227,26 +227,26 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
                     <PawPrint className="w-5 h-5 text-muted-foreground" />
                     <FormLabel>Pet Allowed*</FormLabel>
                   </div>
-                  <div className="flex space-x-2">
-                    <Button
-                      type="button"
-                      variant={field.value === false ? "outline" : "secondary"}
-                      size="sm"
-                      onClick={() => field.onChange(false)}
-                      className="flex-1"
-                    >
-                      No
-                    </Button>
-                    <Button
-                      type="button"
-                      variant={field.value === true ? "outline" : "secondary"}
-                      size="sm"
-                      onClick={() => field.onChange(true)}
-                      className="flex-1"
-                    >
-                      Yes
-                    </Button>
-                  </div>
+                   <div className="flex space-x-2">
+                     <Button
+                       type="button"
+                       variant={field.value === false ? "default" : "outline"}
+                       size="sm"
+                       onClick={() => field.onChange(false)}
+                       className="flex-1"
+                     >
+                       No
+                     </Button>
+                     <Button
+                       type="button"
+                       variant={field.value === true ? "default" : "outline"}
+                       size="sm"
+                       onClick={() => field.onChange(true)}
+                       className="flex-1"
+                     >
+                       Yes
+                     </Button>
+                   </div>
                   <FormMessage />
                 </FormItem>
               )}
@@ -262,26 +262,26 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
                     <Dumbbell className="w-5 h-5 text-muted-foreground" />
                     <FormLabel>Gym*</FormLabel>
                   </div>
-                  <div className="flex space-x-2">
-                    <Button
-                      type="button"
-                      variant={field.value === false ? "outline" : "secondary"}
-                      size="sm"
-                      onClick={() => field.onChange(false)}
-                      className="flex-1"
-                    >
-                      No
-                    </Button>
-                    <Button
-                      type="button"
-                      variant={field.value === true ? "outline" : "secondary"}
-                      size="sm"
-                      onClick={() => field.onChange(true)}
-                      className="flex-1"
-                    >
-                      Yes
-                    </Button>
-                  </div>
+                   <div className="flex space-x-2">
+                     <Button
+                       type="button"
+                       variant={field.value === false ? "default" : "outline"}
+                       size="sm"
+                       onClick={() => field.onChange(false)}
+                       className="flex-1"
+                     >
+                       No
+                     </Button>
+                     <Button
+                       type="button"
+                       variant={field.value === true ? "default" : "outline"}
+                       size="sm"
+                       onClick={() => field.onChange(true)}
+                       className="flex-1"
+                     >
+                       Yes
+                     </Button>
+                   </div>
                   <FormMessage />
                 </FormItem>
               )}
@@ -297,26 +297,26 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
                     <UtensilsCrossed className="w-5 h-5 text-muted-foreground" />
                     <FormLabel>Non-Veg Allowed*</FormLabel>
                   </div>
-                  <div className="flex space-x-2">
-                    <Button
-                      type="button"
-                      variant={field.value === false ? "outline" : "secondary"}
-                      size="sm"
-                      onClick={() => field.onChange(false)}
-                      className="flex-1"
-                    >
-                      No
-                    </Button>
-                    <Button
-                      type="button"
-                      variant={field.value === true ? "outline" : "secondary"}
-                      size="sm"
-                      onClick={() => field.onChange(true)}
-                      className="flex-1"
-                    >
-                      Yes
-                    </Button>
-                  </div>
+                   <div className="flex space-x-2">
+                     <Button
+                       type="button"
+                       variant={field.value === false ? "default" : "outline"}
+                       size="sm"
+                       onClick={() => field.onChange(false)}
+                       className="flex-1"
+                     >
+                       No
+                     </Button>
+                     <Button
+                       type="button"
+                       variant={field.value === true ? "default" : "outline"}
+                       size="sm"
+                       onClick={() => field.onChange(true)}
+                       className="flex-1"
+                     >
+                       Yes
+                     </Button>
+                   </div>
                   <FormMessage />
                 </FormItem>
               )}
@@ -332,26 +332,26 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
                     <Shield className="w-5 h-5 text-muted-foreground" />
                     <FormLabel>Gated Security*</FormLabel>
                   </div>
-                  <div className="flex space-x-2">
-                    <Button
-                      type="button"
-                      variant={field.value === false ? "outline" : "secondary"}
-                      size="sm"
-                      onClick={() => field.onChange(false)}
-                      className="flex-1"
-                    >
-                      No
-                    </Button>
-                    <Button
-                      type="button"
-                      variant={field.value === true ? "outline" : "secondary"}
-                      size="sm"
-                      onClick={() => field.onChange(true)}
-                      className="flex-1"
-                    >
-                      Yes
-                    </Button>
-                  </div>
+                   <div className="flex space-x-2">
+                     <Button
+                       type="button"
+                       variant={field.value === false ? "default" : "outline"}
+                       size="sm"
+                       onClick={() => field.onChange(false)}
+                       className="flex-1"
+                     >
+                       No
+                     </Button>
+                     <Button
+                       type="button"
+                       variant={field.value === true ? "default" : "outline"}
+                       size="sm"
+                       onClick={() => field.onChange(true)}
+                       className="flex-1"
+                     >
+                       Yes
+                     </Button>
+                   </div>
                   <FormMessage />
                 </FormItem>
               )}
@@ -443,24 +443,24 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
               <FormItem>
                 <div className="flex items-center space-x-4">
                   <FormLabel>Do you have more similar <strong>units/properties</strong> available ?</FormLabel>
-                  <div className="flex space-x-2">
-                    <Button
-                      type="button"
-                      variant={field.value === false ? "outline" : "secondary"}
-                      size="sm"
-                      onClick={() => field.onChange(false)}
-                    >
-                      No
-                    </Button>
-                    <Button
-                      type="button"
-                      variant={field.value === true ? "outline" : "secondary"}
-                      size="sm"
-                      onClick={() => field.onChange(true)}
-                    >
-                      Yes
-                    </Button>
-                  </div>
+                   <div className="flex space-x-2">
+                     <Button
+                       type="button"
+                       variant={field.value === false ? "default" : "outline"}
+                       size="sm"
+                       onClick={() => field.onChange(false)}
+                     >
+                       No
+                     </Button>
+                     <Button
+                       type="button"
+                       variant={field.value === true ? "default" : "outline"}
+                       size="sm"
+                       onClick={() => field.onChange(true)}
+                     >
+                       Yes
+                     </Button>
+                   </div>
                 </div>
                 <FormMessage />
               </FormItem>
