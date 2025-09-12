@@ -19,10 +19,6 @@ const propertyDetailsSchema = z.object({
   floorType: z.string().optional(),
   totalFloors: z.union([z.number(), z.string()]).optional(),
   floorNo: z.union([z.number(), z.string()]).optional(),
-  furnishingStatus: z.string().optional(),
-  bathrooms: z.number().optional(),
-  balconies: z.number().optional(),
-  parkingType: z.string().optional(),
   superBuiltUpArea: z.number().min(1, "Super built up area is required and must be greater than 0"),
   onMainRoad: z.boolean().optional(),
   cornerProperty: z.boolean().optional(),
@@ -57,10 +53,6 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
       floorType: initialData.floorType || '',
       totalFloors: initialData.totalFloors || 1,
       floorNo: initialData.floorNo || 0,
-      furnishingStatus: initialData.furnishingStatus || '',
-      bathrooms: initialData.bathrooms || 0,
-      balconies: initialData.balconies || 0,
-      parkingType: initialData.parkingType || '',
       superBuiltUpArea: initialData.superBuiltUpArea ?? undefined,
       onMainRoad: initialData.onMainRoad || false,
       cornerProperty: initialData.cornerProperty || false,
@@ -78,7 +70,6 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
 
   const onSubmit = (data: PropertyDetailsFormData) => {
     console.log('PropertyDetailsStep submitting data:', data);
-    console.log('Bathrooms value:', data.bathrooms, 'Type:', typeof data.bathrooms);
     
     // Pass the form data merged with initial data to maintain all PropertyDetails fields
     onNext({
@@ -316,145 +307,31 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
             ) : null}
           </div>
 
-          {/* Super Built Up Area, Bathrooms, Balconies */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <FormField
-              control={form.control}
-              name="superBuiltUpArea"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-sm font-medium">Super Built Up Area</FormLabel>
-                  <div className="relative">
-                    <FormControl>
-                      <Input
-                        type="number"
-                        placeholder="1500"
-                        className="h-12 pr-12 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
-                        {...field}
-                        onChange={(e) => field.onChange(e.target.value === '' ? undefined : parseInt(e.target.value, 10))}
-                      />
-                    </FormControl>
-                    <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-sm text-gray-500">
-                      Sq.ft
-                    </div>
+          {/* Super Built Up Area */}
+          <FormField
+            control={form.control}
+            name="superBuiltUpArea"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-sm font-medium">Super Built Up Area</FormLabel>
+                <div className="relative">
+                  <FormControl>
+                    <Input
+                      type="number"
+                      placeholder="1500"
+                      className="h-12 pr-12 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
+                      {...field}
+                      onChange={(e) => field.onChange(e.target.value === '' ? undefined : parseInt(e.target.value, 10))}
+                    />
+                  </FormControl>
+                  <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-sm text-gray-500">
+                    Sq.ft
                   </div>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="bathrooms"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-sm font-medium">Bathrooms</FormLabel>
-                  <Select
-                    onValueChange={(value) => field.onChange(parseInt(value))}
-                    defaultValue={field.value?.toString()}
-                  >
-                    <FormControl>
-                      <SelectTrigger className="h-12">
-                        <SelectValue placeholder="Select Bathrooms" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {[...Array(10)].map((_, i) => {
-                        const count = i + 1;
-                        return (
-                          <SelectItem key={count} value={count.toString()}>
-                            {count}
-                          </SelectItem>
-                        );
-                      })}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="balconies"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-sm font-medium">Balconies</FormLabel>
-                  <Select
-                    onValueChange={(value) => field.onChange(parseInt(value))}
-                    defaultValue={field.value?.toString()}
-                  >
-                    <FormControl>
-                      <SelectTrigger className="h-12">
-                        <SelectValue placeholder="Select Balconies" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {[...Array(6)].map((_, i) => {
-                        const count = i;
-                        return (
-                          <SelectItem key={count} value={count.toString()}>
-                            {count}
-                          </SelectItem>
-                        );
-                      })}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-
-          {/* Furnishing Status */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <FormField
-              control={form.control}
-              name="furnishingStatus"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-sm font-medium">Furnishing Status</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <FormControl>
-                      <SelectTrigger className="h-12">
-                        <SelectValue placeholder="Select Furnishing Status" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="Fully Furnished">Fully Furnished</SelectItem>
-                      <SelectItem value="Semi Furnished">Semi Furnished</SelectItem>
-                      <SelectItem value="Unfurnished">Unfurnished</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="parkingType"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-sm font-medium">Parking</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <FormControl>
-                      <SelectTrigger className="h-12">
-                        <SelectValue placeholder="Select Parking" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="Covered">Covered</SelectItem>
-                      <SelectItem value="Open">Open</SelectItem>
-                      <SelectItem value="Both">Both</SelectItem>
-                      <SelectItem value="None">None</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
+                </div>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
 
           {/* Help Section */}

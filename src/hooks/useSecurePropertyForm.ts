@@ -171,8 +171,6 @@ export const useSecurePropertyForm = () => {
         property_type: sanitizedPropertyInfo.propertyDetails?.propertyType || propertyInfo.propertyDetails.propertyType,
         listing_type: sanitizedPropertyInfo.rentalDetails?.listingType || propertyInfo.rentalDetails.listingType,
         bhk_type: propertyInfo.propertyDetails.bhkType,
-        bathrooms: sanitizedPropertyInfo.propertyDetails?.bathrooms || propertyInfo.propertyDetails.bathrooms,
-        balconies: sanitizedPropertyInfo.propertyDetails?.balconies || propertyInfo.propertyDetails.balconies,
         super_area: sanitizedPropertyInfo.propertyDetails?.superBuiltUpArea || propertyInfo.propertyDetails.superBuiltUpArea,
         carpet_area: propertyInfo.propertyDetails.superBuiltUpArea, // Assuming same as super area
         expected_price: sanitizedPropertyInfo.rentalDetails?.expectedPrice || propertyInfo.rentalDetails.expectedPrice,
@@ -185,7 +183,6 @@ export const useSecurePropertyForm = () => {
         description: sanitizedPropertyInfo.additionalInfo?.description || propertyInfo.additionalInfo?.description,
         images: imageUrls,
         videos: videoUrl ? [videoUrl] : [],
-        furnishing: propertyInfo.propertyDetails.furnishingStatus,
         availability_type: propertyInfo.scheduleInfo.availability,
         price_negotiable: propertyInfo.rentalDetails.rentNegotiable || false,
         maintenance_charges: propertyInfo.rentalDetails.maintenanceCharges || 0,

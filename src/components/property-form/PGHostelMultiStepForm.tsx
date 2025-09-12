@@ -230,13 +230,9 @@ const [propertyInfo, setPropertyInfo] = useState({
         propertyType: 'PG/Hostel',
         buildingType: 'PG',
         bhkType: 'PG/Hostel',
-        bathrooms: roomDetails.attachedBathroom ? 1 : 0,
-        balconies: 0,
         propertyAge: 'New',
         totalFloors: 1,
         floorNo: 1,
-        furnishingStatus: 'Furnished',
-        parkingType: amenities.parking !== 'none' ? 'Available' : 'Not Available',
         superBuiltUpArea: 1,
         onMainRoad: false,
         cornerProperty: false

@@ -174,13 +174,9 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
         propertyType: 'apartment',
         buildingType: propertyDetails.apartmentType,
         bhkType: propertyDetails.bhkType,
-        bathrooms: 1, // Default for flatmates
-        balconies: 0,
         propertyAge: propertyDetails.propertyAge,
         totalFloors: propertyDetails.totalFloors,
         floorNo: propertyDetails.floorNo,
-        furnishingStatus: 'Semi Furnished', // Default
-        parkingType: amenities.parking,
         superBuiltUpArea: propertyDetails.builtUpArea,
         onMainRoad: false,
         cornerProperty: false

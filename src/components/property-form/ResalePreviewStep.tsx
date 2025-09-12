@@ -101,22 +101,10 @@ export const ResalePreviewStep: React.FC<ResalePreviewStepProps> = ({
                   <span>{propertyInfo.propertyDetails.bhkType}</span>
                 </div>
               )}
-              {propertyInfo?.propertyDetails?.bathrooms !== undefined && (
-                <div className="flex items-center gap-2">
-                  <Bath className="h-5 w-5 text-muted-foreground" />
-                  <span>{propertyInfo.propertyDetails.bathrooms} Bathrooms</span>
-                </div>
-              )}
               <div className="flex items-center gap-2">
                 <Square className="h-5 w-5 text-muted-foreground" />
                 <span>{propertyInfo?.propertyDetails?.superBuiltUpArea} sq ft</span>
               </div>
-              {propertyInfo?.propertyDetails?.balconies !== undefined && (
-                <div className="flex items-center gap-2">
-                  <Building className="h-5 w-5 text-muted-foreground" />
-                  <span>{propertyInfo.propertyDetails.balconies} Balconies</span>
-                </div>
-              )}
             </div>
 
             {/* Additional Property Info */}

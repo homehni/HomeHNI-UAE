@@ -13,14 +13,10 @@ export interface PropertyDetails {
   apartmentName?: string;
   buildingType: string;
   bhkType: string;
-  bathrooms: number;
-  balconies: number;
   propertyAge: string;
   floorType?: string;
   totalFloors: number;
   floorNo: number;
-  furnishingStatus: string;
-  parkingType: string;
   superBuiltUpArea: number;
   builtUpArea?: number;
   carpetArea?: number;
@@ -191,7 +187,7 @@ export interface PropertyDraft {
 }
 
 // Commercial specific interfaces
-export interface CommercialPropertyDetails extends Omit<PropertyDetails, 'bhkType' | 'bathrooms' | 'balconies'> {
+export interface CommercialPropertyDetails extends Omit<PropertyDetails, 'bhkType'> {
   spaceType: 'office' | 'retail' | 'warehouse' | 'showroom' | 'restaurant' | 'co-working' | 'industrial' | 'medical' | 'educational';
   powerLoad?: string;
   ceilingHeight?: string;

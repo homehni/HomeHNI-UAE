@@ -53,7 +53,6 @@ export const CommercialSalePropertyDetailsStep = ({
       floorNo: initialData?.floorNo?.toString() || '0',
       totalFloors: initialData?.totalFloors?.toString() || '1',
       superBuiltUpArea: initialData?.superBuiltUpArea?.toString() || '',
-      furnishingStatus: initialData?.furnishingStatus || '',
       powerLoad: initialData?.powerLoad || '',
       ceilingHeight: initialData?.ceilingHeight || '',
       entranceWidth: initialData?.entranceWidth || '',

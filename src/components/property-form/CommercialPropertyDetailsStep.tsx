@@ -53,7 +53,6 @@ export const CommercialPropertyDetailsStep: React.FC<CommercialPropertyDetailsSt
       propertyAge: initialData.propertyAge || '',
       totalFloors: initialData.totalFloors || 1,
       floorNo: initialData.floorNo || 0,
-      furnishingStatus: initialData.furnishingStatus || '',
       superBuiltUpArea: initialData.superBuiltUpArea || undefined,
       powerLoad: initialData.powerLoad || '',
       ceilingHeight: initialData.ceilingHeight || '',

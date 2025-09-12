@@ -66,9 +66,7 @@ export const validatePropertySubmission = (
     pincode: sanitizeText(propertyInfo.locationDetails?.pincode || '', { maxLength: 10 }),
     description: sanitizePropertyDescription(propertyInfo.additionalInfo?.description || ''),
     expectedPrice: sanitizeNumber(propertyInfo.rentalDetails?.expectedPrice, 1, 100000000),
-    superBuiltUpArea: sanitizeNumber(propertyInfo.propertyDetails?.superBuiltUpArea, 1, 50000),
-    bathrooms: sanitizeNumber(propertyInfo.propertyDetails?.bathrooms, 0, 20),
-    balconies: sanitizeNumber(propertyInfo.propertyDetails?.balconies, 0, 10)
+    superBuiltUpArea: sanitizeNumber(propertyInfo.propertyDetails?.superBuiltUpArea, 1, 50000)
   };
 
   // Minimal property validation - only require at least one meaningful field
@@ -175,9 +173,7 @@ export const validatePropertySubmission = (
         propertyDetails: {
           title: sanitizedProperty.title,
           propertyType: sanitizedProperty.propertyType,
-          superBuiltUpArea: sanitizedProperty.superBuiltUpArea,
-          bathrooms: sanitizedProperty.bathrooms,
-          balconies: sanitizedProperty.balconies
+          superBuiltUpArea: sanitizedProperty.superBuiltUpArea
         },
         locationDetails: {
           state: sanitizedProperty.state,
