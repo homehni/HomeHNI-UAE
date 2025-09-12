@@ -15,7 +15,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Checkbox } from '@/components/ui/checkbox';
-import { ArrowLeft, Loader2, Save, X, Upload, MapPin, MoveUp, Wifi, AirVent, MessageCircle, Users, Waves, Flame, Car, Building2, Droplets, Trees, Sparkles, PersonStanding, Zap, ShieldCheck, ShoppingCart, Accessibility } from 'lucide-react';
+import { ArrowLeft, Loader2, Save, X, Upload, MapPin, MoveUp, Wifi, AirVent, MessageCircle, Users, Waves, Flame, Car, Building2, Droplets, Trees, Sparkles, PersonStanding, Zap, ShieldCheck, ShoppingCart, Accessibility, PawPrint, Dumbbell, UtensilsCrossed } from 'lucide-react';
 
 interface Property {
   id: string;
@@ -63,6 +63,10 @@ interface Property {
   road_width?: number;
   gated_security?: boolean | string;
   directions?: string;
+  // Newly surfaced fields
+  who_will_show?: string;
+  current_property_condition?: string;
+  secondary_phone?: string;
 }
 
 interface PGProperty {
@@ -142,7 +146,9 @@ export const EditPropertyInline: React.FC = () => {
         // Plot/Land specific fields
         'plot_area', 'length', 'width', 'boundary_wall', 'floors_allowed', 
         'gated_project', 'water_supply', 'electricity_connection', 'sewage_connection',
-        'road_width', 'gated_security', 'directions'
+        'road_width', 'gated_security', 'directions',
+        // Newly compared fields
+        'who_will_show', 'current_property_condition', 'secondary_phone'
       ];
       
       return fieldsToCompare.some(field => {
@@ -432,6 +438,10 @@ export const EditPropertyInline: React.FC = () => {
           road_width: payload.road_width,
           gated_security: payload.gated_security,
           directions: payload.directions,
+          // Newly mapped fields
+          who_will_show: payload.who_will_show || payload.whoWillShow,
+          current_property_condition: payload.current_property_condition || payload.currentPropertyCondition,
+          secondary_phone: payload.secondary_phone || payload.secondaryNumber,
         };
 
         console.log('Property from submission:', propertyFromSubmission);
@@ -835,6 +845,17 @@ export const EditPropertyInline: React.FC = () => {
           landmarks: (editedProperty as Property).landmark, // Map landmark to landmarks (database field)
           images: editedProperty.images,
           videos: editedProperty.videos,
+          // Newly added infrastructure fields
+          water_supply: (editedProperty as Property).water_supply || null,
+          electricity_connection: (editedProperty as Property).electricity_connection || null,
+          sewage_connection: (editedProperty as Property).sewage_connection || null,
+          road_width: (editedProperty as Property).road_width ?? null,
+          gated_security: ((editedProperty as Property).gated_security === true || (editedProperty as Property).gated_security === 'true') ? true : false,
+          directions: (editedProperty as Property).directions || null,
+          // Newly added top-level details
+          who_will_show: (editedProperty as any).who_will_show || null,
+          current_property_condition: (editedProperty as any).current_property_condition || null,
+          secondary_phone: (editedProperty as any).secondary_phone || null,
           status: 'pending', // Reset to pending for review - CRITICAL: prevents public visibility
           updated_at: new Date().toISOString()
         };
@@ -1517,6 +1538,45 @@ export const EditPropertyInline: React.FC = () => {
                           <div>
                             <h5 className="font-medium text-gray-700 mb-3">Select the available amenities</h5>
                             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                              {/* Pet Allowed */}
+                              <div className="flex items-center space-x-3 p-3 border rounded-lg">
+                                <Checkbox
+                                  checked={!!editedProperty.amenities?.petAllowed}
+                                  onCheckedChange={(checked) => handleFieldChange('amenities', {
+                                    ...(editedProperty.amenities || {}),
+                                    petAllowed: !!checked
+                                  })}
+                                />
+                                <PawPrint className="w-5 h-5 text-muted-foreground" />
+                                <Label className="font-normal cursor-pointer">Pet Allowed</Label>
+                              </div>
+
+                              {/* Gym */}
+                              <div className="flex items-center space-x-3 p-3 border rounded-lg">
+                                <Checkbox
+                                  checked={!!editedProperty.amenities?.gym}
+                                  onCheckedChange={(checked) => handleFieldChange('amenities', {
+                                    ...(editedProperty.amenities || {}),
+                                    gym: !!checked
+                                  })}
+                                />
+                                <Dumbbell className="w-5 h-5 text-muted-foreground" />
+                                <Label className="font-normal cursor-pointer">Gym</Label>
+                              </div>
+
+                              {/* Non-Veg Allowed */}
+                              <div className="flex items-center space-x-3 p-3 border rounded-lg">
+                                <Checkbox
+                                  checked={!!editedProperty.amenities?.nonVegAllowed}
+                                  onCheckedChange={(checked) => handleFieldChange('amenities', {
+                                    ...(editedProperty.amenities || {}),
+                                    nonVegAllowed: !!checked
+                                  })}
+                                />
+                                <UtensilsCrossed className="w-5 h-5 text-muted-foreground" />
+                                <Label className="font-normal cursor-pointer">Non-Veg Allowed</Label>
+                              </div>
+
                               {/* Lift */}
                               <div className="flex items-center space-x-3 p-3 border rounded-lg">
                                 <Checkbox
@@ -1939,20 +1999,72 @@ export const EditPropertyInline: React.FC = () => {
                               </label>
                             </div>
                           </div>
+
+                          {/* Who shows property and condition */}
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+                            <div>
+                              <Label htmlFor="who_will_show">Who will show the property?*</Label>
+                              <Select
+                                value={(editedProperty as any).who_will_show || ''}
+                                onValueChange={(value) => handleFieldChange('who_will_show', value)}
+                              >
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="need-help">Need help</SelectItem>
+                                  <SelectItem value="i-will-show">I will show</SelectItem>
+                                  <SelectItem value="neighbours">Neighbours</SelectItem>
+                                  <SelectItem value="friends-relatives">Friends/Relatives</SelectItem>
+                                  <SelectItem value="security">Security</SelectItem>
+                                  <SelectItem value="tenants">Tenants</SelectItem>
+                                  <SelectItem value="others">Others</SelectItem>
+                                </SelectContent>
+                              </Select>
+                            </div>
+                            <div>
+                              <Label htmlFor="current_property_condition">Current Property Condition?</Label>
+                              <Select
+                                value={(editedProperty as any).current_property_condition || ''}
+                                onValueChange={(value) => handleFieldChange('current_property_condition', value)}
+                              >
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="excellent">Excellent</SelectItem>
+                                  <SelectItem value="good">Good</SelectItem>
+                                  <SelectItem value="average">Average</SelectItem>
+                                  <SelectItem value="needs-renovation">Needs Renovation</SelectItem>
+                                </SelectContent>
+                              </Select>
+                            </div>
+                          </div>
+
+                          {/* Secondary Number */}
+                          <div className="mt-4">
+                            <Label htmlFor="secondary_phone">Secondary Number</Label>
+                            <div className="flex">
+                              <div className="flex items-center px-3 border border-r-0 rounded-l-md bg-muted">
+                                <span className="text-sm">+91</span>
+                              </div>
+                              <Input
+                                id="secondary_phone"
+                                placeholder="Secondary Number"
+                                value={(editedProperty as any).secondary_phone || ''}
+                                onChange={(e) => handleFieldChange('secondary_phone', e.target.value)}
+                                className="rounded-l-none"
+                              />
+                            </div>
+                          </div>
                           
                           <div className="mt-4">
                             <div className="flex items-center space-x-2 mb-2">
                               <Label htmlFor="directions">Add Directions Tip for your buyers</Label>
-                              <span className="bg-orange-100 text-orange-800 text-xs px-2 py-1 rounded-full font-semibold">
-                                NEW
-                              </span>
+                              <span className="bg-orange-100 text-orange-800 text-xs px-2 py-1 rounded-full font-semibold">NEW</span>
                             </div>
-                            <p className="text-sm text-gray-500 mb-2">
-                              Don't want calls asking location?
-                            </p>
-                            <p className="text-sm text-gray-600 mb-3">
-                              Add directions to reach using landmarks
-                            </p>
+                            <p className="text-sm text-gray-500 mb-2">Don't want calls asking location?</p>
+                            <p className="text-sm text-gray-600 mb-3">Add directions to reach using landmarks</p>
                             <textarea
                               id="directions"
                               className="w-full p-3 border border-gray-300 rounded-md resize-none min-h-[100px]"

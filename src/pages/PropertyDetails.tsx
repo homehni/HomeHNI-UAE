@@ -252,16 +252,23 @@ const PropertyDetails: React.FC = () => {
           // Regular property - fetch amenities and additional_documents
           const { data, error } = await supabase
             .from('properties')
-            .select('amenities, additional_documents')
+            .select('amenities, additional_documents, water_supply, gated_security, who_will_show, current_property_condition, secondary_phone')
             .eq('id', id)
             .maybeSingle();
           if (!error && data) {
             console.log('PropertyDetails loaded amenities from database:', {
               amenities: (data as any).amenities,
-              additional_documents: (data as any).additional_documents
+              additional_documents: (data as any).additional_documents,
+              who_will_show: (data as any).who_will_show,
+              current_property_condition: (data as any).current_property_condition,
+              secondary_phone: (data as any).secondary_phone,
+              water_supply: (data as any).water_supply,
+              gated_security: (data as any).gated_security,
             });
             setDbAmenities((data as any).amenities ?? null);
             setDbAdditionalDocs((data as any).additional_documents ?? null);
+            // Merge top-level fields if not present
+            setProperty(prev => prev ? ({...prev, ...data} as any) : prev);
           }
         }
       } catch (err) {
