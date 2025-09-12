@@ -49,6 +49,7 @@ export const fetchPublicProperties = async () => {
 
 // Service to fetch featured properties for the home page - uses secure database function
 export const fetchFeaturedProperties = async () => {
+  // Fetch all approved public properties via secure RPC
   const { data, error } = await supabase
     .rpc('get_public_properties');
     
@@ -56,9 +57,30 @@ export const fetchFeaturedProperties = async () => {
     console.error('Error fetching featured properties:', error);
     throw error;
   }
+
+  // Also fetch curated featured entries (publicly selectable)
+  const { data: curatedRows, error: curatedErr } = await supabase
+    .from('featured_properties')
+    .select('property_id, is_active, featured_until, sort_order')
+    .eq('is_active', true)
+    .order('sort_order', { ascending: true });
+
+  if (curatedErr) {
+    console.warn('Warning: could not fetch curated featured_properties rows:', curatedErr);
+  }
+
+  const today = new Date();
+  const curatedIds = new Set(
+    (curatedRows || [])
+      .filter(r => !r.featured_until || new Date(r.featured_until) >= today)
+      .map(r => r.property_id)
+  );
   
-  // Filter for featured properties
-  const featuredData = (data || []).filter(property => property.is_featured).slice(0, 20);
+  // Include properties marked is_featured OR curated in featured_properties
+  const featuredData = (data || [])
+    .filter((p: any) => Boolean(p.is_featured) || curatedIds.has(p.id))
+    .slice(0, 20);
+  
   return featuredData;
 };
 

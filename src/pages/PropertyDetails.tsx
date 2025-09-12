@@ -88,20 +88,49 @@ const PropertyDetails: React.FC = () => {
     console.log('Fetching property data for ID:', id);
     setLoading(true);
     try {
-      // First try to fetch from properties table (approved properties)
+      // First, use secure public function (works for anonymous users)
+      const { data: pubData, error: pubError } = await supabase
+        .rpc('get_public_property_by_id', { property_id: id });
+
+      if (!pubError && pubData && pubData.length > 0) {
+        const raw = pubData[0] as any;
+        // Normalize image paths to public URLs
+        const normalize = (s: string): string | null => {
+          if (!s) return null;
+          const rawStr = String(s).trim();
+          if (/^https?:\/\//i.test(rawStr) || /^data:/i.test(rawStr) || rawStr.startsWith('/')) return rawStr;
+          // Strip common prefixes
+          let cleaned = rawStr
+            .replace(/^\/?storage\/v1\/object\/public\/property-media\//i, '')
+            .replace(/^property-media\//i, '')
+            .replace(/^public\//i, '');
+          try {
+            const { data } = supabase.storage.from('property-media').getPublicUrl(cleaned);
+            return data.publicUrl || null;
+          } catch {
+            return null;
+          }
+        };
+        const normalizedImages = Array.isArray(raw.images)
+          ? (raw.images.map((i: any) => typeof i === 'string' ? normalize(i) : normalize(i?.url)).filter(Boolean))
+          : [];
+        setProperty({ ...(raw as Property), images: normalizedImages as string[] } as Property);
+        return;
+      }
+
+      // Fallback for admins/owners (direct table access)
       const { data: propertyData, error: propertyError } = await supabase
         .from('properties')
         .select('*')
         .eq('id', id)
-        .single();
+        .maybeSingle();
 
-      console.log('Properties table query result:', { propertyData, propertyError });
+      console.log('Properties table query result (fallback):', { propertyData, propertyError });
 
       if (propertyData && !propertyError) {
-        console.log('Latest property data fetched from properties table:', propertyData);
-        console.log('Images array from properties table:', propertyData.images);
-        console.log('Images array length:', propertyData.images?.length);
-        setProperty(propertyData as Property);
+        const raw = propertyData as any;
+        const normalizedImages = Array.isArray(raw.images) ? raw.images : [];
+        setProperty({ ...(raw as Property), images: normalizedImages } as Property);
         return;
       }
 
@@ -219,56 +248,53 @@ const PropertyDetails: React.FC = () => {
         if (isPGHostel) {
           // Fetch from pg_hostel_properties table
           const { data, error } = await supabase
-            .from('pg_hostel_properties')
-            .select('*')
-            .eq('id', id)
-            .maybeSingle();
+            .rpc('get_public_pg_hostel_property_by_id', { property_id: id });
           
-          if (!error && data) {
+          const pgRow = (!error && data && data.length > 0) ? data[0] : null;
+          
+          if (!error && pgRow) {
             // Transform PG/Hostel data to match PropertyDetailsCard interface
             const transformedData = {
               ...property,
-              expected_rent: data.expected_rent,
-              expected_deposit: data.expected_deposit,
-              place_available_for: data.place_available_for,
-              preferred_guests: data.preferred_guests,
-              available_from: data.available_from,
-              food_included: data.food_included,
-              gate_closing_time: data.gate_closing_time,
-              description: data.description,
-              amenities: data.amenities,
-              available_services: data.available_services,
-              parking: data.parking,
-              landmark: data.landmark,
-              state: data.state,
-              city: data.city,
-              locality: data.locality,
-              property_type: data.property_type || property?.property_type,
+              expected_rent: pgRow.expected_rent,
+              expected_deposit: pgRow.expected_deposit,
+              place_available_for: pgRow.place_available_for,
+              preferred_guests: pgRow.preferred_guests,
+              available_from: pgRow.available_from,
+              food_included: pgRow.food_included,
+              gate_closing_time: pgRow.gate_closing_time,
+              description: pgRow.description,
+              amenities: pgRow.amenities,
+              available_services: pgRow.available_services,
+              parking: pgRow.parking,
+              landmark: pgRow.landmark,
+              state: pgRow.state,
+              city: pgRow.city,
+              locality: pgRow.locality,
+              property_type: pgRow.property_type || property?.property_type,
             };
-            setDbAmenities(data.amenities ?? null);
+            setDbAmenities(pgRow.amenities ?? null);
             setPgHostelData(transformedData);
           }
         } else {
-          // Regular property - fetch amenities and additional_documents
+          // Regular property - fetch amenities and additional_documents via secure RPC
           const { data, error } = await supabase
-            .from('properties')
-            .select('amenities, additional_documents, water_supply, gated_security, who_will_show, current_property_condition, secondary_phone')
-            .eq('id', id)
-            .maybeSingle();
-          if (!error && data) {
-            console.log('PropertyDetails loaded amenities from database:', {
-              amenities: (data as any).amenities,
-              additional_documents: (data as any).additional_documents,
-              who_will_show: (data as any).who_will_show,
-              current_property_condition: (data as any).current_property_condition,
-              secondary_phone: (data as any).secondary_phone,
-              water_supply: (data as any).water_supply,
-              gated_security: (data as any).gated_security,
+            .rpc('get_public_property_by_id', { property_id: id });
+          const row = (!error && data && data.length > 0) ? data[0] : null;
+          if (!error && row) {
+            console.log('PropertyDetails loaded amenities from RPC:', {
+              amenities: (row as any).amenities,
+              additional_documents: (row as any).additional_documents,
+              who_will_show: (row as any).who_will_show,
+              current_property_condition: (row as any).current_property_condition,
+              secondary_phone: (row as any).secondary_phone,
+              water_supply: (row as any).water_supply,
+              gated_security: (row as any).gated_security,
             });
-            setDbAmenities((data as any).amenities ?? null);
-            setDbAdditionalDocs((data as any).additional_documents ?? null);
+            setDbAmenities((row as any).amenities ?? null);
+            setDbAdditionalDocs((row as any).additional_documents ?? null);
             // Merge top-level fields if not present
-            setProperty(prev => prev ? ({...prev, ...data} as any) : prev);
+            setProperty(prev => prev ? ({...prev, ...(row as any) } as any) : prev);
           }
         }
       } catch (err) {
