@@ -40,6 +40,7 @@ export const LocationDetailsStep: React.FC<LocationDetailsStepProps> = ({
   const mapRef = useRef<any>(null);
   const markerRef = useRef<any>(null);
   const [showMap, setShowMap] = useState(false);
+  const [locationMismatchWarning, setLocationMismatchWarning] = useState<string>('');
   const form = useForm<LocationDetailsFormData>({
     resolver: zodResolver(locationDetailsSchema),
     defaultValues: {
@@ -121,10 +122,33 @@ export const LocationDetailsStep: React.FC<LocationDetailsStepProps> = ({
     const initAutocomplete = () => {
       const google = (window as any).google;
       if (!google?.maps?.places) return;
+      
+      const selectedCity = form.watch('city');
+      const getCityBounds = (city: string) => {
+        // Define approximate bounds for major Indian cities
+        const cityBounds: { [key: string]: { northeast: { lat: number; lng: number }; southwest: { lat: number; lng: number } } } = {
+          'Bangalore': { northeast: { lat: 13.173, lng: 77.727 }, southwest: { lat: 12.864, lng: 77.465 } },
+          'Mumbai': { northeast: { lat: 19.270, lng: 72.978 }, southwest: { lat: 18.892, lng: 72.776 } },
+          'Delhi': { northeast: { lat: 28.884, lng: 77.347 }, southwest: { lat: 28.404, lng: 76.838 } },
+          'Pune': { northeast: { lat: 18.640, lng: 73.993 }, southwest: { lat: 18.412, lng: 73.739 } },
+          'Chennai': { northeast: { lat: 13.233, lng: 80.348 }, southwest: { lat: 12.834, lng: 80.117 } },
+          'Hyderabad': { northeast: { lat: 17.567, lng: 78.658 }, southwest: { lat: 17.271, lng: 78.220 } },
+          'Gurgaon': { northeast: { lat: 28.504, lng: 77.113 }, southwest: { lat: 28.402, lng: 76.828 } },
+          'Noida': { northeast: { lat: 28.595, lng: 77.391 }, southwest: { lat: 28.570, lng: 77.359 } },
+          'Faridabad': { northeast: { lat: 28.432, lng: 77.342 }, southwest: { lat: 28.360, lng: 77.299 } },
+          'Ghaziabad': { northeast: { lat: 28.686, lng: 77.449 }, southwest: { lat: 28.654, lng: 77.412 } },
+          'Greater Noida': { northeast: { lat: 28.496, lng: 77.536 }, southwest: { lat: 28.464, lng: 77.504 } }
+        };
+        return cityBounds[city];
+      };
+
+      const bounds = selectedCity ? getCityBounds(selectedCity) : null;
+      
       const options = {
         fields: ['formatted_address', 'geometry', 'name', 'address_components'],
         types: ['geocode'],
         componentRestrictions: { country: 'in' as const },
+        ...(bounds && { bounds: new google.maps.LatLngBounds(bounds.southwest, bounds.northeast) })
       };
 
       const attach = (el: HTMLInputElement | null, onPlace: (place: any, el: HTMLInputElement) => void) => {
@@ -145,14 +169,14 @@ export const LocationDetailsStep: React.FC<LocationDetailsStepProps> = ({
         
         // Parse address components to extract city, state, and pincode
         if (place?.address_components) {
-          let city = '';
+          let detectedCity = '';
           let state = '';
           let pincode = '';
           
           place.address_components.forEach((component: any) => {
             const types = component.types;
             if (types.includes('locality') || types.includes('administrative_area_level_2')) {
-              city = component.long_name;
+              detectedCity = component.long_name;
             } else if (types.includes('administrative_area_level_1')) {
               state = component.long_name;
             } else if (types.includes('postal_code')) {
@@ -160,8 +184,39 @@ export const LocationDetailsStep: React.FC<LocationDetailsStepProps> = ({
             }
           });
           
+          // Validate if detected city matches selected city
+          const selectedCity = form.getValues('city');
+          const cityAliases: { [key: string]: string[] } = {
+            'Bangalore': ['Bengaluru', 'Bangalore'],
+            'Mumbai': ['Mumbai', 'Bombay'],
+            'Delhi': ['Delhi', 'New Delhi'],
+            'Pune': ['Pune', 'Poona'],
+            'Chennai': ['Chennai', 'Madras'],
+            'Hyderabad': ['Hyderabad', 'Secunderabad'],
+            'Gurgaon': ['Gurgaon', 'Gurugram'],
+            'Noida': ['Noida'],
+            'Faridabad': ['Faridabad'],
+            'Ghaziabad': ['Ghaziabad'],
+            'Greater Noida': ['Greater Noida']
+          };
+          
+          const isValidCity = selectedCity && cityAliases[selectedCity] && 
+            cityAliases[selectedCity].some(alias => 
+              detectedCity.toLowerCase().includes(alias.toLowerCase()) || 
+              alias.toLowerCase().includes(detectedCity.toLowerCase())
+            );
+          
+          if (selectedCity && detectedCity && !isValidCity) {
+            setLocationMismatchWarning(`Please select another locality in ${selectedCity.toLowerCase()}`);
+            // Clear the locality field
+            form.setValue('locality', '', { shouldValidate: true });
+            el.value = '';
+            return;
+          } else {
+            setLocationMismatchWarning('');
+          }
+          
           // Update the form fields
-          if (city) form.setValue('city', city, { shouldValidate: true });
           if (state) form.setValue('state', state, { shouldValidate: true });
           if (pincode) form.setValue('pincode', pincode, { shouldValidate: true });
         }
@@ -173,6 +228,21 @@ export const LocationDetailsStep: React.FC<LocationDetailsStepProps> = ({
     };
 
     loadGoogleMaps().then(initAutocomplete).catch(console.error);
+  }, [form]);
+
+  // Watch for city changes and reset locality mismatch warning
+  useEffect(() => {
+    const subscription = form.watch((value, { name }) => {
+      if (name === 'city') {
+        setLocationMismatchWarning('');
+        // Clear locality when city changes
+        form.setValue('locality', '', { shouldValidate: false });
+        if (localityInputRef.current) {
+          localityInputRef.current.value = '';
+        }
+      }
+    });
+    return () => subscription.unsubscribe();
   }, [form]);
 
   const onSubmit = (data: LocationDetailsFormData) => {
@@ -254,6 +324,14 @@ export const LocationDetailsStep: React.FC<LocationDetailsStepProps> = ({
                           <p className="text-xs text-red-500 animate-pulse font-bold">
                             Type the name of the apartment/ the area of property/anything that could help us 😊
                           </p>
+                          {locationMismatchWarning && (
+                            <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-lg">
+                              <div className="w-6 h-6 bg-red-100 rounded flex items-center justify-center flex-shrink-0">
+                                <span className="text-red-600 text-sm font-bold">✕</span>
+                              </div>
+                              <p className="text-sm text-red-600">{locationMismatchWarning}</p>
+                            </div>
+                          )}
                           <FormMessage />
                         </FormItem>
                       )}
