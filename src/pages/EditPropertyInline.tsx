@@ -146,7 +146,7 @@ export const EditPropertyInline: React.FC = () => {
         // Plot/Land specific fields
         'plot_area', 'length', 'width', 'boundary_wall', 'floors_allowed', 
         'gated_project', 'water_supply', 'electricity_connection', 'sewage_connection',
-        'road_width', 'gated_security', 'directions',
+        'road_width', 'gated_security',
         // Newly compared fields
         'who_will_show', 'current_property_condition', 'secondary_phone'
       ];
@@ -597,7 +597,7 @@ export const EditPropertyInline: React.FC = () => {
             gated_security: typeof regularProperty.gated_security === 'boolean' 
               ? regularProperty.gated_security 
               : regularProperty.gated_security === 'true' || regularProperty.gated_security === 'Yes',
-            directions: regularProperty.directions
+            
           })
           .eq('id', regularProperty.id)
           .eq('user_id', user.id);
@@ -851,7 +851,7 @@ export const EditPropertyInline: React.FC = () => {
           sewage_connection: (editedProperty as Property).sewage_connection || null,
           road_width: (editedProperty as Property).road_width ?? null,
           gated_security: ((editedProperty as Property).gated_security === true || (editedProperty as Property).gated_security === 'true') ? true : false,
-          directions: (editedProperty as Property).directions || null,
+          
           // Newly added top-level details
           who_will_show: (editedProperty as any).who_will_show || null,
           current_property_condition: (editedProperty as any).current_property_condition || null,
