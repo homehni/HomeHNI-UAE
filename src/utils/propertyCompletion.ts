@@ -181,6 +181,26 @@ export const calculatePGPropertyCompletion = (property: PGPropertyData): Complet
 export const calculatePropertyCompletion = (property: PropertyData): CompletionResult => {
   const propertyType = property.property_type;
   
+  console.log('=== PROPERTY COMPLETION CALCULATION DEBUG ===');
+  console.log('Property Title:', property.title);
+  console.log('Property Type:', propertyType);
+  console.log('Raw Property Data:', {
+    title: property.title,
+    expected_price: property.expected_price,
+    super_area: property.super_area,
+    bathrooms: property.bathrooms,
+    balconies: property.balconies,
+    floor_no: property.floor_no,
+    total_floors: property.total_floors,
+    city: property.city,
+    locality: property.locality,
+    state: property.state,
+    pincode: property.pincode,
+    images: property.images?.length || 0,
+    amenities: property.amenities,
+    description: property.description?.length || 0
+  });
+  
   // Define fields based on property type
   let fields: Array<{ key: string; weight: number; required: boolean }> = [];
   
@@ -320,6 +340,13 @@ export const calculatePropertyCompletion = (property: PropertyData): CompletionR
       isCompleted = value !== null && value !== undefined && value !== '';
     }
 
+    console.log(`Field ${field.key}:`, {
+      value: value,
+      isCompleted: isCompleted,
+      weight: field.weight,
+      required: field.required
+    });
+
     if (isCompleted) {
       totalScore += field.weight;
       completedFields.push(field.key);
@@ -335,6 +362,13 @@ export const calculatePropertyCompletion = (property: PropertyData): CompletionR
 
   let percentage = Math.round((totalScore / maxScore) * 100);
   
+  console.log('=== COMPLETION CALCULATION RESULTS ===');
+  console.log('Total Score:', totalScore, '/ Max Score:', maxScore);
+  console.log('Calculated Percentage:', percentage);
+  console.log('Completed Fields:', completedFields);
+  console.log('Missing Fields:', missingFields);
+  console.log('=== END DEBUG ===');
+  
   // TEMPORARY: If all required fields are completed, show 100% regardless of admin approval
   const allRequiredCompleted = !fields
     .filter(field => field.required)
@@ -342,6 +376,7 @@ export const calculatePropertyCompletion = (property: PropertyData): CompletionR
   
   if (allRequiredCompleted) {
     percentage = 100;
+    console.log('All required fields completed, setting percentage to 100%');
   }
 
   return {

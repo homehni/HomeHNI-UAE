@@ -507,11 +507,19 @@ export const EditPropertyInline: React.FC = () => {
   };
 
   const handleFieldChange = (field: string, value: any) => {
+    console.log(`Field change: ${field} = `, value);
     if (editedProperty) {
-      setEditedProperty(prev => ({
-        ...prev!,
+      const updatedProperty = {
+        ...editedProperty,
         [field]: value
-      }));
+      };
+      console.log('Updated property after field change:', {
+        field,
+        value,
+        beforeChange: editedProperty[field as keyof typeof editedProperty],
+        afterChange: updatedProperty[field as keyof typeof updatedProperty]
+      });
+      setEditedProperty(updatedProperty);
     }
   };
 
@@ -876,11 +884,21 @@ export const EditPropertyInline: React.FC = () => {
           updateData.total_floors = (editedProperty as Property).total_floors;
           updateData.floor_no = (editedProperty as Property).floor_no;
           updateData.amenities = (editedProperty as Property).amenities;
+          
+          console.log('Property details being saved:', {
+            bathrooms: updateData.bathrooms,
+            balconies: updateData.balconies,
+            total_floors: updateData.total_floors,
+            floor_no: updateData.floor_no,
+            amenities: updateData.amenities
+          });
         }
 
         console.log('EditPropertyInline saving amenities:', {
           amenities: updateData.amenities,
-          updateData
+          updateData,
+          originalProperty: property,
+          editedProperty: editedProperty
         });
 
         const { error } = await supabase
