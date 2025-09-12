@@ -64,29 +64,29 @@ export interface PropertyAmenities {
   moreSimilarUnits?: boolean;
   directionsTip?: string;
   
-  // Amenities (boolean for consistency with AmenitiesStep)
-  lift?: boolean;
-  powerBackup?: boolean;
-  waterStorageFacility?: boolean;
-  security?: boolean;
-  wifi?: boolean;
+  // Amenities - using strings for consistency
+  lift?: string;
+  powerBackup?: string;
+  waterStorageFacility?: string;
+  security?: string;
+  wifi?: string;
   parking?: string;
-  internetServices?: boolean;
-  airConditioner?: boolean;
-  clubHouse?: boolean;
-  intercom?: boolean;
-  swimmingPool?: boolean;
-  childrenPlayArea?: boolean;
-  fireSafety?: boolean;
-  servantRoom?: boolean;
-  shoppingCenter?: boolean;
-  gasPipeline?: boolean;
-  park?: boolean;
-  rainWaterHarvesting?: boolean;
-  sewageTreatmentPlant?: boolean;
-  houseKeeping?: boolean;
-  vastu?: boolean;
-  visitorParking?: boolean;
+  internetServices?: string;
+  airConditioner?: string;
+  clubHouse?: string;
+  intercom?: string;
+  swimmingPool?: string;
+  childrenPlayArea?: string;
+  fireSafety?: string;
+  servantRoom?: string;
+  shoppingCenter?: string;
+  gasPipeline?: string;
+  park?: string;
+  rainWaterHarvesting?: string;
+  sewageTreatmentPlant?: string;
+  houseKeeping?: string;
+  vastu?: string;
+  visitorParking?: string;
 }
 
 export interface CategorizedImages {
@@ -246,7 +246,9 @@ export interface CommercialSaleAmenities {
   directionsTip?: string;
 }
 
-export interface CommercialAmenities extends PropertyAmenities {}
+export interface CommercialAmenities extends PropertyAmenities {
+  washrooms?: string;
+}
 
 export interface CommercialInfo {
   propertyDetails: CommercialPropertyDetails;

@@ -15,7 +15,8 @@ import {
   Home, MapPin, Building, Sparkles, Camera, FileText, Calendar, Phone, 
   Plus, Minus, PawPrint, Dumbbell, UtensilsCrossed, Shield, MoveUp,
   Wifi, AirVent, MessageCircle, Users, Waves, Flame, Car, Building2,
-  Droplets, Wrench, Trees, Trash2, Tv, Zap
+  Droplets, Wrench, Trees, Trash2, Tv, Zap, ShieldCheck, ShoppingCart,
+  Accessibility, Bath, PersonStanding
 } from 'lucide-react';
 
 const amenitiesSchema = z.object({
@@ -32,24 +33,27 @@ const amenitiesSchema = z.object({
   moreSimilarUnits: z.boolean().optional(),
   directionsTip: z.string().optional(),
   
-  // Amenities
-  lift: z.boolean().optional(),
-  powerBackup: z.boolean().optional(),
-  waterStorageFacility: z.boolean().optional(),
-  security: z.boolean().optional(),
-  wifi: z.boolean().optional(),
-  swimmingPool: z.boolean().optional(),
-  childrenPlayArea: z.boolean().optional(),
-  fireSafety: z.boolean().optional(),
-  servantRoom: z.boolean().optional(),
-  shoppingCenter: z.boolean().optional(),
-  gasPipeline: z.boolean().optional(),
-  park: z.boolean().optional(),
-  rainWaterHarvesting: z.boolean().optional(),
-  sewageTreatmentPlant: z.boolean().optional(),
-  houseKeeping: z.boolean().optional(),
-  powerBackup: z.boolean().optional(),
-  visitorParking: z.boolean().optional(),
+  // Amenities - using strings for consistency
+  lift: z.string().optional(),
+  powerBackup: z.string().optional(),
+  waterStorageFacility: z.string().optional(),
+  security: z.string().optional(),
+  wifi: z.string().optional(),
+  internetServices: z.string().optional(),
+  airConditioner: z.string().optional(),
+  clubHouse: z.string().optional(),
+  intercom: z.string().optional(),
+  swimmingPool: z.string().optional(),
+  childrenPlayArea: z.string().optional(),
+  fireSafety: z.string().optional(),
+  servantRoom: z.string().optional(),
+  shoppingCenter: z.string().optional(),
+  gasPipeline: z.string().optional(),
+  park: z.string().optional(),
+  rainWaterHarvesting: z.string().optional(),
+  sewageTreatmentPlant: z.string().optional(),
+  houseKeeping: z.string().optional(),
+  visitorParking: z.string().optional(),
 });
 
 type AmenitiesFormData = z.infer<typeof amenitiesSchema>;
@@ -84,23 +88,23 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
       secondaryNumber: initialData.secondaryNumber || '',
       moreSimilarUnits: initialData.moreSimilarUnits || false,
       directionsTip: initialData.directionsTip || '',
-      lift: initialData.lift || false,
-      internetServices: initialData.internetServices || false,
-      airConditioner: initialData.airConditioner || false,
-      clubHouse: initialData.clubHouse || false,
-      intercom: initialData.intercom || false,
-      swimmingPool: initialData.swimmingPool || false,
-      childrenPlayArea: initialData.childrenPlayArea || false,
-      fireSafety: initialData.fireSafety || false,
-      servantRoom: initialData.servantRoom || false,
-      shoppingCenter: initialData.shoppingCenter || false,
-      gasPipeline: initialData.gasPipeline || false,
-      park: initialData.park || false,
-      rainWaterHarvesting: initialData.rainWaterHarvesting || false,
-      sewageTreatmentPlant: initialData.sewageTreatmentPlant || false,
-      houseKeeping: initialData.houseKeeping || false,
-      powerBackup: initialData.powerBackup || false,
-      visitorParking: initialData.visitorParking || false,
+      lift: initialData.lift || 'Not Available',
+      internetServices: initialData.internetServices || 'Not Available',
+      airConditioner: initialData.airConditioner || 'Not Available',
+      clubHouse: initialData.clubHouse || 'Not Available',
+      intercom: initialData.intercom || 'Not Available',
+      swimmingPool: initialData.swimmingPool || 'Not Available',
+      childrenPlayArea: initialData.childrenPlayArea || 'Not Available',
+      fireSafety: initialData.fireSafety || 'Not Available',
+      servantRoom: initialData.servantRoom || 'Not Available',
+      shoppingCenter: initialData.shoppingCenter || 'Not Available',
+      gasPipeline: initialData.gasPipeline || 'Not Available',
+      park: initialData.park || 'Not Available',
+      rainWaterHarvesting: initialData.rainWaterHarvesting || 'Not Available',
+      sewageTreatmentPlant: initialData.sewageTreatmentPlant || 'Not Available',
+      houseKeeping: initialData.houseKeeping || 'Not Available',
+      powerBackup: initialData.powerBackup || 'Not Available',
+      visitorParking: initialData.visitorParking || 'Not Available',
     },
   });
 
@@ -495,19 +499,15 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
                 control={form.control}
                 name="lift"
                 render={({ field }) => (
-                  <FormItem className="flex flex-col items-center space-y-2">
+                  <FormItem className="flex items-center space-x-3 p-3 border rounded-lg">
                     <FormControl>
-                      <div className="flex flex-col items-center space-y-2">
-                        <Checkbox
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                        <div className="flex items-center space-x-2">
-                          <MoveUp className="w-5 h-5" />
-                          <FormLabel className="font-normal">Lift</FormLabel>
-                        </div>
-                      </div>
+                      <Checkbox
+                        checked={field.value === 'Available'}
+                        onCheckedChange={(checked) => field.onChange(checked ? 'Available' : 'Not Available')}
+                      />
                     </FormControl>
+                    <MoveUp className="w-5 h-5 text-muted-foreground" />
+                    <FormLabel className="font-normal cursor-pointer">Lift</FormLabel>
                   </FormItem>
                 )}
               />
@@ -517,19 +517,15 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
                 control={form.control}
                 name="internetServices"
                 render={({ field }) => (
-                  <FormItem className="flex flex-col items-center space-y-2">
+                  <FormItem className="flex items-center space-x-3 p-3 border rounded-lg">
                     <FormControl>
-                      <div className="flex flex-col items-center space-y-2">
-                        <Checkbox
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                        <div className="flex items-center space-x-2">
-                          <Wifi className="w-5 h-5" />
-                          <FormLabel className="font-normal">Internet Services</FormLabel>
-                        </div>
-                      </div>
+                      <Checkbox
+                        checked={field.value === 'Available'}
+                        onCheckedChange={(checked) => field.onChange(checked ? 'Available' : 'Not Available')}
+                      />
                     </FormControl>
+                    <Wifi className="w-5 h-5 text-muted-foreground" />
+                    <FormLabel className="font-normal cursor-pointer">Internet Services</FormLabel>
                   </FormItem>
                 )}
               />
@@ -539,19 +535,15 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
                 control={form.control}
                 name="airConditioner"
                 render={({ field }) => (
-                  <FormItem className="flex flex-col items-center space-y-2">
+                  <FormItem className="flex items-center space-x-3 p-3 border rounded-lg">
                     <FormControl>
-                      <div className="flex flex-col items-center space-y-2">
-                        <Checkbox
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                        <div className="flex items-center space-x-2">
-                          <AirVent className="w-5 h-5" />
-                          <FormLabel className="font-normal">Air Conditioner</FormLabel>
-                        </div>
-                      </div>
+                      <Checkbox
+                        checked={field.value === 'Available'}
+                        onCheckedChange={(checked) => field.onChange(checked ? 'Available' : 'Not Available')}
+                      />
                     </FormControl>
+                    <AirVent className="w-5 h-5 text-muted-foreground" />
+                    <FormLabel className="font-normal cursor-pointer">Air Conditioner</FormLabel>
                   </FormItem>
                 )}
               />
@@ -561,19 +553,15 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
                 control={form.control}
                 name="clubHouse"
                 render={({ field }) => (
-                  <FormItem className="flex flex-col items-center space-y-2">
+                  <FormItem className="flex items-center space-x-3 p-3 border rounded-lg">
                     <FormControl>
-                      <div className="flex flex-col items-center space-y-2">
-                        <Checkbox
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                        <div className="flex items-center space-x-2">
-                          <Users className="w-5 h-5" />
-                          <FormLabel className="font-normal">Club House</FormLabel>
-                        </div>
-                      </div>
+                      <Checkbox
+                        checked={field.value === 'Available'}
+                        onCheckedChange={(checked) => field.onChange(checked ? 'Available' : 'Not Available')}
+                      />
                     </FormControl>
+                    <Users className="w-5 h-5 text-muted-foreground" />
+                    <FormLabel className="font-normal cursor-pointer">Club House</FormLabel>
                   </FormItem>
                 )}
               />
@@ -583,19 +571,15 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
                 control={form.control}
                 name="intercom"
                 render={({ field }) => (
-                  <FormItem className="flex flex-col items-center space-y-2">
+                  <FormItem className="flex items-center space-x-3 p-3 border rounded-lg">
                     <FormControl>
-                      <div className="flex flex-col items-center space-y-2">
-                        <Checkbox
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                        <div className="flex items-center space-x-2">
-                          <MessageCircle className="w-5 h-5" />
-                          <FormLabel className="font-normal">Intercom</FormLabel>
-                        </div>
-                      </div>
+                      <Checkbox
+                        checked={field.value === 'Available'}
+                        onCheckedChange={(checked) => field.onChange(checked ? 'Available' : 'Not Available')}
+                      />
                     </FormControl>
+                    <MessageCircle className="w-5 h-5 text-muted-foreground" />
+                    <FormLabel className="font-normal cursor-pointer">Intercom</FormLabel>
                   </FormItem>
                 )}
               />
@@ -605,19 +589,15 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
                 control={form.control}
                 name="swimmingPool"
                 render={({ field }) => (
-                  <FormItem className="flex flex-col items-center space-y-2">
+                  <FormItem className="flex items-center space-x-3 p-3 border rounded-lg">
                     <FormControl>
-                      <div className="flex flex-col items-center space-y-2">
-                        <Checkbox
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                        <div className="flex items-center space-x-2">
-                          <Waves className="w-5 h-5" />
-                          <FormLabel className="font-normal">Swimming Pool</FormLabel>
-                        </div>
-                      </div>
+                      <Checkbox
+                        checked={field.value === 'Available'}
+                        onCheckedChange={(checked) => field.onChange(checked ? 'Available' : 'Not Available')}
+                      />
                     </FormControl>
+                    <Waves className="w-5 h-5 text-muted-foreground" />
+                    <FormLabel className="font-normal cursor-pointer">Swimming Pool</FormLabel>
                   </FormItem>
                 )}
               />
@@ -627,19 +607,15 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
                 control={form.control}
                 name="childrenPlayArea"
                 render={({ field }) => (
-                  <FormItem className="flex flex-col items-center space-y-2">
+                  <FormItem className="flex items-center space-x-3 p-3 border rounded-lg">
                     <FormControl>
-                      <div className="flex flex-col items-center space-y-2">
-                        <Checkbox
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                        <div className="flex items-center space-x-2">
-                          <Trees className="w-5 h-5" />
-                          <FormLabel className="font-normal">Children Play Area</FormLabel>
-                        </div>
-                      </div>
+                      <Checkbox
+                        checked={field.value === 'Available'}
+                        onCheckedChange={(checked) => field.onChange(checked ? 'Available' : 'Not Available')}
+                      />
                     </FormControl>
+                    <Accessibility className="w-5 h-5 text-muted-foreground" />
+                    <FormLabel className="font-normal cursor-pointer">Children Play Area</FormLabel>
                   </FormItem>
                 )}
               />
@@ -649,19 +625,15 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
                 control={form.control}
                 name="fireSafety"
                 render={({ field }) => (
-                  <FormItem className="flex flex-col items-center space-y-2">
+                  <FormItem className="flex items-center space-x-3 p-3 border rounded-lg">
                     <FormControl>
-                      <div className="flex flex-col items-center space-y-2">
-                        <Checkbox
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                        <div className="flex items-center space-x-2">
-                          <Flame className="w-5 h-5" />
-                          <FormLabel className="font-normal">Fire Safety</FormLabel>
-                        </div>
-                      </div>
+                      <Checkbox
+                        checked={field.value === 'Available'}
+                        onCheckedChange={(checked) => field.onChange(checked ? 'Available' : 'Not Available')}
+                      />
                     </FormControl>
+                    <Flame className="w-5 h-5 text-muted-foreground" />
+                    <FormLabel className="font-normal cursor-pointer">Fire Safety</FormLabel>
                   </FormItem>
                 )}
               />
@@ -671,19 +643,15 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
                 control={form.control}
                 name="servantRoom"
                 render={({ field }) => (
-                  <FormItem className="flex flex-col items-center space-y-2">
+                  <FormItem className="flex items-center space-x-3 p-3 border rounded-lg">
                     <FormControl>
-                      <div className="flex flex-col items-center space-y-2">
-                        <Checkbox
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                        <div className="flex items-center space-x-2">
-                          <Home className="w-5 h-5" />
-                          <FormLabel className="font-normal">Servant Room</FormLabel>
-                        </div>
-                      </div>
+                      <Checkbox
+                        checked={field.value === 'Available'}
+                        onCheckedChange={(checked) => field.onChange(checked ? 'Available' : 'Not Available')}
+                      />
                     </FormControl>
+                    <PersonStanding className="w-5 h-5 text-muted-foreground" />
+                    <FormLabel className="font-normal cursor-pointer">Servant Room</FormLabel>
                   </FormItem>
                 )}
               />
@@ -693,19 +661,15 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
                 control={form.control}
                 name="shoppingCenter"
                 render={({ field }) => (
-                  <FormItem className="flex flex-col items-center space-y-2">
+                  <FormItem className="flex items-center space-x-3 p-3 border rounded-lg">
                     <FormControl>
-                      <div className="flex flex-col items-center space-y-2">
-                        <Checkbox
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                        <div className="flex items-center space-x-2">
-                          <Building2 className="w-5 h-5" />
-                          <FormLabel className="font-normal">Shopping Center</FormLabel>
-                        </div>
-                      </div>
+                      <Checkbox
+                        checked={field.value === 'Available'}
+                        onCheckedChange={(checked) => field.onChange(checked ? 'Available' : 'Not Available')}
+                      />
                     </FormControl>
+                    <ShoppingCart className="w-5 h-5 text-muted-foreground" />
+                    <FormLabel className="font-normal cursor-pointer">Shopping Center</FormLabel>
                   </FormItem>
                 )}
               />
@@ -715,19 +679,15 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
                 control={form.control}
                 name="gasPipeline"
                 render={({ field }) => (
-                  <FormItem className="flex flex-col items-center space-y-2">
+                  <FormItem className="flex items-center space-x-3 p-3 border rounded-lg">
                     <FormControl>
-                      <div className="flex flex-col items-center space-y-2">
-                        <Checkbox
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                        <div className="flex items-center space-x-2">
-                          <Wrench className="w-5 h-5" />
-                          <FormLabel className="font-normal">Gas Pipeline</FormLabel>
-                        </div>
-                      </div>
+                      <Checkbox
+                        checked={field.value === 'Available'}
+                        onCheckedChange={(checked) => field.onChange(checked ? 'Available' : 'Not Available')}
+                      />
                     </FormControl>
+                    <Flame className="w-5 h-5 text-muted-foreground" />
+                    <FormLabel className="font-normal cursor-pointer">Gas Pipeline</FormLabel>
                   </FormItem>
                 )}
               />
@@ -737,19 +697,15 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
                 control={form.control}
                 name="park"
                 render={({ field }) => (
-                  <FormItem className="flex flex-col items-center space-y-2">
+                  <FormItem className="flex items-center space-x-3 p-3 border rounded-lg">
                     <FormControl>
-                      <div className="flex flex-col items-center space-y-2">
-                        <Checkbox
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                        <div className="flex items-center space-x-2">
-                          <Trees className="w-5 h-5" />
-                          <FormLabel className="font-normal">Park</FormLabel>
-                        </div>
-                      </div>
+                      <Checkbox
+                        checked={field.value === 'Available'}
+                        onCheckedChange={(checked) => field.onChange(checked ? 'Available' : 'Not Available')}
+                      />
                     </FormControl>
+                    <Trees className="w-5 h-5 text-muted-foreground" />
+                    <FormLabel className="font-normal cursor-pointer">Park</FormLabel>
                   </FormItem>
                 )}
               />
@@ -759,19 +715,15 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
                 control={form.control}
                 name="rainWaterHarvesting"
                 render={({ field }) => (
-                  <FormItem className="flex flex-col items-center space-y-2">
+                  <FormItem className="flex items-center space-x-3 p-3 border rounded-lg">
                     <FormControl>
-                      <div className="flex flex-col items-center space-y-2">
-                        <Checkbox
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                        <div className="flex items-center space-x-2">
-                          <Droplets className="w-5 h-5" />
-                          <FormLabel className="font-normal">Rain Water Harvesting</FormLabel>
-                        </div>
-                      </div>
+                      <Checkbox
+                        checked={field.value === 'Available'}
+                        onCheckedChange={(checked) => field.onChange(checked ? 'Available' : 'Not Available')}
+                      />
                     </FormControl>
+                    <Droplets className="w-5 h-5 text-muted-foreground" />
+                    <FormLabel className="font-normal cursor-pointer">Rain Water Harvesting</FormLabel>
                   </FormItem>
                 )}
               />
@@ -781,19 +733,15 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
                 control={form.control}
                 name="sewageTreatmentPlant"
                 render={({ field }) => (
-                  <FormItem className="flex flex-col items-center space-y-2">
+                  <FormItem className="flex items-center space-x-3 p-3 border rounded-lg">
                     <FormControl>
-                      <div className="flex flex-col items-center space-y-2">
-                        <Checkbox
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                        <div className="flex items-center space-x-2">
-                          <Trash2 className="w-5 h-5" />
-                          <FormLabel className="font-normal">Sewage Treatment Plant</FormLabel>
-                        </div>
-                      </div>
+                      <Checkbox
+                        checked={field.value === 'Available'}
+                        onCheckedChange={(checked) => field.onChange(checked ? 'Available' : 'Not Available')}
+                      />
                     </FormControl>
+                    <Building2 className="w-5 h-5 text-muted-foreground" />
+                    <FormLabel className="font-normal cursor-pointer">Sewage Treatment Plant</FormLabel>
                   </FormItem>
                 )}
               />
@@ -803,19 +751,15 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
                 control={form.control}
                 name="houseKeeping"
                 render={({ field }) => (
-                  <FormItem className="flex flex-col items-center space-y-2">
+                  <FormItem className="flex items-center space-x-3 p-3 border rounded-lg">
                     <FormControl>
-                      <div className="flex flex-col items-center space-y-2">
-                        <Checkbox
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                        <div className="flex items-center space-x-2">
-                          <Home className="w-5 h-5" />
-                          <FormLabel className="font-normal">House Keeping</FormLabel>
-                        </div>
-                      </div>
+                      <Checkbox
+                        checked={field.value === 'Available'}
+                        onCheckedChange={(checked) => field.onChange(checked ? 'Available' : 'Not Available')}
+                      />
                     </FormControl>
+                    <Sparkles className="w-5 h-5 text-muted-foreground" />
+                    <FormLabel className="font-normal cursor-pointer">House Keeping</FormLabel>
                   </FormItem>
                 )}
               />
@@ -825,19 +769,15 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
                 control={form.control}
                 name="powerBackup"
                 render={({ field }) => (
-                  <FormItem className="flex flex-col items-center space-y-2">
+                  <FormItem className="flex items-center space-x-3 p-3 border rounded-lg">
                     <FormControl>
-                      <div className="flex flex-col items-center space-y-2">
-                        <Checkbox
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                        <div className="flex items-center space-x-2">
-                          <Zap className="w-5 h-5" />
-                          <FormLabel className="font-normal">Power Backup</FormLabel>
-                        </div>
-                      </div>
+                      <Checkbox
+                        checked={field.value === 'Available'}
+                        onCheckedChange={(checked) => field.onChange(checked ? 'Available' : 'Not Available')}
+                      />
                     </FormControl>
+                    <Zap className="w-5 h-5 text-muted-foreground" />
+                    <FormLabel className="font-normal cursor-pointer">Power Backup</FormLabel>
                   </FormItem>
                 )}
               />
@@ -847,19 +787,15 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
                 control={form.control}
                 name="visitorParking"
                 render={({ field }) => (
-                  <FormItem className="flex flex-col items-center space-y-2">
+                  <FormItem className="flex items-center space-x-3 p-3 border rounded-lg">
                     <FormControl>
-                      <div className="flex flex-col items-center space-y-2">
-                        <Checkbox
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                        <div className="flex items-center space-x-2">
-                          <Car className="w-5 h-5" />
-                          <FormLabel className="font-normal">Visitor Parking</FormLabel>
-                        </div>
-                      </div>
+                      <Checkbox
+                        checked={field.value === 'Available'}
+                        onCheckedChange={(checked) => field.onChange(checked ? 'Available' : 'Not Available')}
+                      />
                     </FormControl>
+                    <Car className="w-5 h-5 text-muted-foreground" />
+                    <FormLabel className="font-normal cursor-pointer">Visitor Parking</FormLabel>
                   </FormItem>
                 )}
               />
