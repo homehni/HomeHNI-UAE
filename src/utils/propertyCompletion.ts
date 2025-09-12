@@ -160,7 +160,16 @@ export const calculatePGPropertyCompletion = (property: PGPropertyData): Complet
     }
   });
 
-  const percentage = Math.round((totalScore / maxScore) * 100);
+  let percentage = Math.round((totalScore / maxScore) * 100);
+  
+  // TEMPORARY: If all required fields are completed, show 100% regardless of admin approval
+  const allRequiredCompleted = !fields
+    .filter(field => field.required)
+    .some(field => !completedFields.includes(field.key));
+  
+  if (allRequiredCompleted) {
+    percentage = 100;
+  }
 
   return {
     percentage,
@@ -324,7 +333,16 @@ export const calculatePropertyCompletion = (property: PropertyData): CompletionR
     }
   });
 
-  const percentage = Math.round((totalScore / maxScore) * 100);
+  let percentage = Math.round((totalScore / maxScore) * 100);
+  
+  // TEMPORARY: If all required fields are completed, show 100% regardless of admin approval
+  const allRequiredCompleted = !fields
+    .filter(field => field.required)
+    .some(field => !completedFields.includes(field.key));
+  
+  if (allRequiredCompleted) {
+    percentage = 100;
+  }
 
   return {
     percentage,
