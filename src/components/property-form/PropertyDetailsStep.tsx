@@ -13,6 +13,7 @@ import { Phone } from 'lucide-react';
 const propertyDetailsSchema = z.object({
   title: z.string().optional(), // Made optional - will be auto-generated
   propertyType: z.string().optional(),
+  apartmentName: z.string().optional(),
   bhkType: z.string().optional(),
   buildingType: z.string().optional(),
   floorType: z.string().optional(),
@@ -49,6 +50,7 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
     defaultValues: {
       title: initialData.title || '',
       propertyType: initialData.propertyType || '',
+      apartmentName: initialData.apartmentName || '',
       bhkType: initialData.bhkType || '',
       buildingType: initialData.buildingType || '',
       // propertyAge removed - not part of the schema
@@ -64,6 +66,14 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
       cornerProperty: initialData.cornerProperty || false,
     },
   });
+
+  const watchedPropertyType = form.watch("propertyType");
+  
+  // Properties that show apartment name dropdown
+  const showApartmentName = ['Apartment', 'Penthouse', 'Gated Community Villa'].includes(watchedPropertyType);
+  
+  // Properties that show number of floors
+  const showNumberOfFloors = ['Independent House', 'Villa', 'Duplex'].includes(watchedPropertyType);
 
 
   const onSubmit = (data: PropertyDetailsFormData) => {
@@ -125,10 +135,9 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
                       <SelectItem value="Apartment">Apartment</SelectItem>
                       <SelectItem value="Villa">Villa</SelectItem>
                       <SelectItem value="Independent House">Independent House</SelectItem>
-                      <SelectItem value="Builder Floor">Builder Floor</SelectItem>
-                      <SelectItem value="Studio Apartment">Studio Apartment</SelectItem>
                       <SelectItem value="Penthouse">Penthouse</SelectItem>
                       <SelectItem value="Duplex">Duplex</SelectItem>
+                      <SelectItem value="Gated Community Villa">Gated Community Villa</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />
@@ -165,79 +174,146 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
             />
           </div>
 
-          {/* Floor, Total Floors */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Apartment Name - Only for Apartment, Penthouse, Gated Community Villa */}
+          {showApartmentName && (
             <FormField
               control={form.control}
-              name="floorNo"
+              name="apartmentName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-sm font-medium">Floor</FormLabel>
-                  <Select
-                    onValueChange={(value) => {
-                      if (value === 'ground') {
-                        field.onChange(0);
-                      } else if (value === 'basement') {
-                        field.onChange('basement');
-                      } else {
-                        field.onChange(parseInt(value));
-                      }
-                    }}
-                    value={field.value === undefined ? undefined : field.value.toString()}
-                  >
+                  <FormLabel className="text-sm font-medium">
+                    Apartment Name <span className="text-red-500">(Please select from dropdown)*</span>
+                  </FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger className="h-12">
-                        <SelectValue placeholder="Select Floor" />
+                        <SelectValue placeholder="e.g. Ajmera Enclave" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="basement">Basement</SelectItem>
-                      <SelectItem value="ground">Ground Floor</SelectItem>
-                      {[...Array(50)].map((_, i) => {
-                        const floor = i + 1;
-                        return (
-                          <SelectItem key={floor} value={floor.toString()}>
-                            {floor}
-                          </SelectItem>
-                        );
-                      })}
+                      <SelectItem value="Ajmera Enclave">Ajmera Enclave</SelectItem>
+                      <SelectItem value="DLF Phase 1">DLF Phase 1</SelectItem>
+                      <SelectItem value="Brigade Gateway">Brigade Gateway</SelectItem>
+                      <SelectItem value="Prestige Shantiniketan">Prestige Shantiniketan</SelectItem>
+                      <SelectItem value="Sobha City">Sobha City</SelectItem>
+                      <SelectItem value="Mantri Espana">Mantri Espana</SelectItem>
+                      <SelectItem value="Other">Other</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />
                 </FormItem>
               )}
             />
+          )}
 
-            <FormField
-              control={form.control}
-              name="totalFloors"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-sm font-medium">Total Floors</FormLabel>
-                  <Select
-                    onValueChange={(value) => field.onChange(parseInt(value))}
-                    defaultValue={field.value?.toString()}
-                  >
-                    <FormControl>
-                      <SelectTrigger className="h-12">
-                        <SelectValue placeholder="Select Total Floors" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {[...Array(50)].map((_, i) => {
-                        const floor = i + 1;
-                        return (
-                          <SelectItem key={floor} value={floor.toString()}>
-                            {floor}
-                          </SelectItem>
-                        );
-                      })}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+          {/* Floor, Total Floors / No. of Floors */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {showApartmentName && (
+              <FormField
+                control={form.control}
+                name="floorNo"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-sm font-medium">Floor</FormLabel>
+                    <Select
+                      onValueChange={(value) => {
+                        if (value === 'ground') {
+                          field.onChange(0);
+                        } else if (value === 'basement') {
+                          field.onChange('basement');
+                        } else {
+                          field.onChange(parseInt(value));
+                        }
+                      }}
+                      value={field.value === undefined ? undefined : field.value.toString()}
+                    >
+                      <FormControl>
+                        <SelectTrigger className="h-12">
+                          <SelectValue placeholder="Select Floor" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="basement">Basement</SelectItem>
+                        <SelectItem value="ground">Ground Floor</SelectItem>
+                        {[...Array(50)].map((_, i) => {
+                          const floor = i + 1;
+                          return (
+                            <SelectItem key={floor} value={floor.toString()}>
+                              {floor}
+                            </SelectItem>
+                          );
+                        })}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
+
+            {showApartmentName ? (
+              <FormField
+                control={form.control}
+                name="totalFloors"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-sm font-medium">Total Floors</FormLabel>
+                    <Select
+                      onValueChange={(value) => field.onChange(parseInt(value))}
+                      defaultValue={field.value?.toString()}
+                    >
+                      <FormControl>
+                        <SelectTrigger className="h-12">
+                          <SelectValue placeholder="Select Total Floors" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {[...Array(50)].map((_, i) => {
+                          const floor = i + 1;
+                          return (
+                            <SelectItem key={floor} value={floor.toString()}>
+                              {floor}
+                            </SelectItem>
+                          );
+                        })}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            ) : showNumberOfFloors ? (
+              <FormField
+                control={form.control}
+                name="totalFloors"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-sm font-medium">No. of Floors</FormLabel>
+                    <Select
+                      onValueChange={(value) => field.onChange(parseInt(value))}
+                      defaultValue={field.value?.toString()}
+                    >
+                      <FormControl>
+                        <SelectTrigger className="h-12">
+                          <SelectValue placeholder="Select" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {[...Array(10)].map((_, i) => {
+                          const floor = i + 1;
+                          return (
+                            <SelectItem key={floor} value={floor.toString()}>
+                              {floor}
+                            </SelectItem>
+                          );
+                        })}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            ) : null}
           </div>
 
           {/* Super Built Up Area, Bathrooms, Balconies */}

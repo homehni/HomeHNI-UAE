@@ -10,6 +10,7 @@ export interface OwnerInfo {
 export interface PropertyDetails {
   title: string;
   propertyType: string;
+  apartmentName?: string;
   buildingType: string;
   bhkType: string;
   bathrooms: number;
