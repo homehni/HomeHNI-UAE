@@ -1,6 +1,42 @@
 import { supabase } from '@/integrations/supabase/client';
 import { mapPropertyType } from '@/utils/propertyMappings';
 
+// Ensure a valid auth session before storage operations and retry once on "exp" errors
+const uploadWithRetry = async (
+  bucket: string,
+  path: string,
+  file: File,
+  options?: { cacheControl?: string; upsert?: boolean }
+) => {
+  const attempt = () =>
+    supabase.storage.from(bucket).upload(path, file, options);
+
+  // First attempt
+  let { data, error } = await attempt();
+
+  // If token expired or unauthorized due to exp claim, try to refresh and retry once
+  if (error && (String(error.message || '').toLowerCase().includes('exp') || (error as any).statusCode === '403')) {
+    try {
+      await supabase.auth.refreshSession();
+    } catch (_) {
+      // ignore
+    }
+    ({ data, error } = await attempt());
+
+    // If still failing with exp, clear stale session and retry as a last resort
+    if (error && String(error.message || '').toLowerCase().includes('exp')) {
+      try {
+        await supabase.auth.signOut();
+      } catch (_) {
+        // ignore
+      }
+      ({ data, error } = await attempt());
+    }
+  }
+
+  return { data, error };
+};
+
 export interface UploadResult {
   url: string;
   path: string;
@@ -15,12 +51,12 @@ export const uploadFilesToStorage = async (
     const fileExt = file.name.split('.').pop();
     const fileName = `${userId}/${folder}/${Date.now()}_${index}.${fileExt}`;
     
-    const { data, error } = await supabase.storage
-      .from('property-media')
-      .upload(fileName, file, {
-        cacheControl: '3600',
-        upsert: false
-      });
+const { data, error } = await uploadWithRetry(
+      'property-media',
+      fileName,
+      file,
+      { cacheControl: '3600', upsert: false }
+    );
 
     if (error) {
       console.error('Upload error:', error);
@@ -71,9 +107,12 @@ export const uploadPropertyImagesByType = async (
     const unique = `${Date.now()}_${index}${userId ? `_${userId.slice(0, 8)}` : ''}.${fileExt}`;
     const path = `${basePath}/${unique}`;
 
-    const { error } = await supabase.storage
-      .from('property-media')
-      .upload(path, file, { cacheControl: '3600', upsert: false });
+const { error } = await uploadWithRetry(
+      'property-media',
+      path,
+      file,
+      { cacheControl: '3600', upsert: false }
+    );
 
     if (error) {
       console.error('Upload error:', error);
