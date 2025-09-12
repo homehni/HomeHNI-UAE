@@ -1636,45 +1636,6 @@ export const EditPropertyInline: React.FC = () => {
                           <div>
                             <h5 className="font-medium text-gray-700 mb-3">Select the available amenities</h5>
                             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                              {/* Pet Allowed */}
-                              <div className="flex items-center space-x-3 p-3 border rounded-lg">
-                                <Checkbox
-                                  checked={!!editedProperty.amenities?.petAllowed}
-                                  onCheckedChange={(checked) => handleFieldChange('amenities', {
-                                    ...(editedProperty.amenities || {}),
-                                    petAllowed: !!checked
-                                  })}
-                                />
-                                <PawPrint className="w-5 h-5 text-muted-foreground" />
-                                <Label className="font-normal cursor-pointer">Pet Allowed</Label>
-                              </div>
-
-                              {/* Gym */}
-                              <div className="flex items-center space-x-3 p-3 border rounded-lg">
-                                <Checkbox
-                                  checked={!!editedProperty.amenities?.gym}
-                                  onCheckedChange={(checked) => handleFieldChange('amenities', {
-                                    ...(editedProperty.amenities || {}),
-                                    gym: !!checked
-                                  })}
-                                />
-                                <Dumbbell className="w-5 h-5 text-muted-foreground" />
-                                <Label className="font-normal cursor-pointer">Gym</Label>
-                              </div>
-
-                              {/* Non-Veg Allowed */}
-                              <div className="flex items-center space-x-3 p-3 border rounded-lg">
-                                <Checkbox
-                                  checked={!!editedProperty.amenities?.nonVegAllowed}
-                                  onCheckedChange={(checked) => handleFieldChange('amenities', {
-                                    ...(editedProperty.amenities || {}),
-                                    nonVegAllowed: !!checked
-                                  })}
-                                />
-                                <UtensilsCrossed className="w-5 h-5 text-muted-foreground" />
-                                <Label className="font-normal cursor-pointer">Non-Veg Allowed</Label>
-                              </div>
-
                               {/* Lift */}
                               <div className="flex items-center space-x-3 p-3 border rounded-lg">
                                 <Checkbox
