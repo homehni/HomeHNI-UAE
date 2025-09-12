@@ -148,7 +148,11 @@ export const PropertyEditModal: React.FC<PropertyEditModalProps> = ({
         sewageTreatmentPlant: property.amenities?.sewageTreatmentPlant || 'Not Available',
         houseKeeping: property.amenities?.houseKeeping || 'Not Available',
         powerBackup: property.amenities?.powerBackup || 'Not Available',
-        visitorParking: property.amenities?.visitorParking || 'Not Available'
+        visitorParking: property.amenities?.visitorParking || 'Not Available',
+        waterStorageFacility: property.amenities?.waterStorageFacility || 'Not Available',
+        security: property.amenities?.security || 'Not Available',
+        wifi: property.amenities?.wifi || 'Not Available',
+        parking: property.amenities?.parking || ''
       });
     }
   }, [property]);
@@ -191,7 +195,11 @@ export const PropertyEditModal: React.FC<PropertyEditModalProps> = ({
         sewageTreatmentPlant: formData.sewageTreatmentPlant,
         houseKeeping: formData.houseKeeping,
         powerBackup: formData.powerBackup,
-        visitorParking: formData.visitorParking
+        visitorParking: formData.visitorParking,
+        waterStorageFacility: formData.waterStorageFacility,
+        security: formData.security,
+        wifi: formData.wifi,
+        parking: formData.parking
       };
 
       const { error } = await supabase
@@ -826,6 +834,35 @@ export const PropertyEditModal: React.FC<PropertyEditModalProps> = ({
                 <Label className="font-normal cursor-pointer">Visitor Parking</Label>
               </div>
 
+              {/* WiFi */}
+              <div className="flex items-center space-x-3 p-3 border rounded-lg">
+                <Checkbox
+                  checked={formData.wifi === 'Available'}
+                  onCheckedChange={(checked) => handleInputChange('wifi', checked ? 'Available' : 'Not Available')}
+                />
+                <Wifi className="w-5 h-5 text-muted-foreground" />
+                <Label className="font-normal cursor-pointer">WiFi</Label>
+              </div>
+
+              {/* Water Storage Facility */}
+              <div className="flex items-center space-x-3 p-3 border rounded-lg">
+                <Checkbox
+                  checked={formData.waterStorageFacility === 'Available'}
+                  onCheckedChange={(checked) => handleInputChange('waterStorageFacility', checked ? 'Available' : 'Not Available')}
+                />
+                <Droplets className="w-5 h-5 text-muted-foreground" />
+                <Label className="font-normal cursor-pointer">Water Storage Facility</Label>
+              </div>
+
+              {/* Security */}
+              <div className="flex items-center space-x-3 p-3 border rounded-lg">
+                <Checkbox
+                  checked={formData.security === 'Available'}
+                  onCheckedChange={(checked) => handleInputChange('security', checked ? 'Available' : 'Not Available')}
+                />
+                <ShieldCheck className="w-5 h-5 text-muted-foreground" />
+                <Label className="font-normal cursor-pointer">Security</Label>
+              </div>
             </div>
           </div>
 
