@@ -912,10 +912,7 @@ export const EditPropertyInline: React.FC = () => {
         }
       }
 
-      toast({
-        title: "Property Updated!",
-        description: "Your property has been updated successfully and is pending review.",
-      });
+      // Property updated successfully - removed toast notification
 
       // Update the original property state
       setProperty(editedProperty);
@@ -925,11 +922,7 @@ export const EditPropertyInline: React.FC = () => {
       
     } catch (error) {
       console.error('Error updating property:', error);
-      toast({
-        title: "Update Failed",
-        description: "Failed to update property. Please try again.",
-        variant: "destructive"
-      });
+      // Removed error toast notification
     } finally {
       setIsSubmitting(false);
     }
