@@ -90,23 +90,50 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
         
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            {/* Property Name - Optional */}
-            <FormField
-              control={form.control}
-              name="title"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-sm font-medium">Property Name</FormLabel>
-                  <FormControl>
-                    <Input
-                      className="h-10"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            {/* Property Name and Built Up Area */}
+            <div className="grid grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
+                name="title"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-sm font-medium">Property Name</FormLabel>
+                    <FormControl>
+                      <Input
+                        className="h-10"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="superBuiltUpArea"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-sm font-medium">Built Up Area*</FormLabel>
+                    <div className="relative">
+                      <FormControl>
+                        <Input
+                          type="number"
+                          placeholder="943"
+                          className="h-10 pr-12 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
+                          {...field}
+                          onChange={(e) => field.onChange(e.target.value === '' ? undefined : parseInt(e.target.value, 10))}
+                        />
+                      </FormControl>
+                      <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-sm text-muted-foreground">
+                        Sq.ft
+                      </div>
+                    </div>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
 
             {/* Property Type and BHK Type */}
             <div className="grid grid-cols-2 gap-4">
@@ -335,32 +362,6 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
                 />
               ) : null}
             </div>
-
-            {/* Super Built Up Area */}
-            <FormField
-              control={form.control}
-              name="superBuiltUpArea"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-sm font-medium">Built Up Area*</FormLabel>
-                  <div className="relative">
-                    <FormControl>
-                      <Input
-                        type="number"
-                        placeholder="943"
-                        className="h-10 pr-12 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
-                        {...field}
-                        onChange={(e) => field.onChange(e.target.value === '' ? undefined : parseInt(e.target.value, 10))}
-                      />
-                    </FormControl>
-                    <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-sm text-muted-foreground">
-                      Sq.ft
-                    </div>
-                  </div>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
 
 
             {/* Help Section */}
