@@ -9,7 +9,7 @@ import { CategorizedImageUpload } from './CategorizedImageUpload';
 import { VideoUpload } from './VideoUpload';
 import { PropertyGallery } from '@/types/property';
 import { ProgressIndicator } from './ProgressIndicator';
-import { Home, MapPin, Building, Sparkles, Camera, FileText, Calendar, Phone } from 'lucide-react';
+import { Home, MapPin, Building, Sparkles, Camera, FileText, Calendar, Phone, Mail, Video } from 'lucide-react';
 
 // Define a local type for our form data
 type GalleryFormData = {
@@ -127,9 +127,9 @@ export const GalleryStep: React.FC<GalleryStepProps> = ({
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-semibold text-primary">Upload photos & videos</h1>
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <h1 className="text-2xl font-bold text-red-600">Upload photos & videos</h1>
         <Button 
           variant="outline" 
           className="bg-teal-600 text-white border-teal-600 hover:bg-teal-700"
@@ -194,10 +194,7 @@ export const GalleryStep: React.FC<GalleryStepProps> = ({
               {/* Email Option */}
               <div className="bg-orange-50 border border-orange-200 rounded-lg p-6">
                 <div className="flex items-center justify-center w-12 h-12 bg-orange-500 rounded-full mx-auto mb-4">
-                  <svg className="h-6 w-6 text-white" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/>
-                    <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/>
-                  </svg>
+                  <Mail className="h-6 w-6 text-white" />
                 </div>
                 <h4 className="font-medium mb-2">Email to</h4>
                 <p className="text-lg font-semibold text-orange-600">photos@nobroker.in</p>
@@ -208,9 +205,7 @@ export const GalleryStep: React.FC<GalleryStepProps> = ({
           {/* Add Videos Section */}
           <div className="text-center pt-8">
             <div className="inline-flex items-center justify-center w-16 h-16 bg-gray-100 rounded-lg mb-4">
-              <svg className="h-8 w-8 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm3 2h6v4H7V5zm8 8v2h1v-2h-1zm-2-1a1 1 0 011-1v4a1 1 0 01-1 1H7a1 1 0 01-1-1V9a1 1 0 011-1h6z" clipRule="evenodd"/>
-              </svg>
+              <Video className="h-8 w-8 text-gray-400" />
             </div>
             
             <FormField
