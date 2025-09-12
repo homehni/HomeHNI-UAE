@@ -14,7 +14,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ArrowLeft, Loader2, Save, X, Upload, MapPin } from 'lucide-react';
+import { Checkbox } from '@/components/ui/checkbox';
+import { ArrowLeft, Loader2, Save, X, Upload, MapPin, MoveUp, Wifi, AirVent, MessageCircle, Users, Waves, Flame, Car, Building2, Droplets, Trees, Sparkles, PersonStanding, Zap, ShieldCheck, ShoppingCart, Accessibility } from 'lucide-react';
 
 interface Property {
   id: string;
@@ -355,11 +356,11 @@ export const EditPropertyInline: React.FC = () => {
         // Handle amenities type conversion from Json to string[]
         const processedProperty = {
           ...propertyData,
-          amenities: Array.isArray(propertyData.amenities) 
-            ? propertyData.amenities 
-            : typeof propertyData.amenities === 'object' && propertyData.amenities
-              ? Object.keys(propertyData.amenities).filter(key => propertyData.amenities[key])
-              : []
+          amenities: Array.isArray(propertyData.amenities)
+            ? propertyData.amenities.reduce((acc: any, key: string) => ({ ...acc, [key]: 'Available' }), {})
+            : (typeof propertyData.amenities === 'object' && propertyData.amenities)
+              ? propertyData.amenities
+              : {}
         } as Property;
         setProperty(processedProperty);
         setEditedProperty(processedProperty);
@@ -1511,154 +1512,232 @@ export const EditPropertyInline: React.FC = () => {
                     {editedProperty.property_type !== 'plot' && editedProperty.property_type !== 'land' && (
                       <div className="mt-6">
                         <h4 className="text-lg font-semibold mb-4">Amenities</h4>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                          {/* Power Backup */}
+                        <div className="space-y-6">
+                          {/* Available Amenities - match Post Property form */}
                           <div>
-                            <Label htmlFor="powerBackup">Power Backup</Label>
-                            <Select
-                              value={editedProperty.amenities?.powerBackup || ''}
-                              onValueChange={(value) => handleFieldChange('amenities', {
-                                ...editedProperty.amenities,
-                                powerBackup: value
-                              })}
-                            >
-                              <SelectTrigger>
-                                <SelectValue placeholder="Select" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="full">Full Power Backup</SelectItem>
-                                <SelectItem value="partial">Partial Power Backup</SelectItem>
-                                <SelectItem value="dg-backup">DG Backup</SelectItem>
-                                <SelectItem value="no-backup">No Power Backup</SelectItem>
-                              </SelectContent>
-                            </Select>
-                          </div>
+                            <h5 className="font-medium text-gray-700 mb-3">Select the available amenities</h5>
+                            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                              {/* Lift */}
+                              <div className="flex items-center space-x-3 p-3 border rounded-lg">
+                                <Checkbox
+                                  checked={editedProperty.amenities?.lift === 'Available'}
+                                  onCheckedChange={(checked) => handleFieldChange('amenities', {
+                                    ...(editedProperty.amenities || {}),
+                                    lift: checked ? 'Available' : 'Not Available'
+                                  })}
+                                />
+                                <MoveUp className="w-5 h-5 text-muted-foreground" />
+                                <Label className="font-normal cursor-pointer">Lift</Label>
+                              </div>
 
-                          {/* Lift */}
-                          <div>
-                            <Label htmlFor="lift">Lift</Label>
-                            <Select
-                              value={editedProperty.amenities?.lift || ''}
-                              onValueChange={(value) => handleFieldChange('amenities', {
-                                ...editedProperty.amenities,
-                                lift: value
-                              })}
-                            >
-                              <SelectTrigger>
-                                <SelectValue placeholder="Select" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="available">Yes</SelectItem>
-                                <SelectItem value="not-available">No</SelectItem>
-                              </SelectContent>
-                            </Select>
-                          </div>
+                              {/* Internet Services */}
+                              <div className="flex items-center space-x-3 p-3 border rounded-lg">
+                                <Checkbox
+                                  checked={editedProperty.amenities?.internetServices === 'Available'}
+                                  onCheckedChange={(checked) => handleFieldChange('amenities', {
+                                    ...(editedProperty.amenities || {}),
+                                    internetServices: checked ? 'Available' : 'Not Available'
+                                  })}
+                                />
+                                <Wifi className="w-5 h-5 text-muted-foreground" />
+                                <Label className="font-normal cursor-pointer">Internet Services</Label>
+                              </div>
 
-                          {/* Parking */}
-                          <div>
-                            <Label htmlFor="parking">Parking</Label>
-                            <Select
-                              value={editedProperty.amenities?.parking || ''}
-                              onValueChange={(value) => handleFieldChange('amenities', {
-                                ...editedProperty.amenities,
-                                parking: value
-                              })}
-                            >
-                              <SelectTrigger>
-                                <SelectValue placeholder="Select" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="bike">Bike Parking</SelectItem>
-                                <SelectItem value="car">Car Parking</SelectItem>
-                                <SelectItem value="both">Both</SelectItem>
-                                <SelectItem value="none">No Parking</SelectItem>
-                              </SelectContent>
-                            </Select>
-                          </div>
+                              {/* Air Conditioner */}
+                              <div className="flex items-center space-x-3 p-3 border rounded-lg">
+                                <Checkbox
+                                  checked={editedProperty.amenities?.airConditioner === 'Available'}
+                                  onCheckedChange={(checked) => handleFieldChange('amenities', {
+                                    ...(editedProperty.amenities || {}),
+                                    airConditioner: checked ? 'Available' : 'Not Available'
+                                  })}
+                                />
+                                <AirVent className="w-5 h-5 text-muted-foreground" />
+                                <Label className="font-normal cursor-pointer">Air Conditioner</Label>
+                              </div>
 
-                          {/* Water Storage Facility */}
-                          <div>
-                            <Label htmlFor="waterStorageFacility">Water Storage Facility</Label>
-                            <Select
-                              value={editedProperty.amenities?.waterStorageFacility || ''}
-                              onValueChange={(value) => handleFieldChange('amenities', {
-                                ...editedProperty.amenities,
-                                waterStorageFacility: value
-                              })}
-                            >
-                              <SelectTrigger>
-                                <SelectValue placeholder="Select" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="overhead-tank">Overhead Tank</SelectItem>
-                                <SelectItem value="underground-tank">Underground Tank</SelectItem>
-                                <SelectItem value="both">Both</SelectItem>
-                                <SelectItem value="borewell">Borewell</SelectItem>
-                                <SelectItem value="none">None</SelectItem>
-                              </SelectContent>
-                            </Select>
-                          </div>
+                              {/* Club House */}
+                              <div className="flex items-center space-x-3 p-3 border rounded-lg">
+                                <Checkbox
+                                  checked={editedProperty.amenities?.clubHouse === 'Available'}
+                                  onCheckedChange={(checked) => handleFieldChange('amenities', {
+                                    ...(editedProperty.amenities || {}),
+                                    clubHouse: checked ? 'Available' : 'Not Available'
+                                  })}
+                                />
+                                <Users className="w-5 h-5 text-muted-foreground" />
+                                <Label className="font-normal cursor-pointer">Club House</Label>
+                              </div>
 
-                          {/* Security */}
-                          <div>
-                            <Label htmlFor="security">Security</Label>
-                            <Select
-                              value={editedProperty.amenities?.security || ''}
-                              onValueChange={(value) => handleFieldChange('amenities', {
-                                ...editedProperty.amenities,
-                                security: value
-                              })}
-                            >
-                              <SelectTrigger>
-                                <SelectValue placeholder="Select" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="yes">Yes</SelectItem>
-                                <SelectItem value="no">No</SelectItem>
-                              </SelectContent>
-                            </Select>
-                          </div>
+                              {/* Intercom */}
+                              <div className="flex items-center space-x-3 p-3 border rounded-lg">
+                                <Checkbox
+                                  checked={editedProperty.amenities?.intercom === 'Available'}
+                                  onCheckedChange={(checked) => handleFieldChange('amenities', {
+                                    ...(editedProperty.amenities || {}),
+                                    intercom: checked ? 'Available' : 'Not Available'
+                                  })}
+                                />
+                                <MessageCircle className="w-5 h-5 text-muted-foreground" />
+                                <Label className="font-normal cursor-pointer">Intercom</Label>
+                              </div>
 
-                          {/* WiFi */}
-                          <div>
-                            <Label htmlFor="wifi">WiFi</Label>
-                            <Select
-                              value={editedProperty.amenities?.wifi || ''}
-                              onValueChange={(value) => handleFieldChange('amenities', {
-                                ...editedProperty.amenities,
-                                wifi: value
-                              })}
-                            >
-                              <SelectTrigger>
-                                <SelectValue placeholder="Select" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="available">Yes</SelectItem>
-                                <SelectItem value="not-available">No</SelectItem>
-                              </SelectContent>
-                            </Select>
-                          </div>
+                              {/* Swimming Pool */}
+                              <div className="flex items-center space-x-3 p-3 border rounded-lg">
+                                <Checkbox
+                                  checked={editedProperty.amenities?.swimmingPool === 'Available'}
+                                  onCheckedChange={(checked) => handleFieldChange('amenities', {
+                                    ...(editedProperty.amenities || {}),
+                                    swimmingPool: checked ? 'Available' : 'Not Available'
+                                  })}
+                                />
+                                <Waves className="w-5 h-5 text-muted-foreground" />
+                                <Label className="font-normal cursor-pointer">Swimming Pool</Label>
+                              </div>
 
-                          {/* Current Property Condition */}
-                          <div>
-                            <Label htmlFor="currentPropertyCondition">Current Property Condition</Label>
-                            <Select
-                              value={editedProperty.amenities?.currentPropertyCondition || ''}
-                              onValueChange={(value) => handleFieldChange('amenities', {
-                                ...editedProperty.amenities,
-                                currentPropertyCondition: value
-                              })}
-                            >
-                              <SelectTrigger>
-                                <SelectValue placeholder="Select" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="excellent">Excellent</SelectItem>
-                                <SelectItem value="good">Good</SelectItem>
-                                <SelectItem value="average">Average</SelectItem>
-                                <SelectItem value="needs-renovation">Needs Renovation</SelectItem>
-                              </SelectContent>
-                            </Select>
+                              {/* Children Play Area */}
+                              <div className="flex items-center space-x-3 p-3 border rounded-lg">
+                                <Checkbox
+                                  checked={editedProperty.amenities?.childrenPlayArea === 'Available'}
+                                  onCheckedChange={(checked) => handleFieldChange('amenities', {
+                                    ...(editedProperty.amenities || {}),
+                                    childrenPlayArea: checked ? 'Available' : 'Not Available'
+                                  })}
+                                />
+                                <Accessibility className="w-5 h-5 text-muted-foreground" />
+                                <Label className="font-normal cursor-pointer">Children Play Area</Label>
+                              </div>
+
+                              {/* Fire Safety */}
+                              <div className="flex items-center space-x-3 p-3 border rounded-lg">
+                                <Checkbox
+                                  checked={editedProperty.amenities?.fireSafety === 'Available'}
+                                  onCheckedChange={(checked) => handleFieldChange('amenities', {
+                                    ...(editedProperty.amenities || {}),
+                                    fireSafety: checked ? 'Available' : 'Not Available'
+                                  })}
+                                />
+                                <Flame className="w-5 h-5 text-muted-foreground" />
+                                <Label className="font-normal cursor-pointer">Fire Safety</Label>
+                              </div>
+
+                              {/* Servant Room */}
+                              <div className="flex items-center space-x-3 p-3 border rounded-lg">
+                                <Checkbox
+                                  checked={editedProperty.amenities?.servantRoom === 'Available'}
+                                  onCheckedChange={(checked) => handleFieldChange('amenities', {
+                                    ...(editedProperty.amenities || {}),
+                                    servantRoom: checked ? 'Available' : 'Not Available'
+                                  })}
+                                />
+                                <PersonStanding className="w-5 h-5 text-muted-foreground" />
+                                <Label className="font-normal cursor-pointer">Servant Room</Label>
+                              </div>
+
+                              {/* Shopping Center */}
+                              <div className="flex items-center space-x-3 p-3 border rounded-lg">
+                                <Checkbox
+                                  checked={editedProperty.amenities?.shoppingCenter === 'Available'}
+                                  onCheckedChange={(checked) => handleFieldChange('amenities', {
+                                    ...(editedProperty.amenities || {}),
+                                    shoppingCenter: checked ? 'Available' : 'Not Available'
+                                  })}
+                                />
+                                <ShoppingCart className="w-5 h-5 text-muted-foreground" />
+                                <Label className="font-normal cursor-pointer">Shopping Center</Label>
+                              </div>
+
+                              {/* Gas Pipeline */}
+                              <div className="flex items-center space-x-3 p-3 border rounded-lg">
+                                <Checkbox
+                                  checked={editedProperty.amenities?.gasPipeline === 'Available'}
+                                  onCheckedChange={(checked) => handleFieldChange('amenities', {
+                                    ...(editedProperty.amenities || {}),
+                                    gasPipeline: checked ? 'Available' : 'Not Available'
+                                  })}
+                                />
+                                <Flame className="w-5 h-5 text-muted-foreground" />
+                                <Label className="font-normal cursor-pointer">Gas Pipeline</Label>
+                              </div>
+
+                              {/* Park */}
+                              <div className="flex items-center space-x-3 p-3 border rounded-lg">
+                                <Checkbox
+                                  checked={editedProperty.amenities?.park === 'Available'}
+                                  onCheckedChange={(checked) => handleFieldChange('amenities', {
+                                    ...(editedProperty.amenities || {}),
+                                    park: checked ? 'Available' : 'Not Available'
+                                  })}
+                                />
+                                <Trees className="w-5 h-5 text-muted-foreground" />
+                                <Label className="font-normal cursor-pointer">Park</Label>
+                              </div>
+
+                              {/* Rain Water Harvesting */}
+                              <div className="flex items-center space-x-3 p-3 border rounded-lg">
+                                <Checkbox
+                                  checked={editedProperty.amenities?.rainWaterHarvesting === 'Available'}
+                                  onCheckedChange={(checked) => handleFieldChange('amenities', {
+                                    ...(editedProperty.amenities || {}),
+                                    rainWaterHarvesting: checked ? 'Available' : 'Not Available'
+                                  })}
+                                />
+                                <Droplets className="w-5 h-5 text-muted-foreground" />
+                                <Label className="font-normal cursor-pointer">Rain Water Harvesting</Label>
+                              </div>
+
+                              {/* Sewage Treatment Plant */}
+                              <div className="flex items-center space-x-3 p-3 border rounded-lg">
+                                <Checkbox
+                                  checked={editedProperty.amenities?.sewageTreatmentPlant === 'Available'}
+                                  onCheckedChange={(checked) => handleFieldChange('amenities', {
+                                    ...(editedProperty.amenities || {}),
+                                    sewageTreatmentPlant: checked ? 'Available' : 'Not Available'
+                                  })}
+                                />
+                                <Building2 className="w-5 h-5 text-muted-foreground" />
+                                <Label className="font-normal cursor-pointer">Sewage Treatment Plant</Label>
+                              </div>
+
+                              {/* House Keeping */}
+                              <div className="flex items-center space-x-3 p-3 border rounded-lg">
+                                <Checkbox
+                                  checked={editedProperty.amenities?.houseKeeping === 'Available'}
+                                  onCheckedChange={(checked) => handleFieldChange('amenities', {
+                                    ...(editedProperty.amenities || {}),
+                                    houseKeeping: checked ? 'Available' : 'Not Available'
+                                  })}
+                                />
+                                <Sparkles className="w-5 h-5 text-muted-foreground" />
+                                <Label className="font-normal cursor-pointer">House Keeping</Label>
+                              </div>
+
+                              {/* Power Backup */}
+                              <div className="flex items-center space-x-3 p-3 border rounded-lg">
+                                <Checkbox
+                                  checked={editedProperty.amenities?.powerBackup === 'Available'}
+                                  onCheckedChange={(checked) => handleFieldChange('amenities', {
+                                    ...(editedProperty.amenities || {}),
+                                    powerBackup: checked ? 'Available' : 'Not Available'
+                                  })}
+                                />
+                                <Zap className="w-5 h-5 text-muted-foreground" />
+                                <Label className="font-normal cursor-pointer">Power Backup</Label>
+                              </div>
+
+                              {/* Visitor Parking */}
+                              <div className="flex items-center space-x-3 p-3 border rounded-lg">
+                                <Checkbox
+                                  checked={editedProperty.amenities?.visitorParking === 'Available'}
+                                  onCheckedChange={(checked) => handleFieldChange('amenities', {
+                                    ...(editedProperty.amenities || {}),
+                                    visitorParking: checked ? 'Available' : 'Not Available'
+                                  })}
+                                />
+                                <Car className="w-5 h-5 text-muted-foreground" />
+                                <Label className="font-normal cursor-pointer">Visitor Parking</Label>
+                              </div>
+                            </div>
                           </div>
 
                           {/* Directions Tip */}
@@ -1669,7 +1748,7 @@ export const EditPropertyInline: React.FC = () => {
                               className="mt-1"
                               value={editedProperty.amenities?.directionsTip || ''}
                               onChange={(e) => handleFieldChange('amenities', {
-                                ...editedProperty.amenities,
+                                ...(editedProperty.amenities || {}),
                                 directionsTip: e.target.value
                               })}
                               placeholder="Eg. Take the road opposite to Amrita College, take right after 300m..."
