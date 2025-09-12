@@ -114,7 +114,7 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
   };
 
   return (
-    <div className="bg-background rounded-lg border p-8">
+    <div className="bg-background rounded-lg border p-6 max-h-screen overflow-y-auto">
       <div className="text-center mb-8">
         <h2 className="text-2xl font-bold text-primary mb-2">Provide additional details about your property to get maximum visibility</h2>
       </div>
