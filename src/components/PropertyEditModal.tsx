@@ -40,6 +40,8 @@ interface Property {
   current_property_condition?: string;
   water_supply?: string;
   gated_security?: boolean;
+  who_will_show?: string;
+  secondary_phone?: string;
   amenities?: {
     lift?: string;
     parking?: string;
@@ -129,9 +131,9 @@ export const PropertyEditModal: React.FC<PropertyEditModalProps> = ({
         gym: property.amenities?.gym || false,
         nonVegAllowed: property.amenities?.nonVegAllowed || false,
         gatedSecurity: property.gated_security || false,
-        whoWillShow: property.amenities?.whoWillShow || '',
+        whoWillShow: property.who_will_show || property.amenities?.whoWillShow || '',
         currentPropertyCondition: property.current_property_condition || '',
-        secondaryNumber: property.amenities?.secondaryNumber || '',
+        secondaryNumber: property.secondary_phone || property.amenities?.secondaryNumber || '',
         moreSimilarUnits: property.amenities?.moreSimilarUnits || false,
         directionsTip: property.amenities?.directionsTip || '',
         
@@ -228,6 +230,8 @@ export const PropertyEditModal: React.FC<PropertyEditModalProps> = ({
           water_supply: formData.waterSupply,
           current_property_condition: formData.currentPropertyCondition,
           gated_security: formData.gatedSecurity,
+          who_will_show: formData.whoWillShow || null,
+          secondary_phone: formData.secondaryNumber || null,
           // Amenities JSON column
           amenities: amenitiesData,
           updated_at: new Date().toISOString()

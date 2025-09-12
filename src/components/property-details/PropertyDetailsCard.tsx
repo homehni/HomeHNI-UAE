@@ -158,7 +158,14 @@ export const PropertyDetailsCard: React.FC<PropertyDetailsCardProps> = ({ proper
     { label: 'Property Age', value: property.property_age || 'Not specified' },
     { label: 'Facing', value: property.facing_direction || 'Not specified' },
     { label: 'Floor Type', value: property.floor_type || 'Not specified' },
+    { label: 'Water Supply', value: property.water_supply || 'Not specified' },
+    { label: 'Gated Security', value: property.gated_security ? 'Yes' : 'No' },
+    { label: 'Who Shows Property', value: property.who_will_show || 'Not specified' },
+    { label: 'Secondary Contact', value: property.secondary_phone || 'Not specified' },
     { label: 'Property Condition', value: property.current_property_condition || 'Not specified' },
+    { label: 'Gym', value: property.amenities?.gym ? 'Yes' : 'No' },
+    { label: 'Pet Allowed', value: (property as any).amenities?.petAllowed ? 'Yes' : 'No' },
+    { label: 'Non-Veg Allowed', value: (property as any).amenities?.nonVegAllowed ? 'Yes' : 'No' },
   ];
 
   const filteredDetails = details.filter(item => item.value !== 'Not specified');
