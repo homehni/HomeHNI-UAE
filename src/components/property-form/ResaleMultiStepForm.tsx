@@ -7,7 +7,7 @@ import { ResaleLocationDetailsStep } from './ResaleLocationDetailsStep';
 import { SaleDetailsStep } from './SaleDetailsStep';
 import { ResaleAmenitiesStep } from './ResaleAmenitiesStep';
 import { ResaleGalleryStep } from './ResaleGalleryStep';
-import { ResaleAdditionalInfoStep } from './ResaleAdditionalInfoStep';
+
 import { ResaleScheduleStep } from './ResaleScheduleStep';
 import { ResalePreviewStep } from './ResalePreviewStep';
 import { Badge } from '@/components/ui/badge';
@@ -112,11 +112,6 @@ export const ResaleMultiStepForm: React.FC<ResaleMultiStepFormProps> = ({
     scrollToTop();
   };
 
-  const handleAdditionalInfoNext = (data: any) => {
-    updateAdditionalInfo(data);
-    nextStep();
-    scrollToTop();
-  };
 
   const handleScheduleNext = (data: any) => {
     updateScheduleInfo(data);
@@ -221,14 +216,6 @@ export const ResaleMultiStepForm: React.FC<ResaleMultiStepFormProps> = ({
               )}
 
               {currentStep === 6 && (
-                <ResaleAdditionalInfoStep
-                  initialData={additionalInfo}
-                  onNext={handleAdditionalInfoNext}
-                  onBack={prevStep}
-                />
-              )}
-
-              {currentStep === 7 && (
                 <ResaleScheduleStep
                   initialData={scheduleInfo}
                   onNext={handleScheduleNext}
@@ -236,7 +223,7 @@ export const ResaleMultiStepForm: React.FC<ResaleMultiStepFormProps> = ({
                 />
               )}
 
-              {currentStep === 8 && (
+              {currentStep === 7 && (
                 <ResalePreviewStep
                   formData={getFormData() as SalePropertyFormData}
                   onBack={prevStep}

@@ -6,7 +6,7 @@ import { CommercialSaleLocationDetailsStep } from './CommercialSaleLocationDetai
 import { CommercialSaleSaleDetailsStep } from './CommercialSaleSaleDetailsStep';
 import { CommercialSaleAmenitiesStep } from './CommercialSaleAmenitiesStep';
 import { CommercialSaleGalleryStep } from './CommercialSaleGalleryStep';
-import { CommercialSaleAdditionalInfoStep } from './CommercialSaleAdditionalInfoStep';
+
 import { CommercialSaleScheduleStep } from './CommercialSaleScheduleStep';
 import { CommercialSalePreviewStep } from './CommercialSalePreviewStep';
 import { OwnerInfo } from '@/types/property';
@@ -57,7 +57,7 @@ export const CommercialSaleMultiStepForm = ({
 
   // Navigate to target step if provided
   useEffect(() => {
-    if (targetStep && targetStep > 0 && targetStep <= 8) {
+    if (targetStep && targetStep > 0 && targetStep <= 7) {
       console.log('Navigating to target step:', targetStep);
       goToStep(targetStep);
     }
@@ -65,7 +65,7 @@ export const CommercialSaleMultiStepForm = ({
 
   const completedSteps = useMemo(() => {
     const completed = [];
-    for (let i = 2; i <= 8; i++) {
+    for (let i = 2; i <= 7; i++) {
       if (isStepValid(i) && i < currentStep) {
         completed.push(i);
       }
@@ -95,7 +95,7 @@ export const CommercialSaleMultiStepForm = ({
             }}
             onBack={prevStep}
             currentStep={currentStep}
-            totalSteps={8}
+            totalSteps={7}
           />
         );
       case 3:
@@ -110,7 +110,7 @@ export const CommercialSaleMultiStepForm = ({
             }}
             onBack={prevStep}
             currentStep={currentStep}
-            totalSteps={8}
+            totalSteps={7}
           />
         );
       case 4:
@@ -125,7 +125,7 @@ export const CommercialSaleMultiStepForm = ({
             }}
             onBack={prevStep}
             currentStep={currentStep}
-            totalSteps={8}
+            totalSteps={7}
           />
         );
       case 5:
@@ -140,7 +140,7 @@ export const CommercialSaleMultiStepForm = ({
             }}
             onBack={prevStep}
             currentStep={currentStep}
-            totalSteps={8}
+            totalSteps={7}
           />
         );
       case 6:
@@ -155,47 +155,32 @@ export const CommercialSaleMultiStepForm = ({
             }}
             onBack={prevStep}
             currentStep={currentStep}
-            totalSteps={8}
+            totalSteps={7}
           />
         );
       case 7:
         return (
-          <CommercialSaleAdditionalInfoStep
-            initialData={additionalInfo}
-            onNext={(data) => {
-              console.log('Step 7 onNext called with data:', data);
-              updateAdditionalInfo(data);
-              nextStep();
-              scrollToTop();
-            }}
-            onBack={prevStep}
-            currentStep={currentStep}
-            totalSteps={8}
-          />
-        );
-      case 8:
-        return (
           <CommercialSaleScheduleStep
             initialData={scheduleInfo}
             onNext={(data) => {
-              console.log('Step 8 onNext called with data:', data);
+              console.log('Step 7 onNext called with data:', data);
               updateScheduleInfo(data);
               nextStep();
               scrollToTop();
             }}
             onBack={prevStep}
             currentStep={currentStep}
-            totalSteps={8}
+            totalSteps={7}
           />
         );
-      case 9:
+      case 8:
         return (
           <CommercialSalePreviewStep
             formData={getFormData() as any}
             onSubmit={handleSubmit}
             onBack={prevStep}
             currentStep={currentStep}
-            totalSteps={8}
+            totalSteps={7}
             isSubmitting={isSubmitting}
           />
         );
@@ -213,7 +198,7 @@ export const CommercialSaleMultiStepForm = ({
               List Your Commercial Property for Sale
             </h1>
             <p className="text-gray-600 mt-1">
-              Step {currentStep} of 8: Complete your property listing
+              Step {currentStep} of 7: Complete your property listing
             </p>
           </div>
         </div>

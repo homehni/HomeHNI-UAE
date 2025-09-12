@@ -7,7 +7,7 @@ import { LocationDetailsStep } from './LocationDetailsStep';
 import { RentalDetailsStep } from './RentalDetailsStep';
 import { AmenitiesStep } from './AmenitiesStep';
 import { GalleryStep } from './GalleryStep';
-import { AdditionalInfoStep } from './AdditionalInfoStep';
+
 import { ScheduleStep } from './ScheduleStep';
 import { PreviewStep } from './PreviewStep';
 import { Home, MapPin, DollarSign, Sparkles, Camera, Info, Calendar, CheckCircle } from 'lucide-react';
@@ -93,7 +93,7 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
 
   // Navigate to target step if provided
   React.useEffect(() => {
-    if (targetStep && targetStep > 0 && targetStep <= 8) {
+    if (targetStep && targetStep > 0 && targetStep <= 6) {
       console.log('Navigating to target step:', targetStep);
       goToStep(targetStep);
     }
@@ -144,11 +144,6 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
     scrollToTop();
   };
 
-  const handleAdditionalInfoNext = (data: any) => {
-    updateAdditionalInfo(data);
-    nextStep();
-    scrollToTop();
-  };
 
   const handleScheduleNext = (data: any) => {
     updateScheduleInfo(data);
@@ -198,12 +193,12 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
             <div className="max-w-4xl mx-auto">
               <div className="flex items-center justify-between mb-2">
                 <h1 className="text-xl font-semibold text-gray-900">Property Details</h1>
-                <span className="text-sm text-gray-500">{currentStep}/8</span>
+                <span className="text-sm text-gray-500">{currentStep}/6</span>
               </div>
               <div className="w-full bg-gray-200 rounded-full h-2">
                 <div 
                   className="bg-teal-600 h-2 rounded-full transition-all duration-300"
-                  style={{ width: `${(currentStep / 8) * 100}%` }}
+                  style={{ width: `${(currentStep / 6) * 100}%` }}
                 ></div>
               </div>
             </div>
@@ -218,7 +213,7 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
                   onNext={handlePropertyDetailsNext}
                   onBack={() => {}} // No back on first step
                   currentStep={currentStep}
-                  totalSteps={8}
+                  totalSteps={6}
                 />
               )}
 
@@ -230,7 +225,7 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
                   onNext={handleLocationDetailsNext}
                   onBack={prevStep}
                   currentStep={currentStep}
-                  totalSteps={8}
+                  totalSteps={6}
                 />
               )}
 
@@ -240,7 +235,7 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
                   onNext={handleRentalDetailsNext}
                   onBack={prevStep}
                   currentStep={currentStep}
-                  totalSteps={8}
+                  totalSteps={6}
                 />
               )}
 
@@ -263,14 +258,6 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
               )}
 
               {currentStep === 6 && (
-                <AdditionalInfoStep
-                  initialData={additionalInfo}
-                  onNext={handleAdditionalInfoNext}
-                  onBack={prevStep}
-                />
-              )}
-
-              {currentStep === 7 && (
                 <ScheduleStep
                   initialData={scheduleInfo}
                   onNext={handleScheduleNext}
@@ -278,7 +265,7 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
                 />
               )}
 
-              {currentStep === 8 && (
+              {currentStep === 7 && (
                 <PreviewStep
                   formData={getFormData()}
                   onBack={prevStep}

@@ -7,7 +7,7 @@ import { CommercialLocationDetailsStep } from './CommercialLocationDetailsStep';
 import { CommercialRentalDetailsStep } from './CommercialRentalDetailsStep';
 import { CommercialAmenitiesStep } from './CommercialAmenitiesStep';
 import { GalleryStep } from './GalleryStep';
-import { CommercialAdditionalInfoStep } from './CommercialAdditionalInfoStep';
+
 import { ScheduleStep } from './ScheduleStep';
 import { PreviewStep } from './PreviewStep';
 import { OwnerInfo, CommercialFormData, CommercialPropertyDetails, LocationDetails, CommercialRentalDetails, CommercialAmenities, PropertyGallery, AdditionalInfo, ScheduleInfo } from '@/types/property';
@@ -59,7 +59,7 @@ export const CommercialMultiStepForm: React.FC<CommercialMultiStepFormProps> = (
 
   // Navigate to target step if provided
   useEffect(() => {
-    if (targetStep && targetStep > 0 && targetStep <= 8) {
+    if (targetStep && targetStep > 0 && targetStep <= 7) {
       console.log('Navigating to target step:', targetStep);
       goToStep(targetStep);
     }
@@ -110,11 +110,6 @@ export const CommercialMultiStepForm: React.FC<CommercialMultiStepFormProps> = (
     scrollToTop();
   };
 
-  const handleAdditionalInfoNext = (data: AdditionalInfo) => {
-    updateAdditionalInfo(data);
-    nextStep();
-    scrollToTop();
-  };
 
   const handleScheduleNext = (data: ScheduleInfo) => {
     updateScheduleInfo(data);
@@ -138,7 +133,7 @@ export const CommercialMultiStepForm: React.FC<CommercialMultiStepFormProps> = (
             onNext={handlePropertyDetailsNext}
             onBack={prevStep}
             currentStep={currentStep}
-            totalSteps={8}
+            totalSteps={7}
           />
         );
       case 3:
@@ -148,7 +143,7 @@ export const CommercialMultiStepForm: React.FC<CommercialMultiStepFormProps> = (
             onNext={handleLocationDetailsNext}
             onBack={prevStep}
             currentStep={currentStep}
-            totalSteps={8}
+            totalSteps={7}
           />
         );
       case 4:
@@ -158,7 +153,7 @@ export const CommercialMultiStepForm: React.FC<CommercialMultiStepFormProps> = (
             onNext={handleRentalDetailsNext}
             onBack={prevStep}
             currentStep={currentStep}
-            totalSteps={8}
+            totalSteps={7}
           />
         );
       case 5:
@@ -168,7 +163,7 @@ export const CommercialMultiStepForm: React.FC<CommercialMultiStepFormProps> = (
             onNext={handleAmenitiesNext}
             onBack={prevStep}
             currentStep={currentStep}
-            totalSteps={8}
+            totalSteps={7}
           />
         );
       case 6:
@@ -178,20 +173,10 @@ export const CommercialMultiStepForm: React.FC<CommercialMultiStepFormProps> = (
             onNext={handleGalleryNext}
             onBack={prevStep}
             currentStep={currentStep}
-            totalSteps={8}
+            totalSteps={7}
           />
         );
       case 7:
-        return (
-              <CommercialAdditionalInfoStep
-                initialData={additionalInfo}
-                onNext={handleAdditionalInfoNext}
-                onBack={prevStep}
-                currentStep={currentStep}
-                totalSteps={7}
-              />
-        );
-      case 8:
         return (
           <ScheduleStep
             initialData={scheduleInfo}
@@ -199,7 +184,7 @@ export const CommercialMultiStepForm: React.FC<CommercialMultiStepFormProps> = (
             onBack={prevStep}
           />
         );
-      case 9:
+      case 8:
         return (
           <PreviewStep
             formData={getFormData()}
@@ -225,7 +210,7 @@ export const CommercialMultiStepForm: React.FC<CommercialMultiStepFormProps> = (
           </div>
           <div className="flex items-center space-x-4">
             <span className="text-sm text-gray-600">
-              Step {currentStep} of 8
+              Step {currentStep} of 7
             </span>
           </div>
         </div>
