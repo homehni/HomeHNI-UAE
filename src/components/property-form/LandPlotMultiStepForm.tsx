@@ -6,7 +6,7 @@ import { LandPlotLocationDetailsStep } from './LandPlotLocationDetailsStep';
 import { LandPlotSaleDetailsStep } from './LandPlotSaleDetailsStep';
 import { LandPlotAmenitiesStep } from './LandPlotAmenitiesStep';
 import { LandPlotGalleryStep } from './LandPlotGalleryStep';
-import { LandPlotAdditionalInfoStep } from './LandPlotAdditionalInfoStep';
+
 import { LandPlotScheduleStep } from './LandPlotScheduleStep';
 import { LandPlotPreviewStep } from './LandPlotPreviewStep';
 import { Badge } from '@/components/ui/badge';
@@ -60,7 +60,7 @@ export const LandPlotMultiStepForm: React.FC<LandPlotMultiStepFormProps> = ({
 
   // Navigate to target step if provided
   React.useEffect(() => {
-    if (targetStep && targetStep > 0 && targetStep <= 8) {
+    if (targetStep && targetStep > 0 && targetStep <= 7) {
       console.log('Navigating to target step:', targetStep);
       goToStep(targetStep);
     }
@@ -108,11 +108,6 @@ export const LandPlotMultiStepForm: React.FC<LandPlotMultiStepFormProps> = ({
     scrollToTop();
   };
 
-  const handleAdditionalInfoNext = (data: any) => {
-    updateAdditionalInfo(data);
-    nextStep();
-    scrollToTop();
-  };
 
   const handleScheduleNext = (data: any) => {
     updateScheduleInfo(data);
@@ -141,7 +136,7 @@ export const LandPlotMultiStepForm: React.FC<LandPlotMultiStepFormProps> = ({
       <div className="mb-12">
         <ProgressIndicator
           currentStep={currentStep}
-          totalSteps={8}
+          totalSteps={7}
           completedSteps={completedSteps}
         />
       </div>
@@ -158,9 +153,8 @@ export const LandPlotMultiStepForm: React.FC<LandPlotMultiStepFormProps> = ({
                 { number: 3, title: "Sale Details", completed: completedSteps.includes(3), active: currentStep === 3 },
                 { number: 4, title: "Infrastructure", completed: completedSteps.includes(4), active: currentStep === 4 },
                 { number: 5, title: "Photos & Videos", completed: completedSteps.includes(5), active: currentStep === 5 },
-                { number: 6, title: "Additional Info", completed: completedSteps.includes(6), active: currentStep === 6 },
-                { number: 7, title: "Schedule", completed: completedSteps.includes(7), active: currentStep === 7 },
-                { number: 8, title: "Preview & Submit", completed: completedSteps.includes(8), active: currentStep === 8 },
+                { number: 6, title: "Schedule", completed: completedSteps.includes(6), active: currentStep === 6 },
+                { number: 7, title: "Preview & Submit", completed: completedSteps.includes(7), active: currentStep === 7 },
               ].map((step) => (
                 <div
                   key={step.number}
@@ -208,7 +202,7 @@ export const LandPlotMultiStepForm: React.FC<LandPlotMultiStepFormProps> = ({
                 onNext={handleLocationDetailsNext}
                 onBack={prevStep}
                 currentStep={2}
-                totalSteps={4}
+                totalSteps={7}
               />
             )}
 
@@ -237,14 +231,6 @@ export const LandPlotMultiStepForm: React.FC<LandPlotMultiStepFormProps> = ({
             )}
 
             {currentStep === 6 && (
-              <LandPlotAdditionalInfoStep
-                initialData={additionalInfo}
-                onNext={handleAdditionalInfoNext}
-                onBack={prevStep}
-              />
-            )}
-
-            {currentStep === 7 && (
               <LandPlotScheduleStep
                 initialData={scheduleInfo}
                 onNext={handleScheduleNext}
@@ -252,7 +238,7 @@ export const LandPlotMultiStepForm: React.FC<LandPlotMultiStepFormProps> = ({
               />
             )}
 
-            {currentStep === 8 && (
+            {currentStep === 7 && (
               <LandPlotPreviewStep
                 formData={getFormData() as LandPlotFormData}
                 onBack={prevStep}

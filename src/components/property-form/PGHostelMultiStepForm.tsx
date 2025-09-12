@@ -173,42 +173,42 @@ const [propertyInfo, setPropertyInfo] = useState({
 
   const handleRoomDetailsNext = (data: any) => {
     setRoomDetails(data);
-    setCompletedSteps(prev => [...prev.filter(step => step !== 4), 4]);
-    setCurrentStep(5);
+    setCompletedSteps(prev => [...prev.filter(step => step !== 3), 3]);
+    setCurrentStep(4);
     scrollToTop();
   };
 
   const handleLocalityDetailsNext = (data: any) => {
     setLocalityDetails(data);
-    setCompletedSteps(prev => [...prev.filter(step => step !== 5), 5]);
-    setCurrentStep(6);
+    setCompletedSteps(prev => [...prev.filter(step => step !== 4), 4]);
+    setCurrentStep(5);
     scrollToTop();
   };
 
   const handlePgDetailsNext = (data: any) => {
     setPgDetails(data);
-    setCompletedSteps(prev => [...prev.filter(step => step !== 6), 6]);
-    setCurrentStep(7);
+    setCompletedSteps(prev => [...prev.filter(step => step !== 5), 5]);
+    setCurrentStep(6);
     scrollToTop();
   };
 
   const handleAmenitiesNext = (data: any) => {
     setAmenities(data);
-    setCompletedSteps(prev => [...prev.filter(step => step !== 7), 7]);
-    setCurrentStep(8);
+    setCompletedSteps(prev => [...prev.filter(step => step !== 6), 6]);
+    setCurrentStep(7);
     scrollToTop();
   };
 
   const handleGalleryNext = (data: any) => {
     setGallery(data);
-    setCompletedSteps(prev => [...prev.filter(step => step !== 8), 8]);
-    setCurrentStep(9);
+    setCompletedSteps(prev => [...prev.filter(step => step !== 7), 7]);
+    setCurrentStep(8);
     scrollToTop();
   };
 
   const handleScheduleNext = (data: any) => {
     setScheduleInfo(data);
-    setCompletedSteps(prev => [...prev.filter(step => step !== 9), 9]);
+    setCompletedSteps(prev => [...prev.filter(step => step !== 8), 8]);
     // Form complete, submit
     handleSubmit();
   };
@@ -301,7 +301,7 @@ const [propertyInfo, setPropertyInfo] = useState({
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 lg:p-8">
             <ProgressIndicator 
               currentStep={currentStep - 1} 
-              totalSteps={7} 
+              totalSteps={6} 
               completedSteps={completedSteps.map(step => step - 1)} 
             />
         
@@ -310,7 +310,7 @@ const [propertyInfo, setPropertyInfo] = useState({
             initialData={ownerInfo}
             onNext={handleOwnerInfoNext}
             currentStep={1}
-            totalSteps={8}
+            totalSteps={6}
           />
         )}
 
@@ -320,7 +320,7 @@ const [propertyInfo, setPropertyInfo] = useState({
             onNext={handlePropertyInfoNext}
             onBack={prevStep}
             currentStep={1}
-            totalSteps={8}
+            totalSteps={6}
           />
         )}
 
@@ -330,7 +330,7 @@ const [propertyInfo, setPropertyInfo] = useState({
             onNext={handleRoomTypesNext}
             onBack={prevStep}
             currentStep={2}
-            totalSteps={8}
+            totalSteps={6}
           />
         )}
 
@@ -341,7 +341,7 @@ const [propertyInfo, setPropertyInfo] = useState({
             onNext={handleRoomDetailsNext}
             onBack={prevStep}
             currentStep={3}
-            totalSteps={8}
+            totalSteps={6}
           />
         )}
 
@@ -351,7 +351,7 @@ const [propertyInfo, setPropertyInfo] = useState({
             onNext={handleLocalityDetailsNext}
             onBack={prevStep}
             currentStep={4}
-            totalSteps={8}
+            totalSteps={6}
           />
         )}
 
@@ -361,37 +361,27 @@ const [propertyInfo, setPropertyInfo] = useState({
             onNext={handlePgDetailsNext}
             onBack={prevStep}
             currentStep={5}
-            totalSteps={8}
+            totalSteps={6}
           />
         )}
 
         {currentStep === 7 && (
-          <PgHostelAmenitiesStep
-            initialData={amenities}
-            onNext={handleAmenitiesNext}
-            onBack={prevStep}
-            currentStep={6}
-            totalSteps={8}
-          />
-        )}
-
-        {currentStep === 8 && (
           <PgHostelGalleryStep
             initialData={gallery}
             onNext={handleGalleryNext}
             onBack={prevStep}
-            currentStep={7}
-            totalSteps={8}
+            currentStep={5}
+            totalSteps={6}
           />
         )}
 
-        {currentStep === 9 && (
+        {currentStep === 8 && (
           <PgHostelScheduleStep
             initialData={scheduleInfo}
             onNext={handleScheduleNext}
             onBack={prevStep}
-            currentStep={8}
-            totalSteps={8}
+            currentStep={6}
+            totalSteps={6}
           />
         )}
           </div>
