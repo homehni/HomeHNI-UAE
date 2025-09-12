@@ -189,17 +189,52 @@ export const PostProperty: React.FC = () => {
 
   const handlePropertySelectionNext = (data: {
     city: string;
+    phoneNumber: string;
     whatsappUpdates: boolean;
     propertyType: 'Residential' | 'Commercial' | 'Land/Plot';
     listingType: 'Rent' | 'Resale' | 'PG/Hostel' | 'Flatmates';
   }) => {
     setPropertySelectionData(data);
-    setInitialOwnerData({
+    
+    // Create owner info from the selection data
+    const ownerInfoData: OwnerInfo = {
+      fullName: '',
+      email: '',
+      phoneNumber: data.phoneNumber,
       whatsappUpdates: data.whatsappUpdates,
       propertyType: data.propertyType,
       listingType: data.listingType
-    });
-    setCurrentStep('owner-info');
+    };
+    
+    setOwnerInfo(ownerInfoData);
+    
+    // Route directly to appropriate form based on property type and listing type
+    if (data.propertyType === 'Commercial') {
+      if (data.listingType === 'Rent') {
+        setCurrentStep('commercial-rental-form');
+      } else if (data.listingType === 'Resale') {
+        setCurrentStep('commercial-sale-form');
+      }
+    } else {
+      // Route to appropriate form based on listing type for non-commercial
+      switch (data.listingType) {
+        case 'Resale':
+          if (data.propertyType === 'Land/Plot') {
+            setCurrentStep('land-plot-form');
+          } else {
+            setCurrentStep('resale-form');
+          }
+          break;
+        case 'PG/Hostel':
+          setCurrentStep('pg-hostel-form');
+          break;
+        case 'Flatmates':
+          setCurrentStep('flatmates-form');
+          break;
+        default: // 'Rent'
+          setCurrentStep('rental-form');
+      }
+    }
   };
 
   const handleOwnerInfoNext = (data: OwnerInfo) => {
@@ -708,8 +743,6 @@ export const PostProperty: React.FC = () => {
     switch (currentStep) {
       case 'property-selection':
         return <PropertySelectionStep onNext={handlePropertySelectionNext} />;
-      case 'owner-info':
-        return <OwnerInfoStep initialData={initialOwnerData} onNext={handleOwnerInfoNext} />;
       case 'rental-form':
         return (
           <MultiStepForm 
