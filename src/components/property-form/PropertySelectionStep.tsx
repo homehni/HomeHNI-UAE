@@ -14,7 +14,6 @@ interface PropertySelectionData {
   whatsappUpdates: boolean;
   propertyType: 'Residential' | 'Commercial' | 'Land/Plot';
   listingType: 'Rent' | 'Resale' | 'PG/Hostel' | 'Flatmates';
-  termsAccepted: boolean;
 }
 
 interface PropertySelectionStepProps {
@@ -29,8 +28,6 @@ export const PropertySelectionStep: React.FC<PropertySelectionStepProps> = ({
   const [whatsappUpdates, setWhatsappUpdates] = useState(true);
   const [selectedPropertyType, setSelectedPropertyType] = useState<'Residential' | 'Commercial' | 'Land/Plot'>('Residential');
   const [selectedListingType, setSelectedListingType] = useState<string>('');
-  
-  const [termsAccepted, setTermsAccepted] = useState<boolean>(false);
 
   const getListingTypes = () => {
     switch (selectedPropertyType) {
@@ -49,19 +46,18 @@ export const PropertySelectionStep: React.FC<PropertySelectionStepProps> = ({
   };
 
   const handleSubmit = () => {
-    if (selectedCity && selectedListingType && phoneNumber && termsAccepted) {
+    if (selectedCity && selectedListingType && phoneNumber) {
       onNext({
         city: selectedCity,
         phoneNumber,
         whatsappUpdates,
         propertyType: selectedPropertyType,
-        listingType: selectedListingType as 'Rent' | 'Resale' | 'PG/Hostel' | 'Flatmates',
-        termsAccepted
+        listingType: selectedListingType as 'Rent' | 'Resale' | 'PG/Hostel' | 'Flatmates'
       });
     }
   };
 
-  const isFormValid = selectedCity && selectedListingType && phoneNumber && termsAccepted;
+  const isFormValid = selectedCity && selectedListingType && phoneNumber;
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
@@ -172,18 +168,12 @@ export const PropertySelectionStep: React.FC<PropertySelectionStepProps> = ({
           </div>
 
 
-          {/* Terms & Conditions */}
-          <div className="flex items-start space-x-2 py-2">
-            <Checkbox
-              id="terms"
-              checked={termsAccepted}
-              onCheckedChange={(checked) => setTermsAccepted(checked as boolean)}
-              className="mt-0.5"
-            />
-            <Label htmlFor="terms" className="text-sm text-gray-600 leading-relaxed">
-              By clicking 'Start Posting Your Property For FREE', you acknowledge that you have read, understood, and agreed to the above{' '}
+          {/* Terms and Conditions */}
+          <div className="p-4 bg-transparent">
+            <p className="text-sm text-gray-500 text-center leading-relaxed">
+              By clicking 'Start Posting Your Ad' you acknowledge that you have agreed to the{' '}
               <span className="text-red-600 underline cursor-pointer">Terms & Conditions</span>.
-            </Label>
+            </p>
           </div>
 
           {/* Submit Button */}
