@@ -58,11 +58,15 @@ export const fetchFeaturedProperties = async () => {
     throw error;
   }
 
-  // Also fetch curated featured entries (publicly selectable)
+  // Also fetch curated featured entries (publicly selectable) - only visible properties
   const { data: curatedRows, error: curatedErr } = await supabase
     .from('featured_properties')
-    .select('property_id, is_active, featured_until, sort_order')
+    .select(`
+      property_id, is_active, featured_until, sort_order,
+      properties!inner(is_visible)
+    `)
     .eq('is_active', true)
+    .eq('properties.is_visible', true)
     .order('sort_order', { ascending: true });
 
   if (curatedErr) {
