@@ -9,7 +9,6 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { MessageCircle } from 'lucide-react';
 
 interface PropertySelectionData {
-  city: string;
   phoneNumber: string;
   whatsappUpdates: boolean;
   propertyType: 'Residential' | 'Commercial' | 'Land/Plot';
@@ -23,7 +22,6 @@ interface PropertySelectionStepProps {
 export const PropertySelectionStep: React.FC<PropertySelectionStepProps> = ({
   onNext
 }) => {
-  const [selectedCity, setSelectedCity] = useState<string>('');
   const [phoneNumber, setPhoneNumber] = useState<string>('');
   const [whatsappUpdates, setWhatsappUpdates] = useState(true);
   const [selectedPropertyType, setSelectedPropertyType] = useState<'Residential' | 'Commercial' | 'Land/Plot'>('Residential');
@@ -46,9 +44,8 @@ export const PropertySelectionStep: React.FC<PropertySelectionStepProps> = ({
   };
 
   const handleSubmit = () => {
-    if (selectedCity && selectedListingType && phoneNumber) {
+    if (selectedListingType && phoneNumber) {
       onNext({
-        city: selectedCity,
         phoneNumber,
         whatsappUpdates,
         propertyType: selectedPropertyType,
@@ -57,7 +54,7 @@ export const PropertySelectionStep: React.FC<PropertySelectionStepProps> = ({
     }
   };
 
-  const isFormValid = selectedCity && selectedListingType && phoneNumber;
+  const isFormValid = selectedListingType && phoneNumber;
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
@@ -90,23 +87,6 @@ export const PropertySelectionStep: React.FC<PropertySelectionStepProps> = ({
                 className="flex-1 rounded-l-none"
               />
             </div>
-          </div>
-
-          {/* City Selection */}
-          <div className="space-y-2">
-            <Select value={selectedCity} onValueChange={setSelectedCity}>
-              <SelectTrigger className="w-full h-12 text-left">
-                <SelectValue placeholder="Bangalore" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="bangalore">Bangalore</SelectItem>
-                <SelectItem value="mumbai">Mumbai</SelectItem>
-                <SelectItem value="delhi">Delhi</SelectItem>
-                <SelectItem value="pune">Pune</SelectItem>
-                <SelectItem value="hyderabad">Hyderabad</SelectItem>
-                <SelectItem value="chennai">Chennai</SelectItem>
-              </SelectContent>
-            </Select>
           </div>
 
           {/* WhatsApp Updates */}
