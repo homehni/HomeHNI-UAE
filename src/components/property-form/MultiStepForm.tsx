@@ -200,9 +200,9 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
             </div>
           </div>
 
-          {/* Form Content */}
-          <div className="flex-1 p-3 min-h-0 max-h-full">
-            <div className="bg-white h-full overflow-hidden">
+          {/* Form Content - Scrollable */}
+          <div className="flex-1 overflow-y-auto p-4">
+            <div className="bg-white">
               {currentStep === 1 && (
                 <PropertyDetailsStep
                   initialData={propertyDetails}
