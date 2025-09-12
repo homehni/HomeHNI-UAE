@@ -89,7 +89,7 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
         <h1 className="text-2xl font-semibold text-primary mb-6">Property Details</h1>
         
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             {/* Property Name - Optional */}
             <FormField
               control={form.control}
@@ -99,7 +99,7 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
                   <FormLabel className="text-sm font-medium">Property Name</FormLabel>
                   <FormControl>
                     <Input
-                      className="h-12"
+                      className="h-10"
                       {...field}
                     />
                   </FormControl>
@@ -109,7 +109,7 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
             />
 
             {/* Property Type and BHK Type */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-2 gap-4">
               <FormField
                 control={form.control}
                 name="propertyType"
@@ -118,7 +118,7 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
                     <FormLabel className="text-sm font-medium">Property Type</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
-                        <SelectTrigger className="h-12">
+                        <SelectTrigger className="h-10">
                           <SelectValue placeholder="Select Property Type" />
                         </SelectTrigger>
                       </FormControl>
@@ -144,7 +144,7 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
                     <FormLabel className="text-sm font-medium">BHK Type</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
-                        <SelectTrigger className="h-12">
+                        <SelectTrigger className="h-10">
                           <SelectValue placeholder="Select BHK Type" />
                         </SelectTrigger>
                       </FormControl>
@@ -165,9 +165,8 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
               />
             </div>
 
-
             {/* Property Age and Facing */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-2 gap-4">
               <FormField
                 control={form.control}
                 name="propertyAge"
@@ -176,7 +175,7 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
                     <FormLabel className="text-sm font-medium">Property Age*</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
-                        <SelectTrigger className="h-12">
+                        <SelectTrigger className="h-10">
                           <SelectValue placeholder="Select" />
                         </SelectTrigger>
                       </FormControl>
@@ -203,7 +202,7 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
                     <FormLabel className="text-sm font-medium">Facing</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
-                        <SelectTrigger className="h-12">
+                        <SelectTrigger className="h-10">
                           <div className="flex items-center gap-2">
                             <Compass className="h-4 w-4 text-muted-foreground" />
                             <SelectValue placeholder="Select" />
@@ -228,14 +227,14 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
             </div>
 
             {/* Floor, Total Floors / No. of Floors */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-2 gap-4">
               {showFloorDropdown && (
                 <FormField
                   control={form.control}
                   name="floorNo"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-sm font-medium">Floor</FormLabel>
+                      <FormLabel className="text-sm font-medium">Floor*</FormLabel>
                       <Select
                         onValueChange={(value) => {
                           if (value === 'ground') {
@@ -249,7 +248,7 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
                         value={field.value === undefined ? undefined : field.value.toString()}
                       >
                         <FormControl>
-                          <SelectTrigger className="h-12">
+                          <SelectTrigger className="h-10">
                             <SelectValue placeholder="Select Floor" />
                           </SelectTrigger>
                         </FormControl>
@@ -278,13 +277,13 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
                   name="totalFloors"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-sm font-medium">Total Floors</FormLabel>
+                      <FormLabel className="text-sm font-medium">Total Floor*</FormLabel>
                       <Select
                         onValueChange={(value) => field.onChange(parseInt(value))}
                         defaultValue={field.value?.toString()}
                       >
                         <FormControl>
-                          <SelectTrigger className="h-12">
+                          <SelectTrigger className="h-10">
                             <SelectValue placeholder="Select Total Floors" />
                           </SelectTrigger>
                         </FormControl>
@@ -315,7 +314,7 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
                         defaultValue={field.value?.toString()}
                       >
                         <FormControl>
-                          <SelectTrigger className="h-12">
+                          <SelectTrigger className="h-10">
                             <SelectValue placeholder="Select" />
                           </SelectTrigger>
                         </FormControl>
@@ -343,18 +342,18 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
               name="superBuiltUpArea"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-sm font-medium">Super Built Up Area</FormLabel>
+                  <FormLabel className="text-sm font-medium">Built Up Area*</FormLabel>
                   <div className="relative">
                     <FormControl>
                       <Input
                         type="number"
-                        placeholder="1500"
-                        className="h-12 pr-12 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
+                        placeholder="943"
+                        className="h-10 pr-12 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
                         {...field}
                         onChange={(e) => field.onChange(e.target.value === '' ? undefined : parseInt(e.target.value, 10))}
                       />
                     </FormControl>
-                    <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-sm text-gray-500">
+                    <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-sm text-muted-foreground">
                       Sq.ft
                     </div>
                   </div>
