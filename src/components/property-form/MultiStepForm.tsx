@@ -9,7 +9,6 @@ import { AmenitiesStep } from './AmenitiesStep';
 import { GalleryStep } from './GalleryStep';
 
 import { ScheduleStep } from './ScheduleStep';
-import { PreviewStep } from './PreviewStep';
 import { Home, MapPin, DollarSign, Sparkles, Camera, Info, Calendar, CheckCircle } from 'lucide-react';
 
 import { OwnerInfo, PropertyInfo } from '@/types/property';
@@ -145,10 +144,9 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
   };
 
 
-  const handleScheduleNext = (data: any) => {
+  const handleScheduleSubmit = (data: any) => {
     updateScheduleInfo(data);
-    nextStep();
-    scrollToTop();
+    handleSubmit();
   };
 
   const handleSubmit = () => {
@@ -260,18 +258,8 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
               {currentStep === 6 && (
                 <ScheduleStep
                   initialData={scheduleInfo}
-                  onNext={handleScheduleNext}
+                  onNext={handleScheduleSubmit}
                   onBack={prevStep}
-                />
-              )}
-
-              {currentStep === 7 && (
-                <PreviewStep
-                  formData={getFormData()}
-                  onBack={prevStep}
-                  onEdit={goToStep}
-                  onSubmit={handleSubmit}
-                  isSubmitting={isSubmitting}
                 />
               )}
             </div>
