@@ -1533,6 +1533,104 @@ export const EditPropertyInline: React.FC = () => {
                     {editedProperty.property_type !== 'plot' && editedProperty.property_type !== 'land' && (
                       <div className="mt-6">
                         <h4 className="text-lg font-semibold mb-4">Amenities</h4>
+
+                        {/* Key facilities */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                          <div>
+                            <Label htmlFor="water_supply">Water Supply</Label>
+                            <Select
+                              value={editedProperty.water_supply || ''}
+                              onValueChange={(value) => handleFieldChange('water_supply', value)}
+                            >
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="municipal">Municipal Supply</SelectItem>
+                                <SelectItem value="borewell">Borewell</SelectItem>
+                                <SelectItem value="tank">Water Tank</SelectItem>
+                                <SelectItem value="none">None</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+                          <div>
+                            <Label htmlFor="gated_security">Gated Security</Label>
+                            <div className="flex gap-2 mt-2">
+                              <Button
+                                type="button"
+                                variant={(editedProperty.gated_security === false || editedProperty.gated_security === 'false') ? 'default' : 'outline'}
+                                onClick={() => handleFieldChange('gated_security', false)}
+                              >
+                                No
+                              </Button>
+                              <Button
+                                type="button"
+                                variant={(editedProperty.gated_security === true || editedProperty.gated_security === 'true') ? 'default' : 'outline'}
+                                onClick={() => handleFieldChange('gated_security', true)}
+                              >
+                                Yes
+                              </Button>
+                            </div>
+                          </div>
+                          <div>
+                            <Label>Pet Allowed*</Label>
+                            <div className="flex gap-2 mt-2">
+                              <Button
+                                type="button"
+                                variant={editedProperty.amenities?.petAllowed === false ? 'default' : 'outline'}
+                                onClick={() => handleFieldChange('amenities', { ...(editedProperty.amenities || {}), petAllowed: false })}
+                              >
+                                No
+                              </Button>
+                              <Button
+                                type="button"
+                                variant={editedProperty.amenities?.petAllowed === true ? 'default' : 'outline'}
+                                onClick={() => handleFieldChange('amenities', { ...(editedProperty.amenities || {}), petAllowed: true })}
+                              >
+                                Yes
+                              </Button>
+                            </div>
+                          </div>
+                          <div>
+                            <Label>Gym*</Label>
+                            <div className="flex gap-2 mt-2">
+                              <Button
+                                type="button"
+                                variant={editedProperty.amenities?.gym === false ? 'default' : 'outline'}
+                                onClick={() => handleFieldChange('amenities', { ...(editedProperty.amenities || {}), gym: false })}
+                              >
+                                No
+                              </Button>
+                              <Button
+                                type="button"
+                                variant={editedProperty.amenities?.gym === true ? 'default' : 'outline'}
+                                onClick={() => handleFieldChange('amenities', { ...(editedProperty.amenities || {}), gym: true })}
+                              >
+                                Yes
+                              </Button>
+                            </div>
+                          </div>
+                          <div>
+                            <Label>Non-Veg Allowed*</Label>
+                            <div className="flex gap-2 mt-2">
+                              <Button
+                                type="button"
+                                variant={editedProperty.amenities?.nonVegAllowed === false ? 'default' : 'outline'}
+                                onClick={() => handleFieldChange('amenities', { ...(editedProperty.amenities || {}), nonVegAllowed: false })}
+                              >
+                                No
+                              </Button>
+                              <Button
+                                type="button"
+                                variant={editedProperty.amenities?.nonVegAllowed === true ? 'default' : 'outline'}
+                                onClick={() => handleFieldChange('amenities', { ...(editedProperty.amenities || {}), nonVegAllowed: true })}
+                              >
+                                Yes
+                              </Button>
+                            </div>
+                          </div>
+                        </div>
+
                         <div className="space-y-6">
                           {/* Available Amenities - match Post Property form */}
                           <div>
