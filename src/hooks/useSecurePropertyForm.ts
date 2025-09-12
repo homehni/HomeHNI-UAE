@@ -193,7 +193,6 @@ export const useSecurePropertyForm = () => {
         owner_name: sanitizedOwnerInfo.fullName || ownerInfo.fullName,
         owner_phone: sanitizedOwnerInfo.phoneNumber || ownerInfo.phoneNumber,
         owner_email: sanitizedOwnerInfo.email || ownerInfo.email,
-        owner_role: sanitizedOwnerInfo.role || ownerInfo.role,
         status: 'pending'
       };
 

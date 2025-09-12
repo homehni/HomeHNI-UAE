@@ -43,8 +43,7 @@ export const validatePropertySubmission = (
   const sanitizedOwner = {
     fullName: sanitizeText(ownerInfo.fullName || '', { maxLength: 100 }),
     phoneNumber: sanitizePhone(ownerInfo.phoneNumber || ''),
-    email: sanitizeEmail(ownerInfo.email || ''),
-    role: ownerInfo.role
+    email: sanitizeEmail(ownerInfo.email || '')
   };
 
   // Minimal owner validation - only require at least one field

@@ -82,9 +82,6 @@ export const LandPlotPreviewStep: React.FC<LandPlotPreviewStepProps> = ({
               <span className="font-medium">Name:</span> {ownerInfo.fullName}
             </div>
             <div>
-              <span className="font-medium">Role:</span> {ownerInfo.role}
-            </div>
-            <div>
               <span className="font-medium">Phone:</span> {ownerInfo.phoneNumber}
             </div>
             <div>

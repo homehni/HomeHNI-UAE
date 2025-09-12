@@ -14,7 +14,6 @@ interface PropertySelectionData {
   whatsappUpdates: boolean;
   propertyType: 'Residential' | 'Commercial' | 'Land/Plot';
   listingType: 'Rent' | 'Resale' | 'PG/Hostel' | 'Flatmates';
-  role: 'Owner' | 'Agent' | 'Builder' | 'Tenant';
   termsAccepted: boolean;
 }
 
@@ -30,7 +29,7 @@ export const PropertySelectionStep: React.FC<PropertySelectionStepProps> = ({
   const [whatsappUpdates, setWhatsappUpdates] = useState(true);
   const [selectedPropertyType, setSelectedPropertyType] = useState<'Residential' | 'Commercial' | 'Land/Plot'>('Residential');
   const [selectedListingType, setSelectedListingType] = useState<string>('');
-  const [selectedRole, setSelectedRole] = useState<'Owner' | 'Agent' | 'Builder' | 'Tenant'>('Owner');
+  
   const [termsAccepted, setTermsAccepted] = useState<boolean>(false);
 
   const getListingTypes = () => {
@@ -57,7 +56,6 @@ export const PropertySelectionStep: React.FC<PropertySelectionStepProps> = ({
         whatsappUpdates,
         propertyType: selectedPropertyType,
         listingType: selectedListingType as 'Rent' | 'Resale' | 'PG/Hostel' | 'Flatmates',
-        role: selectedRole,
         termsAccepted
       });
     }
@@ -173,21 +171,6 @@ export const PropertySelectionStep: React.FC<PropertySelectionStepProps> = ({
             </div>
           </div>
 
-          {/* I am */}
-          <div className="space-y-2">
-            <Label className="text-base font-medium">I am *</Label>
-            <Select value={selectedRole} onValueChange={(value: 'Owner' | 'Agent' | 'Builder' | 'Tenant') => setSelectedRole(value)}>
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="Select your role" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="Owner">Owner</SelectItem>
-                <SelectItem value="Agent">Agent</SelectItem>
-                <SelectItem value="Builder">Builder</SelectItem>
-                <SelectItem value="Tenant">Tenant</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
 
           {/* Terms & Conditions */}
           <div className="flex items-start space-x-2 py-2">

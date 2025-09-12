@@ -42,16 +42,11 @@ export const PostProperty: React.FC = () => {
   const location = useLocation();
   const { toast } = useToast();
 
-  // Extract role, edit mode, and step from URL parameters
+  // Extract edit mode, and step from URL parameters
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
-    const role = searchParams.get('role');
     const editPropertyId = searchParams.get('edit');
     const step = searchParams.get('step');
-    
-    if (role && ['Owner', 'Agent', 'Builder'].includes(role)) {
-      setInitialOwnerData({ role: role as 'Owner' | 'Agent' | 'Builder' });
-    }
     
     // Handle edit mode from sessionStorage
     const editData = sessionStorage.getItem('editPropertyData');
@@ -64,8 +59,7 @@ export const PostProperty: React.FC = () => {
         setInitialOwnerData({
           fullName: propertyData.owner_name || '',
           email: propertyData.owner_email || '',
-          phoneNumber: propertyData.owner_phone || '',
-          role: propertyData.owner_role || 'Owner'
+          phoneNumber: propertyData.owner_phone || ''
         });
         
         // Determine the form step based on form type
@@ -489,7 +483,6 @@ export const PostProperty: React.FC = () => {
         owner_name: data.ownerInfo.fullName || 'Anonymous',
         owner_email: data.ownerInfo.email || '',
         owner_phone: data.ownerInfo.phoneNumber || '',
-        owner_role: data.ownerInfo.role || 'Owner',
         // Add amenities data
         amenities: (data.propertyInfo as any).amenities || null
       };
@@ -527,7 +520,6 @@ export const PostProperty: React.FC = () => {
             owner_name: data.ownerInfo.fullName || 'Anonymous',
             owner_email: data.ownerInfo.email || '',
             owner_phone: data.ownerInfo.phoneNumber || '',
-            owner_role: data.ownerInfo.role || 'Owner',
             amenities: (window as any).editingPropertyData?.amenities || (data.propertyInfo as any).amenities || null,
             status: 'pending', // Reset to pending for review - CRITICAL: prevents public visibility
             updated_at: new Date().toISOString(),
@@ -659,7 +651,6 @@ export const PostProperty: React.FC = () => {
         owner_name: data.ownerInfo.fullName || 'Anonymous',
         owner_email: data.ownerInfo.email || '',
         owner_phone: data.ownerInfo.phoneNumber || '',
-        owner_role: data.ownerInfo.role || 'Owner',
         title: propertyTitle, // Use the same generated title
         property_type: ('propertyDetails' in data.propertyInfo)
                       ? (data.propertyInfo.propertyDetails.propertyType || 'Residential')

@@ -19,7 +19,6 @@ interface LocalOwnerInfo {
   fullName: string;
   phoneNumber: string;
   email: string;
-  role: 'Owner' | 'Agent' | 'Builder' | 'Tenant';
   city: string;
   whatsappUpdates: boolean;
 }
@@ -46,7 +45,6 @@ export const PGHostelMultiStepForm: React.FC<PGHostelMultiStepFormProps> = ({
     fullName: '',
     phoneNumber: '',
     email: '',
-    role: 'Owner' as const,
     city: '',
     whatsappUpdates: false,
     ...initialOwnerInfo
@@ -222,7 +220,6 @@ const [propertyInfo, setPropertyInfo] = useState({
       fullName: ownerInfo.fullName,
       phoneNumber: ownerInfo.phoneNumber,
       email: ownerInfo.email,
-      role: ownerInfo.role === 'Tenant' ? 'Owner' : ownerInfo.role,
       whatsappUpdates: ownerInfo.whatsappUpdates,
       propertyType: 'Residential',
       listingType: 'PG/Hostel'

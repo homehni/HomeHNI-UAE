@@ -31,7 +31,6 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
     fullName: '',
     phoneNumber: '',
     email: '',
-    role: 'Owner',
     whatsappUpdates: false,
     propertyType: 'Residential',
     listingType: 'Flatmates',

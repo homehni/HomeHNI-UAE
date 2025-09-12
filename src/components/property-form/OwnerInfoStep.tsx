@@ -46,7 +46,7 @@ export const OwnerInfoStep: React.FC<OwnerInfoStepProps> = ({
     mode: 'onTouched' // Only show errors after user interaction
   });
 
-  const selectedRole = watch('role');
+  
   const selectedPropertyType = watch('propertyType');
   const selectedListingType = watch('listingType');
   const whatsappUpdates = watch('whatsappUpdates');
@@ -73,13 +73,6 @@ export const OwnerInfoStep: React.FC<OwnerInfoStepProps> = ({
     }
   }, [selectedPropertyType, selectedListingType, setValue, trigger]);
 
-  // Update form values when initialData changes
-  useEffect(() => {
-    if (initialData.role && initialData.role !== watch('role')) {
-      setValue('role', initialData.role);
-      trigger('role');
-    }
-  }, [initialData.role, setValue, trigger, watch]);
 
   // Auto-fill detection and validation
   useEffect(() => {
@@ -94,7 +87,7 @@ export const OwnerInfoStep: React.FC<OwnerInfoStepProps> = ({
   // Custom validation check for button state
   const isFormValid = () => {
     const values = getValues();
-    return !!(values.phoneNumber && values.role && 
+    return !!(values.phoneNumber && 
              values.propertyType && values.listingType && agreedToTerms);
   };
 
@@ -234,54 +227,6 @@ export const OwnerInfoStep: React.FC<OwnerInfoStepProps> = ({
             </div>
             {errors.listingType && touchedFields.listingType && (
               <p className="text-sm text-destructive">{errors.listingType.message}</p>
-            )}
-          </div>
-
-          {/* Role Selection */}
-          <div className="space-y-3">
-            <Label>I am *</Label>
-            <div className="w-48">
-              <Select 
-                value={selectedRole} 
-                onValueChange={(value) => {
-                  setValue('role', value as 'Owner' | 'Agent' | 'Builder');
-                  trigger('role');
-                }}
-              >
-              <SelectTrigger className={errors.role ? 'border-destructive' : ''}>
-                <SelectValue placeholder="Select your role" />
-              </SelectTrigger>
-               <SelectContent>
-                {selectedListingType === 'Rent' ? (
-                  <>
-                    <SelectItem value="Owner">Property Owner</SelectItem>
-                    <SelectItem value="Agent">Agent</SelectItem>
-                    <SelectItem value="Builder">Builder</SelectItem>
-                  </>
-                ) : selectedListingType === 'PG/Hostel' ? (
-                  <>
-                    <SelectItem value="Owner">Owner (of Building)</SelectItem>
-                    <SelectItem value="Agent">Agent</SelectItem>
-                    <SelectItem value="Builder">Builder</SelectItem>
-                  </>
-                ) : selectedListingType === 'Flatmates' ? (
-                  <>
-                    <SelectItem value="Owner">Student</SelectItem>
-                    <SelectItem value="Agent">Working professional</SelectItem>
-                    <SelectItem value="Builder">Tenant</SelectItem>
-                  </>
-                ) : (
-                  <>
-                    <SelectItem value="Owner">Owner</SelectItem>
-                    <SelectItem value="Agent">Agent</SelectItem>
-                    <SelectItem value="Builder">Builder</SelectItem>
-                  </>
-                )}
-              </SelectContent>
-              </Select>
-            </div>
-            {errors.role && touchedFields.role && (
-              <p className="text-sm text-destructive">{errors.role.message}</p>
             )}
           </div>
 

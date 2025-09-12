@@ -275,7 +275,6 @@ export const ResalePreviewStep: React.FC<ResalePreviewStepProps> = ({
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <p className="font-medium">{ownerInfo?.fullName}</p>
-                  <p className="text-sm text-muted-foreground">{ownerInfo?.role}</p>
                 </div>
                 <div>
                   <p className="text-sm">{ownerInfo?.phoneNumber}</p>

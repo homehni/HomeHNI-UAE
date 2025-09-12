@@ -10,7 +10,6 @@ interface PgHostelOwnerInfo {
   fullName: string;
   phoneNumber: string;
   email: string;
-  role: 'Owner' | 'Agent' | 'Builder' | 'Tenant';
   city: string;
   whatsappUpdates: boolean;
 }
@@ -32,7 +31,6 @@ export function PgHostelOwnerInfoStep({
     fullName: '',
     phoneNumber: '',
     email: '',
-    role: 'Owner',
     city: '',
     whatsappUpdates: true,
     ...initialData,
@@ -92,26 +90,6 @@ export function PgHostelOwnerInfoStep({
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   placeholder="Enter your email"
                 />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="role">You are</Label>
-                <Select
-                  value={formData.role}
-                  onValueChange={(value: 'Owner' | 'Agent' | 'Builder' | 'Tenant') => 
-                    setFormData({ ...formData, role: value })
-                  }
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select your role" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="Owner">Owner</SelectItem>
-                    <SelectItem value="Agent">Agent</SelectItem>
-                    <SelectItem value="Builder">Builder</SelectItem>
-                    <SelectItem value="Tenant">Tenant</SelectItem>
-                  </SelectContent>
-                </Select>
               </div>
 
               <div className="space-y-2 md:col-span-2">
