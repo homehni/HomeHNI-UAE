@@ -23,6 +23,7 @@ const rentalDetailsSchema = z.object({
   rentNegotiable: z.boolean().optional(),
   securityDeposit: z.number().optional(),
   monthlyMaintenance: z.string().optional(),
+  maintenanceAmount: z.number().optional(),
   availableFrom: z.string().optional(),
   preferredTenants: z.array(z.string()).optional(),
   furnishing: z.string().optional(),
@@ -55,6 +56,7 @@ export const RentalDetailsStep: React.FC<RentalDetailsStepProps> = ({
       rentNegotiable: initialData.rentNegotiable || false,
       securityDeposit: initialData.securityDeposit || undefined,
       monthlyMaintenance: '',
+      maintenanceAmount: undefined,
       availableFrom: initialData.availableFrom || '',
       preferredTenants: [],
       furnishing: '',
@@ -63,6 +65,7 @@ export const RentalDetailsStep: React.FC<RentalDetailsStepProps> = ({
   });
 
   const propertyType = form.watch('propertyAvailableFor');
+  const maintenanceType = form.watch('monthlyMaintenance');
 
   const onSubmit = (data: RentalDetailsForm) => {
     // Convert form data to RentalDetails format
@@ -235,31 +238,55 @@ export const RentalDetailsStep: React.FC<RentalDetailsStepProps> = ({
           )}
 
           {/* Monthly Maintenance */}
-          <FormField
-            control={form.control}
-            name="monthlyMaintenance"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-sm font-medium text-gray-900">Monthly Maintenance</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
-                  <FormControl>
-                    <SelectTrigger className="h-12">
-                      <SelectValue placeholder="Select" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent className="bg-white border shadow-lg z-50">
-                    <SelectItem value="included">Included in Rent</SelectItem>
-                    <SelectItem value="extra-1000">Extra ₹1,000</SelectItem>
-                    <SelectItem value="extra-2000">Extra ₹2,000</SelectItem>
-                    <SelectItem value="extra-3000">Extra ₹3,000</SelectItem>
-                    <SelectItem value="extra-5000">Extra ₹5,000</SelectItem>
-                    <SelectItem value="extra-other">Other Amount</SelectItem>
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <FormField
+              control={form.control}
+              name="monthlyMaintenance"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-sm font-medium text-gray-900">Monthly Maintenance</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger className="h-12">
+                        <SelectValue placeholder="Select" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent className="bg-white border shadow-lg z-50">
+                      <SelectItem value="included">Included in Rent</SelectItem>
+                      <SelectItem value="extra">Extra</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {maintenanceType === 'extra' && (
+              <FormField
+                control={form.control}
+                name="maintenanceAmount"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-sm font-medium text-gray-900">Maintenance Amount *</FormLabel>
+                    <FormControl>
+                      <div className="relative">
+                        <span className="absolute left-3 top-3 text-gray-500">₹</span>
+                        <Input 
+                          placeholder="Enter Amount"
+                          className="h-12 pl-8"
+                          type="number"
+                          value={field.value || ''}
+                          onChange={(e) => field.onChange(e.target.value ? Number(e.target.value) : undefined)}
+                        />
+                        <span className="absolute right-3 top-3 text-gray-500">/ Month</span>
+                      </div>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             )}
-          />
+          </div>
 
           {/* Available From */}
           <FormField
