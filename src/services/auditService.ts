@@ -17,7 +17,7 @@ export class AuditService {
   static async logEvent({
     action,
     tableName = 'system',
-    recordId,
+    recordId = 'system',
     oldValues,
     newValues,
     ipAddress,
