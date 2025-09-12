@@ -29,28 +29,28 @@ export const PropertyFormSidebar: React.FC<PropertyFormSidebarProps> = ({
   }));
 
   return (
-    <div className="w-56 bg-white border-r border-gray-200 h-full p-2 flex-shrink-0">
+    <div className="w-64 bg-white border-r border-gray-200 h-full p-3 flex-shrink-0">
       {/* Logo/Header */}
-      <div className="mb-2 p-1">
-        <div className="w-8 h-8 bg-red-500 rounded-lg flex items-center justify-center">
-          <Home className="w-4 h-4 text-white" />
+      <div className="mb-4 p-2">
+        <div className="w-10 h-10 bg-red-500 rounded-lg flex items-center justify-center">
+          <Home className="w-5 h-5 text-white" />
         </div>
       </div>
 
       {/* Steps */}
-      <div className="space-y-1">
+      <div className="space-y-2">
         {sidebarSteps.map((step) => (
           <div
             key={step.number}
-            className={`flex items-center gap-1 p-1 rounded transition-all duration-200 ${
+            className={`flex items-center gap-2 p-2 rounded-lg transition-all duration-200 ${
               step.active 
-                ? 'bg-teal-50 border-l-2 border-teal-500' 
+                ? 'bg-teal-50 border-l-4 border-teal-500' 
                 : step.completed 
                   ? 'hover:bg-gray-50' 
                   : 'text-gray-400'
             }`}
           >
-            <div className={`flex items-center justify-center w-5 h-5 rounded ${
+            <div className={`flex items-center justify-center w-7 h-7 rounded-lg ${
               step.active 
                 ? 'text-teal-600' 
                 : step.completed 
@@ -58,14 +58,14 @@ export const PropertyFormSidebar: React.FC<PropertyFormSidebarProps> = ({
                   : 'text-gray-400'
             }`}>
               {step.completed ? (
-                <CheckCircle className="w-3 h-3" />
+                <CheckCircle className="w-4 h-4" />
               ) : (
-                <div className="text-xs">
+                <div className="text-sm">
                   {step.icon}
                 </div>
               )}
             </div>
-            <span className={`text-xs font-medium truncate ${
+            <span className={`text-sm font-medium ${
               step.active 
                 ? 'text-teal-700' 
                 : step.completed 

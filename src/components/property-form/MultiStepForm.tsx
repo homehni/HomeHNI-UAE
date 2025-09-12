@@ -176,7 +176,7 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
 
   return (
     <div className="h-screen bg-gray-50 overflow-hidden">
-      <div className="flex max-w-6xl mx-auto h-full">
+      <div className="flex max-w-full mx-auto h-full">
         {/* Sidebar */}
         <PropertyFormSidebar
           currentStep={currentStep}
@@ -201,7 +201,7 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
           </div>
 
           {/* Form Content */}
-          <div className="flex-1 p-3 min-h-0">
+          <div className="flex-1 p-3 min-h-0 max-h-full">
             <div className="bg-white h-full overflow-hidden">
               {currentStep === 1 && (
                 <PropertyDetailsStep

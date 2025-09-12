@@ -191,7 +191,7 @@ export const CommercialSaleMultiStepForm = ({
 
   return (
     <div className="h-screen bg-gray-50 overflow-hidden">
-      <div className="max-w-6xl mx-auto h-full flex flex-col">
+      <div className="max-w-full mx-auto h-full flex flex-col">
         <div className="bg-white shadow-sm border-b flex-shrink-0">
           <div className="px-4 py-2">
             <h1 className="text-base font-bold text-gray-900">
@@ -213,7 +213,7 @@ export const CommercialSaleMultiStepForm = ({
             onStepClick={goToStep}
           />
 
-          <div className="flex-1 min-w-0 p-3 bg-white overflow-hidden">
+          <div className="flex-1 min-w-0 p-3 bg-white overflow-hidden max-h-full">
             {renderCurrentStep()}
           </div>
         </div>

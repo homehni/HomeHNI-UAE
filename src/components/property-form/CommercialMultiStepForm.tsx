@@ -201,7 +201,7 @@ export const CommercialMultiStepForm: React.FC<CommercialMultiStepFormProps> = (
 
   return (
     <div className="h-screen bg-gray-50 overflow-hidden">
-      <div className="max-w-6xl mx-auto h-full flex flex-col">
+      <div className="max-w-full mx-auto h-full flex flex-col">
         {/* Header */}
         <div className="bg-white border-b border-gray-200 px-4 py-2 flex-shrink-0">
           <div className="flex items-center justify-between">
@@ -224,7 +224,7 @@ export const CommercialMultiStepForm: React.FC<CommercialMultiStepFormProps> = (
             onStepClick={goToStep}
           />
           
-          <div className="flex-1 min-w-0 p-3 bg-white overflow-hidden">
+          <div className="flex-1 min-w-0 p-3 bg-white overflow-hidden max-h-full">
             {renderCurrentStep()}
           </div>
         </div>
