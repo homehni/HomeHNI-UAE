@@ -13,6 +13,8 @@ const commercialSalePropertyDetailsSchema = z.object({
   title: z.string().optional(), // Made optional - will be auto-generated
   spaceType: z.enum(['office', 'retail', 'warehouse', 'showroom', 'restaurant', 'co-working', 'industrial', 'medical', 'educational']).optional(),
   buildingType: z.string().optional(),
+  propertyAge: z.string().optional(),
+  facing: z.string().optional(),
   floorNo: z.string().optional(),
   totalFloors: z.string().optional(),
   superBuiltUpArea: z.string().optional(),
