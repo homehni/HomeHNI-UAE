@@ -242,7 +242,7 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="flex max-w-6xl mx-auto">
+      <div className="flex max-w-6xl mx-auto h-screen">
         {/* Sidebar */}
         <PropertyFormSidebar
           currentStep={currentStep}
@@ -251,11 +251,11 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
         />
         
         {/* Main Content */}
-        <div className="flex-1 min-w-0 bg-white">
+        <div className="flex-1 min-w-0 bg-white flex flex-col">
           {/* Progress Bar */}
-          <div className="bg-white border-b border-gray-200 px-6 py-4">
-            <div className="flex items-center justify-between mb-3">
-              <h1 className="text-xl font-semibold text-gray-900">
+          <div className="bg-white border-b border-gray-200 px-6 py-3">
+            <div className="flex items-center justify-between mb-2">
+              <h1 className="text-lg font-semibold text-gray-900">
                 Provide additional details about your property to get maximum visibility
               </h1>
               <span className="text-sm text-gray-500 bg-gray-100 px-3 py-1 rounded-full">{currentStep}/6</span>
@@ -268,9 +268,9 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
             </div>
           </div>
 
-          {/* Form Content */}
-          <div className="p-6">
-            <div className="bg-white p-6">
+          {/* Form Content - Scrollable */}
+          <div className="flex-1 overflow-y-auto p-4">
+            <div className="bg-white p-4">
               {currentStep === 1 && (
                 <FlattmatesPropertyDetailsStep
                   initialData={propertyDetails}
