@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Eye, CheckCircle, XCircle, Trash2, Search, MoreHorizontal } from 'lucide-react';
+import { Eye, CheckCircle, XCircle, Trash2, Search, MoreHorizontal, EyeOff } from 'lucide-react';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
 import { SecureDataMask } from './SecureDataMask';
@@ -39,6 +39,7 @@ interface Property {
   owner_phone?: string;
   is_featured?: boolean;
   is_edited?: boolean;
+  is_visible?: boolean;
 }
 
 interface PropertyTableProps {
@@ -61,6 +62,7 @@ interface PropertyTableProps {
   onApprove: (id: string) => void;
   onReject: (property: Property) => void;
   onDelete: (id: string) => void;
+  onToggleVisibility?: (id: string, isVisible: boolean) => void;
   actionLoading: boolean;
 }
 
@@ -77,6 +79,7 @@ export const PropertyTable: React.FC<PropertyTableProps> = ({
   onApprove,
   onReject,
   onDelete,
+  onToggleVisibility,
   actionLoading,
 }) => {
   const getStatusBadge = (status: string) => {
@@ -182,6 +185,11 @@ export const PropertyTable: React.FC<PropertyTableProps> = ({
                             ⭐ Featured
                           </Badge>
                         )}
+                        {property.is_visible === false && (
+                          <Badge variant="outline" className="text-xs bg-gray-100 text-gray-600 border-gray-300 font-medium px-2 py-1">
+                            👁️‍🗨️ Hidden
+                          </Badge>
+                        )}
                       </div>
                     </div>
                   </TableCell>
@@ -253,6 +261,24 @@ export const PropertyTable: React.FC<PropertyTableProps> = ({
                       >
                         <Eye className="h-4 w-4" />
                       </Button>
+                      
+                      {onToggleVisibility && (
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          onClick={() => onToggleVisibility(property.id, !property.is_visible)}
+                          disabled={actionLoading}
+                          className={cn(
+                            "h-9 w-9 p-0",
+                            property.is_visible === false 
+                              ? "hover:bg-green-50 hover:text-green-600" 
+                              : "hover:bg-orange-50 hover:text-orange-600"
+                          )}
+                          title={property.is_visible === false ? "Show Property" : "Hide Property"}
+                        >
+                          {property.is_visible === false ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4" />}
+                        </Button>
+                      )}
                       
                       {(property.status === 'pending' || property.status === 'new') && (
                         <>

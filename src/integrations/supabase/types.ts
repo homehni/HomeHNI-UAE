@@ -802,6 +802,7 @@ export type Database = {
           id: string
           images: string[] | null
           is_featured: boolean
+          is_visible: boolean | null
           landmarks: string | null
           listing_type: string
           locality: string
@@ -857,6 +858,7 @@ export type Database = {
           id?: string
           images?: string[] | null
           is_featured?: boolean
+          is_visible?: boolean | null
           landmarks?: string | null
           listing_type: string
           locality: string
@@ -912,6 +914,7 @@ export type Database = {
           id?: string
           images?: string[] | null
           is_featured?: boolean
+          is_visible?: boolean | null
           landmarks?: string | null
           listing_type?: string
           locality?: string

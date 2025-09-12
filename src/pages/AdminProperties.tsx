@@ -32,6 +32,7 @@ interface PropertySubmission {
   owner_role?: string;
   is_featured?: boolean;
   is_edited?: boolean;
+  is_visible?: boolean;
   updated_at?: string;
 }
 
@@ -161,7 +162,8 @@ const AdminProperties = () => {
           owner_email: payload?.owner_email || '',
           owner_phone: payload?.owner_phone || '',
           owner_role: payload?.owner_role || 'Owner',
-          is_featured: payload?.is_featured || false
+          is_featured: payload?.is_featured || false,
+          is_visible: payload?.is_visible !== false // Default to true unless explicitly false
         };
       }) || [];
 
@@ -176,7 +178,9 @@ const AdminProperties = () => {
           // Mark as edited for identification
           is_edited: wasEdited,
           // Ensure status is 'new' for admin review workflow
-          status: 'new'
+          status: 'new',
+          // Include visibility status
+          is_visible: property.is_visible !== false // Default to true unless explicitly false
         };
       }) || [];
 
@@ -722,6 +726,69 @@ const AdminProperties = () => {
     setReviewModalOpen(true);
   };
 
+  // Handle visibility toggle for properties
+  const handleToggleVisibility = async (propertyId: string, isVisible: boolean) => {
+    setActionLoading(true);
+    try {
+      // First find the submission to check if it's approved
+      const { data: submission } = await supabase
+        .from('property_submissions')
+        .select('*')
+        .eq('id', propertyId)
+        .single();
+
+      if (submission?.status === 'approved') {
+        // Find and update the main property table
+        const { data: properties } = await supabase
+          .from('properties')
+          .select('id')
+          .eq('title', submission.title)
+          .eq('city', submission.city)
+          .eq('state', submission.state);
+
+        if (properties && properties.length > 0) {
+          await supabase
+            .from('properties')
+            .update({ is_visible: isVisible })
+            .eq('id', properties[0].id);
+        }
+      }
+
+      // Update the submission's visibility in payload
+      let updatedPayload: any = {};
+      try {
+        updatedPayload = typeof submission?.payload === 'string' 
+          ? JSON.parse(submission.payload) 
+          : submission?.payload || {};
+      } catch (e) {
+        updatedPayload = {};
+      }
+      
+      updatedPayload.is_visible = isVisible;
+      
+      await supabase
+        .from('property_submissions')
+        .update({ payload: JSON.stringify(updatedPayload) })
+        .eq('id', propertyId);
+
+      toast({
+        title: 'Success',
+        description: `Property ${isVisible ? 'shown' : 'hidden'} successfully`
+      });
+
+      fetchProperties();
+    } catch (error) {
+      console.error('Error toggling visibility:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to update property visibility',
+        variant: 'destructive'
+      });
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
@@ -776,6 +843,7 @@ const AdminProperties = () => {
           setPropertyToDelete(id);
           setDeleteModalOpen(true);
         }}
+        onToggleVisibility={handleToggleVisibility}
         actionLoading={actionLoading}
       />
 
