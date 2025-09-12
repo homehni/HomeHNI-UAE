@@ -5,14 +5,15 @@ import { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { LocationDetails } from '@/types/property';
 import { ArrowLeft, ArrowRight, Home, MapPin } from 'lucide-react';
 
 
 const locationDetailsSchema = z.object({
+  city: z.string().min(1, "City is required"),
   locality: z.string().optional(),
   landmark: z.string().optional(),
-  city: z.string().optional(),
   state: z.string().optional(),
   pincode: z.string().optional(),
 });
@@ -42,6 +43,7 @@ export const LocationDetailsStep: React.FC<LocationDetailsStepProps> = ({
   const form = useForm<LocationDetailsFormData>({
     resolver: zodResolver(locationDetailsSchema),
     defaultValues: {
+      city: initialData.city || '',
       locality: initialData.locality || '',
       landmark: initialData.landmark || '',
     },
@@ -49,6 +51,9 @@ export const LocationDetailsStep: React.FC<LocationDetailsStepProps> = ({
 
   // Update form values when initialData changes
   useEffect(() => {
+    if (initialData.city) {
+      form.setValue('city', initialData.city);
+    }
     if (initialData.locality) {
       form.setValue('locality', initialData.locality);
     }
@@ -189,6 +194,38 @@ export const LocationDetailsStep: React.FC<LocationDetailsStepProps> = ({
 
               <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                  {/* City Selection */}
+                  <FormField
+                    control={form.control}
+                    name="city"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-sm font-medium">City *</FormLabel>
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <FormControl>
+                            <SelectTrigger className="h-12 bg-white z-50">
+                              <SelectValue placeholder="Bangalore" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent className="bg-white border border-gray-200 shadow-lg z-[9999]">
+                            <SelectItem value="Bangalore">Bangalore</SelectItem>
+                            <SelectItem value="Mumbai">Mumbai</SelectItem>
+                            <SelectItem value="Pune">Pune</SelectItem>
+                            <SelectItem value="Chennai">Chennai</SelectItem>
+                            <SelectItem value="Gurgaon">Gurgaon</SelectItem>
+                            <SelectItem value="Hyderabad">Hyderabad</SelectItem>
+                            <SelectItem value="Delhi">Delhi</SelectItem>
+                            <SelectItem value="Faridabad">Faridabad</SelectItem>
+                            <SelectItem value="Ghaziabad">Ghaziabad</SelectItem>
+                            <SelectItem value="Noida">Noida</SelectItem>
+                            <SelectItem value="Greater Noida">Greater Noida</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
                   {/* Locality/Area and Landmark */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <FormField
