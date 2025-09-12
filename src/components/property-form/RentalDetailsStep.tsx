@@ -7,28 +7,25 @@ import { CalendarIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { PriceInput } from '@/components/ui/price-input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Badge } from '@/components/ui/badge';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Label } from '@/components/ui/label';
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
 import { RentalDetails } from '@/types/property';
-import { Home, MapPin, Building, Sparkles, Camera, FileText, Calendar as CalendarStep } from 'lucide-react';
 
 const rentalDetailsSchema = z.object({
-  listingType: z.enum(['Sale', 'Rent']).optional(),
-  expectedPrice: z.number().min(1, "Expected rent is required and must be greater than 0"),
+  propertyAvailableFor: z.string().optional(),
+  expectedPrice: z.number().min(1, "Expected rent is required and must be greater than 0").optional(),
   rentNegotiable: z.boolean().optional(),
-  maintenanceExtra: z.boolean().optional(),
-  maintenanceCharges: z.number().optional(),
   securityDeposit: z.number().optional(),
-  depositNegotiable: z.boolean().optional(),
-  leaseDuration: z.string().optional(),
-  lockinPeriod: z.string().optional(),
+  monthlyMaintenance: z.string().optional(),
   availableFrom: z.string().optional(),
-  idealFor: z.array(z.string()).optional(),
+  preferredTenants: z.array(z.string()).optional(),
+  furnishing: z.string().optional(),
+  parking: z.string().optional(),
 });
 
 type RentalDetailsForm = z.infer<typeof rentalDetailsSchema>;
@@ -48,280 +45,317 @@ export const RentalDetailsStep: React.FC<RentalDetailsStepProps> = ({
   currentStep,
   totalSteps
 }) => {
-  const [showMaintenanceInput, setShowMaintenanceInput] = useState(initialData.maintenanceExtra || false);
-
   const form = useForm<RentalDetailsForm>({
     resolver: zodResolver(rentalDetailsSchema),
     defaultValues: {
-      listingType: initialData.listingType || 'Rent',
+      propertyAvailableFor: 'rent',
       expectedPrice: initialData.expectedPrice || undefined,
       rentNegotiable: initialData.rentNegotiable || false,
-      maintenanceExtra: initialData.maintenanceExtra || false,
-      maintenanceCharges: initialData.maintenanceCharges || undefined,
       securityDeposit: initialData.securityDeposit || undefined,
-      depositNegotiable: initialData.depositNegotiable || false,
-      leaseDuration: initialData.leaseDuration || '',
-      lockinPeriod: initialData.lockinPeriod || '',
+      monthlyMaintenance: '',
       availableFrom: initialData.availableFrom || '',
-      idealFor: initialData.idealFor || [],
+      preferredTenants: [],
+      furnishing: '',
+      parking: '',
     },
   });
-
 
   const onSubmit = (data: RentalDetailsForm) => {
     // Convert form data to RentalDetails format
     const rentalData: RentalDetails = {
-      listingType: data.listingType || 'Rent',
+      listingType: 'Rent',
       expectedPrice: data.expectedPrice || 0,
       rentNegotiable: data.rentNegotiable || false,
-      maintenanceExtra: data.maintenanceExtra || false,
-      maintenanceCharges: data.maintenanceCharges || 0,
+      maintenanceExtra: false,
+      maintenanceCharges: 0,
       securityDeposit: data.securityDeposit || 0,
-      depositNegotiable: data.depositNegotiable || false,
-      leaseDuration: data.leaseDuration || '',
-      lockinPeriod: data.lockinPeriod || '',
+      depositNegotiable: false,
+      leaseDuration: '',
+      lockinPeriod: '',
       availableFrom: data.availableFrom || '',
-      idealFor: [],
+      idealFor: data.preferredTenants || [],
     };
     onNext(rentalData);
   };
 
   return (
     <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
-      <h1 className="text-2xl font-semibold text-primary mb-6">Provide rental details about your property</h1>
+      <h1 className="text-2xl font-semibold text-teal-600 mb-6">
+        Provide rental details about your property
+      </h1>
+      
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          {/* Property Available For */}
+          <div>
+            <h3 className="text-lg font-medium text-gray-900 mb-4">Property available for</h3>
+            <FormField
+              control={form.control}
+              name="propertyAvailableFor"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <RadioGroup
+                      onValueChange={field.onChange}
+                      defaultValue={field.value || 'rent'}
+                      className="flex space-x-6"
+                    >
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="rent" id="rent" />
+                        <Label htmlFor="rent">Only rent</Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="lease" id="lease" />
+                        <Label htmlFor="lease">Only lease</Label>
+                      </div>
+                    </RadioGroup>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+
+          {/* Expected Rent and Deposit */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <FormField
+              control={form.control}
+              name="expectedPrice"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-sm font-medium text-gray-900">Expected Rent *</FormLabel>
+                  <FormControl>
+                    <div className="relative">
+                      <span className="absolute left-3 top-3 text-gray-500">₹</span>
+                      <Input 
+                        placeholder="Enter Amount"
+                        className="h-12 pl-8"
+                        type="number"
+                        value={field.value || ''}
+                        onChange={(e) => field.onChange(e.target.value ? Number(e.target.value) : undefined)}
+                      />
+                      <span className="absolute right-3 top-3 text-gray-500">/ Month</span>
+                    </div>
+                  </FormControl>
+                  <div className="mt-2">
+                    <FormField
+                      control={form.control}
+                      name="rentNegotiable"
+                      render={({ field }) => (
+                        <div className="flex items-center space-x-2">
+                          <Checkbox 
+                            id="rentNegotiable"
+                            checked={field.value}
+                            onCheckedChange={field.onChange}
+                          />
+                          <label htmlFor="rentNegotiable" className="text-sm text-gray-600">
+                            Rent Negotiable
+                          </label>
+                        </div>
+                      )}
+                    />
+                  </div>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="securityDeposit"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-sm font-medium text-gray-900">Expected Deposit *</FormLabel>
+                  <FormControl>
+                    <div className="relative">
+                      <span className="absolute left-3 top-3 text-gray-500">₹</span>
+                      <Input 
+                        placeholder="Enter Amount"
+                        className="h-12 pl-8"
+                        type="number"
+                        value={field.value || ''}
+                        onChange={(e) => field.onChange(e.target.value ? Number(e.target.value) : undefined)}
+                      />
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+
+          {/* Monthly Maintenance */}
+          <FormField
+            control={form.control}
+            name="monthlyMaintenance"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-sm font-medium text-gray-900">Monthly Maintenance</FormLabel>
+                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <FormControl>
+                    <SelectTrigger className="h-12">
+                      <SelectValue placeholder="Select" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent className="bg-white border shadow-lg z-50">
+                    <SelectItem value="included">Included in Rent</SelectItem>
+                    <SelectItem value="extra-1000">Extra ₹1,000</SelectItem>
+                    <SelectItem value="extra-2000">Extra ₹2,000</SelectItem>
+                    <SelectItem value="extra-3000">Extra ₹3,000</SelectItem>
+                    <SelectItem value="extra-5000">Extra ₹5,000</SelectItem>
+                    <SelectItem value="extra-other">Other Amount</SelectItem>
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          {/* Available From */}
+          <FormField
+            control={form.control}
+            name="availableFrom"
+            render={({ field }) => {
+              const [open, setOpen] = React.useState(false);
               
-              <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                  {/* Expected Rent */}
-                  <div>
-                    <FormField
-                      control={form.control}
-                      name="expectedPrice"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className="text-sm font-medium">Expected Rent</FormLabel>
-                          <div className="flex items-center space-x-4">
-                             <div className="flex-1">
-                               <FormControl>
-                                 <PriceInput 
-                                   placeholder="Enter Amount"
-                                   className="h-12"
-                                   value={field.value}
-                                   onChange={field.onChange}
-                                 />
-                               </FormControl>
-                             </div>
-                          </div>
-                          <div className="flex items-center space-x-6 mt-2">
-                            <FormField
-                              control={form.control}
-                              name="rentNegotiable"
-                              render={({ field }) => (
-                                <div className="flex items-center space-x-2">
-                                  <Checkbox 
-                                    id="rentNegotiable"
-                                    checked={field.value}
-                                    onCheckedChange={field.onChange}
-                                  />
-                                  <label htmlFor="rentNegotiable" className="text-sm text-gray-600">Rent Negotiable</label>
-                                </div>
-                              )}
-                            />
-                            <FormField
-                              control={form.control}
-                              name="maintenanceExtra"
-                              render={({ field }) => (
-                                <div className="flex items-center space-x-2">
-                                  <Checkbox 
-                                    id="maintenanceExtra"
-                                    checked={field.value}
-                                    onCheckedChange={(checked) => {
-                                      field.onChange(checked);
-                                      setShowMaintenanceInput(!!checked);
-                                      if (!checked) {
-                                        form.setValue('maintenanceCharges', 0);
-                                      }
-                                    }}
-                                  />
-                                  <label htmlFor="maintenanceExtra" className="text-sm text-gray-600">Maintenance Extra</label>
-                                </div>
-                              )}
-                            />
-                          </div>
-                          {showMaintenanceInput && (
-                            <div className="mt-4">
-                              <FormField
-                                control={form.control}
-                                name="maintenanceCharges"
-                                render={({ field }) => (
-                                  <FormItem>
-                                    <FormLabel className="text-sm font-medium">Maintenance Amount (₹/month)</FormLabel>
-                                     <FormControl>
-                                       <PriceInput 
-                                         placeholder="Enter maintenance amount"
-                                         className="h-12"
-                                         value={field.value}
-                                         onChange={field.onChange}
-                                       />
-                                     </FormControl>
-                                    <FormMessage />
-                                  </FormItem>
-                                )}
-                              />
-                            </div>
+              return (
+                <FormItem className="flex flex-col">
+                  <FormLabel className="text-sm font-medium text-gray-900">Available From *</FormLabel>
+                  <Popover open={open} onOpenChange={setOpen}>
+                    <PopoverTrigger asChild>
+                      <FormControl>
+                        <Button
+                          variant={"outline"}
+                          className={cn(
+                            "h-12 pl-3 text-left font-normal justify-start",
+                            !field.value && "text-muted-foreground"
                           )}
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
+                        >
+                          <CalendarIcon className="mr-2 h-4 w-4" />
+                          {field.value ? (
+                            format(new Date(field.value), "dd/MM/yyyy")
+                          ) : (
+                            <span>dd/mm/yyyy</span>
+                          )}
+                        </Button>
+                      </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0 bg-white border shadow-lg z-50" align="start">
+                      <Calendar
+                        mode="single"
+                        selected={field.value ? new Date(field.value) : undefined}
+                        onSelect={(date) => {
+                          field.onChange(date ? format(date, "yyyy-MM-dd") : "");
+                          setOpen(false);
+                        }}
+                        initialFocus
+                        className="p-3"
+                      />
+                    </PopoverContent>
+                  </Popover>
+                  <FormMessage />
+                </FormItem>
+              );
+            }}
+          />
 
-                  {/* Deposit and Duration */}
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <FormField
-                      control={form.control}
-                      name="securityDeposit"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className="text-sm font-medium">Deposit Amount (INR)</FormLabel>
-                           <FormControl>
-                             <PriceInput 
-                               placeholder="Enter Amount"
-                               className="h-12"
-                               value={field.value}
-                               onChange={field.onChange}
-                             />
-                           </FormControl>
-                          <div className="mt-2">
-                            <FormField
-                              control={form.control}
-                              name="depositNegotiable"
-                              render={({ field }) => (
-                                <div className="flex items-center space-x-2">
-                                  <Checkbox 
-                                    id="depositNegotiable"
-                                    checked={field.value}
-                                    onCheckedChange={field.onChange}
-                                  />
-                                  <label htmlFor="depositNegotiable" className="text-sm text-gray-600">Deposit Negotiable</label>
-                                </div>
-                              )}
-                            />
-                          </div>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+          {/* Preferred Tenants */}
+          <div>
+            <h3 className="text-sm font-medium text-gray-900 mb-4">Preferred Tenants*</h3>
+            <FormField
+              control={form.control}
+              name="preferredTenants"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <div className="flex flex-wrap gap-4">
+                      {['Anyone', 'Family', 'Bachelor Female', 'Bachelor Male', 'Company'].map((tenant) => (
+                        <div key={tenant} className="flex items-center space-x-2">
+                          <Checkbox 
+                            id={tenant}
+                            checked={field.value?.includes(tenant) || false}
+                            onCheckedChange={(checked) => {
+                              const currentTenants = field.value || [];
+                              if (checked) {
+                                field.onChange([...currentTenants, tenant]);
+                              } else {
+                                field.onChange(currentTenants.filter(t => t !== tenant));
+                              }
+                            }}
+                          />
+                          <label htmlFor={tenant} className="text-sm text-gray-700">
+                            {tenant}
+                          </label>
+                        </div>
+                      ))}
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
 
-                    <FormField
-                      control={form.control}
-                      name="leaseDuration"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className="text-sm font-medium">Lease Duration (Years)</FormLabel>
-                          <Select onValueChange={field.onChange} defaultValue={field.value}>
-                            <FormControl>
-                              <SelectTrigger className="h-12">
-                                <SelectValue placeholder="Lease Duration" />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              <SelectItem value="1">1 Year</SelectItem>
-                              <SelectItem value="2">2 Years</SelectItem>
-                              <SelectItem value="3">3 Years</SelectItem>
-                              <SelectItem value="5">5 Years</SelectItem>
-                              <SelectItem value="10">10 Years</SelectItem>
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+          {/* Furnishing and Parking */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <FormField
+              control={form.control}
+              name="furnishing"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-sm font-medium text-gray-900">Furnishing*</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger className="h-12">
+                        <SelectValue placeholder="Select" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent className="bg-white border shadow-lg z-50">
+                      <SelectItem value="fully-furnished">Fully Furnished</SelectItem>
+                      <SelectItem value="semi-furnished">Semi Furnished</SelectItem>
+                      <SelectItem value="unfurnished">Unfurnished</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-                    <FormField
-                      control={form.control}
-                      name="lockinPeriod"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className="text-sm font-medium">Lockin Period (Years)</FormLabel>
-                          <Select onValueChange={field.onChange} defaultValue={field.value}>
-                            <FormControl>
-                              <SelectTrigger className="h-12">
-                                <SelectValue placeholder="Lockin Period" />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              <SelectItem value="0">No Lock-in</SelectItem>
-                              <SelectItem value="1">1 Year</SelectItem>
-                              <SelectItem value="2">2 Years</SelectItem>
-                              <SelectItem value="3">3 Years</SelectItem>
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
+            <FormField
+              control={form.control}
+              name="parking"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-sm font-medium text-gray-900">Parking*</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger className="h-12">
+                        <SelectValue placeholder="Select" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent className="bg-white border shadow-lg z-50">
+                      <SelectItem value="car">Car Parking</SelectItem>
+                      <SelectItem value="bike">Bike Parking</SelectItem>
+                      <SelectItem value="both">Car + Bike Parking</SelectItem>
+                      <SelectItem value="none">No Parking</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
 
-                  <FormField
-                    control={form.control}
-                    name="availableFrom"
-                    render={({ field }) => {
-                      const [open, setOpen] = React.useState(false);
-                      
-                      return (
-                        <FormItem className="flex flex-col">
-                          <FormLabel className="text-sm font-medium">Available From</FormLabel>
-                          <Popover open={open} onOpenChange={setOpen}>
-                            <PopoverTrigger asChild>
-                            <FormControl>
-                              <Button
-                                variant={"outline"}
-                                className={cn(
-                                  "h-12 pl-3 text-left font-normal justify-start",
-                                  !field.value && "text-muted-foreground"
-                                )}
-                              >
-                                <CalendarIcon className="mr-2 h-4 w-4" />
-                                {field.value ? (
-                                  format(new Date(field.value), "dd/MM/yyyy")
-                                ) : (
-                                  <span>dd/mm/yyyy</span>
-                                )}
-                              </Button>
-                            </FormControl>
-                          </PopoverTrigger>
-                          <PopoverContent className="w-auto p-0" align="start">
-                            <Calendar
-                              mode="single"
-                              selected={field.value ? new Date(field.value) : undefined}
-                              onSelect={(date) => {
-                                field.onChange(date ? format(date, "yyyy-MM-dd") : "");
-                                setOpen(false);
-                              }}
-                              initialFocus
-                              className={cn("p-3 pointer-events-auto")}
-                            />
-                            </PopoverContent>
-                          </Popover>
-                          <FormMessage />
-                        </FormItem>
-                      );
-                    }}
-                  />
-
-
-
-                  <div className="flex justify-between pt-6">
-                    <Button type="button" variant="outline" onClick={onBack} className="px-8">
-                      Back
-                    </Button>
-                    <Button type="submit" className="px-8 bg-red-500 hover:bg-red-600">
-                      Save & Continue
-                    </Button>
-                  </div>
-                  </form>
-                </Form>
+          <div className="flex justify-between pt-6">
+            <Button type="button" variant="outline" onClick={onBack} className="px-8 bg-gray-500 text-white hover:bg-gray-600">
+              Back
+            </Button>
+            <Button type="submit" className="px-8 bg-red-500 hover:bg-red-600 text-white">
+              Save & Continue
+            </Button>
+          </div>
+        </form>
+      </Form>
     </div>
   );
 };
