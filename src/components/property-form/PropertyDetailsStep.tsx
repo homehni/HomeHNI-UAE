@@ -13,7 +13,6 @@ import { Phone, Compass } from 'lucide-react';
 const propertyDetailsSchema = z.object({
   title: z.string().optional(), // Made optional - will be auto-generated
   propertyType: z.string().optional(),
-  apartmentName: z.string().optional(),
   bhkType: z.string().optional(),
   buildingType: z.string().optional(),
   propertyAge: z.string().min(1, "Property age is required"),
@@ -48,7 +47,6 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
     defaultValues: {
       title: initialData.title || '',
       propertyType: initialData.propertyType || '',
-      apartmentName: initialData.apartmentName || '',
       bhkType: initialData.bhkType || '',
       buildingType: initialData.buildingType || '',
       propertyAge: initialData.propertyAge || '',
@@ -65,8 +63,8 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
 
   const watchedPropertyType = form.watch("propertyType");
   
-  // Properties that show apartment name dropdown
-  const showApartmentName = ['Apartment', 'Penthouse', 'Gated Community Villa'].includes(watchedPropertyType);
+  // Properties that show floor dropdown (for apartments, penthouses, etc.)
+  const showFloorDropdown = ['Apartment', 'Penthouse', 'Gated Community Villa'].includes(watchedPropertyType);
   
   // Properties that show number of floors
   const showNumberOfFloors = ['Independent House', 'Villa', 'Duplex'].includes(watchedPropertyType);
@@ -96,18 +94,14 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
             name="title"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-sm font-medium">Name of Property (Optional)</FormLabel>
+                <FormLabel className="text-sm font-medium">Property Name</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="Leave empty for auto-generated name based on property details"
                     className="h-12"
                     {...field}
                   />
                 </FormControl>
                 <FormMessage />
-                <p className="text-xs text-muted-foreground">
-                  If left empty, a name will be automatically generated based on your property details
-                </p>
               </FormItem>
             )}
           />
@@ -169,26 +163,6 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
             />
           </div>
 
-          {/* Apartment Name - Only for Apartment, Penthouse, Gated Community Villa */}
-          {showApartmentName && (
-            <FormField
-              control={form.control}
-              name="apartmentName"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-sm font-medium">Apartment Name</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="e.g. Ajmera Enclave"
-                      className="h-12"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          )}
 
           {/* Property Age and Facing */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -253,7 +227,7 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
 
           {/* Floor, Total Floors / No. of Floors */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {showApartmentName && (
+            {showFloorDropdown && (
               <FormField
                 control={form.control}
                 name="floorNo"
@@ -296,7 +270,7 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
               />
             )}
 
-            {showApartmentName ? (
+            {showFloorDropdown ? (
               <FormField
                 control={form.control}
                 name="totalFloors"
