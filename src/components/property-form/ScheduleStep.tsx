@@ -52,11 +52,12 @@ export const ScheduleStep: React.FC<ScheduleStepProps> = ({
   const watchAvailableAllDay = form.watch('availableAllDay');
 
   return (
-    <div className="space-y-6">
+    <div>
       {/* Main Title */}
-      <div className="text-center">
-        <h2 className="text-2xl font-bold text-gray-900">Schedule & Services</h2>
-        <p className="text-gray-600 mt-2">Set your availability and choose additional services</p>
+      <div className="mb-8 text-center">
+        <h1 className="text-2xl font-bold text-primary mb-2">
+          Make house visits hassle-free by providing us your availability
+        </h1>
       </div>
 
       <Form {...form}>
@@ -308,11 +309,11 @@ export const ScheduleStep: React.FC<ScheduleStepProps> = ({
 
           {/* Action Buttons */}
           <div className="flex justify-between pt-8">
-            <Button type="button" variant="outline" onClick={onBack} className="px-8 h-12">
+            <Button type="button" variant="outline" onClick={onBack} className="px-8">
               Back
             </Button>
-            <Button type="submit" className="px-8 h-12 bg-primary hover:bg-primary/90">
-              Save & Continue
+            <Button type="submit" className="px-8 bg-destructive hover:bg-destructive/90">
+              Finish Posting
             </Button>
           </div>
         </form>

@@ -43,11 +43,11 @@ export const AdditionalInfoStep: React.FC<AdditionalInfoStepProps> = ({
   };
 
   return (
-    <div className="space-y-6">
+    <div className="p-6 space-y-8">
       {/* Header */}
       <div className="text-center">
-        <h2 className="text-2xl font-bold text-gray-900">Additional Information</h2>
-        <p className="text-gray-600 mt-2">Add more details about your property</p>
+        <h2 className="text-2xl font-bold text-gray-900 mb-2">Additional Information</h2>
+        <p className="text-gray-600">Provide additional details about your property</p>
       </div>
 
       <Form {...form}>
@@ -147,7 +147,7 @@ export const AdditionalInfoStep: React.FC<AdditionalInfoStepProps> = ({
             <Button type="button" variant="outline" onClick={onBack} className="h-12 px-8">
               Back
             </Button>
-            <Button type="submit" className="h-12 px-8 bg-primary hover:bg-primary/90">
+            <Button type="submit" className="h-12 px-8">
               Save & Continue
             </Button>
           </div>

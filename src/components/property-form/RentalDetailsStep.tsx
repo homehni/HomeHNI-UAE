@@ -67,6 +67,7 @@ export const RentalDetailsStep: React.FC<RentalDetailsStepProps> = ({
     },
   });
 
+
   const onSubmit = (data: RentalDetailsForm) => {
     // Convert form data to RentalDetails format
     const rentalData: RentalDetails = {
@@ -86,11 +87,8 @@ export const RentalDetailsStep: React.FC<RentalDetailsStepProps> = ({
   };
 
   return (
-    <div className="space-y-6">
-      <div className="text-center">
-        <h2 className="text-2xl font-bold text-gray-900">Rental Details</h2>
-        <p className="text-gray-600 mt-2">Set your rental price and preferences</p>
-      </div>
+    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
+      <h1 className="text-2xl font-semibold text-primary mb-6">Provide rental details about your property</h1>
               
               <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -314,14 +312,14 @@ export const RentalDetailsStep: React.FC<RentalDetailsStepProps> = ({
 
 
 
-                   <div className="flex justify-between pt-6">
-                     <Button type="button" variant="outline" onClick={onBack} className="px-8 h-12">
-                       Back
-                     </Button>
-                     <Button type="submit" className="px-8 h-12 bg-primary hover:bg-primary/90">
-                       Save & Continue
-                     </Button>
-                   </div>
+                  <div className="flex justify-between pt-6">
+                    <Button type="button" variant="outline" onClick={onBack} className="px-8">
+                      Back
+                    </Button>
+                    <Button type="submit" className="px-8 bg-red-500 hover:bg-red-600">
+                      Save & Continue
+                    </Button>
+                  </div>
                   </form>
                 </Form>
     </div>

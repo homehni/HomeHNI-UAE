@@ -57,12 +57,6 @@ export const PropertySelectionStep: React.FC<PropertySelectionStepProps> = ({
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-2xl mx-auto px-4">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-semibold text-gray-800 mb-2">
-            Post your property
-          </h1>
-        </div>
 
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 space-y-6">
           {/* City Selection */}

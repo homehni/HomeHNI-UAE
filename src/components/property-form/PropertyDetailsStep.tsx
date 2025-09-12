@@ -85,46 +85,67 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
       
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-          {/* Apartment Type */}
+          {/* Property Name - Optional */}
           <FormField
             control={form.control}
-            name="propertyType"
+            name="title"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-sm font-medium">Apartment Type*</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
-                  <FormControl>
-                    <SelectTrigger className="h-12">
-                      <SelectValue placeholder="Select" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectItem value="Apartment">Apartment</SelectItem>
-                    <SelectItem value="Villa">Villa</SelectItem>
-                    <SelectItem value="Independent House">Independent House</SelectItem>
-                    <SelectItem value="Builder Floor">Builder Floor</SelectItem>
-                    <SelectItem value="Studio Apartment">Studio Apartment</SelectItem>
-                    <SelectItem value="Penthouse">Penthouse</SelectItem>
-                    <SelectItem value="Duplex">Duplex</SelectItem>
-                  </SelectContent>
-                </Select>
+                <FormLabel className="text-sm font-medium">Name of Property (Optional)</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="Leave empty for auto-generated name based on property details"
+                    className="h-12"
+                    {...field}
+                  />
+                </FormControl>
                 <FormMessage />
+                <p className="text-xs text-muted-foreground">
+                  If left empty, a name will be automatically generated based on your property details
+                </p>
               </FormItem>
             )}
           />
 
-          {/* BHK Type, Floor, Total Floor */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {/* Property Type and BHK Type */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <FormField
+              control={form.control}
+              name="propertyType"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-sm font-medium">Property Type</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger className="h-12">
+                        <SelectValue placeholder="Select Property Type" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="Apartment">Apartment</SelectItem>
+                      <SelectItem value="Villa">Villa</SelectItem>
+                      <SelectItem value="Independent House">Independent House</SelectItem>
+                      <SelectItem value="Builder Floor">Builder Floor</SelectItem>
+                      <SelectItem value="Studio Apartment">Studio Apartment</SelectItem>
+                      <SelectItem value="Penthouse">Penthouse</SelectItem>
+                      <SelectItem value="Duplex">Duplex</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
             <FormField
               control={form.control}
               name="bhkType"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-sm font-medium">BHK Type*</FormLabel>
+                  <FormLabel className="text-sm font-medium">BHK Type</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger className="h-12">
-                        <SelectValue placeholder="Select" />
+                        <SelectValue placeholder="Select BHK Type" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -142,13 +163,16 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
                 </FormItem>
               )}
             />
+          </div>
 
+          {/* Floor, Total Floors */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <FormField
               control={form.control}
               name="floorNo"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-sm font-medium">Floor*</FormLabel>
+                  <FormLabel className="text-sm font-medium">Floor</FormLabel>
                   <Select
                     onValueChange={(value) => {
                       if (value === 'ground') {
@@ -163,7 +187,7 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
                   >
                     <FormControl>
                       <SelectTrigger className="h-12">
-                        <SelectValue placeholder="Select" />
+                        <SelectValue placeholder="Select Floor" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -189,14 +213,14 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
               name="totalFloors"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-sm font-medium">Total Floor*</FormLabel>
+                  <FormLabel className="text-sm font-medium">Total Floors</FormLabel>
                   <Select
                     onValueChange={(value) => field.onChange(parseInt(value))}
                     defaultValue={field.value?.toString()}
                   >
                     <FormControl>
                       <SelectTrigger className="h-12">
-                        <SelectValue placeholder="Select" />
+                        <SelectValue placeholder="Select Total Floors" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -216,27 +240,57 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
             />
           </div>
 
-          {/* Property Age and Facing */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Super Built Up Area, Bathrooms, Balconies */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <FormField
               control={form.control}
-              name="buildingType"
+              name="superBuiltUpArea"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-sm font-medium">Property Age*</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <FormLabel className="text-sm font-medium">Super Built Up Area</FormLabel>
+                  <div className="relative">
+                    <FormControl>
+                      <Input
+                        type="number"
+                        placeholder="1500"
+                        className="h-12 pr-12 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
+                        {...field}
+                        onChange={(e) => field.onChange(e.target.value === '' ? undefined : parseInt(e.target.value, 10))}
+                      />
+                    </FormControl>
+                    <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-sm text-gray-500">
+                      Sq.ft
+                    </div>
+                  </div>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="bathrooms"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-sm font-medium">Bathrooms</FormLabel>
+                  <Select
+                    onValueChange={(value) => field.onChange(parseInt(value))}
+                    defaultValue={field.value?.toString()}
+                  >
                     <FormControl>
                       <SelectTrigger className="h-12">
-                        <SelectValue placeholder="Select" />
+                        <SelectValue placeholder="Select Bathrooms" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="0-1 years">0-1 years</SelectItem>
-                      <SelectItem value="1-5 years">1-5 years</SelectItem>
-                      <SelectItem value="5-10 years">5-10 years</SelectItem>
-                      <SelectItem value="10-15 years">10-15 years</SelectItem>
-                      <SelectItem value="15-20 years">15-20 years</SelectItem>
-                      <SelectItem value="20+ years">20+ years</SelectItem>
+                      {[...Array(10)].map((_, i) => {
+                        const count = i + 1;
+                        return (
+                          <SelectItem key={count} value={count.toString()}>
+                            {count}
+                          </SelectItem>
+                        );
+                      })}
                     </SelectContent>
                   </Select>
                   <FormMessage />
@@ -246,25 +300,28 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
 
             <FormField
               control={form.control}
-              name="floorType"
+              name="balconies"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-sm font-medium">Facing</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <FormLabel className="text-sm font-medium">Balconies</FormLabel>
+                  <Select
+                    onValueChange={(value) => field.onChange(parseInt(value))}
+                    defaultValue={field.value?.toString()}
+                  >
                     <FormControl>
                       <SelectTrigger className="h-12">
-                        <SelectValue placeholder="Select" />
+                        <SelectValue placeholder="Select Balconies" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="North">North</SelectItem>
-                      <SelectItem value="South">South</SelectItem>
-                      <SelectItem value="East">East</SelectItem>
-                      <SelectItem value="West">West</SelectItem>
-                      <SelectItem value="North-East">North-East</SelectItem>
-                      <SelectItem value="North-West">North-West</SelectItem>
-                      <SelectItem value="South-East">South-East</SelectItem>
-                      <SelectItem value="South-West">South-West</SelectItem>
+                      {[...Array(6)].map((_, i) => {
+                        const count = i;
+                        return (
+                          <SelectItem key={count} value={count.toString()}>
+                            {count}
+                          </SelectItem>
+                        );
+                      })}
                     </SelectContent>
                   </Select>
                   <FormMessage />
@@ -273,31 +330,56 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
             />
           </div>
 
-          {/* Built Up Area */}
-          <FormField
-            control={form.control}
-            name="superBuiltUpArea"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-sm font-medium">Built Up Area*</FormLabel>
-                <div className="relative">
-                  <FormControl>
-                    <Input
-                      type="number"
-                      placeholder="Built Up Area"
-                      className="h-12 pr-12 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
-                      {...field}
-                      onChange={(e) => field.onChange(e.target.value === '' ? undefined : parseInt(e.target.value, 10))}
-                    />
-                  </FormControl>
-                  <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-sm text-gray-500">
-                    Sq.ft
-                  </div>
-                </div>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          {/* Furnishing Status */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <FormField
+              control={form.control}
+              name="furnishingStatus"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-sm font-medium">Furnishing Status</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger className="h-12">
+                        <SelectValue placeholder="Select Furnishing Status" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="Fully Furnished">Fully Furnished</SelectItem>
+                      <SelectItem value="Semi Furnished">Semi Furnished</SelectItem>
+                      <SelectItem value="Unfurnished">Unfurnished</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="parkingType"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-sm font-medium">Parking</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger className="h-12">
+                        <SelectValue placeholder="Select Parking" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="Covered">Covered</SelectItem>
+                      <SelectItem value="Open">Open</SelectItem>
+                      <SelectItem value="Both">Both</SelectItem>
+                      <SelectItem value="None">None</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+
 
           {/* Help Section */}
           <div className="bg-orange-50 border border-orange-200 rounded-lg p-4 flex items-center justify-between">
@@ -315,7 +397,7 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
             <Button type="button" variant="outline" onClick={onBack} className="h-12 px-8">
               Back
             </Button>
-            <Button type="submit" className="h-12 px-8 bg-red-500 hover:bg-red-600 text-white">
+            <Button type="submit" className="h-12 px-8">
               Save & Continue
             </Button>
           </div>

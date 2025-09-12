@@ -9,7 +9,7 @@ import { CategorizedImageUpload } from './CategorizedImageUpload';
 import { VideoUpload } from './VideoUpload';
 import { PropertyGallery } from '@/types/property';
 import { ProgressIndicator } from './ProgressIndicator';
-import { Home, MapPin, Building, Sparkles, Camera, FileText, Calendar, Phone, Mail, Video } from 'lucide-react';
+import { Home, MapPin, Building, Sparkles, Camera, FileText, Calendar, Phone } from 'lucide-react';
 
 // Define a local type for our form data
 type GalleryFormData = {
@@ -127,136 +127,83 @@ export const GalleryStep: React.FC<GalleryStepProps> = ({
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-red-600">Upload photos & videos</h1>
-        <Button 
-          variant="outline" 
-          className="bg-teal-600 text-white border-teal-600 hover:bg-teal-700"
-        >
-          <Phone className="h-4 w-4 mr-2" />
-          Upload through phone
-        </Button>
-      </div>
-
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(handleFormSubmit)} className="space-y-8">
-          {/* Main Upload Area */}
-          <div className="border-2 border-dashed border-gray-300 rounded-lg p-12 text-center bg-gray-50">
-            <div className="flex flex-col items-center">
-              <div className="w-16 h-16 bg-gray-200 rounded-lg flex items-center justify-center mb-4">
-                <Camera className="h-8 w-8 text-gray-400" />
-              </div>
-              <h3 className="text-lg font-medium mb-2">Add photos to get 5X more responses.</h3>
-              <p className="text-gray-600 mb-6">90% tenants contact on properties with photos.</p>
-              
+    <Card>
+      <CardContent className="p-8">
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(handleFormSubmit)} className="space-y-8">
               <FormField
                 control={form.control}
                 name="images"
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
-                      <Button 
-                        type="button"
-                        className="bg-teal-600 hover:bg-teal-700 text-white px-8 py-3"
-                      >
-                        Add Photos
-                      </Button>
+                      <div className="space-y-6">
+                        {/* Upload Images Title */}
+                        <div className="text-center">
+                          <h2 className="text-xl font-semibold text-foreground mb-4">Upload Property Images by Category</h2>
+                        </div>
+                        
+                        {/* Categorized Image Upload Component */}
+                        <CategorizedImageUpload
+                          images={field.value as any}
+                          onImagesChange={field.onChange}
+                          maxImagesPerCategory={5}
+                        />
+                      </div>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-            </div>
-          </div>
 
-          {/* OR Divider */}
-          <div className="flex items-center gap-4">
-            <div className="flex-1 h-px bg-gray-300"></div>
-            <span className="bg-gray-500 text-white text-sm px-3 py-1 rounded-full">OR</span>
-            <div className="flex-1 h-px bg-gray-300"></div>
-          </div>
+              {/* Video Upload */}
+              <FormField
+                control={form.control}
+                name="video"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Property Video (Optional)</FormLabel>
+                    <FormControl>
+                      <VideoUpload
+                        video={field.value}
+                        onVideoChange={field.onChange}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-          {/* Alternative Upload Options */}
-          <div className="text-center">
-            <h3 className="text-lg font-medium mb-6">We can upload photos on your behalf</h3>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto">
-              {/* WhatsApp Option */}
-              <div className="bg-green-50 border border-green-200 rounded-lg p-6">
-                <div className="flex items-center justify-center w-12 h-12 bg-green-500 rounded-full mx-auto mb-4">
-                  <Phone className="h-6 w-6 text-white" />
-                </div>
-                <h4 className="font-medium mb-2">Whatsapp us on</h4>
-                <p className="text-lg font-semibold text-green-600">0-9241-700-000</p>
-              </div>
-
-              {/* Email Option */}
-              <div className="bg-orange-50 border border-orange-200 rounded-lg p-6">
-                <div className="flex items-center justify-center w-12 h-12 bg-orange-500 rounded-full mx-auto mb-4">
-                  <Mail className="h-6 w-6 text-white" />
-                </div>
-                <h4 className="font-medium mb-2">Email to</h4>
-                <p className="text-lg font-semibold text-orange-600">photos@nobroker.in</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Add Videos Section */}
-          <div className="text-center pt-8">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-gray-100 rounded-lg mb-4">
-              <Video className="h-8 w-8 text-gray-400" />
-            </div>
-            
-            <FormField
-              control={form.control}
-              name="video"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Button 
-                      type="button"
-                      variant="outline" 
-                      className="bg-teal-600 text-white border-teal-600 hover:bg-teal-700 px-8 py-3"
-                    >
-                      Add Videos
-                    </Button>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-
-          <div className="flex justify-between pt-6">
-            <Button type="button" variant="outline" onClick={onBack} className="h-12 px-8">
-              Back
-            </Button>
-            <div className="flex gap-3">
-              {isEditMode && onSubmit && (
-                <Button 
-                  type="button" 
-                  onClick={handleSubmitProperty}
-                  disabled={isSubmitting}
-                  className="bg-green-600 hover:bg-green-700 text-white h-12 px-8"
-                >
-                  {isSubmitting ? (
-                    <div className="flex items-center gap-2">
-                      <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
-                      <span>Submitting...</span>
-                    </div>
-                  ) : (
-                    'Submit Property'
-                  )}
+              <div className="flex justify-between pt-6">
+                <Button type="button" variant="outline" onClick={onBack} className="bg-muted text-muted-foreground">
+                  Back
                 </Button>
-              )}
-              <Button type="submit" className="h-12 px-8 bg-red-500 hover:bg-red-600 text-white">
-                Save & Continue
-              </Button>
-            </div>
-          </div>
-        </form>
-      </Form>
-    </div>
+                <div className="flex gap-3">
+                  {isEditMode && onSubmit && (
+                    <Button 
+                      type="button" 
+                      onClick={handleSubmitProperty}
+                      disabled={isSubmitting}
+                      className="bg-green-600 hover:bg-green-700 text-white"
+                    >
+                      {isSubmitting ? (
+                        <div className="flex items-center gap-2">
+                          <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
+                          <span>Submitting...</span>
+                        </div>
+                      ) : (
+                        'Submit Property'
+                      )}
+                    </Button>
+                  )}
+                  <Button type="submit" className="bg-primary text-primary-foreground">
+                    Save & Continue
+                  </Button>
+                </div>
+              </div>
+            </form>
+          </Form>
+        </CardContent>
+    </Card>
   );
 };

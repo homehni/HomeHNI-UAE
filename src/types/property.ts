@@ -63,30 +63,6 @@ export interface PropertyAmenities {
   currentPropertyCondition?: string;
   moreSimilarUnits?: boolean;
   directionsTip?: string;
-  bathrooms?: number;
-  balconies?: number;
-  petAllowed?: boolean;
-  nonVegAllowed?: boolean;
-  gym?: boolean;
-  gatedSecurity?: boolean;
-  whoWillShowProperty?: string;
-  secondaryNumber?: string;
-  // Additional amenities
-  internetServices?: boolean;
-  airConditioner?: boolean;
-  clubHouse?: boolean;
-  intercom?: boolean;
-  swimmingPool?: boolean;
-  childrenPlayArea?: boolean;
-  fireSafety?: boolean;
-  servantRoom?: boolean;
-  shoppingCenter?: boolean;
-  gasPipeline?: boolean;
-  park?: boolean;
-  rainWaterHarvesting?: boolean;
-  sewageTreatmentPlant?: boolean;
-  houseKeeping?: boolean;
-  visitorParking?: boolean;
 }
 
 export interface CategorizedImages {
