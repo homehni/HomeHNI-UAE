@@ -81,7 +81,7 @@ export function PgHostelAmenitiesStep({
   ];
 
   return (
-    <div className="max-w-2xl mx-auto space-y-6">
+    <div className="max-w-2xl mx-auto space-y-4">
       <div className="text-center mb-8">
         <h2 className="text-2xl font-bold text-foreground mb-2">Amenities</h2>
         <p className="text-muted-foreground">Select all amenities available at your PG/Hostel</p>
