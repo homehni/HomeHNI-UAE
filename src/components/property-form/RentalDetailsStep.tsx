@@ -71,10 +71,10 @@ export const RentalDetailsStep: React.FC<RentalDetailsStepProps> = ({
     // Convert form data to RentalDetails format
     const rentalData: RentalDetails = {
       listingType: 'Rent',
-      expectedPrice: data.expectedPrice || 0,
+      expectedPrice: data.expectedPrice || data.expectedLeaseAmount || 0,
       rentNegotiable: data.rentNegotiable || false,
-      maintenanceExtra: false,
-      maintenanceCharges: 0,
+      maintenanceExtra: data.monthlyMaintenance === 'extra',
+      maintenanceCharges: data.maintenanceAmount || 0,
       securityDeposit: data.securityDeposit || 0,
       depositNegotiable: false,
       leaseDuration: '',
