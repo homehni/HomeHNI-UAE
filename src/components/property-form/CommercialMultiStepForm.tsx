@@ -7,6 +7,7 @@ import { CommercialLocationDetailsStep } from './CommercialLocationDetailsStep';
 import { CommercialRentalDetailsStep } from './CommercialRentalDetailsStep';
 import { CommercialAmenitiesStep } from './CommercialAmenitiesStep';
 import { GalleryStep } from './GalleryStep';
+import GetTenantsFasterSection from '@/components/GetTenantsFasterSection';
 
 import { ScheduleStep } from './ScheduleStep';
 import { PreviewStep } from './PreviewStep';
@@ -218,14 +219,21 @@ export const CommercialMultiStepForm: React.FC<CommercialMultiStepFormProps> = (
         </div>
 
         <div className="flex flex-1 overflow-hidden">
-          <CommercialSidebar
-            currentStep={currentStep}
-            completedSteps={completedSteps}
-            onStepClick={goToStep}
-          />
+          <div className="w-80">
+            <CommercialSidebar
+              currentStep={currentStep}
+              completedSteps={completedSteps}
+              onStepClick={goToStep}
+            />
+          </div>
           
           <div className="flex-1 min-w-0 p-3 bg-white overflow-hidden max-h-full">
             {renderCurrentStep()}
+          </div>
+
+          {/* Right Sidebar - Get Tenants Faster */}
+          <div className="w-80 h-full">
+            <GetTenantsFasterSection />
           </div>
         </div>
       </div>

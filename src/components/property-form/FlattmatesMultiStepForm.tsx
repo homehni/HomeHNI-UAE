@@ -9,6 +9,7 @@ import { FlattmatesAmenitiesStep } from './FlattmatesAmenitiesStep';
 import { GalleryStep } from './GalleryStep';
 import { ScheduleStep } from './ScheduleStep';
 import { PreviewStep } from './PreviewStep';
+import GetTenantsFasterSection from '@/components/GetTenantsFasterSection';
 import { Home, MapPin, DollarSign, Sparkles, Camera, Calendar } from 'lucide-react';
 import { OwnerInfo, PropertyDetails, LocationDetails, PropertyGallery, AdditionalInfo, ScheduleInfo, FlattmatesFormData } from '@/types/property';
 
@@ -244,22 +245,23 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
     <div className="h-screen bg-gray-50 overflow-hidden">
       <div className="flex max-w-full mx-auto h-full">
         {/* Sidebar */}
-        <PropertyFormSidebar
-          currentStep={currentStep}
-          completedSteps={completedSteps}
-          steps={sidebarSteps}
-        />
+        <div className="w-80">
+          <PropertyFormSidebar
+            currentStep={currentStep}
+            completedSteps={completedSteps}
+            steps={sidebarSteps}
+          />
+        </div>
         
         {/* Main Content */}
         <div className="flex-1 min-w-0 bg-white flex flex-col">
-          {/* Progress Bar */}
-          <div className="bg-white border-b border-gray-200 px-4 py-2 flex-shrink-0">
-            <div className="flex items-center justify-between mb-1">
-              <h1 className="text-base font-semibold text-gray-900">
-                Provide additional details about your property to get maximum visibility
-              </h1>
-              <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">{currentStep}/6</span>
-            </div>
+          ...
+        </div>
+
+        {/* Right Sidebar - Get Tenants Faster */}
+        <div className="w-80 h-full">
+          <GetTenantsFasterSection />
+        </div>
             <div className="w-full bg-gray-200 rounded-full h-1">
               <div 
                 className="bg-teal-600 h-1 rounded-full transition-all duration-300"
@@ -342,6 +344,11 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
               )}
             </div>
           </div>
+        </div>
+
+        {/* Right Sidebar - Get Tenants Faster */}
+        <div className="w-80 h-full">
+          <GetTenantsFasterSection />
         </div>
       </div>
     </div>

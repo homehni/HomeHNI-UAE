@@ -7,6 +7,7 @@ import { LocationDetailsStep } from './LocationDetailsStep';
 import { RentalDetailsStep } from './RentalDetailsStep';
 import { AmenitiesStep } from './AmenitiesStep';
 import { GalleryStep } from './GalleryStep';
+import GetTenantsFasterSection from '@/components/GetTenantsFasterSection';
 
 import { ScheduleStep } from './ScheduleStep';
 import { Home, MapPin, DollarSign, Sparkles, Camera, Info, Calendar, CheckCircle } from 'lucide-react';
@@ -178,11 +179,13 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
     <div className="min-h-screen bg-gray-50">
       <div className="flex max-w-full mx-auto">
         {/* Sidebar */}
-        <PropertyFormSidebar
-          currentStep={currentStep}
-          completedSteps={completedSteps}
-          steps={sidebarSteps}
-        />
+        <div className="w-80">
+          <PropertyFormSidebar
+            currentStep={currentStep}
+            completedSteps={completedSteps}
+            steps={sidebarSteps}
+          />
+        </div>
 
         {/* Main Content */}
         <div className="flex-1 min-w-0 bg-white flex flex-col">
@@ -248,6 +251,11 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
               )}
             </div>
           </div>
+        </div>
+
+        {/* Right Sidebar - Get Tenants Faster */}
+        <div className="w-80 min-h-screen">
+          <GetTenantsFasterSection />
         </div>
       </div>
     </div>

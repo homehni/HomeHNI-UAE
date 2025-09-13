@@ -6,6 +6,7 @@ import { LandPlotLocationDetailsStep } from './LandPlotLocationDetailsStep';
 import { LandPlotSaleDetailsStep } from './LandPlotSaleDetailsStep';
 import { LandPlotAmenitiesStep } from './LandPlotAmenitiesStep';
 import { LandPlotGalleryStep } from './LandPlotGalleryStep';
+import GetTenantsFasterSection from '@/components/GetTenantsFasterSection';
 
 import { LandPlotScheduleStep } from './LandPlotScheduleStep';
 import { LandPlotPreviewStep } from './LandPlotPreviewStep';
@@ -247,6 +248,11 @@ export const LandPlotMultiStepForm: React.FC<LandPlotMultiStepFormProps> = ({
                 isSubmitting={isSubmitting}
               />
             )}
+          </div>
+
+          {/* Right Sidebar - Get Tenants Faster */}
+          <div className="w-80 h-full">
+            <GetTenantsFasterSection />
           </div>
         </div>
       </div>

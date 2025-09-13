@@ -5,6 +5,7 @@ import { PgHostelSidebar } from './PgHostelSidebar';
 import { PgHostelOwnerInfoStep } from './PgHostelOwnerInfoStep';
 import { PgHostelPropertyInfoStep } from './PgHostelPropertyInfoStep';
 import { PgHostelRoomTypeStep } from './PgHostelRoomTypeStep';
+import GetTenantsFasterSection from '@/components/GetTenantsFasterSection';
 
 import { PgHostelRoomDetailsStep } from './PgHostelRoomDetailsStep';
 import { PgHostelLocalityDetailsStep } from './PgHostelLocalityDetailsStep';
@@ -291,10 +292,12 @@ const [propertyInfo, setPropertyInfo] = useState({
     <div className="min-h-screen bg-gradient-to-br from-red-50/30 to-orange-100/30">      
       <div className="flex min-h-screen">
         {/* Sidebar */}
-        <PgHostelSidebar 
-          currentStep={currentStep} 
-          completedSteps={completedSteps} 
-        />
+        <div className="w-80">
+          <PgHostelSidebar 
+            currentStep={currentStep} 
+            completedSteps={completedSteps} 
+          />
+        </div>
         
         {/* Main Content */}
         <div className="flex-1 p-4 lg:p-8">
@@ -385,6 +388,11 @@ const [propertyInfo, setPropertyInfo] = useState({
           />
         )}
           </div>
+        </div>
+
+        {/* Right Sidebar - Get Tenants Faster */}
+        <div className="w-80 h-full">
+          <GetTenantsFasterSection />
         </div>
       </div>
     </div>

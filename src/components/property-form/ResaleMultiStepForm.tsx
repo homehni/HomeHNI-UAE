@@ -7,6 +7,7 @@ import { ResaleLocationDetailsStep } from './ResaleLocationDetailsStep';
 import { SaleDetailsStep } from './SaleDetailsStep';
 import { ResaleAmenitiesStep } from './ResaleAmenitiesStep';
 import { ResaleGalleryStep } from './ResaleGalleryStep';
+import GetTenantsFasterSection from '@/components/GetTenantsFasterSection';
 
 import { ResaleScheduleStep } from './ResaleScheduleStep';
 import { ResalePreviewStep } from './ResalePreviewStep';
@@ -143,11 +144,13 @@ export const ResaleMultiStepForm: React.FC<ResaleMultiStepFormProps> = ({
     <div className="h-screen bg-gray-50 overflow-hidden">
       <div className="flex max-w-full mx-auto h-full">
         {/* Sidebar */}
-        <PropertyFormSidebar
-          currentStep={currentStep}
-          completedSteps={completedSteps}
-          steps={sidebarSteps}
-        />
+        <div className="w-80">
+          <PropertyFormSidebar
+            currentStep={currentStep}
+            completedSteps={completedSteps}
+            steps={sidebarSteps}
+          />
+        </div>
 
         {/* Main Content */}
         <div className="flex-1 min-w-0 bg-white flex flex-col">
@@ -232,6 +235,11 @@ export const ResaleMultiStepForm: React.FC<ResaleMultiStepFormProps> = ({
               )}
             </div>
           </div>
+        </div>
+
+        {/* Right Sidebar - Get Tenants Faster */}
+        <div className="w-80 h-full">
+          <GetTenantsFasterSection />
         </div>
       </div>
     </div>
