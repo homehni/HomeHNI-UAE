@@ -699,7 +699,7 @@ export const PostProperty: React.FC = () => {
         locality: data.propertyInfo.locationDetails.locality || 'Unknown',
         pincode: data.propertyInfo.locationDetails.pincode || '000000',
         expected_price: (priceDetailsDraft?.expectedPrice != null && !Number.isNaN(Number(priceDetailsDraft.expectedPrice))) ? Number(priceDetailsDraft.expectedPrice) : 0,
-        status: 'submitted'
+        status: 'approved'
       };
 
       const { error: draftError } = await supabase
@@ -714,8 +714,8 @@ export const PostProperty: React.FC = () => {
       toast({
         title: isEditMode ? "Property Updated!" : "Success!",
         description: isEditMode 
-          ? "Your property has been updated successfully and is pending review."
-          : "Your property has been submitted successfully.",
+          ? "Your property has been updated successfully and is now live."
+          : "Your property has been published successfully and is now live on the platform.",
       });
 
       // Navigate to dashboard after successful submission/update

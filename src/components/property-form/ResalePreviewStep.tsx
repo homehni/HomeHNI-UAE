@@ -307,7 +307,7 @@ export const ResalePreviewStep: React.FC<ResalePreviewStepProps> = ({
           <DialogHeader>
             <DialogTitle className="text-center text-primary">Thank You!</DialogTitle>
             <DialogDescription className="text-center">
-              Your property has been submitted for sale and is under review. It will be published within 4 hours.
+              Your property has been published successfully and is now live on the platform!
             </DialogDescription>
           </DialogHeader>
           <div className="flex justify-center pt-4">

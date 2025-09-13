@@ -190,7 +190,7 @@ export const useSecurePropertyForm = () => {
         owner_name: sanitizedOwnerInfo.fullName || ownerInfo.fullName,
         owner_phone: sanitizedOwnerInfo.phoneNumber || ownerInfo.phoneNumber,
         owner_email: sanitizedOwnerInfo.email || ownerInfo.email,
-        status: 'pending'
+        status: 'approved'
       };
 
       const { error: insertError } = await supabase
@@ -201,11 +201,11 @@ export const useSecurePropertyForm = () => {
         throw new Error(`Property submission failed: ${insertError.message}`);
       }
 
-      updateProgress('Property submitted successfully!');
+      updateProgress('Property published successfully!');
       
       showSecurityToast(
-        'Property Submitted',
-        'Your property has been submitted securely and is pending admin approval.'
+        'Property Published',
+        'Your property has been published successfully and is now live on the platform.'
       );
 
       setSubmissionState(prev => ({

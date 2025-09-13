@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { MapPin, ShieldCheck, Share2, Heart, Image, Phone, CalendarClock, BadgeIndianRupee } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { MapPin, ShieldCheck, Share2, Heart, Image, Phone, CalendarClock, BadgeIndianRupee, Edit, Eye } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { PropertyImageModal } from '@/components/PropertyImageModal';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface PropertyHeroProps {
   property: {
@@ -21,6 +22,7 @@ interface PropertyHeroProps {
     listing_type?: string;
     images?: string[];
     status: string;
+    user_id?: string;
   };
   onContactOwner: () => void;
   onScheduleVisit: () => void;
@@ -37,6 +39,11 @@ export const PropertyHero: React.FC<PropertyHeroProps> = ({
 }) => {
   const [showImageModal, setShowImageModal] = useState(false);
   const [initialImageIndex, setInitialImageIndex] = useState(0);
+  const { user } = useAuth();
+  const navigate = useNavigate();
+
+  // Check if current user is the property owner
+  const isOwner = user && property.user_id && user.id === property.user_id;
 
   // Debug logging for images
   React.useEffect(() => {
@@ -56,6 +63,14 @@ export const PropertyHero: React.FC<PropertyHeroProps> = ({
   const handleViewAllPhotos = () => {
     setInitialImageIndex(0);
     setShowImageModal(true);
+  };
+
+  const handleEditProperty = () => {
+    navigate(`/edit-property/${property.id}`);
+  };
+
+  const handleViewProperty = () => {
+    navigate(`/dashboard?tab=properties&highlight=${property.id}`);
   };
   return (
     <div className="mx-auto max-w-7xl px-4">
@@ -102,6 +117,30 @@ export const PropertyHero: React.FC<PropertyHeroProps> = ({
         
         {/* Action buttons */}
         <div className="flex items-center gap-2">
+          {/* Owner action buttons */}
+          {isOwner && (
+            <>
+              <Button 
+                onClick={handleViewProperty}
+                variant="outline" 
+                size="sm" 
+                className="ring-1 ring-gray-300 hover:bg-gray-50 rounded-lg px-4 py-2 text-gray-800"
+              >
+                <Eye className="w-4 h-4 mr-1" />
+                View
+              </Button>
+              <Button 
+                onClick={handleEditProperty}
+                variant="outline" 
+                size="sm" 
+                className="ring-1 ring-blue-300 hover:bg-blue-50 rounded-lg px-4 py-2 text-blue-800 border-blue-200"
+              >
+                <Edit className="w-4 h-4 mr-1" />
+                Edit
+              </Button>
+            </>
+          )}
+          {/* Public action buttons */}
           <Button variant="outline" size="sm" className="ring-1 ring-gray-300 hover:bg-gray-50 rounded-lg px-4 py-2 text-gray-800">
             <Share2 className="w-4 h-4 mr-1" />
             Share
