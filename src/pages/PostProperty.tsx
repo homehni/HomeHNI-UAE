@@ -862,7 +862,7 @@ export const PostProperty: React.FC = () => {
     <div className="min-h-screen bg-white">
       <Marquee />
       <Header />
-      <div className="pt-8">
+      <div className="pt-24">
         {renderCurrentStep()}
       </div>
       <Footer />
