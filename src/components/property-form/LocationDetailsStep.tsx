@@ -377,17 +377,6 @@ export const LocationDetailsStep: React.FC<LocationDetailsStepProps> = ({
                     </div>
                   )}
 
-                  {/* Navigation Buttons */}
-                  <div className="flex justify-between pt-6">
-                    <Button type="button" variant="outline" onClick={onBack} className="h-12 px-8">
-                      <ArrowLeft className="h-4 w-4 mr-2" />
-                      Back
-                    </Button>
-                    <Button type="submit" className="h-12 px-8">
-                      Save & Continue
-                      <ArrowRight className="h-4 w-4 ml-2" />
-                    </Button>
-                  </div>
                 </form>
               </Form>
     </div>

@@ -239,32 +239,6 @@ export const PreviewStep: React.FC<PreviewStepProps> = ({
             </div>
           </div>
 
-          {/* Action Buttons */}
-          <div className="flex justify-between pt-6 border-t">
-            <Button variant="outline" onClick={onBack}>
-              Back
-            </Button>
-            <div className="space-x-4">
-              <Button variant="ghost" onClick={() => onEdit(2)}>
-                <Edit className="h-4 w-4 mr-2" />
-                Edit Info
-              </Button>
-              <Button
-                onClick={handleSubmit}
-                disabled={isSubmitting}
-                className="bg-primary hover:bg-primary/90 min-w-[140px]"
-              >
-                {isSubmitting ? (
-                  <div className="flex items-center gap-2">
-                    <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
-                    <span>Submitting...</span>
-                  </div>
-                ) : (
-                  'Submit Listing'
-                )}
-              </Button>
-            </div>
-          </div>
         </CardContent>
       </Card>
 

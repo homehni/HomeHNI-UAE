@@ -174,33 +174,6 @@ export const GalleryStep: React.FC<GalleryStepProps> = ({
                 )}
               />
 
-              <div className="flex justify-between pt-6">
-                <Button type="button" variant="outline" onClick={onBack} className="bg-muted text-muted-foreground">
-                  Back
-                </Button>
-                <div className="flex gap-3">
-                  {isEditMode && onSubmit && (
-                    <Button 
-                      type="button" 
-                      onClick={handleSubmitProperty}
-                      disabled={isSubmitting}
-                      className="bg-green-600 hover:bg-green-700 text-white"
-                    >
-                      {isSubmitting ? (
-                        <div className="flex items-center gap-2">
-                          <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
-                          <span>Submitting...</span>
-                        </div>
-                      ) : (
-                        'Submit Property'
-                      )}
-                    </Button>
-                  )}
-                  <Button type="submit" className="bg-primary text-primary-foreground">
-                    Save & Continue
-                  </Button>
-                </div>
-              </div>
             </form>
           </Form>
         </CardContent>

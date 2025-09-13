@@ -142,15 +142,6 @@ export const AdditionalInfoStep: React.FC<AdditionalInfoStepProps> = ({
             />
           </div>
 
-          {/* Navigation Buttons */}
-          <div className="flex justify-between pt-6">
-            <Button type="button" variant="outline" onClick={onBack} className="h-12 px-8">
-              Back
-            </Button>
-            <Button type="submit" className="h-12 px-8">
-              Save & Continue
-            </Button>
-          </div>
         </form>
       </Form>
     </div>
