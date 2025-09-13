@@ -164,22 +164,22 @@ export const Auth: React.FC = () => {
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl"></div>
         
         <div className="relative flex items-center justify-center p-4 min-h-screen">
-          <Card className="w-full max-w-md backdrop-blur-sm bg-white/95 border-2 border-brand-red/30 shadow-2xl shadow-brand-red/10 rounded-2xl animate-fade-in hover:border-brand-red/50 transition-colors duration-300">
-            <CardHeader className="text-center pb-6 pt-8">
-              <div className="flex items-center justify-center mb-6">
+          <Card className="w-full max-w-sm backdrop-blur-sm bg-white/95 border-2 border-brand-red/30 shadow-2xl shadow-brand-red/10 rounded-2xl animate-fade-in hover:border-brand-red/50 transition-colors duration-300">
+            <CardHeader className="text-center pb-3 pt-4">
+              <div className="flex items-center justify-center mb-3">
                 <img 
                   src="/lovable-uploads/b90cb5cf-9777-4b49-b4e5-6fb3a504a2b0.png?v=1"
                   alt="Home HNI Logo" 
-                  className="h-16 w-auto"
+                  className="h-12 w-auto"
                 />
               </div>
-              <div className="space-y-2">
-                <p className="text-sm text-muted-foreground">Your premium property partner</p>
+              <div>
+                <p className="text-xs text-muted-foreground">Your premium property partner</p>
               </div>
             </CardHeader>
-            <CardContent className="px-8 pb-8">
+            <CardContent className="px-6 pb-6">
               <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-                <TabsList className="grid w-full grid-cols-2 mb-6 bg-gray-100/80 p-1 rounded-xl">
+                <TabsList className="grid w-full grid-cols-2 mb-4 bg-gray-100/80 p-1 rounded-xl">
                   <TabsTrigger value="signin" className="flex items-center space-x-2 rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm">
                     <LogIn size={16} />
                     <span>Login</span>
@@ -190,16 +190,16 @@ export const Auth: React.FC = () => {
                   </TabsTrigger>
                 </TabsList>
                 
-                <TabsContent value="signin" className="space-y-6">
+                <TabsContent value="signin" className="space-y-4">
                   <div className="text-center">
-                    <CardTitle className="text-2xl font-semibold text-gray-800">Welcome Back</CardTitle>
-                    <CardDescription className="mt-2 text-gray-600">
+                    <CardTitle className="text-xl font-semibold text-gray-800">Welcome Back</CardTitle>
+                    <CardDescription className="mt-1 text-gray-600 text-sm">
                       Login to access your account and all features
                     </CardDescription>
                   </div>
                   
-                  <form onSubmit={handleEmailSignIn} className="space-y-5">
-                    <div className="space-y-2">
+                  <form onSubmit={handleEmailSignIn} className="space-y-4">
+                    <div className="space-y-1">
                       <Label htmlFor="signin-email" className="text-sm font-medium text-gray-700">Email</Label>
                         <Input
                           id="signin-email"
@@ -209,11 +209,11 @@ export const Auth: React.FC = () => {
                           placeholder="Enter your email"
                           required
                           autoComplete="email"
-                          className="h-12 rounded-xl border-gray-200 focus:border-brand-red focus:ring-brand-red/20"
+                          className="h-10 rounded-xl border-gray-200 focus:border-brand-red focus:ring-brand-red/20"
                         />
                     </div>
                     
-                    <div className="space-y-2">
+                    <div className="space-y-1">
                       <Label htmlFor="signin-password" className="text-sm font-medium text-gray-700">Password</Label>
                       <div className="relative">
                         <Input
@@ -224,13 +224,13 @@ export const Auth: React.FC = () => {
                           placeholder="Enter your password"
                           required
                           autoComplete="current-password"
-                          className="h-12 rounded-xl border-gray-200 focus:border-brand-red focus:ring-brand-red/20 pr-12"
+                          className="h-10 rounded-xl border-gray-200 focus:border-brand-red focus:ring-brand-red/20 pr-10"
                         />
                         <Button
                           type="button"
                           variant="ghost"
                           size="sm"
-                          className="absolute right-3 top-3 h-6 w-6 p-0 hover:bg-gray-100"
+                          className="absolute right-2 top-2 h-6 w-6 p-0 hover:bg-gray-100"
                           onClick={() => setShowSignInPassword(!showSignInPassword)}
                         >
                           {showSignInPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -238,7 +238,7 @@ export const Auth: React.FC = () => {
                       </div>
                     </div>
 
-                    <Button type="submit" className="w-full h-12 rounded-xl bg-gradient-to-r from-brand-red to-brand-red-dark hover:shadow-lg transition-all duration-200" size="lg">
+                    <Button type="submit" className="w-full h-10 rounded-xl bg-gradient-to-r from-brand-red to-brand-red-dark hover:shadow-lg transition-all duration-200">
                       Login
                     </Button>
                   </form>
@@ -248,31 +248,30 @@ export const Auth: React.FC = () => {
                       <span className="w-full border-t border-gray-200" />
                     </div>
                     <div className="relative flex justify-center text-xs uppercase">
-                      <span className="bg-white px-4 text-gray-500 font-medium">Or continue with</span>
+                      <span className="bg-white px-3 text-gray-500 font-medium">Or continue with</span>
                     </div>
                   </div>
                   
                   <Button 
                     onClick={handleGoogleSignIn}
-                    className="w-full h-12 rounded-xl border-2 hover:bg-gray-50 transition-all duration-200"
+                    className="w-full h-10 rounded-xl border-2 hover:bg-gray-50 transition-all duration-200"
                     variant="outline"
-                    size="lg"
                   >
-                    <Chrome className="h-5 w-5 mr-3 text-red-500" />
+                    <Chrome className="h-4 w-4 mr-2 text-red-500" />
                     Continue with Google
                   </Button>
                 </TabsContent>
                 
-                <TabsContent value="signup" className="space-y-6">
+                <TabsContent value="signup" className="space-y-4">
                   <div className="text-center">
-                    <CardTitle className="text-2xl font-semibold text-gray-800">Create Account</CardTitle>
-                    <CardDescription className="mt-2 text-gray-600">
+                    <CardTitle className="text-xl font-semibold text-gray-800">Create Account</CardTitle>
+                    <CardDescription className="mt-1 text-gray-600 text-sm">
                       Join Home HNI to start your property journey
                     </CardDescription>
                   </div>
                   
-                  <form onSubmit={handleEmailSignUp} className="space-y-5">
-                    <div className="space-y-2">
+                  <form onSubmit={handleEmailSignUp} className="space-y-3">
+                    <div className="space-y-1">
                       <Label htmlFor="signup-name" className="text-sm font-medium text-gray-700">Full Name</Label>
                       <Input
                         id="signup-name"
@@ -282,11 +281,11 @@ export const Auth: React.FC = () => {
                         placeholder="Enter your full name"
                         required
                         autoComplete="name"
-                        className="h-12 rounded-xl border-gray-200 focus:border-brand-red focus:ring-brand-red/20"
+                        className="h-10 rounded-xl border-gray-200 focus:border-brand-red focus:ring-brand-red/20"
                       />
                     </div>
 
-                    <div className="space-y-2">
+                    <div className="space-y-1">
                       <Label htmlFor="signup-email" className="text-sm font-medium text-gray-700">Email</Label>
                       <Input
                         id="signup-email"
@@ -296,11 +295,11 @@ export const Auth: React.FC = () => {
                         placeholder="Enter your email"
                         required
                         autoComplete="email"
-                        className="h-12 rounded-xl border-gray-200 focus:border-brand-red focus:ring-brand-red/20"
+                        className="h-10 rounded-xl border-gray-200 focus:border-brand-red focus:ring-brand-red/20"
                       />
                     </div>
                     
-                    <div className="space-y-2">
+                    <div className="space-y-1">
                       <Label htmlFor="signup-password" className="text-sm font-medium text-gray-700">Password</Label>
                       <div className="relative">
                         <Input
@@ -311,13 +310,13 @@ export const Auth: React.FC = () => {
                           placeholder="Create a password (min 6 characters)"
                           required
                           autoComplete="new-password"
-                          className="h-12 rounded-xl border-gray-200 focus:border-brand-red focus:ring-brand-red/20 pr-12"
+                          className="h-10 rounded-xl border-gray-200 focus:border-brand-red focus:ring-brand-red/20 pr-10"
                         />
                         <Button
                           type="button"
                           variant="ghost"
                           size="sm"
-                          className="absolute right-3 top-3 h-6 w-6 p-0 hover:bg-gray-100"
+                          className="absolute right-2 top-2 h-6 w-6 p-0 hover:bg-gray-100"
                           onClick={() => setShowSignUpPassword(!showSignUpPassword)}
                         >
                           {showSignUpPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -325,7 +324,7 @@ export const Auth: React.FC = () => {
                       </div>
                     </div>
 
-                    <div className="space-y-2">
+                    <div className="space-y-1">
                       <Label htmlFor="signup-confirm-password" className="text-sm font-medium text-gray-700">Confirm Password</Label>
                       <div className="relative">
                         <Input
@@ -336,13 +335,13 @@ export const Auth: React.FC = () => {
                           placeholder="Confirm your password"
                           required
                           autoComplete="new-password"
-                          className="h-12 rounded-xl border-gray-200 focus:border-brand-red focus:ring-brand-red/20 pr-12"
+                          className="h-10 rounded-xl border-gray-200 focus:border-brand-red focus:ring-brand-red/20 pr-10"
                         />
                         <Button
                           type="button"
                           variant="ghost"
                           size="sm"
-                          className="absolute right-3 top-3 h-6 w-6 p-0 hover:bg-gray-100"
+                          className="absolute right-2 top-2 h-6 w-6 p-0 hover:bg-gray-100"
                           onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                         >
                           {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -350,7 +349,7 @@ export const Auth: React.FC = () => {
                       </div>
                     </div>
 
-                    <Button type="submit" className="w-full h-12 rounded-xl bg-gradient-to-r from-brand-red to-brand-red-dark hover:shadow-lg transition-all duration-200" size="lg">
+                    <Button type="submit" className="w-full h-10 rounded-xl bg-gradient-to-r from-brand-red to-brand-red-dark hover:shadow-lg transition-all duration-200">
                       Create Account
                     </Button>
                   </form>
@@ -360,23 +359,22 @@ export const Auth: React.FC = () => {
                       <span className="w-full border-t border-gray-200" />
                     </div>
                     <div className="relative flex justify-center text-xs uppercase">
-                      <span className="bg-white px-4 text-gray-500 font-medium">Or continue with</span>
+                      <span className="bg-white px-3 text-gray-500 font-medium">Or continue with</span>
                     </div>
                   </div>
                   
                   <Button 
                     onClick={handleGoogleSignIn}
-                    className="w-full h-12 rounded-xl border-2 hover:bg-gray-50 transition-all duration-200"
+                    className="w-full h-10 rounded-xl border-2 hover:bg-gray-50 transition-all duration-200"
                     variant="outline"
-                    size="lg"
                   >
-                    <Chrome className="h-5 w-5 mr-3 text-red-500" />
+                    <Chrome className="h-4 w-4 mr-2 text-red-500" />
                     Sign up with Google
                   </Button>
                 </TabsContent>
               </Tabs>
               
-             <div className="text-center text-xs text-gray-500 mt-8 pt-6 border-t border-gray-100">
+             <div className="text-center text-xs text-gray-500 mt-4 pt-4 border-t border-gray-100">
   By continuing, you agree to our{" "}
   <Link 
     to="/terms-and-conditions" 
