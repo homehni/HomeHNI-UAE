@@ -22,6 +22,7 @@ import { mapBhkType, mapPropertyType, mapListingType, validateMappedValues } fro
 import { generatePropertyName } from '@/utils/propertyNameGenerator';
 import Header from '@/components/Header';
 import Marquee from '@/components/Marquee';
+import WhyPostSection from '@/components/WhyPostSection';
 
 type FormStep = 'property-selection' | 'owner-info' | 'rental-form' | 'resale-form' | 'pg-hostel-form' | 'flatmates-form' | 'commercial-rental-form' | 'commercial-sale-form' | 'land-plot-form';
 
@@ -742,7 +743,14 @@ export const PostProperty: React.FC = () => {
   const renderCurrentStep = () => {
     switch (currentStep) {
       case 'property-selection':
-        return <PropertySelectionStep onNext={handlePropertySelectionNext} />;
+        return (
+          <div className="min-h-screen flex">
+            <WhyPostSection />
+            <div className="flex-1 lg:w-1/2 xl:w-3/5">
+              <PropertySelectionStep onNext={handlePropertySelectionNext} />
+            </div>
+          </div>
+        );
       case 'rental-form':
         return (
           <MultiStepForm 
