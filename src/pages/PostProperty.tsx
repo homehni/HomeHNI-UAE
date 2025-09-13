@@ -744,8 +744,10 @@ export const PostProperty: React.FC = () => {
     switch (currentStep) {
       case 'property-selection':
         return (
-          <div className="min-h-screen flex">
-            <WhyPostSection />
+          <div className="min-h-screen flex flex-col lg:flex-row">
+            <div className="hidden lg:block lg:w-1/2 xl:w-2/5">
+              <WhyPostSection />
+            </div>
             <div className="flex-1 lg:w-1/2 xl:w-3/5">
               <PropertySelectionStep onNext={handlePropertySelectionNext} />
             </div>

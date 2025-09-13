@@ -21,15 +21,15 @@ const WhyPostSection: React.FC = () => {
   ];
 
   return (
-    <div className="hidden lg:block lg:w-1/2 xl:w-2/5 relative">
+    <div className="w-full relative bg-gray-50">
       {/* Green circular border design */}
-      <div className="relative h-full min-h-[600px] flex items-center justify-center">
-        <div className="relative w-full max-w-md">
+      <div className="relative h-full min-h-screen flex items-center justify-center">
+        <div className="relative w-full max-w-md mx-8">
           {/* Main circular border */}
           <div className="absolute inset-0 border-4 border-primary rounded-full transform scale-110"></div>
           
           {/* Content container */}
-          <div className="relative bg-background/95 backdrop-blur-sm rounded-2xl p-8 mx-4 shadow-lg border border-border/50">
+          <div className="relative bg-background/95 backdrop-blur-sm rounded-2xl p-8 shadow-lg border border-border/50">
             
             {/* Why Post section */}
             <div className="mb-8">
