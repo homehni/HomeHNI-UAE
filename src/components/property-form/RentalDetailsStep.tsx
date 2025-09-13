@@ -139,8 +139,9 @@ export const RentalDetailsStep: React.FC<RentalDetailsStepProps> = ({
                           placeholder="Enter Amount"
                           className="h-12 pl-8 pr-20"
                           type="number"
+                          min="0"
                           value={field.value || ''}
-                          onChange={(e) => field.onChange(e.target.value ? Number(e.target.value) : undefined)}
+                          onChange={(e) => field.onChange(e.target.value ? Math.max(0, Number(e.target.value)) : undefined)}
                         />
                         <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-sm text-gray-500">/ Month</span>
                       </div>
@@ -181,8 +182,9 @@ export const RentalDetailsStep: React.FC<RentalDetailsStepProps> = ({
                           placeholder="Enter Amount"
                           className="h-12 pl-8"
                           type="number"
+                          min="0"
                           value={field.value || ''}
-                          onChange={(e) => field.onChange(e.target.value ? Number(e.target.value) : undefined)}
+                          onChange={(e) => field.onChange(e.target.value ? Math.max(0, Number(e.target.value)) : undefined)}
                         />
                       </div>
                     </FormControl>
@@ -206,8 +208,9 @@ export const RentalDetailsStep: React.FC<RentalDetailsStepProps> = ({
                           placeholder="Enter Amount"
                           className="h-12 pl-8"
                           type="number"
+                          min="0"
                           value={field.value || ''}
-                          onChange={(e) => field.onChange(e.target.value ? Number(e.target.value) : undefined)}
+                          onChange={(e) => field.onChange(e.target.value ? Math.max(0, Number(e.target.value)) : undefined)}
                         />
                       </div>
                     </FormControl>
@@ -275,8 +278,9 @@ export const RentalDetailsStep: React.FC<RentalDetailsStepProps> = ({
                           placeholder="Enter Amount"
                           className="h-12 pl-8 pr-20"
                           type="number"
+                          min="0"
                           value={field.value || ''}
-                          onChange={(e) => field.onChange(e.target.value ? Number(e.target.value) : undefined)}
+                          onChange={(e) => field.onChange(e.target.value ? Math.max(0, Number(e.target.value)) : undefined)}
                         />
                         <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-sm text-gray-500">/ Month</span>
                       </div>

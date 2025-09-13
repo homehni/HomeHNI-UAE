@@ -15,7 +15,7 @@ const PriceInput = React.forwardRef<HTMLInputElement, PriceInputProps>(
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const inputValue = e.target.value.replace(/[^0-9]/g, '')
-      const numericValue = inputValue ? parseInt(inputValue) : undefined
+      const numericValue = inputValue ? Math.max(0, parseInt(inputValue)) : undefined
       onChange?.(numericValue)
     }
 
