@@ -20,7 +20,7 @@ import { uploadSingleFile, uploadPropertyImagesByType } from '@/services/fileUpl
 import { validatePropertySubmission } from '@/utils/propertyValidation';
 import { mapBhkType, mapPropertyType, mapListingType, validateMappedValues } from '@/utils/propertyMappings';
 import { generatePropertyName } from '@/utils/propertyNameGenerator';
-import { createPostingLead } from '@/services/leadService';
+import { createPropertyContact } from '@/services/propertyContactService';
 import Header from '@/components/Header';
 import Marquee from '@/components/Marquee';
 import WhyPostSection from '@/components/WhyPostSection';
@@ -203,8 +203,8 @@ export const PostProperty: React.FC = () => {
     listingType: 'Rent' | 'Resale' | 'PG/Hostel' | 'Flatmates';
   }) => {
     try {
-      // Save contact data as posting lead
-      await createPostingLead({
+      // Save contact data to database
+      await createPropertyContact({
         name: data.name,
         email: data.email,
         phone: data.phoneNumber,

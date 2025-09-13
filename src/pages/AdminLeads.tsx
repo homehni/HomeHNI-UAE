@@ -35,8 +35,8 @@ import { MessageSquare, Mail, Phone, Eye, UserPlus, Loader2 } from 'lucide-react
 
 interface Lead {
   id: string;
-  property_id: string | null;
-  property_owner_id: string | null;
+  property_id: string;
+  property_owner_id: string;
   interested_user_name: string;
   interested_user_email: string;
   interested_user_phone: string | null;
@@ -44,11 +44,6 @@ interface Lead {
   status: string;
   created_at: string;
   updated_at: string;
-  lead_type: string;
-  city: string | null;
-  property_type: string | null;
-  listing_type: string | null;
-  whatsapp_opted_in: boolean;
   property?: {
     title: string;
     city: string;
@@ -62,7 +57,6 @@ export const AdminLeads: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
-  const [leadTypeFilter, setLeadTypeFilter] = useState('all');
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
   const [viewDialogOpen, setViewDialogOpen] = useState(false);
   const [assignDialogOpen, setAssignDialogOpen] = useState(false);
@@ -100,7 +94,7 @@ export const AdminLeads: React.FC = () => {
 
   useEffect(() => {
     filterLeads();
-  }, [leads, searchTerm, statusFilter, leadTypeFilter]);
+  }, [leads, searchTerm, statusFilter]);
 
   const fetchLeads = async () => {
     try {
@@ -142,17 +136,12 @@ export const AdminLeads: React.FC = () => {
       filtered = filtered.filter(lead =>
         lead.interested_user_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         lead.interested_user_email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        lead.property?.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        lead.city?.toLowerCase().includes(searchTerm.toLowerCase())
+        lead.property?.title?.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
 
     if (statusFilter !== 'all') {
       filtered = filtered.filter(lead => lead.status === statusFilter);
-    }
-
-    if (leadTypeFilter !== 'all') {
-      filtered = filtered.filter(lead => lead.lead_type === leadTypeFilter);
     }
 
     setFilteredLeads(filtered);
@@ -206,7 +195,7 @@ export const AdminLeads: React.FC = () => {
     <div className="space-y-6">
       <div>
         <h1 className="text-3xl font-bold text-foreground mb-2">Lead Management</h1>
-        <p className="text-muted-foreground">Monitor and manage property inquiries and posting leads</p>
+        <p className="text-muted-foreground">Monitor and manage property inquiries and leads</p>
       </div>
 
       {/* Stats Cards */}
@@ -251,7 +240,7 @@ export const AdminLeads: React.FC = () => {
       <Card>
         <CardHeader>
           <CardTitle>All Leads</CardTitle>
-          <CardDescription>Manage property inquiries and posting leads</CardDescription>
+          <CardDescription>Manage property inquiries and leads</CardDescription>
           
           {/* Filters */}
           <div className="flex gap-4 mt-4">
@@ -272,25 +261,14 @@ export const AdminLeads: React.FC = () => {
                 <SelectItem value="closed">Closed</SelectItem>
               </SelectContent>
             </Select>
-            <Select value={leadTypeFilter} onValueChange={setLeadTypeFilter}>
-              <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Filter by type" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Types</SelectItem>
-                <SelectItem value="inquiry">Property Inquiries</SelectItem>
-                <SelectItem value="posting">Property Postings</SelectItem>
-              </SelectContent>
-            </Select>
           </div>
         </CardHeader>
         <CardContent>
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>User</TableHead>
-                <TableHead>Type</TableHead>
-                <TableHead>Property/Interest</TableHead>
+                <TableHead>Interested User</TableHead>
+                <TableHead>Property</TableHead>
                 <TableHead>Contact</TableHead>
                 <TableHead>Status</TableHead>
                 <TableHead>Date</TableHead>
@@ -307,33 +285,18 @@ export const AdminLeads: React.FC = () => {
                     </div>
                   </TableCell>
                   <TableCell>
-                    <Badge variant="outline" className={lead.lead_type === 'posting' ? 'bg-green-50 text-green-700' : 'bg-blue-50 text-blue-700'}>
-                      {lead.lead_type === 'posting' ? 'Property Posting' : 'Property Inquiry'}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>
-                    {lead.lead_type === 'posting' ? (
-                      <div>
-                        <div className="font-medium">{lead.property_type} for {lead.listing_type}</div>
-                        <div className="text-sm text-muted-foreground">{lead.city}</div>
+                    <div>
+                      <div className="font-medium">{lead.property?.title || 'N/A'}</div>
+                      <div className="text-sm text-muted-foreground">
+                        {lead.property?.city}, {lead.property?.state}
                       </div>
-                    ) : (
-                      <div>
-                        <div className="font-medium">{lead.property?.title || 'N/A'}</div>
-                        <div className="text-sm text-muted-foreground">
-                          {lead.property?.city}, {lead.property?.state}
-                        </div>
-                      </div>
-                    )}
+                    </div>
                   </TableCell>
                   <TableCell>
                     <div className="flex items-center gap-2">
                       <Mail className="h-4 w-4 text-muted-foreground" />
                       {lead.interested_user_phone && (
                         <Phone className="h-4 w-4 text-muted-foreground" />
-                      )}
-                      {lead.whatsapp_opted_in && (
-                        <MessageSquare className="h-4 w-4 text-green-600" />
                       )}
                     </div>
                   </TableCell>
@@ -393,7 +356,7 @@ export const AdminLeads: React.FC = () => {
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <Label className="font-semibold">User Name</Label>
+                  <Label className="font-semibold">Interested User</Label>
                   <p>{selectedLead.interested_user_name}</p>
                 </div>
                 <div>
@@ -410,35 +373,15 @@ export const AdminLeads: React.FC = () => {
                     {selectedLead.status}
                   </Badge>
                 </div>
-                <div>
-                  <Label className="font-semibold">Lead Type</Label>
-                  <Badge variant="outline" className={selectedLead.lead_type === 'posting' ? 'bg-green-50 text-green-700' : 'bg-blue-50 text-blue-700'}>
-                    {selectedLead.lead_type === 'posting' ? 'Property Posting' : 'Property Inquiry'}
-                  </Badge>
-                </div>
-                {selectedLead.whatsapp_opted_in && (
-                  <div>
-                    <Label className="font-semibold">WhatsApp</Label>
-                    <p className="text-green-600">Opted in for updates</p>
-                  </div>
-                )}
               </div>
               
-              {selectedLead.lead_type === 'posting' ? (
-                <div>
-                  <Label className="font-semibold">Property Interest</Label>
-                  <p>{selectedLead.property_type} for {selectedLead.listing_type}</p>
-                  <p className="text-sm text-muted-foreground">Location: {selectedLead.city}</p>
-                </div>
-              ) : (
-                <div>
-                  <Label className="font-semibold">Property</Label>
-                  <p>{selectedLead.property?.title || 'N/A'}</p>
-                  <p className="text-sm text-muted-foreground">
-                    {selectedLead.property?.city}, {selectedLead.property?.state}
-                  </p>
-                </div>
-              )}
+              <div>
+                <Label className="font-semibold">Property</Label>
+                <p>{selectedLead.property?.title || 'N/A'}</p>
+                <p className="text-sm text-muted-foreground">
+                  {selectedLead.property?.city}, {selectedLead.property?.state}
+                </p>
+              </div>
               
               {selectedLead.message && (
                 <div>
@@ -448,7 +391,7 @@ export const AdminLeads: React.FC = () => {
               )}
               
               <div className="text-sm text-muted-foreground">
-                <p>Created: {new Date(selectedLead.created_at).toLocaleString()}</p>
+                <p>Inquiry Date: {new Date(selectedLead.created_at).toLocaleString()}</p>
                 <p>Last Updated: {new Date(selectedLead.updated_at).toLocaleString()}</p>
               </div>
             </div>
