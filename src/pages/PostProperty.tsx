@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { PropertySelectionStep } from '@/components/property-form/PropertySelectionStep';
 import { OwnerInfoStep } from '@/components/property-form/OwnerInfoStep';
@@ -787,7 +788,7 @@ export const PostProperty: React.FC = () => {
                   Sell or Rent your Property For Free
                 </h1>
                 <div className="text-gray-600">
-                  Looking for a property? <span className="text-blue-500 cursor-pointer">Click Here</span>
+                  Looking for a property? <Link to="/" className="text-blue-500 cursor-pointer hover:text-blue-600 underline">Click Here</Link>
                 </div>
               </div>
             </div>
