@@ -233,6 +233,14 @@ export const PropertySelectionStep: React.FC<PropertySelectionStepProps> = ({
               Start Posting Your Ad For FREE
             </Button>
           </div>
+
+          {/* Terms and Conditions */}
+          <div className="pt-4">
+            <p className="text-sm text-gray-500 text-center leading-relaxed">
+              By clicking 'Start Posting Your Ad' you acknowledge that you have agreed to the{' '}
+              <span className="text-red-600 underline cursor-pointer">Terms & Conditions</span>.
+            </p>
+          </div>
         </div>
       </div>
     </div>
