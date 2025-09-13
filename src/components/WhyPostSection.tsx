@@ -22,12 +22,8 @@ const WhyPostSection: React.FC = () => {
 
   return (
     <div className="w-full relative bg-gray-50">
-      {/* Green circular border design */}
       <div className="relative h-full min-h-screen flex items-center justify-center">
         <div className="relative w-full max-w-md mx-8">
-          {/* Main circular border */}
-          <div className="absolute inset-0 border-4 border-primary rounded-full transform scale-110"></div>
-          
           {/* Content container */}
           <div className="relative bg-background/95 backdrop-blur-sm rounded-2xl p-8 shadow-lg border border-border/50">
             
@@ -59,16 +55,16 @@ const WhyPostSection: React.FC = () => {
               
               <div className="bg-accent/50 rounded-lg p-4 mb-4">
                 <p className="text-sm text-foreground leading-relaxed mb-3">
-                  "I posted a property ad online on NoBroker. Its an efficient real estate website because 
-                  despite my busy schedule they did a great job of contacting me at the right times. To 
-                  keep me updated they sent mails & messages. They found a great tenant for my 
-                  rental property as per my demands."
+                  "HomeHNI made selling my property incredibly smooth and stress-free. Their team 
+                  provided excellent guidance throughout the process and helped me find qualified 
+                  buyers quickly. The platform's user-friendly interface and professional support 
+                  made all the difference in achieving the best price for my property."
                 </p>
               </div>
               
               <div className="flex items-center justify-between text-sm">
-                <span className="font-semibold text-foreground">Aldrin</span>
-                <span className="text-muted-foreground">Bangalore</span>
+                <span className="font-semibold text-foreground">Rajesh Kumar</span>
+                <span className="text-muted-foreground">Mumbai</span>
               </div>
             </div>
             
