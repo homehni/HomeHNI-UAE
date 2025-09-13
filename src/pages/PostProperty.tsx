@@ -20,6 +20,7 @@ import { uploadSingleFile, uploadPropertyImagesByType } from '@/services/fileUpl
 import { validatePropertySubmission } from '@/utils/propertyValidation';
 import { mapBhkType, mapPropertyType, mapListingType, validateMappedValues } from '@/utils/propertyMappings';
 import { generatePropertyName } from '@/utils/propertyNameGenerator';
+import { createPropertyContact } from '@/services/propertyContactService';
 import Header from '@/components/Header';
 import Marquee from '@/components/Marquee';
 import WhyPostSection from '@/components/WhyPostSection';
@@ -33,6 +34,9 @@ export const PostProperty: React.FC = () => {
   const [ownerInfo, setOwnerInfo] = useState<OwnerInfo | null>(null);
   const [initialOwnerData, setInitialOwnerData] = useState<Partial<OwnerInfo>>({});
   const [propertySelectionData, setPropertySelectionData] = useState<{
+    name: string;
+    email: string;
+    phoneNumber: string;
     city: string;
     whatsappUpdates: boolean;
     propertyType: 'Residential' | 'Commercial' | 'Land/Plot';
@@ -189,19 +193,47 @@ export const PostProperty: React.FC = () => {
     }
   };
 
-  const handlePropertySelectionNext = (data: {
-    city: string;
+  const handlePropertySelectionNext = async (data: {
+    name: string;
+    email: string;
     phoneNumber: string;
+    city: string;
     whatsappUpdates: boolean;
     propertyType: 'Residential' | 'Commercial' | 'Land/Plot';
     listingType: 'Rent' | 'Resale' | 'PG/Hostel' | 'Flatmates';
   }) => {
+    try {
+      // Save contact data to database
+      await createPropertyContact({
+        name: data.name,
+        email: data.email,
+        phone: data.phoneNumber,
+        city: data.city,
+        whatsapp_opted_in: data.whatsappUpdates,
+        property_type: data.propertyType,
+        listing_type: data.listingType
+      });
+
+      toast({
+        title: "Success",
+        description: "Contact information saved successfully!"
+      });
+    } catch (error) {
+      console.error('Error saving contact data:', error);
+      toast({
+        title: "Error",
+        description: "Failed to save contact information. Please try again.",
+        variant: "destructive",
+      });
+      return; // Don't proceed if contact save fails
+    }
+
     setPropertySelectionData(data);
     
     // Create owner info from the selection data
     const ownerInfoData: OwnerInfo = {
-      fullName: '',
-      email: '',
+      fullName: data.name,
+      email: data.email,
       phoneNumber: data.phoneNumber,
       whatsappUpdates: data.whatsappUpdates,
       propertyType: data.propertyType,

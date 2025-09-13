@@ -9,7 +9,10 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { MessageCircle } from 'lucide-react';
 
 interface PropertySelectionData {
+  name: string;
+  email: string;
   phoneNumber: string;
+  city: string;
   whatsappUpdates: boolean;
   propertyType: 'Residential' | 'Commercial' | 'Land/Plot';
   listingType: 'Rent' | 'Resale' | 'PG/Hostel' | 'Flatmates';
@@ -22,7 +25,10 @@ interface PropertySelectionStepProps {
 export const PropertySelectionStep: React.FC<PropertySelectionStepProps> = ({
   onNext
 }) => {
+  const [name, setName] = useState<string>('');
+  const [email, setEmail] = useState<string>('');
   const [phoneNumber, setPhoneNumber] = useState<string>('');
+  const [city, setCity] = useState<string>('');
   const [whatsappUpdates, setWhatsappUpdates] = useState(true);
   const [selectedPropertyType, setSelectedPropertyType] = useState<'Residential' | 'Commercial' | 'Land/Plot'>('Residential');
   const [selectedListingType, setSelectedListingType] = useState<string>('');
@@ -44,9 +50,12 @@ export const PropertySelectionStep: React.FC<PropertySelectionStepProps> = ({
   };
 
   const handleSubmit = () => {
-    if (selectedListingType && phoneNumber) {
+    if (selectedListingType && phoneNumber && name && email && city) {
       onNext({
+        name,
+        email,
         phoneNumber,
+        city,
         whatsappUpdates,
         propertyType: selectedPropertyType,
         listingType: selectedListingType as 'Rent' | 'Resale' | 'PG/Hostel' | 'Flatmates'
@@ -54,7 +63,7 @@ export const PropertySelectionStep: React.FC<PropertySelectionStepProps> = ({
     }
   };
 
-  const isFormValid = selectedListingType && phoneNumber;
+  const isFormValid = selectedListingType && phoneNumber && name && email && city;
 
   return (
     <div className="min-h-screen bg-gray-50 py-8 flex items-center">
@@ -67,24 +76,64 @@ export const PropertySelectionStep: React.FC<PropertySelectionStepProps> = ({
             <h2 className="text-lg font-medium text-gray-800">Personal Information</h2>
           </div>
 
-          {/* Mobile Number */}
-          <div className="space-y-2">
-            <Label htmlFor="mobile" className="text-base font-medium">Mobile Number *</Label>
-            <div className="flex">
-              <Select defaultValue="+91">
-                <SelectTrigger className="w-24 rounded-r-none border-r-0">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="+91">+91</SelectItem>
-                </SelectContent>
-              </Select>
+          {/* Personal Information Form */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Name */}
+            <div className="space-y-2">
+              <Label htmlFor="name" className="text-base font-medium">Name *</Label>
               <Input
-                id="mobile"
-                placeholder="Enter your mobile number"
-                value={phoneNumber}
-                onChange={(e) => setPhoneNumber(e.target.value)}
-                className="flex-1 rounded-l-none"
+                id="name"
+                placeholder="Enter your name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="w-full"
+              />
+            </div>
+
+            {/* Email */}
+            <div className="space-y-2">
+              <Label htmlFor="email" className="text-base font-medium">Email *</Label>
+              <Input
+                id="email"
+                type="email"
+                placeholder="Enter your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full"
+              />
+            </div>
+
+            {/* Mobile Number */}
+            <div className="space-y-2">
+              <Label htmlFor="mobile" className="text-base font-medium">Mobile Number *</Label>
+              <div className="flex">
+                <Select defaultValue="+91">
+                  <SelectTrigger className="w-24 rounded-r-none border-r-0">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="+91">+91</SelectItem>
+                  </SelectContent>
+                </Select>
+                <Input
+                  id="mobile"
+                  placeholder="Enter your mobile number"
+                  value={phoneNumber}
+                  onChange={(e) => setPhoneNumber(e.target.value)}
+                  className="flex-1 rounded-l-none"
+                />
+              </div>
+            </div>
+
+            {/* City */}
+            <div className="space-y-2">
+              <Label htmlFor="city" className="text-base font-medium">City *</Label>
+              <Input
+                id="city"
+                placeholder="Select city"
+                value={city}
+                onChange={(e) => setCity(e.target.value)}
+                className="w-full"
               />
             </div>
           </div>

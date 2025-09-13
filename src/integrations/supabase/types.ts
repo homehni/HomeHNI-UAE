@@ -984,6 +984,45 @@ export type Database = {
           },
         ]
       }
+      property_contacts: {
+        Row: {
+          city: string
+          created_at: string
+          email: string
+          id: string
+          listing_type: string | null
+          name: string
+          phone: string
+          property_type: string | null
+          updated_at: string
+          whatsapp_opted_in: boolean | null
+        }
+        Insert: {
+          city: string
+          created_at?: string
+          email: string
+          id?: string
+          listing_type?: string | null
+          name: string
+          phone: string
+          property_type?: string | null
+          updated_at?: string
+          whatsapp_opted_in?: boolean | null
+        }
+        Update: {
+          city?: string
+          created_at?: string
+          email?: string
+          id?: string
+          listing_type?: string | null
+          name?: string
+          phone?: string
+          property_type?: string | null
+          updated_at?: string
+          whatsapp_opted_in?: boolean | null
+        }
+        Relationships: []
+      }
       property_drafts: {
         Row: {
           balconies: number | null
