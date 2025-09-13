@@ -26,6 +26,7 @@ import Header from '@/components/Header';
 import Marquee from '@/components/Marquee';
 import Footer from '@/components/Footer';
 import WhyPostSection from '@/components/WhyPostSection';
+import GetTenantsFasterSection from '@/components/GetTenantsFasterSection';
 import HowItWorksSection from '@/components/HowItWorksSection';
 import PropertyFAQSection from '@/components/PropertyFAQSection';
 

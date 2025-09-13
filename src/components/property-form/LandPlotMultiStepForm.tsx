@@ -6,6 +6,7 @@ import { LandPlotLocationDetailsStep } from './LandPlotLocationDetailsStep';
 import { LandPlotSaleDetailsStep } from './LandPlotSaleDetailsStep';
 import { LandPlotAmenitiesStep } from './LandPlotAmenitiesStep';
 import { LandPlotGalleryStep } from './LandPlotGalleryStep';
+import GetTenantsFasterSection from '@/components/GetTenantsFasterSection';
 
 import { LandPlotScheduleStep } from './LandPlotScheduleStep';
 import { LandPlotPreviewStep } from './LandPlotPreviewStep';
@@ -188,65 +189,72 @@ export const LandPlotMultiStepForm: React.FC<LandPlotMultiStepFormProps> = ({
 
           {/* Main Content */}
           <div className="flex-1 p-6 md:p-8">
-            {currentStep === 1 && (
-              <LandPlotPropertyDetailsStep
-                initialData={plotDetails}
-                onNext={handlePlotDetailsNext}
-                onBack={() => {}} // No back on first step
-              />
-            )}
+            <div className="max-w-4xl mx-auto">
+              {currentStep === 1 && (
+                <LandPlotPropertyDetailsStep
+                  initialData={plotDetails}
+                  onNext={handlePlotDetailsNext}
+                  onBack={() => {}} // No back on first step
+                />
+              )}
 
-            {currentStep === 2 && (
-              <LandPlotLocationDetailsStep
-                initialData={locationDetails}
-                onNext={handleLocationDetailsNext}
-                onBack={prevStep}
-                currentStep={2}
-                totalSteps={7}
-              />
-            )}
+              {currentStep === 2 && (
+                <LandPlotLocationDetailsStep
+                  initialData={locationDetails}
+                  onNext={handleLocationDetailsNext}
+                  onBack={prevStep}
+                  currentStep={2}
+                  totalSteps={7}
+                />
+              )}
 
-            {currentStep === 3 && (
-              <LandPlotSaleDetailsStep
-                initialData={saleDetails}
-                onNext={handleSaleDetailsNext}
-                onBack={prevStep}
-              />
-            )}
+              {currentStep === 3 && (
+                <LandPlotSaleDetailsStep
+                  initialData={saleDetails}
+                  onNext={handleSaleDetailsNext}
+                  onBack={prevStep}
+                />
+              )}
 
-            {currentStep === 4 && (
-              <LandPlotAmenitiesStep
-                initialData={amenities}
-                onNext={handleAmenitiesNext}
-                onBack={prevStep}
-              />
-            )}
+              {currentStep === 4 && (
+                <LandPlotAmenitiesStep
+                  initialData={amenities}
+                  onNext={handleAmenitiesNext}
+                  onBack={prevStep}
+                />
+              )}
 
-            {currentStep === 5 && (
-              <LandPlotGalleryStep
-                initialData={gallery}
-                onNext={handleGalleryNext}
-                onBack={prevStep}
-              />
-            )}
+              {currentStep === 5 && (
+                <LandPlotGalleryStep
+                  initialData={gallery}
+                  onNext={handleGalleryNext}
+                  onBack={prevStep}
+                />
+              )}
 
-            {currentStep === 6 && (
-              <LandPlotScheduleStep
-                initialData={scheduleInfo}
-                onNext={handleScheduleNext}
-                onBack={prevStep}
-              />
-            )}
+              {currentStep === 6 && (
+                <LandPlotScheduleStep
+                  initialData={scheduleInfo}
+                  onNext={handleScheduleNext}
+                  onBack={prevStep}
+                />
+              )}
 
-            {currentStep === 7 && (
-              <LandPlotPreviewStep
-                formData={getFormData() as LandPlotFormData}
-                onBack={prevStep}
-                onEdit={goToStep}
-                onSubmit={handleSubmit}
-                isSubmitting={isSubmitting}
-              />
-            )}
+              {currentStep === 7 && (
+                <LandPlotPreviewStep
+                  formData={getFormData() as LandPlotFormData}
+                  onBack={prevStep}
+                  onEdit={goToStep}
+                  onSubmit={handleSubmit}
+                  isSubmitting={isSubmitting}
+                />
+              )}
+            </div>
+          </div>
+
+          {/* Right Sidebar - Get Tenants Faster */}
+          <div className="w-80 flex-shrink-0 h-full">
+            <GetTenantsFasterSection />
           </div>
         </div>
       </div>
