@@ -1,6 +1,6 @@
 import React from 'react';
 import { Shield, Star, Facebook, Tag } from 'lucide-react';
-import { Button } from './ui/button';
+import { Button } from '@/components/ui/button';
 
 const GetTenantsFasterSection: React.FC = () => {
   const features = [
