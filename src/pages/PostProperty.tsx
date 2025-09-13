@@ -781,10 +781,10 @@ export const PostProperty: React.FC = () => {
         return (
           <div className="min-h-screen">
             <div className="flex flex-col lg:flex-row">
-              <div className="hidden lg:block lg:w-1/2 xl:w-2/5">
+              <div className="hidden lg:block lg:w-[15%]">
                 <WhyPostSection />
               </div>
-              <div className="flex-1 lg:w-1/2 xl:w-3/5">
+              <div className="flex-1 lg:w-[85%]">
                 <PropertySelectionStep onNext={handlePropertySelectionNext} />
               </div>
             </div>

@@ -49,25 +49,25 @@ const WhyPostSection: React.FC = () => {
   }, [testimonials.length]);
 
   return (
-    <div className="w-full relative bg-gray-50">
+    <div className="w-full relative bg-gray-100/50">
       <div className="relative h-full min-h-screen flex items-center justify-center">
-        <div className="relative w-full max-w-md mx-8">
+        <div className="relative w-full max-w-sm mx-4">
           {/* Content container */}
-          <div className="relative bg-background/95 backdrop-blur-sm rounded-2xl p-8 shadow-lg border border-border/50">
+          <div className="relative bg-gray-50/80 backdrop-blur-sm rounded-xl p-6 shadow-sm border border-gray-200/50">
             
             {/* Why Post section */}
-            <div className="mb-8">
-              <h2 className="text-2xl font-bold text-foreground mb-6">Why Post through us?</h2>
+            <div className="mb-6">
+              <h2 className="text-lg font-semibold text-gray-600 mb-5">Why Post through us?</h2>
               
               <div className="space-y-4">
                 {benefits.map((benefit, index) => (
                   <div key={index} className="flex items-start gap-3">
-                    <div className="flex-shrink-0 w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center">
-                      <benefit.icon className="w-4 h-4 text-primary" />
+                    <div className="flex-shrink-0 w-7 h-7 bg-gray-200/70 rounded-full flex items-center justify-center">
+                      <benefit.icon className="w-3.5 h-3.5 text-gray-500" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-foreground text-sm">{benefit.title}</h3>
-                      <p className="text-muted-foreground text-xs">{benefit.description}</p>
+                      <h3 className="font-medium text-gray-700 text-sm">{benefit.title}</h3>
+                      <p className="text-gray-500 text-xs">{benefit.description}</p>
                     </div>
                   </div>
                 ))}
@@ -75,10 +75,10 @@ const WhyPostSection: React.FC = () => {
             </div>
 
             {/* Testimonial section */}
-            <div className="border-t border-border/30 pt-6">
+            <div className="border-t border-gray-200/50 pt-5">
               <div className="flex items-center gap-2 mb-3">
-                <Star className="w-5 h-5 text-yellow-500 fill-current" />
-                <h3 className="font-bold text-lg text-foreground">30 Lac+ Home Owners Trust Us</h3>
+                <Star className="w-4 h-4 text-yellow-400 fill-current" />
+                <h3 className="font-semibold text-base text-gray-700">30 Lac+ Home Owners Trust Us</h3>
               </div>
               
               <div className="relative overflow-hidden">
@@ -88,15 +88,15 @@ const WhyPostSection: React.FC = () => {
                 >
                   {testimonials.map((testimonial, index) => (
                     <div key={index} className="w-full flex-shrink-0">
-                      <div className="bg-accent/50 rounded-lg p-4 mb-4">
-                        <p className="text-sm text-foreground leading-relaxed mb-3">
+                      <div className="bg-gray-200/40 rounded-lg p-3 mb-3">
+                        <p className="text-xs text-gray-600 leading-relaxed mb-2">
                           "{testimonial.text}"
                         </p>
                       </div>
                       
-                      <div className="flex items-center justify-between text-sm">
-                        <span className="font-semibold text-foreground">{testimonial.name}</span>
-                        <span className="text-muted-foreground">{testimonial.city}</span>
+                      <div className="flex items-center justify-between text-xs">
+                        <span className="font-medium text-gray-600">{testimonial.name}</span>
+                        <span className="text-gray-500">{testimonial.city}</span>
                       </div>
                     </div>
                   ))}
@@ -104,15 +104,15 @@ const WhyPostSection: React.FC = () => {
               </div>
 
               {/* Testimonial indicators */}
-              <div className="flex justify-center gap-2 mt-4">
+              <div className="flex justify-center gap-1.5 mt-3">
                 {testimonials.map((_, index) => (
                   <button
                     key={index}
                     onClick={() => setCurrentTestimonial(index)}
-                    className={`w-2 h-2 rounded-full transition-colors duration-300 ${
+                    className={`w-1.5 h-1.5 rounded-full transition-colors duration-300 ${
                       index === currentTestimonial 
-                        ? 'bg-primary' 
-                        : 'bg-muted-foreground/30'
+                        ? 'bg-gray-500' 
+                        : 'bg-gray-300'
                     }`}
                   />
                 ))}
