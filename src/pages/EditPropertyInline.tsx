@@ -1210,14 +1210,12 @@ export const EditPropertyInline: React.FC = () => {
                               <SelectValue placeholder="Select property type" />
                             </SelectTrigger>
                             <SelectContent>
-                              <SelectItem value="apartment">Apartment</SelectItem>
-                              <SelectItem value="villa">Villa</SelectItem>
-                              <SelectItem value="independent_house">Independent House</SelectItem>
-                              <SelectItem value="builder_floor">Builder Floor</SelectItem>
-                              <SelectItem value="plot">Plot/Land</SelectItem>
-                              <SelectItem value="commercial">Commercial</SelectItem>
-                              <SelectItem value="office">Office Space</SelectItem>
-                              <SelectItem value="shop">Shop/Showroom</SelectItem>
+                              <SelectItem value="Apartment">Apartment</SelectItem>
+                              <SelectItem value="Villa">Villa</SelectItem>
+                              <SelectItem value="Independent House">Independent House</SelectItem>
+                              <SelectItem value="Penthouse">Penthouse</SelectItem>
+                              <SelectItem value="Duplex">Duplex</SelectItem>
+                              <SelectItem value="Gated Community Villa">Gated Community Villa</SelectItem>
                             </SelectContent>
                           </Select>
                         </div>
