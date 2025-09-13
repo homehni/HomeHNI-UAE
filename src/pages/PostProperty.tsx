@@ -26,6 +26,7 @@ import Marquee from '@/components/Marquee';
 import Footer from '@/components/Footer';
 import WhyPostSection from '@/components/WhyPostSection';
 import HowItWorksSection from '@/components/HowItWorksSection';
+import PropertyFAQSection from '@/components/PropertyFAQSection';
 
 type FormStep = 'property-selection' | 'owner-info' | 'rental-form' | 'resale-form' | 'pg-hostel-form' | 'flatmates-form' | 'commercial-rental-form' | 'commercial-sale-form' | 'land-plot-form';
 
@@ -788,6 +789,7 @@ export const PostProperty: React.FC = () => {
               </div>
             </div>
             <HowItWorksSection />
+            <PropertyFAQSection />
           </div>
         );
       case 'rental-form':
