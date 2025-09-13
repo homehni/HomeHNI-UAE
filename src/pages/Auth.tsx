@@ -204,9 +204,6 @@ export const Auth: React.FC = () => {
                   className="h-12 w-auto"
                 />
               </div>
-              <div>
-                <p className="text-xs text-muted-foreground">Your premium property partner</p>
-              </div>
             </CardHeader>
             <CardContent className="px-6 pb-6">
               <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
@@ -222,13 +219,6 @@ export const Auth: React.FC = () => {
                 </TabsList>
                 
                 <TabsContent value="signin" className="space-y-4">
-                  <div className="text-center">
-                    <CardTitle className="text-xl font-semibold text-gray-800">Welcome Back</CardTitle>
-                    <CardDescription className="mt-1 text-gray-600 text-sm">
-                      Login to access your account and all features
-                    </CardDescription>
-                  </div>
-                  
                   <form onSubmit={handleEmailSignIn} className="space-y-4">
                     <div className="space-y-1">
                       <Label htmlFor="signin-email" className="text-sm font-medium text-gray-700">Email</Label>
