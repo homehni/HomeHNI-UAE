@@ -390,23 +390,11 @@ export const Dashboard: React.FC = () => {
 
 
   const handleEditProperty = (property: CombinedProperty) => {
-    if (property.isSubmission) {
-      // For flatmates properties, route to amenities step (step 4)
-      // For other properties, route to images step (step 5)
-      console.log('Property data:', property);
-      console.log('Property type:', property.property_type);
-      console.log('Listing type:', property.listing_type);
-      
-      const targetStep = property.property_type === 'apartment' && property.listing_type === 'rent' 
-        ? 'amenities' 
-        : 'images';
-      
-      console.log('Target step:', targetStep);
-      navigate(`/post-property?step=${targetStep}`);
-      return;
-    }
-    // For approved properties, go to the edit page
-    navigate(`/edit-property/${property.id}`);
+    // Open edit modal for all properties (both submissions and approved)
+    setEditPropertyModal({
+      isOpen: true,
+      property: property as Property
+    });
   };
 
   const closeEditModal = () => {
