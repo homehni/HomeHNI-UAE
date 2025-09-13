@@ -314,3 +314,15 @@ All colors MUST be HSL.
 /* Images from editor */
 .prose img, .content-area img { max-width: 100%; height: auto; }
 
+/* Google Places dropdown fixes */
+.pac-container {
+  z-index: 9999 !important; /* Ensure above dialogs/tabs */
+  background: hsl(var(--popover));
+  color: hsl(var(--popover-foreground));
+  border: 1px solid hsl(var(--border));
+}
+.pac-item { cursor: pointer; }
+.pac-item:hover, .pac-item.pac-selected {
+  background: hsl(var(--secondary));
+}
+

@@ -174,6 +174,7 @@ export const EditPropertyInline: React.FC = () => {
   const mapRef = useRef<any>(null);
   const markerRef = useRef<any>(null);
   const [showMap, setShowMap] = useState(false);
+  const autocompleteInitializedRef = useRef(false);
 
   useEffect(() => {
     if (propertyId && user) {
@@ -219,6 +220,8 @@ export const EditPropertyInline: React.FC = () => {
 
   // Google Maps autocomplete functionality
   useEffect(() => {
+    if (activeTab !== 'location' || autocompleteInitializedRef.current) return;
+
     const loadGoogleMaps = () => {
       return new Promise((resolve, reject) => {
         if ((window as any).google?.maps?.places) {
@@ -325,8 +328,13 @@ export const EditPropertyInline: React.FC = () => {
       });
     };
 
-    loadGoogleMaps().then(initAutocomplete).catch(console.error);
-  }, [editedProperty]);
+    loadGoogleMaps()
+      .then(() => {
+        initAutocomplete();
+        autocompleteInitializedRef.current = true;
+      })
+      .catch(console.error);
+  }, [activeTab]);
 
   // Save data to localStorage whenever editedProperty changes
   useEffect(() => {
