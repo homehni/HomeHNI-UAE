@@ -802,6 +802,10 @@ export const PostProperty: React.FC = () => {
                 <PropertySelectionStep onNext={handlePropertySelectionNext} />
               </div>
             </div>
+            
+            {/* Sections below the form */}
+            <HowItWorksSection />
+            <PropertyFAQSection />
           </div>
         );
       case 'rental-form':
