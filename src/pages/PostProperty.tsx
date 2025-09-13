@@ -23,6 +23,7 @@ import { generatePropertyName } from '@/utils/propertyNameGenerator';
 import { createPropertyContact } from '@/services/propertyContactService';
 import Header from '@/components/Header';
 import Marquee from '@/components/Marquee';
+import Footer from '@/components/Footer';
 import WhyPostSection from '@/components/WhyPostSection';
 import HowItWorksSection from '@/components/HowItWorksSection';
 
@@ -858,8 +859,13 @@ export const PostProperty: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen">
-      {renderCurrentStep()}
+    <div className="min-h-screen bg-white">
+      <Marquee />
+      <Header />
+      <div className="pt-8">
+        {renderCurrentStep()}
+      </div>
+      <Footer />
     </div>
   );
 };
