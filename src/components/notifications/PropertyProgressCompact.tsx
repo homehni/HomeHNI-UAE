@@ -19,8 +19,8 @@ export const PropertyProgressCompact: React.FC<PropertyProgressCompactProps> = (
 }) => {
   const navigate = useNavigate();
 
-  // Only show if completion is less than 80%
-  if (completionPercentage >= 80) {
+  // Only show if completion is less than 60%
+  if (completionPercentage >= 60) {
     return null;
   }
 

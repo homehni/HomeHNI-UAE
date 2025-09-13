@@ -709,7 +709,7 @@ export const Dashboard: React.FC = () => {
                                     });
                                     
                                     // Show when completion is below threshold
-                                    const shouldShow = completion.percentage < 80;
+                                    const shouldShow = completion.percentage < 60;
                                     
                                     return shouldShow ? (
                                       <PropertyProgressCompact
