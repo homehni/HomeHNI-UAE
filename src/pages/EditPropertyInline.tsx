@@ -1494,57 +1494,62 @@ export const EditPropertyInline: React.FC = () => {
                             placeholder="No. of balconies"
                           />
                         </div>
-                        <div>
-                          <Label htmlFor="floor_no">Floor Number</Label>
-                          <Select
-                            value={
-                              editedProperty.floor_no === 0 ? 'ground' :
-                              editedProperty.floor_no === 'basement' ? 'basement' :
-                              editedProperty.floor_no === '99+' ? '99+' :
-                              editedProperty.floor_no?.toString() || ''
-                            }
-                            onValueChange={(value) => {
-                              if (value === 'ground') {
-                                handleFieldChange('floor_no', 0);
-                              } else if (value === 'basement') {
-                                handleFieldChange('floor_no', 'basement');
-                              } else if (value === '99+') {
-                                handleFieldChange('floor_no', '99+');
-                              } else {
-                                handleFieldChange('floor_no', parseInt(value));
+                        {/* Floor Number - Only for Apartment, Penthouse, and Gated Community Villa */}
+                        {(editedProperty.property_type === 'Apartment' || 
+                          editedProperty.property_type === 'Penthouse' || 
+                          editedProperty.property_type === 'Gated Community Villa') && (
+                          <div>
+                            <Label htmlFor="floor_no">Floor Number</Label>
+                            <Select
+                              value={
+                                editedProperty.floor_no === 0 ? 'ground' :
+                                editedProperty.floor_no === 'basement' ? 'basement' :
+                                editedProperty.floor_no === '99+' ? '99+' :
+                                editedProperty.floor_no?.toString() || ''
                               }
-                            }}
-                          >
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select Floor" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="basement">Basement</SelectItem>
-                              <SelectItem value="ground">Ground Floor</SelectItem>
-                              {[...Array(50)].map((_, i) => {
-                                const floor = i + 1;
-                                return (
-                                  <SelectItem key={floor} value={floor.toString()}>
-                                    {floor}
-                                  </SelectItem>
-                                );
-                              })}
-                              <SelectItem value="99+">50+</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </div>
-                        <div>
-                          <Label htmlFor="total_floors">Total Floors</Label>
-                          <Input
-                            id="total_floors"
-                            type="number"
-                            value={editedProperty.total_floors || ''}
-                            onChange={(e) => handleFieldChange('total_floors', Number(e.target.value))}
-                            placeholder="Total floors in building"
-                          />
-                        </div>
-                      </div>
-                    )}
+                              onValueChange={(value) => {
+                                if (value === 'ground') {
+                                  handleFieldChange('floor_no', 0);
+                                } else if (value === 'basement') {
+                                  handleFieldChange('floor_no', 'basement');
+                                } else if (value === '99+') {
+                                  handleFieldChange('floor_no', '99+');
+                                } else {
+                                  handleFieldChange('floor_no', parseInt(value));
+                                }
+                              }}
+                            >
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select Floor" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="basement">Basement</SelectItem>
+                                <SelectItem value="ground">Ground Floor</SelectItem>
+                                {[...Array(50)].map((_, i) => {
+                                  const floor = i + 1;
+                                  return (
+                                    <SelectItem key={floor} value={floor.toString()}>
+                                      {floor}
+                                    </SelectItem>
+                                  );
+                                })}
+                                <SelectItem value="99+">50+</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+                         )}
+                         <div>
+                           <Label htmlFor="total_floors">Total Floors</Label>
+                           <Input
+                             id="total_floors"
+                             type="number"
+                             value={editedProperty.total_floors || ''}
+                             onChange={(e) => handleFieldChange('total_floors', Number(e.target.value))}
+                             placeholder="Total floors in building"
+                           />
+                         </div>
+                       </div>
+                     )}
 
                     {/* Show editable amenities for regular properties */}
                     {editedProperty.property_type !== 'plot' && editedProperty.property_type !== 'land' && (
