@@ -292,7 +292,7 @@ const [propertyInfo, setPropertyInfo] = useState({
     <div className="min-h-screen bg-gradient-to-br from-red-50/30 to-orange-100/30">      
       <div className="flex min-h-screen">
         {/* Sidebar */}
-        <div className="w-80">
+        <div className="w-80 flex-shrink-0">
           <PgHostelSidebar 
             currentStep={currentStep} 
             completedSteps={completedSteps} 
@@ -301,7 +301,7 @@ const [propertyInfo, setPropertyInfo] = useState({
         
         {/* Main Content */}
         <div className="flex-1 p-4 lg:p-8">
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 lg:p-8">
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 lg:p-8 max-w-4xl mx-auto">
             <ProgressIndicator 
               currentStep={currentStep - 1} 
               totalSteps={6} 
@@ -391,7 +391,7 @@ const [propertyInfo, setPropertyInfo] = useState({
         </div>
 
         {/* Right Sidebar - Get Tenants Faster */}
-        <div className="w-80 h-full">
+        <div className="w-80 flex-shrink-0 h-full">
           <GetTenantsFasterSection />
         </div>
       </div>

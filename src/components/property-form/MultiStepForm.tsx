@@ -177,9 +177,9 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="flex max-w-full mx-auto">
+      <div className="flex w-full">
         {/* Sidebar */}
-        <div className="w-80">
+        <div className="w-80 flex-shrink-0">
           <PropertyFormSidebar
             currentStep={currentStep}
             completedSteps={completedSteps}
@@ -191,7 +191,7 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
         <div className="flex-1 min-w-0 bg-white flex flex-col">
           {/* Form Content - Scrollable */}
           <div className="flex-1 p-4">
-            <div className="bg-white">
+            <div className="bg-white max-w-4xl mx-auto">
               {currentStep === 1 && (
                 <PropertyDetailsStep
                   initialData={propertyDetails}
@@ -254,7 +254,7 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
         </div>
 
         {/* Right Sidebar - Get Tenants Faster */}
-        <div className="w-80 min-h-screen">
+        <div className="w-80 flex-shrink-0 min-h-screen">
           <GetTenantsFasterSection />
         </div>
       </div>

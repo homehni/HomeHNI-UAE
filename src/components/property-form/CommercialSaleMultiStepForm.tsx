@@ -208,7 +208,7 @@ export const CommercialSaleMultiStepForm = ({
         </div>
 
         <div className="flex flex-1 overflow-hidden">
-          <div className="w-80">
+          <div className="w-80 flex-shrink-0">
             <CommercialSaleSidebar
               currentStep={currentStep}
               completedSteps={completedSteps}
@@ -216,12 +216,14 @@ export const CommercialSaleMultiStepForm = ({
             />
           </div>
 
-          <div className="flex-1 min-w-0 p-3 bg-white overflow-hidden max-h-full">
-            {renderCurrentStep()}
+          <div className="flex-1 min-w-0 p-3 bg-white overflow-auto max-h-full">
+            <div className="max-w-4xl mx-auto">
+              {renderCurrentStep()}
+            </div>
           </div>
 
           {/* Right Sidebar - Get Tenants Faster */}
-          <div className="w-80 h-full">
+          <div className="w-80 flex-shrink-0 h-full">
             <GetTenantsFasterSection />
           </div>
         </div>
