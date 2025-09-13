@@ -6,7 +6,6 @@ import { CommercialSaleLocationDetailsStep } from './CommercialSaleLocationDetai
 import { CommercialSaleSaleDetailsStep } from './CommercialSaleSaleDetailsStep';
 import { CommercialSaleAmenitiesStep } from './CommercialSaleAmenitiesStep';
 import { CommercialSaleGalleryStep } from './CommercialSaleGalleryStep';
-import GetTenantsFasterSection from '@/components/GetTenantsFasterSection';
 
 import { CommercialSaleScheduleStep } from './CommercialSaleScheduleStep';
 import { CommercialSalePreviewStep } from './CommercialSalePreviewStep';
@@ -208,23 +207,14 @@ export const CommercialSaleMultiStepForm = ({
         </div>
 
         <div className="flex flex-1 overflow-hidden">
-          <div className="w-80 flex-shrink-0">
-            <CommercialSaleSidebar
-              currentStep={currentStep}
-              completedSteps={completedSteps}
-              onStepClick={goToStep}
-            />
-          </div>
+          <CommercialSaleSidebar
+            currentStep={currentStep}
+            completedSteps={completedSteps}
+            onStepClick={goToStep}
+          />
 
-          <div className="flex-1 min-w-0 p-3 bg-white overflow-auto max-h-full">
-            <div className="max-w-4xl mx-auto">
-              {renderCurrentStep()}
-            </div>
-          </div>
-
-          {/* Right Sidebar - Get Tenants Faster */}
-          <div className="w-80 flex-shrink-0 h-full">
-            <GetTenantsFasterSection />
+          <div className="flex-1 min-w-0 p-3 bg-white overflow-hidden max-h-full">
+            {renderCurrentStep()}
           </div>
         </div>
       </div>

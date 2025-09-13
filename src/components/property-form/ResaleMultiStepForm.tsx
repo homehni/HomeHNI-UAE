@@ -7,7 +7,6 @@ import { ResaleLocationDetailsStep } from './ResaleLocationDetailsStep';
 import { SaleDetailsStep } from './SaleDetailsStep';
 import { ResaleAmenitiesStep } from './ResaleAmenitiesStep';
 import { ResaleGalleryStep } from './ResaleGalleryStep';
-import GetTenantsFasterSection from '@/components/GetTenantsFasterSection';
 
 import { ResaleScheduleStep } from './ResaleScheduleStep';
 import { ResalePreviewStep } from './ResalePreviewStep';
@@ -142,15 +141,13 @@ export const ResaleMultiStepForm: React.FC<ResaleMultiStepFormProps> = ({
 
   return (
     <div className="h-screen bg-gray-50 overflow-hidden">
-      <div className="flex w-full h-full">
+      <div className="flex max-w-full mx-auto h-full">
         {/* Sidebar */}
-        <div className="w-80 flex-shrink-0">
-          <PropertyFormSidebar
-            currentStep={currentStep}
-            completedSteps={completedSteps}
-            steps={sidebarSteps}
-          />
-        </div>
+        <PropertyFormSidebar
+          currentStep={currentStep}
+          completedSteps={completedSteps}
+          steps={sidebarSteps}
+        />
 
         {/* Main Content */}
         <div className="flex-1 min-w-0 bg-white flex flex-col">
@@ -170,78 +167,71 @@ export const ResaleMultiStepForm: React.FC<ResaleMultiStepFormProps> = ({
 
           {/* Form Content */}
           <div className="flex-1 p-3 min-h-0 max-h-full">
-            <div className="bg-white h-full overflow-auto">
-              <div className="max-w-4xl mx-auto">
-                {currentStep === 1 && (
-                  <ResalePropertyDetailsStep
-                    initialData={propertyDetails}
-                    onNext={handlePropertyDetailsNext}
-                    onBack={() => {}} // No back on first step
-                  />
-                )}
+            <div className="bg-white h-full overflow-hidden">
+              {currentStep === 1 && (
+                <ResalePropertyDetailsStep
+                  initialData={propertyDetails}
+                  onNext={handlePropertyDetailsNext}
+                  onBack={() => {}} // No back on first step
+                />
+              )}
 
-                {currentStep === 2 && (
-                  <ResaleLocationDetailsStep
-                    initialData={locationDetails}
-                    onNext={handleLocationDetailsNext}
-                    onBack={prevStep}
-                    currentStep={2}
-                    totalSteps={4}
-                  />
-                )}
+              {currentStep === 2 && (
+                <ResaleLocationDetailsStep
+                  initialData={locationDetails}
+                  onNext={handleLocationDetailsNext}
+                  onBack={prevStep}
+                  currentStep={2}
+                  totalSteps={4}
+                />
+              )}
 
-                {currentStep === 3 && (
-                  <SaleDetailsStep
-                    initialData={saleDetails}
-                    propertyDetails={propertyDetails}
-                    onNext={handleSaleDetailsNext}
-                    onBack={prevStep}
-                  />
-                )}
+              {currentStep === 3 && (
+                <SaleDetailsStep
+                  initialData={saleDetails}
+                  propertyDetails={propertyDetails}
+                  onNext={handleSaleDetailsNext}
+                  onBack={prevStep}
+                />
+              )}
 
-                {currentStep === 4 && (
-                  <ResaleAmenitiesStep
-                    initialData={amenities as any}
-                    onNext={handleAmenitiesNext}
-                    onBack={prevStep}
-                  />
-                )}
+              {currentStep === 4 && (
+                <ResaleAmenitiesStep
+                  initialData={amenities as any}
+                  onNext={handleAmenitiesNext}
+                  onBack={prevStep}
+                />
+              )}
 
-                {currentStep === 5 && (
-                  <ResaleGalleryStep
-                    initialData={gallery}
-                    onNext={handleGalleryNext}
-                    onBack={prevStep}
-                    onSubmit={handleSubmit}
-                    isSubmitting={isSubmitting}
-                  />
-                )}
+              {currentStep === 5 && (
+                <ResaleGalleryStep
+                  initialData={gallery}
+                  onNext={handleGalleryNext}
+                  onBack={prevStep}
+                  onSubmit={handleSubmit}
+                  isSubmitting={isSubmitting}
+                />
+              )}
 
-                {currentStep === 6 && (
-                  <ResaleScheduleStep
-                    initialData={scheduleInfo}
-                    onNext={handleScheduleNext}
-                    onBack={prevStep}
-                  />
-                )}
+              {currentStep === 6 && (
+                <ResaleScheduleStep
+                  initialData={scheduleInfo}
+                  onNext={handleScheduleNext}
+                  onBack={prevStep}
+                />
+              )}
 
-                {currentStep === 7 && (
-                  <ResalePreviewStep
-                    formData={getFormData() as SalePropertyFormData}
-                    onBack={prevStep}
-                    onEdit={goToStep}
-                    onSubmit={handleSubmit}
-                    isSubmitting={isSubmitting}
-                  />
-                )}
-              </div>
+              {currentStep === 7 && (
+                <ResalePreviewStep
+                  formData={getFormData() as SalePropertyFormData}
+                  onBack={prevStep}
+                  onEdit={goToStep}
+                  onSubmit={handleSubmit}
+                  isSubmitting={isSubmitting}
+                />
+              )}
             </div>
           </div>
-        </div>
-
-        {/* Right Sidebar - Get Tenants Faster */}
-        <div className="w-80 flex-shrink-0 h-full">
-          <GetTenantsFasterSection />
         </div>
       </div>
     </div>

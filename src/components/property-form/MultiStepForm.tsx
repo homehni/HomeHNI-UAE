@@ -7,7 +7,6 @@ import { LocationDetailsStep } from './LocationDetailsStep';
 import { RentalDetailsStep } from './RentalDetailsStep';
 import { AmenitiesStep } from './AmenitiesStep';
 import { GalleryStep } from './GalleryStep';
-import GetTenantsFasterSection from '@/components/GetTenantsFasterSection';
 
 import { ScheduleStep } from './ScheduleStep';
 import { Home, MapPin, DollarSign, Sparkles, Camera, Info, Calendar, CheckCircle } from 'lucide-react';
@@ -177,21 +176,19 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="flex w-full">
+      <div className="flex max-w-full mx-auto">
         {/* Sidebar */}
-        <div className="w-80 flex-shrink-0">
-          <PropertyFormSidebar
-            currentStep={currentStep}
-            completedSteps={completedSteps}
-            steps={sidebarSteps}
-          />
-        </div>
+        <PropertyFormSidebar
+          currentStep={currentStep}
+          completedSteps={completedSteps}
+          steps={sidebarSteps}
+        />
 
         {/* Main Content */}
         <div className="flex-1 min-w-0 bg-white flex flex-col">
           {/* Form Content - Scrollable */}
           <div className="flex-1 p-4">
-            <div className="bg-white max-w-4xl mx-auto">
+            <div className="bg-white">
               {currentStep === 1 && (
                 <PropertyDetailsStep
                   initialData={propertyDetails}
@@ -251,11 +248,6 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
               )}
             </div>
           </div>
-        </div>
-
-        {/* Right Sidebar - Get Tenants Faster */}
-        <div className="w-80 flex-shrink-0 min-h-screen">
-          <GetTenantsFasterSection />
         </div>
       </div>
     </div>
