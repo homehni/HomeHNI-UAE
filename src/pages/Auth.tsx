@@ -293,7 +293,7 @@ export const Auth: React.FC = () => {
                   </Button>
                 </TabsContent>
                 
-                <TabsContent value="signup" className="space-y-4">
+                <TabsContent value="signup" className="space-y-3">
                   <div className="text-center">
                     <CardTitle className="text-xl font-semibold text-gray-800">Create Account</CardTitle>
                     <CardDescription className="mt-1 text-gray-600 text-sm">
@@ -301,7 +301,7 @@ export const Auth: React.FC = () => {
                     </CardDescription>
                   </div>
                   
-                  <form onSubmit={handleEmailSignUp} className="space-y-3">
+                  <form onSubmit={handleEmailSignUp} className="space-y-2">
                     <div className="space-y-1">
                       <Label htmlFor="signup-name" className="text-sm font-medium text-gray-700">Full Name</Label>
                       <Input
@@ -312,7 +312,7 @@ export const Auth: React.FC = () => {
                         placeholder="Enter your full name"
                         required
                         autoComplete="name"
-                        className="h-10 rounded-xl border-gray-200 focus:border-brand-red focus:ring-brand-red/20"
+                        className="h-9 rounded-xl border-gray-200 focus:border-brand-red focus:ring-brand-red/20"
                       />
                     </div>
 
@@ -326,7 +326,7 @@ export const Auth: React.FC = () => {
                         placeholder="Enter your email"
                         required
                         autoComplete="email"
-                        className="h-10 rounded-xl border-gray-200 focus:border-brand-red focus:ring-brand-red/20"
+                        className="h-9 rounded-xl border-gray-200 focus:border-brand-red focus:ring-brand-red/20"
                       />
                     </div>
                     
@@ -341,13 +341,13 @@ export const Auth: React.FC = () => {
                           placeholder="Create a password (min 6 characters)"
                           required
                           autoComplete="new-password"
-                          className="h-10 rounded-xl border-gray-200 focus:border-brand-red focus:ring-brand-red/20 pr-10"
+                          className="h-9 rounded-xl border-gray-200 focus:border-brand-red focus:ring-brand-red/20 pr-10"
                         />
                         <Button
                           type="button"
                           variant="ghost"
                           size="sm"
-                          className="absolute right-2 top-2 h-6 w-6 p-0 hover:bg-gray-100"
+                          className="absolute right-2 top-1.5 h-6 w-6 p-0 hover:bg-gray-100"
                           onClick={() => setShowSignUpPassword(!showSignUpPassword)}
                         >
                           {showSignUpPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -366,13 +366,13 @@ export const Auth: React.FC = () => {
                           placeholder="Confirm your password"
                           required
                           autoComplete="new-password"
-                          className="h-10 rounded-xl border-gray-200 focus:border-brand-red focus:ring-brand-red/20 pr-10"
+                          className="h-9 rounded-xl border-gray-200 focus:border-brand-red focus:ring-brand-red/20 pr-10"
                         />
                         <Button
                           type="button"
                           variant="ghost"
                           size="sm"
-                          className="absolute right-2 top-2 h-6 w-6 p-0 hover:bg-gray-100"
+                          className="absolute right-2 top-1.5 h-6 w-6 p-0 hover:bg-gray-100"
                           onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                         >
                           {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -380,7 +380,7 @@ export const Auth: React.FC = () => {
                       </div>
                     </div>
 
-                    <Button type="submit" className="w-full h-10 rounded-xl bg-gradient-to-r from-brand-red to-brand-red-dark hover:shadow-lg transition-all duration-200">
+                    <Button type="submit" className="w-full h-9 rounded-xl bg-gradient-to-r from-brand-red to-brand-red-dark hover:shadow-lg transition-all duration-200 mt-3">
                       Create Account
                     </Button>
                   </form>
@@ -396,7 +396,7 @@ export const Auth: React.FC = () => {
                   
                   <Button 
                     onClick={handleGoogleSignIn}
-                    className="w-full h-10 rounded-xl border-2 hover:bg-gray-50 transition-all duration-200"
+                    className="w-full h-9 rounded-xl border-2 hover:bg-gray-50 transition-all duration-200"
                     variant="outline"
                   >
                     <Chrome className="h-4 w-4 mr-2 text-red-500" />
