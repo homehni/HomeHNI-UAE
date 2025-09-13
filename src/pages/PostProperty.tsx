@@ -884,7 +884,7 @@ export const PostProperty: React.FC = () => {
       <div className="pt-24">
         {renderCurrentStep()}
       </div>
-      <Footer />
+      {currentStep === 'property-selection' && <Footer />}
     </div>
   );
 };
