@@ -796,14 +796,11 @@ export const PostProperty: React.FC = () => {
             
             {/* Main Content */}
             <div className="flex min-h-[calc(100vh-80px)]">
-              <div className="w-[25%] bg-gray-50 border-r border-gray-200">
+              <div className="w-[35%] bg-gray-50 border-r border-gray-200">
                 <WhyPostSection />
               </div>
-              <div className="flex-1 w-[50%]">
+              <div className="flex-1 w-[65%]">
                 <PropertySelectionStep onNext={handlePropertySelectionNext} />
-              </div>
-              <div className="w-[25%] bg-gray-50">
-                <GetTenantsFasterSection />
               </div>
             </div>
             
