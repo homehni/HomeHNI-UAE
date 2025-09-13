@@ -524,40 +524,55 @@ export type Database = {
       }
       leads: {
         Row: {
+          city: string | null
           created_at: string
           id: string
           interested_user_email: string
           interested_user_name: string
           interested_user_phone: string | null
+          lead_type: string | null
+          listing_type: string | null
           message: string | null
-          property_id: string
-          property_owner_id: string
+          property_id: string | null
+          property_owner_id: string | null
+          property_type: string | null
           status: string | null
           updated_at: string
+          whatsapp_opted_in: boolean | null
         }
         Insert: {
+          city?: string | null
           created_at?: string
           id?: string
           interested_user_email: string
           interested_user_name: string
           interested_user_phone?: string | null
+          lead_type?: string | null
+          listing_type?: string | null
           message?: string | null
-          property_id: string
-          property_owner_id: string
+          property_id?: string | null
+          property_owner_id?: string | null
+          property_type?: string | null
           status?: string | null
           updated_at?: string
+          whatsapp_opted_in?: boolean | null
         }
         Update: {
+          city?: string | null
           created_at?: string
           id?: string
           interested_user_email?: string
           interested_user_name?: string
           interested_user_phone?: string | null
+          lead_type?: string | null
+          listing_type?: string | null
           message?: string | null
-          property_id?: string
-          property_owner_id?: string
+          property_id?: string | null
+          property_owner_id?: string | null
+          property_type?: string | null
           status?: string | null
           updated_at?: string
+          whatsapp_opted_in?: boolean | null
         }
         Relationships: [
           {
