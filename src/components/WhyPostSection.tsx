@@ -49,76 +49,61 @@ const WhyPostSection: React.FC = () => {
   }, [testimonials.length]);
 
   return (
-    <div className="w-full relative bg-gray-100/50">
-      <div className="relative h-full min-h-screen flex items-center justify-center">
-        <div className="relative w-full max-w-sm mx-4">
-          {/* Content container */}
-          <div className="relative bg-gray-50/80 backdrop-blur-sm rounded-xl p-6 shadow-sm border border-gray-200/50">
-            
-            {/* Why Post section */}
-            <div className="mb-6">
-              <h2 className="text-lg font-semibold text-gray-600 mb-5">Why Post through us?</h2>
-              
-              <div className="space-y-4">
-                {benefits.map((benefit, index) => (
-                  <div key={index} className="flex items-start gap-3">
-                    <div className="flex-shrink-0 w-7 h-7 bg-gray-200/70 rounded-full flex items-center justify-center">
-                      <benefit.icon className="w-3.5 h-3.5 text-gray-500" />
-                    </div>
-                    <div>
-                      <h3 className="font-medium text-gray-700 text-sm">{benefit.title}</h3>
-                      <p className="text-gray-500 text-xs">{benefit.description}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Testimonial section */}
-            <div className="border-t border-gray-200/50 pt-5">
-              <div className="flex items-center gap-2 mb-3">
-                <Star className="w-4 h-4 text-yellow-400 fill-current" />
-                <h3 className="font-semibold text-base text-gray-700">30 Lac+ Home Owners Trust Us</h3>
-              </div>
-              
-              <div className="relative overflow-hidden">
-                <div 
-                  className="flex transition-transform duration-500 ease-in-out"
-                  style={{ transform: `translateX(-${currentTestimonial * 100}%)` }}
-                >
-                  {testimonials.map((testimonial, index) => (
-                    <div key={index} className="w-full flex-shrink-0">
-                      <div className="bg-gray-200/40 rounded-lg p-3 mb-3">
-                        <p className="text-xs text-gray-600 leading-relaxed mb-2">
-                          "{testimonial.text}"
-                        </p>
-                      </div>
-                      
-                      <div className="flex items-center justify-between text-xs">
-                        <span className="font-medium text-gray-600">{testimonial.name}</span>
-                        <span className="text-gray-500">{testimonial.city}</span>
-                      </div>
-                    </div>
-                  ))}
+    <div className="w-full h-full bg-gray-100/30 border-r border-gray-200/50">
+      <div className="p-4 space-y-6">
+        {/* Why Post section */}
+        <div>
+          <h2 className="text-lg font-medium text-gray-700 mb-4">Why Post through us?</h2>
+          
+          <div className="space-y-4">
+            {benefits.map((benefit, index) => (
+              <div key={index} className="flex items-start gap-3">
+                <div className="flex-shrink-0 w-8 h-8 bg-gray-200/70 rounded-full flex items-center justify-center mt-0.5">
+                  <benefit.icon className="w-4 h-4 text-gray-500" />
+                </div>
+                <div>
+                  <h3 className="font-medium text-gray-700 text-sm leading-tight">{benefit.title}</h3>
+                  <p className="text-gray-500 text-xs mt-0.5">{benefit.description}</p>
                 </div>
               </div>
+            ))}
+          </div>
+        </div>
 
-              {/* Testimonial indicators */}
-              <div className="flex justify-center gap-1.5 mt-3">
-                {testimonials.map((_, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setCurrentTestimonial(index)}
-                    className={`w-1.5 h-1.5 rounded-full transition-colors duration-300 ${
-                      index === currentTestimonial 
-                        ? 'bg-gray-500' 
-                        : 'bg-gray-300'
-                    }`}
-                  />
-                ))}
+        {/* Testimonial section */}
+        <div className="border-t border-gray-200/50 pt-6">
+          <div className="mb-4">
+            <h3 className="font-semibold text-base text-gray-700 mb-3">30 Lac+ Home Owners Trust Us</h3>
+          </div>
+          
+          <div className="relative">
+            <div className="space-y-3">
+              <div className="bg-gray-50/80 rounded-lg p-3">
+                <p className="text-xs text-gray-600 leading-relaxed">
+                  "{testimonials[currentTestimonial].text}"
+                </p>
+              </div>
+              
+              <div className="flex items-center justify-between text-xs">
+                <span className="font-medium text-gray-600">{testimonials[currentTestimonial].name}</span>
+                <span className="text-gray-500">{testimonials[currentTestimonial].city}</span>
               </div>
             </div>
-            
+
+            {/* Testimonial indicators */}
+            <div className="flex justify-center gap-1.5 mt-3">
+              {testimonials.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentTestimonial(index)}
+                  className={`w-1.5 h-1.5 rounded-full transition-colors duration-300 ${
+                    index === currentTestimonial 
+                      ? 'bg-gray-500' 
+                      : 'bg-gray-300'
+                  }`}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </div>
