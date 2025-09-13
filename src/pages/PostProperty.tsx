@@ -23,6 +23,7 @@ import { generatePropertyName } from '@/utils/propertyNameGenerator';
 import Header from '@/components/Header';
 import Marquee from '@/components/Marquee';
 import WhyPostSection from '@/components/WhyPostSection';
+import HowItWorksSection from '@/components/HowItWorksSection';
 
 type FormStep = 'property-selection' | 'owner-info' | 'rental-form' | 'resale-form' | 'pg-hostel-form' | 'flatmates-form' | 'commercial-rental-form' | 'commercial-sale-form' | 'land-plot-form';
 
@@ -744,13 +745,16 @@ export const PostProperty: React.FC = () => {
     switch (currentStep) {
       case 'property-selection':
         return (
-          <div className="min-h-screen flex flex-col lg:flex-row">
-            <div className="hidden lg:block lg:w-1/2 xl:w-2/5">
-              <WhyPostSection />
+          <div className="min-h-screen">
+            <div className="flex flex-col lg:flex-row">
+              <div className="hidden lg:block lg:w-1/2 xl:w-2/5">
+                <WhyPostSection />
+              </div>
+              <div className="flex-1 lg:w-1/2 xl:w-3/5">
+                <PropertySelectionStep onNext={handlePropertySelectionNext} />
+              </div>
             </div>
-            <div className="flex-1 lg:w-1/2 xl:w-3/5">
-              <PropertySelectionStep onNext={handlePropertySelectionNext} />
-            </div>
+            <HowItWorksSection />
           </div>
         );
       case 'rental-form':
