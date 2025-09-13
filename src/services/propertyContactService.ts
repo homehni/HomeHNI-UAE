@@ -14,9 +14,7 @@ export interface CreatePropertyContactData {
 export const createPropertyContact = async (contactData: CreatePropertyContactData) => {
   const { data, error } = await supabase
     .from('property_contacts')
-    .insert([contactData])
-    .select()
-    .single();
+    .insert([contactData]);
 
   if (error) {
     console.error('Error creating property contact:', error);
