@@ -195,6 +195,9 @@ export const PropertySelectionStep: React.FC<PropertySelectionStepProps> = ({
                       : 'text-gray-600 hover:text-gray-900'
                   }`}
                 >
+                  {selectedPropertyType === type && (
+                    <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-red-600 rounded-t-sm"></div>
+                  )}
                   {type}
                   {type === 'Land/Plot' && (
                     <Badge variant="destructive" className="absolute -top-1 -right-1 text-xs px-1 py-0">
