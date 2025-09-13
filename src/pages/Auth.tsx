@@ -11,8 +11,7 @@ import { Label } from '@/components/ui/label';
 import { Chrome, Home, UserPlus, LogIn, Eye, EyeOff, X } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { RoleSelectionModal } from '@/components/RoleSelectionModal';
-import Header from '@/components/Header';
-import Marquee from '@/components/Marquee';
+import Index from './Index';
 
 // Auth component with separate password visibility states
 export const Auth: React.FC = () => {
@@ -153,26 +152,9 @@ export const Auth: React.FC = () => {
 
   return (
     <>
-      {/* Full page background with the normal website content */}
-      <div className="min-h-screen">
-        <Marquee />
-        <Header />
-        <div className="pt-20 min-h-screen relative overflow-hidden">
-          {/* Normal hero background like homepage */}
-          <div className="absolute inset-0 bg-cover bg-no-repeat bg-center" 
-               style={{
-                 backgroundImage: `url('/lovable-uploads/02fc42a2-c12f-49f1-92b7-9fdee8f3a419.png')`
-               }}>
-          </div>
-          
-          {/* Content to show normal background is there */}
-          <div className="relative p-8">
-            <div className="text-center">
-              <h1 className="text-4xl font-bold text-white mb-4">Welcome to Home HNI</h1>
-              <p className="text-lg text-white/90">Your premium property partner</p>
-            </div>
-          </div>
-        </div>
+      {/* Background: render the actual homepage behind the modal (no extra images) */}
+      <div className="fixed inset-0 -z-10 pointer-events-none">
+        <Index />
       </div>
 
       {/* Modal Overlay */}
