@@ -174,48 +174,51 @@ export const PropertySelectionStep: React.FC<PropertySelectionStepProps> = ({
             />
           </div>
 
-          {/* Property Type */}
-          <div className="space-y-6">
-            <h3 className="text-lg font-medium text-gray-700">Property type</h3>
-            <div className="flex border-b border-gray-200">
-              {['Residential', 'Commercial', 'Land/Plot'].map((type) => (
-                <button
-                  key={type}
-                  onClick={() => handlePropertyTypeChange(type as 'Residential' | 'Commercial' | 'Land/Plot')}
-                  className={`flex-1 py-3 px-4 text-sm font-medium transition-colors relative ${
-                    selectedPropertyType === type
-                      ? 'text-teal-600 border-b-2 border-teal-600'
-                      : 'text-gray-600 hover:text-gray-900'
-                  }`}
-                >
-                  {type}
-                  {type === 'Land/Plot' && (
-                    <Badge variant="destructive" className="absolute -top-1 -right-1 text-xs px-1 py-0">
-                      New
-                    </Badge>
-                  )}
-                </button>
-              ))}
+          {/* Property Selection Container */}
+          <div className="border border-gray-200 rounded-lg p-6 space-y-6">
+            {/* Property Type */}
+            <div className="space-y-4">
+              <h3 className="text-lg font-medium text-gray-700 text-center">Property type</h3>
+              <div className="flex border-b border-gray-200">
+                {['Residential', 'Commercial', 'Land/Plot'].map((type) => (
+                  <button
+                    key={type}
+                    onClick={() => handlePropertyTypeChange(type as 'Residential' | 'Commercial' | 'Land/Plot')}
+                    className={`flex-1 py-3 px-4 text-sm font-medium transition-colors relative ${
+                      selectedPropertyType === type
+                        ? 'text-red-600 border-b-2 border-red-600'
+                        : 'text-gray-600 hover:text-gray-900'
+                    }`}
+                  >
+                    {type}
+                    {type === 'Land/Plot' && (
+                      <Badge variant="destructive" className="absolute -top-1 -right-1 text-xs px-1 py-0">
+                        New
+                      </Badge>
+                    )}
+                  </button>
+                ))}
+              </div>
             </div>
-          </div>
 
-          {/* Select Property Ad Type */}
-          <div className="space-y-6">
-            <h3 className="text-lg font-medium text-gray-700">Select Property Ad Type</h3>
-            <div className="grid grid-cols-4 gap-3">
-              {getListingTypes().map((type) => (
-                <button
-                  key={type}
-                  onClick={() => setSelectedListingType(type)}
-                  className={`py-4 px-6 rounded-lg text-sm font-medium transition-colors border ${
-                    selectedListingType === type
-                      ? 'bg-teal-600 text-white border-teal-600'
-                      : 'bg-white text-gray-700 border-gray-300 hover:border-gray-400'
-                  }`}
-                >
-                  {type}
-                </button>
-              ))}
+            {/* Select Property Ad Type */}
+            <div className="space-y-4">
+              <h3 className="text-lg font-medium text-gray-700 text-center">Select Property Ad Type</h3>
+              <div className="grid grid-cols-4 gap-3">
+                {getListingTypes().map((type) => (
+                  <button
+                    key={type}
+                    onClick={() => setSelectedListingType(type)}
+                    className={`py-4 px-6 rounded-lg text-sm font-medium transition-colors border ${
+                      selectedListingType === type
+                        ? 'bg-red-600 text-white border-red-600'
+                        : 'bg-white text-gray-700 border-gray-300 hover:border-gray-400'
+                    }`}
+                  >
+                    {type}
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
 
