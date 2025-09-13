@@ -196,7 +196,7 @@ export const PropertySelectionStep: React.FC<PropertySelectionStepProps> = ({
                   }`}
                 >
                   {selectedPropertyType === type && (
-                    <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-red-600 rounded-t-sm"></div>
+                    <div className="absolute bottom-0 left-0 right-0 h-1 bg-red-600 rounded-t-sm"></div>
                   )}
                   {type}
                   {type === 'Land/Plot' && (
