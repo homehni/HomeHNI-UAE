@@ -50,11 +50,11 @@ export const PropertySelectionStep: React.FC<PropertySelectionStepProps> = ({
   };
 
   const handleSubmit = () => {
-    if (selectedListingType && city) {
+    if (selectedListingType && phoneNumber && name && email && city) {
       onNext({
-        name: 'Demo User', // Placeholder since form doesn't collect this anymore
-        email: 'demo@example.com', // Placeholder
-        phoneNumber: '1234567890', // Placeholder
+        name,
+        email,
+        phoneNumber,
         city,
         whatsappUpdates,
         propertyType: selectedPropertyType,
@@ -63,50 +63,101 @@ export const PropertySelectionStep: React.FC<PropertySelectionStepProps> = ({
     }
   };
 
-  const isFormValid = selectedListingType && city;
+  const isFormValid = selectedListingType && phoneNumber && name && email && city;
 
   return (
     <div className="bg-white flex flex-col h-full">
       <div className="flex-1 p-8">
         <div className="max-w-2xl mx-auto space-y-8">
-          {/* City Selection */}
-          <div>
-            <Select value={city} onValueChange={setCity}>
-              <SelectTrigger className="w-full h-12 bg-white border border-gray-300 text-gray-500">
-                <SelectValue placeholder="Select City" />
-              </SelectTrigger>
-              <SelectContent className="bg-white border border-gray-200 shadow-lg z-50 max-h-60 overflow-y-auto">
-                <SelectItem value="Bangalore">Bangalore</SelectItem>
-                <SelectItem value="Mumbai">Mumbai</SelectItem>
-                <SelectItem value="Pune">Pune</SelectItem>
-                <SelectItem value="Chennai">Chennai</SelectItem>
-                <SelectItem value="Gurgaon">Gurgaon</SelectItem>
-                <SelectItem value="Hyderabad">Hyderabad</SelectItem>
-                <SelectItem value="Delhi">Delhi</SelectItem>
-                <SelectItem value="Faridabad">Faridabad</SelectItem>
-                <SelectItem value="Ghaziabad">Ghaziabad</SelectItem>
-                <SelectItem value="Noida">Noida</SelectItem>
-                <SelectItem value="Greater Noida">Greater Noida</SelectItem>
-                <SelectItem value="Kolkata">Kolkata</SelectItem>
-                <SelectItem value="Ahmedabad">Ahmedabad</SelectItem>
-                <SelectItem value="Jaipur">Jaipur</SelectItem>
-                <SelectItem value="Lucknow">Lucknow</SelectItem>
-                <SelectItem value="Kanpur">Kanpur</SelectItem>
-                <SelectItem value="Nagpur">Nagpur</SelectItem>
-                <SelectItem value="Indore">Indore</SelectItem>
-                <SelectItem value="Thane">Thane</SelectItem>
-                <SelectItem value="Bhopal">Bhopal</SelectItem>
-                <SelectItem value="Visakhapatnam">Visakhapatnam</SelectItem>
-                <SelectItem value="Pimpri-Chinchwad">Pimpri-Chinchwad</SelectItem>
-                <SelectItem value="Patna">Patna</SelectItem>
-                <SelectItem value="Vadodara">Vadodara</SelectItem>
-                <SelectItem value="Agra">Agra</SelectItem>
-                <SelectItem value="Ludhiana">Ludhiana</SelectItem>
-                <SelectItem value="Nashik">Nashik</SelectItem>
-                <SelectItem value="Meerut">Meerut</SelectItem>
-                <SelectItem value="Rajkot">Rajkot</SelectItem>
-              </SelectContent>
-            </Select>
+          {/* Personal Information Form */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Name */}
+            <div className="space-y-2">
+              <Label htmlFor="name" className="text-base font-medium">Name *</Label>
+              <Input
+                id="name"
+                placeholder="Enter your name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="w-full"
+              />
+            </div>
+
+            {/* Email */}
+            <div className="space-y-2">
+              <Label htmlFor="email" className="text-base font-medium">Email *</Label>
+              <Input
+                id="email"
+                type="email"
+                placeholder="Enter your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full"
+              />
+            </div>
+
+            {/* Mobile Number */}
+            <div className="space-y-2">
+              <Label htmlFor="mobile" className="text-base font-medium">Mobile Number *</Label>
+              <div className="flex">
+                <Select defaultValue="+91">
+                  <SelectTrigger className="w-24 rounded-r-none border-r-0">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="+91">+91</SelectItem>
+                  </SelectContent>
+                </Select>
+                <Input
+                  id="mobile"
+                  placeholder="Enter your mobile number"
+                  value={phoneNumber}
+                  onChange={(e) => setPhoneNumber(e.target.value)}
+                  className="flex-1 rounded-l-none"
+                />
+              </div>
+            </div>
+
+            {/* City */}
+            <div className="space-y-2">
+              <Label htmlFor="city" className="text-base font-medium">City *</Label>
+              <Select value={city} onValueChange={setCity}>
+                <SelectTrigger className="w-full bg-white">
+                  <SelectValue placeholder="Select city" />
+                </SelectTrigger>
+                <SelectContent className="bg-white border border-gray-200 shadow-lg z-50 max-h-60 overflow-y-auto">
+                  <SelectItem value="Bangalore">Bangalore</SelectItem>
+                  <SelectItem value="Mumbai">Mumbai</SelectItem>
+                  <SelectItem value="Pune">Pune</SelectItem>
+                  <SelectItem value="Chennai">Chennai</SelectItem>
+                  <SelectItem value="Gurgaon">Gurgaon</SelectItem>
+                  <SelectItem value="Hyderabad">Hyderabad</SelectItem>
+                  <SelectItem value="Delhi">Delhi</SelectItem>
+                  <SelectItem value="Faridabad">Faridabad</SelectItem>
+                  <SelectItem value="Ghaziabad">Ghaziabad</SelectItem>
+                  <SelectItem value="Noida">Noida</SelectItem>
+                  <SelectItem value="Greater Noida">Greater Noida</SelectItem>
+                  <SelectItem value="Kolkata">Kolkata</SelectItem>
+                  <SelectItem value="Ahmedabad">Ahmedabad</SelectItem>
+                  <SelectItem value="Jaipur">Jaipur</SelectItem>
+                  <SelectItem value="Lucknow">Lucknow</SelectItem>
+                  <SelectItem value="Kanpur">Kanpur</SelectItem>
+                  <SelectItem value="Nagpur">Nagpur</SelectItem>
+                  <SelectItem value="Indore">Indore</SelectItem>
+                  <SelectItem value="Thane">Thane</SelectItem>
+                  <SelectItem value="Bhopal">Bhopal</SelectItem>
+                  <SelectItem value="Visakhapatnam">Visakhapatnam</SelectItem>
+                  <SelectItem value="Pimpri-Chinchwad">Pimpri-Chinchwad</SelectItem>
+                  <SelectItem value="Patna">Patna</SelectItem>
+                  <SelectItem value="Vadodara">Vadodara</SelectItem>
+                  <SelectItem value="Agra">Agra</SelectItem>
+                  <SelectItem value="Ludhiana">Ludhiana</SelectItem>
+                  <SelectItem value="Nashik">Nashik</SelectItem>
+                  <SelectItem value="Meerut">Meerut</SelectItem>
+                  <SelectItem value="Rajkot">Rajkot</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
 
           {/* WhatsApp Updates */}
