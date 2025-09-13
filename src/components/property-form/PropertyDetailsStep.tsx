@@ -62,12 +62,21 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
   });
 
   const watchedPropertyType = form.watch("propertyType");
+  const watchedFloorNo = form.watch("floorNo");
   
   // Properties that show floor dropdown (for apartments, penthouses, etc.)
   const showFloorDropdown = ['Apartment', 'Penthouse', 'Gated Community Villa'].includes(watchedPropertyType);
   
   // Properties that show number of floors
   const showNumberOfFloors = ['Independent House', 'Villa', 'Duplex'].includes(watchedPropertyType);
+  
+  // Get minimum total floors based on selected floor
+  const getMinTotalFloors = () => {
+    if (typeof watchedFloorNo === 'number' && watchedFloorNo > 0) {
+      return watchedFloorNo;
+    }
+    return 1;
+  };
 
 
   const onSubmit = (data: PropertyDetailsFormData) => {
@@ -101,7 +110,7 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
                     <FormControl>
                       <Input
                         className="h-10"
-                        placeholder="optional"
+                        placeholder="Enter Property Name"
                         {...field}
                       />
                     </FormControl>
@@ -318,12 +327,16 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
                         <SelectContent>
                           {[...Array(50)].map((_, i) => {
                             const floor = i + 1;
-                            return (
-                              <SelectItem key={floor} value={floor.toString()}>
-                                {floor}
-                              </SelectItem>
-                            );
-                          })}
+                            const minFloors = getMinTotalFloors();
+                            if (floor >= minFloors) {
+                              return (
+                                <SelectItem key={floor} value={floor.toString()}>
+                                  {floor}
+                                </SelectItem>
+                              );
+                            }
+                            return null;
+                          }).filter(Boolean)}
                         </SelectContent>
                       </Select>
                       <FormMessage />

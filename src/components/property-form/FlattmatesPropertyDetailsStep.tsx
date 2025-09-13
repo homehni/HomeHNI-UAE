@@ -45,6 +45,14 @@ export function FlattmatesPropertyDetailsStep({
     ...initialData,
   });
 
+  // Get minimum total floors based on selected floor
+  const getMinTotalFloors = () => {
+    if (typeof formData.floorNo === 'number' && formData.floorNo > 0) {
+      return formData.floorNo;
+    }
+    return 1;
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (isFormValid()) {
@@ -159,12 +167,16 @@ export function FlattmatesPropertyDetailsStep({
                         <SelectItem value="0">Ground</SelectItem>
                         {[...Array(99)].map((_, i) => {
                           const floor = i + 1;
-                          return (
-                            <SelectItem key={floor} value={floor.toString()}>
-                              {floor}
-                            </SelectItem>
-                          );
-                        })}
+                          const minFloors = getMinTotalFloors();
+                          if (floor >= minFloors) {
+                            return (
+                              <SelectItem key={floor} value={floor.toString()}>
+                                {floor}
+                              </SelectItem>
+                            );
+                          }
+                          return null;
+                        }).filter(Boolean)}
                         <SelectItem value="99+">99+</SelectItem>
                       </SelectContent>
                     </Select>

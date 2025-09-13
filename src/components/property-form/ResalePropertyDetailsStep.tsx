@@ -56,6 +56,16 @@ export const ResalePropertyDetailsStep: React.FC<ResalePropertyDetailsStepProps>
 
   const [onMainRoad, setOnMainRoad] = useState(initialData.onMainRoad || false);
   const [cornerProperty, setCornerProperty] = useState(initialData.cornerProperty || false);
+  
+  const watchedFloorNo = form.watch("floorNo");
+  
+  // Get minimum total floors based on selected floor
+  const getMinTotalFloors = () => {
+    if (typeof watchedFloorNo === 'number' && watchedFloorNo > 0) {
+      return watchedFloorNo;
+    }
+    return 1;
+  };
 
   const onSubmit = (data: ResalePropertyDetailsFormData) => {
     onNext({
@@ -438,12 +448,16 @@ export const ResalePropertyDetailsStep: React.FC<ResalePropertyDetailsStepProps>
                       <SelectItem value="1">1</SelectItem>
                       {[...Array(50)].map((_, i) => {
                         const floor = i + 2;
-                        return (
-                          <SelectItem key={floor} value={floor.toString()}>
-                            {floor}
-                          </SelectItem>
-                        );
-                      })}
+                        const minFloors = getMinTotalFloors();
+                        if (floor >= minFloors) {
+                          return (
+                            <SelectItem key={floor} value={floor.toString()}>
+                              {floor}
+                            </SelectItem>
+                          );
+                        }
+                        return null;
+                      }).filter(Boolean)}
                       <SelectItem value="99+">50+</SelectItem>
                     </SelectContent>
                   </Select>
