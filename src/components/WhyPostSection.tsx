@@ -22,19 +22,9 @@ const WhyPostSection: React.FC = () => {
 
   const testimonials = [
     {
-      text: "HomeHNI made selling my property incredibly smooth and stress-free. Their team provided excellent guidance throughout the process and helped me find qualified buyers quickly. The platform's user-friendly interface and professional support made all the difference in achieving the best price for my property.",
-      name: "Rajesh Kumar",
-      city: "Mumbai"
-    },
-    {
-      text: "I was amazed by how quickly I found the perfect tenant through HomeHNI. The verification process gave me confidence, and the zero brokerage policy saved me thousands. Highly recommend to all property owners!",
-      name: "Priya Sharma",
+      text: "NoBroker.com is a free property ad posting site that I have tried before. I found that it aids me well and gets the right tenants for my properties. This is the second time I am trying them and my expectation was higher. Amazingly, the 1st person identified by them has become the tenant!",
+      name: "Janardhana",
       city: "Bangalore"
-    },
-    {
-      text: "As a first-time property seller, I was nervous about the process. HomeHNI's team guided me at every step and helped me get the best market price. The entire experience was transparent and hassle-free.",
-      name: "Amit Patel",
-      city: "Delhi"
     }
   ];
 

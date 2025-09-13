@@ -779,17 +779,28 @@ export const PostProperty: React.FC = () => {
     switch (currentStep) {
       case 'property-selection':
         return (
-          <div className="min-h-screen">
-            <div className="flex flex-col lg:flex-row min-h-screen">
-              <div className="hidden lg:block lg:w-[25%]">
+          <div className="min-h-screen bg-white">
+            {/* Header */}
+            <div className="border-b border-gray-200 px-8 py-4">
+              <div className="flex justify-between items-center">
+                <h1 className="text-2xl font-medium text-gray-800">
+                  Sell or Rent your Property For Free
+                </h1>
+                <div className="text-gray-600">
+                  Looking for a property? <span className="text-blue-500 cursor-pointer">Click Here</span>
+                </div>
+              </div>
+            </div>
+            
+            {/* Main Content */}
+            <div className="flex min-h-[calc(100vh-80px)]">
+              <div className="w-[35%] bg-gray-50 border-r border-gray-200">
                 <WhyPostSection />
               </div>
-              <div className="flex-1 lg:w-[75%]">
+              <div className="flex-1 w-[65%]">
                 <PropertySelectionStep onNext={handlePropertySelectionNext} />
               </div>
             </div>
-            <HowItWorksSection />
-            <PropertyFAQSection />
           </div>
         );
       case 'rental-form':
