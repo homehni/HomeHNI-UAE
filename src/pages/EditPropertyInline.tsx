@@ -1369,7 +1369,9 @@ export const EditPropertyInline: React.FC = () => {
                       <p className="text-xs text-red-500 animate-pulse font-bold">
                         Type the name of the apartment/ the area of property/anything that could help us 😊
                       </p>
-                      {(editedProperty.city === 'Unknown' || editedProperty.state === 'Unknown' || editedProperty.pincode === '000000') && (
+                      {((!editedProperty.city || editedProperty.city === 'Unknown') && 
+                        (!editedProperty.state || editedProperty.state === 'Unknown') && 
+                        (!editedProperty.pincode || editedProperty.pincode === '000000')) && (
                         <div className="mt-2 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
                           <p className="text-sm text-yellow-800">
                             <strong>Location Data Missing:</strong> Please re-select your location from the dropdown suggestions to automatically extract city, state, and pincode information.
