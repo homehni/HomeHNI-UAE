@@ -8,7 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Chrome, Home, UserPlus, LogIn, Eye, EyeOff } from 'lucide-react';
+import { Chrome, Home, UserPlus, LogIn, Eye, EyeOff, X } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { RoleSelectionModal } from '@/components/RoleSelectionModal';
 import Header from '@/components/Header';
@@ -147,24 +147,55 @@ export const Auth: React.FC = () => {
     }
   };
 
+  const handleCloseModal = () => {
+    navigate('/');
+  };
+
   return (
-    <div className="min-h-screen">
-      {/* Marquee at the very top */}
-      <Marquee />
-      {/* Header overlapping with content */}
-      <Header />
-      {/* Auth content with proper spacing */}
-      <div className="pt-20 min-h-screen relative overflow-hidden">
-        {/* Enhanced background with overlapping gradients */}
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100"></div>
-        <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-red-50/30"></div>
+    <>
+      {/* Full page background with the actual website content */}
+      <div className="min-h-screen">
+        <Marquee />
+        <Header />
+        <div className="pt-20 min-h-screen relative overflow-hidden">
+          {/* Enhanced background with overlapping gradients */}
+          <div className="absolute inset-0 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100"></div>
+          <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-red-50/30"></div>
+          
+          {/* Decorative elements */}
+          <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-brand-red/5 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl"></div>
+          
+          {/* Placeholder content to show the background is there */}
+          <div className="relative p-8">
+            <div className="text-center">
+              <h1 className="text-4xl font-bold text-gray-900 mb-4">Welcome to Home HNI</h1>
+              <p className="text-lg text-gray-600">Your premium property partner</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Modal Overlay */}
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+        {/* Backdrop - Dark overlay */}
+        <div 
+          className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+          onClick={handleCloseModal}
+        ></div>
         
-        {/* Decorative elements */}
-        <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-brand-red/5 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl"></div>
-        
-        <div className="relative flex items-center justify-center p-4 min-h-screen">
-          <Card className="w-full max-w-md backdrop-blur-sm bg-white/95 border-2 border-brand-red/30 shadow-2xl shadow-brand-red/10 rounded-2xl animate-fade-in hover:border-brand-red/50 transition-colors duration-300">
+        {/* Modal Content */}
+        <div className="relative w-full max-w-md">
+          <Card className="backdrop-blur-sm bg-white/95 border-2 border-brand-red/30 shadow-2xl shadow-brand-red/10 rounded-2xl animate-fade-in hover:border-brand-red/50 transition-colors duration-300">
+            {/* Close Button */}
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleCloseModal}
+              className="absolute right-4 top-4 z-10 h-8 w-8 p-0 hover:bg-gray-100 rounded-full"
+            >
+              <X className="h-4 w-4 text-gray-500" />
+            </Button>
             <CardHeader className="text-center pb-3 pt-4">
               <div className="flex items-center justify-center mb-3">
                 <img 
@@ -406,6 +437,6 @@ export const Auth: React.FC = () => {
           navigate(redirectPath ? redirectPath : '/', { replace: true });
         }} 
       />
-    </div>
+    </>
   );
 };
