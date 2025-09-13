@@ -1,6 +1,4 @@
 import React from 'react';
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { Plus } from 'lucide-react';
 
 const PropertyFAQSection: React.FC = () => {
   const faqData = [
@@ -42,27 +40,18 @@ const PropertyFAQSection: React.FC = () => {
           </div>
         </div>
 
-        {/* FAQ Accordion */}
-        <div className="border-t border-gray-200">
-          <Accordion type="single" collapsible className="w-full">
-            {faqData.map((faq, index) => (
-              <AccordionItem key={index} value={`item-${index}`} className="border-b border-gray-200">
-                <AccordionTrigger className="text-left py-6 hover:no-underline group">
-                  <div className="flex items-center justify-between w-full">
-                    <span className="text-lg font-medium text-teal-600 pr-4 group-hover:text-teal-700 transition-colors">
-                      {faq.question}
-                    </span>
-                    <Plus className="h-5 w-5 text-gray-400 group-hover:text-teal-600 transition-all duration-200 group-data-[state=open]:rotate-45" />
-                  </div>
-                </AccordionTrigger>
-                <AccordionContent className="pb-6 pt-0">
-                  <p className="text-gray-600 leading-relaxed">
-                    {faq.answer}
-                  </p>
-                </AccordionContent>
-              </AccordionItem>
-            ))}
-          </Accordion>
+        {/* FAQ List */}
+        <div className="space-y-8">
+          {faqData.map((faq, index) => (
+            <div key={index} className="border-b border-gray-200 pb-8">
+              <h3 className="text-lg font-medium text-red-600 mb-4">
+                {faq.question}
+              </h3>
+              <p className="text-gray-600 leading-relaxed">
+                {faq.answer}
+              </p>
+            </div>
+          ))}
         </div>
       </div>
     </div>
