@@ -397,6 +397,17 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
         </Form>
       </div>
 
+      {/* Sticky Navigation Buttons */}
+      <div className="flex-shrink-0 bg-white border-t border-gray-200 p-4">
+        <div className="flex justify-between">
+          <Button type="button" variant="outline" onClick={onBack} className="h-10 px-6">
+            Back
+          </Button>
+          <Button type="button" onClick={form.handleSubmit(onSubmit)} className="h-10 px-6">
+            Save & Continue
+          </Button>
+        </div>
+      </div>
     </div>
   );
 };

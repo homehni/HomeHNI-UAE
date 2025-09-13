@@ -309,6 +309,15 @@ export const ScheduleStep: React.FC<ScheduleStepProps> = ({
             </div>
           </div>
 
+          {/* Action Buttons */}
+          <div className="flex justify-between pt-8">
+            <Button type="button" variant="outline" onClick={onBack} className="px-8">
+              Back
+            </Button>
+            <Button type="submit" className="px-8 bg-destructive hover:bg-destructive/90">
+              Finish Posting
+            </Button>
+          </div>
         </form>
       </Form>
     </div>

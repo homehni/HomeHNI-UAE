@@ -356,6 +356,20 @@ export const CommercialPropertyDetailsStep: React.FC<CommercialPropertyDetailsSt
               </div>
             </div>
 
+            {/* Navigation Buttons */}
+            <div className="flex justify-between pt-6">
+              <Button 
+                type="button" 
+                variant="outline" 
+                onClick={onBack}
+                disabled={true}
+              >
+                Back
+              </Button>
+              <Button type="submit">
+                Save & Continue
+              </Button>
+            </div>
           </form>
         </Form>
       </div>

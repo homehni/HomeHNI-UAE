@@ -370,6 +370,20 @@ export const SaleDetailsStep: React.FC<SaleDetailsStepProps> = ({
           </Label>
         </div>
 
+        {/* Navigation Buttons */}
+        <div className="flex justify-between pt-6">
+          <Button type="button" variant="outline" onClick={onBack} className="h-12 px-8">
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Back
+          </Button>
+          <Button 
+            type="submit" 
+            className="h-12 px-8"
+          >
+            Save & Continue
+            <ArrowRight className="ml-2 h-4 w-4" />
+          </Button>
+        </div>
       </form>
     </div>
   );

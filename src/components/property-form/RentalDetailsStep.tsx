@@ -443,6 +443,14 @@ export const RentalDetailsStep: React.FC<RentalDetailsStepProps> = ({
             />
           </div>
 
+          <div className="flex justify-between pt-6">
+            <Button type="button" variant="outline" onClick={onBack} className="px-8 bg-gray-500 text-white hover:bg-gray-600">
+              Back
+            </Button>
+            <Button type="submit" className="px-8 bg-red-500 hover:bg-red-600 text-white">
+              Save & Continue
+            </Button>
+          </div>
         </form>
       </Form>
     </div>

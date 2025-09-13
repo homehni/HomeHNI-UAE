@@ -807,6 +807,14 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
             </div>
           </div>
 
+          <div className="flex justify-between pt-6">
+            <Button type="button" variant="outline" onClick={onBack} className="bg-muted text-muted-foreground">
+              Back
+            </Button>
+            <Button type="submit" className="bg-primary text-primary-foreground">
+              Save & Continue
+            </Button>
+          </div>
         </form>
       </Form>
     </div>

@@ -474,6 +474,13 @@ export const ResalePropertyDetailsStep: React.FC<ResalePropertyDetailsStepProps>
             />
           </div>
 
+          {/* Navigation Buttons */}
+          <div className="flex justify-end pt-6">
+            <Button type="submit" className="h-12 px-8">
+              Next Step
+              <ArrowRight className="h-4 w-4 ml-2" />
+            </Button>
+          </div>
         </form>
       </Form>
     </div>
