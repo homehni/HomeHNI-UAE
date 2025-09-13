@@ -122,6 +122,11 @@ export const LandPlotSaleDetailsStep: React.FC<LandPlotSaleDetailsStepProps> = (
                         setValue('availableFrom', date!);
                         setIsDatePickerOpen(false);
                       }}
+                      disabled={(date) => {
+                        const today = new Date();
+                        today.setHours(0, 0, 0, 0);
+                        return date < today;
+                      }}
                       initialFocus
                       className="pointer-events-auto"
                     />

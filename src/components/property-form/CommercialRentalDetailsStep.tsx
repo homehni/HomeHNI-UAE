@@ -368,9 +368,11 @@ export const CommercialRentalDetailsStep: React.FC<CommercialRentalDetailsStepPr
                               setOpen(false);
                             }
                           }}
-                          disabled={(date) =>
-                            date < new Date("1900-01-01")
-                          }
+                          disabled={(date) => {
+                            const today = new Date();
+                            today.setHours(0, 0, 0, 0);
+                            return date < today;
+                          }}
                           initialFocus
                         />
                       </PopoverContent>
