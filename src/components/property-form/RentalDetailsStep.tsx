@@ -140,6 +140,10 @@ export const RentalDetailsStep: React.FC<RentalDetailsStepProps> = ({
                           className="h-12 pl-8 pr-20"
                           type="number"
                           min="0"
+                          inputMode="numeric"
+                          pattern="[0-9]*"
+                          onKeyDown={(e) => { if (['-','+','e','E','.'].includes(e.key)) e.preventDefault(); }}
+                          onPaste={(e) => { const text = e.clipboardData.getData('text'); const digits = text.replace(/[^0-9]/g, ''); if (digits !== text) { e.preventDefault(); field.onChange(digits ? Math.max(0, Number(digits)) : undefined); } }}
                           value={field.value || ''}
                           onChange={(e) => field.onChange(e.target.value ? Math.max(0, Number(e.target.value)) : undefined)}
                         />
@@ -183,6 +187,10 @@ export const RentalDetailsStep: React.FC<RentalDetailsStepProps> = ({
                           className="h-12 pl-8"
                           type="number"
                           min="0"
+                          inputMode="numeric"
+                          pattern="[0-9]*"
+                          onKeyDown={(e) => { if (['-','+','e','E','.'].includes(e.key)) e.preventDefault(); }}
+                          onPaste={(e) => { const text = e.clipboardData.getData('text'); const digits = text.replace(/[^0-9]/g, ''); if (digits !== text) { e.preventDefault(); field.onChange(digits ? Math.max(0, Number(digits)) : undefined); } }}
                           value={field.value || ''}
                           onChange={(e) => field.onChange(e.target.value ? Math.max(0, Number(e.target.value)) : undefined)}
                         />
@@ -209,6 +217,10 @@ export const RentalDetailsStep: React.FC<RentalDetailsStepProps> = ({
                           className="h-12 pl-8"
                           type="number"
                           min="0"
+                          inputMode="numeric"
+                          pattern="[0-9]*"
+                          onKeyDown={(e) => { if (['-','+','e','E','.'].includes(e.key)) e.preventDefault(); }}
+                          onPaste={(e) => { const text = e.clipboardData.getData('text'); const digits = text.replace(/[^0-9]/g, ''); if (digits !== text) { e.preventDefault(); field.onChange(digits ? Math.max(0, Number(digits)) : undefined); } }}
                           value={field.value || ''}
                           onChange={(e) => field.onChange(e.target.value ? Math.max(0, Number(e.target.value)) : undefined)}
                         />
@@ -279,6 +291,10 @@ export const RentalDetailsStep: React.FC<RentalDetailsStepProps> = ({
                           className="h-12 pl-8 pr-20"
                           type="number"
                           min="0"
+                          inputMode="numeric"
+                          pattern="[0-9]*"
+                          onKeyDown={(e) => { if (['-','+','e','E','.'].includes(e.key)) e.preventDefault(); }}
+                          onPaste={(e) => { const text = e.clipboardData.getData('text'); const digits = text.replace(/[^0-9]/g, ''); if (digits !== text) { e.preventDefault(); field.onChange(digits ? Math.max(0, Number(digits)) : undefined); } }}
                           value={field.value || ''}
                           onChange={(e) => field.onChange(e.target.value ? Math.max(0, Number(e.target.value)) : undefined)}
                         />
