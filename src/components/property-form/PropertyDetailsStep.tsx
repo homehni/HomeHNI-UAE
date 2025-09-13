@@ -282,7 +282,12 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
                             field.onChange(parseInt(value));
                           }
                         }}
-                        value={field.value === undefined ? undefined : field.value.toString()}
+                        value={
+                          field.value === undefined ? undefined : 
+                          field.value === 0 ? 'ground' :
+                          field.value === 'basement' ? 'basement' :
+                          field.value.toString()
+                        }
                       >
                         <FormControl>
                           <SelectTrigger className="h-10">

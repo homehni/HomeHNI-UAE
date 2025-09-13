@@ -394,14 +394,18 @@ export const ResalePropertyDetailsStep: React.FC<ResalePropertyDetailsStepProps>
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-sm font-medium">Floor</FormLabel>
-                  <Select
-                    onValueChange={(value) =>
-                      value === 'lower' || value === 'upper' || value === '99+'
-                        ? field.onChange(value)
-                        : field.onChange(parseInt(value))
-                    }
-                    defaultValue={field.value?.toString()}
-                  >
+                    <Select
+                      onValueChange={(value) =>
+                        value === 'lower' || value === 'upper' || value === '99+'
+                          ? field.onChange(value)
+                          : field.onChange(parseInt(value))
+                      }
+                      value={
+                        field.value === undefined ? undefined :
+                        field.value === 0 ? '0' :
+                        field.value.toString()
+                      }
+                    >
                     <FormControl>
                       <SelectTrigger className="h-12">
                         <SelectValue placeholder="Select Floor" />
@@ -433,12 +437,15 @@ export const ResalePropertyDetailsStep: React.FC<ResalePropertyDetailsStepProps>
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-sm font-medium">Total Floor</FormLabel>
-                  <Select
-                    onValueChange={(value) =>
-                      value === '99+' ? field.onChange(value) : field.onChange(parseInt(value))
-                    }
-                    defaultValue={field.value?.toString()}
-                  >
+                    <Select
+                      onValueChange={(value) =>
+                        value === '99+' ? field.onChange(value) : field.onChange(parseInt(value))
+                      }
+                      value={
+                        field.value === undefined ? undefined :
+                        field.value.toString()
+                      }
+                    >
                     <FormControl>
                       <SelectTrigger className="h-12">
                         <SelectValue placeholder="Select Total Floors" />

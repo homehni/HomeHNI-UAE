@@ -119,7 +119,11 @@ export function FlattmatesPropertyDetailsStep({
                   <div className="space-y-2">
                     <Label htmlFor="floorNo">Floor</Label>
                     <Select
-                      value={formData.floorNo?.toString()}
+                      value={
+                        formData.floorNo === undefined ? undefined :
+                        formData.floorNo === 0 ? '0' :
+                        formData.floorNo.toString()
+                      }
                       onValueChange={(value) => {
                         if (value === 'lower' || value === 'upper' || value === '99+') {
                           setFormData({ ...formData, floorNo: value as any });
@@ -151,7 +155,10 @@ export function FlattmatesPropertyDetailsStep({
                   <div className="space-y-2">
                     <Label htmlFor="totalFloors">Total Floor</Label>
                     <Select
-                      value={formData.totalFloors?.toString()}
+                      value={
+                        formData.totalFloors === undefined ? undefined :
+                        formData.totalFloors.toString()
+                      }
                       onValueChange={(value) => {
                         if (value === '99+') {
                           setFormData({ ...formData, totalFloors: value as any });
