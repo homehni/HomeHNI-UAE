@@ -66,15 +66,15 @@ export const PropertySelectionStep: React.FC<PropertySelectionStepProps> = ({
   const isFormValid = selectedListingType && phoneNumber && name && email && city;
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 flex items-center">
-      <div className="max-w-2xl mx-auto px-4 w-full">
-
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 space-y-6">
-          {/* Header */}
-          <div className="text-center mb-6">
-            <h1 className="text-xl font-semibold text-red-600 mb-2">Start Posting Your Property For FREE</h1>
-            <h2 className="text-lg font-medium text-gray-800">Personal Information</h2>
-          </div>
+    <div className="min-h-screen bg-white flex flex-col">
+      <div className="flex-1 p-8">
+        <div className="max-w-2xl mx-auto">
+          <div className="space-y-6">
+            {/* Header */}
+            <div className="text-center mb-8">
+              <h1 className="text-2xl font-semibold text-red-600 mb-2">Start Posting Your Property For FREE</h1>
+              <h2 className="text-lg font-medium text-gray-800">Personal Information</h2>
+            </div>
 
           {/* Personal Information Form */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -241,12 +241,13 @@ export const PropertySelectionStep: React.FC<PropertySelectionStepProps> = ({
             </Button>
           </div>
 
-          {/* Terms and Conditions */}
-          <div className="p-4 bg-transparent">
-            <p className="text-sm text-gray-500 text-left leading-relaxed">
-              By clicking "Start Posting Your Ad" you acknowledge that you have agreed to the{' '}
-              <span className="text-red-600 underline cursor-pointer">Terms & Conditions</span>.
-            </p>
+            {/* Terms and Conditions */}
+            <div className="p-4 bg-transparent">
+              <p className="text-sm text-gray-500 text-left leading-relaxed">
+                By clicking "Start Posting Your Ad" you acknowledge that you have agreed to the{' '}
+                <span className="text-red-600 underline cursor-pointer">Terms & Conditions</span>.
+              </p>
+            </div>
           </div>
         </div>
       </div>
