@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { LocationDetails } from '@/types/property';
-import { ArrowLeft, ArrowRight, MapPin } from 'lucide-react';
+import { MapPin } from 'lucide-react';
 
 const pgHostelLocationSchema = z.object({
   locality: z.string().optional(),
@@ -248,13 +248,11 @@ export function PgHostelLocalityDetailsStep({
 
           {/* Navigation Buttons */}
           <div className="flex justify-between pt-6">
-            <Button type="button" variant="outline" onClick={onBack} className="h-12 px-8">
-              <ArrowLeft className="h-4 w-4 mr-2" />
+            <Button type="button" variant="outline" onClick={onBack} className="h-10 md:h-12 px-4 md:px-8">
               Back
             </Button>
-            <Button type="submit" className="h-12 px-8">
+            <Button type="submit" className="h-10 md:h-12 px-4 md:px-8">
               Save & Continue
-              <ArrowRight className="h-4 w-4 ml-2" />
             </Button>
           </div>
         </form>
