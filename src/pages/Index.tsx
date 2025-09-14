@@ -61,16 +61,16 @@ const Index = () => {
           <DirectorySection />
         </div>
         
-        <Suspense fallback={<FeaturedPropertiesSkeleton />}>
-          <LazyFeaturedProperties />
-        </Suspense>
-        
         <Suspense fallback={<RealEstateSliderSkeleton />}>
           <LazyRealEstateSlider />
         </Suspense>
         
         <Suspense fallback={<HomeServicesSkeleton />}>
           <LazyHomeServices />
+        </Suspense>
+        
+        <Suspense fallback={<FeaturedPropertiesSkeleton />}>
+          <LazyFeaturedProperties />
         </Suspense>
         
         <Services />
