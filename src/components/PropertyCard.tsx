@@ -265,7 +265,7 @@ const PropertyCard = ({
         )}
       </div>
       
-      <CardContent className="p-3">
+      <CardContent className="p-3 font-poppins">
         <h3 className="font-semibold text-xs mb-1 h-4 truncate text-gray-900">{title}</h3>
         
         <div className="flex items-center text-gray-500 mb-2">
