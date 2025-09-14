@@ -28,7 +28,7 @@ export const PropertyHeader: React.FC<PropertyHeaderProps> = ({ property }) => {
   const area = property.super_area || property.carpet_area || 1600;
 
   return (
-    <div className="bg-white border-b">
+    <div className="bg-white border-b pt-24">
       <div className="mx-auto max-w-7xl px-4 py-4">
         {/* Breadcrumb */}
         <nav className="text-sm text-gray-500 mb-4 flex items-center">
