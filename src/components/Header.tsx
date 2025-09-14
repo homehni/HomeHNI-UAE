@@ -452,8 +452,8 @@ const Header = () => {
                  <span className="ml-1 bg-green-500 text-white text-[10px] px-1.5 py-0.5 rounded-full font-medium">Free</span>
                </Button>
 
-               {/* Post Requirement Button */}
-               <Button variant="outline" size="sm" onClick={() => navigate('/post-service')} className={`font-medium px-3 py-1.5 text-sm transition-all duration-500 ${isScrolled ? 'bg-white text-brand-red border-gray-300 hover:bg-gray-50' : 'bg-white text-brand-red border-white/50 hover:bg-white/90'}`}>
+               {/* Post Requirement Button - Hidden on tablet and mobile */}
+               <Button variant="outline" size="sm" onClick={() => navigate('/post-service')} className={`hidden lg:flex font-medium px-3 py-1.5 text-sm transition-all duration-500 ${isScrolled ? 'bg-white text-brand-red border-gray-300 hover:bg-gray-50' : 'bg-white text-brand-red border-white/50 hover:bg-white/90'}`}>
                  <span>Post Requirement</span>
                </Button>
 
