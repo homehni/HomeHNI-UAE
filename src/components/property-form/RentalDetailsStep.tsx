@@ -447,7 +447,7 @@ export const RentalDetailsStep: React.FC<RentalDetailsStepProps> = ({
             <Button type="button" variant="outline" onClick={onBack} className="px-8 bg-gray-500 text-white hover:bg-gray-600">
               Back
             </Button>
-            <Button type="submit" className="px-8 bg-red-500 hover:bg-red-600 text-white">
+            <Button type="submit" className="pl-8 pr-4 bg-red-500 hover:bg-red-600 text-white">
               Save & Continue
             </Button>
           </div>
