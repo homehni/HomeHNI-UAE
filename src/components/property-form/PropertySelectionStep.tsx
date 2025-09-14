@@ -161,12 +161,12 @@ export const PropertySelectionStep: React.FC<PropertySelectionStepProps> = ({
           </div>
 
           {/* WhatsApp Updates */}
-          <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-            <div className="flex items-center gap-2">
-              <span className="text-gray-700 text-sm lg:text-base">Get updates on</span>
-              <MessageCircle className="w-5 h-5 text-green-600" />
-              <span className="text-gray-700 font-medium text-sm lg:text-base">WhatsApp</span>
+          <div className="flex items-center justify-center gap-3 p-4 bg-gray-50 rounded-lg">
+            <span className="text-gray-700 text-sm lg:text-base">Get updates on</span>
+            <div className="w-5 h-5 rounded-full bg-green-500 flex items-center justify-center">
+              <MessageCircle className="w-3 h-3 text-white" />
             </div>
+            <span className="text-gray-700 font-medium text-sm lg:text-base">WhatsApp</span>
             <Switch
               checked={whatsappUpdates}
               onCheckedChange={setWhatsappUpdates}
