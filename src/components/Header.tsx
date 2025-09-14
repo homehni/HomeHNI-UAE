@@ -187,7 +187,7 @@ const Header = () => {
       <header className={`fixed top-8 left-0 right-0 z-50 transition-all duration-500 ${isScrolled ? 'bg-white/95 backdrop-blur-sm shadow-md' : 'bg-gradient-to-r from-red-800 to-red-700'}`}>
         <div className="w-full px-2 sm:px-4 lg:px-6 xl:px-8 pt-[6px]">
           <div className="flex justify-between items-center h-14">
-            {/* Left section - Logo, Post Property Button, and Location (Mobile and Desktop) */}
+            {/* Left section - Logo, Post Property Button, Avatar, and Location (Mobile and Desktop) */}
             <div className="flex items-center space-x-2 sm:space-x-4 flex-1">
               {/* Home HNI Logo - Show different variant based on scroll state */}
               <div onClick={handleLogoClick} className="cursor-pointer flex-shrink-0">
@@ -199,6 +199,97 @@ const Header = () => {
                 <span>Post property</span>
                 <span className="ml-0.5 sm:ml-1 bg-green-500 text-white text-[8px] sm:text-[10px] px-1 sm:px-1.5 py-0.5 rounded-full font-medium">Free</span>
               </Button>
+
+              {/* Profile Avatar - Next to Post Property Button */}
+              {user && <DropdownMenu onOpenChange={setIsUserDropdownOpen}>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className={`flex items-center space-x-1 p-1 sm:p-2 transition-colors duration-500 ${isScrolled ? 'text-gray-800 hover:bg-gray-100' : 'text-white hover:bg-white/10'}`}>
+                    <Avatar className="h-6 w-6 sm:h-8 sm:w-8">
+                      <AvatarImage src={user.user_metadata?.avatar_url} alt={user.user_metadata?.full_name || user.email} />
+                      <AvatarFallback className="bg-brand-red text-white text-xs sm:text-sm">
+                        {user.user_metadata?.full_name?.charAt(0) || user.email?.charAt(0) || 'U'}
+                      </AvatarFallback>
+                    </Avatar>
+                    <ChevronDown className={`h-3 w-3 sm:h-4 sm:w-4 transition-transform duration-200 ${isUserDropdownOpen ? 'rotate-180' : ''} ${isScrolled ? 'text-gray-800' : 'text-white'} hidden sm:block`} />
+                  </Button>
+                </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-56 bg-white border border-gray-200 shadow-lg">
+                    <DropdownMenuItem onClick={() => navigate('/dashboard?tab=profile')}>
+                      <span>Profile</span>
+                    </DropdownMenuItem>
+                    
+                    {/* Residential Plan with custom dropdown */}
+                    <DropdownMenuItem 
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        setIsResidentialPlanOpen(!isResidentialPlanOpen);
+                      }}
+                      onSelect={(e) => e.preventDefault()}
+                    >
+                      <div className="flex items-center justify-between w-full">
+                        <span>Residential Plan</span>
+                        <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${isResidentialPlanOpen ? 'rotate-180' : ''}`} />
+                      </div>
+                    </DropdownMenuItem>
+                    
+                    {isResidentialPlanOpen && (
+                      <div className="pl-4 space-y-0">
+                        <DropdownMenuItem onClick={() => navigate('/plans?tab=buyer')}>
+                          <span>Buyer Plan</span>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => navigate('/plans?tab=seller')}>
+                          <span>Seller Plan</span>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => navigate('/plans?tab=owner')}>
+                          <span>Owner Plan</span>
+                        </DropdownMenuItem>
+                      </div>
+                    )}
+
+                    {/* Commercial Plan with custom dropdown */}
+                    <DropdownMenuItem 
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        setIsCommercialPlanOpen(!isCommercialPlanOpen);
+                      }}
+                      onSelect={(e) => e.preventDefault()}
+                    >
+                      <div className="flex items-center justify-between w-full">
+                        <span>Commercial Plan</span>
+                        <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${isCommercialPlanOpen ? 'rotate-180' : ''}`} />
+                      </div>
+                    </DropdownMenuItem>
+                    
+                    {isCommercialPlanOpen && (
+                      <div className="pl-4 space-y-0">
+                        <DropdownMenuItem onClick={() => navigate('/plans?tab=commercial-buyer')}>
+                          <span>Commercial Buyer Plan</span>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => navigate('/plans?tab=commercial-seller')}>
+                          <span>Commercial Seller Plan</span>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => navigate('/plans?tab=commercial-owner')}>
+                          <span>Commercial Owner Plan</span>
+                        </DropdownMenuItem>
+                      </div>
+                    )}
+                   <DropdownMenuItem onClick={() => navigate('/dashboard')}>
+                     <span>Dashboard</span>
+                   </DropdownMenuItem>
+                   <DropdownMenuItem onClick={() => navigate('/my-listings')}>
+                     <span>My Listings</span>
+                   </DropdownMenuItem>
+                   <DropdownMenuItem onClick={() => navigate('/my-interests')}>
+                     <span>My Interest</span>
+                   </DropdownMenuItem>
+                   <DropdownMenuSeparator />
+                   <DropdownMenuItem onClick={handleSignOut}>
+                     <span>Sign Out</span>
+                   </DropdownMenuItem>
+                 </DropdownMenuContent>
+               </DropdownMenu>}
 
               {/* Location Selector - Commented out */}
               {false && (
@@ -478,97 +569,6 @@ const Header = () => {
                    Sign Up
                  </Button>
                </div>}
-
-               {/* Profile Avatar - Only visible for authenticated users */}
-               {user && <DropdownMenu onOpenChange={setIsUserDropdownOpen}>
-                 <DropdownMenuTrigger asChild>
-                   <Button variant="ghost" className={`flex items-center space-x-2 p-2 transition-colors duration-500 ${isScrolled ? 'text-gray-800 hover:bg-gray-100' : 'text-white hover:bg-white/10'}`}>
-                     <Avatar className="h-8 w-8">
-                       <AvatarImage src={user.user_metadata?.avatar_url} alt={user.user_metadata?.full_name || user.email} />
-                       <AvatarFallback className="bg-brand-red text-white">
-                         {user.user_metadata?.full_name?.charAt(0) || user.email?.charAt(0) || 'U'}
-                       </AvatarFallback>
-                     </Avatar>
-                     <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${isUserDropdownOpen ? 'rotate-180' : ''} ${isScrolled ? 'text-gray-800' : 'text-white'}`} />
-                   </Button>
-                 </DropdownMenuTrigger>
-                     <DropdownMenuContent align="end" className="w-56 bg-white border border-gray-200 shadow-lg">
-                       <DropdownMenuItem onClick={() => navigate('/dashboard?tab=profile')}>
-                         <span>Profile</span>
-                       </DropdownMenuItem>
-                       
-                       {/* Residential Plan with custom dropdown */}
-                       <DropdownMenuItem 
-                         onClick={(e) => {
-                           e.preventDefault();
-                           e.stopPropagation();
-                           setIsResidentialPlanOpen(!isResidentialPlanOpen);
-                         }}
-                         onSelect={(e) => e.preventDefault()}
-                       >
-                         <div className="flex items-center justify-between w-full">
-                           <span>Residential Plan</span>
-                           <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${isResidentialPlanOpen ? 'rotate-180' : ''}`} />
-                         </div>
-                       </DropdownMenuItem>
-                       
-                       {isResidentialPlanOpen && (
-                         <div className="pl-4 space-y-0">
-                           <DropdownMenuItem onClick={() => navigate('/plans?tab=buyer')}>
-                             <span>Buyer Plan</span>
-                           </DropdownMenuItem>
-                           <DropdownMenuItem onClick={() => navigate('/plans?tab=seller')}>
-                             <span>Seller Plan</span>
-                           </DropdownMenuItem>
-                           <DropdownMenuItem onClick={() => navigate('/plans?tab=owner')}>
-                             <span>Owner Plan</span>
-                           </DropdownMenuItem>
-                         </div>
-                       )}
-
-                       {/* Commercial Plan with custom dropdown */}
-                       <DropdownMenuItem 
-                         onClick={(e) => {
-                           e.preventDefault();
-                           e.stopPropagation();
-                           setIsCommercialPlanOpen(!isCommercialPlanOpen);
-                         }}
-                         onSelect={(e) => e.preventDefault()}
-                       >
-                         <div className="flex items-center justify-between w-full">
-                           <span>Commercial Plan</span>
-                           <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${isCommercialPlanOpen ? 'rotate-180' : ''}`} />
-                         </div>
-                       </DropdownMenuItem>
-                       
-                       {isCommercialPlanOpen && (
-                         <div className="pl-4 space-y-0">
-                           <DropdownMenuItem onClick={() => navigate('/plans?tab=commercial-buyer')}>
-                             <span>Commercial Buyer Plan</span>
-                           </DropdownMenuItem>
-                           <DropdownMenuItem onClick={() => navigate('/plans?tab=commercial-seller')}>
-                             <span>Commercial Seller Plan</span>
-                           </DropdownMenuItem>
-                           <DropdownMenuItem onClick={() => navigate('/plans?tab=commercial-owner')}>
-                             <span>Commercial Owner Plan</span>
-                           </DropdownMenuItem>
-                         </div>
-                       )}
-                      <DropdownMenuItem onClick={() => navigate('/dashboard')}>
-                        <span>Dashboard</span>
-                      </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => navigate('/my-listings')}>
-                        <span>My Listings</span>
-                      </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => navigate('/my-interests')}>
-                        <span>My Interest</span>
-                      </DropdownMenuItem>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem onClick={handleSignOut}>
-                        <span>Sign Out</span>
-                      </DropdownMenuItem>
-                   </DropdownMenuContent>
-                 </DropdownMenu>}
 
                {/* Sidebar toggle button - Show everywhere */}
                {<Button variant="ghost" size="sm" className={`flex items-center space-x-2 p-2 transition-colors duration-500 ${isScrolled ? 'text-gray-800 hover:bg-gray-100' : 'text-white hover:bg-white/10'}`} onClick={() => setIsSidebarOpen(true)}>
