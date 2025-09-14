@@ -815,8 +815,10 @@ export const PostProperty: React.FC = () => {
             <div className="lg:hidden px-4">
               <WhyPostSection />
             </div>
-            <HowItWorksSection />
-            <PropertyFAQSection />
+            <div className="bg-gray-700">
+              <HowItWorksSection />
+              <PropertyFAQSection />
+            </div>
           </div>
         );
       case 'rental-form':
