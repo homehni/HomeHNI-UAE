@@ -18,6 +18,12 @@ import { ServicesStrip } from '@/components/property-details/ServicesStrip';
 import { AmenitiesCard } from '@/components/property-details/AmenitiesCard';
 import { NeighborhoodCard } from '@/components/property-details/NeighborhoodCard';
 import { MobileStickyCTA } from '@/components/property-details/MobileStickyCTA';
+import { PropertyHeader } from '@/components/property-details/PropertyHeader';
+import { PropertyImageGallery } from '@/components/property-details/PropertyImageGallery';
+import { PropertyInfoCards } from '@/components/property-details/PropertyInfoCards';
+import { VisitScheduleCard } from '@/components/property-details/VisitScheduleCard';
+import { PropertyActions } from '@/components/property-details/PropertyActions';
+import { ReportSection } from '@/components/property-details/ReportSection';
 import { supabase } from '@/integrations/supabase/client';
 interface Property {
   id: string;
@@ -371,40 +377,59 @@ const PropertyDetails: React.FC = () => {
           </div>
         )}
         
-        {/* Hero Section */}
-        <section className="bg-gray-50 border-b py-6">
-          <PropertyHero
-            property={mergedProperty as any}
-            onContactOwner={() => setShowContactModal(true)}
-            onScheduleVisit={() => setShowScheduleVisitModal(true)}
-            onEMICalculator={() => setShowEMICalculatorModal(true)}
-            onLegalCheck={() => setShowLegalServicesModal(true)}
-          />
-        </section>
+        {/* New Header Section */}
+        <PropertyHeader property={mergedProperty as any} />
 
         {/* Main Content */}
-        <section className="py-4 sm:py-8">
-          <div className="mx-auto max-w-7xl px-2 sm:px-4 space-y-4 sm:space-y-6">
-            {/* Services Strip */}
-            <div className="hidden sm:block">
-              <ServicesStrip onLegalServices={() => setShowLegalServicesModal(true)} />
+        <section className="py-6">
+          <div className="mx-auto max-w-7xl px-4">
+            {/* Property Gallery and Info Grid */}
+            <div className="grid lg:grid-cols-3 gap-8 mb-8">
+              {/* Left - Image Gallery */}
+              <div className="lg:col-span-2">
+                <PropertyImageGallery property={mergedProperty as any} />
+              </div>
+              
+              {/* Right - Property Info Cards */}
+              <div className="space-y-6">
+                <PropertyInfoCards property={mergedProperty as any} />
+                
+                {/* Visit Schedule Card */}
+                <VisitScheduleCard onJoinVisit={() => setShowScheduleVisitModal(true)} />
+                
+                {/* Action Buttons */}
+                <PropertyActions
+                  onContact={() => setShowContactModal(true)}
+                  onScheduleVisit={() => setShowScheduleVisitModal(true)}
+                />
+                
+                {/* Report Section */}
+                <ReportSection />
+              </div>
             </div>
-            
-            {/* Property Details */}
-            <PropertyDetailsCard property={mergedProperty as any} />
-            
-            {/* Location */}
-            <LocationCard property={mergedProperty as any} />
-            
-            {/* Overview */}
-            <OverviewCard property={mergedProperty as any} />
-            
-            {/* Amenities */}
-            <AmenitiesCard amenities={mergedAmenities} />
-            
-            {/* Neighborhood */}
-            <NeighborhoodCard property={property} />
 
+            {/* Additional Details Sections */}
+            <div className="space-y-6">
+              {/* Services Strip */}
+              <div className="hidden sm:block">
+                <ServicesStrip onLegalServices={() => setShowLegalServicesModal(true)} />
+              </div>
+              
+              {/* Property Details */}
+              <PropertyDetailsCard property={mergedProperty as any} />
+              
+              {/* Location */}
+              <LocationCard property={mergedProperty as any} />
+              
+              {/* Overview */}
+              <OverviewCard property={mergedProperty as any} />
+              
+              {/* Amenities */}
+              <AmenitiesCard amenities={mergedAmenities} />
+              
+              {/* Neighborhood */}
+              <NeighborhoodCard property={property} />
+            </div>
           </div>
         </section>
 
