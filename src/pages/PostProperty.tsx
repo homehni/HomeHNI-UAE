@@ -781,7 +781,7 @@ export const PostProperty: React.FC = () => {
     switch (currentStep) {
       case 'property-selection':
         return (
-          <div className="min-h-screen bg-gray-100">
+          <div className="min-h-screen bg-white">
             {/* Header */}
             <div className="bg-white border-b border-gray-200 px-4 lg:px-8 py-4">
               <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center gap-2">
