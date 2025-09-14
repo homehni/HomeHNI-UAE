@@ -800,7 +800,7 @@ export const PostProperty: React.FC = () => {
                 {/* Main Content */}
                 <div className="flex flex-col lg:flex-row min-h-[600px]">
                   {/* WhyPostSection - Hidden on mobile, shown on desktop with reduced width */}
-                  <div className="hidden lg:block lg:w-[25%] bg-gray-100 border-r border-gray-200 rounded-l-lg">
+                  <div className="hidden lg:block lg:w-[25%] bg-gray-200 border-r border-gray-200 rounded-l-lg">
                     <WhyPostSection />
                   </div>
                   {/* PropertySelectionStep - Full width on mobile, 75% on desktop */}
