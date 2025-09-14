@@ -795,25 +795,20 @@ export const PostProperty: React.FC = () => {
             </div>
             
             {/* Centered Content Container */}
-            <div className="flex justify-center py-4 lg:py-8 px-4">
-              <div className="w-full max-w-7xl bg-white rounded-lg shadow-sm border border-gray-200">
-                {/* Main Content */}
-                <div className="flex flex-col lg:flex-row min-h-[600px]">
-                  {/* WhyPostSection - Hidden on mobile, shown on desktop with reduced width */}
-                  <div className="hidden lg:block lg:w-[25%] bg-gray-300 border-r border-gray-200 rounded-l-lg">
-                    <WhyPostSection />
-                  </div>
-                  {/* PropertySelectionStep - Full width on mobile, 75% on desktop */}
-                  <div className="flex-1 lg:w-[75%] rounded-r-lg">
+            <div className="px-4 py-4">
+              <div className="w-full max-w-4xl mx-auto bg-white rounded-lg shadow-sm border border-gray-200">
+                {/* Main Content - Always stacked vertically */}
+                <div className="flex flex-col">
+                  {/* PropertySelectionStep - Full width */}
+                  <div className="w-full">
                     <PropertySelectionStep onNext={handlePropertySelectionNext} />
+                  </div>
+                  {/* WhyPostSection - Always below the form */}
+                  <div className="w-full border-t border-gray-200">
+                    <WhyPostSection />
                   </div>
                 </div>
               </div>
-            </div>
-            
-            {/* Sections below the form - Stack on mobile */}
-            <div className="lg:hidden px-4">
-              <WhyPostSection />
             </div>
             <div className="bg-gray-700">
               <HowItWorksSection />
