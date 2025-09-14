@@ -43,18 +43,17 @@ export function PgHostelRoomDetailsStep({
   totalSteps 
 }: PgHostelRoomDetailsStepProps) {
   const [formData, setFormData] = useState<PgHostelRoomDetails>({
-    expectedRent: initialData?.expectedRent || undefined,
-    expectedDeposit: initialData?.expectedDeposit || undefined,
+    expectedRent: initialData?.expectedRent || 0,
+    expectedDeposit: initialData?.expectedDeposit || 0,
     roomCount: initialData?.roomCount || 1,
     roomAmenities: {
-      cupboard: false,
-      geyser: false,
-      tv: false,
-      ac: false,
-      bedding: false,
-      attachedBathroom: false,
+      cupboard: initialData?.roomAmenities?.cupboard || false,
+      geyser: initialData?.roomAmenities?.geyser || false,
+      tv: initialData?.roomAmenities?.tv || false,
+      ac: initialData?.roomAmenities?.ac || false,
+      bedding: initialData?.roomAmenities?.bedding || false,
+      attachedBathroom: initialData?.roomAmenities?.attachedBathroom || false,
     },
-    ...initialData,
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -65,7 +64,7 @@ export function PgHostelRoomDetailsStep({
   };
 
   const isFormValid = () => {
-    return true;
+    return formData.expectedRent > 0 && formData.expectedDeposit > 0 && formData.roomCount > 0;
   };
 
   const handleAmenityChange = (amenity: keyof typeof formData.roomAmenities, checked: boolean) => {
