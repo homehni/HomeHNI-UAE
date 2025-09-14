@@ -116,18 +116,18 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
     }
   }));
   return <section id="hero-search" className="relative">
-      {/* Hero Image Background - extends to cover marquee area */}
-      <div className="relative h-[50vh] sm:h-[60vh] bg-cover bg-no-repeat -mt-[70px] pt-[40px]" style={{
+      {/* Hero Image Background - mobile responsive */}
+      <div className="relative h-[40vh] sm:h-[50vh] md:h-[60vh] bg-cover bg-no-repeat -mt-[70px] pt-[40px]" style={{
       backgroundImage: `url(${cmsContent?.content?.heroImage || '/lovable-uploads/02fc42a2-c12f-49f1-92b7-9fdee8f3a419.png'})`,
       backgroundPosition: 'center calc(50% - 2%)'
     }}>
         {/* Mobile Search Section - overlapping 50% at bottom of hero */}
-        <div className="sm:hidden absolute bottom-8 left-4 right-4 transform translate-y-1/2">
-          <div className="bg-white rounded-lg shadow-xl border border-gray-100 p-4">
+        <div className="sm:hidden absolute bottom-4 left-2 right-2 transform translate-y-1/2">
+          <div className="bg-white rounded-lg shadow-xl border border-gray-100 p-3">
             {/* Search Input and Button */}
             <div className="flex gap-2">
               <div className="relative flex-1">
-                <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-brand-red" />
+                <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-brand-red" />
                 <input 
                   ref={mobileInputRef} 
                   type="text" 
@@ -135,13 +135,13 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onKeyPress={handleKeyPress}
-                  className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-brand-red rounded-lg text-brand-red placeholder-brand-red/60 focus:outline-none focus:ring-2 focus:ring-brand-red focus:border-transparent" 
+                  className="w-full pl-9 pr-3 py-2.5 bg-gray-50 border border-brand-red rounded-lg text-brand-red placeholder-brand-red/60 focus:outline-none focus:ring-2 focus:ring-brand-red focus:border-transparent text-sm" 
                 />
               </div>
               
               <Button 
                 onClick={handleSearch}
-                className="h-12 px-6 bg-brand-red hover:bg-brand-red-dark text-white font-medium whitespace-nowrap"
+                className="h-10 px-4 bg-brand-red hover:bg-brand-red-dark text-white font-medium whitespace-nowrap text-sm"
               >
                 Search
               </Button>
@@ -149,39 +149,37 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
           </div>
         </div>
 
-        {/* Desktop Search Section positioned to overlap image and white background */}
+        {/* Desktop Search Section */}
         <div className="hidden sm:block absolute bottom-0 left-0 right-0 transform translate-y-1/2">
-          <div className="max-w-4xl mx-auto px-4">
-            {/* Updated to match screenshot design exactly */}
+          <div className="max-w-4xl mx-auto px-2 sm:px-4">
             <div className="max-w-6xl mx-auto">
-              {/* Navigation Tabs with exact screenshot styling */}
+              {/* Navigation Tabs */}
               <div className="bg-white rounded-t-lg shadow-xl border border-gray-100 overflow-hidden">
-                {/* Tab Navigation - matching screenshot design exactly */}
                 <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
                   <TabsList className="grid w-full grid-cols-3 bg-transparent p-0 h-auto rounded-none border-b border-gray-200">
-                    {navigationTabs.map(tab => <TabsTrigger key={tab.id} value={tab.id} className="px-6 py-4 text-sm font-medium transition-all rounded-none border-b-2 border-transparent data-[state=active]:border-brand-red data-[state=active]:text-brand-red data-[state=active]:bg-brand-red/5 data-[state=active]:font-bold hover:bg-brand-red/5">
+                    {navigationTabs.map(tab => <TabsTrigger key={tab.id} value={tab.id} className="px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm font-medium transition-all rounded-none border-b-2 border-transparent data-[state=active]:border-brand-red data-[state=active]:text-brand-red data-[state=active]:bg-brand-red/5 data-[state=active]:font-bold hover:bg-brand-red/5">
                         {tab.label}
                       </TabsTrigger>)}
                   </TabsList>
 
-                  <TabsContent value={activeTab} className="mt-0 px-6 py-2 bg-white rounded-b-lg">
+                  <TabsContent value={activeTab} className="mt-0 px-3 sm:px-6 py-2 bg-white rounded-b-lg">
                     {/* Search Bar */}
-                    <div className="flex flex-col sm:flex-row gap-4">
+                    <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                       <div className="flex-1 relative">
-                         <MapPin className="absolute left-3 top-3 text-brand-red" size={20} />
+                         <MapPin className="absolute left-3 top-3 text-brand-red" size={16} />
                          <Input 
                            ref={inputRef} 
                            placeholder="Search 'Anything'" 
                            value={searchQuery}
                            onChange={(e) => setSearchQuery(e.target.value)}
                            onKeyPress={handleKeyPress}
-                           className="pl-10 h-12 border-brand-red text-brand-red placeholder-brand-red/60" 
+                           className="pl-9 h-10 sm:h-12 border-brand-red text-brand-red placeholder-brand-red/60 text-sm" 
                          />
                       </div>
                       
                       <Button 
                         onClick={handleSearch}
-                        className="h-12 px-8 bg-brand-red hover:bg-brand-red-dark text-white font-medium"
+                        className="h-10 sm:h-12 px-4 sm:px-8 bg-brand-red hover:bg-brand-red-dark text-white font-medium text-sm"
                       >
                         Search
                       </Button>
@@ -194,9 +192,9 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
         </div>
       </div>
       
-      {/* White background section to accommodate the overlapping search */}
-      <div className="bg-white pt-4 sm:pt-16 pb-8 mx-0 px-0 mb-4 py-[6px]">
-        <div className="container mx-auto px-4">
+      {/* White background section - mobile responsive */}
+      <div className="bg-white pt-2 sm:pt-4 md:pt-16 pb-4 sm:pb-8 mx-0 px-0 mb-2 sm:mb-4 py-[6px]">
+        <div className="container mx-auto px-2 sm:px-4">
           {/* This space allows the search section to overlap properly */}
         </div>
       </div>

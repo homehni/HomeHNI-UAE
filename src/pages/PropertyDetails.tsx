@@ -383,10 +383,12 @@ const PropertyDetails: React.FC = () => {
         </section>
 
         {/* Main Content */}
-        <section className="py-8">
-          <div className="mx-auto max-w-7xl px-4 space-y-6">
+        <section className="py-4 sm:py-8">
+          <div className="mx-auto max-w-7xl px-2 sm:px-4 space-y-4 sm:space-y-6">
             {/* Services Strip */}
-            <ServicesStrip onLegalServices={() => setShowLegalServicesModal(true)} />
+            <div className="hidden sm:block">
+              <ServicesStrip onLegalServices={() => setShowLegalServicesModal(true)} />
+            </div>
             
             {/* Property Details */}
             <PropertyDetailsCard property={mergedProperty as any} />
@@ -396,7 +398,6 @@ const PropertyDetails: React.FC = () => {
             
             {/* Overview */}
             <OverviewCard property={mergedProperty as any} />
-            
             
             {/* Amenities */}
             <AmenitiesCard amenities={mergedAmenities} />

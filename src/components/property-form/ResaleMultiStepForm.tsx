@@ -141,8 +141,92 @@ export const ResaleMultiStepForm: React.FC<ResaleMultiStepFormProps> = ({
   ];
 
   return (
-    <div className="h-screen bg-gray-50 overflow-hidden">
-      <div className="flex w-full h-full">
+    <div className="min-h-screen bg-gray-50">
+      {/* Mobile Layout */}
+      <div className="lg:hidden">
+        <div className="bg-white border-b border-gray-200 px-4 py-4">
+          <div className="flex items-center justify-between mb-2">
+            <h1 className="text-lg font-semibold text-gray-900">Property Details</h1>
+            <span className="text-sm text-gray-500 bg-gray-100 px-2 py-1 rounded-full">{currentStep}/6</span>
+          </div>
+          <div className="w-full bg-gray-200 rounded-full h-2">
+            <div 
+              className="bg-brand-red h-2 rounded-full transition-all duration-300"
+              style={{ width: `${(currentStep / 6) * 100}%` }}
+            ></div>
+          </div>
+        </div>
+        
+        <div className="p-4">
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+            {currentStep === 1 && (
+              <ResalePropertyDetailsStep
+                initialData={propertyDetails}
+                onNext={handlePropertyDetailsNext}
+                onBack={() => {}}
+              />
+            )}
+
+            {currentStep === 2 && (
+              <ResaleLocationDetailsStep
+                initialData={locationDetails}
+                onNext={handleLocationDetailsNext}
+                onBack={prevStep}
+                currentStep={2}
+                totalSteps={4}
+              />
+            )}
+
+            {currentStep === 3 && (
+              <SaleDetailsStep
+                initialData={saleDetails}
+                propertyDetails={propertyDetails}
+                onNext={handleSaleDetailsNext}
+                onBack={prevStep}
+              />
+            )}
+
+            {currentStep === 4 && (
+              <ResaleAmenitiesStep
+                initialData={amenities as any}
+                onNext={handleAmenitiesNext}
+                onBack={prevStep}
+              />
+            )}
+
+            {currentStep === 5 && (
+              <ResaleGalleryStep
+                initialData={gallery}
+                onNext={handleGalleryNext}
+                onBack={prevStep}
+                onSubmit={handleSubmit}
+                isSubmitting={isSubmitting}
+              />
+            )}
+
+            {currentStep === 6 && (
+              <ResaleScheduleStep
+                initialData={scheduleInfo}
+                onNext={handleScheduleNext}
+                onBack={prevStep}
+              />
+            )}
+
+            {currentStep === 7 && (
+              <ResalePreviewStep
+                formData={getFormData() as SalePropertyFormData}
+                onBack={prevStep}
+                onEdit={goToStep}
+                onSubmit={handleSubmit}
+                isSubmitting={isSubmitting}
+              />
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Desktop Layout */}
+      <div className="hidden lg:flex w-full h-screen overflow-hidden">
         {/* Sidebar */}
         <div className="w-80 flex-shrink-0">
           <PropertyFormSidebar
@@ -162,7 +246,7 @@ export const ResaleMultiStepForm: React.FC<ResaleMultiStepFormProps> = ({
             </div>
             <div className="w-full bg-gray-200 rounded-full h-1">
               <div 
-                className="bg-teal-600 h-1 rounded-full transition-all duration-300"
+                className="bg-brand-red h-1 rounded-full transition-all duration-300"
                 style={{ width: `${(currentStep / 6) * 100}%` }}
               ></div>
             </div>

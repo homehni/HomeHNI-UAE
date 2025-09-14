@@ -185,10 +185,23 @@ const Header = () => {
   const isCareersPage = location.pathname === '/careers';
   return <>
       <header className={`fixed top-8 left-0 right-0 z-50 transition-all duration-500 ${isScrolled ? 'bg-white/95 backdrop-blur-sm shadow-md' : 'bg-gradient-to-r from-red-800 to-red-700'}`}>
-        <div className="w-full px-4 lg:px-6 xl:px-8 pt-[6px]">
+        <div className="w-full px-2 sm:px-4 lg:px-6 xl:px-8 pt-[6px]">
           <div className="flex justify-between items-center h-14">
             {/* Left section - Logo and Location (Mobile and Desktop) */}
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2 sm:space-x-4">
+              {/* Mobile Menu Button */}
+              <button
+                className="lg:hidden p-2 rounded-md transition-colors"
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                aria-label="Toggle mobile menu"
+              >
+                {isMobileMenuOpen ? (
+                  <X className={`w-5 h-5 ${isScrolled ? 'text-gray-800' : 'text-white'}`} />
+                ) : (
+                  <Menu className={`w-5 h-5 ${isScrolled ? 'text-gray-800' : 'text-white'}`} />
+                )}
+              </button>
+
               {/* Home HNI Logo - Show different variant based on scroll state */}
               <div onClick={handleLogoClick} className="cursor-pointer">
                 <Logo variant={isScrolled ? "scrolled" : "default"} />

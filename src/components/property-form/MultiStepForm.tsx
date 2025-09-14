@@ -177,7 +177,86 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="flex w-full">
+      {/* Mobile Layout */}
+      <div className="lg:hidden">
+        <div className="bg-white border-b border-gray-200 px-4 py-4">
+          <div className="flex items-center justify-between mb-2">
+            <h1 className="text-lg font-semibold text-gray-900">Property Details</h1>
+            <span className="text-sm text-gray-500 bg-gray-100 px-2 py-1 rounded-full">{currentStep}/6</span>
+          </div>
+          <div className="w-full bg-gray-200 rounded-full h-2">
+            <div 
+              className="bg-brand-red h-2 rounded-full transition-all duration-300"
+              style={{ width: `${(currentStep / 6) * 100}%` }}
+            ></div>
+          </div>
+        </div>
+        
+        <div className="p-4">
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+            {currentStep === 1 && (
+              <PropertyDetailsStep
+                initialData={propertyDetails}
+                onNext={handlePropertyDetailsNext}
+                onBack={() => {}}
+                currentStep={currentStep}
+                totalSteps={6}
+              />
+            )}
+
+            {currentStep === 2 && (
+              <LocationDetailsStep
+                initialData={{
+                  ...locationDetails
+                }}
+                onNext={handleLocationDetailsNext}
+                onBack={prevStep}
+                currentStep={currentStep}
+                totalSteps={6}
+              />
+            )}
+
+            {currentStep === 3 && (
+              <RentalDetailsStep
+                initialData={rentalDetails}
+                onNext={handleRentalDetailsNext}
+                onBack={prevStep}
+                currentStep={currentStep}
+                totalSteps={6}
+              />
+            )}
+
+            {currentStep === 4 && (
+              <AmenitiesStep
+                initialData={amenities}
+                onNext={handleAmenitiesNext}
+                onBack={prevStep}
+              />
+            )}
+
+            {currentStep === 5 && (
+              <GalleryStep
+                initialData={gallery}
+                onNext={handleGalleryNext}
+                onBack={prevStep}
+                onSubmit={handleSubmit}
+                isSubmitting={isSubmitting}
+              />
+            )}
+
+            {currentStep === 6 && (
+              <ScheduleStep
+                initialData={scheduleInfo}
+                onNext={handleScheduleSubmit}
+                onBack={prevStep}
+              />
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Desktop Layout */}
+      <div className="hidden lg:flex w-full">
         {/* Sidebar */}
         <div className="w-80 flex-shrink-0">
           <PropertyFormSidebar
