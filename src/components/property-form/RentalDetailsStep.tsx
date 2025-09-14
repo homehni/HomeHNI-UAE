@@ -443,7 +443,7 @@ export const RentalDetailsStep: React.FC<RentalDetailsStepProps> = ({
             />
           </div>
 
-          <div className="flex justify-between pt-6">
+          <div className="flex justify-start gap-4 pt-6">
             <Button type="button" variant="outline" onClick={onBack} className="px-8 bg-gray-500 text-white hover:bg-gray-600">
               Back
             </Button>
