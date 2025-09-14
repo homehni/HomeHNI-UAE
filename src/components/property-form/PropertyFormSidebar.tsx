@@ -29,7 +29,7 @@ export const PropertyFormSidebar: React.FC<PropertyFormSidebarProps> = ({
   }));
 
   return (
-    <div className="w-64 bg-white border-r border-gray-200 h-full p-3 flex-shrink-0">
+    <div className="w-80 bg-white border-r border-gray-200 h-full p-3 flex-shrink-0">
       {/* Logo/Header */}
       <div className="mb-4 p-2">
         <div className="w-10 h-10 bg-red-500 rounded-lg flex items-center justify-center">

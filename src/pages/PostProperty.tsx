@@ -783,28 +783,33 @@ export const PostProperty: React.FC = () => {
         return (
           <div className="min-h-screen bg-white">
             {/* Header */}
-            <div className="border-b border-gray-200 px-8 py-4">
-              <div className="flex justify-between items-center">
-                <h1 className="text-2xl font-medium text-gray-800">
+            <div className="border-b border-gray-200 px-4 lg:px-8 py-4">
+              <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center gap-2">
+                <h1 className="text-xl lg:text-2xl font-medium text-gray-800">
                   Sell or Rent your Property For Free
                 </h1>
-                <div className="text-gray-600">
+                <div className="text-gray-600 text-sm lg:text-base">
                   Looking for a property? <Link to="/" className="text-blue-500 cursor-pointer hover:text-blue-600 underline">Click Here</Link>
                 </div>
               </div>
             </div>
             
             {/* Main Content */}
-            <div className="flex min-h-[calc(100vh-80px)]">
-              <div className="w-[35%] bg-gray-50 border-r border-gray-200">
+            <div className="flex flex-col lg:flex-row min-h-[calc(100vh-80px)]">
+              {/* WhyPostSection - Hidden on mobile, shown on desktop */}
+              <div className="hidden lg:block lg:w-[35%] bg-gray-50 border-r border-gray-200">
                 <WhyPostSection />
               </div>
-              <div className="flex-1 w-[65%]">
+              {/* PropertySelectionStep - Full width on mobile, 65% on desktop */}
+              <div className="flex-1 lg:w-[65%]">
                 <PropertySelectionStep onNext={handlePropertySelectionNext} />
               </div>
             </div>
             
-            {/* Sections below the form */}
+            {/* Sections below the form - Stack on mobile */}
+            <div className="lg:hidden">
+              <WhyPostSection />
+            </div>
             <HowItWorksSection />
             <PropertyFAQSection />
           </div>
@@ -881,10 +886,11 @@ export const PostProperty: React.FC = () => {
     <div className="min-h-screen bg-white">
       <Marquee />
       <Header />
-      <div className="pt-24">
+      <div className="pt-16 lg:pt-24">
         {renderCurrentStep()}
       </div>
-      <Footer />
+      {/* Only show Footer on property-selection step */}
+      {currentStep === 'property-selection' && <Footer />}
     </div>
   );
 };
