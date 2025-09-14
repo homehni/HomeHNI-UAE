@@ -67,41 +67,41 @@ export const PropertySelectionStep: React.FC<PropertySelectionStepProps> = ({
 
   return (
     <div className="bg-white flex flex-col h-full">
-      <div className="flex-1 p-8">
-        <div className="max-w-2xl mx-auto space-y-8">
+      <div className="flex-1 p-4 lg:p-8">
+        <div className="max-w-2xl mx-auto space-y-6 lg:space-y-8">
           {/* Personal Information Form */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             {/* Name */}
             <div className="space-y-2">
-              <Label htmlFor="name" className="text-base font-medium">Name *</Label>
+              <Label htmlFor="name" className="text-sm lg:text-base font-medium">Name *</Label>
               <Input
                 id="name"
                 placeholder="Enter your name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="w-full"
+                className="w-full h-12"
               />
             </div>
 
             {/* Email */}
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-base font-medium">Email *</Label>
+              <Label htmlFor="email" className="text-sm lg:text-base font-medium">Email *</Label>
               <Input
                 id="email"
                 type="email"
                 placeholder="Enter your email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full"
+                className="w-full h-12"
               />
             </div>
 
             {/* Mobile Number */}
-            <div className="space-y-2">
-              <Label htmlFor="mobile" className="text-base font-medium">Mobile Number *</Label>
+            <div className="space-y-2 lg:col-span-1">
+              <Label htmlFor="mobile" className="text-sm lg:text-base font-medium">Mobile Number *</Label>
               <div className="flex">
                 <Select defaultValue="+91">
-                  <SelectTrigger className="w-24 rounded-r-none border-r-0">
+                  <SelectTrigger className="w-20 lg:w-24 rounded-r-none border-r-0 h-12">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -113,16 +113,16 @@ export const PropertySelectionStep: React.FC<PropertySelectionStepProps> = ({
                   placeholder="Enter your mobile number"
                   value={phoneNumber}
                   onChange={(e) => setPhoneNumber(e.target.value)}
-                  className="flex-1 rounded-l-none"
+                  className="flex-1 rounded-l-none h-12"
                 />
               </div>
             </div>
 
             {/* City */}
-            <div className="space-y-2">
-              <Label htmlFor="city" className="text-base font-medium">City *</Label>
+            <div className="space-y-2 lg:col-span-1">
+              <Label htmlFor="city" className="text-sm lg:text-base font-medium">City *</Label>
               <Select value={city} onValueChange={setCity}>
-                <SelectTrigger className="w-full bg-white">
+                <SelectTrigger className="w-full bg-white h-12">
                   <SelectValue placeholder="Select city" />
                 </SelectTrigger>
                 <SelectContent className="bg-white border border-gray-200 shadow-lg z-50 max-h-60 overflow-y-auto">
@@ -161,11 +161,11 @@ export const PropertySelectionStep: React.FC<PropertySelectionStepProps> = ({
           </div>
 
           {/* WhatsApp Updates */}
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
             <div className="flex items-center gap-2">
-              <span className="text-gray-700">Get updates on</span>
+              <span className="text-gray-700 text-sm lg:text-base">Get updates on</span>
               <MessageCircle className="w-5 h-5 text-green-600" />
-              <span className="text-gray-700 font-medium">WhatsApp</span>
+              <span className="text-gray-700 font-medium text-sm lg:text-base">WhatsApp</span>
             </div>
             <Switch
               checked={whatsappUpdates}
@@ -175,16 +175,16 @@ export const PropertySelectionStep: React.FC<PropertySelectionStepProps> = ({
           </div>
 
           {/* Property Selection Container */}
-          <div className="border border-gray-200 rounded-lg p-6 space-y-6">
+          <div className="border border-gray-200 rounded-lg p-4 lg:p-6 space-y-6">
             {/* Property Type */}
             <div className="space-y-4">
-              <h3 className="text-lg font-medium text-gray-700 text-center">Property type</h3>
+              <h3 className="text-lg lg:text-xl font-medium text-gray-700 text-center">Property type</h3>
               <div className="flex border-b border-gray-200">
                 {['Residential', 'Commercial', 'Land/Plot'].map((type) => (
                   <button
                     key={type}
                     onClick={() => handlePropertyTypeChange(type as 'Residential' | 'Commercial' | 'Land/Plot')}
-                    className={`flex-1 py-3 px-4 text-sm font-medium transition-colors relative ${
+                    className={`flex-1 py-3 px-2 lg:px-4 text-sm lg:text-base font-medium transition-colors relative ${
                       selectedPropertyType === type
                         ? 'text-red-600 border-b-2 border-red-600'
                         : 'text-gray-600 hover:text-gray-900'
@@ -203,13 +203,13 @@ export const PropertySelectionStep: React.FC<PropertySelectionStepProps> = ({
 
             {/* Select Property Ad Type */}
             <div className="space-y-4">
-              <h3 className="text-lg font-medium text-gray-700 text-center">Select Property Ad Type</h3>
-              <div className="grid grid-cols-4 gap-3">
+              <h3 className="text-lg lg:text-xl font-medium text-gray-700 text-center">Select Property Ad Type</h3>
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
                 {getListingTypes().map((type) => (
                   <button
                     key={type}
                     onClick={() => setSelectedListingType(type)}
-                    className={`py-4 px-6 rounded-lg text-sm font-medium transition-colors border ${
+                    className={`py-3 lg:py-4 px-4 lg:px-6 rounded-lg text-sm lg:text-base font-medium transition-colors border ${
                       selectedListingType === type
                         ? 'bg-red-600 text-white border-red-600'
                         : 'bg-white text-gray-700 border-gray-300 hover:border-gray-400'
@@ -222,21 +222,20 @@ export const PropertySelectionStep: React.FC<PropertySelectionStepProps> = ({
             </div>
           </div>
 
-
           {/* Submit Button */}
-          <div className="pt-8">
+          <div className="pt-4 lg:pt-8">
             <Button
               onClick={handleSubmit}
               disabled={!isFormValid}
-              className="w-full h-14 bg-red-500 hover:bg-red-600 text-white text-lg font-semibold rounded-lg"
+              className="w-full h-12 lg:h-14 bg-red-500 hover:bg-red-600 text-white text-base lg:text-lg font-semibold rounded-lg"
             >
               Start Posting Your Ad For FREE
             </Button>
           </div>
 
           {/* Terms and Conditions */}
-          <div className="pt-4">
-            <p className="text-sm text-gray-500 text-center leading-relaxed">
+          <div className="pt-2 lg:pt-4">
+            <p className="text-xs lg:text-sm text-gray-500 text-center leading-relaxed px-2">
               By clicking 'Start Posting Your Ad' you acknowledge that you have agreed to the{' '}
               <span className="text-red-600 underline cursor-pointer">Terms & Conditions</span>.
             </p>
