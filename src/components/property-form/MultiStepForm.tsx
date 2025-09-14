@@ -179,7 +179,7 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
     <div className="min-h-screen bg-gray-50">
       {/* Mobile Layout */}
       <div className="lg:hidden">
-        <div className="bg-white border-b border-gray-200 px-4 py-4">
+        <div className="bg-white border-b border-gray-200 px-4 pt-8 pb-4 md:pt-12 lg:pt-4">
           <div className="flex items-center justify-between mb-2">
             <h1 className="text-lg font-semibold text-gray-900">Property Details</h1>
             <span className="text-sm text-gray-500 bg-gray-100 px-2 py-1 rounded-full">{currentStep}/6</span>
