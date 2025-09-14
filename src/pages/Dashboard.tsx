@@ -594,12 +594,12 @@ export const Dashboard: React.FC = () => {
                       
                       <CardContent className="p-0">
                         <div className="flex min-h-56 items-stretch">
-                          {/* Image Preview - Full-height column */}
-                          <div className="w-56 flex-shrink-0 relative">
+                          {/* Image Preview - Responsive width */}
+                          <div className="w-32 sm:w-40 md:w-56 flex-shrink-0 relative">
                             <img
                               src={getImageUrl()}
                               alt={property.title}
-                              className="absolute inset-0 w-full h-full object-cover rounded-l-lg"
+                              className="absolute inset-0 w-full h-full object-cover rounded-l-lg sm:rounded-l-lg"
                               onError={(e) => {
                                 e.currentTarget.src = '/placeholder.svg';
                                 e.currentTarget.alt = 'Image not available';
