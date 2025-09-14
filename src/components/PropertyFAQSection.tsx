@@ -27,7 +27,7 @@ const PropertyFAQSection: React.FC = () => {
   ];
 
   return (
-    <div className="bg-white pt-8 pb-16">
+    <div className="bg-gray-50 pt-8 pb-16">
       <div className="max-w-6xl mx-auto px-4">
         {/* Header */}
         <div className="mb-12">
