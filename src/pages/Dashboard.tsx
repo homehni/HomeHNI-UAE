@@ -694,8 +694,8 @@ export const Dashboard: React.FC = () => {
                             
                             {/* Bottom Section - Upgrade Button and Progress */}
                             <div className="mt-auto pt-2 border-t border-gray-100 space-y-3">
-                              {/* Upgrade Button - On Top */}
-                              <div className="flex justify-center">
+                              {/* Upgrade Button - Left Aligned */}
+                              <div className="flex justify-start">
                                 <Button
                                   onClick={() => handleUpgradeProperty(property)}
                                   className="bg-white hover:bg-gray-50 text-black px-6 py-2 text-sm font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-200 transform hover:scale-105 border border-black"
