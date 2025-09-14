@@ -51,7 +51,7 @@ const HowItWorksSection: React.FC = () => {
   ];
 
   return (
-    <div className="w-full bg-background pt-16 pb-8">
+    <div className="w-full bg-gray-50 pt-16 pb-8">
       {/* Top Benefits Bar */}
       <div className="bg-accent/20 py-4 mb-16">
         <div className="max-w-6xl mx-auto px-4">
