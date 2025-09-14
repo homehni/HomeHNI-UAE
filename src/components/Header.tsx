@@ -189,21 +189,8 @@ const Header = () => {
           <div className="flex justify-between items-center h-14">
             {/* Left section - Logo and Location (Mobile and Desktop) */}
             <div className="flex items-center space-x-2 sm:space-x-4">
-              {/* Mobile Menu Button */}
-              <button
-                className="lg:hidden p-2 rounded-md transition-colors"
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                aria-label="Toggle mobile menu"
-              >
-                {isMobileMenuOpen ? (
-                  <X className={`w-5 h-5 ${isScrolled ? 'text-gray-800' : 'text-white'}`} />
-                ) : (
-                  <Menu className={`w-5 h-5 ${isScrolled ? 'text-gray-800' : 'text-white'}`} />
-                )}
-              </button>
-
               {/* Home HNI Logo - Show different variant based on scroll state */}
-              <div onClick={handleLogoClick} className="cursor-pointer">
+              <div onClick={handleLogoClick} className="cursor-pointer flex-shrink-0">
                 <Logo variant={isScrolled ? "scrolled" : "default"} />
               </div>
 
