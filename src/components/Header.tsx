@@ -104,25 +104,133 @@ const Header = () => {
     <>
       <header className={`fixed top-8 left-0 right-0 z-50 transition-all duration-500 ${isScrolled ? 'bg-white/95 backdrop-blur-sm shadow-md' : 'bg-gradient-to-r from-red-800 to-red-700'}`}>
         <div className="w-full px-2 sm:px-4 lg:px-6 xl:px-8 pt-[6px]">
-          <div className="flex justify-between items-center h-14">
+          <div className="flex items-center h-14">
             
-            {/* Left section - Logo and Navigation */}
-            <div className="flex items-center space-x-2 sm:space-x-4 flex-1">
-              {/* Home HNI Logo */}
+            {/* Mobile Layout: Logo - Center Button - Right Actions */}
+            <div className="lg:hidden flex items-center justify-between w-full">
+              {/* Left: Logo */}
               <div onClick={handleLogoClick} className="cursor-pointer flex-shrink-0">
                 <Logo variant={isScrolled ? "scrolled" : "default"} />
               </div>
-
-              {/* Mobile: Post Property Button - Center aligned */}
-              <div className="lg:hidden flex justify-center">
+              
+              {/* Center: Post Property Button */}
+              <div className="flex-1 flex justify-center">
                 <Button variant="outline" size="sm" onClick={() => handlePostPropertyClick()} className={`font-medium px-2 py-1 text-xs transition-all duration-500 ${isScrolled ? 'bg-white text-brand-red border-gray-300 hover:bg-gray-50' : 'bg-white text-brand-red border-white/50 hover:bg-white/90'}`}>
                   <span>Post property</span>
                   <span className="ml-0.5 bg-green-500 text-white text-[8px] px-1 py-0.5 rounded-full font-medium">Free</span>
                 </Button>
               </div>
+              
+              {/* Right: Profile and Menu */}
+              <div className="flex items-center space-x-2">
+                {/* Profile Avatar - Mobile */}
+                {user && (
+                  <DropdownMenu onOpenChange={setIsUserDropdownOpen}>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" className={`flex items-center space-x-1 p-1 transition-colors duration-500 ${isScrolled ? 'text-gray-800 hover:bg-gray-100' : 'text-white hover:bg-white/10'}`}>
+                        <Avatar className="h-8 w-8">
+                          <AvatarImage src={user.user_metadata?.avatar_url} alt={user.user_metadata?.full_name || user.email} />
+                          <AvatarFallback className="bg-brand-red text-white text-sm">
+                            {user.user_metadata?.full_name?.charAt(0) || user.email?.charAt(0) || 'U'}
+                          </AvatarFallback>
+                        </Avatar>
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="w-56 bg-white border border-gray-200 shadow-lg">
+                      <DropdownMenuItem onClick={() => navigate('/dashboard?tab=profile')}>
+                        <span>Profile</span>
+                      </DropdownMenuItem>
+                      
+                      {/* Residential Plan with custom dropdown */}
+                      <DropdownMenuItem 
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          setIsResidentialPlanOpen(!isResidentialPlanOpen);
+                        }}
+                        onSelect={(e) => e.preventDefault()}
+                      >
+                        <div className="flex items-center justify-between w-full">
+                          <span>Residential Plan</span>
+                          <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${isResidentialPlanOpen ? 'rotate-180' : ''}`} />
+                        </div>
+                      </DropdownMenuItem>
+                      
+                      {isResidentialPlanOpen && (
+                        <div className="pl-4 space-y-0">
+                          <DropdownMenuItem onClick={() => navigate('/plans?tab=buyer')}>
+                            <span>Buyer Plan</span>
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => navigate('/plans?tab=seller')}>
+                            <span>Seller Plan</span>
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => navigate('/plans?tab=owner')}>
+                            <span>Owner Plan</span>
+                          </DropdownMenuItem>
+                        </div>
+                      )}
+
+                      {/* Commercial Plan with custom dropdown */}
+                      <DropdownMenuItem 
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          setIsCommercialPlanOpen(!isCommercialPlanOpen);
+                        }}
+                        onSelect={(e) => e.preventDefault()}
+                      >
+                        <div className="flex items-center justify-between w-full">
+                          <span>Commercial Plan</span>
+                          <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${isCommercialPlanOpen ? 'rotate-180' : ''}`} />
+                        </div>
+                      </DropdownMenuItem>
+                      
+                      {isCommercialPlanOpen && (
+                        <div className="pl-4 space-y-0">
+                          <DropdownMenuItem onClick={() => navigate('/plans?tab=commercial-buyer')}>
+                            <span>Commercial Buyer Plan</span>
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => navigate('/plans?tab=commercial-seller')}>
+                            <span>Commercial Seller Plan</span>
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => navigate('/plans?tab=commercial-owner')}>
+                            <span>Commercial Owner Plan</span>
+                          </DropdownMenuItem>
+                        </div>
+                      )}
+                      <DropdownMenuItem onClick={() => navigate('/dashboard')}>
+                        <span>Dashboard</span>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => navigate('/my-listings')}>
+                        <span>My Listings</span>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => navigate('/my-interests')}>
+                        <span>My Interest</span>
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem onClick={handleSignOut}>
+                        <span>Sign Out</span>
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                )}
+
+                {/* Menu button */}
+                <Button variant="ghost" size="sm" className={`flex items-center space-x-2 p-2 transition-colors duration-500 ${isScrolled ? 'text-gray-800 hover:bg-gray-100' : 'text-white hover:bg-white/10'}`} onClick={() => setIsSidebarOpen(true)}>
+                  <Menu size={20} />
+                </Button>
+              </div>
+            </div>
+            
+            {/* Desktop Layout: Logo and Navigation - Left section */}
+            <div className="hidden lg:flex items-center space-x-2 sm:space-x-4 flex-1">
+              {/* Home HNI Logo */}
+              <div onClick={handleLogoClick} className="cursor-pointer flex-shrink-0">
+                <Logo variant={isScrolled ? "scrolled" : "default"} />
+              </div>
 
               {/* Desktop Navigation */}
-              <div className="hidden lg:flex items-center space-x-3 xl:space-x-5">
+              <div className="flex items-center space-x-3 xl:space-x-5">
                 {/* Country Switcher - Global dropdown */}
                 <CountrySwitcher />
 
@@ -243,10 +351,10 @@ const Header = () => {
               </div>
             </div>
 
-            {/* Right section - Buttons and Menu */}
-            <div className="flex items-center space-x-2 flex-1 justify-end">
+            {/* Desktop Right section - Buttons and Menu */}
+            <div className="hidden lg:flex items-center space-x-2 flex-1 justify-end">
               {/* Desktop: Post Property Button */}
-              <div className="hidden lg:block">
+              <div>
                 <Button variant="outline" size="sm" onClick={() => handlePostPropertyClick()} className={`font-medium px-3 py-1.5 text-sm transition-all duration-500 ${isScrolled ? 'bg-white text-brand-red border-gray-300 hover:bg-gray-50' : 'bg-white text-brand-red border-white/50 hover:bg-white/90'}`}>
                   <span>Post property</span>
                   <span className="ml-1 bg-green-500 text-white text-[10px] px-1.5 py-0.5 rounded-full font-medium">Free</span>
@@ -254,7 +362,7 @@ const Header = () => {
               </div>
 
               {/* Desktop: Post Requirement Button */}
-              <div className="hidden lg:block">
+              <div>
                 <Button variant="outline" size="sm" onClick={() => navigate('/post-service')} className={`font-medium px-3 py-1.5 text-sm transition-all duration-500 ${isScrolled ? 'bg-white text-brand-red border-gray-300 hover:bg-gray-50' : 'bg-white text-brand-red border-white/50 hover:bg-white/90'}`}>
                   <span>Post Requirement</span>
                 </Button>
@@ -262,7 +370,7 @@ const Header = () => {
 
               {/* Sign Up / Login buttons for unauthenticated users - Desktop only */}
               {!user && (
-                <div className="hidden lg:flex items-center space-x-2">
+                <div className="flex items-center space-x-2">
                   <Button 
                     variant="ghost" 
                     size="sm" 
@@ -284,18 +392,18 @@ const Header = () => {
                 </div>
               )}
 
-              {/* Profile Avatar - Mobile and Desktop */}
+              {/* Profile Avatar - Desktop */}
               {user && (
                 <DropdownMenu onOpenChange={setIsUserDropdownOpen}>
                   <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" className={`flex items-center space-x-1 p-1 sm:p-2 transition-colors duration-500 ${isScrolled ? 'text-gray-800 hover:bg-gray-100' : 'text-white hover:bg-white/10'}`}>
-                      <Avatar className="h-8 w-8 sm:h-10 sm:w-10">
+                    <Button variant="ghost" className={`flex items-center space-x-1 p-2 transition-colors duration-500 ${isScrolled ? 'text-gray-800 hover:bg-gray-100' : 'text-white hover:bg-white/10'}`}>
+                      <Avatar className="h-10 w-10">
                         <AvatarImage src={user.user_metadata?.avatar_url} alt={user.user_metadata?.full_name || user.email} />
-                        <AvatarFallback className="bg-brand-red text-white text-sm sm:text-base">
+                        <AvatarFallback className="bg-brand-red text-white text-base">
                           {user.user_metadata?.full_name?.charAt(0) || user.email?.charAt(0) || 'U'}
                         </AvatarFallback>
                       </Avatar>
-                      <ChevronDown className={`h-3 w-3 sm:h-4 sm:w-4 transition-transform duration-200 ${isUserDropdownOpen ? 'rotate-180' : ''} ${isScrolled ? 'text-gray-800' : 'text-white'} hidden sm:block`} />
+                      <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${isUserDropdownOpen ? 'rotate-180' : ''} ${isScrolled ? 'text-gray-800' : 'text-white'}`} />
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" className="w-56 bg-white border border-gray-200 shadow-lg">
@@ -377,10 +485,10 @@ const Header = () => {
                 </DropdownMenu>
               )}
 
-              {/* Menu button - Always visible */}
+              {/* Menu button - Desktop */}
               <Button variant="ghost" size="sm" className={`flex items-center space-x-2 p-2 transition-colors duration-500 ${isScrolled ? 'text-gray-800 hover:bg-gray-100' : 'text-white hover:bg-white/10'}`} onClick={() => setIsSidebarOpen(true)}>
                 <Menu size={20} />
-                <span className={`text-sm font-medium hidden sm:inline ${isScrolled ? 'text-gray-800' : 'text-white'}`}>Menu</span>
+                <span className={`text-sm font-medium ${isScrolled ? 'text-gray-800' : 'text-white'}`}>Menu</span>
               </Button>
             </div>
           </div>
