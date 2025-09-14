@@ -114,25 +114,39 @@ export const PropertyInfoCards: React.FC<PropertyInfoCardsProps> = ({ property }
   ];
 
   return (
-    <div className="space-y-3">
-      {infoCards.map((card, index) => (
-        <div
-          key={index}
-          className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm flex items-center gap-4 hover:shadow-md transition-shadow"
-        >
-          <div className="bg-gray-50 p-3 rounded-lg flex-shrink-0">
-            <card.icon className="w-6 h-6 text-gray-600" />
-          </div>
-          <div className="flex-1 min-w-0">
-            <div className="font-semibold text-gray-900 text-base mb-1">
-              {card.title}
+    <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+      <div className="grid grid-cols-2">
+        {infoCards.map((card, index) => {
+          const isRightCol = index % 2 === 1;
+          const rows = Math.ceil(infoCards.length / 2);
+          const isLastRow = Math.floor(index / 2) === rows - 1;
+          const cellBorders = [
+            !isRightCol ? 'border-r' : '',
+            !isLastRow ? 'border-b' : '',
+          ]
+            .filter(Boolean)
+            .join(' ');
+
+          return (
+            <div
+              key={index}
+              className={`p-4 ${cellBorders} flex items-center gap-4`}
+            >
+              <div className="bg-gray-50 p-3 rounded-lg flex-shrink-0">
+                <card.icon className="w-6 h-6 text-gray-600" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="font-semibold text-gray-900 text-base">
+                  {card.title}
+                </div>
+                <div className="text-sm text-gray-500">
+                  {card.subtitle}
+                </div>
+              </div>
             </div>
-            <div className="text-sm text-gray-500">
-              {card.subtitle}
-            </div>
-          </div>
-        </div>
-      ))}
+          );
+        })}
+      </div>
     </div>
   );
 };
