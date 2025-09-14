@@ -45,56 +45,56 @@ export const PropertyHeader: React.FC<PropertyHeaderProps> = ({ property }) => {
         </nav>
 
         {/* Header Content */}
-        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+        <div className="flex items-center justify-between gap-4">
           {/* Left Side - Property Info */}
-          <div className="flex items-start gap-4">
-            <div className="bg-red-50 p-3 rounded-lg">
-              <Building className="w-6 h-6 text-red-600" />
+          <div className="flex items-center gap-4">
+            <div className="flex flex-col items-center">
+              <div className="bg-red-50 p-3 rounded-lg mb-2">
+                <Building className="w-6 h-6 text-red-600" />
+              </div>
+              <span className="text-sm text-gray-600">Rent</span>
             </div>
             <div>
               <h1 className="text-2xl font-bold text-gray-900 mb-1">
                 {property.title}
               </h1>
-              <p className="text-gray-600 mb-2">
+              <p className="text-gray-600">
                 Standalone building, {property.locality}
               </p>
             </div>
           </div>
 
-          {/* Right Side - Price Table */}
-          <div className="flex items-center gap-6">
-            {/* Price Table Layout */}
-            <div className="flex bg-gray-50 rounded-lg overflow-hidden border border-gray-200">
-              {/* Rent Column */}
-              <div className="px-6 py-4 border-r border-gray-200 text-center">
-                <div className="text-2xl font-bold text-gray-900 mb-1">
-                  ₹{price?.toLocaleString() || '60,000'}
-                  <span className="text-lg font-normal text-gray-500 ml-1">
-                    + {deposit.toLocaleString()} ₹
-                  </span>
-                </div>
-                <div className="text-sm text-gray-600">Rent</div>
+          {/* Right Side - Price Sections and Button */}
+          <div className="flex items-center gap-4">
+            {/* Rent Section */}
+            <div className="text-center px-4">
+              <div className="text-xl font-bold text-gray-900">
+                ₹{price?.toLocaleString() || '33,000'}
+                <span className="text-sm font-normal text-gray-500 ml-1">
+                  + {deposit.toLocaleString()} ₹
+                </span>
               </div>
-              
-              {/* Area Column */}
-              <div className="px-6 py-4 border-r border-gray-200 text-center">
-                <div className="text-2xl font-bold text-gray-900 mb-1">
-                  {area.toLocaleString()}
-                </div>
-                <div className="text-sm text-gray-600">Sq.Ft</div>
+              <div className="text-sm text-gray-600">Rent</div>
+            </div>
+            
+            {/* Area Section */}
+            <div className="text-center px-4">
+              <div className="text-xl font-bold text-gray-900">
+                {area.toLocaleString()}
               </div>
-              
-              {/* Deposit Column */}
-              <div className="px-6 py-4 text-center">
-                <div className="text-2xl font-bold text-gray-900 mb-1">
-                  ₹{((price || 60000) * 2).toLocaleString()}
-                </div>
-                <div className="text-sm text-gray-600">Deposit</div>
+              <div className="text-sm text-gray-600">Sq.Ft</div>
+            </div>
+            
+            {/* Deposit Section */}
+            <div className="text-center px-4">
+              <div className="text-xl font-bold text-gray-900">
+                ₹{((price || 33000) * 2).toLocaleString()}
               </div>
+              <div className="text-sm text-gray-600">Deposit</div>
             </div>
 
             {/* Apply Loan Button */}
-            <Button className="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg font-medium">
+            <Button className="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg font-medium ml-4">
               Apply Loan
             </Button>
           </div>
