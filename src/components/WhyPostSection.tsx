@@ -49,11 +49,11 @@ const WhyPostSection: React.FC = () => {
   }, [testimonials.length]);
 
   return (
-    <div className="w-full h-full bg-gray-50 border-r border-gray-200">
+    <div className="w-full h-full bg-gray-600 border-r border-gray-200">
       <div className="p-6 space-y-6">
         {/* Why Post section */}
         <div>
-          <h2 className="text-xl font-medium text-gray-700 mb-5">Why Post through us?</h2>
+          <h2 className="text-xl font-medium text-white mb-5">Why Post through us?</h2>
           
           <div className="space-y-5">
             {benefits.map((benefit, index) => (
@@ -62,8 +62,8 @@ const WhyPostSection: React.FC = () => {
                   <benefit.icon className="w-5 h-5 text-gray-500" />
                 </div>
                 <div>
-                  <h3 className="font-medium text-gray-700 text-base leading-tight">{benefit.title}</h3>
-                  <p className="text-gray-500 text-sm mt-1">{benefit.description}</p>
+                  <h3 className="font-medium text-white text-base leading-tight">{benefit.title}</h3>
+                  <p className="text-gray-300 text-sm mt-1">{benefit.description}</p>
                 </div>
               </div>
             ))}
@@ -73,7 +73,7 @@ const WhyPostSection: React.FC = () => {
         {/* Testimonial section */}
         <div className="border-t border-gray-200 pt-6">
           <div className="mb-4">
-            <h3 className="font-semibold text-lg text-gray-700 mb-4">30 Lac+ Home Owners Trust Us</h3>
+            <h3 className="font-semibold text-lg text-white mb-4">30 Lac+ Home Owners Trust Us</h3>
           </div>
           
           <div className="relative">
@@ -85,8 +85,8 @@ const WhyPostSection: React.FC = () => {
               </div>
               
               <div className="flex items-center justify-between text-sm">
-                <span className="font-medium text-gray-700">{testimonials[currentTestimonial].name}</span>
-                <span className="text-gray-500">{testimonials[currentTestimonial].city}</span>
+                <span className="font-medium text-white">{testimonials[currentTestimonial].name}</span>
+                <span className="text-gray-300">{testimonials[currentTestimonial].city}</span>
               </div>
             </div>
 
