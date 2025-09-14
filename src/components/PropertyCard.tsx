@@ -59,9 +59,10 @@ const PropertyCard = ({
       // Format numbers >= 1000 as K
       if (num >= 1000) {
         const kValue = Math.round(num / 1000);
-        return `${kValue}K/Month`;
+        // Use shorter format for mobile (K/M instead of K/Month)
+        return `${kValue}K/M`;
       } else {
-        return `${num}/Month`;
+        return `${num}/M`;
       }
     }
     
@@ -276,7 +277,7 @@ const PropertyCard = ({
           <Button
             variant="outline"
             size="sm"
-            className="h-5 text-xs border-gray-200 hover:bg-gray-50 px-1.5 card-border"
+            className="h-5 text-xs border-gray-200 hover:bg-gray-50 px-2 py-1 card-border"
             onClick={(e) => {
               e.stopPropagation();
               setShowContactModal(true);
