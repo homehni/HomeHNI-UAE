@@ -255,18 +255,18 @@ const PropertyCard = ({
           <Button
             variant="outline"
             size="sm"
-            className="h-6 text-xs border-gray-200 hover:bg-gray-50 px-2 card-border"
+            className="h-5 text-xs border-gray-200 hover:bg-gray-50 px-1.5 card-border"
             onClick={(e) => {
               e.stopPropagation();
               setShowContactModal(true);
             }}
           >
-            <Phone size={8} className="mr-1" />
+            <Phone size={7} className="mr-0.5" />
             Contact
           </Button>
           
           {/* Price Display - Bottom Right */}
-          <div className="text-sm font-bold text-black">
+          <div className="text-xs font-bold text-black">
             {price}
           </div>
         </div>
