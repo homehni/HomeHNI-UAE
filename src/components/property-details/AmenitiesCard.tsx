@@ -189,7 +189,7 @@ export const AmenitiesCard: React.FC<AmenitiesCardProps> = ({ amenities }) => {
         </h2>
         <div className="w-12 h-0.5 bg-red-600 mb-6"></div>
         
-        <div className="grid grid-cols-4 gap-6">
+        <div className="grid grid-cols-5 gap-6">
           {displayAmenities.map((amenity, index) => {
             const IconComponent = amenity.icon;
             return (

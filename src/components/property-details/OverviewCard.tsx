@@ -180,7 +180,7 @@ export const OverviewCard: React.FC<OverviewCardProps> = ({ property }) => {
         </h2>
         <div className="w-12 h-0.5 bg-red-600 mb-6"></div>
         
-        <div className="grid grid-cols-2 gap-6">
+        <div className="grid grid-cols-4 gap-6">
           {filteredOverviewItems.map((item, index) => {
             const IconComponent = item.icon;
             return (
