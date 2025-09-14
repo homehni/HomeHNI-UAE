@@ -445,31 +445,20 @@ const Header = () => {
             </div>
 
             {/* Right section - Other buttons, Profile, and Hamburger Menu */}
-            <div className="flex items-center space-x-2 sm:space-x-4 flex-1 justify-end">
-               {/* Phone Number - No longer visible on any page */}
-               {false && <a href="tel:+919036015272" className={`flex items-center px-3 py-2 rounded-lg border transition-all duration-500 ${isScrolled ? 'bg-white text-red-600 border-red-200 hover:bg-red-50' : 'bg-white/10 backdrop-blur-sm text-white border-white/30 hover:bg-white/20'}`}>
-                  <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
-                  </svg>
-                  <span className="font-medium text-sm">+91 80740 17388</span>
-                </a>}
-
+            <div className="flex items-center space-x-2 flex-1 justify-end">
                {/* Post Property Button */}
-               {<Button variant="outline" size="sm" onClick={() => handlePostPropertyClick()} className={`font-medium px-2 sm:px-3 py-1.5 text-xs sm:text-sm transition-all duration-500 ${isScrolled ? 'bg-white text-brand-red border-gray-300 hover:bg-gray-50' : 'bg-white text-brand-red border-white/50 hover:bg-white/90'}`}>
-                 <span className="hidden sm:inline">Post property</span>
-                 <span className="sm:hidden">Post Property</span>
+               <Button variant="outline" size="sm" onClick={() => handlePostPropertyClick()} className={`font-medium px-3 py-1.5 text-sm transition-all duration-500 ${isScrolled ? 'bg-white text-brand-red border-gray-300 hover:bg-gray-50' : 'bg-white text-brand-red border-white/50 hover:bg-white/90'}`}>
+                 <span>Post property</span>
                  <span className="ml-1 bg-green-500 text-white text-[10px] px-1.5 py-0.5 rounded-full font-medium">Free</span>
-               </Button>}
+               </Button>
 
-               {/* Post Requirement Button - Hide on tablet and mobile */}
-               {<Button variant="outline" size="sm" onClick={() => navigate('/post-service')} className={`hidden lg:flex font-medium px-2 sm:px-3 py-1.5 text-xs sm:text-sm transition-all duration-500 ${isScrolled ? 'bg-white text-brand-red border-gray-300 hover:bg-gray-50' : 'bg-white text-brand-red border-white/50 hover:bg-white/90'}`}>
-                  <span className="hidden sm:inline">Post Requirement</span>
-                  <span className="sm:hidden">Post Requirement</span>
-                </Button>}
+               {/* Post Requirement Button */}
+               <Button variant="outline" size="sm" onClick={() => navigate('/post-service')} className={`font-medium px-3 py-1.5 text-sm transition-all duration-500 ${isScrolled ? 'bg-white text-brand-red border-gray-300 hover:bg-gray-50' : 'bg-white text-brand-red border-white/50 hover:bg-white/90'}`}>
+                 <span>Post Requirement</span>
+               </Button>
 
-
-               {/* Sign Up / Login buttons for unauthenticated users - Hide on tablet and mobile */}
-               {!user && <div className="hidden lg:flex items-center space-x-2">
+               {/* Sign Up / Login buttons for unauthenticated users */}
+               {!user && <div className="flex items-center space-x-2">
                  <Button 
                    variant="ghost" 
                    size="sm" 
@@ -491,18 +480,18 @@ const Header = () => {
                </div>}
 
                {/* Profile Avatar - Only visible for authenticated users */}
-              {user && <DropdownMenu onOpenChange={setIsUserDropdownOpen}>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" className={`flex items-center space-x-2 p-2 transition-colors duration-500 ${isScrolled ? 'text-gray-800 hover:bg-gray-100' : 'text-white hover:bg-white/10'}`}>
-                      <Avatar className="h-8 w-8">
-                        <AvatarImage src={user.user_metadata?.avatar_url} alt={user.user_metadata?.full_name || user.email} />
-                        <AvatarFallback className="bg-brand-red text-white">
-                          {user.user_metadata?.full_name?.charAt(0) || user.email?.charAt(0) || 'U'}
-                        </AvatarFallback>
-                      </Avatar>
-                      <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${isUserDropdownOpen ? 'rotate-180' : ''} ${isScrolled ? 'text-gray-800' : 'text-white'} hidden sm:block`} />
-                    </Button>
-                  </DropdownMenuTrigger>
+               {user && <DropdownMenu onOpenChange={setIsUserDropdownOpen}>
+                 <DropdownMenuTrigger asChild>
+                   <Button variant="ghost" className={`flex items-center space-x-2 p-2 transition-colors duration-500 ${isScrolled ? 'text-gray-800 hover:bg-gray-100' : 'text-white hover:bg-white/10'}`}>
+                     <Avatar className="h-8 w-8">
+                       <AvatarImage src={user.user_metadata?.avatar_url} alt={user.user_metadata?.full_name || user.email} />
+                       <AvatarFallback className="bg-brand-red text-white">
+                         {user.user_metadata?.full_name?.charAt(0) || user.email?.charAt(0) || 'U'}
+                       </AvatarFallback>
+                     </Avatar>
+                     <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${isUserDropdownOpen ? 'rotate-180' : ''} ${isScrolled ? 'text-gray-800' : 'text-white'}`} />
+                   </Button>
+                 </DropdownMenuTrigger>
                    <DropdownMenuContent align="end" className="w-56 bg-white border border-gray-200 shadow-lg">
                      <DropdownMenuItem onClick={() => navigate('/dashboard?tab=profile')}>
                        <span>Profile</span>
