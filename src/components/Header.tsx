@@ -187,12 +187,18 @@ const Header = () => {
       <header className={`fixed top-8 left-0 right-0 z-50 transition-all duration-500 ${isScrolled ? 'bg-white/95 backdrop-blur-sm shadow-md' : 'bg-gradient-to-r from-red-800 to-red-700'}`}>
         <div className="w-full px-2 sm:px-4 lg:px-6 xl:px-8 pt-[6px]">
           <div className="flex justify-between items-center h-14">
-            {/* Left section - Logo and Location (Mobile and Desktop) */}
+            {/* Left section - Logo, Post Property Button, and Location (Mobile and Desktop) */}
             <div className="flex items-center space-x-2 sm:space-x-4 flex-1">
               {/* Home HNI Logo - Show different variant based on scroll state */}
               <div onClick={handleLogoClick} className="cursor-pointer flex-shrink-0">
                 <Logo variant={isScrolled ? "scrolled" : "default"} />
               </div>
+
+              {/* Post Property Button - Next to logo */}
+              <Button variant="outline" size="sm" onClick={() => handlePostPropertyClick()} className={`font-medium px-2 py-1 sm:px-3 sm:py-1.5 text-xs sm:text-sm transition-all duration-500 ${isScrolled ? 'bg-white text-brand-red border-gray-300 hover:bg-gray-50' : 'bg-white text-brand-red border-white/50 hover:bg-white/90'}`}>
+                <span>Post property</span>
+                <span className="ml-0.5 sm:ml-1 bg-green-500 text-white text-[8px] sm:text-[10px] px-1 sm:px-1.5 py-0.5 rounded-full font-medium">Free</span>
+              </Button>
 
               {/* Location Selector - Commented out */}
               {false && (
@@ -446,12 +452,6 @@ const Header = () => {
 
             {/* Right section - Other buttons, Profile, and Hamburger Menu */}
             <div className="flex items-center space-x-2 flex-1 justify-end">
-               {/* Post Property Button */}
-               <Button variant="outline" size="sm" onClick={() => handlePostPropertyClick()} className={`font-medium px-2 py-1 sm:px-3 sm:py-1.5 text-xs sm:text-sm transition-all duration-500 ${isScrolled ? 'bg-white text-brand-red border-gray-300 hover:bg-gray-50' : 'bg-white text-brand-red border-white/50 hover:bg-white/90'}`}>
-                 <span>Post property</span>
-                 <span className="ml-0.5 sm:ml-1 bg-green-500 text-white text-[8px] sm:text-[10px] px-1 sm:px-1.5 py-0.5 rounded-full font-medium">Free</span>
-               </Button>
-
                {/* Post Requirement Button - Hidden on tablet and mobile */}
                <Button variant="outline" size="sm" onClick={() => navigate('/post-service')} className={`hidden lg:flex font-medium px-3 py-1.5 text-sm transition-all duration-500 ${isScrolled ? 'bg-white text-brand-red border-gray-300 hover:bg-gray-50' : 'bg-white text-brand-red border-white/50 hover:bg-white/90'}`}>
                  <span>Post Requirement</span>
@@ -479,20 +479,19 @@ const Header = () => {
                  </Button>
                </div>}
 
-               {/* Profile Avatar - Only visible for authenticated users and hidden on mobile */}
-               {user && <div className="hidden md:block">
-                 <DropdownMenu onOpenChange={setIsUserDropdownOpen}>
-                   <DropdownMenuTrigger asChild>
-                     <Button variant="ghost" className={`flex items-center space-x-2 p-2 transition-colors duration-500 ${isScrolled ? 'text-gray-800 hover:bg-gray-100' : 'text-white hover:bg-white/10'}`}>
-                       <Avatar className="h-8 w-8">
-                         <AvatarImage src={user.user_metadata?.avatar_url} alt={user.user_metadata?.full_name || user.email} />
-                         <AvatarFallback className="bg-brand-red text-white">
-                           {user.user_metadata?.full_name?.charAt(0) || user.email?.charAt(0) || 'U'}
-                         </AvatarFallback>
-                       </Avatar>
-                       <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${isUserDropdownOpen ? 'rotate-180' : ''} ${isScrolled ? 'text-gray-800' : 'text-white'}`} />
-                     </Button>
-                   </DropdownMenuTrigger>
+               {/* Profile Avatar - Only visible for authenticated users */}
+               {user && <DropdownMenu onOpenChange={setIsUserDropdownOpen}>
+                 <DropdownMenuTrigger asChild>
+                   <Button variant="ghost" className={`flex items-center space-x-2 p-2 transition-colors duration-500 ${isScrolled ? 'text-gray-800 hover:bg-gray-100' : 'text-white hover:bg-white/10'}`}>
+                     <Avatar className="h-8 w-8">
+                       <AvatarImage src={user.user_metadata?.avatar_url} alt={user.user_metadata?.full_name || user.email} />
+                       <AvatarFallback className="bg-brand-red text-white">
+                         {user.user_metadata?.full_name?.charAt(0) || user.email?.charAt(0) || 'U'}
+                       </AvatarFallback>
+                     </Avatar>
+                     <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${isUserDropdownOpen ? 'rotate-180' : ''} ${isScrolled ? 'text-gray-800' : 'text-white'}`} />
+                   </Button>
+                 </DropdownMenuTrigger>
                      <DropdownMenuContent align="end" className="w-56 bg-white border border-gray-200 shadow-lg">
                        <DropdownMenuItem onClick={() => navigate('/dashboard?tab=profile')}>
                          <span>Profile</span>
@@ -568,9 +567,8 @@ const Header = () => {
                       <DropdownMenuItem onClick={handleSignOut}>
                         <span>Sign Out</span>
                       </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </div>}
+                   </DropdownMenuContent>
+                 </DropdownMenu>}
 
                {/* Sidebar toggle button - Show everywhere */}
                {<Button variant="ghost" size="sm" className={`flex items-center space-x-2 p-2 transition-colors duration-500 ${isScrolled ? 'text-gray-800 hover:bg-gray-100' : 'text-white hover:bg-white/10'}`} onClick={() => setIsSidebarOpen(true)}>
