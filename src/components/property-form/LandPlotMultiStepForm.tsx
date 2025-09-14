@@ -144,9 +144,9 @@ export const LandPlotMultiStepForm: React.FC<LandPlotMultiStepFormProps> = ({
 
       {/* Form Content with Sidebar Layout */}
       <div className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden animate-scale-in">
-        <div className="flex">
-          {/* Sidebar */}
-          <div className="hidden lg:block w-64 bg-white border-r border-gray-200 min-h-screen p-6">
+        <div className="flex flex-col xl:flex-row">
+          {/* Sidebar - Hidden on mobile and tablet, visible only on extra large screens */}
+          <div className="hidden xl:block w-64 bg-white border-r border-gray-200 min-h-screen p-6">
             <div className="space-y-1">
               {[
                 { number: 1, title: "Plot Details", completed: completedSteps.includes(1), active: currentStep === 1 },

@@ -240,107 +240,91 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
   ];
 
   return (
-    <div className="h-screen bg-gray-50 overflow-hidden">
-      <div className="flex max-w-full mx-auto h-full">
-        {/* Left Sidebar */}
-        <div className="w-80">
+    <div className="min-h-screen bg-gradient-to-br from-red-50/30 to-orange-100/30">      
+      <div className="flex min-h-screen flex-col xl:flex-row">
+        {/* Sidebar - Hidden on mobile and tablet, visible only on extra large screens */}
+        <div className="w-80 flex-shrink-0 hidden xl:block">
           <PropertyFormSidebar currentStep={currentStep} completedSteps={completedSteps} steps={sidebarSteps} />
         </div>
-
-        {/* Main Content */}
-        <div className="flex-1 min-w-0 bg-white flex flex-col">
-          {/* Progress Bar */}
-          <div className="bg-white border-b border-gray-200 px-4 py-2 flex-shrink-0">
-            <div className="flex items-center justify-between mb-1">
-              <h1 className="text-base font-semibold text-gray-900">
-                Provide additional details about your property to get maximum visibility
-              </h1>
-              <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">{currentStep}/6</span>
-            </div>
-            <div className="w-full bg-gray-200 rounded-full h-1">
-              <div
-                className="bg-teal-600 h-1 rounded-full transition-all duration-300"
-                style={{ width: `${(currentStep / 6) * 100}%` }}
+        
+        {/* Main Content - Full width on mobile/tablet, centered on desktop */}
+        <div className="flex-1 p-3 sm:p-4 md:p-6 xl:p-8 w-full">
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-3 sm:p-4 md:p-6 xl:p-8 max-w-4xl mx-auto w-full">
+            <ProgressIndicator 
+              currentStep={currentStep - 1} 
+              totalSteps={6} 
+            />
+            
+            {currentStep === 1 && (
+              <FlattmatesPropertyDetailsStep
+                initialData={propertyDetails}
+                onNext={handlePropertyDetailsNext}
+                onBack={() => {}}
+                currentStep={1}
+                totalSteps={7}
+                completedSteps={completedSteps}
               />
-            </div>
-          </div>
+            )}
 
-          {/* Form Content */}
-          <div className="flex-1 p-3 min-h-0 max-h-full">
-            <div className="bg-white h-full overflow-auto">
-              <div className="max-w-4xl mx-auto">
-                {currentStep === 1 && (
-                  <FlattmatesPropertyDetailsStep
-                    initialData={propertyDetails}
-                    onNext={handlePropertyDetailsNext}
-                    onBack={() => {}}
-                    currentStep={1}
-                    totalSteps={7}
-                    completedSteps={completedSteps}
-                  />
-                )}
+            {currentStep === 2 && (
+              <FlattmatesLocationDetailsStep
+                initialData={locationDetails}
+                onNext={handleLocationDetailsNext}
+                onBack={prevStep}
+                currentStep={2}
+                totalSteps={7}
+              />
+            )}
 
-                {currentStep === 2 && (
-                  <FlattmatesLocationDetailsStep
-                    initialData={locationDetails}
-                    onNext={handleLocationDetailsNext}
-                    onBack={prevStep}
-                    currentStep={2}
-                    totalSteps={7}
-                  />
-                )}
+            {currentStep === 3 && (
+              <FlattmatesRentalDetailsStep
+                initialData={rentalDetails}
+                onNext={handleRentalDetailsNext}
+                onBack={prevStep}
+                currentStep={3}
+                totalSteps={7}
+                completedSteps={completedSteps}
+              />
+            )}
 
-                {currentStep === 3 && (
-                  <FlattmatesRentalDetailsStep
-                    initialData={rentalDetails}
-                    onNext={handleRentalDetailsNext}
-                    onBack={prevStep}
-                    currentStep={3}
-                    totalSteps={7}
-                    completedSteps={completedSteps}
-                  />
-                )}
+            {currentStep === 4 && (
+              <FlattmatesAmenitiesStep
+                initialData={amenities}
+                onNext={handleAmenitiesNext}
+                onBack={prevStep}
+              />
+            )}
 
-                {currentStep === 4 && (
-                  <FlattmatesAmenitiesStep
-                    initialData={amenities}
-                    onNext={handleAmenitiesNext}
-                    onBack={prevStep}
-                  />
-                )}
+            {currentStep === 5 && (
+              <GalleryStep
+                initialData={gallery}
+                onNext={handleGalleryNext}
+                onBack={prevStep}
+                currentStep={5}
+                totalSteps={7}
+                onSubmit={handleSubmit}
+                isSubmitting={isSubmitting}
+              />
+            )}
 
-                {currentStep === 5 && (
-                  <GalleryStep
-                    initialData={gallery}
-                    onNext={handleGalleryNext}
-                    onBack={prevStep}
-                    currentStep={5}
-                    totalSteps={7}
-                    onSubmit={handleSubmit}
-                    isSubmitting={isSubmitting}
-                  />
-                )}
+            {currentStep === 6 && (
+              <ScheduleStep initialData={scheduleInfo} onNext={handleScheduleNext} onBack={prevStep} />
+            )}
 
-                {currentStep === 6 && (
-                  <ScheduleStep initialData={scheduleInfo} onNext={handleScheduleNext} onBack={prevStep} />
-                )}
-
-                {currentStep === 7 && (
-                  <PreviewStep
-                    formData={getFormData()}
-                    onBack={prevStep}
-                    onEdit={goToStep}
-                    onSubmit={handleSubmit}
-                    isSubmitting={isSubmitting}
-                  />
-                )}
-              </div>
-            </div>
+            {currentStep === 7 && (
+              <PreviewStep
+                formData={getFormData()}
+                onBack={prevStep}
+                onEdit={goToStep}
+                onSubmit={handleSubmit}
+                isSubmitting={isSubmitting}
+              />
+            )}
           </div>
         </div>
 
-        {/* Right Sidebar - Get Tenants Faster */}
-        <div className="w-80 flex-shrink-0 h-full">
+        {/* Right Sidebar - Hidden on mobile and tablet, visible only on extra large screens */}
+        <div className="w-80 flex-shrink-0 h-full hidden xl:block">
           <GetTenantsFasterSection />
         </div>
       </div>
