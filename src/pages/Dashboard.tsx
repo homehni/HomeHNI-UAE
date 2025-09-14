@@ -620,6 +620,31 @@ export const Dashboard: React.FC = () => {
                                     Active
                                   </span>
                                 )}
+                                <div className="flex sm:hidden items-center gap-1">
+                                  <Button
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={() => handleViewProperty(property)}
+                                    className="px-2 h-8 text-xs"
+                                  >
+                                    <Eye className="h-3.5 w-3.5" />
+                                  </Button>
+                                  <Button
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={() => handleEditProperty(property)}
+                                    className="px-2 h-8 text-xs"
+                                  >
+                                    <Edit className="h-3.5 w-3.5" />
+                                  </Button>
+                                  <Button
+                                    size="sm"
+                                    className="px-2 h-8 text-xs bg-red-500 hover:bg-red-600 text-white"
+                                    onClick={() => openDeleteModal('property', property.id, property.title)}
+                                  >
+                                    <Trash className="h-3.5 w-3.5" />
+                                  </Button>
+                                </div>
                                 <div className="hidden sm:flex items-center gap-1">
                                   <Button
                                     variant="outline"
@@ -692,8 +717,35 @@ export const Dashboard: React.FC = () => {
                               <div className="text-sm text-gray-500">Posted: {new Date(property.created_at).toLocaleDateString()}</div>
                             </div>
                             
-                            {/* Bottom Section - Upgrade Button and Progress */}
+                            {/* Bottom Section - Action Buttons, Upgrade Button and Progress */}
                             <div className="mt-auto pt-2 border-t border-gray-100 space-y-3">
+                              {/* Action Buttons - Mobile Only */}
+                              <div className="flex sm:hidden justify-start gap-2">
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={() => handleViewProperty(property)}
+                                  className="px-2 h-8 text-xs"
+                                >
+                                  <Eye className="h-3.5 w-3.5" />
+                                </Button>
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={() => handleEditProperty(property)}
+                                  className="px-2 h-8 text-xs"
+                                >
+                                  <Edit className="h-3.5 w-3.5" />
+                                </Button>
+                                <Button
+                                  size="sm"
+                                  className="px-2 h-8 text-xs bg-red-500 hover:bg-red-600 text-white"
+                                  onClick={() => openDeleteModal('property', property.id, property.title)}
+                                >
+                                  <Trash className="h-3.5 w-3.5" />
+                                </Button>
+                              </div>
+                              
                               {/* Upgrade Button - Left Aligned */}
                               <div className="flex justify-start">
                                 <Button
