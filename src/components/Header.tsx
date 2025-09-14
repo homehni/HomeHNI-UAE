@@ -236,7 +236,6 @@ const Header = () => {
                       }}>
                         <button className={`flex items-center hover:opacity-80 transition-colors duration-500 text-base font-medium uppercase ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
                           {item.label}
-                          <ChevronDown className="ml-1 h-3 w-3" />
                         </button>
                         
                          {/* Dynamic dropdown content based on CMS */}
@@ -326,7 +325,6 @@ const Header = () => {
                     <div className="relative" onMouseEnter={handleServicesHover} onMouseLeave={handleServicesLeave}>
                       <button className={`flex items-center hover:opacity-80 transition-colors duration-500 text-base font-medium uppercase ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
                         Services
-                        <ChevronDown className="ml-1 h-3 w-3" />
                       </button>
                       
                       {/* Custom Services Dropdown */}
@@ -367,7 +365,6 @@ const Header = () => {
                     <div className="relative" onMouseEnter={handleLifetimePlansHover} onMouseLeave={handleLifetimePlansLeave}>
                       <button className={`flex items-center hover:opacity-80 transition-colors duration-500 text-base font-medium uppercase ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
                         Plans
-                        <ChevronDown className="ml-1 h-3 w-3" />
                       </button>
                       
                       {/* Plans Dropdown */}
