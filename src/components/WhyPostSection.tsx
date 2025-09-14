@@ -50,7 +50,7 @@ const WhyPostSection: React.FC = () => {
 
   return (
     <div className="w-full h-full bg-gray-50 border-r border-gray-200">
-      <div className="p-6 space-y-6">
+      <div className="p-6 space-y-6" style={{ backgroundColor: '#f5f5f5' }}>
         {/* Why Post section */}
         <div>
           <h2 className="text-xl font-medium text-gray-700 mb-5">Why Post through us?</h2>
