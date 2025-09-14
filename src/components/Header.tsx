@@ -215,7 +215,7 @@ const Header = () => {
               <CountrySwitcher />
 
               {/* Desktop Navigation Links - Show everywhere */}
-              {<nav className="hidden lg:flex items-center space-x-5">
+              {<nav className="hidden lg:flex items-center space-x-3 xl:space-x-5">
                 {/* Dynamic CMS-based navigation */}
                 {headerNavContent?.content?.nav_items?.map((item: any, index: number) => (
                   <div key={index}>
@@ -234,7 +234,7 @@ const Header = () => {
                           handleLifetimePlansLeave();
                         }
                       }}>
-                        <button className={`flex items-center hover:opacity-80 transition-colors duration-500 text-base font-medium uppercase ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
+                        <button className={`flex items-center hover:opacity-80 transition-colors duration-500 text-sm xl:text-base font-medium uppercase ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
                           {item.label}
                         </button>
                         
@@ -312,7 +312,7 @@ const Header = () => {
                           e.preventDefault();
                           navigate(item.link);
                         }}
-                        className={`hover:opacity-80 transition-colors duration-500 text-base font-medium uppercase ${isScrolled ? 'text-gray-800' : 'text-white'}`}
+                        className={`hover:opacity-80 transition-colors duration-500 text-sm xl:text-base font-medium uppercase ${isScrolled ? 'text-gray-800' : 'text-white'}`}
                       >
                         {item.label}
                       </a>
@@ -324,29 +324,29 @@ const Header = () => {
                     <a href="/search?type=buy" onClick={e => {
                       e.preventDefault();
                       navigate('/search?type=buy');
-                    }} className={`hover:opacity-80 transition-colors duration-500 text-base font-medium uppercase ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
+                    }} className={`hover:opacity-80 transition-colors duration-500 text-sm xl:text-base font-medium uppercase ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
                       BUY
                     </a>
 
                     <a href="/search?type=rent" onClick={e => {
                       e.preventDefault();
                       navigate('/search?type=rent');
-                    }} className={`hover:opacity-80 transition-colors duration-500 text-base font-medium uppercase ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
+                    }} className={`hover:opacity-80 transition-colors duration-500 text-sm xl:text-base font-medium uppercase ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
                       RENT
                     </a>
 
                     <a href="/post-property" onClick={e => {
                       e.preventDefault();
                       navigate('/post-property');
-                    }} className={`hover:opacity-80 transition-colors duration-500 text-base font-medium uppercase ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
+                    }} className={`hover:opacity-80 transition-colors duration-500 text-sm xl:text-base font-medium uppercase ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
                       SELL
                     </a>
 
                     {/* Services Dropdown */}
                     <div className="relative" onMouseEnter={handleServicesHover} onMouseLeave={handleServicesLeave}>
-                      <button className={`flex items-center hover:opacity-80 transition-colors duration-500 text-base font-medium uppercase ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
+                      <button className={`flex items-center hover:opacity-80 transition-colors duration-500 text-sm xl:text-base font-medium uppercase ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
                         SERVICES
-                        <ChevronDown className="ml-1 h-4 w-4" />
+                        <ChevronDown className="ml-1 h-3 w-3 xl:h-4 xl:w-4" />
                       </button>
                       
                       {/* Custom Services Dropdown */}
@@ -385,9 +385,9 @@ const Header = () => {
                     
                     {/* Plans Dropdown */}
                     <div className="relative" onMouseEnter={handleLifetimePlansHover} onMouseLeave={handleLifetimePlansLeave}>
-                      <button className={`flex items-center hover:opacity-80 transition-colors duration-500 text-base font-medium uppercase ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
+                      <button className={`flex items-center hover:opacity-80 transition-colors duration-500 text-sm xl:text-base font-medium uppercase ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
                         PLANS
-                        <ChevronDown className="ml-1 h-4 w-4" />
+                        <ChevronDown className="ml-1 h-3 w-3 xl:h-4 xl:w-4" />
                       </button>
                       
                       {/* Plans Dropdown */}
@@ -424,14 +424,14 @@ const Header = () => {
                     <a href="/service-suite" onClick={e => {
                       e.preventDefault();
                       navigate('/service-suite');
-                    }} className={`hover:opacity-80 transition-colors duration-500 text-base font-medium uppercase whitespace-nowrap ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
+                    }} className={`hover:opacity-80 transition-colors duration-500 text-sm xl:text-base font-medium uppercase whitespace-nowrap ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
                       SERVICE PROVIDER
                     </a>
 
                     <a href="/careers" onClick={e => {
                       e.preventDefault();
                       navigate('/careers');
-                    }} className={`hover:opacity-80 transition-colors duration-500 text-base font-medium uppercase ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
+                    }} className={`hover:opacity-80 transition-colors duration-500 text-sm xl:text-base font-medium uppercase ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
                       JOBS
                     </a>
                   </>
