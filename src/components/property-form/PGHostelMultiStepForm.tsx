@@ -181,22 +181,22 @@ const [propertyInfo, setPropertyInfo] = useState({
 
   const handleLocalityDetailsNext = (data: any) => {
     setLocalityDetails(data);
-    setCompletedSteps(prev => [...prev.filter(step => step !== 4), 4]);
-    setCurrentStep(5);
-    scrollToTop();
-  };
-
-  const handlePgDetailsNext = (data: any) => {
-    setPgDetails(data);
     setCompletedSteps(prev => [...prev.filter(step => step !== 5), 5]);
     setCurrentStep(6);
     scrollToTop();
   };
 
-  const handleAmenitiesNext = (data: any) => {
-    setAmenities(data);
+  const handlePgDetailsNext = (data: any) => {
+    setPgDetails(data);
     setCompletedSteps(prev => [...prev.filter(step => step !== 6), 6]);
     setCurrentStep(7);
+    scrollToTop();
+  };
+
+  const handleAmenitiesNext = (data: any) => {
+    setAmenities(data);
+    setCompletedSteps(prev => [...prev.filter(step => step !== 7), 7]);
+    setCurrentStep(8);
     scrollToTop();
   };
 
