@@ -421,13 +421,8 @@ const Header = () => {
 
             </div>
 
-            {/* Center section - Post Property Button */}
+            {/* Center section - Empty for now */}
             <div className="flex-shrink-0 mx-4">
-              {<Button variant="outline" size="sm" onClick={() => handlePostPropertyClick()} className={`font-medium px-2 sm:px-3 py-1.5 text-xs sm:text-sm transition-all duration-500 ${isScrolled ? 'bg-white text-brand-red border-gray-300 hover:bg-gray-50' : 'bg-white text-brand-red border-white/50 hover:bg-white/90'}`}>
-                <span className="hidden sm:inline">Post property</span>
-                <span className="sm:hidden">Post Property</span>
-                <span className="ml-1 bg-green-500 text-white text-[10px] px-1.5 py-0.5 rounded-full font-medium">Free</span>
-              </Button>}
             </div>
 
             {/* Right section - Other buttons, Profile, and Hamburger Menu */}
@@ -439,6 +434,13 @@ const Header = () => {
                   </svg>
                   <span className="font-medium text-sm">+91 80740 17388</span>
                 </a>}
+
+               {/* Post Property Button */}
+               {<Button variant="outline" size="sm" onClick={() => handlePostPropertyClick()} className={`font-medium px-2 sm:px-3 py-1.5 text-xs sm:text-sm transition-all duration-500 ${isScrolled ? 'bg-white text-brand-red border-gray-300 hover:bg-gray-50' : 'bg-white text-brand-red border-white/50 hover:bg-white/90'}`}>
+                 <span className="hidden sm:inline">Post property</span>
+                 <span className="sm:hidden">Post Property</span>
+                 <span className="ml-1 bg-green-500 text-white text-[10px] px-1.5 py-0.5 rounded-full font-medium">Free</span>
+               </Button>}
 
                {/* Post Requirement Button - Hide on tablet and mobile */}
                {<Button variant="outline" size="sm" onClick={() => navigate('/post-service')} className={`hidden lg:flex font-medium px-2 sm:px-3 py-1.5 text-xs sm:text-sm transition-all duration-500 ${isScrolled ? 'bg-white text-brand-red border-gray-300 hover:bg-gray-50' : 'bg-white text-brand-red border-white/50 hover:bg-white/90'}`}>
