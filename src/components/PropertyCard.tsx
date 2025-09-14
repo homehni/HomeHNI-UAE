@@ -60,9 +60,9 @@ const PropertyCard = ({
       if (num >= 1000) {
         const kValue = Math.round(num / 1000);
         // Use shorter format for mobile (K/M instead of K/Month)
-        return `${kValue}K/M`;
+        return `₹${kValue}K/M`;
       } else {
-        return `${num}/M`;
+        return `₹${num}/M`;
       }
     }
     
