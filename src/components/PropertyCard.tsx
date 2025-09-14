@@ -48,6 +48,27 @@ const PropertyCard = ({
     return Math.round(num);
   };
 
+  const formatPrice = (priceStr: string) => {
+    const lower = priceStr.toLowerCase();
+    
+    // Check if it's a rental property (contains "month", "/month", etc.)
+    if (lower.includes('month') || lower.includes('/month')) {
+      // Extract the number from the price string
+      const num = parseFloat(priceStr.replace(/[^0-9.]/g, '')) || 0;
+      
+      // Format numbers >= 1000 as K
+      if (num >= 1000) {
+        const kValue = Math.round(num / 1000);
+        return `${kValue}K/Month`;
+      } else {
+        return `${num}/Month`;
+      }
+    }
+    
+    // For non-rental properties, return as is
+    return priceStr;
+  };
+
   const parseAreaToNumber = (areaStr: string) => {
     const num = parseFloat(areaStr.replace(/[^0-9.]/g, '')) || 0;
     return Math.round(num);
@@ -267,7 +288,7 @@ const PropertyCard = ({
           
           {/* Price Display - Bottom Right */}
           <div className="text-xs font-bold text-black">
-            {price}
+            {formatPrice(price)}
           </div>
         </div>
       </CardContent>
