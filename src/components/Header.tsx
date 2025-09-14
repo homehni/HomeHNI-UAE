@@ -113,8 +113,8 @@ const Header = () => {
                 <Logo variant={isScrolled ? "scrolled" : "default"} />
               </div>
 
-              {/* Mobile: Post Property Button next to logo */}
-              <div className="lg:hidden">
+              {/* Mobile: Post Property Button - Center aligned */}
+              <div className="lg:hidden flex justify-center">
                 <Button variant="outline" size="sm" onClick={() => handlePostPropertyClick()} className={`font-medium px-2 py-1 text-xs transition-all duration-500 ${isScrolled ? 'bg-white text-brand-red border-gray-300 hover:bg-gray-50' : 'bg-white text-brand-red border-white/50 hover:bg-white/90'}`}>
                   <span>Post property</span>
                   <span className="ml-0.5 bg-green-500 text-white text-[8px] px-1 py-0.5 rounded-full font-medium">Free</span>
