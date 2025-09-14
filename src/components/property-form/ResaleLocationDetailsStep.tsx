@@ -7,6 +7,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input';
 import { LocationDetails } from '@/types/property';
 import { ArrowLeft, ArrowRight, Home, MapPin } from 'lucide-react';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 const resaleLocationSchema = z.object({
   locality: z.string().optional(),
@@ -33,6 +34,7 @@ export const ResaleLocationDetailsStep: React.FC<ResaleLocationDetailsStepProps>
   currentStep,
   totalSteps
 }) => {
+  const isMobile = useIsMobile();
   const localityInputRef = useRef<HTMLInputElement | null>(null);
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<any>(null);
@@ -260,14 +262,14 @@ export const ResaleLocationDetailsStep: React.FC<ResaleLocationDetailsStepProps>
           )}
 
           {/* Navigation Buttons */}
-          <div className="flex justify-between pt-6">
-            <Button type="button" variant="outline" onClick={onBack} className="h-12 px-8">
-              <ArrowLeft className="h-4 w-4 mr-2" />
+          <div className="flex justify-between pt-4 md:pt-6">
+            <Button type="button" variant="outline" onClick={onBack} className="h-10 px-4 md:h-12 md:px-8">
+              {!isMobile && <ArrowLeft className="h-4 w-4 mr-2" />}
               Back
             </Button>
-            <Button type="submit" className="h-12 px-8">
+            <Button type="submit" className="h-10 px-4 md:h-12 md:px-8">
               Save & Continue
-              <ArrowRight className="h-4 w-4 ml-2" />
+              {!isMobile && <ArrowRight className="h-4 w-4 ml-2" />}
             </Button>
           </div>
         </form>
