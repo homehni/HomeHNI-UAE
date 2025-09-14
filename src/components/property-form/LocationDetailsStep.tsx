@@ -378,7 +378,7 @@ export const LocationDetailsStep: React.FC<LocationDetailsStepProps> = ({
                   )}
 
                   {/* Navigation Buttons */}
-                  <div className="flex justify-between pt-6">
+                  <div className="flex justify-start gap-4 pt-6">
                     <Button type="button" variant="outline" onClick={onBack} className="h-12 px-8">
                       Back
                     </Button>
