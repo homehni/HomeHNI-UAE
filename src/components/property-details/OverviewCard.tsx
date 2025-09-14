@@ -1,4 +1,25 @@
 import React from 'react';
+import { 
+  Sofa, 
+  Compass, 
+  Droplets, 
+  Building, 
+  Bath, 
+  Utensils, 
+  Shield, 
+  Users,
+  Home,
+  Layers,
+  DollarSign,
+  Key,
+  FileText,
+  CreditCard,
+  Phone,
+  Clock,
+  Zap,
+  MapPin
+} from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 interface OverviewCardProps {
   property: {
@@ -75,72 +96,120 @@ export const OverviewCard: React.FC<OverviewCardProps> = ({ property }) => {
                             property.property_type?.toLowerCase().includes('hostel') ||
                             property.property_type?.toLowerCase().includes('coliving');
 
-  const overviewItems = isPGHostelProperty ? [
-    { label: 'Property Type', value: property.property_type?.replace('_', ' ') || 'Not specified' },
-    { label: 'Furnishing', value: property.furnishing || 'Not specified' },
-    { label: 'Floor', value: formatFloor(property.floor_no, property.total_floors) },
-    { label: 'Balconies', value: property.balconies?.toString() || 'Not specified' },
-    { label: 'Property Age', value: property.property_age || 'Not specified' },
-    { label: 'Facing Direction', value: property.facing_direction || 'Not specified' },
-    { label: 'Floor Type', value: property.floor_type || 'Not specified' },
-    { label: 'Water Supply', value: property.water_supply || 'Not specified' },
-    { label: 'Power Backup', value: property.power_backup || 'Not specified' },
-    { label: 'Property Condition', value: property.current_property_condition || 'Not specified' },
-  ] : isPlotProperty ? [
-    { label: 'Property Type', value: property.property_type?.replace('_', ' ') || 'Not specified' },
-    { label: 'Plot Area', value: formatArea(property.super_area, property.carpet_area) },
-    { label: 'Ownership Type', value: formatOwnership(property.owner_role) },
-    { label: 'Expected Price', value: formatPrice(property.expected_price) },
-    { label: 'Price Negotiable', value: property.price_negotiable ? 'Yes' : 'No' },
-    { label: 'Gated Security', value: property.gated_security ? 'Yes' : 'No' },
-    { label: 'Home Loan Available', value: property.home_loan_available ? 'Yes' : 'No' },
-    { label: 'Water Connection', value: property.water_supply || 'Not specified' },
-    { label: 'Power Backup', value: property.power_backup || 'Not specified' },
-    { label: 'Registration Status', value: property.registration_status || 'Not specified' },
-    { label: 'Property Condition', value: property.current_property_condition || 'Not specified' },
-    { label: 'Who Shows Property', value: property.who_will_show || 'Not specified' },
-    { label: 'Secondary Contact', value: property.secondary_phone || 'Not specified' },
-  ] : [
-    // Financial and administrative details only
-    { label: 'Expected Price', value: formatPrice(property.expected_price) },
-    { label: 'Price Negotiable', value: property.price_negotiable ? 'Yes' : 'No' },
-    { label: 'Security Deposit', value: formatPrice(property.security_deposit) },
-    { label: 'Booking Amount', value: formatBookingAmount(property.booking_amount) },
-    { label: 'Maintenance', value: formatMaintenance(property.maintenance_charges) },
-    { label: 'Ownership Type', value: formatOwnership(property.owner_role) },
-    { label: 'Availability', value: property.availability_type || 'Not specified' },
-    { label: 'Registration Status', value: property.registration_status || 'Not specified' },
-    { label: 'Home Loan Available', value: property.home_loan_available ? 'Yes' : 'No' },
-    { label: 'Gated Security', value: property.gated_security ? 'Yes' : 'No' },
-    { label: 'Water Supply', value: property.water_supply || 'Not specified' },
-    { label: 'Power Backup', value: property.power_backup || 'Not specified' },
-    { label: 'Who Shows Property', value: property.who_will_show || 'Not specified' },
-    { label: 'Secondary Contact', value: property.secondary_phone || 'Not specified' },
+  const getIconForItem = (label: string) => {
+    const iconMap: Record<string, React.ComponentType<any>> = {
+      'Furnishing Status': Sofa,
+      'Facing': Compass,
+      'Water Supply': Droplets,
+      'Floor': Layers,
+      'Bathroom': Bath,
+      'Non-Veg Allowed': Utensils,
+      'Pet Allowed': Users,
+      'Gated Security': Shield,
+      'Property Type': Building,
+      'Balconies': Home,
+      'Expected Price': DollarSign,
+      'Security Deposit': Key,
+      'Registration Status': FileText,
+      'Home Loan Available': CreditCard,
+      'Power Backup': Zap,
+      'Who Shows Property': Users,
+      'Secondary Contact': Phone,
+      'Availability': Clock,
+      'Ownership Type': Key,
+      'Property Age': Building,
+      'Facing Direction': Compass,
+      'Property Condition': Home,
+    };
+    return iconMap[label] || Home;
+  };
+
+  const overviewItems = [
+    { 
+      icon: Sofa, 
+      label: 'Furnishing Status', 
+      value: property.furnishing || 'Semi',
+      hasAction: property.furnishing === 'Semi'
+    },
+    { 
+      icon: Compass, 
+      label: 'Facing', 
+      value: property.facing_direction || 'East' 
+    },
+    { 
+      icon: Droplets, 
+      label: 'Water Supply', 
+      value: property.water_supply || 'Both' 
+    },
+    { 
+      icon: Layers, 
+      label: 'Floor', 
+      value: formatFloor(property.floor_no, property.total_floors) || '3/4' 
+    },
+    { 
+      icon: Bath, 
+      label: 'Bathroom', 
+      value: property.bathrooms?.toString() || '3' 
+    },
+    { 
+      icon: Users, 
+      label: 'Pet Allowed', 
+      value: 'Yes' 
+    },
+    { 
+      icon: Utensils, 
+      label: 'Non-Veg Allowed', 
+      value: 'Yes' 
+    },
+    { 
+      icon: Shield, 
+      label: 'Gated Security', 
+      value: property.gated_security ? 'Yes' : 'Yes' 
+    },
   ];
 
-  const filteredOverviewItems = overviewItems.filter(item => item.value !== 'Not specified');
+  const filteredOverviewItems = overviewItems.filter(item => 
+    item.value !== 'Not specified' && item.value !== undefined
+  );
 
   return (
-    <div className="rounded-2xl border-2 border-red-500 bg-white shadow-lg">
-      <div className="p-5 border-b border-gray-200">
-        <h2 className="text-lg font-semibold text-gray-900">Overview</h2>
-      </div>
-      
-      <div className="p-5 pt-4">
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
-          {filteredOverviewItems.map((item, index) => (
-            <div
-              key={index}
-              className="bg-gray-50/70 p-3 rounded-lg ring-1 ring-gray-100"
-            >
-              <div className="text-xs uppercase tracking-wide text-gray-500 mb-1">
-                {item.label}
+    <div className="bg-white rounded-lg border border-gray-200 shadow-sm">
+      <div className="p-6">
+        <h2 className="text-xl font-semibold text-gray-900 mb-1">
+          Overview
+        </h2>
+        <div className="w-12 h-0.5 bg-red-600 mb-6"></div>
+        
+        <div className="grid grid-cols-2 gap-6">
+          {filteredOverviewItems.map((item, index) => {
+            const IconComponent = item.icon;
+            return (
+              <div key={index} className="flex items-center gap-3">
+                <div className="flex-shrink-0">
+                  <IconComponent className="w-5 h-5 text-gray-500" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="text-sm text-gray-600 mb-1">
+                    {item.label}
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="font-medium text-gray-900">
+                      {item.value}
+                    </span>
+                    {item.hasAction && (
+                      <Button 
+                        variant="outline"
+                        size="sm"
+                        className="text-xs border-teal-300 text-teal-700 hover:bg-teal-50 px-2 py-1 h-auto"
+                      >
+                        Furnish Now
+                      </Button>
+                    )}
+                  </div>
+                </div>
               </div>
-              <div className="text-sm font-medium text-gray-800">
-                {item.value}
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </div>

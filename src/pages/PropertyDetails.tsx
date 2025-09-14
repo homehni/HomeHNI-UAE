@@ -24,6 +24,7 @@ import { PropertyInfoCards } from '@/components/property-details/PropertyInfoCar
 import { VisitScheduleCard } from '@/components/property-details/VisitScheduleCard';
 import { PropertyActions } from '@/components/property-details/PropertyActions';
 import { ReportSection } from '@/components/property-details/ReportSection';
+import { ServicesCard } from '@/components/property-details/ServicesCard';
 import { supabase } from '@/integrations/supabase/client';
 interface Property {
   id: string;
@@ -410,6 +411,15 @@ const PropertyDetails: React.FC = () => {
 
             {/* Additional Details Sections */}
             <div className="space-y-6">
+              {/* Overview */}
+              <OverviewCard property={mergedProperty as any} />
+              
+              {/* Services Card */}
+              <ServicesCard />
+              
+              {/* Amenities */}
+              <AmenitiesCard amenities={mergedAmenities} />
+              
               {/* Services Strip */}
               <div className="hidden sm:block">
                 <ServicesStrip onLegalServices={() => setShowLegalServicesModal(true)} />
@@ -420,12 +430,6 @@ const PropertyDetails: React.FC = () => {
               
               {/* Location */}
               <LocationCard property={mergedProperty as any} />
-              
-              {/* Overview */}
-              <OverviewCard property={mergedProperty as any} />
-              
-              {/* Amenities */}
-              <AmenitiesCard amenities={mergedAmenities} />
               
               {/* Neighborhood */}
               <NeighborhoodCard property={property} />
