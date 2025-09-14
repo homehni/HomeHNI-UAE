@@ -692,40 +692,13 @@ export const Dashboard: React.FC = () => {
                               <div className="text-sm text-gray-500">Posted: {new Date(property.created_at).toLocaleDateString()}</div>
                             </div>
                             
-                            {/* Bottom Section - Progress and Upgrade Button */}
-                            <div className="mt-auto pt-2 border-t border-gray-100">
-                              <div className="flex justify-between items-center">
-                                {/* Property Progress Bar - Show for submissions and low-completion approved listings */}
-                                <div className="flex-1">
-                                  {((property as any).isSubmission || property.status === 'approved' || property.status === 'active') && (() => {
-                                    const completion = calculatePropertyCompletion(property);
-                                    console.log('Property completion:', {
-                                      id: property.id,
-                                      title: property.title,
-                                      status: property.status,
-                                      percentage: completion.percentage,
-                                      missingFields: completion.missingFields,
-                                      propertyType: property.property_type
-                                    });
-                                    
-                                    // Show when completion is below threshold
-                                    const shouldShow = completion.percentage < 60;
-                                    
-                                    return shouldShow ? (
-                                      <PropertyProgressCompact
-                                        propertyId={property.id}
-                                        completionPercentage={completion.percentage}
-                                        missingFields={completion.missingFields}
-                                        propertyType={property.property_type}
-                                      />
-                                    ) : null;
-                                  })()}
-                                </div>
-                                
-                                {/* Upgrade Button */}
+                            {/* Bottom Section - Upgrade Button and Progress */}
+                            <div className="mt-auto pt-2 border-t border-gray-100 space-y-3">
+                              {/* Upgrade Button - On Top */}
+                              <div className="flex justify-center">
                                 <Button
                                   onClick={() => handleUpgradeProperty(property)}
-                                  className="ml-4 bg-white hover:bg-gray-50 text-black px-6 py-2 text-sm font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-200 transform hover:scale-105 border border-black"
+                                  className="bg-white hover:bg-gray-50 text-black px-6 py-2 text-sm font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-200 transform hover:scale-105 border border-black"
                                 >
                                   <span className="flex items-center gap-2">
                                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -734,6 +707,33 @@ export const Dashboard: React.FC = () => {
                                     Upgrade
                                   </span>
                                 </Button>
+                              </div>
+                              
+                              {/* Property Progress Bar - Full Width Below */}
+                              <div className="w-full">
+                                {((property as any).isSubmission || property.status === 'approved' || property.status === 'active') && (() => {
+                                  const completion = calculatePropertyCompletion(property);
+                                  console.log('Property completion:', {
+                                    id: property.id,
+                                    title: property.title,
+                                    status: property.status,
+                                    percentage: completion.percentage,
+                                    missingFields: completion.missingFields,
+                                    propertyType: property.property_type
+                                  });
+                                  
+                                  // Show when completion is below threshold
+                                  const shouldShow = completion.percentage < 60;
+                                  
+                                  return shouldShow ? (
+                                    <PropertyProgressCompact
+                                      propertyId={property.id}
+                                      completionPercentage={completion.percentage}
+                                      missingFields={completion.missingFields}
+                                      propertyType={property.property_type}
+                                    />
+                                  ) : null;
+                                })()}
                               </div>
                             </div>
                           </div>
