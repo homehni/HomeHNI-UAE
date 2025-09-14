@@ -117,7 +117,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
   }));
   return <section id="hero-search" className="relative">
       {/* Hero Image Background - mobile responsive */}
-      <div className="relative h-[40vh] sm:h-[50vh] md:h-[60vh] bg-cover bg-no-repeat -mt-[70px] pt-[40px]" style={{
+      <div className="relative h-[50vh] sm:h-[60vh] md:h-[70vh] bg-cover bg-no-repeat -mt-[70px] pt-[40px]" style={{
       backgroundImage: `url(${cmsContent?.content?.heroImage || '/lovable-uploads/02fc42a2-c12f-49f1-92b7-9fdee8f3a419.png'})`,
       backgroundPosition: 'center calc(50% - 2%)'
     }}>
