@@ -781,9 +781,9 @@ export const PostProperty: React.FC = () => {
     switch (currentStep) {
       case 'property-selection':
         return (
-          <div className="min-h-screen bg-white">
+          <div className="min-h-screen bg-gray-100">
             {/* Header */}
-            <div className="border-b border-gray-200 px-4 lg:px-8 py-4">
+            <div className="bg-white border-b border-gray-200 px-4 lg:px-8 py-4">
               <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center gap-2">
                 <h1 className="text-xl lg:text-2xl font-medium text-gray-800">
                   Sell or Rent your Property For Free
@@ -794,20 +794,25 @@ export const PostProperty: React.FC = () => {
               </div>
             </div>
             
-            {/* Main Content */}
-            <div className="flex flex-col lg:flex-row min-h-[calc(100vh-80px)]">
-              {/* WhyPostSection - Hidden on mobile, shown on desktop */}
-              <div className="hidden lg:block lg:w-[35%] bg-gray-50 border-r border-gray-200">
-                <WhyPostSection />
-              </div>
-              {/* PropertySelectionStep - Full width on mobile, 65% on desktop */}
-              <div className="flex-1 lg:w-[65%]">
-                <PropertySelectionStep onNext={handlePropertySelectionNext} />
+            {/* Centered Content Container */}
+            <div className="flex justify-center py-4 lg:py-8 px-4">
+              <div className="w-full max-w-7xl bg-white rounded-lg shadow-sm border border-gray-200">
+                {/* Main Content */}
+                <div className="flex flex-col lg:flex-row min-h-[600px]">
+                  {/* WhyPostSection - Hidden on mobile, shown on desktop with reduced width */}
+                  <div className="hidden lg:block lg:w-[25%] bg-gray-50 border-r border-gray-200 rounded-l-lg">
+                    <WhyPostSection />
+                  </div>
+                  {/* PropertySelectionStep - Full width on mobile, 75% on desktop */}
+                  <div className="flex-1 lg:w-[75%] rounded-r-lg">
+                    <PropertySelectionStep onNext={handlePropertySelectionNext} />
+                  </div>
+                </div>
               </div>
             </div>
             
             {/* Sections below the form - Stack on mobile */}
-            <div className="lg:hidden">
+            <div className="lg:hidden px-4">
               <WhyPostSection />
             </div>
             <HowItWorksSection />
