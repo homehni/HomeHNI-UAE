@@ -30,7 +30,7 @@ export const PropertyImageGallery: React.FC<PropertyImageGalleryProps> = ({ prop
   return (
     <div className="relative">
       {/* Main Image */}
-      <div className="relative h-[600px] rounded-lg overflow-hidden">
+      <div className="relative h-[480px] rounded-lg overflow-hidden">
         <img
           src={images[0]}
           alt={property.title}
