@@ -593,13 +593,13 @@ export const Dashboard: React.FC = () => {
                       
                       
                       <CardContent className="p-0">
-                        <div className="flex min-h-56 items-stretch">
-                          {/* Image Preview - Responsive width */}
-                          <div className="w-32 sm:w-40 md:w-56 flex-shrink-0 relative">
+                        <div className="flex flex-col md:flex-row md:min-h-56 md:items-stretch">
+                          {/* Image Preview - Mobile: full width on top, Desktop/Tablet: side column */}
+                          <div className="w-full h-48 md:w-40 lg:w-56 md:h-auto flex-shrink-0 relative">
                             <img
                               src={getImageUrl()}
                               alt={property.title}
-                              className="absolute inset-0 w-full h-full object-cover rounded-l-lg sm:rounded-l-lg"
+                              className="absolute inset-0 w-full h-full object-cover rounded-t-lg md:rounded-t-none md:rounded-l-lg"
                               onError={(e) => {
                                 e.currentTarget.src = '/placeholder.svg';
                                 e.currentTarget.alt = 'Image not available';
@@ -608,7 +608,7 @@ export const Dashboard: React.FC = () => {
                           </div>
                           
                           {/* Content - Sleek Layout */}
-                          <div className="flex-1 p-5 flex flex-col min-w-0">
+                          <div className="flex-1 p-4 md:p-5 flex flex-col min-w-0">
                             {/* Header row: title left, actions + status right */}
                             <div className="flex items-start justify-between gap-3 mb-2">
                               <h3 className="text-xl font-semibold text-gray-900 leading-tight truncate pr-2">
