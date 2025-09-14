@@ -211,8 +211,8 @@ const Header = () => {
                 </Select>
               )}
 
-              {/* Country Switcher - Hidden to match reference */}
-              {false && <CountrySwitcher />}
+              {/* Country Switcher - Show as Global dropdown */}
+              <CountrySwitcher />
 
               {/* Desktop Navigation Links - Show everywhere */}
               {<nav className="hidden lg:flex items-center space-x-5">
@@ -346,6 +346,7 @@ const Header = () => {
                     <div className="relative" onMouseEnter={handleServicesHover} onMouseLeave={handleServicesLeave}>
                       <button className={`flex items-center hover:opacity-80 transition-colors duration-500 text-base font-medium uppercase ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
                         SERVICES
+                        <ChevronDown className="ml-1 h-4 w-4" />
                       </button>
                       
                       {/* Custom Services Dropdown */}
@@ -386,6 +387,7 @@ const Header = () => {
                     <div className="relative" onMouseEnter={handleLifetimePlansHover} onMouseLeave={handleLifetimePlansLeave}>
                       <button className={`flex items-center hover:opacity-80 transition-colors duration-500 text-base font-medium uppercase ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
                         PLANS
+                        <ChevronDown className="ml-1 h-4 w-4" />
                       </button>
                       
                       {/* Plans Dropdown */}
