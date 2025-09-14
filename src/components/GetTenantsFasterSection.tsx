@@ -27,7 +27,7 @@ const GetTenantsFasterSection: React.FC = () => {
   ];
 
   return (
-    <div className="w-full h-full bg-gray-50 border-l border-gray-200">
+    <div className="w-full h-full bg-gray-50 border-l border-gray-200 hidden lg:block">
       <div className="p-6 space-y-6 h-full flex flex-col">
         {/* Header */}
         <div className="text-center">
