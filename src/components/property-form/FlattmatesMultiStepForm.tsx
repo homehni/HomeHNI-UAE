@@ -241,15 +241,15 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-red-50/30 to-orange-100/30">      
-      <div className="flex min-h-screen flex-col xl:flex-row">
-        {/* Sidebar - Hidden on mobile and tablet, visible only on extra large screens */}
-        <div className="w-80 flex-shrink-0 hidden xl:block">
+      <div className="flex min-h-screen flex-col lg:flex-row">
+        {/* Sidebar - Hidden on mobile and tablet, visible on desktop */}
+        <div className="w-80 flex-shrink-0 hidden lg:block">
           <PropertyFormSidebar currentStep={currentStep} completedSteps={completedSteps} steps={sidebarSteps} />
         </div>
         
         {/* Main Content - Full width on mobile/tablet, centered on desktop */}
-        <div className="flex-1 p-3 sm:p-4 md:p-6 xl:p-8 w-full">
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-3 sm:p-4 md:p-6 xl:p-8 max-w-4xl mx-auto w-full">
+        <div className="flex-1 p-3 sm:p-4 md:p-6 lg:p-8 w-full">
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-3 sm:p-4 md:p-6 lg:p-8 max-w-4xl mx-auto w-full">
             <ProgressIndicator 
               currentStep={currentStep - 1} 
               totalSteps={6} 
@@ -323,8 +323,8 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
           </div>
         </div>
 
-        {/* Right Sidebar - Hidden on mobile and tablet, visible only on extra large screens */}
-        <div className="w-80 flex-shrink-0 h-full hidden xl:block">
+        {/* Right Sidebar - Hidden on mobile and tablet, visible on desktop */}
+        <div className="w-80 flex-shrink-0 h-full hidden lg:block">
           <GetTenantsFasterSection />
         </div>
       </div>
