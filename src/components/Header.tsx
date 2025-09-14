@@ -408,7 +408,7 @@ const Header = () => {
                     <a href="/service-suite" onClick={e => {
                       e.preventDefault();
                       navigate('/service-suite');
-                    }} className={`hover:opacity-80 transition-colors duration-500 text-base font-medium uppercase ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
+                    }} className={`hover:opacity-80 transition-colors duration-500 text-base font-medium uppercase whitespace-nowrap ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
                       Service Provider
                     </a>
 
