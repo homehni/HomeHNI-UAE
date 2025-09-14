@@ -14,6 +14,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Calendar as CalendarComponent } from '@/components/ui/calendar';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
+import { useIsMobile } from '@/hooks/use-mobile';
 import { SaleDetails } from '@/types/saleProperty';
 
 // Helper function to convert number to words
@@ -114,6 +115,7 @@ export const SaleDetailsStep: React.FC<SaleDetailsStepProps> = ({
   onNext,
   onBack,
 }) => {
+  const isMobile = useIsMobile();
   const [selectedDate, setSelectedDate] = React.useState<Date | undefined>(
     initialData.possessionDate ? new Date(initialData.possessionDate) : undefined
   );
@@ -371,17 +373,17 @@ export const SaleDetailsStep: React.FC<SaleDetailsStepProps> = ({
         </div>
 
         {/* Navigation Buttons */}
-        <div className="flex justify-between pt-6">
-          <Button type="button" variant="outline" onClick={onBack} className="h-12 px-8">
-            <ArrowLeft className="mr-2 h-4 w-4" />
+        <div className="flex justify-between pt-4 md:pt-6">
+          <Button type="button" variant="outline" onClick={onBack} className="h-12 px-6 md:px-8">
+            {!isMobile && <ArrowLeft className="mr-2 h-4 w-4" />}
             Back
           </Button>
           <Button 
             type="submit" 
-            className="h-12 px-8"
+            className="h-12 px-6 md:px-8"
           >
             Save & Continue
-            <ArrowRight className="ml-2 h-4 w-4" />
+            {!isMobile && <ArrowRight className="ml-2 h-4 w-4" />}
           </Button>
         </div>
       </form>
