@@ -174,8 +174,8 @@ const [propertyInfo, setPropertyInfo] = useState({
 
   const handleRoomDetailsNext = (data: any) => {
     setRoomDetails(data);
-    setCompletedSteps(prev => [...prev.filter(step => step !== 3), 3]);
-    setCurrentStep(4);
+    setCompletedSteps(prev => [...prev.filter(step => step !== 4), 4]);
+    setCurrentStep(5);
     scrollToTop();
   };
 
