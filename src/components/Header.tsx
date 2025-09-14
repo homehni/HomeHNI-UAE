@@ -260,6 +260,7 @@ const Header = () => {
                 <div className="relative" onMouseEnter={handleServicesHover} onMouseLeave={handleServicesLeave}>
                   <button className={`flex items-center hover:opacity-80 transition-colors duration-500 text-sm xl:text-base font-medium uppercase ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
                     SERVICES
+                    <ChevronDown className="ml-1 h-4 w-4" />
                   </button>
                   
                   {isServicesDropdownOpen && (
@@ -301,6 +302,7 @@ const Header = () => {
                 <div className="relative" onMouseEnter={handleLifetimePlansHover} onMouseLeave={handleLifetimePlansLeave}>
                   <button className={`flex items-center hover:opacity-80 transition-colors duration-500 text-sm xl:text-base font-medium uppercase ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
                     PLANS
+                    <ChevronDown className="ml-1 h-4 w-4" />
                   </button>
                   
                   {isLifetimePlansDropdownOpen && (
