@@ -204,9 +204,9 @@ const Header = () => {
               {user && <DropdownMenu onOpenChange={setIsUserDropdownOpen}>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" className={`flex items-center space-x-1 p-1 sm:p-2 transition-colors duration-500 ${isScrolled ? 'text-gray-800 hover:bg-gray-100' : 'text-white hover:bg-white/10'}`}>
-                    <Avatar className="h-6 w-6 sm:h-8 sm:w-8">
+                    <Avatar className="h-8 w-8 sm:h-10 sm:w-10">
                       <AvatarImage src={user.user_metadata?.avatar_url} alt={user.user_metadata?.full_name || user.email} />
-                      <AvatarFallback className="bg-brand-red text-white text-xs sm:text-sm">
+                      <AvatarFallback className="bg-brand-red text-white text-sm sm:text-base">
                         {user.user_metadata?.full_name?.charAt(0) || user.email?.charAt(0) || 'U'}
                       </AvatarFallback>
                     </Avatar>
