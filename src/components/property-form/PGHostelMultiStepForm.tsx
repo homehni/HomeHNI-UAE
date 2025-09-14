@@ -391,7 +391,7 @@ const [propertyInfo, setPropertyInfo] = useState({
         </div>
 
         {/* Right Sidebar - Get Tenants Faster */}
-        <div className="w-80 flex-shrink-0 h-full">
+        <div className="w-80 flex-shrink-0 h-full hidden lg:block">
           <GetTenantsFasterSection />
         </div>
       </div>
