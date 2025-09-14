@@ -283,8 +283,8 @@ const PropertyCard = ({
               setShowContactModal(true);
             }}
           >
-            <Phone size={7} className="mr-0.5" />
-            Contact
+            <Phone size={7} className="mr-0.5 sm:mr-0.5 mr-0" />
+            <span className="hidden sm:inline">Contact</span>
           </Button>
           
           {/* Price Display - Bottom Right */}
