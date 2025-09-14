@@ -186,7 +186,7 @@ export const OverviewCard: React.FC<OverviewCardProps> = ({ property }) => {
             return (
               <div key={index} className="flex items-center gap-3">
                 <div className="flex-shrink-0">
-                  <IconComponent className="w-5 h-5 text-gray-500" />
+                  <IconComponent className="w-5 h-5 text-red-600" />
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="text-sm text-gray-600 mb-1">

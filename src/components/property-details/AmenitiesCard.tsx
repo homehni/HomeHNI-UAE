@@ -195,7 +195,7 @@ export const AmenitiesCard: React.FC<AmenitiesCardProps> = ({ amenities }) => {
             return (
               <div key={index} className="flex flex-col items-center text-center">
                 <div className="w-16 h-16 bg-gray-50 rounded-lg flex items-center justify-center mb-3 border border-gray-100">
-                  <IconComponent className="w-6 h-6 text-gray-600" />
+                  <IconComponent className="w-6 h-6 text-red-600" />
                 </div>
                 <span className="text-sm text-gray-700 font-medium">
                   {amenity.name}
