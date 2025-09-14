@@ -61,13 +61,14 @@ export const PropertyHeader: React.FC<PropertyHeaderProps> = ({ property }) => {
             </div>
           </div>
 
-          {/* Right Side - Price & Action */}
+          {/* Right Side - Price Table */}
           <div className="flex items-center gap-6">
-            {/* Price Breakdown */}
-            <div className="flex items-center gap-8">
-              <div className="text-center">
-                <div className="text-2xl font-bold text-gray-900">
-                  ₹{price?.toLocaleString() || '33,000'}
+            {/* Price Table Layout */}
+            <div className="flex bg-gray-50 rounded-lg overflow-hidden border border-gray-200">
+              {/* Rent Column */}
+              <div className="px-6 py-4 border-r border-gray-200 text-center">
+                <div className="text-2xl font-bold text-gray-900 mb-1">
+                  ₹{price?.toLocaleString() || '60,000'}
                   <span className="text-lg font-normal text-gray-500 ml-1">
                     + {deposit.toLocaleString()} ₹
                   </span>
@@ -75,16 +76,18 @@ export const PropertyHeader: React.FC<PropertyHeaderProps> = ({ property }) => {
                 <div className="text-sm text-gray-600">Rent</div>
               </div>
               
-              <div className="text-center">
-                <div className="text-2xl font-bold text-gray-900">
+              {/* Area Column */}
+              <div className="px-6 py-4 border-r border-gray-200 text-center">
+                <div className="text-2xl font-bold text-gray-900 mb-1">
                   {area.toLocaleString()}
                 </div>
                 <div className="text-sm text-gray-600">Sq.Ft</div>
               </div>
               
-              <div className="text-center">
-                <div className="text-2xl font-bold text-gray-900">
-                  ₹{((price || 33000) * 2).toLocaleString()}
+              {/* Deposit Column */}
+              <div className="px-6 py-4 text-center">
+                <div className="text-2xl font-bold text-gray-900 mb-1">
+                  ₹{((price || 60000) * 2).toLocaleString()}
                 </div>
                 <div className="text-sm text-gray-600">Deposit</div>
               </div>
