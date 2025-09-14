@@ -292,7 +292,7 @@ const [propertyInfo, setPropertyInfo] = useState({
     <div className="min-h-screen bg-gradient-to-br from-red-50/30 to-orange-100/30">      
       <div className="flex min-h-screen">
         {/* Sidebar */}
-        <div className="w-80 flex-shrink-0">
+        <div className="w-80 flex-shrink-0 hidden lg:block">
           <PgHostelSidebar 
             currentStep={currentStep} 
             completedSteps={completedSteps} 
