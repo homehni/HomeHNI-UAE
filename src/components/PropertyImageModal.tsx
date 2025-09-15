@@ -89,17 +89,17 @@ export const PropertyImageModal: React.FC<PropertyImageModalProps> = ({
               <Button
                 variant="ghost"
                 onClick={goToPrevious}
-                className="absolute left-6 top-1/2 transform -translate-y-1/2 w-16 h-16 rounded-full bg-black/60 hover:bg-black/80 text-white border border-white/20 transition-all duration-200 hover:scale-105"
+                className="absolute left-6 top-1/2 -translate-y-1/2 w-20 h-20 rounded-full bg-black/60 hover:bg-black/80 text-white border border-white/20 transition-all duration-200 hover:scale-105 flex items-center justify-center"
               >
-                <ChevronLeft className="h-8 w-8" />
+                <ChevronLeft className="h-10 w-10" />
               </Button>
               
               <Button
                 variant="ghost"
                 onClick={goToNext}
-                className="absolute right-6 top-1/2 transform -translate-y-1/2 w-16 h-16 rounded-full bg-black/60 hover:bg-black/80 text-white border border-white/20 transition-all duration-200 hover:scale-105"
+                className="absolute right-6 top-1/2 -translate-y-1/2 w-20 h-20 rounded-full bg-black/60 hover:bg-black/80 text-white border border-white/20 transition-all duration-200 hover:scale-105 flex items-center justify-center"
               >
-                <ChevronRight className="h-8 w-8" />
+                <ChevronRight className="h-10 w-10" />
               </Button>
             </>
           )}
