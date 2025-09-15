@@ -700,7 +700,7 @@ export const Dashboard: React.FC = () => {
                                 title={property.title}
                                 onClick={() => handleViewProperty(property)}
                               >
-                                <h3 className="font-medium text-gray-800 text-sm leading-tight truncate hover:text-blue-600 transition-colors">
+                                <h3 className="font-medium text-gray-800 text-sm leading-tight truncate hover:text-red-500 transition-colors">
                                   {property.title}
                                 </h3>
                                 <svg className="w-3 h-3 text-gray-400 group-hover:text-red-500 flex-shrink-0 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
