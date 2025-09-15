@@ -677,20 +677,20 @@ export const Dashboard: React.FC = () => {
                   return (
                     <Card key={property.id} className="relative bg-white border border-gray-200 shadow-sm hover:shadow-md transition-shadow overflow-hidden">
                       {/* Inactive Status Badge - Top Left */}
-                      <div className="absolute top-3 left-3 z-20 px-2 py-1 text-xs font-medium rounded bg-gray-500 text-white">
+                      <div className="absolute top-2 left-2 z-20 px-2 py-1 text-xs font-medium rounded bg-gray-500 text-white">
                         Inactive
                       </div>
 
                       {/* Diagonal Ribbon - Top Right Corner */}
-                      <div className="absolute top-0 right-0 z-10 overflow-hidden">
-                        <div className={`relative ${property.listing_type === 'rent' ? 'bg-orange-500' : 'bg-blue-500'} text-white text-xs font-medium py-1 px-8 transform rotate-45 translate-x-4 -translate-y-2`}>
-                          {property.listing_type === 'rent' ? 'For Rent' : 'For Buy'}
+                      <div className="absolute top-0 right-0 z-10">
+                        <div className={`${property.listing_type === 'rent' ? 'bg-orange-500' : 'bg-blue-500'} text-white text-xs font-medium py-1 px-6 transform rotate-45 translate-x-3 translate-y-2`}>
+                          For {property.listing_type === 'rent' ? 'Rent' : 'Buy'}
                         </div>
                       </div>
 
                       <CardContent className="p-0">
                         {/* Property Image */}
-                        <div className="relative h-40 bg-gray-100">
+                        <div className="relative h-32 bg-gray-50">
                           <img
                             src={getImageUrl()}
                             alt={property.title}
@@ -702,10 +702,10 @@ export const Dashboard: React.FC = () => {
                           {/* Camera icon placeholder if no image */}
                           {(!property.images || property.images.length === 0) && (
                             <div className="absolute inset-0 flex items-center justify-center">
-                              <div className="w-12 h-12 border border-gray-300 rounded flex items-center justify-center bg-white">
-                                <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                              <div className="w-10 h-10 border border-gray-300 rounded flex items-center justify-center bg-white">
+                                <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
                                 </svg>
                               </div>
                             </div>
@@ -716,7 +716,7 @@ export const Dashboard: React.FC = () => {
                         <div className="p-3">
                           {/* Title with External Link Icon */}
                           <div className="flex items-start justify-between mb-1">
-                            <h3 className="font-normal text-gray-900 text-sm flex-1 pr-2" title={property.title}>
+                            <h3 className="font-normal text-gray-900 text-sm flex-1 pr-1 leading-tight" title={property.title}>
                               {property.title}
                             </h3>
                             <svg className="w-3 h-3 text-blue-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -724,48 +724,43 @@ export const Dashboard: React.FC = () => {
                             </svg>
                           </div>
                           
-                          {/* Location */}
-                          <div className="text-sm text-gray-500 mb-1">
-                            {property.locality || 'Chanchalguda'}
-                          </div>
-                          
                           {/* Price and Location */}
                           <div className="text-sm text-gray-700 mb-3">
                             <span className="text-gray-500">
-                              {property.listing_type === 'rent' ? 'Rent: ' : 'Price: '}
+                              {property.listing_type === 'rent' ? 'Price: ' : 'Price: '}
                             </span>
                             <span className="font-medium">₹{property.expected_price.toLocaleString()}</span>
                             <span className="text-gray-500 ml-1">• Hyderabad</span>
                           </div>
 
                           {/* Action Buttons */}
-                          <div className="flex gap-2 mb-3">
+                          <div className="flex gap-2 mb-2">
                             <Button
                               variant="outline"
                               size="sm"
                               onClick={() => handleEditProperty(property)}
-                              className="text-xs px-3 py-1 flex-1 h-8"
+                              className="text-xs px-3 py-1 flex-1 h-7 font-normal"
                             >
                               Edit
                             </Button>
                             <Button
                               variant="outline"
                               size="sm"
-                              className="text-xs px-3 py-1 flex-1 h-8"
+                              className="text-xs px-3 py-1 flex-1 h-7 font-normal"
                             >
                               Upload Media
                             </Button>
                           </div>
 
                           {/* Contact Status */}
-                          <div className="text-sm text-gray-500 mb-3">
+                          <div className="text-sm text-gray-500 mb-2">
                             None Contacted
                           </div>
 
                           {/* Go Premium Button */}
                           <Button
                             onClick={() => handleUpgradeProperty(property)}
-                            className="w-full bg-red-500 hover:bg-red-600 text-white text-xs py-2 h-8"
+                            className="w-full bg-red-500 hover:bg-red-600 text-white text-xs py-1.5 h-7 font-normal"
                           >
                             <svg className="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
                               <path fillRule="evenodd" d="M5 2a1 1 0 011 1v1h1a1 1 0 010 2H6v1a1 1 0 01-2 0V6H3a1 1 0 010-2h1V3a1 1 0 011-1zm0 10a1 1 0 011 1v1h1a1 1 0 110 2H6v1a1 1 0 11-2 0v-1H3a1 1 0 110-2h1v-1a1 1 0 011-1zM12 2a1 1 0 01.894.553l2.991 5.982a.869.869 0 010 .775l-2.991 5.982A1 1 0 0112 16H9a1 1 0 01-1-1V3a1 1 0 011-1h3z" clipRule="evenodd" />
