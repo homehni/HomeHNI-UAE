@@ -694,12 +694,12 @@ export const Dashboard: React.FC = () => {
                           {/* Left Side - Text Content */}
                           <div className="flex-1 p-3">
                             {/* Title with External Link Icon */}
-                            <div className="flex items-start gap-2 mb-2">
+                            <div className="flex items-start gap-2 mb-2 mt-8">
                               <h3 className="font-medium text-gray-900 text-base flex-1 leading-snug truncate" title={property.title}>
                                 {property.title}
                               </h3>
                               <svg className="w-3 h-3 text-blue-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                               </svg>
                             </div>
                             
