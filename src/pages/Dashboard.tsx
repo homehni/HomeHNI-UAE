@@ -753,24 +753,22 @@ export const Dashboard: React.FC = () => {
                           </div>
 
                           {/* Action Buttons */}
-                          <div className="flex gap-2 mb-4">
-                            <div className="flex justify-between gap-2">
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={() => handleEditProperty(property)}
-                                className="text-xs px-4"
-                              >
-                                Edit
-                              </Button>
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                className="text-xs px-4"
-                              >
-                                Upload Media
-                              </Button>
-                            </div>
+                          <div className="flex justify-between gap-2 mb-4">
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => handleEditProperty(property)}
+                              className="text-xs px-4 flex-1"
+                            >
+                              Edit
+                            </Button>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="text-xs px-4 flex-1"
+                            >
+                              Upload Media
+                            </Button>
                           </div>
 
                           {/* Contact Status */}
