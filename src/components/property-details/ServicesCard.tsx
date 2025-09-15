@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { 
   Truck, 
   FileText, 
@@ -12,27 +13,32 @@ export const ServicesCard: React.FC = () => {
     {
       icon: Truck,
       name: 'Packers and Movers',
-      isNew: false
+      isNew: false,
+      link: '/packers-movers'
     },
     {
       icon: FileText,
       name: 'Create Agreement',
-      isNew: false
+      isNew: false,
+      link: '/legal-services'
     },
     {
       icon: Paintbrush,
       name: 'Painting',
-      isNew: false
+      isNew: false,
+      link: '/painting-cleaning'
     },
     {
       icon: Sparkles,
       name: 'Cleaning',
-      isNew: false
+      isNew: false,
+      link: '/painting-cleaning'
     },
     {
       icon: Wrench,
       name: 'Home Repairs',
-      isNew: true
+      isNew: true,
+      link: '/handover-services'
     }
   ];
 
@@ -47,19 +53,23 @@ export const ServicesCard: React.FC = () => {
           {services.map((service, index) => {
             const IconComponent = service.icon;
             return (
-              <div key={index} className="flex flex-col items-center text-center relative">
+              <Link 
+                key={index} 
+                to={service.link}
+                className="flex flex-col items-center text-center relative group"
+              >
                 {service.isNew && (
                   <div className="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full font-medium">
                     NEW
                   </div>
                 )}
-                <div className="w-16 h-16 bg-gray-50 rounded-lg flex items-center justify-center mb-3 border border-gray-100 hover:bg-gray-100 transition-colors cursor-pointer">
+                <div className="w-16 h-16 bg-gray-50 rounded-lg flex items-center justify-center mb-3 border border-gray-100 hover:bg-gray-100 transition-colors cursor-pointer group-hover:border-red-200 group-hover:bg-red-50">
                   <IconComponent className="w-6 h-6 text-red-600" />
                 </div>
-                <span className="text-sm text-gray-700 font-medium">
+                <span className="text-sm text-gray-700 font-medium group-hover:text-red-600 transition-colors">
                   {service.name}
                 </span>
-              </div>
+              </Link>
             );
           })}
         </div>

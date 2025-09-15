@@ -93,9 +93,11 @@ export const PropertyHeader: React.FC<PropertyHeaderProps> = ({ property }) => {
 
           {/* Apply Loan Button Section */}
           <div className="px-6 py-4">
-            <Button className="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg font-medium">
-              Apply Loan
-            </Button>
+            <Link to="/loans">
+              <Button className="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg font-medium">
+                Apply Loan
+              </Button>
+            </Link>
           </div>
         </div>
       </div>
