@@ -70,7 +70,7 @@ export const PropertySelectionStep: React.FC<PropertySelectionStepProps> = ({
       <div className="p-4">
         <div className="max-w-none space-y-4">
           {/* Personal Information Form */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 gap-3">
             {/* Name */}
             <div className="space-y-1">
               <Label htmlFor="name" className="text-sm font-medium text-gray-700">Name *</Label>
@@ -204,7 +204,7 @@ export const PropertySelectionStep: React.FC<PropertySelectionStepProps> = ({
           {/* Select Property Ad Type */}
           <div className="space-y-3">
             <h3 className="text-base font-semibold text-gray-800 text-center">Select Property Ad Type</h3>
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
               {getListingTypes().map((type) => (
                 <button
                   key={type}
