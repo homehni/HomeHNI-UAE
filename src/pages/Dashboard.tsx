@@ -754,40 +754,23 @@ export const Dashboard: React.FC = () => {
 
                           {/* Action Buttons */}
                           <div className="flex gap-2 mb-4">
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => handleEditProperty(property)}
-                              className="text-xs px-4"
-                            >
-                              <Edit className="w-3 h-3 mr-1" />
-                              Edit
-                            </Button>
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => handleViewProperty(property)}
-                              className="text-xs px-4"
-                            >
-                              <Eye className="w-3 h-3 mr-1" />
-                              View
-                            </Button>
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => openDeleteModal('property', property.id, property.title)}
-                              className="text-xs px-4 text-red-600 hover:text-red-700 hover:border-red-600"
-                            >
-                              <Trash className="w-3 h-3 mr-1" />
-                              Delete
-                            </Button>
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              className="text-xs px-4 bg-gray-100 text-gray-600 hover:bg-gray-200"
-                            >
-                              Upload Media
-                            </Button>
+                            <div className="flex justify-between gap-2">
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => handleEditProperty(property)}
+                                className="text-xs px-4"
+                              >
+                                Edit
+                              </Button>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                className="text-xs px-4"
+                              >
+                                Upload Media
+                              </Button>
+                            </div>
                           </div>
 
                           {/* Contact Status */}
