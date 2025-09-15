@@ -783,7 +783,7 @@ export const PostProperty: React.FC = () => {
         return (
           <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
             {/* Header */}
-            <div className="bg-white/80 backdrop-blur-sm border-b border-gray-200/50 px-4 lg:px-8 py-6 pt-20 lg:pt-10">
+            <div className="bg-white/80 backdrop-blur-sm border-b border-gray-200/50 px-4 lg:px-8 py-4 pt-20 lg:pt-8">
               <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center gap-3">
                 <h1 className="text-2xl lg:text-3xl font-bold bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent">
                   Sell or Rent your Property For Free
@@ -795,8 +795,8 @@ export const PostProperty: React.FC = () => {
             </div>
             
             {/* Centered Content Container */}
-            <div className="flex justify-center py-6 lg:py-12 px-4">
-              <div className="w-full max-w-7xl bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl border border-white/50">
+            <div className="flex justify-start py-2 lg:py-4 px-2 lg:px-4">
+              <div className="w-full max-w-6xl bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl border border-white/50 ml-0 lg:ml-4">
                 {/* Main Content */}
                 <div className="flex flex-col lg:flex-row overflow-hidden rounded-2xl">
                   {/* WhyPostSection - Hidden on mobile, shown on desktop with reduced width */}
