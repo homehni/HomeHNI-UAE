@@ -18,13 +18,13 @@ export const NeighborhoodCard: React.FC<NeighborhoodCardProps> = ({ property }) 
         {/* Map Container */}
         <div className="rounded-xl ring-1 ring-gray-200 overflow-hidden h-64 md:h-80 mb-4 relative">
           <iframe
-            title="Google Maps"
+            title={`Google Map of ${property.locality}, ${property.city}`}
             width="100%"
             height="100%"
             loading="lazy"
             allowFullScreen
             referrerPolicy="no-referrer-when-downgrade"
-            src={`https://www.google.com/maps/embed/v1/place?key=YOUR_API_KEY&q=${encodeURIComponent(property.locality + ', ' + property.city)}&zoom=15`}
+            src={`https://www.google.com/maps?q=${encodeURIComponent(property.locality + ', ' + property.city)}&z=15&output=embed`}
           />
           
           {/* Location Info Overlay */}
@@ -36,15 +36,25 @@ export const NeighborhoodCard: React.FC<NeighborhoodCardProps> = ({ property }) 
               {property.city}
             </p>
             <div className="flex flex-col gap-2">
-              <button className="flex items-center justify-center gap-2 px-3 py-2 bg-blue-600 text-white rounded-md text-sm hover:bg-blue-700">
+              <a
+                href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(property.locality + ', ' + property.city)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-2 px-3 py-2 bg-blue-600 text-white rounded-md text-sm hover:bg-blue-700"
+              >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 01.553-.894L9 2l6 3 6-3v13l-6 3-6-3z" />
                 </svg>
                 Directions
-              </button>
-              <button className="text-sm text-blue-600 hover:text-blue-800">
+              </a>
+              <a
+                className="text-sm text-blue-600 hover:text-blue-800"
+                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(property.locality + ', ' + property.city)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 View larger map
-              </button>
+              </a>
             </div>
           </div>
         </div>
