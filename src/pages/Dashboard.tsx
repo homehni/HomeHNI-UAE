@@ -690,7 +690,7 @@ export const Dashboard: React.FC = () => {
 
                       <CardContent className="p-0">
                         {/* Horizontal Layout: Text Left, Image Right */}
-                        <div className="flex">
+                        <div className="flex pt-8">
                           {/* Left Side - Text Content */}
                           <div className="flex-1 p-3">
                             {/* Title with External Link Icon */}
