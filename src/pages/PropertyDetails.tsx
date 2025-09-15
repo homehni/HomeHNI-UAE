@@ -418,8 +418,6 @@ const PropertyDetails: React.FC = () => {
               
               
               
-              {/* Neighborhood */}
-              <NeighborhoodCard property={property} />
             </div>
           </div>
         </section>
