@@ -15,6 +15,7 @@ import {
   Shield
 } from 'lucide-react';
 import { SecureContactForm } from './SecureContactForm';
+import propertyPlaceholder from '@/assets/property-placeholder.png';
 
 interface Property {
   id: string;
@@ -74,6 +75,9 @@ export const PropertyDetailModal: React.FC<PropertyDetailModalProps> = ({
                     src={image} 
                     alt={`Property ${index + 1}`}
                     className="w-full h-full object-cover"
+                    onError={(e) => {
+                      e.currentTarget.src = propertyPlaceholder;
+                    }}
                   />
                 </div>
               ))}

@@ -38,6 +38,9 @@ export const PropertyImageGallery: React.FC<PropertyImageGalleryProps> = ({ prop
             alt={property.title}
             className="w-full h-full object-cover cursor-pointer"
             onClick={() => handleImageClick(0)}
+            onError={(e) => {
+              e.currentTarget.src = propertyPlaceholder;
+            }}
           />
           
           {/* Overlay Buttons */}
@@ -76,6 +79,9 @@ export const PropertyImageGallery: React.FC<PropertyImageGalleryProps> = ({ prop
               alt={property.title}
               className="w-full h-full object-cover cursor-pointer"
               onClick={() => handleImageClick(0)}
+              onError={(e) => {
+                e.currentTarget.src = propertyPlaceholder;
+              }}
             />
             
             {/* Overlay Buttons */}
@@ -121,6 +127,9 @@ export const PropertyImageGallery: React.FC<PropertyImageGalleryProps> = ({ prop
                   alt={`${property.title} - Image 2`}
                   className="w-full h-full object-cover cursor-pointer rounded-lg"
                   onClick={() => handleImageClick(1)}
+                  onError={(e) => {
+                    e.currentTarget.src = propertyPlaceholder;
+                  }}
                 />
               </div>
             )}
@@ -132,6 +141,9 @@ export const PropertyImageGallery: React.FC<PropertyImageGalleryProps> = ({ prop
                   alt={`${property.title} - Image 3`}
                   className="w-full h-full object-cover cursor-pointer rounded-lg"
                   onClick={() => handleImageClick(2)}
+                  onError={(e) => {
+                    e.currentTarget.src = propertyPlaceholder;
+                  }}
                 />
                 {/* Show +X overlay if there are more than 3 images */}
                 {images.length > 3 && (

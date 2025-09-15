@@ -4,6 +4,7 @@ import { MapPin, ShieldCheck, Share2, Heart, Image, Phone, CalendarClock, BadgeI
 import { Button } from '@/components/ui/button';
 import { PropertyImageModal } from '@/components/PropertyImageModal';
 import { useAuth } from '@/contexts/AuthContext';
+import propertyPlaceholder from '@/assets/property-placeholder.png';
 
 interface PropertyHeroProps {
   property: {
@@ -162,10 +163,13 @@ export const PropertyHero: React.FC<PropertyHeroProps> = ({
             <div className="sm:hidden">
               <div className="relative">
                 <img
-                  src={property.images?.[0] || '/placeholder.svg'}
+                  src={property.images?.[0] || propertyPlaceholder}
                   alt={property.title}
                   className="w-full h-64 object-cover rounded-lg"
                   loading="lazy"
+                  onError={(e) => {
+                    e.currentTarget.src = propertyPlaceholder;
+                  }}
                 />
                 <button 
                   onClick={handleViewAllPhotos}
@@ -186,10 +190,13 @@ export const PropertyHero: React.FC<PropertyHeroProps> = ({
                   onClick={() => handleImageClick(0)}
                 >
                   <img
-                    src={property.images?.[0] || '/placeholder.svg'}
+                    src={property.images?.[0] || propertyPlaceholder}
                     alt={property.title}
                     className="w-full h-full object-cover transition-opacity group-hover:opacity-90"
                     loading="lazy"
+                    onError={(e) => {
+                      e.currentTarget.src = propertyPlaceholder;
+                    }}
                   />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
                 <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition-all duration-200 flex items-center justify-center">
@@ -204,10 +211,13 @@ export const PropertyHero: React.FC<PropertyHeroProps> = ({
                   onClick={() => handleImageClick(1)}
                 >
                   <img
-                    src={property.images?.[1] || '/placeholder.svg'}
+                    src={property.images?.[1] || propertyPlaceholder}
                     alt={`${property.title} - Image 2`}
                     className="w-full h-full object-cover transition-opacity group-hover:opacity-90"
                     loading="lazy"
+                    onError={(e) => {
+                      e.currentTarget.src = propertyPlaceholder;
+                    }}
                   />
                   <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition-all duration-200 flex items-center justify-center">
                     <Image className="h-6 w-6 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
@@ -218,10 +228,13 @@ export const PropertyHero: React.FC<PropertyHeroProps> = ({
                   onClick={() => handleImageClick(2)}
                 >
                   <img
-                    src={property.images?.[2] || '/placeholder.svg'}
+                    src={property.images?.[2] || propertyPlaceholder}
                     alt={`${property.title} - Image 3`}
                     className="w-full h-full object-cover transition-opacity group-hover:opacity-90"
                     loading="lazy"
+                    onError={(e) => {
+                      e.currentTarget.src = propertyPlaceholder;
+                    }}
                   />
                   <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition-all duration-200 flex items-center justify-center">
                     <Image className="h-6 w-6 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
