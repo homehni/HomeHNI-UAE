@@ -748,7 +748,7 @@ export const Dashboard: React.FC = () => {
                             </Button>
 
                             {/* Listing Progress */}
-                            <div className="mb-3">
+                            <div className="mb-3 w-full">
                               {(() => {
                                 const completionResult = property.property_type === 'pg_hostel' 
                                   ? calculatePGPropertyCompletion(property)
