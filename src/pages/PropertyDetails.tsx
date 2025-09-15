@@ -383,7 +383,7 @@ const PropertyDetails: React.FC = () => {
         </div>
 
         {/* Main Content */}
-        <section className="py-6">
+        <section className="pt-24 sm:pt-6 pb-6">
           <div className="mx-auto max-w-7xl px-4">
             {/* Property Gallery and Info Grid */}
             <div className="grid lg:grid-cols-3 gap-8 mb-8">
