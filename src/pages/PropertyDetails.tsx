@@ -417,11 +417,6 @@ const PropertyDetails: React.FC = () => {
               <AmenitiesCard amenities={mergedAmenities} />
               
               
-              {/* Property Details */}
-              <PropertyDetailsCard property={mergedProperty as any} />
-              
-              {/* Location */}
-              <LocationCard property={mergedProperty as any} />
               
               {/* Neighborhood */}
               <NeighborhoodCard property={property} />
