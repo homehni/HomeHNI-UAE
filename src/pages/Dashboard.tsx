@@ -695,7 +695,7 @@ export const Dashboard: React.FC = () => {
                           <div className="flex-1 p-3">
                             {/* Title with External Link Icon */}
                             <div className="flex items-start gap-2 mb-2">
-                              <h3 className="font-normal text-gray-900 text-sm flex-1 leading-tight" title={property.title}>
+                              <h3 className="font-medium text-gray-900 text-sm flex-1 leading-tight truncate" title={property.title}>
                                 {property.title}
                               </h3>
                               <svg className="w-3 h-3 text-blue-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -720,13 +720,6 @@ export const Dashboard: React.FC = () => {
                               >
                                 Edit
                               </Button>
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                className="text-xs px-3 py-1 h-7 font-normal"
-                              >
-                                Upload Media
-                              </Button>
                             </div>
 
                             {/* Contact Status */}
@@ -747,22 +740,29 @@ export const Dashboard: React.FC = () => {
                           </div>
 
                           {/* Right Side - Uniform Image Placeholder */}
-                          <div className="w-20 h-32 bg-gray-100 border-l border-gray-200 flex items-center justify-center">
+                          <div className="w-28 h-24 bg-gray-100 border border-gray-200 rounded-md flex items-center justify-center">
                             {(property.images && property.images.length > 0) ? (
                               <img
                                 src={getImageUrl()}
                                 alt={property.title}
-                                className="w-full h-full object-cover"
+                                className="w-full h-full object-cover rounded-md"
                                 onError={(e) => {
                                   e.currentTarget.src = '/placeholder.svg';
                                 }}
                               />
                             ) : (
-                              <div className="w-12 h-12 border border-gray-300 rounded bg-white flex items-center justify-center">
-                                <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <div className="flex flex-col items-center justify-center gap-2">
+                                <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
                                 </svg>
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  className="h-7 px-3 text-xs font-normal text-gray-600 border-gray-300 bg-white"
+                                >
+                                  Upload Media
+                                </Button>
                               </div>
                             )}
                           </div>
