@@ -57,7 +57,7 @@ const ContactUs = () => {
       <Header />
       
       {/* Main content with banner */}
-      <div className="pt-8">
+      <div className="md:pt-8">
         {/* Banner Section */}
         <div className="relative h-96 bg-gradient-to-r from-brand-red to-brand-maroon overflow-hidden">
           <div 

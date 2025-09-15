@@ -55,7 +55,7 @@ const Index = () => {
       {/* Header overlapping with content */}
       <Header />
       {/* Content starts immediately after marquee */}
-      <div className="pt-8"> {/* Reduced padding to allow header overlap */}
+      <div className="md:pt-8"> {/* Only add padding on desktop where marquee is visible */}
         <div className="relative">
           <SearchSection ref={searchSectionRef} />
           <DirectorySection />

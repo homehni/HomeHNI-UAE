@@ -28,7 +28,7 @@ const AboutUs = () => {
       <Header />
       
       {/* Hero Section with new banner image merged with header/marquee */}
-      <div className="pt-8">
+      <div className="md:pt-8">
         <div className="relative h-[50vh] overflow-hidden">
           {/* New Banner Background */}
           <div 

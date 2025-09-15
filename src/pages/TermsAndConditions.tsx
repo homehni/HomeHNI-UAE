@@ -28,7 +28,7 @@ const TermsAndConditions = () => {
       <Header />
       
       {/* Hero Section with banner image merged with header/marquee */}
-      <div className="pt-8">
+      <div className="md:pt-8">
         <div className="relative h-[50vh] overflow-hidden">
           {/* Banner Background */}
           <div 

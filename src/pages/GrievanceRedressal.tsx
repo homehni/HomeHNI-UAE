@@ -103,7 +103,7 @@ const GrievanceRedressal = () => {
       <Header />
       
       {/* Hero Section with grievance image */}
-      <div className="pt-8">
+      <div className="md:pt-8">
         <div className="relative h-[50vh] overflow-hidden">
           {/* Grievance Banner Background */}
           <div 

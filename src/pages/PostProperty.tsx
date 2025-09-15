@@ -890,7 +890,7 @@ export const PostProperty: React.FC = () => {
     <div className="min-h-screen bg-white">
       <Marquee />
       <Header />
-      <div className="pt-16 lg:pt-24">
+      <div className="md:pt-16 lg:pt-24">
         {renderCurrentStep()}
       </div>
       {/* Only show Footer on property-selection step */}
