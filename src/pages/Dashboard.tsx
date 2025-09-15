@@ -747,7 +747,7 @@ export const Dashboard: React.FC = () => {
                           </div>
 
                           {/* Right Side - Image Area */}
-                          <div className="w-24 h-32 bg-gray-100 flex items-center justify-center">
+                          <div className="w-24 h-24 bg-gray-100 flex items-center justify-center">
                             {(property.images && property.images.length > 0) ? (
                               <img
                                 src={getImageUrl()}
