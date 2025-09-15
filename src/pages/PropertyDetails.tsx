@@ -382,24 +382,24 @@ const PropertyDetails: React.FC = () => {
         </div>
 
         {/* Main Content */}
-        <section className="pt-24 sm:pt-6 pb-6">
-          <div className="mx-auto max-w-7xl px-4">
+        <section className="pt-24 sm:pt-6 pb-6 overflow-x-hidden min-w-0">
+          <div className="mx-auto max-w-7xl px-2 sm:px-4 overflow-x-hidden">
             {/* Property Gallery and Info Grid */}
-            <div className="grid lg:grid-cols-3 gap-8 mb-8">
+            <div className="grid lg:grid-cols-3 gap-4 sm:gap-8 mb-8 min-w-0">
               {/* Left - Image Gallery */}
-              <div className="lg:col-span-2">
-                <div className="mt-6 sm:mt-0">
+              <div className="lg:col-span-2 min-w-0">
+                <div className="mt-6 sm:mt-0 overflow-hidden">
                   <PropertyImageGallery property={mergedProperty as any} />
                 </div>
                 
                 {/* Header Section - Mobile Only (Below Images) */}
-                <div className="block sm:hidden mt-6">
+                <div className="block sm:hidden mt-6 overflow-hidden">
                   <PropertyHeader property={mergedProperty as any} />
                 </div>
               </div>
               
               {/* Right - Property Info Cards */}
-              <div className="space-y-6">
+              <div className="space-y-6 min-w-0">
                 <PropertyInfoCards property={mergedProperty as any} />
                 
                 {/* Visit Schedule Card */}
@@ -414,7 +414,7 @@ const PropertyDetails: React.FC = () => {
             </div>
 
             {/* Additional Details Sections */}
-            <div className="space-y-6">
+            <div className="space-y-6 overflow-x-hidden">
               {/* Overview */}
               <OverviewCard property={mergedProperty as any} />
               

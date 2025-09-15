@@ -114,8 +114,8 @@ export const PropertyInfoCards: React.FC<PropertyInfoCardsProps> = ({ property }
   ];
 
   return (
-    <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
-      <div className="grid grid-cols-1 sm:grid-cols-2">
+    <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden min-w-0">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-0 min-w-0">
         {infoCards.map((card, index) => {
           const isRightCol = index % 2 === 1;
           const rows = Math.ceil(infoCards.length / 2);
@@ -130,16 +130,16 @@ export const PropertyInfoCards: React.FC<PropertyInfoCardsProps> = ({ property }
           return (
             <div
               key={index}
-              className={`p-3 sm:p-4 ${cellBorders} flex items-center gap-3 sm:gap-4`}
+              className={`p-3 sm:p-4 ${cellBorders} flex items-center gap-3 sm:gap-4 min-w-0 overflow-hidden`}
             >
               <div className="bg-gray-50 p-2 sm:p-3 rounded-lg flex-shrink-0">
                 <card.icon className="w-5 h-5 sm:w-6 sm:h-6 text-gray-600" />
               </div>
-              <div className="flex-1 min-w-0">
+              <div className="flex-1 min-w-0 overflow-hidden">
                 <div className="font-semibold text-gray-900 text-sm sm:text-base truncate">
                   {card.title}
                 </div>
-                <div className="text-xs sm:text-sm text-gray-500">
+                <div className="text-xs sm:text-sm text-gray-500 truncate">
                   {card.subtitle}
                 </div>
               </div>

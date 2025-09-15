@@ -45,15 +45,15 @@ export const PropertyHeader: React.FC<PropertyHeaderProps> = ({ property }) => {
         </nav>
 
         {/* Header Content */}
-        <div className="flex flex-col lg:flex-row lg:items-center border border-gray-200 rounded-lg bg-white overflow-hidden">
+        <div className="flex flex-col lg:flex-row lg:items-center border border-gray-200 rounded-lg bg-white overflow-hidden min-w-0">
           {/* Mobile Layout */}
-          <div className="block lg:hidden">
+          <div className="block lg:hidden min-w-0">
             {/* Property Info Section - Mobile */}
-            <div className="px-3 sm:px-4 py-3 border-b border-gray-200">
-              <h1 className="text-lg sm:text-xl font-bold text-gray-900 mb-1 line-clamp-2">
+            <div className="px-3 sm:px-4 py-3 border-b border-gray-200 min-w-0">
+              <h1 className="text-lg sm:text-xl font-bold text-gray-900 mb-1 break-words">
                 {property.title}
               </h1>
-              <p className="text-sm sm:text-base text-gray-600 truncate">
+              <p className="text-sm sm:text-base text-gray-600 break-words">
                 Standalone building, {property.locality}
               </p>
             </div>
