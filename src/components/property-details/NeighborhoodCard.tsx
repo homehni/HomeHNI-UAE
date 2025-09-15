@@ -18,12 +18,13 @@ export const NeighborhoodCard: React.FC<NeighborhoodCardProps> = ({ property }) 
         {/* Map Container */}
         <div className="rounded-xl ring-1 ring-gray-200 overflow-hidden h-64 md:h-80 mb-4 relative">
           <iframe
-            title="map"
+            title="Google Maps"
             width="100%"
             height="100%"
             loading="lazy"
-            src={`https://www.openstreetmap.org/export/embed.html?bbox=77.5%2C12.9%2C77.6%2C13.0&layer=mapnik&marker=12.95%2C77.55`}
-            style={{ border: 'none' }}
+            allowFullScreen
+            referrerPolicy="no-referrer-when-downgrade"
+            src={`https://www.google.com/maps/embed/v1/place?key=YOUR_API_KEY&q=${encodeURIComponent(property.locality + ', ' + property.city)}&zoom=15`}
           />
           
           {/* Location Info Overlay */}
