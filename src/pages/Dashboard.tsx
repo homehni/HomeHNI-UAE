@@ -675,18 +675,20 @@ export const Dashboard: React.FC = () => {
                   const statusBadge = getStatusBadge();
 
                   return (
-                    <Card key={property.id} className="relative bg-white border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
-                      {/* Status Badge */}
-                      <div className={`absolute top-3 left-3 z-10 px-2 py-1 text-xs font-medium rounded ${statusBadge.className}`}>
-                        {statusBadge.text}
+                    <Card key={property.id} className="relative bg-white border border-gray-200 shadow-sm hover:shadow-md transition-shadow overflow-hidden">
+                      {/* Inactive Status Badge - Top Left */}
+                      <div className="absolute top-3 left-3 z-10 px-2 py-1 text-xs font-medium rounded bg-gray-500 text-white">
+                        Inactive
                       </div>
 
-                      {/* Special Status Badge for Rented/Sold */}
-                      {property.status === 'inactive' && (
-                        <div className="absolute top-3 right-3 z-10 px-2 py-1 text-xs font-medium rounded bg-gray-600 text-white">
-                          {property.listing_type === 'rent' ? 'Rented out via Others on' : 'Sold via Others on'} {new Date(property.updated_at || property.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                      {/* Diagonal Ribbon - Top Right */}
+                      <div className="absolute top-0 right-0 z-10">
+                        <div className={`w-16 h-16 ${property.listing_type === 'rent' ? 'bg-orange-500' : 'bg-blue-500'} transform rotate-45 translate-x-6 -translate-y-6`}>
+                          <div className="absolute bottom-2 left-1 text-white text-xs font-medium transform -rotate-45">
+                            {property.listing_type === 'rent' ? 'For Rent' : 'For Buy'}
+                          </div>
                         </div>
-                      )}
+                      </div>
 
                       <CardContent className="p-0">
                         {/* Property Image */}
@@ -699,11 +701,13 @@ export const Dashboard: React.FC = () => {
                               e.currentTarget.src = '/placeholder.svg';
                             }}
                           />
-                          {/* Image placeholder icon if no image */}
+                          {/* Camera icon placeholder if no image */}
                           {(!property.images || property.images.length === 0) && (
                             <div className="absolute inset-0 flex items-center justify-center">
-                              <div className="w-16 h-16 border-2 border-gray-300 rounded-lg flex items-center justify-center">
-                                <Home className="w-8 h-8 text-gray-400" />
+                              <div className="w-16 h-16 border-2 border-gray-300 rounded-lg flex items-center justify-center bg-white">
+                                <svg className="w-8 h-8 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                                  <path fillRule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2h-3L9 1H7L4 3zm5 2a4 4 0 100 8 4 4 0 000-8zm0 2a2 2 0 100 4 2 2 0 000-4z" clipRule="evenodd" />
+                                </svg>
                               </div>
                             </div>
                           )}
@@ -711,49 +715,30 @@ export const Dashboard: React.FC = () => {
 
                         {/* Property Details */}
                         <div className="p-4">
-                          <h3 className="font-semibold text-gray-900 mb-1 line-clamp-2" title={property.title}>
-                            {property.title}
-                          </h3>
+                          {/* Title with External Link Icon */}
+                          <div className="flex items-center gap-2 mb-2">
+                            <h3 className="font-medium text-gray-900 text-sm line-clamp-1" title={property.title}>
+                              {property.title}
+                            </h3>
+                            <svg className="w-3 h-3 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                            </svg>
+                          </div>
                           
-                          <p className="text-sm text-gray-600 mb-3 line-clamp-1">
-                            {property.locality}, {property.city}
-                          </p>
-
-                          {/* Listing Progress for incomplete properties */}
-                          {(() => {
-                            const completion = property.property_type === 'pg_hostel' 
-                              ? calculatePGPropertyCompletion(property as any)
-                              : calculatePropertyCompletion(property as any);
-                            
-                            if (completion.percentage < 60) {
-                              return (
-                                <div className="mb-3">
-                                  <PropertyProgressCompact
-                                    propertyId={property.id}
-                                    completionPercentage={completion.percentage}
-                                    missingFields={completion.missingFields}
-                                    propertyType={property.property_type}
-                                  />
-                                </div>
-                              );
-                            }
-                            return null;
-                          })()}
-
-                          <div className="mb-4">
-                            <span className="text-sm text-gray-600">
-                              {property.listing_type === 'rent' ? 'Rent: ' : 'Price: '}
-                            </span>
-                            <span className="font-semibold text-gray-900">
-                              ₹{property.expected_price.toLocaleString()}
-                            </span>
-                            {property.locality && (
-                              <span className="text-sm text-gray-600 ml-2">• {property.locality}</span>
-                            )}
+                          {/* Location and Price */}
+                          <div className="text-sm text-gray-600 mb-4">
+                            <div>{property.locality || property.city}</div>
+                            <div className="mt-1">
+                              <span className="text-gray-800">
+                                {property.listing_type === 'rent' ? 'Rent: ' : 'Price: '}
+                                ₹{property.expected_price.toLocaleString()}
+                              </span>
+                              <span className="ml-2">• Hyderabad</span>
+                            </div>
                           </div>
 
                           {/* Action Buttons */}
-                          <div className="flex justify-between gap-2 mb-4">
+                          <div className="flex justify-between gap-2 mb-3">
                             <Button
                               variant="outline"
                               size="sm"
