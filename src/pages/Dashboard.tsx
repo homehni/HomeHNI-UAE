@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
-import { Building, MessageSquare, User, LogOut, Plus, Eye, Edit, Trash, FileText, Shield, MapPin, Home } from 'lucide-react';
+import { Building, MessageSquare, User, LogOut, Plus, Eye, Edit, Trash, FileText, Shield, MapPin, Home, Medal } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
 import { DeleteConfirmationModal } from '@/components/DeleteConfirmationModal';
@@ -737,19 +737,12 @@ export const Dashboard: React.FC = () => {
                               </Button>
                             </div>
 
-                            {/* Contact Status */}
-                            <div className="text-sm text-gray-500 mb-3">
-                              None Contacted
-                            </div>
-
                             {/* Go Premium Button */}
                             <Button
                               onClick={() => handleUpgradeProperty(property)}
-                              className="w-full bg-red-500 hover:bg-red-600 text-white text-xs py-1.5 h-7 font-normal"
+                              className="bg-red-500 hover:bg-red-600 text-white text-xs py-1.5 px-3 h-7 font-normal w-auto"
                             >
-                              <svg className="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                <path fillRule="evenodd" d="M5 2a1 1 0 011 1v1h1a1 1 0 010 2H6v1a1 1 0 01-2 0V6H3a1 1 0 010-2h1V3a1 1 0 011-1zm0 10a1 1 0 011 1v1h1a1 1 0 110 2H6v1a1 1 0 11-2 0v-1H3a1 1 0 110-2h1v-1a1 1 0 011-1zM12 2a1 1 0 01.894.553l2.991 5.982a.869.869 0 010 .775l-2.991 5.982A1 1 0 0112 16H9a1 1 0 01-1-1V3a1 1 0 011-1h3z" clipRule="evenodd" />
-                              </svg>
+                              <Medal className="w-3 h-3 mr-1" />
                               Go Premium
                             </Button>
                           </div>
