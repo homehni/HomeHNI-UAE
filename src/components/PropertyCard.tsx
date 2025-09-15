@@ -8,6 +8,7 @@ import { useState } from 'react';
 import { FavoriteButton } from '@/components/FavoriteButton';
 import { ContactOwnerModal } from '@/components/ContactOwnerModal';
 import { supabase } from '@/integrations/supabase/client';
+import propertyPlaceholder from '@/assets/property-placeholder.png';
 
 interface PropertyCardProps {
   id: string;
@@ -143,7 +144,7 @@ const PropertyCard = ({
       const { data } = supabase.storage.from('property-media').getPublicUrl(path);
       return data.publicUrl;
     } catch {
-      return '/placeholder.svg';
+      return propertyPlaceholder;
     }
   });
 
@@ -215,23 +216,23 @@ const PropertyCard = ({
       const first = image[0];
       if (typeof first === 'string') {
         // If it's a direct URL, use it as-is
-        return first.startsWith('http') ? first : (resolveUrlFromString(first) || '/placeholder.svg');
+        return first.startsWith('http') ? first : (resolveUrlFromString(first) || propertyPlaceholder);
       }
       if (first && typeof first === 'object' && 'url' in first) {
         // Handle object format with url property (from database)
-        return (first as any).url || '/placeholder.svg';
+        return (first as any).url || propertyPlaceholder;
       }
-      return '/placeholder.svg';
+      return propertyPlaceholder;
     }
     if (typeof image === 'string') {
       // If it's a direct URL, use it as-is
-      return image.startsWith('http') ? image : (resolveUrlFromString(image) || '/placeholder.svg');
+      return image.startsWith('http') ? image : (resolveUrlFromString(image) || propertyPlaceholder);
     }
     if (image && typeof image === 'object' && 'url' in image) {
       // Handle object format with url property (from database)
-      return (image as any).url || '/placeholder.svg';
+      return (image as any).url || propertyPlaceholder;
     }
-    return '/placeholder.svg';
+    return propertyPlaceholder;
   };
 
   return (
@@ -248,7 +249,7 @@ const PropertyCard = ({
             decoding="async"
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
             onError={(e) => {
-              e.currentTarget.src = '/placeholder.svg';
+              e.currentTarget.src = propertyPlaceholder;
               e.currentTarget.alt = 'Image not available';
             }}
           />
