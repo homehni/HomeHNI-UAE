@@ -180,20 +180,20 @@ export const OverviewCard: React.FC<OverviewCardProps> = ({ property }) => {
         </h2>
         <div className="w-12 h-0.5 bg-red-600 mb-6"></div>
         
-        <div className="grid grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
           {filteredOverviewItems.map((item, index) => {
             const IconComponent = item.icon;
             return (
-              <div key={index} className="flex items-center gap-3">
-                <div className="flex-shrink-0">
+              <div key={index} className="flex items-start gap-3 p-3 rounded-lg border border-gray-100">
+                <div className="flex-shrink-0 mt-0.5">
                   <IconComponent className="w-5 h-5 text-red-600" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <div className="text-sm text-gray-600 mb-1">
+                  <div className="text-sm text-gray-600 mb-1 line-clamp-2">
                     {item.label}
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="font-medium text-gray-900">
+                    <span className="font-medium text-gray-900 text-sm">
                       {item.value}
                     </span>
                     {item.hasAction && (
