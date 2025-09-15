@@ -68,7 +68,7 @@ export const PropertySelectionStep: React.FC<PropertySelectionStepProps> = ({
   return (
     <div className="bg-white flex flex-col h-full">
       <div className="flex-1 p-4 lg:p-8">
-        <div className="max-w-2xl mx-auto space-y-6 lg:space-y-8">
+        <div className="max-w-2xl mx-auto space-y-6 lg:space-y-8 border-2 border-red-500 rounded-xl p-6 lg:p-8 bg-red-50/30 shadow-lg shadow-red-500/10">
           {/* Personal Information Form */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             {/* Name */}
