@@ -174,33 +174,33 @@ export const OverviewCard: React.FC<OverviewCardProps> = ({ property }) => {
 
   return (
     <div className="bg-white rounded-lg border border-gray-200 shadow-sm">
-      <div className="p-6">
-        <h2 className="text-xl font-semibold text-gray-900 mb-1">
+      <div className="p-4 sm:p-6">
+        <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-1">
           Overview
         </h2>
-        <div className="w-12 h-0.5 bg-red-600 mb-6"></div>
+        <div className="w-12 h-0.5 bg-red-600 mb-4 sm:mb-6"></div>
         
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
           {filteredOverviewItems.map((item, index) => {
             const IconComponent = item.icon;
             return (
-              <div key={index} className="flex items-start gap-3 p-3 rounded-lg border border-gray-100">
+              <div key={index} className="flex items-start gap-2 sm:gap-3 p-2 sm:p-3 rounded-lg border border-gray-100">
                 <div className="flex-shrink-0 mt-0.5">
-                  <IconComponent className="w-5 h-5 text-red-600" />
+                  <IconComponent className="w-4 h-4 sm:w-5 sm:h-5 text-red-600" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <div className="text-sm text-gray-600 mb-1 line-clamp-2">
+                  <div className="text-xs sm:text-sm text-gray-600 mb-1 line-clamp-2">
                     {item.label}
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="font-medium text-gray-900 text-sm">
+                    <span className="font-medium text-gray-900 text-xs sm:text-sm truncate">
                       {item.value}
                     </span>
                     {item.hasAction && (
                       <Button 
                         variant="outline"
                         size="sm"
-                        className="text-xs border-teal-300 text-teal-700 hover:bg-teal-50 px-2 py-1 h-auto"
+                        className="text-xs border-teal-300 text-teal-700 hover:bg-teal-50 px-2 py-1 h-auto hidden sm:inline-flex"
                       >
                         Furnish Now
                       </Button>

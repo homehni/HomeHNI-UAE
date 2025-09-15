@@ -49,11 +49,11 @@ export const PropertyHeader: React.FC<PropertyHeaderProps> = ({ property }) => {
           {/* Mobile Layout */}
           <div className="block lg:hidden">
             {/* Property Info Section - Mobile */}
-            <div className="px-4 py-3 border-b border-gray-200">
-              <h1 className="text-xl font-bold text-gray-900 mb-1">
+            <div className="px-3 sm:px-4 py-3 border-b border-gray-200">
+              <h1 className="text-lg sm:text-xl font-bold text-gray-900 mb-1 line-clamp-2">
                 {property.title}
               </h1>
-              <p className="text-gray-600 truncate">
+              <p className="text-sm sm:text-base text-gray-600 truncate">
                 Standalone building, {property.locality}
               </p>
             </div>
@@ -86,9 +86,9 @@ export const PropertyHeader: React.FC<PropertyHeaderProps> = ({ property }) => {
             </div>
 
             {/* Apply Loan Button - Mobile */}
-            <div className="px-4 py-3 border-t border-gray-200">
+            <div className="px-3 sm:px-4 py-3 border-t border-gray-200">
               <Link to="/loans" className="block">
-                <Button className="w-full bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-medium">
+                <Button className="w-full bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-medium text-sm sm:text-base">
                   Apply Loan
                 </Button>
               </Link>
