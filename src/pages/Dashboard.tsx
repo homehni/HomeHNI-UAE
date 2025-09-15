@@ -738,6 +738,15 @@ export const Dashboard: React.FC = () => {
                               </Button>
                             </div>
 
+                            {/* Go Premium Button */}
+                            <Button
+                              onClick={() => handleUpgradeProperty(property)}
+                              className="bg-red-500 hover:bg-red-600 text-white text-xs py-1.5 px-3 h-7 font-normal w-auto mb-3"
+                            >
+                              <Medal className="w-3 h-3 mr-1" />
+                              Go Premium
+                            </Button>
+
                             {/* Listing Progress */}
                             <div className="mb-3">
                               {(() => {
@@ -755,15 +764,6 @@ export const Dashboard: React.FC = () => {
                                 );
                               })()}
                             </div>
-
-                            {/* Go Premium Button */}
-                            <Button
-                              onClick={() => handleUpgradeProperty(property)}
-                              className="bg-red-500 hover:bg-red-600 text-white text-xs py-1.5 px-3 h-7 font-normal w-auto"
-                            >
-                              <Medal className="w-3 h-3 mr-1" />
-                              Go Premium
-                            </Button>
                           </div>
 
                           {/* Right Side - Image Area */}
