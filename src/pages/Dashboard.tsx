@@ -690,32 +690,28 @@ export const Dashboard: React.FC = () => {
 
                       <CardContent className="p-0">
                         {/* Horizontal Layout: Text Left, Image Right */}
-                        <div className="flex h-32">
+                        <div className="flex">
                           {/* Left Side - Text Content */}
-                          <div className="flex-1 p-3 flex flex-col justify-between">
+                          <div className="flex-1 p-3">
                             {/* Title with External Link Icon */}
-                            <div>
-                              <div className="flex items-start gap-2 mb-1">
-                                <h3 className="font-normal text-gray-900 text-sm flex-1 leading-tight" title={property.title}>
-                                  {property.title}
-                                </h3>
-                                <svg className="w-3 h-3 text-blue-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                                </svg>
-                              </div>
-                              
-                              {/* Price and Location */}
-                              <div className="text-sm text-gray-700 mb-2">
-                                <span className="text-gray-500">
-                                  Price: 
-                                </span>
-                                <span className="font-medium">₹{property.expected_price.toLocaleString()}</span>
-                                <span className="text-gray-500 ml-1">• Hyderabad</span>
-                              </div>
+                            <div className="flex items-start gap-2 mb-2">
+                              <h3 className="font-normal text-gray-900 text-sm flex-1 leading-tight" title={property.title}>
+                                {property.title}
+                              </h3>
+                              <svg className="w-3 h-3 text-blue-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                              </svg>
+                            </div>
+                            
+                            {/* Price and Location */}
+                            <div className="text-sm text-gray-700 mb-4">
+                              <span className="text-gray-500">Price: </span>
+                              <span className="font-medium">₹{property.expected_price.toLocaleString()}</span>
+                              <span className="text-gray-500 ml-1">• Hyderabad</span>
                             </div>
 
                             {/* Action Buttons */}
-                            <div className="flex gap-2">
+                            <div className="flex gap-2 mb-3">
                               <Button
                                 variant="outline"
                                 size="sm"
@@ -732,47 +728,44 @@ export const Dashboard: React.FC = () => {
                                 Upload Media
                               </Button>
                             </div>
+
+                            {/* Contact Status */}
+                            <div className="text-sm text-gray-500 mb-3">
+                              None Contacted
+                            </div>
+
+                            {/* Go Premium Button */}
+                            <Button
+                              onClick={() => handleUpgradeProperty(property)}
+                              className="w-full bg-red-500 hover:bg-red-600 text-white text-xs py-1.5 h-7 font-normal"
+                            >
+                              <svg className="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                <path fillRule="evenodd" d="M5 2a1 1 0 011 1v1h1a1 1 0 010 2H6v1a1 1 0 01-2 0V6H3a1 1 0 010-2h1V3a1 1 0 011-1zm0 10a1 1 0 011 1v1h1a1 1 0 110 2H6v1a1 1 0 11-2 0v-1H3a1 1 0 110-2h1v-1a1 1 0 011-1zM12 2a1 1 0 01.894.553l2.991 5.982a.869.869 0 010 .775l-2.991 5.982A1 1 0 0112 16H9a1 1 0 01-1-1V3a1 1 0 011-1h3z" clipRule="evenodd" />
+                              </svg>
+                              Go Premium
+                            </Button>
                           </div>
 
-                          {/* Right Side - Image */}
-                          <div className="w-24 bg-gray-50 flex items-center justify-center">
-                            <img
-                              src={getImageUrl()}
-                              alt={property.title}
-                              className="w-full h-full object-cover"
-                              onError={(e) => {
-                                e.currentTarget.src = '/placeholder.svg';
-                              }}
-                            />
-                            {/* Camera icon placeholder if no image */}
-                            {(!property.images || property.images.length === 0) && (
-                              <div className="w-10 h-10 border border-gray-300 rounded flex items-center justify-center bg-white">
-                                <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          {/* Right Side - Uniform Image Placeholder */}
+                          <div className="w-20 h-32 bg-gray-100 border-l border-gray-200 flex items-center justify-center">
+                            {(property.images && property.images.length > 0) ? (
+                              <img
+                                src={getImageUrl()}
+                                alt={property.title}
+                                className="w-full h-full object-cover"
+                                onError={(e) => {
+                                  e.currentTarget.src = '/placeholder.svg';
+                                }}
+                              />
+                            ) : (
+                              <div className="w-12 h-12 border border-gray-300 rounded bg-white flex items-center justify-center">
+                                <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
                                 </svg>
                               </div>
                             )}
                           </div>
-                        </div>
-
-                        {/* Bottom Section - Contact Status and Go Premium */}
-                        <div className="px-3 pb-3">
-                          {/* Contact Status */}
-                          <div className="text-sm text-gray-500 mb-2">
-                            None Contacted
-                          </div>
-
-                          {/* Go Premium Button */}
-                          <Button
-                            onClick={() => handleUpgradeProperty(property)}
-                            className="w-full bg-red-500 hover:bg-red-600 text-white text-xs py-1.5 h-7 font-normal"
-                          >
-                            <svg className="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                              <path fillRule="evenodd" d="M5 2a1 1 0 011 1v1h1a1 1 0 010 2H6v1a1 1 0 01-2 0V6H3a1 1 0 010-2h1V3a1 1 0 011-1zm0 10a1 1 0 011 1v1h1a1 1 0 110 2H6v1a1 1 0 11-2 0v-1H3a1 1 0 110-2h1v-1a1 1 0 011-1zM12 2a1 1 0 01.894.553l2.991 5.982a.869.869 0 010 .775l-2.991 5.982A1 1 0 0112 16H9a1 1 0 01-1-1V3a1 1 0 011-1h3z" clipRule="evenodd" />
-                            </svg>
-                            Go Premium
-                          </Button>
                         </div>
                       </CardContent>
                     </Card>
