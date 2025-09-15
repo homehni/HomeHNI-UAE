@@ -9,7 +9,7 @@ interface NeighborhoodCardProps {
 
 export const NeighborhoodCard: React.FC<NeighborhoodCardProps> = ({ property }) => {
   return (
-    <div className="rounded-2xl border-2 border-red-500 bg-white shadow-lg">
+    <div className="rounded-2xl border border-border bg-card shadow-lg">
       <div className="p-5 border-b border-gray-200">
         <h2 className="text-lg font-semibold text-gray-900">Neighborhood</h2>
       </div>
