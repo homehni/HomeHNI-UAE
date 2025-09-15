@@ -13,7 +13,7 @@ import { Calendar, CalendarIcon, ArrowLeft, ArrowRight } from 'lucide-react';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Calendar as CalendarComponent } from '@/components/ui/calendar';
 import { cn } from '@/lib/utils';
-import { format } from 'date-fns';
+import { format, addMonths } from 'date-fns';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { SaleDetails } from '@/types/saleProperty';
 
@@ -323,7 +323,12 @@ export const SaleDetailsStep: React.FC<SaleDetailsStepProps> = ({
                   setSelectedDate(date);
                   setIsCalendarOpen(false); // Close popover after date selection
                 }}
-                disabled={(date) => date < new Date()}
+                disabled={(date) => {
+                  const today = new Date();
+                  today.setHours(0, 0, 0, 0);
+                  const maxDate = addMonths(today, 6); // 6 months for sale
+                  return date < today || date > maxDate;
+                }}
                 initialFocus
                 className={cn("p-3 pointer-events-auto")}
               />

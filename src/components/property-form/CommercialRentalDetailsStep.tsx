@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { format } from 'date-fns';
+import { format, addMonths } from 'date-fns';
 import { CalendarIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
@@ -371,7 +371,8 @@ export const CommercialRentalDetailsStep: React.FC<CommercialRentalDetailsStepPr
                           disabled={(date) => {
                             const today = new Date();
                             today.setHours(0, 0, 0, 0);
-                            return date < today;
+                            const maxDate = addMonths(today, 2); // 2 months for rent
+                            return date < today || date > maxDate;
                           }}
                           initialFocus
                         />

@@ -138,6 +138,7 @@ export function PgHostelPgDetailsStep({
                   onChange={(e) => setFormData({ ...formData, availableFrom: e.target.value })}
                   placeholder="15/08/2025"
                   min={new Date().toISOString().split('T')[0]}
+                  max={new Date(new Date().setMonth(new Date().getMonth() + 2)).toISOString().split('T')[0]}
                 />
               </div>
 

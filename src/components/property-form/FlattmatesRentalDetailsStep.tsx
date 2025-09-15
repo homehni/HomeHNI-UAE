@@ -134,6 +134,7 @@ export function FlattmatesRentalDetailsStep({
                         onChange={(e) => setFormData({ ...formData, availableFrom: e.target.value })}
                         className="h-12 pr-12"
                         min={new Date().toISOString().split('T')[0]}
+                        max={new Date(new Date().setMonth(new Date().getMonth() + 2)).toISOString().split('T')[0]}
                       />
                       <Calendar className="absolute right-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                     </div>

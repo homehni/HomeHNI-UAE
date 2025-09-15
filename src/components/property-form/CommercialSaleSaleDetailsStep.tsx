@@ -145,7 +145,12 @@ export const CommercialSaleSaleDetailsStep = ({
                 <FormItem>
                   <FormLabel>Possession Date</FormLabel>
                   <FormControl>
-                    <Input type="date" {...field} min={new Date().toISOString().split('T')[0]} />
+                    <Input 
+                      type="date" 
+                      {...field} 
+                      min={new Date().toISOString().split('T')[0]}
+                      max={new Date(new Date().setMonth(new Date().getMonth() + 6)).toISOString().split('T')[0]}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
