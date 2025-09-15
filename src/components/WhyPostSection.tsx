@@ -50,9 +50,9 @@ const WhyPostSection: React.FC = () => {
 
   return (
     <div className="w-full bg-gradient-to-br from-blue-50 via-white to-indigo-50 flex flex-col">
-      <div className="p-6 flex-1 flex flex-col justify-between">
+      <div className="p-6 flex-1 flex flex-col">
         {/* Why Post section */}
-        <div>
+        <div className="flex-1">
           <h2 className="text-xl font-bold text-gray-800 mb-5 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Why Post through us?</h2>
           
           <div className="space-y-4">
@@ -70,33 +70,33 @@ const WhyPostSection: React.FC = () => {
           </div>
         </div>
 
-        {/* Testimonial section - positioned at bottom */}
-        <div className="bg-gradient-to-r from-blue-500 to-indigo-600 rounded-xl p-5 text-white shadow-xl mt-auto">
-          <div className="mb-4">
-            <h3 className="font-bold text-lg text-white mb-2">30 Lac+ Home Owners Trust Us</h3>
+        {/* Testimonial section - positioned to align with button */}
+        <div className="bg-gradient-to-r from-blue-500 to-indigo-600 rounded-xl p-4 text-white shadow-xl mt-6">
+          <div className="mb-3">
+            <h3 className="font-bold text-base text-white mb-2">30 Lac+ Home Owners Trust Us</h3>
           </div>
           
           <div className="relative">
-            <div className="space-y-4">
-              <div className="bg-white/20 backdrop-blur-sm rounded-lg p-4 border border-white/30">
-                <p className="text-sm text-white/95 leading-relaxed font-medium italic">
+            <div className="space-y-3">
+              <div className="bg-white/20 backdrop-blur-sm rounded-lg p-3 border border-white/30">
+                <p className="text-xs text-white/95 leading-relaxed font-medium italic line-clamp-4">
                   "{testimonials[currentTestimonial].text}"
                 </p>
               </div>
               
               <div className="flex items-center justify-between">
-                <span className="font-bold text-white text-sm">{testimonials[currentTestimonial].name}</span>
-                <span className="text-white/80 text-sm font-medium">{testimonials[currentTestimonial].city}</span>
+                <span className="font-bold text-white text-xs">{testimonials[currentTestimonial].name}</span>
+                <span className="text-white/80 text-xs font-medium">{testimonials[currentTestimonial].city}</span>
               </div>
             </div>
 
             {/* Testimonial indicators */}
-            <div className="flex justify-center gap-2 mt-4">
+            <div className="flex justify-center gap-2 mt-3">
               {testimonials.map((_, index) => (
                 <button
                   key={index}
                   onClick={() => setCurrentTestimonial(index)}
-                  className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                  className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
                     index === currentTestimonial 
                       ? 'bg-white shadow-lg' 
                       : 'bg-white/50 hover:bg-white/70'
