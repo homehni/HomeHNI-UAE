@@ -49,8 +49,8 @@ const WhyPostSection: React.FC = () => {
   }, [testimonials.length]);
 
   return (
-    <div className="w-full h-full bg-gradient-to-br from-blue-50 via-white to-indigo-50">
-      <div className="p-6 space-y-6">
+    <div className="w-full h-full bg-gradient-to-br from-blue-50 via-white to-indigo-50 flex flex-col">
+      <div className="p-6 flex-1 flex flex-col justify-between">
         {/* Why Post section */}
         <div>
           <h2 className="text-xl font-bold text-gray-800 mb-5 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Why Post through us?</h2>
@@ -70,8 +70,8 @@ const WhyPostSection: React.FC = () => {
           </div>
         </div>
 
-        {/* Testimonial section */}
-        <div className="bg-gradient-to-r from-blue-500 to-indigo-600 rounded-xl p-5 text-white shadow-xl">
+        {/* Testimonial section - positioned at bottom */}
+        <div className="bg-gradient-to-r from-blue-500 to-indigo-600 rounded-xl p-5 text-white shadow-xl mt-auto">
           <div className="mb-4">
             <h3 className="font-bold text-lg text-white mb-2">30 Lac+ Home Owners Trust Us</h3>
           </div>
