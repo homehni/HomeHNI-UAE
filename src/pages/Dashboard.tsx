@@ -677,22 +677,20 @@ export const Dashboard: React.FC = () => {
                   return (
                     <Card key={property.id} className="relative bg-white border border-gray-200 shadow-sm hover:shadow-md transition-shadow overflow-hidden">
                       {/* Inactive Status Badge - Top Left */}
-                      <div className="absolute top-3 left-3 z-10 px-2 py-1 text-xs font-medium rounded bg-gray-500 text-white">
+                      <div className="absolute top-3 left-3 z-20 px-2 py-1 text-xs font-medium rounded bg-gray-500 text-white">
                         Inactive
                       </div>
 
-                      {/* Diagonal Ribbon - Top Right */}
-                      <div className="absolute top-0 right-0 z-10">
-                        <div className={`w-16 h-16 ${property.listing_type === 'rent' ? 'bg-orange-500' : 'bg-blue-500'} transform rotate-45 translate-x-6 -translate-y-6`}>
-                          <div className="absolute bottom-2 left-1 text-white text-xs font-medium transform -rotate-45">
-                            {property.listing_type === 'rent' ? 'For Rent' : 'For Buy'}
-                          </div>
+                      {/* Diagonal Ribbon - Top Right Corner */}
+                      <div className="absolute top-0 right-0 z-10 overflow-hidden">
+                        <div className={`relative ${property.listing_type === 'rent' ? 'bg-orange-500' : 'bg-blue-500'} text-white text-xs font-medium py-1 px-8 transform rotate-45 translate-x-4 -translate-y-2`}>
+                          {property.listing_type === 'rent' ? 'For Rent' : 'For Buy'}
                         </div>
                       </div>
 
                       <CardContent className="p-0">
                         {/* Property Image */}
-                        <div className="relative h-48 bg-gray-100">
+                        <div className="relative h-40 bg-gray-100">
                           <img
                             src={getImageUrl()}
                             alt={property.title}
@@ -704,9 +702,10 @@ export const Dashboard: React.FC = () => {
                           {/* Camera icon placeholder if no image */}
                           {(!property.images || property.images.length === 0) && (
                             <div className="absolute inset-0 flex items-center justify-center">
-                              <div className="w-16 h-16 border-2 border-gray-300 rounded-lg flex items-center justify-center bg-white">
-                                <svg className="w-8 h-8 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                                  <path fillRule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2h-3L9 1H7L4 3zm5 2a4 4 0 100 8 4 4 0 000-8zm0 2a2 2 0 100 4 2 2 0 000-4z" clipRule="evenodd" />
+                              <div className="w-12 h-12 border border-gray-300 rounded flex items-center justify-center bg-white">
+                                <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
                                 </svg>
                               </div>
                             </div>
@@ -714,59 +713,61 @@ export const Dashboard: React.FC = () => {
                         </div>
 
                         {/* Property Details */}
-                        <div className="p-4">
+                        <div className="p-3">
                           {/* Title with External Link Icon */}
-                          <div className="flex items-center gap-2 mb-2">
-                            <h3 className="font-medium text-gray-900 text-sm line-clamp-1" title={property.title}>
+                          <div className="flex items-start justify-between mb-1">
+                            <h3 className="font-normal text-gray-900 text-sm flex-1 pr-2" title={property.title}>
                               {property.title}
                             </h3>
-                            <svg className="w-3 h-3 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg className="w-3 h-3 text-blue-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                             </svg>
                           </div>
                           
-                          {/* Location and Price */}
-                          <div className="text-sm text-gray-600 mb-4">
-                            <div>{property.locality || property.city}</div>
-                            <div className="mt-1">
-                              <span className="text-gray-800">
-                                {property.listing_type === 'rent' ? 'Rent: ' : 'Price: '}
-                                ₹{property.expected_price.toLocaleString()}
-                              </span>
-                              <span className="ml-2">• Hyderabad</span>
-                            </div>
+                          {/* Location */}
+                          <div className="text-sm text-gray-500 mb-1">
+                            {property.locality || 'Chanchalguda'}
+                          </div>
+                          
+                          {/* Price and Location */}
+                          <div className="text-sm text-gray-700 mb-3">
+                            <span className="text-gray-500">
+                              {property.listing_type === 'rent' ? 'Rent: ' : 'Price: '}
+                            </span>
+                            <span className="font-medium">₹{property.expected_price.toLocaleString()}</span>
+                            <span className="text-gray-500 ml-1">• Hyderabad</span>
                           </div>
 
                           {/* Action Buttons */}
-                          <div className="flex justify-between gap-2 mb-3">
+                          <div className="flex gap-2 mb-3">
                             <Button
                               variant="outline"
                               size="sm"
                               onClick={() => handleEditProperty(property)}
-                              className="text-xs px-4 flex-1"
+                              className="text-xs px-3 py-1 flex-1 h-8"
                             >
                               Edit
                             </Button>
                             <Button
                               variant="outline"
                               size="sm"
-                              className="text-xs px-4 flex-1"
+                              className="text-xs px-3 py-1 flex-1 h-8"
                             >
                               Upload Media
                             </Button>
                           </div>
 
                           {/* Contact Status */}
-                          <div className="text-sm text-gray-600 mb-3">
+                          <div className="text-sm text-gray-500 mb-3">
                             None Contacted
                           </div>
 
                           {/* Go Premium Button */}
                           <Button
                             onClick={() => handleUpgradeProperty(property)}
-                            className="w-full bg-red-500 hover:bg-red-600 text-white text-sm font-medium"
+                            className="w-full bg-red-500 hover:bg-red-600 text-white text-xs py-2 h-8"
                           >
-                            <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                            <svg className="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
                               <path fillRule="evenodd" d="M5 2a1 1 0 011 1v1h1a1 1 0 010 2H6v1a1 1 0 01-2 0V6H3a1 1 0 010-2h1V3a1 1 0 011-1zm0 10a1 1 0 011 1v1h1a1 1 0 110 2H6v1a1 1 0 11-2 0v-1H3a1 1 0 110-2h1v-1a1 1 0 011-1zM12 2a1 1 0 01.894.553l2.991 5.982a.869.869 0 010 .775l-2.991 5.982A1 1 0 0112 16H9a1 1 0 01-1-1V3a1 1 0 011-1h3z" clipRule="evenodd" />
                             </svg>
                             Go Premium
