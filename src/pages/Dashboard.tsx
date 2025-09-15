@@ -695,7 +695,7 @@ export const Dashboard: React.FC = () => {
                           <div className="flex-1 p-3">
                             {/* Title with External Link Icon */}
                             <div className="flex items-start gap-2 mb-2">
-                              <h3 className="font-medium text-gray-900 text-sm flex-1 leading-tight" title={property.title}>
+                              <h3 className="font-medium text-gray-900 text-base flex-1 leading-snug truncate" title={property.title}>
                                 {property.title}
                               </h3>
                               <svg className="w-3 h-3 text-blue-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -703,9 +703,11 @@ export const Dashboard: React.FC = () => {
                               </svg>
                             </div>
                             
-                            {/* Price and Location */}
-                            <div className="text-sm text-gray-600 mb-4">
-                              <span>Rent: </span>
+                            <div className="text-xs text-gray-500 mb-1">
+                              {property.locality || property.city}
+                            </div>
+                            <div className="text-sm text-gray-600 mb-3">
+                              <span>{property.listing_type === 'rent' ? 'Rent:' : 'Price:'} </span>
                               <span className="font-medium text-gray-900">₹{property.expected_price.toLocaleString()}</span>
                               <span className="ml-1">• Hyderabad</span>
                             </div>
@@ -747,7 +749,7 @@ export const Dashboard: React.FC = () => {
                           </div>
 
                           {/* Right Side - Image Area */}
-                          <div className="w-24 h-24 bg-gray-100 flex items-center justify-center">
+                          <div className="flex-shrink-0 ml-3 w-24 h-24 bg-gray-100 rounded-md flex items-center justify-center">
                             {(property.images && property.images.length > 0) ? (
                               <img
                                 src={getImageUrl()}
