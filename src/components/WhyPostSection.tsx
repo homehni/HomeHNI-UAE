@@ -49,21 +49,20 @@ const WhyPostSection: React.FC = () => {
   }, [testimonials.length]);
 
   return (
-    <div className="w-full h-full bg-gradient-to-br from-indigo-50 via-white to-blue-50">
-      <div className="p-5 space-y-5">
+    <div className="w-full h-full bg-gray-200">
+      <div className="p-4 space-y-4">
         {/* Why Post section */}
         <div>
-          <h2 className="text-lg font-bold text-gray-800 mb-4 bg-gradient-to-r from-indigo-600 to-blue-600 bg-clip-text text-transparent">Why Post through us?</h2>
+          <h2 className="text-lg font-semibold text-gray-700 mb-3">Why Post through us?</h2>
           
-          <div className="space-y-4">
+          <div className="space-y-3">
             {benefits.map((benefit, index) => (
-              <div key={index} className="flex items-start gap-3 group hover:transform hover:translate-x-1 transition-all duration-300">
-                <div className="flex-shrink-0 w-8 h-8 bg-gradient-to-r from-indigo-500 to-blue-500 rounded-lg flex items-center justify-center mt-1 shadow-md group-hover:shadow-lg transition-shadow duration-300">
+              <div key={index} className="flex items-start gap-3">
+                <div className="flex-shrink-0 w-6 h-6 bg-gray-400 rounded-sm flex items-center justify-center mt-1">
                   <benefit.icon className="w-4 h-4 text-white" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-800 text-sm leading-tight">{benefit.title}</h3>
-                  <p className="text-gray-600 text-xs mt-1">{benefit.description}</p>
+                  <h3 className="font-medium text-gray-700 text-sm leading-tight">{benefit.title}</h3>
                 </div>
               </div>
             ))}
@@ -71,38 +70,21 @@ const WhyPostSection: React.FC = () => {
         </div>
 
         {/* Testimonial section */}
-        <div className="border-t border-gray-200/50 pt-5">
-          <div className="mb-4">
-            <h3 className="font-bold text-base text-gray-800 mb-3 bg-gradient-to-r from-indigo-600 to-blue-600 bg-clip-text text-transparent">30 Lac+ Home Owners Trust Us</h3>
+        <div className="pt-3">
+          <div className="mb-3">
+            <h3 className="font-semibold text-base text-gray-700">30 Lac+ Home Owners Trust Us</h3>
           </div>
           
           <div className="relative">
             <div className="space-y-3">
-              <div className="bg-white/90 backdrop-blur-sm rounded-lg p-4 shadow-md border border-white/50 hover:shadow-lg transition-shadow duration-300">
-                <p className="text-xs text-gray-700 leading-relaxed font-medium">
-                  "{testimonials[currentTestimonial].text}"
-                </p>
+              <div className="text-xs text-gray-600 leading-relaxed">
+                "{testimonials[currentTestimonial].text}"
               </div>
               
               <div className="flex items-center justify-between text-xs">
-                <span className="font-bold text-gray-800">{testimonials[currentTestimonial].name}</span>
-                <span className="text-gray-600 font-medium">{testimonials[currentTestimonial].city}</span>
+                <span className="font-medium text-gray-700">{testimonials[currentTestimonial].name}</span>
+                <span className="text-gray-500">{testimonials[currentTestimonial].city}</span>
               </div>
-            </div>
-
-            {/* Testimonial indicators */}
-            <div className="flex justify-center gap-2 mt-3">
-              {testimonials.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => setCurrentTestimonial(index)}
-                  className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                    index === currentTestimonial 
-                      ? 'bg-gradient-to-r from-indigo-500 to-blue-500 shadow-md' 
-                      : 'bg-gray-300 hover:bg-gray-400'
-                  }`}
-                />
-              ))}
             </div>
           </div>
         </div>

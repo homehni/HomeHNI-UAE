@@ -781,11 +781,11 @@ export const PostProperty: React.FC = () => {
     switch (currentStep) {
       case 'property-selection':
         return (
-          <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+          <div className="min-h-screen bg-gray-100">
             {/* Header */}
-            <div className="bg-white/80 backdrop-blur-sm border-b border-gray-200/50 px-4 lg:px-8 py-4 pt-20 lg:pt-8">
+            <div className="bg-white border-b border-gray-200 px-4 lg:px-8 py-4 pt-20 lg:pt-6">
               <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center gap-3">
-                <h1 className="text-2xl lg:text-3xl font-bold bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent">
+                <h1 className="text-xl lg:text-2xl font-semibold text-gray-800">
                   Sell or Rent your Property For Free
                 </h1>
                 <div className="text-gray-600 text-sm lg:text-base">
@@ -794,29 +794,28 @@ export const PostProperty: React.FC = () => {
               </div>
             </div>
             
-            {/* Centered Content Container */}
-            <div className="flex justify-start py-2 lg:py-4 px-2 lg:px-4">
-              <div className="w-full max-w-6xl bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl border border-white/50 ml-0 lg:ml-4">
-                {/* Main Content */}
-                <div className="flex flex-col lg:flex-row overflow-hidden rounded-2xl">
-                  {/* WhyPostSection - Hidden on mobile, shown on desktop with reduced width */}
-                  <div className="hidden lg:block lg:w-[30%] bg-gradient-to-br from-gray-50 to-gray-100">
-                    <WhyPostSection />
-                  </div>
-                  {/* PropertySelectionStep - Full width on mobile, 70% on desktop */}
-                  <div className="flex-1 lg:w-[70%] bg-white">
-                    <PropertySelectionStep onNext={handlePropertySelectionNext} />
-                  </div>
+            {/* Content Container - Centered and Compact */}
+            <div className="flex justify-center py-4 px-4">
+              <div className="w-full max-w-5xl flex flex-col lg:flex-row gap-4">
+                {/* Left Sidebar - Compact */}
+                <div className="hidden lg:block lg:w-80 bg-gray-200 rounded-lg overflow-hidden">
+                  <WhyPostSection />
+                </div>
+                
+                {/* Right Form Area - Compact */}
+                <div className="flex-1 bg-white rounded-lg shadow-sm border border-gray-200">
+                  <PropertySelectionStep onNext={handlePropertySelectionNext} />
                 </div>
               </div>
             </div>
             
-            {/* Sections below the form - Stack on mobile */}
-            <div className="lg:hidden px-4 mb-8">
-              <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+            {/* Mobile Sidebar */}
+            <div className="lg:hidden px-4 mb-4">
+              <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
                 <WhyPostSection />
               </div>
             </div>
+            
             <div className="bg-gradient-to-r from-gray-800 to-gray-900">
               <HowItWorksSection />
               <PropertyFAQSection />
