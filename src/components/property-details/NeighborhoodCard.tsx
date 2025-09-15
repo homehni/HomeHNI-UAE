@@ -105,19 +105,31 @@ export const NeighborhoodCard: React.FC<NeighborhoodCardProps> = ({ property }) 
             </form>
           </div>
         ) : (
-          <div className="rounded-xl ring-1 ring-gray-200 overflow-hidden h-64 md:h-80 mb-4">
+          <div className="rounded-xl ring-1 ring-gray-200 overflow-hidden h-64 md:h-80 mb-4 relative">
             <div ref={mapContainer} className="w-full h-full" />
+            
+            {/* Location Info Overlay */}
+            <div className="absolute top-4 left-4 bg-white rounded-lg shadow-lg p-4 max-w-xs z-10">
+              <h3 className="font-semibold text-gray-900 mb-1">
+                {property.locality}
+              </h3>
+              <p className="text-sm text-gray-600 mb-3">
+                {property.city}
+              </p>
+              <div className="flex flex-col gap-2">
+                <button className="flex items-center justify-center gap-2 px-3 py-2 bg-blue-600 text-white rounded-md text-sm hover:bg-blue-700">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 01.553-.894L9 2l6 3 6-3v13l-6 3-6-3z" />
+                  </svg>
+                  Directions
+                </button>
+                <button className="text-sm text-blue-600 hover:text-blue-800">
+                  View larger map
+                </button>
+              </div>
+            </div>
           </div>
         )}
-        
-        <div className="bg-gray-50/70 p-3 rounded-lg ring-1 ring-gray-100">
-          <div className="text-xs uppercase tracking-wide text-gray-500 mb-1">
-            Location
-          </div>
-          <div className="text-sm font-medium text-gray-800">
-            {property.locality}, {property.city}
-          </div>
-        </div>
       </div>
     </div>
   );
