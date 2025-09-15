@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Camera, MapPin, Heart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { PropertyImageModal } from '@/components/PropertyImageModal';
+import propertyPlaceholder from '@/assets/property-placeholder.png';
 
 interface PropertyImageGalleryProps {
   property: {
@@ -25,7 +26,7 @@ export const PropertyImageGallery: React.FC<PropertyImageGalleryProps> = ({ prop
     setShowImageModal(true);
   };
 
-  const images = property.images || ['/placeholder.svg'];
+  const images = property.images || [propertyPlaceholder];
 
   return (
     <div className="relative">
