@@ -377,51 +377,54 @@ const PropertyDetails: React.FC = () => {
           </div>
         )}
         
-        {/* New Header Section */}
-        <PropertyHeader property={mergedProperty as any} />
-
-        {/* Main Content */}
-        <section className="py-6">
-          <div className="mx-auto max-w-7xl px-4">
-            {/* Property Gallery and Info Grid */}
-            <div className="grid lg:grid-cols-3 gap-8 mb-8">
-              {/* Left - Image Gallery */}
-              <div className="lg:col-span-2">
-                <PropertyImageGallery property={mergedProperty as any} />
+        {/* Main Content - Mobile: Header below images, Desktop: Header above images */}
+        <div className="flex flex-col-reverse lg:flex-col">
+          {/* Property Gallery Section */}
+          <section className="py-6">
+            <div className="mx-auto max-w-7xl px-4">
+              {/* Property Gallery and Info Grid */}
+              <div className="grid lg:grid-cols-3 gap-8 mb-8">
+                {/* Left - Image Gallery */}
+                <div className="lg:col-span-2">
+                  <PropertyImageGallery property={mergedProperty as any} />
+                </div>
+                
+                {/* Right - Property Info Cards */}
+                <div className="space-y-6">
+                  <PropertyInfoCards property={mergedProperty as any} />
+                  
+                  {/* Visit Schedule Card */}
+                  <VisitScheduleCard onJoinVisit={() => setShowScheduleVisitModal(true)} />
+                  
+                  {/* Action Buttons */}
+                  <PropertyActions
+                    onContact={() => setShowContactModal(true)}
+                    onScheduleVisit={() => setShowScheduleVisitModal(true)}
+                  />
+                </div>
               </div>
-              
-              {/* Right - Property Info Cards */}
+
+              {/* Additional Details Sections */}
               <div className="space-y-6">
-                <PropertyInfoCards property={mergedProperty as any} />
+                {/* Overview */}
+                <OverviewCard property={mergedProperty as any} />
                 
-                {/* Visit Schedule Card */}
-                <VisitScheduleCard onJoinVisit={() => setShowScheduleVisitModal(true)} />
+                {/* Services Card */}
+                <ServicesCard />
                 
-                {/* Action Buttons */}
-                <PropertyActions
-                  onContact={() => setShowContactModal(true)}
-                  onScheduleVisit={() => setShowScheduleVisitModal(true)}
-                />
+                {/* Amenities */}
+                <AmenitiesCard amenities={mergedAmenities} />
+                
+                
+                {/* Neighborhood */}
+                <NeighborhoodCard property={property} />
               </div>
             </div>
+          </section>
 
-            {/* Additional Details Sections */}
-            <div className="space-y-6">
-              {/* Overview */}
-              <OverviewCard property={mergedProperty as any} />
-              
-              {/* Services Card */}
-              <ServicesCard />
-              
-              {/* Amenities */}
-              <AmenitiesCard amenities={mergedAmenities} />
-              
-              
-              {/* Neighborhood */}
-              <NeighborhoodCard property={property} />
-            </div>
-          </div>
-        </section>
+          {/* Header Section */}
+          <PropertyHeader property={mergedProperty as any} />
+        </div>
 
         {/* Mobile Sticky CTA */}
         <MobileStickyCTA onContactOwner={() => setShowContactModal(true)} />
