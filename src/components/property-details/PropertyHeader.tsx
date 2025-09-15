@@ -59,7 +59,7 @@ export const PropertyHeader: React.FC<PropertyHeaderProps> = ({ property }) => {
             <h1 className="text-2xl font-bold text-gray-900 mb-1">
               {property.title}
             </h1>
-            <p className="text-gray-600">
+            <p className="text-gray-600 truncate max-w-xs">
               Standalone building, {property.locality}
             </p>
           </div>
