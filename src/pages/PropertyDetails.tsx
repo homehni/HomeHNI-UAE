@@ -377,7 +377,7 @@ const PropertyDetails: React.FC = () => {
           </div>
         )}
         
-        {/* Header Section - Desktop */}
+        {/* Desktop Header Section - Hidden on mobile */}
         <div className="hidden md:block">
           <PropertyHeader property={mergedProperty as any} />
         </div>
@@ -385,16 +385,21 @@ const PropertyDetails: React.FC = () => {
         {/* Main Content */}
         <section className="py-6">
           <div className="mx-auto max-w-7xl px-4">
+            {/* Mobile Image Gallery - Shown first on mobile */}
+            <div className="md:hidden mb-6">
+              <PropertyImageGallery property={mergedProperty as any} />
+            </div>
+            
+            {/* Mobile Header Section - After images on mobile */}
+            <div className="md:hidden mb-6">
+              <PropertyHeader property={mergedProperty as any} />
+            </div>
+            
             {/* Property Gallery and Info Grid */}
             <div className="grid lg:grid-cols-3 gap-8 mb-8">
-              {/* Left - Image Gallery */}
-              <div className="lg:col-span-2">
+              {/* Left - Image Gallery - Desktop only */}
+              <div className="lg:col-span-2 hidden md:block">
                 <PropertyImageGallery property={mergedProperty as any} />
-                
-                {/* Header Section - Mobile (below images) */}
-                <div className="md:hidden mt-4">
-                  <PropertyHeader property={mergedProperty as any} />
-                </div>
               </div>
               
               {/* Right - Property Info Cards */}
