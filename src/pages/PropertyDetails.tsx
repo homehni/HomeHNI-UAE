@@ -13,7 +13,7 @@ import { PropertyHero } from '@/components/property-details/PropertyHero';
 import { PropertyDetailsCard } from '@/components/property-details/PropertyDetailsCard';
 import { LocationCard } from '@/components/property-details/LocationCard';
 import { OverviewCard } from '@/components/property-details/OverviewCard';
-import { ServicesStrip } from '@/components/property-details/ServicesStrip';
+
 
 import { AmenitiesCard } from '@/components/property-details/AmenitiesCard';
 import { NeighborhoodCard } from '@/components/property-details/NeighborhoodCard';
@@ -416,10 +416,6 @@ const PropertyDetails: React.FC = () => {
               {/* Amenities */}
               <AmenitiesCard amenities={mergedAmenities} />
               
-              {/* Services Strip */}
-              <div className="hidden sm:block">
-                <ServicesStrip onLegalServices={() => setShowLegalServicesModal(true)} />
-              </div>
               
               {/* Property Details */}
               <PropertyDetailsCard property={mergedProperty as any} />

@@ -15,15 +15,17 @@ export const NeighborhoodCard: React.FC<NeighborhoodCardProps> = ({ property }) 
       </div>
       
       <div className="p-5 pt-4">
-        {/* Map Container */}
-        <div className="rounded-xl ring-1 ring-gray-200 overflow-hidden h-64 md:h-80 mb-4">
-          <iframe
-            title="map"
-            width="100%"
-            height="100%"
-            loading="lazy"
-            src={`https://www.google.com/maps?q=${encodeURIComponent(property.locality)}&output=embed`}
-          />
+        {/* Location Display */}
+        <div className="rounded-xl ring-1 ring-gray-200 bg-gray-50 p-6 text-center">
+          <div className="text-lg font-medium text-gray-900 mb-2">
+            {property.locality}
+          </div>
+          <div className="text-sm text-gray-600 mb-4">
+            {property.city}
+          </div>
+          <p className="text-sm text-gray-500">
+            Interactive map integration coming soon
+          </p>
         </div>
       </div>
     </div>
