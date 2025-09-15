@@ -695,7 +695,11 @@ export const Dashboard: React.FC = () => {
                           <div className="flex-1 p-3">
                             {/* Title with External Link Icon */}
                             <div className="flex items-start gap-2 mb-2 mt-8">
-                              <h3 className="font-medium text-gray-900 text-base flex-1 leading-snug truncate" title={property.title}>
+                              <h3 
+                                className="font-medium text-gray-900 text-base flex-1 leading-snug truncate cursor-pointer hover:text-blue-600 transition-colors" 
+                                title={property.title}
+                                onClick={() => handleViewProperty(property)}
+                              >
                                 {property.title}
                               </h3>
                               <svg className="w-3 h-3 text-blue-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
