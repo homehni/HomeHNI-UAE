@@ -417,7 +417,8 @@ const PropertyDetails: React.FC = () => {
               <AmenitiesCard amenities={mergedAmenities} />
               
               
-              
+              {/* Neighborhood */}
+              <NeighborhoodCard property={property} />
             </div>
           </div>
         </section>

@@ -26,37 +26,6 @@ export const NeighborhoodCard: React.FC<NeighborhoodCardProps> = ({ property }) 
             referrerPolicy="no-referrer-when-downgrade"
             src={`https://www.google.com/maps?q=${encodeURIComponent(property.locality + ', ' + property.city)}&z=15&output=embed`}
           />
-          
-          {/* Location Info Overlay */}
-          <div className="absolute top-4 left-4 bg-white rounded-lg shadow-lg p-4 max-w-xs z-10">
-            <h3 className="font-semibold text-gray-900 mb-1">
-              {property.locality}
-            </h3>
-            <p className="text-sm text-gray-600 mb-3">
-              {property.city}
-            </p>
-            <div className="flex flex-col gap-2">
-              <a
-                href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(property.locality + ', ' + property.city)}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 px-3 py-2 bg-blue-600 text-white rounded-md text-sm hover:bg-blue-700"
-              >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 01.553-.894L9 2l6 3 6-3v13l-6 3-6-3z" />
-                </svg>
-                Directions
-              </a>
-              <a
-                className="text-sm text-blue-600 hover:text-blue-800"
-                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(property.locality + ', ' + property.city)}`}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                View larger map
-              </a>
-            </div>
-          </div>
         </div>
       </div>
     </div>
