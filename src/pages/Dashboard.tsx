@@ -738,6 +738,24 @@ export const Dashboard: React.FC = () => {
                               </Button>
                             </div>
 
+                            {/* Listing Progress */}
+                            <div className="mb-3">
+                              {(() => {
+                                const completionResult = property.property_type === 'pg_hostel' 
+                                  ? calculatePGPropertyCompletion(property)
+                                  : calculatePropertyCompletion(property);
+                                
+                                return (
+                                  <PropertyProgressCompact 
+                                    propertyId={property.id}
+                                    completionPercentage={completionResult.percentage}
+                                    missingFields={completionResult.missingFields}
+                                    propertyType={property.property_type}
+                                  />
+                                );
+                              })()}
+                            </div>
+
                             {/* Go Premium Button */}
                             <Button
                               onClick={() => handleUpgradeProperty(property)}
