@@ -781,30 +781,30 @@ export const PostProperty: React.FC = () => {
     switch (currentStep) {
       case 'property-selection':
         return (
-          <div className="min-h-screen bg-white">
+          <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
             {/* Header */}
-            <div className="bg-white border-b border-gray-200 px-4 lg:px-8 py-4 pt-20 lg:pt-8">
-              <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center gap-2">
-                <h1 className="text-xl lg:text-2xl font-medium text-gray-800">
+            <div className="bg-white/80 backdrop-blur-sm border-b border-gray-200/50 px-4 lg:px-8 py-6 pt-20 lg:pt-10">
+              <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center gap-3">
+                <h1 className="text-2xl lg:text-3xl font-bold bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent">
                   Sell or Rent your Property For Free
                 </h1>
                 <div className="text-gray-600 text-sm lg:text-base">
-                  Looking for a property? <Link to="/" className="text-blue-500 cursor-pointer hover:text-blue-600 underline">Click Here</Link>
+                  Looking for a property? <Link to="/" className="text-blue-500 cursor-pointer hover:text-blue-600 underline font-medium">Click Here</Link>
                 </div>
               </div>
             </div>
             
             {/* Centered Content Container */}
-            <div className="flex justify-center py-4 lg:py-8 px-4">
-              <div className="w-full max-w-7xl bg-white rounded-lg shadow-sm border border-gray-200">
+            <div className="flex justify-center py-6 lg:py-12 px-4">
+              <div className="w-full max-w-7xl bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl border border-white/50">
                 {/* Main Content */}
-                <div className="flex flex-col lg:flex-row min-h-[600px]">
+                <div className="flex flex-col lg:flex-row overflow-hidden rounded-2xl">
                   {/* WhyPostSection - Hidden on mobile, shown on desktop with reduced width */}
-                  <div className="hidden lg:block lg:w-[25%] bg-gray-300 border-r border-gray-200 rounded-l-lg">
+                  <div className="hidden lg:block lg:w-[30%] bg-gradient-to-br from-gray-50 to-gray-100">
                     <WhyPostSection />
                   </div>
-                  {/* PropertySelectionStep - Full width on mobile, 75% on desktop */}
-                  <div className="flex-1 lg:w-[75%] rounded-r-lg">
+                  {/* PropertySelectionStep - Full width on mobile, 70% on desktop */}
+                  <div className="flex-1 lg:w-[70%] bg-white">
                     <PropertySelectionStep onNext={handlePropertySelectionNext} />
                   </div>
                 </div>
@@ -812,10 +812,12 @@ export const PostProperty: React.FC = () => {
             </div>
             
             {/* Sections below the form - Stack on mobile */}
-            <div className="lg:hidden px-4">
-              <WhyPostSection />
+            <div className="lg:hidden px-4 mb-8">
+              <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+                <WhyPostSection />
+              </div>
             </div>
-            <div className="bg-gray-700">
+            <div className="bg-gradient-to-r from-gray-800 to-gray-900">
               <HowItWorksSection />
               <PropertyFAQSection />
             </div>
