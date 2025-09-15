@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
-import { Building, MessageSquare, User, LogOut, Plus, Eye, Edit, Trash, FileText, Shield, MapPin } from 'lucide-react';
+import { Building, MessageSquare, User, LogOut, Plus, Eye, Edit, Trash, FileText, Shield, MapPin, Home } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
 import { DeleteConfirmationModal } from '@/components/DeleteConfirmationModal';
@@ -125,6 +125,10 @@ export const Dashboard: React.FC = () => {
     isOpen: false,
     property: null
   });
+  
+  // Filter states
+  const [selectedFilter, setSelectedFilter] = useState('All');
+  const [showOnlyActive, setShowOnlyActive] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -449,6 +453,41 @@ export const Dashboard: React.FC = () => {
     navigate(`/plans?tab=${planTab}`);
   };
 
+  // Filter properties based on selected filter and active toggle
+  const filteredProperties = properties.filter(property => {
+    // Apply "Only Active" filter
+    if (showOnlyActive && property.status !== 'active' && property.status !== 'approved') {
+      return false;
+    }
+    
+    // Apply category filter
+    if (selectedFilter === 'All') return true;
+    
+    if (selectedFilter === 'Rent') {
+      return property.listing_type === 'rent' && property.property_type !== 'commercial';
+    }
+    if (selectedFilter === 'Sale') {
+      return property.listing_type === 'sale' && property.property_type !== 'commercial';
+    }
+    if (selectedFilter === 'Commercial-Rent') {
+      return property.listing_type === 'rent' && property.property_type === 'commercial';
+    }
+    if (selectedFilter === 'Commercial-Sale') {
+      return property.listing_type === 'sale' && property.property_type === 'commercial';
+    }
+    if (selectedFilter === 'PG/Hostel') {
+      return property.property_type === 'pg_hostel';
+    }
+    if (selectedFilter === 'Flatmates') {
+      return property.listing_type === 'rent' && property.property_type === 'apartment';
+    }
+    if (selectedFilter === 'Land/Plot') {
+      return property.property_type === 'land' || property.property_type === 'plot';
+    }
+    
+    return true;
+  });
+
   if (!user) {
     navigate('/auth');
     return null;
@@ -553,7 +592,12 @@ export const Dashboard: React.FC = () => {
                 <div className="flex items-center gap-2">
                   <span className="text-sm text-gray-600">Only Active</span>
                   <label className="relative inline-flex items-center cursor-pointer">
-                    <input type="checkbox" className="sr-only peer" />
+                    <input 
+                      type="checkbox" 
+                      className="sr-only peer" 
+                      checked={showOnlyActive}
+                      onChange={(e) => setShowOnlyActive(e.target.checked)}
+                    />
                     <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
                   </label>
                 </div>
@@ -566,38 +610,24 @@ export const Dashboard: React.FC = () => {
 
             {/* Filter Buttons */}
             <div className="flex flex-wrap gap-3">
-              <Button 
-                variant="outline" 
-                className="border-2 border-teal-500 text-teal-700 bg-teal-50 hover:bg-teal-100"
-              >
-                All
-              </Button>
-              <Button variant="outline" className="border-gray-300 hover:border-teal-500">
-                Rent
-              </Button>
-              <Button variant="outline" className="border-gray-300 hover:border-teal-500">
-                Sale
-              </Button>
-              <Button variant="outline" className="border-gray-300 hover:border-teal-500">
-                Commercial-Rent
-              </Button>
-              <Button variant="outline" className="border-gray-300 hover:border-teal-500">
-                Commercial-Sale
-              </Button>
-              <Button variant="outline" className="border-gray-300 hover:border-teal-500">
-                PG/Hostel
-              </Button>
-              <Button variant="outline" className="border-gray-300 hover:border-teal-500">
-                Flatmates
-              </Button>
-              <Button variant="outline" className="border-gray-300 hover:border-teal-500">
-                Land/Plot
-              </Button>
+              {['All', 'Rent', 'Sale', 'Commercial-Rent', 'Commercial-Sale', 'PG/Hostel', 'Flatmates', 'Land/Plot'].map((filter) => (
+                <Button 
+                  key={filter}
+                  variant="outline" 
+                  onClick={() => setSelectedFilter(filter)}
+                  className={selectedFilter === filter 
+                    ? "border-2 border-teal-500 text-teal-700 bg-teal-50 hover:bg-teal-100" 
+                    : "border-gray-300 hover:border-teal-500"
+                  }
+                >
+                  {filter}
+                </Button>
+              ))}
             </div>
 
             {loading ? (
               <div className="text-center py-8">Loading properties...</div>
-            ) : properties.length === 0 ? (
+            ) : filteredProperties.length === 0 ? (
               <Card>
                 <CardContent className="text-center py-8">
                   <Building className="h-12 w-12 mx-auto text-gray-400 mb-4" />
@@ -611,7 +641,7 @@ export const Dashboard: React.FC = () => {
               </Card>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {properties.map((property) => {
+                {filteredProperties.map((property) => {
                   // Get the first image for preview
                   const getImageUrl = () => {
                     if (property.images && property.images.length > 0) {
@@ -673,7 +703,7 @@ export const Dashboard: React.FC = () => {
                           {(!property.images || property.images.length === 0) && (
                             <div className="absolute inset-0 flex items-center justify-center">
                               <div className="w-16 h-16 border-2 border-gray-300 rounded-lg flex items-center justify-center">
-                                <Building className="w-8 h-8 text-gray-400" />
+                                <Home className="w-8 h-8 text-gray-400" />
                               </div>
                             </div>
                           )}
@@ -689,8 +719,31 @@ export const Dashboard: React.FC = () => {
                             {property.locality}, {property.city}
                           </p>
 
+                          {/* Listing Progress for incomplete properties */}
+                          {(() => {
+                            const completion = property.property_type === 'pg_hostel' 
+                              ? calculatePGPropertyCompletion(property as any)
+                              : calculatePropertyCompletion(property as any);
+                            
+                            if (completion.percentage < 60) {
+                              return (
+                                <div className="mb-3">
+                                  <PropertyProgressCompact
+                                    propertyId={property.id}
+                                    completionPercentage={completion.percentage}
+                                    missingFields={completion.missingFields}
+                                    propertyType={property.property_type}
+                                  />
+                                </div>
+                              );
+                            }
+                            return null;
+                          })()}
+
                           <div className="mb-4">
-                            <span className="text-sm text-gray-600">Rent: </span>
+                            <span className="text-sm text-gray-600">
+                              {property.listing_type === 'rent' ? 'Rent: ' : 'Price: '}
+                            </span>
                             <span className="font-semibold text-gray-900">
                               ₹{property.expected_price.toLocaleString()}
                             </span>
