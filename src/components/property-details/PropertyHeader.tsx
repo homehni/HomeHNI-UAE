@@ -31,7 +31,7 @@ export const PropertyHeader: React.FC<PropertyHeaderProps> = ({ property }) => {
     <div className="bg-white border-b pt-24">
       <div className="mx-auto max-w-7xl px-4 py-4">
         {/* Breadcrumb */}
-        <nav className="text-sm text-gray-500 mb-4 flex items-center">
+        <nav className="text-sm text-gray-500 mb-4 hidden sm:flex items-center">
           <Link to="/" className="hover:text-primary flex items-center">
             <Home className="w-4 h-4 mr-1" />
             Home
