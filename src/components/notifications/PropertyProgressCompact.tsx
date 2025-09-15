@@ -80,7 +80,7 @@ export const PropertyProgressCompact: React.FC<PropertyProgressCompactProps> = (
   };
 
   return (
-    <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+    <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg w-full">
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center space-x-2">
           <TrendingUp className="w-4 h-4 text-blue-600" />
@@ -95,7 +95,7 @@ export const PropertyProgressCompact: React.FC<PropertyProgressCompactProps> = (
       
       <Progress 
         value={completionPercentage} 
-        className="h-1.5 mb-2"
+        className="h-1.5 mb-2 w-full"
       />
       
       <div className="flex items-center justify-between">
