@@ -115,13 +115,13 @@ export const PropertyInfoCards: React.FC<PropertyInfoCardsProps> = ({ property }
 
   return (
     <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
-      <div className="grid grid-cols-2">
+      <div className="grid grid-cols-1 sm:grid-cols-2">
         {infoCards.map((card, index) => {
           const isRightCol = index % 2 === 1;
           const rows = Math.ceil(infoCards.length / 2);
           const isLastRow = Math.floor(index / 2) === rows - 1;
           const cellBorders = [
-            !isRightCol ? 'border-r' : '',
+            !isRightCol ? 'sm:border-r' : '',
             !isLastRow ? 'border-b' : '',
           ]
             .filter(Boolean)
@@ -130,16 +130,16 @@ export const PropertyInfoCards: React.FC<PropertyInfoCardsProps> = ({ property }
           return (
             <div
               key={index}
-              className={`p-4 ${cellBorders} flex items-center gap-4`}
+              className={`p-3 sm:p-4 ${cellBorders} flex items-center gap-3 sm:gap-4`}
             >
-              <div className="bg-gray-50 p-3 rounded-lg flex-shrink-0">
-                <card.icon className="w-6 h-6 text-gray-600" />
+              <div className="bg-gray-50 p-2 sm:p-3 rounded-lg flex-shrink-0">
+                <card.icon className="w-5 h-5 sm:w-6 sm:h-6 text-gray-600" />
               </div>
               <div className="flex-1 min-w-0">
-                <div className="font-semibold text-gray-900 text-base">
+                <div className="font-semibold text-gray-900 text-sm sm:text-base truncate">
                   {card.title}
                 </div>
-                <div className="text-sm text-gray-500">
+                <div className="text-xs sm:text-sm text-gray-500">
                   {card.subtitle}
                 </div>
               </div>

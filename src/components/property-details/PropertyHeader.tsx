@@ -29,7 +29,7 @@ export const PropertyHeader: React.FC<PropertyHeaderProps> = ({ property }) => {
 
   return (
     <div className="bg-white border-b pt-0 sm:pt-24">
-      <div className="mx-auto max-w-7xl px-4 py-4">
+      <div className="mx-auto max-w-7xl px-2 sm:px-4 py-4">
         {/* Breadcrumb */}
         <nav className="text-sm text-gray-500 mb-4 hidden sm:flex items-center">
           <Link to="/" className="hover:text-primary flex items-center">
@@ -61,24 +61,24 @@ export const PropertyHeader: React.FC<PropertyHeaderProps> = ({ property }) => {
             {/* Price Info Grid - Mobile */}
             <div className="grid grid-cols-3 gap-0">
               {/* Rent Section */}
-              <div className="text-center px-3 py-3 border-r border-gray-200">
-                <div className="text-lg font-bold text-gray-900">
+              <div className="text-center px-2 sm:px-3 py-3 border-r border-gray-200">
+                <div className="text-base sm:text-lg font-bold text-gray-900">
                   ₹{price?.toLocaleString() || '33,000'}
                 </div>
                 <div className="text-xs text-gray-600">Rent</div>
               </div>
               
               {/* Area Section */}
-              <div className="text-center px-3 py-3 border-r border-gray-200">
-                <div className="text-lg font-bold text-gray-900">
+              <div className="text-center px-2 sm:px-3 py-3 border-r border-gray-200">
+                <div className="text-base sm:text-lg font-bold text-gray-900">
                   {area.toLocaleString()}
                 </div>
                 <div className="text-xs text-gray-600">Sq.Ft</div>
               </div>
               
               {/* Deposit Section */}
-              <div className="text-center px-3 py-3">
-                <div className="text-lg font-bold text-gray-900">
+              <div className="text-center px-2 sm:px-3 py-3">
+                <div className="text-base sm:text-lg font-bold text-gray-900">
                   ₹{((price || 33000) * 2).toLocaleString()}
                 </div>
                 <div className="text-xs text-gray-600">Deposit</div>
