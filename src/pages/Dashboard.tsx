@@ -776,23 +776,6 @@ export const Dashboard: React.FC = () => {
                           </div>
                         </div>
 
-                        {/* Listing Progress - full width */}
-                        <div className="px-3 pb-3">
-                          {(() => {
-                            const completionResult = property.property_type === 'pg_hostel' 
-                              ? calculatePGPropertyCompletion(property)
-                              : calculatePropertyCompletion(property);
-                            
-                            return (
-                              <PropertyProgressCompact 
-                                propertyId={property.id}
-                                completionPercentage={completionResult.percentage}
-                                missingFields={completionResult.missingFields}
-                                propertyType={property.property_type}
-                              />
-                            );
-                          })()}
-                        </div>
                       </CardContent>
                     </Card>
                   );
