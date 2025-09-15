@@ -377,8 +377,10 @@ const PropertyDetails: React.FC = () => {
           </div>
         )}
         
-        {/* New Header Section */}
-        <PropertyHeader property={mergedProperty as any} />
+        {/* Header Section - Desktop Only */}
+        <div className="hidden sm:block">
+          <PropertyHeader property={mergedProperty as any} />
+        </div>
 
         {/* Main Content */}
         <section className="py-6">
@@ -388,6 +390,11 @@ const PropertyDetails: React.FC = () => {
               {/* Left - Image Gallery */}
               <div className="lg:col-span-2">
                 <PropertyImageGallery property={mergedProperty as any} />
+                
+                {/* Header Section - Mobile Only (Below Images) */}
+                <div className="block sm:hidden mt-6">
+                  <PropertyHeader property={mergedProperty as any} />
+                </div>
               </div>
               
               {/* Right - Property Info Cards */}
