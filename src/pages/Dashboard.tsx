@@ -731,9 +731,10 @@ export const Dashboard: React.FC = () => {
                               <Button
                                 variant="outline"
                                 size="sm"
-                                className="text-xs px-3 py-1 h-7 font-normal"
+                                onClick={() => openDeleteModal('property', property.id, property.title)}
+                                className="text-xs px-3 py-1 h-7 font-normal text-red-600 hover:text-red-700"
                               >
-                                Upload Media
+                                Delete
                               </Button>
                             </div>
 
