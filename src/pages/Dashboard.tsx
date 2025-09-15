@@ -544,11 +544,54 @@ export const Dashboard: React.FC = () => {
 
           {/* Properties Tab */}
           <TabsContent value="properties" className="space-y-6">
+            {/* Header with Property Count and Toggle */}
             <div className="flex justify-between items-center">
-              <h2 className="text-xl font-semibold">My Properties</h2>
-              <Button onClick={() => navigate('/post-property')}>
-                <Plus className="h-4 w-4 mr-2" />
-                Add New Property
+              <h2 className="text-lg font-medium text-gray-700">
+                You have already posted {properties.length} properties on PropertyMatch
+              </h2>
+              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2">
+                  <span className="text-sm text-gray-600">Only Active</span>
+                  <label className="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox" className="sr-only peer" />
+                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                  </label>
+                </div>
+                <Button onClick={() => navigate('/post-property')} className="bg-brand-red hover:bg-brand-red/90">
+                  <Plus className="h-4 w-4 mr-2" />
+                  Add New
+                </Button>
+              </div>
+            </div>
+
+            {/* Filter Buttons */}
+            <div className="flex flex-wrap gap-3">
+              <Button 
+                variant="outline" 
+                className="border-2 border-teal-500 text-teal-700 bg-teal-50 hover:bg-teal-100"
+              >
+                All
+              </Button>
+              <Button variant="outline" className="border-gray-300 hover:border-teal-500">
+                Rent
+              </Button>
+              <Button variant="outline" className="border-gray-300 hover:border-teal-500">
+                Sale
+              </Button>
+              <Button variant="outline" className="border-gray-300 hover:border-teal-500">
+                Commercial-Rent
+              </Button>
+              <Button variant="outline" className="border-gray-300 hover:border-teal-500">
+                Commercial-Sale
+              </Button>
+              <Button variant="outline" className="border-gray-300 hover:border-teal-500">
+                PG/Hostel
+              </Button>
+              <Button variant="outline" className="border-gray-300 hover:border-teal-500">
+                Flatmates
+              </Button>
+              <Button variant="outline" className="border-gray-300 hover:border-teal-500">
+                Land/Plot
               </Button>
             </div>
 
@@ -567,7 +610,7 @@ export const Dashboard: React.FC = () => {
                 </CardContent>
               </Card>
             ) : (
-              <div className="grid gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {properties.map((property) => {
                   // Get the first image for preview
                   const getImageUrl = () => {
@@ -583,187 +626,120 @@ export const Dashboard: React.FC = () => {
                     return '/placeholder.svg';
                   };
 
-                  return (
-                    <Card key={property.id} className="relative overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200">
-                      {/* Ribbon for For Sale/For Rent */}
-                      <div className={`absolute top-0 left-0 z-10 px-3 py-1.5 text-xs font-semibold text-white shadow-md ${
-                        property.listing_type === 'sale' ? 'bg-green-600' : 'bg-orange-500'
-                      }`}>
-                        {property.listing_type === 'sale' ? 'For Sale' : 'For Rent'}
-                      </div>
-                      
-                      
-                      
-                      <CardContent className="p-0">
-                        <div className="flex flex-col md:flex-row md:min-h-56 md:items-stretch">
-                          {/* Image Preview - Mobile: full width on top, Desktop/Tablet: side column */}
-                          <div className="w-full h-48 md:w-40 lg:w-56 md:h-auto flex-shrink-0 relative">
-                            <img
-                              src={getImageUrl()}
-                              alt={property.title}
-                              className="absolute inset-0 w-full h-full object-cover rounded-t-lg md:rounded-t-none md:rounded-l-lg"
-                              onError={(e) => {
-                                e.currentTarget.src = '/placeholder.svg';
-                                e.currentTarget.alt = 'Image not available';
-                              }}
-                            />
-                          </div>
-                          
-                          {/* Content - Sleek Layout */}
-                          <div className="flex-1 p-4 md:p-5 flex flex-col min-w-0">
-                            {/* Header row: title left, actions + status right */}
-                            <div className="flex items-start justify-between gap-3 mb-2">
-                              <h3 className="text-xl font-semibold text-gray-900 leading-tight truncate pr-2">
-                                {property.title}
-                              </h3>
-                              <div className="flex items-center gap-2 flex-shrink-0">
-                                {(!('isSubmission' in property) && property.status === 'approved') && (
-                                  <span className={`inline-flex items-center px-3 py-1.5 text-xs font-medium rounded-full border bg-emerald-50 text-emerald-700 border-emerald-200`}>
-                                    Active
-                                  </span>
-                                )}
-                                <div className="flex sm:hidden items-center gap-1">
-                                  <Button
-                                    variant="outline"
-                                    size="sm"
-                                    onClick={() => handleViewProperty(property)}
-                                    className="px-2 h-8 text-xs"
-                                  >
-                                    <Eye className="h-3.5 w-3.5" />
-                                  </Button>
-                                  <Button
-                                    variant="outline"
-                                    size="sm"
-                                    onClick={() => handleEditProperty(property)}
-                                    className="px-2 h-8 text-xs"
-                                  >
-                                    <Edit className="h-3.5 w-3.5" />
-                                  </Button>
-                                  <Button
-                                    size="sm"
-                                    className="px-2 h-8 text-xs bg-red-500 hover:bg-red-600 text-white"
-                                    onClick={() => openDeleteModal('property', property.id, property.title)}
-                                  >
-                                    <Trash className="h-3.5 w-3.5" />
-                                  </Button>
-                                </div>
-                                <div className="hidden sm:flex items-center gap-1">
-                                  <Button
-                                    variant="outline"
-                                    size="sm"
-                                    onClick={() => handleViewProperty(property)}
-                                    className="px-2 h-8 text-xs"
-                                  >
-                                    <Eye className="h-3.5 w-3.5 mr-1" />View
-                                  </Button>
-                                  <Button
-                                    variant="outline"
-                                    size="sm"
-                                    onClick={() => handleEditProperty(property)}
-                                    className="px-2 h-8 text-xs"
-                                  >
-                                    <Edit className="h-3.5 w-3.5 mr-1" />{('isSubmission' in property) ? 'Improve' : 'Edit'}
-                                  </Button>
-                                  <Button
-                                    variant="ghost"
-                                    size="sm"
-                                    className="px-2 h-8 text-xs text-blue-600 hover:text-blue-800"
-                                    onClick={() => {
-                                      navigator.clipboard.writeText(`${window.location.origin}/property/${property.id}`);
-                                      toast({ title: 'Link copied!', description: 'Property link copied to clipboard' });
-                                    }}
-                                  >
-                                    Copy
-                                  </Button>
-                                  <Button
-                                    variant="ghost"
-                                    size="sm"
-                                    className="px-2 h-8 text-xs text-green-600 hover:text-green-800"
-                                    onClick={() => {
-                                      if (navigator.share) {
-                                        navigator.share({
-                                          title: property.title,
-                                          text: `Check out this property: ${property.title}`,
-                                          url: `${window.location.origin}/property/${property.id}`
-                                        });
-                                      } else {
-                                        navigator.clipboard.writeText(`${window.location.origin}/property/${property.id}`);
-                                        toast({ title: 'Link copied!', description: 'Share this link with potential buyers/tenants' });
-                                      }
-                                    }}
-                                  >
-                                    Share
-                                  </Button>
-                                  <Button
-                                    size="sm"
-                                    className="px-2 h-8 text-xs bg-red-500 hover:bg-red-600 text-white"
-                                    onClick={() => openDeleteModal('property', property.id, property.title)}
-                                  >
-                                    <Trash className="h-3.5 w-3.5" />
-                                  </Button>
-                                </div>
-                              </div>
-                            </div>
+                  const getStatusBadge = () => {
+                    if ('isSubmission' in property) {
+                      return { text: 'In Progress', className: 'bg-gray-500 text-white' };
+                    }
+                    
+                    if (property.status === 'approved' || property.status === 'active') {
+                      return { text: 'For Rent', className: 'bg-orange-500 text-white' };
+                    }
+                    
+                    if (property.status === 'inactive') {
+                      return { text: 'Inactive', className: 'bg-gray-400 text-white' };
+                    }
 
-                            {/* Location */}
-                            <div className="flex items-center text-gray-600 mb-3 min-w-0">
-                              <MapPin className="h-4 w-4 mr-2 flex-shrink-0" />
-                              <span className="text-sm truncate" title={property.locality}>
-                                {property.locality}
-                              </span>
-                            </div>
-                            
-                            {/* Price + Date */}
-                            <div className="flex items-center justify-between flex-wrap gap-3 mb-4">
-                              <div className="text-xl font-bold text-green-600">₹{property.expected_price.toLocaleString()}</div>
-                              <div className="text-sm text-gray-500">Posted: {new Date(property.created_at).toLocaleDateString()}</div>
-                            </div>
-                            
-                            {/* Bottom Section - Upgrade Button and Progress */}
-                            <div className="mt-auto pt-2 border-t border-gray-100 space-y-3">
-                              {/* Upgrade Button - Left Aligned */}
-                              <div className="flex justify-start">
-                                <Button
-                                  onClick={() => handleUpgradeProperty(property)}
-                                  className="bg-white hover:bg-gray-50 text-black px-6 py-2 text-sm font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-200 transform hover:scale-105 border border-black"
-                                >
-                                  <span className="flex items-center gap-2">
-                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                                    </svg>
-                                    Upgrade
-                                  </span>
-                                </Button>
-                              </div>
-                              
-                              {/* Property Progress Bar - Full Width Below */}
-                              <div className="w-full">
-                                {((property as any).isSubmission || property.status === 'approved' || property.status === 'active') && (() => {
-                                  const completion = calculatePropertyCompletion(property);
-                                  console.log('Property completion:', {
-                                    id: property.id,
-                                    title: property.title,
-                                    status: property.status,
-                                    percentage: completion.percentage,
-                                    missingFields: completion.missingFields,
-                                    propertyType: property.property_type
-                                  });
-                                  
-                                  // Show when completion is below threshold
-                                  const shouldShow = completion.percentage < 60;
-                                  
-                                  return shouldShow ? (
-                                    <PropertyProgressCompact
-                                      propertyId={property.id}
-                                      completionPercentage={completion.percentage}
-                                      missingFields={completion.missingFields}
-                                      propertyType={property.property_type}
-                                    />
-                                  ) : null;
-                                })()}
+                    return { text: 'Pending', className: 'bg-blue-500 text-white' };
+                  };
+
+                  const statusBadge = getStatusBadge();
+
+                  return (
+                    <Card key={property.id} className="relative bg-white border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
+                      {/* Status Badge */}
+                      <div className={`absolute top-3 left-3 z-10 px-2 py-1 text-xs font-medium rounded ${statusBadge.className}`}>
+                        {statusBadge.text}
+                      </div>
+
+                      {/* Special Status Badge for Rented/Sold */}
+                      {property.status === 'inactive' && (
+                        <div className="absolute top-3 right-3 z-10 px-2 py-1 text-xs font-medium rounded bg-gray-600 text-white">
+                          {property.listing_type === 'rent' ? 'Rented out via Others on' : 'Sold via Others on'} {new Date(property.updated_at || property.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                        </div>
+                      )}
+
+                      <CardContent className="p-0">
+                        {/* Property Image */}
+                        <div className="relative h-48 bg-gray-100">
+                          <img
+                            src={getImageUrl()}
+                            alt={property.title}
+                            className="w-full h-full object-cover"
+                            onError={(e) => {
+                              e.currentTarget.src = '/placeholder.svg';
+                            }}
+                          />
+                          {/* Image placeholder icon if no image */}
+                          {(!property.images || property.images.length === 0) && (
+                            <div className="absolute inset-0 flex items-center justify-center">
+                              <div className="w-16 h-16 border-2 border-gray-300 rounded-lg flex items-center justify-center">
+                                <Building className="w-8 h-8 text-gray-400" />
                               </div>
                             </div>
+                          )}
+                        </div>
+
+                        {/* Property Details */}
+                        <div className="p-4">
+                          <h3 className="font-semibold text-gray-900 mb-1 line-clamp-2" title={property.title}>
+                            {property.title}
+                          </h3>
+                          
+                          <p className="text-sm text-gray-600 mb-3 line-clamp-1">
+                            {property.locality}, {property.city}
+                          </p>
+
+                          <div className="mb-4">
+                            <span className="text-sm text-gray-600">Rent: </span>
+                            <span className="font-semibold text-gray-900">
+                              ₹{property.expected_price.toLocaleString()}
+                            </span>
+                            {property.locality && (
+                              <span className="text-sm text-gray-600 ml-2">• {property.locality}</span>
+                            )}
                           </div>
+
+                          {/* Action Buttons */}
+                          <div className="flex gap-2 mb-4">
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => handleEditProperty(property)}
+                              className="flex-1 text-xs"
+                            >
+                              Edit
+                            </Button>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="flex-1 text-xs bg-teal-600 text-white hover:bg-teal-700 border-teal-600"
+                            >
+                              {property.status === 'active' ? 'Request Deactivation' : 'Request Activation'}
+                            </Button>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="text-xs px-3"
+                            >
+                              Upload Media
+                            </Button>
+                          </div>
+
+                          {/* Contact Status */}
+                          <div className="text-sm text-gray-600 mb-3">
+                            None Contacted
+                          </div>
+
+                          {/* Go Premium Button */}
+                          <Button
+                            onClick={() => handleUpgradeProperty(property)}
+                            className="w-full bg-red-500 hover:bg-red-600 text-white text-sm font-medium"
+                          >
+                            <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M5 2a1 1 0 011 1v1h1a1 1 0 010 2H6v1a1 1 0 01-2 0V6H3a1 1 0 010-2h1V3a1 1 0 011-1zm0 10a1 1 0 011 1v1h1a1 1 0 110 2H6v1a1 1 0 11-2 0v-1H3a1 1 0 110-2h1v-1a1 1 0 011-1zM12 2a1 1 0 01.894.553l2.991 5.982a.869.869 0 010 .775l-2.991 5.982A1 1 0 0112 16H9a1 1 0 01-1-1V3a1 1 0 011-1h3z" clipRule="evenodd" />
+                            </svg>
+                            Go Premium
+                          </Button>
                         </div>
                       </CardContent>
                     </Card>
