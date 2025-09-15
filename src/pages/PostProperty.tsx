@@ -218,10 +218,6 @@ export const PostProperty: React.FC = () => {
         listing_type: data.listingType
       });
 
-      toast({
-        title: "Success",
-        description: "Contact information saved successfully!"
-      });
     } catch (error) {
       console.error('Error saving contact data:', error);
       toast({
