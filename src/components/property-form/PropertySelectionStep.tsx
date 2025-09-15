@@ -101,7 +101,7 @@ export const PropertySelectionStep: React.FC<PropertySelectionStepProps> = ({
               <Label htmlFor="mobile" className="text-sm font-medium text-gray-700">Mobile Number *</Label>
               <div className="flex">
                 <Select defaultValue="+91">
-                  <SelectTrigger className="w-16 rounded-r-none border-r-0 h-9 text-sm border border-gray-300">
+                  <SelectTrigger className="w-16 rounded-r-none border-r-0 h-9 text-sm">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -113,7 +113,7 @@ export const PropertySelectionStep: React.FC<PropertySelectionStepProps> = ({
                   placeholder="Enter your mobile number"
                   value={phoneNumber}
                   onChange={(e) => setPhoneNumber(e.target.value)}
-                  className="flex-1 rounded-l-none h-9 text-sm border border-gray-300"
+                  className="flex-1 rounded-l-none h-9 text-sm"
                 />
               </div>
             </div>

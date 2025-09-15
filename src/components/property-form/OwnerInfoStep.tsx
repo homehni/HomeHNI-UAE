@@ -130,9 +130,9 @@ export const OwnerInfoStep: React.FC<OwnerInfoStepProps> = ({
             {/* Mobile Number */}
             <div className="space-y-2">
               <Label htmlFor="phoneNumber">Mobile Number *</Label>
-              <div className="flex gap-2">
+              <div className="flex">
                 <Select defaultValue="+91">
-                  <SelectTrigger className="w-20">
+                  <SelectTrigger className="w-20 rounded-r-none border-r-0">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -146,7 +146,7 @@ export const OwnerInfoStep: React.FC<OwnerInfoStepProps> = ({
                   type="tel"
                   {...register('phoneNumber')}
                   placeholder="Enter your mobile number"
-                  className={`flex-1 ${errors.phoneNumber && touchedFields.phoneNumber ? 'border-destructive' : ''}`}
+                  className={`flex-1 rounded-l-none ${errors.phoneNumber && touchedFields.phoneNumber ? 'border-destructive' : ''}`}
                   onBlur={handleBlur}
                   onInput={handleBlur}
                   autoComplete="tel"
