@@ -26,7 +26,7 @@ export const PropertyImageGallery: React.FC<PropertyImageGalleryProps> = ({ prop
     setShowImageModal(true);
   };
 
-  const images = property.images || [propertyPlaceholder];
+  const images = (property.images && property.images.length > 0) ? property.images : [propertyPlaceholder];
 
   return (
     <div className="relative">
@@ -167,9 +167,9 @@ export const PropertyImageGallery: React.FC<PropertyImageGalleryProps> = ({ prop
       </div>
 
       {/* Image Modal */}
-      {property.images && (
+      {images.length > 0 && (
         <PropertyImageModal
-          images={property.images}
+          images={images}
           isOpen={showImageModal}
           onClose={() => setShowImageModal(false)}
           initialIndex={initialImageIndex}
