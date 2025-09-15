@@ -73,7 +73,7 @@ export const PropertyImageGallery: React.FC<PropertyImageGalleryProps> = ({ prop
       <div className="hidden md:block">
         <div className="grid grid-cols-3 gap-2 h-[480px] rounded-lg overflow-hidden">
           {/* Main Image - Takes 2 columns */}
-          <div className="col-span-2 relative">
+          <div className={`${images.length < 2 ? 'col-span-3' : 'col-span-2'} relative`}>
             <img
               src={images[0]}
               alt={property.title}
@@ -118,10 +118,10 @@ export const PropertyImageGallery: React.FC<PropertyImageGalleryProps> = ({ prop
             </div>
           </div>
 
-          {/* Right Side Images - Stacked */}
-          <div className="col-span-1 flex flex-col gap-2">
-            {images.length > 1 && (
-              <div className="relative h-1/2">
+          {/* Right Side Images - Stacked (only if 2+ images) */}
+          {images.length > 1 && (
+            <div className="col-span-1 flex flex-col gap-2">
+              <div className={images.length > 2 ? 'relative h-1/2' : 'relative h-full'}>
                 <img
                   src={images[1]}
                   alt={`${property.title} - Image 2`}
@@ -132,37 +132,32 @@ export const PropertyImageGallery: React.FC<PropertyImageGalleryProps> = ({ prop
                   }}
                 />
               </div>
-            )}
-            
-            {images.length > 2 ? (
-              <div className="relative h-1/2">
-                <img
-                  src={images[2]}
-                  alt={`${property.title} - Image 3`}
-                  className="w-full h-full object-cover cursor-pointer rounded-lg"
-                  onClick={() => handleImageClick(2)}
-                  onError={(e) => {
-                    e.currentTarget.src = propertyPlaceholder;
-                  }}
-                />
-                {/* Show +X overlay if there are more than 3 images */}
-                {images.length > 3 && (
-                  <div
-                    className="absolute inset-0 bg-black/70 flex items-center justify-center cursor-pointer rounded-lg backdrop-blur-sm"
-                    onClick={handleViewAllPhotos}
-                  >
-                    <span className="text-white text-xl font-bold">
-                      +{images.length - 3}
-                    </span>
-                  </div>
-                )}
-              </div>
-            ) : (
-              <div className="h-1/2 bg-gray-200 rounded-lg flex items-center justify-center">
-                <span className="text-gray-500 text-sm">No more images</span>
-              </div>
-            )}
-          </div>
+              {images.length > 2 && (
+                <div className="relative h-1/2">
+                  <img
+                    src={images[2]}
+                    alt={`${property.title} - Image 3`}
+                    className="w-full h-full object-cover cursor-pointer rounded-lg"
+                    onClick={() => handleImageClick(2)}
+                    onError={(e) => {
+                      e.currentTarget.src = propertyPlaceholder;
+                    }}
+                  />
+                  {/* Show +X overlay if there are more than 3 images */}
+                  {images.length > 3 && (
+                    <div
+                      className="absolute inset-0 bg-black/70 flex items-center justify-center cursor-pointer rounded-lg backdrop-blur-sm"
+                      onClick={handleViewAllPhotos}
+                    >
+                      <span className="text-white text-xl font-bold">
+                        +{images.length - 3}
+                      </span>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
 
