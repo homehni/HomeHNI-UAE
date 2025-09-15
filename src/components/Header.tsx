@@ -102,7 +102,7 @@ const Header = () => {
 
   return (
     <>
-      <header className={`fixed top-8 left-0 right-0 z-50 transition-all duration-500 ${isScrolled ? 'bg-white/95 backdrop-blur-sm shadow-md' : 'bg-gradient-to-r from-red-800 to-red-700'}`}>
+      <header className={`fixed md:top-8 top-0 left-0 right-0 z-50 transition-all duration-500 ${isScrolled ? 'bg-white/95 backdrop-blur-sm shadow-md' : 'bg-gradient-to-r from-red-800 to-red-700'}`}>
         <div className="w-full px-2 sm:px-4 lg:px-6 xl:px-8 pt-[6px]">
           <div className="flex items-center h-14">
             
