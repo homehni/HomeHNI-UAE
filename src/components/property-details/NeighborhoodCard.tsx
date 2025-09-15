@@ -1,6 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
-import mapboxgl from 'mapbox-gl';
-import 'mapbox-gl/dist/mapbox-gl.css';
+import React from 'react';
 
 interface NeighborhoodCardProps {
   property: {
@@ -10,62 +8,6 @@ interface NeighborhoodCardProps {
 }
 
 export const NeighborhoodCard: React.FC<NeighborhoodCardProps> = ({ property }) => {
-  const mapContainer = useRef<HTMLDivElement>(null);
-  const map = useRef<mapboxgl.Map | null>(null);
-  const [mapboxToken, setMapboxToken] = useState('');
-  const [showTokenInput, setShowTokenInput] = useState(true);
-
-  useEffect(() => {
-    if (!mapContainer.current || !mapboxToken) return;
-
-    // Initialize map
-    mapboxgl.accessToken = mapboxToken;
-    
-    // Geocode the location (simple approach using a geocoding service)
-    const initializeMap = async () => {
-      try {
-        // For demo, we'll center on a default location
-        // In production, you'd geocode the property.locality
-        map.current = new mapboxgl.Map({
-          container: mapContainer.current!,
-          style: 'mapbox://styles/mapbox/light-v11',
-          center: [77.5946, 12.9716], // Bangalore coordinates as default
-          zoom: 12,
-        });
-
-        // Add navigation controls
-        map.current.addControl(
-          new mapboxgl.NavigationControl(),
-          'top-right'
-        );
-
-        // Add a marker for the property location
-        new mapboxgl.Marker()
-          .setLngLat([77.5946, 12.9716])
-          .addTo(map.current);
-
-      } catch (error) {
-        console.error('Error initializing map:', error);
-      }
-    };
-
-    initializeMap();
-
-    // Cleanup
-    return () => {
-      map.current?.remove();
-    };
-  }, [mapboxToken]);
-
-  const handleTokenSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const token = (e.target as any).token.value.trim();
-    if (token) {
-      setMapboxToken(token);
-      setShowTokenInput(false);
-    }
-  };
-
   return (
     <div className="rounded-2xl border-2 border-red-500 bg-white shadow-lg">
       <div className="p-5 border-b border-gray-200">
@@ -73,63 +15,38 @@ export const NeighborhoodCard: React.FC<NeighborhoodCardProps> = ({ property }) 
       </div>
       
       <div className="p-5 pt-4">
-        {showTokenInput ? (
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
-            <h3 className="text-sm font-medium text-blue-900 mb-2">
-              Enter Mapbox Token to View Map
+        {/* Map Container */}
+        <div className="rounded-xl ring-1 ring-gray-200 overflow-hidden h-64 md:h-80 mb-4 relative">
+          <iframe
+            title="map"
+            width="100%"
+            height="100%"
+            loading="lazy"
+            src={`https://www.openstreetmap.org/export/embed.html?bbox=77.5%2C12.9%2C77.6%2C13.0&layer=mapnik&marker=12.95%2C77.55`}
+            style={{ border: 'none' }}
+          />
+          
+          {/* Location Info Overlay */}
+          <div className="absolute top-4 left-4 bg-white rounded-lg shadow-lg p-4 max-w-xs z-10">
+            <h3 className="font-semibold text-gray-900 mb-1">
+              {property.locality}
             </h3>
-            <p className="text-xs text-blue-700 mb-3">
-              Get your free token from{' '}
-              <a 
-                href="https://mapbox.com/" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="underline"
-              >
-                mapbox.com
-              </a>
+            <p className="text-sm text-gray-600 mb-3">
+              {property.city}
             </p>
-            <form onSubmit={handleTokenSubmit} className="flex gap-2">
-              <input
-                name="token"
-                type="text"
-                placeholder="pk.eyJ1..."
-                className="flex-1 px-3 py-2 border border-gray-300 rounded-md text-sm"
-              />
-              <button
-                type="submit"
-                className="px-4 py-2 bg-blue-600 text-white rounded-md text-sm hover:bg-blue-700"
-              >
-                Load Map
+            <div className="flex flex-col gap-2">
+              <button className="flex items-center justify-center gap-2 px-3 py-2 bg-blue-600 text-white rounded-md text-sm hover:bg-blue-700">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 01.553-.894L9 2l6 3 6-3v13l-6 3-6-3z" />
+                </svg>
+                Directions
               </button>
-            </form>
-          </div>
-        ) : (
-          <div className="rounded-xl ring-1 ring-gray-200 overflow-hidden h-64 md:h-80 mb-4 relative">
-            <div ref={mapContainer} className="w-full h-full" />
-            
-            {/* Location Info Overlay */}
-            <div className="absolute top-4 left-4 bg-white rounded-lg shadow-lg p-4 max-w-xs z-10">
-              <h3 className="font-semibold text-gray-900 mb-1">
-                {property.locality}
-              </h3>
-              <p className="text-sm text-gray-600 mb-3">
-                {property.city}
-              </p>
-              <div className="flex flex-col gap-2">
-                <button className="flex items-center justify-center gap-2 px-3 py-2 bg-blue-600 text-white rounded-md text-sm hover:bg-blue-700">
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 01.553-.894L9 2l6 3 6-3v13l-6 3-6-3z" />
-                  </svg>
-                  Directions
-                </button>
-                <button className="text-sm text-blue-600 hover:text-blue-800">
-                  View larger map
-                </button>
-              </div>
+              <button className="text-sm text-blue-600 hover:text-blue-800">
+                View larger map
+              </button>
             </div>
           </div>
-        )}
+        </div>
       </div>
     </div>
   );
