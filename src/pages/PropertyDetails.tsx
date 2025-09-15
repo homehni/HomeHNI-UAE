@@ -17,7 +17,6 @@ import { OverviewCard } from '@/components/property-details/OverviewCard';
 
 import { AmenitiesCard } from '@/components/property-details/AmenitiesCard';
 import { NeighborhoodCard } from '@/components/property-details/NeighborhoodCard';
-import { MobileStickyCTA } from '@/components/property-details/MobileStickyCTA';
 import { PropertyHeader } from '@/components/property-details/PropertyHeader';
 import { PropertyImageGallery } from '@/components/property-details/PropertyImageGallery';
 import { PropertyInfoCards } from '@/components/property-details/PropertyInfoCards';
@@ -389,7 +388,9 @@ const PropertyDetails: React.FC = () => {
             <div className="grid lg:grid-cols-3 gap-8 mb-8">
               {/* Left - Image Gallery */}
               <div className="lg:col-span-2">
-                <PropertyImageGallery property={mergedProperty as any} />
+                <div className="mt-6 sm:mt-0">
+                  <PropertyImageGallery property={mergedProperty as any} />
+                </div>
                 
                 {/* Header Section - Mobile Only (Below Images) */}
                 <div className="block sm:hidden mt-6">
@@ -429,9 +430,6 @@ const PropertyDetails: React.FC = () => {
             </div>
           </div>
         </section>
-
-        {/* Mobile Sticky CTA */}
-        <MobileStickyCTA onContactOwner={() => setShowContactModal(true)} />
       </main>
       
       {/* Contact Modal */}
