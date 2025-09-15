@@ -796,14 +796,14 @@ export const PostProperty: React.FC = () => {
             
             {/* Content Container - Centered and Compact */}
             <div className="flex justify-center py-4 px-4">
-              <div className="w-full max-w-5xl flex flex-col lg:flex-row gap-4 items-stretch">
+              <div className="w-full max-w-5xl flex flex-col lg:flex-row gap-4">
                 {/* Left Sidebar - Compact */}
-                <div className="hidden lg:block lg:w-80 bg-gray-200 rounded-lg overflow-hidden h-full">
+                <div className="hidden lg:block lg:w-80 bg-gray-200 rounded-lg overflow-hidden">
                   <WhyPostSection />
                 </div>
                 
                 {/* Right Form Area - Compact */}
-                <div className="flex-1 bg-white rounded-lg shadow-sm border border-gray-200 h-full">
+                <div className="flex-1 bg-white rounded-lg shadow-sm border border-gray-200">
                   <PropertySelectionStep onNext={handlePropertySelectionNext} />
                 </div>
               </div>

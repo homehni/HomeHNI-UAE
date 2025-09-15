@@ -66,8 +66,8 @@ export const PropertySelectionStep: React.FC<PropertySelectionStepProps> = ({
   const isFormValid = selectedListingType && phoneNumber && name && email && city;
 
   return (
-    <div className="bg-white flex flex-col h-full">
-      <div className="flex-1 p-4">
+    <div className="bg-white">
+      <div className="p-4">
         <div className="max-w-none space-y-4">
           {/* Personal Information Form */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
