@@ -155,8 +155,6 @@ export const Dashboard: React.FC = () => {
 
   const fetchProperties = async () => {
     try {
-      console.log('Fetching properties for user:', user?.id);
-      
       // 1) Fetch approved/pending properties belonging to user
       const { data: propertiesData, error: propertiesError } = await supabase
         .from('properties')
@@ -165,7 +163,6 @@ export const Dashboard: React.FC = () => {
         .order('created_at', { ascending: false });
 
       if (propertiesError) throw propertiesError;
-      console.log('Properties from properties table:', propertiesData?.length || 0);
 
       // 2) Fetch user's submissions that are still under review
       const { data: submissionsData, error: submissionsError } = await supabase
@@ -176,7 +173,6 @@ export const Dashboard: React.FC = () => {
         .order('created_at', { ascending: false });
 
       if (submissionsError) throw submissionsError;
-      console.log('Submissions from property_submissions table:', submissionsData?.length || 0);
 
       // Map submissions to CombinedProperty shape for dashboard display
       const mappedSubmissions: CombinedProperty[] = (submissionsData || []).map((sub: any) => {
@@ -224,7 +220,6 @@ export const Dashboard: React.FC = () => {
       // Sort newest first consistently
       .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
 
-      console.log('Total combined properties:', combined.length);
       setProperties(combined);
     } catch (error) {
       console.error('Error fetching properties:', error);
@@ -359,46 +354,18 @@ export const Dashboard: React.FC = () => {
     setIsDeleting(true);
     try {
       if (deleteModal.type === 'property') {
-        let deleted = false;
-        
-        // First try to delete from properties table
-        const { error: propertiesError } = await supabase
+        const { error } = await supabase
           .from('properties')
           .delete()
           .eq('id', deleteModal.id);
 
-        if (!propertiesError) {
-          deleted = true;
-          console.log('Property deleted from properties table:', deleteModal.id);
-        } else {
-          console.log('Property not found in properties table, trying submissions table');
-          
-          // If not found in properties table, try property_submissions table
-          const { error: submissionsError } = await supabase
-            .from('property_submissions')
-            .delete()
-            .eq('id', deleteModal.id);
+        if (error) throw error;
 
-          if (!submissionsError) {
-            deleted = true;
-            console.log('Property deleted from property_submissions table:', deleteModal.id);
-          } else {
-            throw submissionsError;
-          }
-        }
-
-        if (deleted) {
-          toast({
-            title: "Property deleted",
-            description: "Your property has been removed from the listing.",
-          });
-          
-          // Small delay to ensure database operation completes
-          setTimeout(async () => {
-            console.log('Refreshing properties list after deletion...');
-            await fetchProperties();
-          }, 500);
-        }
+        toast({
+          title: "Property deleted",
+          description: "Your property has been removed from the listing.",
+        });
+        fetchProperties();
       } else {
         // Draft deletion functionality to be implemented
         toast({
@@ -408,7 +375,6 @@ export const Dashboard: React.FC = () => {
       }
       closeDeleteModal();
     } catch (error) {
-      console.error('Delete error:', error);
       toast({
         title: "Error",
         description: `Failed to delete ${deleteModal.type}. Please try again.`,
@@ -427,8 +393,36 @@ export const Dashboard: React.FC = () => {
 
 
   const handleEditProperty = (property: CombinedProperty) => {
-    // Always route to the edit page for any property
-    navigate(`/edit-property/${property.id}`);
+    // Calculate missing fields to determine the best tab to open
+    const completion = calculatePropertyCompletion(property);
+    const missingFields = completion.missingFields;
+    const propertyType = property.property_type;
+    
+    // Determine target tab based on missing fields (same logic as PropertyProgressCompact)
+    const getTargetTab = (missingFields: string[], propertyType: string) => {
+      const isCommercial = propertyType === 'commercial' || propertyType === 'office' || 
+                          propertyType === 'shop' || propertyType === 'warehouse' || propertyType === 'showroom';
+      
+      const priorityOrder = isCommercial 
+        ? ['images', 'locality', 'super_area', 'description', 'expected_price']
+        : ['images', 'locality', 'super_area', 'bhk_type', 'expected_price'];
+      
+      const topField = priorityOrder.find(field => missingFields.includes(field));
+      
+      switch (topField) {
+        case 'images': return 'images';
+        case 'amenities': return 'details';
+        case 'locality': return 'location';
+        case 'super_area': return 'details';
+        case 'bhk_type': return 'basic';
+        case 'description': return 'basic';
+        case 'expected_price': return 'basic';
+        default: return 'basic';
+      }
+    };
+    
+    const targetTab = getTargetTab(missingFields, propertyType);
+    navigate(`/edit-property/${property.id}?tab=${targetTab}`);
   };
   const closeEditModal = () => {
     setEditPropertyModal({
@@ -603,7 +597,7 @@ export const Dashboard: React.FC = () => {
             {/* Header with Property Count and Toggle */}
             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
               <h2 className="text-base sm:text-lg font-medium text-gray-700">
-                You have already posted {properties.length} properties on PropertyMatch
+                You have already posted {properties.length} properties on Home HNI
               </h2>
               <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4">
                 <div className="flex items-center gap-2">
