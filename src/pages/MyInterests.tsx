@@ -90,36 +90,20 @@ export const MyInterests: React.FC = () => {
           const propertyIds = favoritesData.map(fav => fav.property_id);
           console.log('Fetching properties for IDs:', propertyIds);
 
-          // First try to fetch from properties table (without status filter)
-          const { data: propertiesData, error: propertiesError } = await supabase
-            .from('properties')
-            .select('*')
-            .in('id', propertyIds);
-
-          console.log('Properties from main table:', propertiesData);
-          console.log('Properties error:', propertiesError);
-
-          // Also try to fetch from properties table
-          const { data: publicPropertiesData, error: publicPropertiesError } = await supabase
-            .from('properties')
-            .select('*')
-            .in('id', propertyIds);
-
-          console.log('Properties from public view:', publicPropertiesData);
-          console.log('Public properties error:', publicPropertiesError);
-
-          // Combine results from both queries
-          const allProperties = [
-            ...(propertiesData || []),
-            ...(publicPropertiesData || [])
-          ];
-
-          // Remove duplicates by ID
-          const uniqueProperties = allProperties.filter((property, index, self) => 
-            index === self.findIndex(p => p.id === property.id)
+          // Fetch via RPC to bypass RLS and get visible, approved properties
+          const publicProps = await Promise.all(
+            propertyIds.map(async (id) => {
+              const { data, error } = await supabase.rpc('get_public_property_by_id', { property_id: id });
+              if (error) {
+                console.error('Error fetching property via RPC:', id, error);
+                return null;
+              }
+              // RPC returns an array (TABLE), take first row
+              return (data && Array.isArray(data) ? data[0] : null) as any | null;
+            })
           );
 
-          console.log('All unique properties found:', uniqueProperties);
+          const uniqueProperties = (publicProps.filter(Boolean) as any[]);
 
           if (uniqueProperties.length > 0) {
             // Combine the database data for properties that exist
