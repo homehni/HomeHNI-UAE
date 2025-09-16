@@ -468,16 +468,6 @@ export const MyInterests: React.FC = () => {
                         <span className="text-xs line-clamp-1">{property.locality}, {property.city}</span>
                       </div>
 
-                      {/* Property Type and Date */}
-                      <div className="flex items-center justify-between mb-2">
-                        <Badge variant="secondary" className="text-xs">
-                          {property.listing_type}
-                        </Badge>
-                        <span className="text-xs text-gray-500">
-                          {new Date(favorite.created_at).toLocaleDateString()}
-                        </span>
-                      </div>
-
                       {/* Contact Button with Price */}
                       <div className="flex items-center justify-between">
                         <button
