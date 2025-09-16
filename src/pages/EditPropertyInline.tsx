@@ -1325,7 +1325,7 @@ export const EditPropertyInline: React.FC = () => {
                     <Button
                       onClick={handleSave}
                       disabled={isSubmitting || !hasChanges()}
-                      className="bg-blue-600 hover:bg-blue-700"
+                      className="bg-brand-red hover:bg-brand-red-dark"
                     >
                       {isSubmitting ? (
                         <>
