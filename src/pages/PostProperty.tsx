@@ -805,14 +805,14 @@ export const PostProperty: React.FC = () => {
               </div>
             </div>
             
-            {/* Mobile Sidebar */}
-            <div className="lg:hidden px-4 mb-4">
+            {/* Mobile Sidebar - Hidden for mobile-first form experience */}
+            <div className="hidden">
               <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
                 <WhyPostSection />
               </div>
             </div>
             
-            <div className="bg-gradient-to-r from-gray-800 to-gray-900">
+            <div className="bg-gradient-to-r from-gray-800 to-gray-900 hidden sm:block">
               <HowItWorksSection />
               <PropertyFAQSection />
             </div>

@@ -16,7 +16,6 @@ import { RequirementsChatLayout } from '@/components/requirements/RequirementsCh
 import Header from '@/components/Header';
 import Marquee from '@/components/Marquee';
 import { NotificationManager } from '@/components/notifications/NotificationManager';
-import { PropertyProgressCompact } from '@/components/notifications/PropertyProgressCompact';
 import { MissingImagesNotification } from '@/components/notifications/MissingImagesNotification';
 import { calculatePropertyCompletion, calculatePGPropertyCompletion } from '@/utils/propertyCompletion';
 
@@ -431,11 +430,10 @@ export const Dashboard: React.FC = () => {
     // Always route to the edit page for any property
     navigate(`/edit-property/${property.id}`);
   };
-
   const closeEditModal = () => {
     setEditPropertyModal({
       isOpen: false,
-      property: null
+      property: null,
     });
   };
 
@@ -603,11 +601,11 @@ export const Dashboard: React.FC = () => {
           {/* Properties Tab */}
           <TabsContent value="properties" className="space-y-6">
             {/* Header with Property Count and Toggle */}
-            <div className="flex justify-between items-center">
-              <h2 className="text-lg font-medium text-gray-700">
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
+              <h2 className="text-base sm:text-lg font-medium text-gray-700">
                 You have already posted {properties.length} properties on PropertyMatch
               </h2>
-              <div className="flex items-center gap-4">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4">
                 <div className="flex items-center gap-2">
                   <span className="text-sm text-gray-600">Only Active</span>
                   <label className="relative inline-flex items-center cursor-pointer">
@@ -620,7 +618,7 @@ export const Dashboard: React.FC = () => {
                     <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
                   </label>
                 </div>
-                <Button onClick={() => navigate('/post-property')} className="bg-brand-red hover:bg-brand-red/90">
+                <Button onClick={() => navigate('/post-property')} className="bg-brand-red hover:bg-brand-red/90 w-full sm:w-auto">
                   <Plus className="h-4 w-4 mr-2" />
                   Add New
                 </Button>

@@ -524,40 +524,55 @@ export type Database = {
       }
       leads: {
         Row: {
+          city: string | null
           created_at: string
           id: string
           interested_user_email: string
           interested_user_name: string
           interested_user_phone: string | null
+          lead_type: string | null
+          listing_type: string | null
           message: string | null
-          property_id: string
-          property_owner_id: string
+          property_id: string | null
+          property_owner_id: string | null
+          property_type: string | null
           status: string | null
           updated_at: string
+          whatsapp_opted_in: boolean | null
         }
         Insert: {
+          city?: string | null
           created_at?: string
           id?: string
           interested_user_email: string
           interested_user_name: string
           interested_user_phone?: string | null
+          lead_type?: string | null
+          listing_type?: string | null
           message?: string | null
-          property_id: string
-          property_owner_id: string
+          property_id?: string | null
+          property_owner_id?: string | null
+          property_type?: string | null
           status?: string | null
           updated_at?: string
+          whatsapp_opted_in?: boolean | null
         }
         Update: {
+          city?: string | null
           created_at?: string
           id?: string
           interested_user_email?: string
           interested_user_name?: string
           interested_user_phone?: string | null
+          lead_type?: string | null
+          listing_type?: string | null
           message?: string | null
-          property_id?: string
-          property_owner_id?: string
+          property_id?: string | null
+          property_owner_id?: string | null
+          property_type?: string | null
           status?: string | null
           updated_at?: string
+          whatsapp_opted_in?: boolean | null
         }
         Relationships: [
           {
@@ -735,6 +750,7 @@ export type Database = {
           location: Json | null
           phone: string | null
           preferences: Json | null
+          role: string | null
           updated_at: string
           user_id: string
           verification_documents: Json | null
@@ -751,6 +767,7 @@ export type Database = {
           location?: Json | null
           phone?: string | null
           preferences?: Json | null
+          role?: string | null
           updated_at?: string
           user_id: string
           verification_documents?: Json | null
@@ -767,6 +784,7 @@ export type Database = {
           location?: Json | null
           phone?: string | null
           preferences?: Json | null
+          role?: string | null
           updated_at?: string
           user_id?: string
           verification_documents?: Json | null
@@ -1364,6 +1382,22 @@ export type Database = {
           table_name: string
         }[]
       }
+      create_page_with_sections: {
+        Args: {
+          is_published?: boolean
+          meta_description?: string
+          meta_keywords?: string[]
+          meta_title?: string
+          page_slug?: string
+          page_title: string
+          sections_data?: Json
+          user_id?: string
+        }
+        Returns: {
+          page_id: string
+          slug: string
+        }[]
+      }
       create_property_lead: {
         Args: {
           interested_user_email: string
@@ -1377,6 +1411,10 @@ export type Database = {
       detect_suspicious_activity: {
         Args: Record<PropertyKey, never>
         Returns: undefined
+      }
+      ensure_unique_slug: {
+        Args: { base_slug: string }
+        Returns: string
       }
       get_available_roles: {
         Args: Record<PropertyKey, never>
@@ -1678,6 +1716,14 @@ export type Database = {
         }
         Returns: undefined
       }
+      make_user_admin: {
+        Args: { user_email: string }
+        Returns: string
+      }
+      replace_asset_placeholders: {
+        Args: { asset_map: Json; content_data: Json }
+        Returns: Json
+      }
       toggle_property_favorite: {
         Args: { property_id: string }
         Returns: boolean
@@ -1689,6 +1735,10 @@ export type Database = {
           _user_id: string
         }
         Returns: undefined
+      }
+      upload_file_to_storage: {
+        Args: { content_type?: string; file_content: string; file_name: string }
+        Returns: string
       }
       validate_sensitive_access: {
         Args: {

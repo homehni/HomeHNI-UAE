@@ -58,7 +58,41 @@ export const DescriptionCard: React.FC<DescriptionCardProps> = ({ property }) =>
 
   const generateDescription = () => {
     if (property?.description) {
-      return property.description;
+      // If there's a custom description, enhance it with amenities and overview
+      let description = property.description;
+      
+      // Add amenities + core features (condition, security, water) together
+      const amenitiesList = property?.amenities
+        ? Object.entries(property.amenities)
+            .filter(([_, value]) => value === true || value === 'yes' || value === 'Yes')
+            .map(([key]) => key.replace(/_/g, ' ').toLowerCase())
+        : [];
+      const featureList: string[] = [];
+      if (property?.current_property_condition) {
+        featureList.push(`${property.current_property_condition.toLowerCase()} condition`);
+      }
+      if (property?.gated_security) {
+        featureList.push('gated security');
+      }
+      if (property?.water_supply) {
+        featureList.push(`${String(property.water_supply).toLowerCase()} water supply`);
+      }
+      const combinedList = [...amenitiesList, ...featureList];
+      if (combinedList.length > 0) {
+        description += ` Key amenities include ${combinedList.join(', ')}.`;
+      }
+      // Add services for PG/Hostel
+      if (isPGHostel && property?.available_services) {
+        const servicesList = Object.entries(property.available_services)
+          .filter(([_, value]) => value === true || value === 'yes' || value === 'Yes')
+          .map(([key, _]) => key.replace(/_/g, ' ').toLowerCase());
+        
+        if (servicesList.length > 0) {
+          description += ` Available services include ${servicesList.join(', ')}.`;
+        }
+      }
+
+      return description;
     }
 
     // Generate a comprehensive description based on available property data
@@ -75,10 +109,16 @@ export const DescriptionCard: React.FC<DescriptionCardProps> = ({ property }) =>
 
     description += '. ';
 
+    // Add price information
+    const price = isPGHostel ? property?.expected_rent : property?.expected_price;
+    if (price) {
+      description += `Priced at ${formatPrice(price)}, `;
+    }
+
     // Add area information
     if (property?.super_area || property?.carpet_area) {
       const area = formatArea(property?.super_area || property?.carpet_area);
-      description += `With a total area of ${area}, `;
+      description += `with a total area of ${area}, `;
     }
 
     if (isPGHostel) {
@@ -106,8 +146,13 @@ export const DescriptionCard: React.FC<DescriptionCardProps> = ({ property }) =>
       if (property?.available_from) {
         description += `Available from ${property.available_from}. `;
       }
+
+      // Add security deposit information
+      if (property?.expected_deposit) {
+        description += `Security deposit is ₹${property.expected_deposit.toLocaleString('en-IN')}. `;
+      }
     } else {
-      // Regular property description
+      // Regular property description with overview details
       description += 'this property offers';
 
       if (property?.bathrooms) {
@@ -120,31 +165,29 @@ export const DescriptionCard: React.FC<DescriptionCardProps> = ({ property }) =>
 
       description += '. ';
 
-      if (property?.current_property_condition) {
-        description += `The property is in ${property.current_property_condition} condition. `;
-      }
-
-      if (property?.gated_security) {
-        description += 'It features gated security for added safety. ';
-      }
-
-      if (property?.water_supply) {
-        description += `Water supply is ${property.water_supply}. `;
-      }
+      // Core features (condition, security, water) are merged into the amenities sentence below.
     }
 
-    // Add amenities information
-    if (property?.amenities) {
-      const amenitiesList = Object.entries(property.amenities)
-        .filter(([_, value]) => value === true || value === 'yes' || value === 'Yes')
-        .map(([key, _]) => key.replace(/_/g, ' ').toLowerCase());
-      
-      if (amenitiesList.length > 0) {
-        description += `Key amenities include ${amenitiesList.slice(0, 5).join(', ')}`;
-        if (amenitiesList.length > 5) {
-          description += ' and more';
-        }
-        description += '. ';
+    // Add comprehensive amenities information (including core features)
+    {
+      const amenitiesList = property?.amenities
+        ? Object.entries(property.amenities)
+            .filter(([_, value]) => value === true || value === 'yes' || value === 'Yes')
+            .map(([key]) => key.replace(/_/g, ' ').toLowerCase())
+        : [];
+      const featureList: string[] = [];
+      if (property?.current_property_condition) {
+        featureList.push(`${property.current_property_condition.toLowerCase()} condition`);
+      }
+      if (property?.gated_security) {
+        featureList.push('gated security');
+      }
+      if (property?.water_supply) {
+        featureList.push(`${String(property.water_supply).toLowerCase()} water supply`);
+      }
+      const combinedAmenities = [...amenitiesList, ...featureList];
+      if (combinedAmenities.length > 0) {
+        description += `The property comes with excellent amenities including ${combinedAmenities.join(', ')}. `;
       }
     }
 
@@ -155,16 +198,16 @@ export const DescriptionCard: React.FC<DescriptionCardProps> = ({ property }) =>
         .map(([key, _]) => key.replace(/_/g, ' ').toLowerCase());
       
       if (servicesList.length > 0) {
-        description += `Available services include ${servicesList.slice(0, 5).join(', ')}`;
-        if (servicesList.length > 5) {
-          description += ' and more';
-        }
-        description += '. ';
+        description += `Available services include ${servicesList.join(', ')}. `;
       }
     }
 
     if (property?.landmark) {
       description += `Landmark: ${property.landmark}. `;
+    }
+
+    if (property?.parking) {
+      description += `Parking: ${property.parking}. `;
     }
 
     description += `This ${propertyType.toLowerCase()} is perfect for those seeking comfort, convenience, and excellent connectivity in ${location}.`;
@@ -186,59 +229,22 @@ export const DescriptionCard: React.FC<DescriptionCardProps> = ({ property }) =>
           {/* Property Title */}
           {property?.title && (
             <div>
-              <h3 className="text-lg font-medium text-gray-800 mb-2">
+              <h3 className="text-lg font-medium text-gray-800 mb-4">
                 {property.title}
               </h3>
             </div>
           )}
 
-          {/* Key Details Summary */}
-          <div className="bg-gray-50 rounded-lg p-4">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-              <div>
-                <span className="font-medium text-gray-600">Type:</span>
-                <p className="text-gray-800">{getPropertyTypeDisplay()}</p>
-              </div>
-              <div>
-                <span className="font-medium text-gray-600">Price:</span>
-                <p className="text-gray-800">{formatPrice(isPGHostel ? property?.expected_rent : property?.expected_price)}</p>
-              </div>
-              {(property?.super_area || property?.carpet_area) && (
-                <div>
-                  <span className="font-medium text-gray-600">Area:</span>
-                  <p className="text-gray-800">{formatArea(property?.super_area || property?.carpet_area)}</p>
-                </div>
-              )}
-              <div>
-                <span className="font-medium text-gray-600">Location:</span>
-                <p className="text-gray-800">{property?.locality || property?.city || 'Not specified'}</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Full Description */}
+          {/* Full Description with integrated overview and amenities */}
           <div className="prose max-w-none">
-            <p className="text-gray-700 leading-relaxed text-sm">
-              {description}
-            </p>
-          </div>
-
-          {/* Additional Information for PG/Hostel */}
-          {isPGHostel && property?.expected_deposit && (
-            <div className="bg-blue-50 rounded-lg p-4">
-              <h4 className="font-medium text-blue-800 mb-2">Rental Information</h4>
-              <div className="grid grid-cols-2 gap-4 text-sm">
-                <div>
-                  <span className="font-medium text-blue-600">Monthly Rent:</span>
-                  <p className="text-blue-800">{formatPrice(property.expected_rent)}</p>
-                </div>
-                <div>
-                  <span className="font-medium text-blue-600">Security Deposit:</span>
-                  <p className="text-blue-800">₹{property.expected_deposit?.toLocaleString('en-IN')}</p>
-                </div>
-              </div>
+            <div className="text-gray-700 leading-relaxed space-y-2">
+              {description.split('. ').map((sentence, index, array) => (
+                <p key={index} className="mb-2">
+                  {sentence}{index < array.length - 1 ? '.' : ''}
+                </p>
+              ))}
             </div>
-          )}
+          </div>
 
           {/* Documents Available */}
           {property?.additional_documents && Object.keys(property.additional_documents).length > 0 && (

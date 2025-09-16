@@ -66,8 +66,8 @@ export const PropertySelectionStep: React.FC<PropertySelectionStepProps> = ({
   const isFormValid = selectedListingType && phoneNumber && name && email && city;
 
   return (
-    <div className="bg-white flex justify-center min-h-screen">
-      <div className="w-full max-w-2xl mx-auto p-4">
+    <div className="bg-white flex justify-center min-h-screen w-full overflow-x-hidden">
+      <div className="w-full max-w-2xl mx-auto p-4 sm:p-6 min-h-screen flex flex-col justify-start">
         <div className="space-y-4">
           {/* Personal Information Form */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
@@ -172,7 +172,7 @@ export const PropertySelectionStep: React.FC<PropertySelectionStepProps> = ({
             <Switch
               checked={whatsappUpdates}
               onCheckedChange={setWhatsappUpdates}
-              className="data-[state=checked]:bg-green-500"
+              className="data-[state=checked]:bg-red-500"
             />
           </div>
 
@@ -232,8 +232,8 @@ export const PropertySelectionStep: React.FC<PropertySelectionStepProps> = ({
             </Button>
           </div>
 
-          {/* Terms and Conditions */}
-          <div className="pt-2">
+          {/* Terms and Conditions - Hidden on mobile */}
+          <div className="pt-2 hidden sm:block">
             <p className="text-xs text-gray-500 text-center leading-relaxed">
               By clicking 'Start Posting Your Ad' you acknowledge that you have agreed to the{' '}
               <span className="text-red-600 underline cursor-pointer">Terms & Conditions</span>.
