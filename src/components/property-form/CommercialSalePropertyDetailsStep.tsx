@@ -93,10 +93,10 @@ export const CommercialSalePropertyDetailsStep = ({
             name="title"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Name of Property (Optional)</FormLabel>
+                <FormLabel>Property Name (Optional)</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="Leave empty for auto-generated name based on property details"
+                    placeholder="Enter Property Name"
                     {...field}
                   />
                 </FormControl>

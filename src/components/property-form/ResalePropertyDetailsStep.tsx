@@ -103,10 +103,10 @@ export const ResalePropertyDetailsStep: React.FC<ResalePropertyDetailsStepProps>
             name="title"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-sm font-medium">Name of Property (Optional)</FormLabel>
+                <FormLabel className="text-sm font-medium">Property Name (Optional)</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="Leave empty for auto-generated name based on property details"
+                    placeholder="Enter Property Name"
                     className="h-12"
                     {...field}
                   />
