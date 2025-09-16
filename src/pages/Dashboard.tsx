@@ -409,8 +409,11 @@ export const Dashboard: React.FC = () => {
       navigate(`/post-property?step=${targetStep}`);
       return;
     }
-    // For approved properties, go to the edit page
-    navigate(`/edit-property/${property.id}`);
+    // For approved properties, open the edit modal
+    setEditPropertyModal({
+      isOpen: true,
+      property: property as Property
+    });
   };
 
   const closeEditModal = () => {
