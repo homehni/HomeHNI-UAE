@@ -226,9 +226,13 @@ export const DescriptionCard: React.FC<DescriptionCardProps> = ({ property }) =>
 
           {/* Full Description with integrated overview and amenities */}
           <div className="prose max-w-none">
-            <p className="text-gray-700 leading-relaxed">
-              {description}
-            </p>
+            <div className="text-gray-700 leading-relaxed space-y-2">
+              {description.split('. ').map((sentence, index, array) => (
+                <p key={index} className="mb-2">
+                  {sentence}{index < array.length - 1 ? '.' : ''}
+                </p>
+              ))}
+            </div>
           </div>
 
           {/* Documents Available */}
