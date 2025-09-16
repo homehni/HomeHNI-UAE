@@ -16,7 +16,6 @@ import { RequirementsChatLayout } from '@/components/requirements/RequirementsCh
 import Header from '@/components/Header';
 import Marquee from '@/components/Marquee';
 import { NotificationManager } from '@/components/notifications/NotificationManager';
-import { PropertyProgressCompact } from '@/components/notifications/PropertyProgressCompact';
 import { MissingImagesNotification } from '@/components/notifications/MissingImagesNotification';
 import { calculatePropertyCompletion, calculatePGPropertyCompletion } from '@/utils/propertyCompletion';
 
@@ -394,11 +393,36 @@ export const Dashboard: React.FC = () => {
 
 
   const handleEditProperty = (property: CombinedProperty) => {
-    // Always open the in-place edit modal for editing existing properties
-    setEditPropertyModal({
-      isOpen: true,
-      property: property as Property,
-    });
+    // Calculate missing fields to determine the best tab to open
+    const completion = calculatePropertyCompletion(property);
+    const missingFields = completion.missingFields;
+    const propertyType = property.property_type;
+    
+    // Determine target tab based on missing fields (same logic as PropertyProgressCompact)
+    const getTargetTab = (missingFields: string[], propertyType: string) => {
+      const isCommercial = propertyType === 'commercial' || propertyType === 'office' || 
+                          propertyType === 'shop' || propertyType === 'warehouse' || propertyType === 'showroom';
+      
+      const priorityOrder = isCommercial 
+        ? ['images', 'locality', 'super_area', 'description', 'expected_price']
+        : ['images', 'locality', 'super_area', 'bhk_type', 'expected_price'];
+      
+      const topField = priorityOrder.find(field => missingFields.includes(field));
+      
+      switch (topField) {
+        case 'images': return 'images';
+        case 'amenities': return 'details';
+        case 'locality': return 'location';
+        case 'super_area': return 'details';
+        case 'bhk_type': return 'basic';
+        case 'description': return 'basic';
+        case 'expected_price': return 'basic';
+        default: return 'basic';
+      }
+    };
+    
+    const targetTab = getTargetTab(missingFields, propertyType);
+    navigate(`/edit-property/${property.id}?tab=${targetTab}`);
   };
   const closeEditModal = () => {
     setEditPropertyModal({
@@ -733,14 +757,6 @@ export const Dashboard: React.FC = () => {
                               <Medal className="w-3 h-3 mr-1" />
                               Go Premium
                             </Button>
-
-                            {/* Property Progress */}
-                            <PropertyProgressCompact
-                              propertyId={property.id}
-                              completionPercentage={calculatePropertyCompletion(property).percentage}
-                              missingFields={calculatePropertyCompletion(property).missingFields}
-                              propertyType={property.property_type}
-                            />
 
                           </div>
 
