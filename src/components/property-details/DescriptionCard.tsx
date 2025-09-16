@@ -61,17 +61,26 @@ export const DescriptionCard: React.FC<DescriptionCardProps> = ({ property }) =>
       // If there's a custom description, enhance it with amenities and overview
       let description = property.description;
       
-      // Add amenities information
-      if (property?.amenities) {
-        const amenitiesList = Object.entries(property.amenities)
-          .filter(([_, value]) => value === true || value === 'yes' || value === 'Yes')
-          .map(([key, _]) => key.replace(/_/g, ' ').toLowerCase());
-        
-        if (amenitiesList.length > 0) {
-          description += ` Key amenities include ${amenitiesList.join(', ')}.`;
-        }
+      // Add amenities + core features (condition, security, water) together
+      const amenitiesList = property?.amenities
+        ? Object.entries(property.amenities)
+            .filter(([_, value]) => value === true || value === 'yes' || value === 'Yes')
+            .map(([key]) => key.replace(/_/g, ' ').toLowerCase())
+        : [];
+      const featureList: string[] = [];
+      if (property?.current_property_condition) {
+        featureList.push(`${property.current_property_condition.toLowerCase()} condition`);
       }
-
+      if (property?.gated_security) {
+        featureList.push('gated security');
+      }
+      if (property?.water_supply) {
+        featureList.push(`${String(property.water_supply).toLowerCase()} water supply`);
+      }
+      const combinedList = [...amenitiesList, ...featureList];
+      if (combinedList.length > 0) {
+        description += ` Key amenities include ${combinedList.join(', ')}.`;
+      }
       // Add services for PG/Hostel
       if (isPGHostel && property?.available_services) {
         const servicesList = Object.entries(property.available_services)
@@ -156,27 +165,29 @@ export const DescriptionCard: React.FC<DescriptionCardProps> = ({ property }) =>
 
       description += '. ';
 
-      if (property?.current_property_condition) {
-        description += `The property is in ${property.current_property_condition} condition. `;
-      }
-
-      if (property?.gated_security) {
-        description += 'It features gated security for added safety. ';
-      }
-
-      if (property?.water_supply) {
-        description += `Water supply is ${property.water_supply}. `;
-      }
+      // Core features (condition, security, water) are merged into the amenities sentence below.
     }
 
-    // Add comprehensive amenities information
-    if (property?.amenities) {
-      const amenitiesList = Object.entries(property.amenities)
-        .filter(([_, value]) => value === true || value === 'yes' || value === 'Yes')
-        .map(([key, _]) => key.replace(/_/g, ' ').toLowerCase());
-      
-      if (amenitiesList.length > 0) {
-        description += `The property comes with excellent amenities including ${amenitiesList.join(', ')}. `;
+    // Add comprehensive amenities information (including core features)
+    {
+      const amenitiesList = property?.amenities
+        ? Object.entries(property.amenities)
+            .filter(([_, value]) => value === true || value === 'yes' || value === 'Yes')
+            .map(([key]) => key.replace(/_/g, ' ').toLowerCase())
+        : [];
+      const featureList: string[] = [];
+      if (property?.current_property_condition) {
+        featureList.push(`${property.current_property_condition.toLowerCase()} condition`);
+      }
+      if (property?.gated_security) {
+        featureList.push('gated security');
+      }
+      if (property?.water_supply) {
+        featureList.push(`${String(property.water_supply).toLowerCase()} water supply`);
+      }
+      const combinedAmenities = [...amenitiesList, ...featureList];
+      if (combinedAmenities.length > 0) {
+        description += `The property comes with excellent amenities including ${combinedAmenities.join(', ')}. `;
       }
     }
 
