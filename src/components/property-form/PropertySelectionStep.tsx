@@ -232,8 +232,8 @@ export const PropertySelectionStep: React.FC<PropertySelectionStepProps> = ({
             </Button>
           </div>
 
-          {/* Terms and Conditions */}
-          <div className="pt-2">
+          {/* Terms and Conditions - Hidden on mobile */}
+          <div className="pt-2 hidden sm:block">
             <p className="text-xs text-gray-500 text-center leading-relaxed">
               By clicking 'Start Posting Your Ad' you acknowledge that you have agreed to the{' '}
               <span className="text-red-600 underline cursor-pointer">Terms & Conditions</span>.
