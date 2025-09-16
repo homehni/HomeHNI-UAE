@@ -1725,7 +1725,7 @@ export type Database = {
         Returns: Json
       }
       toggle_property_favorite: {
-        Args: { property_id: string }
+        Args: { p_property_id: string }
         Returns: boolean
       }
       update_user_role: {
