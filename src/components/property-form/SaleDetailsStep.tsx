@@ -305,7 +305,7 @@ export const SaleDetailsStep: React.FC<SaleDetailsStepProps> = ({
                   disabled={(date) => {
                     const today = new Date();
                     today.setHours(0, 0, 0, 0);
-                    const maxDate = addMonths(today, 6);
+                    const maxDate = addMonths(today, 3);
                     return date < today || date > maxDate;
                   }}
                   initialFocus
