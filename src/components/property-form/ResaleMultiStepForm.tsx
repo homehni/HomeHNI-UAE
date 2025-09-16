@@ -144,19 +144,6 @@ export const ResaleMultiStepForm: React.FC<ResaleMultiStepFormProps> = ({
     <div className="min-h-screen bg-gray-50">
       {/* Mobile Layout */}
       <div className="lg:hidden">
-        <div className="bg-white border-b border-gray-200 px-4 py-4 pt-6 md:pt-8">
-          <div className="flex items-center justify-between mb-2">
-            <h1 className="text-lg font-semibold text-gray-900">Property Details</h1>
-            <span className="text-sm text-gray-500 bg-gray-100 px-2 py-1 rounded-full">{currentStep}/6</span>
-          </div>
-          <div className="w-full bg-gray-200 rounded-full h-2">
-            <div 
-              className="bg-brand-red h-2 rounded-full transition-all duration-300"
-              style={{ width: `${(currentStep / 6) * 100}%` }}
-            ></div>
-          </div>
-        </div>
-        
         <div className="p-4">
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
             {currentStep === 1 && (
@@ -238,20 +225,6 @@ export const ResaleMultiStepForm: React.FC<ResaleMultiStepFormProps> = ({
 
         {/* Main Content */}
         <div className="flex-1 min-w-0 bg-white flex flex-col">
-          {/* Progress Bar */}
-          <div className="bg-white border-b border-gray-200 px-4 py-2 flex-shrink-0">
-            <div className="flex items-center justify-between mb-1">
-              <h1 className="text-base font-semibold text-gray-900">Property Details</h1>
-              <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">{currentStep}/6</span>
-            </div>
-            <div className="w-full bg-gray-200 rounded-full h-1">
-              <div 
-                className="bg-brand-red h-1 rounded-full transition-all duration-300"
-                style={{ width: `${(currentStep / 6) * 100}%` }}
-              ></div>
-            </div>
-          </div>
-
           {/* Form Content */}
           <div className="flex-1 p-3 min-h-0">
             <div className="bg-white h-full flex flex-col">
