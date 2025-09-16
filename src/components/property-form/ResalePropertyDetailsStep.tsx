@@ -13,12 +13,12 @@ import { ArrowLeft, ArrowRight, Compass } from 'lucide-react';
 const resalePropertyDetailsSchema = z.object({
   title: z.string().optional(), // Made optional - will be auto-generated
   propertyType: z.string().min(1, "Property type is required"),
-  bhkType: z.string().min(1, "BHK type is required"),
-  ownershipType: z.string().min(1, "Ownership type is required"),
-  builtUpArea: z.number().min(1, "Built up area is required and must be greater than 0"),
+  bhkType: z.string().optional(),
+  ownershipType: z.string().optional(),
+  builtUpArea: z.number().optional(),
   carpetArea: z.number().optional(),
-  propertyAge: z.string().min(1, "Property age is required"),
-  facing: z.string().min(1, "Facing is required"),
+  propertyAge: z.string().optional(),
+  facing: z.string().optional(),
   floorNo: z.union([z.number(), z.string()]).optional(),
   totalFloors: z.union([z.number(), z.string()]).optional(),
 });
@@ -75,18 +75,18 @@ export const ResalePropertyDetailsStep: React.FC<ResalePropertyDetailsStepProps>
   const onSubmit = (data: ResalePropertyDetailsFormData) => {
     onNext({
       ...initialData,
-      title: data.title,
+      title: data.title || '',
       propertyType: data.propertyType,
       buildingType: data.propertyType, // Use propertyType as buildingType for residential
-      bhkType: data.bhkType,
-      ownershipType: data.ownershipType,
-      superBuiltUpArea: data.builtUpArea,
-      builtUpArea: data.builtUpArea,
-      carpetArea: data.carpetArea,
+      bhkType: data.bhkType || '',
+      ownershipType: data.ownershipType || '',
+      superBuiltUpArea: data.builtUpArea || 0,
+      builtUpArea: data.builtUpArea || 0,
+      carpetArea: data.carpetArea || 0,
       // propertyAge removed from data transformation
-      facing: data.facing,
-      floorNo: data.floorNo,
-      totalFloors: data.totalFloors,
+      facing: data.facing || '',
+      floorNo: data.floorNo || 0,
+      totalFloors: data.totalFloors || 1,
       onMainRoad,
       cornerProperty,
     } as PropertyDetails);
@@ -101,25 +101,6 @@ export const ResalePropertyDetailsStep: React.FC<ResalePropertyDetailsStepProps>
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-          {/* Property Name */}
-          <FormField
-            control={form.control}
-            name="title"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-sm font-medium">Property Name (Optional)</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="Enter Property Name"
-                    className="h-12"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
           {/* Property Type and BHK Type */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <FormField
@@ -156,7 +137,7 @@ export const ResalePropertyDetailsStep: React.FC<ResalePropertyDetailsStepProps>
               name="bhkType"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-sm font-medium">BHK Type*</FormLabel>
+                  <FormLabel className="text-sm font-medium">BHK Type</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger className="h-12">
@@ -180,30 +161,48 @@ export const ResalePropertyDetailsStep: React.FC<ResalePropertyDetailsStepProps>
             />
           </div>
 
-          {/* Ownership Type */}
-          <FormField
-            control={form.control}
-            name="ownershipType"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-sm font-medium">Ownership Type*</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
+          {/* Property Name and Ownership Type */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <FormField
+              control={form.control}
+              name="title"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-sm font-medium">Property Name (Optional)</FormLabel>
                   <FormControl>
-                    <SelectTrigger className="h-12">
-                      <SelectValue placeholder="Select" />
-                    </SelectTrigger>
+                    <Input
+                      placeholder="Enter Property Name"
+                      className="h-12"
+                      {...field}
+                    />
                   </FormControl>
-                  <SelectContent className="bg-white border shadow-lg z-50">
-                    <SelectItem value="Freehold">Freehold</SelectItem>
-                    <SelectItem value="Leasehold">Leasehold</SelectItem>
-                    <SelectItem value="Co-operative Society">Co-operative Society</SelectItem>
-                    <SelectItem value="Power of Attorney">Power of Attorney</SelectItem>
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="ownershipType"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-sm font-medium">Ownership Type</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger className="h-12">
+                        <SelectValue placeholder="Select" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent className="bg-white border shadow-lg z-50">
+                      <SelectItem value="Freehold">Self Owned</SelectItem>
+                      <SelectItem value="Leasehold">Leasehold</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
 
           {/* Built Up Area and Carpet Area */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -212,7 +211,7 @@ export const ResalePropertyDetailsStep: React.FC<ResalePropertyDetailsStepProps>
               name="builtUpArea"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-sm font-medium">Built Up Area*</FormLabel>
+                  <FormLabel className="text-sm font-medium">Built Up Area</FormLabel>
                   <div className="relative">
                     <FormControl>
                       <Input
@@ -279,7 +278,7 @@ export const ResalePropertyDetailsStep: React.FC<ResalePropertyDetailsStepProps>
               name="propertyAge"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-sm font-medium">Property Age*</FormLabel>
+                  <FormLabel className="text-sm font-medium">Property Age</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger className="h-12">
@@ -306,7 +305,7 @@ export const ResalePropertyDetailsStep: React.FC<ResalePropertyDetailsStepProps>
               name="facing"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-sm font-medium">Facing*</FormLabel>
+                  <FormLabel className="text-sm font-medium">Facing</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger className="h-12">
@@ -342,7 +341,7 @@ export const ResalePropertyDetailsStep: React.FC<ResalePropertyDetailsStepProps>
                   name="floorNo"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-sm font-medium">Floor*</FormLabel>
+                      <FormLabel className="text-sm font-medium">Floor</FormLabel>
                         <Select
                           onValueChange={(value) => {
                             if (value === 'ground') {
@@ -394,7 +393,7 @@ export const ResalePropertyDetailsStep: React.FC<ResalePropertyDetailsStepProps>
                   name="totalFloors"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-sm font-medium">Total Floor*</FormLabel>
+                      <FormLabel className="text-sm font-medium">Total Floor</FormLabel>
                         <Select
                           onValueChange={(value) =>
                             value === '99+' ? field.onChange(value) : field.onChange(parseInt(value))

@@ -156,6 +156,8 @@ export const Dashboard: React.FC = () => {
 
   const fetchProperties = async () => {
     try {
+      console.log('Fetching properties for user:', user?.id);
+      
       // 1) Fetch approved/pending properties belonging to user
       const { data: propertiesData, error: propertiesError } = await supabase
         .from('properties')
@@ -164,6 +166,7 @@ export const Dashboard: React.FC = () => {
         .order('created_at', { ascending: false });
 
       if (propertiesError) throw propertiesError;
+      console.log('Properties from properties table:', propertiesData?.length || 0);
 
       // 2) Fetch user's submissions that are still under review
       const { data: submissionsData, error: submissionsError } = await supabase
@@ -174,6 +177,7 @@ export const Dashboard: React.FC = () => {
         .order('created_at', { ascending: false });
 
       if (submissionsError) throw submissionsError;
+      console.log('Submissions from property_submissions table:', submissionsData?.length || 0);
 
       // Map submissions to CombinedProperty shape for dashboard display
       const mappedSubmissions: CombinedProperty[] = (submissionsData || []).map((sub: any) => {
@@ -221,6 +225,7 @@ export const Dashboard: React.FC = () => {
       // Sort newest first consistently
       .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
 
+      console.log('Total combined properties:', combined.length);
       setProperties(combined);
     } catch (error) {
       console.error('Error fetching properties:', error);
@@ -355,18 +360,46 @@ export const Dashboard: React.FC = () => {
     setIsDeleting(true);
     try {
       if (deleteModal.type === 'property') {
-        const { error } = await supabase
+        let deleted = false;
+        
+        // First try to delete from properties table
+        const { error: propertiesError } = await supabase
           .from('properties')
           .delete()
           .eq('id', deleteModal.id);
 
-        if (error) throw error;
+        if (!propertiesError) {
+          deleted = true;
+          console.log('Property deleted from properties table:', deleteModal.id);
+        } else {
+          console.log('Property not found in properties table, trying submissions table');
+          
+          // If not found in properties table, try property_submissions table
+          const { error: submissionsError } = await supabase
+            .from('property_submissions')
+            .delete()
+            .eq('id', deleteModal.id);
 
-        toast({
-          title: "Property deleted",
-          description: "Your property has been removed from the listing.",
-        });
-        fetchProperties();
+          if (!submissionsError) {
+            deleted = true;
+            console.log('Property deleted from property_submissions table:', deleteModal.id);
+          } else {
+            throw submissionsError;
+          }
+        }
+
+        if (deleted) {
+          toast({
+            title: "Property deleted",
+            description: "Your property has been removed from the listing.",
+          });
+          
+          // Small delay to ensure database operation completes
+          setTimeout(async () => {
+            console.log('Refreshing properties list after deletion...');
+            await fetchProperties();
+          }, 500);
+        }
       } else {
         // Draft deletion functionality to be implemented
         toast({
@@ -376,6 +409,7 @@ export const Dashboard: React.FC = () => {
       }
       closeDeleteModal();
     } catch (error) {
+      console.error('Delete error:', error);
       toast({
         title: "Error",
         description: `Failed to delete ${deleteModal.type}. Please try again.`,
@@ -394,22 +428,7 @@ export const Dashboard: React.FC = () => {
 
 
   const handleEditProperty = (property: CombinedProperty) => {
-    if (property.isSubmission) {
-      // For flatmates properties, route to amenities step (step 4)
-      // For other properties, route to images step (step 5)
-      console.log('Property data:', property);
-      console.log('Property type:', property.property_type);
-      console.log('Listing type:', property.listing_type);
-      
-      const targetStep = property.property_type === 'apartment' && property.listing_type === 'rent' 
-        ? 'amenities' 
-        : 'images';
-      
-      console.log('Target step:', targetStep);
-      navigate(`/post-property?step=${targetStep}`);
-      return;
-    }
-    // For approved properties, go to the edit page
+    // Always route to the edit page for any property
     navigate(`/edit-property/${property.id}`);
   };
 

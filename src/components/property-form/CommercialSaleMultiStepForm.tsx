@@ -180,6 +180,7 @@ export const CommercialSaleMultiStepForm = ({
             formData={getFormData() as any}
             onSubmit={handleSubmit}
             onBack={prevStep}
+            onEdit={goToStep}
             currentStep={currentStep}
             totalSteps={7}
             isSubmitting={isSubmitting}

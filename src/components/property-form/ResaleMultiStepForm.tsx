@@ -134,7 +134,7 @@ export const ResaleMultiStepForm: React.FC<ResaleMultiStepFormProps> = ({
   const sidebarSteps = [
     { title: "Property Details", icon: <Home className="w-4 h-4" /> },
     { title: "Locality Details", icon: <MapPin className="w-4 h-4" /> },
-    { title: "Rental Details", icon: <DollarSign className="w-4 h-4" /> },
+    { title: "Sale Details", icon: <DollarSign className="w-4 h-4" /> },
     { title: "Amenities", icon: <Sparkles className="w-4 h-4" /> },
     { title: "Gallery", icon: <Camera className="w-4 h-4" /> },
     { title: "Schedule", icon: <Calendar className="w-4 h-4" /> },
@@ -213,7 +213,7 @@ export const ResaleMultiStepForm: React.FC<ResaleMultiStepFormProps> = ({
       </div>
 
       {/* Desktop Layout */}
-      <div className="hidden lg:flex w-full h-screen overflow-hidden">
+      <div className="hidden lg:flex w-full min-h-screen">
         {/* Sidebar */}
         <div className="w-80 flex-shrink-0">
           <PropertyFormSidebar
@@ -224,11 +224,11 @@ export const ResaleMultiStepForm: React.FC<ResaleMultiStepFormProps> = ({
         </div>
 
         {/* Main Content */}
-        <div className="flex-1 min-w-0 bg-white flex flex-col">
+        <div className="flex-1 min-w-0 bg-white">
           {/* Form Content */}
-          <div className="flex-1 p-3 min-h-0">
-            <div className="bg-white h-full flex flex-col">
-              <div className="max-w-4xl mx-auto w-full flex-1 flex flex-col">
+          <div className="p-3">
+            <div className="bg-white">
+              <div className="max-w-4xl mx-auto w-full">
                 {currentStep === 1 && (
                   <ResalePropertyDetailsStep
                     initialData={propertyDetails}
