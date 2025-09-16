@@ -172,7 +172,7 @@ export const PropertySelectionStep: React.FC<PropertySelectionStepProps> = ({
             <Switch
               checked={whatsappUpdates}
               onCheckedChange={setWhatsappUpdates}
-              className="data-[state=checked]:bg-green-500"
+              className="data-[state=checked]:bg-red-500"
             />
           </div>
 
