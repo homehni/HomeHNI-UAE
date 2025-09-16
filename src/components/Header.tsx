@@ -203,7 +203,7 @@ const Header = () => {
                       <DropdownMenuItem onClick={() => navigate('/dashboard')}>
                         <span>Dashboard</span>
                       </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => navigate('/my-listings')}>
+                      <DropdownMenuItem onClick={() => navigate('/dashboard?tab=properties')}>
                         <span>My Listings</span>
                       </DropdownMenuItem>
                       <DropdownMenuItem onClick={() => navigate('/my-interests')}>
@@ -477,7 +477,7 @@ const Header = () => {
                     <DropdownMenuItem onClick={() => navigate('/dashboard')}>
                       <span>Dashboard</span>
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => navigate('/my-listings')}>
+                    <DropdownMenuItem onClick={() => navigate('/dashboard?tab=properties')}>
                       <span>My Listings</span>
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => navigate('/my-interests')}>
