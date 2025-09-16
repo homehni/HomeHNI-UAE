@@ -16,3 +16,4 @@ export { VisitScheduleCard } from './VisitScheduleCard';
 export { PropertyActions } from './PropertyActions';
 export { ReportSection } from './ReportSection';
 export { ServicesCard } from './ServicesCard';
+export { DescriptionCard } from './DescriptionCard';

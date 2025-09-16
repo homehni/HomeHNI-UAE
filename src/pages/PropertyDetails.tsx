@@ -23,6 +23,7 @@ import { PropertyInfoCards } from '@/components/property-details/PropertyInfoCar
 import { VisitScheduleCard } from '@/components/property-details/VisitScheduleCard';
 import { PropertyActions } from '@/components/property-details/PropertyActions';
 import { ServicesCard } from '@/components/property-details/ServicesCard';
+import { DescriptionCard } from '@/components/property-details/DescriptionCard';
 import { supabase } from '@/integrations/supabase/client';
 interface Property {
   id: string;
@@ -420,6 +421,9 @@ const PropertyDetails: React.FC = () => {
               
               {/* Services Card */}
               <ServicesCard />
+              
+              {/* Description Section */}
+              <DescriptionCard property={mergedProperty as any} />
               
               {/* Amenities */}
               <AmenitiesCard amenities={mergedAmenities} />
