@@ -49,7 +49,7 @@ const WhyPostSection: React.FC = () => {
   }, [testimonials.length]);
 
   return (
-    <div className="w-full bg-gradient-to-br from-gray-50 via-white to-gray-50 flex flex-col">
+    <div className="w-full flex flex-col" style={{ background: 'linear-gradient(to bottom right, #F5F5F5, #ffffff, #F5F5F5)' }}>
       <div className="p-6 flex-1 flex flex-col">
         {/* Why Post section */}
         <div className="flex-1">
@@ -57,9 +57,9 @@ const WhyPostSection: React.FC = () => {
           
           <div className="space-y-4">
             {benefits.map((benefit, index) => (
-              <div key={index} className="flex items-start gap-4 p-3 bg-white/80 backdrop-blur-sm rounded-xl border border-gray-200 hover:shadow-md transition-all duration-300 group">
-                <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-r from-gray-500 to-gray-600 rounded-lg flex items-center justify-center shadow-lg group-hover:shadow-xl transition-shadow duration-300">
-                  <benefit.icon className="w-5 h-5 text-white" />
+              <div key={index} className="flex items-start gap-4 p-3 bg-white/80 backdrop-blur-sm rounded-xl hover:shadow-md transition-all duration-300 group" style={{ borderColor: '#F5F5F5', borderWidth: '1px' }}>
+                <div className="flex-shrink-0 w-10 h-10 rounded-lg flex items-center justify-center shadow-lg group-hover:shadow-xl transition-shadow duration-300" style={{ background: 'linear-gradient(to right, #F5F5F5, #E5E5E5)' }}>
+                  <benefit.icon className="w-5 h-5 text-gray-600" />
                 </div>
                 <div>
                   <h3 className="font-semibold text-gray-800 text-sm leading-tight mb-1">{benefit.title}</h3>
@@ -71,22 +71,22 @@ const WhyPostSection: React.FC = () => {
         </div>
 
         {/* Testimonial section - positioned to align with button */}
-        <div className="bg-gradient-to-r from-gray-600 to-gray-700 rounded-xl p-4 text-white shadow-xl mt-6">
+        <div className="rounded-xl p-4 text-gray-800 shadow-xl mt-6" style={{ background: 'linear-gradient(to right, #F5F5F5, #E5E5E5)' }}>
           <div className="mb-3">
-            <h3 className="font-bold text-base text-white mb-2">30 Lac+ Home Owners Trust Us</h3>
+            <h3 className="font-bold text-base text-gray-800 mb-2">30 Lac+ Home Owners Trust Us</h3>
           </div>
           
           <div className="relative">
-            <div className="space-y-3">
-              <div className="bg-white/20 backdrop-blur-sm rounded-lg p-3 border border-white/30">
-                <p className="text-xs text-white/95 leading-relaxed font-medium italic line-clamp-4">
+              <div className="space-y-3">
+                <div className="bg-white/50 backdrop-blur-sm rounded-lg p-3 border border-gray-200">
+                  <p className="text-xs text-gray-700 leading-relaxed font-medium italic line-clamp-4">
                   "{testimonials[currentTestimonial].text}"
                 </p>
               </div>
               
               <div className="flex items-center justify-between">
-                <span className="font-bold text-white text-xs">{testimonials[currentTestimonial].name}</span>
-                <span className="text-white/80 text-xs font-medium">{testimonials[currentTestimonial].city}</span>
+                <span className="font-bold text-gray-800 text-xs">{testimonials[currentTestimonial].name}</span>
+                <span className="text-gray-600 text-xs font-medium">{testimonials[currentTestimonial].city}</span>
               </div>
             </div>
 
@@ -98,8 +98,8 @@ const WhyPostSection: React.FC = () => {
                   onClick={() => setCurrentTestimonial(index)}
                   className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
                     index === currentTestimonial 
-                      ? 'bg-white shadow-lg' 
-                      : 'bg-white/50 hover:bg-white/70'
+                      ? 'bg-gray-700 shadow-lg' 
+                      : 'bg-gray-400 hover:bg-gray-500'
                   }`}
                 />
               ))}
