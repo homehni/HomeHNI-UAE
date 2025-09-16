@@ -4,7 +4,6 @@ import { Input } from '@/components/ui/input';
 import { PriceInput } from '@/components/ui/price-input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Card, CardContent } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
 import { Calendar } from 'lucide-react';
@@ -57,15 +56,14 @@ export function FlattmatesRentalDetailsStep({
   };
 
   return (
-    <div className="max-w-2xl mx-auto">
-      <div className="text-center mb-8">
-        <h2 className="text-2xl font-bold text-foreground mb-2">Rental Details</h2>
-        <p className="text-muted-foreground">Set your rental expectations and terms</p>
+    <div className="space-y-8">
+      {/* Header */}
+      <div className="text-center">
+        <h2 className="text-2xl font-bold text-gray-900 mb-2">Flatmates Rental Details</h2>
+        <p className="text-gray-600">Set your rental expectations and terms</p>
       </div>
 
-          <Card>
-            <CardContent className="p-8">
-              <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit} className="space-y-6">
                 {/* Expected Rent and Expected Deposit */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
@@ -162,9 +160,7 @@ export function FlattmatesRentalDetailsStep({
                     Save & Continue
                   </Button>
                 </div>
-              </form>
-            </CardContent>
-          </Card>
+      </form>
     </div>
   );
 }
