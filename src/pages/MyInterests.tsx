@@ -4,7 +4,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Heart, MapPin, BedDouble, Bath, Square, Eye, Trash2 } from 'lucide-react';
+import { Heart, MapPin, BedDouble, Bath, Square, Eye, Trash2, Phone } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
 import Header from '@/components/Header';
@@ -272,15 +272,15 @@ export const MyInterests: React.FC = () => {
             </Card>
           )}
 
-          {/* Properties Grid */}
+          {/* Properties Grid - Horizontal Card Layout */}
           {!loading && favorites.length > 0 && (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4">
               {favorites.map((favorite) => {
                 const property = favorite.properties;
                 return (
-                  <Card key={favorite.id} className="overflow-hidden hover:shadow-lg transition-shadow">
+                  <div key={favorite.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
                     {/* Property Image */}
-                    <div className="relative h-48 bg-gray-200">
+                    <div className="relative h-32 bg-gray-200">
                       {property.images && property.images.length > 0 ? (
                         <img
                           src={property.images[0]}
@@ -289,86 +289,53 @@ export const MyInterests: React.FC = () => {
                         />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center">
-                          <span className="text-gray-400">No Image</span>
+                          <span className="text-gray-400 text-sm">No Image</span>
                         </div>
                       )}
                       
-                      {/* Remove Favorite Button */}
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => handleRemoveFavorite(favorite.id, property.title)}
-                        className="absolute top-2 right-2 bg-white/90 hover:bg-white text-red-500 hover:text-red-600"
-                      >
-                        <Heart className="h-4 w-4 fill-current" />
-                      </Button>
-
-                      {/* Property Type Badge */}
-                      <Badge className="absolute top-2 left-2 bg-brand-red text-white">
-                        {property.listing_type}
-                      </Badge>
-                    </div>
-
-                    <CardContent className="p-4">
-                      {/* Price */}
-                      <div className="text-xl font-bold text-brand-red mb-2">
-                        {formatPrice(property.expected_price)}
+                      {/* New Badge */}
+                      <div className="absolute top-2 left-2">
+                        <span className="bg-red-500 text-white text-xs font-medium px-2 py-1 rounded">
+                          New
+                        </span>
                       </div>
 
-                      {/* Title */}
-                      <h3 className="text-lg font-semibold text-gray-900 mb-2 line-clamp-2">
+                      {/* Heart Icon */}
+                      <button
+                        onClick={() => handleRemoveFavorite(favorite.id, property.title)}
+                        className="absolute top-2 right-2 w-8 h-8 bg-white/80 hover:bg-white rounded-full flex items-center justify-center transition-colors"
+                      >
+                        <Heart className="h-4 w-4 text-red-500 fill-current" />
+                      </button>
+                    </div>
+
+                    <div className="p-3">
+                      {/* Property Title */}
+                      <h3 className="text-sm font-semibold text-gray-900 mb-1 line-clamp-1">
                         {property.title}
                       </h3>
 
                       {/* Location */}
                       <div className="flex items-center text-gray-600 mb-3">
-                        <MapPin className="h-4 w-4 mr-1" />
-                        <span className="text-sm">{property.locality}</span>
+                        <MapPin className="h-3 w-3 mr-1 flex-shrink-0" />
+                        <span className="text-xs line-clamp-1">{property.locality}, {property.city}</span>
                       </div>
 
-                      {/* Property Details */}
-                      <div className="flex items-center space-x-4 text-sm text-gray-600 mb-4">
-                        {property.bhk_type && (
-                          <div className="flex items-center">
-                            <BedDouble className="h-4 w-4 mr-1" />
-                            {property.bhk_type}
-                          </div>
-                        )}
-                        {property.bathrooms && (
-                          <div className="flex items-center">
-                            <Bath className="h-4 w-4 mr-1" />
-                            {property.bathrooms}
-                          </div>
-                        )}
-                        {property.super_area && (
-                          <div className="flex items-center">
-                            <Square className="h-4 w-4 mr-1" />
-                            {property.super_area} sq ft
-                          </div>
-                        )}
-                      </div>
-
-                      {/* Action Buttons */}
-                      <div className="flex space-x-2">
-                        <Button
+                      {/* Contact Button with Price */}
+                      <div className="flex items-center justify-between">
+                        <button
                           onClick={() => handleViewProperty(property.id)}
-                          className="flex-1 bg-brand-red hover:bg-brand-red-dark text-white"
-                          size="sm"
+                          className="flex items-center text-gray-700 hover:text-red-600 transition-colors"
                         >
-                          <Eye className="h-4 w-4 mr-1" />
-                          View Details
-                        </Button>
-                        <Button
-                          onClick={() => handleRemoveFavorite(favorite.id, property.title)}
-                          variant="outline"
-                          size="sm"
-                          className="border-red-200 text-red-600 hover:bg-red-50"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
+                          <Phone className="h-3 w-3 mr-1" />
+                          <span className="text-xs font-medium">Contact</span>
+                        </button>
+                        <span className="text-sm font-bold text-gray-900">
+                          {formatPrice(property.expected_price)}
+                        </span>
                       </div>
-                    </CardContent>
-                  </Card>
+                    </div>
+                  </div>
                 );
               })}
             </div>
