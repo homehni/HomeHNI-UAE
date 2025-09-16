@@ -30,6 +30,9 @@ interface Property {
   pincode: string;
   description?: string;
   images?: string[];
+  videos?: string[];
+  amenities?: any;
+  additional_documents?: any;
   status: string;
   created_at: string;
 }
@@ -243,10 +246,40 @@ export const MyInterests: React.FC = () => {
   };
 
   const handleViewProperty = (propertyId: string, property: Property) => {
-    // Store property data in sessionStorage for new tab access
-    sessionStorage.setItem(`property-${propertyId}`, JSON.stringify(property));
-    // Open property details in new tab
-    window.open(`/property/${propertyId}`, '_blank');
+    try {
+      console.log('Opening property details for:', propertyId, property.title);
+      
+      // Store comprehensive property data in sessionStorage for new tab access
+      const propertyForDetails = {
+        ...property,
+        // Ensure all required fields are present
+        id: propertyId,
+        title: property.title || 'Property Details',
+        images: property.images || [],
+        videos: property.videos || [],
+        amenities: property.amenities || {},
+        additional_documents: property.additional_documents || {}
+      };
+      
+      sessionStorage.setItem(`property-${propertyId}`, JSON.stringify(propertyForDetails));
+      
+      // Open property details in new tab - this will show the full PropertyDetails page
+      const newWindow = window.open(`/property/${propertyId}`, '_blank');
+      
+      if (!newWindow) {
+        // Fallback if popup is blocked - navigate in same tab
+        window.location.href = `/property/${propertyId}`;
+      }
+      
+      console.log('Property details opened successfully');
+    } catch (error) {
+      console.error('Error opening property details:', error);
+      toast({
+        title: "Error",
+        description: "Failed to open property details. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   const formatPrice = (price: number) => {
