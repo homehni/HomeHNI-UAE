@@ -49,16 +49,16 @@ const WhyPostSection: React.FC = () => {
   }, [testimonials.length]);
 
   return (
-    <div className="w-full bg-gradient-to-br from-blue-50 via-white to-indigo-50 flex flex-col">
+    <div className="w-full bg-gradient-to-br from-red-50 via-white to-red-50 flex flex-col">
       <div className="p-6 flex-1 flex flex-col">
         {/* Why Post section */}
         <div className="flex-1">
-          <h2 className="text-xl font-bold text-gray-800 mb-5 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Why Post through us?</h2>
+          <h2 className="text-xl font-bold text-gray-800 mb-5 bg-gradient-to-r from-red-600 to-red-600 bg-clip-text text-transparent">Why Post through us?</h2>
           
           <div className="space-y-4">
             {benefits.map((benefit, index) => (
-              <div key={index} className="flex items-start gap-4 p-3 bg-white/80 backdrop-blur-sm rounded-xl border border-blue-100 hover:shadow-md transition-all duration-300 group">
-                <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-lg flex items-center justify-center shadow-lg group-hover:shadow-xl transition-shadow duration-300">
+              <div key={index} className="flex items-start gap-4 p-3 bg-white/80 backdrop-blur-sm rounded-xl border border-red-100 hover:shadow-md transition-all duration-300 group">
+                <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-r from-red-500 to-red-600 rounded-lg flex items-center justify-center shadow-lg group-hover:shadow-xl transition-shadow duration-300">
                   <benefit.icon className="w-5 h-5 text-white" />
                 </div>
                 <div>
@@ -71,7 +71,7 @@ const WhyPostSection: React.FC = () => {
         </div>
 
         {/* Testimonial section - positioned to align with button */}
-        <div className="bg-gradient-to-r from-blue-500 to-indigo-600 rounded-xl p-4 text-white shadow-xl mt-6">
+        <div className="bg-gradient-to-r from-red-500 to-red-600 rounded-xl p-4 text-white shadow-xl mt-6">
           <div className="mb-3">
             <h3 className="font-bold text-base text-white mb-2">30 Lac+ Home Owners Trust Us</h3>
           </div>
