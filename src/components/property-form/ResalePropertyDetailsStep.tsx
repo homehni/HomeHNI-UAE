@@ -55,7 +55,14 @@ export const ResalePropertyDetailsStep: React.FC<ResalePropertyDetailsStepProps>
   const [onMainRoad, setOnMainRoad] = useState(initialData.onMainRoad || false);
   const [cornerProperty, setCornerProperty] = useState(initialData.cornerProperty || false);
   
+  const watchedPropertyType = form.watch("propertyType");
   const watchedFloorNo = form.watch("floorNo");
+  
+  // Properties that show floor dropdown (for apartments, penthouses, etc.)
+  const showFloorDropdown = ['Apartment', 'Penthouse', 'Gated Community Villa'].includes(watchedPropertyType);
+  
+  // Properties that show number of floors
+  const showNumberOfFloors = ['Independent House', 'Villa', 'Duplex'].includes(watchedPropertyType);
   
   // Get minimum total floors based on selected floor
   const getMinTotalFloors = () => {
@@ -326,93 +333,133 @@ export const ResalePropertyDetailsStep: React.FC<ResalePropertyDetailsStepProps>
             />
           </div>
 
-          {/* Floor and Total Floor */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <FormField
-              control={form.control}
-              name="floorNo"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-sm font-medium">Floor*</FormLabel>
-                    <Select
-                      onValueChange={(value) =>
-                        value === 'lower' || value === 'upper' || value === '99+'
-                          ? field.onChange(value)
-                          : field.onChange(parseInt(value))
-                      }
-                      value={
-                        field.value === undefined ? undefined :
-                        field.value === 0 ? '0' :
-                        field.value.toString()
-                      }
-                    >
-                    <FormControl>
-                      <SelectTrigger className="h-12">
-                        <SelectValue placeholder="Select" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent className="bg-white border shadow-lg z-50">
-                      <SelectItem value="lower">Lower Basement</SelectItem>
-                      <SelectItem value="upper">Upper Basement</SelectItem>
-                      <SelectItem value="0">Ground Floor</SelectItem>
-                      {[...Array(50)].map((_, i) => {
-                        const floor = i + 1;
-                        return (
-                          <SelectItem key={floor} value={floor.toString()}>
-                            {floor}
-                          </SelectItem>
-                        );
-                      })}
-                      <SelectItem value="99+">50+</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
+          {/* Floor and Total Floor - Conditional based on property type */}
+          {(showFloorDropdown || showNumberOfFloors) && (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {showFloorDropdown && (
+                <FormField
+                  control={form.control}
+                  name="floorNo"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-sm font-medium">Floor*</FormLabel>
+                        <Select
+                          onValueChange={(value) => {
+                            if (value === 'ground') {
+                              field.onChange(0);
+                            } else if (value === 'basement') {
+                              field.onChange('basement');
+                            } else if (value === 'lower' || value === 'upper' || value === '99+') {
+                              field.onChange(value);
+                            } else {
+                              field.onChange(parseInt(value));
+                            }
+                          }}
+                          value={
+                            field.value === undefined ? undefined :
+                            field.value === 0 ? 'ground' :
+                            field.value === 'basement' ? 'basement' :
+                            field.value.toString()
+                          }
+                        >
+                        <FormControl>
+                          <SelectTrigger className="h-12">
+                            <SelectValue placeholder="Select" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent className="bg-white border shadow-lg z-50">
+                          <SelectItem value="lower">Lower Basement</SelectItem>
+                          <SelectItem value="upper">Upper Basement</SelectItem>
+                          <SelectItem value="ground">Ground Floor</SelectItem>
+                          {[...Array(50)].map((_, i) => {
+                            const floor = i + 1;
+                            return (
+                              <SelectItem key={floor} value={floor.toString()}>
+                                {floor}
+                              </SelectItem>
+                            );
+                          })}
+                          <SelectItem value="99+">50+</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               )}
-            />
 
-            <FormField
-              control={form.control}
-              name="totalFloors"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-sm font-medium">Total Floor*</FormLabel>
-                    <Select
-                      onValueChange={(value) =>
-                        value === '99+' ? field.onChange(value) : field.onChange(parseInt(value))
-                      }
-                      value={
-                        field.value === undefined ? undefined :
-                        field.value.toString()
-                      }
-                    >
-                    <FormControl>
-                      <SelectTrigger className="h-12">
-                        <SelectValue placeholder="Select" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent className="bg-white border shadow-lg z-50">
-                      <SelectItem value="1">1</SelectItem>
-                      {[...Array(50)].map((_, i) => {
-                        const floor = i + 2;
-                        const minFloors = getMinTotalFloors();
-                        if (floor >= minFloors) {
-                          return (
-                            <SelectItem key={floor} value={floor.toString()}>
-                              {floor}
-                            </SelectItem>
-                          );
-                        }
-                        return null;
-                      }).filter(Boolean)}
-                      <SelectItem value="99+">50+</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
+              {showFloorDropdown ? (
+                <FormField
+                  control={form.control}
+                  name="totalFloors"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-sm font-medium">Total Floor*</FormLabel>
+                        <Select
+                          onValueChange={(value) =>
+                            value === '99+' ? field.onChange(value) : field.onChange(parseInt(value))
+                          }
+                          defaultValue={field.value?.toString()}
+                        >
+                        <FormControl>
+                          <SelectTrigger className="h-12">
+                            <SelectValue placeholder="Select" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent className="bg-white border shadow-lg z-50">
+                          {[...Array(50)].map((_, i) => {
+                            const floor = i + 1;
+                            const minFloors = getMinTotalFloors();
+                            if (floor >= minFloors) {
+                              return (
+                                <SelectItem key={floor} value={floor.toString()}>
+                                  {floor}
+                                </SelectItem>
+                              );
+                            }
+                            return null;
+                          }).filter(Boolean)}
+                          <SelectItem value="99+">50+</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              ) : showNumberOfFloors ? (
+                <FormField
+                  control={form.control}
+                  name="totalFloors"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-sm font-medium">No. of Floors</FormLabel>
+                        <Select
+                          onValueChange={(value) => field.onChange(parseInt(value))}
+                          defaultValue={field.value?.toString()}
+                        >
+                        <FormControl>
+                          <SelectTrigger className="h-12">
+                            <SelectValue placeholder="Select" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent className="bg-white border shadow-lg z-50">
+                          {[...Array(10)].map((_, i) => {
+                            const floor = i + 1;
+                            return (
+                              <SelectItem key={floor} value={floor.toString()}>
+                                {floor}
+                              </SelectItem>
+                            );
+                          })}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              ) : null}
+            </div>
+          )}
 
           {/* Navigation Buttons */}
           <div className="flex justify-end pt-6">
