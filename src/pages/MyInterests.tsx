@@ -4,7 +4,9 @@ import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Heart, MapPin, BedDouble, Bath, Square, Eye, Trash2, Phone } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Heart, MapPin, BedDouble, Bath, Square, Eye, Trash2, Phone, Search, Filter, ArrowUpDown, Calendar, TrendingUp } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
 import Header from '@/components/Header';
@@ -47,7 +49,11 @@ export const MyInterests: React.FC = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [favorites, setFavorites] = useState<FavoriteProperty[]>([]);
+  const [filteredFavorites, setFilteredFavorites] = useState<FavoriteProperty[]>([]);
   const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [sortBy, setSortBy] = useState<'newest' | 'oldest' | 'price_low' | 'price_high'>('newest');
+  const [filterType, setFilterType] = useState<'all' | 'rent' | 'sale'>('all');
   const { refetchFavorites, toggleFavorite, favorites: localFavorites } = useFavorites();
 
   // Redirect to auth if not logged in
@@ -132,6 +138,7 @@ export const MyInterests: React.FC = () => {
 
         console.log('Final combined data:', combinedData);
         setFavorites(combinedData);
+        setFilteredFavorites(combinedData);
       } catch (error) {
         console.error('Error fetching favorites:', error);
         toast({
@@ -146,6 +153,45 @@ export const MyInterests: React.FC = () => {
 
     fetchFavorites();
   }, [user, toast, localFavorites]);
+
+  // Filter and sort favorites
+  useEffect(() => {
+    let filtered = [...favorites];
+
+    // Apply search filter
+    if (searchTerm) {
+      filtered = filtered.filter(fav => 
+        fav.properties.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        fav.properties.locality.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        fav.properties.city.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
+    // Apply type filter
+    if (filterType !== 'all') {
+      filtered = filtered.filter(fav => 
+        fav.properties.listing_type.toLowerCase() === filterType
+      );
+    }
+
+    // Apply sorting
+    filtered.sort((a, b) => {
+      switch (sortBy) {
+        case 'newest':
+          return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+        case 'oldest':
+          return new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
+        case 'price_low':
+          return a.properties.expected_price - b.properties.expected_price;
+        case 'price_high':
+          return b.properties.expected_price - a.properties.expected_price;
+        default:
+          return 0;
+      }
+    });
+
+    setFilteredFavorites(filtered);
+  }, [favorites, searchTerm, sortBy, filterType]);
 
   const handleRemoveFavorite = async (favoriteId: string, propertyTitle: string) => {
     try {
@@ -196,8 +242,11 @@ export const MyInterests: React.FC = () => {
     }
   };
 
-  const handleViewProperty = (propertyId: string) => {
-    navigate(`/property/${propertyId}`);
+  const handleViewProperty = (propertyId: string, property: Property) => {
+    // Store property data in sessionStorage for new tab access
+    sessionStorage.setItem(`property-${propertyId}`, JSON.stringify(property));
+    // Open property details in new tab
+    window.open(`/property/${propertyId}`, '_blank');
   };
 
   const formatPrice = (price: number) => {
@@ -230,21 +279,94 @@ export const MyInterests: React.FC = () => {
         <div className="max-w-7xl mx-auto pt-32 p-4">
           {/* Header */}
           <div className="mb-8">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
               <div>
                 <h1 className="text-3xl font-bold text-gray-900 mb-2">My Saved Properties</h1>
-                <p className="text-gray-600">
-                  {favorites.length > 0 
-                    ? `You have saved ${favorites.length} ${favorites.length === 1 ? 'property' : 'properties'}`
-                    : 'Keep track of properties you\'re interested in'
-                  }
-                </p>
+                <div className="flex items-center gap-4 text-sm text-gray-600">
+                  <span>
+                    {favorites.length > 0 
+                      ? `${favorites.length} ${favorites.length === 1 ? 'property' : 'properties'} saved`
+                      : 'Keep track of properties you\'re interested in'
+                    }
+                  </span>
+                  {filteredFavorites.length !== favorites.length && (
+                    <span className="text-blue-600">
+                      {filteredFavorites.length} shown
+                    </span>
+                  )}
+                </div>
               </div>
-              <Button onClick={() => navigate('/property-search')} variant="outline">
-                Browse Properties
-              </Button>
+              <div className="flex gap-2">
+                <Button onClick={() => navigate('/property-search')} variant="outline" size="sm">
+                  <Search className="h-4 w-4 mr-2" />
+                  Browse Properties
+                </Button>
+                {favorites.length > 0 && (
+                  <Button 
+                    onClick={() => {
+                      const totalValue = favorites.reduce((sum, fav) => sum + fav.properties.expected_price, 0);
+                      toast({
+                        title: "Portfolio Stats",
+                        description: `Total value of saved properties: ${formatPrice(totalValue)}`,
+                      });
+                    }}
+                    variant="outline" 
+                    size="sm"
+                  >
+                    <TrendingUp className="h-4 w-4 mr-2" />
+                    Stats
+                  </Button>
+                )}
+              </div>
             </div>
           </div>
+
+          {/* Search and Filter Controls */}
+          {favorites.length > 0 && (
+            <div className="mb-6 bg-white rounded-lg shadow-sm p-4">
+              <div className="flex flex-col sm:flex-row gap-4">
+                {/* Search */}
+                <div className="flex-1">
+                  <div className="relative">
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                    <Input
+                      placeholder="Search by title, locality, or city..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="pl-10"
+                    />
+                  </div>
+                </div>
+                
+                {/* Filter by Type */}
+                <Select value={filterType} onValueChange={(value: 'all' | 'rent' | 'sale') => setFilterType(value)}>
+                  <SelectTrigger className="w-full sm:w-48">
+                    <Filter className="h-4 w-4 mr-2" />
+                    <SelectValue placeholder="Filter by type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Properties</SelectItem>
+                    <SelectItem value="rent">For Rent</SelectItem>
+                    <SelectItem value="sale">For Sale</SelectItem>
+                  </SelectContent>
+                </Select>
+                
+                {/* Sort */}
+                <Select value={sortBy} onValueChange={(value: 'newest' | 'oldest' | 'price_low' | 'price_high') => setSortBy(value)}>
+                  <SelectTrigger className="w-full sm:w-48">
+                    <ArrowUpDown className="h-4 w-4 mr-2" />
+                    <SelectValue placeholder="Sort by" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="newest">Newest First</SelectItem>
+                    <SelectItem value="oldest">Oldest First</SelectItem>
+                    <SelectItem value="price_low">Price: Low to High</SelectItem>
+                    <SelectItem value="price_high">Price: High to Low</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+          )}
 
           {/* Loading State */}
           {loading && (
@@ -272,10 +394,35 @@ export const MyInterests: React.FC = () => {
             </Card>
           )}
 
+          {/* No Results State */}
+          {!loading && favorites.length > 0 && filteredFavorites.length === 0 && (
+            <Card className="mx-auto max-w-md">
+              <CardContent className="text-center py-12">
+                <Search className="h-16 w-16 mx-auto text-gray-400 mb-6" />
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                  No Properties Found
+                </h3>
+                <p className="text-gray-600 mb-6">
+                  Try adjusting your search or filter criteria.
+                </p>
+                <Button 
+                  onClick={() => {
+                    setSearchTerm('');
+                    setFilterType('all');
+                    setSortBy('newest');
+                  }} 
+                  className="bg-brand-red hover:bg-brand-red-dark text-white"
+                >
+                  Clear Filters
+                </Button>
+              </CardContent>
+            </Card>
+          )}
+
           {/* Properties Grid - Horizontal Card Layout */}
-          {!loading && favorites.length > 0 && (
+          {!loading && filteredFavorites.length > 0 && (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4">
-              {favorites.map((favorite) => {
+              {filteredFavorites.map((favorite) => {
                 const property = favorite.properties;
                 return (
                   <div key={favorite.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
@@ -321,10 +468,20 @@ export const MyInterests: React.FC = () => {
                         <span className="text-xs line-clamp-1">{property.locality}, {property.city}</span>
                       </div>
 
+                      {/* Property Type and Date */}
+                      <div className="flex items-center justify-between mb-2">
+                        <Badge variant="secondary" className="text-xs">
+                          {property.listing_type}
+                        </Badge>
+                        <span className="text-xs text-gray-500">
+                          {new Date(favorite.created_at).toLocaleDateString()}
+                        </span>
+                      </div>
+
                       {/* Contact Button with Price */}
                       <div className="flex items-center justify-between">
                         <button
-                          onClick={() => handleViewProperty(property.id)}
+                          onClick={() => handleViewProperty(property.id, property)}
                           className="flex items-center text-gray-700 hover:text-red-600 transition-colors"
                         >
                           <Phone className="h-3 w-3 mr-1" />
