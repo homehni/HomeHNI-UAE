@@ -458,7 +458,19 @@ export const MyInterests: React.FC = () => {
               {filteredFavorites.map((favorite) => {
                 const property = favorite.properties;
                 return (
-                  <div key={favorite.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+                  <div
+                    key={favorite.id}
+                    className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow cursor-pointer focus:outline-none focus:ring-2 focus:ring-brand-red/40"
+                    role="button"
+                    tabIndex={0}
+                         onClick={(e) => { e.stopPropagation(); handleViewProperty(property.id, property); }}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        handleViewProperty(property.id, property);
+                      }
+                    }}
+                  >
                     {/* Property Image */}
                     <div className="relative h-32 bg-gray-200">
                       {property.images && property.images.length > 0 ? (
@@ -482,7 +494,7 @@ export const MyInterests: React.FC = () => {
 
                       {/* Heart Icon */}
                       <button
-                        onClick={() => handleRemoveFavorite(favorite.id, property.title)}
+                        onClick={(e) => { e.stopPropagation(); handleRemoveFavorite(favorite.id, property.title); }}
                         className="absolute top-2 right-2 w-8 h-8 bg-white/80 hover:bg-white rounded-full flex items-center justify-center transition-colors"
                       >
                         <Heart className="h-4 w-4 text-red-500 fill-current" />
