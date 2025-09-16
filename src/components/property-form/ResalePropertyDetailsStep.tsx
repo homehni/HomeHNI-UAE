@@ -95,7 +95,7 @@ export const ResalePropertyDetailsStep: React.FC<ResalePropertyDetailsStepProps>
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">Property Details</h2>
+        <h2 className="text-2xl font-bold text-red-600 mb-2">Property Details</h2>
         <p className="text-gray-600">Tell us about your property specifications</p>
       </div>
 
