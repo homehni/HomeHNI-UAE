@@ -734,6 +734,14 @@ export const Dashboard: React.FC = () => {
                               Go Premium
                             </Button>
 
+                            {/* Property Progress */}
+                            <PropertyProgressCompact
+                              propertyId={property.id}
+                              completionPercentage={calculatePropertyCompletion(property).percentage}
+                              missingFields={calculatePropertyCompletion(property).missingFields}
+                              propertyType={property.property_type}
+                            />
+
                           </div>
 
                           {/* Right Side - Image Area */}
