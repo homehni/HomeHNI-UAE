@@ -142,73 +142,9 @@ export const MyInterests: React.FC = () => {
           }
         }
 
-        // Handle demo properties (from local state that aren't in database)
-        console.log('Processing local favorites:', Object.entries(localFavorites));
-        Object.entries(localFavorites).forEach(([propertyId, isFavorited]) => {
-          if (isFavorited && !combinedData.find(f => f.property_id === propertyId)) {
-            console.log('Adding missing property as demo:', propertyId);
-            // Check if this is likely a demo property (non-UUID format)
-            const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-            
-            if (!uuidRegex.test(propertyId)) {
-              // Create a demo property object for non-UUID properties
-              combinedData.push({
-                id: `demo-${propertyId}`,
-                user_id: user.id,
-                property_id: propertyId,
-                created_at: new Date().toISOString(),
-                properties: {
-                  id: propertyId,
-                  title: "Demo Property - Featured Listing",
-                  property_type: "apartment",
-                  listing_type: "sale",
-                  bhk_type: "3BHK",
-                  expected_price: 8500000,
-                  super_area: 1200,
-                  carpet_area: 1000,
-                  bathrooms: 3,
-                  balconies: 2,
-                  city: "Delhi",
-                  locality: "Online Only",
-                  state: "Delhi",
-                  pincode: "110001",
-                  description: "This is a demo property for showcase purposes.",
-                  images: ["/placeholder.svg"],
-                  status: "approved",
-                  created_at: new Date().toISOString()
-                }
-              });
-            } else {
-              // This is a valid UUID but not found in database - create a placeholder
-              combinedData.push({
-                id: `missing-${propertyId}`,
-                user_id: user.id,
-                property_id: propertyId,
-                created_at: new Date().toISOString(),
-                properties: {
-                  id: propertyId,
-                  title: "Saved Property - Currently Unavailable",
-                  property_type: "apartment",
-                  listing_type: "sale",
-                  bhk_type: "3BHK",
-                  expected_price: 8500000,
-                  super_area: 1200,
-                  carpet_area: 1000,
-                  bathrooms: 3,
-                  balconies: 2,
-                  city: "Mumbai",
-                  locality: "Property Details Loading...",
-                  state: "Maharashtra",
-                  pincode: "400001",
-                  description: "This property was saved but details are currently unavailable. It may have been removed or is under review.",
-                  images: ["/placeholder.svg"],
-                  status: "approved",
-                  created_at: new Date().toISOString()
-                }
-              });
-            }
-          }
-        });
+        // Do not include demo/local placeholders – only show real DB favorites
+        // This prevents hard-coded placeholder cards from appearing
+        // If needed later, we can merge valid UUIDs from local state after verifying their existence in DB.
 
         console.log('Final combined data:', combinedData);
         setFavorites(combinedData);
