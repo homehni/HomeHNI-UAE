@@ -93,14 +93,14 @@ export const ResalePropertyDetailsStep: React.FC<ResalePropertyDetailsStepProps>
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       <div className="text-center">
         <h2 className="text-2xl font-bold text-gray-900 mb-2">Property Details</h2>
         <p className="text-gray-600">Tell us about your property specifications</p>
       </div>
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           {/* Property Name */}
           <FormField
             control={form.control}
@@ -121,7 +121,7 @@ export const ResalePropertyDetailsStep: React.FC<ResalePropertyDetailsStepProps>
           />
 
           {/* Property Type and BHK Type */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <FormField
               control={form.control}
               name="propertyType"
@@ -206,7 +206,7 @@ export const ResalePropertyDetailsStep: React.FC<ResalePropertyDetailsStepProps>
           />
 
           {/* Built Up Area and Carpet Area */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <FormField
               control={form.control}
               name="builtUpArea"
@@ -273,7 +273,7 @@ export const ResalePropertyDetailsStep: React.FC<ResalePropertyDetailsStepProps>
           </div>
 
           {/* Property Age and Facing */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <FormField
               control={form.control}
               name="propertyAge"
@@ -335,7 +335,7 @@ export const ResalePropertyDetailsStep: React.FC<ResalePropertyDetailsStepProps>
 
           {/* Floor and Total Floor - Conditional based on property type */}
           {(showFloorDropdown || showNumberOfFloors) && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {showFloorDropdown && (
                 <FormField
                   control={form.control}
@@ -462,7 +462,7 @@ export const ResalePropertyDetailsStep: React.FC<ResalePropertyDetailsStepProps>
           )}
 
           {/* Navigation Buttons */}
-          <div className="flex justify-end pt-6">
+          <div className="flex justify-end pt-4">
             <Button type="submit" className="h-12 px-8">
               Next Step
               <ArrowRight className="h-4 w-4 ml-2" />

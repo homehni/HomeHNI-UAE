@@ -253,9 +253,9 @@ export const ResaleMultiStepForm: React.FC<ResaleMultiStepFormProps> = ({
           </div>
 
           {/* Form Content */}
-          <div className="flex-1 p-3 min-h-0 max-h-full">
-            <div className="bg-white h-full overflow-auto">
-              <div className="max-w-4xl mx-auto">
+          <div className="flex-1 p-3 min-h-0">
+            <div className="bg-white h-full flex flex-col">
+              <div className="max-w-4xl mx-auto w-full flex-1 flex flex-col">
                 {currentStep === 1 && (
                   <ResalePropertyDetailsStep
                     initialData={propertyDetails}
