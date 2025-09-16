@@ -12,14 +12,13 @@ import { ArrowLeft, ArrowRight, Compass } from 'lucide-react';
 
 const resalePropertyDetailsSchema = z.object({
   title: z.string().optional(), // Made optional - will be auto-generated
-  propertyType: z.string().optional(),
-  bhkType: z.string().optional(),
-  ownershipType: z.string().optional(),
-  builtUpArea: z.number().optional(),
+  propertyType: z.string().min(1, "Property type is required"),
+  bhkType: z.string().min(1, "BHK type is required"),
+  ownershipType: z.string().min(1, "Ownership type is required"),
+  builtUpArea: z.number().min(1, "Built up area is required and must be greater than 0"),
   carpetArea: z.number().optional(),
   propertyAge: z.string().min(1, "Property age is required"),
-  facing: z.string().optional(),
-  floorType: z.string().optional(),
+  facing: z.string().min(1, "Facing is required"),
   floorNo: z.union([z.number(), z.string()]).optional(),
   totalFloors: z.union([z.number(), z.string()]).optional(),
 });
@@ -48,7 +47,6 @@ export const ResalePropertyDetailsStep: React.FC<ResalePropertyDetailsStepProps>
       carpetArea: (initialData as any).carpetArea || undefined,
       propertyAge: (initialData as any).propertyAge || '',
       facing: (initialData as any).facing || '',
-      floorType: (initialData as any).floorType || '',
       floorNo: initialData.floorNo || 0,
       totalFloors: initialData.totalFloors || 1,
     },
@@ -80,7 +78,6 @@ export const ResalePropertyDetailsStep: React.FC<ResalePropertyDetailsStepProps>
       carpetArea: data.carpetArea,
       // propertyAge removed from data transformation
       facing: data.facing,
-      floorType: data.floorType,
       floorNo: data.floorNo,
       totalFloors: data.totalFloors,
       onMainRoad,
@@ -123,14 +120,14 @@ export const ResalePropertyDetailsStep: React.FC<ResalePropertyDetailsStepProps>
               name="propertyType"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-sm font-medium">Property Type</FormLabel>
+                  <FormLabel className="text-sm font-medium">Property Type*</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger className="h-12">
-                        <SelectValue placeholder="Select Property Type" />
+                        <SelectValue placeholder="Select" />
                       </SelectTrigger>
                     </FormControl>
-                    <SelectContent>
+                    <SelectContent className="bg-white border shadow-lg z-50">
                       <SelectItem value="Apartment">Apartment</SelectItem>
                       <SelectItem value="Co-Living">Co-Living</SelectItem>
                       <SelectItem value="Villa">Villa</SelectItem>
@@ -152,14 +149,14 @@ export const ResalePropertyDetailsStep: React.FC<ResalePropertyDetailsStepProps>
               name="bhkType"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-sm font-medium">BHK Type</FormLabel>
+                  <FormLabel className="text-sm font-medium">BHK Type*</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger className="h-12">
-                        <SelectValue placeholder="Select BHK Type" />
+                        <SelectValue placeholder="Select" />
                       </SelectTrigger>
                     </FormControl>
-                    <SelectContent>
+                    <SelectContent className="bg-white border shadow-lg z-50">
                       <SelectItem value="Studio">Studio</SelectItem>
                       <SelectItem value="1 RK">1 RK</SelectItem>
                       <SelectItem value="1 BHK">1 BHK</SelectItem>
@@ -182,14 +179,14 @@ export const ResalePropertyDetailsStep: React.FC<ResalePropertyDetailsStepProps>
             name="ownershipType"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-sm font-medium">Ownership Type</FormLabel>
+                <FormLabel className="text-sm font-medium">Ownership Type*</FormLabel>
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
                     <SelectTrigger className="h-12">
-                      <SelectValue placeholder="Select Ownership Type" />
+                      <SelectValue placeholder="Select" />
                     </SelectTrigger>
                   </FormControl>
-                  <SelectContent>
+                  <SelectContent className="bg-white border shadow-lg z-50">
                     <SelectItem value="Freehold">Freehold</SelectItem>
                     <SelectItem value="Leasehold">Leasehold</SelectItem>
                     <SelectItem value="Co-operative Society">Co-operative Society</SelectItem>
@@ -201,67 +198,6 @@ export const ResalePropertyDetailsStep: React.FC<ResalePropertyDetailsStepProps>
             )}
           />
 
-          {/* Property Age and Facing */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <FormField
-              control={form.control}
-              name="propertyAge"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-sm font-medium">Property Age*</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <FormControl>
-                      <SelectTrigger className="h-12">
-                        <SelectValue placeholder="Select" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="Under Construction">Under Construction</SelectItem>
-                      <SelectItem value="Ready to Move">Ready to Move</SelectItem>
-                      <SelectItem value="0-1 Years">0-1 Years</SelectItem>
-                      <SelectItem value="1-3 Years">1-3 Years</SelectItem>
-                      <SelectItem value="3-5 Years">3-5 Years</SelectItem>
-                      <SelectItem value="5-10 Years">5-10 Years</SelectItem>
-                      <SelectItem value="10+ Years">10+ Years</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="facing"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-sm font-medium">Facing</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <FormControl>
-                      <SelectTrigger className="h-12">
-                        <div className="flex items-center gap-2">
-                          <Compass className="h-4 w-4 text-muted-foreground" />
-                          <SelectValue placeholder="Select" />
-                        </div>
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="North">North</SelectItem>
-                      <SelectItem value="South">South</SelectItem>
-                      <SelectItem value="East">East</SelectItem>
-                      <SelectItem value="West">West</SelectItem>
-                      <SelectItem value="North-East">North-East</SelectItem>
-                      <SelectItem value="North-West">North-West</SelectItem>
-                      <SelectItem value="South-East">South-East</SelectItem>
-                      <SelectItem value="South-West">South-West</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-
           {/* Built Up Area and Carpet Area */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <FormField
@@ -269,12 +205,12 @@ export const ResalePropertyDetailsStep: React.FC<ResalePropertyDetailsStepProps>
               name="builtUpArea"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-sm font-medium">Built Up Area</FormLabel>
+                  <FormLabel className="text-sm font-medium">Built Up Area*</FormLabel>
                   <div className="relative">
                     <FormControl>
                       <Input
                         type="number"
-                        placeholder="Enter Built Up Area"
+                        placeholder="Built Up Area"
                         className="h-12 pr-12"
                         {...field}
                         onChange={(e) => {
@@ -306,7 +242,7 @@ export const ResalePropertyDetailsStep: React.FC<ResalePropertyDetailsStepProps>
                     <FormControl>
                       <Input
                         type="number"
-                        placeholder="Enter Carpet Area"
+                        placeholder="Carpet Area"
                         className="h-12 pr-12"
                         {...field}
                         onChange={(e) => {
@@ -329,21 +265,51 @@ export const ResalePropertyDetailsStep: React.FC<ResalePropertyDetailsStepProps>
             />
           </div>
 
-          {/* Facing */}
-          <div className="grid grid-cols-1 md:grid-cols-1 gap-6">
+          {/* Property Age and Facing */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <FormField
+              control={form.control}
+              name="propertyAge"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-sm font-medium">Property Age*</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger className="h-12">
+                        <SelectValue placeholder="Select" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent className="bg-white border shadow-lg z-50">
+                      <SelectItem value="Under Construction">Under Construction</SelectItem>
+                      <SelectItem value="Ready to Move">Ready to Move</SelectItem>
+                      <SelectItem value="0-1 Years">0-1 Years</SelectItem>
+                      <SelectItem value="1-3 Years">1-3 Years</SelectItem>
+                      <SelectItem value="3-5 Years">3-5 Years</SelectItem>
+                      <SelectItem value="5-10 Years">5-10 Years</SelectItem>
+                      <SelectItem value="10+ Years">10+ Years</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
             <FormField
               control={form.control}
               name="facing"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-sm font-medium">Facing</FormLabel>
+                  <FormLabel className="text-sm font-medium">Facing*</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger className="h-12">
-                        <SelectValue placeholder="Select Facing Direction" />
+                        <div className="flex items-center gap-2">
+                          <Compass className="h-4 w-4 text-muted-foreground" />
+                          <SelectValue placeholder="Select" />
+                        </div>
                       </SelectTrigger>
                     </FormControl>
-                    <SelectContent>
+                    <SelectContent className="bg-white border shadow-lg z-50">
                       <SelectItem value="North">North</SelectItem>
                       <SelectItem value="South">South</SelectItem>
                       <SelectItem value="East">East</SelectItem>
@@ -360,40 +326,14 @@ export const ResalePropertyDetailsStep: React.FC<ResalePropertyDetailsStepProps>
             />
           </div>
 
-          {/* Floor Type, Floor, Total Floor */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <FormField
-              control={form.control}
-              name="floorType"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-sm font-medium">Floor Type</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <FormControl>
-                      <SelectTrigger className="h-12">
-                        <SelectValue placeholder="Select Floor Type" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="Lower Basement">Lower Basement</SelectItem>
-                      <SelectItem value="Upper Basement">Upper Basement</SelectItem>
-                      <SelectItem value="Ground Floor">Ground Floor</SelectItem>
-                      <SelectItem value="Low Rise (1-3)">Low Rise (1-3)</SelectItem>
-                      <SelectItem value="Mid Rise (4-9)">Mid Rise (4-9)</SelectItem>
-                      <SelectItem value="High Rise (10+)">High Rise (10+)</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
+          {/* Floor and Total Floor */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <FormField
               control={form.control}
               name="floorNo"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-sm font-medium">Floor</FormLabel>
+                  <FormLabel className="text-sm font-medium">Floor*</FormLabel>
                     <Select
                       onValueChange={(value) =>
                         value === 'lower' || value === 'upper' || value === '99+'
@@ -408,10 +348,10 @@ export const ResalePropertyDetailsStep: React.FC<ResalePropertyDetailsStepProps>
                     >
                     <FormControl>
                       <SelectTrigger className="h-12">
-                        <SelectValue placeholder="Select Floor" />
+                        <SelectValue placeholder="Select" />
                       </SelectTrigger>
                     </FormControl>
-                    <SelectContent>
+                    <SelectContent className="bg-white border shadow-lg z-50">
                       <SelectItem value="lower">Lower Basement</SelectItem>
                       <SelectItem value="upper">Upper Basement</SelectItem>
                       <SelectItem value="0">Ground Floor</SelectItem>
@@ -436,7 +376,7 @@ export const ResalePropertyDetailsStep: React.FC<ResalePropertyDetailsStepProps>
               name="totalFloors"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-sm font-medium">Total Floor</FormLabel>
+                  <FormLabel className="text-sm font-medium">Total Floor*</FormLabel>
                     <Select
                       onValueChange={(value) =>
                         value === '99+' ? field.onChange(value) : field.onChange(parseInt(value))
@@ -448,10 +388,10 @@ export const ResalePropertyDetailsStep: React.FC<ResalePropertyDetailsStepProps>
                     >
                     <FormControl>
                       <SelectTrigger className="h-12">
-                        <SelectValue placeholder="Select Total Floors" />
+                        <SelectValue placeholder="Select" />
                       </SelectTrigger>
                     </FormControl>
-                    <SelectContent>
+                    <SelectContent className="bg-white border shadow-lg z-50">
                       <SelectItem value="1">1</SelectItem>
                       {[...Array(50)].map((_, i) => {
                         const floor = i + 2;
