@@ -18,8 +18,8 @@ import { RentalDetails } from '@/types/property';
 
 const rentalDetailsSchema = z.object({
   propertyAvailableFor: z.string().optional(),
-  expectedPrice: z.number().min(1, "Expected rent is required and must be greater than 0").optional(),
-  expectedLeaseAmount: z.number().min(1, "Expected lease amount is required and must be greater than 0").optional(),
+  expectedPrice: z.number().min(1, "Expected rent is required and must be at least 1").optional(),
+  expectedLeaseAmount: z.number().min(1, "Expected lease amount is required and must be at least 1").optional(),
   rentNegotiable: z.boolean().optional(),
   securityDeposit: z.number().optional(),
   monthlyMaintenance: z.string().optional(),
@@ -139,13 +139,13 @@ export const RentalDetailsStep: React.FC<RentalDetailsStepProps> = ({
                           placeholder="Enter Amount"
                           className="h-12 pl-8 pr-20"
                           type="number"
-                          min="0"
+                          min="1"
                           inputMode="numeric"
                           pattern="[0-9]*"
                           onKeyDown={(e) => { if (['-','+','e','E','.'].includes(e.key)) e.preventDefault(); }}
-                          onPaste={(e) => { const text = e.clipboardData.getData('text'); const digits = text.replace(/[^0-9]/g, ''); if (digits !== text) { e.preventDefault(); field.onChange(digits ? Math.max(0, Number(digits)) : undefined); } }}
+                          onPaste={(e) => { const text = e.clipboardData.getData('text'); const digits = text.replace(/[^0-9]/g, ''); if (digits !== text) { e.preventDefault(); field.onChange(digits ? Math.max(1, Number(digits)) : undefined); } }}
                           value={field.value || ''}
-                          onChange={(e) => field.onChange(e.target.value ? Math.max(0, Number(e.target.value)) : undefined)}
+                          onChange={(e) => field.onChange(e.target.value ? Math.max(1, Number(e.target.value)) : undefined)}
                         />
                         <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-sm text-gray-500">/ Month</span>
                       </div>
@@ -186,13 +186,13 @@ export const RentalDetailsStep: React.FC<RentalDetailsStepProps> = ({
                           placeholder="Enter Amount"
                           className="h-12 pl-8"
                           type="number"
-                          min="0"
+                          min="1"
                           inputMode="numeric"
                           pattern="[0-9]*"
                           onKeyDown={(e) => { if (['-','+','e','E','.'].includes(e.key)) e.preventDefault(); }}
-                          onPaste={(e) => { const text = e.clipboardData.getData('text'); const digits = text.replace(/[^0-9]/g, ''); if (digits !== text) { e.preventDefault(); field.onChange(digits ? Math.max(0, Number(digits)) : undefined); } }}
+                          onPaste={(e) => { const text = e.clipboardData.getData('text'); const digits = text.replace(/[^0-9]/g, ''); if (digits !== text) { e.preventDefault(); field.onChange(digits ? Math.max(1, Number(digits)) : undefined); } }}
                           value={field.value || ''}
-                          onChange={(e) => field.onChange(e.target.value ? Math.max(0, Number(e.target.value)) : undefined)}
+                          onChange={(e) => field.onChange(e.target.value ? Math.max(1, Number(e.target.value)) : undefined)}
                         />
                       </div>
                     </FormControl>
@@ -216,13 +216,13 @@ export const RentalDetailsStep: React.FC<RentalDetailsStepProps> = ({
                           placeholder="Enter Amount"
                           className="h-12 pl-8"
                           type="number"
-                          min="0"
+                          min="1"
                           inputMode="numeric"
                           pattern="[0-9]*"
                           onKeyDown={(e) => { if (['-','+','e','E','.'].includes(e.key)) e.preventDefault(); }}
-                          onPaste={(e) => { const text = e.clipboardData.getData('text'); const digits = text.replace(/[^0-9]/g, ''); if (digits !== text) { e.preventDefault(); field.onChange(digits ? Math.max(0, Number(digits)) : undefined); } }}
+                          onPaste={(e) => { const text = e.clipboardData.getData('text'); const digits = text.replace(/[^0-9]/g, ''); if (digits !== text) { e.preventDefault(); field.onChange(digits ? Math.max(1, Number(digits)) : undefined); } }}
                           value={field.value || ''}
-                          onChange={(e) => field.onChange(e.target.value ? Math.max(0, Number(e.target.value)) : undefined)}
+                          onChange={(e) => field.onChange(e.target.value ? Math.max(1, Number(e.target.value)) : undefined)}
                         />
                       </div>
                     </FormControl>
@@ -290,13 +290,13 @@ export const RentalDetailsStep: React.FC<RentalDetailsStepProps> = ({
                           placeholder="Enter Amount"
                           className="h-12 pl-8 pr-20"
                           type="number"
-                          min="0"
+                          min="1"
                           inputMode="numeric"
                           pattern="[0-9]*"
                           onKeyDown={(e) => { if (['-','+','e','E','.'].includes(e.key)) e.preventDefault(); }}
-                          onPaste={(e) => { const text = e.clipboardData.getData('text'); const digits = text.replace(/[^0-9]/g, ''); if (digits !== text) { e.preventDefault(); field.onChange(digits ? Math.max(0, Number(digits)) : undefined); } }}
+                          onPaste={(e) => { const text = e.clipboardData.getData('text'); const digits = text.replace(/[^0-9]/g, ''); if (digits !== text) { e.preventDefault(); field.onChange(digits ? Math.max(1, Number(digits)) : undefined); } }}
                           value={field.value || ''}
-                          onChange={(e) => field.onChange(e.target.value ? Math.max(0, Number(e.target.value)) : undefined)}
+                          onChange={(e) => field.onChange(e.target.value ? Math.max(1, Number(e.target.value)) : undefined)}
                         />
                         <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-sm text-gray-500">/ Month</span>
                       </div>
@@ -450,10 +450,10 @@ export const RentalDetailsStep: React.FC<RentalDetailsStepProps> = ({
           </div>
 
           <div className="flex justify-start gap-4 pt-6">
-            <Button type="button" variant="outline" onClick={onBack} className="px-8 bg-gray-500 text-white hover:bg-gray-600">
+            <Button type="button" variant="outline" onClick={onBack} className="h-12 px-8">
               Back
             </Button>
-            <Button type="submit" className="pl-8 pr-4 bg-red-500 hover:bg-red-600 text-white">
+            <Button type="submit" className="h-12 px-8">
               Save & Continue
             </Button>
           </div>

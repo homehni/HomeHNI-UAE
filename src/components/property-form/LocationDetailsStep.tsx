@@ -292,7 +292,7 @@ export const LocationDetailsStep: React.FC<LocationDetailsStepProps> = ({
                         <Select onValueChange={field.onChange} defaultValue={field.value}>
                           <FormControl>
                             <SelectTrigger className="h-12 bg-white z-50">
-                              <SelectValue placeholder="Bangalore" />
+                              <SelectValue placeholder="Choose city" />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent className="bg-white border border-gray-200 shadow-lg z-[9999]">

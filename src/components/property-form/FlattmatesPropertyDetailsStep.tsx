@@ -258,11 +258,16 @@ export function FlattmatesPropertyDetailsStep({
                     <Input
                       id="builtUpArea"
                       type="number"
+                      min="1"
                       value={formData.builtUpArea || ''}
-                      onChange={(e) => setFormData({ ...formData, builtUpArea: parseInt(e.target.value) || 0 })}
+                      onChange={(e) => {
+                        const value = parseInt(e.target.value);
+                        setFormData({ ...formData, builtUpArea: value >= 1 ? value : undefined });
+                      }}
+                      onKeyDown={(e) => { if (['-','+','e','E','.'].includes(e.key)) e.preventDefault(); }}
+                      onPaste={(e) => { const text = e.clipboardData.getData('text'); const digits = text.replace(/[^0-9]/g, ''); if (digits !== text) { e.preventDefault(); setFormData({ ...formData, builtUpArea: digits ? Math.max(1, Number(digits)) : undefined }); } }}
                       placeholder="Enter area"
                       className="h-12 pr-16"
-                      min="1"
                     />
                     <span className="absolute right-4 top-1/2 transform -translate-y-1/2 text-muted-foreground">
                       Sq.ft

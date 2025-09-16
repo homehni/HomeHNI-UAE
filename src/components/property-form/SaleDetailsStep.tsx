@@ -206,13 +206,16 @@ export const SaleDetailsStep: React.FC<SaleDetailsStepProps> = ({
                     <Input
                       type="number"
                       placeholder="e.g. 4500"
+                      min="1"
                       value={
                         watchedValues.expectedPrice && propertyDetails?.superBuiltUpArea
                           ? Math.round(watchedValues.expectedPrice / propertyDetails.superBuiltUpArea)
                           : field.value || ''
                       }
+                      onKeyDown={(e) => { if (['-','+','e','E','.'].includes(e.key)) e.preventDefault(); }}
+                      onPaste={(e) => { const text = e.clipboardData.getData('text'); const digits = text.replace(/[^0-9]/g, ''); if (digits !== text) { e.preventDefault(); field.onChange(digits ? Math.max(1, Number(digits)) : undefined); } }}
                       onChange={(e) => {
-                        const value = e.target.value ? Number(e.target.value) : undefined;
+                        const value = e.target.value ? Math.max(1, Number(e.target.value)) : undefined;
                         field.onChange(value);
                       }}
                       className="h-10"
@@ -326,8 +329,12 @@ export const SaleDetailsStep: React.FC<SaleDetailsStepProps> = ({
                     <Input
                       type="number"
                       placeholder="e.g. 2500"
+                      min="1"
                       {...field}
-                      onChange={(e) => field.onChange(e.target.value ? Number(e.target.value) : undefined)}
+                      onKeyDown={(e) => { if (['-','+','e','E','.'].includes(e.key)) e.preventDefault(); }}
+                      onPaste={(e) => { const text = e.clipboardData.getData('text'); const digits = text.replace(/[^0-9]/g, ''); if (digits !== text) { e.preventDefault(); field.onChange(digits ? Math.max(1, Number(digits)) : undefined); } }}
+                      value={field.value || ''}
+                      onChange={(e) => field.onChange(e.target.value ? Math.max(1, Number(e.target.value)) : undefined)}
                       className="h-10"
                     />
                   </FormControl>
@@ -348,8 +355,12 @@ export const SaleDetailsStep: React.FC<SaleDetailsStepProps> = ({
                     <Input
                       type="number"
                       placeholder="e.g. 100000"
+                      min="1"
                       {...field}
-                      onChange={(e) => field.onChange(e.target.value ? Number(e.target.value) : undefined)}
+                      onKeyDown={(e) => { if (['-','+','e','E','.'].includes(e.key)) e.preventDefault(); }}
+                      onPaste={(e) => { const text = e.clipboardData.getData('text'); const digits = text.replace(/[^0-9]/g, ''); if (digits !== text) { e.preventDefault(); field.onChange(digits ? Math.max(1, Number(digits)) : undefined); } }}
+                      value={field.value || ''}
+                      onChange={(e) => field.onChange(e.target.value ? Math.max(1, Number(e.target.value)) : undefined)}
                       className="h-10"
                     />
                   </FormControl>

@@ -89,7 +89,13 @@ export const LandPlotPropertyDetailsStep: React.FC<LandPlotPropertyDetailsStepPr
               <Input
                 id="plotArea"
                 type="number"
-                {...register('plotArea', { valueAsNumber: true })}
+                min="1"
+                {...register('plotArea', { 
+                  valueAsNumber: true,
+                  min: { value: 1, message: "Plot area must be at least 1" }
+                })}
+                onKeyDown={(e) => { if (['-','+','e','E','.'].includes(e.key)) e.preventDefault(); }}
+                onPaste={(e) => { const text = e.clipboardData.getData('text'); const digits = text.replace(/[^0-9]/g, ''); if (digits !== text) { e.preventDefault(); } }}
                 placeholder="e.g., 1200"
                 className="w-full"
               />
@@ -126,7 +132,13 @@ export const LandPlotPropertyDetailsStep: React.FC<LandPlotPropertyDetailsStepPr
               <Input
                 id="plotLength"
                 type="number"
-                {...register('plotLength', { valueAsNumber: true })}
+                min="1"
+                {...register('plotLength', { 
+                  valueAsNumber: true,
+                  min: { value: 1, message: "Plot length must be at least 1" }
+                })}
+                onKeyDown={(e) => { if (['-','+','e','E','.'].includes(e.key)) e.preventDefault(); }}
+                onPaste={(e) => { const text = e.clipboardData.getData('text'); const digits = text.replace(/[^0-9]/g, ''); if (digits !== text) { e.preventDefault(); } }}
                 placeholder="e.g., 60"
                 className="w-full"
               />
@@ -138,7 +150,13 @@ export const LandPlotPropertyDetailsStep: React.FC<LandPlotPropertyDetailsStepPr
               <Input
                 id="plotWidth"
                 type="number"
-                {...register('plotWidth', { valueAsNumber: true })}
+                min="1"
+                {...register('plotWidth', { 
+                  valueAsNumber: true,
+                  min: { value: 1, message: "Plot width must be at least 1" }
+                })}
+                onKeyDown={(e) => { if (['-','+','e','E','.'].includes(e.key)) e.preventDefault(); }}
+                onPaste={(e) => { const text = e.clipboardData.getData('text'); const digits = text.replace(/[^0-9]/g, ''); if (digits !== text) { e.preventDefault(); } }}
                 placeholder="e.g., 40"
                 className="w-full"
               />
@@ -195,7 +213,13 @@ export const LandPlotPropertyDetailsStep: React.FC<LandPlotPropertyDetailsStepPr
               <Input
                 id="roadWidth"
                 type="number"
-                {...register('roadWidth', { valueAsNumber: true })}
+                min="1"
+                {...register('roadWidth', { 
+                  valueAsNumber: true,
+                  min: { value: 1, message: "Road width must be at least 1" }
+                })}
+                onKeyDown={(e) => { if (['-','+','e','E','.'].includes(e.key)) e.preventDefault(); }}
+                onPaste={(e) => { const text = e.clipboardData.getData('text'); const digits = text.replace(/[^0-9]/g, ''); if (digits !== text) { e.preventDefault(); } }}
                 placeholder="e.g., 20"
                 className="w-full"
               />
@@ -229,7 +253,13 @@ export const LandPlotPropertyDetailsStep: React.FC<LandPlotPropertyDetailsStepPr
               <Input
                 id="floorsAllowed"
                 type="number"
-                {...register('floorsAllowed', { valueAsNumber: true })}
+                min="1"
+                {...register('floorsAllowed', { 
+                  valueAsNumber: true,
+                  min: { value: 1, message: "Floors allowed must be at least 1" }
+                })}
+                onKeyDown={(e) => { if (['-','+','e','E','.'].includes(e.key)) e.preventDefault(); }}
+                onPaste={(e) => { const text = e.clipboardData.getData('text'); const digits = text.replace(/[^0-9]/g, ''); if (digits !== text) { e.preventDefault(); } }}
                 placeholder="3"
                 className="w-full"
               />

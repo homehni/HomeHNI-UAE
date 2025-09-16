@@ -293,9 +293,13 @@ export const CommercialPropertyDetailsStep: React.FC<CommercialPropertyDetailsSt
                         <Input
                           type="number"
                           placeholder="Enter your Super Built up Area"
+                          min="1"
                           className="h-12 pr-12"
                           {...field}
-                          onChange={(e) => field.onChange(e.target.value ? parseInt(e.target.value) : undefined)}
+                          onKeyDown={(e) => { if (['-','+','e','E','.'].includes(e.key)) e.preventDefault(); }}
+                          onPaste={(e) => { const text = e.clipboardData.getData('text'); const digits = text.replace(/[^0-9]/g, ''); if (digits !== text) { e.preventDefault(); field.onChange(digits ? Math.max(1, Number(digits)) : undefined); } }}
+                          value={field.value || ''}
+                          onChange={(e) => field.onChange(e.target.value ? Math.max(1, parseInt(e.target.value)) : undefined)}
                         />
                       </FormControl>
                       <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-sm text-gray-500">

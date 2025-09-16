@@ -24,14 +24,14 @@ const PriceInput = React.forwardRef<HTMLInputElement, PriceInputProps>(
       const digits = text.replace(/[^0-9]/g, '')
       if (digits !== text) {
         e.preventDefault()
-        const numericValue = digits ? Math.max(0, parseInt(digits)) : undefined
+        const numericValue = digits ? Math.max(1, parseInt(digits)) : undefined
         onChange?.(numericValue)
       }
     }
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const inputValue = e.target.value.replace(/[^0-9]/g, '')
-      const numericValue = inputValue ? Math.max(0, parseInt(inputValue)) : undefined
+      const numericValue = inputValue ? Math.max(1, parseInt(inputValue)) : undefined
       onChange?.(numericValue)
     }
 

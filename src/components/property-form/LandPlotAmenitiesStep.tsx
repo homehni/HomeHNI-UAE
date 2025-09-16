@@ -113,7 +113,13 @@ export const LandPlotAmenitiesStep: React.FC<LandPlotAmenitiesStepProps> = ({
               <Input
                 id="roadWidth"
                 type="number"
-                {...register('roadWidth', { valueAsNumber: true })}
+                min="1"
+                {...register('roadWidth', { 
+                  valueAsNumber: true,
+                  min: { value: 1, message: "Road width must be at least 1" }
+                })}
+                onKeyDown={(e) => { if (['-','+','e','E','.'].includes(e.key)) e.preventDefault(); }}
+                onPaste={(e) => { const text = e.clipboardData.getData('text'); const digits = text.replace(/[^0-9]/g, ''); if (digits !== text) { e.preventDefault(); } }}
                 placeholder="Width of facing road"
                 className="w-full"
               />

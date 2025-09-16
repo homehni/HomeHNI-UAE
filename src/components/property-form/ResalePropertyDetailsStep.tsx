@@ -217,11 +217,15 @@ export const ResalePropertyDetailsStep: React.FC<ResalePropertyDetailsStepProps>
                       <Input
                         type="number"
                         placeholder="Built Up Area"
+                        min="1"
                         className="h-12 pr-12"
                         {...field}
+                        onKeyDown={(e) => { if (['-','+','e','E','.'].includes(e.key)) e.preventDefault(); }}
+                        onPaste={(e) => { const text = e.clipboardData.getData('text'); const digits = text.replace(/[^0-9]/g, ''); if (digits !== text) { e.preventDefault(); field.onChange(digits ? Math.max(1, Number(digits)) : undefined); } }}
+                        value={field.value || ''}
                         onChange={(e) => {
                           const value = parseInt(e.target.value);
-                          if (isNaN(value) || value < 0) {
+                          if (isNaN(value) || value < 1) {
                             field.onChange(undefined);
                           } else {
                             field.onChange(value);
@@ -249,11 +253,15 @@ export const ResalePropertyDetailsStep: React.FC<ResalePropertyDetailsStepProps>
                       <Input
                         type="number"
                         placeholder="Carpet Area"
+                        min="1"
                         className="h-12 pr-12"
                         {...field}
+                        onKeyDown={(e) => { if (['-','+','e','E','.'].includes(e.key)) e.preventDefault(); }}
+                        onPaste={(e) => { const text = e.clipboardData.getData('text'); const digits = text.replace(/[^0-9]/g, ''); if (digits !== text) { e.preventDefault(); field.onChange(digits ? Math.max(1, Number(digits)) : undefined); } }}
+                        value={field.value || ''}
                         onChange={(e) => {
                           const value = parseInt(e.target.value);
-                          if (isNaN(value) || value < 0) {
+                          if (isNaN(value) || value < 1) {
                             field.onChange(undefined);
                           } else {
                             field.onChange(value);

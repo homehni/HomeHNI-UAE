@@ -126,7 +126,12 @@ export function PgHostelRoomDetailsStep({
                     min="1"
                     max="20"
                     value={formData.roomCount}
-                    onChange={(e) => setFormData({ ...formData, roomCount: parseInt(e.target.value) || 1 })}
+                    onChange={(e) => {
+                      const value = parseInt(e.target.value);
+                      setFormData({ ...formData, roomCount: value >= 1 ? value : 1 });
+                    }}
+                    onKeyDown={(e) => { if (['-','+','e','E','.'].includes(e.key)) e.preventDefault(); }}
+                    onPaste={(e) => { const text = e.clipboardData.getData('text'); const digits = text.replace(/[^0-9]/g, ''); if (digits !== text) { e.preventDefault(); } }}
                     placeholder="Enter number of rooms"
                     className="h-14 text-lg"
                   />

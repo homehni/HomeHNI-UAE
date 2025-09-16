@@ -232,7 +232,12 @@ export const CommercialSalePropertyDetailsStep = ({
                     <Input 
                       type="number" 
                       placeholder="e.g., 2000" 
+                      min="1"
                       {...field}
+                      onKeyDown={(e) => { if (['-','+','e','E','.'].includes(e.key)) e.preventDefault(); }}
+                      onPaste={(e) => { const text = e.clipboardData.getData('text'); const digits = text.replace(/[^0-9]/g, ''); if (digits !== text) { e.preventDefault(); field.onChange(digits ? Math.max(1, Number(digits)) : undefined); } }}
+                      value={field.value || ''}
+                      onChange={(e) => field.onChange(e.target.value ? Math.max(1, Number(e.target.value)) : undefined)}
                     />
                   </FormControl>
                   <FormMessage />

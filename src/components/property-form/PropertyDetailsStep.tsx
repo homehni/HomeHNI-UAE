@@ -20,7 +20,7 @@ const propertyDetailsSchema = z.object({
   floorType: z.string().optional(),
   totalFloors: z.union([z.number(), z.string()]).optional(),
   floorNo: z.union([z.number(), z.string()]).optional(),
-  superBuiltUpArea: z.number().min(1, "Super built up area is required and must be greater than 0"),
+  superBuiltUpArea: z.number().min(1, "Super built up area is required and must be at least 1"),
   onMainRoad: z.boolean().optional(),
   cornerProperty: z.boolean().optional(),
 });
@@ -129,10 +129,14 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
                       <FormControl>
                         <Input
                           type="number"
-                          placeholder="943"
+                          placeholder=""
+                          min="1"
                           className="h-10 pr-12 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
                           {...field}
-                          onChange={(e) => field.onChange(e.target.value === '' ? undefined : parseInt(e.target.value, 10))}
+                          onKeyDown={(e) => { if (['-','+','e','E','.'].includes(e.key)) e.preventDefault(); }}
+                          onPaste={(e) => { const text = e.clipboardData.getData('text'); const digits = text.replace(/[^0-9]/g, ''); if (digits !== text) { e.preventDefault(); field.onChange(digits ? Math.max(1, Number(digits)) : undefined); } }}
+                          value={field.value || ''}
+                          onChange={(e) => field.onChange(e.target.value ? Math.max(1, Number(e.target.value)) : undefined)}
                         />
                       </FormControl>
                       <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-sm text-muted-foreground">
