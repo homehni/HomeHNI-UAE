@@ -82,14 +82,8 @@ export const CommercialSalePropertyDetailsStep = ({
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
-      <div className="mb-8">
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">Commercial Property Details</h2>
-        <p className="text-gray-600">Tell us about your commercial space for sale</p>
-        <div className="mt-4 text-sm text-gray-500">
-          Step {currentStep} of {totalSteps}
-        </div>
-      </div>
+    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
+      <h1 className="text-2xl font-semibold text-primary mb-6">Commercial Property Details</h1>
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit, onError)} className="space-y-6">

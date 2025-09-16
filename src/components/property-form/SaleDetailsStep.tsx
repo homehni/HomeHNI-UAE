@@ -161,12 +161,10 @@ export const SaleDetailsStep: React.FC<SaleDetailsStepProps> = ({
   };
 
   return (
-    <div className="space-y-8">
-      {/* Header */}
-      <div className="text-center">
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">Resale Details</h2>
-        <p className="text-gray-600">Enter the sale-specific details for your property</p>
-      </div>
+    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
+      <h1 className="text-2xl font-semibold text-teal-600 mb-6">
+        Provide sale details about your property
+      </h1>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         
