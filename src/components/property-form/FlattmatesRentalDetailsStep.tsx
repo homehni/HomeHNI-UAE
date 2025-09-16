@@ -155,7 +155,7 @@ export function FlattmatesRentalDetailsStep({
                 </div>
 
                 <div className="flex justify-between pt-6">
-                  <Button type="button" variant="outline" onClick={onBack}>
+                  <Button type="button" variant="white" onClick={onBack}>
                     Back
                   </Button>
                   <Button type="submit" variant="default">

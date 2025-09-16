@@ -10,7 +10,7 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-brand-red text-white hover:bg-brand-red-dark",
+        default: "bg-brand-maroon-dark text-white hover:bg-brand-maroon",
         destructive:
           "bg-destructive text-destructive-foreground hover:bg-destructive/90",
         outline:
@@ -19,6 +19,7 @@ const buttonVariants = cva(
           "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
+        white: "bg-white text-foreground border border-input hover:bg-gray-50",
       },
       size: {
         default: "h-10 px-4 py-2",
