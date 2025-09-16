@@ -158,7 +158,7 @@ export function FlattmatesRentalDetailsStep({
                   <Button type="button" variant="outline" onClick={onBack}>
                     Back
                   </Button>
-                  <Button type="submit">
+                  <Button type="submit" variant="default">
                     Save & Continue
                   </Button>
                 </div>
