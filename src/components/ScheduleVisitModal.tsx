@@ -161,24 +161,25 @@ export const ScheduleVisitModal: React.FC<ScheduleVisitModalProps> = ({
 
   // Success Screen Component
   const SuccessScreen = () => (
-    <div className="text-center space-y-6 py-8">
+    <div className="text-center space-y-4 py-6">
       <div className="flex justify-center">
-        <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
-          <CheckCircle className="w-8 h-8 text-green-600" />
+        <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+          <CheckCircle className="w-6 h-6 text-green-600" />
         </div>
       </div>
       
       <div className="space-y-2">
-        <h2 className="text-xl font-semibold text-gray-900">Visit Booked Successfully</h2>
-        <p className="text-green-600 font-medium">{bookedDateTime}</p>
-        <p className="text-sm text-gray-600">
+        <h2 className="text-lg font-semibold text-gray-900">Visit Booked Successfully</h2>
+        <p className="text-green-600 font-medium text-sm">{bookedDateTime}</p>
+        <p className="text-xs text-gray-600">
           You will get all details regarding this visit on your registered number directly.
         </p>
       </div>
       
-      <div className="flex flex-col sm:flex-row gap-3 justify-center">
+      <div className="flex flex-col sm:flex-row gap-2 justify-center pt-2">
         <Button
           variant="outline"
+          size="sm"
           className="flex items-center gap-2"
           onClick={() => window.open(`tel:${formData.phone}`, '_self')}
         >
@@ -186,6 +187,7 @@ export const ScheduleVisitModal: React.FC<ScheduleVisitModalProps> = ({
           Call
         </Button>
         <Button
+          size="sm"
           className="flex items-center gap-2"
           onClick={handleClose}
         >
@@ -207,7 +209,7 @@ export const ScheduleVisitModal: React.FC<ScheduleVisitModalProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-lg max-h-[80vh] overflow-y-auto">
         {showSuccess ? (
           <SuccessScreen />
         ) : (
