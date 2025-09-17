@@ -445,9 +445,9 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
             name="moreSimilarUnits"
             render={({ field }) => (
               <FormItem>
-                <div className="flex items-center space-x-4">
+                <div className="flex flex-col space-y-3 sm:flex-row sm:items-center sm:space-y-0 sm:space-x-4">
                   <FormLabel>Do you have more similar <strong>units/properties</strong> available ?</FormLabel>
-                   <div className="flex space-x-2">
+                   <div className="flex space-x-2 justify-center sm:justify-start">
                      <Button
                        type="button"
                        variant={field.value === false ? "default" : "outline"}
