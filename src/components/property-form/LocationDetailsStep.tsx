@@ -315,7 +315,7 @@ export const LocationDetailsStep: React.FC<LocationDetailsStepProps> = ({
                   />
 
                   {/* Locality/Area and Landmark */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
                     <FormField
                       control={form.control}
                       name="locality"
