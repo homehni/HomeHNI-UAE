@@ -87,7 +87,8 @@ export const RentalDetailsStep: React.FC<RentalDetailsStepProps> = ({
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
+  <>
+    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8 pb-24">
       <h1 className="text-2xl font-semibold text-teal-600 mb-6">
         Provide rental details about your property
       </h1>
@@ -481,17 +482,15 @@ export const RentalDetailsStep: React.FC<RentalDetailsStepProps> = ({
               )}
             />
           </div>
-
-          <div className="flex justify-start gap-4 pt-6">
-            <Button type="button" variant="outline" onClick={onBack} className="h-12 px-8">
-              Back
-            </Button>
-            <Button type="submit" className="h-12 px-8">
-              Save & Continue
-            </Button>
-          </div>
         </form>
       </Form>
     </div>
+
+    <StickyFormNavigation
+      onBack={onBack}
+      onNext={() => form.handleSubmit(onSubmit)()}
+      nextButtonText="Save & Continue"
+    />
+  </>
   );
 };

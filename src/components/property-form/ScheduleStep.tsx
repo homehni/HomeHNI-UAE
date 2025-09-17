@@ -58,7 +58,8 @@ export const ScheduleStep: React.FC<ScheduleStepProps> = ({
   const watchAvailableAllDay = form.watch('availableAllDay');
 
   return (
-    <div>
+  <>
+    <div className="pb-24">
       {/* Main Title */}
       <div className="mb-8 text-center">
         <h1 className="text-2xl font-bold text-primary mb-2">
@@ -316,16 +317,15 @@ export const ScheduleStep: React.FC<ScheduleStepProps> = ({
           </div>
 
           {/* Action Buttons */}
-          <div className="flex justify-between pt-8">
-            <Button type="button" variant="white" onClick={onBack} className="px-8">
-              Back
-            </Button>
-            <Button type="submit" className="px-8 bg-destructive hover:bg-destructive/90">
-              {onSubmit ? 'Submit' : 'Finish Posting'}
-            </Button>
-          </div>
         </form>
       </Form>
     </div>
+
+    <StickyFormNavigation
+      onBack={onBack}
+      onNext={() => form.handleSubmit(onSubmit)()}
+      nextButtonText={onSubmit ? 'Submit' : 'Finish Posting'}
+    />
+  </>
   );
 };

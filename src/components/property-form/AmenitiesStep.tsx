@@ -9,6 +9,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
+import { StickyFormNavigation } from './StickyFormNavigation';
 import { PropertyAmenities } from '@/types/property';
 import { ProgressIndicator } from './ProgressIndicator';
 import { 
@@ -114,7 +115,8 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
   };
 
   return (
-    <div className="bg-background rounded-lg border p-6">
+  <>
+    <div className="bg-background rounded-lg border p-6 pb-24">
       <div className="text-center mb-8">
         <h2 className="text-2xl font-bold text-primary mb-2">Provide additional details about your property to get maximum visibility</h2>
       </div>
@@ -806,17 +808,15 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
 
             </div>
           </div>
-
-          <div className="flex justify-between pt-6">
-            <Button type="button" variant="outline" onClick={onBack} className="bg-muted text-muted-foreground">
-              Back
-            </Button>
-            <Button type="submit" className="bg-primary text-primary-foreground">
-              Save & Continue
-            </Button>
-          </div>
         </form>
       </Form>
     </div>
+
+    <StickyFormNavigation
+      onBack={onBack}
+      onNext={() => form.handleSubmit(onSubmit)()}
+      nextButtonText="Save & Continue"
+    />
+  </>
   );
 };
