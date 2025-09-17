@@ -305,7 +305,7 @@ const PaintingCleaningEmbedded = () => {
                   className="h-12 text-base bg-background"
                 />
 
-                <div className="flex gap-3">
+                <div className="flex flex-col md:flex-row gap-3">
                   <Select name="serviceType">
                     <SelectTrigger id="service-type-mobile" className="flex-1 h-12 bg-background">
                       <SelectValue placeholder="Service Type" />
@@ -327,7 +327,7 @@ const PaintingCleaningEmbedded = () => {
                   </Select>
                 </div>
 
-                <div className="flex gap-3">
+                <div className="flex flex-col md:flex-row gap-3">
                   <Select name="country">
                     <SelectTrigger id="painting-country-mobile" className="flex-1 h-12 bg-background">
                       <SelectValue placeholder="Country" />
