@@ -320,7 +320,7 @@ export const LocationDetailsStep: React.FC<LocationDetailsStepProps> = ({
                       control={form.control}
                       name="locality"
                       render={({ field }) => (
-                        <FormItem className="flex-1">
+                        <FormItem className="flex-1 space-y-2">
                           <FormLabel className="text-sm font-medium flex items-center gap-2">
                             <MapPin className="h-4 w-4 text-primary" />
                             Locality/Area *
@@ -358,8 +358,11 @@ export const LocationDetailsStep: React.FC<LocationDetailsStepProps> = ({
                       control={form.control}
                       name="landmark"
                       render={({ field }) => (
-                        <FormItem className="flex-1">
-                          <FormLabel className="text-sm font-medium">Landmark (Optional)</FormLabel>
+                        <FormItem className="flex-1 space-y-2">
+                          <FormLabel className="text-sm font-medium flex items-center gap-2">
+                            <MapPin className="h-4 w-4 opacity-0" />
+                            Landmark (Optional)
+                          </FormLabel>
                           <FormControl>
                             <Input
                               placeholder="e.g., Near Metro Station"
