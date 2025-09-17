@@ -355,7 +355,7 @@ const LoansEmbedded = () => {
                   className="h-12 text-base bg-background"
                 />
 
-                <div className="flex gap-3">
+                <div className="flex flex-col md:flex-row gap-3">
                   <Select defaultValue="India" name="country">
                     <SelectTrigger className="flex-1 h-12 bg-background">
                       <SelectValue placeholder="Country" />
@@ -395,7 +395,7 @@ const LoansEmbedded = () => {
                   </Select>
                 </div>
 
-                <div className="flex gap-3">
+                <div className="flex flex-col md:flex-row gap-3">
                   <Select name="loanType">
                     <SelectTrigger className="flex-1 h-12 bg-background">
                       <SelectValue placeholder="Loan Type" />
