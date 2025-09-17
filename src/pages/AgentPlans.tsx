@@ -242,7 +242,7 @@ const AgentPlans = () => {
                           plan.badgeColor === 'bg-indigo-500' ? 'bg-indigo-50 text-indigo-800' :
                           'bg-gray-50 text-gray-800'
                         }`}>
-                          <strong>Best For:</strong> {bestForDescriptions[tabKey as keyof typeof bestForDescriptions][index]}
+                          <strong>Best For:</strong>
                         </div>
                         
                         <PayButton
