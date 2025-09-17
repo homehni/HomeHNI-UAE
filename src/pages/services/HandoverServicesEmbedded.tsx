@@ -229,7 +229,7 @@ const HandoverServicesEmbedded = () => {
                   </Select>
                 </div>
 
-                <div className="flex gap-3">
+                <div className="flex flex-col md:flex-row gap-3">
                   <Select name="country">
                     <SelectTrigger id="handover-country-mobile" className="flex-1 h-12 bg-background">
                       <SelectValue placeholder="Country" />
