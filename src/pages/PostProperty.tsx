@@ -752,10 +752,8 @@ export const PostProperty: React.FC = () => {
           : "Your property has been published successfully and is now live on the platform.",
       });
 
-      // Navigate to dashboard after successful submission/update
-      setTimeout(() => {
-        navigate('/dashboard?tab=properties');
-      }, 2000);
+      // Stay on the Preview step after submission - no redirect
+
 
     } catch (error: any) {
       console.error('Error submitting property:', error);
