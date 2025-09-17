@@ -61,7 +61,7 @@ export const ScheduleVisitModal: React.FC<ScheduleVisitModalProps> = ({
     interestedInHomeLoan: false,
     interestedInSiteVisit: true,
     immediateVisit: false,
-    agreeToTerms: false,
+    agreeToTerms: true,
     visitDate: undefined,
     visitTime: ''
   });
@@ -132,7 +132,7 @@ export const ScheduleVisitModal: React.FC<ScheduleVisitModalProps> = ({
         interestedInHomeLoan: false,
         interestedInSiteVisit: true,
         immediateVisit: false,
-        agreeToTerms: false,
+        agreeToTerms: true,
         visitDate: undefined,
         visitTime: ''
       });
@@ -429,7 +429,6 @@ export const ScheduleVisitModal: React.FC<ScheduleVisitModalProps> = ({
                     type="submit"
                     disabled={
                       isSubmitting || 
-                      !formData.agreeToTerms || 
                       !formData.name.trim() || 
                       !formData.phone.trim() || 
                       !formData.email.trim() || 
@@ -447,7 +446,6 @@ export const ScheduleVisitModal: React.FC<ScheduleVisitModalProps> = ({
                         visitDate: formData.visitDate,
                         visitTime: formData.visitTime,
                         isDisabled: isSubmitting || 
-                          !formData.agreeToTerms || 
                           !formData.name.trim() || 
                           !formData.phone.trim() || 
                           !formData.email.trim() || 
