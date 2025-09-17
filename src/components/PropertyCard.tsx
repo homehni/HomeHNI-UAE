@@ -1,4 +1,4 @@
-import { Heart, MapPin, Bed, Bath, Square, Phone, Home } from 'lucide-react';
+import { Heart, MapPin, Bed, Bath, Square, Phone } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
@@ -9,7 +9,6 @@ import { FavoriteButton } from '@/components/FavoriteButton';
 import { ContactOwnerModal } from '@/components/ContactOwnerModal';
 import { supabase } from '@/integrations/supabase/client';
 import propertyPlaceholder from '@/assets/property-placeholder.png';
-import housePlaceholder from '@/assets/house-placeholder.png';
 
 interface PropertyCardProps {
   id: string;
@@ -40,7 +39,6 @@ const PropertyCard = ({
 }: PropertyCardProps) => {
   const navigate = useNavigate();
   const [showContactModal, setShowContactModal] = useState(false);
-  const [hasImageError, setHasImageError] = useState(false);
 
   const parsePriceToNumber = (priceStr: string) => {
     const lower = priceStr.toLowerCase();
@@ -236,12 +234,6 @@ const PropertyCard = ({
     }
     return propertyPlaceholder;
   };
-  const imageUrl = getImageUrl();
-  const showIconFallback = hasImageError || 
-                          !imageUrl || 
-                          imageUrl === propertyPlaceholder || 
-                          imageUrl.includes('property-placeholder') ||
-                          imageUrl.includes('placeholder.svg');
 
   return (
     <Card className="w-full overflow-hidden card-border hover-lift cursor-pointer bg-white border-2 border-brand-red/30 hover:border-brand-red/60" onClick={() => {
@@ -250,24 +242,17 @@ const PropertyCard = ({
     }}>
       <div className="relative">
         <div className="h-24 overflow-hidden">
-          {showIconFallback ? (
-            <div className="w-full h-full bg-muted flex items-center justify-center">
-              <img 
-                src={housePlaceholder} 
-                alt="Property placeholder" 
-                className="w-12 h-12 opacity-60"
-              />
-            </div>
-          ) : (
-            <img
-              src={imageUrl}
-              alt={title}
-              loading="lazy"
-              decoding="async"
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-              onError={() => setHasImageError(true)}
-            />
-          )}
+          <img
+            src={getImageUrl()}
+            alt={title}
+            loading="lazy"
+            decoding="async"
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            onError={(e) => {
+              e.currentTarget.src = propertyPlaceholder;
+              e.currentTarget.alt = 'Image not available';
+            }}
+          />
         </div>
         <FavoriteButton 
           propertyId={id}
