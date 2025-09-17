@@ -22,13 +22,15 @@ interface ResaleMultiStepFormProps {
   isSubmitting?: boolean;
   initialOwnerInfo?: Partial<OwnerInfo>;
   targetStep?: number | null;
+  createdSubmissionId?: string | null;
 }
 
 export const ResaleMultiStepForm: React.FC<ResaleMultiStepFormProps> = ({
   onSubmit,
   isSubmitting = false,
   initialOwnerInfo = {},
-  targetStep = null
+  targetStep = null,
+  createdSubmissionId = null
 }) => {
   const {
     currentStep,
@@ -217,6 +219,7 @@ const handleScheduleSubmit = (data: any) => {
                 onEdit={goToStep}
                 onSubmit={handleSubmit}
                 isSubmitting={isSubmitting}
+                previewPropertyId={createdSubmissionId || undefined}
               />
             )}
           </div>
@@ -301,6 +304,7 @@ const handleScheduleSubmit = (data: any) => {
                     onEdit={goToStep}
                     onSubmit={handleSubmit}
                     isSubmitting={isSubmitting}
+                    previewPropertyId={createdSubmissionId || undefined}
                   />
                 )}
               </div>

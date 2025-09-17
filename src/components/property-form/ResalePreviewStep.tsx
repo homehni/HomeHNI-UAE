@@ -12,6 +12,7 @@ interface ResalePreviewStepProps {
   onEdit: (step: number) => void;
   onSubmit: () => void;
   isSubmitting?: boolean;
+  previewPropertyId?: string;
 }
 
 export const ResalePreviewStep: React.FC<ResalePreviewStepProps> = ({
@@ -19,7 +20,8 @@ export const ResalePreviewStep: React.FC<ResalePreviewStepProps> = ({
   onBack,
   onEdit,
   onSubmit,
-  isSubmitting = false
+  isSubmitting = false,
+  previewPropertyId
 }) => {
   const [showSuccess, setShowSuccess] = useState(false);
   const [showNoPhotosMessage, setShowNoPhotosMessage] = useState(false);
@@ -27,7 +29,6 @@ export const ResalePreviewStep: React.FC<ResalePreviewStepProps> = ({
   const { ownerInfo, propertyInfo } = formData;
 
   const handleSubmit = () => {
-    onSubmit();
     setShowSuccess(true);
   };
 

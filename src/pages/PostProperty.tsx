@@ -47,6 +47,7 @@ export const PostProperty: React.FC = () => {
     listingType: 'Rent' | 'Resale' | 'PG/Hostel' | 'Flatmates';
   } | null>(null);
   const [targetStep, setTargetStep] = useState<number | null>(null);
+  const [lastSubmissionId, setLastSubmissionId] = useState<string | null>(null);
   const { user } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
@@ -635,7 +636,7 @@ export const PostProperty: React.FC = () => {
         }
       } else {
         // Insert new property submission
-        const { error: insertError } = await supabase
+        const { data: inserted, error: insertError } = await supabase
           .from('property_submissions')
           .insert({
             user_id: user.id,
@@ -652,7 +653,13 @@ export const PostProperty: React.FC = () => {
                 propertyInfo: JSON.parse(JSON.stringify(data.propertyInfo))
               }
             }
-          });
+          })
+          .select('id')
+          .single();
+        
+        if (!insertError && inserted?.id) {
+          setLastSubmissionId(inserted.id);
+        }
         
         error = insertError;
       }
@@ -832,6 +839,7 @@ export const PostProperty: React.FC = () => {
             isSubmitting={isSubmitting}
             initialOwnerInfo={ownerInfo || {}}
             targetStep={targetStep}
+            createdSubmissionId={lastSubmissionId}
           />
         );
       case 'pg-hostel-form':
