@@ -7,10 +7,10 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Calendar as CalendarComponent } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { Calendar, X, CalendarIcon, Clock, Phone, Eye, CheckCircle } from 'lucide-react';
+import { X, Calendar as CalendarIcon, Phone, Eye, CheckCircle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Link } from 'react-router-dom';
-import { format } from "date-fns";
+import { format, startOfToday } from "date-fns";
 import { cn } from "@/lib/utils";
 
 interface ScheduleVisitModalProps {
@@ -105,7 +105,7 @@ export const ScheduleVisitModal: React.FC<ScheduleVisitModalProps> = ({
       
       // Format the booked date and time
       const formattedDateTime = formData.visitDate ? 
-        `${format(formData.visitDate, "EEEE, do MMMM")} at ${formData.visitTime}` : '';
+        `${format(formData.visitDate, "EEE, do MMMM")} at ${formData.visitTime}` : '';
       setBookedDateTime(formattedDateTime);
       setShowSuccess(true);
       
@@ -316,7 +316,7 @@ export const ScheduleVisitModal: React.FC<ScheduleVisitModalProps> = ({
                               mode="single"
                               selected={formData.visitDate}
                               onSelect={(date) => handleChange('visitDate', date)}
-                              disabled={(date) => date < new Date()}
+                              disabled={(date) => date < startOfToday()}
                               initialFocus
                               className="p-3 pointer-events-auto"
                             />
