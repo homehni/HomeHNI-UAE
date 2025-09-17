@@ -10,10 +10,10 @@ import PayButton from '@/components/PayButton';
 
 const BuilderLifetimePlans = () => {
   const [selectedPlans, setSelectedPlans] = useState({
-    residential: 0,
-    commercial: 0, 
-    industrial: 0,
-    agricultural: 0
+    residential: 1,
+    commercial: 1, 
+    industrial: 1,
+    agricultural: 1
   });
   const [isTermsModalOpen, setIsTermsModalOpen] = useState(false);
 

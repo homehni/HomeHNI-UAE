@@ -9,10 +9,10 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 
 const CommercialBuyerPlan = () => {
   const [selectedPlans, setSelectedPlans] = useState({
-    residential: 0,
-    commercial: 0, 
-    industrial: 0,
-    agricultural: 0
+    residential: 1,
+    commercial: 1, 
+    industrial: 1,
+    agricultural: 1
   });
   const [isTermsModalOpen, setIsTermsModalOpen] = useState(false);
 
@@ -323,7 +323,6 @@ const CommercialBuyerPlan = () => {
                                 <span className="text-lg text-gray-400 line-through">{plan.originalPrice}</span>
                                 <span className="text-2xl font-bold text-green-600">{plan.freePrice}</span>
                               </div>
-                              <div className="text-sm text-gray-500">{plan.gst}</div>
                             </div>
                           ) : (
                             <>
