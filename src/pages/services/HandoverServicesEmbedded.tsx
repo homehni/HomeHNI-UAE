@@ -213,10 +213,10 @@ const HandoverServicesEmbedded = () => {
                   </SelectContent>
                 </Select>
 
-                <div className="flex gap-3">
+                <div className="flex flex-col md:flex-row gap-3">
                   <Input id="handover-location-mobile" name="location" placeholder="Property Location" className="flex-1 h-12 text-base bg-background" />
                   <Select name="handoverType" required>
-                    <SelectTrigger id="handover-type-mobile" className="w-40 h-12 bg-background">
+                    <SelectTrigger id="handover-type-mobile" className="w-full md:w-40 h-12 bg-background">
                       <SelectValue placeholder="Handover Type" />
                     </SelectTrigger>
                     <SelectContent className="bg-background border shadow-lg">
