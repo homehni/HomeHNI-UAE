@@ -149,6 +149,95 @@ const PropertyManagementEmbedded = () => {
         </div>
       </section>
 
+      {/* Mobile Form */}
+      <section className="lg:hidden px-4 py-8 bg-background">
+        <div className="container mx-auto max-w-xl">
+          <Card className="w-full rounded-2xl shadow-xl border-2 border-primary bg-card">
+            <CardContent className="p-6 md:p-8">
+              <h3 className="text-xl md:text-2xl font-bold text-foreground mb-3">Got a property to be managed?</h3>
+              <p className="text-sm md:text-base text-muted-foreground mb-6 md:mb-8">Just fill up the form & we will take care of the rest</p>
+
+              <form className="space-y-5" onSubmit={e => {
+                e.preventDefault();
+                const form = e.currentTarget as HTMLFormElement;
+                
+                if (!form.checkValidity()) {
+                  form.reportValidity();
+                  toast({
+                    title: "Required Fields Missing",
+                    description: "Please fill in all required fields before submitting.",
+                    variant: "destructive"
+                  });
+                  return;
+                }
+
+                toast({
+                  title: "Request received",
+                  description: "Our property management expert will contact you shortly."
+                });
+                form.reset();
+              }}>
+                <Input id="prop-name-mobile" name="name" placeholder="Name" className="h-10 md:h-12 text-sm md:text-base bg-background" required />
+
+                <div className="flex gap-2 md:gap-3">
+                  <Select defaultValue="+91" name="countryCode">
+                    <SelectTrigger className="w-24 md:w-32 h-10 md:h-12 bg-background">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent className="bg-background border shadow-lg">
+                      <SelectItem value="+91">🇮🇳 +91</SelectItem>
+                      <SelectItem value="+1">🇺🇸 +1</SelectItem>
+                      <SelectItem value="+44">🇬🇧 +44</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <Input id="prop-phone-mobile" name="phone" type="tel" placeholder="Phone Number" className="flex-1 h-10 md:h-12 text-sm md:text-base bg-background" required />
+                </div>
+
+                <Input id="prop-email-mobile" name="email" type="email" placeholder="Email ID" className="h-10 md:h-12 text-sm md:text-base bg-background" required />
+
+                <div className="flex flex-col sm:flex-row gap-2 md:gap-3">
+                  <Select name="propertyType" required>
+                    <SelectTrigger id="prop-type-mobile" className="h-10 md:h-12 bg-background">
+                      <SelectValue placeholder="Property Type" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-background border shadow-lg">
+                      <SelectItem value="apartment">Apartment</SelectItem>
+                      <SelectItem value="villa">Villa</SelectItem>
+                      <SelectItem value="independent-house">Independent House</SelectItem>
+                      <SelectItem value="commercial">Commercial Property</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <Input id="prop-location-mobile" name="location" placeholder="Property Location" className="h-10 md:h-12 text-sm md:text-base bg-background" />
+                </div>
+
+                <div className="flex flex-col sm:flex-row gap-2 md:gap-3">
+                  <Select name="city" required>
+                    <SelectTrigger id="prop-city-mobile" className="h-10 md:h-12 bg-background">
+                      <SelectValue placeholder="City" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-background border shadow-lg">
+                      <SelectItem value="bangalore">Bangalore</SelectItem>
+                      <SelectItem value="mumbai">Mumbai</SelectItem>
+                      <SelectItem value="delhi">Delhi</SelectItem>
+                      <SelectItem value="pune">Pune</SelectItem>
+                      <SelectItem value="hyderabad">Hyderabad</SelectItem>
+                      <SelectItem value="chennai">Chennai</SelectItem>
+                      <SelectItem value="kolkata">Kolkata</SelectItem>
+                      <SelectItem value="ahmedabad">Ahmedabad</SelectItem>
+                      <SelectItem value="other">Other</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <Button type="submit" className="w-full h-10 md:h-12 text-sm md:text-base font-semibold bg-red-600 hover:bg-red-700 text-white mt-4 md:mt-6">
+                  Talk to Us Today!
+                </Button>
+              </form>
+            </CardContent>
+          </Card>
+        </div>
+      </section>
+
       {/* Our Services */}
       <section className="py-16 px-4 bg-background">
         <div className="container mx-auto">
