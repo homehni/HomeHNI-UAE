@@ -328,10 +328,10 @@ const PaintingCleaning = () => {
                   className="h-14 text-lg bg-background px-4"
                 />
 
-                <div className="space-y-4">
-                  <div className="flex gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
                     <Select name="serviceType">
-                      <SelectTrigger id="service-type-mobile" className="flex-1 h-14 bg-background text-lg">
+                      <SelectTrigger id="service-type-mobile" className="w-full h-14 bg-background text-lg">
                         <SelectValue placeholder="Service Type" />
                       </SelectTrigger>
                       <SelectContent className="bg-background border shadow-lg">
@@ -340,8 +340,10 @@ const PaintingCleaning = () => {
                         <SelectItem value="both">Both Painting & Cleaning</SelectItem>
                       </SelectContent>
                     </Select>
+                  </div>
+                  <div>
                     <Select name="propertyType">
-                      <SelectTrigger id="property-type-mobile" className="flex-1 h-14 bg-background text-lg">
+                      <SelectTrigger id="property-type-mobile" className="w-full h-14 bg-background text-lg">
                         <SelectValue placeholder="Property Type" />
                       </SelectTrigger>
                       <SelectContent className="bg-background border shadow-lg">

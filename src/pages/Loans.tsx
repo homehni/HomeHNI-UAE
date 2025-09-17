@@ -379,10 +379,10 @@ const Loans = () => {
                   className="h-14 text-lg bg-background px-4"
                 />
 
-                <div className="space-y-4">
-                  <div className="flex gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
                     <Select defaultValue="India" name="country">
-                      <SelectTrigger className="flex-1 h-14 bg-background text-lg">
+                      <SelectTrigger className="w-full h-14 bg-background text-lg">
                         <SelectValue placeholder="Country" />
                       </SelectTrigger>
                       <SelectContent className="bg-background border shadow-lg">
@@ -392,9 +392,10 @@ const Loans = () => {
                         <SelectItem value="Other">Other</SelectItem>
                       </SelectContent>
                     </Select>
-
+                  </div>
+                  <div>
                     <Select name="state" onValueChange={setSelectedState}>
-                      <SelectTrigger className="flex-1 h-14 bg-background text-lg">
+                      <SelectTrigger className="w-full h-14 bg-background text-lg">
                         <SelectValue placeholder="State" />
                       </SelectTrigger>
                       <SelectContent className="bg-background border shadow-lg">
@@ -406,19 +407,20 @@ const Loans = () => {
                       </SelectContent>
                     </Select>
                   </div>
-
-                  <Select name="city">
-                    <SelectTrigger className="w-full h-14 bg-background text-lg">
-                      <SelectValue placeholder="City" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-background border shadow-lg">
-                      {cities.map((city: string) => (
-                        <SelectItem key={city} value={city}>
-                          {city}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <div className="sm:col-span-2">
+                    <Select name="city">
+                      <SelectTrigger className="w-full h-14 bg-background text-lg">
+                        <SelectValue placeholder="City" />
+                      </SelectTrigger>
+                      <SelectContent className="bg-background border shadow-lg">
+                        {cities.map((city: string) => (
+                          <SelectItem key={city} value={city}>
+                            {city}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
                 </div>
 
                 <div className="space-y-4">
