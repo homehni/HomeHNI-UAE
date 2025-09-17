@@ -224,7 +224,7 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
               render={({ field }) => (
                 <FormItem>
                   <div className="flex items-center space-x-3">
-                    <PawPrint className="w-5 h-5 text-muted-foreground" />
+                    <PawPrint className="w-5 h-5 text-muted-foreground hidden sm:inline" />
                     <FormLabel>Pet Allowed*</FormLabel>
                   </div>
                    <div className="flex space-x-2">
@@ -259,7 +259,7 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
               render={({ field }) => (
                 <FormItem>
                   <div className="flex items-center space-x-3">
-                    <Dumbbell className="w-5 h-5 text-muted-foreground" />
+                    <Dumbbell className="w-5 h-5 text-muted-foreground hidden sm:inline" />
                     <FormLabel>Gym*</FormLabel>
                   </div>
                    <div className="flex space-x-2">
@@ -294,7 +294,7 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
               render={({ field }) => (
                 <FormItem>
                   <div className="flex items-center space-x-3">
-                    <UtensilsCrossed className="w-5 h-5 text-muted-foreground" />
+                    <UtensilsCrossed className="w-5 h-5 text-muted-foreground hidden sm:inline" />
                     <FormLabel>Non-Veg Allowed*</FormLabel>
                   </div>
                    <div className="flex space-x-2">
@@ -329,7 +329,7 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
               render={({ field }) => (
                 <FormItem>
                   <div className="flex items-center space-x-3">
-                    <Shield className="w-5 h-5 text-muted-foreground" />
+                    <Shield className="w-5 h-5 text-muted-foreground hidden sm:inline" />
                     <FormLabel>Gated Security*</FormLabel>
                   </div>
                    <div className="flex space-x-2">
@@ -510,7 +510,7 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
                         onCheckedChange={(checked) => field.onChange(checked ? 'Available' : 'Not Available')}
                       />
                     </FormControl>
-                    <MoveUp className="w-5 h-5 text-muted-foreground" />
+                    <MoveUp className="w-5 h-5 text-muted-foreground hidden sm:inline" />
                     <FormLabel className="font-normal cursor-pointer">Lift</FormLabel>
                   </FormItem>
                 )}
@@ -528,7 +528,7 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
                         onCheckedChange={(checked) => field.onChange(checked ? 'Available' : 'Not Available')}
                       />
                     </FormControl>
-                    <Wifi className="w-5 h-5 text-muted-foreground" />
+                    <Wifi className="w-5 h-5 text-muted-foreground hidden sm:inline" />
                     <FormLabel className="font-normal cursor-pointer">Internet Services</FormLabel>
                   </FormItem>
                 )}
@@ -546,7 +546,7 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
                         onCheckedChange={(checked) => field.onChange(checked ? 'Available' : 'Not Available')}
                       />
                     </FormControl>
-                    <AirVent className="w-5 h-5 text-muted-foreground" />
+                    <AirVent className="w-5 h-5 text-muted-foreground hidden sm:inline" />
                     <FormLabel className="font-normal cursor-pointer">Air Conditioner</FormLabel>
                   </FormItem>
                 )}
@@ -564,7 +564,7 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
                         onCheckedChange={(checked) => field.onChange(checked ? 'Available' : 'Not Available')}
                       />
                     </FormControl>
-                    <Users className="w-5 h-5 text-muted-foreground" />
+                    <Users className="w-5 h-5 text-muted-foreground hidden sm:inline" />
                     <FormLabel className="font-normal cursor-pointer">Club House</FormLabel>
                   </FormItem>
                 )}
@@ -582,7 +582,7 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
                         onCheckedChange={(checked) => field.onChange(checked ? 'Available' : 'Not Available')}
                       />
                     </FormControl>
-                    <MessageCircle className="w-5 h-5 text-muted-foreground" />
+                    <MessageCircle className="w-5 h-5 text-muted-foreground hidden sm:inline" />
                     <FormLabel className="font-normal cursor-pointer">Intercom</FormLabel>
                   </FormItem>
                 )}
@@ -600,7 +600,7 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
                         onCheckedChange={(checked) => field.onChange(checked ? 'Available' : 'Not Available')}
                       />
                     </FormControl>
-                    <Waves className="w-5 h-5 text-muted-foreground" />
+                    <Waves className="w-5 h-5 text-muted-foreground hidden sm:inline" />
                     <FormLabel className="font-normal cursor-pointer">Swimming Pool</FormLabel>
                   </FormItem>
                 )}
@@ -618,7 +618,7 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
                         onCheckedChange={(checked) => field.onChange(checked ? 'Available' : 'Not Available')}
                       />
                     </FormControl>
-                    <Accessibility className="w-5 h-5 text-muted-foreground" />
+                    <Accessibility className="w-5 h-5 text-muted-foreground hidden sm:inline" />
                     <FormLabel className="font-normal cursor-pointer">Children Play Area</FormLabel>
                   </FormItem>
                 )}
@@ -636,7 +636,7 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
                         onCheckedChange={(checked) => field.onChange(checked ? 'Available' : 'Not Available')}
                       />
                     </FormControl>
-                    <Flame className="w-5 h-5 text-muted-foreground" />
+                    <Flame className="w-5 h-5 text-muted-foreground hidden sm:inline" />
                     <FormLabel className="font-normal cursor-pointer">Fire Safety</FormLabel>
                   </FormItem>
                 )}
@@ -654,7 +654,7 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
                         onCheckedChange={(checked) => field.onChange(checked ? 'Available' : 'Not Available')}
                       />
                     </FormControl>
-                    <PersonStanding className="w-5 h-5 text-muted-foreground" />
+                    <PersonStanding className="w-5 h-5 text-muted-foreground hidden sm:inline" />
                     <FormLabel className="font-normal cursor-pointer">Servant Room</FormLabel>
                   </FormItem>
                 )}
@@ -672,7 +672,7 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
                         onCheckedChange={(checked) => field.onChange(checked ? 'Available' : 'Not Available')}
                       />
                     </FormControl>
-                    <ShoppingCart className="w-5 h-5 text-muted-foreground" />
+                    <ShoppingCart className="w-5 h-5 text-muted-foreground hidden sm:inline" />
                     <FormLabel className="font-normal cursor-pointer">Shopping Center</FormLabel>
                   </FormItem>
                 )}
@@ -690,7 +690,7 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
                         onCheckedChange={(checked) => field.onChange(checked ? 'Available' : 'Not Available')}
                       />
                     </FormControl>
-                    <Flame className="w-5 h-5 text-muted-foreground" />
+                    <Flame className="w-5 h-5 text-muted-foreground hidden sm:inline" />
                     <FormLabel className="font-normal cursor-pointer">Gas Pipeline</FormLabel>
                   </FormItem>
                 )}
@@ -708,7 +708,7 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
                         onCheckedChange={(checked) => field.onChange(checked ? 'Available' : 'Not Available')}
                       />
                     </FormControl>
-                    <Trees className="w-5 h-5 text-muted-foreground" />
+                    <Trees className="w-5 h-5 text-muted-foreground hidden sm:inline" />
                     <FormLabel className="font-normal cursor-pointer">Park</FormLabel>
                   </FormItem>
                 )}
@@ -726,7 +726,7 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
                         onCheckedChange={(checked) => field.onChange(checked ? 'Available' : 'Not Available')}
                       />
                     </FormControl>
-                    <Droplets className="w-5 h-5 text-muted-foreground" />
+                    <Droplets className="w-5 h-5 text-muted-foreground hidden sm:inline" />
                     <FormLabel className="font-normal cursor-pointer">Rain Water Harvesting</FormLabel>
                   </FormItem>
                 )}
@@ -744,7 +744,7 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
                         onCheckedChange={(checked) => field.onChange(checked ? 'Available' : 'Not Available')}
                       />
                     </FormControl>
-                    <Building2 className="w-5 h-5 text-muted-foreground" />
+                    <Building2 className="w-5 h-5 text-muted-foreground hidden sm:inline" />
                     <FormLabel className="font-normal cursor-pointer">Sewage Treatment Plant</FormLabel>
                   </FormItem>
                 )}
@@ -762,7 +762,7 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
                         onCheckedChange={(checked) => field.onChange(checked ? 'Available' : 'Not Available')}
                       />
                     </FormControl>
-                    <Sparkles className="w-5 h-5 text-muted-foreground" />
+                    <Sparkles className="w-5 h-5 text-muted-foreground hidden sm:inline" />
                     <FormLabel className="font-normal cursor-pointer">House Keeping</FormLabel>
                   </FormItem>
                 )}
@@ -780,7 +780,7 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
                         onCheckedChange={(checked) => field.onChange(checked ? 'Available' : 'Not Available')}
                       />
                     </FormControl>
-                    <Zap className="w-5 h-5 text-muted-foreground" />
+                    <Zap className="w-5 h-5 text-muted-foreground hidden sm:inline" />
                     <FormLabel className="font-normal cursor-pointer">Power Backup</FormLabel>
                   </FormItem>
                 )}
@@ -798,7 +798,7 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
                         onCheckedChange={(checked) => field.onChange(checked ? 'Available' : 'Not Available')}
                       />
                     </FormControl>
-                    <Car className="w-5 h-5 text-muted-foreground" />
+                    <Car className="w-5 h-5 text-muted-foreground hidden sm:inline" />
                     <FormLabel className="font-normal cursor-pointer">Visitor Parking</FormLabel>
                   </FormItem>
                 )}
