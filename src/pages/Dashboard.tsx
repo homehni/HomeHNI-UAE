@@ -694,7 +694,7 @@ export const Dashboard: React.FC = () => {
 
                       {/* Diagonal Ribbon - Top Right Corner */}
                       <div className="absolute top-0 right-0 z-10">
-                        <div className={`${property.listing_type === 'rent' ? 'bg-orange-500' : 'bg-blue-500'} text-white text-xs font-medium py-1 px-8 transform rotate-45 translate-x-5 translate-y-3`}>
+                        <div className={`${property.listing_type === 'rent' ? 'bg-orange-500' : 'bg-blue-500'} text-white text-xs font-medium py-1 px-6 transform rotate-45 translate-x-4 translate-y-4`}>
                           For {property.listing_type === 'rent' ? 'Rent' : 'Buy'}
                         </div>
                       </div>
