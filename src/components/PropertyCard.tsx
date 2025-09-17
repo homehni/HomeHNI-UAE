@@ -39,6 +39,7 @@ const PropertyCard = ({
 }: PropertyCardProps) => {
   const navigate = useNavigate();
   const [showContactModal, setShowContactModal] = useState(false);
+  const [hasImageError, setHasImageError] = useState(false);
 
   const parsePriceToNumber = (priceStr: string) => {
     const lower = priceStr.toLowerCase();
@@ -234,6 +235,8 @@ const PropertyCard = ({
     }
     return propertyPlaceholder;
   };
+  const imageUrl = getImageUrl();
+  const showIconFallback = hasImageError || !imageUrl || imageUrl === propertyPlaceholder || /placeholder\.svg/i.test(imageUrl);
 
   return (
     <Card className="w-full overflow-hidden card-border hover-lift cursor-pointer bg-white border-2 border-brand-red/30 hover:border-brand-red/60" onClick={() => {
@@ -242,25 +245,18 @@ const PropertyCard = ({
     }}>
       <div className="relative">
         <div className="h-24 overflow-hidden">
-          {getImageUrl() === propertyPlaceholder ? (
-            <div className="w-full h-full bg-gray-100 flex items-center justify-center">
-              <Home size={32} className="text-gray-400" />
+          {showIconFallback ? (
+            <div className="w-full h-full bg-muted flex items-center justify-center">
+              <Home size={32} className="text-muted-foreground" />
             </div>
           ) : (
             <img
-              src={getImageUrl()}
+              src={imageUrl}
               alt={title}
               loading="lazy"
               decoding="async"
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-              onError={(e) => {
-                const target = e.currentTarget;
-                target.style.display = 'none';
-                const parent = target.parentElement;
-                if (parent) {
-                  parent.innerHTML = '<div class="w-full h-full bg-gray-100 flex items-center justify-center"><div class="w-8 h-8 text-gray-400"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg></div></div>';
-                }
-              }}
+              onError={() => setHasImageError(true)}
             />
           )}
         </div>
