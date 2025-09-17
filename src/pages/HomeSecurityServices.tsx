@@ -403,7 +403,7 @@ const HomeSecurityServices = () => {
               <h3 className="text-2xl font-bold text-foreground mb-3 text-uniform-center">Need Security Solutions?</h3>
               <p className="text-base text-muted-foreground mb-8 text-uniform-center">Get free consultation & quote</p>
 
-              <form className="space-y-5" onSubmit={e => {
+              <form className="space-y-6" onSubmit={e => {
                 e.preventDefault();
                 const form = e.currentTarget as HTMLFormElement;
                 if (!form.checkValidity()) {
@@ -425,13 +425,13 @@ const HomeSecurityServices = () => {
                   id="security-name-mobile" 
                   name="name" 
                   placeholder="Name" 
-                  className="h-12 text-base bg-background"
+                  className="h-14 text-lg bg-background px-4"
                   required 
                 />
 
-                <div className="flex gap-3">
+                <div className="flex gap-4">
                   <Select defaultValue="+91" name="countryCode">
-                    <SelectTrigger className="w-32 h-12 bg-background">
+                    <SelectTrigger className="w-36 h-14 bg-background text-lg">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent className="bg-background border shadow-lg">
@@ -500,7 +500,7 @@ const HomeSecurityServices = () => {
                 </div>
 
                 <Select name="serviceType" required>
-                  <SelectTrigger className="h-12 bg-background">
+                  <SelectTrigger className="w-full h-14 bg-background text-lg">
                     <SelectValue placeholder="Service Type" />
                   </SelectTrigger>
                   <SelectContent className="bg-background border shadow-lg">
@@ -512,7 +512,9 @@ const HomeSecurityServices = () => {
                   </SelectContent>
                 </Select>
 
-                <Button type="submit" className="w-full h-12 text-base font-semibold">Get Free Security Consultation</Button>
+                <Button type="submit" className="w-full h-14 text-lg font-semibold bg-red-600 hover:bg-red-700 text-white mt-8">
+                  Get Free Security Consultation
+                </Button>
               </form>
             </CardContent>
           </Card>

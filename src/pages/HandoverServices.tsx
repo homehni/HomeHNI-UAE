@@ -297,11 +297,11 @@ const HandoverServices = () => {
       <section className="lg:hidden px-4 py-8 bg-background">
         <div className="container mx-auto max-w-xl px-4">
           <Card className="w-full rounded-2xl shadow-xl border-2 border-primary bg-card">
-            <CardContent className="p-8 border-2 border-primary">
+            <CardContent className="p-8">
               <h3 className="text-2xl font-bold text-foreground mb-3">Need handover assistance?</h3>
               <p className="text-base text-muted-foreground mb-8">Fill the form & get expert support</p>
 
-              <form className="space-y-5" onSubmit={e => {
+              <form className="space-y-6" onSubmit={e => {
               e.preventDefault();
               const form = e.currentTarget as HTMLFormElement;
               
@@ -322,11 +322,11 @@ const HandoverServices = () => {
               });
               form.reset();
             }}>
-                <Input id="handover-name-mobile" name="name" placeholder="Name" className="h-12 text-base bg-background" required />
+                <Input id="handover-name-mobile" name="name" placeholder="Name" className="h-14 text-lg bg-background px-4" required />
 
-                <div className="flex gap-3">
+                <div className="flex gap-4">
                   <Select defaultValue="+91" name="countryCode">
-                    <SelectTrigger className="w-32 h-12 bg-background">
+                    <SelectTrigger className="w-36 h-14 bg-background text-lg">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent className="bg-background border shadow-lg">
@@ -335,13 +335,13 @@ const HandoverServices = () => {
                       <SelectItem value="+44">🇬🇧 +44</SelectItem>
                     </SelectContent>
                   </Select>
-                  <Input id="handover-phone-mobile" name="phone" type="tel" placeholder="Phone Number" className="flex-1 h-12 text-base bg-background" required />
+                  <Input id="handover-phone-mobile" name="phone" type="tel" placeholder="Phone Number" className="flex-1 h-14 text-lg bg-background px-4" required />
                 </div>
 
-                <Input id="handover-email-mobile" name="email" type="email" placeholder="Email ID" className="h-12 text-base bg-background" required />
+                <Input id="handover-email-mobile" name="email" type="email" placeholder="Email ID" className="h-14 text-lg bg-background px-4" required />
 
                 <Select name="propertyType" required>
-                  <SelectTrigger id="property-type-mobile" className="h-12 bg-background">
+                  <SelectTrigger id="property-type-mobile" className="h-14 bg-background text-lg">
                     <SelectValue placeholder="Property Type" />
                   </SelectTrigger>
                   <SelectContent className="bg-background border shadow-lg">
@@ -352,10 +352,10 @@ const HandoverServices = () => {
                   </SelectContent>
                 </Select>
 
-                <div className="flex gap-3">
-                  <Input id="handover-location-mobile" name="location" placeholder="Property Location" className="flex-1 h-12 text-base bg-background" />
+                <div className="space-y-4">
+                  <Input id="handover-location-mobile" name="location" placeholder="Property Location" className="w-full h-14 text-lg bg-background px-4" />
                   <Select name="handoverType" required>
-                    <SelectTrigger id="handover-type-mobile" className="w-40 h-12 bg-background">
+                    <SelectTrigger id="handover-type-mobile" className="w-full h-14 bg-background text-lg">
                       <SelectValue placeholder="Handover Type" />
                     </SelectTrigger>
                     <SelectContent className="bg-background border shadow-lg">
@@ -368,11 +368,12 @@ const HandoverServices = () => {
                   </Select>
                 </div>
 
-                <div className="flex gap-3">
-                  <Select name="country">
-                    <SelectTrigger id="handover-country-mobile" className="flex-1 h-12 bg-background">
-                      <SelectValue placeholder="Country" />
-                    </SelectTrigger>
+                <div className="space-y-4">
+                  <div className="flex gap-4">
+                    <Select name="country">
+                      <SelectTrigger id="handover-country-mobile" className="flex-1 h-14 bg-background text-lg">
+                        <SelectValue placeholder="Country" />
+                      </SelectTrigger>
                     <SelectContent className="bg-background border shadow-lg">
                       <SelectItem value="india">India</SelectItem>
                       <SelectItem value="usa">United States</SelectItem>
@@ -381,10 +382,10 @@ const HandoverServices = () => {
                       <SelectItem value="australia">Australia</SelectItem>
                     </SelectContent>
                   </Select>
-                  <Select name="state">
-                    <SelectTrigger id="handover-state-mobile" className="flex-1 h-12 bg-background">
-                      <SelectValue placeholder="State" />
-                    </SelectTrigger>
+                    <Select name="state">
+                      <SelectTrigger id="handover-state-mobile" className="flex-1 h-14 bg-background text-lg">
+                        <SelectValue placeholder="State" />
+                      </SelectTrigger>
                     <SelectContent className="bg-background border shadow-lg">
                       <SelectItem value="andhra-pradesh">Andhra Pradesh</SelectItem>
                       <SelectItem value="karnataka">Karnataka</SelectItem>
@@ -398,8 +399,9 @@ const HandoverServices = () => {
                       <SelectItem value="uttar-pradesh">Uttar Pradesh</SelectItem>
                     </SelectContent>
                   </Select>
+                  </div>
                   <Select name="city">
-                    <SelectTrigger id="handover-city-mobile" className="flex-1 h-12 bg-background">
+                    <SelectTrigger id="handover-city-mobile" className="w-full h-14 bg-background text-lg">
                       <SelectValue placeholder="City" />
                     </SelectTrigger>
                     <SelectContent className="bg-background border shadow-lg">

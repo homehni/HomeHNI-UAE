@@ -283,7 +283,7 @@ const PaintingCleaning = () => {
               <h3 className="text-2xl font-bold text-foreground mb-3">Need painting or cleaning?</h3>
               <p className="text-base text-muted-foreground mb-8">Fill the form & get instant quote</p>
 
-              <form className="space-y-5" onSubmit={e => {
+              <form className="space-y-6" onSubmit={e => {
                 e.preventDefault();
                 toast({
                   title: "Request received",
@@ -295,13 +295,13 @@ const PaintingCleaning = () => {
                   id="painting-name-mobile" 
                   name="name" 
                   placeholder="Name" 
-                  className="h-12 text-base bg-background"
+                  className="h-14 text-lg bg-background px-4"
                   required 
                 />
 
-                <div className="flex gap-3">
+                <div className="flex gap-4">
                   <Select defaultValue="+91" name="countryCode">
-                    <SelectTrigger className="w-32 h-12 bg-background">
+                    <SelectTrigger className="w-36 h-14 bg-background text-lg">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent className="bg-background border shadow-lg">
@@ -315,7 +315,7 @@ const PaintingCleaning = () => {
                     name="phone" 
                     type="tel" 
                     placeholder="Phone Number" 
-                    className="flex-1 h-12 text-base bg-background" 
+                    className="flex-1 h-14 text-lg bg-background px-4" 
                     required 
                   />
                 </div>
@@ -325,63 +325,67 @@ const PaintingCleaning = () => {
                   name="email" 
                   type="email" 
                   placeholder="Email ID" 
-                  className="h-12 text-base bg-background"
+                  className="h-14 text-lg bg-background px-4"
                 />
 
-                <div className="flex gap-3">
-                  <Select name="serviceType">
-                    <SelectTrigger id="service-type-mobile" className="flex-1 h-12 bg-background">
-                      <SelectValue placeholder="Service Type" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-background border shadow-lg">
-                      <SelectItem value="painting">Painting Services</SelectItem>
-                      <SelectItem value="cleaning">Cleaning Services</SelectItem>
-                      <SelectItem value="both">Both Painting & Cleaning</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <Select name="propertyType">
-                    <SelectTrigger id="property-type-mobile" className="flex-1 h-12 bg-background">
-                      <SelectValue placeholder="Property Type" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-background border shadow-lg">
-                      <SelectItem value="residential">Residential</SelectItem>
-                      <SelectItem value="commercial">Commercial</SelectItem>
-                    </SelectContent>
-                  </Select>
+                <div className="space-y-4">
+                  <div className="flex gap-4">
+                    <Select name="serviceType">
+                      <SelectTrigger id="service-type-mobile" className="flex-1 h-14 bg-background text-lg">
+                        <SelectValue placeholder="Service Type" />
+                      </SelectTrigger>
+                      <SelectContent className="bg-background border shadow-lg">
+                        <SelectItem value="painting">Painting Services</SelectItem>
+                        <SelectItem value="cleaning">Cleaning Services</SelectItem>
+                        <SelectItem value="both">Both Painting & Cleaning</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <Select name="propertyType">
+                      <SelectTrigger id="property-type-mobile" className="flex-1 h-14 bg-background text-lg">
+                        <SelectValue placeholder="Property Type" />
+                      </SelectTrigger>
+                      <SelectContent className="bg-background border shadow-lg">
+                        <SelectItem value="residential">Residential</SelectItem>
+                        <SelectItem value="commercial">Commercial</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
                 </div>
 
-                <div className="flex gap-3">
-                  <Select name="country">
-                    <SelectTrigger id="painting-country-mobile" className="flex-1 h-12 bg-background">
-                      <SelectValue placeholder="Country" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-background border shadow-lg">
-                      <SelectItem value="india">India</SelectItem>
-                      <SelectItem value="usa">United States</SelectItem>
-                      <SelectItem value="uk">United Kingdom</SelectItem>
-                      <SelectItem value="canada">Canada</SelectItem>
-                      <SelectItem value="australia">Australia</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <Select name="state">
-                    <SelectTrigger id="painting-state-mobile" className="flex-1 h-12 bg-background">
-                      <SelectValue placeholder="State" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-background border shadow-lg">
-                      <SelectItem value="andhra-pradesh">Andhra Pradesh</SelectItem>
-                      <SelectItem value="karnataka">Karnataka</SelectItem>
-                      <SelectItem value="tamil-nadu">Tamil Nadu</SelectItem>
-                      <SelectItem value="telangana">Telangana</SelectItem>
-                      <SelectItem value="maharashtra">Maharashtra</SelectItem>
-                      <SelectItem value="gujarat">Gujarat</SelectItem>
-                      <SelectItem value="rajasthan">Rajasthan</SelectItem>
-                      <SelectItem value="delhi">Delhi</SelectItem>
-                      <SelectItem value="west-bengal">West Bengal</SelectItem>
-                      <SelectItem value="uttar-pradesh">Uttar Pradesh</SelectItem>
-                    </SelectContent>
-                  </Select>
+                <div className="space-y-4">
+                  <div className="flex gap-4">
+                    <Select name="country">
+                      <SelectTrigger id="painting-country-mobile" className="flex-1 h-14 bg-background text-lg">
+                        <SelectValue placeholder="Country" />
+                      </SelectTrigger>
+                      <SelectContent className="bg-background border shadow-lg">
+                        <SelectItem value="india">India</SelectItem>
+                        <SelectItem value="usa">United States</SelectItem>
+                        <SelectItem value="uk">United Kingdom</SelectItem>
+                        <SelectItem value="canada">Canada</SelectItem>
+                        <SelectItem value="australia">Australia</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <Select name="state">
+                      <SelectTrigger id="painting-state-mobile" className="flex-1 h-14 bg-background text-lg">
+                        <SelectValue placeholder="State" />
+                      </SelectTrigger>
+                      <SelectContent className="bg-background border shadow-lg">
+                        <SelectItem value="andhra-pradesh">Andhra Pradesh</SelectItem>
+                        <SelectItem value="karnataka">Karnataka</SelectItem>
+                        <SelectItem value="tamil-nadu">Tamil Nadu</SelectItem>
+                        <SelectItem value="telangana">Telangana</SelectItem>
+                        <SelectItem value="maharashtra">Maharashtra</SelectItem>
+                        <SelectItem value="gujarat">Gujarat</SelectItem>
+                        <SelectItem value="rajasthan">Rajasthan</SelectItem>
+                        <SelectItem value="delhi">Delhi</SelectItem>
+                        <SelectItem value="west-bengal">West Bengal</SelectItem>
+                        <SelectItem value="uttar-pradesh">Uttar Pradesh</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
                   <Select name="city">
-                    <SelectTrigger id="painting-city-mobile" className="flex-1 h-12 bg-background">
+                    <SelectTrigger id="painting-city-mobile" className="w-full h-14 bg-background text-lg">
                       <SelectValue placeholder="City" />
                     </SelectTrigger>
                     <SelectContent className="bg-background border shadow-lg">
@@ -399,7 +403,7 @@ const PaintingCleaning = () => {
                   </Select>
                 </div>
 
-                <Button type="submit" className="w-full h-12 text-base font-semibold bg-red-600 hover:bg-red-700 text-white mt-6">
+                <Button type="submit" className="w-full h-14 text-lg font-semibold bg-red-600 hover:bg-red-700 text-white mt-8">
                   Talk to Us Today!
                 </Button>
               </form>

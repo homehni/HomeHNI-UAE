@@ -324,7 +324,7 @@ const Loans = () => {
               <h3 className="text-2xl font-bold text-foreground mb-3 text-uniform-center">Need a loan?</h3>
               <p className="text-base text-muted-foreground mb-8 text-uniform-center">Fill the form & get instant pre-approval</p>
 
-              <form className="space-y-5" onSubmit={e => {
+              <form className="space-y-6" onSubmit={e => {
                 e.preventDefault();
                 const form = e.currentTarget as HTMLFormElement;
                 if (!form.checkValidity()) {
@@ -346,13 +346,13 @@ const Loans = () => {
                   id="loan-name-mobile" 
                   name="name" 
                   placeholder="Name" 
-                  className="h-12 text-base bg-background"
+                  className="h-14 text-lg bg-background px-4"
                   required 
                 />
 
-                <div className="flex gap-3">
+                <div className="flex gap-4">
                   <Select defaultValue="+91" name="countryCode">
-                    <SelectTrigger className="w-32 h-12 bg-background">
+                    <SelectTrigger className="w-36 h-14 bg-background text-lg">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent className="bg-background border shadow-lg">
@@ -366,7 +366,7 @@ const Loans = () => {
                     name="phone" 
                     type="tel" 
                     placeholder="Phone Number" 
-                    className="flex-1 h-12 text-base bg-background" 
+                    className="flex-1 h-14 text-lg bg-background px-4" 
                     required 
                   />
                 </div>
@@ -376,37 +376,39 @@ const Loans = () => {
                   name="email" 
                   type="email" 
                   placeholder="Email ID" 
-                  className="h-12 text-base bg-background"
+                  className="h-14 text-lg bg-background px-4"
                 />
 
-                <div className="flex gap-3">
-                  <Select defaultValue="India" name="country">
-                    <SelectTrigger className="flex-1 h-12 bg-background">
-                      <SelectValue placeholder="Country" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-background border shadow-lg">
-                      <SelectItem value="India">India</SelectItem>
-                      <SelectItem value="USA">USA</SelectItem>
-                      <SelectItem value="UK">UK</SelectItem>
-                      <SelectItem value="Other">Other</SelectItem>
-                    </SelectContent>
-                  </Select>
+                <div className="space-y-4">
+                  <div className="flex gap-4">
+                    <Select defaultValue="India" name="country">
+                      <SelectTrigger className="flex-1 h-14 bg-background text-lg">
+                        <SelectValue placeholder="Country" />
+                      </SelectTrigger>
+                      <SelectContent className="bg-background border shadow-lg">
+                        <SelectItem value="India">India</SelectItem>
+                        <SelectItem value="USA">USA</SelectItem>
+                        <SelectItem value="UK">UK</SelectItem>
+                        <SelectItem value="Other">Other</SelectItem>
+                      </SelectContent>
+                    </Select>
 
-                  <Select name="state" onValueChange={setSelectedState}>
-                    <SelectTrigger className="flex-1 h-12 bg-background">
-                      <SelectValue placeholder="State" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-background border shadow-lg">
-                      {statesData && Object.keys(statesData).map((state: string) => (
-                        <SelectItem key={state} value={state}>
-                          {state}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                    <Select name="state" onValueChange={setSelectedState}>
+                      <SelectTrigger className="flex-1 h-14 bg-background text-lg">
+                        <SelectValue placeholder="State" />
+                      </SelectTrigger>
+                      <SelectContent className="bg-background border shadow-lg">
+                        {statesData && Object.keys(statesData).map((state: string) => (
+                          <SelectItem key={state} value={state}>
+                            {state}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
 
                   <Select name="city">
-                    <SelectTrigger className="flex-1 h-12 bg-background">
+                    <SelectTrigger className="w-full h-14 bg-background text-lg">
                       <SelectValue placeholder="City" />
                     </SelectTrigger>
                     <SelectContent className="bg-background border shadow-lg">
@@ -419,9 +421,9 @@ const Loans = () => {
                   </Select>
                 </div>
 
-                <div className="flex gap-3">
+                <div className="space-y-4">
                   <Select name="loanType">
-                    <SelectTrigger className="flex-1 h-12 bg-background">
+                    <SelectTrigger className="w-full h-14 bg-background text-lg">
                       <SelectValue placeholder="Loan Type" />
                     </SelectTrigger>
                     <SelectContent className="bg-background border shadow-lg">
@@ -439,11 +441,12 @@ const Loans = () => {
                     name="amount" 
                     type="number" 
                     placeholder="Loan Amount Required" 
-                    className="flex-1 h-12 text-base bg-background"
+                    className="w-full h-14 text-lg bg-background px-4" 
+                    required 
                   />
                 </div>
 
-                <Button type="submit" className="w-full h-12 text-base font-semibold bg-red-600 hover:bg-red-700 text-white mt-6">
+                <Button type="submit" className="w-full h-14 text-lg font-semibold bg-red-600 hover:bg-red-700 text-white mt-8">
                   Get Pre-Approved Now!
                 </Button>
               </form>
