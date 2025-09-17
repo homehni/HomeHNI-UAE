@@ -210,7 +210,7 @@ const PropertySearch = () => {
                 <Input ref={locationInputRef} value={filters.location} onChange={e => {
                 const normalizedLocation = normalizeLocation(e.target.value);
                 updateFilter('location', normalizedLocation);
-              }} placeholder="Enter location or area name..." className="pl-10 pr-4 h-14 text-base border-brand-red focus:ring-2 focus:ring-brand-red/20" />
+              }} placeholder="Enter location or area name..." className="pl-10 pr-4 h-12 border-brand-red focus:ring-2 focus:ring-brand-red/20" />
                 {filters.location && <div className="absolute right-3 top-3">
                     <Button variant="ghost" size="sm" onClick={() => updateFilter('location', '')} className="h-6 w-6 p-0 hover:bg-brand-red/10">
                       <X size={14} />
