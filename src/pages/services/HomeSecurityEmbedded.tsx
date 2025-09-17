@@ -246,7 +246,7 @@ const HomeSecurityEmbedded = () => {
               }}>
                 <Input id="security-name" name="name" placeholder="Name" required />
 
-                <div className="flex gap-2">
+                <div className="flex flex-col sm:flex-row gap-2">
                   <Select defaultValue="+91" name="countryCode">
                     <SelectTrigger className="w-28"><SelectValue /></SelectTrigger>
                     <SelectContent>
@@ -265,7 +265,7 @@ const HomeSecurityEmbedded = () => {
                   />
                 </div>
 
-                <div className="flex gap-2">
+                <div className="flex flex-col md:flex-row gap-2">
                   <Select defaultValue="India" name="country">
                     <SelectTrigger className="flex-1"><SelectValue placeholder="Country" /></SelectTrigger>
                     <SelectContent>
@@ -351,7 +351,7 @@ const HomeSecurityEmbedded = () => {
                   required 
                 />
 
-                <div className="flex gap-3">
+                <div className="flex flex-col sm:flex-row gap-3">
                   <Select defaultValue="+91" name="countryCode">
                     <SelectTrigger className="w-32 h-12 bg-background">
                       <SelectValue />
@@ -372,7 +372,7 @@ const HomeSecurityEmbedded = () => {
                   />
                 </div>
 
-                <div className="flex gap-3">
+                <div className="flex flex-col md:flex-row gap-3">
                   <Select defaultValue="India" name="country">
                     <SelectTrigger className="flex-1 h-12 bg-background">
                       <SelectValue placeholder="Country" />
