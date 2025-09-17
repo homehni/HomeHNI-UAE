@@ -76,22 +76,22 @@ const Services = () => {
   );
 
   const ServiceLink = ({ label, desc, to }: { label: string; desc: string; to: string }) => (
-    <div className="group p-3 md:p-4 border rounded-lg bg-card hover:shadow-lg hover:border-brand-red/20 transition-all duration-300 cursor-pointer">
+    <div className="group p-3 md:p-4 border rounded-lg bg-card hover:shadow-md hover:border-brand-red/20 transition-all duration-200 cursor-pointer">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div className="flex-1">
-          <p className="font-semibold text-sm md:text-base text-foreground group-hover:text-brand-red transition-colors duration-300">{label}</p>
+          <p className="font-semibold text-sm md:text-base text-foreground group-hover:text-brand-red transition-colors duration-200">{label}</p>
           <p className="text-xs md:text-sm text-muted-foreground mt-1 leading-relaxed">{desc}</p>
         </div>
         <Link 
           to={to} 
-          className="flex items-center justify-center gap-2 px-3 py-2 bg-brand-red text-white text-xs md:text-sm font-medium rounded-lg hover:bg-brand-red-dark hover:shadow-md transition-all duration-300 group-hover:scale-105 w-full sm:w-auto" 
+          className="flex items-center justify-center gap-2 px-3 py-2 bg-brand-red text-white text-xs md:text-sm font-medium rounded-lg hover:bg-brand-red-dark transition-colors duration-200 w-full sm:w-auto" 
           onClick={(e) => {
             e.preventDefault();
             window.location.href = to;
           }}
         >
           <span>Open</span>
-          <ArrowRight className="w-3 h-3 md:w-4 md:h-4 group-hover:translate-x-1 transition-transform duration-300" />
+          <ArrowRight className="w-3 h-3 md:w-4 md:h-4" />
         </Link>
       </div>
     </div>
@@ -167,7 +167,7 @@ const Services = () => {
             </div>
           </div>
         </div>
-        image.png      </main>
+      </main>
 
       <Footer />
     </div>
