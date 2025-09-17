@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Badge } from '@/components/ui/badge';
 import { PropertyDetails } from '@/types/property';
 import { Phone, Compass } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
 const propertyDetailsSchema = z.object({
   title: z.string().optional(), // Made optional - will be auto-generated
@@ -42,6 +43,8 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
   currentStep,
   totalSteps
 }) => {
+  const { toast } = useToast();
+  
   const form = useForm<PropertyDetailsFormData>({
     resolver: zodResolver(propertyDetailsSchema),
     defaultValues: {
@@ -393,7 +396,17 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
                 <Phone className="h-5 w-5 text-orange-600" />
                 <span className="text-sm text-gray-700">Don't want to fill all the details? Let us help you!</span>
               </div>
-              <Button variant="outline" className="border-primary text-primary hover:bg-primary hover:text-white">
+              <Button 
+                variant="outline" 
+                className="border-primary text-primary hover:bg-primary hover:text-white"
+                onClick={() => {
+                  toast({
+                    title: "Thank you for the interest. Our agent will give you a call shortly.",
+                    variant: "default",
+                    className: "bg-green-50 border-green-200 text-green-800",
+                  });
+                }}
+              >
                 I'm interested
               </Button>
             </div>
