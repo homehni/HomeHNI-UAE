@@ -193,101 +193,103 @@ const LoansEmbedded = () => {
       </section>
 
       {/* Sticky Form Container for Large Screens */}
-      <div className="hidden lg:block fixed top-32 right-8 z-40 w-96">
-        <Card className="w-full rounded-xl shadow-2xl bg-background border-2 border-primary">
-          <CardContent className="p-6">
-            <h3 className="text-xl font-semibold text-foreground mb-2 text-uniform-center">Need a loan?</h3>
-            <p className="text-sm text-muted-foreground mb-4 text-uniform-center">Fill the form & get instant pre-approval</p>
+      <div className="hidden lg:block fixed top-32 right-8 z-40">
+        <div className="w-96 sticky top-32">
+          <Card className="w-full rounded-xl shadow-2xl bg-background border-2 border-primary">
+            <CardContent className="p-6">
+              <h3 className="text-xl font-semibold text-foreground mb-2 text-uniform-center">Need a loan?</h3>
+              <p className="text-sm text-muted-foreground mb-4 text-uniform-center">Fill the form & get instant pre-approval</p>
 
-            <form className="space-y-4" onSubmit={e => {
-              e.preventDefault();
-              const form = e.currentTarget as HTMLFormElement;
-              if (!form.checkValidity()) {
-                form.reportValidity();
+              <form className="space-y-4" onSubmit={e => {
+                e.preventDefault();
+                const form = e.currentTarget as HTMLFormElement;
+                if (!form.checkValidity()) {
+                  form.reportValidity();
+                  toast({
+                    title: "Required Fields Missing",
+                    description: "Please fill in all required fields before submitting the loan application.",
+                    variant: "destructive"
+                  });
+                  return;
+                }
                 toast({
-                  title: "Required Fields Missing",
-                  description: "Please fill in all required fields before submitting the loan application.",
-                  variant: "destructive"
+                  title: "Application received",
+                  description: "Our loan expert will contact you shortly."
                 });
-                return;
-              }
-              toast({
-                title: "Application received",
-                description: "Our loan expert will contact you shortly."
-              });
-              form.reset();
-            }}>
-              <Input id="loan-name" name="name" placeholder="Name" required />
+                form.reset();
+              }}>
+                <Input id="loan-name" name="name" placeholder="Name" required />
 
-              <div className="flex gap-2">
-                <Select defaultValue="+91" name="countryCode">
-                  <SelectTrigger className="w-28"><SelectValue /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="+91">🇮🇳 +91</SelectItem>
-                    <SelectItem value="+1">🇺🇸 +1</SelectItem>
-                    <SelectItem value="+44">🇬🇧 +44</SelectItem>
-                  </SelectContent>
-                </Select>
-                <Input id="loan-phone" name="phone" type="tel" placeholder="Phone Number" className="flex-1" required />
-              </div>
+                <div className="flex gap-2">
+                  <Select defaultValue="+91" name="countryCode">
+                    <SelectTrigger className="w-28"><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="+91">🇮🇳 +91</SelectItem>
+                      <SelectItem value="+1">🇺🇸 +1</SelectItem>
+                      <SelectItem value="+44">🇬🇧 +44</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <Input id="loan-phone" name="phone" type="tel" placeholder="Phone Number" className="flex-1" required />
+                </div>
 
-              <Input id="loan-email" name="email" type="email" placeholder="Email ID" required />
+                <Input id="loan-email" name="email" type="email" placeholder="Email ID" required />
 
-              <div className="flex gap-2">
-                <Select defaultValue="India" name="country">
-                  <SelectTrigger className="flex-1"><SelectValue placeholder="Country" /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="India">India</SelectItem>
-                    <SelectItem value="USA">USA</SelectItem>
-                    <SelectItem value="UK">UK</SelectItem>
-                    <SelectItem value="Other">Other</SelectItem>
-                  </SelectContent>
-                </Select>
+                <div className="flex gap-2">
+                  <Select defaultValue="India" name="country">
+                    <SelectTrigger className="flex-1"><SelectValue placeholder="Country" /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="India">India</SelectItem>
+                      <SelectItem value="USA">USA</SelectItem>
+                      <SelectItem value="UK">UK</SelectItem>
+                      <SelectItem value="Other">Other</SelectItem>
+                    </SelectContent>
+                  </Select>
 
-                <Select name="state" onValueChange={setSelectedStateDesktop}>
-                  <SelectTrigger className="flex-1"><SelectValue placeholder="State" /></SelectTrigger>
-                  <SelectContent>
-                    {statesData && Object.keys(statesData).map((state: string) => (
-                      <SelectItem key={state} value={state}>
-                        {state}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                  <Select name="state" onValueChange={setSelectedStateDesktop}>
+                    <SelectTrigger className="flex-1"><SelectValue placeholder="State" /></SelectTrigger>
+                    <SelectContent>
+                      {statesData && Object.keys(statesData).map((state: string) => (
+                        <SelectItem key={state} value={state}>
+                          {state}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
 
-                <Select name="city">
-                  <SelectTrigger className="flex-1"><SelectValue placeholder="City" /></SelectTrigger>
-                  <SelectContent>
-                    {citiesDesktop.map((city: string) => (
-                      <SelectItem key={city} value={city}>
-                        {city}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+                  <Select name="city">
+                    <SelectTrigger className="flex-1"><SelectValue placeholder="City" /></SelectTrigger>
+                    <SelectContent>
+                      {citiesDesktop.map((city: string) => (
+                        <SelectItem key={city} value={city}>
+                          {city}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
 
-              <div className="flex gap-2">
-                <Select name="loanType" required>
-                  <SelectTrigger className="flex-1"><SelectValue placeholder="Loan Type" /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="home-loan">Home Loan</SelectItem>
-                    <SelectItem value="lap">Loan Against Property</SelectItem>
-                    <SelectItem value="balance-transfer">Balance Transfer</SelectItem>
-                    <SelectItem value="top-up">Top-up Loan</SelectItem>
-                    <SelectItem value="construction">Construction Loan</SelectItem>
-                    <SelectItem value="business">Business Loan</SelectItem>
-                    <SelectItem value="other">Others</SelectItem>
-                  </SelectContent>
-                </Select>
+                <div className="flex gap-2">
+                  <Select name="loanType" required>
+                    <SelectTrigger className="flex-1"><SelectValue placeholder="Loan Type" /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="home-loan">Home Loan</SelectItem>
+                      <SelectItem value="lap">Loan Against Property</SelectItem>
+                      <SelectItem value="balance-transfer">Balance Transfer</SelectItem>
+                      <SelectItem value="top-up">Top-up Loan</SelectItem>
+                      <SelectItem value="construction">Construction Loan</SelectItem>
+                      <SelectItem value="business">Business Loan</SelectItem>
+                      <SelectItem value="other">Others</SelectItem>
+                    </SelectContent>
+                  </Select>
 
-                <Input id="loan-amount" name="amount" type="number" placeholder="Loan Amount Required" className="flex-1" required />
-              </div>
+                  <Input id="loan-amount" name="amount" type="number" placeholder="Loan Amount Required" className="flex-1" required />
+                </div>
 
-              <Button type="submit" className="w-full">Get Pre-Approved Now!</Button>
-            </form>
-          </CardContent>
-        </Card>
+                <Button type="submit" className="w-full">Get Pre-Approved Now!</Button>
+              </form>
+            </CardContent>
+          </Card>
+        </div>
       </div>
 
       {/* Mobile Form - Static below hero */}
