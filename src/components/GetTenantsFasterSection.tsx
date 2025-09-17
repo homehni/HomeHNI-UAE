@@ -20,7 +20,7 @@ const GetTenantsFasterSection: React.FC = () => {
     description: "Get expert pricing advice"
   }];
   return <div className="w-full h-full bg-gray-50 border-l border-gray-200 hidden lg:block">
-      <div className="p-6 space-y-6 min-h-screen flex flex-col">
+      <div className="p-6 space-y-6 flex flex-col">
         {/* Header */}
         <div className="text-center">
           <h2 className="text-xl font-medium text-gray-700 mb-3">Get Tenants Faster</h2>
@@ -41,7 +41,7 @@ const GetTenantsFasterSection: React.FC = () => {
         </div>
 
         {/* CTA Button */}
-        <div className="pt-6">
+        <div className="pt-4">
           <Button className="w-full font-medium py-3 rounded-md">
             Show Interest
           </Button>
