@@ -10,6 +10,7 @@ import { Badge } from '@/components/ui/badge';
 import { PropertyDetails } from '@/types/property';
 import { Phone, Compass } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { StickyFormNavigation } from './StickyFormNavigation';
 
 const propertyDetailsSchema = z.object({
   title: z.string().optional(), // Made optional - will be auto-generated
@@ -96,9 +97,9 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
   };
 
   return (
-    <div className="flex flex-col h-full">
-      {/* Form Content - Scrollable */}
-      <div className="flex-1 overflow-y-auto p-6">
+    <>
+      {/* Form Content - Scrollable with bottom padding for sticky navigation */}
+      <div className="p-6 pb-24">
         <h1 className="text-2xl font-semibold text-primary mb-6">Property Details</h1>
         
         <Form {...form}>
@@ -417,17 +418,12 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
         </Form>
       </div>
 
-      {/* Sticky Navigation Buttons */}
-      <div className="flex-shrink-0 bg-white border-t border-gray-200 p-4">
-        <div className="flex justify-between">
-          <Button type="button" variant="outline" onClick={onBack} className="h-10 px-6">
-            Back
-          </Button>
-          <Button type="button" onClick={form.handleSubmit(onSubmit)} className="h-10 px-6">
-            Save & Continue
-          </Button>
-        </div>
-      </div>
-    </div>
+      {/* Sticky Navigation */}
+      <StickyFormNavigation
+        onBack={onBack}
+        onNext={() => form.handleSubmit(onSubmit)()}
+        nextButtonText="Save & Continue"
+      />
+    </>
   );
 };
