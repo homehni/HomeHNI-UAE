@@ -192,7 +192,49 @@ const PropertySearch = () => {
       
       {/* Search Header */}
       <div className="bg-white border-b border-gray-200 pt-20">
-        
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex flex-col lg:flex-row gap-4 items-center pt-4">
+            {/* Search Tabs */}
+            <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full lg:w-auto">
+              <TabsList className="grid w-full lg:w-auto grid-cols-3 bg-gray-100">
+                <TabsTrigger value="buy" className="text-xs lg:text-sm">Buy</TabsTrigger>
+                <TabsTrigger value="rent" className="text-xs lg:text-sm">Rent</TabsTrigger>
+                <TabsTrigger value="commercial" className="text-xs lg:text-sm">Commercial</TabsTrigger>
+              </TabsList>
+            </Tabs>
+
+            {/* Location Search with Google Maps Places Autocomplete */}
+            <div className="flex-1 flex gap-2">
+              <div className="relative flex-1">
+                <MapPin className="absolute left-3 top-3 text-brand-red" size={20} />
+                <Input ref={locationInputRef} value={filters.location} onChange={e => {
+                const normalizedLocation = normalizeLocation(e.target.value);
+                updateFilter('location', normalizedLocation);
+              }} placeholder="Enter location or area name..." className="pl-10 pr-4 h-12 border-brand-red focus:ring-2 focus:ring-brand-red/20" />
+                {filters.location && <div className="absolute right-3 top-3">
+                    <Button variant="ghost" size="sm" onClick={() => updateFilter('location', '')} className="h-6 w-6 p-0 hover:bg-brand-red/10">
+                      <X size={14} />
+                    </Button>
+                  </div>}
+                {/* Google Maps attribution */}
+                
+              </div>
+            </div>
+
+            {/* View Controls */}
+            <div className="flex gap-2">
+              <Button variant={viewMode === 'grid' ? 'default' : 'outline'} size="sm" onClick={() => setViewMode('grid')}>
+                <Grid3X3 size={16} />
+              </Button>
+              <Button variant={viewMode === 'list' ? 'default' : 'outline'} size="sm" onClick={() => setViewMode('list')}>
+                <List size={16} />
+              </Button>
+              <Button variant={showMap ? 'default' : 'outline'} size="sm" onClick={() => setShowMap(!showMap)}>
+                <Map size={16} />
+              </Button>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div className="container mx-auto px-4 py-6">
