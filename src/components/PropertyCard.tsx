@@ -211,28 +211,39 @@ const PropertyCard = ({
       isArray: Array.isArray(image),
       imageLength: Array.isArray(image) ? image.length : 'N/A'
     });
-    
+
+    const sanitize = (url?: string) => {
+      const u = (url || '').trim();
+      if (!u) return propertyPlaceholder;
+      const lower = u.toLowerCase();
+      // Treat common placeholders as "no image" and use our branded fallback
+      if (
+        lower === '/placeholder.svg' ||
+        lower.endsWith('/placeholder.svg') ||
+        lower.includes('/placeholder.svg') ||
+        lower.includes('placeholder.svg')
+      ) {
+        return propertyPlaceholder;
+      }
+      return u;
+    };
+
+    let candidate: string | undefined;
+
     if (Array.isArray(image)) {
       const first = image[0];
       if (typeof first === 'string') {
-        // If it's a direct URL, use it as-is
-        return first.startsWith('http') ? first : (resolveUrlFromString(first) || propertyPlaceholder);
+        candidate = first.startsWith('http') ? first : (resolveUrlFromString(first) || undefined);
+      } else if (first && typeof first === 'object' && 'url' in first) {
+        candidate = (first as any).url;
       }
-      if (first && typeof first === 'object' && 'url' in first) {
-        // Handle object format with url property (from database)
-        return (first as any).url || propertyPlaceholder;
-      }
-      return propertyPlaceholder;
+    } else if (typeof image === 'string') {
+      candidate = image.startsWith('http') ? image : (resolveUrlFromString(image) || undefined);
+    } else if (image && typeof image === 'object' && 'url' in image) {
+      candidate = (image as any).url;
     }
-    if (typeof image === 'string') {
-      // If it's a direct URL, use it as-is
-      return image.startsWith('http') ? image : (resolveUrlFromString(image) || propertyPlaceholder);
-    }
-    if (image && typeof image === 'object' && 'url' in image) {
-      // Handle object format with url property (from database)
-      return (image as any).url || propertyPlaceholder;
-    }
-    return propertyPlaceholder;
+
+    return sanitize(candidate);
   };
 
   return (
