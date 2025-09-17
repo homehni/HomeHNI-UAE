@@ -19,11 +19,24 @@ export const RelatedPropertiesCard: React.FC<RelatedPropertiesCardProps> = ({ pr
     navigate(`/search?${queryString}`);
   };
 
-  // Generate nearby localities (sample data - in real app, this would come from API)
-  const nearbyLocalities = [
-    'Banjara Hills', 'Jubilee Hills', 'Madhapur', 'Gachibowli', 'Kondapur',
-    'Kukatpally', 'HITEC City', 'Miyapur', 'Manikonda', 'Tellapur'
-  ].filter(loc => loc !== property.locality).slice(0, 8);
+  // Generate city-specific localities
+  const getCityLocalities = (city: string) => {
+    const cityLocalitiesMap: { [key: string]: string[] } = {
+      'Bengaluru': ['Koramangala', 'Indiranagar', 'Whitefield', 'Electronic City', 'Marathahalli', 'HSR Layout', 'BTM Layout', 'Jayanagar', 'Banashankari', 'Hebbal'],
+      'Bangalore': ['Koramangala', 'Indiranagar', 'Whitefield', 'Electronic City', 'Marathahalli', 'HSR Layout', 'BTM Layout', 'Jayanagar', 'Banashankari', 'Hebbal'],
+      'Hyderabad': ['Banjara Hills', 'Jubilee Hills', 'Madhapur', 'Gachibowli', 'Kondapur', 'Kukatpally', 'HITEC City', 'Miyapur', 'Manikonda', 'Tellapur'],
+      'Mumbai': ['Bandra', 'Andheri', 'Powai', 'Goregaon', 'Malad', 'Borivali', 'Thane', 'Navi Mumbai', 'Worli', 'Lower Parel'],
+      'Delhi': ['Dwarka', 'Rohini', 'Pitampura', 'Janakpuri', 'Laxmi Nagar', 'Karol Bagh', 'Connaught Place', 'Vasant Kunj', 'Saket', 'Greater Kailash'],
+      'Pune': ['Koregaon Park', 'Hinjewadi', 'Wakad', 'Baner', 'Aundh', 'Kothrud', 'Hadapsar', 'Magarpatta', 'Viman Nagar', 'Pimpri'],
+      'Chennai': ['T Nagar', 'Anna Nagar', 'Adyar', 'Velachery', 'OMR', 'Porur', 'Tambaram', 'Chrompet', 'Guduvanchery', 'Pallikaranai']
+    };
+    
+    return cityLocalitiesMap[city] || cityLocalitiesMap['Bengaluru']; // Default to Bengaluru if city not found
+  };
+
+  const nearbyLocalities = getCityLocalities(property.city)
+    .filter(loc => loc !== property.locality)
+    .slice(0, 8);
 
   // Generate different BHK options for same locality
   const bhkOptions = ['1 BHK', '2 BHK', '3 BHK', '4+ BHK', 'Studio'];
@@ -31,11 +44,8 @@ export const RelatedPropertiesCard: React.FC<RelatedPropertiesCardProps> = ({ pr
     .filter(bhk => bhk !== property.bhk_type)
     .slice(0, 6);
 
-  // Generate top localities for same property type
-  const topLocalities = [
-    'Hitech City', 'Begumpet', 'Secunderabad', 'Ameerpet', 'Dilsukhnagar',
-    'LB Nagar', 'Uppal', 'Kompally', 'Nizampet', 'Bachupally'
-  ].slice(0, 8);
+  // Generate top localities for same city
+  const topLocalities = getCityLocalities(property.city).slice(0, 8);
 
   // Generate property type variations
   const propertyTypes = ['Apartment', 'Villa', 'Independent House', 'Builder Floor'];
