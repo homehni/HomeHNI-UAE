@@ -112,11 +112,19 @@ export const CommercialMultiStepForm: React.FC<CommercialMultiStepFormProps> = (
   };
 
 
-  const handleScheduleNext = (data: ScheduleInfo) => {
-    updateScheduleInfo(data);
-    nextStep();
-    scrollToTop();
-  };
+const handleScheduleNext = (data: ScheduleInfo) => {
+  updateScheduleInfo(data);
+  nextStep();
+  scrollToTop();
+};
+
+const handleScheduleSubmit = (data: ScheduleInfo) => {
+  updateScheduleInfo(data);
+  const formData = getFormData();
+  onSubmit(formData as CommercialFormData);
+  goToStep(8);
+  scrollToTop();
+};
 
   const handleSubmit = () => {
     const formData = getFormData();
@@ -183,6 +191,7 @@ export const CommercialMultiStepForm: React.FC<CommercialMultiStepFormProps> = (
             initialData={scheduleInfo}
             onNext={handleScheduleNext}
             onBack={prevStep}
+            onSubmit={handleScheduleSubmit}
           />
         );
       case 8:

@@ -203,6 +203,7 @@ export const ResaleMultiStepForm: React.FC<ResaleMultiStepFormProps> = ({
                 initialData={scheduleInfo}
                 onNext={handleScheduleNext}
                 onBack={prevStep}
+                onSubmit={handleScheduleSubmit}
               />
             )}
 
@@ -286,6 +287,7 @@ export const ResaleMultiStepForm: React.FC<ResaleMultiStepFormProps> = ({
                     initialData={scheduleInfo}
                     onNext={handleScheduleNext}
                     onBack={prevStep}
+                    onSubmit={handleScheduleSubmit}
                   />
                 )}
 
