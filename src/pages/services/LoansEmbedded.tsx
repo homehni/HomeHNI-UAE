@@ -193,7 +193,7 @@ const LoansEmbedded = () => {
       </section>
 
       {/* Sticky Form Container for Large Screens */}
-      <div className="hidden lg:block fixed top-32 right-8 z-40">
+      <div className="hidden lg:block absolute top-32 right-8 z-40">
         <div className="w-96 sticky top-32">
           <Card className="w-full rounded-xl shadow-2xl bg-background border-2 border-primary">
             <CardContent className="p-6">

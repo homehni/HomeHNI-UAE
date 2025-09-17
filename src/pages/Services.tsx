@@ -104,7 +104,7 @@ const Services = () => {
 
       <main className="pt-24">
         <div className="container mx-auto px-4 pt-6 md:pt-12 pb-10">
-          <div className="card-border-red bg-background shadow-sm">
+          <div className="card-border-red relative bg-background shadow-sm">
             {/* Mobile Header with Menu Button */}
             <div className="md:hidden p-4 border-b border-border bg-muted/30">
               <div className="flex items-center justify-between">
