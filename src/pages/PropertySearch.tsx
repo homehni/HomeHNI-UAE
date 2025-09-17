@@ -16,13 +16,11 @@ import Marquee from '@/components/Marquee';
 import Footer from '@/components/Footer';
 import PropertyTools from '@/components/PropertyTools';
 import { useSimplifiedSearch } from '@/hooks/useSimplifiedSearch';
-
 const PropertySearch = () => {
   const navigate = useNavigate();
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [showMap, setShowMap] = useState(false);
   const locationInputRef = useRef<HTMLInputElement>(null);
-  
   const {
     filters,
     activeTab,
@@ -35,17 +33,7 @@ const PropertySearch = () => {
   } = useSimplifiedSearch();
 
   // Property types that match the database schema and FeaturedProperties component
-  const propertyTypes = [
-    'ALL',
-    'DUPLEX',
-    'PENTHOUSE', 
-    'APARTMENT',
-    'VILLA',
-    'PLOT',
-    'PG HOSTEL',
-    'INDEPENDENT HOUSE'
-  ];
-
+  const propertyTypes = ['ALL', 'DUPLEX', 'PENTHOUSE', 'APARTMENT', 'VILLA', 'PLOT', 'PG HOSTEL', 'INDEPENDENT HOUSE'];
   const bhkTypes = ['1 RK', '1 BHK', '2 BHK', '3 BHK', '4 BHK', '5+ BHK'];
   const furnishedOptions = ['Furnished', 'Semi-Furnished', 'Unfurnished'];
   const availabilityOptions = ['Ready to Move', 'Under Construction'];
@@ -54,9 +42,11 @@ const PropertySearch = () => {
   // Function to normalize location for better search matching
   const normalizeLocation = (location: string) => {
     if (!location) return '';
-    
+
     // Common location name mappings for better matching
-    const locationMappings: { [key: string]: string } = {
+    const locationMappings: {
+      [key: string]: string;
+    } = {
       'bangalore': 'Bangalore',
       'bengaluru': 'Bangalore',
       'mumbai': 'Mumbai',
@@ -125,7 +115,6 @@ const PropertySearch = () => {
       'akola': 'Akola',
       'pulgaon': 'Pulgaon'
     };
-    
     const normalized = location.toLowerCase().trim();
     return locationMappings[normalized] || location;
   };
@@ -133,14 +122,12 @@ const PropertySearch = () => {
   // Initialize Google Maps Places Autocomplete
   useEffect(() => {
     const apiKey = 'AIzaSyD2rlXeHN4cm0CQD-y4YGTsob9a_27YcwY';
-    
     const loadGoogleMaps = () => {
       return new Promise((resolve, reject) => {
         if ((window as any).google?.maps?.places) {
           resolve(true);
           return;
         }
-        
         const script = document.createElement('script');
         script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places`;
         script.async = true;
@@ -150,10 +137,8 @@ const PropertySearch = () => {
         document.head.appendChild(script);
       });
     };
-
     const initAutocomplete = () => {
       if (!(window as any).google?.maps?.places || !locationInputRef.current) return;
-      
       const options = {
         fields: ['formatted_address', 'geometry', 'name', 'address_components'],
         types: ['geocode'],
@@ -161,35 +146,20 @@ const PropertySearch = () => {
           country: 'in' as const
         }
       };
-
-      const autocomplete = new (window as any).google.maps.places.Autocomplete(
-        locationInputRef.current, 
-        options
-      );
-
+      const autocomplete = new (window as any).google.maps.places.Autocomplete(locationInputRef.current, options);
       autocomplete.addListener('place_changed', () => {
         const place = autocomplete.getPlace();
         let locationValue = place?.formatted_address || place?.name || '';
-        
+
         // Extract location components for better search matching
         if (place?.address_components) {
           const addressComponents = place.address_components;
-          
+
           // Extract different levels of location information
-          const localityComponent = addressComponents.find((comp: any) => 
-            comp.types.includes('locality') || 
-            comp.types.includes('sublocality') ||
-            comp.types.includes('sublocality_level_1')
-          );
-          
-          const cityComponent = addressComponents.find((comp: any) => 
-            comp.types.includes('administrative_area_level_2')
-          );
-          
-          const stateComponent = addressComponents.find((comp: any) => 
-            comp.types.includes('administrative_area_level_1')
-          );
-          
+          const localityComponent = addressComponents.find((comp: any) => comp.types.includes('locality') || comp.types.includes('sublocality') || comp.types.includes('sublocality_level_1'));
+          const cityComponent = addressComponents.find((comp: any) => comp.types.includes('administrative_area_level_2'));
+          const stateComponent = addressComponents.find((comp: any) => comp.types.includes('administrative_area_level_1'));
+
           // Prioritize locality for more specific property matching
           if (localityComponent) {
             locationValue = localityComponent.long_name;
@@ -200,13 +170,12 @@ const PropertySearch = () => {
           } else if (cityComponent) {
             locationValue = cityComponent.long_name;
           }
-          
+
           // Add state for better disambiguation
           if (stateComponent && !locationValue.includes(stateComponent.long_name)) {
             locationValue += `, ${stateComponent.long_name}`;
           }
         }
-        
         if (locationValue) {
           // Normalize the location for better search matching
           const normalizedLocation = normalizeLocation(locationValue);
@@ -214,15 +183,9 @@ const PropertySearch = () => {
         }
       });
     };
-
-    loadGoogleMaps()
-      .then(initAutocomplete)
-      .catch(console.error);
+    loadGoogleMaps().then(initAutocomplete).catch(console.error);
   }, [updateFilter]);
-
-
-  return (
-    <div className="min-h-screen bg-background">
+  return <div className="min-h-screen bg-background">
       {/* Marquee at the very top */}
       <Marquee />
       <Header />
@@ -244,56 +207,29 @@ const PropertySearch = () => {
             <div className="flex-1 flex gap-2">
               <div className="relative flex-1">
                 <MapPin className="absolute left-3 top-3 text-brand-red" size={20} />
-                <Input 
-                  ref={locationInputRef}
-                  value={filters.location}
-                  onChange={(e) => {
-                    const normalizedLocation = normalizeLocation(e.target.value);
-                    updateFilter('location', normalizedLocation);
-                  }}
-                  placeholder="Search 'Bellandur, Koramangala, Whitefield'..." 
-                  className="pl-10 pr-4 h-12 border-brand-red focus:ring-2 focus:ring-brand-red/20"
-                />
-                {filters.location && (
-                  <div className="absolute right-3 top-3">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => updateFilter('location', '')}
-                      className="h-6 w-6 p-0 hover:bg-brand-red/10"
-                    >
+                <Input ref={locationInputRef} value={filters.location} onChange={e => {
+                const normalizedLocation = normalizeLocation(e.target.value);
+                updateFilter('location', normalizedLocation);
+              }} placeholder="Search 'Bellandur, Koramangala, Whitefield'..." className="pl-10 pr-4 h-12 border-brand-red focus:ring-2 focus:ring-brand-red/20" />
+                {filters.location && <div className="absolute right-3 top-3">
+                    <Button variant="ghost" size="sm" onClick={() => updateFilter('location', '')} className="h-6 w-6 p-0 hover:bg-brand-red/10">
                       <X size={14} />
                     </Button>
-                  </div>
-                )}
+                  </div>}
                 {/* Google Maps attribution */}
-                <div className="absolute -bottom-6 right-0 text-xs text-gray-400">
-                  powered by Google
-                </div>
+                
               </div>
             </div>
 
             {/* View Controls */}
             <div className="flex gap-2">
-              <Button
-                variant={viewMode === 'grid' ? 'default' : 'outline'}
-                size="sm"
-                onClick={() => setViewMode('grid')}
-              >
+              <Button variant={viewMode === 'grid' ? 'default' : 'outline'} size="sm" onClick={() => setViewMode('grid')}>
                 <Grid3X3 size={16} />
               </Button>
-              <Button
-                variant={viewMode === 'list' ? 'default' : 'outline'}
-                size="sm"
-                onClick={() => setViewMode('list')}
-              >
+              <Button variant={viewMode === 'list' ? 'default' : 'outline'} size="sm" onClick={() => setViewMode('list')}>
                 <List size={16} />
               </Button>
-              <Button
-                variant={showMap ? 'default' : 'outline'}
-                size="sm"
-                onClick={() => setShowMap(!showMap)}
-              >
+              <Button variant={showMap ? 'default' : 'outline'} size="sm" onClick={() => setShowMap(!showMap)}>
                 <Map size={16} />
               </Button>
             </div>
@@ -320,14 +256,7 @@ const PropertySearch = () => {
                   <h4 className="font-semibold mb-3">Budget</h4>
                   <div className="space-y-3">
                     <div className="relative">
-                      <Slider
-                        value={filters.budget}
-                        onValueChange={(value) => updateFilter('budget', value)}
-                        max={100000000}
-                        min={0}
-                        step={500000}
-                        className="w-full"
-                      />
+                      <Slider value={filters.budget} onValueChange={value => updateFilter('budget', value)} max={100000000} min={0} step={500000} className="w-full" />
                     </div>
                     <div className="flex justify-between text-sm font-medium text-foreground">
                       <span>₹{filters.budget[0] === 0 ? '0' : filters.budget[0] >= 10000000 ? (filters.budget[0] / 10000000).toFixed(filters.budget[0] % 10000000 === 0 ? 0 : 1) + ' Cr' : (filters.budget[0] / 100000).toFixed(filters.budget[0] % 100000 === 0 ? 0 : 1) + ' L'}</span>
@@ -340,92 +269,45 @@ const PropertySearch = () => {
                       <div className="grid grid-cols-2 gap-2">
                         <div>
                           <label className="text-xs text-gray-500 mb-1 block">Min Budget</label>
-                          <Input
-                            type="number"
-                            placeholder="Enter min budget"
-                            value={filters.budget[0].toString()}
-                            onChange={(e) => {
-                              const value = parseInt(e.target.value) || 0;
-                              if (value <= filters.budget[1]) {
-                                updateFilter('budget', [value, filters.budget[1]]);
-                              }
-                            }}
-                            className="h-8 text-sm"
-                          />
+                          <Input type="number" placeholder="Enter min budget" value={filters.budget[0].toString()} onChange={e => {
+                          const value = parseInt(e.target.value) || 0;
+                          if (value <= filters.budget[1]) {
+                            updateFilter('budget', [value, filters.budget[1]]);
+                          }
+                        }} className="h-8 text-sm" />
                         </div>
                         <div>
                           <label className="text-xs text-gray-500 mb-1 block">Max Budget</label>
-                          <Input
-                            type="number"
-                            placeholder="Enter max budget"
-                            value={filters.budget[1].toString()}
-                            onChange={(e) => {
-                              const value = parseInt(e.target.value) || 0;
-                              if (value >= filters.budget[0]) {
-                                updateFilter('budget', [filters.budget[0], Math.min(value, 100000000)]);
-                              }
-                            }}
-                            className="h-8 text-sm"
-                          />
+                          <Input type="number" placeholder="Enter max budget" value={filters.budget[1].toString()} onChange={e => {
+                          const value = parseInt(e.target.value) || 0;
+                          if (value >= filters.budget[0]) {
+                            updateFilter('budget', [filters.budget[0], Math.min(value, 100000000)]);
+                          }
+                        }} className="h-8 text-sm" />
                         </div>
                       </div>
                     </div>
                     
                     <div className="grid grid-cols-3 gap-2 mt-3">
-                      <Button
-                        variant={filters.budget[0] === 0 && filters.budget[1] === 50000 ? "default" : "outline"}
-                        size="sm"
-                        onClick={() => updateFilter('budget', [0, 50000])}
-                        className="text-xs h-8"
-                      >
+                      <Button variant={filters.budget[0] === 0 && filters.budget[1] === 50000 ? "default" : "outline"} size="sm" onClick={() => updateFilter('budget', [0, 50000])} className="text-xs h-8">
                         Under 50K
                       </Button>
-                      <Button
-                        variant={filters.budget[0] === 0 && filters.budget[1] === 100000 ? "default" : "outline"}
-                        size="sm"
-                        onClick={() => updateFilter('budget', [0, 100000])}
-                        className="text-xs h-8"
-                      >
+                      <Button variant={filters.budget[0] === 0 && filters.budget[1] === 100000 ? "default" : "outline"} size="sm" onClick={() => updateFilter('budget', [0, 100000])} className="text-xs h-8">
                         Under 1L
                       </Button>
-                      <Button
-                        variant={filters.budget[0] === 0 && filters.budget[1] === 5000000 ? "default" : "outline"}
-                        size="sm"
-                        onClick={() => updateFilter('budget', [0, 5000000])}
-                        className="text-xs h-8"
-                      >
+                      <Button variant={filters.budget[0] === 0 && filters.budget[1] === 5000000 ? "default" : "outline"} size="sm" onClick={() => updateFilter('budget', [0, 5000000])} className="text-xs h-8">
                         Under 50L
                       </Button>
-                      <Button
-                        variant={filters.budget[0] === 5000000 && filters.budget[1] === 10000000 ? "default" : "outline"}
-                        size="sm"
-                        onClick={() => updateFilter('budget', [5000000, 10000000])}
-                        className="text-xs h-8"
-                      >
+                      <Button variant={filters.budget[0] === 5000000 && filters.budget[1] === 10000000 ? "default" : "outline"} size="sm" onClick={() => updateFilter('budget', [5000000, 10000000])} className="text-xs h-8">
                         50L-1Cr
                       </Button>
-                      <Button
-                        variant={filters.budget[0] === 10000000 && filters.budget[1] === 20000000 ? "default" : "outline"}
-                        size="sm"
-                        onClick={() => updateFilter('budget', [10000000, 20000000])}
-                        className="text-xs h-8"
-                      >
+                      <Button variant={filters.budget[0] === 10000000 && filters.budget[1] === 20000000 ? "default" : "outline"} size="sm" onClick={() => updateFilter('budget', [10000000, 20000000])} className="text-xs h-8">
                         1-2Cr
                       </Button>
-                      <Button
-                        variant={filters.budget[0] === 20000000 && filters.budget[1] === 50000000 ? "default" : "outline"}
-                        size="sm"
-                        onClick={() => updateFilter('budget', [20000000, 50000000])}
-                        className="text-xs h-8"
-                      >
+                      <Button variant={filters.budget[0] === 20000000 && filters.budget[1] === 50000000 ? "default" : "outline"} size="sm" onClick={() => updateFilter('budget', [20000000, 50000000])} className="text-xs h-8">
                         2-5Cr
                       </Button>
-                      <Button
-                        variant={filters.budget[0] === 50000000 && filters.budget[1] === 100000000 ? "default" : "outline"}
-                        size="sm"
-                        onClick={() => updateFilter('budget', [50000000, 100000000])}
-                        className="text-xs h-8"
-                      >
+                      <Button variant={filters.budget[0] === 50000000 && filters.budget[1] === 100000000 ? "default" : "outline"} size="sm" onClick={() => updateFilter('budget', [50000000, 100000000])} className="text-xs h-8">
                         5Cr+
                       </Button>
                     </div>
@@ -438,27 +320,17 @@ const PropertySearch = () => {
                 <div>
                   <h4 className="font-semibold mb-3">Property Type</h4>
                   <div className="space-y-2">
-                    {propertyTypes.map((type) => (
-                      <div key={type} className="flex items-center space-x-2">
-                        <button
-                          onClick={() => {
-                            if (type === 'ALL') {
-                              updateFilter('propertyType', []);
-                            } else {
-                              updateFilter('propertyType', [type]);
-                            }
-                          }}
-                          className={`w-full text-left px-3 py-2 rounded-full text-sm font-medium transition-colors ${
-                            (filters.propertyType.length === 0 && type === 'ALL') || 
-                            (filters.propertyType.length > 0 && filters.propertyType[0] === type)
-                              ? 'bg-primary text-primary-foreground shadow'
-                              : 'bg-muted/60 hover:bg-muted/80 text-foreground'
-                          }`}
-                        >
+                    {propertyTypes.map(type => <div key={type} className="flex items-center space-x-2">
+                        <button onClick={() => {
+                      if (type === 'ALL') {
+                        updateFilter('propertyType', []);
+                      } else {
+                        updateFilter('propertyType', [type]);
+                      }
+                    }} className={`w-full text-left px-3 py-2 rounded-full text-sm font-medium transition-colors ${filters.propertyType.length === 0 && type === 'ALL' || filters.propertyType.length > 0 && filters.propertyType[0] === type ? 'bg-primary text-primary-foreground shadow' : 'bg-muted/60 hover:bg-muted/80 text-foreground'}`}>
                           {type}
                         </button>
-                      </div>
-                    ))}
+                      </div>)}
                   </div>
                 </div>
 
@@ -468,23 +340,15 @@ const PropertySearch = () => {
                 <div>
                   <h4 className="font-semibold mb-3">BHK Type</h4>
                   <div className="grid grid-cols-3 gap-2">
-                    {bhkTypes.map((bhk) => (
-                      <Button
-                        key={bhk}
-                        variant={filters.bhkType.includes(bhk) ? 'default' : 'outline'}
-                        size="sm"
-                        onClick={() => {
-                          if (filters.bhkType.includes(bhk)) {
-                            updateFilter('bhkType', filters.bhkType.filter(b => b !== bhk));
-                          } else {
-                            updateFilter('bhkType', [...filters.bhkType, bhk]);
-                          }
-                        }}
-                        className="text-xs"
-                      >
+                    {bhkTypes.map(bhk => <Button key={bhk} variant={filters.bhkType.includes(bhk) ? 'default' : 'outline'} size="sm" onClick={() => {
+                    if (filters.bhkType.includes(bhk)) {
+                      updateFilter('bhkType', filters.bhkType.filter(b => b !== bhk));
+                    } else {
+                      updateFilter('bhkType', [...filters.bhkType, bhk]);
+                    }
+                  }} className="text-xs">
                         {bhk}
-                      </Button>
-                    ))}
+                      </Button>)}
                   </div>
                 </div>
 
@@ -494,24 +358,18 @@ const PropertySearch = () => {
                 <div>
                   <h4 className="font-semibold mb-3">Furnished Status</h4>
                   <div className="space-y-2">
-                    {furnishedOptions.map((option) => (
-                      <div key={option} className="flex items-center space-x-2">
-                        <Checkbox
-                          id={option}
-                          checked={filters.furnished.includes(option)}
-                          onCheckedChange={(checked) => {
-                            if (checked) {
-                              updateFilter('furnished', [...filters.furnished, option]);
-                            } else {
-                              updateFilter('furnished', filters.furnished.filter(f => f !== option));
-                            }
-                          }}
-                        />
+                    {furnishedOptions.map(option => <div key={option} className="flex items-center space-x-2">
+                        <Checkbox id={option} checked={filters.furnished.includes(option)} onCheckedChange={checked => {
+                      if (checked) {
+                        updateFilter('furnished', [...filters.furnished, option]);
+                      } else {
+                        updateFilter('furnished', filters.furnished.filter(f => f !== option));
+                      }
+                    }} />
                         <label htmlFor={option} className="text-sm text-gray-700 cursor-pointer">
                           {option}
                         </label>
-                      </div>
-                    ))}
+                      </div>)}
                   </div>
                 </div>
 
@@ -521,24 +379,18 @@ const PropertySearch = () => {
                 <div>
                   <h4 className="font-semibold mb-3">Construction Status</h4>
                   <div className="space-y-2">
-                    {availabilityOptions.map((option) => (
-                      <div key={option} className="flex items-center space-x-2">
-                        <Checkbox
-                          id={option}
-                          checked={filters.availability.includes(option)}
-                          onCheckedChange={(checked) => {
-                            if (checked) {
-                              updateFilter('availability', [...filters.availability, option]);
-                            } else {
-                              updateFilter('availability', filters.availability.filter(a => a !== option));
-                            }
-                          }}
-                        />
+                    {availabilityOptions.map(option => <div key={option} className="flex items-center space-x-2">
+                        <Checkbox id={option} checked={filters.availability.includes(option)} onCheckedChange={checked => {
+                      if (checked) {
+                        updateFilter('availability', [...filters.availability, option]);
+                      } else {
+                        updateFilter('availability', filters.availability.filter(a => a !== option));
+                      }
+                    }} />
                         <label htmlFor={option} className="text-sm text-gray-700 cursor-pointer">
                           {option}
                         </label>
-                      </div>
-                    ))}
+                      </div>)}
                   </div>
                 </div>
 
@@ -548,24 +400,18 @@ const PropertySearch = () => {
                 <div>
                   <h4 className="font-semibold mb-3">Locality</h4>
                   <div className="max-h-32 overflow-y-auto space-y-2">
-                    {availableLocalities.slice(0, 8).map((locality) => (
-                      <div key={locality} className="flex items-center space-x-2">
-                        <Checkbox
-                          id={locality}
-                          checked={filters.locality.includes(locality)}
-                          onCheckedChange={(checked) => {
-                            if (checked) {
-                              updateFilter('locality', [...filters.locality, locality]);
-                            } else {
-                              updateFilter('locality', filters.locality.filter(l => l !== locality));
-                            }
-                          }}
-                        />
+                    {availableLocalities.slice(0, 8).map(locality => <div key={locality} className="flex items-center space-x-2">
+                        <Checkbox id={locality} checked={filters.locality.includes(locality)} onCheckedChange={checked => {
+                      if (checked) {
+                        updateFilter('locality', [...filters.locality, locality]);
+                      } else {
+                        updateFilter('locality', filters.locality.filter(l => l !== locality));
+                      }
+                    }} />
                         <label htmlFor={locality} className="text-sm text-gray-700 cursor-pointer">
                           {locality}
                         </label>
-                      </div>
-                    ))}
+                      </div>)}
                   </div>
                 </div>
 
@@ -575,24 +421,18 @@ const PropertySearch = () => {
                 <div>
                   <h4 className="font-semibold mb-3">Age of Property</h4>
                   <div className="space-y-2">
-                    {constructionOptions.map((option) => (
-                      <div key={option} className="flex items-center space-x-2">
-                        <Checkbox
-                          id={option}
-                          checked={filters.construction.includes(option)}
-                          onCheckedChange={(checked) => {
-                            if (checked) {
-                              updateFilter('construction', [...filters.construction, option]);
-                            } else {
-                              updateFilter('construction', filters.construction.filter(c => c !== option));
-                            }
-                          }}
-                        />
+                    {constructionOptions.map(option => <div key={option} className="flex items-center space-x-2">
+                        <Checkbox id={option} checked={filters.construction.includes(option)} onCheckedChange={checked => {
+                      if (checked) {
+                        updateFilter('construction', [...filters.construction, option]);
+                      } else {
+                        updateFilter('construction', filters.construction.filter(c => c !== option));
+                      }
+                    }} />
                         <label htmlFor={option} className="text-sm text-gray-700 cursor-pointer">
                           {option}
                         </label>
-                      </div>
-                    ))}
+                      </div>)}
                   </div>
                 </div>
               </CardContent>
@@ -606,47 +446,34 @@ const PropertySearch = () => {
               <div>
                 <h1 className="text-2xl font-bold text-gray-900">
                   {(() => {
-                    // Get property type context
-                    const hasPropertyTypeFilter = filters.propertyType.length > 0 && !filters.propertyType.includes('ALL');
-                    const propertyTypeText = hasPropertyTypeFilter ? 
-                      filters.propertyType.length === 1 ? 
-                        filters.propertyType[0].toLowerCase().replace('plot', 'plots').replace('apartment', 'apartments').replace('villa', 'villas').replace('commercial', 'commercial properties').replace('house', 'houses').replace('penthouse', 'penthouses').replace('independent house', 'independent houses').replace('pg hostel', 'pg hostels').replace('duplex', 'duplexes')
-                        : 'properties'
-                      : 'properties';
-                    
-                    // Get location context
-                    const locationText = filters.location ? ` in ${filters.location}` : '';
-                    
-                    switch (activeTab) {
-                      case 'buy':
-                        return hasPropertyTypeFilter ? 
-                          `${propertyTypeText.charAt(0).toUpperCase() + propertyTypeText.slice(1)} for Sale${locationText}` :
-                          `Properties for Sale${locationText || ' in All Locations'}`;
-                      case 'rent':
-                        return hasPropertyTypeFilter ? 
-                          `${propertyTypeText.charAt(0).toUpperCase() + propertyTypeText.slice(1)} for Rent${locationText}` :
-                          `Properties for Rent${locationText || ' in All Locations'}`;
-                      case 'commercial':
-                        return hasPropertyTypeFilter ? 
-                          `${propertyTypeText.charAt(0).toUpperCase() + propertyTypeText.slice(1)} Commercial${locationText}` :
-                          `Commercial Properties${locationText || ' in All Locations'}`;
-                      default:
-                        return `Properties for Sale${locationText || ' in All Locations'}`;
-                    }
-                  })()}
+                  // Get property type context
+                  const hasPropertyTypeFilter = filters.propertyType.length > 0 && !filters.propertyType.includes('ALL');
+                  const propertyTypeText = hasPropertyTypeFilter ? filters.propertyType.length === 1 ? filters.propertyType[0].toLowerCase().replace('plot', 'plots').replace('apartment', 'apartments').replace('villa', 'villas').replace('commercial', 'commercial properties').replace('house', 'houses').replace('penthouse', 'penthouses').replace('independent house', 'independent houses').replace('pg hostel', 'pg hostels').replace('duplex', 'duplexes') : 'properties' : 'properties';
+
+                  // Get location context
+                  const locationText = filters.location ? ` in ${filters.location}` : '';
+                  switch (activeTab) {
+                    case 'buy':
+                      return hasPropertyTypeFilter ? `${propertyTypeText.charAt(0).toUpperCase() + propertyTypeText.slice(1)} for Sale${locationText}` : `Properties for Sale${locationText || ' in All Locations'}`;
+                    case 'rent':
+                      return hasPropertyTypeFilter ? `${propertyTypeText.charAt(0).toUpperCase() + propertyTypeText.slice(1)} for Rent${locationText}` : `Properties for Rent${locationText || ' in All Locations'}`;
+                    case 'commercial':
+                      return hasPropertyTypeFilter ? `${propertyTypeText.charAt(0).toUpperCase() + propertyTypeText.slice(1)} Commercial${locationText}` : `Commercial Properties${locationText || ' in All Locations'}`;
+                    default:
+                      return `Properties for Sale${locationText || ' in All Locations'}`;
+                  }
+                })()}
                 </h1>
                 <p className="text-gray-600 mt-1">
                   {isLoading ? 'Searching...' : `${filteredProperties.length} results found`}
-                  {filters.location && (
-                    <span className="ml-2 text-brand-red">
+                  {filters.location && <span className="ml-2 text-brand-red">
                       • Real-time results for "{filters.location}"
-                    </span>
-                  )}
+                    </span>}
                 </p>
               </div>
               
               <div className="flex items-center gap-4">
-                <Select value={filters.sortBy} onValueChange={(value) => updateFilter('sortBy', value)}>
+                <Select value={filters.sortBy} onValueChange={value => updateFilter('sortBy', value)}>
                   <SelectTrigger className="w-48">
                     <SelectValue placeholder="Sort by" />
                   </SelectTrigger>
@@ -667,121 +494,57 @@ const PropertySearch = () => {
             </div>
 
             {/* Active Filters - Show all active filters */}
-            {(filters.propertyType.length > 0 && !filters.propertyType.includes('ALL') || 
-              filters.bhkType.length > 0 || 
-              filters.furnished.length > 0 || 
-              filters.availability.length > 0 ||
-              filters.locality.length > 0 ||
-              filters.construction.length > 0 ||
-              filters.budget[0] > 0 || 
-              filters.budget[1] < 50000000) && (
-              <div className="flex flex-wrap gap-2 mb-6">
+            {(filters.propertyType.length > 0 && !filters.propertyType.includes('ALL') || filters.bhkType.length > 0 || filters.furnished.length > 0 || filters.availability.length > 0 || filters.locality.length > 0 || filters.construction.length > 0 || filters.budget[0] > 0 || filters.budget[1] < 50000000) && <div className="flex flex-wrap gap-2 mb-6">
                 <div className="flex items-center text-sm text-gray-600 mr-2">
                   <Filter size={14} className="mr-1" />
                   Active filters:
                 </div>
                 
                 {/* Budget filter badge */}
-                {(filters.budget[0] > 0 || filters.budget[1] < 50000000) && (
-                  <Badge variant="secondary" className="flex items-center gap-1">
+                {(filters.budget[0] > 0 || filters.budget[1] < 50000000) && <Badge variant="secondary" className="flex items-center gap-1">
                     ₹{filters.budget[0] === 0 ? '0' : (filters.budget[0] / 100000).toFixed(0) + 'L'} - 
                     ₹{filters.budget[1] >= 10000000 ? (filters.budget[1] / 10000000).toFixed(1) + 'Cr' : (filters.budget[1] / 100000).toFixed(0) + 'L'}
-                    <button 
-                      onClick={() => updateFilter('budget', [0, 50000000])}
-                      className="ml-1 hover:bg-gray-300 rounded-full p-0.5"
-                    >
+                    <button onClick={() => updateFilter('budget', [0, 50000000])} className="ml-1 hover:bg-gray-300 rounded-full p-0.5">
                       <X size={12} />
                     </button>
-                  </Badge>
-                )}
+                  </Badge>}
                 
-                {filters.propertyType.filter(type => type !== 'ALL').map((type) => (
-                  <Badge key={type} variant="secondary" className="flex items-center gap-1">
+                {filters.propertyType.filter(type => type !== 'ALL').map(type => <Badge key={type} variant="secondary" className="flex items-center gap-1">
                     {type}
-                    <button 
-                      onClick={() => updateFilter('propertyType', [])}
-                      className="ml-1 hover:bg-gray-300 rounded-full p-0.5"
-                    >
+                    <button onClick={() => updateFilter('propertyType', [])} className="ml-1 hover:bg-gray-300 rounded-full p-0.5">
                       <X size={12} />
                     </button>
-                  </Badge>
-                ))}
-                {filters.bhkType.map((bhk) => (
-                  <Badge key={bhk} variant="secondary" className="flex items-center gap-1">
+                  </Badge>)}
+                {filters.bhkType.map(bhk => <Badge key={bhk} variant="secondary" className="flex items-center gap-1">
                     {bhk}
-                    <button 
-                      onClick={() => updateFilter('bhkType', filters.bhkType.filter(b => b !== bhk))}
-                      className="ml-1 hover:bg-gray-300 rounded-full p-0.5"
-                    >
+                    <button onClick={() => updateFilter('bhkType', filters.bhkType.filter(b => b !== bhk))} className="ml-1 hover:bg-gray-300 rounded-full p-0.5">
                       <X size={12} />
                     </button>
-                  </Badge>
-                ))}
-                {filters.furnished.map((furnished) => (
-                  <Badge key={furnished} variant="secondary" className="flex items-center gap-1">
+                  </Badge>)}
+                {filters.furnished.map(furnished => <Badge key={furnished} variant="secondary" className="flex items-center gap-1">
                     {furnished}
-                    <button 
-                      onClick={() => updateFilter('furnished', filters.furnished.filter(f => f !== furnished))}
-                      className="ml-1 hover:bg-gray-300 rounded-full p-0.5"
-                    >
+                    <button onClick={() => updateFilter('furnished', filters.furnished.filter(f => f !== furnished))} className="ml-1 hover:bg-gray-300 rounded-full p-0.5">
                       <X size={12} />
                     </button>
-                  </Badge>
-                ))}
-                {filters.locality.map((locality) => (
-                  <Badge key={locality} variant="secondary" className="flex items-center gap-1">
+                  </Badge>)}
+                {filters.locality.map(locality => <Badge key={locality} variant="secondary" className="flex items-center gap-1">
                     {locality}
-                    <button 
-                      onClick={() => updateFilter('locality', filters.locality.filter(l => l !== locality))}
-                      className="ml-1 hover:bg-gray-300 rounded-full p-0.5"
-                    >
+                    <button onClick={() => updateFilter('locality', filters.locality.filter(l => l !== locality))} className="ml-1 hover:bg-gray-300 rounded-full p-0.5">
                       <X size={12} />
                     </button>
-                  </Badge>
-                ))}
+                  </Badge>)}
                 
-                <Button
-                  variant="ghost" 
-                  size="sm"
-                  onClick={clearAllFilters}
-                  className="text-brand-red hover:bg-brand-red/10"
-                >
+                <Button variant="ghost" size="sm" onClick={clearAllFilters} className="text-brand-red hover:bg-brand-red/10">
                   Clear All
                 </Button>
-              </div>
-            )}
+              </div>}
 
             {/* Properties Grid/List - Real-time results */}
-            {isLoading ? (
-              <div className="grid gap-4 sm:gap-6 grid-cols-2 md:grid-cols-2 lg:grid-cols-3">
-                {[1, 2, 3, 4, 5, 6].map((i) => (
-                  <div key={i} className="bg-gray-100 animate-pulse rounded-lg h-80"></div>
-                ))}
-              </div>
-            ) : filteredProperties.length > 0 ? (
-              <div className={`grid gap-4 sm:gap-6 ${
-                viewMode === 'grid' 
-                  ? 'grid-cols-2 md:grid-cols-3 lg:grid-cols-3' 
-                  : 'grid-cols-1'
-              }`}>
-                {filteredProperties.map((property) => (
-                  <PropertyCard
-                    key={property.id}
-                    id={property.id}
-                    title={property.title}
-                    location={property.location}
-                    price={property.price}
-                    area={property.area}
-                    bedrooms={property.bedrooms}
-                    bathrooms={property.bathrooms}
-                    image={property.image}
-                    propertyType={property.propertyType}
-                    size={viewMode === 'list' ? 'large' : 'default'}
-                  />
-                ))}
-              </div>
-            ) : (
-              <div className="text-center py-16">
+            {isLoading ? <div className="grid gap-4 sm:gap-6 grid-cols-2 md:grid-cols-2 lg:grid-cols-3">
+                {[1, 2, 3, 4, 5, 6].map(i => <div key={i} className="bg-gray-100 animate-pulse rounded-lg h-80"></div>)}
+              </div> : filteredProperties.length > 0 ? <div className={`grid gap-4 sm:gap-6 ${viewMode === 'grid' ? 'grid-cols-2 md:grid-cols-3 lg:grid-cols-3' : 'grid-cols-1'}`}>
+                {filteredProperties.map(property => <PropertyCard key={property.id} id={property.id} title={property.title} location={property.location} price={property.price} area={property.area} bedrooms={property.bedrooms} bathrooms={property.bathrooms} image={property.image} propertyType={property.propertyType} size={viewMode === 'list' ? 'large' : 'default'} />)}
+              </div> : <div className="text-center py-16">
                 <div className="text-6xl mb-4">🏠</div>
                 <h3 className="text-xl font-semibold text-gray-600 mb-2">No properties found</h3>
                 <p className="text-gray-500 mb-4">
@@ -790,8 +553,7 @@ const PropertySearch = () => {
                 <Button onClick={clearAllFilters} variant="outline">
                   Clear All Filters
                 </Button>
-              </div>
-            )}
+              </div>}
 
             {/* Pagination */}
             <div className="flex justify-center mt-12">
@@ -811,8 +573,6 @@ const PropertySearch = () => {
       <PropertyTools />
 
       <Footer />
-    </div>
-  );
+    </div>;
 };
-
 export default PropertySearch;
