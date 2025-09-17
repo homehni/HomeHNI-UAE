@@ -10,8 +10,8 @@ import PayButton from '@/components/PayButton';
 
 const AgentPlans = () => {
   const [selectedPlans, setSelectedPlans] = useState({
-    basic: 0,
-    lifetime: 0
+    basic: 1,
+    lifetime: 1
   });
   const [isTermsModalOpen, setIsTermsModalOpen] = useState(false);
 
@@ -224,7 +224,6 @@ const AgentPlans = () => {
                                 <span className="text-lg text-gray-400 line-through">{plan.originalPrice}</span>
                                 <span className="text-2xl font-bold text-green-600">{plan.freePrice}</span>
                               </div>
-                              <div className="text-sm text-gray-500">{plan.gst}</div>
                             </div>
                           ) : (
                             <>
