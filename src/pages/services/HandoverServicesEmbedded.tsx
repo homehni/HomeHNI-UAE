@@ -179,7 +179,7 @@ const HandoverServicesEmbedded = () => {
               }}>
                 <Input id="handover-name-mobile" name="name" placeholder="Name" className="h-12 text-base bg-background" required />
 
-                <div className="flex gap-3">
+                <div className="flex flex-col sm:flex-row gap-3">
                   <Select defaultValue="+91" name="countryCode">
                     <SelectTrigger className="w-32 h-12 bg-background">
                       <SelectValue />
