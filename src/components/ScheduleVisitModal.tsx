@@ -66,6 +66,25 @@ export const ScheduleVisitModal: React.FC<ScheduleVisitModalProps> = ({
     visitTime: ''
   });
 
+  // Generate time options in 30-minute intervals from 07:00 AM to 10:00 PM
+  const formatTimeOption = (totalMinutes: number) => {
+    const hours24 = Math.floor(totalMinutes / 60);
+    const minutes = totalMinutes % 60;
+    const period = hours24 >= 12 ? 'PM' : 'AM';
+    const hours12 = (hours24 % 12) || 12;
+    const hh = hours12.toString().padStart(2, '0');
+    const mm = minutes.toString().padStart(2, '0');
+    return `${hh}:${mm} ${period}`;
+  };
+
+  const timeOptions = React.useMemo(() => {
+    const options: string[] = [];
+    for (let t = 7 * 60; t <= 22 * 60; t += 30) {
+      options.push(formatTimeOption(t));
+    }
+    return options;
+  }, []);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -339,17 +358,9 @@ export const ScheduleVisitModal: React.FC<ScheduleVisitModalProps> = ({
                           required
                         >
                           <option value="">Select time</option>
-                          <option value="09:00 AM">09:00 AM</option>
-                          <option value="10:00 AM">10:00 AM</option>
-                          <option value="11:00 AM">11:00 AM</option>
-                          <option value="12:00 PM">12:00 PM</option>
-                          <option value="01:00 PM">01:00 PM</option>
-                          <option value="02:00 PM">02:00 PM</option>
-                          <option value="03:00 PM">03:00 PM</option>
-                          <option value="04:00 PM">04:00 PM</option>
-                          <option value="05:00 PM">05:00 PM</option>
-                          <option value="06:00 PM">06:00 PM</option>
-                          <option value="07:00 PM">07:00 PM</option>
+                          {timeOptions.map((t) => (
+                            <option key={t} value={t}>{t}</option>
+                          ))}
                         </select>
                       </div>
                     </div>
