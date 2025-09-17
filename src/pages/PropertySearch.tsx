@@ -10,7 +10,7 @@ import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import PropertyCard from '@/components/PropertyCard';
-import { MapPin, Filter, Grid3X3, List, Map, Bookmark, Share2, X } from 'lucide-react';
+import { MapPin, Filter, Grid3X3, List, Bookmark, Share2, X } from 'lucide-react';
 import Header from '@/components/Header';
 import Marquee from '@/components/Marquee';
 import Footer from '@/components/Footer';
@@ -19,7 +19,6 @@ import { useSimplifiedSearch } from '@/hooks/useSimplifiedSearch';
 const PropertySearch = () => {
   const navigate = useNavigate();
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
-  const [showMap, setShowMap] = useState(false);
   const locationInputRef = useRef<HTMLInputElement>(null);
   const {
     filters,
@@ -228,9 +227,6 @@ const PropertySearch = () => {
               </Button>
               <Button variant={viewMode === 'list' ? 'default' : 'outline'} size="sm" onClick={() => setViewMode('list')}>
                 <List size={16} />
-              </Button>
-              <Button variant={showMap ? 'default' : 'outline'} size="sm" onClick={() => setShowMap(!showMap)}>
-                <Map size={16} />
               </Button>
             </div>
           </div>
