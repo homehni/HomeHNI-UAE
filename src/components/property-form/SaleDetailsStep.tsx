@@ -17,6 +17,7 @@ import { cn } from '@/lib/utils';
 import { format, addMonths } from 'date-fns';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { SaleDetails } from '@/types/saleProperty';
+import { formatPriceDisplay } from '@/utils/priceFormatter';
 
 // Helper function to convert number to words
 const numberToWords = (num: number): string => {
@@ -330,6 +331,13 @@ export const SaleDetailsStep: React.FC<SaleDetailsStepProps> = ({
                       className="h-10"
                     />
                   </FormControl>
+                  {watchedValues.maintenanceCharges && (
+                    <div className="mt-1">
+                      <p className="text-sm text-brand-maroon-light font-medium">
+                        {formatPriceDisplay(watchedValues.maintenanceCharges)}
+                      </p>
+                    </div>
+                  )}
                   <FormMessage />
                 </FormItem>
               )}
@@ -356,6 +364,13 @@ export const SaleDetailsStep: React.FC<SaleDetailsStepProps> = ({
                       className="h-10"
                     />
                   </FormControl>
+                  {watchedValues.bookingAmount && (
+                    <div className="mt-1">
+                      <p className="text-sm text-brand-maroon-light font-medium">
+                        {formatPriceDisplay(watchedValues.bookingAmount)}
+                      </p>
+                    </div>
+                  )}
                   <FormMessage />
                 </FormItem>
               )}
