@@ -17,6 +17,7 @@ import { OverviewCard } from '@/components/property-details/OverviewCard';
 
 import { AmenitiesCard } from '@/components/property-details/AmenitiesCard';
 import { NeighborhoodCard } from '@/components/property-details/NeighborhoodCard';
+import { RelatedPropertiesCard } from '@/components/property-details/RelatedPropertiesCard';
 import { PropertyHeader } from '@/components/property-details/PropertyHeader';
 import { PropertyImageGallery } from '@/components/property-details/PropertyImageGallery';
 import { PropertyInfoCards } from '@/components/property-details/PropertyInfoCards';
@@ -431,6 +432,9 @@ const PropertyDetails: React.FC = () => {
               
               {/* Neighborhood */}
               <NeighborhoodCard property={property} />
+              
+              {/* Related Properties */}
+              <RelatedPropertiesCard property={property} />
             </div>
           </div>
         </section>

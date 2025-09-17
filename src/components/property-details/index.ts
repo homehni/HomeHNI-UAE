@@ -6,6 +6,7 @@ export { ServicesStrip } from './ServicesStrip';
 
 export { AmenitiesCard } from './AmenitiesCard';
 export { NeighborhoodCard } from './NeighborhoodCard';
+export { RelatedPropertiesCard } from './RelatedPropertiesCard';
 export { MobileStickyCTA } from './MobileStickyCTA';
 
 // New components for redesigned layout
