@@ -7,6 +7,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Home, MapPin, Building, Sparkles, Camera, FileText, Calendar, Clock, PaintBucket, CheckCircle } from 'lucide-react';
+import { StickyFormNavigation } from './StickyFormNavigation';
 
 const scheduleSchema = z.object({
   paintingService: z.enum(['book', 'decline']).optional(),

@@ -16,6 +16,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { cn } from '@/lib/utils';
 import { RentalDetails } from '@/types/property';
 import { formatPriceDisplay } from '@/utils/priceFormatter';
+import { StickyFormNavigation } from './StickyFormNavigation';
 
 const rentalDetailsSchema = z.object({
   propertyAvailableFor: z.string().optional(),
