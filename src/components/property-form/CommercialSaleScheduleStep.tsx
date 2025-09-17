@@ -26,6 +26,7 @@ interface CommercialSaleScheduleStepProps {
   onBack: () => void;
   currentStep: number;
   totalSteps: number;
+  onSubmit?: (data: Partial<ScheduleInfo>) => void;
 }
 
 export const CommercialSaleScheduleStep = ({
@@ -33,7 +34,8 @@ export const CommercialSaleScheduleStep = ({
   onNext,
   onBack,
   currentStep,
-  totalSteps
+  totalSteps,
+  onSubmit
 }: CommercialSaleScheduleStepProps) => {
   const [paintingResponse, setPaintingResponse] = useState<'book' | 'decline' | null>(initialData?.paintingService as 'book' | 'decline' || null);
   const [cleaningResponse, setCleaningResponse] = useState<'book' | 'decline' | null>(initialData?.cleaningService as 'book' | 'decline' || null);
@@ -50,9 +52,13 @@ export const CommercialSaleScheduleStep = ({
     },
   });
 
-  const onSubmit = (data: CommercialSaleScheduleForm) => {
+const handleFormSubmit = (data: CommercialSaleScheduleForm) => {
+  if (onSubmit) {
+    onSubmit(data);
+  } else {
     onNext(data);
-  };
+  }
+};
 
   const watchAvailableAllDay = form.watch('availableAllDay');
 
@@ -68,7 +74,7 @@ export const CommercialSaleScheduleStep = ({
       </div>
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+<form onSubmit={form.handleSubmit(handleFormSubmit)} className="space-y-8">
           {/* Service Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Painting Service */}
@@ -315,9 +321,9 @@ export const CommercialSaleScheduleStep = ({
             <Button type="button" variant="outline" onClick={onBack}>
               Back
             </Button>
-            <Button type="submit" className="bg-red-600 hover:bg-red-700 text-white">
-              Save & Continue
-            </Button>
+<Button type="submit" className="bg-red-600 hover:bg-red-700 text-white">
+  {onSubmit ? 'Submit' : 'Save & Continue'}
+</Button>
           </div>
         </form>
       </Form>

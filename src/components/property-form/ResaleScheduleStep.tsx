@@ -21,12 +21,14 @@ interface ResaleScheduleStepProps {
   initialData?: Partial<ResaleScheduleData>;
   onNext: (data: ResaleScheduleData) => void;
   onBack: () => void;
+  onSubmit?: (data: ResaleScheduleData) => void;
 }
 
 export const ResaleScheduleStep: React.FC<ResaleScheduleStepProps> = ({
   initialData = {},
   onNext,
-  onBack
+  onBack,
+  onSubmit
 }) => {
   const form = useForm<ResaleScheduleData>({
     resolver: zodResolver(resaleScheduleSchema),
@@ -38,9 +40,13 @@ export const ResaleScheduleStep: React.FC<ResaleScheduleStepProps> = ({
     },
   });
 
-  const onSubmit = (data: ResaleScheduleData) => {
+const handleFormSubmit = (data: ResaleScheduleData) => {
+  if (onSubmit) {
+    onSubmit(data);
+  } else {
     onNext(data);
-  };
+  }
+};
 
   const watchAvailableAllDay = form.watch('availableAllDay');
 
@@ -55,7 +61,7 @@ export const ResaleScheduleStep: React.FC<ResaleScheduleStepProps> = ({
         </div>
 
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <form onSubmit={form.handleSubmit(handleFormSubmit)} className="space-y-8">
             {/* Info Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
               {/* Property Visits Info */}
@@ -223,7 +229,7 @@ export const ResaleScheduleStep: React.FC<ResaleScheduleStepProps> = ({
                 Back
               </Button>
               <Button type="submit" className="bg-primary text-primary-foreground">
-                Save & Continue
+                {onSubmit ? 'Submit' : 'Save & Continue'}
               </Button>
             </div>
           </form>

@@ -120,6 +120,14 @@ export const ResaleMultiStepForm: React.FC<ResaleMultiStepFormProps> = ({
     scrollToTop();
   };
 
+  const handleScheduleSubmit = (data: any) => {
+    updateScheduleInfo(data);
+    const formData = getFormData();
+    onSubmit(formData as SalePropertyFormData);
+    goToStep(7);
+    scrollToTop();
+  };
+
   const handleSubmit = () => {
     const formData = getFormData();
     
@@ -130,7 +138,6 @@ export const ResaleMultiStepForm: React.FC<ResaleMultiStepFormProps> = ({
       onSubmit(formData as SalePropertyFormData);
     }
   };
-
   const sidebarSteps = [
     { title: "Property Details", icon: <Home className="w-4 h-4" /> },
     { title: "Locality Details", icon: <MapPin className="w-4 h-4" /> },

@@ -74,10 +74,19 @@ export const CommercialSaleMultiStepForm = ({
     return completed;
   }, [currentStep, isStepValid]);
 
-  const handleSubmit = async () => {
-    const formData = getFormData();
-    await onSubmit(formData);
-  };
+const handleSubmit = async () => {
+  const formData = getFormData();
+  await onSubmit(formData);
+};
+
+const handleScheduleSubmit = async (data: any) => {
+  // Update schedule info, submit the property, then go to Preview
+  updateScheduleInfo(data);
+  const formData = getFormData();
+  await onSubmit(formData);
+  goToStep(8);
+  scrollToTop();
+};
 
   const scrollToTop = () => {
     window.scrollTo({ top: 150, behavior: 'smooth' });
@@ -172,6 +181,7 @@ export const CommercialSaleMultiStepForm = ({
             onBack={prevStep}
             currentStep={currentStep}
             totalSteps={7}
+            onSubmit={handleScheduleSubmit}
           />
         );
       case 8:
