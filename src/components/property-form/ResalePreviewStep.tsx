@@ -31,6 +31,11 @@ export const ResalePreviewStep: React.FC<ResalePreviewStepProps> = ({
     setShowSuccess(true);
   };
 
+  const handlePreviewListing = () => {
+    // Navigate to property search/listings page as preview
+    navigate('/search');
+  };
+
   const hasPhotos = propertyInfo?.gallery?.images && propertyInfo.gallery.images.length > 0;
 
   if (showSuccess) {
@@ -51,7 +56,10 @@ export const ResalePreviewStep: React.FC<ResalePreviewStepProps> = ({
                 <Button variant="outline" className="border-green-500 text-green-600 hover:bg-green-50 w-full sm:w-auto">
                   Edit
                 </Button>
-                <Button className="bg-red-600 hover:bg-red-700 w-full sm:w-auto">
+                <Button 
+                  onClick={handlePreviewListing}
+                  className="bg-red-600 hover:bg-red-700 w-full sm:w-auto"
+                >
                   Preview Listing
                 </Button>
               </div>
@@ -206,7 +214,7 @@ export const ResalePreviewStep: React.FC<ResalePreviewStepProps> = ({
              disabled={isSubmitting}
              className="bg-red-600 hover:bg-red-700 text-white w-full sm:w-auto"
            >
-             {isSubmitting ? 'Submitting...' : 'Submit Listing'}
+             {isSubmitting ? 'Submitting...' : 'Preview Listing'}
            </Button>
          </div>
       </div>
