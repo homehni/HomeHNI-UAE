@@ -219,100 +219,102 @@ const HomeSecurityEmbedded = () => {
       </section>
 
       {/* Sticky Form Container for Large Screens */}
-      <div className="hidden lg:block fixed top-32 right-8 z-40 w-96">
-        <Card className="w-full rounded-xl shadow-2xl bg-background border-2 border-primary">
-          <CardContent className="p-6">
-            <h3 className="text-xl font-semibold text-foreground mb-2 text-uniform-center">Need Security Solutions?</h3>
-            <p className="text-sm text-muted-foreground mb-4 text-uniform-center">Get free consultation & quote</p>
+      <div className="hidden lg:block fixed top-32 right-8 z-40">
+        <div className="w-96 sticky top-32">
+          <Card className="w-full rounded-xl shadow-2xl bg-background border-2 border-primary">
+            <CardContent className="p-6">
+              <h3 className="text-xl font-semibold text-foreground mb-2 text-uniform-center">Need Security Solutions?</h3>
+              <p className="text-sm text-muted-foreground mb-4 text-uniform-center">Get free consultation & quote</p>
 
-            <form className="space-y-4" onSubmit={e => {
-              e.preventDefault();
-              const form = e.currentTarget as HTMLFormElement;
-              if (!form.checkValidity()) {
-                form.reportValidity();
+              <form className="space-y-4" onSubmit={e => {
+                e.preventDefault();
+                const form = e.currentTarget as HTMLFormElement;
+                if (!form.checkValidity()) {
+                  form.reportValidity();
+                  toast({
+                    title: "Required Fields Missing",
+                    description: "Please fill in all required fields before submitting your security consultation request.",
+                    variant: "destructive"
+                  });
+                  return;
+                }
                 toast({
-                  title: "Required Fields Missing",
-                  description: "Please fill in all required fields before submitting your security consultation request.",
-                  variant: "destructive"
+                  title: "Request received",
+                  description: "Our security expert will contact you shortly."
                 });
-                return;
-              }
-              toast({
-                title: "Request received",
-                description: "Our security expert will contact you shortly."
-              });
-              form.reset();
-            }}>
-              <Input id="security-name" name="name" placeholder="Name" required />
+                form.reset();
+              }}>
+                <Input id="security-name" name="name" placeholder="Name" required />
 
-              <div className="flex gap-2">
-                <Select defaultValue="+91" name="countryCode">
-                  <SelectTrigger className="w-28"><SelectValue /></SelectTrigger>
+                <div className="flex gap-2">
+                  <Select defaultValue="+91" name="countryCode">
+                    <SelectTrigger className="w-28"><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="+91">🇮🇳 +91</SelectItem>
+                      <SelectItem value="+1">🇺🇸 +1</SelectItem>
+                      <SelectItem value="+44">🇬🇧 +44</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <Input 
+                    id="security-phone" 
+                    name="phone" 
+                    type="tel" 
+                    placeholder="Phone Number" 
+                    className="flex-1" 
+                    required 
+                  />
+                </div>
+
+                <div className="flex gap-2">
+                  <Select defaultValue="India" name="country">
+                    <SelectTrigger className="flex-1"><SelectValue placeholder="Country" /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="India">India</SelectItem>
+                      <SelectItem value="USA">USA</SelectItem>
+                      <SelectItem value="UK">UK</SelectItem>
+                      <SelectItem value="Other">Other</SelectItem>
+                    </SelectContent>
+                  </Select>
+
+                  <Select name="state" onValueChange={setSelectedStateDesktop}>
+                    <SelectTrigger className="flex-1"><SelectValue placeholder="State" /></SelectTrigger>
+                    <SelectContent>
+                      {statesData && Object.keys(statesData).map((state: string) => (
+                        <SelectItem key={state} value={state}>
+                          {state}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+
+                  <Select name="city">
+                    <SelectTrigger className="flex-1"><SelectValue placeholder="City" /></SelectTrigger>
+                    <SelectContent>
+                      {citiesDesktop.map((city: string) => (
+                        <SelectItem key={city} value={city}>
+                          {city}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <Select name="serviceType" required>
+                  <SelectTrigger className="w-full"><SelectValue placeholder="Service Type" /></SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="+91">🇮🇳 +91</SelectItem>
-                    <SelectItem value="+1">🇺🇸 +1</SelectItem>
-                    <SelectItem value="+44">🇬🇧 +44</SelectItem>
+                    <SelectItem value="cctv-cameras">CCTV Cameras</SelectItem>
+                    <SelectItem value="digital-locks">Digital Locks</SelectItem>
+                    <SelectItem value="smart-alarms">Smart Alarms</SelectItem>
+                    <SelectItem value="video-door-phones">Video Door Phones</SelectItem>
+                    <SelectItem value="other">Other</SelectItem>
                   </SelectContent>
                 </Select>
-                <Input 
-                  id="security-phone" 
-                  name="phone" 
-                  type="tel" 
-                  placeholder="Phone Number" 
-                  className="flex-1" 
-                  required 
-                />
-              </div>
 
-              <div className="flex gap-2">
-                <Select defaultValue="India" name="country">
-                  <SelectTrigger className="flex-1"><SelectValue placeholder="Country" /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="India">India</SelectItem>
-                    <SelectItem value="USA">USA</SelectItem>
-                    <SelectItem value="UK">UK</SelectItem>
-                    <SelectItem value="Other">Other</SelectItem>
-                  </SelectContent>
-                </Select>
-
-                <Select name="state" onValueChange={setSelectedStateDesktop}>
-                  <SelectTrigger className="flex-1"><SelectValue placeholder="State" /></SelectTrigger>
-                  <SelectContent>
-                    {statesData && Object.keys(statesData).map((state: string) => (
-                      <SelectItem key={state} value={state}>
-                        {state}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-
-                <Select name="city">
-                  <SelectTrigger className="flex-1"><SelectValue placeholder="City" /></SelectTrigger>
-                  <SelectContent>
-                    {citiesDesktop.map((city: string) => (
-                      <SelectItem key={city} value={city}>
-                        {city}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <Select name="serviceType" required>
-                <SelectTrigger className="w-full"><SelectValue placeholder="Service Type" /></SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="cctv-cameras">CCTV Cameras</SelectItem>
-                  <SelectItem value="digital-locks">Digital Locks</SelectItem>
-                  <SelectItem value="smart-alarms">Smart Alarms</SelectItem>
-                  <SelectItem value="video-door-phones">Video Door Phones</SelectItem>
-                  <SelectItem value="other">Other</SelectItem>
-                </SelectContent>
-              </Select>
-
-              <Button type="submit" className="w-full">Get Free Security Consultation</Button>
-            </form>
-          </CardContent>
-        </Card>
+                <Button type="submit" className="w-full">Get Free Security Consultation</Button>
+              </form>
+            </CardContent>
+          </Card>
+        </div>
       </div>
 
       {/* Mobile Form - Static below hero */}

@@ -153,7 +153,8 @@ const PaintingCleaningEmbedded = () => {
       </section>
 
       {/* Sticky Form Container for Large Screens */}
-      <div className="hidden lg:block fixed top-32 right-8 z-50 w-96">
+      <div className="hidden lg:block fixed top-32 right-8 z-50">
+        <div className="w-96 sticky top-32">
         <Card className="w-full rounded-xl shadow-2xl bg-background border-2 border-primary">
           <CardContent className="p-6">
             <h3 className="text-xl font-semibold text-foreground mb-2">Need painting or cleaning?</h3>
@@ -248,6 +249,7 @@ const PaintingCleaningEmbedded = () => {
             </form>
           </CardContent>
         </Card>
+        </div>
       </div>
 
       {/* Mobile Form - Static below hero */}
