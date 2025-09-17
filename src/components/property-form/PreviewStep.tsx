@@ -12,6 +12,7 @@ interface PreviewStepProps {
   onEdit: (step: number) => void;
   onSubmit: () => void;
   isSubmitting?: boolean;
+  isAlreadySubmitted?: boolean;
 }
 
 export const PreviewStep: React.FC<PreviewStepProps> = ({
@@ -19,9 +20,10 @@ export const PreviewStep: React.FC<PreviewStepProps> = ({
   onBack,
   onEdit,
   onSubmit,
-  isSubmitting = false
+  isSubmitting = false,
+  isAlreadySubmitted = false
 }) => {
-  const [showSuccess, setShowSuccess] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(isAlreadySubmitted);
   const [showNoPhotosMessage, setShowNoPhotosMessage] = useState(false);
   const navigate = useNavigate();
   const { ownerInfo, propertyInfo } = formData;

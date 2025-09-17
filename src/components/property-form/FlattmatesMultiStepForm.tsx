@@ -162,6 +162,18 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
     scrollToTop();
   };
 
+  const handleScheduleSubmit = (data: ScheduleInfo) => {
+    setScheduleInfo(data);
+    setCompletedSteps(prev => prev.includes(6) ? prev : [...prev, 6]);
+    // Get the current form data and update the schedule info
+    const formData = getFormData();
+    formData.propertyInfo.scheduleInfo = data;
+    onSubmit(formData);
+    // Navigate to preview step to show success
+    setCurrentStep(7);
+    scrollToTop();
+  };
+
   const prevStep = () => setCurrentStep(prev => Math.max(prev - 1, 1));
   const goToStep = (step: number) => setCurrentStep(step);
 
@@ -308,7 +320,7 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
             )}
 
             {currentStep === 6 && (
-              <ScheduleStep initialData={scheduleInfo} onNext={handleScheduleNext} onBack={prevStep} />
+              <ScheduleStep initialData={scheduleInfo} onNext={handleScheduleNext} onBack={prevStep} onSubmit={handleScheduleSubmit} />
             )}
 
             {currentStep === 7 && (
@@ -318,6 +330,7 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
                 onEdit={goToStep}
                 onSubmit={handleSubmit}
                 isSubmitting={isSubmitting}
+                isAlreadySubmitted={true}
               />
             )}
           </div>

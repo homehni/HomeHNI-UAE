@@ -214,6 +214,13 @@ const [propertyInfo, setPropertyInfo] = useState({
     handleSubmit();
   };
 
+  const handleScheduleSubmit = (data: any) => {
+    setScheduleInfo(data);
+    setCompletedSteps(prev => [...prev.filter(step => step !== 8), 8]);
+    // Submit the form using existing handleSubmit
+    handleSubmit();
+  };
+
   const prevStep = () => setCurrentStep(prev => Math.max(prev - 1, 2));
 
   const getFormData = (): PGHostelFormData => ({
@@ -385,6 +392,7 @@ const [propertyInfo, setPropertyInfo] = useState({
             onBack={prevStep}
             currentStep={6}
             totalSteps={6}
+            onSubmit={handleScheduleSubmit}
           />
         )}
           </div>

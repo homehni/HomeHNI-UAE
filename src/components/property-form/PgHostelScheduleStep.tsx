@@ -25,6 +25,7 @@ interface PgHostelScheduleStepProps {
   onBack: () => void;
   currentStep: number;
   totalSteps: number;
+  onSubmit?: (data: ScheduleFormData) => void;
 }
 
 export function PgHostelScheduleStep({
@@ -32,7 +33,8 @@ export function PgHostelScheduleStep({
   onNext,
   onBack,
   currentStep,
-  totalSteps
+  totalSteps,
+  onSubmit
 }: PgHostelScheduleStepProps) {
   const [paintingResponse, setPaintingResponse] = useState<'book' | 'decline' | null>(initialData.paintingService || null);
   const [cleaningResponse, setCleaningResponse] = useState<'book' | 'decline' | null>(initialData.cleaningService || null);
@@ -49,8 +51,12 @@ export function PgHostelScheduleStep({
     },
   });
 
-  const onSubmit = (data: ScheduleFormData) => {
-    onNext(data);
+  const onFormSubmit = (data: ScheduleFormData) => {
+    if (onSubmit) {
+      onSubmit(data);
+    } else {
+      onNext(data);
+    }
   };
 
   const watchAvailableAllDay = form.watch('availableAllDay');
@@ -67,7 +73,7 @@ export function PgHostelScheduleStep({
           </div>
 
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+            <form onSubmit={form.handleSubmit(onFormSubmit)} className="space-y-8">
               {/* Service Cards */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                 {/* Painting Service */}
@@ -317,11 +323,11 @@ export function PgHostelScheduleStep({
 
               {/* Action Buttons */}
               <div className="flex justify-between pt-8">
-                <Button type="button" variant="outline" onClick={onBack} className="px-8">
+                <Button type="button" variant="white" onClick={onBack} className="px-8">
                   Back
                 </Button>
                 <Button type="submit" className="px-8">
-                  Save & Continue
+                  {onSubmit ? 'Submit' : 'Save & Continue'}
                 </Button>
               </div>
             </form>

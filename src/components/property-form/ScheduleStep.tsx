@@ -23,12 +23,14 @@ interface ScheduleStepProps {
   initialData?: Partial<ScheduleFormData>;
   onNext: (data: ScheduleFormData) => void;
   onBack: () => void;
+  onSubmit?: (data: ScheduleFormData) => void;
 }
 
 export const ScheduleStep: React.FC<ScheduleStepProps> = ({
   initialData = {},
   onNext,
-  onBack
+  onBack,
+  onSubmit
 }) => {
   const [paintingResponse, setPaintingResponse] = useState<'book' | 'decline' | null>(initialData.paintingService || null);
   const [cleaningResponse, setCleaningResponse] = useState<'book' | 'decline' | null>(initialData.cleaningService || null);
@@ -45,8 +47,12 @@ export const ScheduleStep: React.FC<ScheduleStepProps> = ({
     },
   });
 
-  const onSubmit = (data: ScheduleFormData) => {
-    onNext(data);
+  const onFormSubmit = (data: ScheduleFormData) => {
+    if (onSubmit) {
+      onSubmit(data);
+    } else {
+      onNext(data);
+    }
   };
 
   const watchAvailableAllDay = form.watch('availableAllDay');
@@ -61,7 +67,7 @@ export const ScheduleStep: React.FC<ScheduleStepProps> = ({
       </div>
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <form onSubmit={form.handleSubmit(onFormSubmit)} className="space-y-8">
           {/* Service Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
             {/* Painting Service */}
@@ -311,11 +317,11 @@ export const ScheduleStep: React.FC<ScheduleStepProps> = ({
 
           {/* Action Buttons */}
           <div className="flex justify-between pt-8">
-            <Button type="button" variant="outline" onClick={onBack} className="px-8">
+            <Button type="button" variant="white" onClick={onBack} className="px-8">
               Back
             </Button>
             <Button type="submit" className="px-8 bg-destructive hover:bg-destructive/90">
-              Finish Posting
+              {onSubmit ? 'Submit' : 'Finish Posting'}
             </Button>
           </div>
         </form>
