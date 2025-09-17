@@ -8,7 +8,6 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { LocationDetails } from '@/types/property';
 import { ArrowLeft, ArrowRight, Home, MapPin } from 'lucide-react';
-import { StickyFormNavigation } from './StickyFormNavigation';
 
 
 const locationDetailsSchema = z.object({
@@ -278,22 +277,124 @@ export const LocationDetailsStep: React.FC<LocationDetailsStepProps> = ({
   };
 
   return (
-    <>
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8 pb-24">
-        <h1 className="text-2xl font-semibold text-primary mb-6">Location Details</h1>
+    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
+      <h1 className="text-2xl font-semibold text-primary mb-6">Location Details</h1>
 
-                <Form {...form}>
-                  <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-...
-                  </form>
-                </Form>
-      </div>
+              <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                  {/* City Selection */}
+                  <FormField
+                    control={form.control}
+                    name="city"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-sm font-medium">City *</FormLabel>
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <FormControl>
+                            <SelectTrigger className="h-12 bg-white z-50">
+                              <SelectValue placeholder="Choose city" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent className="bg-white border border-gray-200 shadow-lg z-[9999]">
+                            <SelectItem value="Bangalore">Bangalore</SelectItem>
+                            <SelectItem value="Mumbai">Mumbai</SelectItem>
+                            <SelectItem value="Pune">Pune</SelectItem>
+                            <SelectItem value="Chennai">Chennai</SelectItem>
+                            <SelectItem value="Gurgaon">Gurgaon</SelectItem>
+                            <SelectItem value="Hyderabad">Hyderabad</SelectItem>
+                            <SelectItem value="Delhi">Delhi</SelectItem>
+                            <SelectItem value="Faridabad">Faridabad</SelectItem>
+                            <SelectItem value="Ghaziabad">Ghaziabad</SelectItem>
+                            <SelectItem value="Noida">Noida</SelectItem>
+                            <SelectItem value="Greater Noida">Greater Noida</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
 
-      <StickyFormNavigation
-        onBack={onBack}
-        onNext={() => form.handleSubmit(onSubmit)()}
-        nextButtonText="Save & Continue"
-      />
-    </>
+                  {/* Locality/Area and Landmark */}
+                  <div className="grid grid-cols-1 gap-3 md:grid-cols-2 md:gap-6 items-start">
+                    <FormField
+                      control={form.control}
+                      name="locality"
+                      render={({ field }) => (
+                        <FormItem className="flex-1 space-y-2">
+                          <FormLabel className="text-sm font-medium flex items-center gap-2">
+                            <MapPin className="h-4 w-4 text-primary" />
+                            Locality/Area *
+                          </FormLabel>
+                          <FormControl>
+                            <div className="relative">
+                              <Input
+                                placeholder="Search 'Bellandur, Bengaluru, Karnataka'..."
+                                className="h-12 pl-10"
+                                {...field}
+                                ref={(el) => {
+                                  field.ref(el)
+                                  localityInputRef.current = el
+                                }}
+                              />
+                              <MapPin className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                            </div>
+                          </FormControl>
+                          <div className="min-h-[20px]">
+                            <FormMessage />
+                            {locationMismatchWarning && (
+                              <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-lg mt-2">
+                                <div className="w-6 h-6 bg-red-100 rounded flex items-center justify-center flex-shrink-0">
+                                  <span className="text-red-600 text-sm font-bold">✕</span>
+                                </div>
+                                <p className="text-sm text-red-600">{locationMismatchWarning}</p>
+                              </div>
+                            )}
+                          </div>
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="landmark"
+                      render={({ field }) => (
+                        <FormItem className="flex-1 space-y-2">
+                          <FormLabel className="text-sm font-medium flex items-center gap-2">
+                            <MapPin className="h-4 w-4 opacity-0" />
+                            Landmark (Optional)
+                          </FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder="e.g., Near Metro Station"
+                              className="h-12"
+                              {...field}
+                            />
+                          </FormControl>
+                          <div className="min-h-[20px]">
+                            <FormMessage />
+                          </div>
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+
+                  {showMap && (
+                    <div className="w-full h-64 md:h-80 rounded-lg border overflow-hidden">
+                      <div ref={mapContainerRef} className="w-full h-full" />
+                    </div>
+                  )}
+
+                  {/* Navigation Buttons */}
+                  <div className="flex justify-start gap-4 pt-6 -ml-2">
+                    <Button type="button" variant="outline" onClick={onBack} className="h-12 px-8">
+                      Back
+                    </Button>
+                    <Button type="submit" className="h-12 px-8">
+                      Save & Continue
+                    </Button>
+                  </div>
+                </form>
+              </Form>
+    </div>
   );
 };

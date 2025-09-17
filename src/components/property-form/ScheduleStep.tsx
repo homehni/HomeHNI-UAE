@@ -7,7 +7,6 @@ import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Home, MapPin, Building, Sparkles, Camera, FileText, Calendar, Clock, PaintBucket, CheckCircle } from 'lucide-react';
-import { StickyFormNavigation } from './StickyFormNavigation';
 
 const scheduleSchema = z.object({
   paintingService: z.enum(['book', 'decline']).optional(),
@@ -59,8 +58,7 @@ export const ScheduleStep: React.FC<ScheduleStepProps> = ({
   const watchAvailableAllDay = form.watch('availableAllDay');
 
   return (
-  <>
-    <div className="pb-24">
+    <div>
       {/* Main Title */}
       <div className="mb-8 text-center">
         <h1 className="text-2xl font-bold text-primary mb-2">
@@ -318,15 +316,16 @@ export const ScheduleStep: React.FC<ScheduleStepProps> = ({
           </div>
 
           {/* Action Buttons */}
+          <div className="flex justify-between pt-8">
+            <Button type="button" variant="white" onClick={onBack} className="px-8">
+              Back
+            </Button>
+            <Button type="submit" className="px-8 bg-destructive hover:bg-destructive/90">
+              {onSubmit ? 'Submit' : 'Finish Posting'}
+            </Button>
+          </div>
         </form>
       </Form>
     </div>
-
-    <StickyFormNavigation
-      onBack={onBack}
-      onNext={() => form.handleSubmit(onSubmit)()}
-      nextButtonText={onSubmit ? 'Submit' : 'Finish Posting'}
-    />
-  </>
   );
 };

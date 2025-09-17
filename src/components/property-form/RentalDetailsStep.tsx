@@ -16,7 +16,6 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { cn } from '@/lib/utils';
 import { RentalDetails } from '@/types/property';
 import { formatPriceDisplay } from '@/utils/priceFormatter';
-import { StickyFormNavigation } from './StickyFormNavigation';
 
 const rentalDetailsSchema = z.object({
   propertyAvailableFor: z.string().optional(),
@@ -88,8 +87,7 @@ export const RentalDetailsStep: React.FC<RentalDetailsStepProps> = ({
   };
 
   return (
-  <>
-    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8 pb-24">
+    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
       <h1 className="text-2xl font-semibold text-teal-600 mb-6">
         Provide rental details about your property
       </h1>
@@ -483,15 +481,17 @@ export const RentalDetailsStep: React.FC<RentalDetailsStepProps> = ({
               )}
             />
           </div>
+
+          <div className="flex justify-start gap-4 pt-6">
+            <Button type="button" variant="outline" onClick={onBack} className="h-12 px-8">
+              Back
+            </Button>
+            <Button type="submit" className="h-12 px-8">
+              Save & Continue
+            </Button>
+          </div>
         </form>
       </Form>
     </div>
-
-    <StickyFormNavigation
-      onBack={onBack}
-      onNext={() => form.handleSubmit(onSubmit)()}
-      nextButtonText="Save & Continue"
-    />
-  </>
   );
 };
