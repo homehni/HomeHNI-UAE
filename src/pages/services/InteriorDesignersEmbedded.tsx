@@ -323,8 +323,8 @@ const InteriorDesignersEmbedded = () => {
       </section>
 
       {/* Sticky Form Container for Large Screens */}
-      <div className="hidden lg:block absolute top-32 right-8 z-50">
-        <div className="w-96 sticky top-32">
+      <div className="hidden lg:block absolute top-8 right-8 z-50">
+        <div className="w-96 sticky top-8">
         <Card className="w-full rounded-xl shadow-2xl bg-background border-2 border-primary">
           <CardContent className="p-6">
             <h3 className="text-xl font-semibold text-foreground mb-2">Need an interior designer?</h3>
