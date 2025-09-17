@@ -320,7 +320,7 @@ export const LocationDetailsStep: React.FC<LocationDetailsStepProps> = ({
                       control={form.control}
                       name="locality"
                       render={({ field }) => (
-                        <FormItem>
+                        <FormItem className="flex-1">
                           <FormLabel className="text-sm font-medium flex items-center gap-2">
                             <MapPin className="h-4 w-4 text-primary" />
                             Locality/Area *
@@ -339,15 +339,17 @@ export const LocationDetailsStep: React.FC<LocationDetailsStepProps> = ({
                               <MapPin className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                             </div>
                           </FormControl>
-                          <FormMessage />
-                          {locationMismatchWarning && (
-                            <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-lg">
-                              <div className="w-6 h-6 bg-red-100 rounded flex items-center justify-center flex-shrink-0">
-                                <span className="text-red-600 text-sm font-bold">✕</span>
+                          <div className="min-h-[20px]">
+                            <FormMessage />
+                            {locationMismatchWarning && (
+                              <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-lg mt-2">
+                                <div className="w-6 h-6 bg-red-100 rounded flex items-center justify-center flex-shrink-0">
+                                  <span className="text-red-600 text-sm font-bold">✕</span>
+                                </div>
+                                <p className="text-sm text-red-600">{locationMismatchWarning}</p>
                               </div>
-                              <p className="text-sm text-red-600">{locationMismatchWarning}</p>
-                            </div>
-                          )}
+                            )}
+                          </div>
                         </FormItem>
                       )}
                     />
@@ -356,7 +358,7 @@ export const LocationDetailsStep: React.FC<LocationDetailsStepProps> = ({
                       control={form.control}
                       name="landmark"
                       render={({ field }) => (
-                        <FormItem>
+                        <FormItem className="flex-1">
                           <FormLabel className="text-sm font-medium">Landmark (Optional)</FormLabel>
                           <FormControl>
                             <Input
@@ -365,7 +367,9 @@ export const LocationDetailsStep: React.FC<LocationDetailsStepProps> = ({
                               {...field}
                             />
                           </FormControl>
-                          <FormMessage />
+                          <div className="min-h-[20px]">
+                            <FormMessage />
+                          </div>
                         </FormItem>
                       )}
                     />
