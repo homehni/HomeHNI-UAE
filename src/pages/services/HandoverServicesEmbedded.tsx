@@ -149,6 +149,144 @@ const HandoverServicesEmbedded = () => {
         </div>
       </section>
 
+      {/* Mobile Form */}
+      <section className="lg:hidden px-4 py-8 bg-background">
+        <div className="container mx-auto max-w-xl">
+          <Card className="w-full rounded-2xl shadow-xl border-2 border-primary bg-card">
+            <CardContent className="p-6 md:p-8">
+              <h3 className="text-xl md:text-2xl font-bold text-foreground mb-3">Need handover assistance?</h3>
+              <p className="text-sm md:text-base text-muted-foreground mb-6 md:mb-8">Fill the form & get expert support</p>
+
+              <form className="space-y-5" onSubmit={e => {
+                e.preventDefault();
+                const form = e.currentTarget as HTMLFormElement;
+                
+                if (!form.checkValidity()) {
+                  form.reportValidity();
+                  toast({
+                    title: "Required Fields Missing",
+                    description: "Please fill in all required fields before submitting.",
+                    variant: "destructive"
+                  });
+                  return;
+                }
+
+                toast({
+                  title: "Request received",
+                  description: "Our handover expert will contact you shortly."
+                });
+                form.reset();
+              }}>
+                <Input id="handover-name-mobile" name="name" placeholder="Name" className="h-12 text-base bg-background" required />
+
+                <div className="flex gap-3">
+                  <Select defaultValue="+91" name="countryCode">
+                    <SelectTrigger className="w-32 h-12 bg-background">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent className="bg-background border shadow-lg">
+                      <SelectItem value="+91">🇮🇳 +91</SelectItem>
+                      <SelectItem value="+1">🇺🇸 +1</SelectItem>
+                      <SelectItem value="+44">🇬🇧 +44</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <Input id="handover-phone-mobile" name="phone" type="tel" placeholder="Phone Number" className="flex-1 h-12 text-base bg-background" required />
+                </div>
+
+                <Input id="handover-email-mobile" name="email" type="email" placeholder="Email ID" className="h-12 text-base bg-background" required />
+
+                <Select name="propertyType" required>
+                  <SelectTrigger id="property-type-mobile" className="h-12 bg-background">
+                    <SelectValue placeholder="Property Type" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-background border shadow-lg">
+                    <SelectItem value="residential">All Residential</SelectItem>
+                    <SelectItem value="flats">Flat/Apartment</SelectItem>
+                    <SelectItem value="independent-building">Independent Building/Floor</SelectItem>
+                    <SelectItem value="farm-house">Farm House</SelectItem>
+                    <SelectItem value="villa">Villa</SelectItem>
+                    <SelectItem value="plots">Plots</SelectItem>
+                    <SelectItem value="resort">Resort</SelectItem>
+                    <SelectItem value="commercial-building">Commercial Building/House</SelectItem>
+                    <SelectItem value="agricultural">Agricultural Lands</SelectItem>
+                    <SelectItem value="other">Others</SelectItem>
+                  </SelectContent>
+                </Select>
+
+                <div className="flex gap-3">
+                  <Input id="handover-location-mobile" name="location" placeholder="Property Location" className="flex-1 h-12 text-base bg-background" />
+                  <Select name="handoverType" required>
+                    <SelectTrigger id="handover-type-mobile" className="w-40 h-12 bg-background">
+                      <SelectValue placeholder="Handover Type" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-background border shadow-lg">
+                      <SelectItem value="buying">Buying Property</SelectItem>
+                      <SelectItem value="selling">Selling Property</SelectItem>
+                      <SelectItem value="rental">Rental Handover</SelectItem>
+                      <SelectItem value="possession">New Possession</SelectItem>
+                      <SelectItem value="other">Others</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="flex gap-3">
+                  <Select name="country">
+                    <SelectTrigger id="handover-country-mobile" className="flex-1 h-12 bg-background">
+                      <SelectValue placeholder="Country" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-background border shadow-lg">
+                      <SelectItem value="india">India</SelectItem>
+                      <SelectItem value="usa">United States</SelectItem>
+                      <SelectItem value="uk">United Kingdom</SelectItem>
+                      <SelectItem value="canada">Canada</SelectItem>
+                      <SelectItem value="australia">Australia</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <Select name="state">
+                    <SelectTrigger id="handover-state-mobile" className="flex-1 h-12 bg-background">
+                      <SelectValue placeholder="State" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-background border shadow-lg">
+                      <SelectItem value="andhra-pradesh">Andhra Pradesh</SelectItem>
+                      <SelectItem value="karnataka">Karnataka</SelectItem>
+                      <SelectItem value="tamil-nadu">Tamil Nadu</SelectItem>
+                      <SelectItem value="telangana">Telangana</SelectItem>
+                      <SelectItem value="maharashtra">Maharashtra</SelectItem>
+                      <SelectItem value="gujarat">Gujarat</SelectItem>
+                      <SelectItem value="rajasthan">Rajasthan</SelectItem>
+                      <SelectItem value="delhi">Delhi</SelectItem>
+                      <SelectItem value="west-bengal">West Bengal</SelectItem>
+                      <SelectItem value="uttar-pradesh">Uttar Pradesh</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <Select name="city">
+                    <SelectTrigger id="handover-city-mobile" className="flex-1 h-12 bg-background">
+                      <SelectValue placeholder="City" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-background border shadow-lg">
+                      <SelectItem value="bangalore">Bangalore</SelectItem>
+                      <SelectItem value="hyderabad">Hyderabad</SelectItem>
+                      <SelectItem value="chennai">Chennai</SelectItem>
+                      <SelectItem value="mumbai">Mumbai</SelectItem>
+                      <SelectItem value="pune">Pune</SelectItem>
+                      <SelectItem value="delhi">Delhi</SelectItem>
+                      <SelectItem value="kolkata">Kolkata</SelectItem>
+                      <SelectItem value="ahmedabad">Ahmedabad</SelectItem>
+                      <SelectItem value="jaipur">Jaipur</SelectItem>
+                      <SelectItem value="lucknow">Lucknow</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <Button type="submit" className="w-full h-12 text-base font-semibold bg-red-600 hover:bg-red-700 text-white mt-6">
+                  Get Expert Assistance!
+                </Button>
+              </form>
+            </CardContent>
+          </Card>
+        </div>
+      </section>
+
       {/* Our Services */}
       <section className="py-16 px-4 bg-background">
         <div className="container mx-auto">
@@ -446,137 +584,6 @@ const HandoverServicesEmbedded = () => {
         </div>
       </div>
 
-      {/* Mobile Form */}
-      <section className="lg:hidden px-4 py-8 bg-background">
-        <div className="container mx-auto max-w-xl">
-          <Card className="w-full rounded-2xl shadow-xl border-2 border-primary bg-card">
-            <CardContent className="p-6 md:p-8">
-              <h3 className="text-xl md:text-2xl font-bold text-foreground mb-3">Need handover assistance?</h3>
-              <p className="text-sm md:text-base text-muted-foreground mb-6 md:mb-8">Fill the form & get expert support</p>
-
-              <form className="space-y-5" onSubmit={e => {
-                e.preventDefault();
-                const form = e.currentTarget as HTMLFormElement;
-                
-                if (!form.checkValidity()) {
-                  form.reportValidity();
-                  toast({
-                    title: "Required Fields Missing",
-                    description: "Please fill in all required fields before submitting.",
-                    variant: "destructive"
-                  });
-                  return;
-                }
-
-                toast({
-                  title: "Request received",
-                  description: "Our handover expert will contact you shortly."
-                });
-                form.reset();
-              }}>
-                <Input id="handover-name-mobile" name="name" placeholder="Name" className="h-12 text-base bg-background" required />
-
-                <div className="flex gap-3">
-                  <Select defaultValue="+91" name="countryCode">
-                    <SelectTrigger className="w-32 h-12 bg-background">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent className="bg-background border shadow-lg">
-                      <SelectItem value="+91">🇮🇳 +91</SelectItem>
-                      <SelectItem value="+1">🇺🇸 +1</SelectItem>
-                      <SelectItem value="+44">🇬🇧 +44</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <Input id="handover-phone-mobile" name="phone" type="tel" placeholder="Phone Number" className="flex-1 h-12 text-base bg-background" required />
-                </div>
-
-                <Input id="handover-email-mobile" name="email" type="email" placeholder="Email ID" className="h-12 text-base bg-background" required />
-
-                <Select name="propertyType" required>
-                  <SelectTrigger id="property-type-mobile" className="h-12 bg-background">
-                    <SelectValue placeholder="Property Type" />
-                  </SelectTrigger>
-                  <SelectContent className="bg-background border shadow-lg">
-                    <SelectItem value="residential">Residential</SelectItem>
-                    <SelectItem value="commercial">Commercial</SelectItem>
-                    <SelectItem value="industrial">Industrial</SelectItem>
-                    <SelectItem value="agricultural">Agricultural</SelectItem>
-                  </SelectContent>
-                </Select>
-
-                <div className="flex gap-3">
-                  <Input id="handover-location-mobile" name="location" placeholder="Property Location" className="flex-1 h-12 text-base bg-background" />
-                  <Select name="handoverType" required>
-                    <SelectTrigger id="handover-type-mobile" className="w-40 h-12 bg-background">
-                      <SelectValue placeholder="Handover Type" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-background border shadow-lg">
-                      <SelectItem value="buying">Buying Property</SelectItem>
-                      <SelectItem value="selling">Selling Property</SelectItem>
-                      <SelectItem value="rental">Rental Handover</SelectItem>
-                      <SelectItem value="possession">New Possession</SelectItem>
-                      <SelectItem value="other">Others</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div className="flex gap-3">
-                  <Select name="country">
-                    <SelectTrigger id="handover-country-mobile" className="flex-1 h-12 bg-background">
-                      <SelectValue placeholder="Country" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-background border shadow-lg">
-                      <SelectItem value="india">India</SelectItem>
-                      <SelectItem value="usa">United States</SelectItem>
-                      <SelectItem value="uk">United Kingdom</SelectItem>
-                      <SelectItem value="canada">Canada</SelectItem>
-                      <SelectItem value="australia">Australia</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <Select name="state">
-                    <SelectTrigger id="handover-state-mobile" className="flex-1 h-12 bg-background">
-                      <SelectValue placeholder="State" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-background border shadow-lg">
-                      <SelectItem value="andhra-pradesh">Andhra Pradesh</SelectItem>
-                      <SelectItem value="karnataka">Karnataka</SelectItem>
-                      <SelectItem value="tamil-nadu">Tamil Nadu</SelectItem>
-                      <SelectItem value="telangana">Telangana</SelectItem>
-                      <SelectItem value="maharashtra">Maharashtra</SelectItem>
-                      <SelectItem value="gujarat">Gujarat</SelectItem>
-                      <SelectItem value="rajasthan">Rajasthan</SelectItem>
-                      <SelectItem value="delhi">Delhi</SelectItem>
-                      <SelectItem value="west-bengal">West Bengal</SelectItem>
-                      <SelectItem value="uttar-pradesh">Uttar Pradesh</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <Select name="city">
-                    <SelectTrigger id="handover-city-mobile" className="flex-1 h-12 bg-background">
-                      <SelectValue placeholder="City" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-background border shadow-lg">
-                      <SelectItem value="bangalore">Bangalore</SelectItem>
-                      <SelectItem value="hyderabad">Hyderabad</SelectItem>
-                      <SelectItem value="chennai">Chennai</SelectItem>
-                      <SelectItem value="mumbai">Mumbai</SelectItem>
-                      <SelectItem value="pune">Pune</SelectItem>
-                      <SelectItem value="delhi">Delhi</SelectItem>
-                      <SelectItem value="kolkata">Kolkata</SelectItem>
-                      <SelectItem value="ahmedabad">Ahmedabad</SelectItem>
-                      <SelectItem value="jaipur">Jaipur</SelectItem>
-                      <SelectItem value="lucknow">Lucknow</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <Button type="submit" className="w-full h-12 text-base font-semibold bg-red-600 hover:bg-red-700 text-white mt-6">
-                  Get Expert Assistance!
-                </Button>
-              </form>
-            </CardContent>
-          </Card>
-        </div>
-      </section>
 
       {/* FAQ Section */}
       <section className="py-16 px-4 bg-muted/30">

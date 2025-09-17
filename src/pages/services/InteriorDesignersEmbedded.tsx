@@ -149,6 +149,116 @@ const InteriorDesignersEmbedded = () => {
         </div>
       </section>
 
+      {/* Mobile Form */}
+      <section className="lg:hidden px-4 py-8 bg-background">
+        <div className="container mx-auto max-w-xl">
+          <Card className="w-full rounded-2xl shadow-xl border-2 border-primary bg-card">
+            <CardContent className="p-6 md:p-8">
+              <h3 className="text-xl md:text-2xl font-bold text-foreground mb-3">Need an interior designer?</h3>
+              <p className="text-sm md:text-base text-muted-foreground mb-6 md:mb-8">Fill the form & get a free consultation</p>
+
+              <form className="space-y-5" onSubmit={e => {
+                e.preventDefault();
+                toast({
+                  title: "Request submitted",
+                  description: "Our interior designers will contact you within 24 hours."
+                });
+                (e.currentTarget as HTMLFormElement).reset();
+              }}>
+                <Input id="interior-name-mobile" name="name" placeholder="Name" className="h-10 md:h-12 text-sm md:text-base bg-background" required />
+
+                <div className="flex gap-2 md:gap-3">
+                  <Select defaultValue="+91" name="countryCode">
+                    <SelectTrigger className="w-24 md:w-32 h-10 md:h-12 bg-background">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent className="bg-background border shadow-lg">
+                      <SelectItem value="+91">🇮🇳 +91</SelectItem>
+                      <SelectItem value="+1">🇺🇸 +1</SelectItem>
+                      <SelectItem value="+44">🇬🇧 +44</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <Input id="interior-phone-mobile" name="phone" type="tel" placeholder="Phone Number" className="flex-1 h-10 md:h-12 text-sm md:text-base bg-background" required />
+                </div>
+
+                <Input id="interior-email-mobile" name="email" type="email" placeholder="Email ID" className="h-10 md:h-12 text-sm md:text-base bg-background" required />
+
+                <div className="flex flex-col sm:flex-row gap-2 md:gap-3">
+                  <Select name="projectType" required>
+                    <SelectTrigger id="interior-project-type-mobile" className="h-10 md:h-12 bg-background">
+                      <SelectValue placeholder="Project Type" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-background border shadow-lg">
+                      <SelectItem value="residential">Residential Interior Design</SelectItem>
+                      <SelectItem value="commercial">Commercial Interior Design</SelectItem>
+                      <SelectItem value="renovation">Renovation & Remodeling</SelectItem>
+                      <SelectItem value="furniture">Furniture Selection</SelectItem>
+                      <SelectItem value="lighting">Lighting Design</SelectItem>
+                      <SelectItem value="color-consultation">Color Consultation</SelectItem>
+                      <SelectItem value="space-planning">Space Planning</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <Input id="interior-location-mobile" name="location" placeholder="Project Location" className="h-10 md:h-12 text-sm md:text-base bg-background" />
+                </div>
+
+                <div className="flex flex-col sm:flex-row gap-2 md:gap-3">
+                  <Select name="country">
+                    <SelectTrigger id="interior-country-mobile" className="h-10 md:h-12 bg-background">
+                      <SelectValue placeholder="Country" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-background border shadow-lg">
+                      <SelectItem value="india">India</SelectItem>
+                      <SelectItem value="usa">United States</SelectItem>
+                      <SelectItem value="uk">United Kingdom</SelectItem>
+                      <SelectItem value="canada">Canada</SelectItem>
+                      <SelectItem value="australia">Australia</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <Select name="state">
+                    <SelectTrigger id="interior-state-mobile" className="h-10 md:h-12 bg-background">
+                      <SelectValue placeholder="State" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-background border shadow-lg">
+                      <SelectItem value="andhra-pradesh">Andhra Pradesh</SelectItem>
+                      <SelectItem value="karnataka">Karnataka</SelectItem>
+                      <SelectItem value="tamil-nadu">Tamil Nadu</SelectItem>
+                      <SelectItem value="telangana">Telangana</SelectItem>
+                      <SelectItem value="maharashtra">Maharashtra</SelectItem>
+                      <SelectItem value="gujarat">Gujarat</SelectItem>
+                      <SelectItem value="rajasthan">Rajasthan</SelectItem>
+                      <SelectItem value="delhi">Delhi</SelectItem>
+                      <SelectItem value="west-bengal">West Bengal</SelectItem>
+                      <SelectItem value="uttar-pradesh">Uttar Pradesh</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <Select name="city">
+                    <SelectTrigger id="interior-city-mobile" className="h-10 md:h-12 bg-background">
+                      <SelectValue placeholder="City" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-background border shadow-lg">
+                      <SelectItem value="bangalore">Bangalore</SelectItem>
+                      <SelectItem value="hyderabad">Hyderabad</SelectItem>
+                      <SelectItem value="chennai">Chennai</SelectItem>
+                      <SelectItem value="mumbai">Mumbai</SelectItem>
+                      <SelectItem value="pune">Pune</SelectItem>
+                      <SelectItem value="delhi">Delhi</SelectItem>
+                      <SelectItem value="kolkata">Kolkata</SelectItem>
+                      <SelectItem value="ahmedabad">Ahmedabad</SelectItem>
+                      <SelectItem value="jaipur">Jaipur</SelectItem>
+                      <SelectItem value="lucknow">Lucknow</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <Button type="submit" className="w-full h-10 md:h-12 text-sm md:text-base font-semibold bg-red-600 hover:bg-red-700 text-white mt-4 md:mt-6">
+                  Get Free Consultation!
+                </Button>
+              </form>
+            </CardContent>
+          </Card>
+        </div>
+      </section>
+
       {/* Our Services */}
       <section className="py-16 px-4 bg-background">
         <div className="container mx-auto">
@@ -421,115 +531,6 @@ const InteriorDesignersEmbedded = () => {
         </div>
       </div>
 
-      {/* Mobile Form */}
-      <section className="lg:hidden px-4 py-8 bg-background">
-        <div className="container mx-auto max-w-xl">
-          <Card className="w-full rounded-2xl shadow-xl border-2 border-primary bg-card">
-            <CardContent className="p-6 md:p-8">
-              <h3 className="text-xl md:text-2xl font-bold text-foreground mb-3">Need an interior designer?</h3>
-              <p className="text-sm md:text-base text-muted-foreground mb-6 md:mb-8">Fill the form & get a free consultation</p>
-
-              <form className="space-y-5" onSubmit={e => {
-                e.preventDefault();
-                toast({
-                  title: "Request submitted",
-                  description: "Our interior designers will contact you within 24 hours."
-                });
-                (e.currentTarget as HTMLFormElement).reset();
-              }}>
-                <Input id="interior-name-mobile" name="name" placeholder="Name" className="h-10 md:h-12 text-sm md:text-base bg-background" required />
-
-                <div className="flex gap-2 md:gap-3">
-                  <Select defaultValue="+91" name="countryCode">
-                    <SelectTrigger className="w-24 md:w-32 h-10 md:h-12 bg-background">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent className="bg-background border shadow-lg">
-                      <SelectItem value="+91">🇮🇳 +91</SelectItem>
-                      <SelectItem value="+1">🇺🇸 +1</SelectItem>
-                      <SelectItem value="+44">🇬🇧 +44</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <Input id="interior-phone-mobile" name="phone" type="tel" placeholder="Phone Number" className="flex-1 h-10 md:h-12 text-sm md:text-base bg-background" required />
-                </div>
-
-                <Input id="interior-email-mobile" name="email" type="email" placeholder="Email ID" className="h-10 md:h-12 text-sm md:text-base bg-background" required />
-
-                <div className="flex flex-col sm:flex-row gap-2 md:gap-3">
-                  <Select name="projectType" required>
-                    <SelectTrigger id="interior-project-type-mobile" className="h-10 md:h-12 bg-background">
-                      <SelectValue placeholder="Project Type" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-background border shadow-lg">
-                      <SelectItem value="residential">Residential Interior Design</SelectItem>
-                      <SelectItem value="commercial">Commercial Interior Design</SelectItem>
-                      <SelectItem value="renovation">Renovation & Remodeling</SelectItem>
-                      <SelectItem value="furniture">Furniture Selection</SelectItem>
-                      <SelectItem value="lighting">Lighting Design</SelectItem>
-                      <SelectItem value="color-consultation">Color Consultation</SelectItem>
-                      <SelectItem value="space-planning">Space Planning</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <Input id="interior-location-mobile" name="location" placeholder="Project Location" className="h-10 md:h-12 text-sm md:text-base bg-background" />
-                </div>
-
-                <div className="flex flex-col sm:flex-row gap-2 md:gap-3">
-                  <Select name="country">
-                    <SelectTrigger id="interior-country-mobile" className="h-10 md:h-12 bg-background">
-                      <SelectValue placeholder="Country" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-background border shadow-lg">
-                      <SelectItem value="india">India</SelectItem>
-                      <SelectItem value="usa">United States</SelectItem>
-                      <SelectItem value="uk">United Kingdom</SelectItem>
-                      <SelectItem value="canada">Canada</SelectItem>
-                      <SelectItem value="australia">Australia</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <Select name="state">
-                    <SelectTrigger id="interior-state-mobile" className="h-10 md:h-12 bg-background">
-                      <SelectValue placeholder="State" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-background border shadow-lg">
-                      <SelectItem value="andhra-pradesh">Andhra Pradesh</SelectItem>
-                      <SelectItem value="karnataka">Karnataka</SelectItem>
-                      <SelectItem value="tamil-nadu">Tamil Nadu</SelectItem>
-                      <SelectItem value="telangana">Telangana</SelectItem>
-                      <SelectItem value="maharashtra">Maharashtra</SelectItem>
-                      <SelectItem value="gujarat">Gujarat</SelectItem>
-                      <SelectItem value="rajasthan">Rajasthan</SelectItem>
-                      <SelectItem value="delhi">Delhi</SelectItem>
-                      <SelectItem value="west-bengal">West Bengal</SelectItem>
-                      <SelectItem value="uttar-pradesh">Uttar Pradesh</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <Select name="city">
-                    <SelectTrigger id="interior-city-mobile" className="h-10 md:h-12 bg-background">
-                      <SelectValue placeholder="City" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-background border shadow-lg">
-                      <SelectItem value="bangalore">Bangalore</SelectItem>
-                      <SelectItem value="hyderabad">Hyderabad</SelectItem>
-                      <SelectItem value="chennai">Chennai</SelectItem>
-                      <SelectItem value="mumbai">Mumbai</SelectItem>
-                      <SelectItem value="pune">Pune</SelectItem>
-                      <SelectItem value="delhi">Delhi</SelectItem>
-                      <SelectItem value="kolkata">Kolkata</SelectItem>
-                      <SelectItem value="ahmedabad">Ahmedabad</SelectItem>
-                      <SelectItem value="jaipur">Jaipur</SelectItem>
-                      <SelectItem value="lucknow">Lucknow</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <Button type="submit" className="w-full h-10 md:h-12 text-sm md:text-base font-semibold bg-red-600 hover:bg-red-700 text-white mt-4 md:mt-6">
-                  Get Free Consultation!
-                </Button>
-              </form>
-            </CardContent>
-          </Card>
-        </div>
-      </section>
 
       {/* FAQ Section */}
       <section className="py-16 px-4 bg-muted/30">
