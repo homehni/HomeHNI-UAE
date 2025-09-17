@@ -494,16 +494,16 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
           />
 
           {/* Available Amenities */}
-          <div className="mt-8">
-            <h3 className="text-lg font-semibold mb-4 text-muted-foreground">Select the available amenities</h3>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="mt-4 sm:mt-8">
+            <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4 text-muted-foreground">Select the available amenities</h3>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-4">
               
               {/* Lift */}
               <FormField
                 control={form.control}
                 name="lift"
                 render={({ field }) => (
-                  <FormItem className="flex items-center space-x-3 p-3 border rounded-lg">
+                   <FormItem className="flex items-center space-x-2 sm:space-x-3 p-2 sm:p-3 border rounded-lg">
                     <FormControl>
                       <Checkbox
                         checked={field.value === 'Available'}
@@ -521,7 +521,7 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
                 control={form.control}
                 name="internetServices"
                 render={({ field }) => (
-                  <FormItem className="flex items-center space-x-3 p-3 border rounded-lg">
+                  <FormItem className="flex items-center space-x-2 sm:space-x-3 p-2 sm:p-3 border rounded-lg">
                     <FormControl>
                       <Checkbox
                         checked={field.value === 'Available'}
@@ -539,7 +539,7 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
                 control={form.control}
                 name="airConditioner"
                 render={({ field }) => (
-                  <FormItem className="flex items-center space-x-3 p-3 border rounded-lg">
+                  <FormItem className="flex items-center space-x-2 sm:space-x-3 p-2 sm:p-3 border rounded-lg">
                     <FormControl>
                       <Checkbox
                         checked={field.value === 'Available'}
@@ -557,7 +557,7 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
                 control={form.control}
                 name="clubHouse"
                 render={({ field }) => (
-                  <FormItem className="flex items-center space-x-3 p-3 border rounded-lg">
+                  <FormItem className="flex items-center space-x-2 sm:space-x-3 p-2 sm:p-3 border rounded-lg">
                     <FormControl>
                       <Checkbox
                         checked={field.value === 'Available'}
@@ -575,7 +575,7 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
                 control={form.control}
                 name="intercom"
                 render={({ field }) => (
-                  <FormItem className="flex items-center space-x-3 p-3 border rounded-lg">
+                  <FormItem className="flex items-center space-x-2 sm:space-x-3 p-2 sm:p-3 border rounded-lg">
                     <FormControl>
                       <Checkbox
                         checked={field.value === 'Available'}
@@ -593,7 +593,7 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
                 control={form.control}
                 name="swimmingPool"
                 render={({ field }) => (
-                  <FormItem className="flex items-center space-x-3 p-3 border rounded-lg">
+                  <FormItem className="flex items-center space-x-2 sm:space-x-3 p-2 sm:p-3 border rounded-lg">
                     <FormControl>
                       <Checkbox
                         checked={field.value === 'Available'}
@@ -611,7 +611,7 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
                 control={form.control}
                 name="childrenPlayArea"
                 render={({ field }) => (
-                  <FormItem className="flex items-center space-x-3 p-3 border rounded-lg">
+                  <FormItem className="flex items-center space-x-2 sm:space-x-3 p-2 sm:p-3 border rounded-lg">
                     <FormControl>
                       <Checkbox
                         checked={field.value === 'Available'}
@@ -629,7 +629,7 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
                 control={form.control}
                 name="fireSafety"
                 render={({ field }) => (
-                  <FormItem className="flex items-center space-x-3 p-3 border rounded-lg">
+                  <FormItem className="flex items-center space-x-2 sm:space-x-3 p-2 sm:p-3 border rounded-lg">
                     <FormControl>
                       <Checkbox
                         checked={field.value === 'Available'}
@@ -647,7 +647,7 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
                 control={form.control}
                 name="servantRoom"
                 render={({ field }) => (
-                  <FormItem className="flex items-center space-x-3 p-3 border rounded-lg">
+                  <FormItem className="flex items-center space-x-2 sm:space-x-3 p-2 sm:p-3 border rounded-lg">
                     <FormControl>
                       <Checkbox
                         checked={field.value === 'Available'}
@@ -665,7 +665,7 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
                 control={form.control}
                 name="shoppingCenter"
                 render={({ field }) => (
-                  <FormItem className="flex items-center space-x-3 p-3 border rounded-lg">
+                  <FormItem className="flex items-center space-x-2 sm:space-x-3 p-2 sm:p-3 border rounded-lg">
                     <FormControl>
                       <Checkbox
                         checked={field.value === 'Available'}
@@ -683,7 +683,7 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
                 control={form.control}
                 name="gasPipeline"
                 render={({ field }) => (
-                  <FormItem className="flex items-center space-x-3 p-3 border rounded-lg">
+                  <FormItem className="flex items-center space-x-2 sm:space-x-3 p-2 sm:p-3 border rounded-lg">
                     <FormControl>
                       <Checkbox
                         checked={field.value === 'Available'}
@@ -701,7 +701,7 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
                 control={form.control}
                 name="park"
                 render={({ field }) => (
-                  <FormItem className="flex items-center space-x-3 p-3 border rounded-lg">
+                  <FormItem className="flex items-center space-x-2 sm:space-x-3 p-2 sm:p-3 border rounded-lg">
                     <FormControl>
                       <Checkbox
                         checked={field.value === 'Available'}
@@ -719,7 +719,7 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
                 control={form.control}
                 name="rainWaterHarvesting"
                 render={({ field }) => (
-                  <FormItem className="flex items-center space-x-3 p-3 border rounded-lg">
+                  <FormItem className="flex items-center space-x-2 sm:space-x-3 p-2 sm:p-3 border rounded-lg">
                     <FormControl>
                       <Checkbox
                         checked={field.value === 'Available'}
@@ -737,7 +737,7 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
                 control={form.control}
                 name="sewageTreatmentPlant"
                 render={({ field }) => (
-                  <FormItem className="flex items-center space-x-3 p-3 border rounded-lg">
+                  <FormItem className="flex items-center space-x-2 sm:space-x-3 p-2 sm:p-3 border rounded-lg">
                     <FormControl>
                       <Checkbox
                         checked={field.value === 'Available'}
@@ -755,7 +755,7 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
                 control={form.control}
                 name="houseKeeping"
                 render={({ field }) => (
-                  <FormItem className="flex items-center space-x-3 p-3 border rounded-lg">
+                  <FormItem className="flex items-center space-x-2 sm:space-x-3 p-2 sm:p-3 border rounded-lg">
                     <FormControl>
                       <Checkbox
                         checked={field.value === 'Available'}
@@ -773,7 +773,7 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
                 control={form.control}
                 name="powerBackup"
                 render={({ field }) => (
-                  <FormItem className="flex items-center space-x-3 p-3 border rounded-lg">
+                  <FormItem className="flex items-center space-x-2 sm:space-x-3 p-2 sm:p-3 border rounded-lg">
                     <FormControl>
                       <Checkbox
                         checked={field.value === 'Available'}
@@ -791,7 +791,7 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
                 control={form.control}
                 name="visitorParking"
                 render={({ field }) => (
-                  <FormItem className="flex items-center space-x-3 p-3 border rounded-lg">
+                  <FormItem className="flex items-center space-x-2 sm:space-x-3 p-2 sm:p-3 border rounded-lg">
                     <FormControl>
                       <Checkbox
                         checked={field.value === 'Available'}
