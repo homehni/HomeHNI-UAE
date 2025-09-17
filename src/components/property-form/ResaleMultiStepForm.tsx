@@ -122,7 +122,8 @@ export const ResaleMultiStepForm: React.FC<ResaleMultiStepFormProps> = ({
 
   const handleScheduleSubmit = (data: any) => {
     updateScheduleInfo(data);
-    // Do not submit here; just proceed to Preview step
+    const formData = getFormData();
+    onSubmit(formData as SalePropertyFormData);
     goToStep(7);
     scrollToTop();
   };
