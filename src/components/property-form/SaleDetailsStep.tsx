@@ -221,14 +221,6 @@ export const SaleDetailsStep: React.FC<SaleDetailsStepProps> = ({
                       className="h-10"
                     />
                   </FormControl>
-                  {/* Auto-calculated price per sq.ft display */}
-                  {watchedValues.expectedPrice && propertyDetails?.superBuiltUpArea && (
-                    <div className="mt-2">
-                      <p className="text-sm text-gray-700">
-                        Built-up Area: ₹{formatPricePerSqFt(watchedValues.expectedPrice, propertyDetails.superBuiltUpArea)} per sq.ft
-                      </p>
-                    </div>
-                  )}
                   <FormMessage />
                 </FormItem>
               )}
