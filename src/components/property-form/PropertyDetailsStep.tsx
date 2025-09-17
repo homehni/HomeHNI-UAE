@@ -394,17 +394,14 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
             <div className="bg-orange-50 border border-orange-200 rounded-lg p-4 flex items-center justify-between">
               <div className="flex items-center space-x-3">
                 <Phone className="h-5 w-5 text-orange-600" />
-                <span className="text-sm text-gray-700">Don't want to fill all the details? Let us help you!</span>
+                <span className="text-sm text-gray-700">Thank you for the interest. Our agent will give you a call shortly.</span>
               </div>
               <Button 
+                type="button"
                 variant="outline" 
                 className="border-primary text-primary hover:bg-primary hover:text-white"
                 onClick={() => {
-                  toast({
-                    title: "Thank you for the interest. Our agent will give you a call shortly.",
-                    variant: "default",
-                    className: "bg-green-50 border-green-200 text-green-800",
-                  });
+                  // Handle interest click without form submission
                 }}
               >
                 I'm interested
