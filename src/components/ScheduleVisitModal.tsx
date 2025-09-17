@@ -178,7 +178,12 @@ export const ScheduleVisitModal: React.FC<ScheduleVisitModalProps> = ({
   );
 
   const handleChange = (field: keyof ScheduleVisitFormData, value: any) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    console.log(`Updating ${field}:`, value);
+    setFormData(prev => {
+      const newData = { ...prev, [field]: value };
+      console.log('Form data after update:', newData);
+      return newData;
+    });
   };
 
   return (
@@ -432,6 +437,24 @@ export const ScheduleVisitModal: React.FC<ScheduleVisitModalProps> = ({
                       !formData.visitTime
                     }
                     className="px-8"
+                    onClick={() => {
+                      console.log('Button click - Form validation:', {
+                        isSubmitting,
+                        agreeToTerms: formData.agreeToTerms,
+                        name: formData.name.trim(),
+                        phone: formData.phone.trim(),
+                        email: formData.email.trim(),
+                        visitDate: formData.visitDate,
+                        visitTime: formData.visitTime,
+                        isDisabled: isSubmitting || 
+                          !formData.agreeToTerms || 
+                          !formData.name.trim() || 
+                          !formData.phone.trim() || 
+                          !formData.email.trim() || 
+                          !formData.visitDate || 
+                          !formData.visitTime
+                      });
+                    }}
                   >
                     {isSubmitting ? 'Processing...' : 'View Advertiser Details'}
                   </Button>
