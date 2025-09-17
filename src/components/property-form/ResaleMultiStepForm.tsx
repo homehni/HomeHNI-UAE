@@ -120,13 +120,16 @@ export const ResaleMultiStepForm: React.FC<ResaleMultiStepFormProps> = ({
     scrollToTop();
   };
 
-  const handleScheduleSubmit = (data: any) => {
-    updateScheduleInfo(data);
-    const formData = getFormData();
-    onSubmit(formData as SalePropertyFormData);
-    goToStep(7);
-    scrollToTop();
-  };
+const handleScheduleSubmit = (data: any) => {
+  console.log('[ResaleMultiStepForm] Schedule submit: received data', data);
+  updateScheduleInfo(data);
+  const formData = getFormData();
+  console.log('[ResaleMultiStepForm] Submitting resale form data:', formData);
+  onSubmit(formData as SalePropertyFormData);
+  console.log('[ResaleMultiStepForm] Submission triggered. Going to Preview step (7)');
+  goToStep(7);
+  scrollToTop();
+};
 
   const handleSubmit = () => {
     const formData = getFormData();

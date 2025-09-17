@@ -41,6 +41,7 @@ export const ResaleScheduleStep: React.FC<ResaleScheduleStepProps> = ({
   });
 
 const handleFormSubmit = (data: ResaleScheduleData) => {
+  console.log('[ResaleScheduleStep] Submit clicked with data:', data);
   if (onSubmit) {
     onSubmit(data);
   } else {
