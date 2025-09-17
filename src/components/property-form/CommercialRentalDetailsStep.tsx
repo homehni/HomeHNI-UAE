@@ -16,6 +16,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Textarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils';
 import { CommercialRentalDetails } from '@/types/property';
+import { formatPriceDisplay } from '@/utils/priceFormatter';
 
 const commercialRentalDetailsSchema = z.object({
   listingType: z.enum(['Rent']).optional(),
@@ -150,9 +151,17 @@ export const CommercialRentalDetailsStep: React.FC<CommercialRentalDetailsStepPr
                              value={field.value}
                              onChange={field.onChange}
                            />
-                         </FormControl>
+                          </FormControl>
+                        </div>
+                     </div>
+                     {/* Price in words display */}
+                     {field.value && field.value > 0 && (
+                       <div className="mt-2">
+                         <p className="text-sm text-gray-600">
+                           {formatPriceDisplay(field.value)}
+                         </p>
                        </div>
-                    </div>
+                     )}
                     <div className="flex items-center space-x-6 mt-2">
                       <FormField
                         control={form.control}
@@ -204,8 +213,16 @@ export const CommercialRentalDetailsStep: React.FC<CommercialRentalDetailsStepPr
                                    value={field.value}
                                    onChange={field.onChange}
                                  />
-                               </FormControl>
-                              <FormMessage />
+                                </FormControl>
+                                {/* Maintenance amount in words display */}
+                                {field.value && field.value > 0 && (
+                                  <div className="mt-2">
+                                    <p className="text-sm text-gray-600">
+                                      {formatPriceDisplay(field.value)}
+                                    </p>
+                                  </div>
+                                )}
+                               <FormMessage />
                             </FormItem>
                           )}
                         />
@@ -232,8 +249,16 @@ export const CommercialRentalDetailsStep: React.FC<CommercialRentalDetailsStepPr
                          value={field.value}
                          onChange={field.onChange}
                        />
-                     </FormControl>
-                    <div className="mt-2">
+                      </FormControl>
+                      {/* Security deposit in words display */}
+                      {field.value && field.value > 0 && (
+                        <div className="mt-2">
+                          <p className="text-sm text-gray-600">
+                            {formatPriceDisplay(field.value)}
+                          </p>
+                        </div>
+                      )}
+                     <div className="mt-2">
                       <FormField
                         control={form.control}
                         name="depositNegotiable"

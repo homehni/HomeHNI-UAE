@@ -16,6 +16,7 @@ import { cn } from '@/lib/utils';
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Textarea } from '@/components/ui/textarea';
+import { formatPriceDisplay } from '@/utils/priceFormatter';
 
 const saleDetailsSchema = z.object({
   expectedPrice: z.number().optional().or(z.nan()).transform(val => isNaN(val) ? undefined : val),
@@ -78,6 +79,14 @@ export const LandPlotSaleDetailsStep: React.FC<LandPlotSaleDetailsStepProps> = (
                     value={watch('expectedPrice')}
                     onChange={(value) => setValue('expectedPrice', value)}
                   />
+                  {/* Price in words display */}
+                  {watch('expectedPrice') && watch('expectedPrice')! > 0 && (
+                    <div className="mt-2">
+                      <p className="text-sm text-gray-600">
+                        {formatPriceDisplay(watch('expectedPrice')!)}
+                      </p>
+                    </div>
+                  )}
                 {errors.expectedPrice && (
                   <p className="text-red-500 text-sm">{errors.expectedPrice.message}</p>
                 )}

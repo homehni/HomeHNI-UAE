@@ -8,6 +8,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
 import { Calendar } from 'lucide-react';
+import { formatPriceDisplay } from '@/utils/priceFormatter';
 
 interface FlattmatesRentalDetails {
   expectedRent: number;
@@ -77,6 +78,14 @@ export function FlattmatesRentalDetailsStep({
                       placeholder="Enter Amount"
                       className="h-12"
                     />
+                    {/* Expected rent in words display */}
+                    {formData.expectedRent && formData.expectedRent > 0 && (
+                      <div className="mt-2">
+                        <p className="text-sm text-gray-600">
+                          {formatPriceDisplay(formData.expectedRent)}
+                        </p>
+                      </div>
+                    )}
                   </div>
 
                   <div className="space-y-2">
@@ -88,6 +97,14 @@ export function FlattmatesRentalDetailsStep({
                       placeholder="Enter Amount"
                       className="h-12"
                     />
+                    {/* Expected deposit in words display */}
+                    {formData.expectedDeposit && formData.expectedDeposit > 0 && (
+                      <div className="mt-2">
+                        <p className="text-sm text-gray-600">
+                          {formatPriceDisplay(formData.expectedDeposit)}
+                        </p>
+                      </div>
+                    )}
                   </div>
                 </div>
 

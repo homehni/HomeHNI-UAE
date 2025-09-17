@@ -9,6 +9,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Checkbox } from '@/components/ui/checkbox';
 import { Textarea } from '@/components/ui/textarea';
 import { CommercialSaleDetails } from '@/types/commercialSaleProperty';
+import { formatPriceDisplay } from '@/utils/priceFormatter';
 
 const commercialSaleSaleDetailsSchema = z.object({
   listingType: z.literal('Sale').optional(),
@@ -81,8 +82,16 @@ export const CommercialSaleSaleDetailsStep = ({
                       value={field.value}
                       onChange={field.onChange}
                     />
-                  </FormControl>
-                  <FormMessage />
+                   </FormControl>
+                   {/* Price in words display */}
+                   {field.value && field.value > 0 && (
+                     <div className="mt-2">
+                       <p className="text-sm text-gray-600">
+                         {formatPriceDisplay(field.value)}
+                       </p>
+                     </div>
+                   )}
+                   <FormMessage />
                 </FormItem>
               )}
             />

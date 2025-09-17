@@ -15,6 +15,7 @@ import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
 import { RentalDetails } from '@/types/property';
+import { formatPriceDisplay } from '@/utils/priceFormatter';
 
 const rentalDetailsSchema = z.object({
   propertyAvailableFor: z.string().optional(),
@@ -150,6 +151,14 @@ export const RentalDetailsStep: React.FC<RentalDetailsStepProps> = ({
                         <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-sm text-gray-500">/ Month</span>
                       </div>
                     </FormControl>
+                    {/* Expected rent in words display */}
+                    {field.value && field.value > 0 && (
+                      <div className="mt-2">
+                        <p className="text-sm text-gray-600">
+                          {formatPriceDisplay(field.value)}
+                        </p>
+                      </div>
+                    )}
                     <div className="mt-2">
                       <FormField
                         control={form.control}
@@ -196,6 +205,14 @@ export const RentalDetailsStep: React.FC<RentalDetailsStepProps> = ({
                         />
                       </div>
                     </FormControl>
+                    {/* Security deposit in words display */}
+                    {field.value && field.value > 0 && (
+                      <div className="mt-2">
+                        <p className="text-sm text-gray-600">
+                          {formatPriceDisplay(field.value)}
+                        </p>
+                      </div>
+                    )}
                     <FormMessage />
                   </FormItem>
                 )}
@@ -226,6 +243,14 @@ export const RentalDetailsStep: React.FC<RentalDetailsStepProps> = ({
                         />
                       </div>
                     </FormControl>
+                    {/* Expected lease amount in words display */}
+                    {field.value && field.value > 0 && (
+                      <div className="mt-2">
+                        <p className="text-sm text-gray-600">
+                          {formatPriceDisplay(field.value)}
+                        </p>
+                      </div>
+                    )}
                     <div className="mt-2">
                       <FormField
                         control={form.control}
@@ -301,6 +326,14 @@ export const RentalDetailsStep: React.FC<RentalDetailsStepProps> = ({
                         <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-sm text-gray-500">/ Month</span>
                       </div>
                     </FormControl>
+                    {/* Maintenance amount in words display */}
+                    {field.value && field.value > 0 && (
+                      <div className="mt-2">
+                        <p className="text-sm text-gray-600">
+                          {formatPriceDisplay(field.value)}
+                        </p>
+                      </div>
+                    )}
                     <FormMessage />
                   </FormItem>
                 )}

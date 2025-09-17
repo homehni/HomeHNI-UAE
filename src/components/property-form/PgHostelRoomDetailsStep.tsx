@@ -6,6 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Bed, ShowerHead, Tv, Wind, Shirt, ShoppingBag, DollarSign } from 'lucide-react';
+import { formatPriceDisplay } from '@/utils/priceFormatter';
 
 interface PgHostelRoomDetails {
   expectedRent: number;
@@ -107,6 +108,14 @@ export function PgHostelRoomDetailsStep({
                     placeholder="Enter monthly rent amount"
                     className="h-14 text-lg"
                   />
+                  {/* Expected rent in words display */}
+                  {formData.expectedRent && formData.expectedRent > 0 && (
+                    <div className="mt-2">
+                      <p className="text-sm text-gray-600">
+                        {formatPriceDisplay(formData.expectedRent)}
+                      </p>
+                    </div>
+                  )}
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="expectedDeposit" className="text-base font-medium">Expected Deposit</Label>
@@ -117,6 +126,14 @@ export function PgHostelRoomDetailsStep({
                     placeholder="Enter security deposit amount"
                     className="h-14 text-lg"
                   />
+                  {/* Expected deposit in words display */}
+                  {formData.expectedDeposit && formData.expectedDeposit > 0 && (
+                    <div className="mt-2">
+                      <p className="text-sm text-gray-600">
+                        {formatPriceDisplay(formData.expectedDeposit)}
+                      </p>
+                    </div>
+                  )}
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="roomCount" className="text-base font-medium">Number of Rooms</Label>
