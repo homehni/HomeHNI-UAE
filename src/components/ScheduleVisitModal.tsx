@@ -214,15 +214,7 @@ export const ScheduleVisitModal: React.FC<ScheduleVisitModalProps> = ({
           <SuccessScreen />
         ) : (
           <>
-            <DialogHeader className="relative">
-              <Button
-                variant="ghost"
-                size="sm"
-                className="absolute right-0 top-0 h-6 w-6 p-0"
-                onClick={handleClose}
-              >
-                <X className="h-4 w-4" />
-              </Button>
+            <DialogHeader>
               <DialogTitle className="text-xl font-semibold">
                 You are requesting to view advertiser details.
               </DialogTitle>
