@@ -237,7 +237,11 @@ const PropertyCard = ({
     return propertyPlaceholder;
   };
   const imageUrl = getImageUrl();
-  const showIconFallback = hasImageError || !imageUrl || imageUrl === propertyPlaceholder || /placeholder\.svg/i.test(imageUrl);
+  const showIconFallback = hasImageError || 
+                          !imageUrl || 
+                          imageUrl === propertyPlaceholder || 
+                          imageUrl.includes('property-placeholder') ||
+                          imageUrl.includes('placeholder.svg');
 
   return (
     <Card className="w-full overflow-hidden card-border hover-lift cursor-pointer bg-white border-2 border-brand-red/30 hover:border-brand-red/60" onClick={() => {
