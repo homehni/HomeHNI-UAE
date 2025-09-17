@@ -38,14 +38,14 @@ const GetTenantsFasterSection: React.FC = () => {
         </div>
 
         {/* Features */}
-        <div className="space-y-6">
+        <div className="space-y-4">
           {features.map((feature, index) => (
             <div key={index} className="flex flex-col items-center text-center">
-              <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mb-3 shadow-sm border border-gray-200">
-                <feature.icon className="w-6 h-6 text-gray-600" strokeWidth={1.5} />
+              <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center mb-2 shadow-sm border border-gray-200">
+                <feature.icon className="w-5 h-5 text-gray-600" strokeWidth={1.5} />
               </div>
-              <h3 className="font-medium text-gray-700 text-base mb-1">{feature.title}</h3>
-              <p className="text-gray-500 text-xs">{feature.description}</p>
+              <h3 className="font-medium text-gray-700 text-sm mb-1">{feature.title}</h3>
+              <p className="text-gray-500 text-xs leading-tight">{feature.description}</p>
             </div>
           ))}
         </div>
