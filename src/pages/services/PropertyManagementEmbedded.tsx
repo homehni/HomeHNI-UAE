@@ -447,11 +447,11 @@ const PropertyManagementEmbedded = () => {
 
       {/* Mobile Form */}
       <section className="lg:hidden px-4 py-8 bg-background">
-        <div className="container mx-auto max-w-xl px-4">
+        <div className="container mx-auto max-w-xl">
           <Card className="w-full rounded-2xl shadow-xl border-2 border-primary bg-card">
-            <CardContent className="p-8">
-              <h3 className="text-2xl font-bold text-foreground mb-3">Got a property to be managed?</h3>
-              <p className="text-base text-muted-foreground mb-8">Just fill up the form & we will take care of the rest</p>
+            <CardContent className="p-6 md:p-8">
+              <h3 className="text-xl md:text-2xl font-bold text-foreground mb-3">Got a property to be managed?</h3>
+              <p className="text-sm md:text-base text-muted-foreground mb-6 md:mb-8">Just fill up the form & we will take care of the rest</p>
 
               <form className="space-y-5" onSubmit={e => {
                 e.preventDefault();

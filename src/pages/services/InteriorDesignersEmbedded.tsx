@@ -423,11 +423,11 @@ const InteriorDesignersEmbedded = () => {
 
       {/* Mobile Form */}
       <section className="lg:hidden px-4 py-8 bg-background">
-        <div className="container mx-auto max-w-xl px-4">
+        <div className="container mx-auto max-w-xl">
           <Card className="w-full rounded-2xl shadow-xl border-2 border-primary bg-card">
-            <CardContent className="p-8">
-              <h3 className="text-2xl font-bold text-foreground mb-3">Need an interior designer?</h3>
-              <p className="text-base text-muted-foreground mb-8">Fill the form & get a free consultation</p>
+            <CardContent className="p-6 md:p-8">
+              <h3 className="text-xl md:text-2xl font-bold text-foreground mb-3">Need an interior designer?</h3>
+              <p className="text-sm md:text-base text-muted-foreground mb-6 md:mb-8">Fill the form & get a free consultation</p>
 
               <form className="space-y-5" onSubmit={e => {
                 e.preventDefault();
@@ -437,11 +437,11 @@ const InteriorDesignersEmbedded = () => {
                 });
                 (e.currentTarget as HTMLFormElement).reset();
               }}>
-                <Input id="interior-name-mobile" name="name" placeholder="Name" className="h-12 text-base bg-background" required />
+                <Input id="interior-name-mobile" name="name" placeholder="Name" className="h-10 md:h-12 text-sm md:text-base bg-background" required />
 
-                <div className="flex gap-3">
+                <div className="flex gap-2 md:gap-3">
                   <Select defaultValue="+91" name="countryCode">
-                    <SelectTrigger className="w-32 h-12 bg-background">
+                    <SelectTrigger className="w-24 md:w-32 h-10 md:h-12 bg-background">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent className="bg-background border shadow-lg">
@@ -450,14 +450,14 @@ const InteriorDesignersEmbedded = () => {
                       <SelectItem value="+44">🇬🇧 +44</SelectItem>
                     </SelectContent>
                   </Select>
-                  <Input id="interior-phone-mobile" name="phone" type="tel" placeholder="Phone Number" className="flex-1 h-12 text-base bg-background" required />
+                  <Input id="interior-phone-mobile" name="phone" type="tel" placeholder="Phone Number" className="flex-1 h-10 md:h-12 text-sm md:text-base bg-background" required />
                 </div>
 
-                <Input id="interior-email-mobile" name="email" type="email" placeholder="Email ID" className="h-12 text-base bg-background" required />
+                <Input id="interior-email-mobile" name="email" type="email" placeholder="Email ID" className="h-10 md:h-12 text-sm md:text-base bg-background" required />
 
-                <div className="flex gap-3">
+                <div className="flex flex-col sm:flex-row gap-2 md:gap-3">
                   <Select name="projectType" required>
-                    <SelectTrigger id="interior-project-type-mobile" className="flex-1 h-12 bg-background">
+                    <SelectTrigger id="interior-project-type-mobile" className="h-10 md:h-12 bg-background">
                       <SelectValue placeholder="Project Type" />
                     </SelectTrigger>
                     <SelectContent className="bg-background border shadow-lg">
@@ -470,12 +470,12 @@ const InteriorDesignersEmbedded = () => {
                       <SelectItem value="space-planning">Space Planning</SelectItem>
                     </SelectContent>
                   </Select>
-                  <Input id="interior-location-mobile" name="location" placeholder="Project Location" className="flex-1 h-12 text-base bg-background" />
+                  <Input id="interior-location-mobile" name="location" placeholder="Project Location" className="h-10 md:h-12 text-sm md:text-base bg-background" />
                 </div>
 
-                <div className="flex gap-3">
+                <div className="flex flex-col sm:flex-row gap-2 md:gap-3">
                   <Select name="country">
-                    <SelectTrigger id="interior-country-mobile" className="flex-1 h-12 bg-background">
+                    <SelectTrigger id="interior-country-mobile" className="h-10 md:h-12 bg-background">
                       <SelectValue placeholder="Country" />
                     </SelectTrigger>
                     <SelectContent className="bg-background border shadow-lg">
@@ -487,7 +487,7 @@ const InteriorDesignersEmbedded = () => {
                     </SelectContent>
                   </Select>
                   <Select name="state">
-                    <SelectTrigger id="interior-state-mobile" className="flex-1 h-12 bg-background">
+                    <SelectTrigger id="interior-state-mobile" className="h-10 md:h-12 bg-background">
                       <SelectValue placeholder="State" />
                     </SelectTrigger>
                     <SelectContent className="bg-background border shadow-lg">
@@ -504,7 +504,7 @@ const InteriorDesignersEmbedded = () => {
                     </SelectContent>
                   </Select>
                   <Select name="city">
-                    <SelectTrigger id="interior-city-mobile" className="flex-1 h-12 bg-background">
+                    <SelectTrigger id="interior-city-mobile" className="h-10 md:h-12 bg-background">
                       <SelectValue placeholder="City" />
                     </SelectTrigger>
                     <SelectContent className="bg-background border shadow-lg">
@@ -522,7 +522,7 @@ const InteriorDesignersEmbedded = () => {
                   </Select>
                 </div>
 
-                <Button type="submit" className="w-full h-12 text-base font-semibold bg-red-600 hover:bg-red-700 text-white mt-6">
+                <Button type="submit" className="w-full h-10 md:h-12 text-sm md:text-base font-semibold bg-red-600 hover:bg-red-700 text-white mt-4 md:mt-6">
                   Get Free Consultation!
                 </Button>
               </form>
