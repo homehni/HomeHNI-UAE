@@ -344,6 +344,7 @@ export const ScheduleVisitModal: React.FC<ScheduleVisitModalProps> = ({
                           <option value="04:00 PM">04:00 PM</option>
                           <option value="05:00 PM">05:00 PM</option>
                           <option value="06:00 PM">06:00 PM</option>
+                          <option value="07:00 PM">07:00 PM</option>
                         </select>
                       </div>
                     </div>
@@ -421,7 +422,15 @@ export const ScheduleVisitModal: React.FC<ScheduleVisitModalProps> = ({
                 <div className="flex justify-center pt-4">
                   <Button
                     type="submit"
-                    disabled={isSubmitting || !formData.agreeToTerms}
+                    disabled={
+                      isSubmitting || 
+                      !formData.agreeToTerms || 
+                      !formData.name.trim() || 
+                      !formData.phone.trim() || 
+                      !formData.email.trim() || 
+                      !formData.visitDate || 
+                      !formData.visitTime
+                    }
                     className="px-8"
                   >
                     {isSubmitting ? 'Processing...' : 'View Advertiser Details'}
