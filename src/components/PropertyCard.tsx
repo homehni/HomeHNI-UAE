@@ -9,6 +9,7 @@ import { FavoriteButton } from '@/components/FavoriteButton';
 import { ContactOwnerModal } from '@/components/ContactOwnerModal';
 import { supabase } from '@/integrations/supabase/client';
 import propertyPlaceholder from '@/assets/property-placeholder.png';
+import housePlaceholder from '@/assets/house-placeholder.png';
 
 interface PropertyCardProps {
   id: string;
@@ -247,7 +248,11 @@ const PropertyCard = ({
         <div className="h-24 overflow-hidden">
           {showIconFallback ? (
             <div className="w-full h-full bg-muted flex items-center justify-center">
-              <Home size={32} className="text-muted-foreground" />
+              <img 
+                src={housePlaceholder} 
+                alt="Property placeholder" 
+                className="w-12 h-12 opacity-60"
+              />
             </div>
           ) : (
             <img
