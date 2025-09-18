@@ -100,16 +100,16 @@ const LegalServicesEmbedded = () => {
           {/* Mobile: Stack vertically, Tablet: 2 columns with horizontal layout, Desktop: 3 columns */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 max-w-5xl mx-auto">
             {serviceHighlights.map((service, index) => (
-              <Card key={index} className="hover:shadow-lg transition-shadow border-2 border-primary hover:border-brand-red/20 p-4 md:p-6">
-                <CardContent className="pt-4 md:pt-6">
+              <Card key={index} className="hover:shadow-md transition-shadow border border-brand-red/30 hover:border-brand-red/50 p-4 md:p-5 lg:p-6">
+                <CardContent className="pt-4 md:pt-5 lg:pt-6">
                   {/* Mobile/Desktop: Centered layout, Tablet: Horizontal layout */}
-                  <div className="flex md:flex-row lg:flex-col items-start md:items-center lg:items-center md:space-x-4 lg:space-x-0">
-                    <div className="w-12 h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 bg-brand-red/10 rounded-full flex items-center justify-center mb-4 md:mb-0 lg:mb-4 flex-shrink-0 mx-auto md:mx-0 lg:mx-auto">
-                      <service.icon className="h-6 w-6 md:h-7 md:w-7 lg:h-8 lg:w-8 text-brand-red" />
+                  <div className="flex md:flex-row lg:flex-col items-start md:items-start lg:items-center md:space-x-4 lg:space-x-0">
+                    <div className="w-12 h-12 md:w-12 md:h-12 lg:w-16 lg:h-16 bg-brand-red/10 rounded-full flex items-center justify-center mb-4 md:mb-0 lg:mb-4 flex-shrink-0 mx-auto md:mx-0 lg:mx-auto">
+                      <service.icon className="h-6 w-6 md:h-6 md:w-6 lg:h-8 lg:w-8 text-brand-red" />
                     </div>
                     <div className="text-center md:text-left lg:text-center flex-1">
-                      <h3 className="text-lg md:text-xl font-semibold mb-2 md:mb-3">{service.title}</h3>
-                      <p className="text-gray-600 text-sm md:text-base">{service.description}</p>
+                      <h3 className="text-lg md:text-lg lg:text-xl font-semibold mb-2 md:mb-2 lg:mb-3">{service.title}</h3>
+                      <p className="text-gray-600 text-sm md:text-sm lg:text-base">{service.description}</p>
                     </div>
                   </div>
                 </CardContent>
@@ -176,13 +176,13 @@ const LegalServicesEmbedded = () => {
           </div>
           
           {/* Mobile: Stack vertically, Tablet: Single column with larger cards, Desktop: 3 columns */}
-          <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8 max-w-5xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-6 max-w-5xl mx-auto">
             {customerReviews.map((review, index) => (
-              <Card key={index} className="p-4 md:p-8 lg:p-6">
+              <Card key={index} className="p-4 md:p-6 lg:p-6">
                 <CardContent>
                   {/* Mobile/Desktop: Standard layout, Tablet: Enhanced horizontal layout */}
                   <div className="flex items-center mb-4 md:mb-6 lg:mb-4">
-                    <img src={review.avatar} alt={review.name} className="w-12 h-12 md:w-16 md:h-16 lg:w-12 lg:h-12 rounded-full mr-4 md:mr-6 lg:mr-4" />
+                    <img src={review.avatar} alt={review.name} className="w-12 h-12 md:w-14 md:h-14 lg:w-12 lg:h-12 rounded-full mr-4 md:mr-6 lg:mr-4" />
                     <div className="flex-1">
                       <div className="flex flex-col md:flex-row md:items-center md:justify-between lg:flex-col lg:items-start">
                         <div>
