@@ -28,18 +28,20 @@ export const RelatedPropertiesCard: React.FC<RelatedPropertiesCardProps> = ({ pr
     navigate(`/search?${queryString}`);
   };
 
-  // Helper function to get display locality
-  const getDisplayLocality = (locality: any) => {
-    const loc = String(locality ?? '').trim();
-    if (!loc || loc.length <= 2 || /^[\d\s]+$/.test(loc)) {
-      return `${property.city}`;
+  // Helper function to get display locality - avoid showing numbers or invalid localities
+  const getDisplayLocality = () => {
+    const loc = String(property.locality ?? '').trim();
+    const firstPart = loc.split(',')[0];
+    // If locality is invalid (number, too short, or empty), use city
+    if (!loc || loc.length <= 2 || /^[\d\s]+$/.test(firstPart) || firstPart.length <= 2) {
+      return property.city;
     }
-    return loc.split(',')[0];
+    return firstPart;
   };
 
   // Precompute display locality and location param
-  const displayLocality = getDisplayLocality(property.locality);
-  const locationParam = displayLocality && displayLocality !== property.city
+  const displayLocality = getDisplayLocality();
+  const locationParam = displayLocality !== property.city
     ? `${displayLocality}, ${property.city}`
     : property.city;
 
@@ -125,7 +127,7 @@ export const RelatedPropertiesCard: React.FC<RelatedPropertiesCardProps> = ({ pr
                   location: locationParam
                 })}
                >
-                {bhk} Flats for {property.listing_type} in {getDisplayLocality(property.locality)}
+                {bhk} Flats for {property.listing_type} in {displayLocality}
               </TagButton>
             ))}
             <TagButton
@@ -137,7 +139,7 @@ export const RelatedPropertiesCard: React.FC<RelatedPropertiesCardProps> = ({ pr
                 furnished: 'Fully Furnished'
               })}
              >
-              Fully Furnished {property.bhk_type} Flats for {property.listing_type} in {getDisplayLocality(property.locality)}
+              Fully Furnished {property.bhk_type} Flats for {property.listing_type} in {displayLocality}
             </TagButton>
           </div>
         </div>
@@ -176,7 +178,7 @@ export const RelatedPropertiesCard: React.FC<RelatedPropertiesCardProps> = ({ pr
                   location: locationParam
                 })}
               >
-                {property.bhk_type} {type} for {property.listing_type} in {getDisplayLocality(property.locality)}
+                {property.bhk_type} {type} for {property.listing_type} in {displayLocality}
               </TagButton>
             ))}
           </div>
