@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useRelatedProperties } from '@/hooks/useRelatedProperties';
 
 interface RelatedPropertiesCardProps {
   property: {
@@ -14,29 +15,35 @@ interface RelatedPropertiesCardProps {
 export const RelatedPropertiesCard: React.FC<RelatedPropertiesCardProps> = ({ property }) => {
   const navigate = useNavigate();
 
+  // Get dynamic related properties data
+  const { nearbyLocalities, topLocalities, relatedTypes, isLoading } = useRelatedProperties({
+    city: property.city,
+    currentLocality: property.locality,
+    propertyType: property.property_type,
+    listingType: property.listing_type,
+  });
+
   const handleTagClick = (searchParams: Record<string, string>) => {
     const queryString = new URLSearchParams(searchParams).toString();
     navigate(`/search?${queryString}`);
   };
 
-  // Generate city-specific localities
-  const getCityLocalities = (city: string) => {
-    const cityLocalitiesMap: { [key: string]: string[] } = {
-      'Bengaluru': ['Koramangala', 'Indiranagar', 'Whitefield', 'Electronic City', 'Marathahalli', 'HSR Layout', 'BTM Layout', 'Jayanagar', 'Banashankari', 'Hebbal'],
-      'Bangalore': ['Koramangala', 'Indiranagar', 'Whitefield', 'Electronic City', 'Marathahalli', 'HSR Layout', 'BTM Layout', 'Jayanagar', 'Banashankari', 'Hebbal'],
-      'Hyderabad': ['Banjara Hills', 'Jubilee Hills', 'Madhapur', 'Gachibowli', 'Kondapur', 'Kukatpally', 'HITEC City', 'Miyapur', 'Manikonda', 'Tellapur'],
-      'Mumbai': ['Bandra', 'Andheri', 'Powai', 'Goregaon', 'Malad', 'Borivali', 'Thane', 'Navi Mumbai', 'Worli', 'Lower Parel'],
-      'Delhi': ['Dwarka', 'Rohini', 'Pitampura', 'Janakpuri', 'Laxmi Nagar', 'Karol Bagh', 'Connaught Place', 'Vasant Kunj', 'Saket', 'Greater Kailash'],
-      'Pune': ['Koregaon Park', 'Hinjewadi', 'Wakad', 'Baner', 'Aundh', 'Kothrud', 'Hadapsar', 'Magarpatta', 'Viman Nagar', 'Pimpri'],
-      'Chennai': ['T Nagar', 'Anna Nagar', 'Adyar', 'Velachery', 'OMR', 'Porur', 'Tambaram', 'Chrompet', 'Guduvanchery', 'Pallikaranai']
-    };
-    
-    return cityLocalitiesMap[city] || cityLocalitiesMap['Bengaluru']; // Default to Bengaluru if city not found
+  // Helper function to get display locality - avoid showing numbers or invalid localities
+  const getDisplayLocality = () => {
+    const loc = String(property.locality ?? '').trim();
+    const firstPart = loc.split(',')[0];
+    // If locality is invalid (number, too short, or empty), use city
+    if (!loc || loc.length <= 2 || /^[\d\s]+$/.test(firstPart) || firstPart.length <= 2) {
+      return property.city;
+    }
+    return firstPart;
   };
 
-  const nearbyLocalities = getCityLocalities(property.city)
-    .filter(loc => loc !== property.locality)
-    .slice(0, 8);
+  // Precompute display locality and location param
+  const displayLocality = getDisplayLocality();
+  const locationParam = displayLocality !== property.city
+    ? `${displayLocality}, ${property.city}`
+    : property.city;
 
   // Generate different BHK options for same locality
   const bhkOptions = ['1 BHK', '2 BHK', '3 BHK', '4+ BHK', 'Studio'];
@@ -44,14 +51,31 @@ export const RelatedPropertiesCard: React.FC<RelatedPropertiesCardProps> = ({ pr
     .filter(bhk => bhk !== property.bhk_type)
     .slice(0, 6);
 
-  // Generate top localities for same city
-  const topLocalities = getCityLocalities(property.city).slice(0, 8);
+  // Fallback data for when API data is empty or loading
+  const fallbackLocalities = {
+    'Bengaluru': ['Koramangala', 'Indiranagar', 'Whitefield', 'Electronic City'],
+    'Bangalore': ['Koramangala', 'Indiranagar', 'Whitefield', 'Electronic City'],
+    'Hyderabad': ['Banjara Hills', 'Jubilee Hills', 'Madhapur', 'Gachibowli'],
+    'Mumbai': ['Bandra', 'Andheri', 'Powai', 'Goregaon'],
+    'Delhi': ['Dwarka', 'Rohini', 'Pitampura', 'Janakpuri'],
+    'Pune': ['Koregaon Park', 'Hinjewadi', 'Wakad', 'Baner'],
+    'Chennai': ['T Nagar', 'Anna Nagar', 'Adyar', 'Velachery']
+  };
 
-  // Generate property type variations
-  const propertyTypes = ['Apartment', 'Villa', 'Independent House', 'Builder Floor'];
-  const relatedTypes = propertyTypes
-    .filter(type => type.toLowerCase() !== property.property_type?.toLowerCase())
-    .slice(0, 4);
+  const fallbackTypes = ['Apartment', 'Villa', 'Independent House', 'Builder Floor'];
+
+  // Use dynamic data or fallback to static data
+  const displayNearbyLocalities = nearbyLocalities.length > 0 
+    ? nearbyLocalities 
+    : (fallbackLocalities[property.city as keyof typeof fallbackLocalities] || fallbackLocalities['Bengaluru']).slice(0, 8);
+  
+  const displayTopLocalities = topLocalities.length > 0 
+    ? topLocalities 
+    : (fallbackLocalities[property.city as keyof typeof fallbackLocalities] || fallbackLocalities['Bengaluru']).slice(0, 8);
+  
+  const displayRelatedTypes = relatedTypes.length > 0 
+    ? relatedTypes 
+    : fallbackTypes.filter(type => type.toLowerCase() !== property.property_type?.toLowerCase()).slice(0, 4);
 
   const TagButton: React.FC<{ children: React.ReactNode; onClick: () => void }> = ({ children, onClick }) => (
     <button
@@ -73,7 +97,7 @@ export const RelatedPropertiesCard: React.FC<RelatedPropertiesCardProps> = ({ pr
         <div>
           <h3 className="text-base font-medium text-foreground mb-3">Nearby Localities</h3>
           <div className="flex flex-wrap gap-2">
-            {nearbyLocalities.map((locality) => (
+            {displayNearbyLocalities.map((locality) => (
               <TagButton
                 key={locality}
                 onClick={() => handleTagClick({
@@ -82,8 +106,8 @@ export const RelatedPropertiesCard: React.FC<RelatedPropertiesCardProps> = ({ pr
                   listing_type: property.listing_type,
                   location: `${locality}, ${property.city}`
                 })}
-              >
-                {property.bhk_type} for {property.listing_type} in {locality}
+               >
+                {property.bhk_type} Flats for {property.listing_type} in {locality}
               </TagButton>
             ))}
           </div>
@@ -100,10 +124,10 @@ export const RelatedPropertiesCard: React.FC<RelatedPropertiesCardProps> = ({ pr
                   bhk_type: bhk,
                   property_type: property.property_type,
                   listing_type: property.listing_type,
-                  location: `${property.locality}, ${property.city}`
+                  location: locationParam
                 })}
-              >
-                {bhk} for {property.listing_type} in {property.locality}
+               >
+                {bhk} Flats for {property.listing_type} in {displayLocality}
               </TagButton>
             ))}
             <TagButton
@@ -114,8 +138,8 @@ export const RelatedPropertiesCard: React.FC<RelatedPropertiesCardProps> = ({ pr
                 location: property.city,
                 furnished: 'Fully Furnished'
               })}
-            >
-              Fully Furnished {property.bhk_type} in {property.locality}
+             >
+              Fully Furnished {property.bhk_type} Flats for {property.listing_type} in {displayLocality}
             </TagButton>
           </div>
         </div>
@@ -124,7 +148,7 @@ export const RelatedPropertiesCard: React.FC<RelatedPropertiesCardProps> = ({ pr
         <div>
           <h3 className="text-base font-medium text-foreground mb-3">Top Localities</h3>
           <div className="flex flex-wrap gap-2">
-            {topLocalities.map((locality) => (
+            {displayTopLocalities.map((locality) => (
               <TagButton
                 key={locality}
                 onClick={() => handleTagClick({
@@ -133,8 +157,8 @@ export const RelatedPropertiesCard: React.FC<RelatedPropertiesCardProps> = ({ pr
                   listing_type: property.listing_type,
                   location: `${locality}, ${property.city}`
                 })}
-              >
-                {property.bhk_type} for {property.listing_type} in {locality}
+               >
+                {property.bhk_type} Flats for {property.listing_type} in {locality}
               </TagButton>
             ))}
           </div>
@@ -144,19 +168,31 @@ export const RelatedPropertiesCard: React.FC<RelatedPropertiesCardProps> = ({ pr
         <div>
           <h3 className="text-base font-medium text-foreground mb-3">Other Property Types</h3>
           <div className="flex flex-wrap gap-2">
-            {relatedTypes.map((type) => (
+            {displayRelatedTypes.map((type) => (
               <TagButton
                 key={type}
                 onClick={() => handleTagClick({
                   bhk_type: property.bhk_type || '',
                   property_type: type,
                   listing_type: property.listing_type,
-                  location: `${property.locality}, ${property.city}`
+                  location: locationParam
                 })}
               >
-                {property.bhk_type} {type} for {property.listing_type} in {property.locality}
+                {property.bhk_type} {type} for {property.listing_type} in {displayLocality}
               </TagButton>
             ))}
+          </div>
+        </div>
+
+        {/* Post Free Property Ad */}
+        <div>
+          <h3 className="text-base font-medium text-foreground mb-3">Post Free Property Ad</h3>
+          <div className="flex flex-wrap gap-2">
+            <TagButton
+              onClick={() => navigate('/post-property')}
+            >
+              Rent / Sale Property Online
+            </TagButton>
           </div>
         </div>
       </div>
