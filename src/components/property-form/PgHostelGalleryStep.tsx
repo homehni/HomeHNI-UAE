@@ -84,7 +84,7 @@ export function PgHostelGalleryStep({
               </div>
 
               {/* Action Buttons */}
-              <div className="flex justify-between pt-6">
+              <div className="flex justify-between pt-6" style={{ visibility: 'hidden' }}>
                 <Button type="button" variant="outline" onClick={onBack} className="px-8">
                   Back
                 </Button>

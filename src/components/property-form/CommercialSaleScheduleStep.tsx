@@ -1,12 +1,11 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Checkbox } from '@/components/ui/checkbox';
-import { PaintBucket, Sparkles, CheckCircle, Clock } from 'lucide-react';
+import { Clock, Eye, Calendar } from 'lucide-react';
 import { ScheduleInfo } from '@/types/property';
 
 const commercialSaleScheduleSchema = z.object({
@@ -14,8 +13,6 @@ const commercialSaleScheduleSchema = z.object({
   startTime: z.string().optional(),
   endTime: z.string().optional(),
   availableAllDay: z.boolean().optional(),
-  paintingService: z.enum(['book', 'decline']).optional(),
-  cleaningService: z.enum(['book', 'decline']).optional(),
 });
 
 type CommercialSaleScheduleForm = z.infer<typeof commercialSaleScheduleSchema>;
@@ -37,9 +34,6 @@ export const CommercialSaleScheduleStep = ({
   totalSteps,
   onSubmit
 }: CommercialSaleScheduleStepProps) => {
-  const [paintingResponse, setPaintingResponse] = useState<'book' | 'decline' | null>(initialData?.paintingService as 'book' | 'decline' || null);
-  const [cleaningResponse, setCleaningResponse] = useState<'book' | 'decline' | null>(initialData?.cleaningService as 'book' | 'decline' || null);
-
   const form = useForm<CommercialSaleScheduleForm>({
     resolver: zodResolver(commercialSaleScheduleSchema),
     defaultValues: {
@@ -47,8 +41,6 @@ export const CommercialSaleScheduleStep = ({
       startTime: initialData?.startTime || '09:00',
       endTime: initialData?.endTime || '18:00',
       availableAllDay: initialData?.availableAllDay ?? true,
-      paintingService: initialData?.paintingService as 'book' | 'decline' || undefined,
-      cleaningService: initialData?.cleaningService as 'book' | 'decline' || undefined,
     },
   });
 
@@ -66,7 +58,7 @@ const handleFormSubmit = (data: CommercialSaleScheduleForm) => {
     <div className="max-w-4xl mx-auto p-6">
       <div className="mb-8 text-center">
         <h2 className="text-2xl font-bold text-foreground mb-2">
-          Make house visits hassle-free by providing us your availability
+          Schedule Property Visits
         </h2>
         <div className="mt-4 text-sm text-muted-foreground">
           Step {currentStep} of {totalSteps}
@@ -74,257 +66,162 @@ const handleFormSubmit = (data: CommercialSaleScheduleForm) => {
       </div>
 
       <Form {...form}>
-<form onSubmit={form.handleSubmit(handleFormSubmit)} className="space-y-8">
-          {/* Service Cards */}
+        <form onSubmit={form.handleSubmit(handleFormSubmit)} className="space-y-8">
+          {/* Information Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Painting Service */}
-            <div className="bg-gradient-to-br from-orange-50 via-yellow-50 to-amber-100 rounded-xl p-6 relative overflow-hidden border border-orange-200/50 shadow-lg">
-              <div className="relative z-10">
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="w-10 h-10 bg-orange-500 rounded-full flex items-center justify-center">
-                    <PaintBucket className="w-5 h-5 text-white" />
-                  </div>
-                  <div className="w-2 h-2 bg-orange-400 rounded-full animate-pulse"></div>
+            {/* Flexible Timing Card */}
+            <div className="bg-gradient-to-br from-teal-50 to-emerald-100 rounded-xl p-6 border border-teal-200">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 bg-teal-500 rounded-full flex items-center justify-center flex-shrink-0">
+                  <Eye className="w-6 h-6 text-white" />
                 </div>
-                <h3 className="text-lg font-semibold mb-2 text-gray-800">
-                  Freshly painted homes get rented out{' '}
-                  <span className="text-orange-600 font-bold">73% faster</span>
-                </h3>
-                <p className="text-gray-600 mb-4 text-sm">
-                  Get professional painting services at the best prices
-                </p>
-                <FormField
-                  control={form.control}
-                  name="paintingService"
-                  render={({ field }) => (
-                    <div className="space-y-3">
-                      {paintingResponse === 'decline' ? (
-                        <div className="flex items-center gap-2 p-3 bg-green-50 border border-green-200 rounded-lg">
-                          <CheckCircle className="w-4 h-4 text-green-600" />
-                          <span className="text-sm text-green-700 font-medium">
-                            Your response has been captured
-                          </span>
-                        </div>
-                      ) : (
-                        <div className="flex gap-3">
-                          <Button
-                            type="button"
-                            size="sm"
-                            className="bg-orange-500 hover:bg-orange-600 text-white"
-                            variant={field.value === 'book' ? 'default' : 'outline'}
-                            onClick={() => {
-                              field.onChange('book');
-                              setPaintingResponse('book');
-                            }}
-                          >
-                            Book Now
-                          </Button>
-                          <Button
-                            type="button"
-                            size="sm"
-                            variant="outline"
-                            className="border-gray-300 text-gray-700 hover:bg-gray-50"
-                            onClick={() => {
-                              field.onChange('decline');
-                              setPaintingResponse('decline');
-                            }}
-                          >
-                            I Don't Want
-                          </Button>
-                        </div>
-                      )}
-                    </div>
-                  )}
-                />
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-800 mb-2">
+                    Properties with flexible visit timings get{' '}
+                    <span className="text-teal-600 font-bold">60% more inquiries</span>
+                  </h3>
+                  <p className="text-gray-600 text-sm">
+                    Make it easy for serious buyers to visit your property
+                  </p>
+                </div>
               </div>
-              <div className="absolute right-4 top-4 w-16 h-16 bg-gradient-to-br from-orange-300 to-yellow-400 rounded-full opacity-40"></div>
-              <div className="absolute right-8 bottom-4 w-12 h-12 bg-gradient-to-br from-yellow-300 to-orange-300 rounded-full opacity-60"></div>
             </div>
 
-            {/* Cleaning Service */}
-            <div className="bg-gradient-to-br from-teal-50 via-cyan-50 to-blue-100 rounded-xl p-6 relative overflow-hidden border border-teal-200/50 shadow-lg">
-              <div className="relative z-10">
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="w-10 h-10 bg-teal-500 rounded-full flex items-center justify-center">
-                    <Sparkles className="w-5 h-5 text-white" />
-                  </div>
-                  <div className="w-2 h-2 bg-teal-400 rounded-full animate-pulse"></div>
+            {/* Clear Availability Card */}
+            <div className="bg-gradient-to-br from-blue-50 to-indigo-100 rounded-xl p-6 border border-blue-200">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0">
+                  <Calendar className="w-6 h-6 text-white" />
                 </div>
-                <h3 className="text-lg font-semibold mb-2 text-gray-800">
-                  Get your house tenant-ready with{' '}
-                  <span className="text-teal-600 font-bold">Deep Cleaning</span>
-                </h3>
-                <p className="text-gray-600 mb-4 text-sm">
-                  Trusted by 50,000+ owners
-                </p>
-                <FormField
-                  control={form.control}
-                  name="cleaningService"
-                  render={({ field }) => (
-                    <div className="space-y-3">
-                      {cleaningResponse === 'decline' ? (
-                        <div className="flex items-center gap-2 p-3 bg-green-50 border border-green-200 rounded-lg">
-                          <CheckCircle className="w-4 h-4 text-green-600" />
-                          <span className="text-sm text-green-700 font-medium">
-                            Your response has been captured
-                          </span>
-                        </div>
-                      ) : (
-                        <div className="flex gap-3">
-                          <Button
-                            type="button"
-                            size="sm"
-                            className="bg-teal-500 hover:bg-teal-600 text-white"
-                            variant={field.value === 'book' ? 'default' : 'outline'}
-                            onClick={() => {
-                              field.onChange('book');
-                              setCleaningResponse('book');
-                            }}
-                          >
-                            Book Now
-                          </Button>
-                          <Button
-                            type="button"
-                            size="sm"
-                            variant="outline"
-                            className="border-gray-300 text-gray-700 hover:bg-gray-50"
-                            onClick={() => {
-                              field.onChange('decline');
-                              setCleaningResponse('decline');
-                            }}
-                          >
-                            I Don't Want
-                          </Button>
-                        </div>
-                      )}
-                    </div>
-                  )}
-                />
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-800 mb-2">
+                    Clear availability helps buyers{' '}
+                    <span className="text-blue-600 font-bold">plan visits better</span>
+                  </h3>
+                  <p className="text-gray-600 text-sm">
+                    Reduce unnecessary calls and get more serious inquiries
+                  </p>
+                </div>
               </div>
-              <div className="absolute right-4 top-4 w-16 h-16 bg-gradient-to-br from-teal-300 to-cyan-400 rounded-full opacity-40"></div>
-              <div className="absolute right-8 bottom-4 w-12 h-12 bg-gradient-to-br from-cyan-300 to-teal-300 rounded-full opacity-60"></div>
             </div>
           </div>
 
           {/* Availability Section */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Availability</h3>
-              <FormField
-                control={form.control}
-                name="availability"
-                render={({ field }) => (
-                  <div className="grid grid-cols-3 gap-2">
-                    <Button
-                      type="button"
-                      onClick={() => field.onChange('everyday')}
-                      variant={field.value === 'everyday' ? 'default' : 'outline'}
-                      className={`text-center ${field.value === 'everyday' ? 'bg-teal-600 hover:bg-teal-700 text-white' : 'border-gray-300'}`}
-                    >
-                      <div>
-                        <div className="font-semibold">Everyday</div>
-                        <div className="text-xs">Mon-Sun</div>
-                      </div>
-                    </Button>
-                    <Button
-                      type="button"
-                      onClick={() => field.onChange('weekday')}
-                      variant={field.value === 'weekday' ? 'default' : 'outline'}
-                      className={`text-center ${field.value === 'weekday' ? 'bg-teal-600 hover:bg-teal-700 text-white' : 'border-gray-300'}`}
-                    >
-                      <div>
-                        <div className="font-semibold">Weekday</div>
-                        <div className="text-xs">Mon-Fri</div>
-                      </div>
-                    </Button>
-                    <Button
-                      type="button"
-                      onClick={() => field.onChange('weekend')}
-                      variant={field.value === 'weekend' ? 'default' : 'outline'}
-                      className={`text-center ${field.value === 'weekend' ? 'bg-teal-600 hover:bg-teal-700 text-white' : 'border-gray-300'}`}
-                    >
-                      <div>
-                        <div className="font-semibold">Weekend</div>
-                        <div className="text-xs">Sat-Sun</div>
-                      </div>
-                    </Button>
-                  </div>
-                )}
-              />
-            </div>
+          <div className="space-y-6">
+            <h3 className="text-xl font-semibold text-gray-800">
+              When are you available for property visits?
+            </h3>
+            <FormField
+              control={form.control}
+              name="availability"
+              render={({ field }) => (
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <Button
+                    type="button"
+                    onClick={() => field.onChange('everyday')}
+                    variant={field.value === 'everyday' ? 'default' : 'outline'}
+                    className={`h-16 text-center ${field.value === 'everyday' ? 'bg-red-600 hover:bg-red-700 text-white' : 'border-gray-300 text-gray-700'}`}
+                  >
+                    <div>
+                      <div className="font-semibold">Everyday</div>
+                      <div className="text-sm opacity-80">(Mon-Sun)</div>
+                    </div>
+                  </Button>
+                  <Button
+                    type="button"
+                    onClick={() => field.onChange('weekday')}
+                    variant={field.value === 'weekday' ? 'default' : 'outline'}
+                    className={`h-16 text-center ${field.value === 'weekday' ? 'bg-red-600 hover:bg-red-700 text-white' : 'border-gray-300 text-gray-700'}`}
+                  >
+                    <div>
+                      <div className="font-semibold">Weekdays Only</div>
+                      <div className="text-sm opacity-80">(Mon-Fri)</div>
+                    </div>
+                  </Button>
+                  <Button
+                    type="button"
+                    onClick={() => field.onChange('weekend')}
+                    variant={field.value === 'weekend' ? 'default' : 'outline'}
+                    className={`h-16 text-center ${field.value === 'weekend' ? 'bg-red-600 hover:bg-red-700 text-white' : 'border-gray-300 text-gray-700'}`}
+                  >
+                    <div>
+                      <div className="font-semibold">Weekends Only</div>
+                      <div className="text-sm opacity-80">(Sat-Sun)</div>
+                    </div>
+                  </Button>
+                </div>
+              )}
+            />
+          </div>
 
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Select Time Schedule</h3>
-              <div className="space-y-4">
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="flex items-center space-x-2 border rounded-lg p-3">
-                      <div className="w-5 h-5 rounded-full border-2 border-gray-300 flex items-center justify-center">
-                        <Clock className="w-3 h-3" />
-                      </div>
-                      <FormField
-                        control={form.control}
-                        name="startTime"
-                        render={({ field }) => (
-                          <Input
-                            type="time"
-                            value={watchAvailableAllDay ? '10:00' : field.value}
-                            disabled={watchAvailableAllDay}
-                            onChange={!watchAvailableAllDay ? field.onChange : undefined}
-                            className="border-0 p-0 h-auto"
-                          />
-                        )}
+          {/* Time Schedule Section */}
+          <div className="space-y-6">
+            <h3 className="text-xl font-semibold text-gray-800">
+              Preferred time for visits
+            </h3>
+            
+            <FormField
+              control={form.control}
+              name="availableAllDay"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                  <FormControl>
+                    <Checkbox
+                      checked={field.value}
+                      onCheckedChange={(checked) => field.onChange(checked)}
+                      className="border-gray-400"
+                    />
+                  </FormControl>
+                  <FormLabel className="text-base font-medium cursor-pointer">
+                    Available All Day (10 AM to 7 PM)
+                  </FormLabel>
+                </FormItem>
+              )}
+            />
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700">Start Time</label>
+                <div className="flex items-center space-x-3 border rounded-lg p-3">
+                  <Clock className="w-4 h-4 text-gray-500" />
+                  <FormField
+                    control={form.control}
+                    name="startTime"
+                    render={({ field }) => (
+                      <Input
+                        type="time"
+                        value={watchAvailableAllDay ? '10:00' : field.value}
+                        disabled={watchAvailableAllDay}
+                        onChange={!watchAvailableAllDay ? field.onChange : undefined}
+                        className="border-0 p-0 h-auto text-sm"
                       />
-                    </div>
-                    <div className="flex items-center space-x-2 border rounded-lg p-3">
-                      <div className="w-5 h-5 rounded-full border-2 border-gray-300 flex items-center justify-center">
-                        <Clock className="w-3 h-3" />
-                      </div>
-                      <FormField
-                        control={form.control}
-                        name="endTime"
-                        render={({ field }) => (
-                          <Input
-                            type="time"
-                            value={watchAvailableAllDay ? '19:00' : field.value}
-                            disabled={watchAvailableAllDay}
-                            onChange={!watchAvailableAllDay ? field.onChange : undefined}
-                            className="border-0 p-0 h-auto"
-                          />
-                        )}
+                    )}
+                  />
+                </div>
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700">End Time</label>
+                <div className="flex items-center space-x-3 border rounded-lg p-3">
+                  <Clock className="w-4 h-4 text-gray-500" />
+                  <FormField
+                    control={form.control}
+                    name="endTime"
+                    render={({ field }) => (
+                      <Input
+                        type="time"
+                        value={watchAvailableAllDay ? '19:00' : field.value}
+                        disabled={watchAvailableAllDay}
+                        onChange={!watchAvailableAllDay ? field.onChange : undefined}
+                        className="border-0 p-0 h-auto text-sm"
                       />
-                    </div>
-                  </div>
-                <FormField
-                  control={form.control}
-                  name="availableAllDay"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-row items-start space-x-3 space-y-0">
-                      <FormControl>
-                        <Checkbox
-                          checked={field.value}
-                          onCheckedChange={(checked) => field.onChange(checked)}
-                          className="border-teal-600 text-teal-600"
-                        />
-                      </FormControl>
-                      <FormLabel className="text-sm font-medium cursor-pointer">
-                        Available All Day
-                      </FormLabel>
-                    </FormItem>
-                  )}
-                />
+                    )}
+                  />
+                </div>
               </div>
             </div>
           </div>
 
-          {/* Navigation Buttons */}
-          <div className="flex justify-between pt-6">
-            <Button type="button" variant="outline" onClick={onBack}>
-              Back
-            </Button>
-<Button type="submit" className="bg-red-600 hover:bg-red-700 text-white">
-  {onSubmit ? 'Submit' : 'Save & Continue'}
-</Button>
-          </div>
+          {/* Service Cards - Removed */}
         </form>
       </Form>
     </div>

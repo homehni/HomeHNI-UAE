@@ -1,4 +1,5 @@
 import React from 'react';
+import { Button } from '@/components/ui/button';
 import { useLandPlotPropertyForm } from '@/hooks/useLandPlotPropertyForm';
 import { LandPlotPropertyDetailsStep } from './LandPlotPropertyDetailsStep';
 import { LandPlotLocationDetailsStep } from './LandPlotLocationDetailsStep';
@@ -29,6 +30,12 @@ export const LandPlotMultiStepForm: React.FC<LandPlotMultiStepFormProps> = ({
   targetStep = null,
   createdSubmissionId
 }) => {
+  console.log('LandPlotMultiStepForm rendering with props:', {
+    isSubmitting,
+    initialOwnerInfo,
+    targetStep,
+    createdSubmissionId
+  });
   const {
     currentStep,
     ownerInfo,
@@ -53,6 +60,8 @@ export const LandPlotMultiStepForm: React.FC<LandPlotMultiStepFormProps> = ({
     getFormData,
     isStepValid
   } = useLandPlotPropertyForm();
+
+  console.log('LandPlotMultiStepForm currentStep:', currentStep);
 
   // Initialize with owner info if provided
   React.useEffect(() => {
@@ -119,16 +128,23 @@ export const LandPlotMultiStepForm: React.FC<LandPlotMultiStepFormProps> = ({
   };
 
   const handleScheduleSubmit = async (data: any) => {
+    console.log('LandPlotMultiStepForm handleScheduleSubmit called');
+    console.log('Schedule data:', data);
+    
     // Update schedule info, submit the property, then go to Preview
     updateScheduleInfo(data);
     const formData = getFormData();
+    console.log('Complete form data for submission:', formData);
+    
     await onSubmit(formData as LandPlotFormData);
     goToStep(7);
     scrollToTop();
   };
 
   const handleSubmit = () => {
+    console.log('LandPlotMultiStepForm handleSubmit called');
     const formData = getFormData();
+    console.log('Form data for submission:', formData);
     onSubmit(formData as LandPlotFormData);
   };
 
@@ -146,7 +162,7 @@ export const LandPlotMultiStepForm: React.FC<LandPlotMultiStepFormProps> = ({
 
         {/* Main Content */}
         <div className="flex-1 bg-white">
-          <div className="max-w-4xl mx-auto p-6 md:p-8">
+          <div className="max-w-4xl mx-auto p-6 md:p-8 pb-64">
               {currentStep === 1 && (
                 <LandPlotPropertyDetailsStep
                   initialData={plotDetails}
@@ -192,7 +208,7 @@ export const LandPlotMultiStepForm: React.FC<LandPlotMultiStepFormProps> = ({
               {currentStep === 6 && (
                 <LandPlotScheduleStep
                   initialData={scheduleInfo}
-                  onNext={handleScheduleNext}
+                  onNext={handleScheduleSubmit}
                   onBack={prevStep}
                   onSubmit={handleScheduleSubmit}
                 />
@@ -208,6 +224,43 @@ export const LandPlotMultiStepForm: React.FC<LandPlotMultiStepFormProps> = ({
                   previewPropertyId={createdSubmissionId || undefined}
                 />
               )}
+          </div>
+
+          {/* Sticky Bottom Navigation Bar */}
+          <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-3 sm:p-4 z-50 shadow-lg">
+            <div className="max-w-4xl mx-auto flex flex-col sm:flex-row gap-3 sm:gap-0 sm:justify-between">
+              <Button 
+                type="button" 
+                variant="outline" 
+                onClick={currentStep === 1 ? () => {} : prevStep}
+                className="h-10 sm:h-10 px-4 sm:px-6 w-full sm:w-auto order-2 sm:order-1"
+                disabled={currentStep === 1}
+              >
+                Back
+              </Button>
+              <Button 
+                type="button" 
+                onClick={() => {
+                  console.log('LandPlotMultiStepForm sticky Save & Continue button clicked');
+                  console.log('Current step:', currentStep);
+                  
+                  // Trigger the current step's form submission
+                  const currentStepElement = document.querySelector('form');
+                  console.log('Found form element:', currentStepElement);
+                  
+                  if (currentStepElement) {
+                    console.log('Dispatching submit event to form');
+                    const submitEvent = new Event('submit', { bubbles: true, cancelable: true });
+                    currentStepElement.dispatchEvent(submitEvent);
+                  } else {
+                    console.log('No form element found!');
+                  }
+                }}
+                className="h-12 sm:h-10 px-6 sm:px-6 bg-red-600 hover:bg-red-700 text-white w-full sm:w-auto order-1 sm:order-2 font-semibold"
+              >
+                Save & Continue
+              </Button>
+            </div>
           </div>
         </div>
 

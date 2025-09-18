@@ -322,7 +322,7 @@ export function PgHostelScheduleStep({
               </div>
 
               {/* Action Buttons */}
-              <div className="flex justify-between pt-8">
+              <div className="flex justify-between pt-8" style={{ visibility: 'hidden' }}>
                 <Button type="button" variant="white" onClick={onBack} className="px-8">
                   Back
                 </Button>

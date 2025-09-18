@@ -92,7 +92,7 @@ const isFormValid = () => {
               </div>
             </div>
 
-            <div className="flex justify-center space-x-4 pt-6">
+            <div className="flex justify-center space-x-4 pt-6" style={{ visibility: 'hidden' }}>
               <Button type="button" variant="outline" onClick={onBack} className="px-8 py-3">
                 Back
               </Button>

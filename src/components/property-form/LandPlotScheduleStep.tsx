@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -8,6 +8,7 @@ import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ScheduleInfo } from '@/types/property';
+import { Eye, Calendar, Clock } from 'lucide-react';
 
 const scheduleSchema = z.object({
   availability: z.enum(['everyday', 'weekday', 'weekend']).optional(),
@@ -31,9 +32,6 @@ export const LandPlotScheduleStep: React.FC<LandPlotScheduleStepProps> = ({
   onBack,
   onSubmit
 }) => {
-  const [paintingService, setPaintingService] = useState<'book' | 'decline' | null>(null);
-  const [cleaningService, setCleaningService] = useState<'book' | 'decline' | null>(null);
-
   const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm<ScheduleForm>({
     resolver: zodResolver(scheduleSchema),
     defaultValues: {
@@ -52,194 +50,146 @@ export const LandPlotScheduleStep: React.FC<LandPlotScheduleStepProps> = ({
   return (
     <Card className="w-full max-w-4xl mx-auto">
       <CardHeader>
-        <CardTitle className="text-2xl font-bold text-foreground">
-          Make house visits hassle-free by providing us your availability
+        <CardTitle className="text-2xl font-bold text-gray-900">
+          Schedule Property Visits
         </CardTitle>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit(onNext)} className="space-y-8">
-          {/* Services Section */}
+          {/* Informational Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Painting Service */}
-            <div className="bg-gradient-to-br from-yellow-50 to-orange-50 p-6 rounded-lg border">
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex-1">
-                  <h3 className="text-lg font-semibold text-gray-900">
-                    Freshly painted homes get rented out{' '}
-                    <span className="text-teal-600 font-bold">73% faster</span>
+            {/* Flexible Timing Card */}
+            <div className="bg-gradient-to-br from-teal-50 to-emerald-100 rounded-xl p-6 border border-teal-200">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 bg-teal-500 rounded-full flex items-center justify-center flex-shrink-0">
+                  <Eye className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-800 mb-2">
+                    Properties with flexible visit timings get{' '}
+                    <span className="text-teal-600 font-bold">60% more inquiries</span>
                   </h3>
-                  <p className="text-gray-600 mt-2">
-                    Get professional painting services at the best prices
+                  <p className="text-gray-600 text-sm">
+                    Make it easy for serious buyers to visit your property
                   </p>
                 </div>
-                <div className="w-20 h-20 bg-yellow-200 rounded-lg flex items-center justify-center ml-4">
-                  🎨
-                </div>
-              </div>
-              <div className="flex gap-2">
-                <Button
-                  type="button"
-                  onClick={() => setPaintingService('book')}
-                  variant={paintingService === 'book' ? 'default' : 'outline'}
-                  className={paintingService === 'book' ? 'bg-teal-600 hover:bg-teal-700' : ''}
-                >
-                  Book Now
-                </Button>
-                <Button
-                  type="button"
-                  onClick={() => setPaintingService('decline')}
-                  variant={paintingService === 'decline' ? 'default' : 'outline'}
-                  className={paintingService === 'decline' ? 'bg-gray-500 hover:bg-gray-600' : ''}
-                >
-                  I Don't Want Painting
-                </Button>
               </div>
             </div>
 
-            {/* Cleaning Service */}
-            <div className="bg-gradient-to-br from-blue-50 to-cyan-50 p-6 rounded-lg border">
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex-1">
-                  <h3 className="text-lg font-semibold text-gray-900">
-                    Get your house tenant-ready with{' '}
-                    <span className="text-teal-600 font-bold">Deep Cleaning</span>
+            {/* Clear Availability Card */}
+            <div className="bg-gradient-to-br from-blue-50 to-indigo-100 rounded-xl p-6 border border-blue-200">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0">
+                  <Calendar className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-800 mb-2">
+                    Clear availability helps buyers{' '}
+                    <span className="text-blue-600 font-bold">plan visits better</span>
                   </h3>
-                  <p className="text-gray-600 mt-2">
-                    Trusted by 50,000+ owners
+                  <p className="text-gray-600 text-sm">
+                    Reduce unnecessary calls and get more serious inquiries
                   </p>
                 </div>
-                <div className="w-20 h-20 bg-yellow-200 rounded-lg flex items-center justify-center ml-4">
-                  🧽
-                </div>
-              </div>
-              <div className="flex gap-2">
-                <Button
-                  type="button"
-                  onClick={() => setCleaningService('book')}
-                  variant={cleaningService === 'book' ? 'default' : 'outline'}
-                  className={cleaningService === 'book' ? 'bg-teal-600 hover:bg-teal-700' : ''}
-                >
-                  Book Now
-                </Button>
-                <Button
-                  type="button"
-                  onClick={() => setCleaningService('decline')}
-                  variant={cleaningService === 'decline' ? 'default' : 'outline'}
-                  className={cleaningService === 'decline' ? 'bg-gray-500 hover:bg-gray-600' : ''}
-                >
-                  I Don't Want Cleaning
-                </Button>
               </div>
             </div>
           </div>
 
           {/* Availability Section */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div>
-              <h3 className="text-lg font-semibold text-foreground mb-4">Availability</h3>
-              <div className="grid grid-cols-3 gap-2">
-                <Button
-                  type="button"
-                  onClick={() => setValue('availability', 'everyday')}
-                  variant={availability === 'everyday' ? 'default' : 'outline'}
-                  className={`text-center ${availability === 'everyday' ? 'bg-teal-600 hover:bg-teal-700 text-white' : 'border-gray-300'}`}
-                >
-                  <div>
-                    <div className="font-semibold">Everyday</div>
-                    <div className="text-xs">Mon-Sun</div>
-                  </div>
-                </Button>
-                <Button
-                  type="button"
-                  onClick={() => setValue('availability', 'weekday')}
-                  variant={availability === 'weekday' ? 'default' : 'outline'}
-                  className={`text-center ${availability === 'weekday' ? 'bg-teal-600 hover:bg-teal-700 text-white' : 'border-gray-300'}`}
-                >
-                  <div>
-                    <div className="font-semibold">Weekday</div>
-                    <div className="text-xs">Mon-Fri</div>
-                  </div>
-                </Button>
-                <Button
-                  type="button"
-                  onClick={() => setValue('availability', 'weekend')}
-                  variant={availability === 'weekend' ? 'default' : 'outline'}
-                  className={`text-center ${availability === 'weekend' ? 'bg-teal-600 hover:bg-teal-700 text-white' : 'border-gray-300'}`}
-                >
-                  <div>
-                    <div className="font-semibold">Weekend</div>
-                    <div className="text-xs">Sat-Sun</div>
-                  </div>
-                </Button>
-              </div>
+          <div className="space-y-6">
+            <h3 className="text-xl font-semibold text-gray-800">
+              When are you available for property visits?
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <Button
+                type="button"
+                onClick={() => setValue('availability', 'everyday')}
+                variant={availability === 'everyday' ? 'default' : 'outline'}
+                className={`h-16 text-center ${availability === 'everyday' ? 'bg-red-600 hover:bg-red-700 text-white' : 'border-gray-300 text-gray-700'}`}
+              >
+                <div>
+                  <div className="font-semibold">Everyday</div>
+                  <div className="text-sm opacity-80">(Mon-Sun)</div>
+                </div>
+              </Button>
+              <Button
+                type="button"
+                onClick={() => setValue('availability', 'weekday')}
+                variant={availability === 'weekday' ? 'default' : 'outline'}
+                className={`h-16 text-center ${availability === 'weekday' ? 'bg-red-600 hover:bg-red-700 text-white' : 'border-gray-300 text-gray-700'}`}
+              >
+                <div>
+                  <div className="font-semibold">Weekdays Only</div>
+                  <div className="text-sm opacity-80">(Mon-Fri)</div>
+                </div>
+              </Button>
+              <Button
+                type="button"
+                onClick={() => setValue('availability', 'weekend')}
+                variant={availability === 'weekend' ? 'default' : 'outline'}
+                className={`h-16 text-center ${availability === 'weekend' ? 'bg-red-600 hover:bg-red-700 text-white' : 'border-gray-300 text-gray-700'}`}
+              >
+                <div>
+                  <div className="font-semibold">Weekends Only</div>
+                  <div className="text-sm opacity-80">(Sat-Sun)</div>
+                </div>
+              </Button>
+            </div>
+          </div>
+
+          {/* Time Schedule Section */}
+          <div className="space-y-6">
+            <h3 className="text-xl font-semibold text-gray-800">
+              Preferred time for visits
+            </h3>
+            
+            <div className="flex items-center space-x-3">
+              <Checkbox
+                id="availableAllDay"
+                checked={availableAllDay}
+                onCheckedChange={(checked) => setValue('availableAllDay', !!checked)}
+                className="border-gray-400"
+              />
+              <Label htmlFor="availableAllDay" className="text-base font-medium cursor-pointer">
+                Available All Day (10 AM to 7 PM)
+              </Label>
             </div>
 
-            <div>
-              <h3 className="text-lg font-semibold text-foreground mb-4">Select Time Schedule</h3>
-              <div className="space-y-4">
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="flex items-center space-x-2 border rounded-lg p-3">
-                      <div className="w-5 h-5 rounded-full border-2 border-gray-300 flex items-center justify-center">
-                        🕐
-                      </div>
-                      <Input
-                        type="time"
-                        value={availableAllDay ? '10:00' : startTime || '10:00'}
-                        disabled={availableAllDay}
-                        onChange={(e) => !availableAllDay && setValue('startTime', e.target.value)}
-                        className="border-0 p-0 h-auto"
-                      />
-                    </div>
-                    <div className="flex items-center space-x-2 border rounded-lg p-3">
-                      <div className="w-5 h-5 rounded-full border-2 border-gray-300 flex items-center justify-center">
-                        🕙
-                      </div>
-                      <Input
-                        type="time"
-                        value={availableAllDay ? '19:00' : endTime || '19:00'}
-                        disabled={availableAllDay}
-                        onChange={(e) => !availableAllDay && setValue('endTime', e.target.value)}
-                        className="border-0 p-0 h-auto"
-                      />
-                    </div>
-                  </div>
-                <div className="flex items-center space-x-2">
-                  <Checkbox
-                    id="availableAllDay"
-                    checked={availableAllDay}
-                    onCheckedChange={(checked) => setValue('availableAllDay', !!checked)}
-                    className="border-teal-600 text-teal-600"
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700">Start Time</label>
+                <div className="flex items-center space-x-3 border rounded-lg p-3">
+                  <Clock className="w-4 h-4 text-gray-500" />
+                  <Input
+                    type="time"
+                    value={availableAllDay ? '10:00' : startTime || '10:00'}
+                    disabled={availableAllDay}
+                    onChange={(e) => !availableAllDay && setValue('startTime', e.target.value)}
+                    className="border-0 p-0 h-auto text-sm"
                   />
-                  <Label htmlFor="availableAllDay" className="text-sm font-medium text-foreground">
-                    Available All Day
-                  </Label>
+                </div>
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700">End Time</label>
+                <div className="flex items-center space-x-3 border rounded-lg p-3">
+                  <Clock className="w-4 h-4 text-gray-500" />
+                  <Input
+                    type="time"
+                    value={availableAllDay ? '19:00' : endTime || '19:00'}
+                    disabled={availableAllDay}
+                    onChange={(e) => !availableAllDay && setValue('endTime', e.target.value)}
+                    className="border-0 p-0 h-auto text-sm"
+                  />
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Navigation Buttons */}
-          <div className="flex justify-between pt-6">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={onBack}
-            >
-              Back
-            </Button>
-            <div className="flex gap-3">
-              {onSubmit && (
-                <Button 
-                  type="button" 
-                  onClick={handleSubmit(onSubmit)}
-                  className="bg-red-600 hover:bg-red-700 text-white"
-                >
-                  Submit Property
-                </Button>
-              )}
-            </div>
-          </div>
+          {/* Navigation Buttons - Removed, using sticky buttons instead */}
         </form>
+        
+        {/* Additional spacing to ensure proper scrolling */}
+        <div className="h-32"></div>
       </CardContent>
     </Card>
   );

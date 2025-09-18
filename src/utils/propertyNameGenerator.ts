@@ -27,7 +27,7 @@ export const generatePropertyName = (data: PropertyNameData): string => {
   // Safety check for undefined propertyType
   if (!propertyType) {
     console.warn('PropertyType is undefined, using fallback');
-    return `Commercial Space ${listingDisplay}`;
+    return `Residential Property ${listingDisplay}`;
   }
   
   // Handle different property types

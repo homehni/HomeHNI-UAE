@@ -269,20 +269,7 @@ export const CommercialSaleSaleDetailsStep = ({
             />
           </div> */}
 
-          {/* Navigation Buttons */}
-          <div className="flex justify-start gap-4 pt-6">
-            <Button 
-              type="button" 
-              variant="outline" 
-              onClick={onBack}
-              className="h-12 px-8"
-            >
-              Back
-            </Button>
-            <Button type="submit" className="h-12 px-8">
-              Save & Continue
-            </Button>
-          </div>
+          {/* Navigation Buttons - Removed, using sticky buttons instead */}
         </form>
       </Form>
     </div>

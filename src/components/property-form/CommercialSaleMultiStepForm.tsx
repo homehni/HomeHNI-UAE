@@ -1,4 +1,5 @@
 import { useMemo, useEffect } from 'react';
+import { Button } from '@/components/ui/button';
 import { useCommercialSalePropertyForm } from '@/hooks/useCommercialSalePropertyForm';
 import { CommercialSaleSidebar } from './CommercialSaleSidebar';
 import { CommercialSalePropertyDetailsStep } from './CommercialSalePropertyDetailsStep';
@@ -205,8 +206,8 @@ const handleScheduleSubmit = async (data: any) => {
   };
 
   return (
-    <div className="h-screen bg-gray-50 overflow-hidden">
-      <div className="max-w-full mx-auto h-full flex flex-col">
+    <div className="min-h-screen bg-gray-50">
+      <div className="max-w-full mx-auto flex flex-col">
         <div className="bg-white shadow-sm border-b flex-shrink-0">
           <div className="px-4 py-2">
             <h1 className="text-base font-bold text-gray-900">
@@ -221,7 +222,7 @@ const handleScheduleSubmit = async (data: any) => {
           </div>
         </div>
 
-        <div className="flex flex-1 overflow-hidden">
+        <div className="flex flex-col lg:flex-row">
           <div className="w-80 flex-shrink-0">
             <CommercialSaleSidebar
               currentStep={currentStep}
@@ -230,9 +231,38 @@ const handleScheduleSubmit = async (data: any) => {
             />
           </div>
 
-          <div className="flex-1 min-w-0 p-3 bg-white overflow-auto max-h-full">
+          <div className="flex-1 min-w-0 p-3 bg-white pb-20">
             <div className="max-w-4xl mx-auto">
               {renderCurrentStep()}
+            </div>
+          </div>
+
+          {/* Sticky Bottom Navigation Bar */}
+          <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-3 sm:p-4 z-50 shadow-lg">
+            <div className="max-w-4xl mx-auto flex flex-col sm:flex-row gap-3 sm:gap-0 sm:justify-between">
+              <Button 
+                type="button" 
+                variant="outline" 
+                onClick={currentStep === 1 ? () => {} : prevStep}
+                className="h-10 sm:h-10 px-4 sm:px-6 w-full sm:w-auto order-2 sm:order-1"
+                disabled={currentStep === 1}
+              >
+                Back
+              </Button>
+              <Button 
+                type="button" 
+                onClick={() => {
+                  // Trigger the current step's form submission
+                  const currentStepElement = document.querySelector('form');
+                  if (currentStepElement) {
+                    const submitEvent = new Event('submit', { bubbles: true, cancelable: true });
+                    currentStepElement.dispatchEvent(submitEvent);
+                  }
+                }}
+                className="h-12 sm:h-10 px-6 sm:px-6 bg-red-600 hover:bg-red-700 text-white w-full sm:w-auto order-1 sm:order-2 font-semibold"
+              >
+                Save & Continue
+              </Button>
             </div>
           </div>
 

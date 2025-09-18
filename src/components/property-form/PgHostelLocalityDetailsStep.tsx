@@ -233,7 +233,7 @@ export function PgHostelLocalityDetailsStep({
             />
 
             {/* Navigation Buttons */}
-            <div className="flex justify-between pt-6">
+            <div className="flex justify-between pt-6" style={{ visibility: 'hidden' }}>
               <Button type="button" variant="outline" onClick={onBack} className="h-10 md:h-12 px-4 md:px-8">
                 Back
               </Button>

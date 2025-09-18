@@ -175,6 +175,7 @@ export const FlattmatesLocationDetailsStep: React.FC<FlattmatesLocationDetailsSt
   }, [form]);
 
   const onSubmit = (data: FlattmatesLocationData) => {
+    console.log('FlattmatesLocationDetailsStep onSubmit called with data:', data);
     // Convert to LocationDetails format and include parsed city, state, pincode
     const locationData: LocationDetails = {
       state: data.state || '',
@@ -184,6 +185,7 @@ export const FlattmatesLocationDetailsStep: React.FC<FlattmatesLocationDetailsSt
       pincode: data.pincode || '',
       societyName: initialData.societyName || ''
     };
+    console.log('Calling onNext with locationData:', locationData);
     onNext(locationData);
   };
 
@@ -284,7 +286,7 @@ export const FlattmatesLocationDetailsStep: React.FC<FlattmatesLocationDetailsSt
           )}
 
           {/* Navigation Buttons */}
-          <div className="flex justify-between pt-6">
+          <div className="flex justify-between pt-6" style={{ visibility: 'hidden' }}>
             <Button type="button" variant="outline" onClick={onBack} className="h-12 px-8 border-gray-300 text-gray-700 hover:bg-gray-50">
               Back
             </Button>

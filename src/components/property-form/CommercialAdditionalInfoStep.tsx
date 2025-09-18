@@ -147,7 +147,7 @@ export const CommercialAdditionalInfoStep: React.FC<CommercialAdditionalInfoStep
               />
             </div>
 
-            <div className="flex justify-between">
+            <div className="flex justify-between" style={{ visibility: 'hidden' }}>
               <Button type="button" variant="outline" onClick={onBack}>
                 Back
               </Button>

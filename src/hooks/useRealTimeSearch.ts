@@ -285,6 +285,7 @@ export const useRealTimeSearch = () => {
             bathrooms: property.bathrooms || 0,
             image: imageUrl,
             propertyType: displayPropertyType,
+            listingType: property.listing_type || 'sale',
             locality: property.locality || '',
             city: property.city || '',
             bhkType: property.bhk_type || '1bhk',

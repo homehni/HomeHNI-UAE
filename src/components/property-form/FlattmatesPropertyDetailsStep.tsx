@@ -54,9 +54,13 @@ export function FlattmatesPropertyDetailsStep({
   };
 
   const handleSubmit = (e: React.FormEvent) => {
+    console.log('FlattmatesPropertyDetailsStep handleSubmit called');
     e.preventDefault();
     if (isFormValid()) {
+      console.log('Form is valid, calling onNext with data:', formData);
       onNext(formData);
+    } else {
+      console.log('Form is not valid');
     }
   };
 
@@ -275,7 +279,7 @@ export function FlattmatesPropertyDetailsStep({
                   </div>
                 </div>
 
-                <div className="flex justify-between pt-6">
+                <div className="flex justify-between pt-6" style={{ visibility: 'hidden' }}>
                   <Button type="button" variant="outline" onClick={onBack}>
                     Back
                   </Button>

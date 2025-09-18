@@ -407,7 +407,7 @@ export const SaleDetailsStep: React.FC<SaleDetailsStepProps> = ({
           </div>
 
           {/* Navigation Buttons */}
-          <div className="flex justify-between pt-4">
+          <div className="flex justify-between pt-4" style={{ visibility: 'hidden' }}>
             <Button type="button" variant="outline" onClick={onBack} className="h-10 px-6">
               {!isMobile && <ArrowLeft className="mr-2 h-4 w-4" />}
               Back

@@ -20,29 +20,29 @@ const GetTenantsFasterSection: React.FC = () => {
     description: "Get expert pricing advice"
   }];
   return <div className="w-full h-full bg-gray-50 border-l border-gray-200 hidden lg:block">
-      <div className="p-6 space-y-6 flex flex-col">
+      <div className="p-4 space-y-4 flex flex-col">
         {/* Header */}
         <div className="text-center">
-          <h2 className="text-xl font-medium text-gray-700 mb-3">Get Tenants Faster</h2>
-          <p className="text-sm text-gray-600 leading-relaxed px-2">
+          <h2 className="text-lg font-medium text-gray-700 mb-2">Get Tenants Faster</h2>
+          <p className="text-xs text-gray-600 leading-relaxed px-1">
             Subscribe to our owner plans and find Tenants quickly and with ease
           </p>
         </div>
 
         {/* Features */}
-        <div className="space-y-4">
+        <div className="space-y-3">
           {features.map((feature, index) => <div key={index} className="flex flex-col items-center text-center">
-              <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center mb-2 shadow-sm border border-gray-200">
-                <feature.icon className="w-5 h-5 text-gray-600" strokeWidth={1.5} />
+              <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center mb-1 shadow-sm border border-gray-200">
+                <feature.icon className="w-4 h-4 text-gray-600" strokeWidth={1.5} />
               </div>
-              <h3 className="font-medium text-gray-700 text-sm mb-1">{feature.title}</h3>
+              <h3 className="font-medium text-gray-700 text-xs mb-1">{feature.title}</h3>
               
             </div>)}
         </div>
 
         {/* CTA Button */}
-        <div className="pt-4">
-          <Button className="w-full font-medium py-3 rounded-md bg-red-800 hover:bg-red-900 text-white">
+        <div className="pt-2">
+          <Button className="w-full font-medium py-2 rounded-md bg-red-800 hover:bg-red-900 text-white text-sm">
             Show Interest
           </Button>
         </div>

@@ -35,6 +35,11 @@ type FormStep = 'property-selection' | 'owner-info' | 'rental-form' | 'resale-fo
 export const PostProperty: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [currentStep, setCurrentStep] = useState<FormStep>('property-selection');
+  
+  // Debug logging for currentStep changes
+  React.useEffect(() => {
+    console.log('PostProperty currentStep changed to:', currentStep);
+  }, [currentStep]);
   const [ownerInfo, setOwnerInfo] = useState<OwnerInfo | null>(null);
   const [initialOwnerData, setInitialOwnerData] = useState<Partial<OwnerInfo>>({});
   const [propertySelectionData, setPropertySelectionData] = useState<{
@@ -44,7 +49,7 @@ export const PostProperty: React.FC = () => {
     city: string;
     whatsappUpdates: boolean;
     propertyType: 'Residential' | 'Commercial' | 'Land/Plot';
-    listingType: 'Rent' | 'Resale' | 'PG/Hostel' | 'Flatmates';
+    listingType: 'Rent' | 'Resale' | 'PG/Hostel' | 'Flatmates' | 'Sale';
   } | null>(null);
   const [targetStep, setTargetStep] = useState<number | null>(null);
   const [lastSubmissionId, setLastSubmissionId] = useState<string | null>(null);
@@ -205,7 +210,7 @@ export const PostProperty: React.FC = () => {
     city: string;
     whatsappUpdates: boolean;
     propertyType: 'Residential' | 'Commercial' | 'Land/Plot';
-    listingType: 'Rent' | 'Resale' | 'PG/Hostel' | 'Flatmates';
+    listingType: 'Rent' | 'Resale' | 'PG/Hostel' | 'Flatmates' | 'Sale';
   }) => {
     try {
       // Save contact data to database
@@ -221,14 +226,11 @@ export const PostProperty: React.FC = () => {
 
     } catch (error) {
       console.error('Error saving contact data:', error);
-      toast({
-        title: "Error",
-        description: "Failed to save contact information. Please try again.",
-        variant: "destructive",
-      });
-      return; // Don't proceed if contact save fails
+      // Continue anyway - don't block form access due to database issues
+      console.log('Continuing to form despite database error');
     }
 
+    console.log('Property selection data received:', data);
     setPropertySelectionData(data);
     
     // Create owner info from the selection data
@@ -244,10 +246,14 @@ export const PostProperty: React.FC = () => {
     setOwnerInfo(ownerInfoData);
     
     // Route directly to appropriate form based on property type and listing type
+    console.log('Routing based on:', { propertyType: data.propertyType, listingType: data.listingType });
+    
     if (data.propertyType === 'Commercial') {
       if (data.listingType === 'Rent') {
+        console.log('Routing to commercial-rental-form');
         setCurrentStep('commercial-rental-form');
-      } else if (data.listingType === 'Resale') {
+      } else if (data.listingType === 'Sale') {
+        console.log('Routing to commercial-sale-form');
         setCurrentStep('commercial-sale-form');
       }
     } else {
@@ -255,8 +261,10 @@ export const PostProperty: React.FC = () => {
       switch (data.listingType) {
         case 'Resale':
           if (data.propertyType === 'Land/Plot') {
+            console.log('Routing to land-plot-form for Land/Plot Resale');
             setCurrentStep('land-plot-form');
           } else {
+            console.log('Routing to resale-form for Residential Resale');
             setCurrentStep('resale-form');
           }
           break;
@@ -305,6 +313,14 @@ export const PostProperty: React.FC = () => {
   };
 
   const handleSubmit = async (data: { ownerInfo: OwnerInfo; propertyInfo: PropertyInfo | SalePropertyInfo } | PGHostelFormData | FlattmatesFormData | CommercialFormData | CommercialSaleFormData | LandPlotFormData) => {
+    console.log('PostProperty handleSubmit called with data:', data);
+    console.log('Data type check:', {
+      hasOwnerInfo: 'ownerInfo' in data,
+      hasPropertyInfo: 'propertyInfo' in data,
+      hasPlotDetails: 'propertyInfo' in data && 'plotDetails' in data.propertyInfo,
+      dataKeys: Object.keys(data)
+    });
+    
     if (!user) {
       toast({
         title: "Authentication Required",
@@ -363,7 +379,9 @@ export const PostProperty: React.FC = () => {
         bhkType: ('propertyDetails' in data.propertyInfo && 'bhkType' in data.propertyInfo.propertyDetails) ? data.propertyInfo.propertyDetails.bhkType : null,
         propertyType: ('propertyDetails' in data.propertyInfo) ? data.propertyInfo.propertyDetails.propertyType : 
                      ('plotDetails' in data.propertyInfo) ? data.propertyInfo.plotDetails.propertyType : 
-                     ('saleDetails' in data.propertyInfo) ? 'Commercial' : 'Commercial',
+                     ('commercialSaleDetails' in data.propertyInfo) ? 'Commercial' : 
+                     ('commercialRentalDetails' in data.propertyInfo) ? 'Commercial' : 
+                     data.ownerInfo?.propertyType || 'Residential',
         listingType: listingType || 'Sale'
       });
 
@@ -390,7 +408,10 @@ export const PostProperty: React.FC = () => {
           title: ('propertyDetails' in data.propertyInfo) ? data.propertyInfo.propertyDetails.title : 
                  ('plotDetails' in data.propertyInfo) ? data.propertyInfo.plotDetails.title : '',
           propertyType: ('propertyDetails' in data.propertyInfo) ? data.propertyInfo.propertyDetails.propertyType : 
-                       ('plotDetails' in data.propertyInfo) ? data.propertyInfo.plotDetails.propertyType : 'Commercial',
+                       ('plotDetails' in data.propertyInfo) ? data.propertyInfo.plotDetails.propertyType : 
+                       ('commercialSaleDetails' in data.propertyInfo) ? 'Commercial' : 
+                       ('commercialRentalDetails' in data.propertyInfo) ? 'Commercial' : 
+                       data.ownerInfo?.propertyType || 'Residential',
           superBuiltUpArea: ('propertyDetails' in data.propertyInfo) ? Number(data.propertyInfo.propertyDetails.superBuiltUpArea) :
                            ('plotDetails' in data.propertyInfo) ? Number((data.propertyInfo as any).plotDetails.plotArea) : 0,
           bathrooms: ('amenities' in data.propertyInfo) ? Number((data.propertyInfo as any).amenities.bathrooms) || 0 : 0,
@@ -508,7 +529,7 @@ export const PostProperty: React.FC = () => {
                        ? data.propertyInfo.propertyDetails.propertyType 
                        : ('plotDetails' in data.propertyInfo) 
                          ? data.propertyInfo.plotDetails.propertyType 
-                         : 'Commercial',
+                         : data.ownerInfo?.propertyType || 'Residential',
           listingType: listingType,
           commercialType: ('propertyDetails' in data.propertyInfo && 'spaceType' in data.propertyInfo.propertyDetails) 
                          ? (data.propertyInfo.propertyDetails as any).spaceType 
@@ -782,6 +803,7 @@ export const PostProperty: React.FC = () => {
   };
 
   const renderCurrentStep = () => {
+    console.log('renderCurrentStep called with currentStep:', currentStep);
     switch (currentStep) {
       case 'property-selection':
         return (
@@ -887,6 +909,7 @@ export const PostProperty: React.FC = () => {
           />
         );
       case 'land-plot-form':
+        console.log('Rendering LandPlotMultiStepForm');
         return (
           <LandPlotMultiStepForm 
             onSubmit={handleSubmit as (data: LandPlotFormData) => void}

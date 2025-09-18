@@ -361,7 +361,7 @@ export const CommercialPropertyDetailsStep: React.FC<CommercialPropertyDetailsSt
             </div>
 
             {/* Navigation Buttons */}
-            <div className="flex justify-between pt-6">
+            <div className="flex justify-between pt-6" style={{ visibility: 'hidden' }}>
               <Button 
                 type="button" 
                 variant="outline" 

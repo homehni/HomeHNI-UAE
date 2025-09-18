@@ -43,6 +43,8 @@ export const useCommercialSalePropertyForm = () => {
   const goToStep = useCallback((step: number) => {
     if (step >= 2 && step <= 9) { // Valid steps are 2-9
       setCurrentStep(step);
+    } else {
+      console.warn(`Invalid step number: ${step}. Valid range is 2-9.`);
     }
   }, []);
 

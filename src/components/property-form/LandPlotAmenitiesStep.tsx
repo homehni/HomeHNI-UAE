@@ -189,19 +189,7 @@ export const LandPlotAmenitiesStep: React.FC<LandPlotAmenitiesStepProps> = ({
             />
           </div>
 
-          {/* Navigation Buttons */}
-          <div className="flex justify-between pt-6">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={onBack}
-            >
-              Back
-            </Button>
-            <Button type="submit" className="bg-red-600 hover:bg-red-700 text-white">
-              Next: Photos & Videos
-            </Button>
-          </div>
+          {/* Navigation Buttons - Removed, using sticky buttons instead */}
         </form>
       </CardContent>
     </Card>

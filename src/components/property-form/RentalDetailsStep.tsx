@@ -93,7 +93,7 @@ export const RentalDetailsStep: React.FC<RentalDetailsStepProps> = ({
       </h1>
       
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <form id="rental-details-form" onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           {/* Property Available For */}
           <div>
             <h3 className="text-lg font-medium text-gray-900 mb-4">Property available for</h3>
@@ -482,16 +482,11 @@ export const RentalDetailsStep: React.FC<RentalDetailsStepProps> = ({
             />
           </div>
 
-          <div className="flex justify-start gap-4 pt-6">
-            <Button type="button" variant="outline" onClick={onBack} className="h-12 px-8">
-              Back
-            </Button>
-            <Button type="submit" className="h-12 px-8">
-              Save & Continue
-            </Button>
-          </div>
         </form>
       </Form>
+      
+      {/* Hidden submit button for sticky bar */}
+      <button type="submit" form="rental-details-form" className="hidden" />
     </div>
   );
 };

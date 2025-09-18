@@ -225,7 +225,7 @@ export const CommercialSalePreviewStep: React.FC<CommercialSalePreviewStepProps>
           <Button 
             type="button" 
             variant="outline" 
-            onClick={() => onEdit(1)} 
+            onClick={() => onEdit && onEdit(2)} 
             className="border-gray-500 text-gray-600 hover:bg-gray-50 w-full sm:w-auto"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
@@ -336,7 +336,7 @@ export const CommercialSalePreviewStep: React.FC<CommercialSalePreviewStepProps>
               <Button 
                 size="sm" 
                 className="bg-teal-600 hover:bg-teal-700 text-white w-full sm:w-auto"
-                onClick={() => onEdit(5)}
+                onClick={() => onEdit(6)}
               >
                 Upload Now
               </Button>

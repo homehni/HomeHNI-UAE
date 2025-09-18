@@ -299,14 +299,7 @@ export const CommercialSaleAmenitiesStep = ({
             )}
           />
 
-          <div className="flex justify-between pt-6">
-            <Button type="button" variant="outline" onClick={onBack}>
-              Back
-            </Button>
-            <Button type="submit">
-              Save & Continue
-            </Button>
-          </div>
+          {/* Navigation Buttons - Removed, using sticky buttons instead */}
         </form>
       </Form>
     </div>

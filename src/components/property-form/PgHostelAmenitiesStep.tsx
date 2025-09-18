@@ -219,7 +219,7 @@ export function PgHostelAmenitiesStep({
               </Select>
             </div>
 
-            <div className="flex justify-between pt-6">
+            <div className="flex justify-between pt-6" style={{ visibility: 'hidden' }}>
               <Button type="button" variant="outline" onClick={onBack}>
                 Back
               </Button>

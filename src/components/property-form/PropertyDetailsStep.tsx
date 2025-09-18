@@ -102,7 +102,7 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
         <h1 className="text-2xl font-semibold text-primary mb-6">Property Details</h1>
         
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          <form id="property-details-form" onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             {/* Property Name and Built Up Area */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <FormField
@@ -415,19 +415,11 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
             </div>
           </form>
         </Form>
+        
+        {/* Hidden submit button for sticky bar */}
+        <button type="submit" form="property-details-form" className="hidden" />
       </div>
 
-      {/* Sticky Navigation Buttons */}
-      <div className="flex-shrink-0 bg-white border-t border-gray-200 p-4">
-        <div className="flex justify-between">
-          <Button type="button" variant="outline" onClick={onBack} className="h-10 px-6">
-            Back
-          </Button>
-          <Button type="button" onClick={form.handleSubmit(onSubmit)} className="h-10 px-6">
-            Save & Continue
-          </Button>
-        </div>
-      </div>
     </div>
   );
 };

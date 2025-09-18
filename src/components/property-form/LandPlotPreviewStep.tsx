@@ -34,13 +34,21 @@ export const LandPlotPreviewStep: React.FC<LandPlotPreviewStepProps> = ({
   };
 
   const handlePreviewListing = () => {
+    console.log('LandPlotPreviewStep handlePreviewListing called');
+    console.log('previewPropertyId:', previewPropertyId);
+    console.log('formData:', formData);
+    
     if (previewPropertyId) {
+      console.log('Opening property page:', `/property/${previewPropertyId}`);
       // Open the specific property details page in a new tab
       window.open(`/property/${previewPropertyId}`, '_blank');
     } else {
+      console.log('No previewPropertyId, creating preview URL with form data');
       // Create a temporary preview URL with form data
       const previewData = encodeURIComponent(JSON.stringify(formData));
-      window.open(`/preview?data=${previewData}&type=land-plot`, '_blank');
+      const previewUrl = `/preview?data=${previewData}&type=land-plot`;
+      console.log('Opening preview URL:', previewUrl);
+      window.open(previewUrl, '_blank');
     }
   };
 

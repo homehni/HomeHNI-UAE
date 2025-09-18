@@ -21,7 +21,6 @@ interface ImageUploadProps {
   images: File[];
   onImagesChange: (images: File[]) => void;
   maxImages: number;
-  minImages: number;
   onUploadClick?: () => void;
 }
 
@@ -38,8 +37,7 @@ const categories = [
 export const ImageUpload: React.FC<ImageUploadProps> = ({
   images,
   onImagesChange,
-  maxImages,
-  minImages
+  maxImages
 }) => {
   const fileInputRefs = useRef<{ [key: string]: HTMLInputElement | null }>({});
   const { toast } = useToast();
@@ -227,9 +225,6 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
           <Badge variant="outline" className="text-sm">
             Total Images: {getTotalCategorizedImages()}
           </Badge>
-          <Badge variant={getTotalCategorizedImages() >= minImages ? "default" : "destructive"} className="text-sm">
-            Minimum: {minImages}
-          </Badge>
         </div>
       </div>
 
@@ -352,23 +347,9 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
         })}
       </div>
 
-      {/* Upload guidelines */}
-      <div className="text-sm text-muted-foreground space-y-1 bg-muted/50 p-4 rounded-lg">
-        <p>• Upload high-quality images (JPEG, PNG)</p>
-        <p>• Maximum file size: 5MB per image</p>
-        <p>• Up to 5 images per category</p>
-        <p>• Minimum {minImages} total images required</p>
-        <p>• All categories are optional - add images where relevant</p>
-      </div>
+      {/* Upload guidelines - Removed */}
 
-      {/* Warning if minimum not met */}
-      {getTotalCategorizedImages() < minImages && (
-        <div className="bg-destructive/10 border border-destructive/20 rounded-lg p-4 text-center">
-          <p className="text-sm text-destructive font-medium">
-            Please upload at least {minImages - getTotalCategorizedImages()} more image(s) to continue
-          </p>
-        </div>
-      )}
+      {/* Warning message - Removed */}
     </div>
   );
 };

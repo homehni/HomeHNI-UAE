@@ -111,6 +111,7 @@ export const SearchResultsPanel: React.FC<SearchResultsPanelProps> = ({
                   bathrooms={property.bathrooms}
                   image={property.image}
                   propertyType={property.propertyType}
+                  listingType={property.listingType}
                   isNew={property.isNew}
                   size="compact"
                 />

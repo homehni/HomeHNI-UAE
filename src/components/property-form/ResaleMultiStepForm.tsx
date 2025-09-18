@@ -8,6 +8,7 @@ import { SaleDetailsStep } from './SaleDetailsStep';
 import { ResaleAmenitiesStep } from './ResaleAmenitiesStep';
 import { ResaleGalleryStep } from './ResaleGalleryStep';
 import GetTenantsFasterSection from '@/components/GetTenantsFasterSection';
+import { Button } from '@/components/ui/button';
 
 import { ResaleScheduleStep } from './ResaleScheduleStep';
 import { ResalePreviewStep } from './ResalePreviewStep';
@@ -240,7 +241,7 @@ const handleScheduleSubmit = (data: any) => {
         {/* Main Content */}
         <div className="flex-1 min-w-0 bg-white">
           {/* Form Content */}
-          <div className="p-3">
+          <div className="p-3 pb-20">
             <div className="bg-white">
               <div className="max-w-4xl mx-auto w-full">
                 {currentStep === 1 && (
@@ -310,6 +311,53 @@ const handleScheduleSubmit = (data: any) => {
               </div>
             </div>
           </div>
+
+          {/* Sticky Bottom Navigation Bar */}
+          {currentStep !== 7 && (
+            <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-3 sm:p-4 z-50 shadow-lg">
+              <div className="max-w-4xl mx-auto flex flex-col sm:flex-row gap-3 sm:gap-0 sm:justify-between">
+                <Button 
+                  type="button" 
+                  variant="outline" 
+                  onClick={currentStep === 1 ? () => {} : prevStep}
+                  className="h-10 sm:h-10 px-4 sm:px-6 w-full sm:w-auto order-2 sm:order-1"
+                  disabled={currentStep === 1}
+                >
+                  Back
+                </Button>
+                <Button 
+                  type="button" 
+                  onClick={() => {
+                    console.log('ResaleMultiStepForm sticky Save & Continue button clicked');
+                    console.log('Current step:', currentStep);
+                    
+                    if (currentStep === 1) {
+                      console.log('Calling handlePropertyDetailsNext');
+                      handlePropertyDetailsNext(propertyDetails);
+                    } else if (currentStep === 2) {
+                      console.log('Calling handleLocationDetailsNext');
+                      handleLocationDetailsNext(locationDetails);
+                    } else if (currentStep === 3) {
+                      console.log('Calling handleSaleDetailsNext');
+                      handleSaleDetailsNext(saleDetails);
+                    } else if (currentStep === 4) {
+                      console.log('Calling handleAmenitiesNext');
+                      handleAmenitiesNext(amenities);
+                    } else if (currentStep === 5) {
+                      console.log('Calling handleGalleryNext');
+                      handleGalleryNext(gallery);
+                    } else if (currentStep === 6) {
+                      console.log('Calling handleScheduleSubmit');
+                      handleScheduleSubmit(scheduleInfo);
+                    }
+                  }}
+                  className="h-12 sm:h-10 px-6 sm:px-6 bg-red-600 hover:bg-red-700 text-white w-full sm:w-auto order-1 sm:order-2 font-semibold"
+                >
+                  {currentStep === 6 ? 'Submit Property' : 'Save & Continue'}
+                </Button>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Right Sidebar - Get Tenants Faster */}

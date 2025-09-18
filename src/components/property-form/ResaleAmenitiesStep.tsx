@@ -798,7 +798,7 @@ export const ResaleAmenitiesStep: React.FC<ResaleAmenitiesStepProps> = ({
             </div>
           </div>
 
-          <div className="flex justify-between pt-4 md:pt-6">
+          <div className="flex justify-between pt-4 md:pt-6" style={{ visibility: 'hidden' }}>
             <Button type="button" variant="outline" onClick={onBack} className="h-10 px-4 md:h-12 md:px-8">
               Back
             </Button>

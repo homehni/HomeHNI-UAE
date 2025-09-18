@@ -281,7 +281,7 @@ export const LocationDetailsStep: React.FC<LocationDetailsStepProps> = ({
       <h1 className="text-2xl font-semibold text-primary mb-6">Location Details</h1>
 
               <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                <form id="location-details-form" onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                   {/* City Selection */}
                   <FormField
                     control={form.control}
@@ -384,17 +384,11 @@ export const LocationDetailsStep: React.FC<LocationDetailsStepProps> = ({
                     </div>
                   )}
 
-                  {/* Navigation Buttons */}
-                  <div className="flex justify-start gap-4 pt-6 -ml-2">
-                    <Button type="button" variant="outline" onClick={onBack} className="h-12 px-8">
-                      Back
-                    </Button>
-                    <Button type="submit" className="h-12 px-8">
-                      Save & Continue
-                    </Button>
-                  </div>
                 </form>
               </Form>
+              
+              {/* Hidden submit button for sticky bar */}
+              <button type="submit" form="location-details-form" className="hidden" />
     </div>
   );
 };

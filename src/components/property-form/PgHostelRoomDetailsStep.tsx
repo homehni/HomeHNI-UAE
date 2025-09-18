@@ -275,7 +275,7 @@ export function PgHostelRoomDetailsStep({
           </div>
 
           {/* Action Buttons */}
-          <div className="flex justify-center pt-8">
+          <div className="flex justify-center pt-8" style={{ visibility: 'hidden' }}>
             <div className="flex gap-4">
               <Button type="button" variant="outline" onClick={onBack} className="px-8">
                 Back

@@ -225,7 +225,7 @@ const handleFormSubmit = (data: ResaleScheduleData) => {
             </div>
 
             {/* Action Buttons */}
-            <div className="flex justify-between pt-8">
+            <div className="flex justify-between pt-8" style={{ visibility: 'hidden' }}>
               <Button type="button" variant="outline" onClick={onBack} className="bg-muted text-muted-foreground">
                 Back
               </Button>

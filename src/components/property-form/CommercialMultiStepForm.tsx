@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { useCommercialPropertyForm } from '@/hooks/useCommercialPropertyForm';
 import { CommercialSidebar } from './CommercialSidebar';
 import { CommercialPropertyDetailsStep } from './CommercialPropertyDetailsStep';
@@ -205,6 +206,7 @@ const handleScheduleSubmit = (data: ScheduleInfo) => {
             onSubmit={handleSubmit}
             isSubmitting={isSubmitting}
             previewPropertyId={createdSubmissionId || undefined}
+            galleryStep={6}
           />
         );
       default:
@@ -213,8 +215,8 @@ const handleScheduleSubmit = (data: ScheduleInfo) => {
   };
 
   return (
-    <div className="h-screen bg-gray-50 overflow-hidden">
-      <div className="max-w-full mx-auto h-full flex flex-col">
+    <div className="min-h-screen bg-gray-50">
+      <div className="max-w-full mx-auto flex flex-col">
         {/* Header */}
         <div className="bg-white border-b border-gray-200 px-4 py-2 flex-shrink-0">
           <div className="flex items-center justify-between">
@@ -230,7 +232,7 @@ const handleScheduleSubmit = (data: ScheduleInfo) => {
           </div>
         </div>
 
-        <div className="flex flex-1 overflow-hidden">
+        <div className="flex flex-col lg:flex-row">
           <div className="w-80 flex-shrink-0">
             <CommercialSidebar
               currentStep={currentStep}
@@ -239,9 +241,54 @@ const handleScheduleSubmit = (data: ScheduleInfo) => {
             />
           </div>
           
-          <div className="flex-1 min-w-0 p-3 bg-white overflow-auto max-h-full">
+          <div className="flex-1 min-w-0 p-3 bg-white pb-20">
             <div className="max-w-4xl mx-auto">
               {renderCurrentStep()}
+            </div>
+          </div>
+
+          {/* Sticky Bottom Navigation Bar */}
+          <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-3 sm:p-4 z-50 shadow-lg">
+            <div className="max-w-4xl mx-auto flex flex-col sm:flex-row gap-3 sm:gap-0 sm:justify-between">
+              <Button 
+                type="button" 
+                variant="outline" 
+                onClick={currentStep === 1 ? () => {} : prevStep}
+                className="h-10 sm:h-10 px-4 sm:px-6 w-full sm:w-auto order-2 sm:order-1"
+                disabled={currentStep === 1}
+              >
+                Back
+              </Button>
+              <Button 
+                type="button" 
+                onClick={() => {
+                  console.log('CommercialMultiStepForm sticky Save & Continue button clicked');
+                  console.log('Current step:', currentStep);
+                  
+                  if (currentStep === 1) {
+                    console.log('Calling handlePropertyDetailsNext');
+                    handlePropertyDetailsNext(propertyDetails);
+                  } else if (currentStep === 2) {
+                    console.log('Calling handleLocationDetailsNext');
+                    handleLocationDetailsNext(locationDetails);
+                  } else if (currentStep === 3) {
+                    console.log('Calling handleRentalDetailsNext');
+                    handleRentalDetailsNext(rentalDetails);
+                  } else if (currentStep === 4) {
+                    console.log('Calling handleAmenitiesNext');
+                    handleAmenitiesNext(amenities);
+                  } else if (currentStep === 5) {
+                    console.log('Calling handleGalleryNext');
+                    handleGalleryNext(gallery);
+                  } else if (currentStep === 6) {
+                    console.log('Calling handleScheduleSubmit');
+                    handleScheduleSubmit(scheduleInfo);
+                  }
+                }}
+                className="h-12 sm:h-10 px-6 sm:px-6 bg-red-600 hover:bg-red-700 text-white w-full sm:w-auto order-1 sm:order-2 font-semibold"
+                >
+                  {currentStep === 6 ? 'Submit Property' : 'Save & Continue'}
+                </Button>
             </div>
           </div>
 

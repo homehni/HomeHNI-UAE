@@ -14,6 +14,7 @@ interface PreviewStepProps {
   isSubmitting?: boolean;
   isAlreadySubmitted?: boolean;
   previewPropertyId?: string;
+  galleryStep?: number; // Step number for gallery (defaults to 5)
 }
 
 export const PreviewStep: React.FC<PreviewStepProps> = ({
@@ -23,7 +24,8 @@ export const PreviewStep: React.FC<PreviewStepProps> = ({
   onSubmit,
   isSubmitting = false,
   isAlreadySubmitted = false,
-  previewPropertyId
+  previewPropertyId,
+  galleryStep = 5
 }) => {
   const [showSuccess, setShowSuccess] = useState(isAlreadySubmitted);
   const [showNoPhotosMessage, setShowNoPhotosMessage] = useState(false);
@@ -335,7 +337,7 @@ export const PreviewStep: React.FC<PreviewStepProps> = ({
               <Button 
                 size="sm" 
                 className="bg-teal-600 hover:bg-teal-700 text-white w-full sm:w-auto"
-                onClick={() => onEdit(5)}
+                onClick={() => onEdit(galleryStep)}
               >
                 Upload Now
               </Button>

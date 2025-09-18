@@ -19,7 +19,8 @@ interface PropertyCardProps {
   bedrooms: number;
   bathrooms: number;
   image: string | { url: string } | (string | { url: string })[];
-  propertyType: string;  
+  propertyType: string;
+  listingType?: string;  
   isNew?: boolean;
   size?: 'default' | 'compact' | 'large';
 }
@@ -34,6 +35,7 @@ const PropertyCard = ({
   bathrooms,
   image,
   propertyType,
+  listingType,
   isNew = false,
   size = 'default'
 }: PropertyCardProps) => {
@@ -183,7 +185,7 @@ const PropertyCard = ({
     id,
     title,
     property_type: propertyType.toLowerCase().replace(/\s+/g, '_'),
-    listing_type: isPGHostel ? 'rent' : 'sale',
+    listing_type: listingType || (isPGHostel ? 'rent' : 'sale'),
     bhk_type: isPGHostel ? 'PG/Hostel' : (bedrooms ? `${bedrooms} BHK` : undefined),
     expected_price: parsePriceToNumber(price),
     super_area: isPGHostel ? parseAreaToNumber(area.replace(/[^\d]/g, '')) || 1 : parseAreaToNumber(area),

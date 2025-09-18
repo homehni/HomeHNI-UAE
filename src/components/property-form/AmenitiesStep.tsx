@@ -120,7 +120,7 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
       </div>
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <form id="amenities-form" onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           
           {/* Bathrooms, Balcony, Water Supply Row */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -807,16 +807,11 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
             </div>
           </div>
 
-          <div className="flex justify-between pt-6">
-            <Button type="button" variant="outline" onClick={onBack} className="bg-muted text-muted-foreground">
-              Back
-            </Button>
-            <Button type="submit" className="bg-primary text-primary-foreground">
-              Save & Continue
-            </Button>
-          </div>
         </form>
       </Form>
+      
+      {/* Hidden submit button for sticky bar */}
+      <button type="submit" form="amenities-form" className="hidden" />
     </div>
   );
 };

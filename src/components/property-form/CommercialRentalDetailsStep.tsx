@@ -554,7 +554,7 @@ export const CommercialRentalDetailsStep: React.FC<CommercialRentalDetailsStepPr
             /> */}
 
             {/* Navigation Buttons */}
-            <div className="flex justify-start gap-4 pt-6">
+            <div className="flex justify-start gap-4 pt-6" style={{ visibility: 'hidden' }}>
               <Button 
                 type="button" 
                 variant="outline" 

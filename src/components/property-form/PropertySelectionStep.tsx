@@ -15,7 +15,7 @@ interface PropertySelectionData {
   city: string;
   whatsappUpdates: boolean;
   propertyType: 'Residential' | 'Commercial' | 'Land/Plot';
-  listingType: 'Rent' | 'Resale' | 'PG/Hostel' | 'Flatmates';
+  listingType: 'Rent' | 'Resale' | 'PG/Hostel' | 'Flatmates' | 'Sale';
 }
 
 interface PropertySelectionStepProps {
@@ -45,12 +45,34 @@ export const PropertySelectionStep: React.FC<PropertySelectionStepProps> = ({
   };
 
   const handlePropertyTypeChange = (type: 'Residential' | 'Commercial' | 'Land/Plot') => {
+    console.log('Property type changed to:', type);
     setSelectedPropertyType(type);
     setSelectedListingType(''); // Reset listing type when property type changes
   };
 
   const handleSubmit = () => {
+    console.log('PropertySelectionStep handleSubmit called');
+    console.log('Form validation check:', {
+      selectedListingType,
+      phoneNumber,
+      name,
+      email,
+      city,
+      selectedPropertyType,
+      isFormValid: selectedListingType && phoneNumber && name && email && city
+    });
+    
     if (selectedListingType && phoneNumber && name && email && city) {
+      console.log('Form is valid, calling onNext with data:', {
+        name,
+        email,
+        phoneNumber,
+        city,
+        whatsappUpdates,
+        propertyType: selectedPropertyType,
+        listingType: selectedListingType
+      });
+      
       onNext({
         name,
         email,
@@ -58,12 +80,26 @@ export const PropertySelectionStep: React.FC<PropertySelectionStepProps> = ({
         city,
         whatsappUpdates,
         propertyType: selectedPropertyType,
-        listingType: selectedListingType as 'Rent' | 'Resale' | 'PG/Hostel' | 'Flatmates'
+        listingType: selectedListingType as 'Rent' | 'Resale' | 'PG/Hostel' | 'Flatmates' | 'Sale'
       });
+    } else {
+      console.log('Form validation failed - missing required fields');
     }
   };
 
   const isFormValid = selectedListingType && phoneNumber && name && email && city;
+  
+  // Debug logging for form state
+  console.log('PropertySelectionStep render - form state:', {
+    selectedPropertyType,
+    selectedListingType,
+    availableListingTypes: getListingTypes(),
+    name: !!name,
+    email: !!email,
+    phoneNumber: !!phoneNumber,
+    city: !!city,
+    isFormValid
+  });
 
   return (
     <div className="bg-white flex justify-center min-h-screen w-full overflow-x-hidden">
@@ -208,7 +244,10 @@ export const PropertySelectionStep: React.FC<PropertySelectionStepProps> = ({
               {getListingTypes().map((type) => (
                 <button
                   key={type}
-                  onClick={() => setSelectedListingType(type)}
+                  onClick={() => {
+                    console.log('Listing type selected:', type);
+                    setSelectedListingType(type);
+                  }}
                   className={`py-2 px-3 rounded-md text-sm font-medium transition-colors border ${
                     selectedListingType === type
                       ? 'bg-red-600 text-white border-red-600'

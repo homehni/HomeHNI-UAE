@@ -210,7 +210,7 @@ export const CommercialAmenitiesStep: React.FC<CommercialAmenitiesStepProps> = (
               )}
             />
 
-            <div className="flex justify-between">
+            <div className="flex justify-between" style={{ visibility: 'hidden' }}>
               <Button type="button" variant="outline" onClick={onBack}>
                 Back
               </Button>

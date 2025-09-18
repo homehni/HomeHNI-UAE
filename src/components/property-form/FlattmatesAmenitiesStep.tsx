@@ -697,7 +697,7 @@ export const FlattmatesAmenitiesStep: React.FC<FlattmatesAmenitiesStepProps> = (
             </div>
           </div>
 
-          <div className="flex justify-between pt-6">
+          <div className="flex justify-between pt-6" style={{ visibility: 'hidden' }}>
             <Button type="button" variant="outline" onClick={onBack} className="bg-muted text-muted-foreground">
               Back
             </Button>

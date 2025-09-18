@@ -29,46 +29,33 @@ export const CommercialSaleGalleryStep = ({
     });
   };
 
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    handleNext();
+  };
+
   return (
     <div className="max-w-4xl mx-auto p-6">
-      <div className="mb-8">
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">Property Gallery</h2>
-        <p className="text-gray-600">Upload photos and videos of your commercial property</p>
-        <div className="mt-4 text-sm text-gray-500">
-          Step {currentStep} of {totalSteps}
-        </div>
-      </div>
+      <form onSubmit={handleSubmit}>
+        <div className="space-y-8">
+          <div>
+            <ImageUpload
+              images={images}
+              onImagesChange={setImages}
+              maxImages={20}
+            />
+          </div>
 
-      <div className="space-y-8">
-        <div>
-          <h3 className="text-lg font-medium mb-4">Property Images</h3>
-          <p className="text-gray-600 mb-4">Upload images of your property</p>
-          <ImageUpload
-            images={images}
-            onImagesChange={setImages}
-            maxImages={20}
-            minImages={3}
-          />
+          <div>
+            <VideoUpload
+              video={video}
+              onVideoChange={setVideo}
+            />
+          </div>
         </div>
+      </form>
 
-        <div>
-          <h3 className="text-lg font-medium mb-4">Property Video (Optional)</h3>
-          <p className="text-gray-600 mb-4">Upload a video tour of your property</p>
-          <VideoUpload
-            video={video}
-            onVideoChange={setVideo}
-          />
-        </div>
-      </div>
-
-      <div className="flex justify-between pt-8">
-        <Button type="button" variant="outline" onClick={onBack}>
-          Back
-        </Button>
-        <Button type="button" onClick={handleNext}>
-          Save & Continue
-        </Button>
-      </div>
+      {/* Navigation Buttons - Removed, using sticky buttons instead */}
     </div>
   );
 };

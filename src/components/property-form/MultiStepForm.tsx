@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { usePropertyForm } from '@/hooks/usePropertyForm';
 import { ProgressIndicator } from './ProgressIndicator';
 import { PropertyFormSidebar } from './PropertyFormSidebar';
@@ -33,6 +33,49 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
 }) => {
   const [isSubmitted, setIsSubmitted] = React.useState(false);
   const [showNoPhotosMessage, setShowNoPhotosMessage] = React.useState(false);
+  
+  // Refs for form components
+  const propertyDetailsRef = useRef<any>(null);
+  const locationDetailsRef = useRef<any>(null);
+  const rentalDetailsRef = useRef<any>(null);
+  const amenitiesRef = useRef<any>(null);
+  const galleryRef = useRef<any>(null);
+  const scheduleRef = useRef<any>(null);
+
+  // Function to trigger form submission
+  const triggerFormSubmission = () => {
+    // Capture current form data and proceed to next step
+    if (currentStep === 1) {
+      // Update property details with current form data
+      updatePropertyDetails(propertyDetails);
+      nextStep();
+      scrollToTop();
+    } else if (currentStep === 2) {
+      // Update location details with current form data
+      updateLocationDetails(locationDetails);
+      nextStep();
+      scrollToTop();
+    } else if (currentStep === 3) {
+      // Update rental details with current form data
+      updateRentalDetails(rentalDetails);
+      nextStep();
+      scrollToTop();
+    } else if (currentStep === 4) {
+      // Update amenities with current form data
+      updateAmenities(amenities);
+      nextStep();
+      scrollToTop();
+    } else if (currentStep === 5) {
+      // Update gallery with current form data
+      updateGallery(gallery);
+      nextStep();
+      scrollToTop();
+    } else if (currentStep === 6) {
+      // Update schedule info and submit
+      updateScheduleInfo(scheduleInfo);
+      handleSubmit();
+    }
+  };
   // Helper function to get state from city
   const getStateFromCity = (city: string | undefined): string | undefined => {
     if (!city) return undefined;
@@ -672,7 +715,7 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
           </div>
         </div>
         
-        <div className="p-4">
+        <div className="p-4 pb-20">
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
             {currentStep === 1 && (
               <PropertyDetailsStep
@@ -734,6 +777,28 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
 
           </div>
         </div>
+        
+        {/* Mobile Sticky Bottom Navigation Bar */}
+        <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-3 z-50 shadow-lg">
+          <div className="flex flex-col gap-3">
+            <Button 
+              type="button" 
+              onClick={triggerFormSubmission}
+              className="h-12 px-6 bg-red-600 hover:bg-red-700 text-white w-full font-semibold"
+            >
+              Save & Continue
+            </Button>
+            <Button 
+              type="button" 
+              variant="outline" 
+              onClick={currentStep === 1 ? () => {} : prevStep}
+              className="h-10 px-4 w-full"
+              disabled={currentStep === 1}
+            >
+              Back
+            </Button>
+          </div>
+        </div>
       </div>
 
       {/* Desktop Layout */}
@@ -750,7 +815,7 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
         {/* Main Content */}
         <div className="flex-1 min-w-0 bg-white flex flex-col">
           {/* Form Content - Scrollable */}
-          <div className="flex-1 p-4">
+          <div className="flex-1 p-4 pb-20">
             <div className="bg-white max-w-4xl mx-auto">
               {currentStep === 1 && (
                 <PropertyDetailsStep
@@ -810,6 +875,28 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
                 />
               )}
 
+            </div>
+          </div>
+
+          {/* Sticky Bottom Navigation Bar */}
+          <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-3 sm:p-4 z-50 shadow-lg">
+            <div className="max-w-4xl mx-auto flex flex-col sm:flex-row gap-3 sm:gap-0 sm:justify-between">
+              <Button 
+                type="button" 
+                variant="outline" 
+                onClick={currentStep === 1 ? () => {} : prevStep}
+                className="h-10 sm:h-10 px-4 sm:px-6 w-full sm:w-auto order-2 sm:order-1"
+                disabled={currentStep === 1}
+              >
+                Back
+              </Button>
+              <Button 
+                type="button" 
+                onClick={triggerFormSubmission}
+                className="h-12 sm:h-10 px-6 sm:px-6 bg-red-600 hover:bg-red-700 text-white w-full sm:w-auto order-1 sm:order-2 font-semibold"
+              >
+                Save & Continue
+              </Button>
             </div>
           </div>
         </div>

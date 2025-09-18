@@ -286,12 +286,7 @@ export const LandPlotPropertyDetailsStep: React.FC<LandPlotPropertyDetailsStepPr
             </div>
           </div>
 
-        {/* Navigation Buttons */}
-        <div className="flex justify-end pt-6">
-          <Button type="submit" className="bg-red-600 hover:bg-red-700 text-white h-12 px-8">
-            Next Step
-          </Button>
-        </div>
+        {/* Navigation Buttons - Removed, using sticky buttons instead */}
         </form>
     </div>
   );

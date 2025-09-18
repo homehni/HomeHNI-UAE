@@ -67,7 +67,7 @@ export const ScheduleStep: React.FC<ScheduleStepProps> = ({
       </div>
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onFormSubmit)} className="space-y-8">
+        <form id="schedule-form" onSubmit={form.handleSubmit(onFormSubmit)} className="space-y-8">
           {/* Service Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
             {/* Painting Service */}
@@ -315,17 +315,11 @@ export const ScheduleStep: React.FC<ScheduleStepProps> = ({
             </div>
           </div>
 
-          {/* Action Buttons */}
-          <div className="flex justify-between pt-8">
-            <Button type="button" variant="white" onClick={onBack} className="px-8">
-              Back
-            </Button>
-            <Button type="submit" className="px-8 bg-brand-maroon-dark hover:bg-brand-maroon text-white">
-              SUBMIT
-            </Button>
-          </div>
         </form>
       </Form>
+      
+      {/* Hidden submit button for sticky bar */}
+      <button type="submit" form="schedule-form" className="hidden" />
     </div>
   );
 };

@@ -289,12 +289,7 @@ export const CommercialSalePropertyDetailsStep = ({
             />
           </div>
 
-          {/* Navigation Buttons */}
-          <div className="flex justify-end pt-4">
-            <Button type="submit" variant="destructive" className="h-12 px-8 bg-red-800 hover:bg-red-900">
-              Next Step
-            </Button>
-          </div>
+          {/* Navigation Buttons - Removed Next Step button, using sticky buttons instead */}
         </form>
       </Form>
     </div>
