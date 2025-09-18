@@ -26,13 +26,13 @@ const OwnerPlans = ({ embedded }: OwnerPlansProps) => {
     residential: [
       {
         name: "Silver",
-        price: "₹999",
-        originalPrice: "₹999",
+        price: "₹100",
+        originalPrice: "₹100",
         freePrice: "FREE",
         gst: "+18% GST",
         badge: "ON CALL ASSISTANCE",
         badgeColor: "bg-yellow-500",
-        amountPaise: 9900,
+        amountPaise: 10000,
         isFree: true,
       },
       {
