@@ -79,7 +79,7 @@ export function PgHostelGalleryStep({
                 <label className="text-sm font-medium">Video (Optional)</label>
                 <VideoUpload
                   video={formData.video}
-                  onChange={handleVideoChange}
+                  onVideoChange={handleVideoChange}
                 />
               </div>
 

@@ -247,7 +247,7 @@ export const PostProperty: React.FC = () => {
     if (data.propertyType === 'Commercial') {
       if (data.listingType === 'Rent') {
         setCurrentStep('commercial-rental-form');
-      } else if (data.listingType === 'Sale') {
+      } else if (data.listingType === 'Resale') {
         setCurrentStep('commercial-sale-form');
       }
     } else {
