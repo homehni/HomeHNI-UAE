@@ -12,13 +12,13 @@ import { CommercialPropertyDetails } from '@/types/property';
 const commercialSalePropertyDetailsSchema = z.object({
   title: z.string().optional(), // Made optional - will be auto-generated
   propertyType: z.string().optional(),
-  spaceType: z.enum(['office', 'retail', 'warehouse', 'showroom', 'restaurant', 'co-working', 'industrial', 'medical', 'educational']).optional(),
+  spaceType: z.enum(['office', 'retail', 'warehouse', 'showroom', 'restaurant', 'co-working', 'industrial']).optional(),
   buildingType: z.string().optional(),
   propertyAge: z.string().optional(),
   facing: z.string().optional(),
   floorNo: z.string().optional(),
   totalFloors: z.string().optional(),
-  superBuiltUpArea: z.string().optional(),
+  superBuiltUpArea: z.number().optional(),
   furnishingStatus: z.string().optional(),
   powerLoad: z.string().optional(),
   ceilingHeight: z.string().optional(),
@@ -57,7 +57,7 @@ export const CommercialSalePropertyDetailsStep = ({
       facing: (initialData as any)?.facing || '',
       floorNo: initialData?.floorNo?.toString() || '0',
       totalFloors: initialData?.totalFloors?.toString() || '1',
-      superBuiltUpArea: initialData?.superBuiltUpArea?.toString() || '',
+      superBuiltUpArea: initialData?.superBuiltUpArea || undefined,
       powerLoad: initialData?.powerLoad || '',
       ceilingHeight: initialData?.ceilingHeight || '',
       entranceWidth: initialData?.entranceWidth || '',
@@ -70,7 +70,7 @@ export const CommercialSalePropertyDetailsStep = ({
       ...data,
       floorNo: parseInt(data.floorNo),
       totalFloors: parseInt(data.totalFloors),
-      superBuiltUpArea: parseFloat(data.superBuiltUpArea),
+      superBuiltUpArea: data.superBuiltUpArea,
       onMainRoad,
       cornerProperty,
       loadingFacility,
@@ -128,14 +128,11 @@ export const CommercialSalePropertyDetailsStep = ({
                     <SelectContent className="bg-white border shadow-lg z-50">
                       <SelectItem value="office">Office</SelectItem>
                       <SelectItem value="retail">Retail</SelectItem>
-                      <SelectItem value="co-living">Co-Living</SelectItem>
                       <SelectItem value="warehouse">Warehouse</SelectItem>
                       <SelectItem value="showroom">Showroom</SelectItem>
                       <SelectItem value="restaurant">Restaurant</SelectItem>
                       <SelectItem value="co-working">Co-working</SelectItem>
                       <SelectItem value="industrial">Industrial</SelectItem>
-                      <SelectItem value="medical">Medical</SelectItem>
-                      <SelectItem value="educational">Educational</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />
@@ -251,9 +248,27 @@ export const CommercialSalePropertyDetailsStep = ({
                         className="h-12 pr-12"
                         {...field}
                         onKeyDown={(e) => { if (['-','+','e','E','.'].includes(e.key)) e.preventDefault(); }}
-                        onPaste={(e) => { const text = e.clipboardData.getData('text'); const digits = text.replace(/[^0-9]/g, ''); if (digits !== text) { e.preventDefault(); field.onChange(digits ? Math.max(1, Number(digits)) : undefined); } }}
+                        onPaste={(e) => { 
+                          const text = e.clipboardData.getData('text'); 
+                          const digits = text.replace(/[^0-9]/g, ''); 
+                          if (digits !== text) { 
+                            e.preventDefault(); 
+                            const numValue = parseInt(digits);
+                            field.onChange(digits ? Math.max(1, numValue) : undefined); 
+                          } 
+                        }}
                         value={field.value || ''}
-                        onChange={(e) => field.onChange(e.target.value ? Math.max(1, Number(e.target.value)) : undefined)}
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          if (value === '') {
+                            field.onChange(undefined);
+                          } else {
+                            const numValue = parseInt(value);
+                            if (!isNaN(numValue) && numValue > 0) {
+                              field.onChange(numValue);
+                            }
+                          }
+                        }}
                       />
                     </FormControl>
                     <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-sm text-gray-500">
