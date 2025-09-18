@@ -102,12 +102,12 @@ const LegalServicesEmbedded = () => {
             {serviceHighlights.map((service, index) => (
               <Card key={index} className="hover:shadow-lg transition-shadow border-2 border-primary hover:border-brand-red/20 p-4 md:p-6">
                 <CardContent className="pt-4 md:pt-6">
-                  {/* Mobile/Desktop: Centered layout, Tablet: Horizontal layout */}
-                  <div className="flex md:flex-row lg:flex-col items-start md:items-center lg:items-center md:space-x-4 lg:space-x-0">
-                    <div className="w-12 h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 bg-brand-red/10 rounded-full flex items-center justify-center mb-4 md:mb-0 lg:mb-4 flex-shrink-0 mx-auto md:mx-0 lg:mx-auto">
+                  {/* All breakpoints: Vertical centered layout */}
+                  <div className="flex flex-col items-center">
+                    <div className="w-12 h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 bg-brand-red/10 rounded-full flex items-center justify-center mb-4 flex-shrink-0">
                       <service.icon className="h-6 w-6 md:h-7 md:w-7 lg:h-8 lg:w-8 text-brand-red" />
                     </div>
-                    <div className="text-center md:text-left lg:text-center flex-1">
+                    <div className="text-center">
                       <h3 className="text-lg md:text-xl font-semibold mb-2 md:mb-3">{service.title}</h3>
                       <p className="text-gray-600 text-sm md:text-base">{service.description}</p>
                     </div>
