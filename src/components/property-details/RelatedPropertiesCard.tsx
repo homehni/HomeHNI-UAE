@@ -19,6 +19,15 @@ export const RelatedPropertiesCard: React.FC<RelatedPropertiesCardProps> = ({ pr
     navigate(`/search?${queryString}`);
   };
 
+  // Helper function to get display locality
+  const getDisplayLocality = (locality: string) => {
+    // If locality is just a number or very short, use a generic location name
+    if (!locality || locality.length <= 2 || /^\d+$/.test(locality)) {
+      return `${property.city}`;
+    }
+    return locality.split(',')[0];
+  };
+
   // Generate city-specific localities
   const getCityLocalities = (city: string) => {
     const cityLocalitiesMap: { [key: string]: string[] } = {
@@ -103,7 +112,7 @@ export const RelatedPropertiesCard: React.FC<RelatedPropertiesCardProps> = ({ pr
                   location: `${property.locality}, ${property.city}`
                 })}
                >
-                {bhk} Flats for {property.listing_type} in {property.locality.split(',')[0]}
+                {bhk} Flats for {property.listing_type} in {getDisplayLocality(property.locality)}
               </TagButton>
             ))}
             <TagButton
@@ -115,7 +124,7 @@ export const RelatedPropertiesCard: React.FC<RelatedPropertiesCardProps> = ({ pr
                 furnished: 'Fully Furnished'
               })}
              >
-              Fully Furnished {property.bhk_type} Flats for {property.listing_type} in {property.locality.split(',')[0]}
+              Fully Furnished {property.bhk_type} Flats for {property.listing_type} in {getDisplayLocality(property.locality)}
             </TagButton>
           </div>
         </div>
@@ -154,7 +163,7 @@ export const RelatedPropertiesCard: React.FC<RelatedPropertiesCardProps> = ({ pr
                   location: `${property.locality}, ${property.city}`
                 })}
               >
-                {property.bhk_type} {type} for {property.listing_type} in {property.locality.split(',')[0]}
+                {property.bhk_type} {type} for {property.listing_type} in {getDisplayLocality(property.locality)}
               </TagButton>
             ))}
           </div>
