@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import PayButton from '@/components/PayButton';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -31,6 +32,7 @@ const SellerPlans: React.FC<SellerPlansProps> = ({ embedded }) => {
         gst: "+18% GST",
         badge: "BASIC PROMOTION",
         badgeColor: "bg-yellow-500",
+        amountPaise: 99900,
         isFree: true,
       },
       {
@@ -39,6 +41,7 @@ const SellerPlans: React.FC<SellerPlansProps> = ({ embedded }) => {
         gst: "+18% GST",
         badge: "SOCIAL BOOST",
         badgeColor: "bg-green-500",
+        amountPaise: 999900,
       },
       {
         name: "Platinum Plan",
@@ -46,6 +49,7 @@ const SellerPlans: React.FC<SellerPlansProps> = ({ embedded }) => {
         gst: "+18% GST", 
         badge: "EXPERT GUIDANCE",
         badgeColor: "bg-red-500",
+        amountPaise: 1499900,
       },
       {
         name: "Diamond Plan",
@@ -53,6 +57,7 @@ const SellerPlans: React.FC<SellerPlansProps> = ({ embedded }) => {
         gst: "+18% GST",
         badge: "PERSONAL FIELD ASSISTANT", 
         badgeColor: "bg-purple-500",
+        amountPaise: 2000000,
       }
     ],
     commercial: [
@@ -64,6 +69,7 @@ const SellerPlans: React.FC<SellerPlansProps> = ({ embedded }) => {
         gst: "+18% GST",
         badge: "COMMERCIAL MARKETING",
         badgeColor: "bg-blue-500",
+        amountPaise: 99900,
         isFree: true,
       },
       {
@@ -72,6 +78,7 @@ const SellerPlans: React.FC<SellerPlansProps> = ({ embedded }) => {
         gst: "+18% GST",
         badge: "PREMIUM BUSINESS BOOST",
         badgeColor: "bg-indigo-500",
+        amountPaise: 1899900,
       },
       {
         name: "Business Platinum",
@@ -79,6 +86,7 @@ const SellerPlans: React.FC<SellerPlansProps> = ({ embedded }) => {
         gst: "+18% GST", 
         badge: "BUSINESS EXPERT",
         badgeColor: "bg-purple-600",
+        amountPaise: 2599900,
       }
     ],
     industrial: [
@@ -375,15 +383,17 @@ const SellerPlans: React.FC<SellerPlansProps> = ({ embedded }) => {
                           )}
                         </div>
                         
-                        <Button 
+                        <PayButton
+                          label="Subscribe"
+                          planName={`Seller — ${plan.name}`}
+                          amountPaise={plan.amountPaise || 0}
+                          notes={{ plan: plan.name, category: "seller", type: tabKey }}
                           className={`w-full ${
                             selectedPlans[tabKey as keyof typeof selectedPlans] === index 
                               ? 'bg-brand-red hover:bg-brand-maroon-dark text-white' 
                               : 'bg-transparent text-foreground border border-border hover:bg-muted'
                           }`}
-                        >
-                          Subscribe
-                        </Button>
+                        />
                       </CardContent>
                     </Card>
                   ))}

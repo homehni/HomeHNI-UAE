@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Star, Check, Phone, Home, Users, Shield, Clock, UserCheck, Globe, Lock, FileText, TrendingUp, Camera } from 'lucide-react';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import PayButton from '@/components/PayButton';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -31,6 +32,7 @@ const BuyerPlans = ({ embedded }: BuyerPlansProps) => {
         gst: "+18% GST",
         badge: "BASIC SEARCH",
         badgeColor: "bg-yellow-500",
+        amountPaise: 99900,
         isFree: true,
       },
       {
@@ -39,6 +41,7 @@ const BuyerPlans = ({ embedded }: BuyerPlansProps) => {
         gst: "+18% GST",
         badge: "EXPERT ASSISTANCE",
         badgeColor: "bg-green-500",
+        amountPaise: 249900,
       },
       {
         name: "Platinum Plan",
@@ -46,6 +49,7 @@ const BuyerPlans = ({ embedded }: BuyerPlansProps) => {
         gst: "+18% GST", 
         badge: "EXCLUSIVE SUPPORT",
         badgeColor: "bg-red-500",
+        amountPaise: 499900,
       }
     ],
     commercial: [
@@ -57,6 +61,7 @@ const BuyerPlans = ({ embedded }: BuyerPlansProps) => {
         gst: "+18% GST",
         badge: "COMMERCIAL SEARCH",
         badgeColor: "bg-blue-500",
+        amountPaise: 99900,
         isFree: true,
       },
       {
@@ -65,6 +70,7 @@ const BuyerPlans = ({ embedded }: BuyerPlansProps) => {
         gst: "+18% GST",
         badge: "COMMERCIAL EXPERT",
         badgeColor: "bg-indigo-500",
+        amountPaise: 899900,
       },
       {
         name: "Business Elite",
@@ -72,6 +78,7 @@ const BuyerPlans = ({ embedded }: BuyerPlansProps) => {
         gst: "+18% GST", 
         badge: "VIP COMMERCIAL",
         badgeColor: "bg-purple-600",
+        amountPaise: 1299900,
       }
     ],
     industrial: [
@@ -83,6 +90,7 @@ const BuyerPlans = ({ embedded }: BuyerPlansProps) => {
         gst: "+18% GST",
         badge: "INDUSTRIAL SEARCH",
         badgeColor: "bg-gray-600",
+        amountPaise: 99900,
         isFree: true,
       },
       {
@@ -91,6 +99,7 @@ const BuyerPlans = ({ embedded }: BuyerPlansProps) => {
         gst: "+18% GST",
         badge: "INDUSTRIAL EXPERT",
         badgeColor: "bg-slate-700",
+        amountPaise: 1599900,
       },
       {
         name: "Industrial Premium",
@@ -98,6 +107,7 @@ const BuyerPlans = ({ embedded }: BuyerPlansProps) => {
         gst: "+18% GST", 
         badge: "PREMIUM INDUSTRIAL",
         badgeColor: "bg-zinc-800",
+        amountPaise: 2599900,
       }
     ],
     agricultural: [
@@ -109,6 +119,7 @@ const BuyerPlans = ({ embedded }: BuyerPlansProps) => {
         gst: "+18% GST",
         badge: "AGRICULTURAL SEARCH",
         badgeColor: "bg-green-600",
+        amountPaise: 99900,
         isFree: true,
       },
       {
@@ -117,6 +128,7 @@ const BuyerPlans = ({ embedded }: BuyerPlansProps) => {
         gst: "+18% GST",
         badge: "FARM SPECIALIST",
         badgeColor: "bg-emerald-600",
+        amountPaise: 699900,
       },
       {
         name: "Farm Premium",
@@ -124,6 +136,7 @@ const BuyerPlans = ({ embedded }: BuyerPlansProps) => {
         gst: "+18% GST", 
         badge: "PREMIUM FARM",
         badgeColor: "bg-teal-600",
+        amountPaise: 1099900,
       }
     ]
   };
@@ -338,15 +351,17 @@ const BuyerPlans = ({ embedded }: BuyerPlansProps) => {
                           )}
                         </div>
                         
-                        <Button 
+                        <PayButton
+                          label="Subscribe"
+                          planName={`Buyer — ${plan.name}`}
+                          amountPaise={plan.amountPaise}
+                          notes={{ plan: plan.name, category: "buyer", type: tabKey }}
                           className={`w-full ${
                             selectedPlans[tabKey as keyof typeof selectedPlans] === index 
                               ? 'bg-brand-red hover:bg-brand-maroon-dark text-white' 
                               : 'bg-transparent text-foreground border border-border hover:bg-muted'
                           }`}
-                        >
-                          Subscribe
-                        </Button>
+                        />
                       </CardContent>
                     </Card>
                   ))}
