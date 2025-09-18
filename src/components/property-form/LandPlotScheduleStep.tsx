@@ -22,12 +22,14 @@ interface LandPlotScheduleStepProps {
   initialData: Partial<ScheduleInfo>;
   onNext: (data: ScheduleForm) => void;
   onBack: () => void;
+  onSubmit?: (data: ScheduleForm) => void;
 }
 
 export const LandPlotScheduleStep: React.FC<LandPlotScheduleStepProps> = ({
   initialData,
   onNext,
   onBack,
+  onSubmit
 }) => {
   const [paintingService, setPaintingService] = useState<'book' | 'decline' | null>(null);
   const [cleaningService, setCleaningService] = useState<'book' | 'decline' | null>(null);
@@ -225,9 +227,17 @@ export const LandPlotScheduleStep: React.FC<LandPlotScheduleStepProps> = ({
             >
               Back
             </Button>
-            <Button type="submit" className="bg-red-600 hover:bg-red-700 text-white">
-              Save & Continue
-            </Button>
+            <div className="flex gap-3">
+              {onSubmit && (
+                <Button 
+                  type="button" 
+                  onClick={handleSubmit(onSubmit)}
+                  className="bg-red-600 hover:bg-red-700 text-white"
+                >
+                  Submit Property
+                </Button>
+              )}
+            </div>
           </div>
         </form>
       </CardContent>

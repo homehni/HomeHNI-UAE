@@ -1,12 +1,12 @@
 import React from 'react';
 import { useLandPlotPropertyForm } from '@/hooks/useLandPlotPropertyForm';
-import { ProgressIndicator } from './ProgressIndicator';
 import { LandPlotPropertyDetailsStep } from './LandPlotPropertyDetailsStep';
 import { LandPlotLocationDetailsStep } from './LandPlotLocationDetailsStep';
 import { LandPlotSaleDetailsStep } from './LandPlotSaleDetailsStep';
 import { LandPlotAmenitiesStep } from './LandPlotAmenitiesStep';
 import { LandPlotGalleryStep } from './LandPlotGalleryStep';
 import GetTenantsFasterSection from '@/components/GetTenantsFasterSection';
+import { LandPlotSidebar } from './LandPlotSidebar';
 
 import { LandPlotScheduleStep } from './LandPlotScheduleStep';
 import { LandPlotPreviewStep } from './LandPlotPreviewStep';
@@ -118,80 +118,35 @@ export const LandPlotMultiStepForm: React.FC<LandPlotMultiStepFormProps> = ({
     scrollToTop();
   };
 
+  const handleScheduleSubmit = async (data: any) => {
+    // Update schedule info, submit the property, then go to Preview
+    updateScheduleInfo(data);
+    const formData = getFormData();
+    await onSubmit(formData as LandPlotFormData);
+    goToStep(7);
+    scrollToTop();
+  };
+
   const handleSubmit = () => {
     const formData = getFormData();
     onSubmit(formData as LandPlotFormData);
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8">
-      {/* Page Header */}
-      <div className="text-center mb-8 animate-fade-in">
-        <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-          List Your Land/Plot for Sale
-        </h1>
-        <p className="text-gray-600 text-lg">
-          Fill in the details below to list your land/plot for sale on our platform
-        </p>
-      </div>
+    <div className="min-h-screen bg-gray-50">
+      {/* Three Column Layout */}
+      <div className="flex flex-col lg:flex-row min-h-screen">
+        {/* Left Sidebar */}
+        <div className="hidden lg:block w-64 bg-white border-r border-gray-200 min-h-screen">
+          <LandPlotSidebar 
+            currentStep={currentStep}
+            completedSteps={completedSteps}
+          />
+        </div>
 
-      {/* Progress Indicator */}
-      <div className="mb-12">
-        <ProgressIndicator
-          currentStep={currentStep}
-          totalSteps={7}
-          completedSteps={completedSteps}
-        />
-      </div>
-
-      {/* Form Content with Sidebar Layout */}
-      <div className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden animate-scale-in">
-        <div className="flex flex-col lg:flex-row">
-          {/* Sidebar - Hidden on mobile and tablet, visible on desktop */}
-          <div className="hidden lg:block w-64 bg-white border-r border-gray-200 min-h-screen p-6">
-            <div className="space-y-1">
-              {[
-                { number: 1, title: "Plot Details", completed: completedSteps.includes(1), active: currentStep === 1 },
-                { number: 2, title: "Location Details", completed: completedSteps.includes(2), active: currentStep === 2 },
-                { number: 3, title: "Sale Details", completed: completedSteps.includes(3), active: currentStep === 3 },
-                { number: 4, title: "Infrastructure", completed: completedSteps.includes(4), active: currentStep === 4 },
-                { number: 5, title: "Photos & Videos", completed: completedSteps.includes(5), active: currentStep === 5 },
-                { number: 6, title: "Schedule", completed: completedSteps.includes(6), active: currentStep === 6 },
-                { number: 7, title: "Preview & Submit", completed: completedSteps.includes(7), active: currentStep === 7 },
-              ].map((step) => (
-                <div
-                  key={step.number}
-                  className={`flex items-center gap-3 p-3 rounded-lg transition-colors cursor-pointer ${
-                    step.active 
-                      ? 'bg-red-50 text-red-600 border-l-4 border-red-500' 
-                      : step.completed 
-                        ? 'text-green-600 bg-green-50 hover:bg-green-100' 
-                        : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
-                  }`}
-                  onClick={() => step.completed && goToStep(step.number)}
-                >
-                  <div className={`flex items-center justify-center w-8 h-8 rounded-full border-2 ${
-                    step.active 
-                      ? 'border-red-500 bg-red-500 text-white' 
-                      : step.completed 
-                        ? 'border-green-500 bg-green-500 text-white' 
-                        : 'border-gray-300 bg-white'
-                  }`}>
-                    {step.completed ? (
-                      <span className="text-xs">✓</span>
-                    ) : (
-                      <span className="text-xs">{step.number}</span>
-                    )}
-                  </div>
-                  <span className="font-medium text-sm">{step.title}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Main Content */}
-          <div className="flex-1 p-6 md:p-8">
-            <div className="max-w-4xl mx-auto">
+        {/* Main Content */}
+        <div className="flex-1 bg-white">
+          <div className="max-w-4xl mx-auto p-6 md:p-8">
               {currentStep === 1 && (
                 <LandPlotPropertyDetailsStep
                   initialData={plotDetails}
@@ -239,6 +194,7 @@ export const LandPlotMultiStepForm: React.FC<LandPlotMultiStepFormProps> = ({
                   initialData={scheduleInfo}
                   onNext={handleScheduleNext}
                   onBack={prevStep}
+                  onSubmit={handleScheduleSubmit}
                 />
               )}
 
@@ -252,13 +208,12 @@ export const LandPlotMultiStepForm: React.FC<LandPlotMultiStepFormProps> = ({
                   previewPropertyId={createdSubmissionId || undefined}
                 />
               )}
-            </div>
           </div>
+        </div>
 
-          {/* Right Sidebar - Get Tenants Faster */}
-          <div className="w-80 flex-shrink-0 h-full">
-            <GetTenantsFasterSection />
-          </div>
+        {/* Right Sidebar - Get Tenants Faster */}
+        <div className="hidden lg:block w-80 bg-white border-l border-gray-200 min-h-screen">
+          <GetTenantsFasterSection />
         </div>
       </div>
     </div>

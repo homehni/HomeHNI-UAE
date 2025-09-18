@@ -5,13 +5,14 @@ import { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { LocationDetails } from '@/types/property';
 import { ArrowLeft, ArrowRight, MapPin } from 'lucide-react';
 
 const landPlotLocationSchema = z.object({
-  locality: z.string().optional(),
+  city: z.string().min(1, "City is required"),
+  locality: z.string().min(1, "Locality/Area is required"),
   landmark: z.string().optional(),
-  city: z.string().optional(),
   state: z.string().optional(),
   pincode: z.string().optional(),
 });
@@ -42,6 +43,7 @@ export const LandPlotLocationDetailsStep: React.FC<LandPlotLocationDetailsStepPr
   const form = useForm<LandPlotLocationData>({
     resolver: zodResolver(landPlotLocationSchema),
     defaultValues: {
+      city: initialData.city || '',
       locality: initialData.locality || '',
       landmark: initialData.landmark || '',
     },
@@ -49,6 +51,9 @@ export const LandPlotLocationDetailsStep: React.FC<LandPlotLocationDetailsStepPr
 
   // Update form values when initialData changes
   useEffect(() => {
+    if (initialData.city) {
+      form.setValue('city', initialData.city);
+    }
     if (initialData.locality) {
       form.setValue('locality', initialData.locality);
     }
@@ -183,26 +188,67 @@ export const LandPlotLocationDetailsStep: React.FC<LandPlotLocationDetailsStepPr
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
-      <h1 className="text-2xl font-semibold text-primary mb-6">Location Details</h1>
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="text-center">
+        <h2 className="text-2xl font-bold text-red-600 mb-2">Location Details</h2>
+      </div>
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          {/* City Field */}
+          <FormField
+            control={form.control}
+            name="city"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-sm font-medium text-gray-900">City *</FormLabel>
+                <FormControl>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <SelectTrigger className="h-12">
+                      <SelectValue placeholder="Choose city" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-white border shadow-lg z-50">
+                      <SelectItem value="mumbai">Mumbai</SelectItem>
+                      <SelectItem value="delhi">Delhi</SelectItem>
+                      <SelectItem value="bangalore">Bangalore</SelectItem>
+                      <SelectItem value="hyderabad">Hyderabad</SelectItem>
+                      <SelectItem value="chennai">Chennai</SelectItem>
+                      <SelectItem value="kolkata">Kolkata</SelectItem>
+                      <SelectItem value="pune">Pune</SelectItem>
+                      <SelectItem value="ahmedabad">Ahmedabad</SelectItem>
+                      <SelectItem value="jaipur">Jaipur</SelectItem>
+                      <SelectItem value="surat">Surat</SelectItem>
+                      <SelectItem value="lucknow">Lucknow</SelectItem>
+                      <SelectItem value="kanpur">Kanpur</SelectItem>
+                      <SelectItem value="nagpur">Nagpur</SelectItem>
+                      <SelectItem value="indore">Indore</SelectItem>
+                      <SelectItem value="thane">Thane</SelectItem>
+                      <SelectItem value="bhopal">Bhopal</SelectItem>
+                      <SelectItem value="visakhapatnam">Visakhapatnam</SelectItem>
+                      <SelectItem value="pimpri-chinchwad">Pimpri-Chinchwad</SelectItem>
+                      <SelectItem value="patna">Patna</SelectItem>
+                      <SelectItem value="vadodara">Vadodara</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
           {/* Locality/Area and Landmark */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <FormField
               control={form.control}
               name="locality"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-sm font-medium flex items-center gap-2">
-                    <MapPin className="h-4 w-4 text-primary" />
-                    Locality/Area *
-                  </FormLabel>
+                  <FormLabel className="text-sm font-medium text-gray-900">Locality/Area *</FormLabel>
                   <FormControl>
                     <div className="relative">
                       <Input
-                        placeholder="Search 'Sector 18, Gurgaon'..."
+                        placeholder="Search 'Bellandur, Bengaluru, Karnataka'..."
                         className="h-12 pl-10"
                         {...field}
                         ref={(el) => {
@@ -210,12 +256,9 @@ export const LandPlotLocationDetailsStep: React.FC<LandPlotLocationDetailsStepPr
                           localityInputRef.current = el
                         }}
                       />
-                      <MapPin className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                      <MapPin className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                     </div>
                   </FormControl>
-                  <p className="text-xs text-red-500 animate-pulse font-bold">
-                    Type the name of the apartment/ the area of property/anything that could help us 😊
-                  </p>
                   <FormMessage />
                 </FormItem>
               )}
@@ -226,10 +269,10 @@ export const LandPlotLocationDetailsStep: React.FC<LandPlotLocationDetailsStepPr
               name="landmark"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-sm font-medium">Landmark (Optional)</FormLabel>
+                  <FormLabel className="text-sm font-medium text-gray-900">Landmark (Optional)</FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="e.g., Near Highway"
+                      placeholder="e.g., Near Metro Station"
                       className="h-12"
                       {...field}
                     />
@@ -252,7 +295,7 @@ export const LandPlotLocationDetailsStep: React.FC<LandPlotLocationDetailsStepPr
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back
             </Button>
-            <Button type="submit" className="h-12 px-8">
+            <Button type="submit" className="bg-red-600 hover:bg-red-700 text-white h-12 px-8">
               Save & Continue
               <ArrowRight className="h-4 w-4 ml-2" />
             </Button>

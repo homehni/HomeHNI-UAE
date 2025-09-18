@@ -52,18 +52,20 @@ export const LandPlotPropertyDetailsStep: React.FC<LandPlotPropertyDetailsStepPr
 
   const plotAreaUnit = watch('plotAreaUnit');
 
+  const onSubmit = (data: LandPlotDetailsForm) => {
+    console.log('Form submission data:', data);
+    onNext(data);
+  };
+
   return (
-    <Card className="w-full max-w-4xl mx-auto">
-      <CardHeader>
-        <CardTitle className="text-2xl font-bold text-gray-900">
-          Land/Plot Details
-        </CardTitle>
-        <p className="text-gray-600">
-          Enter the basic details about your land/plot
-        </p>
-      </CardHeader>
-      <CardContent>
-        <form onSubmit={handleSubmit(onNext)} className="space-y-6">
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="text-center">
+        <h2 className="text-2xl font-bold text-red-600 mb-2">Land/Plot Details</h2>
+        <p className="text-gray-600">Tell us about your land/plot specifications</p>
+      </div>
+
+      <form onSubmit={handleSubmit(onNext)} className="space-y-4">
           {/* Property Title */}
           {/* <div className="space-y-2">
             <Label htmlFor="title" className="text-sm font-medium text-gray-700">
@@ -97,7 +99,7 @@ export const LandPlotPropertyDetailsStep: React.FC<LandPlotPropertyDetailsStepPr
                 onKeyDown={(e) => { if (['-','+','e','E','.'].includes(e.key)) e.preventDefault(); }}
                 onPaste={(e) => { const text = e.clipboardData.getData('text'); const digits = text.replace(/[^0-9]/g, ''); if (digits !== text) { e.preventDefault(); } }}
                 placeholder="e.g., 1200"
-                className="w-full"
+                className="h-12"
               />
               {errors.plotArea && (
                 <p className="text-red-500 text-sm">{errors.plotArea.message}</p>
@@ -108,7 +110,7 @@ export const LandPlotPropertyDetailsStep: React.FC<LandPlotPropertyDetailsStepPr
                 Unit *
               </Label>
               <Select onValueChange={(value) => setValue('plotAreaUnit', value as any)}>
-                <SelectTrigger>
+                <SelectTrigger className="h-12">
                   <SelectValue placeholder="Select unit" />
                 </SelectTrigger>
                 <SelectContent>
@@ -140,7 +142,7 @@ export const LandPlotPropertyDetailsStep: React.FC<LandPlotPropertyDetailsStepPr
                 onKeyDown={(e) => { if (['-','+','e','E','.'].includes(e.key)) e.preventDefault(); }}
                 onPaste={(e) => { const text = e.clipboardData.getData('text'); const digits = text.replace(/[^0-9]/g, ''); if (digits !== text) { e.preventDefault(); } }}
                 placeholder="e.g., 60"
-                className="w-full"
+                className="h-12"
               />
             </div>
             <div className="space-y-2">
@@ -158,7 +160,7 @@ export const LandPlotPropertyDetailsStep: React.FC<LandPlotPropertyDetailsStepPr
                 onKeyDown={(e) => { if (['-','+','e','E','.'].includes(e.key)) e.preventDefault(); }}
                 onPaste={(e) => { const text = e.clipboardData.getData('text'); const digits = text.replace(/[^0-9]/g, ''); if (digits !== text) { e.preventDefault(); } }}
                 placeholder="e.g., 40"
-                className="w-full"
+                className="h-12"
               />
             </div>
           </div>
@@ -170,7 +172,7 @@ export const LandPlotPropertyDetailsStep: React.FC<LandPlotPropertyDetailsStepPr
                 Land Type *
               </Label>
               <Select onValueChange={(value) => setValue('landType', value as any)}>
-                <SelectTrigger>
+                <SelectTrigger className="h-12">
                   <SelectValue placeholder="Select land type" />
                 </SelectTrigger>
                 <SelectContent>
@@ -187,7 +189,7 @@ export const LandPlotPropertyDetailsStep: React.FC<LandPlotPropertyDetailsStepPr
                 Road Facing *
               </Label>
               <Select onValueChange={(value) => setValue('roadFacing', value as any)}>
-                <SelectTrigger>
+                <SelectTrigger className="h-12">
                   <SelectValue placeholder="Select road facing" />
                 </SelectTrigger>
                 <SelectContent>
@@ -232,7 +234,7 @@ export const LandPlotPropertyDetailsStep: React.FC<LandPlotPropertyDetailsStepPr
                 Boundary Wall
               </Label>
               <Select onValueChange={(value) => setValue('boundaryWall', value as any)}>
-                <SelectTrigger>
+                <SelectTrigger className="h-12">
                   <SelectValue placeholder="Select boundary wall status" />
                 </SelectTrigger>
                 <SelectContent>
@@ -261,7 +263,7 @@ export const LandPlotPropertyDetailsStep: React.FC<LandPlotPropertyDetailsStepPr
                 onKeyDown={(e) => { if (['-','+','e','E','.'].includes(e.key)) e.preventDefault(); }}
                 onPaste={(e) => { const text = e.clipboardData.getData('text'); const digits = text.replace(/[^0-9]/g, ''); if (digits !== text) { e.preventDefault(); } }}
                 placeholder="3"
-                className="w-full"
+                className="h-12"
               />
               {errors.floorsAllowed && (
                 <p className="text-red-500 text-sm">{errors.floorsAllowed.message}</p>
@@ -273,7 +275,7 @@ export const LandPlotPropertyDetailsStep: React.FC<LandPlotPropertyDetailsStepPr
                 Is the Land/Plot inside a gated project?
               </Label>
               <Select onValueChange={(value) => setValue('gatedProject', value as any)}>
-                <SelectTrigger>
+                <SelectTrigger className="h-12">
                   <SelectValue placeholder="Select" />
                 </SelectTrigger>
                 <SelectContent className="bg-white z-50">
@@ -284,22 +286,13 @@ export const LandPlotPropertyDetailsStep: React.FC<LandPlotPropertyDetailsStepPr
             </div>
           </div>
 
-          {/* Navigation Buttons */}
-          <div className="flex justify-between pt-6">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={onBack}
-              disabled={true}
-            >
-              Back
-            </Button>
-            <Button type="submit" className="bg-red-600 hover:bg-red-700 text-white">
-              Next: Location Details
-            </Button>
-          </div>
+        {/* Navigation Buttons */}
+        <div className="flex justify-end pt-6">
+          <Button type="submit" className="bg-red-600 hover:bg-red-700 text-white h-12 px-8">
+            Next Step
+          </Button>
+        </div>
         </form>
-      </CardContent>
-    </Card>
+    </div>
   );
 };
