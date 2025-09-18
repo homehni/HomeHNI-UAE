@@ -82,8 +82,8 @@ export const RelatedPropertiesCard: React.FC<RelatedPropertiesCardProps> = ({ pr
                   listing_type: property.listing_type,
                   location: `${locality}, ${property.city}`
                 })}
-              >
-                {property.bhk_type} for {property.listing_type} in {locality}
+               >
+                {property.bhk_type} Flats for {property.listing_type} in {locality}
               </TagButton>
             ))}
           </div>
@@ -102,8 +102,8 @@ export const RelatedPropertiesCard: React.FC<RelatedPropertiesCardProps> = ({ pr
                   listing_type: property.listing_type,
                   location: `${property.locality}, ${property.city}`
                 })}
-              >
-                {bhk} for {property.listing_type} in {property.locality}
+               >
+                {bhk} Flats for {property.listing_type} in {property.locality.split(',')[0]}
               </TagButton>
             ))}
             <TagButton
@@ -114,8 +114,8 @@ export const RelatedPropertiesCard: React.FC<RelatedPropertiesCardProps> = ({ pr
                 location: property.city,
                 furnished: 'Fully Furnished'
               })}
-            >
-              Fully Furnished {property.bhk_type} in {property.locality}
+             >
+              Fully Furnished {property.bhk_type} Flats for {property.listing_type} in {property.locality.split(',')[0]}
             </TagButton>
           </div>
         </div>
@@ -133,8 +133,8 @@ export const RelatedPropertiesCard: React.FC<RelatedPropertiesCardProps> = ({ pr
                   listing_type: property.listing_type,
                   location: `${locality}, ${property.city}`
                 })}
-              >
-                {property.bhk_type} for {property.listing_type} in {locality}
+               >
+                {property.bhk_type} Flats for {property.listing_type} in {locality}
               </TagButton>
             ))}
           </div>
@@ -153,8 +153,8 @@ export const RelatedPropertiesCard: React.FC<RelatedPropertiesCardProps> = ({ pr
                   listing_type: property.listing_type,
                   location: `${property.locality}, ${property.city}`
                 })}
-              >
-                {property.bhk_type} {type} for {property.listing_type} in {property.locality}
+               >
+                {property.bhk_type} {type} for {property.listing_type} in {property.locality.split(',')[0]}
               </TagButton>
             ))}
           </div>
