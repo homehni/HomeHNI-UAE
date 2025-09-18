@@ -20,13 +20,19 @@ export const RelatedPropertiesCard: React.FC<RelatedPropertiesCardProps> = ({ pr
   };
 
   // Helper function to get display locality
-  const getDisplayLocality = (locality: string) => {
-    // If locality is just a number or very short, use a generic location name
-    if (!locality || locality.length <= 2 || /^\d+$/.test(locality)) {
+  const getDisplayLocality = (locality: any) => {
+    const loc = String(locality ?? '').trim();
+    if (!loc || loc.length <= 2 || /^[\d\s]+$/.test(loc)) {
       return `${property.city}`;
     }
-    return locality.split(',')[0];
+    return loc.split(',')[0];
   };
+
+  // Precompute display locality and location param
+  const displayLocality = getDisplayLocality(property.locality);
+  const locationParam = displayLocality && displayLocality !== property.city
+    ? `${displayLocality}, ${property.city}`
+    : property.city;
 
   // Generate city-specific localities
   const getCityLocalities = (city: string) => {
@@ -109,7 +115,7 @@ export const RelatedPropertiesCard: React.FC<RelatedPropertiesCardProps> = ({ pr
                   bhk_type: bhk,
                   property_type: property.property_type,
                   listing_type: property.listing_type,
-                  location: `${property.locality}, ${property.city}`
+                  location: locationParam
                 })}
                >
                 {bhk} Flats for {property.listing_type} in {getDisplayLocality(property.locality)}
@@ -160,7 +166,7 @@ export const RelatedPropertiesCard: React.FC<RelatedPropertiesCardProps> = ({ pr
                   bhk_type: property.bhk_type || '',
                   property_type: type,
                   listing_type: property.listing_type,
-                  location: `${property.locality}, ${property.city}`
+                  location: locationParam
                 })}
               >
                 {property.bhk_type} {type} for {property.listing_type} in {getDisplayLocality(property.locality)}
