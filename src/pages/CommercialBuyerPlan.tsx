@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Check, Phone, MessageCircle, Quote, Star, Target, Users, Shield, Clock, Bell, FileText, Headphones } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import PayButton from '@/components/PayButton';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Badge } from '@/components/ui/badge';
@@ -23,6 +24,7 @@ const CommercialBuyerPlan = () => {
         price: "₹999",
         originalPrice: "₹999",
         freePrice: "FREE",
+        amountPaise: 99900,
         gst: "+18% GST",
         badge: "BASIC SUPPORT",
         badgeColor: "bg-red-600",
@@ -31,6 +33,7 @@ const CommercialBuyerPlan = () => {
       {
         name: "Gold Plan", 
         price: "₹4,999",
+        amountPaise: 499900,
         gst: "+18% GST",
         badge: "MOST POPULAR",
         badgeColor: "bg-yellow-500",
@@ -38,6 +41,7 @@ const CommercialBuyerPlan = () => {
       {
         name: "Platinum Plan",
         price: "₹8,999",
+        amountPaise: 899900,
         gst: "+18% GST",
         badge: "EXPERT GUIDANCE",
         badgeColor: "bg-blue-600",
@@ -49,6 +53,7 @@ const CommercialBuyerPlan = () => {
         price: "₹999",
         originalPrice: "₹999",
         freePrice: "FREE",
+        amountPaise: 99900,
         gst: "+18% GST",
         badge: "COMMERCIAL SEARCH",
         badgeColor: "bg-blue-500",
@@ -57,6 +62,7 @@ const CommercialBuyerPlan = () => {
       {
         name: "Business Gold", 
         price: "₹8,999",
+        amountPaise: 899900,
         gst: "+18% GST",
         badge: "BUSINESS EXPERT",
         badgeColor: "bg-indigo-500",
@@ -64,6 +70,7 @@ const CommercialBuyerPlan = () => {
       {
         name: "Business Platinum",
         price: "₹15,999",
+        amountPaise: 1599900,
         gst: "+18% GST",
         badge: "VIP COMMERCIAL",
         badgeColor: "bg-purple-600",
@@ -75,6 +82,7 @@ const CommercialBuyerPlan = () => {
         price: "₹999",
         originalPrice: "₹999",
         freePrice: "FREE",
+        amountPaise: 99900,
         gst: "+18% GST",
         badge: "INDUSTRIAL SEARCH",
         badgeColor: "bg-gray-600",
@@ -83,6 +91,7 @@ const CommercialBuyerPlan = () => {
       {
         name: "Industrial Gold", 
         price: "₹15,999",
+        amountPaise: 1599900,
         gst: "+18% GST",
         badge: "INDUSTRIAL EXPERT",
         badgeColor: "bg-slate-700",
@@ -90,6 +99,7 @@ const CommercialBuyerPlan = () => {
       {
         name: "Industrial Platinum",
         price: "₹25,999",
+        amountPaise: 2599900,
         gst: "+18% GST",
         badge: "PREMIUM INDUSTRIAL",
         badgeColor: "bg-zinc-800",
@@ -101,6 +111,7 @@ const CommercialBuyerPlan = () => {
         price: "₹999",
         originalPrice: "₹999",
         freePrice: "FREE",
+        amountPaise: 99900,
         gst: "+18% GST",
         badge: "AGRICULTURAL SEARCH",
         badgeColor: "bg-green-600",
@@ -109,6 +120,7 @@ const CommercialBuyerPlan = () => {
       {
         name: "Farm Gold", 
         price: "₹6,999",
+        amountPaise: 699900,
         gst: "+18% GST",
         badge: "FARM SPECIALIST",
         badgeColor: "bg-emerald-600",
@@ -116,6 +128,7 @@ const CommercialBuyerPlan = () => {
       {
         name: "Farm Platinum",
         price: "₹12,999",
+        amountPaise: 1299900,
         gst: "+18% GST",
         badge: "PREMIUM FARM",
         badgeColor: "bg-teal-600",
@@ -332,15 +345,16 @@ const CommercialBuyerPlan = () => {
                           )}
                         </div>
                         
-                        <Button 
+                        <PayButton
+                          label="Subscribe"
+                          amountPaise={plan.amountPaise || 0}
+                          planName={`Commercial Buyer - ${plan.name}`}
                           className={`w-full ${
                             selectedPlans[tabKey as keyof typeof selectedPlans] === index 
                               ? 'bg-brand-red hover:bg-brand-maroon-dark text-white' 
                               : 'bg-transparent text-foreground border border-border hover:bg-muted'
                           }`}
-                        >
-                          Subscribe
-                        </Button>
+                        />
                       </CardContent>
                     </Card>
                   ))}

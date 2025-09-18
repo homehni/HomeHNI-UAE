@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Check, Phone, MessageCircle, Quote, Star, Camera, Shield, Globe, TrendingUp, Users, Zap, CheckCircle, Eye, Share2, FileText, Handshake } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import PayButton from '@/components/PayButton';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Badge } from '@/components/ui/badge';
@@ -21,6 +22,7 @@ const CommercialSellerPlans = () => {
       {
         name: "Silver Plan",
         price: "₹2,999",
+        amountPaise: 299900,
         gst: "+18% GST", 
         badge: "ESSENTIAL FEATURES",
         badgeColor: "bg-red-600",
@@ -28,6 +30,7 @@ const CommercialSellerPlans = () => {
       {
         name: "Gold Plan",
         price: "₹7,999",
+        amountPaise: 799900,
         gst: "+18% GST",
         badge: "MOST POPULAR",
         badgeColor: "bg-yellow-500",
@@ -37,6 +40,7 @@ const CommercialSellerPlans = () => {
       {
         name: "Business Silver",
         price: "₹8,999",
+        amountPaise: 899900,
         gst: "+18% GST", 
         badge: "BUSINESS ESSENTIALS",
         badgeColor: "bg-blue-500",
@@ -44,6 +48,7 @@ const CommercialSellerPlans = () => {
       {
         name: "Business Gold",
         price: "₹15,999",
+        amountPaise: 1599900,
         gst: "+18% GST",
         badge: "BUSINESS POPULAR",
         badgeColor: "bg-indigo-500",
@@ -53,6 +58,7 @@ const CommercialSellerPlans = () => {
       {
         name: "Industrial Silver",
         price: "₹12,999",
+        amountPaise: 1299900,
         gst: "+18% GST", 
         badge: "INDUSTRIAL BASICS",
         badgeColor: "bg-gray-600",
@@ -60,6 +66,7 @@ const CommercialSellerPlans = () => {
       {
         name: "Industrial Gold",
         price: "₹22,999",
+        amountPaise: 2299900,
         gst: "+18% GST",
         badge: "INDUSTRIAL PREMIUM",
         badgeColor: "bg-slate-700",
@@ -69,6 +76,7 @@ const CommercialSellerPlans = () => {
       {
         name: "Farm Silver",
         price: "₹4,999",
+        amountPaise: 499900,
         gst: "+18% GST", 
         badge: "FARM ESSENTIALS",
         badgeColor: "bg-green-600",
@@ -76,6 +84,7 @@ const CommercialSellerPlans = () => {
       {
         name: "Farm Gold",
         price: "₹9,999",
+        amountPaise: 999900,
         gst: "+18% GST",
         badge: "FARM PREMIUM",
         badgeColor: "bg-emerald-600",
@@ -242,15 +251,16 @@ const CommercialSellerPlans = () => {
                           <div className="text-sm text-gray-500">{plan.gst}</div>
                         </div>
                         
-                        <Button 
+                        <PayButton
+                          label="Subscribe"
+                          amountPaise={plan.amountPaise}
+                          planName={`Commercial Seller - ${plan.name}`}
                           className={`w-full ${
                             selectedPlans[tabKey as keyof typeof selectedPlans] === index 
                               ? 'bg-brand-red hover:bg-brand-maroon-dark text-white' 
                               : 'bg-transparent text-foreground border border-border hover:bg-muted'
                           }`}
-                        >
-                          Subscribe
-                        </Button>
+                        />
                       </CardContent>
                     </Card>
                   ))}

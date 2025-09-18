@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Star, Check, Phone, Clock, Users, Shield, UserCheck, Globe, Camera, Lock, FileText, TrendingUp, Target } from 'lucide-react';
 import { Button } from "@/components/ui/button";
+import PayButton from '@/components/PayButton';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
@@ -24,6 +25,7 @@ const CommercialOwnerPlans = () => {
         price: "₹999",
         originalPrice: "₹999",
         freePrice: "FREE",
+        amountPaise: 99900,
         gst: "+18% GST",
         badge: "BASIC ASSISTANCE",
         badgeColor: "bg-yellow-500",
@@ -32,6 +34,7 @@ const CommercialOwnerPlans = () => {
       {
         name: "Gold Plan",
         price: "₹6,499", 
+        amountPaise: 649900,
         gst: "+18% GST",
         badge: "ENHANCED VISIBILITY",
         badgeColor: "bg-green-500",
@@ -39,6 +42,7 @@ const CommercialOwnerPlans = () => {
       {
         name: "Platinum Plan",
         price: "₹7,999",
+        amountPaise: 799900,
         gst: "+18% GST", 
         badge: "EXPERT GUIDANCE",
         badgeColor: "bg-red-500",
@@ -46,6 +50,7 @@ const CommercialOwnerPlans = () => {
       {
         name: "Diamond Plan",
         price: "₹11,999",
+        amountPaise: 1199900,
         gst: "+18% GST",
         badge: "PREMIUM ASSISTANCE", 
         badgeColor: "bg-purple-500",
@@ -57,6 +62,7 @@ const CommercialOwnerPlans = () => {
         price: "₹999",
         originalPrice: "₹999",
         freePrice: "FREE",
+        amountPaise: 99900,
         gst: "+18% GST",
         badge: "COMMERCIAL BASICS",
         badgeColor: "bg-blue-500",
@@ -65,6 +71,7 @@ const CommercialOwnerPlans = () => {
       {
         name: "Business Gold",
         price: "₹15,999", 
+        amountPaise: 1599900,
         gst: "+18% GST",
         badge: "BUSINESS GROWTH",
         badgeColor: "bg-indigo-500",
@@ -72,6 +79,7 @@ const CommercialOwnerPlans = () => {
       {
         name: "Business Platinum",
         price: "₹22,999",
+        amountPaise: 2299900,
         gst: "+18% GST", 
         badge: "ENTERPRISE LEVEL",
         badgeColor: "bg-purple-600",
@@ -83,6 +91,7 @@ const CommercialOwnerPlans = () => {
         price: "₹999",
         originalPrice: "₹999",
         freePrice: "FREE",
+        amountPaise: 99900,
         gst: "+18% GST",
         badge: "INDUSTRIAL START",
         badgeColor: "bg-gray-600",
@@ -91,6 +100,7 @@ const CommercialOwnerPlans = () => {
       {
         name: "Industrial Pro",
         price: "₹25,999", 
+        amountPaise: 2599900,
         gst: "+18% GST",
         badge: "INDUSTRIAL GROWTH",
         badgeColor: "bg-slate-700",
@@ -98,6 +108,7 @@ const CommercialOwnerPlans = () => {
       {
         name: "Industrial Elite",
         price: "₹45,999",
+        amountPaise: 4599900,
         gst: "+18% GST", 
         badge: "INDUSTRIAL PREMIUM",
         badgeColor: "bg-zinc-800",
@@ -109,6 +120,7 @@ const CommercialOwnerPlans = () => {
         price: "₹999",
         originalPrice: "₹999",
         freePrice: "FREE",
+        amountPaise: 99900,
         gst: "+18% GST",
         badge: "FARM ESSENTIALS",
         badgeColor: "bg-green-600",
@@ -117,6 +129,7 @@ const CommercialOwnerPlans = () => {
       {
         name: "Farm Pro",
         price: "₹12,999", 
+        amountPaise: 1299900,
         gst: "+18% GST",
         badge: "FARM GROWTH",
         badgeColor: "bg-emerald-600",
@@ -124,6 +137,7 @@ const CommercialOwnerPlans = () => {
       {
         name: "Farm Premium",
         price: "₹18,999",
+        amountPaise: 1899900,
         gst: "+18% GST", 
         badge: "FARM PREMIUM",
         badgeColor: "bg-teal-600",
@@ -277,6 +291,7 @@ const CommercialOwnerPlans = () => {
     {
       name: "Relax Plan",
       price: "₹3,499",
+      amountPaise: 349900,
       gst: "+ GST",
       features: [
         "Basic tenant matching",
@@ -290,6 +305,7 @@ const CommercialOwnerPlans = () => {
     {
       name: "Super Relax Plan",
       price: "₹6,499",
+      amountPaise: 649900,
       gst: "+ GST",
       features: [
         "Priority tenant matching",
@@ -304,6 +320,7 @@ const CommercialOwnerPlans = () => {
     {
       name: "MoneyBack Plan",
       price: "₹7,999",
+      amountPaise: 799900,
       gst: "+ GST",
       features: [
         "Guaranteed tenant matching",
@@ -319,6 +336,7 @@ const CommercialOwnerPlans = () => {
     {
       name: "Super MoneyBack Plan",
       price: "₹11,999",
+      amountPaise: 1199900,
       gst: "+ GST",
       features: [
         "Priority guaranteed matching",
@@ -440,15 +458,16 @@ const CommercialOwnerPlans = () => {
                           )}
                         </div>
                         
-                        <Button 
+                        <PayButton
+                          label="Subscribe"
+                          amountPaise={plan.amountPaise || 0}
+                          planName={`Commercial Owner - ${plan.name}`}
                           className={`w-full ${
                             selectedPlans[tabKey as keyof typeof selectedPlans] === index 
                               ? 'bg-brand-red hover:bg-brand-maroon-dark text-white' 
                               : 'bg-transparent text-foreground border border-border hover:bg-muted'
                           }`}
-                        >
-                          Subscribe
-                        </Button>
+                        />
                       </CardContent>
                     </Card>
                   ))}
