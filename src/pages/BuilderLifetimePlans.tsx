@@ -295,11 +295,11 @@ const BuilderLifetimePlans = () => {
           </div>
 
           <Tabs defaultValue="residential" className="w-full">
-            <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 mb-6">
-              <TabsTrigger value="residential">Residential</TabsTrigger>
-              <TabsTrigger value="commercial">Commercial</TabsTrigger>
-              <TabsTrigger value="industrial">Industrial</TabsTrigger>
-              <TabsTrigger value="agricultural">Agricultural</TabsTrigger>
+            <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 mb-6 p-1 gap-1 bg-muted rounded-lg">
+              <TabsTrigger value="residential" className="text-sm md:text-base py-3 px-4 data-[state=active]:bg-background data-[state=active]:text-foreground">Residential</TabsTrigger>
+              <TabsTrigger value="commercial" className="text-sm md:text-base py-3 px-4 data-[state=active]:bg-background data-[state=active]:text-foreground">Commercial</TabsTrigger>
+              <TabsTrigger value="industrial" className="text-sm md:text-base py-3 px-4 data-[state=active]:bg-background data-[state=active]:text-foreground">Industrial</TabsTrigger>
+              <TabsTrigger value="agricultural" className="text-sm md:text-base py-3 px-4 data-[state=active]:bg-background data-[state=active]:text-foreground">Agricultural</TabsTrigger>
             </TabsList>
 
             {Object.entries(tabPlans).map(([category, plans]) => (

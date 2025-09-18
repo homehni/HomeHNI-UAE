@@ -328,11 +328,11 @@ const OwnerPlans = ({ embedded }: OwnerPlansProps) => {
           </div>
 
           <Tabs defaultValue="residential" className="w-full">
-            <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 mb-8">
-              <TabsTrigger value="residential" className="text-sm md:text-base">Residential</TabsTrigger>
-              <TabsTrigger value="commercial" className="text-sm md:text-base">Commercial</TabsTrigger>
-              <TabsTrigger value="industrial" className="text-sm md:text-base">Industrial</TabsTrigger>
-              <TabsTrigger value="agricultural" className="text-sm md:text-base">Agricultural</TabsTrigger>
+            <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 mb-8 p-1 gap-1 bg-muted rounded-lg">
+              <TabsTrigger value="residential" className="text-sm md:text-base py-3 px-4 data-[state=active]:bg-background data-[state=active]:text-foreground">Residential</TabsTrigger>
+              <TabsTrigger value="commercial" className="text-sm md:text-base py-3 px-4 data-[state=active]:bg-background data-[state=active]:text-foreground">Commercial</TabsTrigger>
+              <TabsTrigger value="industrial" className="text-sm md:text-base py-3 px-4 data-[state=active]:bg-background data-[state=active]:text-foreground">Industrial</TabsTrigger>
+              <TabsTrigger value="agricultural" className="text-sm md:text-base py-3 px-4 data-[state=active]:bg-background data-[state=active]:text-foreground">Agricultural</TabsTrigger>
             </TabsList>
 
             {Object.entries(tabPlans).map(([tabKey, plans]) => (
