@@ -345,16 +345,28 @@ const CommercialBuyerPlan = () => {
                           )}
                         </div>
                         
-                        <PayButton
-                          label="Subscribe"
-                          amountPaise={plan.amountPaise || 0}
-                          planName={`Commercial Buyer - ${plan.name}`}
-                          className={`w-full ${
-                            selectedPlans[tabKey as keyof typeof selectedPlans] === index 
-                              ? 'bg-brand-red hover:bg-brand-maroon-dark text-white' 
-                              : 'bg-transparent text-foreground border border-border hover:bg-muted'
-                          }`}
-                        />
+                        {plan.isFree ? (
+                          <Button 
+                            className={`w-full ${
+                              selectedPlans[tabKey as keyof typeof selectedPlans] === index 
+                                ? 'bg-brand-red hover:bg-brand-maroon-dark text-white' 
+                                : 'bg-transparent text-foreground border border-border hover:bg-muted'
+                            }`}
+                          >
+                            Get Started - FREE
+                          </Button>
+                        ) : (
+                          <PayButton
+                            label="Subscribe"
+                            amountPaise={plan.amountPaise || 0}
+                            planName={`Commercial Buyer - ${plan.name}`}
+                            className={`w-full ${
+                              selectedPlans[tabKey as keyof typeof selectedPlans] === index 
+                                ? 'bg-brand-red hover:bg-brand-maroon-dark text-white' 
+                                : 'bg-transparent text-foreground border border-border hover:bg-muted'
+                            }`}
+                          />
+                        )}
                       </CardContent>
                     </Card>
                   ))}

@@ -383,17 +383,29 @@ const SellerPlans: React.FC<SellerPlansProps> = ({ embedded }) => {
                           )}
                         </div>
                         
-                        <PayButton
-                          label="Subscribe"
-                          planName={`Seller — ${plan.name}`}
-                          amountPaise={plan.amountPaise || 0}
-                          notes={{ plan: plan.name, category: "seller", type: tabKey }}
-                          className={`w-full ${
-                            selectedPlans[tabKey as keyof typeof selectedPlans] === index 
-                              ? 'bg-brand-red hover:bg-brand-maroon-dark text-white' 
-                              : 'bg-transparent text-foreground border border-border hover:bg-muted'
-                          }`}
-                        />
+                        {plan.isFree ? (
+                          <Button 
+                            className={`w-full ${
+                              selectedPlans[tabKey as keyof typeof selectedPlans] === index 
+                                ? 'bg-brand-red hover:bg-brand-maroon-dark text-white' 
+                                : 'bg-transparent text-foreground border border-border hover:bg-muted'
+                            }`}
+                          >
+                            Get Started - FREE
+                          </Button>
+                        ) : (
+                          <PayButton
+                            label="Subscribe"
+                            planName={`Seller — ${plan.name}`}
+                            amountPaise={plan.amountPaise || 0}
+                            notes={{ plan: plan.name, category: "seller", type: tabKey }}
+                            className={`w-full ${
+                              selectedPlans[tabKey as keyof typeof selectedPlans] === index 
+                                ? 'bg-brand-red hover:bg-brand-maroon-dark text-white' 
+                                : 'bg-transparent text-foreground border border-border hover:bg-muted'
+                            }`}
+                          />
+                        )}
                       </CardContent>
                     </Card>
                   ))}

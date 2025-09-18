@@ -245,17 +245,29 @@ const AgentPlans = () => {
                           <strong>Best For:</strong>
                         </div>
                         
-                        <PayButton
-                          label="Subscribe"
-                          planName={`Agent — ${plan.name}`}
-                          amountPaise={plan.amountPaise}
-                          notes={{ plan: plan.name, category: "agent", type: tabKey }}
-                          className={`w-full ${
-                            selectedPlans[tabKey as keyof typeof selectedPlans] === index 
-                              ? 'bg-brand-red hover:bg-brand-maroon-dark text-white' 
-                              : 'bg-transparent text-foreground border border-border hover:bg-muted'
-                          }`}
-                        />
+                        {plan.isFree ? (
+                          <Button 
+                            className={`w-full ${
+                              selectedPlans[tabKey as keyof typeof selectedPlans] === index 
+                                ? 'bg-brand-red hover:bg-brand-maroon-dark text-white' 
+                                : 'bg-transparent text-foreground border border-border hover:bg-muted'
+                            }`}
+                          >
+                            Get Started - FREE
+                          </Button>
+                        ) : (
+                          <PayButton
+                            label="Subscribe"
+                            planName={`Agent — ${plan.name}`}
+                            amountPaise={plan.amountPaise}
+                            notes={{ plan: plan.name, category: "agent", type: tabKey }}
+                            className={`w-full ${
+                              selectedPlans[tabKey as keyof typeof selectedPlans] === index 
+                                ? 'bg-brand-red hover:bg-brand-maroon-dark text-white' 
+                                : 'bg-transparent text-foreground border border-border hover:bg-muted'
+                            }`}
+                          />
+                        )}
                       </CardContent>
                     </Card>
                   ))}
