@@ -339,9 +339,9 @@ const Header = () => {
                   )}
                 </div>
 
-                <a href="/service-provider" onClick={e => {
+                <a href="/service-suite" onClick={e => {
                   e.preventDefault();
-                  navigate('/service-provider');
+                  navigate('/service-suite');
                 }} className={`hover:opacity-80 transition-colors duration-500 text-sm xl:text-base font-medium uppercase whitespace-nowrap ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
                   SERVICE PROVIDER
                 </a>
