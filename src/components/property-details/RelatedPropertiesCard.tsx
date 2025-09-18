@@ -153,10 +153,22 @@ export const RelatedPropertiesCard: React.FC<RelatedPropertiesCardProps> = ({ pr
                   listing_type: property.listing_type,
                   location: `${property.locality}, ${property.city}`
                 })}
-               >
+              >
                 {property.bhk_type} {type} for {property.listing_type} in {property.locality.split(',')[0]}
               </TagButton>
             ))}
+          </div>
+        </div>
+
+        {/* Post Free Property Ad */}
+        <div>
+          <h3 className="text-base font-medium text-foreground mb-3">Post Free Property Ad</h3>
+          <div className="flex flex-wrap gap-2">
+            <TagButton
+              onClick={() => navigate('/post-property')}
+            >
+              Rent / Sale Property Online
+            </TagButton>
           </div>
         </div>
       </div>
