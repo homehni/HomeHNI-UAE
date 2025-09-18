@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Home, Users, Building, UserCheck } from 'lucide-react';
 
 interface PgHostelRoomType {
-  selectedType: 'single' | 'double' | 'three' | 'four' | '';
+  selectedTypes: ('single' | 'double' | 'three' | 'four')[];
 }
 
 interface PgHostelRoomTypeStepProps {
@@ -24,7 +24,7 @@ export function PgHostelRoomTypeStep({
   totalSteps 
 }: PgHostelRoomTypeStepProps) {
   const [formData, setFormData] = useState<PgHostelRoomType>({
-    selectedType: '',
+    selectedTypes: [],
     ...initialData,
   });
 
@@ -36,12 +36,23 @@ export function PgHostelRoomTypeStep({
   };
 
   const isFormValid = () => {
-    return true;
+    return formData.selectedTypes.length > 0;
   };
 
   const handleRoomTypeChange = (roomType: 'single' | 'double' | 'three' | 'four') => {
-    setFormData({
-      selectedType: roomType,
+    setFormData(prev => {
+      const isSelected = prev.selectedTypes.includes(roomType);
+      if (isSelected) {
+        // Remove from selection
+        return {
+          selectedTypes: prev.selectedTypes.filter(type => type !== roomType)
+        };
+      } else {
+        // Add to selection
+        return {
+          selectedTypes: [...prev.selectedTypes, roomType]
+        };
+      }
     });
   };
 
@@ -73,70 +84,64 @@ export function PgHostelRoomTypeStep({
   ];
 
   return (
-    <div className="max-w-2xl mx-auto space-y-6 p-6">
-      <div className="text-center mb-8">
-        <h2 className="text-2xl font-bold text-foreground mb-2">Room Types Available</h2>
-        <p className="text-muted-foreground">Select the type of rooms available in your PG</p>
-      </div>
+    <div className="min-h-screen bg-background">
+      <div className="max-w-4xl mx-auto p-8">
+        <div className="text-center mb-8">
+          <h1 className="text-2xl font-semibold text-primary mb-2">
+            Provide details about your place to find a tenant soon
+          </h1>
+          <p className="text-gray-600">
+            Select the type of rooms available in your PG
+          </p>
+        </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Select the type of rooms available in your PG</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {roomTypes.map((roomType) => {
-                const IconComponent = roomType.icon;
-                const isSelected = formData.selectedType === roomType.key;
-                return (
-                  <div 
-                    key={roomType.key} 
-                    className={`border rounded-lg p-4 cursor-pointer transition-all hover:bg-muted/50 ${
-                      isSelected 
-                        ? 'border-primary bg-primary/5 ring-2 ring-primary/20' 
-                        : 'border-border'
-                    }`}
-                    onClick={() => handleRoomTypeChange(roomType.key as 'single' | 'double' | 'three' | 'four')}
-                  >
-                    <div className="flex items-center space-x-3">
-                      <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${
-                        isSelected 
-                          ? 'border-primary bg-primary' 
-                          : 'border-muted-foreground'
-                      }`}>
-                        {isSelected && <div className="w-2 h-2 rounded-full bg-white" />}
-                      </div>
-                      <div className="flex items-center space-x-3 flex-1">
-                        <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
-                          <IconComponent className="w-5 h-5 text-primary" />
-                        </div>
-                        <div>
-                          <Label className="text-base font-medium cursor-pointer">
-                            {roomType.label}
-                          </Label>
-                          <p className="text-sm text-muted-foreground">{roomType.description}</p>
-                        </div>
-                      </div>
+        <form onSubmit={handleSubmit} className="space-y-8">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            {roomTypes.map((roomType) => {
+              const IconComponent = roomType.icon;
+              const isSelected = formData.selectedTypes.includes(roomType.key as 'single' | 'double' | 'three' | 'four');
+              return (
+                <div 
+                  key={roomType.key} 
+                  className={`border-2 rounded-lg p-6 cursor-pointer transition-all hover:shadow-md ${
+                    isSelected 
+                      ? 'border-primary bg-primary/5 ring-2 ring-primary/20' 
+                      : 'border-gray-200 hover:border-gray-300'
+                  }`}
+                  onClick={() => handleRoomTypeChange(roomType.key as 'single' | 'double' | 'three' | 'four')}
+                >
+                  <div className="flex flex-col items-center space-y-3">
+                    <div className={`w-12 h-12 rounded-lg flex items-center justify-center ${
+                      isSelected ? 'bg-primary text-white' : 'bg-gray-100 text-gray-600'
+                    }`}>
+                      <IconComponent className="w-6 h-6" />
+                    </div>
+                    <div className="text-center">
+                      <Label className="text-base font-medium cursor-pointer">
+                        {roomType.label}
+                      </Label>
                     </div>
                   </div>
-                );
-              })}
-            </div>
+                </div>
+              );
+            })}
+          </div>
 
-            <div className="flex justify-between pt-6">
+          {/* Action Buttons */}
+          <div className="flex justify-center pt-8">
+            <div className="flex gap-4">
               {onBack && (
-                <Button type="button" variant="outline" onClick={onBack}>
+                <Button type="button" variant="outline" onClick={onBack} className="px-8">
                   Back
                 </Button>
               )}
-              <Button type="submit" className={onBack ? "" : "ml-auto"}>
+              <Button type="submit" className="px-8">
                 Save & Continue
               </Button>
             </div>
-          </form>
-        </CardContent>
-      </Card>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }

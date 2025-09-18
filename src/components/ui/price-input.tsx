@@ -1,6 +1,6 @@
 import * as React from "react"
 import { cn } from "@/lib/utils"
-import { formatPriceDisplay } from "@/utils/priceFormatter"
+import { formatExactPriceDisplay } from "@/utils/priceFormatter"
 
 export interface PriceInputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
   value?: number | string
@@ -11,7 +11,7 @@ export interface PriceInputProps extends Omit<React.InputHTMLAttributes<HTMLInpu
 const PriceInput = React.forwardRef<HTMLInputElement, PriceInputProps>(
   ({ className, value, onChange, showFormatted = true, onKeyDown: userOnKeyDown, onPaste: userOnPaste, ...props }, ref) => {
     const displayValue = typeof value === 'number' ? value.toString() : value || ''
-    const formattedPrice = showFormatted ? formatPriceDisplay(value || 0) : ''
+    const formattedPrice = showFormatted ? formatExactPriceDisplay(value || 0) : ''
 
     const blockInvalidChars = (e: React.KeyboardEvent<HTMLInputElement>) => {
       if (['-', '+', 'e', 'E', '.'].includes(e.key)) {

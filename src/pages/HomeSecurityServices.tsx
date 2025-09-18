@@ -389,7 +389,7 @@ const HomeSecurityServices = () => {
                 </SelectContent>
               </Select>
 
-              <Button type="submit" className="w-full">Get Free Security Consultation</Button>
+              <Button type="submit" className="w-full bg-red-800 hover:bg-red-900 text-white">Get Free Security Consultation</Button>
             </form>
           </CardContent>
         </Card>
@@ -516,7 +516,7 @@ const HomeSecurityServices = () => {
                   </SelectContent>
                 </Select>
 
-                <Button type="submit" className="w-full h-14 text-lg font-semibold bg-red-600 hover:bg-red-700 text-white mt-8">
+                <Button type="submit" className="w-full h-14 text-lg font-semibold bg-red-800 hover:bg-red-900 text-white mt-8">
                   Get Free Security Consultation
                 </Button>
               </form>

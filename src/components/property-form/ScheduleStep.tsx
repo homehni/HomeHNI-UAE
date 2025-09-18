@@ -320,8 +320,8 @@ export const ScheduleStep: React.FC<ScheduleStepProps> = ({
             <Button type="button" variant="white" onClick={onBack} className="px-8">
               Back
             </Button>
-            <Button type="submit" className="px-8 bg-destructive hover:bg-destructive/90">
-              {onSubmit ? 'Submit' : 'Finish Posting'}
+            <Button type="submit" className="px-8 bg-brand-maroon-dark hover:bg-brand-maroon text-white">
+              SUBMIT
             </Button>
           </div>
         </form>

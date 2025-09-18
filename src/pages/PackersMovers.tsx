@@ -228,7 +228,7 @@ const PackersMovers = () => {
                 <Input id="moving-date" name="movingDate" type="date" placeholder="Preferred Moving Date" className="flex-1" />
               </div>
 
-              <Button type="submit" className="w-full">Get Free Quote!</Button>
+              <Button type="submit" className="w-full bg-red-800 hover:bg-red-900 text-white">Get Free Quote!</Button>
             </form>
           </CardContent>
         </Card>
@@ -326,7 +326,7 @@ const PackersMovers = () => {
                   />
                 </div>
 
-                <Button type="submit" className="w-full h-12 text-base font-semibold bg-red-600 hover:bg-red-700 text-white mt-6">
+                <Button type="submit" className="w-full h-12 text-base font-semibold bg-red-800 hover:bg-red-900 text-white mt-6">
                   Get Free Quote!
                 </Button>
               </form>

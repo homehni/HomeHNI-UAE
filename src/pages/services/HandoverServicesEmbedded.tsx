@@ -278,7 +278,7 @@ const HandoverServicesEmbedded = () => {
                   </Select>
                 </div>
 
-                <Button type="submit" className="w-full h-12 text-base font-semibold bg-red-600 hover:bg-red-700 text-white mt-6">
+                <Button type="submit" className="w-full h-12 text-base font-semibold bg-red-800 hover:bg-red-900 text-white mt-6">
                   Get Expert Assistance!
                 </Button>
               </form>
@@ -577,7 +577,7 @@ const HandoverServicesEmbedded = () => {
                 </Select>
               </div>
 
-              <Button type="submit" className="w-full">Get Expert Assistance!</Button>
+              <Button type="submit" className="w-full bg-red-800 hover:bg-red-900 text-white">Get Expert Assistance!</Button>
             </form>
           </CardContent>
         </Card>

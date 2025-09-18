@@ -300,7 +300,7 @@ export const PagePreview: React.FC<PagePreviewProps> = ({ page, sections = [] })
                 <label className="block text-sm font-medium mb-2">Message</label>
                 <textarea className="w-full p-3 border rounded-lg h-24" placeholder="Tell us how we can help you..."></textarea>
               </div>
-              <Button className="w-full">Send Message</Button>
+              <Button className="w-full bg-red-800 hover:bg-red-900 text-white">Send Message</Button>
             </div>
           </div>
         );

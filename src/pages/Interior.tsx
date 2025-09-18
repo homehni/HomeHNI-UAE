@@ -267,7 +267,7 @@ const Interior = () => {
                 </Select>
               </div>
 
-              <Button type="submit" className="w-full">Get Free Consultation!</Button>
+              <Button type="submit" className="w-full bg-red-800 hover:bg-red-900 text-white">Get Free Consultation!</Button>
             </form>
           </CardContent>
         </Card>
@@ -399,7 +399,7 @@ const Interior = () => {
                   </Select>
                 </div>
 
-                <Button type="submit" className="w-full h-12 text-base font-semibold bg-red-600 hover:bg-red-700 text-white mt-6">
+                <Button type="submit" className="w-full h-12 text-base font-semibold bg-red-800 hover:bg-red-900 text-white mt-6">
                   Get Free Consultation!
                 </Button>
               </form>

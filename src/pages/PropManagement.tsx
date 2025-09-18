@@ -214,7 +214,7 @@ const PropManagement = () => {
                 </SelectContent>
               </Select>
 
-              <Button type="submit" className="w-full">Talk to Us Today!</Button>
+              <Button type="submit" className="w-full bg-red-800 hover:bg-red-900 text-white">Talk to Us Today!</Button>
             </form>
           </CardContent>
         </Card>

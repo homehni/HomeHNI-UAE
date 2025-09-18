@@ -153,6 +153,14 @@ export interface PGHostelAmenities extends PropertyAmenities {
   laundry?: 'included' | 'paid' | 'not-available';
   commonArea?: 'tv-room' | 'study-room' | 'recreation' | 'all';
   cleaning?: 'daily' | 'weekly' | 'self';
+  roomAmenities?: {
+    cupboard?: boolean;
+    geyser?: boolean;
+    tv?: boolean;
+    ac?: boolean;
+    bedding?: boolean;
+    attachedBathroom?: boolean;
+  };
 }
 
 export interface PGHostelInfo {

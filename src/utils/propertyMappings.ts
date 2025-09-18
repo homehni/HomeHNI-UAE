@@ -16,6 +16,7 @@ export const mapBhkType = (bhkType: string): string => {
     '9 BHK': '9bhk',
     '10 BHK': '10bhk',
     'Multiple': 'multiple',
+    'Multiple room types': 'multiple',
     'PG/Hostel': 'pg_hostel'
   };
   
@@ -52,6 +53,7 @@ export const mapPropertyType = (propertyType: string): string => {
     'Industrial/Warehouse': 'warehouse', // Map form value to DB value
     'Showroom': 'showroom',
     'Co-working': 'coworking', // Map form value to DB value
+    'Co-Living': 'coliving', // Map form value to DB value
     'Hospitality/Hotel': 'hotel' // Map form value to DB value
   };
   
@@ -99,7 +101,7 @@ export const validateMappedValues = (data: {
   }
   
   // Validate property type
-  const validPropertyTypes = ['apartment', 'villa', 'independent_house', 'builder_floor', 'studio_apartment', 'penthouse', 'duplex', 'plot', 'studio', 'pg_hostel', 'flatmates', 'commercial', 'office', 'shop', 'warehouse', 'showroom', 'coworking', 'hotel'];
+  const validPropertyTypes = ['apartment', 'villa', 'independent_house', 'builder_floor', 'studio_apartment', 'penthouse', 'duplex', 'plot', 'studio', 'pg_hostel', 'flatmates', 'commercial', 'office', 'shop', 'warehouse', 'showroom', 'coworking', 'coliving', 'hotel'];
   const mappedPropertyType = mapPropertyType(data.propertyType);
   if (!validPropertyTypes.includes(mappedPropertyType)) {
     errors.push(`Invalid property type: ${data.propertyType}`);

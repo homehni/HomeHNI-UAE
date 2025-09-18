@@ -14,6 +14,7 @@ interface CommercialSalePreviewStepProps {
   currentStep: number;
   totalSteps: number;
   isSubmitting: boolean;
+  previewPropertyId?: string;
 }
 
 export const CommercialSalePreviewStep: React.FC<CommercialSalePreviewStepProps> = ({
@@ -23,7 +24,8 @@ export const CommercialSalePreviewStep: React.FC<CommercialSalePreviewStepProps>
   onEdit,
   currentStep,
   totalSteps,
-  isSubmitting
+  isSubmitting,
+  previewPropertyId
 }) => {
   const [showSuccess, setShowSuccess] = useState(false);
   const [showNoPhotosMessage, setShowNoPhotosMessage] = useState(false);
@@ -32,6 +34,16 @@ export const CommercialSalePreviewStep: React.FC<CommercialSalePreviewStepProps>
   const handleSubmit = () => {
     onSubmit();
     setShowSuccess(true);
+  };
+
+  const handlePreviewListing = () => {
+    if (previewPropertyId) {
+      // Open the specific property details page in a new tab
+      window.open(`/property/${previewPropertyId}`, '_blank');
+    } else {
+      // Fallback: open property search in new tab if no ID available
+      window.open('/search', '_blank');
+    }
   };
 
   const hasPhotos = formData.propertyInfo?.gallery?.images && formData.propertyInfo.gallery.images.length > 0;
@@ -53,9 +65,6 @@ export const CommercialSalePreviewStep: React.FC<CommercialSalePreviewStepProps>
               <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                 <Button variant="outline" className="border-green-500 text-green-600 hover:bg-green-50 w-full sm:w-auto">
                   Edit
-                </Button>
-                <Button className="bg-red-600 hover:bg-red-700 w-full sm:w-auto">
-                  Preview Listing
                 </Button>
               </div>
             </div>
@@ -181,16 +190,16 @@ export const CommercialSalePreviewStep: React.FC<CommercialSalePreviewStepProps>
       </div>
 
       {/* Congratulations Section */}
-      <div className="bg-white border border-gray-200 rounded-lg p-4 sm:p-6 mb-4 sm:mb-6">
+      <div className="bg-gradient-to-r from-red-50 to-red-100 border-2 border-red-200 rounded-xl p-4 sm:p-6 mb-4 sm:mb-6 shadow-lg">
         <div className="flex flex-col sm:flex-row items-center gap-4 mb-4">
-          <div className="w-10 h-10 sm:w-12 sm:h-12 bg-orange-100 rounded-full flex items-center justify-center flex-shrink-0">
-            <div className="w-6 h-6 sm:w-8 sm:h-8 bg-orange-500 rounded-full flex items-center justify-center">
-              <span className="text-white text-xs sm:text-sm font-bold">✏</span>
+          <div className="w-12 h-12 sm:w-14 sm:h-14 bg-gradient-to-br from-red-500 to-red-700 rounded-full flex items-center justify-center flex-shrink-0 shadow-md">
+            <div className="w-8 h-8 sm:w-9 sm:h-9 bg-white rounded-full flex items-center justify-center">
+              <span className="text-red-600 text-sm sm:text-base font-bold">✓</span>
             </div>
           </div>
           <div className="text-center sm:text-left">
-            <h2 className="text-lg sm:text-xl font-semibold text-green-600">Congratulations!</h2>
-            <p className="text-sm sm:text-base text-gray-600">Click below to Submit Your Property Or Go back</p>
+            <h2 className="text-lg sm:text-xl font-bold text-red-800 mb-1">Congratulations!</h2>
+            <p className="text-sm sm:text-base text-red-700 font-medium">Your property is submitted successfully!</p>
           </div>
         </div>
         <div className="flex flex-col sm:flex-row gap-3">
@@ -205,11 +214,18 @@ export const CommercialSalePreviewStep: React.FC<CommercialSalePreviewStepProps>
           </Button>
           <Button 
             type="button" 
-            onClick={handleSubmit} 
+            onClick={handlePreviewListing} 
             disabled={isSubmitting}
             className="bg-red-600 hover:bg-red-700 text-white w-full sm:w-auto"
           >
-            {isSubmitting ? 'Submitting...' : 'Submit Listing'}
+            Preview Listing
+          </Button>
+          <Button 
+            type="button" 
+            onClick={() => window.open('/dashboard', '_blank')} 
+            className="bg-blue-600 hover:bg-blue-700 text-white w-full sm:w-auto"
+          >
+            Go to Dashboard
           </Button>
         </div>
       </div>

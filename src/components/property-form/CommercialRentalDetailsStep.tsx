@@ -16,7 +16,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Textarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils';
 import { CommercialRentalDetails } from '@/types/property';
-import { formatPriceDisplay } from '@/utils/priceFormatter';
+import { formatExactPriceDisplay } from '@/utils/priceFormatter';
 
 const commercialRentalDetailsSchema = z.object({
   listingType: z.enum(['Rent']).optional(),
@@ -158,7 +158,7 @@ export const CommercialRentalDetailsStep: React.FC<CommercialRentalDetailsStepPr
                      {field.value && field.value > 0 && (
                        <div className="mt-2">
                          <p className="text-sm text-gray-600">
-                           {formatPriceDisplay(field.value)}
+                           {formatExactPriceDisplay(field.value)}
                          </p>
                        </div>
                      )}
@@ -218,7 +218,7 @@ export const CommercialRentalDetailsStep: React.FC<CommercialRentalDetailsStepPr
                                 {field.value && field.value > 0 && (
                                   <div className="mt-2">
                                     <p className="text-sm text-gray-600">
-                                      {formatPriceDisplay(field.value)}
+                                      {formatExactPriceDisplay(field.value)}
                                     </p>
                                   </div>
                                 )}
@@ -254,7 +254,7 @@ export const CommercialRentalDetailsStep: React.FC<CommercialRentalDetailsStepPr
                       {field.value && field.value > 0 && (
                         <div className="mt-2">
                           <p className="text-sm text-gray-600">
-                            {formatPriceDisplay(field.value)}
+                            {formatExactPriceDisplay(field.value)}
                           </p>
                         </div>
                       )}

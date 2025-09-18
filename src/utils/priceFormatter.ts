@@ -25,3 +25,38 @@ export const formatPriceDisplay = (amount: number | string): string => {
     return `₹ ${numAmount}`;
   }
 };
+
+/**
+ * Formats a number into exact price format without rounding
+ * @param amount - The amount to format
+ * @returns Formatted string with ₹ symbol showing exact amount
+ */
+export const formatExactPriceDisplay = (amount: number | string): string => {
+  const numAmount = typeof amount === 'string' ? parseInt(amount) || 0 : amount || 0;
+  
+  if (numAmount === 0) return '';
+  
+  // Format with Indian number system (lakhs and crores) but show exact amounts
+  if (numAmount >= 10000000) {
+    // Crores (1 Cr = 10,000,000)
+    const crores = numAmount / 10000000;
+    // Use toFixed with more precision to avoid rounding, then trim trailing zeros
+    const croresStr = crores.toFixed(6).replace(/\.?0+$/, '');
+    return `₹ ${croresStr} Cr`;
+  } else if (numAmount >= 100000) {
+    // Lacs (1 Lac = 100,000)
+    const lacs = numAmount / 100000;
+    // Use toFixed with more precision to avoid rounding, then trim trailing zeros
+    const lacsStr = lacs.toFixed(6).replace(/\.?0+$/, '');
+    return `₹ ${lacsStr} Lac`;
+  } else if (numAmount >= 1000) {
+    // Thousands (1k = 1,000)
+    const thousands = numAmount / 1000;
+    // Use toFixed with more precision to avoid rounding, then trim trailing zeros
+    const thousandsStr = thousands.toFixed(6).replace(/\.?0+$/, '');
+    return `₹ ${thousandsStr} k`;
+  } else {
+    // Less than 1000, show as is
+    return `₹ ${numAmount}`;
+  }
+};

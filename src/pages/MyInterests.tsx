@@ -420,7 +420,7 @@ export const MyInterests: React.FC = () => {
                 <p className="text-gray-600 mb-6">
                   Click the ❤️ on any property to save it to your interests.
                 </p>
-                <Button onClick={() => navigate('/property-search')} className="bg-brand-red hover:bg-brand-red-dark text-white">
+                <Button onClick={() => navigate('/property-search')} className="bg-red-800 hover:bg-red-900 text-white">
                   Browse Properties
                 </Button>
               </CardContent>

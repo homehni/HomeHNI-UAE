@@ -830,6 +830,7 @@ export const PostProperty: React.FC = () => {
             isSubmitting={isSubmitting}
             initialOwnerInfo={ownerInfo || {}}
             targetStep={targetStep}
+            createdSubmissionId={lastSubmissionId}
           />
         );
       case 'resale-form':
@@ -849,6 +850,7 @@ export const PostProperty: React.FC = () => {
             isSubmitting={isSubmitting}
             initialOwnerInfo={ownerInfo || {}}
             targetStep={targetStep}
+            createdSubmissionId={lastSubmissionId}
           />
         );
       case 'flatmates-form':
@@ -858,6 +860,7 @@ export const PostProperty: React.FC = () => {
             isSubmitting={isSubmitting}
             initialOwnerInfo={ownerInfo || {}}
             targetStep={targetStep}
+            createdSubmissionId={lastSubmissionId}
           />
         );
       case 'commercial-rental-form':
@@ -867,6 +870,7 @@ export const PostProperty: React.FC = () => {
             isSubmitting={isSubmitting}
             initialOwnerInfo={ownerInfo || {}}
             targetStep={targetStep}
+            createdSubmissionId={lastSubmissionId}
           />
         );
       case 'commercial-sale-form':
@@ -876,6 +880,7 @@ export const PostProperty: React.FC = () => {
             isSubmitting={isSubmitting}
             initialOwnerInfo={ownerInfo || {}}
             targetStep={targetStep}
+            createdSubmissionId={lastSubmissionId}
           />
         );
       case 'land-plot-form':
@@ -885,6 +890,7 @@ export const PostProperty: React.FC = () => {
             isSubmitting={isSubmitting}
             initialOwnerInfo={ownerInfo || {}}
             targetStep={targetStep}
+            createdSubmissionId={lastSubmissionId}
           />
         );
       default:

@@ -18,13 +18,15 @@ interface CommercialMultiStepFormProps {
   isSubmitting?: boolean;
   initialOwnerInfo?: Partial<OwnerInfo>;
   targetStep?: number | null;
+  createdSubmissionId?: string | null;
 }
 
 export const CommercialMultiStepForm: React.FC<CommercialMultiStepFormProps> = ({
   onSubmit,
   isSubmitting = false,
   initialOwnerInfo = {},
-  targetStep = null
+  targetStep = null,
+  createdSubmissionId
 }) => {
   const {
     currentStep,
@@ -202,6 +204,7 @@ const handleScheduleSubmit = (data: ScheduleInfo) => {
             onEdit={goToStep}
             onSubmit={handleSubmit}
             isSubmitting={isSubmitting}
+            previewPropertyId={createdSubmissionId || undefined}
           />
         );
       default:

@@ -269,7 +269,7 @@ const PaintingCleaning = () => {
                 </Select>
               </div>
 
-              <Button type="submit" className="w-full">Talk to Us Today!</Button>
+              <Button type="submit" className="w-full bg-red-800 hover:bg-red-900 text-white">Talk to Us Today!</Button>
             </form>
           </CardContent>
         </Card>
@@ -405,7 +405,7 @@ const PaintingCleaning = () => {
                   </Select>
                 </div>
 
-                <Button type="submit" className="w-full h-14 text-lg font-semibold bg-red-600 hover:bg-red-700 text-white mt-8">
+                <Button type="submit" className="w-full h-14 text-lg font-semibold bg-red-800 hover:bg-red-900 text-white mt-8">
                   Talk to Us Today!
                 </Button>
               </form>

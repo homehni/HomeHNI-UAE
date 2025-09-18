@@ -5,6 +5,7 @@ import { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { LocationDetails } from '@/types/property';
 import { MapPin } from 'lucide-react';
 
@@ -34,10 +35,6 @@ export function PgHostelLocalityDetailsStep({
   totalSteps
 }: PgHostelLocalityDetailsStepProps) {
   const localityInputRef = useRef<HTMLInputElement | null>(null);
-  const mapContainerRef = useRef<HTMLDivElement | null>(null);
-  const mapRef = useRef<any>(null);
-  const markerRef = useRef<any>(null);
-  const [showMap, setShowMap] = useState(false);
 
   const form = useForm<PgHostelLocationData>({
     resolver: zodResolver(pgHostelLocationSchema),
@@ -57,7 +54,7 @@ export function PgHostelLocalityDetailsStep({
     }
   }, [initialData, form]);
 
-  // Google Maps Places Autocomplete and Map preview
+  // Google Maps Places Autocomplete
   useEffect(() => {
     const apiKey = 'AIzaSyD2rlXeHN4cm0CQD-y4YGTsob9a_27YcwY';
 
@@ -81,42 +78,11 @@ export function PgHostelLocalityDetailsStep({
       document.head.appendChild(script);
     });
 
-    const getComponent = (components: any[], type: string) =>
-      components.find((c) => c.types?.includes(type))?.long_name as string | undefined;
-
-    const setMapTo = (lat: number, lng: number, title?: string) => {
-      const google = (window as any).google;
-      if (!google || !mapContainerRef.current) return;
-      if (!mapRef.current) {
-        mapRef.current = new google.maps.Map(mapContainerRef.current, {
-          center: { lat, lng },
-          zoom: 15,
-          mapTypeControl: false,
-          streetViewControl: false,
-          fullscreenControl: false,
-        });
-        markerRef.current = new google.maps.Marker({
-          position: { lat, lng },
-          map: mapRef.current,
-          title: title || 'Selected location',
-        });
-      } else {
-        mapRef.current.setCenter({ lat, lng });
-        if (markerRef.current) {
-          markerRef.current.setPosition({ lat, lng });
-          if (title) markerRef.current.setTitle(title);
-        } else {
-          markerRef.current = new google.maps.Marker({ position: { lat, lng }, map: mapRef.current, title });
-        }
-      }
-      setShowMap(true);
-    };
-
     const initAutocomplete = () => {
       const google = (window as any).google;
       if (!google?.maps?.places) return;
       const options = {
-        fields: ['formatted_address', 'geometry', 'name', 'address_components'],
+        fields: ['formatted_address', 'name', 'address_components'],
         types: ['geocode'],
         componentRestrictions: { country: 'in' as const },
       };
@@ -159,11 +125,7 @@ export function PgHostelLocalityDetailsStep({
           if (state) form.setValue('state', state, { shouldValidate: true });
           if (pincode) form.setValue('pincode', pincode, { shouldValidate: true });
         }
-        
-        const loc = place?.geometry?.location;
-        if (loc) setMapTo(loc.lat(), loc.lng(), place?.name || 'Selected location');
       });
-
     };
 
     loadGoogleMaps().then(initAutocomplete).catch(console.error);
@@ -183,53 +145,84 @@ export function PgHostelLocalityDetailsStep({
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
-      <h1 className="text-2xl font-semibold text-primary mb-6">Location Details</h1>
+    <div className="min-h-screen bg-background">
+      <div className="max-w-4xl mx-auto p-8">
+        <div className="text-center mb-8">
+          <h1 className="text-2xl font-semibold text-primary mb-2">
+            Provide location details
+          </h1>
+        </div>
 
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-          {/* Locality/Area and Landmark */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <FormField
-              control={form.control}
-              name="locality"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-sm font-medium flex items-center gap-2">
-                    <MapPin className="h-4 w-4 text-primary" />
-                    Locality/Area *
-                  </FormLabel>
-                  <FormControl>
-                    <div className="relative">
-                      <Input
-                        placeholder="Search 'Koramangala, Bengaluru'..."
-                        className="h-12 pl-10"
-                        {...field}
-                        ref={(el) => {
-                          field.ref(el)
-                          localityInputRef.current = el
-                        }}
-                      />
-                      <MapPin className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                    </div>
-                  </FormControl>
-                  <p className="text-xs text-red-500 animate-pulse font-bold">
-                    Type the name of the apartment/ the area of property/anything that could help us 😊
-                  </p>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            {/* City and Locality */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <FormField
+                control={form.control}
+                name="city"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-sm font-medium">City*</FormLabel>
+                    <FormControl>
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <SelectTrigger className="h-12">
+                          <SelectValue placeholder="Select city" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="Bangalore">Bangalore</SelectItem>
+                          <SelectItem value="Mumbai">Mumbai</SelectItem>
+                          <SelectItem value="Delhi">Delhi</SelectItem>
+                          <SelectItem value="Chennai">Chennai</SelectItem>
+                          <SelectItem value="Hyderabad">Hyderabad</SelectItem>
+                          <SelectItem value="Pune">Pune</SelectItem>
+                          <SelectItem value="Kolkata">Kolkata</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
+              <FormField
+                control={form.control}
+                name="locality"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-sm font-medium flex items-center gap-2">
+                      <MapPin className="h-4 w-4 text-primary" />
+                      Locality*
+                    </FormLabel>
+                    <FormControl>
+                      <div className="relative">
+                        <Input
+                          placeholder="Enter location / society name"
+                          className="h-12 pl-10"
+                          {...field}
+                          ref={(el) => {
+                            field.ref(el)
+                            localityInputRef.current = el
+                          }}
+                        />
+                        <MapPin className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                      </div>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            {/* Landmark */}
             <FormField
               control={form.control}
               name="landmark"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-sm font-medium">Landmark (Optional)</FormLabel>
+                  <FormLabel className="text-sm font-medium">Landmark / Street*</FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="e.g., Near Metro Station"
+                      placeholder="e.g. Evergreen street"
                       className="h-12"
                       {...field}
                     />
@@ -238,25 +231,19 @@ export function PgHostelLocalityDetailsStep({
                 </FormItem>
               )}
             />
-          </div>
 
-          {showMap && (
-            <div className="w-full h-64 md:h-80 rounded-lg border overflow-hidden">
-              <div ref={mapContainerRef} className="w-full h-full" />
+            {/* Navigation Buttons */}
+            <div className="flex justify-between pt-6">
+              <Button type="button" variant="outline" onClick={onBack} className="h-10 md:h-12 px-4 md:px-8">
+                Back
+              </Button>
+              <Button type="submit" className="h-10 md:h-12 px-4 md:px-8">
+                Save & Continue
+              </Button>
             </div>
-          )}
-
-          {/* Navigation Buttons */}
-          <div className="flex justify-between pt-6">
-            <Button type="button" variant="outline" onClick={onBack} className="h-10 md:h-12 px-4 md:px-8">
-              Back
-            </Button>
-            <Button type="submit" className="h-10 md:h-12 px-4 md:px-8">
-              Save & Continue
-            </Button>
-          </div>
-        </form>
-      </Form>
+          </form>
+        </Form>
+      </div>
     </div>
   );
 }

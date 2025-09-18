@@ -249,7 +249,7 @@ const Careers = () => {
                 </div>
 
 
-                <Button type="submit" className="w-full">Submit Application</Button>
+                <Button type="submit" className="w-full bg-red-800 hover:bg-red-900 text-white">Submit Application</Button>
               </form>
             </CardContent>
           </Card>
@@ -391,7 +391,7 @@ const Careers = () => {
 
                   
 
-                  <Button type="submit" className="w-full h-12 text-base font-semibold bg-red-600 hover:bg-red-700 text-white mt-6">
+                  <Button type="submit" className="w-full h-12 text-base font-semibold bg-red-800 hover:bg-red-900 text-white mt-6">
                     Submit Application
                   </Button>
                 </form>

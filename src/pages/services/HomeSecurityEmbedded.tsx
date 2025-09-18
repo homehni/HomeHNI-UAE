@@ -310,7 +310,7 @@ const HomeSecurityEmbedded = () => {
                   </SelectContent>
                 </Select>
 
-                <Button type="submit" className="w-full">Get Free Security Consultation</Button>
+                <Button type="submit" className="w-full bg-red-800 hover:bg-red-900 text-white">Get Free Security Consultation</Button>
               </form>
             </CardContent>
           </Card>
@@ -425,7 +425,7 @@ const HomeSecurityEmbedded = () => {
                   </SelectContent>
                 </Select>
 
-                <Button type="submit" className="w-full h-12 text-xs md:text-base font-semibold bg-primary text-primary-foreground hover:bg-primary/90">Get Free Security Consultation</Button>
+                <Button type="submit" className="w-full h-12 text-xs md:text-base font-semibold bg-red-800 hover:bg-red-900 text-white">Get Free Security Consultation</Button>
               </form>
             </CardContent>
           </Card>

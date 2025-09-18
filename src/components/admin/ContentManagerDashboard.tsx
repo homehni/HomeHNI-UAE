@@ -677,7 +677,7 @@ export const ContentManagerDashboard: React.FC = () => {
                     </SelectContent>
                   </Select>
                 </div>
-                <Button className="w-full">Create Content</Button>
+                <Button className="w-full bg-red-800 hover:bg-red-900 text-white">Create Content</Button>
               </div>
             </DialogContent>
           </Dialog>

@@ -319,7 +319,7 @@ export const LiveWebsitePreview: React.FC<LiveWebsitePreviewProps> = ({
           )}
 
           <div className="flex justify-center gap-4">
-            <Button variant="default" className="flex items-center gap-2">
+            <Button variant="default" className="flex items-center gap-2 bg-red-800 hover:bg-red-900 text-white">
               <Download className="h-4 w-4" />
               App Store
             </Button>
@@ -376,7 +376,7 @@ export const LiveWebsitePreview: React.FC<LiveWebsitePreviewProps> = ({
               <a href="#" className="text-foreground hover:text-primary">About</a>
               <a href="#" className="text-foreground hover:text-primary">Contact</a>
             </nav>
-            <Button>Sign In</Button>
+            <Button className="bg-red-800 hover:bg-red-900 text-white">Sign In</Button>
           </div>
         </div>
       </header>

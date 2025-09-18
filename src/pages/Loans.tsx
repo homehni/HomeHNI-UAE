@@ -310,7 +310,7 @@ const Loans = () => {
                 <Input id="loan-amount" name="amount" type="number" placeholder="Loan Amount Required" className="flex-1" required />
               </div>
 
-              <Button type="submit" className="w-full">Get Pre-Approved Now!</Button>
+              <Button type="submit" className="w-full bg-red-800 hover:bg-red-900 text-white">Get Pre-Approved Now!</Button>
             </form>
           </CardContent>
         </Card>
@@ -448,7 +448,7 @@ const Loans = () => {
                   />
                 </div>
 
-                <Button type="submit" className="w-full h-14 text-lg font-semibold bg-red-600 hover:bg-red-700 text-white mt-8">
+                <Button type="submit" className="w-full h-14 text-lg font-semibold bg-red-800 hover:bg-red-900 text-white mt-8">
                   Get Pre-Approved Now!
                 </Button>
               </form>

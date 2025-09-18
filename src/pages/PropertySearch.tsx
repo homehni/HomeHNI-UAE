@@ -555,7 +555,7 @@ const PropertySearch = () => {
             <div className="flex justify-center mt-12">
               <div className="flex gap-2">
                 <Button variant="outline" size="sm" disabled>Previous</Button>
-                <Button variant="default" size="sm">1</Button>
+                <Button variant="default" size="sm" className="bg-red-800 hover:bg-red-900 text-white">1</Button>
                 <Button variant="outline" size="sm">2</Button>
                 <Button variant="outline" size="sm">3</Button>
                 <Button variant="outline" size="sm">Next</Button>

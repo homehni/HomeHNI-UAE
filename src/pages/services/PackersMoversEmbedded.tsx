@@ -213,7 +213,7 @@ const PackersMoversEmbedded = () => {
                 </Select>
               </div>
 
-              <Button type="submit" className="w-full">Get Free Moving Quote</Button>
+              <Button type="submit" className="w-full bg-red-800 hover:bg-red-900 text-white">Get Free Moving Quote</Button>
             </form>
           </CardContent>
         </Card>
@@ -289,7 +289,7 @@ const PackersMoversEmbedded = () => {
                   </SelectContent>
                 </Select>
 
-                <Button type="submit" className="w-full h-12 text-base font-semibold">Get Free Moving Quote</Button>
+                <Button type="submit" className="w-full h-12 text-base font-semibold bg-red-800 hover:bg-red-900 text-white">Get Free Moving Quote</Button>
               </form>
             </CardContent>
           </Card>

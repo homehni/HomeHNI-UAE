@@ -7,8 +7,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Card, CardContent } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
-import { Calendar } from 'lucide-react';
-import { formatPriceDisplay } from '@/utils/priceFormatter';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Calendar as CalendarComponent } from '@/components/ui/calendar';
+import { CalendarIcon } from 'lucide-react';
+import { format, addMonths } from 'date-fns';
+import { cn } from '@/lib/utils';
+import { formatExactPriceDisplay } from '@/utils/priceFormatter';
 
 interface FlattmatesRentalDetails {
   expectedRent: number;
@@ -82,7 +86,7 @@ export function FlattmatesRentalDetailsStep({
                     {formData.expectedRent && formData.expectedRent > 0 && (
                       <div className="mt-2">
                         <p className="text-sm text-gray-600">
-                          {formatPriceDisplay(formData.expectedRent)}
+                          {formatExactPriceDisplay(formData.expectedRent)}
                         </p>
                       </div>
                     )}
@@ -101,7 +105,7 @@ export function FlattmatesRentalDetailsStep({
                     {formData.expectedDeposit && formData.expectedDeposit > 0 && (
                       <div className="mt-2">
                         <p className="text-sm text-gray-600">
-                          {formatPriceDisplay(formData.expectedDeposit)}
+                          {formatExactPriceDisplay(formData.expectedDeposit)}
                         </p>
                       </div>
                     )}
@@ -143,18 +147,44 @@ export function FlattmatesRentalDetailsStep({
 
                   <div className="space-y-2">
                     <Label htmlFor="availableFrom">Available From</Label>
-                    <div className="relative">
-                      <Input
-                        id="availableFrom"
-                        type="date"
-                        value={formData.availableFrom}
-                        onChange={(e) => setFormData({ ...formData, availableFrom: e.target.value })}
-                        className="h-12 pr-12"
-                        min={new Date().toISOString().split('T')[0]}
-                        max={new Date(new Date().setMonth(new Date().getMonth() + 2)).toISOString().split('T')[0]}
-                      />
-                      <Calendar className="absolute right-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-                    </div>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant="outline"
+                          className={cn(
+                            "h-12 w-full justify-start text-left font-normal",
+                            !formData.availableFrom && "text-muted-foreground"
+                          )}
+                        >
+                          <CalendarIcon className="mr-2 h-4 w-4" />
+                          {formData.availableFrom ? (
+                            format(new Date(formData.availableFrom), "dd/MM/yyyy")
+                          ) : (
+                            <span>dd/mm/yyyy</span>
+                          )}
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0 bg-white border shadow-lg z-50" align="start">
+                        <CalendarComponent
+                          mode="single"
+                          selected={formData.availableFrom ? new Date(formData.availableFrom) : undefined}
+                          onSelect={(date) => {
+                            setFormData({ 
+                              ...formData, 
+                              availableFrom: date ? format(date, "yyyy-MM-dd") : "" 
+                            });
+                          }}
+                          disabled={(date) => {
+                            const today = new Date();
+                            today.setHours(0, 0, 0, 0);
+                            const maxDate = addMonths(today, 2);
+                            return date < today || date > maxDate;
+                          }}
+                          initialFocus
+                          className="p-3 pointer-events-auto"
+                        />
+                      </PopoverContent>
+                    </Popover>
                   </div>
                 </div>
 
@@ -175,7 +205,7 @@ export function FlattmatesRentalDetailsStep({
                   <Button type="button" variant="white" onClick={onBack}>
                     Back
                   </Button>
-                  <Button type="submit" variant="default">
+                  <Button type="submit" variant="default" className="bg-red-800 hover:bg-red-900 text-white">
                     Save & Continue
                   </Button>
                 </div>

@@ -148,7 +148,7 @@ const CorporateEnquiry = () => {
               <Input name="city" placeholder="City" value={stickyFormData.city} onChange={handleStickyInputChange} className="text-sm" />
               <Input name="employees" type="number" placeholder="Number of Employees" value={stickyFormData.employees} onChange={handleStickyInputChange} className="text-sm" />
             </div>
-            <Button type="submit" className="w-full bg-brand-red hover:bg-brand-red-dark text-sm">
+            <Button type="submit" className="w-full bg-red-800 hover:bg-red-900 text-white text-sm">
               Submit Enquiry
             </Button>
           </form>
@@ -167,7 +167,7 @@ const CorporateEnquiry = () => {
             Partner with us to receive the best prices on a wide range of professional real estate and home services — exclusively for your employees.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-brand-red hover:bg-brand-red-dark" onClick={() => document.getElementById('form')?.scrollIntoView()}>
+            <Button size="lg" className="bg-red-800 hover:bg-red-900 text-white" onClick={() => document.getElementById('form')?.scrollIntoView()}>
               Sign Up for Your Company
             </Button>
             <Button variant="outline" size="lg" onClick={() => document.getElementById('services')?.scrollIntoView()}>
@@ -334,7 +334,7 @@ const CorporateEnquiry = () => {
               <div>
                 <Input name="employees" type="number" placeholder="Number of Employees" value={stickyFormData.employees} onChange={handleStickyInputChange} />
               </div>
-              <Button type="submit" className="w-full bg-brand-red hover:bg-brand-red-dark">
+              <Button type="submit" className="w-full bg-red-800 hover:bg-red-900 text-white">
                 Submit Enquiry
               </Button>
             </form>

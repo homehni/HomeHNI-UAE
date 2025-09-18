@@ -5,13 +5,14 @@ import { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { LocationDetails } from '@/types/property';
 import { ArrowLeft, ArrowRight, MapPin } from 'lucide-react';
 
 const flattmatesLocationSchema = z.object({
-  locality: z.string().optional(),
+  city: z.string().min(1, 'City is required'),
+  locality: z.string().min(1, 'Locality/Area is required'),
   landmark: z.string().optional(),
-  city: z.string().optional(),
   state: z.string().optional(),
   pincode: z.string().optional(),
 });
@@ -42,6 +43,7 @@ export const FlattmatesLocationDetailsStep: React.FC<FlattmatesLocationDetailsSt
   const form = useForm<FlattmatesLocationData>({
     resolver: zodResolver(flattmatesLocationSchema),
     defaultValues: {
+      city: initialData.city || '',
       locality: initialData.locality || '',
       landmark: initialData.landmark || '',
     },
@@ -49,6 +51,9 @@ export const FlattmatesLocationDetailsStep: React.FC<FlattmatesLocationDetailsSt
 
   // Update form values when initialData changes
   useEffect(() => {
+    if (initialData.city) {
+      form.setValue('city', initialData.city);
+    }
     if (initialData.locality) {
       form.setValue('locality', initialData.locality);
     }
@@ -183,62 +188,94 @@ export const FlattmatesLocationDetailsStep: React.FC<FlattmatesLocationDetailsSt
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
-      <h1 className="text-2xl font-semibold text-primary mb-6">Location Details</h1>
+    <div className="space-y-6">
+      <h1 className="text-2xl font-bold text-red-600">Location Details</h1>
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-          {/* Locality/Area and Landmark */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <FormField
-              control={form.control}
-              name="locality"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-sm font-medium flex items-center gap-2">
-                    <MapPin className="h-4 w-4 text-primary" />
-                    Locality/Area *
-                  </FormLabel>
+          {/* City Field */}
+          <FormField
+            control={form.control}
+            name="city"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-sm font-medium text-gray-700">
+                  City *
+                </FormLabel>
+                <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
-                    <div className="relative">
-                      <Input
-                        placeholder="Search 'Sector 12, Noida'..."
-                        className="h-12 pl-10"
-                        {...field}
-                        ref={(el) => {
-                          field.ref(el)
-                          localityInputRef.current = el
-                        }}
-                      />
-                      <MapPin className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                    </div>
+                    <SelectTrigger className="h-12 bg-white z-50">
+                      <SelectValue placeholder="Choose city" />
+                    </SelectTrigger>
                   </FormControl>
-                  <p className="text-xs text-red-500 animate-pulse font-bold">
-                    Type the name of the apartment/ the area of property/anything that could help us 😊
-                  </p>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+                  <SelectContent className="bg-white border border-gray-200 shadow-lg z-[9999]">
+                    <SelectItem value="Bangalore">Bangalore</SelectItem>
+                    <SelectItem value="Mumbai">Mumbai</SelectItem>
+                    <SelectItem value="Pune">Pune</SelectItem>
+                    <SelectItem value="Chennai">Chennai</SelectItem>
+                    <SelectItem value="Gurgaon">Gurgaon</SelectItem>
+                    <SelectItem value="Hyderabad">Hyderabad</SelectItem>
+                    <SelectItem value="Delhi">Delhi</SelectItem>
+                    <SelectItem value="Faridabad">Faridabad</SelectItem>
+                    <SelectItem value="Ghaziabad">Ghaziabad</SelectItem>
+                    <SelectItem value="Noida">Noida</SelectItem>
+                    <SelectItem value="Greater Noida">Greater Noida</SelectItem>
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-            <FormField
-              control={form.control}
-              name="landmark"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-sm font-medium">Landmark (Optional)</FormLabel>
-                  <FormControl>
+          {/* Locality/Area Field */}
+          <FormField
+            control={form.control}
+            name="locality"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-sm font-medium text-gray-700 flex items-center gap-2">
+                  <MapPin className="h-4 w-4 text-red-500" />
+                  Locality/Area *
+                </FormLabel>
+                <FormControl>
+                  <div className="relative">
                     <Input
-                      placeholder="e.g., Near Metro Station"
-                      className="h-12"
+                      placeholder="Search 'Bellandur, Bengaluru, Karnataka'..."
+                      className="h-12 pl-10"
                       {...field}
+                      ref={(el) => {
+                        field.ref(el)
+                        localityInputRef.current = el
+                      }}
                     />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
+                    <MapPin className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                  </div>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          {/* Landmark Field */}
+          <FormField
+            control={form.control}
+            name="landmark"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-sm font-medium text-gray-700">
+                  Landmark (Optional)
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="e.g., Near Metro Station"
+                    className="h-12"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
           {showMap && (
             <div className="w-full h-64 md:h-80 rounded-lg border overflow-hidden">
@@ -248,13 +285,11 @@ export const FlattmatesLocationDetailsStep: React.FC<FlattmatesLocationDetailsSt
 
           {/* Navigation Buttons */}
           <div className="flex justify-between pt-6">
-            <Button type="button" variant="outline" onClick={onBack} className="h-12 px-8">
-              <ArrowLeft className="h-4 w-4 mr-2" />
+            <Button type="button" variant="outline" onClick={onBack} className="h-12 px-8 border-gray-300 text-gray-700 hover:bg-gray-50">
               Back
             </Button>
-            <Button type="submit" className="h-12 px-8">
+            <Button type="submit" className="h-12 px-8 bg-red-600 hover:bg-red-700 text-white">
               Save & Continue
-              <ArrowRight className="h-4 w-4 ml-2" />
             </Button>
           </div>
         </form>

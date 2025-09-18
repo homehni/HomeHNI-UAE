@@ -250,7 +250,7 @@ const InteriorDesignersEmbedded = () => {
                   </Select>
                 </div>
 
-                <Button type="submit" className="w-full h-10 md:h-12 text-sm md:text-base font-semibold bg-red-600 hover:bg-red-700 text-white mt-4 md:mt-6">
+                <Button type="submit" className="w-full h-10 md:h-12 text-sm md:text-base font-semibold bg-red-800 hover:bg-red-900 text-white mt-4 md:mt-6">
                   Get Free Consultation!
                 </Button>
               </form>
@@ -524,7 +524,7 @@ const InteriorDesignersEmbedded = () => {
                 </Select>
               </div>
 
-              <Button type="submit" className="w-full">Get Free Consultation!</Button>
+              <Button type="submit" className="w-full bg-red-800 hover:bg-red-900 text-white">Get Free Consultation!</Button>
             </form>
           </CardContent>
         </Card>

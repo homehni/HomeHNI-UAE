@@ -17,13 +17,15 @@ interface CommercialSaleMultiStepFormProps {
   isSubmitting: boolean;
   initialOwnerInfo?: Partial<OwnerInfo>;
   targetStep?: number | null;
+  createdSubmissionId?: string | null;
 }
 
 export const CommercialSaleMultiStepForm = ({
   onSubmit,
   isSubmitting,
   initialOwnerInfo,
-  targetStep = null
+  targetStep = null,
+  createdSubmissionId
 }: CommercialSaleMultiStepFormProps) => {
   const {
     currentStep,
@@ -194,6 +196,7 @@ const handleScheduleSubmit = async (data: any) => {
             currentStep={currentStep}
             totalSteps={7}
             isSubmitting={isSubmitting}
+            previewPropertyId={createdSubmissionId || undefined}
           />
         );
       default:

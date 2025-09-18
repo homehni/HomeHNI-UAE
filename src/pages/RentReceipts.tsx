@@ -319,7 +319,7 @@ const RentReceipts = () => {
                       </div>
                     </div>
 
-                    <Button type="submit" className="w-full bg-brand-red hover:bg-brand-red-dark text-white">
+                    <Button type="submit" className="w-full bg-red-800 hover:bg-red-900 text-white">
                       <Receipt className="mr-2 h-4 w-4" />
                       Generate Rent Receipt
                     </Button>

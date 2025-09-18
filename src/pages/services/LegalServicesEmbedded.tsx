@@ -77,7 +77,7 @@ const LegalServicesEmbedded = () => {
             <p className="text-xl text-white mb-8 max-w-3xl mx-auto">
               From online rental agreements to tenant verification — all at your doorstep.
             </p>
-            <Button onClick={scrollToContact} size="lg" className="bg-brand-red hover:bg-brand-red-dark text-white px-8 py-3 text-lg">
+            <Button onClick={scrollToContact} size="lg" className="bg-red-800 hover:bg-red-900 text-white px-8 py-3 text-lg">
               Book a Legal Service
               <ArrowRight className="ml-2 h-5 w-5" />
             </Button>

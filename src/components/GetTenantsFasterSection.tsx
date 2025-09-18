@@ -42,7 +42,7 @@ const GetTenantsFasterSection: React.FC = () => {
 
         {/* CTA Button */}
         <div className="pt-4">
-          <Button className="w-full font-medium py-3 rounded-md">
+          <Button className="w-full font-medium py-3 rounded-md bg-red-800 hover:bg-red-900 text-white">
             Show Interest
           </Button>
         </div>

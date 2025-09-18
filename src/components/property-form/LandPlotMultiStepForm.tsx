@@ -19,13 +19,15 @@ interface LandPlotMultiStepFormProps {
   isSubmitting?: boolean;
   initialOwnerInfo?: Partial<OwnerInfo>;
   targetStep?: number | null;
+  createdSubmissionId?: string | null;
 }
 
 export const LandPlotMultiStepForm: React.FC<LandPlotMultiStepFormProps> = ({
   onSubmit,
   isSubmitting = false,
   initialOwnerInfo = {},
-  targetStep = null
+  targetStep = null,
+  createdSubmissionId
 }) => {
   const {
     currentStep,
@@ -247,6 +249,7 @@ export const LandPlotMultiStepForm: React.FC<LandPlotMultiStepFormProps> = ({
                   onEdit={goToStep}
                   onSubmit={handleSubmit}
                   isSubmitting={isSubmitting}
+                  previewPropertyId={createdSubmissionId || undefined}
                 />
               )}
             </div>

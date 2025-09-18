@@ -180,7 +180,7 @@ const ArchitectsEmbedded = () => {
                   <Input id="arch-phone-mobile" name="phone" type="tel" placeholder="Phone Number" className="flex-1 h-10 md:h-12 text-sm md:text-base bg-background" required />
                 </div>
                 <Input id="arch-email-mobile" name="email" type="email" placeholder="Email ID" className="h-10 md:h-12 text-sm md:text-base bg-background" required />
-                <Button type="submit" className="w-full h-10 md:h-12 text-sm md:text-base font-semibold bg-red-600 hover:bg-red-700 text-white mt-4 md:mt-6">
+                <Button type="submit" className="w-full h-10 md:h-12 text-sm md:text-base font-semibold bg-red-800 hover:bg-red-900 text-white mt-4 md:mt-6">
                   Get Free Consultation!
                 </Button>
               </form>
@@ -453,7 +453,7 @@ const ArchitectsEmbedded = () => {
                 </Select>
               </div>
 
-              <Button type="submit" className="w-full">Get Free Consultation!</Button>
+              <Button type="submit" className="w-full bg-red-800 hover:bg-red-900 text-white">Get Free Consultation!</Button>
             </form>
           </CardContent>
         </Card>

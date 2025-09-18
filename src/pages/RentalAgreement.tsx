@@ -264,7 +264,7 @@ const RentalAgreement = () => {
                     Digital copy included
                   </li>
                 </ul>
-                <Button className="w-full bg-brand-red hover:bg-brand-red-dark text-white">
+                <Button className="w-full bg-red-800 hover:bg-red-900 text-white">
                   Check Price for Your City
                 </Button>
               </CardContent>

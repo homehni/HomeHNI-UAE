@@ -15,7 +15,7 @@ import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
 import { RentalDetails } from '@/types/property';
-import { formatPriceDisplay } from '@/utils/priceFormatter';
+import { formatExactPriceDisplay } from '@/utils/priceFormatter';
 
 const rentalDetailsSchema = z.object({
   propertyAvailableFor: z.string().optional(),
@@ -155,7 +155,7 @@ export const RentalDetailsStep: React.FC<RentalDetailsStepProps> = ({
                     {field.value && field.value > 0 && (
                       <div className="mt-2">
                         <p className="text-sm text-gray-600">
-                          {formatPriceDisplay(field.value)}
+                          {formatExactPriceDisplay(field.value)}
                         </p>
                       </div>
                     )}
@@ -209,7 +209,7 @@ export const RentalDetailsStep: React.FC<RentalDetailsStepProps> = ({
                     {field.value && field.value > 0 && (
                       <div className="mt-2">
                         <p className="text-sm text-gray-600">
-                          {formatPriceDisplay(field.value)}
+                          {formatExactPriceDisplay(field.value)}
                         </p>
                       </div>
                     )}
@@ -247,7 +247,7 @@ export const RentalDetailsStep: React.FC<RentalDetailsStepProps> = ({
                     {field.value && field.value > 0 && (
                       <div className="mt-2">
                         <p className="text-sm text-gray-600">
-                          {formatPriceDisplay(field.value)}
+                          {formatExactPriceDisplay(field.value)}
                         </p>
                       </div>
                     )}
@@ -330,7 +330,7 @@ export const RentalDetailsStep: React.FC<RentalDetailsStepProps> = ({
                     {field.value && field.value > 0 && (
                       <div className="mt-2">
                         <p className="text-sm text-gray-600">
-                          {formatPriceDisplay(field.value)}
+                          {formatExactPriceDisplay(field.value)}
                         </p>
                       </div>
                     )}

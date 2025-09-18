@@ -308,7 +308,7 @@ const ServiceSuite = () => {
 
               <CategorizedImageUpload images={serviceImages} onImagesChange={setServiceImages} className="mt-2" />
 
-              <Button type="submit" className="w-full h-9 text-sm">Submit Requirements</Button>
+              <Button type="submit" className="w-full h-9 text-sm bg-red-800 hover:bg-red-900 text-white">Submit Requirements</Button>
             </form>
           </CardContent>
         </Card>
@@ -394,7 +394,7 @@ const ServiceSuite = () => {
 
                 <CategorizedImageUpload images={serviceImages} onImagesChange={setServiceImages} className="mt-3" />
 
-                <Button type="submit" className="w-full h-11 text-sm font-semibold bg-red-600 hover:bg-red-700 text-white mt-4">
+                <Button type="submit" className="w-full h-11 text-sm font-semibold bg-red-800 hover:bg-red-900 text-white mt-4">
                   Submit Requirements
                 </Button>
               </form>
@@ -758,7 +758,7 @@ const ServiceSuite = () => {
                 Whether you're a homeowner, investor, or business owner, we have the right 
                 professionals for all your needs.
                </p>
-               <Button className="bg-red-600 hover:bg-red-700 text-white px-8 py-3 text-lg font-semibold">
+               <Button className="bg-red-800 hover:bg-red-900 text-white px-8 py-3 text-lg font-semibold">
                 Submit Your Requirements Now
                </Button> */}
             </div>
@@ -776,7 +776,7 @@ const ServiceSuite = () => {
             <p className="text-gray-600 mb-6">
               Your service request has been submitted successfully. Our team will review your requirements and get back to you soon.
             </p>
-            <Button onClick={() => setShowThankYouModal(false)} className="bg-red-600 hover:bg-red-700 text-white font-semibold px-8 py-2">
+            <Button onClick={() => setShowThankYouModal(false)} className="bg-red-800 hover:bg-red-900 text-white font-semibold px-8 py-2">
               OK
             </Button>
           </div>
