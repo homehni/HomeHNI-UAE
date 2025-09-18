@@ -97,15 +97,21 @@ const LegalServicesEmbedded = () => {
             </p>
           </div>
           
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 max-w-5xl mx-auto">
+          {/* Mobile: Stack vertically, Tablet: 2 columns with horizontal layout, Desktop: 3 columns */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 max-w-5xl mx-auto">
             {serviceHighlights.map((service, index) => (
-              <Card key={index} className="text-center p-6 hover:shadow-lg transition-shadow border-2 border-primary hover:border-brand-red/20">
-                <CardContent className="pt-6">
-                  <div className="w-16 h-16 bg-brand-red/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <service.icon className="h-8 w-8 text-brand-red" />
+              <Card key={index} className="hover:shadow-lg transition-shadow border-2 border-primary hover:border-brand-red/20 p-4 md:p-6">
+                <CardContent className="pt-4 md:pt-6">
+                  {/* Mobile/Desktop: Centered layout, Tablet: Horizontal layout */}
+                  <div className="flex md:flex-row lg:flex-col items-start md:items-center lg:items-center md:space-x-4 lg:space-x-0">
+                    <div className="w-12 h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 bg-brand-red/10 rounded-full flex items-center justify-center mb-4 md:mb-0 lg:mb-4 flex-shrink-0 mx-auto md:mx-0 lg:mx-auto">
+                      <service.icon className="h-6 w-6 md:h-7 md:w-7 lg:h-8 lg:w-8 text-brand-red" />
+                    </div>
+                    <div className="text-center md:text-left lg:text-center flex-1">
+                      <h3 className="text-lg md:text-xl font-semibold mb-2 md:mb-3">{service.title}</h3>
+                      <p className="text-gray-600 text-sm md:text-base">{service.description}</p>
+                    </div>
                   </div>
-                  <h3 className="text-xl font-semibold mb-3">{service.title}</h3>
-                  <p className="text-gray-600">{service.description}</p>
                 </CardContent>
               </Card>
             ))}
@@ -169,23 +175,29 @@ const LegalServicesEmbedded = () => {
             <p className="text-gray-600">Real experiences from satisfied customers</p>
           </div>
           
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 max-w-5xl mx-auto">
+          {/* Mobile: Stack vertically, Tablet: Single column with larger cards, Desktop: 3 columns */}
+          <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8 max-w-5xl mx-auto">
             {customerReviews.map((review, index) => (
-              <Card key={index} className="p-6">
+              <Card key={index} className="p-4 md:p-8 lg:p-6">
                 <CardContent>
-                  <div className="flex items-center mb-4">
-                    <img src={review.avatar} alt={review.name} className="w-12 h-12 rounded-full mr-4" />
-                    <div>
-                      <h4 className="font-semibold">{review.name}</h4>
-                      <p className="text-sm text-gray-600">{review.location}</p>
+                  {/* Mobile/Desktop: Standard layout, Tablet: Enhanced horizontal layout */}
+                  <div className="flex items-center mb-4 md:mb-6 lg:mb-4">
+                    <img src={review.avatar} alt={review.name} className="w-12 h-12 md:w-16 md:h-16 lg:w-12 lg:h-12 rounded-full mr-4 md:mr-6 lg:mr-4" />
+                    <div className="flex-1">
+                      <div className="flex flex-col md:flex-row md:items-center md:justify-between lg:flex-col lg:items-start">
+                        <div>
+                          <h4 className="font-semibold text-base md:text-lg lg:text-base">{review.name}</h4>
+                          <p className="text-sm md:text-base lg:text-sm text-gray-600">{review.location}</p>
+                        </div>
+                        <div className="flex mt-2 md:mt-0 lg:mt-2">
+                          {[...Array(review.rating)].map((_, i) => (
+                            <Star key={i} className="h-4 w-4 md:h-5 md:w-5 lg:h-4 lg:w-4 text-yellow-400 fill-current" />
+                          ))}
+                        </div>
+                      </div>
                     </div>
                   </div>
-                  <div className="flex mb-3">
-                    {[...Array(review.rating)].map((_, i) => (
-                      <Star key={i} className="h-4 w-4 text-yellow-400 fill-current" />
-                    ))}
-                  </div>
-                  <p className="text-gray-600 italic">"{review.review}"</p>
+                  <p className="text-gray-600 italic text-sm md:text-base lg:text-sm leading-relaxed">"{review.review}"</p>
                 </CardContent>
               </Card>
             ))}
