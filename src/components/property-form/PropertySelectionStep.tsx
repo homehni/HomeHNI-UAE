@@ -58,7 +58,7 @@ export const PropertySelectionStep: React.FC<PropertySelectionStepProps> = ({
         city,
         whatsappUpdates,
         propertyType: selectedPropertyType,
-        listingType: selectedListingType as 'Rent' | 'Resale' | 'PG/Hostel' | 'Flatmates'
+        listingType: selectedListingType as 'Rent' | 'Resale' | 'Sale' | 'PG/Hostel' | 'Flatmates'
       });
     }
   };

@@ -128,9 +128,10 @@ export const CommercialRentalDetailsStep: React.FC<CommercialRentalDetailsStepPr
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
-        <h1 className="text-2xl font-semibold text-primary mb-6">Commercial Rental Details</h1>
+    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
+      <h1 className="text-2xl font-semibold text-teal-600 mb-6">
+        Provide rental details about your commercial property
+      </h1>
         
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -141,19 +142,25 @@ export const CommercialRentalDetailsStep: React.FC<CommercialRentalDetailsStepPr
                 name="expectedPrice"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-sm font-medium">Expected Rent</FormLabel>
-                    <div className="flex items-center space-x-4">
-                       <div className="flex-1">
-                         <FormControl>
-                           <PriceInput 
-                             placeholder="Enter Amount"
-                             className="h-12"
-                             value={field.value}
-                             onChange={field.onChange}
-                           />
-                          </FormControl>
-                        </div>
-                     </div>
+                    <FormLabel className="text-sm font-medium text-gray-900">Expected Rent *</FormLabel>
+                    <FormControl>
+                      <div className="relative">
+                        <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">₹</span>
+                        <Input 
+                          placeholder="Enter Amount"
+                          className="h-12 pl-8 pr-20"
+                          type="number"
+                          min="1"
+                          inputMode="numeric"
+                          pattern="[0-9]*"
+                          onKeyDown={(e) => { if (['-','+','e','E','.'].includes(e.key)) e.preventDefault(); }}
+                          onPaste={(e) => { const text = e.clipboardData.getData('text'); const digits = text.replace(/[^0-9]/g, ''); if (digits !== text) { e.preventDefault(); field.onChange(digits ? Math.max(1, Number(digits)) : undefined); } }}
+                          value={field.value || ''}
+                          onChange={(e) => field.onChange(e.target.value ? Math.max(1, Number(e.target.value)) : undefined)}
+                        />
+                        <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-sm text-gray-500">/ Month</span>
+                      </div>
+                    </FormControl>
                      {/* Price in words display */}
                      {field.value && field.value > 0 && (
                        <div className="mt-2">
@@ -162,7 +169,7 @@ export const CommercialRentalDetailsStep: React.FC<CommercialRentalDetailsStepPr
                          </p>
                        </div>
                      )}
-                    <div className="flex items-center space-x-6 mt-2">
+                    <div className="mt-2">
                       <FormField
                         control={form.control}
                         name="rentNegotiable"
@@ -173,84 +180,130 @@ export const CommercialRentalDetailsStep: React.FC<CommercialRentalDetailsStepPr
                               checked={field.value}
                               onCheckedChange={field.onChange}
                             />
-                            <label htmlFor="rentNegotiable" className="text-sm text-gray-600">Rent Negotiable</label>
-                          </div>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="maintenanceExtra"
-                        render={({ field }) => (
-                          <div className="flex items-center space-x-2">
-                            <Checkbox 
-                              id="maintenanceExtra"
-                              checked={field.value}
-                              onCheckedChange={(checked) => {
-                                field.onChange(checked);
-                                setShowMaintenanceInput(!!checked);
-                                if (!checked) {
-                                  form.setValue('maintenanceCharges', 0);
-                                }
-                              }}
-                            />
-                            <label htmlFor="maintenanceExtra" className="text-sm text-gray-600">Maintenance Extra</label>
+                            <label htmlFor="rentNegotiable" className="text-sm text-gray-600">
+                              Rent Negotiable
+                            </label>
                           </div>
                         )}
                       />
                     </div>
-                    {showMaintenanceInput && (
-                      <div className="mt-4">
-                        <FormField
-                          control={form.control}
-                          name="maintenanceCharges"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel className="text-sm font-medium">Maintenance Amount (₹/month)</FormLabel>
-                               <FormControl>
-                                 <PriceInput 
-                                   placeholder="Enter maintenance amount"
-                                   className="h-12"
-                                   value={field.value}
-                                   onChange={field.onChange}
-                                 />
-                                </FormControl>
-                                {/* Maintenance amount in words display */}
-                                {field.value && field.value > 0 && (
-                                  <div className="mt-2">
-                                    <p className="text-sm text-gray-600">
-                                      {formatExactPriceDisplay(field.value)}
-                                    </p>
-                                  </div>
-                                )}
-                               <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                      </div>
-                    )}
                     <FormMessage />
                   </FormItem>
                 )}
               />
             </div>
 
-            {/* Deposit and Duration */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* Security Deposit */}
+            <FormField
+              control={form.control}
+              name="securityDeposit"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-sm font-medium text-gray-900">Expected Deposit *</FormLabel>
+                  <FormControl>
+                    <div className="relative">
+                      <span className="absolute left-3 top-3 text-gray-500">₹</span>
+                      <Input 
+                        placeholder="Enter Amount"
+                        className="h-12 pl-8"
+                        type="number"
+                        min="1"
+                        inputMode="numeric"
+                        pattern="[0-9]*"
+                        onKeyDown={(e) => { if (['-','+','e','E','.'].includes(e.key)) e.preventDefault(); }}
+                        onPaste={(e) => { const text = e.clipboardData.getData('text'); const digits = text.replace(/[^0-9]/g, ''); if (digits !== text) { e.preventDefault(); field.onChange(digits ? Math.max(1, Number(digits)) : undefined); } }}
+                        value={field.value || ''}
+                        onChange={(e) => field.onChange(e.target.value ? Math.max(1, Number(e.target.value)) : undefined)}
+                      />
+                    </div>
+                  </FormControl>
+                  {/* Security deposit in words display */}
+                  {field.value && field.value > 0 && (
+                    <div className="mt-2">
+                      <p className="text-sm text-gray-600">
+                        {formatExactPriceDisplay(field.value)}
+                      </p>
+                    </div>
+                  )}
+                  <div className="mt-2">
+                    <FormField
+                      control={form.control}
+                      name="depositNegotiable"
+                      render={({ field }) => (
+                        <div className="flex items-center space-x-2">
+                          <Checkbox 
+                            id="depositNegotiable"
+                            checked={field.value}
+                            onCheckedChange={field.onChange}
+                          />
+                          <label htmlFor="depositNegotiable" className="text-sm text-gray-600">
+                            Deposit Negotiable
+                          </label>
+                        </div>
+                      )}
+                    />
+                  </div>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* Monthly Maintenance */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <FormField
                 control={form.control}
-                name="securityDeposit"
+                name="maintenanceExtra"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-sm font-medium">Security Deposit (INR)</FormLabel>
-                     <FormControl>
-                       <PriceInput 
-                         placeholder="Enter Amount"
-                         className="h-12"
-                         value={field.value}
-                         onChange={field.onChange}
-                       />
+                    <FormLabel className="text-sm font-medium text-gray-900">Monthly Maintenance</FormLabel>
+                    <Select onValueChange={(value) => {
+                      field.onChange(value === 'extra');
+                      setShowMaintenanceInput(value === 'extra');
+                      if (value !== 'extra') {
+                        form.setValue('maintenanceCharges', 0);
+                      }
+                    }} defaultValue={field.value ? 'extra' : 'included'}>
+                      <FormControl>
+                        <SelectTrigger className="h-12">
+                          <SelectValue placeholder="Select" />
+                        </SelectTrigger>
                       </FormControl>
-                      {/* Security deposit in words display */}
+                      <SelectContent className="bg-white border shadow-lg z-50">
+                        <SelectItem value="included">Included in Rent</SelectItem>
+                        <SelectItem value="extra">Extra</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {showMaintenanceInput && (
+                <FormField
+                  control={form.control}
+                  name="maintenanceCharges"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-sm font-medium text-gray-900">Maintenance Amount *</FormLabel>
+                      <FormControl>
+                        <div className="relative">
+                          <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">₹</span>
+                          <Input 
+                            placeholder="Enter Amount"
+                            className="h-12 pl-8 pr-20"
+                            type="number"
+                            min="1"
+                            inputMode="numeric"
+                            pattern="[0-9]*"
+                            onKeyDown={(e) => { if (['-','+','e','E','.'].includes(e.key)) e.preventDefault(); }}
+                            onPaste={(e) => { const text = e.clipboardData.getData('text'); const digits = text.replace(/[^0-9]/g, ''); if (digits !== text) { e.preventDefault(); field.onChange(digits ? Math.max(1, Number(digits)) : undefined); } }}
+                            value={field.value || ''}
+                            onChange={(e) => field.onChange(e.target.value ? Math.max(1, Number(e.target.value)) : undefined)}
+                          />
+                          <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-sm text-gray-500">/ Month</span>
+                        </div>
+                      </FormControl>
+                      {/* Maintenance amount in words display */}
                       {field.value && field.value > 0 && (
                         <div className="mt-2">
                           <p className="text-sm text-gray-600">
@@ -258,40 +311,28 @@ export const CommercialRentalDetailsStep: React.FC<CommercialRentalDetailsStepPr
                           </p>
                         </div>
                       )}
-                     <div className="mt-2">
-                      <FormField
-                        control={form.control}
-                        name="depositNegotiable"
-                        render={({ field }) => (
-                          <div className="flex items-center space-x-2">
-                            <Checkbox 
-                              id="depositNegotiable"
-                              checked={field.value}
-                              onCheckedChange={field.onChange}
-                            />
-                            <label htmlFor="depositNegotiable" className="text-sm text-gray-600">Deposit Negotiable</label>
-                          </div>
-                        )}
-                      />
-                    </div>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              )}
+            </div>
 
+            {/* Lease Duration and Lock-in Period */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <FormField
                 control={form.control}
                 name="leaseDuration"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-sm font-medium">Lease Duration (Years)</FormLabel>
+                    <FormLabel className="text-sm font-medium text-gray-900">Lease Duration (Years)</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger className="h-12">
                           <SelectValue placeholder="Lease Duration" />
                         </SelectTrigger>
                       </FormControl>
-                      <SelectContent>
+                      <SelectContent className="bg-white border shadow-lg z-50">
                         <SelectItem value="1">1 Year</SelectItem>
                         <SelectItem value="2">2 Years</SelectItem>
                         <SelectItem value="3">3 Years</SelectItem>
@@ -311,14 +352,14 @@ export const CommercialRentalDetailsStep: React.FC<CommercialRentalDetailsStepPr
                 name="lockinPeriod"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-sm font-medium">Lock-in Period (Years)</FormLabel>
+                    <FormLabel className="text-sm font-medium text-gray-900">Lock-in Period (Years)</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger className="h-12">
                           <SelectValue placeholder="Lock-in Period" />
                         </SelectTrigger>
                       </FormControl>
-                      <SelectContent>
+                      <SelectContent className="bg-white border shadow-lg z-50">
                         <SelectItem value="0">No Lock-in</SelectItem>
                         <SelectItem value="1">1 Year</SelectItem>
                         <SelectItem value="2">2 Years</SelectItem>
@@ -367,31 +408,33 @@ export const CommercialRentalDetailsStep: React.FC<CommercialRentalDetailsStepPr
                 
                 return (
                   <FormItem className="flex flex-col">
-                    <FormLabel className="text-sm font-medium">Available From</FormLabel>
+                    <FormLabel className="text-sm font-medium text-gray-900">Available From *</FormLabel>
                     <Popover open={open} onOpenChange={setOpen}>
                       <PopoverTrigger asChild>
-                      <FormControl>
-                        <Button
-                          variant={"outline"}
-                          className={cn(
-                            "h-12 pl-3 text-left font-normal justify-start",
-                            !field.value && "text-muted-foreground"
-                          )}
-                        >
-                          <CalendarIcon className="mr-2 h-4 w-4" />
-                          {field.value ? format(new Date(field.value), "PPP") : <span>Pick a date</span>}
-                        </Button>
-                      </FormControl>
+                        <FormControl>
+                          <Button
+                            variant={"outline"}
+                            className={cn(
+                              "h-12 pl-3 text-left font-normal justify-start",
+                              !field.value && "text-muted-foreground"
+                            )}
+                          >
+                            <CalendarIcon className="mr-2 h-4 w-4" />
+                            {field.value ? (
+                              format(new Date(field.value), "dd/MM/yyyy")
+                            ) : (
+                              <span>dd/mm/yyyy</span>
+                            )}
+                          </Button>
+                        </FormControl>
                       </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0" align="start">
+                      <PopoverContent className="w-auto p-0 bg-white border shadow-lg z-50" align="start">
                         <Calendar
                           mode="single"
                           selected={field.value ? new Date(field.value) : undefined}
                           onSelect={(date) => {
-                            if (date) {
-                              field.onChange(format(date, "yyyy-MM-dd"));
-                              setOpen(false);
-                            }
+                            field.onChange(date ? format(date, "yyyy-MM-dd") : "");
+                            setOpen(false);
                           }}
                           disabled={(date) => {
                             const today = new Date();
@@ -400,6 +443,7 @@ export const CommercialRentalDetailsStep: React.FC<CommercialRentalDetailsStepPr
                             return date < today || date > maxDate;
                           }}
                           initialFocus
+                          className={cn("p-3 pointer-events-auto")}
                         />
                       </PopoverContent>
                     </Popover>
@@ -410,37 +454,50 @@ export const CommercialRentalDetailsStep: React.FC<CommercialRentalDetailsStepPr
             />
 
             {/* Suitable Business Types */}
-            <div className="space-y-4">
-              <FormLabel className="text-sm font-medium">Suitable Business Types</FormLabel>
-              <div className="flex flex-wrap gap-2">
-                {predefinedBusinessTypes.map((type) => (
-                  <Badge
-                    key={type}
-                    variant={selectedBusinessTypes.includes(type) ? "default" : "outline"}
-                    className="cursor-pointer px-3 py-1"
-                    onClick={() => toggleBusinessType(type)}
-                  >
-                    {type}
-                  </Badge>
-                ))}
-              </div>
-              <div className="flex space-x-2">
-                <Input
-                  placeholder="Add custom business type"
-                  value={customBusinessType}
-                  onChange={(e) => setCustomBusinessType(e.target.value)}
-                  className="flex-1"
-                  onKeyPress={(e) => {
-                    if (e.key === 'Enter') {
-                      e.preventDefault();
-                      addCustomBusinessType();
-                    }
-                  }}
-                />
-                <Button type="button" onClick={addCustomBusinessType} variant="outline">
-                  Add
-                </Button>
-              </div>
+            <div>
+              <h3 className="text-sm font-medium text-gray-900 mb-4">Suitable Business Types*</h3>
+              <FormField
+                control={form.control}
+                name="businessType"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <div className="flex flex-wrap gap-4">
+                        {predefinedBusinessTypes.map((type) => (
+                          <div key={type} className="flex items-center space-x-2">
+                            <Checkbox 
+                              id={type}
+                              checked={selectedBusinessTypes.includes(type)}
+                              onCheckedChange={() => toggleBusinessType(type)}
+                            />
+                            <label htmlFor={type} className="text-sm text-gray-700">
+                              {type}
+                            </label>
+                          </div>
+                        ))}
+                      </div>
+                    </FormControl>
+                    <div className="flex space-x-2 mt-4">
+                      <Input
+                        placeholder="Add custom business type"
+                        value={customBusinessType}
+                        onChange={(e) => setCustomBusinessType(e.target.value)}
+                        className="flex-1"
+                        onKeyPress={(e) => {
+                          if (e.key === 'Enter') {
+                            e.preventDefault();
+                            addCustomBusinessType();
+                          }
+                        }}
+                      />
+                      <Button type="button" onClick={addCustomBusinessType} variant="outline">
+                        Add
+                      </Button>
+                    </div>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </div>
 
             {/* Restricted Activities */}
@@ -497,21 +554,21 @@ export const CommercialRentalDetailsStep: React.FC<CommercialRentalDetailsStepPr
             /> */}
 
             {/* Navigation Buttons */}
-            <div className="flex justify-between pt-6">
+            <div className="flex justify-start gap-4 pt-6">
               <Button 
                 type="button" 
                 variant="outline" 
                 onClick={onBack}
+                className="h-12 px-8"
               >
                 Back
               </Button>
-              <Button type="submit">
+              <Button type="submit" className="h-12 px-8">
                 Save & Continue
               </Button>
             </div>
           </form>
         </Form>
       </div>
-    </div>
   );
 };

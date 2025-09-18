@@ -1,5 +1,5 @@
 import React from 'react';
-import { Building, MapPin, IndianRupee, Sparkles, Camera, FileText, Calendar } from 'lucide-react';
+import { Building, MapPin, IndianRupee, Sparkles, Camera, FileText, Calendar, Home, CheckCircle } from 'lucide-react';
 
 interface CommercialSidebarProps {
   currentStep: number;
@@ -17,113 +17,130 @@ export const CommercialSidebar: React.FC<CommercialSidebarProps> = ({
       id: 2, 
       icon: Building, 
       label: 'Property Details', 
-      description: 'Space type, area, facilities' 
+      completed: completedSteps.includes(2),
+      active: currentStep === 2
     },
     { 
       id: 3, 
       icon: MapPin, 
-      label: 'Location Details', 
-      description: 'Address and locality' 
+      label: 'Locality Details', 
+      completed: completedSteps.includes(3),
+      active: currentStep === 3
     },
     { 
       id: 4, 
       icon: IndianRupee, 
       label: 'Rental Details', 
-      description: 'Rent, deposit, lease terms' 
+      completed: completedSteps.includes(4),
+      active: currentStep === 4
     },
     { 
       id: 5, 
       icon: Sparkles, 
       label: 'Amenities', 
-      description: 'Facilities and features' 
+      completed: completedSteps.includes(5),
+      active: currentStep === 5
     },
     { 
       id: 6, 
       icon: Camera, 
       label: 'Gallery', 
-      description: 'Photos and videos' 
+      completed: completedSteps.includes(6),
+      active: currentStep === 6
     },
     { 
       id: 7, 
-      icon: FileText, 
-      label: 'Additional Info', 
-      description: 'Description and extras' 
-    },
-    { 
-      id: 8, 
       icon: Calendar, 
       label: 'Schedule', 
-      description: 'Viewing schedule' 
+      completed: completedSteps.includes(7),
+      active: currentStep === 7
     },
   ];
 
-  const getStepStatus = (stepId: number) => {
-    if (completedSteps.includes(stepId)) return 'completed';
-    if (stepId === currentStep) return 'current';
-    if (stepId < currentStep) return 'available';
-    return 'upcoming';
-  };
-
-  const getStepClasses = (status: string) => {
-    switch (status) {
-      case 'completed':
-        return 'bg-primary/10 text-primary border-l-4 border-primary cursor-pointer hover:bg-primary/15';
-      case 'current':
-        return 'bg-primary/20 text-primary border-l-4 border-primary';
-      case 'available':
-        return 'text-gray-600 hover:bg-gray-50 cursor-pointer';
-      default:
-        return 'text-gray-400';
-    }
-  };
-
   return (
-    <div className="hidden lg:block w-72 bg-white border-r border-gray-200 min-h-screen">
-      <div className="p-6">
-        <div className="mb-6">
-          <h2 className="text-lg font-semibold text-gray-900">Commercial Property Listing</h2>
-          <p className="text-sm text-gray-600 mt-1">Complete all steps to list your commercial property</p>
+    <div className="w-80 bg-white border-r border-gray-200 h-full p-3 flex-shrink-0">
+      {/* Logo/Header */}
+      <div className="mb-4 p-2">
+        <div className="w-10 h-10 bg-red-500 rounded-lg flex items-center justify-center">
+          <Home className="w-5 h-5 text-white" />
         </div>
-        
-        <nav className="space-y-2">
-          {steps.map((step) => {
-            const Icon = step.icon;
-            const status = getStepStatus(step.id);
-            const isClickable = status === 'completed' || status === 'available';
-            
-            return (
-              <div
-                key={step.id}
-                className={`flex items-start space-x-3 p-3 rounded-lg transition-colors ${getStepClasses(status)}`}
-                onClick={isClickable ? () => onStepClick(step.id) : undefined}
-              >
-                <div className="flex-shrink-0 mt-0.5">
-                  <Icon className="h-5 w-5" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center space-x-2">
-                    <span className="text-sm font-medium">{step.label}</span>
-                    {status === 'completed' && (
-                      <svg className="h-4 w-4 text-primary" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                      </svg>
-                    )}
-                  </div>
-                  <p className="text-xs text-gray-500 mt-1">{step.description}</p>
-                </div>
-              </div>
-            );
-          })}
-        </nav>
+      </div>
 
-        <div className="mt-8 p-4 bg-blue-50 rounded-lg">
-          <h3 className="text-sm font-medium text-blue-900 mb-2">Need Help?</h3>
-          <p className="text-xs text-blue-700 mb-3">
-            Our team can help you list your commercial property with professional photos and descriptions.
-          </p>
-          <button className="text-xs text-blue-600 hover:text-blue-800 font-medium">
-            Get Professional Help →
-          </button>
+      {/* Steps */}
+      <div className="space-y-2">
+        {steps.map((step) => (
+          <div
+            key={step.id}
+            className={`flex items-center gap-2 p-2 rounded-lg transition-all duration-200 ${
+              step.active 
+                ? 'bg-teal-50 border-l-4 border-teal-500' 
+                : step.completed 
+                  ? 'hover:bg-gray-50' 
+                  : 'text-gray-400'
+            }`}
+            onClick={step.completed || step.id <= currentStep ? () => onStepClick(step.id) : undefined}
+          >
+            <div className={`flex items-center justify-center w-7 h-7 rounded-lg ${
+              step.active 
+                ? 'text-teal-600' 
+                : step.completed 
+                  ? 'text-green-600' 
+                  : 'text-gray-400'
+            }`}>
+              {step.completed ? (
+                <CheckCircle className="w-4 h-4" />
+              ) : (
+                <div className="text-sm">
+                  <step.icon className="w-4 h-4" />
+                </div>
+              )}
+            </div>
+            <span className={`text-sm font-medium ${
+              step.active 
+                ? 'text-teal-700' 
+                : step.completed 
+                  ? 'text-gray-700' 
+                  : 'text-gray-400'
+            }`}>
+              {step.label}
+            </span>
+          </div>
+        ))}
+      </div>
+
+      {/* Circular Progress Indicator */}
+      <div className="mt-6 p-4 bg-gray-50 rounded-lg">
+        <div className="flex items-center justify-center">
+          <div className="relative w-20 h-20">
+            <svg className="w-20 h-20 transform -rotate-90" viewBox="0 0 36 36">
+              <path
+                d="M18 2.0845
+                  a 15.9155 15.9155 0 0 1 0 31.831
+                  a 15.9155 15.9155 0 0 1 0 -31.831"
+                fill="none"
+                stroke="#e5e7eb"
+                strokeWidth="2"
+              />
+              <path
+                d="M18 2.0845
+                  a 15.9155 15.9155 0 0 1 0 31.831
+                  a 15.9155 15.9155 0 0 1 0 -31.831"
+                fill="none"
+                stroke="#10b981"
+                strokeWidth="2"
+                strokeDasharray={`${Math.min((currentStep / 6) * 100, 100)}, 100`}
+              />
+            </svg>
+            <div className="absolute inset-0 flex items-center justify-center">
+              <span className="text-lg font-semibold text-gray-700">
+                {Math.min(Math.round((currentStep / 6) * 100), 100)}%
+              </span>
+            </div>
+          </div>
+        </div>
+        <div className="text-center mt-2">
+          <p className="text-xs text-gray-600">Property Score</p>
+          <p className="text-xs text-gray-500">Better your property score, greater your visibility</p>
         </div>
       </div>
     </div>

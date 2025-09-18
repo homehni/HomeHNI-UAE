@@ -24,6 +24,12 @@ export const generatePropertyName = (data: PropertyNameData): string => {
   
   const listingDisplay = listingDisplayMap[listingType] || 'For Sale';
   
+  // Safety check for undefined propertyType
+  if (!propertyType) {
+    console.warn('PropertyType is undefined, using fallback');
+    return `Commercial Space ${listingDisplay}`;
+  }
+  
   // Handle different property types
   switch (propertyType.toLowerCase()) {
     case 'apartment':

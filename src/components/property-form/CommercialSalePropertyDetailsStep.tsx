@@ -11,6 +11,7 @@ import { CommercialPropertyDetails } from '@/types/property';
 
 const commercialSalePropertyDetailsSchema = z.object({
   title: z.string().optional(), // Made optional - will be auto-generated
+  propertyType: z.string().optional(),
   spaceType: z.enum(['office', 'retail', 'warehouse', 'showroom', 'restaurant', 'co-working', 'industrial', 'medical', 'educational']).optional(),
   buildingType: z.string().optional(),
   propertyAge: z.string().optional(),
@@ -49,6 +50,7 @@ export const CommercialSalePropertyDetailsStep = ({
     resolver: zodResolver(commercialSalePropertyDetailsSchema),
     defaultValues: {
       title: initialData?.title || '',
+      propertyType: initialData?.propertyType || 'Commercial',
       spaceType: (initialData?.spaceType as any) || 'office',
       buildingType: initialData?.buildingType || '',
       propertyAge: (initialData as any)?.propertyAge || '',
@@ -82,21 +84,25 @@ export const CommercialSalePropertyDetailsStep = ({
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
-      <h1 className="text-2xl font-semibold text-primary mb-6">Commercial Property Details</h1>
+    <div className="space-y-6">
+      <div className="text-center">
+        <h2 className="text-2xl font-bold text-red-600 mb-2">Commercial Property Details</h2>
+        <p className="text-gray-600">Tell us about your commercial property specifications</p>
+      </div>
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit, onError)} className="space-y-6">
+        <form onSubmit={form.handleSubmit(onSubmit, onError)} className="space-y-4">
           {/* Property Name */}
           <FormField
             control={form.control}
             name="title"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Property Name (Optional)</FormLabel>
+                <FormLabel className="text-sm font-medium">Property Name (Optional)</FormLabel>
                 <FormControl>
                   <Input
                     placeholder="Enter Property Name"
+                    className="h-12"
                     {...field}
                   />
                 </FormControl>
@@ -105,23 +111,24 @@ export const CommercialSalePropertyDetailsStep = ({
             )}
           />
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Space Type and Building Type */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <FormField
               control={form.control}
               name="spaceType"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Space Type</FormLabel>
+                  <FormLabel className="text-sm font-medium">Space Type*</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select space type" />
+                      <SelectTrigger className="h-12">
+                        <SelectValue placeholder="Select" />
                       </SelectTrigger>
                     </FormControl>
-                    <SelectContent>
+                    <SelectContent className="bg-white border shadow-lg z-50">
                       <SelectItem value="office">Office</SelectItem>
                       <SelectItem value="retail">Retail</SelectItem>
-                       <SelectItem value="co-living">Co-Living</SelectItem>
+                      <SelectItem value="co-living">Co-Living</SelectItem>
                       <SelectItem value="warehouse">Warehouse</SelectItem>
                       <SelectItem value="showroom">Showroom</SelectItem>
                       <SelectItem value="restaurant">Restaurant</SelectItem>
@@ -141,14 +148,14 @@ export const CommercialSalePropertyDetailsStep = ({
               name="buildingType"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Building Type</FormLabel>
+                  <FormLabel className="text-sm font-medium">Building Type</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select building type" />
+                      <SelectTrigger className="h-12">
+                        <SelectValue placeholder="Select" />
                       </SelectTrigger>
                     </FormControl>
-                    <SelectContent>
+                    <SelectContent className="bg-white border shadow-lg z-50">
                       <SelectItem value="standalone">Standalone Building</SelectItem>
                       <SelectItem value="mall">Shopping Mall</SelectItem>
                       <SelectItem value="complex">Commercial Complex</SelectItem>
@@ -163,30 +170,33 @@ export const CommercialSalePropertyDetailsStep = ({
             />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Floor Number and Total Floors */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <FormField
               control={form.control}
               name="floorNo"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Floor Number</FormLabel>
+                  <FormLabel className="text-sm font-medium">Floor</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select floor" />
+                      <SelectTrigger className="h-12">
+                        <SelectValue placeholder="Select" />
                       </SelectTrigger>
                     </FormControl>
-                    <SelectContent>
+                    <SelectContent className="bg-white border shadow-lg z-50">
+                      <SelectItem value="lower">Lower Basement</SelectItem>
+                      <SelectItem value="upper">Upper Basement</SelectItem>
                       <SelectItem value="0">Ground Floor</SelectItem>
-                      {Array.from({ length: 99 }, (_, i) => i + 1).map(floor => (
-                        <SelectItem key={floor} value={floor.toString()}>
-                          {floor === 1 ? '1st Floor' : 
-                           floor === 2 ? '2nd Floor' : 
-                           floor === 3 ? '3rd Floor' : 
-                           `${floor}th Floor`}
-                        </SelectItem>
-                      ))}
-                      <SelectItem value="100">99+ Floor</SelectItem>
+                      {[...Array(50)].map((_, i) => {
+                        const floor = i + 1;
+                        return (
+                          <SelectItem key={floor} value={floor.toString()}>
+                            {floor}
+                          </SelectItem>
+                        );
+                      })}
+                      <SelectItem value="99+">50+</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />
@@ -199,20 +209,23 @@ export const CommercialSalePropertyDetailsStep = ({
               name="totalFloors"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Total Floors</FormLabel>
+                  <FormLabel className="text-sm font-medium">Total Floor</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select total floors" />
+                      <SelectTrigger className="h-12">
+                        <SelectValue placeholder="Select" />
                       </SelectTrigger>
                     </FormControl>
-                    <SelectContent>
-                      {Array.from({ length: 99 }, (_, i) => i + 1).map(floors => (
-                        <SelectItem key={floors} value={floors.toString()}>
-                          {floors} Floor{floors > 1 ? 's' : ''}
-                        </SelectItem>
-                      ))}
-                      <SelectItem value="100">99+ Floors</SelectItem>
+                    <SelectContent className="bg-white border shadow-lg z-50">
+                      {[...Array(50)].map((_, i) => {
+                        const floor = i + 1;
+                        return (
+                          <SelectItem key={floor} value={floor.toString()}>
+                            {floor}
+                          </SelectItem>
+                        );
+                      })}
+                      <SelectItem value="99+">50+</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />
@@ -221,25 +234,32 @@ export const CommercialSalePropertyDetailsStep = ({
             />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Super Built-up Area and Furnishing Status */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <FormField
               control={form.control}
               name="superBuiltUpArea"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Super Built-up Area (sq ft)</FormLabel>
-                  <FormControl>
-                    <Input 
-                      type="number" 
-                      placeholder="e.g., 2000" 
-                      min="1"
-                      {...field}
-                      onKeyDown={(e) => { if (['-','+','e','E','.'].includes(e.key)) e.preventDefault(); }}
-                      onPaste={(e) => { const text = e.clipboardData.getData('text'); const digits = text.replace(/[^0-9]/g, ''); if (digits !== text) { e.preventDefault(); field.onChange(digits ? Math.max(1, Number(digits)) : undefined); } }}
-                      value={field.value || ''}
-                      onChange={(e) => field.onChange(e.target.value ? Math.max(1, Number(e.target.value)) : undefined)}
-                    />
-                  </FormControl>
+                  <FormLabel className="text-sm font-medium">Super Built-up Area</FormLabel>
+                  <div className="relative">
+                    <FormControl>
+                      <Input
+                        type="number"
+                        placeholder="Super Built-up Area"
+                        min="1"
+                        className="h-12 pr-12"
+                        {...field}
+                        onKeyDown={(e) => { if (['-','+','e','E','.'].includes(e.key)) e.preventDefault(); }}
+                        onPaste={(e) => { const text = e.clipboardData.getData('text'); const digits = text.replace(/[^0-9]/g, ''); if (digits !== text) { e.preventDefault(); field.onChange(digits ? Math.max(1, Number(digits)) : undefined); } }}
+                        value={field.value || ''}
+                        onChange={(e) => field.onChange(e.target.value ? Math.max(1, Number(e.target.value)) : undefined)}
+                      />
+                    </FormControl>
+                    <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-sm text-gray-500">
+                      Sq.ft
+                    </div>
+                  </div>
                   <FormMessage />
                 </FormItem>
               )}
@@ -250,14 +270,14 @@ export const CommercialSalePropertyDetailsStep = ({
               name="furnishingStatus"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Furnishing Status</FormLabel>
+                  <FormLabel className="text-sm font-medium">Furnishing Status</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select furnishing" />
+                      <SelectTrigger className="h-12">
+                        <SelectValue placeholder="Select" />
                       </SelectTrigger>
                     </FormControl>
-                    <SelectContent>
+                    <SelectContent className="bg-white border shadow-lg z-50">
                       <SelectItem value="unfurnished">Unfurnished</SelectItem>
                       <SelectItem value="semi-furnished">Semi Furnished</SelectItem>
                       <SelectItem value="furnished">Furnished</SelectItem>
@@ -269,39 +289,10 @@ export const CommercialSalePropertyDetailsStep = ({
             />
           </div>
 
-          <div className="space-y-4">
-            <h3 className="text-lg font-medium">Additional Features</h3>
-            <div className="flex flex-wrap gap-3">
-              <Badge
-                variant={onMainRoad ? "default" : "outline"}
-                className="cursor-pointer px-4 py-2"
-                onClick={() => setOnMainRoad(!onMainRoad)}
-              >
-                On Main Road
-              </Badge>
-              <Badge
-                variant={cornerProperty ? "default" : "outline"}
-                className="cursor-pointer px-4 py-2"
-                onClick={() => setCornerProperty(!cornerProperty)}
-              >
-                Corner Property
-              </Badge>
-              <Badge
-                variant={loadingFacility ? "default" : "outline"}
-                className="cursor-pointer px-4 py-2"
-                onClick={() => setLoadingFacility(!loadingFacility)}
-              >
-                Loading Facility
-              </Badge>
-            </div>
-          </div>
-
-          <div className="flex justify-between pt-6">
-            <Button type="button" variant="outline" onClick={onBack}>
-              Back
-            </Button>
-            <Button type="submit">
-              Save & Continue
+          {/* Navigation Buttons */}
+          <div className="flex justify-end pt-4">
+            <Button type="submit" variant="destructive" className="h-12 px-8 bg-red-800 hover:bg-red-900">
+              Next Step
             </Button>
           </div>
         </form>

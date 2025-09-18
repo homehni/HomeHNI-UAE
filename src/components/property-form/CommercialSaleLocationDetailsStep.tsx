@@ -5,13 +5,14 @@ import { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { LocationDetails } from '@/types/property';
 import { ArrowLeft, ArrowRight, MapPin } from 'lucide-react';
 
 const commercialSaleLocationDetailsSchema = z.object({
+  city: z.string().min(1, "City is required"),
   locality: z.string().optional(),
   landmark: z.string().optional(),
-  city: z.string().optional(),
   state: z.string().optional(),
   pincode: z.string().optional(),
 });
@@ -42,9 +43,9 @@ export const CommercialSaleLocationDetailsStep: React.FC<CommercialSaleLocationD
   const form = useForm<CommercialSaleLocationDetailsForm>({
     resolver: zodResolver(commercialSaleLocationDetailsSchema),
     defaultValues: {
+      city: initialData.city || '',
       locality: initialData.locality || '',
       landmark: initialData.landmark || '',
-      city: initialData.city || '',
       state: initialData.state || '',
       pincode: initialData.pincode || '',
     },
@@ -52,11 +53,20 @@ export const CommercialSaleLocationDetailsStep: React.FC<CommercialSaleLocationD
 
   // Update form values when initialData changes
   useEffect(() => {
+    if (initialData.city) {
+      form.setValue('city', initialData.city);
+    }
     if (initialData.locality) {
       form.setValue('locality', initialData.locality);
     }
     if (initialData.landmark) {
       form.setValue('landmark', initialData.landmark);
+    }
+    if (initialData.state) {
+      form.setValue('state', initialData.state);
+    }
+    if (initialData.pincode) {
+      form.setValue('pincode', initialData.pincode);
     }
   }, [initialData, form]);
 
@@ -187,10 +197,42 @@ export const CommercialSaleLocationDetailsStep: React.FC<CommercialSaleLocationD
 
   return (
     <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
-      <h1 className="text-2xl font-semibold text-primary mb-6">Commercial Sale Location Details</h1>
+      <h1 className="text-2xl font-semibold text-red-600 mb-6">Location Details</h1>
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          {/* City Selection */}
+          <FormField
+            control={form.control}
+            name="city"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-sm font-medium">City *</FormLabel>
+                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <FormControl>
+                    <SelectTrigger className="h-12 bg-white z-50">
+                      <SelectValue placeholder="Choose city" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent className="bg-white border border-gray-200 shadow-lg z-[9999]">
+                    <SelectItem value="Bangalore">Bangalore</SelectItem>
+                    <SelectItem value="Mumbai">Mumbai</SelectItem>
+                    <SelectItem value="Pune">Pune</SelectItem>
+                    <SelectItem value="Chennai">Chennai</SelectItem>
+                    <SelectItem value="Gurgaon">Gurgaon</SelectItem>
+                    <SelectItem value="Hyderabad">Hyderabad</SelectItem>
+                    <SelectItem value="Delhi">Delhi</SelectItem>
+                    <SelectItem value="Faridabad">Faridabad</SelectItem>
+                    <SelectItem value="Ghaziabad">Ghaziabad</SelectItem>
+                    <SelectItem value="Noida">Noida</SelectItem>
+                    <SelectItem value="Greater Noida">Greater Noida</SelectItem>
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
           {/* Locality/Area and Landmark */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <FormField
@@ -205,7 +247,7 @@ export const CommercialSaleLocationDetailsStep: React.FC<CommercialSaleLocationD
                   <FormControl>
                     <div className="relative">
                       <Input
-                        placeholder="Search 'Connaught Place, New Delhi'..."
+                        placeholder="Search 'Bellandur, Bengaluru, Karnataka'..."
                         className="h-12 pl-10"
                         {...field}
                         ref={(el) => {
@@ -216,9 +258,6 @@ export const CommercialSaleLocationDetailsStep: React.FC<CommercialSaleLocationD
                       <MapPin className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                     </div>
                   </FormControl>
-                  <p className="text-xs text-red-500 animate-pulse font-bold">
-                    Type the name of the apartment/ the area of property/anything that could help us 😊
-                  </p>
                   <FormMessage />
                 </FormItem>
               )}

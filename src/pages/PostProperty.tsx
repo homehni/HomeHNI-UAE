@@ -247,7 +247,7 @@ export const PostProperty: React.FC = () => {
     if (data.propertyType === 'Commercial') {
       if (data.listingType === 'Rent') {
         setCurrentStep('commercial-rental-form');
-      } else if (data.listingType === 'Resale') {
+      } else if (data.listingType === 'Sale') {
         setCurrentStep('commercial-sale-form');
       }
     } else {
@@ -362,7 +362,8 @@ export const PostProperty: React.FC = () => {
       const mappingValidation = validateMappedValues({
         bhkType: ('propertyDetails' in data.propertyInfo && 'bhkType' in data.propertyInfo.propertyDetails) ? data.propertyInfo.propertyDetails.bhkType : null,
         propertyType: ('propertyDetails' in data.propertyInfo) ? data.propertyInfo.propertyDetails.propertyType : 
-                     ('plotDetails' in data.propertyInfo) ? data.propertyInfo.plotDetails.propertyType : 'Commercial',
+                     ('plotDetails' in data.propertyInfo) ? data.propertyInfo.plotDetails.propertyType : 
+                     ('saleDetails' in data.propertyInfo) ? 'Commercial' : 'Commercial',
         listingType: listingType || 'Sale'
       });
 
@@ -380,14 +381,16 @@ export const PostProperty: React.FC = () => {
             ? (data.propertyInfo as any).pgDetails.expectedPrice
             : ('flattmatesDetails' in data.propertyInfo)
               ? (data.propertyInfo as any).flattmatesDetails.expectedPrice
-              : undefined;
+              : ('commercialSaleDetails' in data.propertyInfo)
+                ? (data.propertyInfo as any).commercialSaleDetails.expectedPrice
+                : undefined;
 
       const normalizedPropertyInfo = {
         propertyDetails: {
           title: ('propertyDetails' in data.propertyInfo) ? data.propertyInfo.propertyDetails.title : 
                  ('plotDetails' in data.propertyInfo) ? data.propertyInfo.plotDetails.title : '',
           propertyType: ('propertyDetails' in data.propertyInfo) ? data.propertyInfo.propertyDetails.propertyType : 
-                       ('plotDetails' in data.propertyInfo) ? data.propertyInfo.plotDetails.propertyType : '',
+                       ('plotDetails' in data.propertyInfo) ? data.propertyInfo.plotDetails.propertyType : 'Commercial',
           superBuiltUpArea: ('propertyDetails' in data.propertyInfo) ? Number(data.propertyInfo.propertyDetails.superBuiltUpArea) :
                            ('plotDetails' in data.propertyInfo) ? Number((data.propertyInfo as any).plotDetails.plotArea) : 0,
           bathrooms: ('amenities' in data.propertyInfo) ? Number((data.propertyInfo as any).amenities.bathrooms) || 0 : 0,

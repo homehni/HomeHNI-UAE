@@ -65,7 +65,9 @@ export const CommercialSaleSaleDetailsStep = ({
 
   return (
     <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
-      <h1 className="text-2xl font-semibold text-primary mb-6">Commercial Sale Details</h1>
+      <h1 className="text-2xl font-semibold text-teal-600 mb-6">
+        Provide sale details about your commercial property
+      </h1>
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -75,23 +77,51 @@ export const CommercialSaleSaleDetailsStep = ({
               name="expectedPrice"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Expected Price (₹)</FormLabel>
+                  <FormLabel className="text-sm font-medium text-gray-900">Expected Price (₹) *</FormLabel>
                   <FormControl>
-                    <PriceInput 
-                      placeholder="Enter Amount" 
-                      value={field.value}
-                      onChange={field.onChange}
+                    <div className="relative">
+                      <span className="absolute left-3 top-3 text-gray-500">₹</span>
+                      <Input 
+                        placeholder="Enter Amount"
+                        className="h-12 pl-8"
+                        type="number"
+                        min="1"
+                        inputMode="numeric"
+                        pattern="[0-9]*"
+                        onKeyDown={(e) => { if (['-','+','e','E','.'].includes(e.key)) e.preventDefault(); }}
+                        onPaste={(e) => { const text = e.clipboardData.getData('text'); const digits = text.replace(/[^0-9]/g, ''); if (digits !== text) { e.preventDefault(); field.onChange(digits ? Math.max(1, Number(digits)) : undefined); } }}
+                        value={field.value || ''}
+                        onChange={(e) => field.onChange(e.target.value ? Math.max(1, Number(e.target.value)) : undefined)}
+                      />
+                    </div>
+                  </FormControl>
+                  {/* Price in words display */}
+                  {field.value && field.value > 0 && (
+                    <div className="mt-2">
+                      <p className="text-sm text-gray-600">
+                        {formatPriceDisplay(field.value)}
+                      </p>
+                    </div>
+                  )}
+                  <div className="mt-2">
+                    <FormField
+                      control={form.control}
+                      name="priceNegotiable"
+                      render={({ field }) => (
+                        <div className="flex items-center space-x-2">
+                          <Checkbox 
+                            id="priceNegotiable"
+                            checked={field.value}
+                            onCheckedChange={field.onChange}
+                          />
+                          <label htmlFor="priceNegotiable" className="text-sm text-gray-600">
+                            Price Negotiable
+                          </label>
+                        </div>
+                      )}
                     />
-                   </FormControl>
-                   {/* Price in words display */}
-                   {field.value && field.value > 0 && (
-                     <div className="mt-2">
-                       <p className="text-sm text-gray-600">
-                         {formatPriceDisplay(field.value)}
-                       </p>
-                     </div>
-                   )}
-                   <FormMessage />
+                  </div>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -101,14 +131,14 @@ export const CommercialSaleSaleDetailsStep = ({
               name="ownershipType"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Ownership Type</FormLabel>
+                  <FormLabel className="text-sm font-medium text-gray-900">Ownership Type</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select ownership type" />
+                      <SelectTrigger className="h-12">
+                        <SelectValue placeholder="Select" />
                       </SelectTrigger>
                     </FormControl>
-                    <SelectContent>
+                    <SelectContent className="bg-white border shadow-lg z-50">
                       <SelectItem value="freehold">Freehold</SelectItem>
                       <SelectItem value="leasehold">Leasehold</SelectItem>
                       <SelectItem value="cooperative">Cooperative Society</SelectItem>
@@ -121,70 +151,39 @@ export const CommercialSaleSaleDetailsStep = ({
             />
           </div>
 
+
+          {/* Possession Date */}
           <FormField
             control={form.control}
-            name="priceNegotiable"
-            render={({ field }) => (
-              <FormItem className="flex flex-row items-start space-x-3 space-y-0">
-                <FormControl>
-                  <Checkbox
-                    checked={field.value}
-                    onCheckedChange={field.onChange}
-                  />
-                </FormControl>
-                <div className="space-y-1 leading-none">
-                  <FormLabel>Price Negotiable</FormLabel>
-                </div>
-              </FormItem>
-            )}
-          />
-
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <FormField
-              control={form.control}
-              name="possessionDate"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Possession Date</FormLabel>
-                  <FormControl>
-                    <Input 
-                      type="date" 
-                      {...field} 
-                      min={new Date().toISOString().split('T')[0]}
-                      max={new Date(new Date().setMonth(new Date().getMonth() + 6)).toISOString().split('T')[0]}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-
-
-          {/* <FormField
-            control={form.control}
-            name="operatingHours"
+            name="possessionDate"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Preferred Operating Hours</FormLabel>
+                <FormLabel className="text-sm font-medium text-gray-900">Possession Date</FormLabel>
                 <FormControl>
-                  <Input placeholder="e.g., 9 AM to 9 PM" {...field} />
+                  <Input 
+                    type="date" 
+                    className="h-12"
+                    {...field} 
+                    min={new Date().toISOString().split('T')[0]}
+                    max={new Date(new Date().setMonth(new Date().getMonth() + 6)).toISOString().split('T')[0]}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
-          /> */}
+          />
 
+          {/* Suitable Business Types */}
           <FormField
             control={form.control}
             name="businessType"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Suitable Business Types (Optional)</FormLabel>
+                <FormLabel className="text-sm font-medium text-gray-900">Suitable Business Types (Optional)</FormLabel>
                 <FormControl>
                   <Textarea 
                     placeholder="e.g., Retail, Office, Restaurant, etc. (comma separated)"
+                    className="min-h-[100px]"
                     value={field.value?.join(', ') || ''}
                     onChange={(e) => field.onChange(e.target.value.split(',').map(s => s.trim()).filter(Boolean))}
                   />
@@ -270,11 +269,17 @@ export const CommercialSaleSaleDetailsStep = ({
             />
           </div> */}
 
-          <div className="flex justify-between pt-6">
-            <Button type="button" variant="outline" onClick={onBack}>
+          {/* Navigation Buttons */}
+          <div className="flex justify-start gap-4 pt-6">
+            <Button 
+              type="button" 
+              variant="outline" 
+              onClick={onBack}
+              className="h-12 px-8"
+            >
               Back
             </Button>
-            <Button type="submit">
+            <Button type="submit" className="h-12 px-8">
               Save & Continue
             </Button>
           </div>

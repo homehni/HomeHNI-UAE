@@ -51,19 +51,38 @@ export const PreviewStep: React.FC<PreviewStepProps> = ({
     return (
       <div className="w-full px-4 sm:px-6 lg:px-8 space-y-6 lg:space-y-8">
         {/* Success Message */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 sm:p-6 lg:p-8">
+        <div className="bg-red-50 border border-red-200 rounded-lg shadow-sm p-4 sm:p-6 lg:p-8">
           <div className="flex flex-col sm:flex-row items-start gap-4 sm:gap-6">
-            <div className="w-12 h-12 sm:w-16 sm:h-16 bg-orange-100 rounded-full flex items-center justify-center flex-shrink-0 mx-auto sm:mx-0">
-              <Edit className="w-6 h-6 sm:w-8 sm:h-8 text-orange-600" />
+            <div className="w-12 h-12 sm:w-16 sm:h-16 bg-red-500 rounded-full flex items-center justify-center flex-shrink-0 mx-auto sm:mx-0">
+              <div className="w-6 h-6 sm:w-8 sm:h-8 bg-white rounded-full flex items-center justify-center">
+                <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-red-500" />
+              </div>
             </div>
             <div className="flex-1 text-center sm:text-left">
-              <h1 className="text-2xl sm:text-3xl font-bold text-green-600 mb-2">Congratulations!</h1>
-              <p className="text-base sm:text-lg text-gray-700 mb-4 sm:mb-6">
-                You have successfully posted your property, it will be live within 12 Hrs.
+              <h1 className="text-2xl sm:text-3xl font-bold text-red-600 mb-2">Congratulations!</h1>
+              <p className="text-base sm:text-lg text-red-600 mb-4 sm:mb-6">
+                Your property is submitted successfully!
               </p>
               <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-                <Button variant="outline" className="border-green-500 text-green-600 hover:bg-green-50 w-full sm:w-auto">
-                  Edit
+                <Button 
+                  variant="outline" 
+                  className="border-red-500 text-red-600 hover:bg-red-50 w-full sm:w-auto"
+                  onClick={() => onEdit && onEdit(2)}
+                >
+                  <ArrowLeft className="h-4 w-4 mr-2" />
+                  Edit Property
+                </Button>
+                <Button 
+                  className="bg-red-600 hover:bg-red-700 text-white w-full sm:w-auto"
+                  onClick={handlePreviewListing}
+                >
+                  Preview Listing
+                </Button>
+                <Button 
+                  className="bg-blue-600 hover:bg-blue-700 text-white w-full sm:w-auto"
+                  onClick={() => navigate('/dashboard')}
+                >
+                  Go to Dashboard
                 </Button>
               </div>
             </div>

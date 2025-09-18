@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { 
   OwnerInfo, 
   CommercialPropertyDetails, 
@@ -28,57 +28,57 @@ export const useCommercialSalePropertyForm = () => {
     availableAllDay: true
   });
 
-  const nextStep = () => {
+  const nextStep = useCallback(() => {
     if (currentStep < 9) {
       setCurrentStep(currentStep + 1);
     }
-  };
+  }, [currentStep]);
 
-  const prevStep = () => {
+  const prevStep = useCallback(() => {
     if (currentStep > 2) { // Don't go below step 2 since we skip owner info step
       setCurrentStep(currentStep - 1);
     }
-  };
+  }, [currentStep]);
 
-  const goToStep = (step: number) => {
+  const goToStep = useCallback((step: number) => {
     if (step >= 2 && step <= 9) { // Valid steps are 2-9
       setCurrentStep(step);
     }
-  };
+  }, []);
 
-  const updateOwnerInfo = (data: Partial<OwnerInfo>) => {
+  const updateOwnerInfo = useCallback((data: Partial<OwnerInfo>) => {
     setOwnerInfo(prev => ({ ...prev, ...data }));
-  };
+  }, []);
 
-  const updatePropertyDetails = (data: Partial<CommercialPropertyDetails>) => {
+  const updatePropertyDetails = useCallback((data: Partial<CommercialPropertyDetails>) => {
     setPropertyDetails(prev => ({ ...prev, ...data }));
-  };
+  }, []);
 
-  const updateLocationDetails = (data: Partial<LocationDetails>) => {
+  const updateLocationDetails = useCallback((data: Partial<LocationDetails>) => {
     setLocationDetails(prev => ({ ...prev, ...data }));
-  };
+  }, []);
 
-  const updateSaleDetails = (data: Partial<CommercialSaleDetails>) => {
+  const updateSaleDetails = useCallback((data: Partial<CommercialSaleDetails>) => {
     setSaleDetails(prev => ({ ...prev, ...data }));
-  };
+  }, []);
 
-  const updateAmenities = (data: Partial<CommercialAmenities>) => {
+  const updateAmenities = useCallback((data: Partial<CommercialAmenities>) => {
     setAmenities(prev => ({ ...prev, ...data }));
-  };
+  }, []);
 
-  const updateGallery = (data: Partial<PropertyGallery>) => {
+  const updateGallery = useCallback((data: Partial<PropertyGallery>) => {
     setGallery(prev => ({ ...prev, ...data }));
-  };
+  }, []);
 
-  const updateAdditionalInfo = (data: Partial<AdditionalInfo>) => {
+  const updateAdditionalInfo = useCallback((data: Partial<AdditionalInfo>) => {
     setAdditionalInfo(prev => ({ ...prev, ...data }));
-  };
+  }, []);
 
-  const updateScheduleInfo = (data: Partial<ScheduleInfo>) => {
+  const updateScheduleInfo = useCallback((data: Partial<ScheduleInfo>) => {
     setScheduleInfo(prev => ({ ...prev, ...data }));
-  };
+  }, []);
 
-  const getFormData = () => ({
+  const getFormData = useCallback(() => ({
     ownerInfo,
     propertyInfo: {
       propertyDetails,
@@ -89,12 +89,12 @@ export const useCommercialSalePropertyForm = () => {
       additionalInfo,
       scheduleInfo
     }
-  });
+  }), [ownerInfo, propertyDetails, locationDetails, saleDetails, amenities, gallery, additionalInfo, scheduleInfo]);
 
-  const isStepValid = (step: number): boolean => {
+  const isStepValid = useCallback((step: number): boolean => {
     // All steps are optional now
     return true;
-  };
+  }, []);
 
   return {
     currentStep,
