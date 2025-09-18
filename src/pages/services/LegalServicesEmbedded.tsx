@@ -97,7 +97,7 @@ const LegalServicesEmbedded = () => {
             </p>
           </div>
           
-          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 max-w-5xl mx-auto">
             {serviceHighlights.map((service, index) => (
               <Card key={index} className="text-center p-6 hover:shadow-lg transition-shadow border-2 border-primary hover:border-brand-red/20">
                 <CardContent className="pt-6">
@@ -169,7 +169,7 @@ const LegalServicesEmbedded = () => {
             <p className="text-gray-600">Real experiences from satisfied customers</p>
           </div>
           
-          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 max-w-5xl mx-auto">
             {customerReviews.map((review, index) => (
               <Card key={index} className="p-6">
                 <CardContent>
