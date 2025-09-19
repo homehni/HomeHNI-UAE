@@ -113,13 +113,26 @@ Deno.serve(async (req) => {
 
     if (authError) {
       console.error('Auth creation failed:', JSON.stringify(authError, null, 2));
+      const code = (authError as any)?.code ?? (authError as any)?.status ?? 'unknown';
+      let status = 400;
+      let message = `Authentication error: ${authError.message}`;
+
+      if (code === 'email_exists' || `${authError.message}`.toLowerCase().includes('already')) {
+        status = 409;
+        message = 'Email already registered. Please log in or reset your password.';
+      } else if ((authError as any)?.status === 500 || code === 'unexpected_failure') {
+        status = 502;
+        message = 'Temporary auth service error. Please try again in a moment.';
+      }
+
       return new Response(
-        JSON.stringify({ 
-          success: false, 
-          error: `Authentication error: ${authError.message}`,
+        JSON.stringify({
+          success: false,
+          error: message,
+          code,
           details: authError
         }),
-        { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 400 }
+        { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status }
       );
     }
 

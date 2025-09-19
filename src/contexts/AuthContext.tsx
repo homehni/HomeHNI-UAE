@@ -127,25 +127,38 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const signUpWithPassword = async (email: string, password: string, fullName?: string) => {
-    // Use Edge Function to create confirmed user instantly
-    const { data, error } = await supabase.functions.invoke('create-user', {
-      body: {
-        name: fullName || email.split('@')[0],
-        email,
-        password,
-        role: 'buyer',
-        status: 'active'
+    try {
+      const { data, error } = await supabase.functions.invoke('create-user', {
+        body: {
+          name: fullName || email.split('@')[0],
+          email,
+          password,
+          role: 'buyer',
+          status: 'active'
+        }
+      });
+
+      if (error) {
+        let message = 'Sign up failed';
+        try {
+          const resp = (error as any)?.context?.response;
+          if (resp) {
+            const json = await resp.json();
+            message = json?.error || message;
+          }
+        } catch {}
+        // Also log for auditing; ignore failures
+        try { await AuditService.logAuthEvent('User Signup Failed', email, false, message); } catch {}
+        throw new Error(message);
       }
-    });
 
-    if (error) {
-      console.error('Error signing up via edge function:', error);
-      throw error;
-    }
-
-    if (!data?.success) {
-      const msg = data?.error || 'Failed to create user';
-      console.error('Edge function signup failed:', msg);
+      if (!data?.success) {
+        const msg = data?.error || 'Failed to create user';
+        try { await AuditService.logAuthEvent('User Signup Failed', email, false, msg); } catch {}
+        throw new Error(msg);
+      }
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : 'Sign up failed';
       throw new Error(msg);
     }
   };
