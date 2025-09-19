@@ -121,7 +121,7 @@ const Careers = () => {
       
       {/* Hero Section with banner image merged with header/marquee */}
       <div className="md:pt-8">
-        <div className="relative h-[50vh] overflow-hidden">
+        <div className="relative h-[70vh] overflow-hidden">
           {/* Banner Background */}
           <div className="absolute inset-0 bg-cover bg-center bg-no-repeat" style={{
           backgroundImage: `url('/lovable-uploads/b97275ad-b157-4783-8b5b-198d7c905011.png')`,
@@ -129,7 +129,7 @@ const Careers = () => {
         }}></div>
         
           {/* Hero Text Overlay */}
-          <div className="absolute inset-0 flex items-center pt-20">
+          <div className="absolute inset-0 bg-black bg-opacity-20 flex items-center pt-20">
             <div className="container mx-auto px-4">
               <div className="text-white max-w-4xl text-center lg:text-left">
                 <h1 className="text-4xl md:text-6xl font-bold mb-6">
