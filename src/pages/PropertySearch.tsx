@@ -554,11 +554,31 @@ const PropertySearch = () => {
             {/* Pagination */}
             <div className="flex justify-center mt-12">
               <div className="flex gap-2">
-                <Button variant="outline" size="sm" disabled>Previous</Button>
-                <Button variant="default" size="sm" className="bg-red-800 hover:bg-red-900 text-white">1</Button>
-                <Button variant="outline" size="sm">2</Button>
-                <Button variant="outline" size="sm">3</Button>
-                <Button variant="outline" size="sm">Next</Button>
+                {/* Previous button - only show if not on first page */}
+                {1 > 1 && (
+                  <Button variant="outline" size="sm">
+                    Previous
+                  </Button>
+                )}
+                
+                {/* Page numbers */}
+                {[1, 2, 3, 4, 5].map(pageNum => (
+                  <Button 
+                    key={pageNum}
+                    variant={pageNum === 1 ? "default" : "outline"} 
+                    size="sm" 
+                    className={pageNum === 1 ? "bg-red-800 hover:bg-red-900 text-white" : ""}
+                  >
+                    {pageNum}
+                  </Button>
+                ))}
+                
+                {/* Next button - only show if there are more pages */}
+                {1 < 5 && (
+                  <Button variant="outline" size="sm">
+                    Next
+                  </Button>
+                )}
               </div>
             </div>
           </div>
