@@ -127,8 +127,7 @@ export const GalleryStep: React.FC<GalleryStepProps> = ({
   };
 
   return (
-    <Card>
-      <CardContent className="p-8">
+    <div className="bg-background p-8">
           <Form {...form}>
             <form id="gallery-form" onSubmit={form.handleSubmit(handleFormSubmit)} className="space-y-8">
               <FormField
@@ -179,7 +178,6 @@ export const GalleryStep: React.FC<GalleryStepProps> = ({
           
           {/* Hidden submit button for sticky bar */}
           <button type="submit" form="gallery-form" className="hidden" />
-        </CardContent>
-    </Card>
+        </div>
   );
 };
