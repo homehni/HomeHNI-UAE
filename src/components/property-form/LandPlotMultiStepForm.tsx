@@ -229,31 +229,25 @@ export const LandPlotMultiStepForm: React.FC<LandPlotMultiStepFormProps> = ({
           {/* Sticky Bottom Navigation Bar */}
           <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-3 sm:p-4 z-50 shadow-lg">
             <div className="max-w-4xl mx-auto flex flex-col sm:flex-row gap-3 sm:gap-4 sm:justify-center">
-              <Button 
-                type="button" 
-                variant="outline" 
-                onClick={currentStep === 1 ? () => {} : prevStep}
-                className="h-10 sm:h-10 px-4 sm:px-6 w-full sm:w-auto order-2 sm:order-1"
-                disabled={currentStep === 1}
-              >
-                Back
-              </Button>
+              {currentStep > 1 && (
+                <Button 
+                  type="button" 
+                  variant="outline" 
+                  onClick={prevStep}
+                  className="h-10 sm:h-10 px-4 sm:px-6 w-full sm:w-auto order-2 sm:order-1"
+                >
+                  Back
+                </Button>
+              )}
               <Button 
                 type="button" 
                 onClick={() => {
-                  console.log('LandPlotMultiStepForm sticky Save & Continue button clicked');
-                  console.log('Current step:', currentStep);
-                  
+                  scrollToTop();
                   // Trigger the current step's form submission
                   const currentStepElement = document.querySelector('form');
-                  console.log('Found form element:', currentStepElement);
-                  
                   if (currentStepElement) {
-                    console.log('Dispatching submit event to form');
                     const submitEvent = new Event('submit', { bubbles: true, cancelable: true });
                     currentStepElement.dispatchEvent(submitEvent);
-                  } else {
-                    console.log('No form element found!');
                   }
                 }}
                 className="h-12 sm:h-10 px-6 sm:px-6 bg-red-600 hover:bg-red-700 text-white w-full sm:w-auto order-1 sm:order-2 font-semibold"
