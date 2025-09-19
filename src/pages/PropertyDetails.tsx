@@ -21,7 +21,6 @@ import { RelatedPropertiesCard } from '@/components/property-details/RelatedProp
 import { PropertyHeader } from '@/components/property-details/PropertyHeader';
 import { PropertyImageGallery } from '@/components/property-details/PropertyImageGallery';
 import { PropertyInfoCards } from '@/components/property-details/PropertyInfoCards';
-import { VisitScheduleCard } from '@/components/property-details/VisitScheduleCard';
 import { PropertyActions } from '@/components/property-details/PropertyActions';
 import { ServicesCard } from '@/components/property-details/ServicesCard';
 import { DescriptionCard } from '@/components/property-details/DescriptionCard';
@@ -403,9 +402,6 @@ const PropertyDetails: React.FC = () => {
               {/* Right - Property Info Cards */}
               <div className="space-y-6 min-w-0">
                 <PropertyInfoCards property={mergedProperty as any} />
-                
-                {/* Visit Schedule Card */}
-                <VisitScheduleCard onJoinVisit={() => setShowScheduleVisitModal(true)} />
                 
                 {/* Action Buttons */}
                 <PropertyActions
