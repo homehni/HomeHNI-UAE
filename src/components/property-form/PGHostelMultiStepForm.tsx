@@ -150,6 +150,10 @@ const [propertyInfo, setPropertyInfo] = useState({
     window.scrollTo({ top: 150, behavior: 'smooth' });
   };
 
+  useEffect(() => {
+    scrollToTop();
+  }, [currentStep]);
+
   // Step handlers
 
 

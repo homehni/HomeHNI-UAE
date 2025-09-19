@@ -83,6 +83,10 @@ export const CommercialMultiStepForm: React.FC<CommercialMultiStepFormProps> = (
     window.scrollTo({ top: 150, behavior: 'smooth' });
   };
 
+  useEffect(() => {
+    scrollToTop();
+  }, [currentStep]);
+
   // Step handlers
   const handlePropertyDetailsNext = (data: Partial<CommercialPropertyDetails>) => {
     updatePropertyDetails(data);

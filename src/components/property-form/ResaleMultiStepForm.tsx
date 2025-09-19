@@ -86,6 +86,10 @@ export const ResaleMultiStepForm: React.FC<ResaleMultiStepFormProps> = ({
     window.scrollTo({ top: 150, behavior: 'smooth' });
   };
 
+  React.useEffect(() => {
+    scrollToTop();
+  }, [currentStep]);
+
   const handlePropertyDetailsNext = (data: any) => {
     updatePropertyDetails(data);
     nextStep();

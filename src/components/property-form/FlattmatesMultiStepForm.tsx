@@ -124,6 +124,11 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
     window.scrollTo({ top: 150, behavior: 'smooth' });
   };
 
+  useEffect(() => {
+    scrollToTop();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentStep]);
+
   const handlePropertyDetailsNext = (data: any) => {
     setPropertyDetails(data);
     setCompletedSteps(prev => prev.includes(1) ? prev : [...prev, 1]);

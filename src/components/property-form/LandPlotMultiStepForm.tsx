@@ -90,6 +90,10 @@ export const LandPlotMultiStepForm: React.FC<LandPlotMultiStepFormProps> = ({
     window.scrollTo({ top: 150, behavior: 'smooth' });
   };
 
+  React.useEffect(() => {
+    scrollToTop();
+  }, [currentStep]);
+
   const handlePlotDetailsNext = (data: any) => {
     updatePlotDetails(data);
     nextStep();

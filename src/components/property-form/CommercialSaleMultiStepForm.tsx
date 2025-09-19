@@ -95,6 +95,10 @@ const handleScheduleSubmit = async (data: any) => {
     window.scrollTo({ top: 150, behavior: 'smooth' });
   };
 
+  useEffect(() => {
+    scrollToTop();
+  }, [currentStep]);
+
   const renderCurrentStep = () => {
     switch (currentStep) {
       case 2:
