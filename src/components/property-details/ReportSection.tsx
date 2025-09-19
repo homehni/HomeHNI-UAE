@@ -34,33 +34,31 @@ export const ReportSection: React.FC = () => {
           <AlertTriangle className="w-5 h-5 text-teal-600" />
         </div>
         <div className="flex-1">
-          <div className="text-sm text-teal-900 mb-2">
+          <div className="text-sm text-teal-900 mb-1">
             Report what was not correct in this property
           </div>
           
-          <div className="space-y-2">
-            <div className="flex flex-wrap gap-2">
-              {reportOptions.map(option => (
-                <Button
-                  key={option}
-                  onClick={() => handleReportToggle(option)}
-                  variant={selectedReports.includes(option) ? "default" : "outline"}
-                  size="sm"
-                  className={`text-xs ${selectedReports.includes(option) 
-                    ? "bg-teal-600 hover:bg-teal-700 text-white" 
-                    : "text-teal-700 border-teal-300 hover:bg-teal-100"
-                  }`}
-                >
-                  {option}
-                </Button>
-              ))}
-            </div>
-
+          <div className="flex flex-wrap gap-2">
+            {reportOptions.map(option => (
+              <Button
+                key={option}
+                onClick={() => handleReportToggle(option)}
+                variant={selectedReports.includes(option) ? "default" : "outline"}
+                size="sm"
+                className={`text-xs ${selectedReports.includes(option) 
+                  ? "bg-teal-600 hover:bg-teal-700 text-white" 
+                  : "text-teal-700 border-teal-300 hover:bg-teal-100"
+                }`}
+              >
+                {option}
+              </Button>
+            ))}
+            
             {selectedReports.length > 0 && (
               <Button
                 onClick={handleSubmitReports}
                 size="sm"
-                className="bg-teal-600 hover:bg-teal-700 text-white text-xs"
+                className="bg-teal-600 hover:bg-teal-700 text-white text-xs ml-2"
               >
                 Submit Report
               </Button>
