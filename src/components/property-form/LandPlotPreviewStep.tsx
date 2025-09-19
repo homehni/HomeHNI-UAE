@@ -190,9 +190,35 @@ export const LandPlotPreviewStep: React.FC<LandPlotPreviewStepProps> = ({
 
   return (
     <div className="w-full px-4 sm:px-6 lg:px-8 space-y-4 sm:space-y-6">
-      {/* Preview Title */}
-      <div className="text-center mb-6 sm:mb-8">
-        {/* Title and subtitle removed */}
+      {/* Property Preview Section */}
+      <div className="bg-white border border-gray-200 rounded-lg p-4 sm:p-6 mb-4 sm:mb-6 shadow-sm">
+        <h2 className="text-xl font-bold text-gray-800 mb-4">Land/Plot Preview</h2>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Property Details */}
+          <div className="space-y-3">
+            <h3 className="font-semibold text-gray-700">Plot Details</h3>
+            <div className="space-y-2 text-sm">
+              <p><span className="font-medium">Title:</span> {propertyInfo?.plotDetails?.title || 'Not specified'}</p>
+              <p><span className="font-medium">Type:</span> Land/Plot</p>
+              <p><span className="font-medium">Land Type:</span> {propertyInfo?.plotDetails?.landType || 'Not specified'}</p>
+              <p><span className="font-medium">Price:</span> ₹{propertyInfo?.saleDetails?.expectedPrice?.toLocaleString() || 'Not specified'}</p>
+              <p><span className="font-medium">Area:</span> {propertyInfo?.plotDetails?.plotArea || 'Not specified'} {propertyInfo?.plotDetails?.plotAreaUnit || 'sq ft'}</p>
+            </div>
+          </div>
+
+          {/* Location & Owner */}
+          <div className="space-y-3">
+            <h3 className="font-semibold text-gray-700">Location & Contact</h3>
+            <div className="space-y-2 text-sm">
+              <p><span className="font-medium">Location:</span> {propertyInfo?.locationDetails?.locality || 'Not specified'}, {propertyInfo?.locationDetails?.city || 'Not specified'}</p>
+              <p><span className="font-medium">Owner:</span> {ownerInfo?.fullName || 'Not specified'}</p>
+              <p><span className="font-medium">Email:</span> {ownerInfo?.email || 'Not specified'}</p>
+              <p><span className="font-medium">Phone:</span> {ownerInfo?.phoneNumber || 'Not specified'}</p>
+              <p><span className="font-medium">Images:</span> {propertyInfo?.gallery?.images?.length || 0} uploaded</p>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Congratulations Section */}
