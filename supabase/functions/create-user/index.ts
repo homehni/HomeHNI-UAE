@@ -171,16 +171,49 @@ Deno.serve(async (req) => {
 
     console.log('Profile created successfully');
 
-    // Assign or update role idempotently
+    // Assign role if not already assigned (idempotent without relying on DB unique constraints)
     console.log('Assigning role:', role);
-    const { error: roleError } = await supabaseAdmin
+    const { data: existingRoleRows, error: roleSelectError } = await supabaseAdmin
       .from('user_roles')
-      .upsert({
-        user_id: authData.user.id,
-        role: role.trim()
-      }, {
-        onConflict: 'user_id'
-      });
+      .select('id')
+      .eq('user_id', authData.user.id)
+      .eq('role', role.trim())
+      .limit(1);
+
+    if (roleSelectError) {
+      console.error('Role lookup failed:', JSON.stringify(roleSelectError, null, 2));
+      return new Response(
+        JSON.stringify({ 
+          success: false, 
+          error: `Role lookup error: ${roleSelectError.message}`,
+          details: roleSelectError
+        }),
+        { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 400 }
+      );
+    }
+
+    if (!existingRoleRows || existingRoleRows.length === 0) {
+      const { error: roleInsertError } = await supabaseAdmin
+        .from('user_roles')
+        .insert({
+          user_id: authData.user.id,
+          role: role.trim()
+        });
+
+      if (roleInsertError) {
+        console.error('Role assignment failed:', JSON.stringify(roleInsertError, null, 2));
+        return new Response(
+          JSON.stringify({ 
+            success: false, 
+            error: `Role assignment error: ${roleInsertError.message}`,
+            details: roleInsertError
+          }),
+          { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 400 }
+        );
+      }
+    } else {
+      console.log('Role already assigned, skipping insert');
+    }
 
     if (roleError) {
       console.error('Role assignment failed:', JSON.stringify(roleError, null, 2));
