@@ -255,6 +255,9 @@ export const LandPlotMultiStepForm: React.FC<LandPlotMultiStepFormProps> = ({
                   } else {
                     console.log('No form element found!');
                   }
+                  
+                  // Always scroll to top when Save & Continue is clicked
+                  setTimeout(scrollToTop, 100);
                 }}
                 className="h-12 sm:h-10 px-6 sm:px-6 bg-red-600 hover:bg-red-700 text-white w-full sm:w-auto order-1 sm:order-2 font-semibold"
               >

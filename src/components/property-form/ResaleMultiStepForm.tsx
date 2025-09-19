@@ -331,6 +331,9 @@ const handleScheduleSubmit = (data: any) => {
                     console.log('ResaleMultiStepForm sticky Save & Continue button clicked');
                     console.log('Current step:', currentStep);
                     
+                    // Always scroll to top first
+                    scrollToTop();
+                    
                     if (currentStep === 1) {
                       console.log('Calling handlePropertyDetailsNext');
                       handlePropertyDetailsNext(propertyDetails);
