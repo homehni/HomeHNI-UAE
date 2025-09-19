@@ -48,6 +48,12 @@ interface Property {
   created_at: string;
   amenities?: any; // May come as JSONB object
   additional_documents?: Record<string, boolean>;
+  // Extra optional fields for richer display
+  security_deposit?: number | null;
+  available_from?: string | null;
+  parking?: string | null;
+  age_of_building?: string | null;
+  preferred_tenant?: string | null;
   // Note: Owner contact info removed for security
 }
 const PropertyDetails: React.FC = () => {
@@ -176,6 +182,12 @@ const PropertyDetails: React.FC = () => {
             images: payload.images || [], // This should contain the uploaded image URLs
             videos: payload.videos || [],
             amenities: payload.amenities || null, // Add amenities from payload
+            // Extra fields from payload to enrich preview
+            security_deposit: payload.security_deposit ?? null,
+            available_from: payload.available_from ?? null,
+            parking: payload.parking ?? null,
+            age_of_building: payload.age_of_building ?? null,
+            preferred_tenant: payload.preferred_tenant ?? null,
             status: submissionData.status || 'pending',
             created_at: submissionData.created_at
           };
