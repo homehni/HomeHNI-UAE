@@ -127,20 +127,26 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const signUpWithPassword = async (email: string, password: string, fullName?: string) => {
-    // Create user with email confirmed immediately to skip verification
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: {
-          full_name: fullName,
-        }
+    // Use Edge Function to create confirmed user instantly
+    const { data, error } = await supabase.functions.invoke('create-user', {
+      body: {
+        name: fullName || email.split('@')[0],
+        email,
+        password,
+        role: 'buyer',
+        status: 'active'
       }
     });
-    
+
     if (error) {
-      console.error('Error signing up:', error);
+      console.error('Error signing up via edge function:', error);
       throw error;
+    }
+
+    if (!data?.success) {
+      const msg = data?.error || 'Failed to create user';
+      console.error('Edge function signup failed:', msg);
+      throw new Error(msg);
     }
   };
 
