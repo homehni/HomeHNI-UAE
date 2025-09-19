@@ -259,11 +259,14 @@ const handleScheduleSubmit = (data: Partial<ScheduleInfo>) => {
               >
                 Back
               </Button>
-              <Button 
+                <Button 
                 type="button" 
                 onClick={() => {
                   console.log('CommercialMultiStepForm sticky Save & Continue button clicked');
                   console.log('Current step:', currentStep);
+                  
+                  // Always scroll to top first
+                  scrollToTop();
                   
                   if (currentStep === 1) {
                     console.log('Calling handlePropertyDetailsNext');

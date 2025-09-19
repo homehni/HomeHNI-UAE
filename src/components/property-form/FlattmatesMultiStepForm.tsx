@@ -886,6 +886,9 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
                   console.log('FlattmatesMultiStepForm sticky Save & Continue button clicked');
                   console.log('Current step:', currentStep);
                   
+                  // Always scroll to top first
+                  scrollToTop();
+                  
                   // Directly call the appropriate handler based on current step
                   if (currentStep === 1) {
                     console.log('Calling handlePropertyDetailsNext');
