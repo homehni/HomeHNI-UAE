@@ -408,8 +408,8 @@ const Careers = () => {
             
             {/* Header Section */}
             <section className="mb-8">
-              <h1 className="text-4xl font-bold text-gray-900 mb-4 text-uniform-center">Careers at HomeHNI</h1>
-              <p className="text-xl text-gray-600 mb-6 text-uniform-center">Shape the Future of High-Value Real Estate with Us</p>
+              <h1 className="text-4xl font-bold text-gray-900 mb-4 text-center lg:text-left">Careers at HomeHNI</h1>
+              <p className="text-xl text-gray-600 mb-6 text-center lg:text-left">Shape the Future of High-Value Real Estate with Us</p>
               <p className="text-gray-700 text-uniform mb-3">
                 At HomeHNI, we are redefining how High-Net-Worth Individuals (HNIs) experience real estate. With technology, transparency, and trust at our core, we're building India's most intelligent platform for premium property discovery and transactions.
               </p>
