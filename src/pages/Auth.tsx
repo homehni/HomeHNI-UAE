@@ -135,6 +135,22 @@ export const Auth: React.FC = () => {
       setSignUpForm({ fullName: '', email: '', password: '', confirmPassword: '' });
     } catch (error: any) {
       console.log('Auth error caught:', error);
+      
+      // Handle specific error codes
+      if (error.code === 'email_exists' || error.message?.includes('already registered')) {
+        // Auto-switch to login tab and pre-fill email
+        setSignInForm({ email: signUpForm.email, password: '' });
+        setActiveTab('signin');
+        
+        toast({
+          title: "Email already registered",
+          description: "This email is already registered. Please login or reset your password.",
+          variant: "destructive",
+        });
+        return;
+      }
+      
+      // Generic error handling
       toast({
         title: "Sign up failed",
         description: error.message || "Please try again or contact support.",
@@ -253,6 +269,12 @@ export const Auth: React.FC = () => {
                       Login
                     </Button>
                   </form>
+
+                  <div className="text-center">
+                    <Button variant="link" className="text-sm text-brand-red hover:underline p-0 h-auto">
+                      Forgot password?
+                    </Button>
+                  </div>
 
                   <div className="relative">
                     <div className="absolute inset-0 flex items-center">

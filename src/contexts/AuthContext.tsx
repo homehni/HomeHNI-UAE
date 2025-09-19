@@ -140,24 +140,33 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       if (error) {
         let message = 'Sign up failed';
+        let errorCode = '';
         console.log('Supabase function error:', error);
         try {
           const resp = (error as any)?.context?.response;
           if (resp) {
             const json = await resp.json();
             message = json?.error || message;
+            errorCode = json?.code || '';
           }
         } catch {}
         // Also log for auditing; ignore failures
         try { await AuditService.logAuthEvent('User Signup Failed', email, false, message); } catch {}
-        throw new Error(message);
+        
+        const errorObj = new Error(message) as any;
+        errorObj.code = errorCode;
+        throw errorObj;
       }
 
       if (!data?.success) {
         const msg = data?.error || 'Failed to create user';
+        const code = data?.code || '';
         console.log('Signup failed with message:', msg);
         try { await AuditService.logAuthEvent('User Signup Failed', email, false, msg); } catch {}
-        throw new Error(msg);
+        
+        const errorObj = new Error(msg) as any;
+        errorObj.code = code;
+        throw errorObj;
       }
     } catch (err) {
       const msg = err instanceof Error ? err.message : 'Sign up failed';

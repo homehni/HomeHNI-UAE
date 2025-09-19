@@ -145,14 +145,16 @@ Deno.serve(async (req) => {
 
     console.log('Auth user created successfully:', authData.user.id);
 
-    // Create profile
+    // Create profile using upsert to handle existing profiles
     console.log('Creating profile...');
     const { error: profileError } = await supabaseAdmin
       .from('profiles')
-      .insert({
+      .upsert({
         user_id: authData.user.id,
         full_name: name.trim(),
         verification_status: status === 'active' ? 'verified' : 'unverified'
+      }, {
+        onConflict: 'user_id'
       });
 
     if (profileError) {
