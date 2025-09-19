@@ -403,7 +403,7 @@ const Careers = () => {
 
         {/* Main Content */}
         <div className="container mx-auto px-4 pt-4 pb-8">
-          <div className="max-w-4xl mx-auto lg:pr-[420px]">{/* Add padding for desktop form */}
+          <div className="max-w-4xl lg:pr-[420px]">{/* Add padding for desktop form */}
             
             {/* Header Section */}
             <section className="mb-8">
