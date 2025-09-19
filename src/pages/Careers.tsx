@@ -10,6 +10,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Marquee from '@/components/Marquee';
 const Careers = () => {
+  // Career page component
   const [statesData, setStatesData] = useState<any>(null);
   const [selectedState, setSelectedState] = useState("");
   const [selectedStateDesktop, setSelectedStateDesktop] = useState("");
