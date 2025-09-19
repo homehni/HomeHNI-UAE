@@ -90,11 +90,27 @@ export const Auth: React.FC = () => {
     try {
       await signInWithPassword(signInForm.email, signInForm.password);
     } catch (error: any) {
-      toast({
-        title: "Sign in failed",
-        description: error.message || "Please check your credentials and try again.",
-        variant: "destructive",
-      });
+      const msg = (error?.message || '').toLowerCase();
+      if (msg.includes('email not confirmed') || msg.includes('email_not_confirmed')) {
+        // Offer verification path and resend the link automatically
+        try {
+          const { supabase } = await import('@/integrations/supabase/client');
+          await supabase.auth.resend({
+            type: 'signup',
+            email: signInForm.email,
+            options: { emailRedirectTo: `${window.location.origin}/` }
+          });
+          toast({ title: 'Email not confirmed', description: 'We re-sent the verification link. Please check your inbox.', });
+        } catch (_) {
+          toast({ title: 'Email not confirmed', description: 'Please verify your email. We could not resend automatically.', variant: 'destructive' });
+        }
+      } else {
+        toast({
+          title: 'Sign in failed',
+          description: error.message || 'Please check your credentials and try again.',
+          variant: 'destructive',
+        });
+      }
     }
   };
 

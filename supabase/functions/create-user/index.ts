@@ -101,10 +101,11 @@ Deno.serve(async (req) => {
 
     console.log('Supabase client created, attempting to create auth user...');
 
-    // Create auth user (let database trigger handle email confirmation)
+    // Create auth user and mark email as confirmed so the user can log in immediately
     const { data: authData, error: authError } = await supabaseAdmin.auth.admin.createUser({
       email: email.trim(),
       password: password.trim(),
+      email_confirm: true,
       user_metadata: {
         full_name: name.trim()
       }
@@ -215,17 +216,6 @@ Deno.serve(async (req) => {
       console.log('Role already assigned, skipping insert');
     }
 
-    if (roleError) {
-      console.error('Role assignment failed:', JSON.stringify(roleError, null, 2));
-      return new Response(
-        JSON.stringify({ 
-          success: false, 
-          error: `Role assignment error: ${roleError.message}`,
-          details: roleError
-        }),
-        { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 400 }
-      );
-    }
 
     console.log('=== USER CREATED SUCCESSFULLY ===');
     console.log('User ID:', authData.user.id);
