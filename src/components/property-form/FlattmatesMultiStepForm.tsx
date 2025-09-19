@@ -133,6 +133,8 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentStep]);
 
+  const currentFormId = 'flatmates-step-form';
+
   const handlePropertyDetailsNext = (data: any) => {
     setPropertyDetails(data);
     setCompletedSteps(prev => prev.includes(1) ? prev : [...prev, 1]);
@@ -748,6 +750,7 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
                 currentStep={currentStep}
                 totalSteps={6}
                 completedSteps={completedSteps}
+                formId={currentFormId}
               />
             )}
 
@@ -828,34 +831,37 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
                 />
               )}
 
-              {currentStep === 2 && (
-                <FlattmatesLocationDetailsStep
-                  initialData={locationDetails}
-                  onNext={handleLocationDetailsNext}
-                  onBack={prevStep}
-                  currentStep={currentStep}
-                  totalSteps={6}
-                />
-              )}
+            {currentStep === 2 && (
+              <FlattmatesLocationDetailsStep
+                initialData={locationDetails}
+                onNext={handleLocationDetailsNext}
+                onBack={prevStep}
+                currentStep={currentStep}
+                totalSteps={6}
+                formId={currentFormId}
+              />
+            )}
 
-              {currentStep === 3 && (
-                <FlattmatesRentalDetailsStep
-                  initialData={rentalDetails}
-                  onNext={handleRentalDetailsNext}
-                  onBack={prevStep}
-                  currentStep={currentStep}
-                  totalSteps={6}
-                  completedSteps={completedSteps}
-                />
-              )}
+            {currentStep === 3 && (
+              <FlattmatesRentalDetailsStep
+                initialData={rentalDetails}
+                onNext={handleRentalDetailsNext}
+                onBack={prevStep}
+                currentStep={currentStep}
+                totalSteps={6}
+                completedSteps={completedSteps}
+                formId={currentFormId}
+              />
+            )}
 
-              {currentStep === 4 && (
-                <FlattmatesAmenitiesStep
-                  initialData={amenities}
-                  onNext={handleAmenitiesNext}
-                  onBack={prevStep}
-                />
-              )}
+            {currentStep === 4 && (
+              <FlattmatesAmenitiesStep
+                initialData={amenities}
+                onNext={handleAmenitiesNext}
+                onBack={prevStep}
+                formId={currentFormId}
+              />
+            )}
 
               {currentStep === 5 && (
                 <GalleryStep
@@ -898,24 +904,30 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
                   // Always scroll to top first
                   scrollToTop();
                   
-                  // Directly call the appropriate handler based on current step
+                  // Prefer submitting the active form so the latest child state is captured
+                  const formIdToUse = currentStep === 5
+                    ? 'gallery-form'
+                    : currentStep === 6
+                      ? 'schedule-form'
+                      : currentFormId;
+                  const formEl = document.getElementById(formIdToUse) as HTMLFormElement | null;
+                  if (formEl && typeof formEl.requestSubmit === 'function') {
+                    console.log('Submitting form via requestSubmit:', formIdToUse);
+                    formEl.requestSubmit();
+                    return;
+                  }
+                  console.warn('Form element not found, falling back to direct handlers');
                   if (currentStep === 1) {
-                    console.log('Calling handlePropertyDetailsNext');
                     handlePropertyDetailsNext(propertyDetails);
                   } else if (currentStep === 2) {
-                    console.log('Calling handleLocationDetailsNext');
                     handleLocationDetailsNext(locationDetails);
                   } else if (currentStep === 3) {
-                    console.log('Calling handleRentalDetailsNext');
                     handleRentalDetailsNext(rentalDetails);
                   } else if (currentStep === 4) {
-                    console.log('Calling handleAmenitiesNext');
                     handleAmenitiesNext(amenities);
                   } else if (currentStep === 5) {
-                    console.log('Calling handleGalleryNext');
                     handleGalleryNext(gallery);
                   } else if (currentStep === 6) {
-                    console.log('Calling handleScheduleNext');
                     handleScheduleNext(scheduleInfo);
                   }
                 }}
