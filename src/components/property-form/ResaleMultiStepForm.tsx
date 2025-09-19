@@ -83,7 +83,11 @@ export const ResaleMultiStepForm: React.FC<ResaleMultiStepFormProps> = ({
 
 
   const scrollToTop = () => {
-    window.scrollTo({ top: 150, behavior: 'smooth' });
+    try {
+      const el = document.scrollingElement || document.documentElement || document.body;
+      el?.scrollTo({ top: 0, behavior: 'smooth' });
+    } catch {}
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   React.useEffect(() => {
