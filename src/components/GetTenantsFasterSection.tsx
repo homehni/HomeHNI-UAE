@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Shield, Star, Facebook, Tag } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 const GetTenantsFasterSection: React.FC = () => {
   const { toast } = useToast();
+  const [interestShown, setInterestShown] = useState(false);
   
   const handleShowInterest = () => {
+    setInterestShown(true);
     toast({
       title: "Your request has been submitted successfully.",
       description: "Our executives will reach out to you soon.",
@@ -56,7 +58,7 @@ const GetTenantsFasterSection: React.FC = () => {
             onClick={handleShowInterest}
             className="w-full font-medium py-2 rounded-md bg-red-800 hover:bg-red-900 text-white text-sm"
           >
-            Show Interest
+            {interestShown ? "Interest shown" : "Show Interest"}
           </Button>
         </div>
       </div>
