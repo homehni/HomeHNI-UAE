@@ -54,7 +54,7 @@ export const PropertyHeader: React.FC<PropertyHeaderProps> = ({ property }) => {
                 {property.title}
               </h1>
               <p className="text-sm sm:text-base text-gray-600 break-words">
-                Standalone building, {property.locality}
+                {property.locality}
               </p>
             </div>
             
@@ -111,7 +111,7 @@ export const PropertyHeader: React.FC<PropertyHeaderProps> = ({ property }) => {
                 {property.title}
               </h1>
               <p className="text-gray-600 truncate max-w-xs">
-                Standalone building, {property.locality}
+                {property.locality}
               </p>
             </div>
 
