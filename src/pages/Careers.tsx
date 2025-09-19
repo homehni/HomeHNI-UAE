@@ -403,7 +403,8 @@ const Careers = () => {
 
         {/* Main Content */}
         <div className="container mx-auto px-4 pt-4 pb-8">
-          <div className="max-w-4xl lg:pr-[420px]">{/* Add padding for desktop form */}
+          <div className="grid lg:grid-cols-2 gap-8 items-start">
+            <div className="max-w-none lg:pr-8">{/* Content takes full width, padding only for desktop form */}
             
             {/* Header Section */}
             <section className="mb-8">
@@ -630,6 +631,10 @@ const Careers = () => {
                 })}
               </p>
             </div>
+            </div>
+            
+            {/* Right side spacing for sticky form */}
+            <div className="hidden lg:block"></div>
           </div>
         </div>
       </div>
