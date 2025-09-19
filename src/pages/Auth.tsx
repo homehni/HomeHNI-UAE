@@ -134,6 +134,7 @@ export const Auth: React.FC = () => {
       // Clear signup form
       setSignUpForm({ fullName: '', email: '', password: '', confirmPassword: '' });
     } catch (error: any) {
+      console.log('Auth error caught:', error);
       toast({
         title: "Sign up failed",
         description: error.message || "Please try again or contact support.",

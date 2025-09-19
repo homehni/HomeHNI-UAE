@@ -140,6 +140,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       if (error) {
         let message = 'Sign up failed';
+        console.log('Supabase function error:', error);
         try {
           const resp = (error as any)?.context?.response;
           if (resp) {
@@ -154,6 +155,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       if (!data?.success) {
         const msg = data?.error || 'Failed to create user';
+        console.log('Signup failed with message:', msg);
         try { await AuditService.logAuthEvent('User Signup Failed', email, false, msg); } catch {}
         throw new Error(msg);
       }
