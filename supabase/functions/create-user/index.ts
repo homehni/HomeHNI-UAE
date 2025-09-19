@@ -101,11 +101,11 @@ Deno.serve(async (req) => {
 
     console.log('Supabase client created, attempting to create auth user...');
 
-    // Create auth user and mark email as confirmed so the user can log in immediately
+    // Create auth user without email confirmation - we'll send verification email
     const { data: authData, error: authError } = await supabaseAdmin.auth.admin.createUser({
       email: email.trim(),
       password: password.trim(),
-      email_confirm: true,
+      email_confirm: false, // Don't auto-confirm, we'll send verification email
       user_metadata: {
         full_name: name.trim()
       }
@@ -217,19 +217,62 @@ Deno.serve(async (req) => {
     }
 
 
+    // Generate email verification URL
+    const { data: verifyData, error: verifyError } = await supabaseAdmin.auth.admin.generateLink({
+      type: 'signup',
+      email: email.trim(),
+      options: {
+        redirectTo: `${req.headers.get('origin') || 'https://homehni.in'}/auth?verified=true`
+      }
+    });
+
+    if (verifyError) {
+      console.error('Failed to generate verification link:', verifyError);
+      // Continue without verification email rather than failing
+    } else {
+      // Send verification email using our email service
+      try {
+        const emailResponse = await fetch(`${supabaseUrl}/functions/v1/send-verification-email`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${serviceRoleKey}`,
+          },
+          body: JSON.stringify({
+            email: email.trim(),
+            name: name.trim(),
+            verificationUrl: verifyData.properties?.action_link || verifyData.properties?.email_otp || '#'
+          })
+        });
+
+        const emailResult = await emailResponse.json();
+        if (!emailResult.success) {
+          console.error('Failed to send verification email:', emailResult.error);
+        } else {
+          console.log('Verification email sent successfully');
+        }
+      } catch (emailError) {
+        console.error('Error sending verification email:', emailError);
+      }
+    }
+
     console.log('=== USER CREATED SUCCESSFULLY ===');
     console.log('User ID:', authData.user.id);
+    console.log('Email:', authData.user.email);
+    console.log('Profile created/updated, role assigned');
 
     return new Response(
       JSON.stringify({ 
         success: true, 
-        user_id: authData.user.id,
-        message: 'User created successfully' 
+        message: 'User created successfully. Please check your email to verify your account.',
+        user: {
+          id: authData.user.id,
+          email: authData.user.email,
+          full_name: name
+        },
+        requiresVerification: true
       }),
-      {
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        status: 200,
-      }
+      { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 200 }
     );
 
   } catch (error) {
