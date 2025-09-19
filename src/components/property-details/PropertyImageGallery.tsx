@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { Camera, MapPin, Heart } from 'lucide-react';
+import { Camera, Heart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { PropertyImageModal } from '@/components/PropertyImageModal';
-import { FavoriteButton } from '@/components/FavoriteButton';
+import { useFavorites } from '@/hooks/useFavorites';
 import propertyPlaceholder from '@/assets/property-placeholder.png';
 
 interface PropertyImageGalleryProps {
@@ -16,6 +16,7 @@ interface PropertyImageGalleryProps {
 export const PropertyImageGallery: React.FC<PropertyImageGalleryProps> = ({ property }) => {
   const [showImageModal, setShowImageModal] = useState(false);
   const [initialImageIndex, setInitialImageIndex] = useState(0);
+  const { isFavorite, toggleFavorite } = useFavorites();
 
   const handleImageClick = (index: number) => {
     setInitialImageIndex(index);
@@ -25,6 +26,12 @@ export const PropertyImageGallery: React.FC<PropertyImageGalleryProps> = ({ prop
   const handleViewAllPhotos = () => {
     setInitialImageIndex(0);
     setShowImageModal(true);
+  };
+
+  const handleShortlistClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    toggleFavorite(property.id);
   };
 
   const images = (property.images && property.images.length > 0) ? property.images : [propertyPlaceholder];
@@ -59,12 +66,15 @@ export const PropertyImageGallery: React.FC<PropertyImageGalleryProps> = ({ prop
 
           {/* Shortlist Button - Top Right */}
           <div className="absolute top-4 right-4">
-            <FavoriteButton
-              propertyId={property.id}
-              size="sm"
+            <Button
               variant="outline"
-              className="bg-black/70 text-white border-white/20 hover:bg-black/80 backdrop-blur-sm hover:text-red-500"
-            />
+              size="sm"
+              className="bg-black/70 text-white border-white/20 hover:bg-black/80 backdrop-blur-sm"
+              onClick={handleShortlistClick}
+            >
+              <Heart className={`w-4 h-4 mr-1 ${isFavorite(property.id) ? 'fill-current text-red-500' : ''}`} />
+              Shortlist
+            </Button>
           </div>
         </div>
       </div>
@@ -95,24 +105,19 @@ export const PropertyImageGallery: React.FC<PropertyImageGalleryProps> = ({ prop
                 <Camera className="w-4 h-4 mr-1" />
                 Photos
               </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                className="bg-black/70 text-white border-white/20 hover:bg-black/80 backdrop-blur-sm"
-              >
-                <MapPin className="w-4 h-4 mr-1" />
-                Location
-              </Button>
             </div>
 
             {/* Shortlist Button - Top Right */}
             <div className="absolute top-4 right-4">
-              <FavoriteButton
-                propertyId={property.id}
-                size="sm"
+              <Button
                 variant="outline"
-                className="bg-black/70 text-white border-white/20 hover:bg-black/80 backdrop-blur-sm hover:text-red-500"
-              />
+                size="sm"
+                className="bg-black/70 text-white border-white/20 hover:bg-black/80 backdrop-blur-sm"
+                onClick={handleShortlistClick}
+              >
+                <Heart className={`w-4 h-4 mr-1 ${isFavorite(property.id) ? 'fill-current text-red-500' : ''}`} />
+                Shortlist
+              </Button>
             </div>
           </div>
 
