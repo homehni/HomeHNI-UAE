@@ -17,9 +17,9 @@ const Careers = () => {
   const [citiesDesktop, setCitiesDesktop] = useState<string[]>([]);
   const [resumeFile, setResumeFile] = useState<File | null>(null);
   const [resumeFileMobile, setResumeFileMobile] = useState<File | null>(null);
-
-  const { toast } = useToast();
-
+  const {
+    toast
+  } = useToast();
   const handleResumeUpload = (file: File | null, isMobile: boolean = false) => {
     if (file) {
       // Validate file type
@@ -42,20 +42,17 @@ const Careers = () => {
         });
         return;
       }
-
       if (isMobile) {
         setResumeFileMobile(file);
       } else {
         setResumeFile(file);
       }
-      
       toast({
         title: "Resume uploaded",
         description: `${file.name} has been selected.`
       });
     }
   };
-
   const removeResume = (isMobile: boolean = false) => {
     if (isMobile) {
       setResumeFileMobile(null);
@@ -97,7 +94,6 @@ const Careers = () => {
       setCitiesDesktop([]);
     }
   }, [selectedStateDesktop, statesData]);
-
   useEffect(() => {
     // Smooth scroll to top when component mounts
     const scrollToTop = () => {
@@ -110,8 +106,7 @@ const Careers = () => {
     // Small delay to ensure page is fully loaded
     setTimeout(scrollToTop, 100);
   }, []);
-  return (
-    <div className="min-h-screen bg-white">
+  return <div className="min-h-screen bg-white">
       {/* Marquee at the very top */}
       <Marquee />
       
@@ -172,22 +167,18 @@ const Careers = () => {
                   <Select name="state" onValueChange={setSelectedStateDesktop}>
                     <SelectTrigger className="flex-1"><SelectValue placeholder="State" /></SelectTrigger>
                     <SelectContent>
-                      {statesData && Object.keys(statesData).map((state: string) => (
-                        <SelectItem key={state} value={state}>
+                      {statesData && Object.keys(statesData).map((state: string) => <SelectItem key={state} value={state}>
                           {state}
-                        </SelectItem>
-                      ))}
+                        </SelectItem>)}
                     </SelectContent>
                   </Select>
 
                   <Select name="city">
                     <SelectTrigger className="flex-1"><SelectValue placeholder="City" /></SelectTrigger>
                     <SelectContent>
-                      {citiesDesktop.map((city: string) => (
-                        <SelectItem key={city} value={city}>
+                      {citiesDesktop.map((city: string) => <SelectItem key={city} value={city}>
                           {city}
-                        </SelectItem>
-                      ))}
+                        </SelectItem>)}
                     </SelectContent>
                   </Select>
                 </div>
@@ -206,29 +197,14 @@ const Careers = () => {
                 {/* Resume Upload */}
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-gray-700">Resume/CV</label>
-                  {!resumeFile ? (
-                    <div className="flex items-center gap-2 p-2 border border-gray-300 rounded-lg hover:border-gray-400 transition-colors">
-                      <input
-                        type="file"
-                        accept=".pdf,.doc,.docx"
-                        onChange={(e) => e.target.files?.[0] && handleResumeUpload(e.target.files[0])}
-                        className="hidden"
-                        id="resume-upload"
-                      />
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        onClick={() => document.getElementById('resume-upload')?.click()}
-                        className="flex items-center gap-1 text-xs h-8"
-                      >
+                  {!resumeFile ? <div className="flex items-center gap-2 p-2 border border-gray-300 rounded-lg hover:border-gray-400 transition-colors">
+                      <input type="file" accept=".pdf,.doc,.docx" onChange={e => e.target.files?.[0] && handleResumeUpload(e.target.files[0])} className="hidden" id="resume-upload" />
+                      <Button type="button" variant="outline" size="sm" onClick={() => document.getElementById('resume-upload')?.click()} className="flex items-center gap-1 text-xs h-8">
                         <Upload className="h-3 w-3" />
                         Choose File
                       </Button>
                       <span className="text-xs text-gray-500">PDF, DOC, DOCX (Max 5MB)</span>
-                    </div>
-                  ) : (
-                    <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                    </div> : <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                       <div className="flex items-center space-x-3">
                         <FileText className="h-5 w-5 text-gray-400" />
                         <div>
@@ -236,17 +212,10 @@ const Careers = () => {
                           <p className="text-xs text-gray-500">{(resumeFile.size / 1024 / 1024).toFixed(2)} MB</p>
                         </div>
                       </div>
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => removeResume()}
-                        className="text-red-500 hover:text-red-700"
-                      >
+                      <Button type="button" variant="ghost" size="sm" onClick={() => removeResume()} className="text-red-500 hover:text-red-700">
                         <X className="h-4 w-4" />
                       </Button>
-                    </div>
-                  )}
+                    </div>}
                 </div>
 
 
@@ -307,11 +276,9 @@ const Careers = () => {
                         <SelectValue placeholder="State" />
                       </SelectTrigger>
                       <SelectContent className="bg-background border shadow-lg">
-                        {statesData && Object.keys(statesData).map((state: string) => (
-                          <SelectItem key={state} value={state}>
+                        {statesData && Object.keys(statesData).map((state: string) => <SelectItem key={state} value={state}>
                             {state}
-                          </SelectItem>
-                        ))}
+                          </SelectItem>)}
                       </SelectContent>
                     </Select>
 
@@ -320,11 +287,9 @@ const Careers = () => {
                         <SelectValue placeholder="City" />
                       </SelectTrigger>
                       <SelectContent className="bg-background border shadow-lg">
-                        {cities.map((city: string) => (
-                          <SelectItem key={city} value={city}>
+                        {cities.map((city: string) => <SelectItem key={city} value={city}>
                             {city}
-                          </SelectItem>
-                        ))}
+                          </SelectItem>)}
                       </SelectContent>
                     </Select>
                   </div>
@@ -347,29 +312,15 @@ const Careers = () => {
                   {/* Resume Upload - Mobile */}
                   <div className="space-y-3">
                     <label className="block text-sm font-medium text-gray-700">Resume/CV</label>
-                    {!resumeFileMobile ? (
-                      <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-gray-400 transition-colors">
+                    {!resumeFileMobile ? <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-gray-400 transition-colors">
                         <Upload className="h-8 w-8 text-gray-400 mx-auto mb-3" />
                         <p className="text-base text-gray-600 mb-3">Upload your resume</p>
-                        <input
-                          type="file"
-                          accept=".pdf,.doc,.docx"
-                          onChange={(e) => e.target.files?.[0] && handleResumeUpload(e.target.files[0], true)}
-                          className="hidden"
-                          id="resume-upload-mobile"
-                        />
-                        <Button
-                          type="button"
-                          variant="outline"
-                          onClick={() => document.getElementById('resume-upload-mobile')?.click()}
-                          className="h-12"
-                        >
+                        <input type="file" accept=".pdf,.doc,.docx" onChange={e => e.target.files?.[0] && handleResumeUpload(e.target.files[0], true)} className="hidden" id="resume-upload-mobile" />
+                        <Button type="button" variant="outline" onClick={() => document.getElementById('resume-upload-mobile')?.click()} className="h-12">
                           Choose File
                         </Button>
                         <p className="text-sm text-gray-500 mt-2">PDF, DOC, DOCX (Max 5MB)</p>
-                      </div>
-                    ) : (
-                      <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                      </div> : <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
                         <div className="flex items-center space-x-3">
                           <FileText className="h-6 w-6 text-gray-400" />
                           <div>
@@ -377,17 +328,10 @@ const Careers = () => {
                             <p className="text-sm text-gray-500">{(resumeFileMobile.size / 1024 / 1024).toFixed(2)} MB</p>
                           </div>
                         </div>
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => removeResume(true)}
-                          className="text-red-500 hover:text-red-700"
-                        >
+                        <Button type="button" variant="ghost" size="sm" onClick={() => removeResume(true)} className="text-red-500 hover:text-red-700">
                           <X className="h-5 w-5" />
                         </Button>
-                      </div>
-                    )}
+                      </div>}
                   </div>
 
                   
@@ -402,15 +346,14 @@ const Careers = () => {
         </section>
 
         {/* Main Content */}
-        <div className="container mx-auto px-4 pt-4 pb-8">
-          <div className="grid lg:grid-cols-2 gap-8 items-start">
-            <div className="max-w-none lg:pr-8">{/* Content takes full width, padding only for desktop form */}
+        <div className="container mx-auto px-4 py-16">
+          <div className="max-w-4xl mx-auto lg:pr-[420px]">{/* Add padding for desktop form */}
             
             {/* Header Section */}
-            <section className="mb-8">
+            <section className="mb-12 section-separator pt-8">
               <h1 className="text-4xl font-bold text-gray-900 mb-4 text-uniform-center">Careers at HomeHNI</h1>
               <p className="text-xl text-gray-600 mb-6 text-uniform-center">Shape the Future of High-Value Real Estate with Us</p>
-              <p className="text-gray-700 text-uniform mb-3">
+              <p className="text-gray-700 text-uniform mb-4 text-left">
                 At HomeHNI, we are redefining how High-Net-Worth Individuals (HNIs) experience real estate. With technology, transparency, and trust at our core, we're building India's most intelligent platform for premium property discovery and transactions.
               </p>
               <p className="text-gray-700 text-uniform">
@@ -419,7 +362,7 @@ const Careers = () => {
             </section>
 
             {/* Why Work with HomeHNI */}
-            <section className="mb-8">
+            <section className="mb-12 section-separator pt-8">
               <div className="flex items-center mb-6">
                 <h2 className="text-2xl font-bold text-gray-900">Why Work with HomeHNI?</h2>
               </div>
@@ -456,7 +399,7 @@ const Careers = () => {
             </section>
 
             {/* Current Openings */}
-            <section className="mb-8">
+            <section className="mb-12 section-separator pt-8">
               <div className="flex items-center mb-6">
                 <h2 className="text-2xl font-bold text-gray-900">Current Openings</h2>
               </div>
@@ -501,7 +444,7 @@ const Careers = () => {
             </section>
 
             {/* Life at HomeHNI */}
-            <section className="mb-8">
+            <section className="mb-12">
               <div className="flex items-center mb-6">
                 <h2 className="text-2xl font-bold text-gray-900"> Life at HomeHNI</h2>
               </div>
@@ -536,7 +479,7 @@ const Careers = () => {
             </section>
 
             {/* Don't See Your Role Listed */}
-            <section className="mb-8">
+            <section className="mb-12">
               <div className="flex items-center mb-6">
                 <h2 className="text-2xl font-bold text-gray-900">Don't See Your Role Listed?</h2>
               </div>
@@ -549,7 +492,7 @@ const Careers = () => {
             </section>
 
             {/* Join the HomeHNI Journey */}
-            <section className="mb-8">
+            <section className="mb-12">
               <div className="flex items-center mb-6">
                 <h2 className="text-2xl font-bold text-gray-900">Join the HomeHNI Journey</h2>
               </div>
@@ -560,11 +503,27 @@ const Careers = () => {
               </div>
             </section>
 
-            {/* Career Opportunities */}
-            <section className="mb-8">
-              <div className="flex items-center mb-6">
-                <h2 className="text-2xl font-bold text-gray-900">Career Opportunities</h2>
-              </div>
+            <div className="mt-12 pt-8 border-t border-gray-200 text-center">
+              <p className="text-sm text-gray-500">
+                Last updated: {new Date().toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+              })}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Career Services Footer Section */}
+      <section className="py-16 px-4 bg-background">
+        <div className="container mx-auto">
+          <div className="grid lg:grid-cols-2 gap-16 items-start">
+            <div className="max-w-3xl">
+              <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-8">
+                Career Opportunities
+              </h2>
               
               <div className="space-y-6 mb-8">
                 <div className="flex flex-wrap gap-3">
@@ -588,7 +547,7 @@ const Careers = () => {
                 </div>
               </div>
 
-              <h3 className="text-xl font-bold text-gray-900 mb-4">
+              <h3 className="text-2xl md:text-3xl font-bold text-foreground mb-6">
                 Work Culture & Benefits
               </h3>
               
@@ -603,7 +562,7 @@ const Careers = () => {
                 </div>
               </div>
 
-              <h3 className="text-xl font-bold text-gray-900 mb-4">
+              <h3 className="text-2xl md:text-3xl font-bold text-foreground mb-6">
                 Application Process
               </h3>
               
@@ -620,25 +579,14 @@ const Careers = () => {
                   <span className="px-4 py-2 bg-muted rounded-full text-sm">Equal Opportunity Employer</span>
                 </div>
               </div>
-            </section>
-
-            <div className="mt-8 pt-6 border-t border-gray-200 text-center">
-              <p className="text-sm text-gray-500">
-                Last updated: {new Date().toLocaleDateString('en-US', {
-                  year: 'numeric',
-                  month: 'long',
-                  day: 'numeric'
-                })}
-              </p>
-            </div>
             </div>
             
             {/* Right side spacing for sticky form */}
             <div className="hidden lg:block"></div>
           </div>
         </div>
-      </div>
-    </div>
-  );
+      </section>
+      
+    </div>;
 };
 export default Careers;
