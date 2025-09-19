@@ -80,8 +80,16 @@ export const CommercialMultiStepForm: React.FC<CommercialMultiStepFormProps> = (
   }, [currentStep, isStepValid]);
 
   const scrollToTop = () => {
-    window.scrollTo({ top: 150, behavior: 'smooth' });
+    try {
+      const el = document.scrollingElement || document.documentElement || document.body;
+      el?.scrollTo({ top: 0, behavior: 'smooth' });
+    } catch {}
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
+
+  useEffect(() => {
+    scrollToTop();
+  }, [currentStep]);
 
   // Step handlers
   const handlePropertyDetailsNext = (data: Partial<CommercialPropertyDetails>) => {
@@ -259,11 +267,14 @@ const handleScheduleSubmit = (data: Partial<ScheduleInfo>) => {
               >
                 Back
               </Button>
-              <Button 
+                <Button 
                 type="button" 
                 onClick={() => {
                   console.log('CommercialMultiStepForm sticky Save & Continue button clicked');
                   console.log('Current step:', currentStep);
+                  
+                  // Always scroll to top first
+                  scrollToTop();
                   
                   if (currentStep === 1) {
                     console.log('Calling handlePropertyDetailsNext');

@@ -83,8 +83,18 @@ export const ResaleMultiStepForm: React.FC<ResaleMultiStepFormProps> = ({
 
 
   const scrollToTop = () => {
-    window.scrollTo({ top: 150, behavior: 'smooth' });
+    try {
+      const el = document.scrollingElement || document.documentElement || document.body;
+      el?.scrollTo({ top: 0, behavior: 'smooth' });
+    } catch {}
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
+
+  React.useEffect(() => {
+    scrollToTop();
+  }, [currentStep]);
+
+  const currentFormId = 'resale-step-form';
 
   const handlePropertyDetailsNext = (data: any) => {
     updatePropertyDetails(data);
@@ -164,6 +174,7 @@ const handleScheduleSubmit = (data: any) => {
                 initialData={propertyDetails}
                 onNext={handlePropertyDetailsNext}
                 onBack={() => {}}
+                formId={currentFormId}
               />
             )}
 
@@ -174,6 +185,7 @@ const handleScheduleSubmit = (data: any) => {
                 onBack={prevStep}
                 currentStep={2}
                 totalSteps={4}
+                formId={currentFormId}
               />
             )}
 
@@ -183,6 +195,7 @@ const handleScheduleSubmit = (data: any) => {
                 propertyDetails={propertyDetails}
                 onNext={handleSaleDetailsNext}
                 onBack={prevStep}
+                formId={currentFormId}
               />
             )}
 
@@ -191,6 +204,7 @@ const handleScheduleSubmit = (data: any) => {
                 initialData={amenities as any}
                 onNext={handleAmenitiesNext}
                 onBack={prevStep}
+                formId={currentFormId}
               />
             )}
 
@@ -201,6 +215,7 @@ const handleScheduleSubmit = (data: any) => {
                 onBack={prevStep}
                 onSubmit={handleSubmit}
                 isSubmitting={isSubmitting}
+                formId={currentFormId}
               />
             )}
 
@@ -210,6 +225,7 @@ const handleScheduleSubmit = (data: any) => {
                 onNext={handleScheduleNext}
                 onBack={prevStep}
                 onSubmit={handleScheduleSubmit}
+                formId={currentFormId}
               />
             )}
 
@@ -249,6 +265,7 @@ const handleScheduleSubmit = (data: any) => {
                     initialData={propertyDetails}
                     onNext={handlePropertyDetailsNext}
                     onBack={() => {}} // No back on first step
+                    formId={currentFormId}
                   />
                 )}
 
@@ -259,6 +276,7 @@ const handleScheduleSubmit = (data: any) => {
                     onBack={prevStep}
                     currentStep={2}
                     totalSteps={4}
+                    formId={currentFormId}
                   />
                 )}
 
@@ -268,6 +286,7 @@ const handleScheduleSubmit = (data: any) => {
                     propertyDetails={propertyDetails}
                     onNext={handleSaleDetailsNext}
                     onBack={prevStep}
+                    formId={currentFormId}
                   />
                 )}
 
@@ -276,6 +295,7 @@ const handleScheduleSubmit = (data: any) => {
                     initialData={amenities as any}
                     onNext={handleAmenitiesNext}
                     onBack={prevStep}
+                    formId={currentFormId}
                   />
                 )}
 
@@ -286,6 +306,7 @@ const handleScheduleSubmit = (data: any) => {
                     onBack={prevStep}
                     onSubmit={handleSubmit}
                     isSubmitting={isSubmitting}
+                    formId={currentFormId}
                   />
                 )}
 
@@ -295,6 +316,7 @@ const handleScheduleSubmit = (data: any) => {
                     onNext={handleScheduleNext}
                     onBack={prevStep}
                     onSubmit={handleScheduleSubmit}
+                    formId={currentFormId}
                   />
                 )}
 
@@ -330,25 +352,12 @@ const handleScheduleSubmit = (data: any) => {
                   onClick={() => {
                     console.log('ResaleMultiStepForm sticky Save & Continue button clicked');
                     console.log('Current step:', currentStep);
-                    
-                    if (currentStep === 1) {
-                      console.log('Calling handlePropertyDetailsNext');
-                      handlePropertyDetailsNext(propertyDetails);
-                    } else if (currentStep === 2) {
-                      console.log('Calling handleLocationDetailsNext');
-                      handleLocationDetailsNext(locationDetails);
-                    } else if (currentStep === 3) {
-                      console.log('Calling handleSaleDetailsNext');
-                      handleSaleDetailsNext(saleDetails);
-                    } else if (currentStep === 4) {
-                      console.log('Calling handleAmenitiesNext');
-                      handleAmenitiesNext(amenities);
-                    } else if (currentStep === 5) {
-                      console.log('Calling handleGalleryNext');
-                      handleGalleryNext(gallery);
-                    } else if (currentStep === 6) {
-                      console.log('Calling handleScheduleSubmit');
-                      handleScheduleSubmit(scheduleInfo);
+                    scrollToTop();
+                    const formEl = document.getElementById(currentFormId) as HTMLFormElement | null;
+                    if (formEl) {
+                      formEl.requestSubmit();
+                    } else {
+                      console.warn('Form element not found for current step');
                     }
                   }}
                   className="h-12 sm:h-10 px-6 sm:px-6 bg-red-600 hover:bg-red-700 text-white w-full sm:w-auto order-1 sm:order-2 font-semibold"

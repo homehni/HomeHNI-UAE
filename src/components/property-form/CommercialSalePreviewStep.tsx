@@ -203,9 +203,35 @@ export const CommercialSalePreviewStep: React.FC<CommercialSalePreviewStepProps>
 
   return (
     <div className="w-full px-4 sm:px-6 lg:px-8 space-y-4 sm:space-y-6">
-      {/* Preview Title */}
-      <div className="text-center mb-6 sm:mb-8">
-        {/* Title and subtitle removed */}
+      {/* Property Preview Section */}
+      <div className="bg-white border border-gray-200 rounded-lg p-4 sm:p-6 mb-4 sm:mb-6 shadow-sm">
+        <h2 className="text-xl font-bold text-gray-800 mb-4">Property Preview</h2>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Property Details */}
+          <div className="space-y-3">
+            <h3 className="font-semibold text-gray-700">Commercial Property Details</h3>
+            <div className="space-y-2 text-sm">
+              <p><span className="font-medium">Title:</span> {formData.propertyInfo?.propertyDetails?.title || 'Not specified'}</p>
+              <p><span className="font-medium">Type:</span> Commercial Property</p>
+              <p><span className="font-medium">Property Sub-type:</span> {formData.propertyInfo?.propertyDetails?.spaceType || 'Not specified'}</p>
+              <p><span className="font-medium">Price:</span> ₹{formData.propertyInfo?.saleDetails?.expectedPrice?.toLocaleString() || 'Not specified'}</p>
+              <p><span className="font-medium">Area:</span> {formData.propertyInfo?.propertyDetails?.superBuiltUpArea || 'Not specified'} sq ft</p>
+            </div>
+          </div>
+
+          {/* Location & Owner */}
+          <div className="space-y-3">
+            <h3 className="font-semibold text-gray-700">Location & Contact</h3>
+            <div className="space-y-2 text-sm">
+              <p><span className="font-medium">Location:</span> {formData.propertyInfo?.locationDetails?.locality || 'Not specified'}, {formData.propertyInfo?.locationDetails?.city || 'Not specified'}</p>
+              <p><span className="font-medium">Owner:</span> {formData.ownerInfo?.fullName || 'Not specified'}</p>
+              <p><span className="font-medium">Email:</span> {formData.ownerInfo?.email || 'Not specified'}</p>
+              <p><span className="font-medium">Phone:</span> {formData.ownerInfo?.phoneNumber || 'Not specified'}</p>
+              <p><span className="font-medium">Images:</span> {formData.propertyInfo?.gallery?.images?.length || 0} uploaded</p>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Congratulations Section */}

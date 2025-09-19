@@ -76,12 +76,14 @@ interface FlattmatesAmenitiesStepProps {
   initialData?: Partial<FlattmatesAmenities>;
   onNext: (data: FlattmatesAmenities) => void;
   onBack: () => void;
+  formId?: string;
 }
 
 export const FlattmatesAmenitiesStep: React.FC<FlattmatesAmenitiesStepProps> = ({
   initialData = {},
   onNext,
-  onBack
+  onBack,
+  formId
 }) => {
   const form = useForm<FlattmatesAmenitiesFormData>({
     resolver: zodResolver(amenitiesSchema),
@@ -126,7 +128,7 @@ export const FlattmatesAmenitiesStep: React.FC<FlattmatesAmenitiesStepProps> = (
       </div>
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <form id={formId || 'flatmates-step-form'} onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           
           {/* Room Details Section */}
           <div className="space-y-6">

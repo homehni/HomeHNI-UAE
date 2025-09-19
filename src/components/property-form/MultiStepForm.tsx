@@ -159,8 +159,16 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
 
 
   const scrollToTop = () => {
-    window.scrollTo({ top: 150, behavior: 'smooth' });
+    try {
+      const el = document.scrollingElement || document.documentElement || document.body;
+      el?.scrollTo({ top: 0, behavior: 'smooth' });
+    } catch {}
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
+
+  React.useEffect(() => {
+    scrollToTop();
+  }, [currentStep]);
 
   const handlePropertyDetailsNext = (data: any) => {
     updatePropertyDetails(data);
@@ -892,7 +900,12 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
               </Button>
               <Button 
                 type="button" 
-                onClick={triggerFormSubmission}
+                onClick={() => {
+                  // Always scroll to top first
+                  scrollToTop();
+                  // Then trigger form submission
+                  triggerFormSubmission();
+                }}
                 className="h-12 sm:h-10 px-6 sm:px-6 bg-red-600 hover:bg-red-700 text-white w-full sm:w-auto order-1 sm:order-2 font-semibold"
               >
                 Save & Continue

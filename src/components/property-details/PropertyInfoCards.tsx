@@ -61,19 +61,19 @@ export const PropertyInfoCards: React.FC<PropertyInfoCardsProps> = ({ property }
   };
 
   const getAgeOfBuilding = () => {
-    if (!property.age_of_building) return '1-3 Years';
+    if (!property.age_of_building) return 'Not specified';
     return property.age_of_building;
   };
 
   const getPreferredTenant = () => {
-    if (!property.preferred_tenant) return 'Family';
+    if (!property.preferred_tenant) return 'Any';
     return property.preferred_tenant.replace(/[-_]/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
   };
 
   const infoCards = [
     {
       icon: Bed,
-      title: property.bhk_type?.replace('bhk', ' Bedroom') || '3 Bedroom',
+      title: property.bhk_type?.replace('bhk', ' Bedroom') || 'Not specified',
       subtitle: 'No. of Bedroom',
     },
     {
@@ -103,7 +103,7 @@ export const PropertyInfoCards: React.FC<PropertyInfoCardsProps> = ({ property }
     },
     {
       icon: Home,
-      title: property.balconies?.toString() || '2',
+      title: property.balconies?.toString() || '0',
       subtitle: 'Balcony',
     },
     {
