@@ -368,26 +368,17 @@ const Header = () => {
                 </Button>
               </div>
 
-              {/* Sign Up / Login buttons for unauthenticated users - Desktop only */}
+              {/* Login/Sign Up button for unauthenticated users - Desktop only */}
               {!user && (
-                <div className="flex items-center space-x-2">
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
-                    onClick={() => navigate('/auth')}
-                    className={`font-medium px-3 py-1.5 text-sm transition-all duration-500 ${isScrolled ? 'text-gray-800 hover:bg-gray-100' : 'text-white hover:bg-white/10'}`}
-                  >
-                    <LogIn className="mr-1 h-4 w-4" />
-                    Login
-                  </Button>
+                <div>
                   <Button 
                     variant="outline" 
                     size="sm" 
-                    onClick={() => navigate('/auth?mode=signup')}
+                    onClick={() => navigate('/auth')}
                     className={`font-medium px-3 py-1.5 text-sm transition-all duration-500 ${isScrolled ? 'bg-white text-brand-red border-gray-300 hover:bg-gray-50' : 'bg-white/20 backdrop-blur-sm text-white border-white/30 hover:bg-white/30'}`}
                   >
-                    <UserPlus className="mr-1 h-4 w-4" />
-                    Sign Up
+                    <LogIn className="mr-1 h-4 w-4" />
+                    Login/Sign Up
                   </Button>
                 </div>
               )}
