@@ -29,40 +29,35 @@ export const ReportSection: React.FC = () => {
 
   return (
     <div className="bg-teal-50 border border-teal-200 rounded-lg p-4">
-      <div className="flex items-start gap-3">
-        <div className="bg-teal-100 p-2 rounded-lg flex-shrink-0">
-          <AlertTriangle className="w-5 h-5 text-teal-600" />
+      <div className="space-y-3">
+        <div className="text-xs text-teal-900">
+          Report what was not correct in this property
         </div>
-        <div className="flex-1">
-          <div className="text-sm text-teal-900">
-            Report what was not correct in this property
-          </div>
-          <div className="flex flex-wrap gap-2">
-            {reportOptions.map(option => (
-              <Button
-                key={option}
-                onClick={() => handleReportToggle(option)}
-                variant={selectedReports.includes(option) ? "default" : "outline"}
-                size="sm"
-                className={`text-xs ${selectedReports.includes(option) 
-                  ? "bg-teal-600 hover:bg-teal-700 text-white" 
-                  : "text-teal-700 border-teal-300 hover:bg-teal-100"
-                }`}
-              >
-                {option}
-              </Button>
-            ))}
-            
-            {selectedReports.length > 0 && (
-              <Button
-                onClick={handleSubmitReports}
-                size="sm"
-                className="bg-teal-600 hover:bg-teal-700 text-white text-xs ml-2"
-              >
-                Submit Report
-              </Button>
-            )}
-          </div>
+        <div className="flex flex-wrap gap-2">
+          {reportOptions.map(option => (
+            <Button
+              key={option}
+              onClick={() => handleReportToggle(option)}
+              variant={selectedReports.includes(option) ? "default" : "outline"}
+              size="sm"
+              className={`text-xs ${selectedReports.includes(option) 
+                ? "bg-teal-600 hover:bg-teal-700 text-white" 
+                : "text-teal-700 border-teal-300 hover:bg-teal-100"
+              }`}
+            >
+              {option}
+            </Button>
+          ))}
+          
+          {selectedReports.length > 0 && (
+            <Button
+              onClick={handleSubmitReports}
+              size="sm"
+              className="bg-teal-600 hover:bg-teal-700 text-white text-xs ml-2"
+            >
+              Submit Report
+            </Button>
+          )}
         </div>
       </div>
     </div>
