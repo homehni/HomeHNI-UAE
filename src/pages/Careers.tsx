@@ -402,14 +402,14 @@ const Careers = () => {
         </section>
 
         {/* Main Content */}
-        <div className="container mx-auto px-4 pt-8 pb-16">
+        <div className="container mx-auto px-4 pt-4 pb-8">
           <div className="max-w-4xl mx-auto lg:pr-[420px]">{/* Add padding for desktop form */}
             
             {/* Header Section */}
-            <section className="mb-12">
+            <section className="mb-8">
               <h1 className="text-4xl font-bold text-gray-900 mb-4 text-uniform-center">Careers at HomeHNI</h1>
               <p className="text-xl text-gray-600 mb-6 text-uniform-center">Shape the Future of High-Value Real Estate with Us</p>
-              <p className="text-gray-700 text-uniform mb-4">
+              <p className="text-gray-700 text-uniform mb-3">
                 At HomeHNI, we are redefining how High-Net-Worth Individuals (HNIs) experience real estate. With technology, transparency, and trust at our core, we're building India's most intelligent platform for premium property discovery and transactions.
               </p>
               <p className="text-gray-700 text-uniform">
@@ -418,7 +418,7 @@ const Careers = () => {
             </section>
 
             {/* Why Work with HomeHNI */}
-            <section className="mb-12">
+            <section className="mb-8">
               <div className="flex items-center mb-6">
                 <h2 className="text-2xl font-bold text-gray-900">Why Work with HomeHNI?</h2>
               </div>
@@ -455,7 +455,7 @@ const Careers = () => {
             </section>
 
             {/* Current Openings */}
-            <section className="mb-12">
+            <section className="mb-8">
               <div className="flex items-center mb-6">
                 <h2 className="text-2xl font-bold text-gray-900">Current Openings</h2>
               </div>
@@ -500,7 +500,7 @@ const Careers = () => {
             </section>
 
             {/* Life at HomeHNI */}
-            <section className="mb-12">
+            <section className="mb-8">
               <div className="flex items-center mb-6">
                 <h2 className="text-2xl font-bold text-gray-900"> Life at HomeHNI</h2>
               </div>
@@ -535,7 +535,7 @@ const Careers = () => {
             </section>
 
             {/* Don't See Your Role Listed */}
-            <section className="mb-12">
+            <section className="mb-8">
               <div className="flex items-center mb-6">
                 <h2 className="text-2xl font-bold text-gray-900">Don't See Your Role Listed?</h2>
               </div>
@@ -548,7 +548,7 @@ const Careers = () => {
             </section>
 
             {/* Join the HomeHNI Journey */}
-            <section className="mb-12">
+            <section className="mb-8">
               <div className="flex items-center mb-6">
                 <h2 className="text-2xl font-bold text-gray-900">Join the HomeHNI Journey</h2>
               </div>
@@ -560,7 +560,7 @@ const Careers = () => {
             </section>
 
             {/* Career Opportunities */}
-            <section className="mb-12">
+            <section className="mb-8">
               <div className="flex items-center mb-6">
                 <h2 className="text-2xl font-bold text-gray-900">Career Opportunities</h2>
               </div>
@@ -621,7 +621,7 @@ const Careers = () => {
               </div>
             </section>
 
-            <div className="mt-12 pt-8 border-t border-gray-200 text-center">
+            <div className="mt-8 pt-6 border-t border-gray-200 text-center">
               <p className="text-sm text-gray-500">
                 Last updated: {new Date().toLocaleDateString('en-US', {
                   year: 'numeric',
