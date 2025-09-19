@@ -101,11 +101,10 @@ Deno.serve(async (req) => {
 
     console.log('Supabase client created, attempting to create auth user...');
 
-    // Create auth user
+    // Create auth user (let database trigger handle email confirmation)
     const { data: authData, error: authError } = await supabaseAdmin.auth.admin.createUser({
       email: email.trim(),
       password: password.trim(),
-      email_confirm: true,
       user_metadata: {
         full_name: name.trim()
       }
