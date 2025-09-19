@@ -22,6 +22,7 @@ interface ResaleGalleryStepProps {
   onBack: () => void;
   onSubmit?: () => void;
   isSubmitting?: boolean;
+  formId?: string;
 }
 
 export const ResaleGalleryStep: React.FC<ResaleGalleryStepProps> = ({
@@ -29,7 +30,8 @@ export const ResaleGalleryStep: React.FC<ResaleGalleryStepProps> = ({
   onNext,
   onBack,
   onSubmit,
-  isSubmitting = false
+  isSubmitting = false,
+  formId
 }) => {
   const form = useForm<ResaleGalleryFormData>({
     resolver: zodResolver(resaleGallerySchema),
@@ -77,7 +79,7 @@ export const ResaleGalleryStep: React.FC<ResaleGalleryStepProps> = ({
         </div>
 
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(handleFormSubmit)} className="space-y-8">
+          <form id={formId} onSubmit={form.handleSubmit(handleFormSubmit)} className="space-y-8">
             <FormField
               control={form.control}
               name="images"

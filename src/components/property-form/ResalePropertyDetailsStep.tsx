@@ -29,12 +29,14 @@ interface ResalePropertyDetailsStepProps {
   initialData?: Partial<PropertyDetails>;
   onNext: (data: PropertyDetails) => void;
   onBack: () => void;
+  formId?: string;
 }
 
 export const ResalePropertyDetailsStep: React.FC<ResalePropertyDetailsStepProps> = ({
   initialData = {},
   onNext,
-  onBack
+  onBack,
+  formId
 }) => {
   const form = useForm<ResalePropertyDetailsFormData>({
     resolver: zodResolver(resalePropertyDetailsSchema),
@@ -100,7 +102,7 @@ export const ResalePropertyDetailsStep: React.FC<ResalePropertyDetailsStepProps>
       </div>
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <form id={formId} onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           {/* Property Type and BHK Type */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <FormField

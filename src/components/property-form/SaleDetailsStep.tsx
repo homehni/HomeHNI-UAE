@@ -108,6 +108,7 @@ interface SaleDetailsStepProps {
   propertyDetails?: Partial<import('@/types/property').PropertyDetails>;
   onNext: (data: SaleDetails) => void;
   onBack: () => void;
+  formId?: string;
 }
 
 export const SaleDetailsStep: React.FC<SaleDetailsStepProps> = ({
@@ -115,6 +116,7 @@ export const SaleDetailsStep: React.FC<SaleDetailsStepProps> = ({
   propertyDetails,
   onNext,
   onBack,
+  formId,
 }) => {
   const isMobile = useIsMobile();
   const [selectedDate, setSelectedDate] = React.useState<Date | undefined>(
@@ -159,7 +161,7 @@ export const SaleDetailsStep: React.FC<SaleDetailsStepProps> = ({
     <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <form id={formId} onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           {/* Sale Price */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <FormField
