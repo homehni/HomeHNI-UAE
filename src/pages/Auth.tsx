@@ -121,10 +121,18 @@ export const Auth: React.FC = () => {
 
     try {
       await signUpWithPassword(signUpForm.email, signUpForm.password, signUpForm.fullName);
+      
+      // Switch to signin tab and pre-fill email
+      setSignInForm({ email: signUpForm.email, password: '' });
+      setActiveTab('signin');
+      
       toast({
         title: "Account created successfully!",
-        description: "Please check your email to verify your account.",
+        description: "You can now login with your credentials.",
       });
+      
+      // Clear signup form
+      setSignUpForm({ fullName: '', email: '', password: '', confirmPassword: '' });
     } catch (error: any) {
       toast({
         title: "Sign up failed",
