@@ -22,6 +22,7 @@ import { PropertyHeader } from '@/components/property-details/PropertyHeader';
 import { PropertyImageGallery } from '@/components/property-details/PropertyImageGallery';
 import { PropertyInfoCards } from '@/components/property-details/PropertyInfoCards';
 import { PropertyActions } from '@/components/property-details/PropertyActions';
+import { ReportSection } from '@/components/property-details/ReportSection';
 import { ServicesCard } from '@/components/property-details/ServicesCard';
 import { DescriptionCard } from '@/components/property-details/DescriptionCard';
 import { supabase } from '@/integrations/supabase/client';
@@ -408,6 +409,9 @@ const PropertyDetails: React.FC = () => {
                   onContact={() => setShowContactModal(true)}
                   onScheduleVisit={() => setShowScheduleVisitModal(true)}
                 />
+                
+                {/* Report Section */}
+                <ReportSection />
               </div>
             </div>
 
