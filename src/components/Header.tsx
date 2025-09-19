@@ -346,12 +346,6 @@ const Header = () => {
                   SERVICE PROVIDER
                 </a>
 
-                <a href="/careers" onClick={e => {
-                  e.preventDefault();
-                  navigate('/careers');
-                }} className={`hover:opacity-80 transition-colors duration-500 text-sm xl:text-base font-medium uppercase ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
-                  JOBS
-                </a>
               </div>
             </div>
 
