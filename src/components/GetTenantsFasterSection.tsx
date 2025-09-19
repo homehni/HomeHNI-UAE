@@ -56,7 +56,12 @@ const GetTenantsFasterSection: React.FC = () => {
         <div className="pt-2">
           <Button 
             onClick={handleShowInterest}
-            className="w-full font-medium py-2 rounded-md bg-red-800 hover:bg-red-900 text-white text-sm"
+            className={`w-full font-medium py-2 rounded-md text-white text-sm ${
+              interestShown 
+                ? "bg-gray-400 hover:bg-gray-400 cursor-default" 
+                : "bg-red-800 hover:bg-red-900"
+            }`}
+            disabled={interestShown}
           >
             {interestShown ? "Interest shown" : "Show Interest"}
           </Button>
