@@ -21,6 +21,7 @@ interface ImageUploadProps {
   images: File[];
   onImagesChange: (images: File[]) => void;
   maxImages: number;
+  minImages?: number;
   onUploadClick?: () => void;
 }
 

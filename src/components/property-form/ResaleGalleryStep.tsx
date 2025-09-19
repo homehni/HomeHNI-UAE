@@ -91,7 +91,6 @@ export const ResaleGalleryStep: React.FC<ResaleGalleryStepProps> = ({
                         images={field.value || []}
                         onImagesChange={field.onChange}
                         maxImages={15}
-                        minImages={0}
                       />
                     </div>
                   </FormControl>

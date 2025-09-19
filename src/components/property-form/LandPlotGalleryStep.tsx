@@ -71,7 +71,6 @@ export const LandPlotGalleryStep: React.FC<LandPlotGalleryStepProps> = ({
               images={images}
               onImagesChange={handleImageChange}
               maxImages={20}
-              minImages={0}
             />
             
             <div className="text-sm text-gray-600">

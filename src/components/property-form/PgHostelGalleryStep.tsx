@@ -70,7 +70,6 @@ export function PgHostelGalleryStep({
                   images={formData.images}
                   onImagesChange={handleImagesChange}
                   maxImages={20}
-                  minImages={0}
                 />
               </div>
 

@@ -84,19 +84,19 @@ export const CommercialMultiStepForm: React.FC<CommercialMultiStepFormProps> = (
   };
 
   // Step handlers
-  const handlePropertyDetailsNext = (data: CommercialPropertyDetails) => {
+  const handlePropertyDetailsNext = (data: Partial<CommercialPropertyDetails>) => {
     updatePropertyDetails(data);
     nextStep();
     scrollToTop();
   };
 
-  const handleLocationDetailsNext = (data: LocationDetails) => {
+  const handleLocationDetailsNext = (data: Partial<LocationDetails>) => {
     updateLocationDetails(data);
     nextStep();
     scrollToTop();
   };
 
-  const handleRentalDetailsNext = (data: CommercialRentalDetails) => {
+  const handleRentalDetailsNext = (data: Partial<CommercialRentalDetails>) => {
     updateRentalDetails(data);
     nextStep();
     scrollToTop();
@@ -108,20 +108,20 @@ export const CommercialMultiStepForm: React.FC<CommercialMultiStepFormProps> = (
     scrollToTop();
   };
 
-  const handleGalleryNext = (data: PropertyGallery) => {
+  const handleGalleryNext = (data: Partial<PropertyGallery>) => {
     updateGallery(data);
     nextStep();
     scrollToTop();
   };
 
 
-const handleScheduleNext = (data: ScheduleInfo) => {
+const handleScheduleNext = (data: Partial<ScheduleInfo>) => {
   updateScheduleInfo(data);
   nextStep();
   scrollToTop();
 };
 
-const handleScheduleSubmit = (data: ScheduleInfo) => {
+const handleScheduleSubmit = (data: Partial<ScheduleInfo>) => {
   updateScheduleInfo(data);
   const formData = getFormData();
   onSubmit(formData as CommercialFormData);

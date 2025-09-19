@@ -16,6 +16,7 @@ interface PropertyResult {
   bathrooms: number;
   image: string | string[];
   propertyType: string;
+  listingType?: string;
   isNew?: boolean;
 }
 

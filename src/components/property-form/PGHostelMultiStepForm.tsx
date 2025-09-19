@@ -1020,7 +1020,7 @@ const [propertyInfo, setPropertyInfo] = useState({
                   // Directly call the appropriate handler based on current step
                   if (currentStep === 1) {
                     console.log('Calling handleRoomTypeNext');
-                    handleRoomTypeNext(roomTypes);
+                    handleRoomTypesNext(roomTypes);
                   } else if (currentStep === 2) {
                     console.log('Calling handleRoomDetailsNext');
                     handleRoomDetailsNext(roomDetails);
