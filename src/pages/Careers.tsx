@@ -642,6 +642,7 @@ const Careers = () => {
         </div>
       </section>
       
+      <Footer />
     </div>;
 };
 export default Careers;
