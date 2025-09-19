@@ -572,12 +572,6 @@ export const PostProperty: React.FC = () => {
         availability_type: 'immediate',
         status: 'pending',
         is_featured: true, // Mark all submitted properties as featured candidates
-        // Extra fields for better details rendering
-        security_deposit: Number(((data.propertyInfo as any)?.flattmatesDetails?.securityDeposit ?? (data.propertyInfo as any)?.rentalDetails?.securityDeposit) ?? 0) || null,
-        available_from: ((data.propertyInfo as any)?.flattmatesDetails?.availableFrom) || ((data.propertyInfo as any)?.rentalDetails?.availableFrom) || null,
-        parking: ((data.propertyInfo as any)?.amenities?.parking) || null,
-        age_of_building: (('propertyDetails' in data.propertyInfo) && (data.propertyInfo as any).propertyDetails?.propertyAge) ? (data.propertyInfo as any).propertyDetails.propertyAge : null,
-        preferred_tenant: ((data.propertyInfo as any)?.flattmatesDetails?.genderPreference) || ((data.propertyInfo as any)?.rentalDetails?.preferredTenants) || null,
         // Add owner information directly to properties table
         owner_name: data.ownerInfo.fullName || 'Anonymous',
         owner_email: data.ownerInfo.email || '',

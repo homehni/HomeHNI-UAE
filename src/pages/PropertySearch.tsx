@@ -10,7 +10,7 @@ import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import PropertyCard from '@/components/PropertyCard';
-import { MapPin, Filter, Grid3X3, List, Bookmark, Share2, X, ChevronLeft, ChevronRight } from 'lucide-react';
+import { MapPin, Filter, Grid3X3, List, Bookmark, Share2, X } from 'lucide-react';
 import Header from '@/components/Header';
 import Marquee from '@/components/Marquee';
 import Footer from '@/components/Footer';
@@ -19,8 +19,6 @@ import { useSimplifiedSearch } from '@/hooks/useSimplifiedSearch';
 const PropertySearch = () => {
   const navigate = useNavigate();
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(12); // 12 properties per page
   const locationInputRef = useRef<HTMLInputElement>(null);
   const {
     filters,
@@ -32,18 +30,6 @@ const PropertySearch = () => {
     availableLocalities,
     isLoading
   } = useSimplifiedSearch();
-
-  // Calculate pagination
-  const totalProperties = filteredProperties.length;
-  const totalPages = Math.ceil(totalProperties / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const currentProperties = filteredProperties.slice(startIndex, endIndex);
-
-  // Reset to page 1 when filters change
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [filteredProperties]);
 
   // Property types that match the database schema and FeaturedProperties component
   const propertyTypes = ['ALL', 'DUPLEX', 'PENTHOUSE', 'APARTMENT', 'VILLA', 'PLOT', 'PG HOSTEL', 'INDEPENDENT HOUSE'];
@@ -553,7 +539,7 @@ const PropertySearch = () => {
             {isLoading ? <div className="grid gap-4 sm:gap-6 grid-cols-2 md:grid-cols-2 lg:grid-cols-3">
                 {[1, 2, 3, 4, 5, 6].map(i => <div key={i} className="bg-gray-100 animate-pulse rounded-lg h-80"></div>)}
               </div> : filteredProperties.length > 0 ? <div className={`grid gap-4 sm:gap-6 ${viewMode === 'grid' ? 'grid-cols-2 md:grid-cols-3 lg:grid-cols-3' : 'grid-cols-1'}`}>
-                {currentProperties.map(property => <PropertyCard key={property.id} id={property.id} title={property.title} location={property.location} price={property.price} area={property.area} bedrooms={property.bedrooms} bathrooms={property.bathrooms} image={property.image} propertyType={property.propertyType} listingType={property.listingType} size={viewMode === 'list' ? 'large' : 'default'} />)}
+                {filteredProperties.map(property => <PropertyCard key={property.id} id={property.id} title={property.title} location={property.location} price={property.price} area={property.area} bedrooms={property.bedrooms} bathrooms={property.bathrooms} image={property.image} propertyType={property.propertyType} listingType={property.listingType} size={viewMode === 'list' ? 'large' : 'default'} />)}
               </div> : <div className="text-center py-16">
                 <div className="text-6xl mb-4">🏠</div>
                 <h3 className="text-xl font-semibold text-gray-600 mb-2">No properties found</h3>
@@ -565,53 +551,16 @@ const PropertySearch = () => {
                 </Button>
               </div>}
 
-            {/* Pagination - Only show if there are multiple pages */}
-            {totalPages > 1 && (
-              <div className="flex justify-center mt-12">
-                <div className="flex gap-2">
-                  {/* Previous button - only show if not on first page */}
-                  {currentPage > 1 && (
-                    <Button 
-                      variant="outline" 
-                      size="sm"
-                      onClick={() => setCurrentPage(currentPage - 1)}
-                    >
-                      <ChevronLeft size={16} />
-                    </Button>
-                  )}
-                  
-                  {/* Page numbers - show up to 5 pages around current page */}
-                  {Array.from({ length: totalPages }, (_, i) => i + 1)
-                    .filter(pageNum => {
-                      // Show current page and 2 pages on each side
-                      return pageNum >= Math.max(1, currentPage - 2) && 
-                             pageNum <= Math.min(totalPages, currentPage + 2);
-                    })
-                    .map(pageNum => (
-                      <Button 
-                        key={pageNum}
-                        variant={pageNum === currentPage ? "default" : "outline"} 
-                        size="sm" 
-                        className={pageNum === currentPage ? "bg-red-800 hover:bg-red-900 text-white" : ""}
-                        onClick={() => setCurrentPage(pageNum)}
-                      >
-                        {pageNum}
-                      </Button>
-                    ))}
-                  
-                  {/* Next button - only show if there are more pages */}
-                  {currentPage < totalPages && (
-                    <Button 
-                      variant="outline" 
-                      size="sm"
-                      onClick={() => setCurrentPage(currentPage + 1)}
-                    >
-                      <ChevronRight size={16} />
-                    </Button>
-                  )}
-                </div>
+            {/* Pagination */}
+            <div className="flex justify-center mt-12">
+              <div className="flex gap-2">
+                <Button variant="outline" size="sm" disabled>Previous</Button>
+                <Button variant="default" size="sm" className="bg-red-800 hover:bg-red-900 text-white">1</Button>
+                <Button variant="outline" size="sm">2</Button>
+                <Button variant="outline" size="sm">3</Button>
+                <Button variant="outline" size="sm">Next</Button>
               </div>
-            )}
+            </div>
           </div>
         </div>
       </div>

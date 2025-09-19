@@ -59,14 +59,12 @@ interface ResaleAmenitiesStepProps {
   initialData?: Partial<PropertyAmenities>;
   onNext: (data: PropertyAmenities) => void;
   onBack: () => void;
-  formId?: string;
 }
 
 export const ResaleAmenitiesStep: React.FC<ResaleAmenitiesStepProps> = ({
   initialData = {},
   onNext,
-  onBack,
-  formId
+  onBack
 }) => {
   const form = useForm<ResaleAmenitiesForm>({
     resolver: zodResolver(resaleAmenitiesSchema),
@@ -113,7 +111,7 @@ export const ResaleAmenitiesStep: React.FC<ResaleAmenitiesStepProps> = ({
       <h1 className="text-2xl font-semibold text-red-600 mb-6">Amenities</h1>
 
       <Form {...form}>
-        <form id={formId} onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           
           {/* Bathrooms, Balcony, Water Supply Row */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

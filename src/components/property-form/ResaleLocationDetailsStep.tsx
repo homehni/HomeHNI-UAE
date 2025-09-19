@@ -26,7 +26,6 @@ interface ResaleLocationDetailsStepProps {
   onBack: () => void;
   currentStep: number;
   totalSteps: number;
-  formId?: string;
 }
 
 export const ResaleLocationDetailsStep: React.FC<ResaleLocationDetailsStepProps> = ({
@@ -34,8 +33,7 @@ export const ResaleLocationDetailsStep: React.FC<ResaleLocationDetailsStepProps>
   onNext,
   onBack,
   currentStep,
-  totalSteps,
-  formId
+  totalSteps
 }) => {
   const isMobile = useIsMobile();
   const localityInputRef = useRef<HTMLInputElement | null>(null);
@@ -287,7 +285,7 @@ export const ResaleLocationDetailsStep: React.FC<ResaleLocationDetailsStepProps>
       <h1 className="text-2xl font-semibold text-red-600 mb-6">Location Details</h1>
 
       <Form {...form}>
-        <form id={formId} onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           {/* City Selection */}
           <FormField
             control={form.control}

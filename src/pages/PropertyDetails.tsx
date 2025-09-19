@@ -21,8 +21,8 @@ import { RelatedPropertiesCard } from '@/components/property-details/RelatedProp
 import { PropertyHeader } from '@/components/property-details/PropertyHeader';
 import { PropertyImageGallery } from '@/components/property-details/PropertyImageGallery';
 import { PropertyInfoCards } from '@/components/property-details/PropertyInfoCards';
+import { VisitScheduleCard } from '@/components/property-details/VisitScheduleCard';
 import { PropertyActions } from '@/components/property-details/PropertyActions';
-import { ReportSection } from '@/components/property-details/ReportSection';
 import { ServicesCard } from '@/components/property-details/ServicesCard';
 import { DescriptionCard } from '@/components/property-details/DescriptionCard';
 import { supabase } from '@/integrations/supabase/client';
@@ -48,12 +48,6 @@ interface Property {
   created_at: string;
   amenities?: any; // May come as JSONB object
   additional_documents?: Record<string, boolean>;
-  // Extra optional fields for richer display
-  security_deposit?: number | null;
-  available_from?: string | null;
-  parking?: string | null;
-  age_of_building?: string | null;
-  preferred_tenant?: string | null;
   // Note: Owner contact info removed for security
 }
 const PropertyDetails: React.FC = () => {
@@ -182,12 +176,6 @@ const PropertyDetails: React.FC = () => {
             images: payload.images || [], // This should contain the uploaded image URLs
             videos: payload.videos || [],
             amenities: payload.amenities || null, // Add amenities from payload
-            // Extra fields from payload to enrich preview
-            security_deposit: payload.security_deposit ?? null,
-            available_from: payload.available_from ?? null,
-            parking: payload.parking ?? null,
-            age_of_building: payload.age_of_building ?? null,
-            preferred_tenant: payload.preferred_tenant ?? null,
             status: submissionData.status || 'pending',
             created_at: submissionData.created_at
           };
@@ -416,14 +404,14 @@ const PropertyDetails: React.FC = () => {
               <div className="space-y-6 min-w-0">
                 <PropertyInfoCards property={mergedProperty as any} />
                 
+                {/* Visit Schedule Card */}
+                <VisitScheduleCard onJoinVisit={() => setShowScheduleVisitModal(true)} />
+                
                 {/* Action Buttons */}
                 <PropertyActions
                   onContact={() => setShowContactModal(true)}
                   onScheduleVisit={() => setShowScheduleVisitModal(true)}
                 />
-                
-                {/* Report Section */}
-                <ReportSection />
               </div>
             </div>
 

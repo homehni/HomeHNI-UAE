@@ -30,7 +30,6 @@ interface FlattmatesRentalDetailsStepProps {
   currentStep: number;
   totalSteps: number;
   completedSteps: number[];
-  formId?: string;
 }
 
 export function FlattmatesRentalDetailsStep({ 
@@ -39,8 +38,7 @@ export function FlattmatesRentalDetailsStep({
   onBack, 
   currentStep, 
   totalSteps,
-  completedSteps,
-  formId
+  completedSteps 
 }: FlattmatesRentalDetailsStepProps) {
   const [formData, setFormData] = useState<FlattmatesRentalDetails>({
     expectedRent: 0,
@@ -76,7 +74,7 @@ export function FlattmatesRentalDetailsStep({
 
           <Card>
             <CardContent className="p-8">
-              <form id={formId || 'flatmates-step-form'} onSubmit={handleSubmit} className="space-y-6">
+              <form onSubmit={handleSubmit} className="space-y-6">
                 {/* Expected Rent and Expected Deposit */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">

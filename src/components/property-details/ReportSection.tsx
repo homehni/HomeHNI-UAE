@@ -1,144 +1,75 @@
 import React, { useState } from 'react';
-import { AlertTriangle, MapPin, Camera, Users, Home, Calendar, Tag, Info, ArrowLeft, X } from 'lucide-react';
+import { AlertTriangle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { useToast } from '@/hooks/use-toast';
+import { Textarea } from '@/components/ui/textarea';
 
 export const ReportSection: React.FC = () => {
-  const [selectedReports, setSelectedReports] = useState<string[]>([]);
-  const [showWrongInfoModal, setShowWrongInfoModal] = useState(false);
-  const [selectedIssues, setSelectedIssues] = useState<string[]>([]);
-  const { toast } = useToast();
+  const [reportText, setReportText] = useState('');
+  const [showReportForm, setShowReportForm] = useState(false);
 
-  const reportOptions = [
-    'Listed by Broker',
-    'Rented Out', 
-    'Wrong Info'
-  ];
-
-  const issueOptions = [
-    { id: 'location', label: 'Location', icon: MapPin },
-    { id: 'fake-photos', label: 'Fake Photos', icon: Camera },
-    { id: 'tenants-preference', label: 'Tenants Preference', icon: Users },
-    { id: 'bhk-type', label: 'BHK Type', icon: Home },
-    { id: 'availability-date', label: 'Availability Date', icon: Calendar },
-    { id: 'rent-deposit', label: 'Rent or Deposit', icon: Tag },
-    { id: 'other', label: 'Other', icon: Info },
-  ];
-
-  const handleReportToggle = (option: string) => {
-    if (option === 'Wrong Info') {
-      setShowWrongInfoModal(true);
-    } else {
-      // Show toast for "Listed by Broker" and "Rented Out"
-      toast({
-        title: "Contact Required",
-        description: "It seems you have not taken the contact of this property. Please Take Owner Contact before reporting the issue",
-        variant: "destructive",
-      });
-    }
-  };
-
-  const handleIssueToggle = (issueId: string) => {
-    setSelectedIssues(prev => 
-      prev.includes(issueId) 
-        ? prev.filter(item => item !== issueId)
-        : [...prev, issueId]
-    );
-  };
-
-  const handleSubmitIssues = () => {
-    if (selectedIssues.length > 0) {
-      console.log('Issues reported:', selectedIssues);
-      toast({
-        title: "Report Submitted",
-        description: "Thank you for reporting the issues. We will review them shortly.",
-      });
-      setSelectedIssues([]);
-      setShowWrongInfoModal(false);
+  const handleSubmitReport = () => {
+    if (reportText.trim()) {
+      // Handle report submission
+      console.log('Report submitted:', reportText);
+      setReportText('');
+      setShowReportForm(false);
+      // You could show a toast notification here
     }
   };
 
   return (
-    <>
-      <div className="bg-teal-50 border border-teal-200 rounded-lg p-4">
-        <div className="space-y-3">
-          <div className="text-xs text-teal-900">
+    <div className="bg-orange-50 border border-orange-200 rounded-lg p-4">
+      <div className="flex items-start gap-3">
+        <div className="bg-orange-100 p-2 rounded-lg flex-shrink-0">
+          <AlertTriangle className="w-5 h-5 text-orange-600" />
+        </div>
+        <div className="flex-1">
+          <div className="font-medium text-orange-900 mb-2">
             Report what was not correct in this property
           </div>
-          <div className="flex flex-wrap gap-2">
-            {reportOptions.map(option => (
-              <Button
-                key={option}
-                onClick={() => handleReportToggle(option)}
-                variant="outline"
-                size="sm"
-                className="text-xs text-teal-700 border-teal-300 hover:bg-teal-100"
-              >
-                {option}
-              </Button>
-            ))}
-          </div>
+          
+          {!showReportForm ? (
+            <Button
+              onClick={() => setShowReportForm(true)}
+              variant="outline"
+              size="sm"
+              className="text-orange-600 border-orange-300 hover:bg-orange-100"
+            >
+              Report Issue
+            </Button>
+          ) : (
+            <div className="space-y-3">
+              <Textarea
+                placeholder="Please describe what was incorrect about this property listing..."
+                value={reportText}
+                onChange={(e) => setReportText(e.target.value)}
+                className="min-h-[100px] border-orange-300 focus:border-orange-500"
+              />
+              <div className="flex gap-2">
+                <Button
+                  onClick={handleSubmitReport}
+                  size="sm"
+                  className="bg-orange-600 hover:bg-orange-700 text-white"
+                  disabled={!reportText.trim()}
+                >
+                  Submit Report
+                </Button>
+                <Button
+                  onClick={() => {
+                    setShowReportForm(false);
+                    setReportText('');
+                  }}
+                  variant="outline"
+                  size="sm"
+                  className="text-orange-600 border-orange-300 hover:bg-orange-100"
+                >
+                  Cancel
+                </Button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
-
-      {/* Wrong Info Modal */}
-      <Dialog open={showWrongInfoModal} onOpenChange={setShowWrongInfoModal}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle className="flex items-center justify-between">
-              What's wrong?
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setShowWrongInfoModal(false)}
-                className="h-6 w-6 p-0"
-              >
-                <X size={16} />
-              </Button>
-            </DialogTitle>
-          </DialogHeader>
-          
-          <div className="space-y-4">
-            {issueOptions.map(({ id, label, icon: Icon }) => (
-              <div key={id} className="flex items-center space-x-3">
-                <Icon className="h-5 w-5 text-gray-500" />
-                <div className="flex-1">
-                  <label htmlFor={id} className="text-sm text-gray-700 cursor-pointer">
-                    {label}
-                  </label>
-                </div>
-                <Checkbox
-                  id={id}
-                  checked={selectedIssues.includes(id)}
-                  onCheckedChange={() => handleIssueToggle(id)}
-                />
-              </div>
-            ))}
-          </div>
-
-          <div className="flex items-center justify-between mt-6">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setShowWrongInfoModal(false)}
-              className="flex items-center gap-1"
-            >
-              <ArrowLeft size={16} />
-              Back
-            </Button>
-            
-            <Button
-              onClick={handleSubmitIssues}
-              disabled={selectedIssues.length === 0}
-              className="bg-teal-600 hover:bg-teal-700 text-white"
-            >
-              Report
-            </Button>
-          </div>
-        </DialogContent>
-      </Dialog>
-    </>
+    </div>
   );
 };

@@ -25,7 +25,6 @@ interface FlattmatesLocationDetailsStepProps {
   onBack: () => void;
   currentStep: number;
   totalSteps: number;
-  formId?: string;
 }
 
 export const FlattmatesLocationDetailsStep: React.FC<FlattmatesLocationDetailsStepProps> = ({
@@ -33,8 +32,7 @@ export const FlattmatesLocationDetailsStep: React.FC<FlattmatesLocationDetailsSt
   onNext,
   onBack,
   currentStep,
-  totalSteps,
-  formId
+  totalSteps
 }) => {
   const localityInputRef = useRef<HTMLInputElement | null>(null);
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
@@ -196,7 +194,7 @@ export const FlattmatesLocationDetailsStep: React.FC<FlattmatesLocationDetailsSt
       <h1 className="text-2xl font-bold text-red-600">Location Details</h1>
 
       <Form {...form}>
-        <form id={formId || 'flatmates-step-form'} onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           {/* City Field */}
           <FormField
             control={form.control}

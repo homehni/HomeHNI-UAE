@@ -128,43 +128,43 @@ export const OverviewCard: React.FC<OverviewCardProps> = ({ property }) => {
     { 
       icon: Sofa, 
       label: 'Furnishing Status', 
-      value: property.furnishing || 'Not specified',
+      value: property.furnishing || 'Semi',
       hasAction: property.furnishing === 'Semi'
     },
     { 
       icon: Compass, 
       label: 'Facing', 
-      value: property.facing_direction || 'Not specified' 
+      value: property.facing_direction || 'East' 
     },
     { 
       icon: Droplets, 
       label: 'Water Supply', 
-      value: property.water_supply || 'Not specified' 
+      value: property.water_supply || 'Both' 
     },
     { 
       icon: Layers, 
       label: 'Floor', 
-      value: formatFloor(property.floor_no, property.total_floors) 
+      value: formatFloor(property.floor_no, property.total_floors) || '3/4' 
     },
     { 
       icon: Bath, 
       label: 'Bathroom', 
-      value: property.bathrooms?.toString() || 'Not specified' 
+      value: property.bathrooms?.toString() || '3' 
     },
     { 
       icon: Users, 
       label: 'Pet Allowed', 
-      value: 'Not specified' 
+      value: 'Yes' 
     },
     { 
       icon: Utensils, 
       label: 'Non-Veg Allowed', 
-      value: 'Not specified' 
+      value: 'Yes' 
     },
     { 
       icon: Shield, 
       label: 'Gated Security', 
-      value: property.gated_security ? 'Yes' : 'No' 
+      value: property.gated_security ? 'Yes' : 'Yes' 
     },
   ];
 

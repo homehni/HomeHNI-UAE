@@ -503,9 +503,15 @@ export const MyInterests: React.FC = () => {
 
                     <div className="p-3">
                       {/* Property Title */}
-                      <h3 className="text-sm font-semibold text-gray-900 mb-3 line-clamp-1">
+                      <h3 className="text-sm font-semibold text-gray-900 mb-1 line-clamp-1">
                         {property.title}
                       </h3>
+
+                      {/* Location */}
+                      <div className="flex items-center text-gray-600 mb-3">
+                        <MapPin className="h-3 w-3 mr-1 flex-shrink-0" />
+                        <span className="text-xs line-clamp-1">{property.locality}, {property.city}</span>
+                      </div>
 
                       {/* Contact Button with Price */}
                       <div className="flex items-center justify-between">

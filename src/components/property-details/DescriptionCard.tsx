@@ -97,20 +97,14 @@ export const DescriptionCard: React.FC<DescriptionCardProps> = ({ property }) =>
 
     // Generate a comprehensive description based on available property data
     const propertyType = getPropertyTypeDisplay();
-    
-    // Filter out 'Unknown' values for location
-    const validLocality = property?.locality && property.locality !== 'Unknown' ? property.locality : null;
-    const validCity = property?.city && property.city !== 'Unknown' ? property.city : null;
-    const validState = property?.state && property.state !== 'Unknown' ? property.state : null;
-    
-    const location = validLocality && validCity 
-      ? `${validLocality}, ${validCity}` 
-      : validCity || validLocality || 'a prime location';
+    const location = property?.locality && property?.city 
+      ? `${property.locality}, ${property.city}` 
+      : property?.city || 'prime location';
     
     let description = `This ${property?.bhk_type ? property.bhk_type + ' ' : ''}${propertyType.toLowerCase()} is located in ${location}`;
 
-    if (validState) {
-      description += `, ${validState}`;
+    if (property?.state) {
+      description += `, ${property.state}`;
     }
 
     description += '. ';

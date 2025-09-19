@@ -147,16 +147,8 @@ const [propertyInfo, setPropertyInfo] = useState({
   const [completedSteps, setCompletedSteps] = useState<number[]>([]);
 
   const scrollToTop = () => {
-    try {
-      const el = document.scrollingElement || document.documentElement || document.body;
-      el?.scrollTo({ top: 0, behavior: 'smooth' });
-    } catch {}
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 150, behavior: 'smooth' });
   };
-
-  useEffect(() => {
-    scrollToTop();
-  }, [currentStep]);
 
   // Step handlers
 
@@ -1024,9 +1016,6 @@ const [propertyInfo, setPropertyInfo] = useState({
                 onClick={() => {
                   console.log('PGHostelMultiStepForm sticky Save & Continue button clicked');
                   console.log('Current step:', currentStep);
-                  
-                  // Always scroll to top first
-                  scrollToTop();
                   
                   // Directly call the appropriate handler based on current step
                   if (currentStep === 1) {

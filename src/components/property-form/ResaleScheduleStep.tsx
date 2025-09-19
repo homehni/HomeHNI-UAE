@@ -22,15 +22,13 @@ interface ResaleScheduleStepProps {
   onNext: (data: ResaleScheduleData) => void;
   onBack: () => void;
   onSubmit?: (data: ResaleScheduleData) => void;
-  formId?: string;
 }
 
 export const ResaleScheduleStep: React.FC<ResaleScheduleStepProps> = ({
   initialData = {},
   onNext,
   onBack,
-  onSubmit,
-  formId
+  onSubmit
 }) => {
   const form = useForm<ResaleScheduleData>({
     resolver: zodResolver(resaleScheduleSchema),
@@ -64,7 +62,7 @@ const handleFormSubmit = (data: ResaleScheduleData) => {
         </div>
 
         <Form {...form}>
-          <form id={formId} onSubmit={form.handleSubmit(handleFormSubmit)} className="space-y-8">
+          <form onSubmit={form.handleSubmit(handleFormSubmit)} className="space-y-8">
             {/* Info Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
               {/* Property Visits Info */}

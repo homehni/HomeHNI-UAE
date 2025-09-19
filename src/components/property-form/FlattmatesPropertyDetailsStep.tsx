@@ -23,7 +23,6 @@ interface FlattmatesPropertyDetailsStepProps {
   currentStep: number;
   totalSteps: number;
   completedSteps: number[];
-  formId?: string;
 }
 
 export function FlattmatesPropertyDetailsStep({ 
@@ -32,8 +31,7 @@ export function FlattmatesPropertyDetailsStep({
   onBack, 
   currentStep, 
   totalSteps,
-  completedSteps,
-  formId
+  completedSteps 
 }: FlattmatesPropertyDetailsStepProps) {
   const [formData, setFormData] = useState<FlattmatesPropertyDetails>({
     apartmentType: '',
@@ -79,7 +77,7 @@ export function FlattmatesPropertyDetailsStep({
 
           <Card>
             <CardContent className="p-8">
-              <form id={formId || 'flatmates-step-form'} onSubmit={handleSubmit} className="space-y-6">
+              <form onSubmit={handleSubmit} className="space-y-6">
                 {/* Apartment Type and BHK Type */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">

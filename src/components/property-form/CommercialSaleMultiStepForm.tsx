@@ -92,16 +92,8 @@ const handleScheduleSubmit = async (data: any) => {
 };
 
   const scrollToTop = () => {
-    try {
-      const el = document.scrollingElement || document.documentElement || document.body;
-      el?.scrollTo({ top: 0, behavior: 'smooth' });
-    } catch {}
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 150, behavior: 'smooth' });
   };
-
-  useEffect(() => {
-    scrollToTop();
-  }, [currentStep]);
 
   const renderCurrentStep = () => {
     switch (currentStep) {
@@ -260,14 +252,12 @@ const handleScheduleSubmit = async (data: any) => {
               <Button 
                 type="button" 
                 onClick={() => {
-                  // Trigger the current step's form submission and scroll to top
+                  // Trigger the current step's form submission
                   const currentStepElement = document.querySelector('form');
                   if (currentStepElement) {
                     const submitEvent = new Event('submit', { bubbles: true, cancelable: true });
                     currentStepElement.dispatchEvent(submitEvent);
                   }
-                  // Always scroll to top when Save & Continue is clicked
-                  setTimeout(scrollToTop, 100);
                 }}
                 className="h-12 sm:h-10 px-6 sm:px-6 bg-red-600 hover:bg-red-700 text-white w-full sm:w-auto order-1 sm:order-2 font-semibold"
               >
