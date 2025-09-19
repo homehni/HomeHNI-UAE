@@ -128,7 +128,7 @@ const Careers = () => {
         }}></div>
         
           {/* Hero Text Overlay */}
-          <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center">
+          <div className="absolute inset-0 flex items-center pt-20">
             <div className="container mx-auto px-4">
               <div className="text-white max-w-4xl text-center lg:text-left">
                 <h1 className="text-4xl md:text-6xl font-bold mb-6">
@@ -137,11 +137,6 @@ const Careers = () => {
                 <p className="text-lg md:text-xl mb-8 opacity-90 leading-relaxed">
                   Join India's most innovative real estate technology platform and shape the future of luxury property experiences for High-Net-Worth Individuals
                 </p>
-                <div className="flex flex-wrap justify-center lg:justify-start gap-4 text-sm md:text-base">
-                  <span className="px-4 py-2 bg-white bg-opacity-20 rounded-full backdrop-blur-sm">Remote Opportunities</span>
-                  <span className="px-4 py-2 bg-white bg-opacity-20 rounded-full backdrop-blur-sm">Flexible Work Culture</span>
-                  <span className="px-4 py-2 bg-white bg-opacity-20 rounded-full backdrop-blur-sm">Growth-Focused Environment</span>
-                </div>
               </div>
             </div>
           </div>
