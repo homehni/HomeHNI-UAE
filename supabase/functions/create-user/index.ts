@@ -171,13 +171,15 @@ Deno.serve(async (req) => {
 
     console.log('Profile created successfully');
 
-    // Assign role
+    // Assign or update role idempotently
     console.log('Assigning role:', role);
     const { error: roleError } = await supabaseAdmin
       .from('user_roles')
-      .insert({
+      .upsert({
         user_id: authData.user.id,
         role: role.trim()
+      }, {
+        onConflict: 'user_id'
       });
 
     if (roleError) {
