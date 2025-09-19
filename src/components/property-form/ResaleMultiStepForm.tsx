@@ -316,32 +316,38 @@ const handleScheduleSubmit = (data: any) => {
           {currentStep !== 7 && (
             <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-3 sm:p-4 z-50 shadow-lg">
               <div className="max-w-4xl mx-auto flex flex-col sm:flex-row gap-3 sm:gap-4 sm:justify-center">
-                {currentStep > 1 && (
-                  <Button 
-                    type="button" 
-                    variant="outline" 
-                    onClick={prevStep}
-                    className="h-10 sm:h-10 px-4 sm:px-6 w-full sm:w-auto order-2 sm:order-1"
-                  >
-                    Back
-                  </Button>
-                )}
+                <Button 
+                  type="button" 
+                  variant="outline" 
+                  onClick={currentStep === 1 ? () => {} : prevStep}
+                  className="h-10 sm:h-10 px-4 sm:px-6 w-full sm:w-auto order-2 sm:order-1"
+                  disabled={currentStep === 1}
+                >
+                  Back
+                </Button>
                 <Button 
                   type="button" 
                   onClick={() => {
-                    scrollToTop();
+                    console.log('ResaleMultiStepForm sticky Save & Continue button clicked');
+                    console.log('Current step:', currentStep);
                     
                     if (currentStep === 1) {
+                      console.log('Calling handlePropertyDetailsNext');
                       handlePropertyDetailsNext(propertyDetails);
                     } else if (currentStep === 2) {
+                      console.log('Calling handleLocationDetailsNext');
                       handleLocationDetailsNext(locationDetails);
                     } else if (currentStep === 3) {
+                      console.log('Calling handleSaleDetailsNext');
                       handleSaleDetailsNext(saleDetails);
                     } else if (currentStep === 4) {
+                      console.log('Calling handleAmenitiesNext');
                       handleAmenitiesNext(amenities);
                     } else if (currentStep === 5) {
+                      console.log('Calling handleGalleryNext');
                       handleGalleryNext(gallery);
                     } else if (currentStep === 6) {
+                      console.log('Calling handleScheduleSubmit');
                       handleScheduleSubmit(scheduleInfo);
                     }
                   }}
