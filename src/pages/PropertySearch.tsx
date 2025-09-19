@@ -10,7 +10,7 @@ import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import PropertyCard from '@/components/PropertyCard';
-import { MapPin, Filter, Grid3X3, List, Bookmark, Share2, X } from 'lucide-react';
+import { MapPin, Filter, Grid3X3, List, Bookmark, Share2, X, ChevronLeft, ChevronRight } from 'lucide-react';
 import Header from '@/components/Header';
 import Marquee from '@/components/Marquee';
 import Footer from '@/components/Footer';
@@ -576,7 +576,7 @@ const PropertySearch = () => {
                       size="sm"
                       onClick={() => setCurrentPage(currentPage - 1)}
                     >
-                      Previous
+                      <ChevronLeft size={16} />
                     </Button>
                   )}
                   
@@ -606,7 +606,7 @@ const PropertySearch = () => {
                       size="sm"
                       onClick={() => setCurrentPage(currentPage + 1)}
                     >
-                      Next
+                      <ChevronRight size={16} />
                     </Button>
                   )}
                 </div>
