@@ -126,6 +126,23 @@ const Careers = () => {
           backgroundImage: `url('/lovable-uploads/b97275ad-b157-4783-8b5b-198d7c905011.png')`,
           backgroundPosition: 'center center'
         }}></div>
+        
+          {/* Hero Text Overlay */}
+          <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+            <div className="text-center text-white max-w-4xl px-4">
+              <h1 className="text-4xl md:text-6xl font-bold mb-4">
+                Build Your Career with HomeHNI
+              </h1>
+              <p className="text-lg md:text-xl mb-6 opacity-90">
+                Join India's most innovative real estate technology platform and shape the future of luxury property experiences
+              </p>
+              <div className="flex flex-wrap justify-center gap-4 text-sm md:text-base">
+                <span className="px-4 py-2 bg-white bg-opacity-20 rounded-full">Remote Opportunities</span>
+                <span className="px-4 py-2 bg-white bg-opacity-20 rounded-full">Flexible Work Culture</span>
+                <span className="px-4 py-2 bg-white bg-opacity-20 rounded-full">Growth-Focused Environment</span>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Sticky Form Container for Large Screens */}
