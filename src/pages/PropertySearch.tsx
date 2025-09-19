@@ -19,6 +19,8 @@ import { useSimplifiedSearch } from '@/hooks/useSimplifiedSearch';
 const PropertySearch = () => {
   const navigate = useNavigate();
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(12); // 12 properties per page
   const locationInputRef = useRef<HTMLInputElement>(null);
   const {
     filters,
@@ -30,6 +32,18 @@ const PropertySearch = () => {
     availableLocalities,
     isLoading
   } = useSimplifiedSearch();
+
+  // Calculate pagination
+  const totalProperties = filteredProperties.length;
+  const totalPages = Math.ceil(totalProperties / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentProperties = filteredProperties.slice(startIndex, endIndex);
+
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [filteredProperties]);
 
   // Property types that match the database schema and FeaturedProperties component
   const propertyTypes = ['ALL', 'DUPLEX', 'PENTHOUSE', 'APARTMENT', 'VILLA', 'PLOT', 'PG HOSTEL', 'INDEPENDENT HOUSE'];
@@ -551,36 +565,53 @@ const PropertySearch = () => {
                 </Button>
               </div>}
 
-            {/* Pagination */}
-            <div className="flex justify-center mt-12">
-              <div className="flex gap-2">
-                {/* Previous button - only show if not on first page */}
-                {1 > 1 && (
-                  <Button variant="outline" size="sm">
-                    Previous
-                  </Button>
-                )}
-                
-                {/* Page numbers */}
-                {[1, 2, 3, 4, 5].map(pageNum => (
-                  <Button 
-                    key={pageNum}
-                    variant={pageNum === 1 ? "default" : "outline"} 
-                    size="sm" 
-                    className={pageNum === 1 ? "bg-red-800 hover:bg-red-900 text-white" : ""}
-                  >
-                    {pageNum}
-                  </Button>
-                ))}
-                
-                {/* Next button - only show if there are more pages */}
-                {1 < 5 && (
-                  <Button variant="outline" size="sm">
-                    Next
-                  </Button>
-                )}
+            {/* Pagination - Only show if there are multiple pages */}
+            {totalPages > 1 && (
+              <div className="flex justify-center mt-12">
+                <div className="flex gap-2">
+                  {/* Previous button - only show if not on first page */}
+                  {currentPage > 1 && (
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      onClick={() => setCurrentPage(currentPage - 1)}
+                    >
+                      Previous
+                    </Button>
+                  )}
+                  
+                  {/* Page numbers - show up to 5 pages around current page */}
+                  {Array.from({ length: totalPages }, (_, i) => i + 1)
+                    .filter(pageNum => {
+                      // Show current page and 2 pages on each side
+                      return pageNum >= Math.max(1, currentPage - 2) && 
+                             pageNum <= Math.min(totalPages, currentPage + 2);
+                    })
+                    .map(pageNum => (
+                      <Button 
+                        key={pageNum}
+                        variant={pageNum === currentPage ? "default" : "outline"} 
+                        size="sm" 
+                        className={pageNum === currentPage ? "bg-red-800 hover:bg-red-900 text-white" : ""}
+                        onClick={() => setCurrentPage(pageNum)}
+                      >
+                        {pageNum}
+                      </Button>
+                    ))}
+                  
+                  {/* Next button - only show if there are more pages */}
+                  {currentPage < totalPages && (
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      onClick={() => setCurrentPage(currentPage + 1)}
+                    >
+                      Next
+                    </Button>
+                  )}
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       </div>
