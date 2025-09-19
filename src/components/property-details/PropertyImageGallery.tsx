@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Camera, MapPin, Heart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { PropertyImageModal } from '@/components/PropertyImageModal';
+import { FavoriteButton } from '@/components/FavoriteButton';
 import propertyPlaceholder from '@/assets/property-placeholder.png';
 
 interface PropertyImageGalleryProps {
@@ -58,13 +59,12 @@ export const PropertyImageGallery: React.FC<PropertyImageGalleryProps> = ({ prop
 
           {/* Shortlist Button - Top Right */}
           <div className="absolute top-4 right-4">
-            <Button
-              variant="outline"
+            <FavoriteButton
+              propertyId={property.id}
               size="sm"
-              className="bg-black/70 text-white border-white/20 hover:bg-black/80 backdrop-blur-sm"
-            >
-              <Heart className="w-4 h-4" />
-            </Button>
+              variant="outline"
+              className="bg-black/70 text-white border-white/20 hover:bg-black/80 backdrop-blur-sm hover:text-red-500"
+            />
           </div>
         </div>
       </div>
@@ -107,14 +107,12 @@ export const PropertyImageGallery: React.FC<PropertyImageGalleryProps> = ({ prop
 
             {/* Shortlist Button - Top Right */}
             <div className="absolute top-4 right-4">
-              <Button
-                variant="outline"
+              <FavoriteButton
+                propertyId={property.id}
                 size="sm"
-                className="bg-black/70 text-white border-white/20 hover:bg-black/80 backdrop-blur-sm"
-              >
-                <Heart className="w-4 h-4 mr-1" />
-                Shortlist
-              </Button>
+                variant="outline"
+                className="bg-black/70 text-white border-white/20 hover:bg-black/80 backdrop-blur-sm hover:text-red-500"
+              />
             </div>
           </div>
 
