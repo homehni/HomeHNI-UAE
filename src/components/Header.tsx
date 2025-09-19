@@ -251,12 +251,12 @@ const Header = () => {
                   RENT
                 </a>
 
-                <a href="/post-property" onClick={e => {
+                <button onClick={e => {
                   e.preventDefault();
-                  navigate('/post-property');
+                  handlePostPropertyClick();
                 }} className={`hover:opacity-80 transition-colors duration-500 text-sm xl:text-base font-medium uppercase ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
                   SELL
-                </a>
+                </button>
 
                 {/* Services Dropdown */}
                 <div className="relative" onMouseEnter={handleServicesHover} onMouseLeave={handleServicesLeave}>
