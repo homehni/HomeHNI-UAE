@@ -1,7 +1,17 @@
 import React from 'react';
 import { Shield, Star, Facebook, Tag } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useToast } from '@/hooks/use-toast';
 const GetTenantsFasterSection: React.FC = () => {
+  const { toast } = useToast();
+  
+  const handleShowInterest = () => {
+    toast({
+      title: "Your request has been submitted successfully.",
+      description: "Our executives will reach out to you soon.",
+    });
+  };
+
   const features = [{
     icon: Shield,
     title: "Privacy",
@@ -42,7 +52,10 @@ const GetTenantsFasterSection: React.FC = () => {
 
         {/* CTA Button */}
         <div className="pt-2">
-          <Button className="w-full font-medium py-2 rounded-md bg-red-800 hover:bg-red-900 text-white text-sm">
+          <Button 
+            onClick={handleShowInterest}
+            className="w-full font-medium py-2 rounded-md bg-red-800 hover:bg-red-900 text-white text-sm"
+          >
             Show Interest
           </Button>
         </div>
