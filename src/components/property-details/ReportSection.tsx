@@ -34,10 +34,9 @@ export const ReportSection: React.FC = () => {
           <AlertTriangle className="w-5 h-5 text-teal-600" />
         </div>
         <div className="flex-1">
-          <div className="text-sm text-teal-900 mb-1">
+          <div className="text-sm text-teal-900">
             Report what was not correct in this property
           </div>
-          
           <div className="flex flex-wrap gap-2">
             {reportOptions.map(option => (
               <Button
