@@ -61,9 +61,8 @@ export const CommercialSaleAmenitiesStep = ({
 
   return (
     <div className="max-w-4xl mx-auto p-6">
-      <div className="mb-8">
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">Amenities & Features</h2>
-        <p className="text-gray-600">What amenities does your commercial property offer?</p>
+      <div className="mb-8 text-left">
+        <h2 className="text-2xl font-bold text-red-600 mb-2">Amenities & Features</h2>
         <div className="mt-4 text-sm text-gray-500">
           Step {currentStep} of {totalSteps}
         </div>
