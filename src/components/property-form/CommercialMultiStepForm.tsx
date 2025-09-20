@@ -207,6 +207,7 @@ const handleScheduleSubmit = (data: Partial<ScheduleInfo>) => {
           <CommercialPreviewStep
             formData={getFormData() as CommercialFormData}
             onBack={prevStep}
+            onEdit={goToStep}
             onSubmit={handleSubmit}
             currentStep={currentStep}
             totalSteps={8}
