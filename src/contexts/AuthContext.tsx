@@ -50,15 +50,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         
         // Defer any Supabase calls/logging to avoid deadlocks
         setTimeout(() => {
-          // If user came from a password recovery email, route them to reset screen
-          if (event === 'PASSWORD_RECOVERY') {
-            try {
-              const params = new URLSearchParams(window.location.search);
-              if (params.get('mode') !== 'reset-password' || window.location.pathname !== '/auth') {
-                window.location.replace('/auth?mode=reset-password');
-              }
-            } catch {}
-          }
+          try {
+            const isRecoveryHash = (window.location.hash || '').includes('type=recovery');
+            const params = new URLSearchParams(window.location.search);
+            const alreadyOnReset = params.get('mode') === 'reset-password' && window.location.pathname === '/auth';
+
+            // If user came from a password recovery email OR we detect recovery hash, route them to reset screen
+            if ((event === 'PASSWORD_RECOVERY' || (event === 'SIGNED_IN' && isRecoveryHash) || isRecoveryHash) && !alreadyOnReset) {
+              window.location.replace('/auth?mode=reset-password');
+              return;
+            }
+          } catch {}
 
           if (event === 'SIGNED_IN') {
             AuditService.logAuthEvent('User Login Success', session?.user?.email ?? undefined, true);
@@ -84,6 +86,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setSession(session);
       setUser(session?.user ?? null);
       setLoading(false);
+
+      // If we arrived with a recovery hash on the home page, send to reset screen
+      try {
+        const isRecoveryHash = (window.location.hash || '').includes('type=recovery');
+        const params = new URLSearchParams(window.location.search);
+        const alreadyOnReset = params.get('mode') === 'reset-password' && window.location.pathname === '/auth';
+        if (isRecoveryHash && !alreadyOnReset) {
+          window.location.replace('/auth?mode=reset-password');
+        }
+      } catch {}
       
       // Load profile for initial session
       if (session?.user) {
