@@ -263,40 +263,23 @@ const handleScheduleSubmit = (data: Partial<ScheduleInfo>) => {
               >
                 Back
               </Button>
-                <Button 
+              <Button 
                 type="button" 
                 onClick={() => {
-                  console.log('CommercialMultiStepForm sticky Save & Continue button clicked');
-                  console.log('Current step:', currentStep);
-                  
-                  // Always scroll to top first
-                  scrollToTop();
-                  
-                  if (currentStep === 2) {
-                    console.log('Calling handlePropertyDetailsNext');
-                    handlePropertyDetailsNext(propertyDetails);
-                  } else if (currentStep === 3) {
-                    console.log('Calling handleLocationDetailsNext');
-                    handleLocationDetailsNext(locationDetails);
-                  } else if (currentStep === 4) {
-                    console.log('Calling handleRentalDetailsNext');
-                    handleRentalDetailsNext(rentalDetails);
-                  } else if (currentStep === 5) {
-                    console.log('Calling handleAmenitiesNext');
-                    handleAmenitiesNext(amenities);
-                  } else if (currentStep === 6) {
-                    console.log('Calling handleGalleryNext');
-                    handleGalleryNext(gallery);
-                  } else if (currentStep === 7) {
-                    console.log('Calling handleScheduleSubmit');
-                    handleScheduleSubmit(scheduleInfo);
+                  // Trigger the current step's form submission like Commercial Sale flow
+                  const currentStepForm = document.querySelector('form');
+                  if (currentStepForm) {
+                    const submitEvent = new Event('submit', { bubbles: true, cancelable: true });
+                    currentStepForm.dispatchEvent(submitEvent);
                   }
+                  // Scroll to top after triggering submit
+                  setTimeout(scrollToTop, 100);
                 }}
                 className="h-12 sm:h-10 px-6 sm:px-6 bg-red-600 hover:bg-red-700 text-white w-full sm:w-auto order-1 sm:order-2 font-semibold"
                 style={{ display: currentStep === 8 ? 'none' : 'block' }}
-                >
-                  {currentStep === 7 ? 'Review & Submit' : 'Save & Continue'}
-                </Button>
+              >
+                {currentStep === 7 ? 'Review & Submit' : 'Save & Continue'}
+              </Button>
             </div>
           </div>
 
