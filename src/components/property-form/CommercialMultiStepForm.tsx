@@ -205,17 +205,12 @@ const handleScheduleSubmit = (data: Partial<ScheduleInfo>) => {
       case 8:
         return (
           <CommercialPreviewStep
+            formData={getFormData() as CommercialFormData}
             onBack={prevStep}
             onSubmit={handleSubmit}
             currentStep={currentStep}
             totalSteps={8}
             isSubmitting={isSubmitting}
-            propertyDetails={propertyDetails}
-            locationDetails={locationDetails}
-            rentalDetails={rentalDetails}
-            amenities={amenities}
-            gallery={gallery}
-            scheduleInfo={scheduleInfo}
           />
         );
       default:

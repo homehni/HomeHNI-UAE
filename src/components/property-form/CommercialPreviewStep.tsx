@@ -1,35 +1,27 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { CheckCircle, Building, MapPin, IndianRupee, Sparkles, Camera, Calendar } from 'lucide-react';
-import { CommercialPropertyDetails, LocationDetails, CommercialRentalDetails, CommercialAmenities, PropertyGallery, ScheduleInfo } from '@/types/property';
+import { CommercialFormData } from '@/types/property';
 
 interface CommercialPreviewStepProps {
+  formData: CommercialFormData;
   onBack: () => void;
   onSubmit: () => void;
   currentStep: number;
   totalSteps: number;
   isSubmitting: boolean;
-  propertyDetails: Partial<CommercialPropertyDetails>;
-  locationDetails: Partial<LocationDetails>;
-  rentalDetails: Partial<CommercialRentalDetails>;
-  amenities: Partial<CommercialAmenities>;
-  gallery: Partial<PropertyGallery>;
-  scheduleInfo: Partial<ScheduleInfo>;
 }
 
 export const CommercialPreviewStep = ({
+  formData,
   onBack,
   onSubmit,
   currentStep,
   totalSteps,
-  isSubmitting,
-  propertyDetails,
-  locationDetails,
-  rentalDetails,
-  amenities,
-  gallery,
-  scheduleInfo
+  isSubmitting
 }: CommercialPreviewStepProps) => {
+  const { ownerInfo, propertyInfo } = formData;
+  const { propertyDetails, locationDetails, rentalDetails, amenities, gallery, scheduleInfo } = propertyInfo || {};
   const completedSteps = [
     { icon: Building, label: 'Property Details', description: 'Commercial space details added' },
     { icon: MapPin, label: 'Locality Details', description: 'Location information provided' },
