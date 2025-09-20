@@ -72,8 +72,7 @@ export function FlattmatesPropertyDetailsStep({
   return (
     <div className="max-w-2xl mx-auto">
       <div className="text-left mb-8">
-        <h2 className="text-2xl font-bold text-foreground mb-2">Property Details</h2>
-        <p className="text-muted-foreground">Tell us about your property for flatmates</p>
+        <h2 className="text-2xl font-bold text-red-600 mb-2">Property Details</h2>
       </div>
 
           <div className="p-8">
