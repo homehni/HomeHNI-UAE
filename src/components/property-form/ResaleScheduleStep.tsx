@@ -56,11 +56,10 @@ const handleFormSubmit = (data: ResaleScheduleData) => {
   return (
     <div className="max-w-4xl">
       <div className="bg-background rounded-lg border p-8">
-        <div className="text-center mb-8">
+        <div className="text-left mb-8">
           <h2 className="text-2xl font-bold text-primary mb-2">
             Set your availability for property visits
           </h2>
-          <p className="text-muted-foreground">Help potential buyers schedule visits at convenient times</p>
         </div>
 
         <Form {...form}>
