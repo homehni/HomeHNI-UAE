@@ -87,11 +87,7 @@ export function PgHostelAmenitiesStep({
         <p className="text-muted-foreground">Select all amenities available at your PG/Hostel</p>
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Available Amenities</CardTitle>
-        </CardHeader>
-        <CardContent>
+      <div className="bg-background p-6">
           <form onSubmit={handleSubmit} className="space-y-8">
             {/* Available Services */}
             <div className="space-y-4">
@@ -228,8 +224,7 @@ export function PgHostelAmenitiesStep({
               </Button>
             </div>
           </form>
-        </CardContent>
-      </Card>
+        </div>
     </div>
   );
 }
