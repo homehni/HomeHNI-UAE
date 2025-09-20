@@ -73,9 +73,8 @@ export const ResaleGalleryStep: React.FC<ResaleGalleryStepProps> = ({
   return (
     <div className="max-w-4xl">
       <div className="bg-background rounded-lg border p-8">
-        <div className="text-center mb-8">
-          <h2 className="text-2xl font-bold text-foreground mb-2">Property Photos & Videos</h2>
-          <p className="text-muted-foreground">Add photos to get 5X more responses from potential buyers</p>
+        <div className="text-left mb-8">
+          <h2 className="text-2xl font-bold text-red-600 mb-2">Property Photos & Videos</h2>
         </div>
 
         <Form {...form}>
