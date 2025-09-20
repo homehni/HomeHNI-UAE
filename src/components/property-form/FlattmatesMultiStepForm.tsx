@@ -910,12 +910,32 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
                     : currentStep === 6
                       ? 'schedule-form'
                       : currentFormId;
-                  const formEl = document.getElementById(formIdToUse) as HTMLFormElement | null;
-                  if (formEl && typeof formEl.requestSubmit === 'function') {
-                    console.log('Submitting form via requestSubmit:', formIdToUse);
-                    formEl.requestSubmit();
-                    return;
+
+                  // Try several strategies to find the active form
+                  const candidates: (HTMLFormElement | null)[] = [
+                    document.getElementById(formIdToUse) as HTMLFormElement | null,
+                    document.querySelector(`#${formIdToUse}`) as HTMLFormElement | null,
+                    document.querySelector('form#flatmates-step-form') as HTMLFormElement | null,
+                    document.querySelector('.max-w-4xl form') as HTMLFormElement | null,
+                    document.querySelector('form') as HTMLFormElement | null,
+                  ];
+                  const formEl = candidates.find(Boolean) as HTMLFormElement | null;
+
+                  if (formEl) {
+                    // Ensure focused elements are committed
+                    (document.activeElement as HTMLElement | null)?.blur?.();
+
+                    if (typeof (formEl as any).requestSubmit === 'function') {
+                      console.log('Submitting form via requestSubmit:', formEl.id || '[no id]');
+                      (formEl as any).requestSubmit();
+                    } else {
+                      console.log('Submitting form via dispatchEvent fallback:', formEl.id || '[no id]');
+                      const ev = new Event('submit', { bubbles: true, cancelable: true });
+                      formEl.dispatchEvent(ev);
+                    }
+                    return; // Stop here, handler will be executed by the form
                   }
+
                   console.warn('Form element not found, falling back to direct handlers');
                   if (currentStep === 1) {
                     handlePropertyDetailsNext(propertyDetails);
