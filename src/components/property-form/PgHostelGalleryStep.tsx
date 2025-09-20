@@ -60,7 +60,6 @@ export function PgHostelGalleryStep({
           <form onSubmit={handleSubmit} className="space-y-6">
               {/* Image Upload */}
               <div className="space-y-2">
-                <label className="text-sm font-medium">Photos *</label>
                 <ImageUpload
                   images={formData.images}
                   onImagesChange={handleImagesChange}
