@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
@@ -32,6 +33,7 @@ export const ScheduleStep: React.FC<ScheduleStepProps> = ({
   onBack,
   onSubmit
 }) => {
+  const navigate = useNavigate();
   const [paintingResponse, setPaintingResponse] = useState<'book' | 'decline' | null>(initialData.paintingService || null);
   const [cleaningResponse, setCleaningResponse] = useState<'book' | 'decline' | null>(initialData.cleaningService || null);
   
@@ -108,6 +110,7 @@ export const ScheduleStep: React.FC<ScheduleStepProps> = ({
                             onClick={() => {
                               field.onChange('book');
                               setPaintingResponse('book');
+                              navigate('/painting-cleaning');
                             }}
                           >
                             Book Now
@@ -172,6 +175,7 @@ export const ScheduleStep: React.FC<ScheduleStepProps> = ({
                             onClick={() => {
                               field.onChange('book');
                               setCleaningResponse('book');
+                              navigate('/painting-cleaning');
                             }}
                           >
                             Book Now
