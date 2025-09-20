@@ -6,7 +6,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
-import { Building, MessageSquare, User, LogOut, Plus, Eye, Edit, Trash, FileText, Shield, MapPin, Home, Medal } from 'lucide-react';
+import { Building, MessageSquare, User, LogOut, Plus, Eye, Edit, Trash, FileText, Shield, MapPin, Home, Medal, Heart, Search, Filter, ArrowUpDown, Phone, TrendingUp, Menu, X } from 'lucide-react';
+import ChatBot from '@/components/ChatBot';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
 import { DeleteConfirmationModal } from '@/components/DeleteConfirmationModal';
@@ -18,6 +19,9 @@ import Marquee from '@/components/Marquee';
 import { NotificationManager } from '@/components/notifications/NotificationManager';
 import { MissingImagesNotification } from '@/components/notifications/MissingImagesNotification';
 import { calculatePropertyCompletion, calculatePGPropertyCompletion } from '@/utils/propertyCompletion';
+import { useFavorites } from '@/hooks/useFavorites';
+import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 interface Property {
   id: string;
@@ -87,6 +91,14 @@ interface PropertyRequirement {
   state?: string;
 }
 
+interface FavoriteProperty {
+  id: string;
+  user_id: string;
+  property_id: string;
+  created_at: string;
+  properties: Property;
+}
+
 export const Dashboard: React.FC = () => {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
@@ -98,6 +110,21 @@ export const Dashboard: React.FC = () => {
   const initialTab = searchParams.get('tab') || 'properties';
   const [activeTab, setActiveTab] = useState(initialTab);
   
+  // Sidebar navigation state - map tab to sidebar item
+  const getSidebarItemFromTab = (tab: string) => {
+    switch (tab) {
+      case 'interest': return 'interest';
+      case 'leads': return 'leads';
+      case 'profile': return 'profile';
+      case 'payments': return 'payments';
+      case 'interested': return 'interested';
+      default: return 'properties';
+    }
+  };
+  
+  const [activeSidebarItem, setActiveSidebarItem] = useState(getSidebarItemFromTab(initialTab));
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  
   const [properties, setProperties] = useState<CombinedProperty[]>([]);
   const [leads, setLeads] = useState<Lead[]>([]);
   const [serviceSubmissions, setServiceSubmissions] = useState<ServiceSubmission[]>([]);
@@ -105,6 +132,15 @@ export const Dashboard: React.FC = () => {
   const [requirementsPage, setRequirementsPage] = useState(1);
   const requirementsPerPage = 3;
   const [loading, setLoading] = useState(true);
+  
+  // Favorites state
+  const [favorites, setFavorites] = useState<FavoriteProperty[]>([]);
+  const [filteredFavorites, setFilteredFavorites] = useState<FavoriteProperty[]>([]);
+  const [favoritesLoading, setFavoritesLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [sortBy, setSortBy] = useState<'newest' | 'oldest' | 'price_low' | 'price_high'>('newest');
+  const [filterType, setFilterType] = useState<'all' | 'rent' | 'sale'>('all');
+  const { refetchFavorites, toggleFavorite, favorites: localFavorites } = useFavorites();
   const [deleteModal, setDeleteModal] = useState<{
     isOpen: boolean;
     type: 'property' | 'draft';
@@ -135,6 +171,7 @@ export const Dashboard: React.FC = () => {
       fetchLeads();
       fetchServiceSubmissions();
       fetchPropertyRequirements();
+      fetchFavorites();
     }
   }, [user]);
 
@@ -143,6 +180,7 @@ export const Dashboard: React.FC = () => {
     const searchParams = new URLSearchParams(location.search);
     const tabFromUrl = searchParams.get('tab') || 'properties';
     setActiveTab(tabFromUrl);
+    setActiveSidebarItem(getSidebarItemFromTab(tabFromUrl));
   }, [location.search]);
 
   // Handle tab change
@@ -150,6 +188,15 @@ export const Dashboard: React.FC = () => {
     setActiveTab(newTab);
     const searchParams = new URLSearchParams(location.search);
     searchParams.set('tab', newTab);
+    navigate(`${location.pathname}?${searchParams.toString()}`, { replace: true });
+  };
+
+  // Handle sidebar navigation
+  const handleSidebarNavigation = (item: string) => {
+    setActiveSidebarItem(item);
+    setActiveTab(item);
+    const searchParams = new URLSearchParams(location.search);
+    searchParams.set('tab', item);
     navigate(`${location.pathname}?${searchParams.toString()}`, { replace: true });
   };
 
@@ -316,6 +363,219 @@ export const Dashboard: React.FC = () => {
       setPropertyRequirements(requirementData);
     } catch (error) {
       console.error('💥 Error fetching property requirements:', error);
+    }
+  };
+
+  const fetchFavorites = async () => {
+    if (!user) return;
+
+    try {
+      setFavoritesLoading(true);
+      console.log('Fetching favorites for user:', user.id);
+      
+      // First get the favorite property IDs from database
+      const { data: favoritesData, error: favoritesError } = await supabase
+        .from('user_favorites')
+        .select('id, property_id, created_at')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false });
+
+      if (favoritesError) {
+        console.error('Error fetching favorites from DB:', favoritesError);
+        throw favoritesError;
+      }
+
+      console.log('Database favorites:', favoritesData);
+
+      // Handle database favorites (real properties)
+      let combinedData: FavoriteProperty[] = [];
+
+      if (favoritesData && favoritesData.length > 0) {
+        // Get the property IDs
+        const propertyIds = favoritesData.map(fav => fav.property_id);
+        console.log('Fetching properties for IDs:', propertyIds);
+
+        // Fetch via RPC to bypass RLS and get visible, approved properties
+        const publicProps = await Promise.all(
+          propertyIds.map(async (id) => {
+            const { data, error } = await supabase.rpc('get_public_property_by_id', { property_id: id });
+            if (error) {
+              console.error('Error fetching property via RPC:', id, error);
+              return null;
+            }
+            // RPC returns an array (TABLE), take first row
+            return (data && Array.isArray(data) ? data[0] : null) as any | null;
+          })
+        );
+
+        const uniqueProperties = (publicProps.filter(Boolean) as any[]);
+
+        if (uniqueProperties.length > 0) {
+          // Combine the database data for properties that exist
+          const dbFavorites = favoritesData.map(favorite => {
+            const property = uniqueProperties.find(p => p.id === favorite.property_id);
+            if (property) {
+              return {
+                id: favorite.id,
+                user_id: user.id,
+                property_id: favorite.property_id,
+                created_at: favorite.created_at,
+                properties: property
+              };
+            }
+            return null;
+          }).filter(Boolean) as FavoriteProperty[];
+          
+          combinedData = [...combinedData, ...dbFavorites];
+          console.log('Successfully mapped database favorites:', dbFavorites.length);
+        }
+      }
+
+      console.log('Final combined data:', combinedData);
+      setFavorites(combinedData);
+      setFilteredFavorites(combinedData);
+    } catch (error) {
+      console.error('Error fetching favorites:', error);
+      toast({
+        title: "Error",
+        description: "Failed to load your saved properties. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setFavoritesLoading(false);
+    }
+  };
+
+  // Filter and sort favorites
+  useEffect(() => {
+    let filtered = [...favorites];
+
+    // Apply search filter
+    if (searchTerm) {
+      filtered = filtered.filter(fav => 
+        fav.properties.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        fav.properties.locality.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        fav.properties.city.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
+    // Apply type filter
+    if (filterType !== 'all') {
+      filtered = filtered.filter(fav => 
+        fav.properties.listing_type.toLowerCase() === filterType
+      );
+    }
+
+    // Apply sorting
+    filtered.sort((a, b) => {
+      switch (sortBy) {
+        case 'newest':
+          return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+        case 'oldest':
+          return new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
+        case 'price_low':
+          return a.properties.expected_price - b.properties.expected_price;
+        case 'price_high':
+          return b.properties.expected_price - a.properties.expected_price;
+        default:
+          return 0;
+      }
+    });
+
+    setFilteredFavorites(filtered);
+  }, [favorites, searchTerm, sortBy, filterType]);
+
+  const handleRemoveFavorite = async (favoriteId: string, propertyTitle: string) => {
+    try {
+      // Check if this is a demo or missing property
+      const isDemo = favoriteId.startsWith('demo-');
+      const isMissing = favoriteId.startsWith('missing-');
+      
+      if (isDemo || isMissing) {
+        // For demo and missing properties, just toggle the favorite status
+        const propertyId = isDemo 
+          ? favoriteId.replace('demo-', '')
+          : favoriteId.replace('missing-', '');
+        await toggleFavorite(propertyId);
+        
+        // Remove from local state
+        setFavorites(prev => prev.filter(fav => fav.id !== favoriteId));
+        
+        toast({
+          title: isDemo ? "Demo property removed" : "Property removed",
+          description: `"${propertyTitle}" has been removed from your saved properties.`,
+        });
+      } else {
+        // For real properties, delete from database
+        const { error } = await supabase
+          .from('user_favorites')
+          .delete()
+          .eq('id', favoriteId);
+
+        if (error) throw error;
+
+        setFavorites(prev => prev.filter(fav => fav.id !== favoriteId));
+        
+        // Refresh the favorites in the global hook
+        refetchFavorites();
+        
+        toast({
+          title: "Property removed",
+          description: `"${propertyTitle}" has been removed from your saved properties.`,
+        });
+      }
+    } catch (error) {
+      console.error('Error removing favorite:', error);
+      toast({
+        title: "Error",
+        description: "Failed to remove property from favorites. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleViewFavoriteProperty = (propertyId: string, property: Property) => {
+    try {
+      console.log('Opening property details for:', propertyId, property.title);
+      
+      // Store comprehensive property data in sessionStorage for new tab access
+      const propertyForDetails = {
+        ...property,
+        // Ensure all required fields are present
+        id: propertyId,
+        title: property.title || 'Property Details',
+        images: property.images || [],
+        videos: property.videos || []
+      };
+      
+      sessionStorage.setItem(`property-${propertyId}`, JSON.stringify(propertyForDetails));
+      
+      // Open property details in new tab - this will show the full PropertyDetails page
+      const newWindow = window.open(`/property/${propertyId}`, '_blank');
+      
+      if (!newWindow) {
+        // Fallback if popup is blocked - navigate in same tab
+        window.location.href = `/property/${propertyId}`;
+      }
+      
+      console.log('Property details opened successfully');
+    } catch (error) {
+      console.error('Error opening property details:', error);
+      toast({
+        title: "Error",
+        description: "Failed to open property details. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const formatPrice = (price: number) => {
+    if (price >= 10000000) {
+      return `₹${(price / 10000000).toFixed(1)} Cr`;
+    } else if (price >= 100000) {
+      return `₹${(price / 100000).toFixed(1)} L`;
+    } else {
+      return `₹${price.toLocaleString()}`;
     }
   };
 
@@ -505,102 +765,162 @@ export const Dashboard: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+    <div className="min-h-screen bg-gray-50">
       <Header />
       <Marquee />
-      <div className="max-w-6xl mx-auto pt-32 p-4">
-        {/* Header */}
-        <div className="mb-8">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-            <p className="text-gray-600">Welcome back, {user.user_metadata?.full_name || user.email}</p>
+      
+      {/* Mobile Menu Button */}
+      <div className="lg:hidden fixed top-20 left-4 z-50">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          className="bg-white shadow-md"
+        >
+          <Menu className="h-4 w-4" />
+        </Button>
+          </div>
+
+      <div className="flex pt-20 lg:pt-20">
+        {/* Sidebar Navigation - Hidden on mobile, visible on desktop */}
+        <div className={`fixed lg:static inset-y-0 left-0 z-50 lg:z-auto w-64 bg-white shadow-lg lg:shadow-sm border-r border-gray-200 min-h-screen transform transition-transform duration-300 ease-in-out ${
+          isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
+        }`}>
+          <div className="p-6">
+            {/* Mobile close button */}
+            <div className="lg:hidden flex justify-end mb-4">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                <X className="h-4 w-4" />
+              </Button>
+        </div>
+
+            <h2 className="text-lg font-semibold text-gray-900 mb-6">Manage your Account</h2>
+            <nav className="space-y-2">
+              <div 
+                className={`px-3 py-2 text-sm cursor-pointer transition-colors ${
+                  activeSidebarItem === 'profile' 
+                    ? 'font-medium text-gray-900 bg-gray-100 rounded-md' 
+                    : 'text-gray-600 hover:text-gray-900'
+                }`}
+                onClick={() => {
+                  handleSidebarNavigation('profile');
+                  setIsMobileMenuOpen(false);
+                }}
+              >
+                Basic Profile
+                  </div>
+              <div 
+                className={`px-3 py-2 text-sm cursor-pointer transition-colors ${
+                  activeSidebarItem === 'interest' 
+                    ? 'font-medium text-gray-900 bg-gray-100 rounded-md' 
+                    : 'text-gray-600 hover:text-gray-900'
+                }`}
+                    onClick={() => {
+                  handleSidebarNavigation('interest');
+                  setIsMobileMenuOpen(false);
+                }}
+              >
+                Your Shortlists
+                </div>
+              <div 
+                className={`px-3 py-2 text-sm cursor-pointer transition-colors ${
+                  activeSidebarItem === 'leads' 
+                    ? 'font-medium text-gray-900 bg-gray-100 rounded-md' 
+                    : 'text-gray-600 hover:text-gray-900'
+                }`}
+                onClick={() => {
+                  handleSidebarNavigation('leads');
+                  setIsMobileMenuOpen(false);
+                }}
+              >
+                Owners you Contacted
+          </div>
+              <div 
+                className={`px-3 py-2 text-sm cursor-pointer transition-colors ${
+                  activeSidebarItem === 'payments' 
+                    ? 'font-medium text-gray-900 bg-gray-100 rounded-md' 
+                    : 'text-gray-600 hover:text-gray-900'
+                }`}
+                onClick={() => {
+                  handleSidebarNavigation('payments');
+                  setIsMobileMenuOpen(false);
+                }}
+              >
+                Your Payments
+              </div>
+              <div 
+                className={`px-3 py-2 text-sm cursor-pointer transition-colors ${
+                  activeSidebarItem === 'properties' 
+                    ? 'font-medium text-gray-900 bg-gray-100 rounded-md' 
+                    : 'text-gray-600 hover:text-gray-900'
+                }`}
+                onClick={() => {
+                  handleSidebarNavigation('properties');
+                  setIsMobileMenuOpen(false);
+                }}
+              >
+                Your Properties
+          </div>
+              <div 
+                className={`px-3 py-2 text-sm cursor-pointer transition-colors ${
+                  activeSidebarItem === 'interested' 
+                    ? 'font-medium text-gray-900 bg-gray-100 rounded-md' 
+                    : 'text-gray-600 hover:text-gray-900'
+                }`}
+                onClick={() => {
+                  handleSidebarNavigation('interested');
+                  setIsMobileMenuOpen(false);
+                }}
+              >
+                Interested in your Properties
+              </div>
+            </nav>
           </div>
         </div>
 
-
-        {/* Employee Panel Access - Hidden */}
-        {false && (
-          <div className="mb-6">
-            <Card className="bg-gradient-to-r from-blue-500 to-purple-600 text-white">
-              <CardContent className="p-6">
-                <div className="flex justify-between items-center">
-                  <div>
-                    <h3 className="text-lg font-semibold mb-2">Employee Panel Access</h3>
-                    <p className="text-blue-100">Access your employee dashboard to view payments and role information</p>
-                  </div>
-                  <Button 
-                    variant="secondary" 
-                    onClick={() => {
-                      // Check if user is a finance or HR admin first
-                      if (window.location.pathname === '/dashboard') {
-                        // For now, just navigate to employee dashboard and let the redirect handler take over
-                        navigate('/employee-dashboard');
-                      }
-                    }}
-                    className="bg-white text-blue-600 hover:bg-gray-100"
-                  >
-                    <User className="h-4 w-4 mr-2" />
-                    Employee Panel
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
+        {/* Mobile overlay */}
+        {isMobileMenuOpen && (
+          <div 
+            className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
+            onClick={() => setIsMobileMenuOpen(false)}
+          />
         )}
 
-        {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Total Properties</CardTitle>
-              <Building className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{properties.length}</div>
-            </CardContent>
-          </Card>
-          
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Active Listings</CardTitle>
-              <Eye className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">
-                {properties.filter(p => p.status === 'active').length}
-              </div>
-            </CardContent>
-          </Card>
-          
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Contact Leads</CardTitle>
-              <MessageSquare className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{leads.length}</div>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Tabs */}
-        <Tabs value={activeTab} onValueChange={handleTabChange} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 h-auto p-2">
-            <TabsTrigger value="properties" className="text-sm md:text-base px-4 py-3">My Listings</TabsTrigger>
-            <TabsTrigger value="requirements" className="text-sm md:text-base px-4 py-3">My Requirements</TabsTrigger>
-            <TabsTrigger value="leads" className="text-sm md:text-base px-4 py-3">Contact Leads</TabsTrigger>
-            <TabsTrigger value="profile" className="text-sm md:text-base px-4 py-3">Profile</TabsTrigger>
-          </TabsList>
-
-          {/* Properties Tab */}
-          <TabsContent value="properties" className="space-y-6">
-            {/* Header with Property Count and Toggle */}
-            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
-              <h2 className="text-base sm:text-lg font-medium text-gray-700">
+        {/* Main Content Area */}
+        <div className="flex-1 p-4 lg:p-6 lg:ml-0 min-h-screen">
+          {/* Content based on sidebar selection */}
+          {activeSidebarItem === 'properties' && (
+            <div className="space-y-6">
+              {/* Header */}
+              <div className="mb-6">
+                <h1 className="text-2xl font-semibold text-gray-900">
                 You have already posted {properties.length} properties on Home HNI
-              </h2>
-              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4">
-                <div className="flex items-center gap-2">
+                </h1>
+              </div>
+
+              {/* Filter Tabs */}
+              <div className="mb-6">
+                <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-4 gap-4">
+                  <div className="flex flex-wrap gap-1">
+                    {['All', 'Rent', 'Sale', 'Commercial-Rent', 'Commercial-Sale', 'PG/Hostel', 'Flatmates', 'Land/Plot'].map((filter) => (
+                      <button
+                        key={filter}
+                        onClick={() => setSelectedFilter(filter)}
+                        className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${
+                          selectedFilter === filter
+                            ? 'bg-red-500 text-white'
+                            : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-300'
+                        }`}
+                      >
+                        {filter}
+                      </button>
+                    ))}
+                  </div>
+                  <div className="flex items-center space-x-2">
                   <span className="text-sm text-gray-600">Only Active</span>
                   <label className="relative inline-flex items-center cursor-pointer">
                     <input 
@@ -612,35 +932,14 @@ export const Dashboard: React.FC = () => {
                     <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
                   </label>
                 </div>
-                <Button onClick={() => navigate('/post-property')} className="bg-brand-red hover:bg-brand-red/90 w-full sm:w-auto">
-                  <Plus className="h-4 w-4 mr-2" />
-                  Add New
-                </Button>
               </div>
             </div>
 
-            {/* Filter Buttons */}
-            <div className="flex flex-wrap gap-3">
-              {['All', 'Rent', 'Sale', 'Commercial-Rent', 'Commercial-Sale', 'PG/Hostel', 'Flatmates', 'Land/Plot'].map((filter) => (
-                <Button 
-                  key={filter}
-                  variant="outline" 
-                  onClick={() => setSelectedFilter(filter)}
-                  className={selectedFilter === filter 
-                    ? "border-2 border-teal-500 text-teal-700 bg-teal-50 hover:bg-teal-100" 
-                    : "border-gray-300 hover:border-teal-500"
-                  }
-                >
-                  {filter}
-                </Button>
-              ))}
-            </div>
-
+              {/* Properties Content */}
             {loading ? (
               <div className="text-center py-8">Loading properties...</div>
             ) : filteredProperties.length === 0 ? (
-              <Card>
-                <CardContent className="text-center py-8">
+                <div className="text-center py-12 bg-white rounded-lg border border-gray-200">
                   <Building className="h-12 w-12 mx-auto text-gray-400 mb-4" />
                   <h3 className="text-lg font-medium text-gray-900 mb-2">No properties listed yet</h3>
                   <p className="text-gray-500 mb-4">Start by adding your first property listing</p>
@@ -648,12 +947,10 @@ export const Dashboard: React.FC = () => {
                     <Plus className="h-4 w-4 mr-2" />
                     List Your First Property
                   </Button>
-                </CardContent>
-              </Card>
+                </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
                 {filteredProperties.map((property) => {
-                  // Get the first image for preview
                   const getImageUrl = () => {
                     if (property.images && property.images.length > 0) {
                       const firstImage = property.images[0];
@@ -726,7 +1023,6 @@ export const Dashboard: React.FC = () => {
                             <div className="text-sm text-gray-600 mb-3">
                               <span>{property.listing_type === 'rent' ? 'Rent:' : 'Price:'} </span>
                               <span className="font-medium text-gray-900">₹{property.expected_price.toLocaleString()}</span>
-                              <span className="ml-1">• Hyderabad</span>
                             </div>
 
                             {/* Action Buttons */}
@@ -793,17 +1089,304 @@ export const Dashboard: React.FC = () => {
                 })}
               </div>
             )}
-          </TabsContent>
+            </div>
+          )}
 
-          {/* Requirements Tab */}
-          <TabsContent value="requirements" className="space-y-0 p-0 h-[calc(100vh-200px)]">
-            <RequirementsChatLayout requirements={propertyRequirements} />
-          </TabsContent>
+          {/* Requirements/Shortlists Content */}
+          {activeSidebarItem === 'interest' && (
+            <div className="space-y-6">
+              {/* Header */}
+              <div className="mb-6">
+                <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                  <div>
+                    <h1 className="text-2xl font-semibold text-gray-900 mb-2">My Saved Properties</h1>
+                    <div className="flex items-center gap-4 text-sm text-gray-600">
+                      <span>
+                        {favorites.length > 0 
+                          ? `${favorites.length} ${favorites.length === 1 ? 'property' : 'properties'} saved`
+                          : 'Keep track of properties you\'re interested in'
+                        }
+                      </span>
+                      {filteredFavorites.length !== favorites.length && (
+                        <span className="text-blue-600">
+                          {filteredFavorites.length} shown
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                  <div className="flex gap-2">
+                    <Button onClick={() => navigate('/property-search')} variant="outline" size="sm">
+                      <Search className="h-4 w-4 mr-2" />
+                      Browse Properties
+                    </Button>
+                    {favorites.length > 0 && (
+                      <Button 
+                        onClick={() => {
+                          const totalValue = favorites.reduce((sum, fav) => sum + fav.properties.expected_price, 0);
+                          toast({
+                            title: "Portfolio Stats",
+                            description: `Total value of saved properties: ${formatPrice(totalValue)}`,
+                          });
+                        }}
+                        variant="outline" 
+                        size="sm"
+                      >
+                        <TrendingUp className="h-4 w-4 mr-2" />
+                        Stats
+                      </Button>
+                    )}
+                  </div>
+                </div>
+              </div>
 
-          {/* Leads Tab */}
-          <TabsContent value="leads" className="space-y-6">
-            <h2 className="text-xl font-semibold">Contact Leads</h2>
-            
+              {/* Search and Filter Controls */}
+              {favorites.length > 0 && (
+                <div className="mb-6 bg-white rounded-lg shadow-sm p-4">
+                  <div className="flex flex-col sm:flex-row gap-4">
+                    {/* Search */}
+                    <div className="flex-1">
+                      <div className="relative">
+                        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                        <Input
+                          placeholder="Search by title, locality, or city..."
+                          value={searchTerm}
+                          onChange={(e) => setSearchTerm(e.target.value)}
+                          className="pl-10"
+                        />
+                      </div>
+                    </div>
+                    
+                    {/* Filter by Type */}
+                    <Select value={filterType} onValueChange={(value: 'all' | 'rent' | 'sale') => setFilterType(value)}>
+                      <SelectTrigger className="w-full sm:w-48">
+                        <Filter className="h-4 w-4 mr-2" />
+                        <SelectValue placeholder="Filter by type" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">All Properties</SelectItem>
+                        <SelectItem value="rent">For Rent</SelectItem>
+                        <SelectItem value="sale">For Sale</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    
+                    {/* Sort */}
+                    <Select value={sortBy} onValueChange={(value: 'newest' | 'oldest' | 'price_low' | 'price_high') => setSortBy(value)}>
+                      <SelectTrigger className="w-full sm:w-48">
+                        <ArrowUpDown className="h-4 w-4 mr-2" />
+                        <SelectValue placeholder="Sort by" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="newest">Newest First</SelectItem>
+                        <SelectItem value="oldest">Oldest First</SelectItem>
+                        <SelectItem value="price_low">Price: Low to High</SelectItem>
+                        <SelectItem value="price_high">Price: High to Low</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+              )}
+
+              {/* Loading State */}
+              {favoritesLoading && (
+                <div className="text-center py-12">
+                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-red mx-auto mb-4"></div>
+                  <p className="text-gray-600">Loading your saved properties...</p>
+                </div>
+              )}
+
+              {/* Empty State */}
+              {!favoritesLoading && favorites.length === 0 && (
+                <Card className="mx-auto max-w-md">
+                  <CardContent className="text-center py-12">
+                    <Heart className="h-16 w-16 mx-auto text-gray-400 mb-6" />
+                    <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                      No Saved Properties Yet
+                    </h3>
+                    <p className="text-gray-600 mb-6">
+                      Click the ❤️ on any property to save it to your interests.
+                    </p>
+                    <Button onClick={() => navigate('/property-search')} className="bg-red-800 hover:bg-red-900 text-white">
+                      Browse Properties
+                    </Button>
+                  </CardContent>
+                </Card>
+              )}
+
+              {/* No Results State */}
+              {!favoritesLoading && favorites.length > 0 && filteredFavorites.length === 0 && (
+                <Card className="mx-auto max-w-md">
+                  <CardContent className="text-center py-12">
+                    <Search className="h-16 w-16 mx-auto text-gray-400 mb-6" />
+                    <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                      No Properties Found
+                    </h3>
+                    <p className="text-gray-600 mb-6">
+                      Try adjusting your search or filter criteria.
+                    </p>
+                    <Button 
+                      onClick={() => {
+                        setSearchTerm('');
+                        setFilterType('all');
+                        setSortBy('newest');
+                      }} 
+                      className="bg-brand-red hover:bg-brand-red-dark text-white"
+                    >
+                      Clear Filters
+                    </Button>
+                  </CardContent>
+                </Card>
+              )}
+
+              {/* Properties Grid - Horizontal Card Layout */}
+              {!favoritesLoading && filteredFavorites.length > 0 && (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4">
+                  {filteredFavorites.map((favorite) => {
+                    const property = favorite.properties;
+                    return (
+                      <div
+                        key={favorite.id}
+                        className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow cursor-pointer focus:outline-none focus:ring-2 focus:ring-brand-red/40"
+                        role="button"
+                        tabIndex={0}
+                        onClick={(e) => { e.stopPropagation(); handleViewFavoriteProperty(property.id, property); }}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            handleViewFavoriteProperty(property.id, property);
+                          }
+                        }}
+                      >
+                        {/* Property Image */}
+                        <div className="relative h-32 bg-gray-200">
+                          {property.images && property.images.length > 0 ? (
+                            <img
+                              src={property.images[0]}
+                              alt={property.title}
+                              className="w-full h-full object-cover"
+                            />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center bg-gray-100">
+                              <svg 
+                                width="120" 
+                                height="120" 
+                                viewBox="0 0 32 32" 
+                                fill="none" 
+                                xmlns="http://www.w3.org/2000/svg"
+                                className="text-gray-600"
+                              >
+                                {/* House icon */}
+                                <path 
+                                  d="M6 24V12L16 4L26 12V24H20V18H12V24H6Z" 
+                                  stroke="currentColor" 
+                                  strokeWidth="1.5" 
+                                  strokeLinecap="round" 
+                                  strokeLinejoin="round"
+                                  fill="none"
+                                />
+                                {/* Chimney */}
+                                <path 
+                                  d="M8 8V4H10V8" 
+                                  stroke="currentColor" 
+                                  strokeWidth="1.5" 
+                                  strokeLinecap="round" 
+                                  strokeLinejoin="round"
+                                  fill="none"
+                                />
+                                {/* Door */}
+                                <rect 
+                                  x="12" 
+                                  y="18" 
+                                  width="3" 
+                                  height="6" 
+                                  stroke="currentColor" 
+                                  strokeWidth="1.5" 
+                                  fill="none"
+                                />
+                                {/* Window */}
+                                <rect 
+                                  x="20" 
+                                  y="16" 
+                                  width="3" 
+                                  height="3" 
+                                  stroke="currentColor" 
+                                  strokeWidth="1.5" 
+                                  fill="none"
+                                />
+                                {/* Ground line */}
+                                <path 
+                                  d="M4 24H28" 
+                                  stroke="currentColor" 
+                                  strokeWidth="1.5" 
+                                  strokeLinecap="round"
+                                />
+                                {/* Cloud with dashed lines */}
+                                <path 
+                                  d="M22 8C23.5 8 24.5 9 24.5 10.5C24.5 10.5 25 10.5 25 12C25 13 24 14 23 14" 
+                                  stroke="currentColor" 
+                                  strokeWidth="1.5" 
+                                  strokeLinecap="round" 
+                                  fill="none"
+                                />
+                                {/* Dashed lines */}
+                                <path 
+                                  d="M26 10.5H28M26 11.5H28M26 12.5H28" 
+                                  stroke="currentColor" 
+                                  strokeWidth="1.5" 
+                                  strokeLinecap="round" 
+                                  strokeDasharray="2,2"
+                                />
+                              </svg>
+                            </div>
+                          )}
+                          
+                          {/* New Badge */}
+                          <div className="absolute top-2 left-2">
+                            <span className="bg-red-500 text-white text-xs font-medium px-2 py-1 rounded">
+                              New
+                            </span>
+                          </div>
+
+                          {/* Heart Icon */}
+                          <button
+                            onClick={(e) => { e.stopPropagation(); handleRemoveFavorite(favorite.id, property.title); }}
+                            className="absolute top-2 right-2 w-8 h-8 bg-white/80 hover:bg-white rounded-full flex items-center justify-center transition-colors"
+                          >
+                            <Heart className="h-4 w-4 text-red-500 fill-current" />
+                          </button>
+                        </div>
+
+                        <div className="p-3">
+                          {/* Property Title */}
+                          <h3 className="text-sm font-semibold text-gray-900 mb-3 line-clamp-1">
+                            {property.title}
+                          </h3>
+
+                          {/* Contact Button with Price */}
+                          <div className="flex items-center justify-between">
+                            <button
+                              onClick={() => handleViewFavoriteProperty(property.id, property)}
+                              className="flex items-center text-gray-700 hover:text-red-600 transition-colors"
+                            >
+                              <Phone className="h-3 w-3 mr-1" />
+                              <span className="text-xs font-medium">Contact</span>
+                            </button>
+                            <span className="text-sm font-bold text-gray-900">
+                              {formatPrice(property.expected_price)}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Leads Content */}
+          {activeSidebarItem === 'leads' && (
+            <div className="space-y-6">
+              <h1 className="text-2xl font-semibold text-gray-900">Contact Leads</h1>
             {leads.length === 0 ? (
               <Card>
                 <CardContent className="text-center py-8">
@@ -844,10 +1427,13 @@ export const Dashboard: React.FC = () => {
                 ))}
               </div>
             )}
-          </TabsContent>
+            </div>
+          )}
 
-          {/* Profile Tab */}
-          <TabsContent value="profile" className="space-y-6">
+          {/* Profile Content */}
+          {activeSidebarItem === 'profile' && (
+            <div className="space-y-6">
+              <h1 className="text-2xl font-semibold text-gray-900">Profile Information</h1>
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center">
@@ -881,9 +1467,37 @@ export const Dashboard: React.FC = () => {
                 </div>
               </CardContent>
             </Card>
-          </TabsContent>
-        </Tabs>
       </div>
+          )}
+
+          {/* Payments Content */}
+          {activeSidebarItem === 'payments' && (
+            <div className="space-y-6">
+              <h1 className="text-2xl font-semibold text-gray-900">Your Payments</h1>
+              <div className="text-center py-12 bg-white rounded-lg border border-gray-200">
+                <Building className="h-12 w-12 mx-auto text-gray-400 mb-4" />
+                <h3 className="text-lg font-medium text-gray-900 mb-2">No payment history</h3>
+                <p className="text-gray-500">Your payment history will appear here</p>
+              </div>
+            </div>
+          )}
+
+          {/* Interested in your Properties Content */}
+          {activeSidebarItem === 'interested' && (
+            <div className="space-y-6">
+              <h1 className="text-2xl font-semibold text-gray-900">Interested in your Properties</h1>
+              <div className="text-center py-12 bg-white rounded-lg border border-gray-200">
+                <Building className="h-12 w-12 mx-auto text-gray-400 mb-4" />
+                <h3 className="text-lg font-medium text-gray-900 mb-2">No interested parties</h3>
+                <p className="text-gray-500">People interested in your properties will appear here</p>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* ChatBot Component */}
+      <ChatBot />
 
       {/* Delete Confirmation Modal */}
       <DeleteConfirmationModal
