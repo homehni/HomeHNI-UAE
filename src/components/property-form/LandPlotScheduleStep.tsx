@@ -6,7 +6,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ScheduleInfo } from '@/types/property';
 import { Eye, Calendar, Clock } from 'lucide-react';
 
@@ -48,13 +47,12 @@ export const LandPlotScheduleStep: React.FC<LandPlotScheduleStepProps> = ({
   const endTime = watch('endTime');
 
   return (
-    <Card className="w-full max-w-4xl mx-auto">
-      <CardHeader>
-        <CardTitle className="text-2xl font-bold text-gray-900">
-          Schedule Property Visits
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
+    <div className="bg-background p-6">
+        <div className="text-center mb-8">
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">
+            Schedule Property Visits
+          </h2>
+        </div>
         <form onSubmit={handleSubmit(onNext)} className="space-y-8">
           {/* Informational Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -190,7 +188,6 @@ export const LandPlotScheduleStep: React.FC<LandPlotScheduleStepProps> = ({
         
         {/* Additional spacing to ensure proper scrolling */}
         <div className="h-32"></div>
-      </CardContent>
-    </Card>
+      </div>
   );
 };
