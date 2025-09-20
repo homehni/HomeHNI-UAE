@@ -65,7 +65,7 @@ export const CommercialSaleSaleDetailsStep = ({
 
   return (
     <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
-      <h1 className="text-2xl font-semibold text-teal-600 mb-6">
+      <h1 className="text-2xl font-semibold text-red-600 mb-6">
         Provide sale details about your commercial property
       </h1>
 
