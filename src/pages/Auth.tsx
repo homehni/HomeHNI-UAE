@@ -34,6 +34,14 @@ export const Auth: React.FC = () => {
   const [forgotPasswordEmail, setForgotPasswordEmail] = useState('');
   const [isResetLoading, setIsResetLoading] = useState(false);
   
+  // Password reset states
+  const [isPasswordResetMode, setIsPasswordResetMode] = useState(false);
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmNewPassword, setConfirmNewPassword] = useState('');
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmNewPassword, setShowConfirmNewPassword] = useState(false);
+  const [isUpdatingPassword, setIsUpdatingPassword] = useState(false);
+  
   const [signInForm, setSignInForm] = useState({ email: '', password: '' });
   const [signUpForm, setSignUpForm] = useState({ 
     fullName: '', 
@@ -43,7 +51,17 @@ export const Auth: React.FC = () => {
   });
 
   useEffect(() => {
-    if (user && !employeeLoading && !adminLoading) {
+    // Check for password reset mode
+    const urlParams = new URLSearchParams(location.search);
+    const mode = urlParams.get('mode');
+    
+    if (mode === 'reset-password') {
+      setIsPasswordResetMode(true);
+    }
+  }, [location]);
+
+  useEffect(() => {
+    if (user && !employeeLoading && !adminLoading && !isPasswordResetMode) {
       const urlParams = new URLSearchParams(location.search);
       const redirectPath = urlParams.get('redirectTo');
       
@@ -217,6 +235,58 @@ export const Auth: React.FC = () => {
     }
   };
 
+  const handlePasswordUpdate = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (newPassword !== confirmNewPassword) {
+      toast({
+        title: "Passwords don't match",
+        description: "Please make sure both password fields match.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (newPassword.length < 6) {
+      toast({
+        title: "Password too short",
+        description: "Password must be at least 6 characters long.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsUpdatingPassword(true);
+
+    try {
+      const { supabase } = await import('@/integrations/supabase/client');
+      const { error } = await supabase.auth.updateUser({
+        password: newPassword
+      });
+
+      if (error) throw error;
+
+      toast({
+        title: "Password updated successfully",
+        description: "You can now login with your new password.",
+      });
+
+      // Reset form and redirect to login
+      setNewPassword('');
+      setConfirmNewPassword('');
+      setIsPasswordResetMode(false);
+      navigate('/auth', { replace: true });
+    } catch (error: any) {
+      toast({
+        title: "Error updating password",
+        description: error.message || "Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsUpdatingPassword(false);
+    }
+  };
+
   const handleCloseModal = () => {
     navigate('/');
   };
@@ -258,45 +328,28 @@ export const Auth: React.FC = () => {
               </div>
             </CardHeader>
             <CardContent className="px-6 pb-6">
-              <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-                <TabsList className="grid w-full grid-cols-2 mb-4 bg-gray-100/80 p-1 rounded-xl">
-                  <TabsTrigger value="signin" className="flex items-center space-x-2 rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm">
-                    <LogIn size={16} />
-                    <span>Login</span>
-                  </TabsTrigger>
-                  <TabsTrigger value="signup" className="flex items-center space-x-2 rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm">
-                    <UserPlus size={16} />
-                    <span>Sign Up</span>
-                  </TabsTrigger>
-                </TabsList>
-                
-                <TabsContent value="signin" className="space-y-4">
-                  <form onSubmit={handleEmailSignIn} className="space-y-4">
+              {isPasswordResetMode ? (
+                // Password Reset Form
+                <div className="space-y-4">
+                  <div className="text-center mb-6">
+                    <CardTitle className="text-xl font-semibold text-gray-800">Set New Password</CardTitle>
+                    <CardDescription className="text-gray-600 text-sm mt-2">
+                      Enter your new password below
+                    </CardDescription>
+                  </div>
+                  
+                  <form onSubmit={handlePasswordUpdate} className="space-y-4">
                     <div className="space-y-1">
-                      <Label htmlFor="signin-email" className="text-sm font-medium text-gray-700">Email</Label>
-                        <Input
-                          id="signin-email"
-                          type="email"
-                          value={signInForm.email}
-                          onChange={(e) => setSignInForm({...signInForm, email: e.target.value})}
-                          placeholder="Enter your email"
-                          required
-                          autoComplete="email"
-                          className="h-10 rounded-xl border-gray-200 focus:border-brand-red focus:ring-brand-red/20"
-                        />
-                    </div>
-                    
-                    <div className="space-y-1">
-                      <Label htmlFor="signin-password" className="text-sm font-medium text-gray-700">Password</Label>
+                      <Label htmlFor="new-password" className="text-sm font-medium text-gray-700">New Password</Label>
                       <div className="relative">
                         <Input
-                          id="signin-password"
-                          type={showSignInPassword ? "text" : "password"}
-                          value={signInForm.password}
-                          onChange={(e) => setSignInForm({...signInForm, password: e.target.value})}
-                          placeholder="Enter your password"
+                          id="new-password"
+                          type={showNewPassword ? "text" : "password"}
+                          value={newPassword}
+                          onChange={(e) => setNewPassword(e.target.value)}
+                          placeholder="Enter new password (min 6 characters)"
                           required
-                          autoComplete="current-password"
+                          autoComplete="new-password"
                           className="h-10 rounded-xl border-gray-200 focus:border-brand-red focus:ring-brand-red/20 pr-10"
                         />
                         <Button
@@ -304,175 +357,280 @@ export const Auth: React.FC = () => {
                           variant="ghost"
                           size="sm"
                           className="absolute right-2 top-2 h-6 w-6 p-0 hover:bg-gray-100"
-                          onClick={() => setShowSignInPassword(!showSignInPassword)}
+                          onClick={() => setShowNewPassword(!showNewPassword)}
                         >
-                          {showSignInPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                          {showNewPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                         </Button>
                       </div>
-                    </div>
-
-                    <Button type="submit" className="w-full h-10 rounded-xl bg-gradient-to-r from-brand-red to-brand-red-dark hover:shadow-lg transition-all duration-200">
-                      Login
-                    </Button>
-                  </form>
-
-                  <div className="text-center">
-                    <Button 
-                      variant="link" 
-                      className="text-sm text-brand-red hover:underline p-0 h-auto"
-                      onClick={() => setShowForgotPassword(true)}
-                    >
-                      Forgot password?
-                    </Button>
-                  </div>
-
-                  <div className="relative">
-                    <div className="absolute inset-0 flex items-center">
-                      <span className="w-full border-t border-gray-200" />
-                    </div>
-                    <div className="relative flex justify-center text-xs uppercase">
-                      <span className="bg-white px-3 text-gray-500 font-medium">Or continue with</span>
-                    </div>
-                  </div>
-                  
-                  <Button 
-                    onClick={handleGoogleSignIn}
-                    className="w-full h-10 rounded-xl border-2 hover:bg-gray-50 transition-all duration-200"
-                    variant="outline"
-                  >
-                    <Chrome className="h-4 w-4 mr-2 text-red-500" />
-                    Continue with Google
-                  </Button>
-                </TabsContent>
-                
-                <TabsContent value="signup" className="space-y-3">
-                  <div className="text-center">
-                    <CardTitle className="text-xl font-semibold text-gray-800">Create Account</CardTitle>
-                    <CardDescription className="mt-1 text-gray-600 text-sm">
-                      Join Home HNI to start your property journey
-                    </CardDescription>
-                  </div>
-                  
-                  <form onSubmit={handleEmailSignUp} className="space-y-2">
-                    <div className="space-y-1">
-                      <Label htmlFor="signup-name" className="text-sm font-medium text-gray-700">Full Name</Label>
-                      <Input
-                        id="signup-name"
-                        type="text"
-                        value={signUpForm.fullName}
-                        onChange={(e) => setSignUpForm({...signUpForm, fullName: e.target.value})}
-                        placeholder="Enter your full name"
-                        required
-                        autoComplete="name"
-                        className="h-9 rounded-xl border-gray-200 focus:border-brand-red focus:ring-brand-red/20"
-                      />
-                    </div>
-
-                    <div className="space-y-1">
-                      <Label htmlFor="signup-email" className="text-sm font-medium text-gray-700">Email</Label>
-                      <Input
-                        id="signup-email"
-                        type="email"
-                        value={signUpForm.email}
-                        onChange={(e) => setSignUpForm({...signUpForm, email: e.target.value})}
-                        placeholder="Enter your email"
-                        required
-                        autoComplete="email"
-                        className="h-9 rounded-xl border-gray-200 focus:border-brand-red focus:ring-brand-red/20"
-                      />
                     </div>
                     
                     <div className="space-y-1">
-                      <Label htmlFor="signup-password" className="text-sm font-medium text-gray-700">Password</Label>
+                      <Label htmlFor="confirm-new-password" className="text-sm font-medium text-gray-700">Confirm New Password</Label>
                       <div className="relative">
                         <Input
-                          id="signup-password"
-                          type={showSignUpPassword ? "text" : "password"}
-                          value={signUpForm.password}
-                          onChange={(e) => setSignUpForm({...signUpForm, password: e.target.value})}
-                          placeholder="Create a password (min 6 characters)"
+                          id="confirm-new-password"
+                          type={showConfirmNewPassword ? "text" : "password"}
+                          value={confirmNewPassword}
+                          onChange={(e) => setConfirmNewPassword(e.target.value)}
+                          placeholder="Confirm your new password"
                           required
                           autoComplete="new-password"
-                          className="h-9 rounded-xl border-gray-200 focus:border-brand-red focus:ring-brand-red/20 pr-10"
+                          className="h-10 rounded-xl border-gray-200 focus:border-brand-red focus:ring-brand-red/20 pr-10"
                         />
                         <Button
                           type="button"
                           variant="ghost"
                           size="sm"
-                          className="absolute right-2 top-1.5 h-6 w-6 p-0 hover:bg-gray-100"
-                          onClick={() => setShowSignUpPassword(!showSignUpPassword)}
+                          className="absolute right-2 top-2 h-6 w-6 p-0 hover:bg-gray-100"
+                          onClick={() => setShowConfirmNewPassword(!showConfirmNewPassword)}
                         >
-                          {showSignUpPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                          {showConfirmNewPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                         </Button>
                       </div>
                     </div>
 
-                    <div className="space-y-1">
-                      <Label htmlFor="signup-confirm-password" className="text-sm font-medium text-gray-700">Confirm Password</Label>
-                      <div className="relative">
-                        <Input
-                          id="signup-confirm-password"
-                          type={showConfirmPassword ? "text" : "password"}
-                          value={signUpForm.confirmPassword}
-                          onChange={(e) => setSignUpForm({...signUpForm, confirmPassword: e.target.value})}
-                          placeholder="Confirm your password"
-                          required
-                          autoComplete="new-password"
-                          className="h-9 rounded-xl border-gray-200 focus:border-brand-red focus:ring-brand-red/20 pr-10"
-                        />
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          size="sm"
-                          className="absolute right-2 top-1.5 h-6 w-6 p-0 hover:bg-gray-100"
-                          onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                        >
-                          {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                        </Button>
-                      </div>
-                    </div>
-
-                    <Button type="submit" className="w-full h-9 rounded-xl bg-gradient-to-r from-brand-red to-brand-red-dark hover:shadow-lg transition-all duration-200 mt-3">
-                      Create Account
+                    <Button 
+                      type="submit" 
+                      disabled={isUpdatingPassword}
+                      className="w-full h-10 rounded-xl bg-gradient-to-r from-brand-red to-brand-red-dark hover:shadow-lg transition-all duration-200"
+                    >
+                      {isUpdatingPassword ? "Updating..." : "Update Password"}
                     </Button>
                   </form>
-
-                  <div className="relative">
-                    <div className="absolute inset-0 flex items-center">
-                      <span className="w-full border-t border-gray-200" />
-                    </div>
-                    <div className="relative flex justify-center text-xs uppercase">
-                      <span className="bg-white px-3 text-gray-500 font-medium">Or continue with</span>
-                    </div>
-                  </div>
                   
-                  <Button 
-                    onClick={handleGoogleSignIn}
-                    className="w-full h-9 rounded-xl border-2 hover:bg-gray-50 transition-all duration-200"
-                    variant="outline"
-                  >
-                    <Chrome className="h-4 w-4 mr-2 text-red-500" />
-                    Sign up with Google
-                  </Button>
-                </TabsContent>
-              </Tabs>
-              
-             <div className="text-center text-xs text-gray-500 mt-4 pt-4 border-t border-gray-100">
-  By continuing, you agree to our{" "}
-  <Link 
-    to="/terms-and-conditions" 
-    className="text-brand-red hover:underline cursor-pointer"
-  >
-    Terms of Service
-  </Link>{" "}
-  and{" "}
-  <Link 
-    to="/privacy-policy" 
-    className="text-brand-red hover:underline cursor-pointer"
-  >
-    Privacy Policy
-  </Link>
-</div>
+                  <div className="text-center">
+                    <Button 
+                      variant="link" 
+                      className="text-sm text-gray-600 hover:text-brand-red p-0 h-auto"
+                      onClick={() => {
+                        setIsPasswordResetMode(false);
+                        navigate('/auth', { replace: true });
+                      }}
+                    >
+                      Back to login
+                    </Button>
+                  </div>
+                </div>
+              ) : (
+                // Normal Login/Signup Tabs
+                <>
+                  <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+                    <TabsList className="grid w-full grid-cols-2 mb-4 bg-gray-100/80 p-1 rounded-xl">
+                      <TabsTrigger value="signin" className="flex items-center space-x-2 rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm">
+                        <LogIn size={16} />
+                        <span>Login</span>
+                      </TabsTrigger>
+                      <TabsTrigger value="signup" className="flex items-center space-x-2 rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm">
+                        <UserPlus size={16} />
+                        <span>Sign Up</span>
+                      </TabsTrigger>
+                    </TabsList>
+                    
+                    <TabsContent value="signin" className="space-y-4">
+                      <form onSubmit={handleEmailSignIn} className="space-y-4">
+                        <div className="space-y-1">
+                          <Label htmlFor="signin-email" className="text-sm font-medium text-gray-700">Email</Label>
+                            <Input
+                              id="signin-email"
+                              type="email"
+                              value={signInForm.email}
+                              onChange={(e) => setSignInForm({...signInForm, email: e.target.value})}
+                              placeholder="Enter your email"
+                              required
+                              autoComplete="email"
+                              className="h-10 rounded-xl border-gray-200 focus:border-brand-red focus:ring-brand-red/20"
+                            />
+                        </div>
+                        
+                        <div className="space-y-1">
+                          <Label htmlFor="signin-password" className="text-sm font-medium text-gray-700">Password</Label>
+                          <div className="relative">
+                            <Input
+                              id="signin-password"
+                              type={showSignInPassword ? "text" : "password"}
+                              value={signInForm.password}
+                              onChange={(e) => setSignInForm({...signInForm, password: e.target.value})}
+                              placeholder="Enter your password"
+                              required
+                              autoComplete="current-password"
+                              className="h-10 rounded-xl border-gray-200 focus:border-brand-red focus:ring-brand-red/20 pr-10"
+                            />
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="sm"
+                              className="absolute right-2 top-2 h-6 w-6 p-0 hover:bg-gray-100"
+                              onClick={() => setShowSignInPassword(!showSignInPassword)}
+                            >
+                              {showSignInPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                            </Button>
+                          </div>
+                        </div>
+
+                        <Button type="submit" className="w-full h-10 rounded-xl bg-gradient-to-r from-brand-red to-brand-red-dark hover:shadow-lg transition-all duration-200">
+                          Login
+                        </Button>
+                      </form>
+
+                      <div className="text-center">
+                        <Button 
+                          variant="link" 
+                          className="text-sm text-brand-red hover:underline p-0 h-auto"
+                          onClick={() => setShowForgotPassword(true)}
+                        >
+                          Forgot password?
+                        </Button>
+                      </div>
+
+                      <div className="relative">
+                        <div className="absolute inset-0 flex items-center">
+                          <span className="w-full border-t border-gray-200" />
+                        </div>
+                        <div className="relative flex justify-center text-xs uppercase">
+                          <span className="bg-white px-3 text-gray-500 font-medium">Or continue with</span>
+                        </div>
+                      </div>
+                      
+                      <Button 
+                        onClick={handleGoogleSignIn}
+                        className="w-full h-10 rounded-xl border-2 hover:bg-gray-50 transition-all duration-200"
+                        variant="outline"
+                      >
+                        <Chrome className="h-4 w-4 mr-2 text-red-500" />
+                        Continue with Google
+                      </Button>
+                    </TabsContent>
+                    
+                    <TabsContent value="signup" className="space-y-3">
+                      <div className="text-center">
+                        <CardTitle className="text-xl font-semibold text-gray-800">Create Account</CardTitle>
+                        <CardDescription className="mt-1 text-gray-600 text-sm">
+                          Join Home HNI to start your property journey
+                        </CardDescription>
+                      </div>
+                      
+                      <form onSubmit={handleEmailSignUp} className="space-y-2">
+                        <div className="space-y-1">
+                          <Label htmlFor="signup-name" className="text-sm font-medium text-gray-700">Full Name</Label>
+                          <Input
+                            id="signup-name"
+                            type="text"
+                            value={signUpForm.fullName}
+                            onChange={(e) => setSignUpForm({...signUpForm, fullName: e.target.value})}
+                            placeholder="Enter your full name"
+                            required
+                            autoComplete="name"
+                            className="h-9 rounded-xl border-gray-200 focus:border-brand-red focus:ring-brand-red/20"
+                          />
+                        </div>
+
+                        <div className="space-y-1">
+                          <Label htmlFor="signup-email" className="text-sm font-medium text-gray-700">Email</Label>
+                          <Input
+                            id="signup-email"
+                            type="email"
+                            value={signUpForm.email}
+                            onChange={(e) => setSignUpForm({...signUpForm, email: e.target.value})}
+                            placeholder="Enter your email"
+                            required
+                            autoComplete="email"
+                            className="h-9 rounded-xl border-gray-200 focus:border-brand-red focus:ring-brand-red/20"
+                          />
+                        </div>
+                        
+                        <div className="space-y-1">
+                          <Label htmlFor="signup-password" className="text-sm font-medium text-gray-700">Password</Label>
+                          <div className="relative">
+                            <Input
+                              id="signup-password"
+                              type={showSignUpPassword ? "text" : "password"}
+                              value={signUpForm.password}
+                              onChange={(e) => setSignUpForm({...signUpForm, password: e.target.value})}
+                              placeholder="Create a password (min 6 characters)"
+                              required
+                              autoComplete="new-password"
+                              className="h-9 rounded-xl border-gray-200 focus:border-brand-red focus:ring-brand-red/20 pr-10"
+                            />
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="sm"
+                              className="absolute right-2 top-1.5 h-6 w-6 p-0 hover:bg-gray-100"
+                              onClick={() => setShowSignUpPassword(!showSignUpPassword)}
+                            >
+                              {showSignUpPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                            </Button>
+                          </div>
+                        </div>
+
+                        <div className="space-y-1">
+                          <Label htmlFor="signup-confirm-password" className="text-sm font-medium text-gray-700">Confirm Password</Label>
+                          <div className="relative">
+                            <Input
+                              id="signup-confirm-password"
+                              type={showConfirmPassword ? "text" : "password"}
+                              value={signUpForm.confirmPassword}
+                              onChange={(e) => setSignUpForm({...signUpForm, confirmPassword: e.target.value})}
+                              placeholder="Confirm your password"
+                              required
+                              autoComplete="new-password"
+                              className="h-9 rounded-xl border-gray-200 focus:border-brand-red focus:ring-brand-red/20 pr-10"
+                            />
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="sm"
+                              className="absolute right-2 top-1.5 h-6 w-6 p-0 hover:bg-gray-100"
+                              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                            >
+                              {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                            </Button>
+                          </div>
+                        </div>
+
+                        <Button type="submit" className="w-full h-9 rounded-xl bg-gradient-to-r from-brand-red to-brand-red-dark hover:shadow-lg transition-all duration-200 mt-3">
+                          Create Account
+                        </Button>
+                      </form>
+
+                      <div className="relative">
+                        <div className="absolute inset-0 flex items-center">
+                          <span className="w-full border-t border-gray-200" />
+                        </div>
+                        <div className="relative flex justify-center text-xs uppercase">
+                          <span className="bg-white px-3 text-gray-500 font-medium">Or continue with</span>
+                        </div>
+                      </div>
+                      
+                      <Button 
+                        onClick={handleGoogleSignIn}
+                        className="w-full h-9 rounded-xl border-2 hover:bg-gray-50 transition-all duration-200"
+                        variant="outline"
+                      >
+                        <Chrome className="h-4 w-4 mr-2 text-red-500" />
+                        Sign up with Google
+                      </Button>
+                    </TabsContent>
+                  </Tabs>
+                  
+                  <div className="text-center text-xs text-gray-500 mt-4 pt-4 border-t border-gray-100">
+                    By continuing, you agree to our{" "}
+                    <Link 
+                      to="/terms-and-conditions" 
+                      className="text-brand-red hover:underline cursor-pointer"
+                    >
+                      Terms of Service
+                    </Link>{" "}
+                    and{" "}
+                    <Link 
+                      to="/privacy-policy" 
+                      className="text-brand-red hover:underline cursor-pointer"
+                    >
+                      Privacy Policy
+                    </Link>
+                  </div>
+                </>
+              )}
             </CardContent>
           </Card>
         </div>
