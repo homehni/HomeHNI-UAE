@@ -78,14 +78,6 @@ export const CategorizedImageUpload: React.FC<CategorizedImageUploadProps> = ({
 
   return (
     <div className="space-y-6">
-      {/* Header with total count */}
-      <div className="text-center space-y-2">
-        <div className="flex items-center justify-center gap-2">
-          <Badge variant="outline" className="text-sm">
-            Total Images: {getTotalImages()}
-          </Badge>
-        </div>
-      </div>
 
       {/* Categories Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
