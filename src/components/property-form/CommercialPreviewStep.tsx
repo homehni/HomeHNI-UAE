@@ -48,12 +48,9 @@ export const CommercialPreviewStep: React.FC<CommercialPreviewStepProps> = ({
       // Open the specific property details page in a new tab
       window.open(`/property/${previewPropertyId}`, '_blank');
     } else {
-      console.log('No previewPropertyId, creating preview URL with form data');
-      // Create a temporary preview URL with form data
-      const previewData = encodeURIComponent(JSON.stringify(formData));
-      const previewUrl = `/preview?data=${previewData}&type=commercial`;
-      console.log('Opening preview URL:', previewUrl);
-      window.open(previewUrl, '_blank');
+      console.log('Property submitted but not yet live. Navigating to property search.');
+      // Navigate to property search page since property is not yet live
+      window.open('/property-search?tab=commercial', '_blank');
     }
   };
 
