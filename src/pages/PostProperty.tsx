@@ -816,12 +816,14 @@ export const PostProperty: React.FC = () => {
           <div className="min-h-screen bg-gray-100">
             {/* Header */}
             <div className="bg-white border-b border-gray-200 px-4 lg:px-8 py-4 pt-20 lg:pt-6">
-              <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center gap-3">
-                <h1 className="text-xl lg:text-2xl font-semibold text-gray-800">
-                  Sell or Rent your Property For Free
-                </h1>
-                <div className="text-gray-600 text-sm lg:text-base">
-                  Looking for a property? <Link to="/" className="text-blue-500 cursor-pointer hover:text-blue-600 underline font-medium">Click Here</Link>
+              <div className="flex justify-center">
+                <div className="w-full max-w-5xl flex flex-col lg:flex-row lg:justify-between lg:items-center gap-3">
+                  <h1 className="text-xl lg:text-2xl font-semibold text-gray-800">
+                    Sell or Rent your Property For Free
+                  </h1>
+                  <div className="text-gray-600 text-sm lg:text-base">
+                    Looking for a property? <Link to="/" className="text-blue-500 cursor-pointer hover:text-blue-600 underline font-medium">Click Here</Link>
+                  </div>
                 </div>
               </div>
             </div>
