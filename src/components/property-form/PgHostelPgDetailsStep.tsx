@@ -134,67 +134,68 @@ export function PgHostelPgDetailsStep({
             </div>
           </div>
 
-          {/* Preferred Guests */}
-          <div className="space-y-2">
-            <Label htmlFor="preferredGuests" className="text-base font-medium">Preferred Guests*</Label>
-            <Select
-              value={formData.preferredGuests}
-              onValueChange={(value: 'student' | 'working' | 'any') => 
-                setFormData({ ...formData, preferredGuests: value })
-              }
-            >
-              <SelectTrigger className="h-12">
-                <SelectValue placeholder="Select" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="working">Working Professional</SelectItem>
-                <SelectItem value="student">Student</SelectItem>
-                <SelectItem value="any">Both</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+          {/* Preferred Guests and Available From */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-2">
+              <Label htmlFor="preferredGuests" className="text-base font-medium">Preferred Guests*</Label>
+              <Select
+                value={formData.preferredGuests}
+                onValueChange={(value: 'student' | 'working' | 'any') => 
+                  setFormData({ ...formData, preferredGuests: value })
+                }
+              >
+                <SelectTrigger className="h-12">
+                  <SelectValue placeholder="Select" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="working">Working Professional</SelectItem>
+                  <SelectItem value="student">Student</SelectItem>
+                  <SelectItem value="any">Both</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
 
-          {/* Available From */}
-          <div className="space-y-2">
-            <Label htmlFor="availableFrom" className="text-base font-medium">Available From</Label>
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  className={cn(
-                    "h-12 w-full justify-start text-left font-normal",
-                    !formData.availableFrom && "text-muted-foreground"
-                  )}
-                >
-                  <CalendarIcon className="mr-2 h-4 w-4" />
-                  {formData.availableFrom ? (
-                    format(new Date(formData.availableFrom), "dd/MM/yyyy")
-                  ) : (
-                    <span>dd/mm/yyyy</span>
-                  )}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0 bg-white border shadow-lg z-50" align="start">
-                <Calendar
-                  mode="single"
-                  selected={formData.availableFrom ? new Date(formData.availableFrom) : undefined}
-                  onSelect={(date) => {
-                    setFormData({ 
-                      ...formData, 
-                      availableFrom: date ? format(date, "yyyy-MM-dd") : "" 
-                    });
-                  }}
-                  disabled={(date) => {
-                    const today = new Date();
-                    today.setHours(0, 0, 0, 0);
-                    const maxDate = addMonths(today, 2);
-                    return date < today || date > maxDate;
-                  }}
-                  initialFocus
-                  className="p-3 pointer-events-auto"
-                />
-              </PopoverContent>
-            </Popover>
+            <div className="space-y-2">
+              <Label htmlFor="availableFrom" className="text-base font-medium">Available From</Label>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className={cn(
+                      "h-12 w-full justify-start text-left font-normal",
+                      !formData.availableFrom && "text-muted-foreground"
+                    )}
+                  >
+                    <CalendarIcon className="mr-2 h-4 w-4" />
+                    {formData.availableFrom ? (
+                      format(new Date(formData.availableFrom), "dd/MM/yyyy")
+                    ) : (
+                      <span>dd/mm/yyyy</span>
+                    )}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0 bg-white border shadow-lg z-50" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={formData.availableFrom ? new Date(formData.availableFrom) : undefined}
+                    onSelect={(date) => {
+                      setFormData({ 
+                        ...formData, 
+                        availableFrom: date ? format(date, "yyyy-MM-dd") : "" 
+                      });
+                    }}
+                    disabled={(date) => {
+                      const today = new Date();
+                      today.setHours(0, 0, 0, 0);
+                      const maxDate = addMonths(today, 2);
+                      return date < today || date > maxDate;
+                    }}
+                    initialFocus
+                    className="p-3 pointer-events-auto"
+                  />
+                </PopoverContent>
+              </Popover>
+            </div>
           </div>
 
           {/* Rules */}
