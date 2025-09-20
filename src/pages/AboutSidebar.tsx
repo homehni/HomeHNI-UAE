@@ -493,24 +493,24 @@ const AboutSidebar = () => {
                       In case you have any questions, suggestions or if you just want to have a general talk with us. You can reach out to us by any of the below means:
                     </p>
                     
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:divide-x lg:divide-gray-300">
                       {/* Traditional Way Column */}
-                      <div>
+                      <div className="lg:pr-8">
                         <h3 className="text-lg font-medium text-gray-900 mb-4">Traditional Way</h3>
                         <div className="space-y-3">
-                          <div className="flex justify-between items-center">
+                          <div className="flex flex-col items-start">
                             <span className="text-gray-700 text-sm">Write to us</span>
                             <a href="mailto:homehni8@gmail.com" className="text-blue-600 hover:underline text-sm">
                               homehni8@gmail.com
                             </a>
                           </div>
-                          {/* <div className="flex justify-between items-center">
+                          {/* <div className="flex flex-col items-start">
                             <span className="text-gray-700 text-sm">Media Query</span>
                             <a href="mailto:media@homehni.com" className="text-blue-600 hover:underline text-sm">
                               media@homehni.com
                             </a>
                           </div> */}
-                          <div className="flex justify-between items-center">
+                          <div className="flex flex-col items-start">
                             <span className="text-gray-700 text-sm">Contact</span>
                             <a href="tel:+918074017388" className="text-blue-600 hover:underline text-sm">
                               +91 80740 17388
@@ -520,7 +520,7 @@ const AboutSidebar = () => {
                       </div>
                       
                       {/* Social Network Column */}
-                      <div>
+                      <div className="lg:pl-8">
                         <h3 className="text-lg font-medium text-gray-900 mb-4">Reach us on social network</h3>
                         <div className="flex gap-4">
                           <a
