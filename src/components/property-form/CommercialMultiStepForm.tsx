@@ -281,9 +281,9 @@ const handleScheduleSubmit = (data: Partial<ScheduleInfo>) => {
                   setTimeout(scrollToTop, 100);
                 }}
                 className="h-12 sm:h-10 px-6 sm:px-6 bg-red-600 hover:bg-red-700 text-white w-full sm:w-auto order-1 sm:order-2 font-semibold"
-                style={{ display: currentStep === 7 ? 'none' : 'block' }}
+                style={{ display: isSubmitted ? 'none' : 'block' }}
               >
-                {currentStep === 6 ? 'Review & Submit' : 'Save & Continue'}
+                {currentStep === 7 ? 'Submit Property' : currentStep === 6 ? 'Review & Submit' : 'Save & Continue'}
               </Button>
             </div>
           </div>
