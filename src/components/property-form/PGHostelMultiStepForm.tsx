@@ -13,6 +13,7 @@ import { PgHostelPgDetailsStep } from './PgHostelPgDetailsStep';
 import { PgHostelAmenitiesStep } from './PgHostelAmenitiesStep';
 import { PgHostelGalleryStep } from './PgHostelGalleryStep';
 import { PgHostelScheduleStep } from './PgHostelScheduleStep';
+import { PgHostelPreviewStep } from './PgHostelPreviewStep';
 import { PGHostelFormData, OwnerInfo } from '@/types/property';
 
 // Define local interfaces to match the components
@@ -138,7 +139,7 @@ const [propertyInfo, setPropertyInfo] = useState({
 
   // Navigate to target step if provided
   useEffect(() => {
-    if (targetStep && targetStep > 0 && targetStep <= 6) {
+    if (targetStep && targetStep > 0 && targetStep <= 8) {
       console.log('Navigating to target step:', targetStep);
       setCurrentStep(targetStep);
     }
@@ -206,7 +207,12 @@ const [propertyInfo, setPropertyInfo] = useState({
   const handleScheduleNext = (data: any) => {
     setScheduleInfo(data);
     setCompletedSteps(prev => [...prev.filter(step => step !== 7), 7]);
-    // Form complete, submit
+    setCurrentStep(8);
+    scrollToTop();
+  };
+
+  const handlePreviewSubmit = () => {
+    // Final submission happens here
     handleSubmit();
   };
 
@@ -806,7 +812,7 @@ const [propertyInfo, setPropertyInfo] = useState({
                   onNext={handleRoomTypesNext}
                   onBack={prevStep}
             currentStep={1}
-            totalSteps={6}
+            totalSteps={7}
           />
         )}
 
@@ -817,7 +823,7 @@ const [propertyInfo, setPropertyInfo] = useState({
                   onNext={handleRoomDetailsNext}
             onBack={prevStep}
                   currentStep={2}
-            totalSteps={6}
+            totalSteps={7}
           />
         )}
 
@@ -827,7 +833,7 @@ const [propertyInfo, setPropertyInfo] = useState({
                   onNext={handleLocalityDetailsNext}
                   onBack={prevStep}
                   currentStep={3}
-                  totalSteps={6}
+                  totalSteps={7}
                 />
               )}
 
@@ -837,7 +843,7 @@ const [propertyInfo, setPropertyInfo] = useState({
                   onNext={handlePgDetailsNext}
                   onBack={prevStep}
                   currentStep={4}
-                  totalSteps={6}
+                  totalSteps={7}
                 />
               )}
 
@@ -847,7 +853,7 @@ const [propertyInfo, setPropertyInfo] = useState({
                   onNext={handleAmenitiesNext}
                   onBack={prevStep}
                   currentStep={5}
-                  totalSteps={6}
+                  totalSteps={7}
                 />
               )}
 
@@ -857,17 +863,18 @@ const [propertyInfo, setPropertyInfo] = useState({
                   onNext={handleGalleryNext}
                   onBack={prevStep}
                   currentStep={6}
-                  totalSteps={6}
+                  totalSteps={7}
                 />
               )}
 
               {currentStep === 7 && (
-                <PgHostelScheduleStep
-                  initialData={scheduleInfo}
-                  onNext={handleScheduleNext}
+                <PgHostelPreviewStep
+                  formData={getFormData()}
                   onBack={prevStep}
-                  currentStep={7}
-                  totalSteps={6}
+                  onEdit={() => setCurrentStep(1)}
+                  onSubmit={handlePreviewSubmit}
+                  isSubmitting={isSubmitting}
+                  createdSubmissionId={createdSubmissionId}
                 />
               )}
             </div>
@@ -901,12 +908,12 @@ const [propertyInfo, setPropertyInfo] = useState({
                   } else if (currentStep === 6) {
                     handleGalleryNext(gallery);
                   } else if (currentStep === 7) {
-                    handleScheduleNext(scheduleInfo);
+                    handlePreviewSubmit();
                   }
                 }}
                 className="h-12 sm:h-10 px-6 sm:px-6 bg-red-600 hover:bg-red-700 text-white w-full sm:w-auto order-1 sm:order-2 font-semibold"
               >
-                Save & Continue
+                {currentStep === 7 ? 'Submit Property' : 'Save & Continue'}
               </Button>
             </div>
           </div>
@@ -929,7 +936,7 @@ const [propertyInfo, setPropertyInfo] = useState({
               {currentStep === 4 && 'PG Details'}
               {currentStep === 5 && 'Amenities'}
               {currentStep === 6 && 'Gallery'}
-              {currentStep === 7 && 'Schedule'}
+              {currentStep === 7 && 'Preview'}
             </h1>
           </div>
         </div>
@@ -942,7 +949,7 @@ const [propertyInfo, setPropertyInfo] = useState({
             onNext={handleRoomTypesNext}
             onBack={prevStep}
                 currentStep={1}
-            totalSteps={6}
+            totalSteps={7}
           />
         )}
 
@@ -953,7 +960,7 @@ const [propertyInfo, setPropertyInfo] = useState({
             onNext={handleRoomDetailsNext}
             onBack={prevStep}
                 currentStep={2}
-            totalSteps={6}
+            totalSteps={7}
           />
         )}
 
@@ -963,7 +970,7 @@ const [propertyInfo, setPropertyInfo] = useState({
             onNext={handleLocalityDetailsNext}
             onBack={prevStep}
                 currentStep={3}
-            totalSteps={6}
+            totalSteps={7}
           />
         )}
 
@@ -973,7 +980,7 @@ const [propertyInfo, setPropertyInfo] = useState({
             onNext={handlePgDetailsNext}
                 onBack={prevStep}
                 currentStep={4}
-                totalSteps={6}
+                totalSteps={7}
               />
             )}
 
@@ -983,7 +990,7 @@ const [propertyInfo, setPropertyInfo] = useState({
                 onNext={handleAmenitiesNext}
             onBack={prevStep}
             currentStep={5}
-            totalSteps={6}
+            totalSteps={7}
           />
         )}
 
@@ -993,19 +1000,20 @@ const [propertyInfo, setPropertyInfo] = useState({
             onNext={handleGalleryNext}
             onBack={prevStep}
                 currentStep={6}
-            totalSteps={6}
+            totalSteps={7}
           />
         )}
 
             {currentStep === 7 && (
-          <PgHostelScheduleStep
-            initialData={scheduleInfo}
-            onNext={handleScheduleNext}
-            onBack={prevStep}
-                currentStep={7}
-            totalSteps={6}
-          />
-        )}
+              <PgHostelPreviewStep
+                formData={getFormData()}
+                onBack={prevStep}
+                onEdit={() => setCurrentStep(1)}
+                onSubmit={handlePreviewSubmit}
+                isSubmitting={isSubmitting}
+                createdSubmissionId={createdSubmissionId}
+              />
+            )}
 
           {/* Sticky Bottom Navigation Bar */}
           <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-3 sm:p-4 z-50 shadow-lg">
@@ -1048,13 +1056,13 @@ const [propertyInfo, setPropertyInfo] = useState({
                     console.log('Calling handleGalleryNext');
                     handleGalleryNext(gallery);
                   } else if (currentStep === 7) {
-                    console.log('Calling handleScheduleNext');
-                    handleScheduleNext(scheduleInfo);
+                    console.log('Calling handlePreviewSubmit');
+                    handlePreviewSubmit();
                   }
                 }}
                 className="h-12 sm:h-10 px-6 sm:px-6 bg-red-600 hover:bg-red-700 text-white w-full sm:w-auto order-1 sm:order-2 font-semibold"
               >
-                Save & Continue
+                {currentStep === 7 ? 'Submit Property' : 'Save & Continue'}
               </Button>
             </div>
           </div>
