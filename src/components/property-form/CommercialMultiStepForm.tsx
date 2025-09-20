@@ -210,6 +210,12 @@ const handleScheduleSubmit = (data: Partial<ScheduleInfo>) => {
             currentStep={currentStep}
             totalSteps={8}
             isSubmitting={isSubmitting}
+            propertyDetails={propertyDetails}
+            locationDetails={locationDetails}
+            rentalDetails={rentalDetails}
+            amenities={amenities}
+            gallery={gallery}
+            scheduleInfo={scheduleInfo}
           />
         );
       default:
