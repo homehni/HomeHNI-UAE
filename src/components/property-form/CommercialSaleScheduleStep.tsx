@@ -57,12 +57,9 @@ const handleFormSubmit = (data: CommercialSaleScheduleForm) => {
   return (
     <div className="max-w-4xl mx-auto p-6">
       <div className="mb-8 text-left">
-        <h2 className="text-2xl font-bold text-foreground mb-2">
+        <h2 className="text-2xl font-bold text-red-600 mb-2">
           Schedule Property Visits
         </h2>
-        <div className="mt-4 text-sm text-muted-foreground">
-          Step {currentStep} of {totalSteps}
-        </div>
       </div>
 
       <Form {...form}>
