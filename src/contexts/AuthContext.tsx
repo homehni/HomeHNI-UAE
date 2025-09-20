@@ -50,6 +50,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         
         // Defer any Supabase calls/logging to avoid deadlocks
         setTimeout(() => {
+          // If user came from a password recovery email, route them to reset screen
+          if (event === 'PASSWORD_RECOVERY') {
+            try {
+              const params = new URLSearchParams(window.location.search);
+              if (params.get('mode') !== 'reset-password' || window.location.pathname !== '/auth') {
+                window.location.replace('/auth?mode=reset-password');
+              }
+            } catch {}
+          }
+
           if (event === 'SIGNED_IN') {
             AuditService.logAuthEvent('User Login Success', session?.user?.email ?? undefined, true);
           }

@@ -34,9 +34,11 @@ export const Auth: React.FC = () => {
   const [forgotPasswordEmail, setForgotPasswordEmail] = useState('');
   const [isResetLoading, setIsResetLoading] = useState(false);
   
-  // Check for password reset mode immediately - this needs to happen synchronously
+  // Check for password recovery/reset mode immediately - needs to happen synchronously
   const urlParams = new URLSearchParams(location.search);
-  const isResetMode = urlParams.get('mode') === 'reset-password';
+  const hashParams = new URLSearchParams((location.hash || '').replace(/^#/, ''));
+  const isRecovery = hashParams.get('type') === 'recovery';
+  const isResetMode = urlParams.get('mode') === 'reset-password' || isRecovery;
   
   // Password reset states
   const [isPasswordResetMode, setIsPasswordResetMode] = useState(isResetMode);
@@ -55,15 +57,12 @@ export const Auth: React.FC = () => {
   });
 
   useEffect(() => {
-    // Update password reset mode when location changes
-    const urlParams = new URLSearchParams(location.search);
-    const mode = urlParams.get('mode');
-    
-    if (mode === 'reset-password') {
-      setIsPasswordResetMode(true);
-    } else {
-      setIsPasswordResetMode(false);
-    }
+    // Update password reset mode when location (including hash) changes
+    const params = new URLSearchParams(location.search);
+    const mode = params.get('mode');
+    const hashParams = new URLSearchParams((location.hash || '').replace(/^#/, ''));
+    const isRecovery = hashParams.get('type') === 'recovery';
+    setIsPasswordResetMode(mode === 'reset-password' || isRecovery);
   }, [location]);
 
   useEffect(() => {
