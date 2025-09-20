@@ -31,7 +31,7 @@ export const usePropertyForm = () => {
   });
 
   const nextStep = () => {
-    if (currentStep < 6) {
+    if (currentStep < 7) {
       setCurrentStep(currentStep + 1);
     }
   };
@@ -43,7 +43,7 @@ export const usePropertyForm = () => {
   };
 
   const goToStep = (step: number) => {
-    if (step >= 1 && step <= 6) {
+    if (step >= 1 && step <= 7) {
       setCurrentStep(step);
     }
   };

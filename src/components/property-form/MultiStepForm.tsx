@@ -10,6 +10,7 @@ import { GalleryStep } from './GalleryStep';
 import GetTenantsFasterSection from '@/components/GetTenantsFasterSection';
 
 import { ScheduleStep } from './ScheduleStep';
+import { PreviewStep } from './PreviewStep';
 import { Home, MapPin, DollarSign, Sparkles, Camera, Info, Calendar, CheckCircle, ArrowLeft } from 'lucide-react';
 
 import { OwnerInfo, PropertyInfo } from '@/types/property';
@@ -31,8 +32,6 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
   targetStep = null,
   createdSubmissionId = null
 }) => {
-  const [isSubmitted, setIsSubmitted] = React.useState(false);
-  const [showNoPhotosMessage, setShowNoPhotosMessage] = React.useState(false);
   
   // Refs for form components
   const propertyDetailsRef = useRef<any>(null);
@@ -141,7 +140,7 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
 
   // Navigate to target step if provided
   React.useEffect(() => {
-    if (targetStep && targetStep > 0 && targetStep <= 6) {
+    if (targetStep && targetStep > 0 && targetStep <= 7) {
       console.log('Navigating to target step:', targetStep);
       goToStep(targetStep);
     }
@@ -201,28 +200,31 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
   };
 
 
-  const handleScheduleSubmit = (data: any) => {
+  const handleScheduleSubmit = async (data: any) => {
+    console.log('MultiStepForm handleScheduleSubmit called');
+    console.log('Schedule data:', data);
+    
+    // Update schedule info, submit the property, then go to Preview
     updateScheduleInfo(data);
-    console.log('Submitting property directly from Schedule step');
-    handleSubmit();
+    const formData = getFormData();
+    console.log('Complete form data for submission:', formData);
+    
+    await onSubmit({
+      ownerInfo: formData.ownerInfo as OwnerInfo,
+      propertyInfo: formData.propertyInfo as PropertyInfo
+    });
+    goToStep(7);
+    scrollToTop();
   };
 
   const handleSubmit = () => {
+    console.log('MultiStepForm handleSubmit called');
     const formData = getFormData();
-    
-    console.log('Form submission with optional validation:', { formData });
-    
-    // Since all fields are now optional, we can submit with any data
-    if (formData.ownerInfo && formData.propertyInfo) {
-      onSubmit({
-        ownerInfo: formData.ownerInfo as OwnerInfo,
-        propertyInfo: formData.propertyInfo as PropertyInfo
-      });
-      // Show success page after submission
-      setIsSubmitted(true);
-    } else {
-      console.error('Form data structure is invalid');
-    }
+    console.log('Form data for submission:', formData);
+    onSubmit({
+      ownerInfo: formData.ownerInfo as OwnerInfo,
+      propertyInfo: formData.propertyInfo as PropertyInfo
+    });
   };
 
   const handlePreviewListing = () => {
@@ -244,6 +246,7 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
     { title: "Amenities", icon: <Sparkles className="w-4 h-4" /> },
     { title: "Gallery", icon: <Camera className="w-4 h-4" /> },
     { title: "Schedule", icon: <Calendar className="w-4 h-4" /> },
+    { title: "Preview", icon: <CheckCircle className="w-4 h-4" /> },
   ];
 
   // Show success page if property has been submitted
