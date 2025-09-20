@@ -28,6 +28,7 @@ export const CommercialMultiStepForm: React.FC<CommercialMultiStepFormProps> = (
   targetStep = null,
   createdSubmissionId
 }) => {
+  const [isSubmitted, setIsSubmitted] = useState(false);
   const {
     currentStep,
     ownerInfo,
@@ -62,7 +63,7 @@ export const CommercialMultiStepForm: React.FC<CommercialMultiStepFormProps> = (
 
   // Navigate to target step if provided
   useEffect(() => {
-    if (targetStep && targetStep > 0 && targetStep <= 8) {
+    if (targetStep && targetStep > 0 && targetStep <= 7) {
       console.log('Navigating to target step:', targetStep);
       goToStep(targetStep);
     }
@@ -130,8 +131,9 @@ const handleScheduleNext = (data: Partial<ScheduleInfo>) => {
 
 const handleScheduleSubmit = (data: Partial<ScheduleInfo>) => {
   updateScheduleInfo(data);
-  nextStep();
-  scrollToTop();
+  const formData = getFormData();
+  onSubmit(formData as CommercialFormData);
+  setIsSubmitted(true);
 };
 
   const handleSubmit = () => {
@@ -142,6 +144,20 @@ const handleScheduleSubmit = (data: Partial<ScheduleInfo>) => {
   };
 
   const renderCurrentStep = () => {
+    if (isSubmitted) {
+      return (
+        <CommercialPreviewStep
+          formData={getFormData() as CommercialFormData}
+          onBack={prevStep}
+          onEdit={goToStep}
+          onSubmit={handleSubmit}
+          currentStep={currentStep}
+          totalSteps={7}
+          isSubmitting={isSubmitting}
+        />
+      );
+    }
+
     switch (currentStep) {
       case 2:
         return (
@@ -150,7 +166,7 @@ const handleScheduleSubmit = (data: Partial<ScheduleInfo>) => {
             onNext={handlePropertyDetailsNext}
             onBack={prevStep}
             currentStep={currentStep}
-            totalSteps={8}
+            totalSteps={7}
           />
         );
       case 3:
@@ -160,7 +176,7 @@ const handleScheduleSubmit = (data: Partial<ScheduleInfo>) => {
             onNext={handleLocationDetailsNext}
             onBack={prevStep}
             currentStep={currentStep}
-            totalSteps={8}
+            totalSteps={7}
           />
         );
       case 4:
@@ -170,7 +186,7 @@ const handleScheduleSubmit = (data: Partial<ScheduleInfo>) => {
             onNext={handleRentalDetailsNext}
             onBack={prevStep}
             currentStep={currentStep}
-            totalSteps={8}
+            totalSteps={7}
           />
         );
       case 5:
@@ -180,7 +196,7 @@ const handleScheduleSubmit = (data: Partial<ScheduleInfo>) => {
             onNext={handleAmenitiesNext}
             onBack={prevStep}
             currentStep={currentStep}
-            totalSteps={8}
+            totalSteps={7}
           />
         );
       case 6:
@@ -190,7 +206,7 @@ const handleScheduleSubmit = (data: Partial<ScheduleInfo>) => {
             onNext={handleGalleryNext}
             onBack={prevStep}
             currentStep={currentStep}
-            totalSteps={8}
+            totalSteps={7}
           />
         );
       case 7:
@@ -200,18 +216,6 @@ const handleScheduleSubmit = (data: Partial<ScheduleInfo>) => {
             onNext={handleScheduleNext}
             onBack={prevStep}
             onSubmit={handleScheduleSubmit}
-          />
-        );
-      case 8:
-        return (
-          <CommercialPreviewStep
-            formData={getFormData() as CommercialFormData}
-            onBack={prevStep}
-            onEdit={goToStep}
-            onSubmit={handleSubmit}
-            currentStep={currentStep}
-            totalSteps={8}
-            isSubmitting={isSubmitting}
           />
         );
       default:
@@ -231,7 +235,7 @@ const handleScheduleSubmit = (data: Partial<ScheduleInfo>) => {
             </div>
             <div className="flex items-center space-x-2">
               <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
-                Step {currentStep} of 8
+                Step {currentStep} of 7
               </span>
             </div>
           </div>
@@ -277,9 +281,9 @@ const handleScheduleSubmit = (data: Partial<ScheduleInfo>) => {
                   setTimeout(scrollToTop, 100);
                 }}
                 className="h-12 sm:h-10 px-6 sm:px-6 bg-red-600 hover:bg-red-700 text-white w-full sm:w-auto order-1 sm:order-2 font-semibold"
-                style={{ display: currentStep === 8 ? 'none' : 'block' }}
+                style={{ display: currentStep === 7 ? 'none' : 'block' }}
               >
-                {currentStep === 7 ? 'Review & Submit' : 'Save & Continue'}
+                {currentStep === 6 ? 'Review & Submit' : 'Save & Continue'}
               </Button>
             </div>
           </div>

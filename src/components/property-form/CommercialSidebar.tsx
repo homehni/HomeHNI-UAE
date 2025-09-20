@@ -55,13 +55,6 @@ export const CommercialSidebar: React.FC<CommercialSidebarProps> = ({
       completed: completedSteps.includes(7),
       active: currentStep === 7
     },
-    { 
-      id: 8, 
-      icon: Eye, 
-      label: 'Preview', 
-      completed: completedSteps.includes(8),
-      active: currentStep === 8
-    },
   ];
 
   return (

@@ -30,7 +30,7 @@ export const useCommercialPropertyForm = () => {
   });
 
   const nextStep = useCallback(() => {
-    if (currentStep < 9) {
+    if (currentStep < 7) {
       setCurrentStep(currentStep + 1);
     }
   }, [currentStep]);
@@ -42,7 +42,7 @@ export const useCommercialPropertyForm = () => {
   }, [currentStep]);
 
   const goToStep = useCallback((step: number) => {
-    if (step >= 2 && step <= 9) { // Valid steps are 2-9
+    if (step >= 2 && step <= 7) { // Valid steps are 2-7
       setCurrentStep(step);
     }
   }, []);
