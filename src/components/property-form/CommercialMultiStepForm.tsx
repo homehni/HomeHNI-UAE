@@ -9,9 +9,8 @@ import { CommercialRentalDetailsStep } from './CommercialRentalDetailsStep';
 import { CommercialAmenitiesStep } from './CommercialAmenitiesStep';
 import { GalleryStep } from './GalleryStep';
 import GetTenantsFasterSection from '@/components/GetTenantsFasterSection';
-
 import { ScheduleStep } from './ScheduleStep';
-import { PreviewStep } from './PreviewStep';
+import { CommercialPreviewStep } from './CommercialPreviewStep';
 import { OwnerInfo, CommercialFormData, CommercialPropertyDetails, LocationDetails, CommercialRentalDetails, CommercialAmenities, PropertyGallery, AdditionalInfo, ScheduleInfo } from '@/types/property';
 
 interface CommercialMultiStepFormProps {
@@ -63,7 +62,7 @@ export const CommercialMultiStepForm: React.FC<CommercialMultiStepFormProps> = (
 
   // Navigate to target step if provided
   useEffect(() => {
-    if (targetStep && targetStep > 0 && targetStep <= 7) {
+    if (targetStep && targetStep > 0 && targetStep <= 8) {
       console.log('Navigating to target step:', targetStep);
       goToStep(targetStep);
     }
@@ -131,9 +130,7 @@ const handleScheduleNext = (data: Partial<ScheduleInfo>) => {
 
 const handleScheduleSubmit = (data: Partial<ScheduleInfo>) => {
   updateScheduleInfo(data);
-  const formData = getFormData();
-  onSubmit(formData as CommercialFormData);
-  goToStep(8);
+  nextStep();
   scrollToTop();
 };
 
@@ -153,7 +150,7 @@ const handleScheduleSubmit = (data: Partial<ScheduleInfo>) => {
             onNext={handlePropertyDetailsNext}
             onBack={prevStep}
             currentStep={currentStep}
-            totalSteps={7}
+            totalSteps={8}
           />
         );
       case 3:
@@ -163,7 +160,7 @@ const handleScheduleSubmit = (data: Partial<ScheduleInfo>) => {
             onNext={handleLocationDetailsNext}
             onBack={prevStep}
             currentStep={currentStep}
-            totalSteps={7}
+            totalSteps={8}
           />
         );
       case 4:
@@ -173,7 +170,7 @@ const handleScheduleSubmit = (data: Partial<ScheduleInfo>) => {
             onNext={handleRentalDetailsNext}
             onBack={prevStep}
             currentStep={currentStep}
-            totalSteps={7}
+            totalSteps={8}
           />
         );
       case 5:
@@ -183,7 +180,7 @@ const handleScheduleSubmit = (data: Partial<ScheduleInfo>) => {
             onNext={handleAmenitiesNext}
             onBack={prevStep}
             currentStep={currentStep}
-            totalSteps={7}
+            totalSteps={8}
           />
         );
       case 6:
@@ -193,7 +190,7 @@ const handleScheduleSubmit = (data: Partial<ScheduleInfo>) => {
             onNext={handleGalleryNext}
             onBack={prevStep}
             currentStep={currentStep}
-            totalSteps={7}
+            totalSteps={8}
           />
         );
       case 7:
@@ -207,14 +204,12 @@ const handleScheduleSubmit = (data: Partial<ScheduleInfo>) => {
         );
       case 8:
         return (
-          <PreviewStep
-            formData={getFormData()}
+          <CommercialPreviewStep
             onBack={prevStep}
-            onEdit={goToStep}
             onSubmit={handleSubmit}
+            currentStep={currentStep}
+            totalSteps={8}
             isSubmitting={isSubmitting}
-            previewPropertyId={createdSubmissionId || undefined}
-            galleryStep={6}
           />
         );
       default:
@@ -234,7 +229,7 @@ const handleScheduleSubmit = (data: Partial<ScheduleInfo>) => {
             </div>
             <div className="flex items-center space-x-2">
               <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
-                Step {currentStep} of 7
+                Step {currentStep} of 8
               </span>
             </div>
           </div>
@@ -291,14 +286,15 @@ const handleScheduleSubmit = (data: Partial<ScheduleInfo>) => {
                   } else if (currentStep === 5) {
                     console.log('Calling handleGalleryNext');
                     handleGalleryNext(gallery);
-                  } else if (currentStep === 6) {
+                  } else if (currentStep === 7) {
                     console.log('Calling handleScheduleSubmit');
                     handleScheduleSubmit(scheduleInfo);
                   }
                 }}
                 className="h-12 sm:h-10 px-6 sm:px-6 bg-red-600 hover:bg-red-700 text-white w-full sm:w-auto order-1 sm:order-2 font-semibold"
+                style={{ display: currentStep === 8 ? 'none' : 'block' }}
                 >
-                  {currentStep === 6 ? 'Submit Property' : 'Save & Continue'}
+                  {currentStep === 7 ? 'Review & Submit' : 'Save & Continue'}
                 </Button>
             </div>
           </div>

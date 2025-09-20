@@ -61,7 +61,7 @@ export const CommercialSaleMultiStepForm = ({
 
   // Navigate to target step if provided
   useEffect(() => {
-    if (targetStep && targetStep > 0 && targetStep <= 7) {
+    if (targetStep && targetStep > 0 && targetStep <= 8) {
       console.log('Navigating to target step:', targetStep);
       goToStep(targetStep);
     }
@@ -77,19 +77,16 @@ export const CommercialSaleMultiStepForm = ({
     return completed;
   }, [currentStep, isStepValid]);
 
-const handleSubmit = async () => {
-  const formData = getFormData();
-  await onSubmit(formData);
-};
+  const handleScheduleSubmit = (data: any) => {
+    updateScheduleInfo(data);
+    nextStep();
+    scrollToTop();
+  };
 
-const handleScheduleSubmit = async (data: any) => {
-  // Update schedule info, submit the property, then go to Preview
-  updateScheduleInfo(data);
-  const formData = getFormData();
-  await onSubmit(formData);
-  goToStep(8);
-  scrollToTop();
-};
+  const handleSubmit = () => {
+    const formData = getFormData();
+    onSubmit(formData);
+  };
 
   const scrollToTop = () => {
     try {
@@ -116,7 +113,7 @@ const handleScheduleSubmit = async (data: any) => {
             }}
             onBack={prevStep}
             currentStep={currentStep}
-            totalSteps={7}
+            totalSteps={8}
           />
         );
       case 3:
@@ -131,7 +128,7 @@ const handleScheduleSubmit = async (data: any) => {
             }}
             onBack={prevStep}
             currentStep={currentStep}
-            totalSteps={7}
+            totalSteps={8}
           />
         );
       case 4:
@@ -146,7 +143,7 @@ const handleScheduleSubmit = async (data: any) => {
             }}
             onBack={prevStep}
             currentStep={currentStep}
-            totalSteps={7}
+            totalSteps={8}
           />
         );
       case 5:
@@ -161,7 +158,7 @@ const handleScheduleSubmit = async (data: any) => {
             }}
             onBack={prevStep}
             currentStep={currentStep}
-            totalSteps={7}
+            totalSteps={8}
           />
         );
       case 6:
@@ -176,7 +173,7 @@ const handleScheduleSubmit = async (data: any) => {
             }}
             onBack={prevStep}
             currentStep={currentStep}
-            totalSteps={7}
+            totalSteps={8}
           />
         );
       case 7:
@@ -191,21 +188,18 @@ const handleScheduleSubmit = async (data: any) => {
             }}
             onBack={prevStep}
             currentStep={currentStep}
-            totalSteps={7}
+            totalSteps={8}
             onSubmit={handleScheduleSubmit}
           />
         );
       case 8:
         return (
           <CommercialSalePreviewStep
-            formData={getFormData() as any}
-            onSubmit={handleSubmit}
             onBack={prevStep}
-            onEdit={goToStep}
+            onSubmit={handleSubmit}
             currentStep={currentStep}
-            totalSteps={7}
+            totalSteps={8}
             isSubmitting={isSubmitting}
-            previewPropertyId={createdSubmissionId || undefined}
           />
         );
       default:
@@ -222,9 +216,9 @@ const handleScheduleSubmit = async (data: any) => {
               List Your Commercial Property for Sale
             </h1>
             <p className="text-gray-600 text-xs mt-1 flex items-center gap-2">
-              Step {currentStep} of 7: Complete your property listing
+              Step {currentStep} of 8: Complete your property listing
               <span className="text-xs bg-gray-100 px-2 py-1 rounded-full">
-                {currentStep}/7
+                {currentStep}/8
               </span>
             </p>
           </div>
@@ -270,8 +264,9 @@ const handleScheduleSubmit = async (data: any) => {
                   setTimeout(scrollToTop, 100);
                 }}
                 className="h-12 sm:h-10 px-6 sm:px-6 bg-red-600 hover:bg-red-700 text-white w-full sm:w-auto order-1 sm:order-2 font-semibold"
+                style={{ display: currentStep === 8 ? 'none' : 'block' }}
               >
-                Save & Continue
+                {currentStep === 7 ? 'Review & Submit' : 'Save & Continue'}
               </Button>
             </div>
           </div>

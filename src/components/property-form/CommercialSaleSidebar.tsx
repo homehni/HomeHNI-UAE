@@ -1,5 +1,5 @@
 import React from 'react';
-import { Building, MapPin, IndianRupee, Sparkles, Camera, Calendar, Home, CheckCircle } from 'lucide-react';
+import { Building, MapPin, IndianRupee, Sparkles, Camera, Calendar, Home, CheckCircle, Eye } from 'lucide-react';
 
 interface CommercialSaleSidebarProps {
   currentStep: number;
@@ -50,6 +50,13 @@ export const CommercialSaleSidebar = ({ currentStep, completedSteps, onStepClick
       label: 'Schedule', 
       completed: completedSteps.includes(7),
       active: currentStep === 7
+    },
+    { 
+      id: 8, 
+      icon: Eye, 
+      label: 'Preview', 
+      completed: completedSteps.includes(8),
+      active: currentStep === 8
     },
   ];
 
@@ -124,12 +131,12 @@ export const CommercialSaleSidebar = ({ currentStep, completedSteps, onStepClick
                 fill="none"
                 stroke="#10b981"
                 strokeWidth="2"
-                strokeDasharray={`${Math.min((currentStep / 6) * 100, 100)}, 100`}
+                strokeDasharray={`${Math.min((currentStep / 7) * 100, 100)}, 100`}
               />
             </svg>
             <div className="absolute inset-0 flex items-center justify-center">
               <span className="text-lg font-semibold text-gray-700">
-                {Math.min(Math.round((currentStep / 6) * 100), 100)}%
+                {Math.min(Math.round((currentStep / 7) * 100), 100)}%
               </span>
             </div>
           </div>

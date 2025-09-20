@@ -2,7 +2,7 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { CheckCircle, Building, MapPin, IndianRupee, Sparkles, Camera, Calendar } from 'lucide-react';
 
-interface CommercialSalePreviewStepProps {
+interface CommercialPreviewStepProps {
   onBack: () => void;
   onSubmit: () => void;
   currentStep: number;
@@ -10,17 +10,17 @@ interface CommercialSalePreviewStepProps {
   isSubmitting: boolean;
 }
 
-export const CommercialSalePreviewStep = ({
+export const CommercialPreviewStep = ({
   onBack,
   onSubmit,
   currentStep,
   totalSteps,
   isSubmitting
-}: CommercialSalePreviewStepProps) => {
+}: CommercialPreviewStepProps) => {
   const completedSteps = [
     { icon: Building, label: 'Property Details', description: 'Commercial space details added' },
     { icon: MapPin, label: 'Locality Details', description: 'Location information provided' },
-    { icon: IndianRupee, label: 'Sale Details', description: 'Pricing and terms configured' },
+    { icon: IndianRupee, label: 'Rental Details', description: 'Pricing and terms configured' },
     { icon: Sparkles, label: 'Amenities', description: 'Amenities and facilities listed' },
     { icon: Camera, label: 'Gallery', description: 'Photos and videos uploaded' },
     { icon: Calendar, label: 'Schedule', description: 'Contact schedule set' }
@@ -33,7 +33,7 @@ export const CommercialSalePreviewStep = ({
           <CheckCircle className="w-8 h-8 text-green-600" />
         </div>
         <h2 className="text-2xl font-bold text-gray-900 mb-2">
-          Ready to Submit Your Commercial Property for Sale
+          Ready to Submit Your Commercial Property
         </h2>
         <p className="text-gray-600">
           Your property listing is complete. Review the details below and submit when ready.
@@ -62,7 +62,7 @@ export const CommercialSalePreviewStep = ({
         <ul className="text-sm text-blue-800 space-y-1">
           <li>• Your property will be reviewed by our team</li>
           <li>• Once approved, it will be live on the platform</li>
-          <li>• You'll start receiving inquiries from potential buyers</li>
+          <li>• You'll start receiving inquiries from potential tenants</li>
           <li>• We'll send you notifications for all activities</li>
         </ul>
       </div>
