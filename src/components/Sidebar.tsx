@@ -86,9 +86,9 @@ const handleAuthClick = () => {
     { id: 'packers-movers', label: 'Packers and Movers', hasSubmenu: false, onClick: () => { navigate('/packers-movers'); onClose(); } },
     // { id: 'refer-earn', label: 'Refer & Earn', hasSubmenu: false, onClick: () => { navigate('/refer-earn'); onClose(); } },
     // { id: 'rent-receipts', label: 'Rent Receipts', hasSubmenu: false, onClick: () => { navigate('/rent-receipts'); onClose(); } },
-    { id: 'owner-plans', label: 'Property Renting Owner Plans', hasSubmenu: false, onClick: () => { navigate('/owner-plans'); onClose(); } },
-    { id: 'buyer-plans', label: 'Property Buyer Plans', hasSubmenu: false, onClick: () => { navigate('/buyer-plans'); onClose(); } },
-    { id: 'seller-plans', label: 'Property Seller Plans', hasSubmenu: false, onClick: () => { navigate('/seller-plans'); onClose(); } },
+    { id: 'owner-plans', label: 'Property Renting Owner Plans', hasSubmenu: false, onClick: () => { navigate('/plans?tab=owner'); onClose(); } },
+    { id: 'buyer-plans', label: 'Property Buyer Plans', hasSubmenu: false, onClick: () => { navigate('/plans?tab=buyer'); onClose(); } },
+    { id: 'seller-plans', label: 'Property Seller Plans', hasSubmenu: false, onClick: () => { navigate('/plans?tab=seller'); onClose(); } },
     { id: 'about', label: 'About', hasSubmenu: false, onClick: () => { navigate('/about'); onClose(); } },
     {
   id: 'commercial-plans',
@@ -105,21 +105,21 @@ const handleAuthClick = () => {
     {
       label: 'Corpoarate Commercial Owner Plans',
       onClick: () => {
-        navigate('/commercial-owner-plans');
+        navigate('/plans?tab=commercial-owner');
         onClose();
       }
     },
     {
       label: 'Corpoarate Commercial Buyer Plans',
       onClick: () => {
-        navigate('/commercial-buyer-plan');
+        navigate('/plans?tab=commercial-buyer');
         onClose();
       }
     },
     {
       label: 'Corpoarate Commercial Seller Plans',
       onClick: () => {
-        navigate('/commercial-seller-plans');
+        navigate('/plans?tab=commercial-seller');
         onClose();
       }
     }
