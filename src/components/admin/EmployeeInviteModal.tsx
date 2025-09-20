@@ -145,7 +145,7 @@ export const EmployeeInviteModal: React.FC<EmployeeInviteModalProps> = ({
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="full_name">Full Name *</Label>
+              <Label htmlFor="full_name">Full Name</Label>
               <Input
                 id="full_name"
                 value={formData.full_name}
@@ -156,7 +156,7 @@ export const EmployeeInviteModal: React.FC<EmployeeInviteModalProps> = ({
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="email">Email Address *</Label>
+              <Label htmlFor="email">Email Address</Label>
               <Input
                 id="email"
                 type="email"
@@ -178,7 +178,7 @@ export const EmployeeInviteModal: React.FC<EmployeeInviteModalProps> = ({
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="join_date">Join Date *</Label>
+              <Label htmlFor="join_date">Join Date</Label>
               <Input
                 id="join_date"
                 type="date"
@@ -189,7 +189,7 @@ export const EmployeeInviteModal: React.FC<EmployeeInviteModalProps> = ({
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="department">Department *</Label>
+              <Label htmlFor="department">Department</Label>
               <Select onValueChange={(value) => handleInputChange('department', value)}>
                 <SelectTrigger>
                   <SelectValue placeholder="Select department" />
@@ -208,7 +208,7 @@ export const EmployeeInviteModal: React.FC<EmployeeInviteModalProps> = ({
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="designation">Designation *</Label>
+              <Label htmlFor="designation">Designation</Label>
               <Input
                 id="designation"
                 value={formData.designation}
@@ -219,7 +219,7 @@ export const EmployeeInviteModal: React.FC<EmployeeInviteModalProps> = ({
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="role">Employee Role *</Label>
+              <Label htmlFor="role">Employee Role</Label>
               <Select onValueChange={(value) => handleInputChange('role', value as any)}>
                 <SelectTrigger>
                   <SelectValue placeholder="Select role" />

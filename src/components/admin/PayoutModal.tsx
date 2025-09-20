@@ -302,7 +302,7 @@ export const PayoutModal: React.FC<PayoutModalProps> = ({
           <form onSubmit={handleCreatePayout} className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="employee_id">Employee *</Label>
+                <Label htmlFor="employee_id">Employee</Label>
                 <Select 
                   value={formData.employee_id} 
                   onValueChange={(value) => setFormData(prev => ({ ...prev, employee_id: value }))}
@@ -321,7 +321,7 @@ export const PayoutModal: React.FC<PayoutModalProps> = ({
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="payout_type">Payout Type *</Label>
+                <Label htmlFor="payout_type">Payout Type</Label>
                 <Select 
                   value={formData.payout_type} 
                   onValueChange={(value) => setFormData(prev => ({ ...prev, payout_type: value as any }))}
@@ -339,7 +339,7 @@ export const PayoutModal: React.FC<PayoutModalProps> = ({
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="amount">Amount (₹) *</Label>
+                <Label htmlFor="amount">Amount (₹)</Label>
                 <Input
                   id="amount"
                   type="number"

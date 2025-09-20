@@ -128,7 +128,7 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
                 name="superBuiltUpArea"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-sm font-medium">Built Up Area*</FormLabel>
+                    <FormLabel className="text-sm font-medium">Built Up Area</FormLabel>
                     <div className="relative">
                       <FormControl>
                         <Input
@@ -217,7 +217,7 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
                 name="propertyAge"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-sm font-medium">Property Age*</FormLabel>
+                    <FormLabel className="text-sm font-medium">Property Age</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger className="h-10">
@@ -279,7 +279,7 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
                   name="floorNo"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-sm font-medium">Floor*</FormLabel>
+                      <FormLabel className="text-sm font-medium">Floor</FormLabel>
                       <Select
                         onValueChange={(value) => {
                           if (value === 'ground') {
@@ -327,7 +327,7 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
                   name="totalFloors"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-sm font-medium">Total Floor*</FormLabel>
+                      <FormLabel className="text-sm font-medium">Total Floor</FormLabel>
                       <Select
                         onValueChange={(value) => field.onChange(parseInt(value))}
                         defaultValue={field.value?.toString()}

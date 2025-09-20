@@ -142,7 +142,7 @@ export const FlattmatesAmenitiesStep: React.FC<FlattmatesAmenitiesStepProps> = (
                   <FormItem className="border rounded-lg p-4">
                     <div className="flex items-center space-x-3 mb-3">
                       <Bath className="w-5 h-5 text-muted-foreground" />
-                      <FormLabel className="text-sm font-medium">Attached Bathroom*</FormLabel>
+                      <FormLabel className="text-sm font-medium">Attached Bathroom</FormLabel>
                     </div>
                     <div className="flex space-x-2">
                       <Button
@@ -177,7 +177,7 @@ export const FlattmatesAmenitiesStep: React.FC<FlattmatesAmenitiesStepProps> = (
                   <FormItem className="border rounded-lg p-4">
                     <div className="flex items-center space-x-3 mb-3">
                       <Wind className="w-5 h-5 text-muted-foreground" />
-                      <FormLabel className="text-sm font-medium">AC Room*</FormLabel>
+                      <FormLabel className="text-sm font-medium">AC Room</FormLabel>
                     </div>
                     <div className="flex space-x-2">
                       <Button
@@ -253,7 +253,7 @@ export const FlattmatesAmenitiesStep: React.FC<FlattmatesAmenitiesStepProps> = (
                   <FormItem className="border rounded-lg p-4">
                     <div className="flex items-center space-x-3 mb-3">
                       <UtensilsCrossed className="w-5 h-5 text-muted-foreground" />
-                      <FormLabel className="text-sm font-medium">Non-Veg Allowed*</FormLabel>
+                      <FormLabel className="text-sm font-medium">Non-Veg Allowed</FormLabel>
                     </div>
                     <div className="flex space-x-2">
                       <Button
@@ -364,7 +364,7 @@ export const FlattmatesAmenitiesStep: React.FC<FlattmatesAmenitiesStepProps> = (
                   <FormItem className="border rounded-lg p-4">
                     <div className="flex items-center space-x-3 mb-3">
                       <Dumbbell className="w-5 h-5 text-muted-foreground" />
-                      <FormLabel className="text-sm font-medium">Gym*</FormLabel>
+                      <FormLabel className="text-sm font-medium">Gym</FormLabel>
                     </div>
                     <div className="flex space-x-2">
                       <Button
@@ -399,7 +399,7 @@ export const FlattmatesAmenitiesStep: React.FC<FlattmatesAmenitiesStepProps> = (
                   <FormItem className="border rounded-lg p-4">
                     <div className="flex items-center space-x-3 mb-3">
                       <Shield className="w-5 h-5 text-muted-foreground" />
-                      <FormLabel className="text-sm font-medium">Gated Security*</FormLabel>
+                      <FormLabel className="text-sm font-medium">Gated Security</FormLabel>
                     </div>
                     <div className="flex space-x-2">
                       <Button
@@ -436,7 +436,7 @@ export const FlattmatesAmenitiesStep: React.FC<FlattmatesAmenitiesStepProps> = (
               name="whoWillShow"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Who will show the property?*</FormLabel>
+                  <FormLabel>Who will show the property?</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger>

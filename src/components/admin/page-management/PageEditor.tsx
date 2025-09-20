@@ -465,7 +465,7 @@ export const PageEditor: React.FC<PageEditorProps> = ({
             </div>
             
             <div className="space-y-2">
-              <Label htmlFor="slug">URL Slug *</Label>
+              <Label htmlFor="slug">URL Slug</Label>
               <Input
                 id="slug"
                 value={formData.slug}

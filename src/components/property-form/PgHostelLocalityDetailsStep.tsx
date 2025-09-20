@@ -162,7 +162,7 @@ export function PgHostelLocalityDetailsStep({
                 name="city"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-sm font-medium">City*</FormLabel>
+                    <FormLabel className="text-sm font-medium">City</FormLabel>
                     <FormControl>
                       <Select onValueChange={field.onChange} defaultValue={field.value}>
                         <SelectTrigger className="h-12">
@@ -219,7 +219,7 @@ export function PgHostelLocalityDetailsStep({
               name="landmark"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-sm font-medium">Landmark / Street*</FormLabel>
+                  <FormLabel className="text-sm font-medium">Landmark / Street</FormLabel>
                   <FormControl>
                     <Input
                       placeholder="e.g. Evergreen street"

@@ -114,7 +114,7 @@ export const ResalePropertyDetailsStep: React.FC<ResalePropertyDetailsStepProps>
               name="propertyType"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-sm font-medium">Property Type*</FormLabel>
+                  <FormLabel className="text-sm font-medium">Property Type</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger className="h-12">

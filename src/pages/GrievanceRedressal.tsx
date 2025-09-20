@@ -142,7 +142,7 @@ const GrievanceRedressal = () => {
                       name="name"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Your Name *</FormLabel>
+                          <FormLabel>Your Name</FormLabel>
                           <FormControl>
                             <Input placeholder="Enter your full name" {...field} />
                           </FormControl>
@@ -156,7 +156,7 @@ const GrievanceRedressal = () => {
                       name="email"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Your Email ID *</FormLabel>
+                          <FormLabel>Your Email ID</FormLabel>
                           <FormControl>
                             <Input type="email" placeholder="Enter your email" {...field} />
                           </FormControl>
@@ -172,7 +172,7 @@ const GrievanceRedressal = () => {
                       name="contactNumber"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Your Contact Number *</FormLabel>
+                          <FormLabel>Your Contact Number</FormLabel>
                           <FormControl>
                             <Input type="tel" placeholder="Enter your contact number" {...field} />
                           </FormControl>
@@ -186,7 +186,7 @@ const GrievanceRedressal = () => {
                       name="platform"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Select Platform/Section *</FormLabel>
+                          <FormLabel>Select Platform/Section</FormLabel>
                           <Select onValueChange={field.onChange} defaultValue={field.value}>
                             <FormControl>
                               <SelectTrigger>
@@ -213,7 +213,7 @@ const GrievanceRedressal = () => {
                     name="url"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>URL of the page you're reporting *</FormLabel>
+                        <FormLabel>URL of the page you're reporting</FormLabel>
                         <FormControl>
                           <Input type="url" placeholder="https://example.com/page-url" {...field} />
                         </FormControl>
@@ -227,7 +227,7 @@ const GrievanceRedressal = () => {
                     name="complaintNature"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Nature of Complaint *</FormLabel>
+                        <FormLabel>Nature of Complaint</FormLabel>
                         <Select onValueChange={field.onChange} defaultValue={field.value}>
                           <FormControl>
                             <SelectTrigger>
@@ -253,7 +253,7 @@ const GrievanceRedressal = () => {
                     name="description"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Describe your complaint in detail *</FormLabel>
+                        <FormLabel>Describe your complaint in detail</FormLabel>
                         <FormControl>
                           <Textarea 
                             placeholder="Please provide a detailed description of your complaint..." 

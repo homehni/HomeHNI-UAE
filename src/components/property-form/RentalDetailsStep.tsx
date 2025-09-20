@@ -225,7 +225,7 @@ export const RentalDetailsStep: React.FC<RentalDetailsStepProps> = ({
                 name="expectedLeaseAmount"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-sm font-medium text-gray-900">Expected Lease Amount *</FormLabel>
+                    <FormLabel className="text-sm font-medium text-gray-900">Expected Lease Amount</FormLabel>
                     <FormControl>
                       <div className="relative">
                         <span className="absolute left-3 top-3 text-gray-500">₹</span>
@@ -307,7 +307,7 @@ export const RentalDetailsStep: React.FC<RentalDetailsStepProps> = ({
                 name="maintenanceAmount"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-sm font-medium text-gray-900">Maintenance Amount *</FormLabel>
+                    <FormLabel className="text-sm font-medium text-gray-900">Maintenance Amount</FormLabel>
                     <FormControl>
                       <div className="relative">
                         <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">₹</span>

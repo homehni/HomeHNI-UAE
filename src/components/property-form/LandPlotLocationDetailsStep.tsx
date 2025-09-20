@@ -202,7 +202,7 @@ export const LandPlotLocationDetailsStep: React.FC<LandPlotLocationDetailsStepPr
             name="city"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-sm font-medium text-gray-900">City *</FormLabel>
+                <FormLabel className="text-sm font-medium text-gray-900">City</FormLabel>
                 <FormControl>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <SelectTrigger className="h-12">
@@ -244,7 +244,7 @@ export const LandPlotLocationDetailsStep: React.FC<LandPlotLocationDetailsStepPr
               name="locality"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-sm font-medium text-gray-900">Locality/Area *</FormLabel>
+                  <FormLabel className="text-sm font-medium text-gray-900">Locality/Area</FormLabel>
                   <FormControl>
                     <div className="relative">
                       <Input
