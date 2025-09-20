@@ -93,6 +93,5 @@ export function PgHostelGalleryStep({
           </div>
         </div>
       </div>
-    </div>
-  );
-}
+    );
+  }
