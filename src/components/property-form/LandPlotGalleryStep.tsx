@@ -53,15 +53,6 @@ export const LandPlotGalleryStep: React.FC<LandPlotGalleryStepProps> = ({
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
           {/* Image Upload Section */}
           <div className="space-y-4">
-            <div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                Plot Images (Optional)
-              </h3>
-              <p className="text-sm text-gray-600 mb-4">
-                Upload clear photos showing different angles of your plot, boundaries, access road, and surrounding area (optional).
-              </p>
-            </div>
-            
             <ImageUpload
               images={images}
               onImagesChange={handleImageChange}
