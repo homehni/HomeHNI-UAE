@@ -219,9 +219,6 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
       {/* Header with total count */}
       <div className="text-center space-y-2">
         <h3 className="text-lg font-semibold">Add Property Images by Category</h3>
-        <p className="text-sm text-muted-foreground">
-          Upload images for different areas of your property. All categories are optional.
-        </p>
         <div className="flex items-center justify-center gap-2">
           <Badge variant="outline" className="text-sm">
             Total Images: {getTotalCategorizedImages()}
