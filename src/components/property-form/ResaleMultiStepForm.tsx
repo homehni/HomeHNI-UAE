@@ -67,7 +67,7 @@ export const ResaleMultiStepForm: React.FC<ResaleMultiStepFormProps> = ({
 
   // Navigate to target step if provided
   React.useEffect(() => {
-    if (targetStep && targetStep > 0 && targetStep <= 8) {
+    if (targetStep && targetStep > 0 && targetStep <= 7) {
       console.log('Navigating to target step:', targetStep);
       goToStep(targetStep);
     }
@@ -161,6 +161,7 @@ const handleScheduleSubmit = (data: any) => {
     { title: "Amenities", icon: <Sparkles className="w-4 h-4" /> },
     { title: "Gallery", icon: <Camera className="w-4 h-4" /> },
     { title: "Schedule", icon: <Calendar className="w-4 h-4" /> },
+    { title: "Preview", icon: <CheckCircle className="w-4 h-4" /> },
   ];
 
   return (

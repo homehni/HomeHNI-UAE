@@ -34,7 +34,7 @@ export const useSalePropertyForm = () => {
   });
 
   const nextStep = () => {
-    if (currentStep < 9) {
+    if (currentStep < 7) {
       setCurrentStep(currentStep + 1);
     }
   };
@@ -46,7 +46,7 @@ export const useSalePropertyForm = () => {
   };
 
   const goToStep = (step: number) => {
-    if (step >= 1 && step <= 9) {
+    if (step >= 1 && step <= 7) {
       setCurrentStep(step);
     }
   };
