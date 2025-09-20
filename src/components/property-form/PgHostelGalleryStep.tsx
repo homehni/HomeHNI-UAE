@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ImageUpload } from './ImageUpload';
 import { VideoUpload } from './VideoUpload';
 
@@ -52,17 +51,16 @@ export function PgHostelGalleryStep({
   return (
     <div className="min-h-screen bg-background">
       <div className="max-w-4xl mx-auto p-8">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-center text-2xl font-semibold text-primary">
+        <div className="bg-background p-8">
+          <div className="text-center mb-8">
+            <h2 className="text-2xl font-semibold text-primary mb-2">
               Upload photos & videos
-            </CardTitle>
-            <p className="text-center text-gray-600">
+            </h2>
+            <p className="text-gray-600">
               Add photos to get 5X more responses. 90% tenants contact on properties with photos.
             </p>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-6">
+          </div>
+          <form onSubmit={handleSubmit} className="space-y-6">
               {/* Image Upload */}
               <div className="space-y-2">
                 <label className="text-sm font-medium">Photos *</label>
@@ -92,8 +90,8 @@ export function PgHostelGalleryStep({
                 </Button>
               </div>
             </form>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </div>
     </div>
   );
