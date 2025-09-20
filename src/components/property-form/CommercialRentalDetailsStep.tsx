@@ -135,8 +135,8 @@ export const CommercialRentalDetailsStep: React.FC<CommercialRentalDetailsStepPr
         
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            {/* Expected Rent */}
-            <div>
+            {/* Expected Rent and Expected Deposit */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <FormField
                 control={form.control}
                 name="expectedPrice"
@@ -191,62 +191,61 @@ export const CommercialRentalDetailsStep: React.FC<CommercialRentalDetailsStepPr
                   </FormItem>
                 )}
               />
-            </div>
 
-            {/* Security Deposit */}
-            <FormField
-              control={form.control}
-              name="securityDeposit"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-sm font-medium text-gray-900">Expected Deposit</FormLabel>
-                  <FormControl>
-                    <div className="relative">
-                      <span className="absolute left-3 top-3 text-gray-500">₹</span>
-                      <Input 
-                        placeholder="Enter Amount"
-                        className="h-12 pl-8 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
-                        type="number"
-                        min="1"
-                        inputMode="numeric"
-                        pattern="[0-9]*"
-                        onKeyDown={(e) => { if (['-','+','e','E','.'].includes(e.key)) e.preventDefault(); }}
-                        onPaste={(e) => { const text = e.clipboardData.getData('text'); const digits = text.replace(/[^0-9]/g, ''); if (digits !== text) { e.preventDefault(); field.onChange(digits ? Math.max(1, Number(digits)) : undefined); } }}
-                        value={field.value || ''}
-                        onChange={(e) => field.onChange(e.target.value ? Math.max(1, Number(e.target.value)) : undefined)}
+              <FormField
+                control={form.control}
+                name="securityDeposit"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-sm font-medium text-gray-900">Expected Deposit</FormLabel>
+                    <FormControl>
+                      <div className="relative">
+                        <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">₹</span>
+                        <Input 
+                          placeholder="Enter Amount"
+                          className="h-12 pl-8 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
+                          type="number"
+                          min="1"
+                          inputMode="numeric"
+                          pattern="[0-9]*"
+                          onKeyDown={(e) => { if (['-','+','e','E','.'].includes(e.key)) e.preventDefault(); }}
+                          onPaste={(e) => { const text = e.clipboardData.getData('text'); const digits = text.replace(/[^0-9]/g, ''); if (digits !== text) { e.preventDefault(); field.onChange(digits ? Math.max(1, Number(digits)) : undefined); } }}
+                          value={field.value || ''}
+                          onChange={(e) => field.onChange(e.target.value ? Math.max(1, Number(e.target.value)) : undefined)}
+                        />
+                      </div>
+                    </FormControl>
+                    {/* Security deposit in words display */}
+                    {field.value && field.value > 0 && (
+                      <div className="mt-2">
+                        <p className="text-sm text-gray-600">
+                          {formatExactPriceDisplay(field.value)}
+                        </p>
+                      </div>
+                    )}
+                    <div className="mt-2">
+                      <FormField
+                        control={form.control}
+                        name="depositNegotiable"
+                        render={({ field }) => (
+                          <div className="flex items-center space-x-2">
+                            <Checkbox 
+                              id="depositNegotiable"
+                              checked={field.value}
+                              onCheckedChange={field.onChange}
+                            />
+                            <label htmlFor="depositNegotiable" className="text-sm text-gray-600">
+                              Deposit Negotiable
+                            </label>
+                          </div>
+                        )}
                       />
                     </div>
-                  </FormControl>
-                  {/* Security deposit in words display */}
-                  {field.value && field.value > 0 && (
-                    <div className="mt-2">
-                      <p className="text-sm text-gray-600">
-                        {formatExactPriceDisplay(field.value)}
-                      </p>
-                    </div>
-                  )}
-                  <div className="mt-2">
-                    <FormField
-                      control={form.control}
-                      name="depositNegotiable"
-                      render={({ field }) => (
-                        <div className="flex items-center space-x-2">
-                          <Checkbox 
-                            id="depositNegotiable"
-                            checked={field.value}
-                            onCheckedChange={field.onChange}
-                          />
-                          <label htmlFor="depositNegotiable" className="text-sm text-gray-600">
-                            Deposit Negotiable
-                          </label>
-                        </div>
-                      )}
-                    />
-                  </div>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
 
             {/* Monthly Maintenance */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
