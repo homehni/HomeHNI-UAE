@@ -34,8 +34,12 @@ export const Auth: React.FC = () => {
   const [forgotPasswordEmail, setForgotPasswordEmail] = useState('');
   const [isResetLoading, setIsResetLoading] = useState(false);
   
+  // Check for password reset mode immediately - this needs to happen synchronously
+  const urlParams = new URLSearchParams(location.search);
+  const isResetMode = urlParams.get('mode') === 'reset-password';
+  
   // Password reset states
-  const [isPasswordResetMode, setIsPasswordResetMode] = useState(false);
+  const [isPasswordResetMode, setIsPasswordResetMode] = useState(isResetMode);
   const [newPassword, setNewPassword] = useState('');
   const [confirmNewPassword, setConfirmNewPassword] = useState('');
   const [showNewPassword, setShowNewPassword] = useState(false);
@@ -51,12 +55,14 @@ export const Auth: React.FC = () => {
   });
 
   useEffect(() => {
-    // Check for password reset mode
+    // Update password reset mode when location changes
     const urlParams = new URLSearchParams(location.search);
     const mode = urlParams.get('mode');
     
     if (mode === 'reset-password') {
       setIsPasswordResetMode(true);
+    } else {
+      setIsPasswordResetMode(false);
     }
   }, [location]);
 
