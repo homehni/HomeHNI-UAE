@@ -353,13 +353,26 @@ const handleScheduleSubmit = (data: any) => {
                   onClick={() => {
                     console.log('ResaleMultiStepForm sticky Save & Continue button clicked');
                     console.log('Current step:', currentStep);
-                    scrollToTop();
+                    console.log('Form ID we are looking for:', currentFormId);
+                    
                     const formEl = document.getElementById(currentFormId) as HTMLFormElement | null;
+                    console.log('Form element found:', formEl);
+                    
                     if (formEl) {
+                      console.log('Calling requestSubmit on form element');
                       formEl.requestSubmit();
                     } else {
                       console.warn('Form element not found for current step');
+                      // Try to find any form on the page as fallback
+                      const anyForm = document.querySelector('form');
+                      console.log('Any form found on page:', anyForm);
+                      if (anyForm) {
+                        console.log('Trying to submit any form found');
+                        anyForm.requestSubmit();
+                      }
                     }
+                    
+                    scrollToTop();
                   }}
                   className="h-12 sm:h-10 px-6 sm:px-6 bg-red-600 hover:bg-red-700 text-white w-full sm:w-auto order-1 sm:order-2 font-semibold"
                 >

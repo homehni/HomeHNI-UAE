@@ -75,6 +75,10 @@ export const ResalePropertyDetailsStep: React.FC<ResalePropertyDetailsStepProps>
   };
 
   const onSubmit = (data: ResalePropertyDetailsFormData) => {
+    console.log('ResalePropertyDetailsStep onSubmit called with data:', data);
+    console.log('Form validation state:', form.formState);
+    console.log('Form errors:', form.formState.errors);
+    
     onNext({
       ...initialData,
       title: data.title || '',
