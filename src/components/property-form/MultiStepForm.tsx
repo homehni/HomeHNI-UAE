@@ -178,7 +178,7 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
         </div>
 
         {/* Main Content */}
-        <div className="flex-1 bg-white p-6 md:p-8 pb-64">
+        <div className="flex-1 bg-white p-6 md:p-8 pb-20 overflow-y-auto max-h-screen">
               {currentStep === 1 && (
                 <PropertyDetailsStep
                   initialData={propertyDetails}
