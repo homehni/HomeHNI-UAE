@@ -48,8 +48,8 @@ export const LandPlotScheduleStep: React.FC<LandPlotScheduleStepProps> = ({
 
   return (
     <div className="bg-background p-6">
-        <div className="text-center mb-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">
+        <div className="text-left mb-8">
+          <h2 className="text-2xl font-bold text-red-600 mb-2">
             Schedule Property Visits
           </h2>
         </div>
