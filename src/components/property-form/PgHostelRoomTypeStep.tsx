@@ -86,13 +86,10 @@ export function PgHostelRoomTypeStep({
   return (
     <div className="min-h-screen bg-background">
       <div className="max-w-4xl mx-auto p-8">
-        <div className="text-center mb-8">
+        <div className="text-left mb-8">
           <h1 className="text-2xl font-semibold text-primary mb-2">
             Provide details about your place to find a tenant soon
           </h1>
-          <p className="text-gray-600">
-            Select the type of rooms available in your PG
-          </p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-8">
