@@ -79,18 +79,23 @@ export const useCommercialPropertyForm = () => {
     setScheduleInfo(prev => ({ ...prev, ...data }));
   }, []);
 
-  const getFormData = useCallback(() => ({
-    ownerInfo,
-    propertyInfo: {
-      propertyDetails,
-      locationDetails,
-      rentalDetails,
-      amenities,
-      gallery,
-      additionalInfo,
-      scheduleInfo
-    }
-  }), [ownerInfo, propertyDetails, locationDetails, rentalDetails, amenities, gallery, additionalInfo, scheduleInfo]);
+  const getFormData = useCallback(() => {
+    const formData = {
+      ownerInfo,
+      propertyInfo: {
+        propertyDetails,
+        locationDetails,
+        rentalDetails,
+        amenities,
+        gallery,
+        additionalInfo,
+        scheduleInfo
+      }
+    };
+    console.log('Getting commercial form data:', formData);
+    console.log('Commercial property title:', formData.propertyInfo.propertyDetails.title);
+    return formData;
+  }, [ownerInfo, propertyDetails, locationDetails, rentalDetails, amenities, gallery, additionalInfo, scheduleInfo]);
 
   const isStepValid = useCallback((step: number): boolean => {
     // All steps are now optional - always return true
