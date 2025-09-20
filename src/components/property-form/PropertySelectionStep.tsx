@@ -214,7 +214,7 @@ export const PropertySelectionStep: React.FC<PropertySelectionStepProps> = ({
 
           {/* Property Type */}
           <div className="space-y-3">
-            <h3 className="text-base font-semibold text-gray-800 text-center">Property type</h3>
+            <h3 className="text-base font-semibold text-gray-800 text-left">Property type</h3>
             <div className="flex border-b border-gray-200">
               {['Residential', 'Commercial', 'Land/Plot'].map((type) => (
                 <button
@@ -239,7 +239,7 @@ export const PropertySelectionStep: React.FC<PropertySelectionStepProps> = ({
 
           {/* Select Property Ad Type */}
           <div className="space-y-3">
-            <h3 className="text-base font-semibold text-gray-800 text-center">Select Property Ad Type</h3>
+            <h3 className="text-base font-semibold text-gray-800 text-left">Select Property Ad Type</h3>
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-2">
               {getListingTypes().map((type) => (
                 <button
