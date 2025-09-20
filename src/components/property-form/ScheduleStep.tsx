@@ -110,7 +110,7 @@ export const ScheduleStep: React.FC<ScheduleStepProps> = ({
                             onClick={() => {
                               field.onChange('book');
                               setPaintingResponse('book');
-                              navigate('/painting-cleaning');
+                              window.open('/painting-cleaning', '_blank');
                             }}
                           >
                             Book Now
@@ -175,7 +175,7 @@ export const ScheduleStep: React.FC<ScheduleStepProps> = ({
                             onClick={() => {
                               field.onChange('book');
                               setCleaningResponse('book');
-                              navigate('/painting-cleaning');
+                              window.open('/painting-cleaning', '_blank');
                             }}
                           >
                             Book Now

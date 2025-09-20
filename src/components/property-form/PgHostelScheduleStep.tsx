@@ -116,7 +116,7 @@ export function PgHostelScheduleStep({
                                 onClick={() => {
                                   field.onChange('book');
                                   setPaintingResponse('book');
-                                  navigate('/painting-cleaning');
+                                  window.open('/painting-cleaning', '_blank');
                                 }}
                               >
                                 Book Now
@@ -181,7 +181,7 @@ export function PgHostelScheduleStep({
                                 onClick={() => {
                                   field.onChange('book');
                                   setCleaningResponse('book');
-                                  navigate('/painting-cleaning');
+                                  window.open('/painting-cleaning', '_blank');
                                 }}
                               >
                                 Book Now
