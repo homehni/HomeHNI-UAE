@@ -83,7 +83,7 @@ export const CommercialSaleSaleDetailsStep = ({
                       <span className="absolute left-3 top-3 text-gray-500">₹</span>
                       <Input 
                         placeholder="Enter Amount"
-                        className="h-12 pl-8"
+                        className="h-12 pl-8 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
                         type="number"
                         min="1"
                         inputMode="numeric"

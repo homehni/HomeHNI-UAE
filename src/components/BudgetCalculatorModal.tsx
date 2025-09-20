@@ -84,7 +84,7 @@ const BudgetCalculatorModal: React.FC<BudgetCalculatorModalProps> = ({
                       type="number"
                       value={monthlyIncome}
                       onChange={(e) => setMonthlyIncome(Number(e.target.value))}
-                      className="text-center"
+                      className="text-center [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
                     />
                     <Slider
                       value={[monthlyIncome]}
@@ -105,7 +105,7 @@ const BudgetCalculatorModal: React.FC<BudgetCalculatorModalProps> = ({
                       type="number"
                       value={monthlyExpenses}
                       onChange={(e) => setMonthlyExpenses(Number(e.target.value))}
-                      className="text-center"
+                      className="text-center [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
                     />
                     <Slider
                       value={[monthlyExpenses]}

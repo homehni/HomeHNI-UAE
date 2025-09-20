@@ -101,7 +101,7 @@ const AreaConverterModal: React.FC<AreaConverterModalProps> = ({
                       value={inputValue}
                       onChange={(e) => setInputValue(Number(e.target.value))}
                       placeholder="Enter value"
-                      className="text-lg"
+                      className="text-lg [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
                     />
                     <Select value={fromUnit} onValueChange={setFromUnit}>
                       <SelectTrigger>

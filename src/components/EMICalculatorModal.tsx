@@ -136,7 +136,7 @@ const EMICalculatorModal: React.FC<EMICalculatorModalProps> = ({
                   type="number"
                   value={loanAmount}
                   onChange={(e) => setLoanAmount(Number(e.target.value))}
-                  className="text-center"
+                  className="text-center [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
                 />
                 <Slider
                   value={[loanAmount]}

@@ -222,7 +222,7 @@ export const SaleDetailsStep: React.FC<SaleDetailsStepProps> = ({
                         const value = e.target.value ? Math.max(1, Number(e.target.value)) : undefined;
                         field.onChange(value);
                       }}
-                      className="h-10"
+                      className="h-10 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
                     />
                   </FormControl>
                   <FormMessage />
@@ -331,7 +331,7 @@ export const SaleDetailsStep: React.FC<SaleDetailsStepProps> = ({
                       onPaste={(e) => { const text = e.clipboardData.getData('text'); const digits = text.replace(/[^0-9]/g, ''); if (digits !== text) { e.preventDefault(); field.onChange(digits ? Math.max(1, Number(digits)) : undefined); } }}
                       value={field.value || ''}
                       onChange={(e) => field.onChange(e.target.value ? Math.max(1, Number(e.target.value)) : undefined)}
-                      className="h-10"
+                      className="h-10 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
                     />
                   </FormControl>
                   {watchedValues.maintenanceCharges && (
@@ -364,7 +364,7 @@ export const SaleDetailsStep: React.FC<SaleDetailsStepProps> = ({
                       onPaste={(e) => { const text = e.clipboardData.getData('text'); const digits = text.replace(/[^0-9]/g, ''); if (digits !== text) { e.preventDefault(); field.onChange(digits ? Math.max(1, Number(digits)) : undefined); } }}
                       value={field.value || ''}
                       onChange={(e) => field.onChange(e.target.value ? Math.max(1, Number(e.target.value)) : undefined)}
-                      className="h-10"
+                      className="h-10 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
                     />
                   </FormControl>
                   {watchedValues.bookingAmount && (

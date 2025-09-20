@@ -347,7 +347,7 @@ export const PayoutModal: React.FC<PayoutModalProps> = ({
                   onChange={(e) => setFormData(prev => ({ ...prev, amount: e.target.value }))}
                   placeholder="Enter amount"
                   required
-                  min="1"
+                  className="[&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
                   step="0.01"
                 />
               </div>

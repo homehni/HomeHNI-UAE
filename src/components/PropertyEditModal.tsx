@@ -355,7 +355,7 @@ export const PropertyEditModal: React.FC<PropertyEditModalProps> = ({
                 type="number"
                 value={formData.expected_price || ''}
                 onChange={(e) => handleInputChange('expected_price', Number(e.target.value))}
-                placeholder="Enter expected price"
+                className="[&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
               />
             </div>
 
@@ -365,7 +365,7 @@ export const PropertyEditModal: React.FC<PropertyEditModalProps> = ({
                 type="number"
                 value={formData.super_area || ''}
                 onChange={(e) => handleInputChange('super_area', Number(e.target.value))}
-                placeholder="Enter super area"
+                className="[&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
               />
             </div>
 
@@ -375,7 +375,7 @@ export const PropertyEditModal: React.FC<PropertyEditModalProps> = ({
                 type="number"
                 value={formData.carpet_area || ''}
                 onChange={(e) => handleInputChange('carpet_area', Number(e.target.value))}
-                placeholder="Enter carpet area"
+                className="[&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
               />
             </div>
           </div>

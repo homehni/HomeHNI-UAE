@@ -224,7 +224,7 @@ export const ResalePropertyDetailsStep: React.FC<ResalePropertyDetailsStepProps>
                         type="number"
                         placeholder="Built Up Area"
                         min="1"
-                        className="h-12 pr-12"
+                        className="h-12 pr-12 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
                         {...field}
                         onKeyDown={(e) => { if (['-','+','e','E','.'].includes(e.key)) e.preventDefault(); }}
                         onPaste={(e) => { const text = e.clipboardData.getData('text'); const digits = text.replace(/[^0-9]/g, ''); if (digits !== text) { e.preventDefault(); field.onChange(digits ? Math.max(1, Number(digits)) : undefined); } }}
@@ -260,7 +260,7 @@ export const ResalePropertyDetailsStep: React.FC<ResalePropertyDetailsStepProps>
                         type="number"
                         placeholder="Carpet Area"
                         min="1"
-                        className="h-12 pr-12"
+                        className="h-12 pr-12 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
                         {...field}
                         onKeyDown={(e) => { if (['-','+','e','E','.'].includes(e.key)) e.preventDefault(); }}
                         onPaste={(e) => { const text = e.clipboardData.getData('text'); const digits = text.replace(/[^0-9]/g, ''); if (digits !== text) { e.preventDefault(); field.onChange(digits ? Math.max(1, Number(digits)) : undefined); } }}

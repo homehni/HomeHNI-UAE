@@ -244,7 +244,7 @@ export const EmployeeInviteModal: React.FC<EmployeeInviteModalProps> = ({
                 onChange={(e) => handleInputChange('salary', e.target.value)}
                 placeholder="Enter monthly salary"
                 min="0"
-                step="1000"
+                className="[&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
               />
             </div>
           </div>

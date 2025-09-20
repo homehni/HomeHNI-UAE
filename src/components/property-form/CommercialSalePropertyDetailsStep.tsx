@@ -245,7 +245,7 @@ export const CommercialSalePropertyDetailsStep = ({
                         type="number"
                         placeholder="Super Built-up Area"
                         min="1"
-                        className="h-12 pr-12"
+                        className="h-12 pr-12 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
                         {...field}
                         onKeyDown={(e) => { if (['-','+','e','E','.'].includes(e.key)) e.preventDefault(); }}
                         onPaste={(e) => { 
