@@ -1,7 +1,6 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { PropertyGallery } from '@/types/property';
 import { ImageUpload } from './ImageUpload';
 import { VideoUpload } from './VideoUpload';
@@ -45,16 +44,15 @@ export const LandPlotGalleryStep: React.FC<LandPlotGalleryStepProps> = ({
   };
 
   return (
-    <Card className="w-full max-w-4xl mx-auto">
-      <CardHeader>
-        <CardTitle className="text-2xl font-bold text-gray-900">
-          Photos & Videos
-        </CardTitle>
-        <p className="text-gray-600">
-          Upload high-quality photos and videos of your land/plot (optional).
-        </p>
-      </CardHeader>
-      <CardContent>
+    <div className="bg-background p-6">
+        <div className="text-center mb-8">
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">
+            Photos & Videos
+          </h2>
+          <p className="text-gray-600">
+            Upload high-quality photos and videos of your land/plot (optional).
+          </p>
+        </div>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
           {/* Image Upload Section */}
           <div className="space-y-4">
@@ -115,7 +113,6 @@ export const LandPlotGalleryStep: React.FC<LandPlotGalleryStepProps> = ({
 
           {/* Navigation Buttons - Removed, using sticky buttons instead */}
         </form>
-      </CardContent>
-    </Card>
+      </div>
   );
 };

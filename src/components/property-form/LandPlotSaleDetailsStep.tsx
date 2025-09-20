@@ -8,7 +8,6 @@ import { PriceInput } from '@/components/ui/price-input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { LandPlotSaleDetails } from '@/types/landPlotProperty';
 import { CalendarIcon } from 'lucide-react';
 import { format, addMonths } from 'date-fns';
@@ -54,16 +53,15 @@ export const LandPlotSaleDetailsStep: React.FC<LandPlotSaleDetailsStepProps> = (
 
 
   return (
-    <Card className="w-full max-w-4xl mx-auto">
-      <CardHeader>
-        <CardTitle className="text-2xl font-bold text-gray-900">
-          Sale Details
-        </CardTitle>
-        <p className="text-gray-600">
-          Enter pricing and ownership details for your land/plot
-        </p>
-      </CardHeader>
-      <CardContent>
+    <div className="bg-background p-6">
+        <div className="text-center mb-8">
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">
+            Sale Details
+          </h2>
+          <p className="text-gray-600">
+            Enter pricing and ownership details for your land/plot
+          </p>
+        </div>
         <form onSubmit={handleSubmit(onNext)} className="space-y-6">
           {/* Expected Price and Available From in same row */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -175,7 +173,6 @@ export const LandPlotSaleDetailsStep: React.FC<LandPlotSaleDetailsStepProps> = (
 
           {/* Navigation Buttons - Removed, using sticky buttons instead */}
         </form>
-      </CardContent>
-    </Card>
+      </div>
   );
 };

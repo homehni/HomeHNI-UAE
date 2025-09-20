@@ -8,7 +8,6 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Textarea } from '@/components/ui/textarea';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { LandPlotAmenities } from '@/types/landPlotProperty';
 
 const amenitiesSchema = z.object({
@@ -47,16 +46,15 @@ export const LandPlotAmenitiesStep: React.FC<LandPlotAmenitiesStepProps> = ({
   });
 
   return (
-    <Card className="w-full max-w-4xl mx-auto">
-      <CardHeader>
-        <CardTitle className="text-2xl font-bold text-gray-900">
-          Infrastructure & Amenities
-        </CardTitle>
-        <p className="text-gray-600">
-          Provide details about available infrastructure and amenities
-        </p>
-      </CardHeader>
-      <CardContent>
+    <div className="bg-background p-6">
+        <div className="text-center mb-8">
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">
+            Infrastructure & Amenities
+          </h2>
+          <p className="text-gray-600">
+            Provide details about available infrastructure and amenities
+          </p>
+        </div>
         <form onSubmit={handleSubmit(onNext)} className="space-y-6">
           {/* Water Supply and Electricity Connection */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -191,7 +189,6 @@ export const LandPlotAmenitiesStep: React.FC<LandPlotAmenitiesStepProps> = ({
 
           {/* Navigation Buttons - Removed, using sticky buttons instead */}
         </form>
-      </CardContent>
-    </Card>
+      </div>
   );
 };
