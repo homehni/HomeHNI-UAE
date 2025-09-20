@@ -55,12 +55,9 @@ export const LandPlotSaleDetailsStep: React.FC<LandPlotSaleDetailsStepProps> = (
   return (
     <div className="bg-background p-6">
         <div className="text-left mb-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">
+          <h2 className="text-2xl font-bold text-red-600 mb-2">
             Sale Details
           </h2>
-          <p className="text-gray-600">
-            Enter pricing and ownership details for your land/plot
-          </p>
         </div>
         <form onSubmit={handleSubmit(onNext)} className="space-y-6">
           {/* Expected Price and Available From in same row */}
