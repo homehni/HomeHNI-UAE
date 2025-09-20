@@ -178,8 +178,7 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
         </div>
 
         {/* Main Content */}
-        <div className="flex-1 bg-white">
-          <div className="max-w-4xl mx-auto p-6 md:p-8 pb-64">
+        <div className="flex-1 bg-white p-6 md:p-8 pb-64">
               {currentStep === 1 && (
                 <PropertyDetailsStep
                   initialData={propertyDetails}
@@ -249,7 +248,6 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
                   previewPropertyId={createdSubmissionId || undefined}
                 />
               )}
-          </div>
 
           {/* Sticky Bottom Navigation Bar */}
           <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-3 sm:p-4 z-50 shadow-lg">
