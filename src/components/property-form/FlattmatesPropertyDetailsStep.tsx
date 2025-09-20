@@ -3,7 +3,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Card, CardContent } from '@/components/ui/card';
 
 interface FlattmatesPropertyDetails {
   apartmentType: string;
@@ -77,9 +76,8 @@ export function FlattmatesPropertyDetailsStep({
         <p className="text-muted-foreground">Tell us about your property for flatmates</p>
       </div>
 
-          <Card>
-            <CardContent className="p-8">
-              <form id={formId || 'flatmates-step-form'} onSubmit={handleSubmit} className="space-y-6">
+          <div className="p-8">
+            <form id={formId || 'flatmates-step-form'} onSubmit={handleSubmit} className="space-y-6">
                 {/* Apartment Type and BHK Type */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
@@ -290,8 +288,7 @@ export function FlattmatesPropertyDetailsStep({
                   </Button>
                 </div>
               </form>
-        </CardContent>
-      </Card>
+          </div>
     </div>
   );
 }

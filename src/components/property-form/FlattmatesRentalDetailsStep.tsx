@@ -4,7 +4,6 @@ import { Input } from '@/components/ui/input';
 import { PriceInput } from '@/components/ui/price-input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Card, CardContent } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
@@ -74,9 +73,8 @@ export function FlattmatesRentalDetailsStep({
         <p className="text-muted-foreground">Set your rental expectations and terms</p>
       </div>
 
-          <Card>
-            <CardContent className="p-8">
-              <form id={formId || 'flatmates-step-form'} onSubmit={handleSubmit} className="space-y-6">
+          <div className="p-8">
+            <form id={formId || 'flatmates-step-form'} onSubmit={handleSubmit} className="space-y-6">
                 {/* Expected Rent and Expected Deposit */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
@@ -216,8 +214,7 @@ export function FlattmatesRentalDetailsStep({
                   </Button>
                 </div>
               </form>
-            </CardContent>
-          </Card>
+          </div>
     </div>
   );
 }
