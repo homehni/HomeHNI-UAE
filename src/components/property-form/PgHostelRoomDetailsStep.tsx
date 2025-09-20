@@ -103,18 +103,10 @@ export function PgHostelRoomDetailsStep({
   return (
     <div className="min-h-screen bg-background">
       <div className="max-w-4xl mx-auto p-8">
-        <div className="text-center mb-8">
+        <div className="text-left mb-8">
           <h1 className="text-2xl font-semibold text-primary mb-2">
             Provide details about your place to find a tenant soon
           </h1>
-          <p className="text-gray-600">
-            {roomTypes.selectedTypes.length === 1 
-              ? `${roomTypes.selectedTypes[0].charAt(0).toUpperCase() + roomTypes.selectedTypes[0].slice(1)} Room Details`
-              : roomTypes.selectedTypes.length > 1 
-              ? 'Multiple Room Types Details'
-              : 'Room Details'
-            }
-          </p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-8">
