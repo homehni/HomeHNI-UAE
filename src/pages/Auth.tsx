@@ -30,6 +30,9 @@ export const Auth: React.FC = () => {
   const [showSignInPassword, setShowSignInPassword] = useState(false);
   const [showSignUpPassword, setShowSignUpPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
+  const [forgotPasswordEmail, setForgotPasswordEmail] = useState('');
+  const [isResetLoading, setIsResetLoading] = useState(false);
   
   const [signInForm, setSignInForm] = useState({ email: '', password: '' });
   const [signUpForm, setSignUpForm] = useState({ 
@@ -184,6 +187,36 @@ export const Auth: React.FC = () => {
     }
   };
 
+  const handleForgotPassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsResetLoading(true);
+
+    try {
+      const { supabase } = await import('@/integrations/supabase/client');
+      const { error } = await supabase.auth.resetPasswordForEmail(forgotPasswordEmail, {
+        redirectTo: `${window.location.origin}/auth?mode=reset-password`,
+      });
+
+      if (error) throw error;
+
+      toast({
+        title: "Password reset email sent",
+        description: "Please check your email for password reset instructions.",
+      });
+      
+      setShowForgotPassword(false);
+      setForgotPasswordEmail('');
+    } catch (error: any) {
+      toast({
+        title: "Error sending reset email",
+        description: error.message || "Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsResetLoading(false);
+    }
+  };
+
   const handleCloseModal = () => {
     navigate('/');
   };
@@ -284,7 +317,11 @@ export const Auth: React.FC = () => {
                   </form>
 
                   <div className="text-center">
-                    <Button variant="link" className="text-sm text-brand-red hover:underline p-0 h-auto">
+                    <Button 
+                      variant="link" 
+                      className="text-sm text-brand-red hover:underline p-0 h-auto"
+                      onClick={() => setShowForgotPassword(true)}
+                    >
                       Forgot password?
                     </Button>
                   </div>
@@ -452,6 +489,76 @@ export const Auth: React.FC = () => {
           navigate(redirectPath ? redirectPath : '/', { replace: true });
         }} 
       />
+      
+      {/* Forgot Password Modal */}
+      {showForgotPassword && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
+          {/* Backdrop */}
+          <div 
+            className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+            onClick={() => setShowForgotPassword(false)}
+          ></div>
+          
+          {/* Modal Content */}
+          <div className="relative w-full max-w-sm">
+            <Card className="backdrop-blur-sm bg-white/95 border-2 border-brand-red/30 shadow-2xl shadow-brand-red/10 rounded-2xl">
+              {/* Close Button */}
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setShowForgotPassword(false)}
+                className="absolute right-4 top-4 z-10 h-8 w-8 p-0 hover:bg-gray-100 rounded-full"
+              >
+                <X className="h-4 w-4 text-gray-500" />
+              </Button>
+              
+              <CardHeader className="text-center pb-4 pt-6">
+                <CardTitle className="text-xl font-semibold text-gray-800">Reset Password</CardTitle>
+                <CardDescription className="text-gray-600 text-sm">
+                  Enter your email address and we'll send you a link to reset your password.
+                </CardDescription>
+              </CardHeader>
+              
+              <CardContent className="px-6 pb-6">
+                <form onSubmit={handleForgotPassword} className="space-y-4">
+                  <div className="space-y-1">
+                    <Label htmlFor="reset-email" className="text-sm font-medium text-gray-700">Email</Label>
+                    <Input
+                      id="reset-email"
+                      type="email"
+                      value={forgotPasswordEmail}
+                      onChange={(e) => setForgotPasswordEmail(e.target.value)}
+                      placeholder="Enter your email address"
+                      required
+                      autoComplete="email"
+                      className="h-10 rounded-xl border-gray-200 focus:border-brand-red focus:ring-brand-red/20"
+                    />
+                  </div>
+                  
+                  <div className="space-y-3">
+                    <Button 
+                      type="submit" 
+                      disabled={isResetLoading}
+                      className="w-full h-10 rounded-xl bg-gradient-to-r from-brand-red to-brand-red-dark hover:shadow-lg transition-all duration-200"
+                    >
+                      {isResetLoading ? 'Sending...' : 'Send Reset Link'}
+                    </Button>
+                    
+                    <Button 
+                      type="button"
+                      variant="outline"
+                      onClick={() => setShowForgotPassword(false)}
+                      className="w-full h-10 rounded-xl border-gray-200 hover:bg-gray-50"
+                    >
+                      Back to Login
+                    </Button>
+                  </div>
+                </form>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      )}
     </>
   );
 };
