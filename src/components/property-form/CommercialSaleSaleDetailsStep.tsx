@@ -77,7 +77,7 @@ export const CommercialSaleSaleDetailsStep = ({
               name="expectedPrice"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-sm font-medium text-gray-900">Expected Price (₹) *</FormLabel>
+                  <FormLabel className="text-sm font-medium text-gray-900">Expected Price (₹)</FormLabel>
                   <FormControl>
                     <div className="relative">
                       <span className="absolute left-3 top-3 text-gray-500">₹</span>

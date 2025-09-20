@@ -118,7 +118,7 @@ export const CommercialSalePropertyDetailsStep = ({
               name="spaceType"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-sm font-medium">Space Type*</FormLabel>
+                  <FormLabel className="text-sm font-medium">Space Type</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger className="h-12">

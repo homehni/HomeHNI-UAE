@@ -130,7 +130,7 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
               name="bathrooms"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Bathroom(s)*</FormLabel>
+                  <FormLabel>Bathroom(s)</FormLabel>
                   <div className="flex items-center space-x-2">
                     <Button
                       type="button"
@@ -225,7 +225,7 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
                 <FormItem>
                   <div className="flex items-center space-x-3">
                     <PawPrint className="w-5 h-5 text-muted-foreground hidden sm:inline" />
-                    <FormLabel>Pet Allowed*</FormLabel>
+                    <FormLabel>Pet Allowed</FormLabel>
                   </div>
                    <div className="flex space-x-2">
                      <Button
@@ -260,7 +260,7 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
                 <FormItem>
                   <div className="flex items-center space-x-3">
                     <Dumbbell className="w-5 h-5 text-muted-foreground hidden sm:inline" />
-                    <FormLabel>Gym*</FormLabel>
+                    <FormLabel>Gym</FormLabel>
                   </div>
                    <div className="flex space-x-2">
                      <Button
@@ -295,7 +295,7 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
                 <FormItem>
                   <div className="flex items-center space-x-3">
                     <UtensilsCrossed className="w-5 h-5 text-muted-foreground hidden sm:inline" />
-                    <FormLabel>Non-Veg Allowed*</FormLabel>
+                    <FormLabel>Non-Veg Allowed</FormLabel>
                   </div>
                    <div className="flex space-x-2">
                      <Button
@@ -330,7 +330,7 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
                 <FormItem>
                   <div className="flex items-center space-x-3">
                     <Shield className="w-5 h-5 text-muted-foreground hidden sm:inline" />
-                    <FormLabel>Gated Security*</FormLabel>
+                    <FormLabel>Gated Security</FormLabel>
                   </div>
                    <div className="flex space-x-2">
                      <Button
@@ -366,7 +366,7 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
               name="whoWillShow"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Who will show the property?*</FormLabel>
+                  <FormLabel>Who will show the property?</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger>

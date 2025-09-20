@@ -156,7 +156,7 @@ export function PgHostelPgDetailsStep({
 
           {/* Available From */}
           <div className="space-y-2">
-            <Label htmlFor="availableFrom" className="text-base font-medium">Available From*</Label>
+            <Label htmlFor="availableFrom" className="text-base font-medium">Available From</Label>
             <Popover>
               <PopoverTrigger asChild>
                 <Button

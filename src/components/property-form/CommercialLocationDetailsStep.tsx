@@ -207,7 +207,7 @@ export const CommercialLocationDetailsStep: React.FC<CommercialLocationDetailsSt
             name="city"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-sm font-medium">City *</FormLabel>
+                <FormLabel className="text-sm font-medium">City</FormLabel>
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
                     <SelectTrigger className="h-12 bg-white z-50">

@@ -79,7 +79,7 @@ export const CommercialAdditionalInfoStep: React.FC<CommercialAdditionalInfoStep
                 name="previousOccupancy"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-sm font-medium">Previous Occupancy *</FormLabel>
+                    <FormLabel className="text-sm font-medium">Previous Occupancy</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger className="h-12">

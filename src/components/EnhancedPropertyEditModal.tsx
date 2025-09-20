@@ -210,7 +210,7 @@ export const EnhancedPropertyEditModal: React.FC<EnhancedPropertyEditModalProps>
         <div className="space-y-6">
           {/* Property Title */}
           <div className="space-y-2">
-            <Label>Property Title *</Label>
+            <Label>Property Title</Label>
             <Input
               value={formData.title || ''}
               onChange={(e) => handleInputChange('title', e.target.value)}
@@ -221,7 +221,7 @@ export const EnhancedPropertyEditModal: React.FC<EnhancedPropertyEditModalProps>
           {/* Basic Information - Dropdowns */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="space-y-2">
-              <Label>Property Type *</Label>
+              <Label>Property Type</Label>
               <Select
                 value={formData.property_type || ''}
                 onValueChange={(value) => handleInputChange('property_type', value)}
@@ -240,7 +240,7 @@ export const EnhancedPropertyEditModal: React.FC<EnhancedPropertyEditModalProps>
             </div>
 
             <div className="space-y-2">
-              <Label>Listing Type *</Label>
+              <Label>Listing Type</Label>
               <Select
                 value={formData.listing_type || ''}
                 onValueChange={(value) => handleInputChange('listing_type', value)}
@@ -322,7 +322,7 @@ export const EnhancedPropertyEditModal: React.FC<EnhancedPropertyEditModalProps>
           {/* Price and Area */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div className="space-y-2">
-              <Label>Expected Price (₹) *</Label>
+              <Label>Expected Price (₹)</Label>
               <Input
                 type="number"
                 value={formData.expected_price || ''}
@@ -383,7 +383,7 @@ export const EnhancedPropertyEditModal: React.FC<EnhancedPropertyEditModalProps>
           {/* Location */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label>State *</Label>
+              <Label>State</Label>
               <Select
                 value={formData.state || ''}
                 onValueChange={(value) => handleInputChange('state', value)}
@@ -402,7 +402,7 @@ export const EnhancedPropertyEditModal: React.FC<EnhancedPropertyEditModalProps>
             </div>
 
             <div className="space-y-2">
-              <Label>City *</Label>
+              <Label>City</Label>
               <Select
                 value={formData.city || ''}
                 onValueChange={(value) => handleInputChange('city', value)}
@@ -421,7 +421,7 @@ export const EnhancedPropertyEditModal: React.FC<EnhancedPropertyEditModalProps>
             </div>
 
             <div className="space-y-2">
-              <Label>Locality *</Label>
+              <Label>Locality</Label>
               <Input
                 value={formData.locality || ''}
                 onChange={(e) => handleInputChange('locality', e.target.value)}
@@ -430,7 +430,7 @@ export const EnhancedPropertyEditModal: React.FC<EnhancedPropertyEditModalProps>
             </div>
 
             <div className="space-y-2">
-              <Label>Pincode *</Label>
+              <Label>Pincode</Label>
               <Input
                 value={formData.pincode || ''}
                 onChange={(e) => handleInputChange('pincode', e.target.value)}

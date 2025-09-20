@@ -82,7 +82,7 @@ export const ContactOwnerModal: React.FC<ContactOwnerModalProps> = ({
           
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="name">Full Name *</Label>
+              <Label htmlFor="name">Full Name</Label>
               <Input
                 id="name"
                 value={formData.name}
@@ -93,7 +93,7 @@ export const ContactOwnerModal: React.FC<ContactOwnerModalProps> = ({
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="email">Email Address *</Label>
+              <Label htmlFor="email">Email Address</Label>
               <Input
                 id="email"
                 type="email"

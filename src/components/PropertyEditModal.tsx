@@ -284,7 +284,7 @@ export const PropertyEditModal: React.FC<PropertyEditModalProps> = ({
           {/* Basic Information */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label>Property Title *</Label>
+              <Label>Property Title</Label>
               <Input
                 value={formData.title || ''}
                 onChange={(e) => handleInputChange('title', e.target.value)}
@@ -293,7 +293,7 @@ export const PropertyEditModal: React.FC<PropertyEditModalProps> = ({
             </div>
 
             <div className="space-y-2">
-              <Label>Property Type *</Label>
+              <Label>Property Type</Label>
               <Select
                 value={formData.property_type || ''}
                 onValueChange={(value) => handleInputChange('property_type', value)}
@@ -312,7 +312,7 @@ export const PropertyEditModal: React.FC<PropertyEditModalProps> = ({
             </div>
 
             <div className="space-y-2">
-              <Label>Listing Type *</Label>
+              <Label>Listing Type</Label>
               <Select
                 value={formData.listing_type || ''}
                 onValueChange={(value) => handleInputChange('listing_type', value)}
@@ -350,7 +350,7 @@ export const PropertyEditModal: React.FC<PropertyEditModalProps> = ({
           {/* Price and Area */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="space-y-2">
-              <Label>Expected Price (₹) *</Label>
+              <Label>Expected Price (₹)</Label>
               <Input
                 type="number"
                 value={formData.expected_price || ''}
@@ -384,7 +384,7 @@ export const PropertyEditModal: React.FC<PropertyEditModalProps> = ({
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* Bathrooms */}
             <div className="space-y-2">
-              <Label>Bathroom(s)*</Label>
+              <Label>Bathroom(s)</Label>
               <div className="flex items-center space-x-2">
                 <Button
                   type="button"
@@ -459,7 +459,7 @@ export const PropertyEditModal: React.FC<PropertyEditModalProps> = ({
             <div className="space-y-2">
               <div className="flex items-center space-x-3">
                 <PawPrint className="w-5 h-5 text-muted-foreground" />
-                <Label>Pet Allowed*</Label>
+                <Label>Pet Allowed</Label>
               </div>
               <div className="flex space-x-2">
                 <Button
@@ -487,7 +487,7 @@ export const PropertyEditModal: React.FC<PropertyEditModalProps> = ({
             <div className="space-y-2">
               <div className="flex items-center space-x-3">
                 <Dumbbell className="w-5 h-5 text-muted-foreground" />
-                <Label>Gym*</Label>
+                <Label>Gym</Label>
               </div>
               <div className="flex space-x-2">
                 <Button
@@ -515,7 +515,7 @@ export const PropertyEditModal: React.FC<PropertyEditModalProps> = ({
             <div className="space-y-2">
               <div className="flex items-center space-x-3">
                 <UtensilsCrossed className="w-5 h-5 text-muted-foreground" />
-                <Label>Non-Veg Allowed*</Label>
+                <Label>Non-Veg Allowed</Label>
               </div>
               <div className="flex space-x-2">
                 <Button
@@ -543,7 +543,7 @@ export const PropertyEditModal: React.FC<PropertyEditModalProps> = ({
             <div className="space-y-2">
               <div className="flex items-center space-x-3">
                 <Shield className="w-5 h-5 text-muted-foreground" />
-                <Label>Gated Security*</Label>
+                <Label>Gated Security</Label>
               </div>
               <div className="flex space-x-2">
                 <Button
@@ -572,7 +572,7 @@ export const PropertyEditModal: React.FC<PropertyEditModalProps> = ({
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Who will show the property */}
             <div className="space-y-2">
-              <Label>Who will show the property?*</Label>
+              <Label>Who will show the property?</Label>
               <Select 
                 value={formData.whoWillShow || ''} 
                 onValueChange={(value) => handleInputChange('whoWillShow', value)}
@@ -877,7 +877,7 @@ export const PropertyEditModal: React.FC<PropertyEditModalProps> = ({
           {/* Location */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label>State *</Label>
+              <Label>State</Label>
               <Input
                 value={formData.state || ''}
                 onChange={(e) => handleInputChange('state', e.target.value)}
@@ -886,7 +886,7 @@ export const PropertyEditModal: React.FC<PropertyEditModalProps> = ({
             </div>
 
             <div className="space-y-2">
-              <Label>City *</Label>
+              <Label>City</Label>
               <Input
                 value={formData.city || ''}
                 onChange={(e) => handleInputChange('city', e.target.value)}
@@ -895,7 +895,7 @@ export const PropertyEditModal: React.FC<PropertyEditModalProps> = ({
             </div>
 
             <div className="space-y-2">
-              <Label>Locality *</Label>
+              <Label>Locality</Label>
               <Input
                 value={formData.locality || ''}
                 onChange={(e) => handleInputChange('locality', e.target.value)}
@@ -904,7 +904,7 @@ export const PropertyEditModal: React.FC<PropertyEditModalProps> = ({
             </div>
 
             <div className="space-y-2">
-              <Label>Pincode *</Label>
+              <Label>Pincode</Label>
               <Input
                 value={formData.pincode || ''}
                 onChange={(e) => handleInputChange('pincode', e.target.value)}

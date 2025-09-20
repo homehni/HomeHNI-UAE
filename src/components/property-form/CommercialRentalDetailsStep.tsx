@@ -142,7 +142,7 @@ export const CommercialRentalDetailsStep: React.FC<CommercialRentalDetailsStepPr
                 name="expectedPrice"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-sm font-medium text-gray-900">Expected Rent *</FormLabel>
+                    <FormLabel className="text-sm font-medium text-gray-900">Expected Rent</FormLabel>
                     <FormControl>
                       <div className="relative">
                         <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">₹</span>
@@ -199,7 +199,7 @@ export const CommercialRentalDetailsStep: React.FC<CommercialRentalDetailsStepPr
               name="securityDeposit"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-sm font-medium text-gray-900">Expected Deposit *</FormLabel>
+                  <FormLabel className="text-sm font-medium text-gray-900">Expected Deposit</FormLabel>
                   <FormControl>
                     <div className="relative">
                       <span className="absolute left-3 top-3 text-gray-500">₹</span>
@@ -284,7 +284,7 @@ export const CommercialRentalDetailsStep: React.FC<CommercialRentalDetailsStepPr
                   name="maintenanceCharges"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-sm font-medium text-gray-900">Maintenance Amount *</FormLabel>
+                      <FormLabel className="text-sm font-medium text-gray-900">Maintenance Amount</FormLabel>
                       <FormControl>
                         <div className="relative">
                           <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">₹</span>
@@ -408,7 +408,7 @@ export const CommercialRentalDetailsStep: React.FC<CommercialRentalDetailsStepPr
                 
                 return (
                   <FormItem className="flex flex-col">
-                    <FormLabel className="text-sm font-medium text-gray-900">Available From *</FormLabel>
+                    <FormLabel className="text-sm font-medium text-gray-900">Available From</FormLabel>
                     <Popover open={open} onOpenChange={setOpen}>
                       <PopoverTrigger asChild>
                         <FormControl>
@@ -455,7 +455,7 @@ export const CommercialRentalDetailsStep: React.FC<CommercialRentalDetailsStepPr
 
             {/* Suitable Business Types */}
             <div>
-              <h3 className="text-sm font-medium text-gray-900 mb-4">Suitable Business Types*</h3>
+              <h3 className="text-sm font-medium text-gray-900 mb-4">Suitable Business Types</h3>
               <FormField
                 control={form.control}
                 name="businessType"
