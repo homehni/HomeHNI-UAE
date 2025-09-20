@@ -271,19 +271,19 @@ const handleScheduleSubmit = (data: Partial<ScheduleInfo>) => {
                   // Always scroll to top first
                   scrollToTop();
                   
-                  if (currentStep === 1) {
+                  if (currentStep === 2) {
                     console.log('Calling handlePropertyDetailsNext');
                     handlePropertyDetailsNext(propertyDetails);
-                  } else if (currentStep === 2) {
+                  } else if (currentStep === 3) {
                     console.log('Calling handleLocationDetailsNext');
                     handleLocationDetailsNext(locationDetails);
-                  } else if (currentStep === 3) {
+                  } else if (currentStep === 4) {
                     console.log('Calling handleRentalDetailsNext');
                     handleRentalDetailsNext(rentalDetails);
-                  } else if (currentStep === 4) {
+                  } else if (currentStep === 5) {
                     console.log('Calling handleAmenitiesNext');
                     handleAmenitiesNext(amenities);
-                  } else if (currentStep === 5) {
+                  } else if (currentStep === 6) {
                     console.log('Calling handleGalleryNext');
                     handleGalleryNext(gallery);
                   } else if (currentStep === 7) {
