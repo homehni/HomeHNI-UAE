@@ -17,6 +17,14 @@ const Loans = () => {
   const [cities, setCities] = useState<string[]>([]);
   const [citiesDesktop, setCitiesDesktop] = useState<string[]>([]);
 
+  const majorCities = [
+    "Mumbai", "Delhi", "Bangalore", "Hyderabad", "Ahmedabad", "Chennai", "Kolkata", "Surat", "Pune", "Jaipur",
+    "Lucknow", "Kanpur", "Nagpur", "Indore", "Thane", "Bhopal", "Visakhapatnam", "Pimpri-Chinchwad", "Patna", "Vadodara",
+    "Ghaziabad", "Ludhiana", "Agra", "Nashik", "Faridabad", "Meerut", "Rajkot", "Kalyan-Dombivli", "Vasai-Virar", "Varanasi",
+    "Srinagar", "Aurangabad", "Dhanbad", "Amritsar", "Navi Mumbai", "Allahabad", "Ranchi", "Howrah", "Coimbatore", "Jabalpur",
+    "Gwalior", "Vijayawada", "Jodhpur", "Madurai", "Raipur", "Kota", "Guwahati", "Chandigarh", "Solapur", "Hubli-Dharwad"
+  ];
+
   const services = [{
     icon: Home,
     title: "Home Loans",
@@ -270,22 +278,11 @@ const Loans = () => {
                   </SelectContent>
                 </Select>
 
-                <Select name="state" onValueChange={setSelectedStateDesktop}>
-                  <SelectTrigger className="flex-1"><SelectValue placeholder="State" /></SelectTrigger>
-                  <SelectContent>
-                    {statesData && Object.keys(statesData).map((state: string) => (
-                      <SelectItem key={state} value={state}>
-                        {state}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-
-                <Select name="city">
+                <Select name="state">
                   <SelectTrigger className="flex-1"><SelectValue placeholder="City" /></SelectTrigger>
                   <SelectContent>
-                    {citiesDesktop.map((city: string) => (
-                      <SelectItem key={city} value={city}>
+                    {majorCities.map((city) => (
+                      <SelectItem key={city} value={city.toLowerCase()}>
                         {city}
                       </SelectItem>
                     ))}
@@ -394,27 +391,13 @@ const Loans = () => {
                     </Select>
                   </div>
                   <div>
-                    <Select name="state" onValueChange={setSelectedState}>
-                      <SelectTrigger className="w-full h-14 bg-background text-lg">
-                        <SelectValue placeholder="State" />
-                      </SelectTrigger>
-                      <SelectContent className="bg-background border shadow-lg">
-                        {statesData && Object.keys(statesData).map((state: string) => (
-                          <SelectItem key={state} value={state}>
-                            {state}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div className="sm:col-span-2">
-                    <Select name="city">
+                    <Select name="state">
                       <SelectTrigger className="w-full h-14 bg-background text-lg">
                         <SelectValue placeholder="City" />
                       </SelectTrigger>
                       <SelectContent className="bg-background border shadow-lg">
-                        {cities.map((city: string) => (
-                          <SelectItem key={city} value={city}>
+                        {majorCities.map((city) => (
+                          <SelectItem key={city} value={city.toLowerCase()}>
                             {city}
                           </SelectItem>
                         ))}

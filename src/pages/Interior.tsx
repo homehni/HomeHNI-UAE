@@ -10,6 +10,14 @@ import Marquee from "@/components/Marquee";
 import Header from "@/components/Header";
 
 const Interior = () => {
+  const majorCities = [
+    "Mumbai", "Delhi", "Bangalore", "Hyderabad", "Ahmedabad", "Chennai", "Kolkata", "Surat", "Pune", "Jaipur",
+    "Lucknow", "Kanpur", "Nagpur", "Indore", "Thane", "Bhopal", "Visakhapatnam", "Pimpri-Chinchwad", "Patna", "Vadodara",
+    "Ghaziabad", "Ludhiana", "Agra", "Nashik", "Faridabad", "Meerut", "Rajkot", "Kalyan-Dombivli", "Vasai-Virar", "Varanasi",
+    "Srinagar", "Aurangabad", "Dhanbad", "Amritsar", "Navi Mumbai", "Allahabad", "Ranchi", "Howrah", "Coimbatore", "Jabalpur",
+    "Gwalior", "Vijayawada", "Jodhpur", "Madurai", "Raipur", "Kota", "Guwahati", "Chandigarh", "Solapur", "Hubli-Dharwad"
+  ];
+
   const services = [{
     icon: Home,
     title: "Residential Interior Design",
@@ -225,7 +233,7 @@ const Interior = () => {
               </div>
 
               <div className="flex gap-2">
-                <Select name="country">
+                <Select defaultValue="india" name="country">
                   <SelectTrigger id="design-country" className="flex-1"><SelectValue placeholder="Country" /></SelectTrigger>
                   <SelectContent>
                     <SelectItem value="india">India</SelectItem>
@@ -351,7 +359,7 @@ const Interior = () => {
                 </div>
 
                 <div className="flex gap-3">
-                  <Select name="country">
+                  <Select defaultValue="india" name="country">
                     <SelectTrigger id="design-country-mobile" className="flex-1 h-12 bg-background">
                       <SelectValue placeholder="Country" />
                     </SelectTrigger>

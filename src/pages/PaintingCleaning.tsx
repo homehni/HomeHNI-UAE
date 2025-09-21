@@ -10,6 +10,14 @@ import Marquee from "@/components/Marquee";
 import Header from "@/components/Header";
 
 const PaintingCleaning = () => {
+  const majorCities = [
+    "Mumbai", "Delhi", "Bangalore", "Hyderabad", "Ahmedabad", "Chennai", "Kolkata", "Surat", "Pune", "Jaipur",
+    "Lucknow", "Kanpur", "Nagpur", "Indore", "Thane", "Bhopal", "Visakhapatnam", "Pimpri-Chinchwad", "Patna", "Vadodara",
+    "Ghaziabad", "Ludhiana", "Agra", "Nashik", "Faridabad", "Meerut", "Rajkot", "Kalyan-Dombivli", "Vasai-Virar", "Varanasi",
+    "Srinagar", "Aurangabad", "Dhanbad", "Amritsar", "Navi Mumbai", "Allahabad", "Ranchi", "Howrah", "Coimbatore", "Jabalpur",
+    "Gwalior", "Vijayawada", "Jodhpur", "Madurai", "Raipur", "Kota", "Guwahati", "Chandigarh", "Solapur", "Hubli-Dharwad"
+  ];
+
   const services = [{
     icon: PaintBucket,
     title: "Interior Painting",
@@ -227,7 +235,7 @@ const PaintingCleaning = () => {
               </div>
 
               <div className="flex gap-2">
-                <Select name="country">
+                <Select defaultValue="india" name="country">
                   <SelectTrigger id="painting-country" className="flex-1"><SelectValue placeholder="Country" /></SelectTrigger>
                   <SelectContent>
                     <SelectItem value="india">India</SelectItem>
@@ -356,7 +364,7 @@ const PaintingCleaning = () => {
 
                 <div className="space-y-4">
                   <div className="flex gap-4">
-                    <Select name="country">
+                    <Select defaultValue="india" name="country">
                       <SelectTrigger id="painting-country-mobile" className="flex-1 h-14 bg-background text-lg">
                         <SelectValue placeholder="Country" />
                       </SelectTrigger>
@@ -370,39 +378,17 @@ const PaintingCleaning = () => {
                     </Select>
                     <Select name="state">
                       <SelectTrigger id="painting-state-mobile" className="flex-1 h-14 bg-background text-lg">
-                        <SelectValue placeholder="State" />
+                        <SelectValue placeholder="City" />
                       </SelectTrigger>
                       <SelectContent className="bg-background border shadow-lg">
-                        <SelectItem value="andhra-pradesh">Andhra Pradesh</SelectItem>
-                        <SelectItem value="karnataka">Karnataka</SelectItem>
-                        <SelectItem value="tamil-nadu">Tamil Nadu</SelectItem>
-                        <SelectItem value="telangana">Telangana</SelectItem>
-                        <SelectItem value="maharashtra">Maharashtra</SelectItem>
-                        <SelectItem value="gujarat">Gujarat</SelectItem>
-                        <SelectItem value="rajasthan">Rajasthan</SelectItem>
-                        <SelectItem value="delhi">Delhi</SelectItem>
-                        <SelectItem value="west-bengal">West Bengal</SelectItem>
-                        <SelectItem value="uttar-pradesh">Uttar Pradesh</SelectItem>
+                        {majorCities.map((city) => (
+                          <SelectItem key={city} value={city.toLowerCase()}>
+                            {city}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                   </div>
-                  <Select name="city">
-                    <SelectTrigger id="painting-city-mobile" className="w-full h-14 bg-background text-lg">
-                      <SelectValue placeholder="City" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-background border shadow-lg">
-                      <SelectItem value="bangalore">Bangalore</SelectItem>
-                      <SelectItem value="hyderabad">Hyderabad</SelectItem>
-                      <SelectItem value="chennai">Chennai</SelectItem>
-                      <SelectItem value="mumbai">Mumbai</SelectItem>
-                      <SelectItem value="pune">Pune</SelectItem>
-                      <SelectItem value="delhi">Delhi</SelectItem>
-                      <SelectItem value="kolkata">Kolkata</SelectItem>
-                      <SelectItem value="ahmedabad">Ahmedabad</SelectItem>
-                      <SelectItem value="jaipur">Jaipur</SelectItem>
-                      <SelectItem value="lucknow">Lucknow</SelectItem>
-                    </SelectContent>
-                  </Select>
                 </div>
 
                 <Button type="submit" className="w-full h-14 text-lg font-semibold bg-red-800 hover:bg-red-900 text-white mt-8">
