@@ -163,7 +163,8 @@ export const LandPlotMultiStepForm: React.FC<LandPlotMultiStepFormProps> = ({
     console.log('Complete form data for submission:', formData);
     
     await onSubmit(formData as LandPlotFormData);
-    setIsSubmitted(true);
+    console.log('LandPlotMultiStepForm submission triggered. Going to Preview step (7)');
+    goToStep(7);
     scrollToTop();
   };
 
