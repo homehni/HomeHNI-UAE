@@ -350,7 +350,7 @@ const Footer = ({
         Thousands of owner-listed options. No brokerage.
       </p>
       <button
-        onClick={handleFindNowClick}
+        onClick={() => navigate('/search')}
         className="bg-brand-red text-white px-6 py-2 rounded text-sm hover:bg-brand-red-dark transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-brand-red"
       >
         Browse Listings
