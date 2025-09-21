@@ -91,27 +91,26 @@ export const CommercialSalePropertyDetailsStep = ({
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit, onError)} className="space-y-4">
-          {/* Property Name */}
-          <FormField
-            control={form.control}
-            name="title"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-sm font-medium">Property Name (Optional)</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="Enter Property Name"
-                    className="h-12"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          {/* Space Type and Building Type */}
+          {/* Property Name and Space Type */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <FormField
+              control={form.control}
+              name="title"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-sm font-medium">Property Name (Optional)</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Enter Property Name"
+                      className="h-12"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
             <FormField
               control={form.control}
               name="spaceType"
@@ -138,7 +137,10 @@ export const CommercialSalePropertyDetailsStep = ({
                 </FormItem>
               )}
             />
+          </div>
 
+          {/* Building Type and Floor Number */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <FormField
               control={form.control}
               name="buildingType"
@@ -164,10 +166,7 @@ export const CommercialSalePropertyDetailsStep = ({
                 </FormItem>
               )}
             />
-          </div>
 
-          {/* Floor Number and Total Floors */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <FormField
               control={form.control}
               name="floorNo"
@@ -199,25 +198,27 @@ export const CommercialSalePropertyDetailsStep = ({
                 </FormItem>
               )}
             />
+          </div>
 
-            <FormField
-              control={form.control}
-              name="totalFloors"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-sm font-medium">Total Floor</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <FormControl>
-                      <SelectTrigger className="h-12">
-                        <SelectValue placeholder="Select" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent className="bg-white border shadow-lg z-50">
-                      {[...Array(50)].map((_, i) => {
-                        const floor = i + 1;
-                        return (
-                          <SelectItem key={floor} value={floor.toString()}>
-                            {floor}
+          {/* Total Floors */}
+          <FormField
+            control={form.control}
+            name="totalFloors"
+            render={({ field }) => (
+              <FormItem className="w-1/2">
+                <FormLabel className="text-sm font-medium">Total Floor</FormLabel>
+                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <FormControl>
+                    <SelectTrigger className="h-12">
+                      <SelectValue placeholder="Select" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent className="bg-white border shadow-lg z-50">
+                    {[...Array(50)].map((_, i) => {
+                      const floor = i + 1;
+                      return (
+                        <SelectItem key={floor} value={floor.toString()}>
+                          {floor}
                           </SelectItem>
                         );
                       })}
@@ -227,8 +228,7 @@ export const CommercialSalePropertyDetailsStep = ({
                   <FormMessage />
                 </FormItem>
               )}
-            />
-          </div>
+             />
 
           {/* Super Built-up Area and Furnishing Status */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
