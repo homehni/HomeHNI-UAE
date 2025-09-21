@@ -274,47 +274,32 @@ const handleAuthClick = () => {
                   {item.hasSubmenu && expandedSections.includes(item.id) && (
                     <div className="ml-4 mt-1">
                       {item.isContactUs ? (
-                        <div className="space-y-3 p-2">
-                          {/* Email */}
-                          <div className="flex items-center space-x-3">
-                            <div className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center">
-                              <Mail className="w-4 h-4 text-gray-600" />
-                            </div>
-                            <a 
-                              href="mailto:assist@nobroker.in" 
-                              className="text-sm text-gray-600 hover:text-brand-red transition-colors"
-                            >
-                              assist@nobroker.in
-                            </a>
-                          </div>
+                        <div className="flex space-x-3 justify-start p-2">
+                          {/* Email Icon */}
+                          <a 
+                            href="mailto:assist@nobroker.in" 
+                            className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50 transition-colors"
+                          >
+                            <Mail className="w-4 h-4 text-gray-600" />
+                          </a>
                           
-                          {/* Phone Number */}
-                          <div className="flex items-center space-x-3">
-                            <div className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center">
-                              <Phone className="w-4 h-4 text-gray-600" />
-                            </div>
-                            <a 
-                              href="tel:+919876543210" 
-                              className="text-sm text-gray-600 hover:text-brand-red transition-colors"
-                            >
-                              +91 98765 43210
-                            </a>
-                          </div>
+                          {/* Phone Icon */}
+                          <a 
+                            href="tel:+919876543210" 
+                            className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50 transition-colors"
+                          >
+                            <Phone className="w-4 h-4 text-gray-600" />
+                          </a>
                           
-                          {/* WhatsApp */}
-                          <div className="flex items-center space-x-3">
-                            <div className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center">
-                              <MessageCircle className="w-4 h-4 text-gray-600" />
-                            </div>
-                            <a 
-                              href="https://wa.me/919876543210" 
-                              target="_blank" 
-                              rel="noopener noreferrer"
-                              className="text-sm text-gray-600 hover:text-brand-red transition-colors"
-                            >
-                              WhatsApp
-                            </a>
-                          </div>
+                          {/* WhatsApp Icon */}
+                          <a 
+                            href="https://wa.me/919876543210" 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50 transition-colors"
+                          >
+                            <MessageCircle className="w-4 h-4 text-gray-600" />
+                          </a>
                         </div>
                       ) : (
                         item.submenu?.map((subItem) => (
