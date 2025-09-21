@@ -377,17 +377,6 @@ export const CommercialPreviewStep: React.FC<CommercialPreviewStepProps> = ({
         </div>
       )}
 
-      {/* Submit Button */}
-      <div className="flex justify-center pt-4">
-        <Button
-          type="button"
-          onClick={handleSubmit}
-          disabled={isSubmitting}
-          className="bg-red-600 hover:bg-red-700 text-white px-8 py-3 text-lg font-semibold w-full sm:w-auto"
-        >
-          {isSubmitting ? 'Submitting...' : 'Submit Property Listing'}
-        </Button>
-      </div>
     </div>
   );
 };
