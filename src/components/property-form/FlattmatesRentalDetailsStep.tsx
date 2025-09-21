@@ -72,7 +72,7 @@ export function FlattmatesRentalDetailsStep({
         <h2 className="text-2xl font-bold text-red-600 mb-2">Rental Details</h2>
       </div>
 
-          <div className="p-8">
+          <div className="">
             <form id={formId || 'flatmates-step-form'} onSubmit={handleSubmit} className="space-y-6">
                 {/* Expected Rent and Expected Deposit */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
