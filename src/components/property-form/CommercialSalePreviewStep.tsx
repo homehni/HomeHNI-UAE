@@ -4,6 +4,7 @@ import { CheckCircle, Building, MapPin, IndianRupee, Sparkles, Camera, Calendar 
 
 interface CommercialSalePreviewStepProps {
   onBack: () => void;
+  onEdit: (step: number) => void;
   onSubmit: () => void;
   currentStep: number;
   totalSteps: number;
@@ -12,18 +13,19 @@ interface CommercialSalePreviewStepProps {
 
 export const CommercialSalePreviewStep = ({
   onBack,
+  onEdit,
   onSubmit,
   currentStep,
   totalSteps,
   isSubmitting
 }: CommercialSalePreviewStepProps) => {
   const completedSteps = [
-    { icon: Building, label: 'Property Details', description: 'Commercial space details added' },
-    { icon: MapPin, label: 'Locality Details', description: 'Location information provided' },
-    { icon: IndianRupee, label: 'Sale Details', description: 'Pricing and terms configured' },
-    { icon: Sparkles, label: 'Amenities', description: 'Amenities and facilities listed' },
-    { icon: Camera, label: 'Gallery', description: 'Photos and videos uploaded' },
-    { icon: Calendar, label: 'Schedule', description: 'Contact schedule set' }
+    { icon: Building, label: 'Property Details', description: 'Commercial space details added', step: 2 },
+    { icon: MapPin, label: 'Locality Details', description: 'Location information provided', step: 3 },
+    { icon: IndianRupee, label: 'Sale Details', description: 'Pricing and terms configured', step: 4 },
+    { icon: Sparkles, label: 'Amenities', description: 'Amenities and facilities listed', step: 5 },
+    { icon: Camera, label: 'Gallery', description: 'Photos and videos uploaded', step: 6 },
+    { icon: Calendar, label: 'Schedule', description: 'Contact schedule set', step: 7 }
   ];
 
   return (
@@ -44,14 +46,24 @@ export const CommercialSalePreviewStep = ({
         <h3 className="text-lg font-semibold text-gray-900 mb-4">Completed Sections</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {completedSteps.map((step, index) => (
-            <div key={index} className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
-              <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
-                <step.icon className="w-4 h-4 text-green-600" />
+            <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                  <step.icon className="w-4 h-4 text-green-600" />
+                </div>
+                <div>
+                  <p className="font-medium text-gray-900">{step.label}</p>
+                  <p className="text-sm text-gray-600">{step.description}</p>
+                </div>
               </div>
-              <div>
-                <p className="font-medium text-gray-900">{step.label}</p>
-                <p className="text-sm text-gray-600">{step.description}</p>
-              </div>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => onEdit(step.step)}
+                className="text-primary hover:text-primary/80"
+              >
+                Edit
+              </Button>
             </div>
           ))}
         </div>
