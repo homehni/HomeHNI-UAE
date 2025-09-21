@@ -257,7 +257,7 @@ const handleScheduleSubmit = (data: Partial<ScheduleInfo>) => {
           </div>
 
           {/* Sticky Bottom Navigation Bar - Hidden on Preview step */}
-          {currentStep !== 7 && (
+          {!isSubmitted && (
             <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-3 sm:p-4 z-50 shadow-lg">
             <div className="max-w-4xl mx-auto flex flex-col sm:flex-row gap-3 sm:gap-4 sm:justify-center">
               <Button 
