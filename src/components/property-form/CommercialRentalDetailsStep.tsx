@@ -455,7 +455,7 @@ export const CommercialRentalDetailsStep: React.FC<CommercialRentalDetailsStepPr
                         placeholder="Add custom business type"
                         value={customBusinessType}
                         onChange={(e) => setCustomBusinessType(e.target.value)}
-                        className="flex-1"
+                        className="w-1/2"
                         onKeyPress={(e) => {
                           if (e.key === 'Enter') {
                             e.preventDefault();
