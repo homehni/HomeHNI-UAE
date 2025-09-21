@@ -10,7 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Chrome, Home, UserPlus, LogIn, Eye, EyeOff, X } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { RoleSelectionModal } from '@/components/RoleSelectionModal';
+
 import Index from './Index';
 
 // Auth component with separate password visibility states
@@ -26,7 +26,7 @@ export const Auth: React.FC = () => {
     const mode = urlParams.get('mode');
     return mode === 'signup' ? 'signup' : 'signin';
   });
-  const [showRoleModal, setShowRoleModal] = useState(false);
+  
   const [showSignInPassword, setShowSignInPassword] = useState(false);
   const [showSignUpPassword, setShowSignUpPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -91,23 +91,8 @@ export const Auth: React.FC = () => {
         return;
       }
       
-      if (profile) {
-        // Profile exists, check if user needs to select a role
-        const validRoles = ['buyer', 'seller', 'agent', 'builder'];
-        if (!validRoles.includes(profile.role)) {
-          setShowRoleModal(true);
-        } else {
-          // User has a valid role, redirect them
-          navigate(redirectPath ? redirectPath : '/', { replace: true });
-        }
-      } else {
-        // Profile doesn't exist yet (first-time user) - show role selection
-        setTimeout(() => {
-          if (!profile) {
-            setShowRoleModal(true);
-          }
-        }, 1000); // Wait 1 second for profile to load
-      }
+      // User is authenticated, redirect them to intended page or home
+      navigate(redirectPath ? redirectPath : '/', { replace: true });
     }
   }, [user, profile, isEmployee, isFinanceAdmin, isHRAdmin, isAdmin, employeeLoading, adminLoading, navigate, location]);
 
@@ -641,17 +626,6 @@ export const Auth: React.FC = () => {
         </div>
       </div>
 
-      {/* Role Selection Modal */}
-      <RoleSelectionModal 
-        isOpen={showRoleModal} 
-        onComplete={() => {
-          setShowRoleModal(false);
-          // After role selection, redirect to intended page
-          const urlParams = new URLSearchParams(location.search);
-          const redirectPath = urlParams.get('redirectTo');
-          navigate(redirectPath ? redirectPath : '/', { replace: true });
-        }} 
-      />
       
       {/* Forgot Password Modal */}
       {showForgotPassword && (
