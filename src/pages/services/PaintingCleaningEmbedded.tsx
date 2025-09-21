@@ -212,8 +212,8 @@ const PaintingCleaningEmbedded = () => {
               </div>
 
               <div className="flex gap-2">
-                <Select name="country">
-                  <SelectTrigger id="painting-country" className="flex-1"><SelectValue placeholder="Country" /></SelectTrigger>
+                <Select defaultValue="india" name="country">
+                  <SelectTrigger id="painting-country" className="flex-1"><SelectValue /></SelectTrigger>
                   <SelectContent>
                     <SelectItem value="india">India</SelectItem>
                     <SelectItem value="usa">United States</SelectItem>
@@ -222,34 +222,12 @@ const PaintingCleaningEmbedded = () => {
                     <SelectItem value="australia">Australia</SelectItem>
                   </SelectContent>
                 </Select>
-                <Select name="state">
-                  <SelectTrigger id="painting-state" className="flex-1"><SelectValue placeholder="State" /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="andhra-pradesh">Andhra Pradesh</SelectItem>
-                    <SelectItem value="karnataka">Karnataka</SelectItem>
-                    <SelectItem value="tamil-nadu">Tamil Nadu</SelectItem>
-                    <SelectItem value="telangana">Telangana</SelectItem>
-                    <SelectItem value="maharashtra">Maharashtra</SelectItem>
-                    <SelectItem value="gujarat">Gujarat</SelectItem>
-                    <SelectItem value="rajasthan">Rajasthan</SelectItem>
-                    <SelectItem value="delhi">Delhi</SelectItem>
-                    <SelectItem value="west-bengal">West Bengal</SelectItem>
-                    <SelectItem value="uttar-pradesh">Uttar Pradesh</SelectItem>
-                  </SelectContent>
-                </Select>
                 <Select name="city">
-                  <SelectTrigger id="painting-city" className="flex-1"><SelectValue placeholder="City" /></SelectTrigger>
+                  <SelectTrigger id="painting-city" className="flex-1"><SelectValue placeholder="Select City" /></SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="bangalore">Bangalore</SelectItem>
-                    <SelectItem value="hyderabad">Hyderabad</SelectItem>
-                    <SelectItem value="chennai">Chennai</SelectItem>
-                    <SelectItem value="mumbai">Mumbai</SelectItem>
-                    <SelectItem value="pune">Pune</SelectItem>
-                    <SelectItem value="delhi">Delhi</SelectItem>
-                    <SelectItem value="kolkata">Kolkata</SelectItem>
-                    <SelectItem value="ahmedabad">Ahmedabad</SelectItem>
-                    <SelectItem value="jaipur">Jaipur</SelectItem>
-                    <SelectItem value="lucknow">Lucknow</SelectItem>
+                    {majorCities.map((city) => (
+                      <SelectItem key={city} value={city.toLowerCase()}>{city}</SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </div>
@@ -337,9 +315,9 @@ const PaintingCleaningEmbedded = () => {
                 </div>
 
                 <div className="flex flex-col md:flex-row gap-3">
-                  <Select name="country">
+                  <Select defaultValue="india" name="country">
                     <SelectTrigger id="painting-country-mobile" className="flex-1 h-12 bg-background">
-                      <SelectValue placeholder="Country" />
+                      <SelectValue />
                     </SelectTrigger>
                     <SelectContent className="bg-background border shadow-lg">
                       <SelectItem value="india">India</SelectItem>
@@ -349,41 +327,17 @@ const PaintingCleaningEmbedded = () => {
                       <SelectItem value="australia">Australia</SelectItem>
                     </SelectContent>
                   </Select>
-                  <Select name="state">
-                    <SelectTrigger id="painting-state-mobile" className="flex-1 h-12 bg-background">
-                      <SelectValue placeholder="State" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-background border shadow-lg">
-                      <SelectItem value="andhra-pradesh">Andhra Pradesh</SelectItem>
-                      <SelectItem value="karnataka">Karnataka</SelectItem>
-                      <SelectItem value="tamil-nadu">Tamil Nadu</SelectItem>
-                      <SelectItem value="telangana">Telangana</SelectItem>
-                      <SelectItem value="maharashtra">Maharashtra</SelectItem>
-                      <SelectItem value="gujarat">Gujarat</SelectItem>
-                      <SelectItem value="rajasthan">Rajasthan</SelectItem>
-                      <SelectItem value="delhi">Delhi</SelectItem>
-                      <SelectItem value="west-bengal">West Bengal</SelectItem>
-                      <SelectItem value="uttar-pradesh">Uttar Pradesh</SelectItem>
-                    </SelectContent>
-                  </Select>
                   <Select name="city">
                     <SelectTrigger id="painting-city-mobile" className="flex-1 h-12 bg-background">
-                      <SelectValue placeholder="City" />
+                      <SelectValue placeholder="Select City" />
                     </SelectTrigger>
                     <SelectContent className="bg-background border shadow-lg">
-                      <SelectItem value="bangalore">Bangalore</SelectItem>
-                      <SelectItem value="hyderabad">Hyderabad</SelectItem>
-                      <SelectItem value="chennai">Chennai</SelectItem>
-                      <SelectItem value="mumbai">Mumbai</SelectItem>
-                      <SelectItem value="pune">Pune</SelectItem>
-                      <SelectItem value="delhi">Delhi</SelectItem>
-                      <SelectItem value="kolkata">Kolkata</SelectItem>
-                      <SelectItem value="ahmedabad">Ahmedabad</SelectItem>
-                      <SelectItem value="jaipur">Jaipur</SelectItem>
-                      <SelectItem value="lucknow">Lucknow</SelectItem>
+                      {majorCities.map((city) => (
+                        <SelectItem key={city} value={city.toLowerCase()}>{city}</SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
-                </div>
+                 </div>
 
                 <Button type="submit" className="w-full h-12 text-base font-semibold bg-red-600 hover:bg-red-700 text-white mt-6">
                   Talk to Us Today!

@@ -420,8 +420,8 @@ const ArchitectsEmbedded = () => {
               </div>
 
               <div className="flex gap-2">
-                <Select name="country">
-                  <SelectTrigger id="arch-country" className="flex-1"><SelectValue placeholder="Country" /></SelectTrigger>
+                <Select defaultValue="india" name="country">
+                  <SelectTrigger id="arch-country" className="flex-1"><SelectValue /></SelectTrigger>
                   <SelectContent>
                     <SelectItem value="india">India</SelectItem>
                     <SelectItem value="usa">United States</SelectItem>
@@ -430,34 +430,12 @@ const ArchitectsEmbedded = () => {
                     <SelectItem value="australia">Australia</SelectItem>
                   </SelectContent>
                 </Select>
-                <Select name="state">
-                  <SelectTrigger id="arch-state" className="flex-1"><SelectValue placeholder="State" /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="andhra-pradesh">Andhra Pradesh</SelectItem>
-                    <SelectItem value="karnataka">Karnataka</SelectItem>
-                    <SelectItem value="tamil-nadu">Tamil Nadu</SelectItem>
-                    <SelectItem value="telangana">Telangana</SelectItem>
-                    <SelectItem value="maharashtra">Maharashtra</SelectItem>
-                    <SelectItem value="gujarat">Gujarat</SelectItem>
-                    <SelectItem value="rajasthan">Rajasthan</SelectItem>
-                    <SelectItem value="delhi">Delhi</SelectItem>
-                    <SelectItem value="west-bengal">West Bengal</SelectItem>
-                    <SelectItem value="uttar-pradesh">Uttar Pradesh</SelectItem>
-                  </SelectContent>
-                </Select>
                 <Select name="city">
-                  <SelectTrigger id="arch-city" className="flex-1"><SelectValue placeholder="City" /></SelectTrigger>
+                  <SelectTrigger id="arch-city" className="flex-1"><SelectValue placeholder="Select City" /></SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="bangalore">Bangalore</SelectItem>
-                    <SelectItem value="hyderabad">Hyderabad</SelectItem>
-                    <SelectItem value="chennai">Chennai</SelectItem>
-                    <SelectItem value="mumbai">Mumbai</SelectItem>
-                    <SelectItem value="pune">Pune</SelectItem>
-                    <SelectItem value="delhi">Delhi</SelectItem>
-                    <SelectItem value="kolkata">Kolkata</SelectItem>
-                    <SelectItem value="ahmedabad">Ahmedabad</SelectItem>
-                    <SelectItem value="jaipur">Jaipur</SelectItem>
-                    <SelectItem value="lucknow">Lucknow</SelectItem>
+                    {majorCities.map((city) => (
+                      <SelectItem key={city} value={city.toLowerCase()}>{city}</SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </div>
