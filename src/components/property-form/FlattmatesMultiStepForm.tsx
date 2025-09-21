@@ -9,6 +9,7 @@ import { FlattmatesRentalDetailsStep } from './FlattmatesRentalDetailsStep';
 import { FlattmatesAmenitiesStep } from './FlattmatesAmenitiesStep';
 import { GalleryStep } from './GalleryStep';
 import { ScheduleStep } from './ScheduleStep';
+import { FlattmatesPreviewStep } from './FlattmatesPreviewStep';
 import GetTenantsFasterSection from '@/components/GetTenantsFasterSection';
 import { Home, MapPin, DollarSign, Star, Camera, Calendar, ArrowLeft, CheckCircle } from 'lucide-react';
 import { OwnerInfo, PropertyDetails, LocationDetails, PropertyGallery, AdditionalInfo, ScheduleInfo, FlattmatesFormData } from '@/types/property';
@@ -173,7 +174,8 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
   const handleScheduleNext = (data: ScheduleInfo) => {
     setScheduleInfo(data);
     setCompletedSteps(prev => prev.includes(6) ? prev : [...prev, 6]);
-    handleSubmit();
+    setCurrentStep(7);
+    scrollToTop();
   };
 
   const prevStep = () => setCurrentStep(prev => Math.max(prev - 1, 1));
@@ -263,7 +265,8 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
     { title: 'Rental Details', icon: <DollarSign className="w-4 h-4" /> },
     { title: 'Amenities', icon: <Star className="w-4 h-4" /> },
     { title: 'Gallery', icon: <Camera className="w-4 h-4" /> },
-    { title: 'Schedule', icon: <Calendar className="w-4 h-4" /> }
+    { title: 'Schedule', icon: <Calendar className="w-4 h-4" /> },
+    { title: 'Preview', icon: <CheckCircle className="w-4 h-4" /> }
   ];
 
   if (isSubmitted) {
@@ -274,8 +277,8 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
           {/* Sidebar */}
           <div className="w-80 flex-shrink-0">
             <PropertyFormSidebar
-              currentStep={6} // All steps completed
-              completedSteps={[1, 2, 3, 4, 5, 6]}
+              currentStep={7} // All steps completed
+              completedSteps={[1, 2, 3, 4, 5, 6, 7]}
               steps={sidebarSteps}
             />
           </div>
@@ -912,7 +915,7 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
                   onNext={handlePropertyDetailsNext}
                   onBack={() => {}} // No back on first step
                   currentStep={currentStep}
-                  totalSteps={6}
+                  totalSteps={7}
                   completedSteps={completedSteps}
                 />
               )}
@@ -923,7 +926,7 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
                 onNext={handleLocationDetailsNext}
                 onBack={prevStep}
                 currentStep={currentStep}
-                totalSteps={6}
+                totalSteps={7}
                 formId={currentFormId}
               />
             )}
@@ -934,7 +937,7 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
                 onNext={handleRentalDetailsNext}
                 onBack={prevStep}
                 currentStep={currentStep}
-                totalSteps={6}
+                totalSteps={7}
                 completedSteps={completedSteps}
                 formId={currentFormId}
               />
@@ -960,97 +963,22 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
               )}
 
               {currentStep === 6 && (
-                <>
-                  <ScheduleStep
-                    initialData={scheduleInfo}
-                    onNext={handleScheduleNext}
-                    onBack={prevStep}
-                  />
-                  
-                  {/* Photo Upload Warning Logic for Schedule Step */}
-                  <div className="mt-6 space-y-4">
-                    {/* Missing Photos Warning */}
-                    {!hasPhotos && !showNoPhotosMessage && (
-                      <div className="bg-orange-50 border border-orange-200 rounded-lg p-4">
-                        <div className="flex items-start gap-3">
-                          <div className="w-6 h-6 bg-orange-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                            <span className="text-orange-600 font-bold text-sm">!</span>
-                          </div>
-                          <div className="flex-1">
-                            <h3 className="text-base font-semibold text-gray-800 mb-1">Your property doesn't have any photos</h3>
-                            <p className="text-sm text-gray-600 mb-3">
-                              Your property will be live but to get the right flatmate faster, we suggest uploading property photos ASAP
-                            </p>
-                            <div className="flex flex-col sm:flex-row gap-2">
-                              <Button 
-                                variant="outline" 
-                                size="sm"
-                                className="border-teal-500 text-teal-600 hover:bg-teal-50"
-                                onClick={() => setShowNoPhotosMessage(true)}
-                              >
-                                I Don't Have Photos
-                              </Button>
-                              <Button variant="outline" size="sm" className="border-teal-500 text-teal-600 hover:bg-teal-50">
-                                Send Photos
-                              </Button>
-                              <Button 
-                                size="sm" 
-                                className="bg-teal-600 hover:bg-teal-700 text-white"
-                                onClick={() => setCurrentStep(5)}
-                              >
-                                Upload Now
-                              </Button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    )}
+                <ScheduleStep
+                  initialData={scheduleInfo}
+                  onNext={handleScheduleNext}
+                  onBack={prevStep}
+                />
+              )}
 
-                    {/* Success Message for Photos */}
-                    {hasPhotos && (
-                      <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-                        <div className="flex items-start gap-3">
-                          <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
-                            <CheckCircle className="w-4 h-4 text-green-600" />
-                          </div>
-                          <div className="flex-1">
-                            <h3 className="text-base font-semibold text-gray-800 mb-1">Great! Your property has photos</h3>
-                            <p className="text-sm text-gray-600">
-                              Properties with photos get 5X more responses. You're all set!
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-
-                    {/* No Photos Message */}
-                    {showNoPhotosMessage && (
-                      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                        <div className="flex items-start gap-3">
-                          <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-                            <CheckCircle className="w-4 h-4 text-blue-600" />
-                          </div>
-                          <div className="flex-1">
-                            <p className="font-medium text-blue-800 mb-1">Thanks for letting us know!</p>
-                            <p className="text-blue-700 text-sm">
-                              No worries! Your property listing will still be active. You can always add photos later to get better responses.
-                            </p>
-                            <div className="mt-3">
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                className="border-blue-300 text-blue-600 hover:bg-blue-50"
-                                onClick={() => setShowNoPhotosMessage(false)}
-                              >
-                                Close
-                              </Button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </>
+              {currentStep === 7 && (
+                <FlattmatesPreviewStep
+                  formData={getFormData()}
+                  onBack={prevStep}
+                  onEdit={goToStep}
+                  onSubmit={handleSubmit}
+                  isSubmitting={isSubmitting}
+                  previewPropertyId={createdSubmissionId || undefined}
+                />
               )}
             </div>
           </div>
@@ -1122,11 +1050,13 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
                     handleGalleryNext(gallery);
                   } else if (currentStep === 6) {
                     handleScheduleNext(scheduleInfo);
+                  } else if (currentStep === 7) {
+                    handleSubmit();
                   }
                 }}
                 className="h-12 sm:h-10 px-6 sm:px-6 bg-red-600 hover:bg-red-700 text-white w-full sm:w-auto order-1 sm:order-2 font-semibold"
               >
-                Save & Continue
+                {currentStep === 7 ? 'Submit Property' : 'Save & Continue'}
               </Button>
             </div>
             </div>
