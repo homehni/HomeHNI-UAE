@@ -154,6 +154,7 @@ const handleScheduleSubmit = (data: Partial<ScheduleInfo>) => {
           currentStep={currentStep}
           totalSteps={7}
           isSubmitting={isSubmitting}
+          previewPropertyId={createdSubmissionId || undefined}
         />
       );
     }
