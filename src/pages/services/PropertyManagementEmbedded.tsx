@@ -8,6 +8,15 @@ import { useToast } from "@/hooks/use-toast";
 import { Building2, Users, CreditCard, Calculator, TrendingUp, FileText, MapPin, Crown, Clock, CheckCircle, Shield, Star, X, Plus, Minus, Globe, Shield as ShieldCheck, Headphones, Smartphone, Download, Home, UserCheck, Settings, BarChart3, Wrench } from "lucide-react";
 
 const PropertyManagementEmbedded = () => {
+  // Major cities in India
+  const majorCities = [
+    "Mumbai", "Delhi", "Bangalore", "Hyderabad", "Ahmedabad", "Chennai", "Kolkata", "Surat", "Pune", "Jaipur",
+    "Lucknow", "Kanpur", "Nagpur", "Indore", "Thane", "Bhopal", "Visakhapatnam", "Pimpri-Chinchwad", "Patna", "Vadodara",
+    "Ghaziabad", "Ludhiana", "Agra", "Nashik", "Faridabad", "Meerut", "Rajkot", "Kalyan-Dombivli", "Vasai-Virar", "Varanasi",
+    "Srinagar", "Aurangabad", "Dhanbad", "Amritsar", "Navi Mumbai", "Allahabad", "Ranchi", "Howrah", "Coimbatore", "Jabalpur",
+    "Gwalior", "Vijayawada", "Jodhpur", "Madurai", "Raipur", "Kota", "Guwahati", "Chandigarh", "Solapur", "Hubli-Dharwad"
+  ];
+
   const services = [{
     icon: Users,
     title: "Tenant Management",
@@ -61,62 +70,62 @@ const PropertyManagementEmbedded = () => {
     homeHNI: true,
     others: false
   }, {
-    feature: "Legal Compliance Management",
+    feature: "Legal Documentation",
     homeHNI: true,
     others: false
   }, {
-    feature: "Digital Financial Reports",
+    feature: "Monthly Financial Reports",
     homeHNI: true,
     others: false
   }, {
-    feature: "Property Marketing Services",
+    feature: "Digital Property Management",
     homeHNI: true,
     others: false
   }, {
-    feature: "Transparent Fee Structure",
+    feature: "Transparent Pricing",
     homeHNI: true,
     others: false
   }, {
-    feature: "Dedicated Property Manager",
+    feature: "Owner Dashboard Access",
     homeHNI: true,
     others: false
   }];
 
   const testimonials = [{
-    name: "Rajesh Agarwal",
+    name: "Rajesh Sharma",
     role: "Property Owner",
     image: "/lovable-uploads/46a07bb4-9f10-4614-ad52-73dfb2de4f28.png",
     rating: 5,
-    text: "Excellent property management service! They handle everything professionally and my rental income has increased significantly."
+    text: "Excellent property management! They handle everything from tenant screening to maintenance. Hassle-free rental income."
   }, {
-    name: "Priya Sharma",
+    name: "Priya Nair",
     role: "NRI Investor",
     image: "/lovable-uploads/5b898e4e-d9b6-4366-b58f-176fc3c8a9c3.png",
     rating: 5,
-    text: "Perfect for NRI property management. They take care of everything remotely and provide detailed monthly reports."
+    text: "Perfect for NRIs like me. I can manage my India properties remotely with their digital platform. Great service!"
   }, {
-    name: "Amit Kumar",
+    name: "Amit Patel",
     role: "Real Estate Investor",
     image: "/lovable-uploads/6e6c47cd-700c-49d4-bfee-85a69bb8353f.png",
     rating: 5,
-    text: "Professional service with excellent tenant screening and maintenance coordination. Highly recommend!"
+    text: "Professional team managing my 5 properties. Regular reports and timely rent collection. Highly recommended!"
   }];
 
   const faqs = [{
     question: "What services are included in property management?",
-    answer: "Our property management includes tenant screening, rent collection, property maintenance, legal compliance, marketing & leasing, and detailed financial reporting."
+    answer: "Our comprehensive property management includes tenant screening, rent collection, property maintenance, legal compliance, marketing, financial reporting, and 24/7 support. We handle everything from finding tenants to property maintenance."
   }, {
-    question: "How do you screen tenants?",
-    answer: "We conduct comprehensive tenant screening including background checks, income verification, employment verification, and reference checks to ensure quality tenants."
+    question: "How do you screen potential tenants?",
+    answer: "We conduct thorough background checks including employment verification, credit history, previous landlord references, and police verification. Only pre-qualified, reliable tenants are selected for your property."
   }, {
-    question: "What is your fee structure?",
-    answer: "Our fees are transparent and competitive, typically ranging from 8-12% of monthly rent. We provide detailed breakdown of all charges upfront."
+    question: "How is rent collection handled?",
+    answer: "We use automated systems for rent collection with multiple payment options. Late payment follow-ups are handled professionally, and you receive regular financial reports with complete transparency."
   }, {
-    question: "Do you handle maintenance issues?",
-    answer: "Yes, we provide 24/7 maintenance support with a network of trusted vendors and coordinate all repairs and maintenance work."
+    question: "Do you handle property maintenance issues?",
+    answer: "Yes, we have a network of certified vendors and provide 24/7 maintenance coordination. All maintenance requests are handled promptly with prior approval for expenses above agreed limits."
   }, {
-    question: "How often do you provide financial reports?",
-    answer: "We provide detailed monthly financial reports including income, expenses, maintenance costs, and property performance metrics."
+    question: "What reports do property owners receive?",
+    answer: "Property owners receive detailed monthly reports including rent collection status, maintenance expenses, occupancy rates, market analysis, and financial statements. Everything is available through our online owner portal."
   }];
 
   const { toast } = useToast();
@@ -131,17 +140,20 @@ const PropertyManagementEmbedded = () => {
 
         <div className="relative z-10 container mx-auto">
           <div className="grid lg:grid-cols-2 gap-8 items-start">
+            {/* Left: Copy */}
             <div className="max-w-2xl">
               <h1 className="text-4xl md:text-5xl font-bold mb-4 leading-tight">
-                Professional Property Management
+                Professional Property Management Services
                 <br className="hidden md:block" />
-                <span className="block">for Maximum Returns</span>
+                <span className="block">for Hassle-Free Rentals</span>
               </h1>
               <p className="text-lg md:text-xl text-white/90 mb-6">
-                Complete property management services with tenant screening, rent collection, 
-                maintenance coordination, and detailed financial reporting.
+                Complete property management solution including tenant screening, rent collection, 
+                maintenance, and financial reporting.
               </p>
             </div>
+
+            {/* Right: Placeholder for form on desktop */}
             <div className="hidden lg:block lg:justify-self-end">
               <div className="w-full max-w-md h-80"></div>
             </div>
@@ -149,39 +161,126 @@ const PropertyManagementEmbedded = () => {
         </div>
       </section>
 
-      {/* Mobile Form */}
-      <section className="lg:hidden px-4 py-8 bg-background">
-        <div className="container mx-auto max-w-xl">
-          <Card className="w-full rounded-2xl shadow-xl border-2 border-primary bg-card">
-            <CardContent className="p-6 md:p-8">
-              <h3 className="text-xl md:text-2xl font-bold text-foreground mb-3">Got a property to be managed?</h3>
-              <p className="text-sm md:text-base text-muted-foreground mb-6 md:mb-8">Just fill up the form & we will take care of the rest</p>
+      {/* Sticky Form Container for Large Screens */}
+      <div className="hidden lg:block absolute top-8 right-8 z-40">
+        <div className="w-96 sticky top-8">
+          <Card className="w-full rounded-xl shadow-2xl bg-background border-2 border-primary">
+            <CardContent className="p-6">
+              <h3 className="text-xl font-semibold text-foreground mb-2 text-uniform-center">Need Property Management?</h3>
+              <p className="text-sm text-muted-foreground mb-4 text-uniform-center">Get professional management service</p>
 
-              <form className="space-y-5" onSubmit={e => {
+              <form className="space-y-4" onSubmit={e => {
                 e.preventDefault();
                 const form = e.currentTarget as HTMLFormElement;
-                
                 if (!form.checkValidity()) {
                   form.reportValidity();
                   toast({
                     title: "Required Fields Missing",
-                    description: "Please fill in all required fields before submitting.",
+                    description: "Please fill in all required fields before submitting your property management request.",
                     variant: "destructive"
                   });
                   return;
                 }
-
                 toast({
                   title: "Request received",
                   description: "Our property management expert will contact you shortly."
                 });
                 form.reset();
               }}>
-                <Input id="prop-name-mobile" name="name" placeholder="Name" className="h-10 md:h-12 text-sm md:text-base bg-background" required />
+                <Input id="property-name" name="name" placeholder="Name" required />
 
-                <div className="flex gap-2 md:gap-3">
+                <div className="flex gap-2">
                   <Select defaultValue="+91" name="countryCode">
-                    <SelectTrigger className="w-24 md:w-32 h-10 md:h-12 bg-background">
+                    <SelectTrigger className="w-28"><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="+91">🇮🇳 +91</SelectItem>
+                      <SelectItem value="+1">🇺🇸 +1</SelectItem>
+                      <SelectItem value="+44">🇬🇧 +44</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <Input id="property-phone" name="phone" type="tel" placeholder="Phone Number" className="flex-1" required />
+                </div>
+
+                <Input id="property-email" name="email" type="email" placeholder="Email ID" required />
+
+                <div className="flex gap-2">
+                  <Select defaultValue="India" name="country">
+                    <SelectTrigger className="flex-1"><SelectValue placeholder="Country" /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="India">India</SelectItem>
+                      <SelectItem value="USA">USA</SelectItem>
+                      <SelectItem value="UK">UK</SelectItem>
+                      <SelectItem value="Other">Other</SelectItem>
+                    </SelectContent>
+                  </Select>
+
+                  <Select name="city" required>
+                    <SelectTrigger className="flex-1"><SelectValue placeholder="City" /></SelectTrigger>
+                    <SelectContent>
+                      {majorCities.map((city: string) => (
+                        <SelectItem key={city} value={city}>
+                          {city}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <Select name="propertyType" required>
+                  <SelectTrigger className="w-full"><SelectValue placeholder="Property Type" /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="residential">Residential</SelectItem>
+                    <SelectItem value="commercial">Commercial</SelectItem>
+                    <SelectItem value="apartment">Apartment</SelectItem>
+                    <SelectItem value="villa">Villa/House</SelectItem>
+                    <SelectItem value="other">Other</SelectItem>
+                  </SelectContent>
+                </Select>
+
+                <Button type="submit" className="w-full bg-red-800 hover:bg-red-900 text-white">Get Property Management Quote</Button>
+              </form>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+
+      {/* Mobile Form - Static below hero */}
+      <section className="lg:hidden px-4 py-8 bg-background">
+        <div className="container mx-auto max-w-xl px-4">
+          <Card className="w-full rounded-2xl shadow-xl border-2 border-primary bg-card">
+            <CardContent className="p-8">
+              <h3 className="text-2xl font-bold text-foreground mb-3 text-uniform-center">Need Property Management?</h3>
+              <p className="text-base text-muted-foreground mb-8 text-uniform-center">Get professional management service</p>
+
+              <form className="space-y-5" onSubmit={e => {
+                e.preventDefault();
+                const form = e.currentTarget as HTMLFormElement;
+                if (!form.checkValidity()) {
+                  form.reportValidity();
+                  toast({
+                    title: "Required Fields Missing",
+                    description: "Please fill in all required fields before submitting your property management request.",
+                    variant: "destructive"
+                  });
+                  return;
+                }
+                toast({
+                  title: "Request received",
+                  description: "Our property management expert will contact you shortly."
+                });
+                form.reset();
+              }}>
+                <Input 
+                  id="property-name-mobile" 
+                  name="name" 
+                  placeholder="Name" 
+                  className="h-12 text-base bg-background"
+                  required 
+                />
+
+                <div className="flex gap-3">
+                  <Select defaultValue="+91" name="countryCode">
+                    <SelectTrigger className="w-32 h-12 bg-background">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent className="bg-background border shadow-lg">
@@ -190,509 +289,213 @@ const PropertyManagementEmbedded = () => {
                       <SelectItem value="+44">🇬🇧 +44</SelectItem>
                     </SelectContent>
                   </Select>
-                  <Input id="prop-phone-mobile" name="phone" type="tel" placeholder="Phone Number" className="flex-1 h-10 md:h-12 text-sm md:text-base bg-background" required />
+                  <Input 
+                    id="property-phone-mobile" 
+                    name="phone" 
+                    type="tel" 
+                    placeholder="Phone Number" 
+                    className="flex-1 h-12 text-base bg-background" 
+                    required 
+                  />
                 </div>
 
-                <Input id="prop-email-mobile" name="email" type="email" placeholder="Email ID" className="h-10 md:h-12 text-sm md:text-base bg-background" required />
+                <Input 
+                  id="property-email-mobile" 
+                  name="email" 
+                  type="email" 
+                  placeholder="Email ID" 
+                  className="h-12 text-base bg-background"
+                />
 
-                <div className="flex flex-col sm:flex-row gap-2 md:gap-3">
-                  <Select name="propertyType" required>
-                    <SelectTrigger id="prop-type-mobile" className="h-10 md:h-12 bg-background">
-                      <SelectValue placeholder="Property Type" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-background border shadow-lg">
-                      <SelectItem value="apartment">Apartment</SelectItem>
-                      <SelectItem value="villa">Villa</SelectItem>
-                      <SelectItem value="independent-house">Independent House</SelectItem>
-                      <SelectItem value="commercial">Commercial Property</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <Input id="prop-location-mobile" name="location" placeholder="Property Location" className="h-10 md:h-12 text-sm md:text-base bg-background" />
-                </div>
-
-                <div className="flex flex-col sm:flex-row gap-2 md:gap-3">
-                  <Select name="city" required>
-                    <SelectTrigger id="prop-city-mobile" className="h-10 md:h-12 bg-background">
-                      <SelectValue placeholder="City" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-background border shadow-lg">
-                      <SelectItem value="bangalore">Bangalore</SelectItem>
-                      <SelectItem value="mumbai">Mumbai</SelectItem>
-                      <SelectItem value="delhi">Delhi</SelectItem>
-                      <SelectItem value="pune">Pune</SelectItem>
-                      <SelectItem value="hyderabad">Hyderabad</SelectItem>
-                      <SelectItem value="chennai">Chennai</SelectItem>
-                      <SelectItem value="kolkata">Kolkata</SelectItem>
-                      <SelectItem value="ahmedabad">Ahmedabad</SelectItem>
-                      <SelectItem value="other">Other</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <Button type="submit" className="w-full h-10 md:h-12 text-sm md:text-base font-semibold bg-red-600 hover:bg-red-700 text-white mt-4 md:mt-6">
-                  Talk to Us Today!
-                </Button>
-              </form>
-            </CardContent>
-          </Card>
-        </div>
-      </section>
-
-      {/* Our Services */}
-      <section className="py-16 px-4 bg-background">
-        <div className="container mx-auto">
-          <div className="grid lg:grid-cols-2 gap-16 items-start">
-            <div className="max-w-3xl">
-              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
-                Our Property Management Services
-              </h2>
-              <div className="grid gap-6">
-                {services.map((service, index) => {
-                  const IconComponent = service.icon;
-                  return (
-                    <div key={index} className="flex gap-4 p-6 bg-card rounded-lg border">
-                      <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                        <IconComponent className="w-6 h-6 text-red-600" />
-                      </div>
-                      <div>
-                        <h3 className="text-lg font-semibold text-foreground mb-2">{service.title}</h3>
-                        <p className="text-muted-foreground text-sm">{service.description}</p>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-            <div className="hidden lg:block"></div>
-          </div>
-        </div>
-      </section>
-
-      {/* Stats Section */}
-      <section className="py-16 px-4 bg-muted/30">
-        <div className="container mx-auto">
-          <div className="grid lg:grid-cols-2 gap-16 items-start">
-            <div className="max-w-3xl">
-              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
-                Trusted by Thousands
-              </h2>
-              <div className="grid grid-cols-2 gap-8">
-                <div className="text-center">
-                  <div className="text-4xl md:text-5xl font-bold text-red-600 mb-2">1K+</div>
-                  <p className="text-muted-foreground">Properties Managed</p>
-                </div>
-                <div className="text-center">
-                  <div className="text-4xl md:text-5xl font-bold text-red-600 mb-2">500+</div>
-                  <p className="text-muted-foreground">Happy Landlords</p>
-                </div>
-                <div className="text-center">
-                  <div className="text-4xl md:text-5xl font-bold text-red-600 mb-2">24/7</div>
-                  <p className="text-muted-foreground">Support Team</p>
-                </div>
-                <div className="text-center">
-                  <div className="text-4xl md:text-5xl font-bold text-red-600 mb-2">95%</div>
-                  <p className="text-muted-foreground">Occupancy Rate</p>
-                </div>
-              </div>
-            </div>
-            <div className="hidden lg:block"></div>
-          </div>
-        </div>
-      </section>
-
-      {/* Comparison Table */}
-      <section className="py-16 px-4 bg-background">
-        <div className="container mx-auto">
-          <div className="grid lg:grid-cols-2 gap-16 items-start">
-            <div className="max-w-3xl">
-              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
-                Why Home HNI is Better
-              </h2>
-              <div className="bg-card rounded-xl border overflow-hidden">
-                <div className="grid grid-cols-3 gap-4 p-4 bg-muted/50 font-semibold text-sm">
-                  <div>Features</div>
-                  <div className="text-center">Home HNI</div>
-                  <div className="text-center">Others</div>
-                </div>
-                {comparisonData.map((item, index) => (
-                  <div key={index} className="grid grid-cols-3 gap-4 p-4 border-t text-sm">
-                    <div className="text-foreground">{item.feature}</div>
-                    <div className="text-center">
-                      {item.homeHNI ? (
-                        <CheckCircle className="w-4 h-4 text-red-600 mx-auto" />
-                      ) : (
-                        <X className="w-4 h-4 text-red-500 mx-auto" />
-                      )}
-                    </div>
-                    <div className="text-center">
-                      {item.others ? (
-                        <CheckCircle className="w-4 h-4 text-red-600 mx-auto" />
-                      ) : (
-                        <X className="w-4 h-4 text-red-500 mx-auto" />
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div className="hidden lg:block"></div>
-          </div>
-        </div>
-      </section>
-
-      {/* Testimonials */}
-      <section className="py-16 px-4 bg-muted/30">
-        <div className="container mx-auto">
-          <div className="grid lg:grid-cols-2 gap-16 items-start">
-            <div className="max-w-3xl">
-              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
-                What Our Customers Say
-              </h2>
-              <div className="space-y-6">
-                {testimonials.map((testimonial, index) => (
-                  <Card key={index} className="p-6">
-                    <CardContent className="p-0">
-                      <div className="flex items-start gap-4">
-                        <img 
-                          src={testimonial.image} 
-                          alt={testimonial.name}
-                          className="w-12 h-12 rounded-full object-cover"
-                        />
-                        <div className="flex-1">
-                          <div className="flex items-center gap-1 mb-2">
-                            {[...Array(testimonial.rating)].map((_, i) => (
-                              <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                            ))}
-                          </div>
-                          <p className="text-muted-foreground text-sm mb-3">"{testimonial.text}"</p>
-                          <div>
-                            <p className="font-semibold text-sm">{testimonial.name}</p>
-                            <p className="text-xs text-muted-foreground">{testimonial.role}</p>
-                          </div>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            </div>
-            <div className="hidden lg:block"></div>
-          </div>
-        </div>
-      </section>
-
-      {/* Target Audience */}
-      <section className="py-16 px-4 bg-background">
-        <div className="container mx-auto">
-          <div className="grid lg:grid-cols-2 gap-16 items-start">
-            <div className="max-w-3xl">
-              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
-                Who We Serve
-              </h2>
-              <div className="grid gap-6">
-                {targetAudience.map((audience, index) => {
-                  const IconComponent = audience.icon;
-                  return (
-                    <div key={index} className="flex gap-4 p-6 bg-card rounded-lg border">
-                      <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                        <IconComponent className="w-6 h-6 text-red-600" />
-                      </div>
-                      <div>
-                        <h3 className="text-lg font-semibold text-foreground mb-2">{audience.title}</h3>
-                        <p className="text-muted-foreground text-sm">{audience.description}</p>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-            <div className="hidden lg:block"></div>
-          </div>
-        </div>
-      </section>
-
-      {/* Sticky Form Container for Large Screens */}
-      <div className="hidden lg:block absolute top-8 right-8 z-50">
-        <div className="w-96 sticky top-8">
-        <Card className="w-full rounded-xl shadow-2xl bg-background border-2 border-primary">
-          <CardContent className="p-6">
-            <h3 className="text-xl font-semibold text-foreground mb-2">Got a property to be managed?</h3>
-            <p className="text-sm text-muted-foreground mb-4">Just fill up the form & we will take care of the rest</p>
-
-            <form className="space-y-4" onSubmit={e => {
-              e.preventDefault();
-              const form = e.currentTarget as HTMLFormElement;
-              
-              if (!form.checkValidity()) {
-                form.reportValidity();
-                toast({
-                  title: "Required Fields Missing",
-                  description: "Please fill in all required fields before submitting.",
-                  variant: "destructive"
-                });
-                return;
-              }
-
-              toast({
-                title: "Request received",
-                description: "Our property management expert will contact you shortly."
-              });
-              form.reset();
-            }}>
-              <Input id="pm-name" name="name" placeholder="Name" required />
-
-              <div className="flex gap-2">
-                <Select defaultValue="+91" name="countryCode">
-                  <SelectTrigger className="w-20"><SelectValue /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="+91">IN +91</SelectItem>
-                    <SelectItem value="+1">US +1</SelectItem>
-                    <SelectItem value="+44">UK +44</SelectItem>
-                  </SelectContent>
-                </Select>
-                <Input id="pm-phone" name="phone" type="tel" placeholder="Phone Number" className="flex-1" required />
-              </div>
-
-              <Input id="pm-email" name="email" type="email" placeholder="Email ID" required />
-
-              <Select name="propertyType" required>
-                <SelectTrigger id="property-type"><SelectValue placeholder="Property Type" /></SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="residential">All Residential</SelectItem>
-                  <SelectItem value="flats">Flat/Apartment</SelectItem>
-                  <SelectItem value="independent-building">Independent Building/Floor</SelectItem>
-                  <SelectItem value="farm-house">Farm House</SelectItem>
-                  <SelectItem value="villa">Villa</SelectItem>
-                  <SelectItem value="plots">Plots</SelectItem>
-                  <SelectItem value="resort">Resort</SelectItem>
-                  <SelectItem value="commercial-building">Commercial Building/House</SelectItem>
-                  <SelectItem value="agricultural">Agricultural Lands</SelectItem>
-                  <SelectItem value="other">Others</SelectItem>
-                </SelectContent>
-              </Select>
-
-              <div className="flex gap-2">
-                <Input id="pm-location" name="location" placeholder="Property Location" className="flex-1" />
-                <Select name="managementType" required>
-                  <SelectTrigger id="management-type" className="w-40"><SelectValue placeholder="Management Type" /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="full-management">Full Management</SelectItem>
-                    <SelectItem value="tenant-management">Tenant Management</SelectItem>
-                    <SelectItem value="maintenance-only">Maintenance Only</SelectItem>
-                    <SelectItem value="rent-collection">Rent Collection</SelectItem>
-                    <SelectItem value="consultation">Consultation</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="flex gap-2">
-                <Select name="country">
-                  <SelectTrigger id="pm-country" className="flex-1"><SelectValue placeholder="Country" /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="india">India</SelectItem>
-                    <SelectItem value="usa">United States</SelectItem>
-                    <SelectItem value="uk">United Kingdom</SelectItem>
-                    <SelectItem value="canada">Canada</SelectItem>
-                    <SelectItem value="australia">Australia</SelectItem>
-                  </SelectContent>
-                </Select>
-                <Select name="state">
-                  <SelectTrigger id="pm-state" className="flex-1"><SelectValue placeholder="State" /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="andhra-pradesh">Andhra Pradesh</SelectItem>
-                    <SelectItem value="karnataka">Karnataka</SelectItem>
-                    <SelectItem value="tamil-nadu">Tamil Nadu</SelectItem>
-                    <SelectItem value="telangana">Telangana</SelectItem>
-                    <SelectItem value="maharashtra">Maharashtra</SelectItem>
-                    <SelectItem value="gujarat">Gujarat</SelectItem>
-                    <SelectItem value="rajasthan">Rajasthan</SelectItem>
-                    <SelectItem value="delhi">Delhi</SelectItem>
-                    <SelectItem value="west-bengal">West Bengal</SelectItem>
-                    <SelectItem value="uttar-pradesh">Uttar Pradesh</SelectItem>
-                  </SelectContent>
-                </Select>
-                <Select name="city">
-                  <SelectTrigger id="pm-city" className="flex-1"><SelectValue placeholder="City" /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="mumbai">Mumbai</SelectItem>
-                    <SelectItem value="delhi">Delhi</SelectItem>
-                    <SelectItem value="bangalore">Bangalore</SelectItem>
-                    <SelectItem value="pune">Pune</SelectItem>
-                    <SelectItem value="hyderabad">Hyderabad</SelectItem>
-                    <SelectItem value="chennai">Chennai</SelectItem>
-                    <SelectItem value="kolkata">Kolkata</SelectItem>
-                    <SelectItem value="ahmedabad">Ahmedabad</SelectItem>
-                    <SelectItem value="other">Other</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <Button type="submit" className="w-full bg-red-600 hover:bg-red-700 text-white">Talk to Us Today!</Button>
-            </form>
-          </CardContent>
-        </Card>
-        </div>
-      </div>
-
-      {/* Mobile Form */}
-      <section className="lg:hidden px-4 py-8 bg-background">
-        <div className="container mx-auto max-w-xl">
-          <Card className="w-full rounded-2xl shadow-xl border-2 border-primary bg-card">
-            <CardContent className="p-6 md:p-8">
-              <h3 className="text-xl md:text-2xl font-bold text-foreground mb-3">Got a property to be managed?</h3>
-              <p className="text-sm md:text-base text-muted-foreground mb-6 md:mb-8">Just fill up the form & we will take care of the rest</p>
-
-              <form className="space-y-5" onSubmit={e => {
-                e.preventDefault();
-                const form = e.currentTarget as HTMLFormElement;
-                
-                if (!form.checkValidity()) {
-                  form.reportValidity();
-                  toast({
-                    title: "Required Fields Missing",
-                    description: "Please fill in all required fields before submitting.",
-                    variant: "destructive"
-                  });
-                  return;
-                }
-
-                toast({
-                  title: "Request received",
-                  description: "Our property management expert will contact you shortly."
-                });
-                form.reset();
-              }}>
-                <Input id="pm-name-mobile" name="name" placeholder="Name" className="h-12 text-base bg-background" required />
-
-                <div className="flex gap-3">
-                  <Select defaultValue="+91" name="countryCode">
-                    <SelectTrigger className="w-32 h-12 bg-background">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent className="bg-background border shadow-lg">
-                      <SelectItem value="+91">IN +91</SelectItem>
-                      <SelectItem value="+1">US +1</SelectItem>
-                      <SelectItem value="+44">UK +44</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <Input id="pm-phone-mobile" name="phone" type="tel" placeholder="Phone Number" className="flex-1 h-12 text-base bg-background" required />
-                </div>
-
-                <Input id="pm-email-mobile" name="email" type="email" placeholder="Email ID" className="h-12 text-base bg-background" required />
-
-                <Select name="propertyType" required>
-                  <SelectTrigger id="property-type-mobile" className="h-12 bg-background">
-                    <SelectValue placeholder="Property Type" />
-                  </SelectTrigger>
-                  <SelectContent className="bg-background border shadow-lg">
-                    <SelectItem value="residential">All Residential</SelectItem>
-                    <SelectItem value="flats">Flat/Apartment</SelectItem>
-                    <SelectItem value="independent-building">Independent Building/Floor</SelectItem>
-                    <SelectItem value="farm-house">Farm House</SelectItem>
-                    <SelectItem value="villa">Villa</SelectItem>
-                    <SelectItem value="plots">Plots</SelectItem>
-                    <SelectItem value="resort">Resort</SelectItem>
-                    <SelectItem value="commercial-building">Commercial Building/House</SelectItem>
-                    <SelectItem value="agricultural">Agricultural Lands</SelectItem>
-                    <SelectItem value="other">Others</SelectItem>
-                  </SelectContent>
-                </Select>
-
-                <div className="flex gap-3">
-                  <Input id="pm-location-mobile" name="location" placeholder="Property Location" className="flex-1 h-12 text-base bg-background" />
-                  <Select name="managementType" required>
-                    <SelectTrigger id="management-type-mobile" className="w-40 h-12 bg-background">
-                      <SelectValue placeholder="Management Type" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-background border shadow-lg">
-                      <SelectItem value="full-management">Full Management</SelectItem>
-                      <SelectItem value="tenant-management">Tenant Management</SelectItem>
-                      <SelectItem value="maintenance-only">Maintenance Only</SelectItem>
-                      <SelectItem value="rent-collection">Rent Collection</SelectItem>
-                      <SelectItem value="consultation">Consultation</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div className="flex gap-3">
-                  <Select name="country">
-                    <SelectTrigger id="pm-country-mobile" className="flex-1 h-12 bg-background">
+                <div className="flex flex-col md:flex-row gap-3">
+                  <Select defaultValue="India" name="country">
+                    <SelectTrigger className="flex-1 h-12 bg-background">
                       <SelectValue placeholder="Country" />
                     </SelectTrigger>
                     <SelectContent className="bg-background border shadow-lg">
-                      <SelectItem value="india">India</SelectItem>
-                      <SelectItem value="usa">United States</SelectItem>
-                      <SelectItem value="uk">United Kingdom</SelectItem>
-                      <SelectItem value="canada">Canada</SelectItem>
-                      <SelectItem value="australia">Australia</SelectItem>
+                      <SelectItem value="India">India</SelectItem>
+                      <SelectItem value="USA">USA</SelectItem>
+                      <SelectItem value="UK">UK</SelectItem>
+                      <SelectItem value="Other">Other</SelectItem>
                     </SelectContent>
                   </Select>
-                  <Select name="state">
-                    <SelectTrigger id="pm-state-mobile" className="flex-1 h-12 bg-background">
-                      <SelectValue placeholder="State" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-background border shadow-lg">
-                      <SelectItem value="andhra-pradesh">Andhra Pradesh</SelectItem>
-                      <SelectItem value="karnataka">Karnataka</SelectItem>
-                      <SelectItem value="tamil-nadu">Tamil Nadu</SelectItem>
-                      <SelectItem value="telangana">Telangana</SelectItem>
-                      <SelectItem value="maharashtra">Maharashtra</SelectItem>
-                      <SelectItem value="gujarat">Gujarat</SelectItem>
-                      <SelectItem value="rajasthan">Rajasthan</SelectItem>
-                      <SelectItem value="delhi">Delhi</SelectItem>
-                      <SelectItem value="west-bengal">West Bengal</SelectItem>
-                      <SelectItem value="uttar-pradesh">Uttar Pradesh</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <Select name="city">
-                    <SelectTrigger id="pm-city-mobile" className="flex-1 h-12 bg-background">
+
+                  <Select name="city" required>
+                    <SelectTrigger className="flex-1 h-12 bg-background">
                       <SelectValue placeholder="City" />
                     </SelectTrigger>
                     <SelectContent className="bg-background border shadow-lg">
-                      <SelectItem value="mumbai">Mumbai</SelectItem>
-                      <SelectItem value="delhi">Delhi</SelectItem>
-                      <SelectItem value="bangalore">Bangalore</SelectItem>
-                      <SelectItem value="pune">Pune</SelectItem>
-                      <SelectItem value="hyderabad">Hyderabad</SelectItem>
-                      <SelectItem value="chennai">Chennai</SelectItem>
-                      <SelectItem value="kolkata">Kolkata</SelectItem>
-                      <SelectItem value="ahmedabad">Ahmedabad</SelectItem>
-                      <SelectItem value="other">Other</SelectItem>
+                      {majorCities.map((city: string) => (
+                        <SelectItem key={city} value={city}>
+                          {city}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 </div>
 
-                <Button type="submit" className="w-full h-12 text-base font-semibold bg-red-600 hover:bg-red-700 text-white mt-6">
-                  Talk to Us Today!
+                <Select name="propertyType" required>
+                  <SelectTrigger className="h-12 bg-background">
+                    <SelectValue placeholder="Property Type" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-background border shadow-lg">
+                    <SelectItem value="residential">Residential</SelectItem>
+                    <SelectItem value="commercial">Commercial</SelectItem>
+                    <SelectItem value="apartment">Apartment</SelectItem>
+                    <SelectItem value="villa">Villa/House</SelectItem>
+                    <SelectItem value="other">Other</SelectItem>
+                  </SelectContent>
+                </Select>
+
+                <Button type="submit" className="w-full h-12 text-base font-semibold bg-red-800 hover:bg-red-900 text-white mt-6">
+                  Get Property Management Quote
                 </Button>
               </form>
             </CardContent>
           </Card>
+        </div>
+      </section>
+
+      {/* Services Section */}
+      <section className="py-16 px-4 bg-muted/30">
+        <div className="container mx-auto text-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+            Complete Property Management Solutions
+          </h2>
+          <p className="text-lg text-muted-foreground mb-12 max-w-2xl mx-auto">
+            Professional property management services to maximize your rental income with minimal hassle.
+          </p>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {services.map((service, index) => (
+              <Card key={index} className="p-6 hover:shadow-lg transition-shadow bg-background border border-border">
+                <CardContent className="p-0 text-center">
+                  <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+                    <service.icon className="w-6 h-6 text-red-600" />
+                  </div>
+                  <h3 className="text-lg font-semibold text-foreground mb-2">{service.title}</h3>
+                  <p className="text-muted-foreground">{service.description}</p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Why Choose Us Section */}
+      <section className="py-16 px-4 bg-background">
+        <div className="container mx-auto">
+          <h2 className="text-3xl md:text-4xl font-bold text-center text-foreground mb-12">Why Choose HomeHNI Over Others?</h2>
+          
+          <div className="max-w-4xl mx-auto">
+            <div className="bg-card border border-border rounded-lg overflow-hidden">
+              <div className="grid grid-cols-3 bg-muted text-center py-4">
+                <div className="font-semibold text-foreground">Features</div>
+                <div className="font-semibold text-foreground">HomeHNI</div>
+                <div className="font-semibold text-foreground">Others</div>
+              </div>
+              
+              {comparisonData.map((item, index) => (
+                <div key={index} className={`grid grid-cols-3 text-center py-3 ${index % 2 === 0 ? 'bg-muted/50' : 'bg-background'}`}>
+                  <div className="text-foreground font-medium">{item.feature}</div>
+                  <div>{item.homeHNI ? <CheckCircle className="w-5 h-5 text-green-600 mx-auto" /> : <X className="w-5 h-5 text-red-500 mx-auto" />}</div>
+                  <div>{item.others ? <CheckCircle className="w-5 h-5 text-green-600 mx-auto" /> : <X className="w-5 h-5 text-red-500 mx-auto" />}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Customer Testimonials Section */}
+      <section className="py-16 px-4 bg-muted/30">
+        <div className="container mx-auto">
+          <h2 className="text-3xl md:text-4xl font-bold text-center text-foreground mb-12">What Our Customers Say</h2>
+          
+          <div className="grid md:grid-cols-3 gap-8">
+            {testimonials.map((testimonial, index) => (
+              <Card key={index} className="p-6 bg-background border border-border">
+                <CardContent className="p-0">
+                  <div className="flex items-center mb-4">
+                    <img 
+                      src={testimonial.image} 
+                      alt={testimonial.name}
+                      className="w-12 h-12 rounded-full object-cover mr-4"
+                    />
+                    <div>
+                      <h4 className="font-semibold text-foreground">{testimonial.name}</h4>
+                      <p className="text-sm text-muted-foreground">{testimonial.role}</p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex mb-3">
+                    {[...Array(testimonial.rating)].map((_, i) => (
+                      <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                    ))}
+                  </div>
+                  
+                  <p className="text-muted-foreground">{testimonial.text}</p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Target Audience Section */}
+      <section className="py-16 px-4 bg-background">
+        <div className="container mx-auto text-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">Perfect For</h2>
+          <p className="text-lg text-muted-foreground mb-12">Our property management services cater to various property owners</p>
+          
+          <div className="grid md:grid-cols-3 gap-8">
+            {targetAudience.map((audience, index) => (
+              <div key={index} className="space-y-4">
+                <div className="w-16 h-16 bg-red-100 rounded-2xl flex items-center justify-center mx-auto">
+                  <audience.icon className="w-8 h-8 text-red-600" />
+                </div>
+                <h3 className="text-xl font-bold text-foreground">{audience.title}</h3>
+                <p className="text-muted-foreground">{audience.description}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
       {/* FAQ Section */}
       <section className="py-16 px-4 bg-muted/30">
         <div className="container mx-auto">
-          <div className="grid lg:grid-cols-2 gap-16 items-start">
-            <div className="max-w-3xl">
-              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
-                Frequently Asked Questions
-              </h2>
-              <Accordion type="single" collapsible className="space-y-4">
-                {faqs.map((faq, index) => (
-                  <AccordionItem key={index} value={`item-${index}`} className="bg-card border rounded-lg px-6">
-                    <AccordionTrigger className="text-left font-semibold text-sm py-4">
-                      {faq.question}
-                    </AccordionTrigger>
-                    <AccordionContent className="text-muted-foreground text-sm pb-4">
-                      {faq.answer}
-                    </AccordionContent>
-                  </AccordionItem>
-                ))}
-              </Accordion>
-            </div>
-            <div className="hidden lg:block"></div>
+          <h2 className="text-3xl md:text-4xl font-bold text-center text-foreground mb-12">Frequently Asked Questions</h2>
+          
+          <div className="max-w-3xl mx-auto">
+            <Accordion type="single" collapsible className="w-full">
+              {faqs.map((faq, index) => (
+                <AccordionItem key={index} value={`item-${index}`}>
+                  <AccordionTrigger className="text-left font-semibold text-foreground">
+                    {faq.question}
+                  </AccordionTrigger>
+                  <AccordionContent className="text-muted-foreground">
+                    {faq.answer}
+                  </AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
+          </div>
+        </div>
+      </section>
+
+      {/* Service Tags Section */}
+      <section className="py-12 px-4 bg-background">
+        <div className="container mx-auto text-center">
+          <div className="flex flex-wrap justify-center gap-3">
+            <span className="px-4 py-2 bg-red-100 text-red-700 rounded-full text-sm font-medium">Property Management Mumbai</span>
+            <span className="px-4 py-2 bg-red-100 text-red-700 rounded-full text-sm font-medium">Tenant Screening</span>
+            <span className="px-4 py-2 bg-red-100 text-red-700 rounded-full text-sm font-medium">Rent Collection</span>
+            <span className="px-4 py-2 bg-red-100 text-red-700 rounded-full text-sm font-medium">Property Maintenance</span>
+            <span className="px-4 py-2 bg-red-100 text-red-700 rounded-full text-sm font-medium">Legal Compliance</span>
+            <span className="px-4 py-2 bg-red-100 text-red-700 rounded-full text-sm font-medium">Financial Reporting</span>
+            <span className="px-4 py-2 bg-red-100 text-red-700 rounded-full text-sm font-medium">NRI Property Management</span>
+            <span className="px-4 py-2 bg-red-100 text-red-700 rounded-full text-sm font-medium">Professional Service</span>
           </div>
         </div>
       </section>

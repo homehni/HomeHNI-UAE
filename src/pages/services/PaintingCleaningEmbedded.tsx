@@ -8,6 +8,15 @@ import { useToast } from "@/hooks/use-toast";
 import { PaintBucket, Sparkles, Home, Building2, Clock, CheckCircle, Shield, Star, Users, Crown, Globe, Headphones, Paintbrush, Droplets, X } from "lucide-react";
 
 const PaintingCleaningEmbedded = () => {
+  // Major cities in India
+  const majorCities = [
+    "Mumbai", "Delhi", "Bangalore", "Hyderabad", "Ahmedabad", "Chennai", "Kolkata", "Surat", "Pune", "Jaipur",
+    "Lucknow", "Kanpur", "Nagpur", "Indore", "Thane", "Bhopal", "Visakhapatnam", "Pimpri-Chinchwad", "Patna", "Vadodara",
+    "Ghaziabad", "Ludhiana", "Agra", "Nashik", "Faridabad", "Meerut", "Rajkot", "Kalyan-Dombivli", "Vasai-Virar", "Varanasi",
+    "Srinagar", "Aurangabad", "Dhanbad", "Amritsar", "Navi Mumbai", "Allahabad", "Ranchi", "Howrah", "Coimbatore", "Jabalpur",
+    "Gwalior", "Vijayawada", "Jodhpur", "Madurai", "Raipur", "Kota", "Guwahati", "Chandigarh", "Solapur", "Hubli-Dharwad"
+  ];
+
   const services = [{
     icon: PaintBucket,
     title: "Interior Painting",
