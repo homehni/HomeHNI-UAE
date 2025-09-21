@@ -221,6 +221,11 @@ export const CommercialSaleMultiStepForm = ({
 
           <div className="flex-1 min-w-0 p-3 bg-white pb-20">
             <div className="max-w-4xl mx-auto">
+              {currentStep === 6 && (
+                <div className="mb-6">
+                  <h1 className="text-2xl font-semibold text-red-600">Upload images</h1>
+                </div>
+              )}
               {renderCurrentStep()}
             </div>
           </div>
