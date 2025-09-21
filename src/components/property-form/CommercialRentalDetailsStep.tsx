@@ -406,7 +406,7 @@ export const CommercialRentalDetailsStep: React.FC<CommercialRentalDetailsStepPr
                 const [open, setOpen] = React.useState(false);
                 
                 return (
-                  <FormItem className="flex flex-col">
+                  <FormItem className="flex flex-col w-1/2">
                     <FormLabel className="text-sm font-medium text-gray-900">Available From</FormLabel>
                     <Popover open={open} onOpenChange={setOpen}>
                       <PopoverTrigger asChild>
