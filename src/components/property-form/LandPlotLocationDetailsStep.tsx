@@ -196,68 +196,42 @@ export const LandPlotLocationDetailsStep: React.FC<LandPlotLocationDetailsStepPr
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-          {/* City Field */}
-          <FormField
-            control={form.control}
-            name="city"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-sm font-medium text-gray-900">City</FormLabel>
-                <FormControl>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <SelectTrigger className="h-12">
-                      <SelectValue placeholder="Choose city" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-white border shadow-lg z-50">
-                      <SelectItem value="mumbai">Mumbai</SelectItem>
-                      <SelectItem value="delhi">Delhi</SelectItem>
-                      <SelectItem value="bangalore">Bangalore</SelectItem>
-                      <SelectItem value="hyderabad">Hyderabad</SelectItem>
-                      <SelectItem value="chennai">Chennai</SelectItem>
-                      <SelectItem value="kolkata">Kolkata</SelectItem>
-                      <SelectItem value="pune">Pune</SelectItem>
-                      <SelectItem value="ahmedabad">Ahmedabad</SelectItem>
-                      <SelectItem value="jaipur">Jaipur</SelectItem>
-                      <SelectItem value="surat">Surat</SelectItem>
-                      <SelectItem value="lucknow">Lucknow</SelectItem>
-                      <SelectItem value="kanpur">Kanpur</SelectItem>
-                      <SelectItem value="nagpur">Nagpur</SelectItem>
-                      <SelectItem value="indore">Indore</SelectItem>
-                      <SelectItem value="thane">Thane</SelectItem>
-                      <SelectItem value="bhopal">Bhopal</SelectItem>
-                      <SelectItem value="visakhapatnam">Visakhapatnam</SelectItem>
-                      <SelectItem value="pimpri-chinchwad">Pimpri-Chinchwad</SelectItem>
-                      <SelectItem value="patna">Patna</SelectItem>
-                      <SelectItem value="vadodara">Vadodara</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          {/* Locality/Area and Landmark */}
+          {/* City Field and Landmark */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <FormField
               control={form.control}
-              name="locality"
+              name="city"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-sm font-medium text-gray-900">Locality/Area</FormLabel>
+                  <FormLabel className="text-sm font-medium text-gray-900">City</FormLabel>
                   <FormControl>
-                    <div className="relative">
-                      <Input
-                        placeholder="Search 'Bellandur, Bengaluru, Karnataka'..."
-                        className="h-12 pl-10"
-                        {...field}
-                        ref={(el) => {
-                          field.ref(el)
-                          localityInputRef.current = el
-                        }}
-                      />
-                      <MapPin className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                    </div>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <SelectTrigger className="h-12">
+                        <SelectValue placeholder="Choose city" />
+                      </SelectTrigger>
+                      <SelectContent className="bg-white border shadow-lg z-50">
+                        <SelectItem value="mumbai">Mumbai</SelectItem>
+                        <SelectItem value="delhi">Delhi</SelectItem>
+                        <SelectItem value="bangalore">Bangalore</SelectItem>
+                        <SelectItem value="hyderabad">Hyderabad</SelectItem>
+                        <SelectItem value="chennai">Chennai</SelectItem>
+                        <SelectItem value="kolkata">Kolkata</SelectItem>
+                        <SelectItem value="pune">Pune</SelectItem>
+                        <SelectItem value="ahmedabad">Ahmedabad</SelectItem>
+                        <SelectItem value="jaipur">Jaipur</SelectItem>
+                        <SelectItem value="surat">Surat</SelectItem>
+                        <SelectItem value="lucknow">Lucknow</SelectItem>
+                        <SelectItem value="kanpur">Kanpur</SelectItem>
+                        <SelectItem value="nagpur">Nagpur</SelectItem>
+                        <SelectItem value="indore">Indore</SelectItem>
+                        <SelectItem value="thane">Thane</SelectItem>
+                        <SelectItem value="bhopal">Bhopal</SelectItem>
+                        <SelectItem value="visakhapatnam">Visakhapatnam</SelectItem>
+                        <SelectItem value="pimpri-chinchwad">Pimpri-Chinchwad</SelectItem>
+                        <SelectItem value="patna">Patna</SelectItem>
+                        <SelectItem value="vadodara">Vadodara</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -282,6 +256,32 @@ export const LandPlotLocationDetailsStep: React.FC<LandPlotLocationDetailsStepPr
               )}
             />
           </div>
+
+          {/* Locality/Area */}
+          <FormField
+            control={form.control}
+            name="locality"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-sm font-medium text-gray-900">Locality/Area</FormLabel>
+                <FormControl>
+                  <div className="relative">
+                    <Input
+                      placeholder="Search 'Bellandur, Bengaluru, Karnataka'..."
+                      className="h-12 pl-10"
+                      {...field}
+                      ref={(el) => {
+                        field.ref(el)
+                        localityInputRef.current = el
+                      }}
+                    />
+                    <MapPin className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                  </div>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
           {showMap && (
             <div className="w-full h-64 md:h-80 rounded-lg border overflow-hidden">
