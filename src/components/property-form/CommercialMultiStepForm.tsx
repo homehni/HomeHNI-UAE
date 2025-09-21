@@ -143,13 +143,18 @@ const handleScheduleSubmit = (data: Partial<ScheduleInfo>) => {
     onSubmit(formData as CommercialFormData);
   };
 
+  const handleEdit = (step: number) => {
+    setIsSubmitted(false);
+    goToStep(step);
+  };
+
   const renderCurrentStep = () => {
     if (isSubmitted) {
       return (
         <CommercialPreviewStep
           formData={getFormData() as CommercialFormData}
           onBack={prevStep}
-          onEdit={goToStep}
+          onEdit={handleEdit}
           onSubmit={handleSubmit}
           currentStep={currentStep}
           totalSteps={7}
