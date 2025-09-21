@@ -157,7 +157,7 @@ export const CommercialSaleSaleDetailsStep = ({
             control={form.control}
             name="possessionDate"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="w-1/2">
                 <FormLabel className="text-sm font-medium text-gray-900">Possession Date</FormLabel>
                 <FormControl>
                   <Input 
