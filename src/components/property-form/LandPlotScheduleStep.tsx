@@ -46,6 +46,14 @@ export const LandPlotScheduleStep: React.FC<LandPlotScheduleStepProps> = ({
   const startTime = watch('startTime');
   const endTime = watch('endTime');
 
+  const handleFormSubmit = (data: ScheduleForm) => {
+    if (onSubmit) {
+      onSubmit(data);
+    } else {
+      onNext(data);
+    }
+  };
+
   return (
     <div className="bg-background p-6">
         <div className="text-left mb-8">
@@ -53,7 +61,7 @@ export const LandPlotScheduleStep: React.FC<LandPlotScheduleStepProps> = ({
             Schedule Property Visits
           </h2>
         </div>
-        <form onSubmit={handleSubmit(onNext)} className="space-y-8">
+        <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-8">
           {/* Informational Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Flexible Timing Card */}
