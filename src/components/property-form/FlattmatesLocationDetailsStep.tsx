@@ -231,55 +231,58 @@ export const FlattmatesLocationDetailsStep: React.FC<FlattmatesLocationDetailsSt
             )}
           />
 
-          {/* Locality/Area Field */}
-          <FormField
-            control={form.control}
-            name="locality"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-sm font-medium text-gray-700 flex items-center gap-2">
-                  <MapPin className="h-4 w-4 text-red-500" />
-                  Locality/Area *
-                </FormLabel>
-                <FormControl>
-                  <div className="relative">
-                    <Input
-                      placeholder="Search 'Bellandur, Bengaluru, Karnataka'..."
-                      className="h-12 pl-10"
-                      {...field}
-                      ref={(el) => {
-                        field.ref(el)
-                        localityInputRef.current = el
-                      }}
-                    />
-                    <MapPin className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                  </div>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          {/* Locality/Area and Landmark Fields - Side by side */}
+          <div className="grid grid-cols-2 gap-4">
+            {/* Locality/Area Field */}
+            <FormField
+              control={form.control}
+              name="locality"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-sm font-medium text-gray-700 flex items-center gap-2">
+                    <MapPin className="h-4 w-4 text-red-500" />
+                    Locality/Area *
+                  </FormLabel>
+                  <FormControl>
+                    <div className="relative">
+                      <Input
+                        placeholder="Search 'Bellandur, Bengaluru, Karnataka'..."
+                        className="h-12 pl-10"
+                        {...field}
+                        ref={(el) => {
+                          field.ref(el)
+                          localityInputRef.current = el
+                        }}
+                      />
+                      <MapPin className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          {/* Landmark Field */}
-          <FormField
-            control={form.control}
-            name="landmark"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-sm font-medium text-gray-700">
-                  Landmark (Optional)
-                </FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="e.g., Near Metro Station"
-                    className="h-12"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+            {/* Landmark Field */}
+            <FormField
+              control={form.control}
+              name="landmark"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-sm font-medium text-gray-700">
+                    Landmark (Optional)
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="e.g., Near Metro Station"
+                      className="h-12"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
 
           {showMap && (
             <div className="w-full h-64 md:h-80 rounded-lg border overflow-hidden">
