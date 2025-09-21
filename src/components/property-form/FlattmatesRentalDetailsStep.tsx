@@ -70,7 +70,6 @@ export function FlattmatesRentalDetailsStep({
     <div className="max-w-2xl mx-auto">
       <div className="text-left mb-8">
         <h2 className="text-2xl font-bold text-red-600 mb-2">Rental Details</h2>
-        <p className="text-muted-foreground">Set your rental expectations and terms</p>
       </div>
 
           <div className="p-8">
