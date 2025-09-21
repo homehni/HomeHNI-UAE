@@ -8,8 +8,6 @@ import { useToast } from "@/hooks/use-toast";
 import { Building2, Users, CreditCard, Calculator, TrendingUp, FileText, MapPin, Crown, Clock, CheckCircle, Shield, Star, X, Plus, Minus, Globe, Shield as ShieldCheck, Headphones, Smartphone, Download, Home, Percent, DollarSign } from "lucide-react";
 
 const LoansEmbedded = () => {
-  const [statesData, setStatesData] = useState<any>(null);
-  
   // Major cities in India
   const majorCities = [
     "Mumbai", "Delhi", "Bangalore", "Hyderabad", "Ahmedabad", "Chennai", "Kolkata", "Surat", "Pune", "Jaipur",
@@ -131,20 +129,6 @@ const LoansEmbedded = () => {
   }];
 
   const { toast } = useToast();
-
-  // Load states data (keeping for potential future use)
-  useEffect(() => {
-    const loadStatesData = async () => {
-      try {
-        const response = await fetch('/data/india_states_cities.json');
-        const data = await response.json();
-        setStatesData(data);
-      } catch (error) {
-        console.error('Failed to load states data:', error);
-      }
-    };
-    loadStatesData();
-  }, []);
 
   return (
     <div className="bg-background">
@@ -292,12 +276,12 @@ const LoansEmbedded = () => {
                 });
                 form.reset();
               }}>
-                <Input 
-                  id="loan-name-mobile" 
-                  name="name" 
-                  placeholder="Name" 
+                <Input
+                  id="loan-name-mobile"
+                  name="name"
+                  placeholder="Name"
                   className="h-12 text-base bg-background"
-                  required 
+                  required
                 />
 
                 <div className="flex gap-3">
@@ -311,21 +295,21 @@ const LoansEmbedded = () => {
                       <SelectItem value="+44">🇬🇧 +44</SelectItem>
                     </SelectContent>
                   </Select>
-                  <Input 
-                    id="loan-phone-mobile" 
-                    name="phone" 
-                    type="tel" 
-                    placeholder="Phone Number" 
-                    className="flex-1 h-12 text-base bg-background" 
-                    required 
+                  <Input
+                    id="loan-phone-mobile"
+                    name="phone"
+                    type="tel"
+                    placeholder="Phone Number"
+                    className="flex-1 h-12 text-base bg-background"
+                    required
                   />
                 </div>
 
-                <Input 
-                  id="loan-email-mobile" 
-                  name="email" 
-                  type="email" 
-                  placeholder="Email ID" 
+                <Input
+                  id="loan-email-mobile"
+                  name="email"
+                  type="email"
+                  placeholder="Email ID"
                   className="h-12 text-base bg-background"
                 />
 
@@ -371,11 +355,11 @@ const LoansEmbedded = () => {
                     </SelectContent>
                   </Select>
 
-                  <Input 
-                    id="loan-amount-mobile" 
-                    name="amount" 
-                    type="number" 
-                    placeholder="Loan Amount Required" 
+                  <Input
+                    id="loan-amount-mobile"
+                    name="amount"
+                    type="number"
+                    placeholder="Loan Amount Required"
                     className="flex-1 h-12 text-base bg-background"
                   />
                 </div>
@@ -407,10 +391,10 @@ const LoansEmbedded = () => {
                     Competitive Interest Rates
                   </h3>
                   <p className="text-sm text-muted-foreground">
-                    Starting from 8.5% per annum with flexible repayment options
+                    Starting from 8.5% per annum
                   </p>
                 </div>
-
+                
                 <div className="space-y-3">
                   <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
                     <Clock className="w-5 h-5 text-red-600" />
@@ -419,7 +403,7 @@ const LoansEmbedded = () => {
                     Quick Approval
                   </h3>
                   <p className="text-sm text-muted-foreground">
-                    Get loan approval in just 48-72 hours with minimal documentation
+                    Pre-approval in 48-72 hours
                   </p>
                 </div>
 
@@ -431,269 +415,216 @@ const LoansEmbedded = () => {
                     Minimal Documentation
                   </h3>
                   <p className="text-sm text-muted-foreground">
-                    Simple paperwork with digital documentation process
+                    Hassle-free paperwork process
                   </p>
                 </div>
 
                 <div className="space-y-3">
                   <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
-                    <Users className="w-5 h-5 text-red-600" />
+                    <Headphones className="w-5 h-5 text-red-600" />
                   </div>
                   <h3 className="text-base font-semibold text-foreground">
-                    Dedicated Loan Advisor
+                    Expert Guidance
                   </h3>
                   <p className="text-sm text-muted-foreground">
-                    Personal guidance throughout the loan process
-                  </p>
-                </div>
-
-                <div className="space-y-3">
-                  <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
-                    <Building2 className="w-5 h-5 text-red-600" />
-                  </div>
-                  <h3 className="text-base font-semibold text-foreground">
-                    Free Property Valuation
-                  </h3>
-                  <p className="text-sm text-muted-foreground">
-                    Professional property assessment at no extra cost
-                  </p>
-                </div>
-
-                <div className="space-y-3">
-                  <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
-                    <DollarSign className="w-5 h-5 text-red-600" />
-                  </div>
-                  <h3 className="text-base font-semibold text-foreground">
-                    Zero Processing Fees
-                  </h3>
-                  <p className="text-sm text-muted-foreground">
-                    No hidden charges or processing fees on select loan products
+                    Dedicated loan advisors
                   </p>
                 </div>
               </div>
             </div>
-            
-            {/* Right side spacing for sticky form */}
-            <div className="hidden lg:block"></div>
-          </div>
-        </div>
-      </section>
 
-      {/* Loan Services Info Section */}
-      <section className="py-16 px-4 bg-muted/30">
-        <div className="container mx-auto">
-          <div className="grid lg:grid-cols-2 gap-16 items-start">
-            <div className="max-w-3xl">
-              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
-                Comprehensive Loan Solutions
-              </h2>
-              <div className="text-muted-foreground space-y-4 text-sm leading-relaxed">
-                <p>
-                  Whether you're looking to purchase your dream home, expand your business, or leverage your 
-                  property for additional funds, our comprehensive loan solutions are designed to meet your 
-                  unique financial needs. With competitive interest rates and quick approval processes, we make 
-                  borrowing simple and stress-free.
-                </p>
-                <p>
-                  Our team of experienced loan advisors provides personalized guidance throughout the entire 
-                  process, from initial consultation to loan disbursement. We understand that every financial 
-                  situation is unique, which is why we offer flexible terms and customized solutions to help 
-                  you achieve your goals.
-                </p>
-                <p>
-                  With our digital-first approach, minimal documentation requirements, and transparent fee 
-                  structure, getting a loan has never been easier. Join thousands of satisfied customers who 
-                  have trusted us with their financial needs and experienced the difference of working with 
-                  a truly customer-centric lending partner.
-                </p>
+            <div className="flex justify-center lg:justify-end">
+              <div className="w-full max-w-md aspect-square bg-gradient-to-br from-red-100 to-red-50 rounded-2xl flex items-center justify-center">
+                <div className="text-center space-y-4">
+                  <div className="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center mx-auto">
+                    <DollarSign className="w-8 h-8 text-white" />
+                  </div>
+                  <h3 className="text-xl font-bold text-foreground">Loan Amount</h3>
+                  <p className="text-3xl font-bold text-red-600">Up to ₹5 Cr</p>
+                  <p className="text-muted-foreground">Based on property value</p>
+                </div>
               </div>
             </div>
-            
-            {/* Right side spacing for sticky form */}
-            <div className="hidden lg:block"></div>
           </div>
         </div>
       </section>
 
-      {/* Loan Services */}
+      {/* Comprehensive Loan Solutions Section */}
+      <section className="py-16 px-4 bg-muted/30">
+        <div className="container mx-auto text-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+            Comprehensive Loan Solutions
+          </h2>
+          <p className="text-lg text-muted-foreground mb-12 max-w-2xl mx-auto">
+            From home purchases to business expansion, we provide tailored loan solutions for all your financial needs.
+          </p>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {services.map((service, index) => (
+              <Card key={index} className="p-6 hover:shadow-lg transition-shadow bg-background border border-border">
+                <CardContent className="p-0 text-center">
+                  <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+                    <service.icon className="w-6 h-6 text-red-600" />
+                  </div>
+                  <h3 className="text-lg font-semibold text-foreground mb-2">{service.title}</h3>
+                  <p className="text-muted-foreground">{service.description}</p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Our Loan Services Section */}
       <section className="py-16 px-4 bg-background">
         <div className="container mx-auto">
-          <div className="grid lg:grid-cols-2 gap-16 items-start">
-            <div className="max-w-3xl">
-              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
-                Our Loan Services
-              </h2>
-              <div className="grid gap-6">
-                {services.map((service, index) => {
-                  const IconComponent = service.icon;
-                  return (
-                    <div key={index} className="flex gap-4 p-6 bg-card rounded-lg border">
-                      <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                        <IconComponent className="w-6 h-6 text-red-600" />
-                      </div>
-                      <div>
-                        <h3 className="text-lg font-semibold text-foreground mb-2">{service.title}</h3>
-                        <p className="text-muted-foreground text-sm">{service.description}</p>
-                      </div>
-                    </div>
-                  );
-                })}
+          <h2 className="text-3xl md:text-4xl font-bold text-center text-foreground mb-12">Our Loan Services</h2>
+          
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="text-center space-y-4">
+              <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mx-auto">
+                <Home className="w-8 h-8 text-white" />
               </div>
+              <h3 className="text-xl font-bold text-foreground">Home Loans</h3>
+              <p className="text-muted-foreground">Competitive interest rates starting from 8.5% per annum for your dream home purchase.</p>
+              <ul className="text-sm text-muted-foreground space-y-1">
+                <li>• Loan amount up to ₹5 crores</li>
+                <li>• Tenure up to 30 years</li>
+                <li>• Zero processing fees*</li>
+              </ul>
             </div>
-            
-            {/* Right side spacing for sticky form */}
-            <div className="hidden lg:block"></div>
+
+            <div className="text-center space-y-4">
+              <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center mx-auto">
+                <Building2 className="w-8 h-8 text-white" />
+              </div>
+              <h3 className="text-xl font-bold text-foreground">Loan Against Property</h3>
+              <p className="text-muted-foreground">Leverage your property for business expansion or personal financial needs.</p>
+              <ul className="text-sm text-muted-foreground space-y-1">
+                <li>• Up to 70% of property value</li>
+                <li>• Flexible repayment options</li>
+                <li>• Quick disbursement</li>
+              </ul>
+            </div>
+
+            <div className="text-center space-y-4">
+              <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center mx-auto">
+                <TrendingUp className="w-8 h-8 text-white" />
+              </div>
+              <h3 className="text-xl font-bold text-foreground">Balance Transfer</h3>
+              <p className="text-muted-foreground">Switch your existing loan to us and save on EMIs with lower interest rates.</p>
+              <ul className="text-sm text-muted-foreground space-y-1">
+                <li>• Save up to ₹5 lakhs in interest</li>
+                <li>• Top-up facility available</li>
+                <li>• Free legal assistance</li>
+              </ul>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Stats Section */}
+      {/* Trusted by Thousands Section */}
       <section className="py-16 px-4 bg-muted/30">
-        <div className="container mx-auto">
-          <div className="grid lg:grid-cols-2 gap-16 items-start">
-            <div className="max-w-3xl">
-              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
-                Trusted by Thousands
-              </h2>
-              <div className="grid grid-cols-2 gap-8">
-                <div className="text-center">
-                  <div className="text-4xl md:text-5xl font-bold text-red-600 mb-2">₹500Cr+</div>
-                  <p className="text-muted-foreground">Loans Disbursed</p>
-                </div>
-                <div className="text-center">
-                  <div className="text-4xl md:text-5xl font-bold text-red-600 mb-2">10K+</div>
-                  <p className="text-muted-foreground">Happy Customers</p>
-                </div>
-                <div className="text-center">
-                  <div className="text-4xl md:text-5xl font-bold text-red-600 mb-2">48hrs</div>
-                  <p className="text-muted-foreground">Average Approval Time</p>
-                </div>
-                <div className="text-center">
-                  <div className="text-4xl md:text-5xl font-bold text-red-600 mb-2">98%</div>
-                  <p className="text-muted-foreground">Customer Satisfaction</p>
-                </div>
-              </div>
+        <div className="container mx-auto text-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-12">Trusted by Thousands</h2>
+          
+          <div className="grid md:grid-cols-4 gap-8">
+            <div className="space-y-2">
+              <div className="text-4xl font-bold text-red-600">50K+</div>
+              <p className="text-muted-foreground">Happy Customers</p>
             </div>
-            
-            {/* Right side spacing for sticky form */}
-            <div className="hidden lg:block"></div>
+            <div className="space-y-2">
+              <div className="text-4xl font-bold text-red-600">₹1000Cr+</div>
+              <p className="text-muted-foreground">Loans Disbursed</p>
+            </div>
+            <div className="space-y-2">
+              <div className="text-4xl font-bold text-red-600">48 Hrs</div>
+              <p className="text-muted-foreground">Quick Approval</p>
+            </div>
+            <div className="space-y-2">
+              <div className="text-4xl font-bold text-red-600">15+</div>
+              <p className="text-muted-foreground">Years Experience</p>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Comparison Table */}
+      {/* Comparison Table Section */}
       <section className="py-16 px-4 bg-background">
         <div className="container mx-auto">
-          <div className="grid lg:grid-cols-2 gap-16 items-start">
-            <div className="max-w-3xl">
-              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
-                Why Home HNI is Better
-              </h2>
-              <div className="bg-card rounded-xl border overflow-hidden">
-                <div className="grid grid-cols-3 gap-4 p-4 bg-muted/50 font-semibold text-sm">
-                  <div>Features</div>
-                  <div className="text-center">Home HNI</div>
-                  <div className="text-center">Others</div>
+          <h2 className="text-3xl md:text-4xl font-bold text-center text-foreground mb-12">Why Choose HomeHNI Over Others?</h2>
+          
+          <div className="max-w-4xl mx-auto">
+            <div className="bg-card border border-border rounded-lg overflow-hidden">
+              <div className="grid grid-cols-3 bg-muted text-center py-4">
+                <div className="font-semibold text-foreground">Features</div>
+                <div className="font-semibold text-foreground">HomeHNI</div>
+                <div className="font-semibold text-foreground">Others</div>
+              </div>
+              
+              {comparisonData.map((item, index) => (
+                <div key={index} className={`grid grid-cols-3 text-center py-3 ${index % 2 === 0 ? 'bg-muted/50' : 'bg-background'}`}>
+                  <div className="text-foreground font-medium">{item.feature}</div>
+                  <div>{item.homeHNI ? <CheckCircle className="w-5 h-5 text-green-600 mx-auto" /> : <X className="w-5 h-5 text-red-500 mx-auto" />}</div>
+                  <div>{item.others ? <CheckCircle className="w-5 h-5 text-green-600 mx-auto" /> : <X className="w-5 h-5 text-red-500 mx-auto" />}</div>
                 </div>
-                {comparisonData.map((item, index) => (
-                  <div key={index} className="grid grid-cols-3 gap-4 p-4 border-t text-sm">
-                    <div className="text-foreground">{item.feature}</div>
-                    <div className="text-center">
-                      {item.homeHNI ? (
-                        <CheckCircle className="w-4 h-4 text-red-600 mx-auto" />
-                      ) : (
-                        <X className="w-4 h-4 text-red-500 mx-auto" />
-                      )}
-                    </div>
-                    <div className="text-center">
-                      {item.others ? (
-                        <CheckCircle className="w-4 h-4 text-red-600 mx-auto" />
-                      ) : (
-                        <X className="w-4 h-4 text-red-500 mx-auto" />
-                      )}
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Customer Testimonials Section */}
+      <section className="py-16 px-4 bg-muted/30">
+        <div className="container mx-auto">
+          <h2 className="text-3xl md:text-4xl font-bold text-center text-foreground mb-12">What Our Customers Say</h2>
+          
+          <div className="grid md:grid-cols-3 gap-8">
+            {testimonials.map((testimonial, index) => (
+              <Card key={index} className="p-6 bg-background border border-border">
+                <CardContent className="p-0">
+                  <div className="flex items-center mb-4">
+                    <img
+                      src={testimonial.image}
+                      alt={testimonial.name}
+                      className="w-12 h-12 rounded-full object-cover mr-4"
+                    />
+                    <div>
+                      <h4 className="font-semibold text-foreground">{testimonial.name}</h4>
+                      <p className="text-sm text-muted-foreground">{testimonial.role}</p>
                     </div>
                   </div>
-                ))}
-              </div>
-            </div>
-            
-            {/* Right side spacing for sticky form */}
-            <div className="hidden lg:block"></div>
+                  
+                  <div className="flex mb-3">
+                    {[...Array(testimonial.rating)].map((_, i) => (
+                      <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                    ))}
+                  </div>
+                  
+                  <p className="text-muted-foreground">{testimonial.text}</p>
+                </CardContent>
+              </Card>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Testimonials */}
-      <section className="py-16 px-4 bg-muted/30">
-        <div className="container mx-auto">
-          <div className="grid lg:grid-cols-2 gap-16 items-start">
-            <div className="max-w-3xl">
-              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
-                What Our Customers Say
-              </h2>
-              <div className="space-y-6">
-                {testimonials.map((testimonial, index) => (
-                  <Card key={index} className="p-6">
-                    <CardContent className="p-0">
-                      <div className="flex items-start gap-4">
-                        <img 
-                          src={testimonial.image} 
-                          alt={testimonial.name}
-                          className="w-12 h-12 rounded-full object-cover"
-                        />
-                        <div className="flex-1">
-                          <div className="flex items-center gap-1 mb-2">
-                            {[...Array(testimonial.rating)].map((_, i) => (
-                              <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                            ))}
-                          </div>
-                          <p className="text-muted-foreground text-sm mb-3">"{testimonial.text}"</p>
-                          <div>
-                            <p className="font-semibold text-sm">{testimonial.name}</p>
-                            <p className="text-xs text-muted-foreground">{testimonial.role}</p>
-                          </div>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            </div>
-            
-            {/* Right side spacing for sticky form */}
-            <div className="hidden lg:block"></div>
-          </div>
-        </div>
-      </section>
-
-      {/* Target Audience */}
+      {/* Target Audience Section */}
       <section className="py-16 px-4 bg-background">
-        <div className="container mx-auto">
-          <div className="grid lg:grid-cols-2 gap-16 items-start">
-            <div className="max-w-3xl">
-              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
-                Who We Serve
-              </h2>
-              <div className="grid gap-6">
-                {targetAudience.map((audience, index) => {
-                  const IconComponent = audience.icon;
-                  return (
-                    <div key={index} className="flex gap-4 p-6 bg-card rounded-lg border">
-                      <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                        <IconComponent className="w-6 h-6 text-red-600" />
-                      </div>
-                      <div>
-                        <h3 className="text-lg font-semibold text-foreground mb-2">{audience.title}</h3>
-                        <p className="text-muted-foreground text-sm">{audience.description}</p>
-                      </div>
-                    </div>
-                  );
-                })}
+        <div className="container mx-auto text-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">Perfect For</h2>
+          <p className="text-lg text-muted-foreground mb-12">Our loan solutions are designed for various customer needs</p>
+          
+          <div className="grid md:grid-cols-3 gap-8">
+            {targetAudience.map((audience, index) => (
+              <div key={index} className="space-y-4">
+                <div className="w-16 h-16 bg-red-100 rounded-2xl flex items-center justify-center mx-auto">
+                  <audience.icon className="w-8 h-8 text-red-600" />
+                </div>
+                <h3 className="text-xl font-bold text-foreground">{audience.title}</h3>
+                <p className="text-muted-foreground">{audience.description}</p>
               </div>
-            </div>
-            
-            {/* Right side spacing for sticky form */}
-            <div className="hidden lg:block"></div>
+            ))}
           </div>
         </div>
       </section>
@@ -701,98 +632,37 @@ const LoansEmbedded = () => {
       {/* FAQ Section */}
       <section className="py-16 px-4 bg-muted/30">
         <div className="container mx-auto">
-          <div className="grid lg:grid-cols-2 gap-16 items-start">
-            <div className="max-w-3xl">
-              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
-                Frequently Asked Questions
-              </h2>
-              <Accordion type="single" collapsible className="space-y-4">
-                {faqs.map((faq, index) => (
-                  <AccordionItem key={index} value={`item-${index}`} className="bg-card border rounded-lg px-6">
-                    <AccordionTrigger className="text-left font-semibold text-sm py-4">
-                      {faq.question}
-                    </AccordionTrigger>
-                    <AccordionContent className="text-muted-foreground text-sm pb-4">
-                      {faq.answer}
-                    </AccordionContent>
-                  </AccordionItem>
-                ))}
-              </Accordion>
-            </div>
-            
-            {/* Right side spacing for sticky form */}
-            <div className="hidden lg:block"></div>
+          <h2 className="text-3xl md:text-4xl font-bold text-center text-foreground mb-12">Frequently Asked Questions</h2>
+          
+          <div className="max-w-3xl mx-auto">
+            <Accordion type="single" collapsible className="w-full">
+              {faqs.map((faq, index) => (
+                <AccordionItem key={index} value={`item-${index}`}>
+                  <AccordionTrigger className="text-left font-semibold text-foreground">
+                    {faq.question}
+                  </AccordionTrigger>
+                  <AccordionContent className="text-muted-foreground">
+                    {faq.answer}
+                  </AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
           </div>
         </div>
       </section>
 
       {/* Service Tags Section */}
-      <section className="py-16 px-4 bg-background">
-        <div className="container mx-auto">
-          <div className="grid lg:grid-cols-2 gap-16 items-start">
-            <div className="max-w-3xl">
-              <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-8">
-                Loan Services
-              </h2>
-              
-              <div className="space-y-6 mb-8">
-                <div className="flex flex-wrap gap-3">
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Home Loans in Hyderabad</span>
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Home Loans in Bangalore</span>
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Home Loans in Mumbai</span>
-                </div>
-                <div className="flex flex-wrap gap-3">
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Home Loans in Pune</span>
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Home Loans in Delhi</span>
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Home Loans in Chennai</span>
-                </div>
-                <div className="flex flex-wrap gap-3">
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Loan Against Property</span>
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Business Loans</span>
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Construction Loans</span>
-                </div>
-                <div className="flex flex-wrap gap-3">
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Balance Transfer Loans</span>
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Top-up Loans</span>
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Quick Loan Approval</span>
-                </div>
-                <div className="flex flex-wrap gap-3">
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Low Interest Rate Loans</span>
-                </div>
-              </div>
-
-              <h3 className="text-2xl md:text-3xl font-bold text-foreground mb-6">
-                Property Loan Services
-              </h3>
-              
-              <div className="space-y-3 mb-8">
-                <div className="flex flex-wrap gap-3">
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Loan Against Property in Hyderabad</span>
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Property Valuation Services</span>
-                </div>
-              </div>
-
-              <h3 className="text-2xl md:text-3xl font-bold text-foreground mb-6">
-                Home Loan Documentation
-              </h3>
-              
-              <div className="space-y-3">
-                <div className="flex flex-wrap gap-3">
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Home Loan Documents</span>
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Loan Processing Services</span>
-                </div>
-                <div className="flex flex-wrap gap-3">
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Digital Loan Application</span>
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Instant Loan Approval</span>
-                </div>
-                <div className="flex flex-wrap gap-3">
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Zero Processing Fee Loans</span>
-                </div>
-              </div>
-            </div>
-            
-            {/* Right side spacing for sticky form */}
-            <div className="hidden lg:block"></div>
+      <section className="py-12 px-4 bg-background">
+        <div className="container mx-auto text-center">
+          <div className="flex flex-wrap justify-center gap-3">
+            <span className="px-4 py-2 bg-red-100 text-red-700 rounded-full text-sm font-medium">Home Loans Mumbai</span>
+            <span className="px-4 py-2 bg-red-100 text-red-700 rounded-full text-sm font-medium">Property Loans Delhi</span>
+            <span className="px-4 py-2 bg-red-100 text-red-700 rounded-full text-sm font-medium">Business Loans Bangalore</span>
+            <span className="px-4 py-2 bg-red-100 text-red-700 rounded-full text-sm font-medium">Loan Against Property</span>
+            <span className="px-4 py-2 bg-red-100 text-red-700 rounded-full text-sm font-medium">Balance Transfer</span>
+            <span className="px-4 py-2 bg-red-100 text-red-700 rounded-full text-sm font-medium">Construction Finance</span>
+            <span className="px-4 py-2 bg-red-100 text-red-700 rounded-full text-sm font-medium">Quick Loan Approval</span>
+            <span className="px-4 py-2 bg-red-100 text-red-700 rounded-full text-sm font-medium">Low Interest Rates</span>
           </div>
         </div>
       </section>
