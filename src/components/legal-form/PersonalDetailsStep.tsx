@@ -20,49 +20,21 @@ interface PersonalDetailsStepProps {
 }
 
 const PersonalDetailsStep = ({ data, onChange }: PersonalDetailsStepProps) => {
-  const [indiaData, setIndiaData] = useState<Record<string, string[]>>({});
-  const [availableStates, setAvailableStates] = useState<string[]>([]);
-  const [availableCities, setAvailableCities] = useState<string[]>([]);
+  // Major cities in India
+  const majorCities = [
+    "Mumbai", "Delhi", "Bangalore", "Hyderabad", "Ahmedabad", "Chennai", "Kolkata", "Surat", "Pune", "Jaipur",
+    "Lucknow", "Kanpur", "Nagpur", "Indore", "Thane", "Bhopal", "Visakhapatnam", "Pimpri-Chinchwad", "Patna", "Vadodara",
+    "Ghaziabad", "Ludhiana", "Agra", "Nashik", "Faridabad", "Meerut", "Rajkot", "Kalyan-Dombivli", "Vasai-Virar", "Varanasi",
+    "Srinagar", "Aurangabad", "Dhanbad", "Amritsar", "Navi Mumbai", "Allahabad", "Ranchi", "Howrah", "Coimbatore", "Jabalpur",
+    "Gwalior", "Vijayawada", "Jodhpur", "Madurai", "Raipur", "Kota", "Guwahati", "Chandigarh", "Solapur", "Hubli-Dharwad"
+  ];
 
-  // Load India states and cities data
+  // Set India as default when component mounts
   useEffect(() => {
-    const loadIndiaData = async () => {
-      try {
-        const response = await fetch('/data/india_states_cities.json');
-        const data = await response.json();
-        setIndiaData(data);
-      } catch (error) {
-        console.error('Failed to load India data:', error);
-      }
-    };
-    loadIndiaData();
+    if (!data.country) {
+      onChange({ country: 'india' });
+    }
   }, []);
-
-  // Update available states when country changes
-  useEffect(() => {
-    if (data.country === 'India') {
-      setAvailableStates(Object.keys(indiaData));
-    } else {
-      setAvailableStates([]);
-    }
-    // Reset state and city when country changes
-    if (data.state) {
-      onChange({ state: '', city: '' });
-    }
-  }, [data.country, indiaData]);
-
-  // Update available cities when state changes
-  useEffect(() => {
-    if (data.country === 'India' && data.state && indiaData[data.state]) {
-      setAvailableCities(indiaData[data.state]);
-    } else {
-      setAvailableCities([]);
-    }
-    // Reset city when state changes
-    if (data.city) {
-      onChange({ city: '' });
-    }
-  }, [data.state, data.country, indiaData]);
   return (
     <div className="space-y-6">
       <div className="text-center mb-8">
@@ -129,48 +101,22 @@ const PersonalDetailsStep = ({ data, onChange }: PersonalDetailsStepProps) => {
             <MapPin className="h-4 w-4 mr-2" />
             Location <span className="text-red-500 ml-1">*</span>
           </Label>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-1">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-1">
             <div>
               <Select
-                value={data.country}
+                value={data.country || 'india'}
                 onValueChange={(value) => onChange({ country: value })}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="Country" />
+                  <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="India">India</SelectItem>
-                  <SelectItem value="USA">United States</SelectItem>
-                  <SelectItem value="UK">United Kingdom</SelectItem>
-                  <SelectItem value="Canada">Canada</SelectItem>
-                  <SelectItem value="Australia">Australia</SelectItem>
-                  <SelectItem value="Other">Other</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div>
-              <Select
-                value={data.state}
-                onValueChange={(value) => onChange({ state: value })}
-                disabled={data.country !== 'India' || availableStates.length === 0}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder={data.country === 'India' ? 'Select State' : 'State'} />
-                </SelectTrigger>
-                <SelectContent>
-                  {data.country === 'India' ? (
-                    availableStates.map((state) => (
-                      <SelectItem key={state} value={state}>
-                        {state}
-                      </SelectItem>
-                    ))
-                  ) : (
-                    <>
-                      <SelectItem value="Other State">Other State</SelectItem>
-                      <SelectItem value="Not Applicable">Not Applicable</SelectItem>
-                    </>
-                  )}
+                  <SelectItem value="india">India</SelectItem>
+                  <SelectItem value="usa">United States</SelectItem>
+                  <SelectItem value="uk">United Kingdom</SelectItem>
+                  <SelectItem value="canada">Canada</SelectItem>
+                  <SelectItem value="australia">Australia</SelectItem>
+                  <SelectItem value="other">Other</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -179,24 +125,16 @@ const PersonalDetailsStep = ({ data, onChange }: PersonalDetailsStepProps) => {
               <Select
                 value={data.city}
                 onValueChange={(value) => onChange({ city: value })}
-                disabled={!data.state || (data.country === 'India' && availableCities.length === 0)}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder={data.country === 'India' && data.state ? 'Select City' : 'City'} />
+                  <SelectValue placeholder="Select City" />
                 </SelectTrigger>
                 <SelectContent>
-                  {data.country === 'India' && data.state ? (
-                    availableCities.map((city) => (
-                      <SelectItem key={city} value={city}>
-                        {city}
-                      </SelectItem>
-                    ))
-                  ) : (
-                    <>
-                      <SelectItem value="Other City">Other City</SelectItem>
-                      <SelectItem value="Not Applicable">Not Applicable</SelectItem>
-                    </>
-                  )}
+                  {majorCities.map((city) => (
+                    <SelectItem key={city} value={city.toLowerCase()}>
+                      {city}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
