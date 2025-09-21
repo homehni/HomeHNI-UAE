@@ -1,6 +1,8 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import { format } from 'date-fns';
+import { CalendarIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { PriceInput } from '@/components/ui/price-input';
@@ -8,6 +10,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Textarea } from '@/components/ui/textarea';
+import { Calendar } from '@/components/ui/calendar';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { cn } from '@/lib/utils';
 import { CommercialSaleDetails } from '@/types/commercialSaleProperty';
 import { formatPriceDisplay } from '@/utils/priceFormatter';
 
@@ -157,17 +162,46 @@ export const CommercialSaleSaleDetailsStep = ({
             control={form.control}
             name="possessionDate"
             render={({ field }) => (
-              <FormItem className="w-1/2">
+              <FormItem className="w-1/2 flex flex-col">
                 <FormLabel className="text-sm font-medium text-gray-900">Possession Date</FormLabel>
-                <FormControl>
-                  <Input 
-                    type="date" 
-                    className="h-12"
-                    {...field} 
-                    min={new Date().toISOString().split('T')[0]}
-                    max={new Date(new Date().setMonth(new Date().getMonth() + 6)).toISOString().split('T')[0]}
-                  />
-                </FormControl>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <FormControl>
+                      <Button
+                        variant={"outline"}
+                        className={cn(
+                          "h-12 pl-3 text-left font-normal justify-start",
+                          !field.value && "text-muted-foreground"
+                        )}
+                      >
+                        {field.value ? (
+                          format(new Date(field.value), "dd/MM/yyyy")
+                        ) : (
+                          <span>Select date</span>
+                        )}
+                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                      </Button>
+                    </FormControl>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0 bg-white border shadow-lg z-50" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={field.value ? new Date(field.value) : undefined}
+                      onSelect={(date) => {
+                        field.onChange(date ? format(date, "yyyy-MM-dd") : "");
+                      }}
+                      disabled={(date) => {
+                        const today = new Date();
+                        today.setHours(0, 0, 0, 0);
+                        const maxDate = new Date();
+                        maxDate.setMonth(maxDate.getMonth() + 6);
+                        return date < today || date > maxDate;
+                      }}
+                      initialFocus
+                      className={cn("p-3 pointer-events-auto")}
+                    />
+                  </PopoverContent>
+                </Popover>
                 <FormMessage />
               </FormItem>
             )}
