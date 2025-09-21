@@ -286,7 +286,7 @@ const handleAuthClick = () => {
                           
                           {/* Phone Icon */}
                           <a 
-                            href="tel:+919876543210" 
+                            href="tel:+918074017388" 
                             className="w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50 hover:border-brand-red transition-all"
                             title="Call Us"
                           >
