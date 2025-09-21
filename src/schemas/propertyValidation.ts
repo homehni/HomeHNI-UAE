@@ -4,7 +4,7 @@ export const ownerInfoSchema = z.object({
   phoneNumber: z.string().optional(),
   whatsappUpdates: z.boolean().optional(),
   propertyType: z.enum(['Residential', 'Commercial', 'Land/Plot']).optional(),
-  listingType: z.enum(['Rent', 'Resale', 'PG/Hostel', 'Flatmates', 'Sale']).optional(),
+  listingType: z.enum(['Rent', 'Resale', 'PG/Hostel', 'Flatmates', 'Sale', 'Industrial land', 'Agricultural Land', 'Commercial land']).optional(),
 });
 
 export const propertyInfoSchema = z.object({

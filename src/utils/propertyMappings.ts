@@ -70,6 +70,9 @@ export const mapListingType = (listingType: string): string => {
     'Flatmates': 'rent', // Treat Flatmates as rentals
     'Buy': 'sale', // Map "Buy" to 'sale'
     'Lease': 'rent', // Map "Lease" to 'rent'
+    'Industrial land': 'sale', // Map land types to 'sale'
+    'Agricultural Land': 'sale',
+    'Commercial land': 'sale',
   };
   
   if (!listingType) return 'sale';

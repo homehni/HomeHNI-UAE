@@ -4,7 +4,7 @@ export interface OwnerInfo {
   email: string;
   whatsappUpdates: boolean;
   propertyType: 'Residential' | 'Commercial' | 'Land/Plot';
-  listingType: 'Rent' | 'Resale' | 'PG/Hostel' | 'Flatmates' | 'Sale';
+  listingType: 'Rent' | 'Resale' | 'PG/Hostel' | 'Flatmates' | 'Sale' | 'Industrial land' | 'Agricultural Land' | 'Commercial land';
 }
 
 export interface PropertyDetails {

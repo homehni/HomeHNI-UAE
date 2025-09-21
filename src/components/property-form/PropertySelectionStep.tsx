@@ -15,7 +15,7 @@ interface PropertySelectionData {
   city: string;
   whatsappUpdates: boolean;
   propertyType: 'Residential' | 'Commercial' | 'Land/Plot';
-  listingType: 'Rent' | 'Resale' | 'PG/Hostel' | 'Flatmates' | 'Sale';
+  listingType: 'Rent' | 'Resale' | 'PG/Hostel' | 'Flatmates' | 'Sale' | 'Industrial land' | 'Agricultural Land' | 'Commercial land';
 }
 
 interface PropertySelectionStepProps {
@@ -38,7 +38,7 @@ export const PropertySelectionStep: React.FC<PropertySelectionStepProps> = ({
       case 'Commercial':
         return ['Rent', 'Sale'];
       case 'Land/Plot':
-        return ['Resale'];
+        return ['Industrial land', 'Agricultural Land', 'Commercial land'];
       default: // Residential
         return ['Rent', 'Resale', 'PG/Hostel', 'Flatmates'];
     }
@@ -80,7 +80,7 @@ export const PropertySelectionStep: React.FC<PropertySelectionStepProps> = ({
         city,
         whatsappUpdates,
         propertyType: selectedPropertyType,
-        listingType: selectedListingType as 'Rent' | 'Resale' | 'PG/Hostel' | 'Flatmates' | 'Sale'
+        listingType: selectedListingType as 'Rent' | 'Resale' | 'PG/Hostel' | 'Flatmates' | 'Sale' | 'Industrial land' | 'Agricultural Land' | 'Commercial land'
       });
     } else {
       console.log('Form validation failed - missing required fields');

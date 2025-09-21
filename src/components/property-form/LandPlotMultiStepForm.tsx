@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useLandPlotPropertyForm } from '@/hooks/useLandPlotPropertyForm';
 import { LandPlotPropertyDetailsStep } from './LandPlotPropertyDetailsStep';
@@ -10,9 +11,9 @@ import GetTenantsFasterSection from '@/components/GetTenantsFasterSection';
 import { LandPlotSidebar } from './LandPlotSidebar';
 
 import { LandPlotScheduleStep } from './LandPlotScheduleStep';
-import { LandPlotPreviewStep } from './LandPlotPreviewStep';
+import { LandPlotSuccessStep } from './LandPlotSuccessStep';
 import { Badge } from '@/components/ui/badge';
-import { OwnerInfo } from '@/types/property';
+import { OwnerInfo, ScheduleInfo } from '@/types/property';
 import { LandPlotFormData } from '@/types/landPlotProperty';
 
 interface LandPlotMultiStepFormProps {
@@ -30,6 +31,9 @@ export const LandPlotMultiStepForm: React.FC<LandPlotMultiStepFormProps> = ({
   targetStep = null,
   createdSubmissionId
 }) => {
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const navigate = useNavigate();
+  
   console.log('LandPlotMultiStepForm rendering with props:', {
     isSubmitting,
     initialOwnerInfo,
@@ -128,24 +132,49 @@ export const LandPlotMultiStepForm: React.FC<LandPlotMultiStepFormProps> = ({
     scrollToTop();
   };
 
+  const handleScheduleSubmit = async (data: Partial<ScheduleInfo>) => {
+    console.log('LandPlotMultiStepForm handleScheduleSubmit called');
+    updateScheduleInfo(data);
+    
+    const formData = {
+      ownerInfo,
+      propertyInfo: {
+        plotDetails,
+        locationDetails,
+        saleDetails,
+        amenities,
+        gallery,
+        additionalInfo,
+        scheduleInfo: data
+      }
+    };
+    
+    console.log('Complete form data for submission:', formData);
+    
+    await onSubmit(formData as LandPlotFormData);
+    setIsSubmitted(true);
+    scrollToTop();
+  };
+
+  const handleEdit = (step: number) => {
+    setIsSubmitted(false);
+    goToStep(step);
+  };
+
+  const handlePreviewListing = () => {
+    if (createdSubmissionId) {
+      window.open(`/property/${createdSubmissionId}`, '_blank');
+    }
+  };
+
+  const handleGoToDashboard = () => {
+    navigate('/dashboard');
+  };
+
 
   const handleScheduleNext = (data: any) => {
     updateScheduleInfo(data);
     nextStep();
-    scrollToTop();
-  };
-
-  const handleScheduleSubmit = async (data: any) => {
-    console.log('LandPlotMultiStepForm handleScheduleSubmit called');
-    console.log('Schedule data:', data);
-    
-    // Update schedule info, submit the property, then go to Preview
-    updateScheduleInfo(data);
-    const formData = getFormData();
-    console.log('Complete form data for submission:', formData);
-    
-    await onSubmit(formData as LandPlotFormData);
-    goToStep(7);
     scrollToTop();
   };
 
@@ -222,20 +251,19 @@ export const LandPlotMultiStepForm: React.FC<LandPlotMultiStepFormProps> = ({
                 />
               )}
 
-              {currentStep === 7 && (
-                <LandPlotPreviewStep
-                  formData={getFormData() as LandPlotFormData}
-                  onBack={prevStep}
-                  onEdit={goToStep}
-                  onSubmit={handleSubmit}
-                  isSubmitting={isSubmitting}
-                  previewPropertyId={createdSubmissionId || undefined}
+              {(currentStep === 7 || isSubmitted) && (
+                <LandPlotSuccessStep
+                  onPreviewListing={handlePreviewListing}
+                  onGoToDashboard={handleGoToDashboard}
+                  createdSubmissionId={createdSubmissionId}
+                  onEdit={handleEdit}
+                  gallery={gallery}
                 />
               )}
           </div>
 
-          {/* Sticky Bottom Navigation Bar - Hidden on Preview step */}
-          {currentStep !== 5 && (
+          {/* Sticky Bottom Navigation Bar - Hidden on Success step */}
+          {currentStep !== 5 && !isSubmitted && (
             <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-3 sm:p-4 z-50 shadow-lg">
             <div className="max-w-4xl mx-auto flex flex-col sm:flex-row gap-3 sm:gap-4 sm:justify-center">
               <Button 

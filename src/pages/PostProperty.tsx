@@ -49,7 +49,7 @@ export const PostProperty: React.FC = () => {
     city: string;
     whatsappUpdates: boolean;
     propertyType: 'Residential' | 'Commercial' | 'Land/Plot';
-    listingType: 'Rent' | 'Resale' | 'PG/Hostel' | 'Flatmates' | 'Sale';
+    listingType: 'Rent' | 'Resale' | 'PG/Hostel' | 'Flatmates' | 'Sale' | 'Industrial land' | 'Agricultural Land' | 'Commercial land';
   } | null>(null);
   const [targetStep, setTargetStep] = useState<number | null>(null);
   const [lastSubmissionId, setLastSubmissionId] = useState<string | null>(null);
@@ -210,7 +210,7 @@ export const PostProperty: React.FC = () => {
     city: string;
     whatsappUpdates: boolean;
     propertyType: 'Residential' | 'Commercial' | 'Land/Plot';
-    listingType: 'Rent' | 'Resale' | 'PG/Hostel' | 'Flatmates' | 'Sale';
+    listingType: 'Rent' | 'Resale' | 'PG/Hostel' | 'Flatmates' | 'Sale' | 'Industrial land' | 'Agricultural Land' | 'Commercial land';
   }) => {
     try {
       // Save contact data to database
@@ -268,6 +268,12 @@ export const PostProperty: React.FC = () => {
             setCurrentStep('resale-form');
           }
           break;
+        case 'Industrial land':
+        case 'Agricultural Land':
+        case 'Commercial land':
+          console.log(`Routing to land-plot-form for Land/Plot ${data.listingType}`);
+          setCurrentStep('land-plot-form');
+          break;
         case 'PG/Hostel':
           setCurrentStep('pg-hostel-form');
           break;
@@ -299,6 +305,11 @@ export const PostProperty: React.FC = () => {
           } else {
             setCurrentStep('resale-form');
           }
+          break;
+        case 'Industrial land':
+        case 'Agricultural Land':
+        case 'Commercial land':
+          setCurrentStep('land-plot-form');
           break;
         case 'PG/Hostel':
           setCurrentStep('pg-hostel-form');
