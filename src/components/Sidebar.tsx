@@ -277,7 +277,7 @@ const handleAuthClick = () => {
                         <div className="flex space-x-6 justify-start p-3">
                           {/* Email Icon */}
                           <a 
-                            href="mailto:assist@nobroker.in" 
+                            href="mailto:homehni8@gmail.com" 
                             className="w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50 hover:border-brand-red transition-all"
                             title="Send Email"
                           >
@@ -295,7 +295,7 @@ const handleAuthClick = () => {
                           
                           {/* WhatsApp Icon */}
                           <a 
-                            href="https://wa.me/919876543210?text=Hello%2C%20I%20would%20like%20to%20inquire%20about%20your%20services" 
+                            href="https://wa.me/8074017388?text=Hello%2C%20I%20would%20like%20to%20inquire%20about%20your%20services" 
                             target="_blank" 
                             rel="noopener noreferrer"
                             className="w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50 hover:border-green-500 transition-all"
