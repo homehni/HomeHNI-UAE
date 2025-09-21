@@ -247,7 +247,7 @@ export const CommercialRentalDetailsStep: React.FC<CommercialRentalDetailsStepPr
               />
             </div>
 
-            {/* Monthly Maintenance */}
+            {/* Monthly Maintenance and Lease Duration */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <FormField
                 control={form.control}
@@ -277,48 +277,6 @@ export const CommercialRentalDetailsStep: React.FC<CommercialRentalDetailsStepPr
                 )}
               />
 
-              {showMaintenanceInput && (
-                <FormField
-                  control={form.control}
-                  name="maintenanceCharges"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-sm font-medium text-gray-900">Maintenance Amount</FormLabel>
-                      <FormControl>
-                        <div className="relative">
-                          <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">₹</span>
-                          <Input 
-                            placeholder="Enter Amount"
-                            className="h-12 pl-8 pr-20 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
-                            type="number"
-                            min="1"
-                            inputMode="numeric"
-                            pattern="[0-9]*"
-                            onKeyDown={(e) => { if (['-','+','e','E','.'].includes(e.key)) e.preventDefault(); }}
-                            onPaste={(e) => { const text = e.clipboardData.getData('text'); const digits = text.replace(/[^0-9]/g, ''); if (digits !== text) { e.preventDefault(); field.onChange(digits ? Math.max(1, Number(digits)) : undefined); } }}
-                            value={field.value || ''}
-                            onChange={(e) => field.onChange(e.target.value ? Math.max(1, Number(e.target.value)) : undefined)}
-                          />
-                          <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-sm text-gray-500">/ Month</span>
-                        </div>
-                      </FormControl>
-                      {/* Maintenance amount in words display */}
-                      {field.value && field.value > 0 && (
-                        <div className="mt-2">
-                          <p className="text-sm text-gray-600">
-                            {formatExactPriceDisplay(field.value)}
-                          </p>
-                        </div>
-                      )}
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              )}
-            </div>
-
-            {/* Lease Duration and Lock-in Period */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <FormField
                 control={form.control}
                 name="leaseDuration"
@@ -345,7 +303,50 @@ export const CommercialRentalDetailsStep: React.FC<CommercialRentalDetailsStepPr
                   </FormItem>
                 )}
               />
+            </div>
 
+            {/* Maintenance Amount (if extra) */}
+            {showMaintenanceInput && (
+              <FormField
+                control={form.control}
+                name="maintenanceCharges"
+                render={({ field }) => (
+                  <FormItem className="w-1/2">
+                    <FormLabel className="text-sm font-medium text-gray-900">Maintenance Amount</FormLabel>
+                    <FormControl>
+                      <div className="relative">
+                        <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">₹</span>
+                        <Input 
+                          placeholder="Enter Amount"
+                          className="h-12 pl-8 pr-20 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
+                          type="number"
+                          min="1"
+                          inputMode="numeric"
+                          pattern="[0-9]*"
+                          onKeyDown={(e) => { if (['-','+','e','E','.'].includes(e.key)) e.preventDefault(); }}
+                          onPaste={(e) => { const text = e.clipboardData.getData('text'); const digits = text.replace(/[^0-9]/g, ''); if (digits !== text) { e.preventDefault(); field.onChange(digits ? Math.max(1, Number(digits)) : undefined); } }}
+                          value={field.value || ''}
+                          onChange={(e) => field.onChange(e.target.value ? Math.max(1, Number(e.target.value)) : undefined)}
+                        />
+                        <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-sm text-gray-500">/ Month</span>
+                      </div>
+                    </FormControl>
+                    {/* Maintenance amount in words display */}
+                    {field.value && field.value > 0 && (
+                      <div className="mt-2">
+                        <p className="text-sm text-gray-600">
+                          {formatExactPriceDisplay(field.value)}
+                        </p>
+                      </div>
+                    )}
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
+
+            {/* Lock-in Period and Available From */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <FormField
                 control={form.control}
                 name="lockinPeriod"
@@ -370,87 +371,60 @@ export const CommercialRentalDetailsStep: React.FC<CommercialRentalDetailsStepPr
                   </FormItem>
                 )}
               />
+
+              <FormField
+                control={form.control}
+                name="availableFrom"
+                render={({ field }) => {
+                  const [open, setOpen] = React.useState(false);
+                  
+                  return (
+                    <FormItem className="flex flex-col">
+                      <FormLabel className="text-sm font-medium text-gray-900">Available From</FormLabel>
+                      <Popover open={open} onOpenChange={setOpen}>
+                        <PopoverTrigger asChild>
+                          <FormControl>
+                            <Button
+                              variant={"outline"}
+                              className={cn(
+                                "h-12 pl-3 text-left font-normal justify-start",
+                                !field.value && "text-muted-foreground"
+                              )}
+                            >
+                              <CalendarIcon className="mr-2 h-4 w-4" />
+                              {field.value ? (
+                                format(new Date(field.value), "dd/MM/yyyy")
+                              ) : (
+                                <span>dd/mm/yyyy</span>
+                              )}
+                            </Button>
+                          </FormControl>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0 bg-white border shadow-lg z-50" align="start">
+                          <Calendar
+                            mode="single"
+                            selected={field.value ? new Date(field.value) : undefined}
+                            onSelect={(date) => {
+                              field.onChange(date ? format(date, "yyyy-MM-dd") : "");
+                              setOpen(false);
+                            }}
+                            disabled={(date) => {
+                              const today = new Date();
+                              today.setHours(0, 0, 0, 0);
+                              const maxDate = addMonths(today, 2); // 2 months for rent
+                              return date < today || date > maxDate;
+                            }}
+                            initialFocus
+                            className={cn("p-3 pointer-events-auto")}
+                          />
+                        </PopoverContent>
+                      </Popover>
+                      <FormMessage />
+                    </FormItem>
+                  );
+                }}
+              />
             </div>
-
-            {/* Operating Hours */}
-            {/* <FormField
-              control={form.control}
-              name="operatingHours"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-sm font-medium">Operating Hours</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <FormControl>
-                      <SelectTrigger className="h-12">
-                        <SelectValue placeholder="Select Operating Hours" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="9 AM - 6 PM">9 AM - 6 PM</SelectItem>
-                      <SelectItem value="10 AM - 7 PM">10 AM - 7 PM</SelectItem>
-                      <SelectItem value="24/7">24/7</SelectItem>
-                      <SelectItem value="Flexible">Flexible</SelectItem>
-                      <SelectItem value="Custom">Custom Hours</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            /> */}
-
-            {/* Available From */}
-            <FormField
-              control={form.control}
-              name="availableFrom"
-              render={({ field }) => {
-                const [open, setOpen] = React.useState(false);
-                
-                return (
-                  <FormItem className="flex flex-col w-1/2">
-                    <FormLabel className="text-sm font-medium text-gray-900">Available From</FormLabel>
-                    <Popover open={open} onOpenChange={setOpen}>
-                      <PopoverTrigger asChild>
-                        <FormControl>
-                          <Button
-                            variant={"outline"}
-                            className={cn(
-                              "h-12 pl-3 text-left font-normal justify-start",
-                              !field.value && "text-muted-foreground"
-                            )}
-                          >
-                            <CalendarIcon className="mr-2 h-4 w-4" />
-                            {field.value ? (
-                              format(new Date(field.value), "dd/MM/yyyy")
-                            ) : (
-                              <span>dd/mm/yyyy</span>
-                            )}
-                          </Button>
-                        </FormControl>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0 bg-white border shadow-lg z-50" align="start">
-                        <Calendar
-                          mode="single"
-                          selected={field.value ? new Date(field.value) : undefined}
-                          onSelect={(date) => {
-                            field.onChange(date ? format(date, "yyyy-MM-dd") : "");
-                            setOpen(false);
-                          }}
-                          disabled={(date) => {
-                            const today = new Date();
-                            today.setHours(0, 0, 0, 0);
-                            const maxDate = addMonths(today, 2); // 2 months for rent
-                            return date < today || date > maxDate;
-                          }}
-                          initialFocus
-                          className={cn("p-3 pointer-events-auto")}
-                        />
-                      </PopoverContent>
-                    </Popover>
-                    <FormMessage />
-                  </FormItem>
-                );
-              }}
-            />
 
             {/* Suitable Business Types */}
             <div>
