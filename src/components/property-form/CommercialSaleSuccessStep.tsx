@@ -8,6 +8,7 @@ interface CommercialSaleSuccessStepProps {
   onGoToDashboard: () => void;
   createdSubmissionId?: string | null;
   onEdit?: (step: number) => void;
+  gallery?: { images?: any[] };
 }
 
 export const CommercialSaleSuccessStep = ({
@@ -15,9 +16,13 @@ export const CommercialSaleSuccessStep = ({
   onPreviewListing,
   onGoToDashboard,
   createdSubmissionId,
-  onEdit
+  onEdit,
+  gallery
 }: CommercialSaleSuccessStepProps) => {
   const [showNoPhotosMessage, setShowNoPhotosMessage] = useState(false);
+  
+  // Check if there are photos uploaded
+  const hasPhotos = gallery?.images && gallery.images.length > 0;
 
   const handleGoPremium = () => {
     window.open('/plans', '_blank');
@@ -120,8 +125,39 @@ export const CommercialSaleSuccessStep = ({
         </div>
       </div>
 
-      {/* Photo Upload Notice */}
-      {!showNoPhotosMessage && (
+      {/* Photo Status Messages */}
+      {hasPhotos ? (
+        /* Photos Success Message */
+        <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+          <div className="flex items-start gap-3">
+            <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center mt-0.5">
+              <CheckCircle className="w-4 h-4 text-green-600" />
+            </div>
+            <div className="flex-1">
+              <p className="font-medium text-green-800 mb-1">Great! Your property has photos</p>
+              <p className="text-green-700 text-sm">
+                Properties with photos get 5X more responses. You're all set!
+              </p>
+            </div>
+          </div>
+        </div>
+      ) : showNoPhotosMessage ? (
+        /* No Photos Message */
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+          <div className="flex items-start gap-3">
+            <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center mt-0.5">
+              <CheckCircle className="w-4 h-4 text-blue-600" />
+            </div>
+            <div className="flex-1">
+              <p className="font-medium text-blue-800 mb-1">Thanks for letting us know!</p>
+              <p className="text-blue-700 text-sm">
+                No worries! Your property listing will still be active. You can always add photos later to get better responses.
+              </p>
+            </div>
+          </div>
+        </div>
+      ) : (
+        /* Photo Upload Notice */
         <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
           <div className="flex items-start gap-3">
             <div className="w-6 h-6 bg-yellow-100 rounded-full flex items-center justify-center mt-0.5">
@@ -157,23 +193,6 @@ export const CommercialSaleSuccessStep = ({
                   Upload Now
                 </Button>
               </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* No Photos Message */}
-      {showNoPhotosMessage && (
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-          <div className="flex items-start gap-3">
-            <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center mt-0.5">
-              <CheckCircle className="w-4 h-4 text-blue-600" />
-            </div>
-            <div className="flex-1">
-              <p className="font-medium text-blue-800 mb-1">Thanks for letting us know!</p>
-              <p className="text-blue-700 text-sm">
-                No worries! Your property listing will still be active. You can always add photos later to get better responses.
-              </p>
             </div>
           </div>
         </div>
