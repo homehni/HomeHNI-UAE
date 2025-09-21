@@ -250,10 +250,8 @@ const handleScheduleSubmit = (data: Partial<ScheduleInfo>) => {
             />
           </div>
           
-          <div className="flex-1 min-w-0 p-3 bg-white pb-20">
-            <div className="max-w-4xl mx-auto">
-              {renderCurrentStep()}
-            </div>
+          <div className="max-w-4xl mx-auto">
+            {renderCurrentStep()}
           </div>
 
           {/* Sticky Bottom Navigation Bar */}
