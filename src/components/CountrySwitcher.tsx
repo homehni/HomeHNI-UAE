@@ -155,7 +155,7 @@ const CountrySwitcher: React.FC = () => {
                       className={`block w-full text-left text-sm transition-all duration-200 py-2 px-2 rounded hover:bg-opacity-10 ${
                         currentCountry === country.code
                           ? 'text-red-600 font-medium bg-red-50' 
-                          : 'text-black hover:text-brand-red hover:bg-red-50'
+                          : 'text-gray-400 hover:text-brand-red hover:bg-red-50'
                       }`}
                     >
                       <span className="flex items-center justify-between">
