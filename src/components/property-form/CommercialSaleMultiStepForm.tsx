@@ -210,20 +210,6 @@ export const CommercialSaleMultiStepForm = ({
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-full mx-auto flex flex-col">
-        <div className="bg-white shadow-sm border-b flex-shrink-0">
-          <div className="px-4 py-2">
-            <h1 className="text-base font-bold text-gray-900">
-              List Your Commercial Property for Sale
-            </h1>
-            <p className="text-gray-600 text-xs mt-1 flex items-center gap-2">
-              Step {currentStep} of 8: Complete your property listing
-              <span className="text-xs bg-gray-100 px-2 py-1 rounded-full">
-                {currentStep}/8
-              </span>
-            </p>
-          </div>
-        </div>
-
         <div className="flex flex-col lg:flex-row">
           <div className="w-80 flex-shrink-0">
             <CommercialSaleSidebar
