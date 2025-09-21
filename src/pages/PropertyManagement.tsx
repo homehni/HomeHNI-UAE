@@ -8,7 +8,16 @@ import { useToast } from "@/hooks/use-toast";
 import { Building2, Users, CreditCard, Calculator, TrendingUp, FileText, MapPin, Crown, Clock, CheckCircle, Shield, Star, X, Plus, Minus, Globe, Shield as ShieldCheck, Headphones, Smartphone, Download, Home, UserCheck, Settings, BarChart3, Wrench } from "lucide-react";
 import Marquee from "@/components/Marquee";
 import Header from "@/components/Header";
+
 const PropertyManagement = () => {
+  // Major cities in India
+  const majorCities = [
+    "Mumbai", "Delhi", "Bangalore", "Hyderabad", "Ahmedabad", "Chennai", "Kolkata", "Surat", "Pune", "Jaipur",
+    "Lucknow", "Kanpur", "Nagpur", "Indore", "Thane", "Bhopal", "Visakhapatnam", "Pimpri-Chinchwad", "Patna", "Vadodara",
+    "Ghaziabad", "Ludhiana", "Agra", "Nashik", "Faridabad", "Meerut", "Rajkot", "Kalyan-Dombivli", "Vasai-Virar", "Varanasi",
+    "Srinagar", "Aurangabad", "Dhanbad", "Amritsar", "Navi Mumbai", "Allahabad", "Ranchi", "Howrah", "Coimbatore", "Jabalpur",
+    "Gwalior", "Vijayawada", "Jodhpur", "Madurai", "Raipur", "Kota", "Guwahati", "Chandigarh", "Solapur", "Hubli-Dharwad"
+  ];
   const services = [{
     icon: Users,
     title: "Tenant Management",
@@ -245,8 +254,8 @@ const PropertyManagement = () => {
               </div>
 
               <div className="flex gap-2">
-                <Select name="country">
-                  <SelectTrigger id="pm-country" className="flex-1"><SelectValue placeholder="Country" /></SelectTrigger>
+                <Select defaultValue="india" name="country">
+                  <SelectTrigger id="pm-country" className="flex-1"><SelectValue /></SelectTrigger>
                   <SelectContent>
                     <SelectItem value="india">India</SelectItem>
                     <SelectItem value="usa">United States</SelectItem>
@@ -255,33 +264,12 @@ const PropertyManagement = () => {
                     <SelectItem value="australia">Australia</SelectItem>
                   </SelectContent>
                 </Select>
-                <Select name="state">
-                  <SelectTrigger id="pm-state" className="flex-1"><SelectValue placeholder="State" /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="andhra-pradesh">Andhra Pradesh</SelectItem>
-                    <SelectItem value="karnataka">Karnataka</SelectItem>
-                    <SelectItem value="tamil-nadu">Tamil Nadu</SelectItem>
-                    <SelectItem value="telangana">Telangana</SelectItem>
-                    <SelectItem value="maharashtra">Maharashtra</SelectItem>
-                    <SelectItem value="gujarat">Gujarat</SelectItem>
-                    <SelectItem value="rajasthan">Rajasthan</SelectItem>
-                    <SelectItem value="delhi">Delhi</SelectItem>
-                    <SelectItem value="west-bengal">West Bengal</SelectItem>
-                    <SelectItem value="uttar-pradesh">Uttar Pradesh</SelectItem>
-                  </SelectContent>
-                </Select>
                 <Select name="city">
-                  <SelectTrigger id="pm-city" className="flex-1"><SelectValue placeholder="City" /></SelectTrigger>
+                  <SelectTrigger id="pm-city" className="flex-1"><SelectValue placeholder="Select City" /></SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="mumbai">Mumbai</SelectItem>
-                    <SelectItem value="delhi">Delhi</SelectItem>
-                    <SelectItem value="bangalore">Bangalore</SelectItem>
-                    <SelectItem value="pune">Pune</SelectItem>
-                    <SelectItem value="hyderabad">Hyderabad</SelectItem>
-                    <SelectItem value="chennai">Chennai</SelectItem>
-                    <SelectItem value="kolkata">Kolkata</SelectItem>
-                    <SelectItem value="ahmedabad">Ahmedabad</SelectItem>
-                    <SelectItem value="other">Other</SelectItem>
+                    {majorCities.map((city) => (
+                      <SelectItem key={city} value={city.toLowerCase()}>{city}</SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </div>
@@ -374,9 +362,9 @@ const PropertyManagement = () => {
                 </div>
 
                 <div className="flex gap-3">
-                  <Select name="country">
+                  <Select defaultValue="india" name="country">
                     <SelectTrigger id="pm-country-mobile" className="flex-1 h-12 bg-background">
-                      <SelectValue placeholder="Country" />
+                      <SelectValue />
                     </SelectTrigger>
                     <SelectContent className="bg-background border shadow-lg">
                       <SelectItem value="india">India</SelectItem>
@@ -386,37 +374,14 @@ const PropertyManagement = () => {
                       <SelectItem value="australia">Australia</SelectItem>
                     </SelectContent>
                   </Select>
-                  <Select name="state">
-                    <SelectTrigger id="pm-state-mobile" className="flex-1 h-12 bg-background">
-                      <SelectValue placeholder="State" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-background border shadow-lg">
-                      <SelectItem value="andhra-pradesh">Andhra Pradesh</SelectItem>
-                      <SelectItem value="karnataka">Karnataka</SelectItem>
-                      <SelectItem value="tamil-nadu">Tamil Nadu</SelectItem>
-                      <SelectItem value="telangana">Telangana</SelectItem>
-                      <SelectItem value="maharashtra">Maharashtra</SelectItem>
-                      <SelectItem value="gujarat">Gujarat</SelectItem>
-                      <SelectItem value="rajasthan">Rajasthan</SelectItem>
-                      <SelectItem value="delhi">Delhi</SelectItem>
-                      <SelectItem value="west-bengal">West Bengal</SelectItem>
-                      <SelectItem value="uttar-pradesh">Uttar Pradesh</SelectItem>
-                    </SelectContent>
-                  </Select>
                   <Select name="city">
                     <SelectTrigger id="pm-city-mobile" className="flex-1 h-12 bg-background">
-                      <SelectValue placeholder="City" />
+                      <SelectValue placeholder="Select City" />
                     </SelectTrigger>
                     <SelectContent className="bg-background border shadow-lg">
-                      <SelectItem value="mumbai">Mumbai</SelectItem>
-                      <SelectItem value="delhi">Delhi</SelectItem>
-                      <SelectItem value="bangalore">Bangalore</SelectItem>
-                      <SelectItem value="pune">Pune</SelectItem>
-                      <SelectItem value="hyderabad">Hyderabad</SelectItem>
-                      <SelectItem value="chennai">Chennai</SelectItem>
-                      <SelectItem value="kolkata">Kolkata</SelectItem>
-                      <SelectItem value="ahmedabad">Ahmedabad</SelectItem>
-                      <SelectItem value="other">Other</SelectItem>
+                      {majorCities.map((city) => (
+                        <SelectItem key={city} value={city.toLowerCase()}>{city}</SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 </div>

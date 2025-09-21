@@ -8,7 +8,16 @@ import { useToast } from "@/hooks/use-toast";
 import { Building2, Users, FileCheck, Search, Database, Headphones, MapPin, Crown, Clock, CheckCircle, Shield, Star, X, Plus, Minus, Globe, ShieldCheck, Home, Key, Users2, Building } from "lucide-react";
 import Marquee from "@/components/Marquee";
 import Header from "@/components/Header";
+
 const HandoverServices = () => {
+  // Major cities in India
+  const majorCities = [
+    "Mumbai", "Delhi", "Bangalore", "Hyderabad", "Ahmedabad", "Chennai", "Kolkata", "Surat", "Pune", "Jaipur",
+    "Lucknow", "Kanpur", "Nagpur", "Indore", "Thane", "Bhopal", "Visakhapatnam", "Pimpri-Chinchwad", "Patna", "Vadodara",
+    "Ghaziabad", "Ludhiana", "Agra", "Nashik", "Faridabad", "Meerut", "Rajkot", "Kalyan-Dombivli", "Vasai-Virar", "Varanasi",
+    "Srinagar", "Aurangabad", "Dhanbad", "Amritsar", "Navi Mumbai", "Allahabad", "Ranchi", "Howrah", "Coimbatore", "Jabalpur",
+    "Gwalior", "Vijayawada", "Jodhpur", "Madurai", "Raipur", "Kota", "Guwahati", "Chandigarh", "Solapur", "Hubli-Dharwad"
+  ];
   const services = [{
     icon: FileCheck,
     title: "Complete Documentation Support",
@@ -245,8 +254,8 @@ const HandoverServices = () => {
               </div>
 
               <div className="flex gap-2">
-                <Select name="country">
-                  <SelectTrigger id="handover-country" className="flex-1"><SelectValue placeholder="Country" /></SelectTrigger>
+                <Select defaultValue="india" name="country">
+                  <SelectTrigger id="handover-country" className="flex-1"><SelectValue /></SelectTrigger>
                   <SelectContent>
                     <SelectItem value="india">India</SelectItem>
                     <SelectItem value="usa">United States</SelectItem>
@@ -255,34 +264,12 @@ const HandoverServices = () => {
                     <SelectItem value="australia">Australia</SelectItem>
                   </SelectContent>
                 </Select>
-                <Select name="state">
-                  <SelectTrigger id="handover-state" className="flex-1"><SelectValue placeholder="State" /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="andhra-pradesh">Andhra Pradesh</SelectItem>
-                    <SelectItem value="karnataka">Karnataka</SelectItem>
-                    <SelectItem value="tamil-nadu">Tamil Nadu</SelectItem>
-                    <SelectItem value="telangana">Telangana</SelectItem>
-                    <SelectItem value="maharashtra">Maharashtra</SelectItem>
-                    <SelectItem value="gujarat">Gujarat</SelectItem>
-                    <SelectItem value="rajasthan">Rajasthan</SelectItem>
-                    <SelectItem value="delhi">Delhi</SelectItem>
-                    <SelectItem value="west-bengal">West Bengal</SelectItem>
-                    <SelectItem value="uttar-pradesh">Uttar Pradesh</SelectItem>
-                  </SelectContent>
-                </Select>
                 <Select name="city">
-                  <SelectTrigger id="handover-city" className="flex-1"><SelectValue placeholder="City" /></SelectTrigger>
+                  <SelectTrigger id="handover-city" className="flex-1"><SelectValue placeholder="Select City" /></SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="bangalore">Bangalore</SelectItem>
-                    <SelectItem value="hyderabad">Hyderabad</SelectItem>
-                    <SelectItem value="chennai">Chennai</SelectItem>
-                    <SelectItem value="mumbai">Mumbai</SelectItem>
-                    <SelectItem value="pune">Pune</SelectItem>
-                    <SelectItem value="delhi">Delhi</SelectItem>
-                    <SelectItem value="kolkata">Kolkata</SelectItem>
-                    <SelectItem value="ahmedabad">Ahmedabad</SelectItem>
-                    <SelectItem value="jaipur">Jaipur</SelectItem>
-                    <SelectItem value="lucknow">Lucknow</SelectItem>
+                    {majorCities.map((city) => (
+                      <SelectItem key={city} value={city.toLowerCase()}>{city}</SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </div>
@@ -370,9 +357,9 @@ const HandoverServices = () => {
 
                 <div className="space-y-4">
                   <div className="flex gap-4">
-                    <Select name="country">
+                    <Select defaultValue="india" name="country">
                       <SelectTrigger id="handover-country-mobile" className="flex-1 h-14 bg-background text-lg">
-                        <SelectValue placeholder="Country" />
+                        <SelectValue />
                       </SelectTrigger>
                     <SelectContent className="bg-background border shadow-lg">
                       <SelectItem value="india">India</SelectItem>
@@ -382,41 +369,17 @@ const HandoverServices = () => {
                       <SelectItem value="australia">Australia</SelectItem>
                     </SelectContent>
                   </Select>
-                    <Select name="state">
-                      <SelectTrigger id="handover-state-mobile" className="flex-1 h-14 bg-background text-lg">
-                        <SelectValue placeholder="State" />
+                    <Select name="city">
+                      <SelectTrigger id="handover-city-mobile" className="flex-1 h-14 bg-background text-lg">
+                        <SelectValue placeholder="Select City" />
                       </SelectTrigger>
                     <SelectContent className="bg-background border shadow-lg">
-                      <SelectItem value="andhra-pradesh">Andhra Pradesh</SelectItem>
-                      <SelectItem value="karnataka">Karnataka</SelectItem>
-                      <SelectItem value="tamil-nadu">Tamil Nadu</SelectItem>
-                      <SelectItem value="telangana">Telangana</SelectItem>
-                      <SelectItem value="maharashtra">Maharashtra</SelectItem>
-                      <SelectItem value="gujarat">Gujarat</SelectItem>
-                      <SelectItem value="rajasthan">Rajasthan</SelectItem>
-                      <SelectItem value="delhi">Delhi</SelectItem>
-                      <SelectItem value="west-bengal">West Bengal</SelectItem>
-                      <SelectItem value="uttar-pradesh">Uttar Pradesh</SelectItem>
+                      {majorCities.map((city) => (
+                        <SelectItem key={city} value={city.toLowerCase()}>{city}</SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                   </div>
-                  <Select name="city">
-                    <SelectTrigger id="handover-city-mobile" className="w-full h-14 bg-background text-lg">
-                      <SelectValue placeholder="City" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-background border shadow-lg">
-                      <SelectItem value="bangalore">Bangalore</SelectItem>
-                      <SelectItem value="hyderabad">Hyderabad</SelectItem>
-                      <SelectItem value="chennai">Chennai</SelectItem>
-                      <SelectItem value="mumbai">Mumbai</SelectItem>
-                      <SelectItem value="pune">Pune</SelectItem>
-                      <SelectItem value="delhi">Delhi</SelectItem>
-                      <SelectItem value="kolkata">Kolkata</SelectItem>
-                      <SelectItem value="ahmedabad">Ahmedabad</SelectItem>
-                      <SelectItem value="jaipur">Jaipur</SelectItem>
-                      <SelectItem value="lucknow">Lucknow</SelectItem>
-                    </SelectContent>
-                  </Select>
                 </div>
 
                 <Button type="submit" className="w-full h-12 text-base font-semibold bg-red-800 hover:bg-red-900 text-white mt-6">
