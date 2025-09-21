@@ -215,16 +215,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
   };
 
   return (
-    <div className="space-y-6">
-      {/* Header with total count */}
-      <div className="text-left space-y-2">
-        <h3 className="text-lg font-semibold text-red-600">Add Property Images by Category</h3>
-        <div className="flex items-center justify-center gap-2">
-          <Badge variant="outline" className="text-sm">
-            Total Images: {getTotalCategorizedImages()}
-          </Badge>
-        </div>
-      </div>
+    <div className="space-y-4">
 
       {/* Compression Progress */}
       {compressionProgress && (
