@@ -239,7 +239,7 @@ export const CommercialPreviewStep: React.FC<CommercialPreviewStepProps> = ({
            <Button 
              type="button" 
              variant="outline" 
-             onClick={() => onEdit && onEdit(1)} 
+             onClick={() => onEdit && onEdit(2)} 
              className="border-gray-500 text-gray-600 hover:bg-gray-50 w-full sm:w-auto"
            >
              <ArrowLeft className="w-4 h-4 mr-2" />
