@@ -182,14 +182,6 @@ export const CategorizedImageUpload: React.FC<CategorizedImageUploadProps> = ({
         })}
       </div>
 
-      {/* Upload guidelines */}
-      <div className="text-sm text-muted-foreground space-y-1 bg-muted/50 p-4 rounded-lg">
-        <p>• Upload high-quality images (JPEG, PNG)</p>
-        <p>• Maximum file size: 5MB per image</p>
-        <p>• Up to {maxImagesPerCategory} images per category</p>
-        <p>• All categories are optional - add images where relevant</p>
-      </div>
-
     </div>
   );
 };
