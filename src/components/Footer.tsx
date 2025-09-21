@@ -11,14 +11,15 @@ interface FooterProps {
 const Footer = ({
   searchSectionRef
 }: FooterProps) => {
-  const { content: cmsContent } = useCMSContent('footer_content');
+  const {
+    content: cmsContent
+  } = useCMSContent('footer_content');
   const {
     user
   } = useAuth();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('Properties & Flats for Sale');
   const [activeServicesTab, setActiveServicesTab] = useState('Buy');
-  
   const handlePostPropertyClick = () => {
     if (user) {
       navigate('/post-property');
@@ -82,9 +83,7 @@ const Footer = ({
       "Luxury Properties": ["Luxury Villas in Bangalore", "Luxury Apartments in Mumbai", "Premium Properties in Hyderabad", "Penthouses", "Villa Communities", "Gated Communities"]
     }
   }];
-
   const tabs = propertyListings.map(section => section.title);
-
   const getActiveTabData = () => {
     const activeSection = propertyListings.find(section => section.title === activeTab);
     return activeSection ? activeSection.cityData : {};
@@ -166,24 +165,21 @@ const Footer = ({
 
     // Otherwise, extract location and property type information from the link text
     const searchParams = new URLSearchParams();
-    
+
     // Determine search type based on link content
     if (linkText.toLowerCase().includes('rent')) {
       searchParams.set('type', 'rent');
     } else if (linkText.toLowerCase().includes('sale') || linkText.toLowerCase().includes('buy')) {
       searchParams.set('type', 'buy');
     }
-    
+
     // Extract location if mentioned
     const locationKeywords = ['bangalore', 'mumbai', 'delhi', 'pune', 'chennai', 'hyderabad', 'noida', 'gurgaon'];
-    const foundLocation = locationKeywords.find(keyword => 
-      linkText.toLowerCase().includes(keyword)
-    );
-    
+    const foundLocation = locationKeywords.find(keyword => linkText.toLowerCase().includes(keyword));
     if (foundLocation) {
       searchParams.set('location', foundLocation);
     }
-    
+
     // Extract property type
     if (linkText.toLowerCase().includes('flat') || linkText.toLowerCase().includes('apartment')) {
       searchParams.set('propertyType', 'Flat/Apartment');
@@ -194,11 +190,10 @@ const Footer = ({
     } else if (linkText.toLowerCase().includes('independent house')) {
       searchParams.set('propertyType', 'Independent House');
     }
-    
+
     // Navigate to search page with parameters
     navigate(`/search?${searchParams.toString()}`);
   };
-  
   const additionalCities = [{
     title: "Flats for Sale in Hyderabad",
     links: ["Flats for Sale in Banjara Hills", "Flats for Sale in Jubilee Hills", "Flats for Sale in Madhapur", "Flats for Sale in Kukatpally Housing Board Colony", "Flats for Sale in Gachibowli", "Flats for Sale in Secrbowl", "Flats for Sale in Kukatpally", "Flats for Sale in Miyapur", "Flats for Sale in Himaya Nagar", "Flats for Sale in Ameerpet", "Flats for Sale in Hyderabad Below 65 Lakhs", "Flats for Sale in Hyderabad Below 50 Lakhs", "Flats for Sale Below 50 Lakhs in Hyderabad", "Flats for Sale Below 70 Lakhs in Hyderabad", "Flats for Sale Below 80 Lakhs in Hyderabad", "Flats for Sale Below 90 Lakhs in Hyderabad", "Properties for Sale in Hyderabad"]
@@ -225,41 +220,24 @@ const Footer = ({
           {/* Tab Navigation */}
           <div className="border-b border-gray-200 mb-6">
             <div className="flex flex-wrap justify-between gap-0">
-              {tabs.map((tab, index) => (
-                <button
-                  key={index}
-                  onClick={() => setActiveTab(tab)}
-                  className={`px-4 py-3 text-sm font-medium border-b-2 transition-colors ${
-                    activeTab === tab
-                      ? 'border-brand-red text-brand-red bg-brand-red/5'
-                      : 'border-transparent text-gray-600 hover:text-gray-900 hover:border-gray-300'
-                  }`}
-                >
+              {tabs.map((tab, index) => <button key={index} onClick={() => setActiveTab(tab)} className={`px-4 py-3 text-sm font-medium border-b-2 transition-colors ${activeTab === tab ? 'border-brand-red text-brand-red bg-brand-red/5' : 'border-transparent text-gray-600 hover:text-gray-900 hover:border-gray-300'}`}>
                   {tab}
-                </button>
-              ))}
+                </button>)}
             </div>
           </div>
 
           {/* Tab Content */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {Object.entries(getActiveTabData()).map(([cityTitle, links], index) => (
-              <div key={index}>
+            {Object.entries(getActiveTabData()).map(([cityTitle, links], index) => <div key={index}>
                 <h4 className="font-semibold text-gray-900 mb-3 text-sm">{cityTitle}</h4>
                 <ul className="space-y-1">
-                  {(links as string[]).map((link, linkIndex) => (
-                    <li key={linkIndex}>
-                      <button 
-                        onClick={() => handleLinkClick(link)} 
-                        className="text-xs text-gray-600 hover:text-brand-red transition-colors leading-relaxed text-left"
-                      >
+                  {(links as string[]).map((link, linkIndex) => <li key={linkIndex}>
+                      <button onClick={() => handleLinkClick(link)} className="text-xs text-gray-600 hover:text-brand-red transition-colors leading-relaxed text-left">
                         {link}
                       </button>
-                    </li>
-                  ))}
+                    </li>)}
                 </ul>
-              </div>
-            ))}
+              </div>)}
           </div>
         </div>
 
@@ -282,100 +260,16 @@ const Footer = ({
           
         </div>
 
-        {/* Home HNI Services Section */}
-        <div className="mb-8">
-          <h3 className="text-lg font-semibold text-gray-900 mb-6 text-center">Home HNI Services</h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <button 
-              onClick={() => handleLinkClick('Premium Property Advisory')} 
-              className="text-sm text-gray-600 hover:text-brand-red transition-colors text-left p-3 bg-gray-50 rounded-lg hover:bg-gray-100"
-            >
-              Premium Property Advisory
-            </button>
-            <button 
-              onClick={() => handleLinkClick('Exclusive Property Deals')} 
-              className="text-sm text-gray-600 hover:text-brand-red transition-colors text-left p-3 bg-gray-50 rounded-lg hover:bg-gray-100"
-            >
-              Exclusive Property Deals
-            </button>
-            <button 
-              onClick={() => handleLinkClick('High-Value Investment Opportunities')} 
-              className="text-sm text-gray-600 hover:text-brand-red transition-colors text-left p-3 bg-gray-50 rounded-lg hover:bg-gray-100"
-            >
-              High-Value Investment Opportunities
-            </button>
-            <button 
-              onClick={() => handleLinkClick('Luxury Property Management')} 
-              className="text-sm text-gray-600 hover:text-brand-red transition-colors text-left p-3 bg-gray-50 rounded-lg hover:bg-gray-100"
-            >
-              Luxury Property Management
-            </button>
-            <button 
-              onClick={() => handleLinkClick('Portfolio Diversification')} 
-              className="text-sm text-gray-600 hover:text-brand-red transition-colors text-left p-3 bg-gray-50 rounded-lg hover:bg-gray-100"
-            >
-              Portfolio Diversification
-            </button>
-            <button 
-              onClick={() => handleLinkClick('Tax Optimization Strategies')} 
-              className="text-sm text-gray-600 hover:text-brand-red transition-colors text-left p-3 bg-gray-50 rounded-lg hover:bg-gray-100"
-            >
-              Tax Optimization Strategies
-            </button>
-            <button 
-              onClick={() => handleLinkClick('Due Diligence Services')} 
-              className="text-sm text-gray-600 hover:text-brand-red transition-colors text-left p-3 bg-gray-50 rounded-lg hover:bg-gray-100"
-            >
-              Due Diligence Services
-            </button>
-            <button 
-              onClick={() => handleLinkClick('Private Wealth Real Estate')} 
-              className="text-sm text-gray-600 hover:text-brand-red transition-colors text-left p-3 bg-gray-50 rounded-lg hover:bg-gray-100"
-            >
-              Private Wealth Real Estate
-            </button>
-          </div>
-        </div>
-
         {/* Services Section with Tabs */}
         <div className="mb-8">
           {/* Services Tab Navigation */}
-          <div className="border-b border-gray-200 mb-6">
-            <div className="flex justify-between gap-0">
-              <button
-                onClick={() => setActiveServicesTab('Buy')}
-                className={`px-4 py-3 text-sm font-medium border-b-2 transition-colors flex-1 ${
-                  activeServicesTab === 'Buy'
-                    ? 'border-brand-red text-brand-red bg-brand-red/5'
-                    : 'border-transparent text-gray-600 hover:text-gray-900 hover:border-gray-300'
-                }`}
-              >
-                Buy
-              </button>
-              <button
-                onClick={() => setActiveServicesTab('Rent')}
-                className={`px-4 py-3 text-sm font-medium border-b-2 transition-colors flex-1 ${
-                  activeServicesTab === 'Rent'
-                    ? 'border-brand-red text-brand-red bg-brand-red/5'
-                    : 'border-transparent text-gray-600 hover:text-gray-900 hover:border-gray-300'
-                }`}
-              >
-                Rent
-              </button>
-            </div>
-          </div>
+          
 
           {/* Services Tab Content */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
-            {(activeServicesTab === 'Buy' ? services.buy : services.rent).map((service, index) => (
-              <button 
-                key={index} 
-                onClick={() => handleLinkClick(service)} 
-                className="text-xs text-gray-600 hover:text-brand-red transition-colors text-left"
-              >
+            {(activeServicesTab === 'Buy' ? services.buy : services.rent).map((service, index) => <button key={index} onClick={() => handleLinkClick(service)} className="text-xs text-gray-600 hover:text-brand-red transition-colors text-left">
                 {service}
-              </button>
-            ))}
+              </button>)}
           </div>
         </div>
 
@@ -388,10 +282,7 @@ const Footer = ({
       <p className="text-sm text-gray-600 mb-4">
         Reach verified buyers & tenants. Zero brokerage.
       </p>
-      <button
-        onClick={handlePostPropertyClick}
-        className="bg-brand-red text-white px-6 py-2 rounded text-sm hover:bg-brand-red-dark transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-brand-red"
-      >
+      <button onClick={handlePostPropertyClick} className="bg-brand-red text-white px-6 py-2 rounded text-sm hover:bg-brand-red-dark transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-brand-red">
         Post for Free
       </button>
     </div>
@@ -404,15 +295,12 @@ const Footer = ({
       <p className="text-sm text-gray-600 mb-4">
         Thousands of owner-listed options. No brokerage.
       </p>
-      <button
-        onClick={() => navigate('/search')}
-        className="bg-brand-red text-white px-6 py-2 rounded text-sm hover:bg-brand-red-dark transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-brand-red"
-      >
+      <button onClick={handleFindNowClick} className="bg-brand-red text-white px-6 py-2 rounded text-sm hover:bg-brand-red-dark transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-brand-red">
         Browse Listings
       </button>
     </div>
   </div>
-</div>
+      </div>
 
 
         {/* Footer links and social media */}
@@ -429,38 +317,26 @@ const Footer = ({
           </div>
 
           {/* Company Info from CMS */}
-          {cmsContent?.content && (
-            <div className="text-center mb-6 p-6 bg-gray-50 rounded-lg">
-              {cmsContent.content.companyName && (
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">
+          {cmsContent?.content && <div className="text-center mb-6 p-6 bg-gray-50 rounded-lg">
+              {cmsContent.content.companyName && <h3 className="text-lg font-semibold text-gray-900 mb-2">
                   {cmsContent.content.companyName}
-                </h3>
-              )}
-              {cmsContent.content.description && (
-                <p className="text-gray-600 mb-4 max-w-2xl mx-auto">
+                </h3>}
+              {cmsContent.content.description && <p className="text-gray-600 mb-4 max-w-2xl mx-auto">
                   {cmsContent.content.description}
-                </p>
-              )}
-              {cmsContent.content.address && (
-                <div className="flex items-center justify-center gap-2 text-sm text-gray-600 mb-2">
+                </p>}
+              {cmsContent.content.address && <div className="flex items-center justify-center gap-2 text-sm text-gray-600 mb-2">
                   <MapPin className="w-4 h-4" />
                   <span>{cmsContent.content.address}</span>
-                </div>
-              )}
-              {cmsContent.content.phone && (
-                <div className="flex items-center justify-center gap-2 text-sm text-gray-600 mb-2">
+                </div>}
+              {cmsContent.content.phone && <div className="flex items-center justify-center gap-2 text-sm text-gray-600 mb-2">
                   <Phone className="w-4 h-4" />
                   <span>{cmsContent.content.phone}</span>
-                </div>
-              )}
-              {cmsContent.content.email && (
-                <div className="flex items-center justify-center gap-2 text-sm text-gray-600">
+                </div>}
+              {cmsContent.content.email && <div className="flex items-center justify-center gap-2 text-sm text-gray-600">
                   <Mail className="w-4 h-4" />
                   <span>{cmsContent.content.email}</span>
-                </div>
-              )}
-            </div>
-          )}
+                </div>}
+            </div>}
 
           {/* App store badges */}
           <div className="flex flex-col items-center gap-2 mb-6">
@@ -475,51 +351,27 @@ const Footer = ({
           {/* Social media icons */}
               {/* Social: brand ring, fills red on hover */}
     <div className="flex justify-center gap-4 mb-8">
-      <a
-        href="https://www.facebook.com/profile.php?id=61578319572154"
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="Home HNI on Facebook"
-        className="group w-10 h-10 rounded-full ring-1 ring-brand-red/40 bg-white hover:bg-brand-red transition-all flex items-center justify-center hover:scale-110
-                   focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-brand-red"
-      >
+      <a href="https://www.facebook.com/profile.php?id=61578319572154" target="_blank" rel="noopener noreferrer" aria-label="Home HNI on Facebook" className="group w-10 h-10 rounded-full ring-1 ring-brand-red/40 bg-white hover:bg-brand-red transition-all flex items-center justify-center hover:scale-110
+                   focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-brand-red">
         <Facebook className="w-5 h-5 text-brand-red group-hover:text-white" />
       </a>
-      <a
-        href="https://x.com/homehni8"
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="Home HNI on X (Twitter)"
-        className="group w-10 h-10 rounded-full ring-1 ring-brand-red/40 bg-white hover:bg-brand-red transition-all flex items-center justify-center hover:scale-110
-                   focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-brand-red"
-      >
+      <a href="https://x.com/homehni8" target="_blank" rel="noopener noreferrer" aria-label="Home HNI on X (Twitter)" className="group w-10 h-10 rounded-full ring-1 ring-brand-red/40 bg-white hover:bg-brand-red transition-all flex items-center justify-center hover:scale-110
+                   focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-brand-red">
         <Twitter className="w-5 h-5 text-brand-red group-hover:text-white" />
       </a>
-      <a
-        href="https://www.instagram.com/homehni/"
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="Home HNI on Instagram"
-        className="group w-10 h-10 rounded-full ring-1 ring-brand-red/40 bg-white hover:bg-brand-red transition-all flex items-center justify-center hover:scale-110
-                   focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-brand-red"
-      >
+      <a href="https://www.instagram.com/homehni/" target="_blank" rel="noopener noreferrer" aria-label="Home HNI on Instagram" className="group w-10 h-10 rounded-full ring-1 ring-brand-red/40 bg-white hover:bg-brand-red transition-all flex items-center justify-center hover:scale-110
+                   focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-brand-red">
         <Instagram className="w-5 h-5 text-brand-red group-hover:text-white" />
       </a>
-      <a
-        href="https://www.linkedin.com/in/homehni/"
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="Home HNI on LinkedIn"
-        className="group w-10 h-10 rounded-full ring-1 ring-brand-red/40 bg-white hover:bg-brand-red transition-all flex items-center justify-center hover:scale-110
-                   focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-brand-red"
-      >
+      <a href="https://www.linkedin.com/in/homehni/" target="_blank" rel="noopener noreferrer" aria-label="Home HNI on LinkedIn" className="group w-10 h-10 rounded-full ring-1 ring-brand-red/40 bg-white hover:bg-brand-red transition-all flex items-center justify-center hover:scale-110
+                   focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-brand-red">
         <Linkedin className="w-5 h-5 text-brand-red group-hover:text-white" />
       </a>
     </div>
 
           {/* Copyright */}
         {/* Copyright & Credit */}
-<div className="mt-6 text-center space-y-3">
+        <div className="mt-6 text-center space-y-3">
   {/* Compact badge-style copyright line */}
   <div className="inline-flex items-center gap-2 rounded-full bg-white px-3 py-1 ring-1 ring-gray-200 text-[11px] sm:text-xs text-gray-600">
     <span>© 2025</span>
@@ -531,17 +383,12 @@ const Footer = ({
   {/* Product credit with orange heart */}
   <div className="text-[11px] sm:text-xs text-gray-500">
     Designed by{" "}
-    <a
-      href="https://ranazonai.com/"
-      target="_blank"
-      rel="noopener noreferrer"
-      className="text-brand-red font-semibold underline hover:text-brand-red/80 transition-colors"
-    >
+    <a href="https://ranazonai.com/" target="_blank" rel="noopener noreferrer" className="text-brand-red font-semibold underline hover:text-brand-red/80 transition-colors">
       Ranazonai Technologies
     </a>
     , Built with <span className="text-orange-500" role="img" aria-label="orange heart">🧡</span> and Dedication.
   </div>
-</div>
+        </div>
 
           
         </div>
