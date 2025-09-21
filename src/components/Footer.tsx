@@ -282,59 +282,9 @@ const Footer = ({
           
         </div>
 
-        {/* Home HNI Services Section */}
-        <div className="mb-8">
-          <h3 className="text-lg font-semibold text-gray-900 mb-6 text-center">Home HNI Services</h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <button 
-              onClick={() => handleLinkClick('Premium Property Advisory')} 
-              className="text-sm text-gray-600 hover:text-brand-red transition-colors text-left p-3 bg-gray-50 rounded-lg hover:bg-gray-100"
-            >
-              Premium Property Advisory
-            </button>
-            <button 
-              onClick={() => handleLinkClick('Exclusive Property Deals')} 
-              className="text-sm text-gray-600 hover:text-brand-red transition-colors text-left p-3 bg-gray-50 rounded-lg hover:bg-gray-100"
-            >
-              Exclusive Property Deals
-            </button>
-            <button 
-              onClick={() => handleLinkClick('High-Value Investment Opportunities')} 
-              className="text-sm text-gray-600 hover:text-brand-red transition-colors text-left p-3 bg-gray-50 rounded-lg hover:bg-gray-100"
-            >
-              High-Value Investment Opportunities
-            </button>
-            <button 
-              onClick={() => handleLinkClick('Luxury Property Management')} 
-              className="text-sm text-gray-600 hover:text-brand-red transition-colors text-left p-3 bg-gray-50 rounded-lg hover:bg-gray-100"
-            >
-              Luxury Property Management
-            </button>
-            <button 
-              onClick={() => handleLinkClick('Portfolio Diversification')} 
-              className="text-sm text-gray-600 hover:text-brand-red transition-colors text-left p-3 bg-gray-50 rounded-lg hover:bg-gray-100"
-            >
-              Portfolio Diversification
-            </button>
-            <button 
-              onClick={() => handleLinkClick('Tax Optimization Strategies')} 
-              className="text-sm text-gray-600 hover:text-brand-red transition-colors text-left p-3 bg-gray-50 rounded-lg hover:bg-gray-100"
-            >
-              Tax Optimization Strategies
-            </button>
-            <button 
-              onClick={() => handleLinkClick('Due Diligence Services')} 
-              className="text-sm text-gray-600 hover:text-brand-red transition-colors text-left p-3 bg-gray-50 rounded-lg hover:bg-gray-100"
-            >
-              Due Diligence Services
-            </button>
-            <button 
-              onClick={() => handleLinkClick('Private Wealth Real Estate')} 
-              className="text-sm text-gray-600 hover:text-brand-red transition-colors text-left p-3 bg-gray-50 rounded-lg hover:bg-gray-100"
-            >
-              Private Wealth Real Estate
-            </button>
-          </div>
+        {/* Home HNI Services */}
+        <div className="mb-6">
+          <h3 className="text-lg font-semibold text-gray-900 text-left">Home HNI Services</h3>
         </div>
 
         {/* Services Section with Tabs */}
