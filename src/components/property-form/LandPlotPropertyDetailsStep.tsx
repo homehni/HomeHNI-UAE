@@ -104,24 +104,21 @@ export const LandPlotPropertyDetailsStep: React.FC<LandPlotPropertyDetailsStepPr
                 <p className="text-red-500 text-sm">{errors.plotArea.message}</p>
               )}
             </div>
-            {/* <div className="space-y-2">
-              <Label htmlFor="plotAreaUnit" className="text-sm font-medium text-gray-700">
-                Unit *
+            <div className="space-y-2">
+              <Label htmlFor="boundaryWall" className="text-sm font-medium text-gray-700">
+                Boundary Wall
               </Label>
-              <Select onValueChange={(value) => setValue('plotAreaUnit', value as any)}>
+              <Select onValueChange={(value) => setValue('boundaryWall', value as any)}>
                 <SelectTrigger className="h-12">
-                  <SelectValue placeholder="Select unit" />
+                  <SelectValue placeholder="Select boundary wall status" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="sq-ft">Square Feet</SelectItem>
-                  <SelectItem value="sq-yard">Square Yard</SelectItem>
-                  <SelectItem value="acre">Acre</SelectItem>
-                  <SelectItem value="hectare">Hectare</SelectItem>
-                  <SelectItem value="bigha">Bigha</SelectItem>
-                  <SelectItem value="biswa">Biswa</SelectItem>
+                  <SelectItem value="yes">Yes - Complete</SelectItem>
+                  <SelectItem value="partial">Partial</SelectItem>
+                  <SelectItem value="no">No</SelectItem>
                 </SelectContent>
               </Select>
-            </div> */}
+            </div>
           </div>
 
           {/* Plot Dimensions */}
@@ -204,46 +201,6 @@ export const LandPlotPropertyDetailsStep: React.FC<LandPlotPropertyDetailsStepPr
               </Select>
             </div>
           </div> */}
-
-          {/* Road Width & Boundary */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* <div className="space-y-2">
-              <Label htmlFor="roadWidth" className="text-sm font-medium text-gray-700">
-                Road Width (feet) *
-              </Label>
-              <Input
-                id="roadWidth"
-                type="number"
-                min="1"
-                {...register('roadWidth', { 
-                  valueAsNumber: true,
-                  min: { value: 1, message: "Road width must be at least 1" }
-                })}
-                onKeyDown={(e) => { if (['-','+','e','E','.'].includes(e.key)) e.preventDefault(); }}
-                onPaste={(e) => { const text = e.clipboardData.getData('text'); const digits = text.replace(/[^0-9]/g, ''); if (digits !== text) { e.preventDefault(); } }}
-                placeholder="e.g., 20"
-                className="w-full"
-              />
-              {errors.roadWidth && (
-                <p className="text-red-500 text-sm">{errors.roadWidth.message}</p>
-              )}
-            </div> */}
-            <div className="space-y-2">
-              <Label htmlFor="boundaryWall" className="text-sm font-medium text-gray-700">
-                Boundary Wall
-              </Label>
-              <Select onValueChange={(value) => setValue('boundaryWall', value as any)}>
-                <SelectTrigger className="h-12">
-                  <SelectValue placeholder="Select boundary wall status" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="yes">Yes - Complete</SelectItem>
-                  <SelectItem value="partial">Partial</SelectItem>
-                  <SelectItem value="no">No</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
 
           {/* Floors Allowed and Gated Project */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
