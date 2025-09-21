@@ -161,7 +161,6 @@ export const GalleryStep: React.FC<GalleryStepProps> = ({
                 name="video"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Property Video (Optional)</FormLabel>
                     <FormControl>
                       <VideoUpload
                         video={field.value}
