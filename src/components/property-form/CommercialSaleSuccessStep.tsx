@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { CheckCircle } from 'lucide-react';
 
@@ -7,14 +7,36 @@ interface CommercialSaleSuccessStepProps {
   onPreviewListing: () => void;
   onGoToDashboard: () => void;
   createdSubmissionId?: string | null;
+  onEdit?: (step: number) => void;
 }
 
 export const CommercialSaleSuccessStep = ({
   onEditProperty,
   onPreviewListing,
   onGoToDashboard,
-  createdSubmissionId
+  createdSubmissionId,
+  onEdit
 }: CommercialSaleSuccessStepProps) => {
+  const [showNoPhotosMessage, setShowNoPhotosMessage] = useState(false);
+
+  const handleGoPremium = () => {
+    window.open('/plans', '_blank');
+  };
+
+  const handleUploadNow = () => {
+    if (onEdit) {
+      onEdit(6); // Navigate to gallery step
+    }
+  };
+
+  const handleSendPhotos = () => {
+    // Placeholder for send photos functionality
+    console.log('Send photos clicked');
+  };
+
+  const handleIDontHavePhotos = () => {
+    setShowNoPhotosMessage(true);
+  };
   return (
     <div className="max-w-4xl mx-auto p-6">
       {/* Success Message */}
@@ -70,7 +92,10 @@ export const CommercialSaleSuccessStep = ({
               <p className="text-gray-600 text-sm">Unlock access to 100% tenants and enjoy a super-fast closure.</p>
             </div>
           </div>
-          <Button className="bg-teal-600 hover:bg-teal-700 text-white">
+          <Button 
+            className="bg-teal-600 hover:bg-teal-700 text-white"
+            onClick={handleGoPremium}
+          >
             Go Premium
           </Button>
         </div>
@@ -96,30 +121,63 @@ export const CommercialSaleSuccessStep = ({
       </div>
 
       {/* Photo Upload Notice */}
-      <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-        <div className="flex items-start gap-3">
-          <div className="w-6 h-6 bg-yellow-100 rounded-full flex items-center justify-center mt-0.5">
-            <span className="text-yellow-600 text-sm font-semibold">!</span>
-          </div>
-          <div className="flex-1">
-            <p className="font-medium text-yellow-800 mb-1">Your commercial property don't have any photos</p>
-            <p className="text-yellow-700 text-sm mb-3">
-              Your property will be live but in order to get the right tenant faster, we suggest to upload your property photos ASAP
-            </p>
-            <div className="flex gap-2">
-              <Button variant="outline" size="sm" className="text-blue-600 border-blue-300">
-                I Don't Have Photos
-              </Button>
-              <Button variant="outline" size="sm" className="text-blue-600 border-blue-300">
-                Send Photos
-              </Button>
-              <Button size="sm" className="bg-teal-600 hover:bg-teal-700 text-white">
-                Upload Now
-              </Button>
+      {!showNoPhotosMessage && (
+        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+          <div className="flex items-start gap-3">
+            <div className="w-6 h-6 bg-yellow-100 rounded-full flex items-center justify-center mt-0.5">
+              <span className="text-yellow-600 text-sm font-semibold">!</span>
+            </div>
+            <div className="flex-1">
+              <p className="font-medium text-yellow-800 mb-1">Your commercial property don't have any photos</p>
+              <p className="text-yellow-700 text-sm mb-3">
+                Your property will be live but in order to get the right tenant faster, we suggest to upload your property photos ASAP
+              </p>
+              <div className="flex gap-2">
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="text-blue-600 border-blue-300"
+                  onClick={handleIDontHavePhotos}
+                >
+                  I Don't Have Photos
+                </Button>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="text-blue-600 border-blue-300"
+                  onClick={handleSendPhotos}
+                >
+                  Send Photos
+                </Button>
+                <Button 
+                  size="sm" 
+                  className="bg-teal-600 hover:bg-teal-700 text-white"
+                  onClick={handleUploadNow}
+                >
+                  Upload Now
+                </Button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
+
+      {/* No Photos Message */}
+      {showNoPhotosMessage && (
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+          <div className="flex items-start gap-3">
+            <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center mt-0.5">
+              <CheckCircle className="w-4 h-4 text-blue-600" />
+            </div>
+            <div className="flex-1">
+              <p className="font-medium text-blue-800 mb-1">Thanks for letting us know!</p>
+              <p className="text-blue-700 text-sm">
+                No worries! Your property listing will still be active. You can always add photos later to get better responses.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

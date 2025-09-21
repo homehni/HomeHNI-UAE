@@ -124,6 +124,7 @@ export const CommercialSaleMultiStepForm = ({
             window.location.href = '/dashboard';
           }}
           createdSubmissionId={createdSubmissionId}
+          onEdit={handleEdit}
         />
       );
     }
