@@ -284,7 +284,7 @@ const Footer = ({
 
         {/* Home HNI Services */}
         <div className="mb-6">
-          <h3 className="text-lg font-semibold text-gray-900 text-left">Home HNI Services</h3>
+          <h3 className="text-lg font-semibold text-gray-900 text-center">Home HNI Services</h3>
         </div>
 
         {/* Services Section with Tabs */}
