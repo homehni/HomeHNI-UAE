@@ -11,7 +11,9 @@ import GetTenantsFasterSection from '@/components/GetTenantsFasterSection';
 import { LandPlotSidebar } from './LandPlotSidebar';
 
 import { LandPlotScheduleStep } from './LandPlotScheduleStep';
-import { LandPlotSuccessStep } from './LandPlotSuccessStep';
+import { IndustrialLandSuccessStep } from './IndustrialLandSuccessStep';
+import { AgriculturalLandSuccessStep } from './AgriculturalLandSuccessStep';
+import { CommercialLandSuccessStep } from './CommercialLandSuccessStep';
 import { Badge } from '@/components/ui/badge';
 import { OwnerInfo, ScheduleInfo } from '@/types/property';
 import { LandPlotFormData } from '@/types/landPlotProperty';
@@ -22,6 +24,7 @@ interface LandPlotMultiStepFormProps {
   initialOwnerInfo?: Partial<OwnerInfo>;
   targetStep?: number | null;
   createdSubmissionId?: string | null;
+  listingType?: 'Industrial land' | 'Agricultural Land' | 'Commercial land';
 }
 
 export const LandPlotMultiStepForm: React.FC<LandPlotMultiStepFormProps> = ({
@@ -29,7 +32,8 @@ export const LandPlotMultiStepForm: React.FC<LandPlotMultiStepFormProps> = ({
   isSubmitting = false,
   initialOwnerInfo = {},
   targetStep = null,
-  createdSubmissionId
+  createdSubmissionId,
+  listingType = 'Industrial land'
 }) => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const navigate = useNavigate();
@@ -171,6 +175,27 @@ export const LandPlotMultiStepForm: React.FC<LandPlotMultiStepFormProps> = ({
     navigate('/dashboard');
   };
 
+  const renderSuccessStep = () => {
+    const successProps = {
+      onPreviewListing: handlePreviewListing,
+      onGoToDashboard: handleGoToDashboard,
+      createdSubmissionId,
+      onEdit: handleEdit,
+      gallery
+    };
+
+    switch (listingType) {
+      case 'Industrial land':
+        return <IndustrialLandSuccessStep {...successProps} />;
+      case 'Agricultural Land':
+        return <AgriculturalLandSuccessStep {...successProps} />;
+      case 'Commercial land':
+        return <CommercialLandSuccessStep {...successProps} />;
+      default:
+        return <IndustrialLandSuccessStep {...successProps} />;
+    }
+  };
+
 
   const handleScheduleNext = (data: any) => {
     updateScheduleInfo(data);
@@ -251,15 +276,7 @@ export const LandPlotMultiStepForm: React.FC<LandPlotMultiStepFormProps> = ({
                 />
               )}
 
-              {(currentStep === 7 || isSubmitted) && (
-                <LandPlotSuccessStep
-                  onPreviewListing={handlePreviewListing}
-                  onGoToDashboard={handleGoToDashboard}
-                  createdSubmissionId={createdSubmissionId}
-                  onEdit={handleEdit}
-                  gallery={gallery}
-                />
-              )}
+              {(currentStep === 7 || isSubmitted) && renderSuccessStep()}
           </div>
 
           {/* Sticky Bottom Navigation Bar - Hidden on Success step */}

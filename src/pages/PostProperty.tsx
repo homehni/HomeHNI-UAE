@@ -936,6 +936,7 @@ export const PostProperty: React.FC = () => {
             initialOwnerInfo={ownerInfo || {}}
             targetStep={targetStep}
             createdSubmissionId={lastSubmissionId}
+            listingType={ownerInfo?.listingType as 'Industrial land' | 'Agricultural Land' | 'Commercial land'}
           />
         );
       default:
