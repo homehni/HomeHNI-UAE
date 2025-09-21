@@ -370,310 +370,197 @@ const HomeSecurityEmbedded = () => {
                   </SelectContent>
                 </Select>
 
-                <Button type="submit" className="w-full h-12 text-xs md:text-base font-semibold bg-red-800 hover:bg-red-900 text-white">Get Free Security Consultation</Button>
+                <Button type="submit" className="w-full h-12 text-base font-semibold bg-red-800 hover:bg-red-900 text-white mt-6">
+                  Get Free Security Consultation
+                </Button>
               </form>
             </CardContent>
           </Card>
         </div>
       </section>
 
-      {/* Why Choose Our Home Security Services */}
+      {/* Why Choose Us Section */}
       <section className="py-16 px-4 bg-background">
         <div className="container mx-auto">
-          <div className="grid lg:grid-cols-2 gap-16 items-start">
-            <div className="max-w-3xl">
+          <div className="grid lg:grid-cols-2 gap-8 items-start">
+            <div className="max-w-2xl pr-8">
               <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
-                Why Choose Our Home Security Services?
+                Why choose our security services?
               </h2>
               
-              <div className="grid grid-cols-2 gap-6">
-                <div className="space-y-3">
-                  <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
-                    <CheckCircle className="w-5 h-5 text-red-600" />
-                  </div>
-                  <h3 className="text-base font-semibold text-foreground">
-                    Competitive Pricing with Warranty
-                  </h3>
-                  <p className="text-sm text-muted-foreground">
-                    Best rates in the market with comprehensive warranty coverage
-                  </p>
-                </div>
-
-                <div className="space-y-3">
-                  <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
-                    <Clock className="w-5 h-5 text-red-600" />
-                  </div>
-                  <h3 className="text-base font-semibold text-foreground">
-                    Quick Installation & Setup
-                  </h3>
-                  <p className="text-sm text-muted-foreground">
-                    Professional installation completed within 24-48 hours
-                  </p>
-                </div>
-
-                <div className="space-y-3">
-                  <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
-                    <Shield className="w-5 h-5 text-red-600" />
-                  </div>
-                  <h3 className="text-base font-semibold text-foreground">
-                    Minimal Maintenance Required
-                  </h3>
-                  <p className="text-sm text-muted-foreground">
-                    Low-maintenance systems designed for long-term reliability
-                  </p>
-                </div>
-
-                <div className="space-y-3">
-                  <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
-                    <Users className="w-5 h-5 text-red-600" />
-                  </div>
-                  <h3 className="text-base font-semibold text-foreground">
-                    Expert Security Consultation
-                  </h3>
-                  <p className="text-sm text-muted-foreground">
-                    Free consultation to assess your security needs
-                  </p>
-                </div>
-
-                <div className="space-y-3">
-                  <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
-                    <Smartphone className="w-5 h-5 text-red-600" />
-                  </div>
-                  <h3 className="text-base font-semibold text-foreground">
-                    Smart Technology Integration
-                  </h3>
-                  <p className="text-sm text-muted-foreground">
-                    Mobile app control with AI alerts and notifications
-                  </p>
-                </div>
-
-                <div className="space-y-3">
-                  <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
-                    <Headphones className="w-5 h-5 text-red-600" />
-                  </div>
-                  <h3 className="text-base font-semibold text-foreground">
-                    24/7 Monitoring Support
-                  </h3>
-                  <p className="text-sm text-muted-foreground">
-                    Round-the-clock technical support and monitoring
-                  </p>
-                </div>
-              </div>
-            </div>
-            
-            {/* Right side spacing for sticky form */}
-            <div className="hidden lg:block"></div>
-          </div>
-        </div>
-      </section>
-
-      {/* Our Security Services */}
-      <section className="py-16 px-4 bg-muted/30">
-        <div className="container mx-auto">
-          <div className="grid lg:grid-cols-2 gap-16 items-start">
-            <div className="max-w-3xl">
-              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
-                Our Security Services
-              </h2>
-              <div className="grid gap-6">
-                {services.map((service, index) => {
-                  const IconComponent = service.icon;
-                  return (
-                    <div key={index} className="flex gap-4 p-6 bg-card rounded-lg border">
-                      <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                        <IconComponent className="w-6 h-6 text-red-600" />
-                      </div>
-                      <div>
-                        <h3 className="text-lg font-semibold text-foreground mb-2">{service.title}</h3>
-                        <p className="text-muted-foreground text-sm">{service.description}</p>
-                      </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {benefits.slice(0, 4).map((benefit, index) => (
+                  <div key={index} className="space-y-3">
+                    <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
+                      <benefit.icon className="w-5 h-5 text-red-600" />
                     </div>
-                  );
-                })}
-              </div>
-            </div>
-            
-            {/* Right side spacing for sticky form */}
-            <div className="hidden lg:block"></div>
-          </div>
-        </div>
-      </section>
-
-      {/* Stats Section */}
-      <section className="py-16 px-4 bg-background">
-        <div className="container mx-auto">
-          <div className="grid lg:grid-cols-2 gap-16 items-start">
-            <div className="max-w-3xl">
-              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
-                Trusted by Thousands
-              </h2>
-              <div className="grid grid-cols-2 gap-8">
-                <div className="text-center">
-                  <div className="text-4xl md:text-5xl font-bold text-red-600 mb-2">5,000+</div>
-                  <p className="text-muted-foreground">Homes Secured</p>
-                </div>
-                <div className="text-center">
-                  <div className="text-4xl md:text-5xl font-bold text-red-600 mb-2">200+</div>
-                  <p className="text-muted-foreground">Corporate Offices Protected</p>
-                </div>
-                <div className="text-center">
-                  <div className="text-4xl md:text-5xl font-bold text-red-600 mb-2">24/7</div>
-                  <p className="text-muted-foreground">Support Team</p>
-                </div>
-                <div className="text-center">
-                  <div className="text-4xl md:text-5xl font-bold text-red-600 mb-2">99%</div>
-                  <p className="text-muted-foreground">Customer Satisfaction</p>
-                </div>
-              </div>
-            </div>
-            
-            {/* Right side spacing for sticky form */}
-            <div className="hidden lg:block"></div>
-          </div>
-        </div>
-      </section>
-
-      {/* Comparison Table */}
-      <section className="py-16 px-4 bg-muted/30">
-        <div className="container mx-auto">
-          <div className="grid lg:grid-cols-2 gap-16 items-start">
-            <div className="max-w-3xl">
-              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
-                Why Home HNI is Better
-              </h2>
-              <div className="bg-card rounded-xl border overflow-hidden">
-                <div className="grid grid-cols-3 gap-4 p-4 bg-muted/50 font-semibold text-sm">
-                  <div>Features</div>
-                  <div className="text-center">Home HNI</div>
-                  <div className="text-center">Others</div>
-                </div>
-                {comparisonData.map((item, index) => (
-                  <div key={index} className="grid grid-cols-3 gap-4 p-4 border-t text-sm">
-                    <div className="text-foreground">{item.feature}</div>
-                    <div className="text-center">
-                      {item.homeHNI ? (
-                        <CheckCircle className="w-4 h-4 text-red-600 mx-auto" />
-                      ) : (
-                        <X className="w-4 h-4 text-red-500 mx-auto" />
-                      )}
-                    </div>
-                    <div className="text-center">
-                      {item.others ? (
-                        <CheckCircle className="w-4 h-4 text-red-600 mx-auto" />
-                      ) : (
-                        <X className="w-4 h-4 text-red-500 mx-auto" />
-                      )}
-                    </div>
+                    <h3 className="text-base font-semibold text-foreground">
+                      {benefit.title}
+                    </h3>
+                    <p className="text-sm text-muted-foreground">
+                      {benefit.description}
+                    </p>
                   </div>
                 ))}
               </div>
             </div>
-            
-            {/* Right side spacing for sticky form */}
-            <div className="hidden lg:block"></div>
+
+            <div className="flex justify-center lg:justify-end">
+              <div className="w-full max-w-md aspect-square bg-gradient-to-br from-red-100 to-red-50 rounded-2xl flex items-center justify-center">
+                <div className="text-center space-y-4">
+                  <div className="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center mx-auto">
+                    <Shield className="w-8 h-8 text-white" />
+                  </div>
+                  <h3 className="text-xl font-bold text-foreground">Security Coverage</h3>
+                  <p className="text-3xl font-bold text-red-600">24/7</p>
+                  <p className="text-muted-foreground">Complete Protection</p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Testimonials */}
+      {/* Services Section */}
+      <section className="py-16 px-4 bg-muted/30">
+        <div className="container mx-auto text-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+            Comprehensive Security Solutions
+          </h2>
+          <p className="text-lg text-muted-foreground mb-12 max-w-2xl mx-auto">
+            From CCTV installation to smart home integration, we provide complete security solutions for your peace of mind.
+          </p>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {services.map((service, index) => (
+              <Card key={index} className="p-6 hover:shadow-lg transition-shadow bg-background border border-border">
+                <CardContent className="p-0 text-center">
+                  <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+                    <service.icon className="w-6 h-6 text-red-600" />
+                  </div>
+                  <h3 className="text-lg font-semibold text-foreground mb-2">{service.title}</h3>
+                  <p className="text-muted-foreground">{service.description}</p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Comparison Table Section */}
       <section className="py-16 px-4 bg-background">
         <div className="container mx-auto">
-          <div className="grid lg:grid-cols-2 gap-16 items-start">
-            <div className="max-w-3xl">
-              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
-                What Our Customers Say
-              </h2>
-              <div className="space-y-6">
-                {testimonials.map((testimonial, index) => (
-                  <Card key={index} className="p-6">
-                    <CardContent className="p-0">
-                      <div className="flex items-start gap-4">
-                        <img 
-                          src={testimonial.image} 
-                          alt={testimonial.name}
-                          className="w-12 h-12 rounded-full object-cover"
-                        />
-                        <div className="flex-1">
-                          <div className="flex items-center gap-1 mb-2">
-                            {[...Array(testimonial.rating)].map((_, i) => (
-                              <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                            ))}
-                          </div>
-                          <p className="text-muted-foreground text-sm mb-3">"{testimonial.text}"</p>
-                          <div>
-                            <p className="font-semibold text-sm">{testimonial.name}</p>
-                            <p className="text-xs text-muted-foreground">{testimonial.role}</p>
-                          </div>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
+          <h2 className="text-3xl md:text-4xl font-bold text-center text-foreground mb-12">Why Choose HomeHNI Over Others?</h2>
+          
+          <div className="max-w-4xl mx-auto">
+            <div className="bg-card border border-border rounded-lg overflow-hidden">
+              <div className="grid grid-cols-3 bg-muted text-center py-4">
+                <div className="font-semibold text-foreground">Features</div>
+                <div className="font-semibold text-foreground">HomeHNI</div>
+                <div className="font-semibold text-foreground">Others</div>
               </div>
+              
+              {comparisonData.map((item, index) => (
+                <div key={index} className={`grid grid-cols-3 text-center py-3 ${index % 2 === 0 ? 'bg-muted/50' : 'bg-background'}`}>
+                  <div className="text-foreground font-medium">{item.feature}</div>
+                  <div>{item.homeHNI ? <CheckCircle className="w-5 h-5 text-green-600 mx-auto" /> : <X className="w-5 h-5 text-red-500 mx-auto" />}</div>
+                  <div>{item.others ? <CheckCircle className="w-5 h-5 text-green-600 mx-auto" /> : <X className="w-5 h-5 text-red-500 mx-auto" />}</div>
+                </div>
+              ))}
             </div>
-            
-            {/* Right side spacing for sticky form */}
-            <div className="hidden lg:block"></div>
           </div>
         </div>
       </section>
 
-      {/* Target Audience */}
+      {/* Customer Testimonials Section */}
       <section className="py-16 px-4 bg-muted/30">
         <div className="container mx-auto">
-          <div className="grid lg:grid-cols-2 gap-16 items-start">
-            <div className="max-w-3xl">
-              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
-                Who We Serve
-              </h2>
-              <div className="grid gap-6">
-                {targetAudience.map((audience, index) => {
-                  const IconComponent = audience.icon;
-                  return (
-                    <div key={index} className="flex gap-4 p-6 bg-card rounded-lg border">
-                      <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                        <IconComponent className="w-6 h-6 text-red-600" />
-                      </div>
-                      <div>
-                        <h3 className="text-lg font-semibold text-foreground mb-2">{audience.title}</h3>
-                        <p className="text-muted-foreground text-sm">{audience.description}</p>
-                      </div>
+          <h2 className="text-3xl md:text-4xl font-bold text-center text-foreground mb-12">What Our Customers Say</h2>
+          
+          <div className="grid md:grid-cols-3 gap-8">
+            {testimonials.map((testimonial, index) => (
+              <Card key={index} className="p-6 bg-background border border-border">
+                <CardContent className="p-0">
+                  <div className="flex items-center mb-4">
+                    <img 
+                      src={testimonial.image} 
+                      alt={testimonial.name}
+                      className="w-12 h-12 rounded-full object-cover mr-4"
+                    />
+                    <div>
+                      <h4 className="font-semibold text-foreground">{testimonial.name}</h4>
+                      <p className="text-sm text-muted-foreground">{testimonial.role}</p>
                     </div>
-                  );
-                })}
+                  </div>
+                  
+                  <div className="flex mb-3">
+                    {[...Array(testimonial.rating)].map((_, i) => (
+                      <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                    ))}
+                  </div>
+                  
+                  <p className="text-muted-foreground">{testimonial.text}</p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Target Audience Section */}
+      <section className="py-16 px-4 bg-background">
+        <div className="container mx-auto text-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">Perfect For</h2>
+          <p className="text-lg text-muted-foreground mb-12">Our security solutions are designed for various customer needs</p>
+          
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {targetAudience.map((audience, index) => (
+              <div key={index} className="space-y-4">
+                <div className="w-16 h-16 bg-red-100 rounded-2xl flex items-center justify-center mx-auto">
+                  <audience.icon className="w-8 h-8 text-red-600" />
+                </div>
+                <h3 className="text-xl font-bold text-foreground">{audience.title}</h3>
+                <p className="text-muted-foreground">{audience.description}</p>
               </div>
-            </div>
-            
-            {/* Right side spacing for sticky form */}
-            <div className="hidden lg:block"></div>
+            ))}
           </div>
         </div>
       </section>
 
       {/* FAQ Section */}
-      <section className="py-16 px-4 bg-background">
+      <section className="py-16 px-4 bg-muted/30">
         <div className="container mx-auto">
-          <div className="grid lg:grid-cols-2 gap-16 items-start">
-            <div className="max-w-3xl">
-              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
-                Frequently Asked Questions
-              </h2>
-              <Accordion type="single" collapsible className="space-y-4">
-                {faqs.map((faq, index) => (
-                  <AccordionItem key={index} value={`item-${index}`} className="bg-card border rounded-lg px-6">
-                    <AccordionTrigger className="text-left font-semibold text-sm py-4">
-                      {faq.question}
-                    </AccordionTrigger>
-                    <AccordionContent className="text-muted-foreground text-sm pb-4">
-                      {faq.answer}
-                    </AccordionContent>
-                  </AccordionItem>
-                ))}
-              </Accordion>
-            </div>
-            
-            {/* Right side spacing for sticky form */}
-            <div className="hidden lg:block"></div>
+          <h2 className="text-3xl md:text-4xl font-bold text-center text-foreground mb-12">Frequently Asked Questions</h2>
+          
+          <div className="max-w-3xl mx-auto">
+            <Accordion type="single" collapsible className="w-full">
+              {faqs.map((faq, index) => (
+                <AccordionItem key={index} value={`item-${index}`}>
+                  <AccordionTrigger className="text-left font-semibold text-foreground">
+                    {faq.question}
+                  </AccordionTrigger>
+                  <AccordionContent className="text-muted-foreground">
+                    {faq.answer}
+                  </AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
+          </div>
+        </div>
+      </section>
+
+      {/* Service Tags Section */}
+      <section className="py-12 px-4 bg-background">
+        <div className="container mx-auto text-center">
+          <div className="flex flex-wrap justify-center gap-3">
+            <span className="px-4 py-2 bg-red-100 text-red-700 rounded-full text-sm font-medium">CCTV Installation Mumbai</span>
+            <span className="px-4 py-2 bg-red-100 text-red-700 rounded-full text-sm font-medium">Digital Locks Delhi</span>
+            <span className="px-4 py-2 bg-red-100 text-red-700 rounded-full text-sm font-medium">Home Security Bangalore</span>
+            <span className="px-4 py-2 bg-red-100 text-red-700 rounded-full text-sm font-medium">Smart Alarms</span>
+            <span className="px-4 py-2 bg-red-100 text-red-700 rounded-full text-sm font-medium">Video Door Phone</span>
+            <span className="px-4 py-2 bg-red-100 text-red-700 rounded-full text-sm font-medium">Security System</span>
+            <span className="px-4 py-2 bg-red-100 text-red-700 rounded-full text-sm font-medium">Professional Installation</span>
+            <span className="px-4 py-2 bg-red-100 text-red-700 rounded-full text-sm font-medium">24/7 Support</span>
           </div>
         </div>
       </section>
