@@ -8,11 +8,14 @@ import { useToast } from "@/hooks/use-toast";
 import { Shield, Camera, Lock, Bell, Smartphone, Home, Clock, CheckCircle, Star, X, Users, Building2, Zap, Headphones, Award, TrendingUp } from "lucide-react";
 
 const HomeSecurityEmbedded = () => {
-  const [statesData, setStatesData] = useState<any>(null);
-  const [selectedState, setSelectedState] = useState("");
-  const [selectedStateDesktop, setSelectedStateDesktop] = useState("");
-  const [cities, setCities] = useState<string[]>([]);
-  const [citiesDesktop, setCitiesDesktop] = useState<string[]>([]);
+  // Major cities in India
+  const majorCities = [
+    "Mumbai", "Delhi", "Bangalore", "Hyderabad", "Ahmedabad", "Chennai", "Kolkata", "Surat", "Pune", "Jaipur",
+    "Lucknow", "Kanpur", "Nagpur", "Indore", "Thane", "Bhopal", "Visakhapatnam", "Pimpri-Chinchwad", "Patna", "Vadodara",
+    "Ghaziabad", "Ludhiana", "Agra", "Nashik", "Faridabad", "Meerut", "Rajkot", "Kalyan-Dombivli", "Vasai-Virar", "Varanasi",
+    "Srinagar", "Aurangabad", "Dhanbad", "Amritsar", "Navi Mumbai", "Allahabad", "Ranchi", "Howrah", "Coimbatore", "Jabalpur",
+    "Gwalior", "Vijayawada", "Jodhpur", "Madurai", "Raipur", "Kota", "Guwahati", "Chandigarh", "Solapur", "Hubli-Dharwad"
+  ];
 
   const services = [{
     icon: Camera,
@@ -153,40 +156,6 @@ const HomeSecurityEmbedded = () => {
 
   const { toast } = useToast();
 
-  // Load states and cities data
-  useEffect(() => {
-    const loadStatesData = async () => {
-      try {
-        const response = await fetch('/data/india_states_cities.json');
-        const data = await response.json();
-        setStatesData(data);
-      } catch (error) {
-        console.error('Failed to load states data:', error);
-      }
-    };
-    loadStatesData();
-  }, []);
-
-  // Update cities when state changes (mobile)
-  useEffect(() => {
-    if (statesData && selectedState) {
-      const cities = statesData[selectedState];
-      setCities(cities || []);
-    } else {
-      setCities([]);
-    }
-  }, [selectedState, statesData]);
-
-  // Update cities when state changes (desktop)
-  useEffect(() => {
-    if (statesData && selectedStateDesktop) {
-      const cities = statesData[selectedStateDesktop];
-      setCitiesDesktop(cities || []);
-    } else {
-      setCitiesDesktop([]);
-    }
-  }, [selectedStateDesktop, statesData]);
-
   return (
     <div className="bg-background">
       {/* Hero Section */}
@@ -276,21 +245,10 @@ const HomeSecurityEmbedded = () => {
                     </SelectContent>
                   </Select>
 
-                  <Select name="state" onValueChange={setSelectedStateDesktop}>
-                    <SelectTrigger className="flex-1"><SelectValue placeholder="State" /></SelectTrigger>
-                    <SelectContent>
-                      {statesData && Object.keys(statesData).map((state: string) => (
-                        <SelectItem key={state} value={state}>
-                          {state}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-
-                  <Select name="city">
+                  <Select name="city" required>
                     <SelectTrigger className="flex-1"><SelectValue placeholder="City" /></SelectTrigger>
                     <SelectContent>
-                      {citiesDesktop.map((city: string) => (
+                      {majorCities.map((city: string) => (
                         <SelectItem key={city} value={city}>
                           {city}
                         </SelectItem>
@@ -385,25 +343,12 @@ const HomeSecurityEmbedded = () => {
                     </SelectContent>
                   </Select>
 
-                  <Select name="state" onValueChange={setSelectedState}>
-                    <SelectTrigger className="flex-1 h-12 bg-background">
-                      <SelectValue placeholder="State" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-background border shadow-lg">
-                      {statesData && Object.keys(statesData).map((state: string) => (
-                        <SelectItem key={state} value={state}>
-                          {state}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-
-                  <Select name="city">
+                  <Select name="city" required>
                     <SelectTrigger className="flex-1 h-12 bg-background">
                       <SelectValue placeholder="City" />
                     </SelectTrigger>
                     <SelectContent className="bg-background border shadow-lg">
-                      {cities.map((city: string) => (
+                      {majorCities.map((city: string) => (
                         <SelectItem key={city} value={city}>
                           {city}
                         </SelectItem>
