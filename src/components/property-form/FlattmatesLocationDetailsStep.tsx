@@ -178,6 +178,10 @@ export const FlattmatesLocationDetailsStep: React.FC<FlattmatesLocationDetailsSt
 
   const onSubmit = (data: FlattmatesLocationData) => {
     console.log('FlattmatesLocationDetailsStep onSubmit called with data:', data);
+    console.log('Form errors:', form.formState.errors);
+    console.log('Form isValid:', form.formState.isValid);
+    console.log('Form isDirty:', form.formState.isDirty);
+    
     // Convert to LocationDetails format and include parsed city, state, pincode
     const locationData: LocationDetails = {
       state: data.state || '',
@@ -196,7 +200,15 @@ export const FlattmatesLocationDetailsStep: React.FC<FlattmatesLocationDetailsSt
       <h1 className="text-2xl font-bold text-red-600">Location Details</h1>
 
       <Form {...form}>
-        <form id={formId || 'flatmates-step-form'} onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <form 
+          id={formId || 'flatmates-step-form'} 
+          onSubmit={(e) => {
+            console.log('FlattmatesLocationDetailsStep form being submitted');
+            console.log('Current form values:', form.getValues());
+            form.handleSubmit(onSubmit)(e);
+          }} 
+          className="space-y-6"
+        >
           {/* City and Landmark Fields - Side by side */}
           <div className="grid grid-cols-2 gap-4">
             {/* City Field */}
