@@ -197,66 +197,37 @@ export const FlattmatesLocationDetailsStep: React.FC<FlattmatesLocationDetailsSt
 
       <Form {...form}>
         <form id={formId || 'flatmates-step-form'} onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-          {/* City Field */}
-          <FormField
-            control={form.control}
-            name="city"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-sm font-medium text-gray-700">
-                  City *
-                </FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
-                  <FormControl>
-                    <SelectTrigger className="h-12 bg-white z-50">
-                      <SelectValue placeholder="Choose city" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent className="bg-white border border-gray-200 shadow-lg z-[9999]">
-                    <SelectItem value="Bangalore">Bangalore</SelectItem>
-                    <SelectItem value="Mumbai">Mumbai</SelectItem>
-                    <SelectItem value="Pune">Pune</SelectItem>
-                    <SelectItem value="Chennai">Chennai</SelectItem>
-                    <SelectItem value="Gurgaon">Gurgaon</SelectItem>
-                    <SelectItem value="Hyderabad">Hyderabad</SelectItem>
-                    <SelectItem value="Delhi">Delhi</SelectItem>
-                    <SelectItem value="Faridabad">Faridabad</SelectItem>
-                    <SelectItem value="Ghaziabad">Ghaziabad</SelectItem>
-                    <SelectItem value="Noida">Noida</SelectItem>
-                    <SelectItem value="Greater Noida">Greater Noida</SelectItem>
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          {/* Locality/Area and Landmark Fields - Side by side */}
+          {/* City and Landmark Fields - Side by side */}
           <div className="grid grid-cols-2 gap-4">
-            {/* Locality/Area Field */}
+            {/* City Field */}
             <FormField
               control={form.control}
-              name="locality"
+              name="city"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-sm font-medium text-gray-700 flex items-center gap-2">
-                    <MapPin className="h-4 w-4 text-red-500" />
-                    Locality/Area *
+                  <FormLabel className="text-sm font-medium text-gray-700">
+                    City *
                   </FormLabel>
-                  <FormControl>
-                    <div className="relative">
-                      <Input
-                        placeholder="Search 'Bellandur, Bengaluru, Karnataka'..."
-                        className="h-12 pl-10"
-                        {...field}
-                        ref={(el) => {
-                          field.ref(el)
-                          localityInputRef.current = el
-                        }}
-                      />
-                      <MapPin className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                    </div>
-                  </FormControl>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger className="h-12 bg-white z-50">
+                        <SelectValue placeholder="Choose city" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent className="bg-white border border-gray-200 shadow-lg z-[9999]">
+                      <SelectItem value="Bangalore">Bangalore</SelectItem>
+                      <SelectItem value="Mumbai">Mumbai</SelectItem>
+                      <SelectItem value="Pune">Pune</SelectItem>
+                      <SelectItem value="Chennai">Chennai</SelectItem>
+                      <SelectItem value="Gurgaon">Gurgaon</SelectItem>
+                      <SelectItem value="Hyderabad">Hyderabad</SelectItem>
+                      <SelectItem value="Delhi">Delhi</SelectItem>
+                      <SelectItem value="Faridabad">Faridabad</SelectItem>
+                      <SelectItem value="Ghaziabad">Ghaziabad</SelectItem>
+                      <SelectItem value="Noida">Noida</SelectItem>
+                      <SelectItem value="Greater Noida">Greater Noida</SelectItem>
+                    </SelectContent>
+                  </Select>
                   <FormMessage />
                 </FormItem>
               )}
@@ -283,6 +254,35 @@ export const FlattmatesLocationDetailsStep: React.FC<FlattmatesLocationDetailsSt
               )}
             />
           </div>
+
+          {/* Locality/Area Field */}
+          <FormField
+            control={form.control}
+            name="locality"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-sm font-medium text-gray-700 flex items-center gap-2">
+                  <MapPin className="h-4 w-4 text-red-500" />
+                  Locality/Area *
+                </FormLabel>
+                <FormControl>
+                  <div className="relative">
+                    <Input
+                      placeholder="Search 'Bellandur, Bengaluru, Karnataka'..."
+                      className="h-12 pl-10"
+                      {...field}
+                      ref={(el) => {
+                        field.ref(el)
+                        localityInputRef.current = el
+                      }}
+                    />
+                    <MapPin className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                  </div>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
           {showMap && (
             <div className="w-full h-64 md:h-80 rounded-lg border overflow-hidden">
