@@ -26,6 +26,10 @@ export const IndustrialLandSuccessStep = ({
     window.open('/plans', '_blank');
   };
 
+  const handleGoDashboard = () => {
+    window.open('/dashboard', '_blank');
+  };
+
   const handleEditProperty = () => {
     if (onEdit) {
       onEdit(1); // Go back to first step
@@ -76,7 +80,7 @@ export const IndustrialLandSuccessStep = ({
             Preview Listing
           </Button>
           <Button
-            onClick={onGoToDashboard}
+            onClick={handleGoDashboard}
             className="bg-blue-600 hover:bg-blue-700 text-white"
           >
             Go to Dashboard

@@ -28,6 +28,10 @@ export const CommercialSaleSuccessStep = ({
     window.open('/plans', '_blank');
   };
 
+  const handleGoDashboard = () => {
+    window.open('/dashboard', '_blank');
+  };
+
   const handleUploadNow = () => {
     if (onEdit) {
       onEdit(6); // Navigate to gallery step
@@ -71,7 +75,7 @@ export const CommercialSaleSuccessStep = ({
             Preview Listing
           </Button>
           <Button
-            onClick={onGoToDashboard}
+            onClick={handleGoDashboard}
             className="bg-blue-600 hover:bg-blue-700 text-white"
           >
             Go to Dashboard
