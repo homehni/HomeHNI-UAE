@@ -1,6 +1,6 @@
 
 import { useState } from 'react';
-import { X, ChevronDown, User, UserPlus, LogIn, LogOut, Settings, Shield, Mail, Facebook, Instagram, MessageCircle } from 'lucide-react';
+import { X, ChevronDown, User, UserPlus, LogIn, LogOut, Settings, Shield, Mail, Phone, MessageCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useNavigate, Link } from 'react-router-dom';
@@ -275,45 +275,44 @@ const handleAuthClick = () => {
                     <div className="ml-4 mt-1">
                       {item.isContactUs ? (
                         <div className="space-y-3 p-2">
-                          {/* Email Section */}
-                          <div className="flex items-center space-x-2">
-                            <Mail className="w-4 h-4 text-gray-500" />
-                            <div>
-                              <p className="text-xs text-gray-400">Email</p>
-                              <a 
-                                href="mailto:assist@nobroker.in" 
-                                className="text-sm text-gray-600 hover:text-brand-red transition-colors"
-                              >
-                                assist@nobroker.in
-                              </a>
+                          {/* Email */}
+                          <div className="flex items-center space-x-3">
+                            <div className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center">
+                              <Mail className="w-4 h-4 text-gray-600" />
                             </div>
+                            <a 
+                              href="mailto:assist@nobroker.in" 
+                              className="text-sm text-gray-600 hover:text-brand-red transition-colors"
+                            >
+                              assist@nobroker.in
+                            </a>
                           </div>
                           
-                          {/* Social Media Icons */}
-                          <div className="flex space-x-3 justify-start">
+                          {/* Phone Number */}
+                          <div className="flex items-center space-x-3">
+                            <div className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center">
+                              <Phone className="w-4 h-4 text-gray-600" />
+                            </div>
                             <a 
-                              href="https://facebook.com" 
-                              target="_blank" 
-                              rel="noopener noreferrer"
-                              className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50 transition-colors"
+                              href="tel:+919876543210" 
+                              className="text-sm text-gray-600 hover:text-brand-red transition-colors"
                             >
-                              <Facebook className="w-4 h-4 text-gray-600" />
+                              +91 98765 43210
                             </a>
-                            <a 
-                              href="https://instagram.com" 
-                              target="_blank" 
-                              rel="noopener noreferrer"
-                              className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50 transition-colors"
-                            >
-                              <Instagram className="w-4 h-4 text-gray-600" />
-                            </a>
-                            <a 
-                              href="https://wa.me" 
-                              target="_blank" 
-                              rel="noopener noreferrer"
-                              className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50 transition-colors"
-                            >
+                          </div>
+                          
+                          {/* WhatsApp */}
+                          <div className="flex items-center space-x-3">
+                            <div className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center">
                               <MessageCircle className="w-4 h-4 text-gray-600" />
+                            </div>
+                            <a 
+                              href="https://wa.me/919876543210" 
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                              className="text-sm text-gray-600 hover:text-brand-red transition-colors"
+                            >
+                              WhatsApp
                             </a>
                           </div>
                         </div>
