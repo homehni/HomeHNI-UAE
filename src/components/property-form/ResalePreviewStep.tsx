@@ -413,13 +413,6 @@ export const ResalePreviewStep: React.FC<ResalePreviewStepProps> = ({
         </div>
       )}
 
-      {/* Back Button */}
-      <div className="flex justify-start pt-4 sm:pt-6">
-        <Button type="button" variant="outline" onClick={onBack} className="h-9 sm:h-10 px-3 sm:px-4 md:h-12 md:px-8 w-full sm:w-auto">
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          Back
-        </Button>
-      </div>
     </div>
   );
 };
