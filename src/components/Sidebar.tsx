@@ -1,6 +1,6 @@
 
 import { useState } from 'react';
-import { X, ChevronDown, User, UserPlus, LogIn, LogOut, Settings, Shield } from 'lucide-react';
+import { X, ChevronDown, User, UserPlus, LogIn, LogOut, Settings, Shield, Mail, Facebook, Instagram, MessageCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useNavigate, Link } from 'react-router-dom';
@@ -135,11 +135,7 @@ const handleAuthClick = () => {
       id: 'contact-us', 
       label: 'Contact Us', 
       hasSubmenu: true,
-      submenu: [
-        { label: 'Customer Support', onClick: handleContactUsClick },
-        { label: 'Sales Enquiry', onClick: handleContactUsClick },
-        { label: 'Partnership', onClick: handleContactUsClick }
-      ]
+      isContactUs: true
     }
   ];
 
@@ -275,17 +271,63 @@ const handleAuthClick = () => {
                     )}
                   </button>
                   
-                  {item.hasSubmenu && item.submenu && expandedSections.includes(item.id) && (
+                  {item.hasSubmenu && expandedSections.includes(item.id) && (
                     <div className="ml-4 mt-1">
-                      {item.submenu.map((subItem) => (
-                        <button
-                          key={typeof subItem === 'string' ? subItem : subItem.label}
-                          onClick={typeof subItem === 'string' ? undefined : subItem.onClick}
-                          className="w-full text-left px-4 py-2 text-sm text-gray-500 hover:bg-gray-50 hover:text-gray-700 rounded-lg transition-colors"
-                        >
-                          {typeof subItem === 'string' ? subItem : subItem.label}
-                        </button>
-                      ))}
+                      {item.isContactUs ? (
+                        <div className="space-y-3 p-2">
+                          {/* Email Section */}
+                          <div className="flex items-center space-x-2">
+                            <Mail className="w-4 h-4 text-gray-500" />
+                            <div>
+                              <p className="text-xs text-gray-400">Email</p>
+                              <a 
+                                href="mailto:assist@nobroker.in" 
+                                className="text-sm text-gray-600 hover:text-brand-red transition-colors"
+                              >
+                                assist@nobroker.in
+                              </a>
+                            </div>
+                          </div>
+                          
+                          {/* Social Media Icons */}
+                          <div className="flex space-x-3 justify-start">
+                            <a 
+                              href="https://facebook.com" 
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                              className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50 transition-colors"
+                            >
+                              <Facebook className="w-4 h-4 text-gray-600" />
+                            </a>
+                            <a 
+                              href="https://instagram.com" 
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                              className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50 transition-colors"
+                            >
+                              <Instagram className="w-4 h-4 text-gray-600" />
+                            </a>
+                            <a 
+                              href="https://wa.me" 
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                              className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50 transition-colors"
+                            >
+                              <MessageCircle className="w-4 h-4 text-gray-600" />
+                            </a>
+                          </div>
+                        </div>
+                      ) : (
+                        item.submenu?.map((subItem) => (
+                          <button
+                            key={typeof subItem === 'string' ? subItem : subItem.label}
+                            onClick={typeof subItem === 'string' ? undefined : subItem.onClick}
+                            className="w-full text-left px-4 py-2 text-sm text-gray-500 hover:bg-gray-50 hover:text-gray-700 rounded-lg transition-colors"
+                          >
+                            {typeof subItem === 'string' ? subItem : subItem.label}
+                          </button>
+                        ))
+                      )}
                     </div>
                   )}
                 </div>
