@@ -883,8 +883,9 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
             </div>
           </div>
 
-          {/* Sticky Bottom Navigation Bar */}
-          <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-3 sm:p-4 z-50 shadow-lg">
+          {/* Sticky Bottom Navigation Bar - Hidden on Preview step */}
+          {currentStep !== 7 && (
+            <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-3 sm:p-4 z-50 shadow-lg">
             <div className="max-w-4xl mx-auto flex flex-col sm:flex-row gap-3 sm:gap-4 sm:justify-center">
               <Button 
                 type="button" 
@@ -956,7 +957,8 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
                 Save & Continue
               </Button>
             </div>
-          </div>
+            </div>
+          )}
         </div>
 
         {/* Right Sidebar - Get Tenants Faster */}
