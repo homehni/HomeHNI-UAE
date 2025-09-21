@@ -80,7 +80,7 @@ export const LandPlotMultiStepForm: React.FC<LandPlotMultiStepFormProps> = ({
 
   // Navigate to target step if provided
   React.useEffect(() => {
-    if (targetStep && targetStep > 0 && targetStep <= 7) {
+    if (targetStep && targetStep > 0 && targetStep <= 8) {
       console.log('Navigating to target step:', targetStep);
       goToStep(targetStep);
     }
@@ -132,6 +132,13 @@ export const LandPlotMultiStepForm: React.FC<LandPlotMultiStepFormProps> = ({
 
   const handleGalleryNext = (data: any) => {
     updateGallery(data);
+    nextStep();
+    scrollToTop();
+  };
+
+  const handleScheduleNext = (data: Partial<ScheduleInfo>) => {
+    console.log('LandPlotMultiStepForm handleScheduleNext called');
+    updateScheduleInfo(data);
     nextStep();
     scrollToTop();
   };
@@ -197,11 +204,6 @@ export const LandPlotMultiStepForm: React.FC<LandPlotMultiStepFormProps> = ({
   };
 
 
-  const handleScheduleNext = (data: any) => {
-    updateScheduleInfo(data);
-    nextStep();
-    scrollToTop();
-  };
 
   const handleSubmit = () => {
     console.log('LandPlotMultiStepForm handleSubmit called');
@@ -270,7 +272,7 @@ export const LandPlotMultiStepForm: React.FC<LandPlotMultiStepFormProps> = ({
               {currentStep === 6 && (
                 <LandPlotScheduleStep
                   initialData={scheduleInfo}
-                  onNext={handleScheduleSubmit}
+                  onNext={handleScheduleNext}
                   onBack={prevStep}
                   onSubmit={handleScheduleSubmit}
                 />
