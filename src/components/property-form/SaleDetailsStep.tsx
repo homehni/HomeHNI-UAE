@@ -159,6 +159,9 @@ export const SaleDetailsStep: React.FC<SaleDetailsStepProps> = ({
 
   return (
     <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
+      <div className="text-left">
+        <h2 className="text-2xl font-bold text-red-600 mb-6">Sale details</h2>
+      </div>
 
       <Form {...form}>
         <form id={formId} onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
