@@ -204,8 +204,8 @@ export const PreviewStep: React.FC<PreviewStepProps> = ({
 
   return (
     <div className="w-full px-4 sm:px-6 lg:px-8 space-y-4 sm:space-y-6">
-      {/* Property Preview Section */}
-      <div className="bg-white border border-gray-200 rounded-lg p-4 sm:p-6 mb-4 sm:mb-6 shadow-sm">
+      {/* Property Preview Section - Hidden */}
+      <div className="hidden bg-white border border-gray-200 rounded-lg p-4 sm:p-6 mb-4 sm:mb-6 shadow-sm">
         <h2 className="text-xl font-bold text-gray-800 mb-4">Property Preview</h2>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
