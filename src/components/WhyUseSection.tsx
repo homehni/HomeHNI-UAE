@@ -166,14 +166,14 @@ const WhyUseSection = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {benefits.map((benefit, index) => (
-              <div key={index} className="card-border-accent hover-lift p-6 bg-white">
+              <div key={index} className="card-border-accent hover-lift p-6 bg-white text-uniform-center">
                 <div className="relative inline-block mb-4 text-uniform-center w-full">
                   {benefit.icon}
                 </div>
-                <h3 className="text-lg font-semibold text-gray-800 mb-2 text-left">
+                <h3 className="text-lg font-semibold text-gray-800 mb-2 text-uniform-center">
                   {benefit.title}
                 </h3>
-                <p className="text-sm text-gray-600 text-uniform">{benefit.description}</p>
+                <p className="text-sm text-gray-600 text-uniform-center">{benefit.description}</p>
               </div>
             ))}
           </div>
