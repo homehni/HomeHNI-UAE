@@ -475,14 +475,6 @@ const CorporateEnquiry = () => {
             {/* Right side spacing for sticky form */}
             <div className="hidden lg:block"></div>
           </div>
-          
-          <div className="mt-12 pt-8 border-t border-gray-300 text-center">
-            <p className="text-sm text-gray-600">
-              © 2024 Home HNI. All rights reserved. | 
-              <a href="/privacy-policy" className="hover:text-foreground ml-1">Privacy Policy</a> | 
-              <a href="/terms-and-conditions" className="hover:text-foreground ml-1">Terms & Conditions</a>
-            </p>
-          </div>
         </div>
       </section>
     </div>
