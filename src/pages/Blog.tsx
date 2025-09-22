@@ -17,6 +17,7 @@ const Blog = () => {
   const [email, setEmail] = useState('');
   const [modalEmail, setModalEmail] = useState('');
   const [showSubscriptionModal, setShowSubscriptionModal] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const { toast } = useToast();
 
@@ -64,12 +65,13 @@ const Blog = () => {
     setSelectedCategories([]);
     setShowSubscriptionModal(false);
     
-    // Show success toast
-    toast({
-      title: "Successfully subscribed!",
-      description: "You'll receive our latest updates based on your selected categories.",
-      duration: 4000,
-    });
+    // Show success modal
+    setShowSuccessModal(true);
+    
+    // Auto-hide success modal after 3 seconds
+    setTimeout(() => {
+      setShowSuccessModal(false);
+    }, 3000);
   };
 
   const toggleCategory = (category: string) => {
@@ -275,11 +277,11 @@ const Blog = () => {
 
       {/* Subscription Modal */}
       <Dialog open={showSubscriptionModal} onOpenChange={setShowSubscriptionModal}>
-        <DialogContent className="sm:max-w-[600px] bg-white p-0">
+        <DialogContent className="sm:max-w-[600px] bg-transparent border-none shadow-none p-0">
           <div className="relative bg-gradient-to-br from-blue-50 to-purple-50 p-8 rounded-lg">
             <button
               onClick={() => setShowSubscriptionModal(false)}
-              className="absolute top-4 right-4 p-2 hover:bg-white/20 rounded-full transition-colors"
+              className="absolute top-4 right-4 p-2 hover:bg-white/20 rounded-full transition-colors z-10"
             >
               <X className="h-5 w-5 text-gray-600" />
             </button>
@@ -332,6 +334,25 @@ const Blog = () => {
                 </Button>
               </div>
             </form>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Success Modal */}
+      <Dialog open={showSuccessModal} onOpenChange={setShowSuccessModal}>
+        <DialogContent className="sm:max-w-[400px] bg-transparent border-none shadow-none p-0">
+          <div className="bg-red-500 text-white p-8 rounded-lg text-center">
+            <div className="mb-4">
+              <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <h2 className="text-2xl font-bold mb-2">You&apos;re all set!</h2>
+              <p className="text-white/90">
+                Get ready for regular updates and more.
+              </p>
+            </div>
           </div>
         </DialogContent>
       </Dialog>
