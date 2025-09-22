@@ -12,11 +12,12 @@ import CommercialSellerPlans from './CommercialSellerPlans';
 import CommercialOwnerPlans from './CommercialOwnerPlans';
 import BuilderLifetimePlans from './BuilderLifetimePlans';
 import AgentPlans from './AgentPlans';
+import RentalPlans from './RentalPlans';
 
 const sections = [
   { id: 'buyer', label: 'Buyer Plans' },
   { id: 'seller', label: 'Seller Plans' },
-  { id: 'owner', label: 'Tenant Plans' },
+  { id: 'rental', label: 'Rental Plans' },
   { id: 'commercial-buyer', label: 'Commercial Buyer Plans' },
   { id: 'commercial-seller', label: 'Commercial Seller Plans' },
   { id: 'commercial-owner', label: 'Owner Plans' },
@@ -158,10 +159,10 @@ const Plans = () => {
                   </>
                 )}
 
-                {active === 'owner' && (
+                {active === 'rental' && (
                   <>
                     
-                    <OwnerPlans embedded />
+                    <RentalPlans embedded />
                   </>
                 )}
 
