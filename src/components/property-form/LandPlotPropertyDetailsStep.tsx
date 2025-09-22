@@ -61,7 +61,7 @@ export const LandPlotPropertyDetailsStep: React.FC<LandPlotPropertyDetailsStepPr
     <div className="space-y-6">
       {/* Header */}
       <div className="text-left">
-        <h2 className="text-2xl font-bold text-red-600 mb-2">Land/Plot Details</h2>
+        <h2 className="text-2xl font-semibold text-red-600 mb-2">Land/Plot Details</h2>
       </div>
 
       <form onSubmit={handleSubmit(onNext)} className="space-y-4">
