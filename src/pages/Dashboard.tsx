@@ -758,9 +758,14 @@ export const Dashboard: React.FC = () => {
 
       console.log('Profile update successful:', data);
 
+      // Refresh the auth context to get updated user data
+      if (window.location) {
+        window.location.reload();
+      }
+
       toast({
         title: "Profile updated",
-        description: "Your name has been updated successfully.",
+        description: "Your name has been updated successfully. Page will refresh to show changes.",
       });
 
     } catch (error) {
