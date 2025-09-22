@@ -156,24 +156,48 @@ const RentalPlans = ({ embedded }: RentalPlansProps) => {
                 ))}
               </div>
 
-              {/* What You Get Section */}
-              <Card className="bg-card">
-                <CardHeader className="pb-4">
-                  <h3 className="text-xl font-bold text-center">What You Get</h3>
-                </CardHeader>
-                <CardContent className="pt-0">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {tenantPlanDetails[selectedTenantPlan].map((feature, index) => (
-                      <div key={index} className="flex items-start gap-3 p-3 bg-muted rounded-lg">
-                        <div className="text-brand-red flex-shrink-0 mt-0.5">
-                          {feature.icon}
-                        </div>
-                        <span className="text-sm text-foreground leading-relaxed">{feature.text}</span>
+              {/* Plan Details - matching Owner plan structure */}
+              <div className={`rounded-lg p-8 shadow-sm bg-opacity-10 border border-opacity-20 ${tenantPlans[selectedTenantPlan].badgeColor}`} style={{
+                borderColor: tenantPlans[selectedTenantPlan].badgeColor.replace('bg-', ''),
+                backgroundColor: tenantPlans[selectedTenantPlan].badgeColor.replace('bg-', '') + '20'
+              }}>
+                <h3 className="text-xl font-bold mb-6 text-center">What You Get</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                  {tenantPlanDetails[selectedTenantPlan].map((detail, index) => (
+                    <div key={index} className="flex items-start gap-3">
+                      <div className="text-brand-red mt-1">
+                        {detail.icon}
                       </div>
-                    ))}
+                      <span className="text-sm text-foreground leading-relaxed">
+                        {detail.text}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+                
+                {/* Contact Info inside features section */}
+                <div className="mt-6">
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                    {/* Phone number - center aligned */}
+                    <div className="text-center sm:text-center sm:flex-1">
+                      <span className="text-gray-600">For assistance call us at: </span>
+                      <a 
+                        href="tel:+918074017388" 
+                        className="text-brand-red font-semibold text-base hover:text-brand-red-dark transition-colors cursor-pointer"
+                      >
+                        +91 80740 17388
+                      </a>
+                    </div>
+                    
+                    {/* Terms & Conditions - right aligned */}
+                    <div className="text-right">
+                      <span className="text-sm text-gray-500 underline cursor-pointer hover:text-gray-700">
+                        Terms & Conditions Apply
+                      </span>
+                    </div>
                   </div>
-                </CardContent>
-              </Card>
+                </div>
+              </div>
 
               {/* Testimonials Section */}
               <Card className="bg-card">
