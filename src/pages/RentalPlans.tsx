@@ -88,29 +88,8 @@ const RentalPlans = ({ embedded }: RentalPlansProps) => {
             </TabsContent>
 
             <TabsContent value="tenant" className="space-y-8">
-              {/* Hero Section for Tenant Plans */}
-              <section className="relative text-white py-12 px-6 rounded-lg bg-cover bg-center bg-no-repeat"
-                style={{
-                  backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('/lovable-uploads/fbb0d72f-782e-49f5-bbe1-8afc1314b5f7.png')`
-                }}>
-                <div className="max-w-4xl mx-auto text-center">
-                  <h3 className="text-2xl md:text-4xl font-bold mb-4">
-                    Find Your Perfect Rental Home
-                  </h3>
-                  <p className="text-lg mb-4 max-w-2xl mx-auto">
-                    Get expert assistance in finding and securing your ideal rental property
-                  </p>
-                  <div className="flex items-center justify-center gap-2 mb-4">
-                    <div className="flex">
-                      {[1, 2, 3, 4, 5].map(star => <Star key={star} className="w-4 h-4 fill-yellow-400 text-yellow-400" />)}
-                    </div>
-                    <span className="ml-2 text-sm">Trusted by 50,000+ Tenants</span>
-                  </div>
-                </div>
-              </section>
-
-              {/* Tenant Plan Cards */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {/* Plan Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                 {tenantPlans.map((plan, index) => (
                   <Card 
                     key={index}
