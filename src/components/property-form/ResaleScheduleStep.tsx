@@ -64,48 +64,68 @@ const handleFormSubmit = (data: ResaleScheduleData) => {
 
         <Form {...form}>
           <form id={formId} onSubmit={form.handleSubmit(handleFormSubmit)} className="space-y-8">
-            {/* Info Cards */}
+            {/* Service Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-              {/* Property Visits Info */}
-              <div className="bg-gradient-to-br from-green-50 via-emerald-50 to-teal-100 rounded-xl p-6 relative overflow-hidden border border-green-200/50 shadow-lg">
+              {/* Painting Service Card */}
+              <div className="bg-gradient-to-br from-orange-50 to-yellow-50 rounded-xl p-6 relative overflow-hidden border border-orange-200/50 shadow-lg">
                 <div className="relative z-10">
-                  <div className="flex items-center gap-3 mb-3">
-                    <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center">
-                      <Eye className="w-5 h-5 text-white" />
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-10 h-10 bg-orange-500 rounded-full flex items-center justify-center">
+                      <div className="w-6 h-6 bg-white rounded-full flex items-center justify-center">
+                        <span className="text-orange-500 text-sm font-bold">%</span>
+                      </div>
                     </div>
-                    <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                    <div className="w-2 h-2 bg-orange-400 rounded-full"></div>
                   </div>
                   <h3 className="text-lg font-semibold mb-2 text-gray-800">
-                    Properties with flexible visit timings get{' '}
-                    <span className="text-green-600 font-bold">60% more</span> inquiries
+                    Freshly painted homes get rented out{' '}
+                    <span className="text-orange-600 font-bold">73% faster</span>
                   </h3>
-                  <p className="text-gray-600 text-sm">
-                    Make it easy for serious buyers to visit your property
+                  <p className="text-gray-600 text-sm mb-6">
+                    Get professional painting services at the best prices
                   </p>
+                  <div className="flex gap-3">
+                    <Button className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded-lg font-medium">
+                      Book Now
+                    </Button>
+                    <Button variant="outline" className="border-gray-300 text-gray-600 hover:bg-gray-50 px-6 py-2 rounded-lg">
+                      I Don't Want
+                    </Button>
+                  </div>
                 </div>
-                <div className="absolute right-4 top-4 w-16 h-16 bg-gradient-to-br from-green-300 to-emerald-400 rounded-full opacity-40"></div>
-                <div className="absolute right-8 bottom-4 w-12 h-12 bg-gradient-to-br from-emerald-300 to-green-300 rounded-full opacity-60"></div>
+                <div className="absolute right-4 top-4 w-16 h-16 bg-gradient-to-br from-yellow-300 to-orange-300 rounded-full opacity-30"></div>
+                <div className="absolute right-8 bottom-16 w-12 h-12 bg-gradient-to-br from-orange-300 to-yellow-300 rounded-full opacity-50"></div>
               </div>
 
-              {/* Quick Response Info */}
-              <div className="bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-100 rounded-xl p-6 relative overflow-hidden border border-blue-200/50 shadow-lg">
+              {/* Cleaning Service Card */}
+              <div className="bg-gradient-to-br from-teal-50 to-cyan-50 rounded-xl p-6 relative overflow-hidden border border-teal-200/50 shadow-lg">
                 <div className="relative z-10">
-                  <div className="flex items-center gap-3 mb-3">
-                    <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center">
-                      <Calendar className="w-5 h-5 text-white" />
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-10 h-10 bg-teal-500 rounded-full flex items-center justify-center">
+                      <div className="w-6 h-6 bg-white rounded-full flex items-center justify-center">
+                        <span className="text-teal-500 text-sm font-bold">✨</span>
+                      </div>
                     </div>
-                    <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>
+                    <div className="w-2 h-2 bg-teal-400 rounded-full"></div>
                   </div>
                   <h3 className="text-lg font-semibold mb-2 text-gray-800">
-                    Clear availability helps buyers{' '}
-                    <span className="text-blue-600 font-bold">plan visits</span> better
+                    Get your house tenant-ready with{' '}
+                    <span className="text-teal-600 font-bold">Deep Cleaning</span>
                   </h3>
-                  <p className="text-gray-600 text-sm">
-                    Reduce unnecessary calls and get more serious inquiries
+                  <p className="text-gray-600 text-sm mb-6">
+                    Trusted by 50,000+ owners
                   </p>
+                  <div className="flex gap-3">
+                    <Button className="bg-teal-500 hover:bg-teal-600 text-white px-6 py-2 rounded-lg font-medium">
+                      Book Now
+                    </Button>
+                    <Button variant="outline" className="border-gray-300 text-gray-600 hover:bg-gray-50 px-6 py-2 rounded-lg">
+                      I Don't Want
+                    </Button>
+                  </div>
                 </div>
-                <div className="absolute right-4 top-4 w-16 h-16 bg-gradient-to-br from-blue-300 to-indigo-400 rounded-full opacity-40"></div>
-                <div className="absolute right-8 bottom-4 w-12 h-12 bg-gradient-to-br from-indigo-300 to-blue-300 rounded-full opacity-60"></div>
+                <div className="absolute right-4 top-4 w-16 h-16 bg-gradient-to-br from-cyan-300 to-teal-300 rounded-full opacity-30"></div>
+                <div className="absolute right-8 bottom-16 w-12 h-12 bg-gradient-to-br from-teal-300 to-cyan-300 rounded-full opacity-50"></div>
               </div>
             </div>
 
