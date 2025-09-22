@@ -6,7 +6,6 @@ import { Label } from '@/components/ui/label';
 import { Search, FileText, Truck, Paintbrush, Sparkles, Snowflake, Building, Users, Home, PhoneCall, Mail, MapPin, CheckCircle } from 'lucide-react';
 import Header from '@/components/Header';
 import Marquee from '@/components/Marquee';
-import Footer from '@/components/Footer';
 import { useToast } from '@/hooks/use-toast';
 
 // Import company logos
@@ -421,7 +420,71 @@ const CorporateEnquiry = () => {
         </div>
       </section>
 
-      <Footer />
+      {/* Corporate Services Footer */}
+      <section className="py-16 bg-gray-50 border-t">
+        <div className="container mx-auto">
+          <div className="grid lg:grid-cols-2 gap-16 items-start">
+            <div className="max-w-3xl space-y-12">
+              {/* Employee Services Section */}
+              <div>
+                <h3 className="text-2xl font-bold text-foreground mb-6">Employee Services</h3>
+                <div className="flex flex-wrap gap-3">
+                  <span className="px-4 py-2 bg-white rounded-full text-sm text-foreground hover:bg-gray-100 cursor-pointer transition-colors border border-gray-200">House Search in Mumbai</span>
+                  <span className="px-4 py-2 bg-white rounded-full text-sm text-foreground hover:bg-gray-100 cursor-pointer transition-colors border border-gray-200">House Search in Delhi</span>
+                  <span className="px-4 py-2 bg-white rounded-full text-sm text-foreground hover:bg-gray-100 cursor-pointer transition-colors border border-gray-200">House Search in Bangalore</span>
+                  <span className="px-4 py-2 bg-white rounded-full text-sm text-foreground hover:bg-gray-100 cursor-pointer transition-colors border border-gray-200">House Search in Pune</span>
+                  <span className="px-4 py-2 bg-white rounded-full text-sm text-foreground hover:bg-gray-100 cursor-pointer transition-colors border border-gray-200">House Search in Hyderabad</span>
+                  <span className="px-4 py-2 bg-white rounded-full text-sm text-foreground hover:bg-gray-100 cursor-pointer transition-colors border border-gray-200">House Search in Chennai</span>
+                  <span className="px-4 py-2 bg-white rounded-full text-sm text-foreground hover:bg-gray-100 cursor-pointer transition-colors border border-gray-200">Rental Agreements</span>
+                  <span className="px-4 py-2 bg-white rounded-full text-sm text-foreground hover:bg-gray-100 cursor-pointer transition-colors border border-gray-200">Packers & Movers</span>
+                  <span className="px-4 py-2 bg-white rounded-full text-sm text-foreground hover:bg-gray-100 cursor-pointer transition-colors border border-gray-200">Home Painting Services</span>
+                  <span className="px-4 py-2 bg-white rounded-full text-sm text-foreground hover:bg-gray-100 cursor-pointer transition-colors border border-gray-200">Home Cleaning Services</span>
+                  <span className="px-4 py-2 bg-white rounded-full text-sm text-foreground hover:bg-gray-100 cursor-pointer transition-colors border border-gray-200">AC Servicing</span>
+                </div>
+              </div>
+
+              {/* Corporate Office Solutions Section */}
+              <div>
+                <h3 className="text-2xl font-bold text-foreground mb-6">Corporate Office Solutions</h3>
+                <div className="flex flex-wrap gap-3">
+                  <span className="px-4 py-2 bg-white rounded-full text-sm text-foreground hover:bg-gray-100 cursor-pointer transition-colors border border-gray-200">Office Leasing in Mumbai</span>
+                  <span className="px-4 py-2 bg-white rounded-full text-sm text-foreground hover:bg-gray-100 cursor-pointer transition-colors border border-gray-200">Corporate Relocation Services</span>
+                  <span className="px-4 py-2 bg-white rounded-full text-sm text-foreground hover:bg-gray-100 cursor-pointer transition-colors border border-gray-200">Office Setup & Design</span>
+                  <span className="px-4 py-2 bg-white rounded-full text-sm text-foreground hover:bg-gray-100 cursor-pointer transition-colors border border-gray-200">Office Leasing in Delhi</span>
+                  <span className="px-4 py-2 bg-white rounded-full text-sm text-foreground hover:bg-gray-100 cursor-pointer transition-colors border border-gray-200">Office Leasing in Bangalore</span>
+                  <span className="px-4 py-2 bg-white rounded-full text-sm text-foreground hover:bg-gray-100 cursor-pointer transition-colors border border-gray-200">Employee Relocation Services</span>
+                  <span className="px-4 py-2 bg-white rounded-full text-sm text-foreground hover:bg-gray-100 cursor-pointer transition-colors border border-gray-200">Facility Management</span>
+                  <span className="px-4 py-2 bg-white rounded-full text-sm text-foreground hover:bg-gray-100 cursor-pointer transition-colors border border-gray-200">Commercial Property Valuation</span>
+                </div>
+              </div>
+
+              {/* Corporate Benefits & Support Section */}
+              <div>
+                <h3 className="text-2xl font-bold text-foreground mb-6">Corporate Benefits & Support</h3>
+                <div className="flex flex-wrap gap-3">
+                  <span className="px-4 py-2 bg-white rounded-full text-sm text-foreground hover:bg-gray-100 cursor-pointer transition-colors border border-gray-200">Exclusive Corporate Discounts</span>
+                  <span className="px-4 py-2 bg-white rounded-full text-sm text-foreground hover:bg-gray-100 cursor-pointer transition-colors border border-gray-200">Priority Customer Support</span>
+                  <span className="px-4 py-2 bg-white rounded-full text-sm text-foreground hover:bg-gray-100 cursor-pointer transition-colors border border-gray-200">Custom Service Packages</span>
+                  <span className="px-4 py-2 bg-white rounded-full text-sm text-foreground hover:bg-gray-100 cursor-pointer transition-colors border border-gray-200">Bulk Service Orders</span>
+                  <span className="px-4 py-2 bg-white rounded-full text-sm text-foreground hover:bg-gray-100 cursor-pointer transition-colors border border-gray-200">Employee Training & Onboarding</span>
+                  <span className="px-4 py-2 bg-white rounded-full text-sm text-foreground hover:bg-gray-100 cursor-pointer transition-colors border border-gray-200">Analytics & Reporting</span>
+                  <span className="px-4 py-2 bg-white rounded-full text-sm text-foreground hover:bg-gray-100 cursor-pointer transition-colors border border-gray-200">Dedicated Account Manager</span>
+                </div>
+              </div>
+            </div>
+            {/* Right side spacing for sticky form */}
+            <div className="hidden lg:block"></div>
+          </div>
+          
+          <div className="mt-12 pt-8 border-t border-gray-300 text-center">
+            <p className="text-sm text-gray-600">
+              © 2024 Home HNI. All rights reserved. | 
+              <a href="/privacy-policy" className="hover:text-foreground ml-1">Privacy Policy</a> | 
+              <a href="/terms-and-conditions" className="hover:text-foreground ml-1">Terms & Conditions</a>
+            </p>
+          </div>
+        </div>
+      </section>
     </div>
   );
 };
