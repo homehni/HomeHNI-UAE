@@ -168,7 +168,10 @@ export const Dashboard: React.FC = () => {
   // Profile states
   const [profileName, setProfileName] = useState('');
   const [originalProfileName, setOriginalProfileName] = useState('');
+  const [profilePhone, setProfilePhone] = useState('');
+  const [originalProfilePhone, setOriginalProfilePhone] = useState('');
   const [isUpdatingName, setIsUpdatingName] = useState(false);
+  const [isUpdatingPhone, setIsUpdatingPhone] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -182,19 +185,25 @@ export const Dashboard: React.FC = () => {
 
   // Load profile name from Supabase profiles when user changes
   useEffect(() => {
-    const loadName = async () => {
+    const loadProfileData = async () => {
       if (!user) return;
       const { data, error } = await supabase
         .from('profiles')
-        .select('full_name')
+        .select('full_name, phone')
         .eq('user_id', user.id)
         .maybeSingle();
-      if (!error && data?.full_name) {
-        setProfileName(data.full_name);
-        setOriginalProfileName(data.full_name);
+      if (!error && data) {
+        if (data.full_name) {
+          setProfileName(data.full_name);
+          setOriginalProfileName(data.full_name);
+        }
+        if (data.phone) {
+          setProfilePhone(data.phone);
+          setOriginalProfilePhone(data.phone);
+        }
       }
     };
-    loadName();
+    loadProfileData();
   }, [user?.id]);
 
   // Update active tab when URL changes
@@ -788,6 +797,43 @@ export const Dashboard: React.FC = () => {
       });
     } finally {
       setIsUpdatingName(false);
+    }
+  };
+
+  const handleUpdatePhone = async () => {
+    if (!user || !profilePhone.trim()) return;
+
+    setIsUpdatingPhone(true);
+    try {
+      const newPhone = profilePhone.trim();
+
+      // Update the existing profile record
+      const { error: profileError } = await supabase
+        .from('profiles')
+        .update({ phone: newPhone })
+        .eq('user_id', user.id);
+
+      if (profileError) {
+        console.error('Profiles update error:', profileError);
+        throw profileError;
+      }
+
+      setOriginalProfilePhone(newPhone);
+
+      toast({
+        title: "Profile updated",
+        description: "Your phone number has been updated successfully.",
+      });
+
+    } catch (error: any) {
+      console.error('Error updating phone:', error);
+      toast({
+        title: "Error",
+        description: `Failed to update your phone number: ${error.message || 'Please try again.'}`,
+        variant: "destructive",
+      });
+    } finally {
+      setIsUpdatingPhone(false);
     }
   };
 
@@ -1493,6 +1539,25 @@ export const Dashboard: React.FC = () => {
                   <p className={user.email_confirmed_at ? 'text-green-600' : 'text-red-600'}>
                     {user.email_confirmed_at ? 'Yes' : 'No'}
                   </p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-gray-700">Phone Number</label>
+                  <div className="flex items-center gap-2 mt-1">
+                    <Input
+                      value={profilePhone}
+                      onChange={(e) => setProfilePhone(e.target.value)}
+                      placeholder="Enter your phone number"
+                      className="flex-1"
+                      type="tel"
+                    />
+                    <Button
+                      onClick={handleUpdatePhone}
+                      disabled={isUpdatingPhone || profilePhone.trim() === originalProfilePhone.trim()}
+                      size="sm"
+                    >
+                      {isUpdatingPhone ? 'Saving...' : 'Save'}
+                    </Button>
+                  </div>
                 </div>
               </CardContent>
             </Card>
