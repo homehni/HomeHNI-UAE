@@ -184,11 +184,8 @@ export const FlattmatesLocationDetailsStep: React.FC<FlattmatesLocationDetailsSt
     console.log('Form isValid:', form.formState.isValid);
     console.log('Form isDirty:', form.formState.isDirty);
     
-    // Check if form is valid before proceeding
-    if (!form.formState.isValid) {
-      console.log('Form is not valid, not proceeding');
-      return;
-    }
+    // Let react-hook-form + zod handle validity. If invalid, onSubmit won't be called.
+
     
     // Convert to LocationDetails format and include parsed city, state, pincode
     const locationData: LocationDetails = {
@@ -315,6 +312,8 @@ export const FlattmatesLocationDetailsStep: React.FC<FlattmatesLocationDetailsSt
               Save & Continue
             </Button>
           </div>
+          {/* Hidden submit button for sticky bar */}
+          <button type="submit" className="hidden" />
         </form>
       </Form>
     </div>
