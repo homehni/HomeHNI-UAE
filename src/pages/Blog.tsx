@@ -42,7 +42,8 @@ const Blog = () => {
 
   const handleNewsletterSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Newsletter subscription:', email);
+    setModalEmail(email);
+    setShowSubscriptionModal(true);
     setEmail('');
   };
 
