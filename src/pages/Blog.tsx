@@ -39,7 +39,7 @@ const Blog = () => {
             {/* Left Content */}
             <div>
               <h1 className="text-5xl font-bold text-gray-900 mb-4">
-                The NoBroker Times
+                The Home HNI Times
               </h1>
               <p className="text-xl text-gray-600 mb-6">
                 Real Estate, Services & Inspiration Unbounded

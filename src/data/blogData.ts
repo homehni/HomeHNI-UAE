@@ -65,13 +65,13 @@ export const categoryTiles = [
     color: "bg-gray-800"
   },
   {
-    title: "NoBroker Hindi Blogs",
+    title: "Home HNI Hindi Blogs",
     count: "136+ Articles",
     image: "/lovable-uploads/e491693e-a750-42b7-bdf6-cdff47be335b.png",
     color: "bg-gray-600"
   },
   {
-    title: "NoBroker Bengali Blogs",
+    title: "Home HNI Bengali Blogs",
     count: "98+ Articles",
     image: "/lovable-uploads/f5f1d518-d734-4fa1-abd3-f45e772294cd.png",
     color: "bg-teal-700"
@@ -158,22 +158,22 @@ export const homeServicesArticles = {
     {
       title: "Asian Paints Ultima 20 Litre Price: Variants, Finish and Coverage Per Sq Ft in 2025",
       date: "September 5, 2025",
-      author: "NoBroker.com"
+      author: "homehni.com"
     },
     {
       title: "Ace Paint Price Per Litre 2025",
       date: "September 5, 2025",
-      author: "NoBroker.com"
+      author: "homehni.com"
     },
     {
       title: "Nerolac Primer 20 Litre Price 2025", 
       date: "September 5, 2025",
-      author: "NoBroker.com"
+      author: "homehni.com"
     },
     {
       title: "Dulux Exterior Paint Colour",
       date: "September 5, 2025",
-      author: "NoBroker.com"
+      author: "homehni.com"
     },
     {
       title: "Birla Opus Oil Paint Price List in India: Variants, Finishes and Coverage Per Sq/Ft",
