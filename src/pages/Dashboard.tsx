@@ -827,7 +827,19 @@ export const Dashboard: React.FC = () => {
 
       console.log('Phone update successful:', data);
       
-      // Also sync into auth user metadata (won't show in the Auth "Phone" column, but in user_metadata)
+      // Update auth user's phone field (this will show in Auth > Users table)
+      const { error: authPhoneError } = await supabase.auth.updateUser({
+        phone: newPhone
+      });
+      
+      if (authPhoneError) {
+        console.warn('Auth phone update failed:', authPhoneError);
+        // Still continue since profile was updated successfully
+      } else {
+        console.log('Auth phone updated successfully');
+      }
+
+      // Also sync into auth user metadata
       const { error: authError } = await supabase.auth.updateUser({
         data: { profile_phone: newPhone },
       });
