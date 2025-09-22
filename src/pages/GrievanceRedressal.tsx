@@ -281,10 +281,10 @@ const GrievanceRedressal = () => {
                   </div>
 
                   {/* Submit Button */}
-                  <div className="pt-4">
+                  <div className="pt-4 flex justify-center">
                     <Button 
                       type="submit" 
-                      className="w-full md:w-auto bg-brand-red hover:bg-brand-red-dark text-white px-8 py-3"
+                      className="bg-brand-red hover:bg-brand-red-dark text-white px-8 py-3"
                       disabled={isSubmitting}
                     >
                       {isSubmitting ? 'Submitting...' : 'Submit Grievance'}
