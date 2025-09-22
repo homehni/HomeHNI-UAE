@@ -257,16 +257,16 @@ const CorporateEnquiry = () => {
               <h2 className="text-2xl font-semibold text-foreground mb-8">Trusted by Leading Companies</h2>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
                 <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
-                  <img src={companyLogo1} alt="TechCorp" className="h-12 w-auto mx-auto object-contain" />
+                  <img src={companyLogo1} alt="TechCorp" className="h-20 w-auto mx-auto object-contain" />
                 </div>
                 <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
-                  <img src={companyLogo2} alt="FinanceMax" className="h-12 w-auto mx-auto object-contain" />
+                  <img src={companyLogo2} alt="FinanceMax" className="h-20 w-auto mx-auto object-contain" />
                 </div>
                 <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
-                  <img src={companyLogo3} alt="ConsultPro" className="h-12 w-auto mx-auto object-contain" />
+                  <img src={companyLogo3} alt="ConsultPro" className="h-20 w-auto mx-auto object-contain" />
                 </div>
                 <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
-                  <img src={companyLogo4} alt="IndustrialMax" className="h-12 w-auto mx-auto object-contain" />
+                  <img src={companyLogo4} alt="IndustrialMax" className="h-20 w-auto mx-auto object-contain" />
                 </div>
               </div>
             </div>
@@ -413,48 +413,6 @@ const CorporateEnquiry = () => {
                     <p className="text-gray-600">{benefit.description}</p>
                   </div>
                 ))}
-              </div>
-            </div>
-            {/* Right side spacing for sticky form */}
-            <div className="hidden lg:block"></div>
-          </div>
-        </div>
-      </section>
-
-      {/* Corporate Services Footer */}
-      <section className="py-16 bg-gray-50 border-t">
-        <div className="container mx-auto">
-          <div className="grid lg:grid-cols-2 gap-16 items-start">
-            <div className="max-w-3xl space-y-12">
-              {/* Employee Services Section */}
-              <div>
-                <h3 className="text-2xl font-bold text-foreground mb-6">Employee Services</h3>
-                <div className="flex flex-wrap gap-3">
-                  <span className="px-4 py-2 bg-white rounded-full text-sm text-foreground hover:bg-gray-100 cursor-pointer transition-colors border border-gray-200">House Search in Mumbai</span>
-                  <span className="px-4 py-2 bg-white rounded-full text-sm text-foreground hover:bg-gray-100 cursor-pointer transition-colors border border-gray-200">House Search in Delhi</span>
-                  <span className="px-4 py-2 bg-white rounded-full text-sm text-foreground hover:bg-gray-100 cursor-pointer transition-colors border border-gray-200">House Search in Bangalore</span>
-                  <span className="px-4 py-2 bg-white rounded-full text-sm text-foreground hover:bg-gray-100 cursor-pointer transition-colors border border-gray-200">House Search in Pune</span>
-                  <span className="px-4 py-2 bg-white rounded-full text-sm text-foreground hover:bg-gray-100 cursor-pointer transition-colors border border-gray-200">House Search in Hyderabad</span>
-                  <span className="px-4 py-2 bg-white rounded-full text-sm text-foreground hover:bg-gray-100 cursor-pointer transition-colors border border-gray-200">House Search in Chennai</span>
-                  <span className="px-4 py-2 bg-white rounded-full text-sm text-foreground hover:bg-gray-100 cursor-pointer transition-colors border border-gray-200">Rental Agreements</span>
-                  <span className="px-4 py-2 bg-white rounded-full text-sm text-foreground hover:bg-gray-100 cursor-pointer transition-colors border border-gray-200">Packers & Movers</span>
-                  <span className="px-4 py-2 bg-white rounded-full text-sm text-foreground hover:bg-gray-100 cursor-pointer transition-colors border border-gray-200">Home Painting Services</span>
-                  <span className="px-4 py-2 bg-white rounded-full text-sm text-foreground hover:bg-gray-100 cursor-pointer transition-colors border border-gray-200">Home Cleaning Services</span>
-                  <span className="px-4 py-2 bg-white rounded-full text-sm text-foreground hover:bg-gray-100 cursor-pointer transition-colors border border-gray-200">AC Servicing</span>
-                </div>
-              </div>
-
-              {/* Corporate Office Solutions Section */}
-              <div>
-                <h3 className="text-2xl font-bold text-foreground mb-6">Corporate Office Solutions</h3>
-                <div className="flex flex-wrap gap-3">
-                  <span className="px-4 py-2 bg-white rounded-full text-sm text-foreground hover:bg-gray-100 cursor-pointer transition-colors border border-gray-200">Office Leasing in Mumbai</span>
-                  <span className="px-4 py-2 bg-white rounded-full text-sm text-foreground hover:bg-gray-100 cursor-pointer transition-colors border border-gray-200">Corporate Relocation Services</span>
-                  <span className="px-4 py-2 bg-white rounded-full text-sm text-foreground hover:bg-gray-100 cursor-pointer transition-colors border border-gray-200">Office Setup & Design</span>
-                  <span className="px-4 py-2 bg-white rounded-full text-sm text-foreground hover:bg-gray-100 cursor-pointer transition-colors border border-gray-200">Office Leasing in Delhi</span>
-                  <span className="px-4 py-2 bg-white rounded-full text-sm text-foreground hover:bg-gray-100 cursor-pointer transition-colors border border-gray-200">Office Leasing in Bangalore</span>
-                  <span className="px-4 py-2 bg-white rounded-full text-sm text-foreground hover:bg-gray-100 cursor-pointer transition-colors border border-gray-200">Employee Relocation Services</span>
-                </div>
               </div>
             </div>
             {/* Right side spacing for sticky form */}
