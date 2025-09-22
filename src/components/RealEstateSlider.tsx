@@ -80,7 +80,7 @@ const RealEstateSlider = () => {
     const autoScroll = () => {
       if (scrollContainerRef.current) {
         const container = scrollContainerRef.current;
-        const slideWidth = 208; // 192px width + 16px gap
+        const slideWidth = 256; // 240px width + 16px gap
         const totalOriginalWidth = companies.length * slideWidth;
 
         // Smooth continuous scroll
@@ -118,14 +118,14 @@ const RealEstateSlider = () => {
             {infiniteCompanies.map((company, index) => 
               <div 
                 key={index} 
-                className="flex-none w-48 bg-card rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer transform hover:scale-105"
+                className="flex-none w-60 bg-card rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer transform hover:scale-105 h-48"
                 onClick={() => handleCompanyClick(company.id)}
               >
                 <div className="h-32 overflow-hidden bg-white flex items-center justify-center p-4">
                   <img src={company.logo} alt={`${company.name} logo`} loading="lazy" className="w-full h-full object-contain" />
                 </div>
-                <div className="p-4">
-                  <h3 className="text-sm font-bold text-foreground text-center mb-1">
+                <div className="px-4 pt-2 pb-4 h-16 flex flex-col justify-center">
+                  <h3 className="text-base font-bold text-foreground text-center mb-1">
                     {company.name}
                   </h3>
                   <p className="text-xs text-muted-foreground text-center line-clamp-2">
