@@ -1602,7 +1602,6 @@ export const Dashboard: React.FC = () => {
               <CardHeader>
                 <CardTitle className="flex items-center">
                   <User className="h-5 w-5 mr-2" />
-                  Profile Information
                 </CardTitle>
                 <CardDescription>
                   Manage your account settings and preferences
