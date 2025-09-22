@@ -167,6 +167,100 @@ const RentalPlans = ({ embedded }: RentalPlansProps) => {
                   </div>
                 </CardContent>
               </Card>
+
+              {/* Testimonials Section */}
+              <Card className="bg-card">
+                <CardContent className="p-8">
+                  <h3 className="text-2xl font-bold mb-8 text-center">What Our Tenants Say</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="bg-muted p-6 rounded-lg">
+                      <div className="flex items-center mb-4">
+                        <div className="flex">
+                          {[1, 2, 3, 4, 5].map(star => <Star key={star} className="w-4 h-4 fill-yellow-400 text-yellow-400" />)}
+                        </div>
+                      </div>
+                      <p className="text-foreground mb-4 italic">
+                        "Found my perfect apartment within 2 weeks with their premium assistance. The documentation support was exceptional!"
+                      </p>
+                      <p className="text-brand-red font-semibold">#FastRental</p>
+                    </div>
+                    <div className="bg-muted p-6 rounded-lg">
+                      <div className="flex items-center mb-4">
+                        <div className="flex">
+                          {[1, 2, 3, 4, 5].map(star => <Star key={star} className="w-4 h-4 fill-yellow-400 text-yellow-400" />)}
+                        </div>
+                      </div>
+                      <p className="text-foreground mb-4 italic">
+                        "The property tours were well-coordinated and saved me so much time. Highly recommend their services!"
+                      </p>
+                      <p className="text-brand-red font-semibold">#ExcellentService</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* FAQs Section */}
+              <Card className="bg-card">
+                <CardContent className="p-8">
+                  <h3 className="text-2xl font-bold mb-8 text-center">Frequently Asked Questions</h3>
+                  <div className="space-y-4">
+                    <div className="border-b border-border pb-4">
+                      <h4 className="font-semibold text-foreground mb-2">How does the property search assistance work?</h4>
+                      <p className="text-muted-foreground text-sm">Our experts help you filter properties based on your requirements, budget, and preferred locations to save your time.</p>
+                    </div>
+                    <div className="border-b border-border pb-4">
+                      <h4 className="font-semibold text-foreground mb-2">What documentation support do you provide?</h4>
+                      <p className="text-muted-foreground text-sm">We assist with rental agreements, verification documents, and ensure all paperwork is completed properly.</p>
+                    </div>
+                    <div className="border-b border-border pb-4">
+                      <h4 className="font-semibold text-foreground mb-2">Do you help with property visits?</h4>
+                      <p className="text-muted-foreground text-sm">Yes, we coordinate property visits, schedule appointments with owners, and can accompany you for premium plans.</p>
+                    </div>
+                    <div className="border-b border-border pb-4">
+                      <h4 className="font-semibold text-foreground mb-2">Are there any hidden charges?</h4>
+                      <p className="text-muted-foreground text-sm">No, all charges are transparent. The plan fee is all you pay - no hidden brokerage or additional costs.</p>
+                    </div>
+                    <div className="border-b border-border pb-4">
+                      <h4 className="font-semibold text-foreground mb-2">How quickly can I find a property?</h4>
+                      <p className="text-muted-foreground text-sm">Most tenants find suitable properties within 2-4 weeks with our assistance, depending on requirements and location.</p>
+                    </div>
+                    <div className="pb-4">
+                      <h4 className="font-semibold text-foreground mb-2">What if I'm not satisfied with the service?</h4>
+                      <p className="text-muted-foreground text-sm">We offer dedicated support throughout your plan validity period and work until you find a suitable property.</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Why Choose Us Section */}
+              <Card className="bg-card">
+                <CardContent className="p-8">
+                  <h3 className="text-2xl font-bold mb-8 text-center">Why Choose Our Tenant Services?</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div className="text-center p-4">
+                      <div className="w-16 h-16 bg-brand-red rounded-full flex items-center justify-center mx-auto mb-4">
+                        <Clock className="w-8 h-8 text-white" />
+                      </div>
+                      <h4 className="font-semibold mb-2">Time Saving</h4>
+                      <p className="text-sm text-muted-foreground">We pre-filter properties to match your exact requirements</p>
+                    </div>
+                    <div className="text-center p-4">
+                      <div className="w-16 h-16 bg-brand-red rounded-full flex items-center justify-center mx-auto mb-4">
+                        <Shield className="w-8 h-8 text-white" />
+                      </div>
+                      <h4 className="font-semibold mb-2">Zero Brokerage</h4>
+                      <p className="text-sm text-muted-foreground">No hidden charges or brokerage fees - transparent pricing</p>
+                    </div>
+                    <div className="text-center p-4">
+                      <div className="w-16 h-16 bg-brand-red rounded-full flex items-center justify-center mx-auto mb-4">
+                        <UserCheck className="w-8 h-8 text-white" />
+                      </div>
+                      <h4 className="font-semibold mb-2">Expert Guidance</h4>
+                      <p className="text-sm text-muted-foreground">Dedicated relationship managers to assist throughout</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
             </TabsContent>
           </Tabs>
         </div>
