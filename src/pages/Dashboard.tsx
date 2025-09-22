@@ -1600,12 +1600,6 @@ export const Dashboard: React.FC = () => {
               <h1 className="text-2xl font-semibold text-gray-900">Profile Information</h1>
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center">
-                  <User className="h-5 w-5 mr-2" />
-                </CardTitle>
-                <CardDescription>
-                  Manage your account settings and preferences
-                </CardDescription>
               </CardHeader>
               <CardContent className="space-y-5">
                 {/* Name */}
