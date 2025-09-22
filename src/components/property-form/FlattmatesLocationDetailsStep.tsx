@@ -11,7 +11,7 @@ import { ArrowLeft, ArrowRight, MapPin } from 'lucide-react';
 
 const flattmatesLocationSchema = z.object({
   city: z.string().min(1, 'City is required'),
-  locality: z.string().min(1, 'Locality/Area is required'),
+  locality: z.string().optional(),
   landmark: z.string().optional(),
   state: z.string().optional(),
   pincode: z.string().optional(),
@@ -221,7 +221,7 @@ export const FlattmatesLocationDetailsStep: React.FC<FlattmatesLocationDetailsSt
                   <FormLabel className="text-sm font-medium text-gray-700">
                     City *
                   </FormLabel>
-                  <Select onValueChange={field.onChange} value={field.value}>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger className="h-12 bg-white z-50">
                         <SelectValue placeholder="Choose city" />
