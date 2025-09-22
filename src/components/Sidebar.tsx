@@ -274,23 +274,23 @@ const handleAuthClick = () => {
                   {item.hasSubmenu && expandedSections.includes(item.id) && (
                     <div className="ml-4 mt-1">
                       {item.isContactUs ? (
-                        <div className="flex space-x-6 justify-start p-3">
-                          {/* Email Icon */}
+                        <div className="flex flex-col space-y-3 p-3">
+                          {/* Email */}
                           <a 
                             href="mailto:homehni8@gmail.com" 
-                            className="w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50 hover:border-brand-red transition-all"
+                            className="px-3 py-2 rounded-lg border border-gray-300 text-sm text-gray-700 hover:bg-gray-50 hover:border-brand-red transition-all text-center"
                             title="Send Email"
                           >
-                            <Mail className="w-5 h-5 text-gray-600" />
+                            homehni8@gmail.com
                           </a>
                           
-                          {/* Phone Icon */}
+                          {/* Phone */}
                           <a 
                             href="tel:+918074017388" 
-                            className="w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50 hover:border-brand-red transition-all"
+                            className="px-3 py-2 rounded-lg border border-gray-300 text-sm text-gray-700 hover:bg-gray-50 hover:border-brand-red transition-all text-center"
                             title="Call Us"
                           >
-                            <Phone className="w-5 h-5 text-gray-600" />
+                            +91 8074017388
                           </a>
                           
                           {/* WhatsApp Icon */}
@@ -298,7 +298,7 @@ const handleAuthClick = () => {
                             href="https://wa.me/8074017388?text=Hello%2C%20I%20would%20like%20to%20inquire%20about%20your%20services" 
                             target="_blank" 
                             rel="noopener noreferrer"
-                            className="w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50 hover:border-green-500 transition-all"
+                            className="w-10 h-10 mx-auto rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50 hover:border-green-500 transition-all"
                             title="WhatsApp"
                           >
                             <svg 
