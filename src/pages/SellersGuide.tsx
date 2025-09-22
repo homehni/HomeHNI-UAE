@@ -25,9 +25,6 @@ const SellersGuide = () => {
             <p className="text-xl md:text-2xl mb-8 opacity-90">
               Maximize your property value with our comprehensive selling guide
             </p>
-            <Button className="bg-white text-orange-600 hover:bg-gray-100 px-8 py-3 text-lg">
-              Start Selling
-            </Button>
           </div>
         </div>
       </section>
