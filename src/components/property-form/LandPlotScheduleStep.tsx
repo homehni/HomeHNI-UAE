@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -6,10 +6,13 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
+import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
 import { ScheduleInfo } from '@/types/property';
-import { Eye, Calendar, Clock } from 'lucide-react';
+import { Eye, Calendar, Clock, PaintBucket, Sparkles, CheckCircle } from 'lucide-react';
 
 const scheduleSchema = z.object({
+  paintingService: z.enum(['book', 'decline']).optional(),
+  cleaningService: z.enum(['book', 'decline']).optional(),
   availability: z.enum(['everyday', 'weekday', 'weekend']).optional(),
   availableAllDay: z.boolean().optional(),
   startTime: z.string().optional(),
@@ -31,9 +34,14 @@ export const LandPlotScheduleStep: React.FC<LandPlotScheduleStepProps> = ({
   onBack,
   onSubmit
 }) => {
+  const [paintingResponse, setPaintingResponse] = useState<'book' | 'decline' | null>(null);
+  const [cleaningResponse, setCleaningResponse] = useState<'book' | 'decline' | null>(null);
+
   const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm<ScheduleForm>({
     resolver: zodResolver(scheduleSchema),
     defaultValues: {
+      paintingService: initialData.paintingService || undefined,
+      cleaningService: initialData.cleaningService || undefined,
       availableAllDay: initialData.availableAllDay ?? true,
       availability: initialData.availability,
       startTime: initialData.startTime || '10:00',
@@ -45,6 +53,8 @@ export const LandPlotScheduleStep: React.FC<LandPlotScheduleStepProps> = ({
   const availableAllDay = watch('availableAllDay');
   const startTime = watch('startTime');
   const endTime = watch('endTime');
+  const paintingService = watch('paintingService');
+  const cleaningService = watch('cleaningService');
 
   const handleFormSubmit = (data: ScheduleForm) => {
     if (onSubmit) {
@@ -62,42 +72,122 @@ export const LandPlotScheduleStep: React.FC<LandPlotScheduleStepProps> = ({
           </h2>
         </div>
         <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-8">
-          {/* Informational Cards */}
+          {/* Service Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Flexible Timing Card */}
-            <div className="bg-gradient-to-br from-teal-50 to-emerald-100 rounded-xl p-6 border border-teal-200">
-              <div className="flex items-start gap-4">
-                <div className="w-12 h-12 bg-teal-500 rounded-full flex items-center justify-center flex-shrink-0">
-                  <Eye className="w-6 h-6 text-white" />
+            {/* Painting Service */}
+            <div className="bg-gradient-to-br from-orange-50 via-yellow-50 to-amber-100 rounded-xl p-6 relative overflow-hidden border border-orange-200/50 shadow-lg">
+              <div className="relative z-10">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-10 h-10 bg-orange-500 rounded-full flex items-center justify-center">
+                    <PaintBucket className="w-5 h-5 text-white" />
+                  </div>
+                  <div className="w-2 h-2 bg-orange-400 rounded-full animate-pulse"></div>
                 </div>
-                <div>
-                  <h3 className="text-lg font-semibold text-gray-800 mb-2">
-                    Properties with flexible visit timings get{' '}
-                    <span className="text-teal-600 font-bold">60% more inquiries</span>
-                  </h3>
-                  <p className="text-gray-600 text-sm">
-                    Make it easy for serious buyers to visit your property
-                  </p>
+                <h3 className="text-lg font-semibold mb-2 text-gray-800">
+                  Freshly painted homes get rented out{' '}
+                  <span className="text-orange-600 font-bold">73% faster</span>
+                </h3>
+                <p className="text-gray-600 mb-4 text-sm">
+                  Get professional painting services at the best prices
+                </p>
+                <div className="space-y-3">
+                  {paintingResponse === 'decline' ? (
+                    <div className="flex items-center gap-2 p-3 bg-green-50 border border-green-200 rounded-lg">
+                      <CheckCircle className="w-4 h-4 text-green-600" />
+                      <span className="text-sm text-green-700 font-medium">
+                        Your response has been captured
+                      </span>
+                    </div>
+                  ) : (
+                    <div className="flex gap-3">
+                      <Button
+                        type="button"
+                        size="sm"
+                        className="bg-orange-500 hover:bg-orange-600 text-white"
+                        onClick={() => {
+                          setValue('paintingService', 'book');
+                          setPaintingResponse('book');
+                          window.open('/painting-cleaning', '_blank');
+                        }}
+                      >
+                        Book Now
+                      </Button>
+                      <Button
+                        type="button"
+                        size="sm"
+                        variant="outline"
+                        className="border-gray-300 text-gray-700 hover:bg-gray-50"
+                        onClick={() => {
+                          setValue('paintingService', 'decline');
+                          setPaintingResponse('decline');
+                        }}
+                      >
+                        I Don't Want
+                      </Button>
+                    </div>
+                  )}
                 </div>
               </div>
+              <div className="absolute right-4 top-4 w-16 h-16 bg-gradient-to-br from-orange-300 to-yellow-400 rounded-full opacity-40"></div>
+              <div className="absolute right-8 bottom-4 w-12 h-12 bg-gradient-to-br from-yellow-300 to-orange-300 rounded-full opacity-60"></div>
             </div>
 
-            {/* Clear Availability Card */}
-            <div className="bg-gradient-to-br from-blue-50 to-indigo-100 rounded-xl p-6 border border-blue-200">
-              <div className="flex items-start gap-4">
-                <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0">
-                  <Calendar className="w-6 h-6 text-white" />
+            {/* Cleaning Service */}
+            <div className="bg-gradient-to-br from-teal-50 via-cyan-50 to-blue-100 rounded-xl p-6 relative overflow-hidden border border-teal-200/50 shadow-lg">
+              <div className="relative z-10">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-10 h-10 bg-teal-500 rounded-full flex items-center justify-center">
+                    <Sparkles className="w-5 h-5 text-white" />
+                  </div>
+                  <div className="w-2 h-2 bg-teal-400 rounded-full animate-pulse"></div>
                 </div>
-                <div>
-                  <h3 className="text-lg font-semibold text-gray-800 mb-2">
-                    Clear availability helps buyers{' '}
-                    <span className="text-blue-600 font-bold">plan visits better</span>
-                  </h3>
-                  <p className="text-gray-600 text-sm">
-                    Reduce unnecessary calls and get more serious inquiries
-                  </p>
+                <h3 className="text-lg font-semibold mb-2 text-gray-800">
+                  Get your house tenant-ready with{' '}
+                  <span className="text-teal-600 font-bold">Deep Cleaning</span>
+                </h3>
+                <p className="text-gray-600 mb-4 text-sm">
+                  Trusted by 50,000+ owners
+                </p>
+                <div className="space-y-3">
+                  {cleaningResponse === 'decline' ? (
+                    <div className="flex items-center gap-2 p-3 bg-green-50 border border-green-200 rounded-lg">
+                      <CheckCircle className="w-4 h-4 text-green-600" />
+                      <span className="text-sm text-green-700 font-medium">
+                        Your response has been captured
+                      </span>
+                    </div>
+                  ) : (
+                    <div className="flex gap-3">
+                      <Button
+                        type="button"
+                        size="sm"
+                        className="bg-teal-500 hover:bg-teal-600 text-white"
+                        onClick={() => {
+                          setValue('cleaningService', 'book');
+                          setCleaningResponse('book');
+                          window.open('/painting-cleaning', '_blank');
+                        }}
+                      >
+                        Book Now
+                      </Button>
+                      <Button
+                        type="button"
+                        size="sm"
+                        variant="outline"
+                        className="border-gray-300 text-gray-700 hover:bg-gray-50"
+                        onClick={() => {
+                          setValue('cleaningService', 'decline');
+                          setCleaningResponse('decline');
+                        }}
+                      >
+                        I Don't Want
+                      </Button>
+                    </div>
+                  )}
                 </div>
               </div>
+              <div className="absolute right-4 top-4 w-16 h-16 bg-gradient-to-br from-teal-300 to-cyan-400 rounded-full opacity-40"></div>
+              <div className="absolute right-8 bottom-4 w-12 h-12 bg-gradient-to-br from-cyan-300 to-teal-300 rounded-full opacity-60"></div>
             </div>
           </div>
 
