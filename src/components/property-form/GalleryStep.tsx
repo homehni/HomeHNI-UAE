@@ -114,7 +114,7 @@ export const GalleryStep: React.FC<GalleryStepProps> = ({
                       <div className="space-y-6">
                         {/* Upload Images Title */}
                         <div className="text-left">
-                          <h2 className="text-2xl text-primary mb-6 font-bold">Upload Property Images by Category</h2>
+                          <h2 className="text-2xl text-primary mb-6 font-semibold">Upload Property Images by Category</h2>
                         </div>
                         
                         {/* Categorized Image Upload Component */}
