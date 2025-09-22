@@ -302,8 +302,8 @@ export const FlattmatesLocationDetailsStep: React.FC<FlattmatesLocationDetailsSt
             </div>
           )}
 
-          {/* Navigation Buttons */}
-          <div className="flex justify-between pt-6">
+          {/* Navigation Buttons - Hidden, handled by sticky bottom navigation */}
+          <div className="flex justify-between pt-6" style={{ display: 'none' }}>
             <Button type="button" variant="outline" onClick={onBack} className="h-12 px-8 border-gray-300 text-gray-700 hover:bg-gray-50">
               Back
             </Button>
