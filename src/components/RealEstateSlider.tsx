@@ -125,12 +125,9 @@ const RealEstateSlider = () => {
                   <img src={company.logo} alt={`${company.name} logo`} loading="lazy" className="w-full h-full object-contain" />
                 </div>
                 <div className="px-4 pt-2 pb-4 h-16 flex flex-col justify-center">
-                  <h3 className="text-base font-bold text-foreground text-center mb-1">
+                  <h3 className="text-base font-bold text-foreground text-center">
                     {company.name}
                   </h3>
-                  <p className="text-xs text-muted-foreground text-center line-clamp-2">
-                    {company.highlights}
-                  </p>
                 </div>
               </div>
             )}
