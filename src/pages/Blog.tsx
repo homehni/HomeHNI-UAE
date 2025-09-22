@@ -277,70 +277,68 @@ const Blog = () => {
 
       {/* Subscription Modal */}
       <Dialog open={showSubscriptionModal} onOpenChange={setShowSubscriptionModal}>
-        <DialogContent className="sm:max-w-[600px] bg-transparent border-none shadow-none p-0">
-          <div className="relative bg-gradient-to-br from-blue-50 to-purple-50 p-8 rounded-lg">
-            <button
-              onClick={() => setShowSubscriptionModal(false)}
-              className="absolute top-4 right-4 p-2 hover:bg-white/20 rounded-full transition-colors z-10"
-            >
-              <X className="h-5 w-5 text-gray-600" />
-            </button>
-            
-            <DialogHeader className="text-center mb-6">
-              <DialogTitle className="text-2xl font-bold text-gray-900 mb-2">
-                Subscribe to our newsletter
-              </DialogTitle>
-              <p className="text-gray-600">Get latest news delivered straight to you inbox</p>
-            </DialogHeader>
+        <DialogContent className="sm:max-w-[600px] bg-white p-8">
+          <button
+            onClick={() => setShowSubscriptionModal(false)}
+            className="absolute top-4 right-4 p-2 hover:bg-gray-100 rounded-full transition-colors z-10"
+          >
+            <X className="h-5 w-5 text-gray-600" />
+          </button>
+          
+          <DialogHeader className="text-center mb-6">
+            <DialogTitle className="text-2xl font-bold text-gray-900 mb-2">
+              Subscribe to our newsletter
+            </DialogTitle>
+            <p className="text-gray-600">Get latest news delivered straight to you inbox</p>
+          </DialogHeader>
 
-            <form onSubmit={handleModalSubmit} className="space-y-6">
-              <Input
-                type="email"
-                placeholder="Enter your email address"
-                value={modalEmail}
-                onChange={(e) => setModalEmail(e.target.value)}
-                className="w-full h-12 bg-white border-gray-200"
-                required
-              />
+          <form onSubmit={handleModalSubmit} className="space-y-6">
+            <Input
+              type="email"
+              placeholder="Enter your email address"
+              value={modalEmail}
+              onChange={(e) => setModalEmail(e.target.value)}
+              className="w-full h-12 bg-gray-50 border-gray-200"
+              required
+            />
 
-              <div>
-                <p className="text-sm text-gray-600 mb-4 text-center">
-                  Select at least 3 categories
-                </p>
-                <div className="flex flex-wrap gap-2 justify-center">
-                  {categories.map((category) => (
-                    <Badge
-                      key={category}
-                      variant={selectedCategories.includes(category) ? "default" : "outline"}
-                      className={`cursor-pointer px-4 py-2 text-sm transition-colors ${
-                        selectedCategories.includes(category)
-                          ? "bg-red-500 text-white hover:bg-red-600"
-                          : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
-                      }`}
-                      onClick={() => toggleCategory(category)}
-                    >
-                      {category}
-                    </Badge>
-                  ))}
-                </div>
+            <div>
+              <p className="text-sm text-gray-600 mb-4 text-center">
+                Select at least 3 categories
+              </p>
+              <div className="flex flex-wrap gap-2 justify-center">
+                {categories.map((category) => (
+                  <Badge
+                    key={category}
+                    variant={selectedCategories.includes(category) ? "default" : "outline"}
+                    className={`cursor-pointer px-4 py-2 text-sm transition-colors ${
+                      selectedCategories.includes(category)
+                        ? "bg-red-500 text-white hover:bg-red-600"
+                        : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
+                    }`}
+                    onClick={() => toggleCategory(category)}
+                  >
+                    {category}
+                  </Badge>
+                ))}
               </div>
+            </div>
 
-              <div className="text-center">
-                <Button
-                  type="submit"
-                  className="bg-red-500 hover:bg-red-600 text-white px-8 py-3 text-lg font-semibold"
-                >
-                  Subscribe Now
-                </Button>
-              </div>
-            </form>
-          </div>
+            <div className="text-center">
+              <Button
+                type="submit"
+                className="bg-red-500 hover:bg-red-600 text-white px-8 py-3 text-lg font-semibold"
+              >
+                Subscribe Now
+              </Button>
+            </div>
+          </form>
         </DialogContent>
       </Dialog>
 
       {/* Success Modal */}
-      <Dialog open={showSuccessModal} onOpenChange={setShowSuccessModal}>
-        <DialogContent className="sm:max-w-[400px] bg-transparent border-none shadow-none p-0">
+      <Dialog open={showSuccessModal} onOpenChange={() => {}}>
+        <DialogContent className="sm:max-w-[400px] bg-transparent border-none shadow-none p-0" onInteractOutside={() => {}}>
           <div className="bg-red-500 text-white p-8 rounded-lg text-center">
             <div className="mb-4">
               <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
