@@ -117,51 +117,90 @@ const Blog = () => {
       {/* Category Tiles */}
       <section className="py-16">
         <div className="container mx-auto px-4">
-          <div className="overflow-x-auto">
-            <div className="flex space-x-4 pb-4" style={{ minWidth: 'max-content' }}>
-              {categoryTiles.map((category, index) => (
-                <Card key={index} className="flex-shrink-0 w-64 group hover:shadow-lg transition-shadow cursor-pointer">
-                  <div className="relative overflow-hidden rounded-t-lg">
-                    <img 
-                      src={category.image} 
-                      alt={category.title}
-                      className="w-full h-32 object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
-                    <div className={`absolute inset-0 ${category.color} bg-opacity-70 flex flex-col justify-end p-4`}>
-                      <h3 className="text-white font-bold text-sm mb-1 line-clamp-2">
-                        {category.title}
-                      </h3>
-                      <p className="text-white/90 text-xs">
-                        {category.count}
-                      </p>
+          <div className="relative">
+            {/* Left Arrow */}
+            <button 
+              onClick={() => {
+                const container = document.getElementById('category-scroll');
+                if (container) container.scrollBy({ left: -280, behavior: 'smooth' });
+              }}
+              className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white shadow-lg rounded-full p-3 hover:bg-gray-50 transition-colors"
+            >
+              <ChevronLeft className="h-5 w-5 text-gray-600" />
+            </button>
+            
+            {/* Right Arrow */}
+            <button 
+              onClick={() => {
+                const container = document.getElementById('category-scroll');
+                if (container) container.scrollBy({ left: 280, behavior: 'smooth' });
+              }}
+              className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white shadow-lg rounded-full p-3 hover:bg-gray-50 transition-colors"
+            >
+              <ChevronRight className="h-5 w-5 text-gray-600" />
+            </button>
+
+            <div 
+              id="category-scroll"
+              className="overflow-x-auto scrollbar-hide mx-12"
+              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+            >
+              <div className="flex space-x-4 pb-4" style={{ minWidth: 'max-content' }}>
+                {categoryTiles.map((category, index) => (
+                  <Card key={index} className="flex-shrink-0 w-64 group hover:shadow-lg transition-all duration-300 hover-scale cursor-pointer">
+                    <div className="relative overflow-hidden rounded-lg">
+                      <img 
+                        src={category.image} 
+                        alt={category.title}
+                        className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                      <div className={`absolute inset-0 ${category.color} bg-opacity-70 flex flex-col justify-end p-4`}>
+                        <h3 className="text-white font-bold text-sm mb-1 line-clamp-2">
+                          {category.title}
+                        </h3>
+                        <p className="text-white/90 text-xs">
+                          {category.count}
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                </Card>
-              ))}
+                  </Card>
+                ))}
+              </div>
             </div>
           </div>
         </div>
       </section>
 
       {/* Newsletter Subscription */}
-      <section className="py-12 bg-gray-50">
+      <section className="py-16 bg-gradient-to-r from-blue-50 via-purple-50 to-pink-50">
         <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            <h3 className="text-2xl font-bold text-gray-900 mb-2">Subscribe to our newsletter</h3>
-            <p className="text-gray-600 mb-6">Get latest news delivered straight to you inbox</p>
-            <form onSubmit={handleNewsletterSubmit} className="flex gap-4 max-w-2xl">
-              <Input 
-                type="email" 
-                placeholder="Enter your email address"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="flex-1 h-12"
-                required
-              />
-              <Button type="submit" className="bg-red-500 hover:bg-red-600 text-white px-8 h-12">
-                Subscribe Now
-              </Button>
-            </form>
+          <div className="max-w-6xl mx-auto">
+            <div className="bg-white rounded-2xl p-8 shadow-lg">
+              <div className="grid md:grid-cols-3 gap-6 items-center">
+                <div className="md:col-span-1">
+                  <h3 className="text-2xl font-bold text-gray-900 mb-2">Subscribe to our newsletter</h3>
+                  <p className="text-gray-600">Get latest news delivered straight to you inbox</p>
+                </div>
+                <div className="md:col-span-2">
+                  <form onSubmit={handleNewsletterSubmit} className="flex gap-3">
+                    <Input 
+                      type="email" 
+                      placeholder="Enter your email address"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="flex-1 h-12 bg-gray-50 border-gray-200 focus:bg-white transition-colors"
+                      required
+                    />
+                    <Button 
+                      type="submit" 
+                      className="bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white px-8 h-12 rounded-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
+                    >
+                      Subscribe Now
+                    </Button>
+                  </form>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
