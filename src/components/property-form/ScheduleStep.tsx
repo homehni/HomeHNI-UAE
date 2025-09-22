@@ -34,8 +34,8 @@ export const ScheduleStep: React.FC<ScheduleStepProps> = ({
   onSubmit
 }) => {
   const navigate = useNavigate();
-  const [paintingResponse, setPaintingResponse] = useState<'book' | 'decline' | null>(initialData.paintingService || null);
-  const [cleaningResponse, setCleaningResponse] = useState<'book' | 'decline' | null>(initialData.cleaningService || null);
+  const [paintingResponse, setPaintingResponse] = useState<'book' | 'decline' | null>(null);
+  const [cleaningResponse, setCleaningResponse] = useState<'book' | 'decline' | null>(null);
   
   const form = useForm<ScheduleFormData>({
     resolver: zodResolver(scheduleSchema),
