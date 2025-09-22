@@ -202,11 +202,7 @@ export const FlattmatesLocationDetailsStep: React.FC<FlattmatesLocationDetailsSt
       <Form {...form}>
         <form 
           id={formId || 'flatmates-step-form'} 
-          onSubmit={(e) => {
-            console.log('FlattmatesLocationDetailsStep form being submitted');
-            console.log('Current form values:', form.getValues());
-            form.handleSubmit(onSubmit)(e);
-          }} 
+          onSubmit={form.handleSubmit(onSubmit)} 
           className="space-y-6"
         >
           {/* City and Landmark Fields - Side by side */}
@@ -220,7 +216,7 @@ export const FlattmatesLocationDetailsStep: React.FC<FlattmatesLocationDetailsSt
                   <FormLabel className="text-sm font-medium text-gray-700">
                     City *
                   </FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
                       <SelectTrigger className="h-12 bg-white z-50">
                         <SelectValue placeholder="Choose city" />
