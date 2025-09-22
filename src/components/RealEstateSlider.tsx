@@ -100,7 +100,7 @@ const RealEstateSlider = () => {
   }, [isPaused, companies.length]);
   return <section className="pb-4 -mt-4 md:-mt-6 bg-gradient-to-br from-background to-secondary/20">
       <div className="container mx-auto px-4">
-        <div className="relative max-w-6xl mx-auto">
+        <div className="relative">
           {/* Navigation Buttons */}
           <button onClick={() => scroll('left')} className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-background/80 hover:bg-background text-foreground p-2 rounded-full shadow-lg transition-colors" aria-label="Scroll left">
             <ChevronLeft className="w-6 h-6" />
