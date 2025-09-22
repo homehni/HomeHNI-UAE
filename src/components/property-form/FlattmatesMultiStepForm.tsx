@@ -137,6 +137,7 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
   const currentFormId = 'flatmates-step-form';
 
   const handlePropertyDetailsNext = (data: any) => {
+    console.log('FlattmatesMultiStepForm - Property Details data received:', data);
     setPropertyDetails(data);
     setCompletedSteps(prev => prev.includes(1) ? prev : [...prev, 1]);
     setCurrentStep(2);
@@ -144,6 +145,7 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
   };
 
   const handleLocationDetailsNext = (data: LocationDetails) => {
+    console.log('FlattmatesMultiStepForm - Location Details data received:', data);
     setLocationDetails(data);
     setCompletedSteps(prev => prev.includes(2) ? prev : [...prev, 2]);
     setCurrentStep(3);
@@ -151,6 +153,7 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
   };
 
   const handleRentalDetailsNext = (data: any) => {
+    console.log('FlattmatesMultiStepForm - Rental Details data received:', data);
     setRentalDetails(data);
     setCompletedSteps(prev => prev.includes(3) ? prev : [...prev, 3]);
     setCurrentStep(4);
@@ -158,6 +161,7 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
   };
 
   const handleAmenitiesNext = (data: any) => {
+    console.log('FlattmatesMultiStepForm - Amenities data received:', data);
     setAmenities(data);
     setCompletedSteps(prev => prev.includes(4) ? prev : [...prev, 4]);
     setCurrentStep(5);
@@ -165,6 +169,7 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
   };
 
   const handleGalleryNext = (data: PropertyGallery) => {
+    console.log('FlattmatesMultiStepForm - Gallery data received:', data);
     setGallery(data);
     setCompletedSteps(prev => prev.includes(5) ? prev : [...prev, 5]);
     setCurrentStep(6);
@@ -172,6 +177,7 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
   };
 
   const handleScheduleNext = (data: ScheduleInfo) => {
+    console.log('FlattmatesMultiStepForm - Schedule data received:', data);
     setScheduleInfo(data);
     setCompletedSteps(prev => prev.includes(6) ? prev : [...prev, 6]);
     setCurrentStep(7);
@@ -242,7 +248,9 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
   });
 
   const handleSubmit = () => {
+    console.log('FlattmatesMultiStepForm - Final submission called');
     const formData = getFormData();
+    console.log('FlattmatesMultiStepForm - Complete form data:', formData);
     onSubmit(formData);
     setIsSubmitted(true);
   };
