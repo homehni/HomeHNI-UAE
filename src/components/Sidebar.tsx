@@ -295,7 +295,7 @@ const handleAuthClick = () => {
                               className="text-sm text-gray-800 hover:text-brand-red transition-colors"
                               title="Call Us"
                             >
-                              +91 8074017388
+                              80740 17388
                             </a>
                           </div>
                           
