@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { PriceInput } from '@/components/ui/price-input';
@@ -58,6 +58,23 @@ export function PgHostelRoomDetailsStep({
     },
   });
 
+  // Sync local state when navigating back to this step
+  useEffect(() => {
+    if (initialData) {
+      setFormData(prev => ({
+        roomTypeDetails: initialData.roomTypeDetails || prev.roomTypeDetails,
+        roomAmenities: {
+          cupboard: initialData.roomAmenities?.cupboard ?? prev.roomAmenities.cupboard,
+          geyser: initialData.roomAmenities?.geyser ?? prev.roomAmenities.geyser,
+          tv: initialData.roomAmenities?.tv ?? prev.roomAmenities.tv,
+          ac: initialData.roomAmenities?.ac ?? prev.roomAmenities.ac,
+          bedding: initialData.roomAmenities?.bedding ?? prev.roomAmenities.bedding,
+          attachedBathroom: initialData.roomAmenities?.attachedBathroom ?? prev.roomAmenities.attachedBathroom,
+        },
+      }));
+    }
+  }, [initialData]);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (isFormValid()) {
@@ -74,16 +91,21 @@ export function PgHostelRoomDetailsStep({
   };
 
   const handleRoomTypePriceChange = (roomType: string, field: 'expectedRent' | 'expectedDeposit', value: number) => {
-    setFormData(prev => ({
-      ...prev,
-      roomTypeDetails: {
-        ...prev.roomTypeDetails,
-        [roomType]: {
-          ...prev.roomTypeDetails[roomType],
-          [field]: value,
+    setFormData(prev => {
+      const next = {
+        ...prev,
+        roomTypeDetails: {
+          ...prev.roomTypeDetails,
+          [roomType]: {
+            ...prev.roomTypeDetails[roomType],
+            [field]: value,
+          },
         },
-      },
-    }));
+      } as PgHostelRoomDetails;
+      // Persist to parent so data survives navigation
+      onNext(next);
+      return next;
+    });
   };
 
   const getRoomTypeLabel = (roomType: string) => {
@@ -91,12 +113,16 @@ export function PgHostelRoomDetailsStep({
   };
 
   const handleAmenityChange = (amenity: keyof typeof formData.roomAmenities, checked: boolean) => {
-    setFormData({
-      ...formData,
-      roomAmenities: {
-        ...formData.roomAmenities,
-        [amenity]: checked,
-      },
+    setFormData(prev => {
+      const next = {
+        ...prev,
+        roomAmenities: {
+          ...prev.roomAmenities,
+          [amenity]: checked,
+        },
+      } as PgHostelRoomDetails;
+      onNext(next);
+      return next;
     });
   };
 

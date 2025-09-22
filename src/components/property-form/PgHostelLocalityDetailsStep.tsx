@@ -54,6 +54,26 @@ export function PgHostelLocalityDetailsStep({
     }
   }, [initialData, form]);
 
+  // Persist changes to parent on any form update
+  useEffect(() => {
+    const subscription = form.watch((values) => {
+      const locationData: LocationDetails = {
+        state: values.state || '',
+        city: values.city || '',
+        locality: values.locality || '',
+        landmark: values.landmark || '',
+        pincode: values.pincode || '',
+        societyName: initialData.societyName || ''
+      };
+      onNext(locationData);
+    });
+    return () => {
+      // react-hook-form v7 returns a subscription with unsubscribe
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (subscription as any)?.unsubscribe?.();
+    };
+  }, [form, onNext, initialData]);
+
   // Google Maps Places Autocomplete
   useEffect(() => {
     const apiKey = 'AIzaSyD2rlXeHN4cm0CQD-y4YGTsob9a_27YcwY';

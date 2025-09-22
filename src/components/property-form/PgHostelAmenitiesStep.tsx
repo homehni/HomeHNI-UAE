@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -58,15 +58,23 @@ export function PgHostelAmenitiesStep({
     ...initialData,
   });
 
+  // Sync when parent provides saved data (navigate back)
+  useEffect(() => {
+    if (initialData) {
+      setFormData(prev => ({ ...prev, ...initialData }));
+    }
+  }, [initialData]);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onNext(formData);
   };
 
   const handleAmenityChange = (amenity: string, value: boolean | string) => {
-    setFormData({
-      ...formData,
-      [amenity]: value,
+    setFormData(prev => {
+      const next = { ...prev, [amenity]: value } as PgHostelAmenities;
+      onNext(next);
+      return next;
     });
   };
 

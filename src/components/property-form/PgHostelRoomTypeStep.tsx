@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -28,6 +28,15 @@ export function PgHostelRoomTypeStep({
     ...initialData,
   });
 
+  // Sync when parent provides saved data (e.g., navigating back)
+  useEffect(() => {
+    if (initialData) {
+      setFormData(prev => ({
+        selectedTypes: initialData.selectedTypes ?? prev.selectedTypes ?? [],
+      }));
+    }
+  }, [initialData]);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (isFormValid()) {
@@ -42,17 +51,13 @@ export function PgHostelRoomTypeStep({
   const handleRoomTypeChange = (roomType: 'single' | 'double' | 'three' | 'four') => {
     setFormData(prev => {
       const isSelected = prev.selectedTypes.includes(roomType);
-      if (isSelected) {
-        // Remove from selection
-        return {
-          selectedTypes: prev.selectedTypes.filter(type => type !== roomType)
-        };
-      } else {
-        // Add to selection
-        return {
-          selectedTypes: [...prev.selectedTypes, roomType]
-        };
-      }
+      const nextSelected = isSelected
+        ? prev.selectedTypes.filter(type => type !== roomType)
+        : [...prev.selectedTypes, roomType];
+      const nextData = { selectedTypes: nextSelected } as PgHostelRoomType;
+      // Persist to parent so sticky navigation has up-to-date data
+      onNext(nextData);
+      return nextData;
     });
   };
 
