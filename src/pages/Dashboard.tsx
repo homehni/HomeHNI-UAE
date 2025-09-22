@@ -167,6 +167,7 @@ export const Dashboard: React.FC = () => {
   
   // Profile states
   const [profileName, setProfileName] = useState('');
+  const [originalProfileName, setOriginalProfileName] = useState('');
   const [isUpdatingName, setIsUpdatingName] = useState(false);
 
   useEffect(() => {
@@ -179,12 +180,22 @@ export const Dashboard: React.FC = () => {
     }
   }, [user]);
 
-  // Update profileName when user data changes
+  // Load profile name from Supabase profiles when user changes
   useEffect(() => {
-    if (user?.user_metadata?.full_name) {
-      setProfileName(user.user_metadata.full_name);
-    }
-  }, [user?.user_metadata?.full_name]);
+    const loadName = async () => {
+      if (!user) return;
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('full_name')
+        .eq('user_id', user.id)
+        .maybeSingle();
+      if (!error && data?.full_name) {
+        setProfileName(data.full_name);
+        setOriginalProfileName(data.full_name);
+      }
+    };
+    loadName();
+  }, [user?.id]);
 
   // Update active tab when URL changes
   useEffect(() => {
@@ -740,35 +751,35 @@ export const Dashboard: React.FC = () => {
 
     setIsUpdatingName(true);
     try {
-      console.log('Updating profile name for user:', user.id, 'to:', profileName.trim());
-      
+      const newName = profileName.trim();
+
       // Update the existing profile record
-      const { data, error } = await supabase
+      const { error: profileError } = await supabase
         .from('profiles')
-        .update({
-          full_name: profileName.trim()
-        })
-        .eq('user_id', user.id)
-        .select();
+        .update({ full_name: newName })
+        .eq('user_id', user.id);
 
-      if (error) {
-        console.error('Supabase error:', error);
-        throw error;
+      if (profileError) {
+        console.error('Profiles update error:', profileError);
+        throw profileError;
       }
 
-      console.log('Profile update successful:', data);
-
-      // Refresh the auth context to get updated user data
-      if (window.location) {
-        window.location.reload();
+      // Also update auth user metadata so it stays in sync on reloads
+      const { error: authError } = await supabase.auth.updateUser({
+        data: { full_name: newName },
+      });
+      if (authError) {
+        console.warn('Auth metadata update failed (non-blocking):', authError);
       }
+
+      setOriginalProfileName(newName);
 
       toast({
         title: "Profile updated",
-        description: "Your name has been updated successfully. Page will refresh to show changes.",
+        description: "Your name has been updated successfully.",
       });
 
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error updating profile:', error);
       toast({
         title: "Error",
@@ -1466,7 +1477,7 @@ export const Dashboard: React.FC = () => {
                     />
                     <Button
                       onClick={handleUpdateName}
-                      disabled={isUpdatingName || profileName === (user.user_metadata?.full_name || '')}
+                      disabled={isUpdatingName || profileName.trim() === originalProfileName.trim()}
                       size="sm"
                     >
                       {isUpdatingName ? 'Saving...' : 'Save'}
