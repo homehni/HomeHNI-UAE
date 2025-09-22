@@ -8,7 +8,6 @@ import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Key, Plus } from 'lucide-react';
 import { CommercialSaleAmenities } from '@/types/property';
-
 const commercialSaleAmenitiesSchema = z.object({
   powerBackup: z.string().optional(),
   lift: z.string().optional(),
@@ -18,12 +17,9 @@ const commercialSaleAmenitiesSchema = z.object({
   security: z.string().optional(),
   currentPropertyCondition: z.string().optional(),
   currentBusiness: z.string().optional(),
-  
-  directionsTip: z.string().optional(),
+  directionsTip: z.string().optional()
 });
-
 type CommercialSaleAmenitiesForm = z.infer<typeof commercialSaleAmenitiesSchema>;
-
 interface CommercialSaleAmenitiesStepProps {
   initialData?: Partial<CommercialSaleAmenities>;
   onNext: (data: Partial<CommercialSaleAmenities>) => void;
@@ -31,7 +27,6 @@ interface CommercialSaleAmenitiesStepProps {
   currentStep: number;
   totalSteps: number;
 }
-
 export const CommercialSaleAmenitiesStep = ({
   initialData,
   onNext,
@@ -50,29 +45,23 @@ export const CommercialSaleAmenitiesStep = ({
       security: initialData?.security || '',
       currentPropertyCondition: initialData?.currentPropertyCondition || '',
       currentBusiness: initialData?.currentBusiness || '',
-      
-      directionsTip: initialData?.directionsTip || '',
-    },
+      directionsTip: initialData?.directionsTip || ''
+    }
   });
-
   const onSubmit = (data: CommercialSaleAmenitiesForm) => {
     onNext(data);
   };
-
-  return (
-    <div className="max-w-4xl mx-auto p-6">
+  return <div className="max-w-4xl mx-auto p-6">
       <div className="mb-8 text-left">
-        <h2 className="text-2xl font-bold text-red-600 mb-2">Amenities & Features</h2>
+        <h2 className="text-2xl text-red-600 mb-2 font-semibold">Amenities & Features</h2>
       </div>
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <FormField
-              control={form.control}
-              name="powerBackup"
-              render={({ field }) => (
-                <FormItem>
+            <FormField control={form.control} name="powerBackup" render={({
+            field
+          }) => <FormItem>
                   <FormLabel>Power Backup</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
@@ -88,15 +77,11 @@ export const CommercialSaleAmenitiesStep = ({
                     </SelectContent>
                   </Select>
                   <FormMessage />
-                </FormItem>
-              )}
-            />
+                </FormItem>} />
 
-            <FormField
-              control={form.control}
-              name="lift"
-              render={({ field }) => (
-                <FormItem>
+            <FormField control={form.control} name="lift" render={({
+            field
+          }) => <FormItem>
                   <FormLabel>Lift</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
@@ -112,17 +97,13 @@ export const CommercialSaleAmenitiesStep = ({
                     </SelectContent>
                   </Select>
                   <FormMessage />
-                </FormItem>
-              )}
-            />
+                </FormItem>} />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <FormField
-              control={form.control}
-              name="parking"
-              render={({ field }) => (
-                <FormItem>
+            <FormField control={form.control} name="parking" render={({
+            field
+          }) => <FormItem>
                   <FormLabel>Parking</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
@@ -138,15 +119,11 @@ export const CommercialSaleAmenitiesStep = ({
                     </SelectContent>
                   </Select>
                   <FormMessage />
-                </FormItem>
-              )}
-            />
+                </FormItem>} />
 
-            <FormField
-              control={form.control}
-              name="washrooms"
-              render={({ field }) => (
-                <FormItem>
+            <FormField control={form.control} name="washrooms" render={({
+            field
+          }) => <FormItem>
                   <FormLabel>Washroom(s)</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
@@ -162,17 +139,13 @@ export const CommercialSaleAmenitiesStep = ({
                     </SelectContent>
                   </Select>
                   <FormMessage />
-                </FormItem>
-              )}
-            />
+                </FormItem>} />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <FormField
-              control={form.control}
-              name="waterStorageFacility"
-              render={({ field }) => (
-                <FormItem>
+            <FormField control={form.control} name="waterStorageFacility" render={({
+            field
+          }) => <FormItem>
                   <FormLabel>Water Storage Facility</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
@@ -188,15 +161,11 @@ export const CommercialSaleAmenitiesStep = ({
                     </SelectContent>
                   </Select>
                   <FormMessage />
-                </FormItem>
-              )}
-            />
+                </FormItem>} />
 
-            <FormField
-              control={form.control}
-              name="security"
-              render={({ field }) => (
-                <FormItem>
+            <FormField control={form.control} name="security" render={({
+            field
+          }) => <FormItem>
                   <FormLabel>Security</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
@@ -212,17 +181,13 @@ export const CommercialSaleAmenitiesStep = ({
                     </SelectContent>
                   </Select>
                   <FormMessage />
-                </FormItem>
-              )}
-            />
+                </FormItem>} />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <FormField
-              control={form.control}
-              name="currentPropertyCondition"
-              render={({ field }) => (
-                <FormItem>
+            <FormField control={form.control} name="currentPropertyCondition" render={({
+            field
+          }) => <FormItem>
                   <FormLabel>Current Property Condition?</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
@@ -238,15 +203,11 @@ export const CommercialSaleAmenitiesStep = ({
                     </SelectContent>
                   </Select>
                   <FormMessage />
-                </FormItem>
-              )}
-            />
+                </FormItem>} />
 
-            <FormField
-              control={form.control}
-              name="currentBusiness"
-              render={({ field }) => (
-                <FormItem>
+            <FormField control={form.control} name="currentBusiness" render={({
+            field
+          }) => <FormItem>
                   <FormLabel>What business is currently running?</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
@@ -265,17 +226,13 @@ export const CommercialSaleAmenitiesStep = ({
                     </SelectContent>
                   </Select>
                   <FormMessage />
-                </FormItem>
-              )}
-            />
+                </FormItem>} />
           </div>
 
 
-          <FormField
-            control={form.control}
-            name="directionsTip"
-            render={({ field }) => (
-              <FormItem>
+          <FormField control={form.control} name="directionsTip" render={({
+          field
+        }) => <FormItem>
                 <FormLabel className="flex items-center gap-2">
                   <Plus className="h-4 w-4" />
                   Add Directions Tip for your buyers <span className="bg-green-100 text-green-700 text-xs px-2 py-1 rounded">NEW</span>
@@ -285,19 +242,13 @@ export const CommercialSaleAmenitiesStep = ({
                   Add directions to reach using landmarks
                 </div>
                 <FormControl>
-                  <Textarea 
-                    placeholder="Provide directions to help visitors find your property easily"
-                    {...field}
-                  />
+                  <Textarea placeholder="Provide directions to help visitors find your property easily" {...field} />
                 </FormControl>
                 <FormMessage />
-              </FormItem>
-            )}
-          />
+              </FormItem>} />
 
           {/* Navigation Buttons - Removed, using sticky buttons instead */}
         </form>
       </Form>
-    </div>
-  );
+    </div>;
 };
