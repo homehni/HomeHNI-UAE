@@ -333,8 +333,8 @@ const Blog = () => {
       </Dialog>
 
       {/* Success Modal */}
-      <Dialog open={showSuccessModal} onOpenChange={setShowSuccessModal}>
-        <DialogContent className="sm:max-w-[400px] bg-transparent border-none shadow-none p-0">
+      <Dialog open={showSuccessModal} onOpenChange={() => {}}>
+        <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center">
           <div className="bg-red-500 text-white p-8 rounded-lg text-center">
             <div className="mb-4">
               <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -348,7 +348,7 @@ const Blog = () => {
               </p>
             </div>
           </div>
-        </DialogContent>
+        </div>
       </Dialog>
 
       <Footer />
