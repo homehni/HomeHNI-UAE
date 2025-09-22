@@ -4,6 +4,7 @@ import OwnerPlans from './OwnerPlans';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Star, Clock, UserCheck, FileText, TrendingUp, Globe, Camera, Shield, Users } from 'lucide-react';
 import PayButton from '@/components/PayButton';
 
@@ -88,6 +89,12 @@ const RentalPlans = ({ embedded }: RentalPlansProps) => {
             </TabsContent>
 
             <TabsContent value="tenant" className="space-y-8">
+              {/* Header Text */}
+              <div className="text-center mb-8">
+                <h3 className="text-2xl font-bold mb-2">Choose Your Perfect Plan</h3>
+                <p className="text-muted-foreground">Select the plan that best fits your rental property search needs</p>
+              </div>
+
               {/* Plan Cards */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                 {tenantPlans.map((plan, index) => (
@@ -149,19 +156,19 @@ const RentalPlans = ({ embedded }: RentalPlansProps) => {
                 ))}
               </div>
 
-              {/* Selected Plan Details */}
+              {/* What You Get Section */}
               <Card className="bg-card">
-                <CardContent className="p-8">
-                  <h3 className="text-2xl font-bold mb-6 text-center">
-                    {tenantPlans[selectedTenantPlan].name} Plan Features
-                  </h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <CardHeader className="pb-4">
+                  <h3 className="text-xl font-bold text-center">What You Get</h3>
+                </CardHeader>
+                <CardContent className="pt-0">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     {tenantPlanDetails[selectedTenantPlan].map((feature, index) => (
-                      <div key={index} className="flex items-center gap-3 p-4 bg-muted rounded-lg">
-                        <div className="text-brand-red flex-shrink-0">
+                      <div key={index} className="flex items-start gap-3 p-3 bg-muted rounded-lg">
+                        <div className="text-brand-red flex-shrink-0 mt-0.5">
                           {feature.icon}
                         </div>
-                        <span className="text-sm font-medium text-foreground">{feature.text}</span>
+                        <span className="text-sm text-foreground leading-relaxed">{feature.text}</span>
                       </div>
                     ))}
                   </div>
@@ -170,8 +177,10 @@ const RentalPlans = ({ embedded }: RentalPlansProps) => {
 
               {/* Testimonials Section */}
               <Card className="bg-card">
-                <CardContent className="p-8">
-                  <h3 className="text-2xl font-bold mb-8 text-center">What Our Tenants Say</h3>
+                <CardHeader className="pb-4">
+                  <h3 className="text-xl font-bold text-center">Customer Testimonials</h3>
+                </CardHeader>
+                <CardContent className="pt-0">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="bg-muted p-6 rounded-lg">
                       <div className="flex items-center mb-4">
@@ -199,66 +208,50 @@ const RentalPlans = ({ embedded }: RentalPlansProps) => {
                 </CardContent>
               </Card>
 
-              {/* FAQs Section */}
+              {/* FAQs Section with Accordion */}
               <Card className="bg-card">
-                <CardContent className="p-8">
-                  <h3 className="text-2xl font-bold mb-8 text-center">Frequently Asked Questions</h3>
-                  <div className="space-y-4">
-                    <div className="border-b border-border pb-4">
-                      <h4 className="font-semibold text-foreground mb-2">How does the property search assistance work?</h4>
-                      <p className="text-muted-foreground text-sm">Our experts help you filter properties based on your requirements, budget, and preferred locations to save your time.</p>
-                    </div>
-                    <div className="border-b border-border pb-4">
-                      <h4 className="font-semibold text-foreground mb-2">What documentation support do you provide?</h4>
-                      <p className="text-muted-foreground text-sm">We assist with rental agreements, verification documents, and ensure all paperwork is completed properly.</p>
-                    </div>
-                    <div className="border-b border-border pb-4">
-                      <h4 className="font-semibold text-foreground mb-2">Do you help with property visits?</h4>
-                      <p className="text-muted-foreground text-sm">Yes, we coordinate property visits, schedule appointments with owners, and can accompany you for premium plans.</p>
-                    </div>
-                    <div className="border-b border-border pb-4">
-                      <h4 className="font-semibold text-foreground mb-2">Are there any hidden charges?</h4>
-                      <p className="text-muted-foreground text-sm">No, all charges are transparent. The plan fee is all you pay - no hidden brokerage or additional costs.</p>
-                    </div>
-                    <div className="border-b border-border pb-4">
-                      <h4 className="font-semibold text-foreground mb-2">How quickly can I find a property?</h4>
-                      <p className="text-muted-foreground text-sm">Most tenants find suitable properties within 2-4 weeks with our assistance, depending on requirements and location.</p>
-                    </div>
-                    <div className="pb-4">
-                      <h4 className="font-semibold text-foreground mb-2">What if I'm not satisfied with the service?</h4>
-                      <p className="text-muted-foreground text-sm">We offer dedicated support throughout your plan validity period and work until you find a suitable property.</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Why Choose Us Section */}
-              <Card className="bg-card">
-                <CardContent className="p-8">
-                  <h3 className="text-2xl font-bold mb-8 text-center">Why Choose Our Tenant Services?</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <div className="text-center p-4">
-                      <div className="w-16 h-16 bg-brand-red rounded-full flex items-center justify-center mx-auto mb-4">
-                        <Clock className="w-8 h-8 text-white" />
-                      </div>
-                      <h4 className="font-semibold mb-2">Time Saving</h4>
-                      <p className="text-sm text-muted-foreground">We pre-filter properties to match your exact requirements</p>
-                    </div>
-                    <div className="text-center p-4">
-                      <div className="w-16 h-16 bg-brand-red rounded-full flex items-center justify-center mx-auto mb-4">
-                        <Shield className="w-8 h-8 text-white" />
-                      </div>
-                      <h4 className="font-semibold mb-2">Zero Brokerage</h4>
-                      <p className="text-sm text-muted-foreground">No hidden charges or brokerage fees - transparent pricing</p>
-                    </div>
-                    <div className="text-center p-4">
-                      <div className="w-16 h-16 bg-brand-red rounded-full flex items-center justify-center mx-auto mb-4">
-                        <UserCheck className="w-8 h-8 text-white" />
-                      </div>
-                      <h4 className="font-semibold mb-2">Expert Guidance</h4>
-                      <p className="text-sm text-muted-foreground">Dedicated relationship managers to assist throughout</p>
-                    </div>
-                  </div>
+                <CardHeader className="pb-4">
+                  <h3 className="text-xl font-bold text-center">Frequently Asked Questions</h3>
+                </CardHeader>
+                <CardContent className="pt-0">
+                  <Accordion type="single" collapsible className="w-full">
+                    <AccordionItem value="item-1">
+                      <AccordionTrigger>How does the property search assistance work?</AccordionTrigger>
+                      <AccordionContent>
+                        Our experts help you filter properties based on your requirements, budget, and preferred locations to save your time.
+                      </AccordionContent>
+                    </AccordionItem>
+                    <AccordionItem value="item-2">
+                      <AccordionTrigger>What documentation support do you provide?</AccordionTrigger>
+                      <AccordionContent>
+                        We assist with rental agreements, verification documents, and ensure all paperwork is completed properly.
+                      </AccordionContent>
+                    </AccordionItem>
+                    <AccordionItem value="item-3">
+                      <AccordionTrigger>Do you help with property visits?</AccordionTrigger>
+                      <AccordionContent>
+                        Yes, we coordinate property visits, schedule appointments with owners, and can accompany you for premium plans.
+                      </AccordionContent>
+                    </AccordionItem>
+                    <AccordionItem value="item-4">
+                      <AccordionTrigger>Are there any hidden charges?</AccordionTrigger>
+                      <AccordionContent>
+                        No, all charges are transparent. The plan fee is all you pay - no hidden brokerage or additional costs.
+                      </AccordionContent>
+                    </AccordionItem>
+                    <AccordionItem value="item-5">
+                      <AccordionTrigger>How quickly can I find a property?</AccordionTrigger>
+                      <AccordionContent>
+                        Most tenants find suitable properties within 2-4 weeks with our assistance, depending on requirements and location.
+                      </AccordionContent>
+                    </AccordionItem>
+                    <AccordionItem value="item-6">
+                      <AccordionTrigger>What if I'm not satisfied with the service?</AccordionTrigger>
+                      <AccordionContent>
+                        We offer dedicated support throughout your plan validity period and work until you find a suitable property.
+                      </AccordionContent>
+                    </AccordionItem>
+                  </Accordion>
                 </CardContent>
               </Card>
             </TabsContent>
