@@ -10,9 +10,9 @@ import { Badge } from '@/components/ui/badge';
 import { PropertyDetails } from '@/types/property';
 import { Phone, Compass } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-
 const propertyDetailsSchema = z.object({
-  title: z.string().optional(), // Made optional - will be auto-generated
+  title: z.string().optional(),
+  // Made optional - will be auto-generated
   propertyType: z.string().optional(),
   bhkType: z.string().optional(),
   buildingType: z.string().optional(),
@@ -23,11 +23,9 @@ const propertyDetailsSchema = z.object({
   floorNo: z.union([z.number(), z.string()]).optional(),
   superBuiltUpArea: z.number().min(1, "Super built up area is required and must be at least 1"),
   onMainRoad: z.boolean().optional(),
-  cornerProperty: z.boolean().optional(),
+  cornerProperty: z.boolean().optional()
 });
-
 type PropertyDetailsFormData = z.infer<typeof propertyDetailsSchema>;
-
 interface PropertyDetailsStepProps {
   initialData?: Partial<PropertyDetails>;
   onNext: (data: PropertyDetails) => void;
@@ -35,7 +33,6 @@ interface PropertyDetailsStepProps {
   currentStep: number;
   totalSteps: number;
 }
-
 export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
   initialData = {},
   onNext,
@@ -43,9 +40,10 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
   currentStep,
   totalSteps
 }) => {
-  const { toast } = useToast();
+  const {
+    toast
+  } = useToast();
   const [isInterested, setIsInterested] = useState(false);
-  
   const form = useForm<PropertyDetailsFormData>({
     resolver: zodResolver(propertyDetailsSchema),
     defaultValues: {
@@ -61,19 +59,18 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
       floorNo: initialData.floorNo || 0,
       superBuiltUpArea: initialData.superBuiltUpArea ?? undefined,
       onMainRoad: initialData.onMainRoad || false,
-      cornerProperty: initialData.cornerProperty || false,
-    },
+      cornerProperty: initialData.cornerProperty || false
+    }
   });
-
   const watchedPropertyType = form.watch("propertyType");
   const watchedFloorNo = form.watch("floorNo");
-  
+
   // Properties that show floor dropdown (for apartments, penthouses, etc.)
   const showFloorDropdown = ['Apartment', 'Penthouse', 'Gated Community Villa'].includes(watchedPropertyType);
-  
+
   // Properties that show number of floors
   const showNumberOfFloors = ['Independent House', 'Villa', 'Duplex'].includes(watchedPropertyType);
-  
+
   // Get minimum total floors based on selected floor
   const getMinTotalFloors = () => {
     if (typeof watchedFloorNo === 'number' && watchedFloorNo > 0) {
@@ -81,85 +78,67 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
     }
     return 1;
   };
-
-
   const onSubmit = (data: PropertyDetailsFormData) => {
     console.log('PropertyDetailsStep submitting data:', data);
-    
+
     // Pass the form data merged with initial data to maintain all PropertyDetails fields
     onNext({
-      ...initialData, // Keep existing fields like title, bhkType, etc.
+      ...initialData,
+      // Keep existing fields like title, bhkType, etc.
       ...data,
       onMainRoad: data.onMainRoad || false,
-      cornerProperty: data.cornerProperty || false,
+      cornerProperty: data.cornerProperty || false
     } as PropertyDetails);
   };
-
-  return (
-    <div className="flex flex-col h-full">
+  return <div className="flex flex-col h-full">
       {/* Form Content - Scrollable */}
       <div className="flex-1 overflow-y-auto p-6">
-        <h1 className="text-2xl font-semibold text-primary mb-6">Property Details</h1>
+        <h1 className="text-2xl text-primary mb-6 font-semibold">Property Details</h1>
         
         <Form {...form}>
           <form id="property-details-form" onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             {/* Property Name and Built Up Area */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <FormField
-                control={form.control}
-                name="title"
-                render={({ field }) => (
-                  <FormItem>
+              <FormField control={form.control} name="title" render={({
+              field
+            }) => <FormItem>
                     <FormLabel className="text-sm font-medium">Property Name</FormLabel>
                     <FormControl>
-                      <Input
-                        className="h-10"
-                        placeholder="Enter Property Name"
-                        {...field}
-                      />
+                      <Input className="h-10" placeholder="Enter Property Name" {...field} />
                     </FormControl>
                     <FormMessage />
-                  </FormItem>
-                )}
-              />
+                  </FormItem>} />
 
-              <FormField
-                control={form.control}
-                name="superBuiltUpArea"
-                render={({ field }) => (
-                  <FormItem>
+              <FormField control={form.control} name="superBuiltUpArea" render={({
+              field
+            }) => <FormItem>
                     <FormLabel className="text-sm font-medium">Built Up Area</FormLabel>
                     <div className="relative">
                       <FormControl>
-                        <Input
-                          type="number"
-                          placeholder=""
-                          min="1"
-                          className="h-10 pr-12 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
-                          {...field}
-                          onKeyDown={(e) => { if (['-','+','e','E','.'].includes(e.key)) e.preventDefault(); }}
-                          onPaste={(e) => { const text = e.clipboardData.getData('text'); const digits = text.replace(/[^0-9]/g, ''); if (digits !== text) { e.preventDefault(); field.onChange(digits ? Math.max(1, Number(digits)) : undefined); } }}
-                          value={field.value || ''}
-                          onChange={(e) => field.onChange(e.target.value ? Math.max(1, Number(e.target.value)) : undefined)}
-                        />
+                        <Input type="number" placeholder="" min="1" className="h-10 pr-12 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]" {...field} onKeyDown={e => {
+                    if (['-', '+', 'e', 'E', '.'].includes(e.key)) e.preventDefault();
+                  }} onPaste={e => {
+                    const text = e.clipboardData.getData('text');
+                    const digits = text.replace(/[^0-9]/g, '');
+                    if (digits !== text) {
+                      e.preventDefault();
+                      field.onChange(digits ? Math.max(1, Number(digits)) : undefined);
+                    }
+                  }} value={field.value || ''} onChange={e => field.onChange(e.target.value ? Math.max(1, Number(e.target.value)) : undefined)} />
                       </FormControl>
                       <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-sm text-muted-foreground">
                         Sq.ft
                       </div>
                     </div>
                     <FormMessage />
-                  </FormItem>
-                )}
-              />
+                  </FormItem>} />
             </div>
 
             {/* Property Type and BHK Type */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <FormField
-                control={form.control}
-                name="propertyType"
-                render={({ field }) => (
-                  <FormItem>
+              <FormField control={form.control} name="propertyType" render={({
+              field
+            }) => <FormItem>
                     <FormLabel className="text-sm font-medium">Property Type</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
@@ -177,15 +156,11 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
                       </SelectContent>
                     </Select>
                     <FormMessage />
-                  </FormItem>
-                )}
-              />
+                  </FormItem>} />
 
-              <FormField
-                control={form.control}
-                name="bhkType"
-                render={({ field }) => (
-                  <FormItem>
+              <FormField control={form.control} name="bhkType" render={({
+              field
+            }) => <FormItem>
                     <FormLabel className="text-sm font-medium">BHK Type</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
@@ -205,18 +180,14 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
                       </SelectContent>
                     </Select>
                     <FormMessage />
-                  </FormItem>
-                )}
-              />
+                  </FormItem>} />
             </div>
 
             {/* Property Age and Facing */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <FormField
-                control={form.control}
-                name="propertyAge"
-                render={({ field }) => (
-                  <FormItem>
+              <FormField control={form.control} name="propertyAge" render={({
+              field
+            }) => <FormItem>
                     <FormLabel className="text-sm font-medium">Property Age</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
@@ -235,15 +206,11 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
                       </SelectContent>
                     </Select>
                     <FormMessage />
-                  </FormItem>
-                )}
-              />
+                  </FormItem>} />
 
-              <FormField
-                control={form.control}
-                name="facing"
-                render={({ field }) => (
-                  <FormItem>
+              <FormField control={form.control} name="facing" render={({
+              field
+            }) => <FormItem>
                     <FormLabel className="text-sm font-medium">Facing</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
@@ -266,37 +233,24 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
                       </SelectContent>
                     </Select>
                     <FormMessage />
-                  </FormItem>
-                )}
-              />
+                  </FormItem>} />
             </div>
 
             {/* Floor, Total Floors / No. of Floors */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {showFloorDropdown && (
-                <FormField
-                  control={form.control}
-                  name="floorNo"
-                  render={({ field }) => (
-                    <FormItem>
+              {showFloorDropdown && <FormField control={form.control} name="floorNo" render={({
+              field
+            }) => <FormItem>
                       <FormLabel className="text-sm font-medium">Floor</FormLabel>
-                      <Select
-                        onValueChange={(value) => {
-                          if (value === 'ground') {
-                            field.onChange(0);
-                          } else if (value === 'basement') {
-                            field.onChange('basement');
-                          } else {
-                            field.onChange(parseInt(value));
-                          }
-                        }}
-                        value={
-                          field.value === undefined ? undefined : 
-                          field.value === 0 ? 'ground' :
-                          field.value === 'basement' ? 'basement' :
-                          field.value.toString()
-                        }
-                      >
+                      <Select onValueChange={value => {
+                if (value === 'ground') {
+                  field.onChange(0);
+                } else if (value === 'basement') {
+                  field.onChange('basement');
+                } else {
+                  field.onChange(parseInt(value));
+                }
+              }} value={field.value === undefined ? undefined : field.value === 0 ? 'ground' : field.value === 'basement' ? 'basement' : field.value.toString()}>
                         <FormControl>
                           <SelectTrigger className="h-10">
                             <SelectValue placeholder="Select Floor" />
@@ -306,32 +260,21 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
                           <SelectItem value="basement">Basement</SelectItem>
                           <SelectItem value="ground">Ground Floor</SelectItem>
                           {[...Array(50)].map((_, i) => {
-                            const floor = i + 1;
-                            return (
-                              <SelectItem key={floor} value={floor.toString()}>
+                    const floor = i + 1;
+                    return <SelectItem key={floor} value={floor.toString()}>
                                 {floor}
-                              </SelectItem>
-                            );
-                          })}
+                              </SelectItem>;
+                  })}
                         </SelectContent>
                       </Select>
                       <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              )}
+                    </FormItem>} />}
 
-              {showFloorDropdown ? (
-                <FormField
-                  control={form.control}
-                  name="totalFloors"
-                  render={({ field }) => (
-                    <FormItem>
+              {showFloorDropdown ? <FormField control={form.control} name="totalFloors" render={({
+              field
+            }) => <FormItem>
                       <FormLabel className="text-sm font-medium">Total Floor</FormLabel>
-                      <Select
-                        onValueChange={(value) => field.onChange(parseInt(value))}
-                        defaultValue={field.value?.toString()}
-                      >
+                      <Select onValueChange={value => field.onChange(parseInt(value))} defaultValue={field.value?.toString()}>
                         <FormControl>
                           <SelectTrigger className="h-10">
                             <SelectValue placeholder="Select Total Floors" />
@@ -339,34 +282,23 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
                         </FormControl>
                         <SelectContent>
                           {[...Array(50)].map((_, i) => {
-                            const floor = i + 1;
-                            const minFloors = getMinTotalFloors();
-                            if (floor >= minFloors) {
-                              return (
-                                <SelectItem key={floor} value={floor.toString()}>
+                    const floor = i + 1;
+                    const minFloors = getMinTotalFloors();
+                    if (floor >= minFloors) {
+                      return <SelectItem key={floor} value={floor.toString()}>
                                   {floor}
-                                </SelectItem>
-                              );
-                            }
-                            return null;
-                          }).filter(Boolean)}
+                                </SelectItem>;
+                    }
+                    return null;
+                  }).filter(Boolean)}
                         </SelectContent>
                       </Select>
                       <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              ) : showNumberOfFloors ? (
-                <FormField
-                  control={form.control}
-                  name="totalFloors"
-                  render={({ field }) => (
-                    <FormItem>
+                    </FormItem>} /> : showNumberOfFloors ? <FormField control={form.control} name="totalFloors" render={({
+              field
+            }) => <FormItem>
                       <FormLabel className="text-sm font-medium">No. of Floors</FormLabel>
-                      <Select
-                        onValueChange={(value) => field.onChange(parseInt(value))}
-                        defaultValue={field.value?.toString()}
-                      >
+                      <Select onValueChange={value => field.onChange(parseInt(value))} defaultValue={field.value?.toString()}>
                         <FormControl>
                           <SelectTrigger className="h-10">
                             <SelectValue placeholder="Select" />
@@ -374,20 +306,15 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
                         </FormControl>
                         <SelectContent>
                           {[...Array(10)].map((_, i) => {
-                            const floor = i + 1;
-                            return (
-                              <SelectItem key={floor} value={floor.toString()}>
+                    const floor = i + 1;
+                    return <SelectItem key={floor} value={floor.toString()}>
                                 {floor}
-                              </SelectItem>
-                            );
-                          })}
+                              </SelectItem>;
+                  })}
                         </SelectContent>
                       </Select>
                       <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              ) : null}
+                    </FormItem>} /> : null}
             </div>
 
 
@@ -396,22 +323,12 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
               <div className="flex items-center space-x-3">
                 <Phone className="h-5 w-5 text-orange-600" />
                 <span className="text-sm text-gray-700">
-                  {isInterested 
-                    ? "Thank you for the interest. Our agent will give you a call shortly." 
-                    : "Don't want to fill all the details? Let us help you!"
-                  }
+                  {isInterested ? "Thank you for the interest. Our agent will give you a call shortly." : "Don't want to fill all the details? Let us help you!"}
                 </span>
               </div>
-              {!isInterested && (
-                <Button 
-                  type="button"
-                  variant="outline" 
-                  className="border-primary text-primary hover:bg-primary hover:text-white"
-                  onClick={() => setIsInterested(true)}
-                >
+              {!isInterested && <Button type="button" variant="outline" className="border-primary text-primary hover:bg-primary hover:text-white" onClick={() => setIsInterested(true)}>
                   I'm interested
-                </Button>
-              )}
+                </Button>}
             </div>
           </form>
         </Form>
@@ -420,6 +337,5 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
         <button type="submit" form="property-details-form" className="hidden" />
       </div>
 
-    </div>
-  );
+    </div>;
 };
