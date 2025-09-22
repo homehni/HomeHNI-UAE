@@ -303,6 +303,22 @@ export const FlattmatesPreviewStep: React.FC<FlattmatesPreviewStepProps> = ({
         </div>
       </div>
 
+      {/* Submit Property Button */}
+      <div className="bg-white border border-gray-200 rounded-lg p-4 sm:p-6 mb-4 sm:mb-6 shadow-sm">
+        <div className="text-center">
+          <Button 
+            onClick={handleSubmit}
+            disabled={isSubmitting}
+            className="bg-red-600 hover:bg-red-700 text-white px-8 py-3 text-lg font-semibold w-full sm:w-auto"
+          >
+            {isSubmitting ? 'Submitting...' : 'Submit Property'}
+          </Button>
+          <p className="text-sm text-gray-600 mt-2">
+            Click to submit your flatmates listing
+          </p>
+        </div>
+      </div>
+
       {/* Missing Photos Warning */}
       {!hasPhotos && !showNoPhotosMessage && (
         <div className="bg-orange-50 border border-orange-200 rounded-lg p-3 sm:p-4 mb-4 sm:mb-6">
