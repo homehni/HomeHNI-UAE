@@ -311,12 +311,12 @@ export const CommercialPreviewStep: React.FC<CommercialPreviewStepProps> = ({
             </div>
           </div>
            <div className="flex-shrink-0 w-full sm:w-auto">
-             <Button 
-               className="bg-teal-600 hover:bg-teal-700 text-white px-6 py-2 w-full sm:w-auto"
-               onClick={() => window.open('/plans', '_blank')}
-             >
-               Go Premium
-             </Button>
+              <Button 
+                className="bg-teal-600 hover:bg-teal-700 text-white px-6 py-2 w-full sm:w-auto"
+                onClick={() => window.open('/plans?tab=commercial-owner', '_blank')}
+              >
+                Go Premium
+              </Button>
            </div>
         </div>
       </div>
