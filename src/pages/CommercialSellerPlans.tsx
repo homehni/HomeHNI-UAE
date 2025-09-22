@@ -244,7 +244,7 @@ const CommercialSellerPlans = () => {
                         </Badge>
                       </div>
                       
-                      <CardContent className="pt-16 pb-6 px-6">
+                      <CardContent className="pt-16 pb-12 px-6 min-h-[280px] flex flex-col justify-between">
                         <h3 className="text-xl font-bold text-gray-900 mb-3">{plan.name}</h3>
                         <div className="mb-6">
                           <span className="text-2xl font-bold text-gray-900">{plan.price}</span>
