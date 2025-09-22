@@ -16,7 +16,7 @@ const SellersGuide = () => {
       <section 
         className="relative bg-cover bg-center bg-no-repeat text-white py-20 md:py-32" 
         style={{
-          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/lovable-uploads/02fc42a2-c12f-49f1-92b7-9fdee8f3a419.png')`
+          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/lovable-uploads/fbb0d72f-782e-49f5-bbe1-8afc1314b5f7.png')`
         }}
       >
         <div className="container mx-auto px-4">
