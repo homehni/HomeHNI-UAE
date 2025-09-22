@@ -34,6 +34,14 @@ const CommercialSellerPlans = () => {
         gst: "+18% GST",
         badge: "MOST POPULAR",
         badgeColor: "bg-yellow-500",
+      },
+      {
+        name: "Platinum Plan",
+        price: "₹12,999",
+        amountPaise: 1299900,
+        gst: "+18% GST",
+        badge: "PREMIUM FEATURES",
+        badgeColor: "bg-purple-600",
       }
     ],
     commercial: [
@@ -52,6 +60,14 @@ const CommercialSellerPlans = () => {
         gst: "+18% GST",
         badge: "BUSINESS POPULAR",
         badgeColor: "bg-indigo-500",
+      },
+      {
+        name: "Business Platinum",
+        price: "₹25,999",
+        amountPaise: 2599900,
+        gst: "+18% GST",
+        badge: "BUSINESS PREMIUM",
+        badgeColor: "bg-violet-600",
       }
     ],
     industrial: [
@@ -70,6 +86,14 @@ const CommercialSellerPlans = () => {
         gst: "+18% GST",
         badge: "INDUSTRIAL PREMIUM",
         badgeColor: "bg-slate-700",
+      },
+      {
+        name: "Industrial Platinum",
+        price: "₹35,999",
+        amountPaise: 3599900,
+        gst: "+18% GST",
+        badge: "INDUSTRIAL ELITE",
+        badgeColor: "bg-zinc-800",
       }
     ],
     agricultural: [
@@ -88,6 +112,14 @@ const CommercialSellerPlans = () => {
         gst: "+18% GST",
         badge: "FARM PREMIUM",
         badgeColor: "bg-emerald-600",
+      },
+      {
+        name: "Farm Platinum",
+        price: "₹16,999",
+        amountPaise: 1699900,
+        gst: "+18% GST",
+        badge: "FARM ELITE",
+        badgeColor: "bg-teal-600",
       }
     ]
   };
@@ -111,6 +143,19 @@ const CommercialSellerPlans = () => {
         { icon: <Share2 className="w-5 h-5" />, text: "Social media marketing (FB & Insta)" },
         { icon: <Zap className="w-5 h-5" />, text: "Featured listing & promotion boost" },
         { icon: <Handshake className="w-5 h-5" />, text: "Price negotiation support" }
+      ],
+      [
+        { icon: <Camera className="w-5 h-5" />, text: "Elite photoshoot & video tour" },
+        { icon: <Shield className="w-5 h-5" />, text: "Maximum privacy & security" },
+        { icon: <Globe className="w-5 h-5" />, text: "Premium featured listing" },
+        { icon: <TrendingUp className="w-5 h-5" />, text: "Maximum property promotion" },
+        { icon: <Phone className="w-5 h-5" />, text: "24/7 dedicated support" },
+        { icon: <Users className="w-5 h-5" />, text: "Senior Relationship Manager" },
+        { icon: <Share2 className="w-5 h-5" />, text: "Multi-platform marketing campaign" },
+        { icon: <Zap className="w-5 h-5" />, text: "Top listing placement guarantee" },
+        { icon: <Handshake className="w-5 h-5" />, text: "Expert negotiation & closing support" },
+        { icon: <FileText className="w-5 h-5" />, text: "Legal documentation assistance" },
+        { icon: <Eye className="w-5 h-5" />, text: "Market analysis & valuation" }
       ]
     ],
     commercial: [
@@ -131,6 +176,19 @@ const CommercialSellerPlans = () => {
         { icon: <Share2 className="w-5 h-5" />, text: "Business social media marketing" },
         { icon: <Zap className="w-5 h-5" />, text: "Premium business listing boost" },
         { icon: <Handshake className="w-5 h-5" />, text: "Commercial negotiation support" }
+      ],
+      [
+        { icon: <Camera className="w-5 h-5" />, text: "Elite commercial documentation & virtual tour" },
+        { icon: <Shield className="w-5 h-5" />, text: "Maximum business security & privacy" },
+        { icon: <Globe className="w-5 h-5" />, text: "Premium commercial listing placement" },
+        { icon: <TrendingUp className="w-5 h-5" />, text: "Maximum commercial promotion reach" },
+        { icon: <Phone className="w-5 h-5" />, text: "24/7 dedicated business support" },
+        { icon: <Users className="w-5 h-5" />, text: "Senior Commercial Relationship Manager" },
+        { icon: <Share2 className="w-5 h-5" />, text: "Multi-channel business marketing campaign" },
+        { icon: <Zap className="w-5 h-5" />, text: "Guaranteed top commercial listing placement" },
+        { icon: <Handshake className="w-5 h-5" />, text: "Expert commercial negotiation & deal closure" },
+        { icon: <FileText className="w-5 h-5" />, text: "Complete legal & documentation support" },
+        { icon: <Eye className="w-5 h-5" />, text: "Commercial market analysis & insights" }
       ]
     ],
     industrial: [
@@ -151,6 +209,19 @@ const CommercialSellerPlans = () => {
         { icon: <Share2 className="w-5 h-5" />, text: "Industrial network marketing" },
         { icon: <Zap className="w-5 h-5" />, text: "Premium industrial listing boost" },
         { icon: <Handshake className="w-5 h-5" />, text: "Industrial negotiation support" }
+      ],
+      [
+        { icon: <Camera className="w-5 h-5" />, text: "Elite industrial facility documentation & drone survey" },
+        { icon: <Shield className="w-5 h-5" />, text: "Maximum industrial security & confidentiality" },
+        { icon: <Globe className="w-5 h-5" />, text: "Premium industrial listing with priority placement" },
+        { icon: <TrendingUp className="w-5 h-5" />, text: "Comprehensive industrial promotion strategy" },
+        { icon: <Phone className="w-5 h-5" />, text: "24/7 dedicated industrial support" },
+        { icon: <Users className="w-5 h-5" />, text: "Senior Industrial Relationship Manager" },
+        { icon: <Share2 className="w-5 h-5" />, text: "Industrial network & B2B marketing" },
+        { icon: <Zap className="w-5 h-5" />, text: "Guaranteed top industrial listing placement" },
+        { icon: <Handshake className="w-5 h-5" />, text: "Expert industrial deal negotiation & closure" },
+        { icon: <FileText className="w-5 h-5" />, text: "Complete industrial legal & compliance support" },
+        { icon: <Eye className="w-5 h-5" />, text: "Industrial market analysis & feasibility study" }
       ]
     ],
     agricultural: [
@@ -171,6 +242,19 @@ const CommercialSellerPlans = () => {
         { icon: <Share2 className="w-5 h-5" />, text: "Farm network marketing" },
         { icon: <Zap className="w-5 h-5" />, text: "Premium farm listing boost" },
         { icon: <Handshake className="w-5 h-5" />, text: "Farm negotiation support" }
+      ],
+      [
+        { icon: <Camera className="w-5 h-5" />, text: "Elite farm documentation & aerial survey" },
+        { icon: <Shield className="w-5 h-5" />, text: "Maximum farm security & privacy protection" },
+        { icon: <Globe className="w-5 h-5" />, text: "Premium agricultural listing with top placement" },
+        { icon: <TrendingUp className="w-5 h-5" />, text: "Comprehensive farm promotion & marketing" },
+        { icon: <Phone className="w-5 h-5" />, text: "24/7 dedicated agricultural support" },
+        { icon: <Users className="w-5 h-5" />, text: "Senior Agricultural Relationship Manager" },
+        { icon: <Share2 className="w-5 h-5" />, text: "Agricultural network & farming community marketing" },
+        { icon: <Zap className="w-5 h-5" />, text: "Guaranteed top agricultural listing placement" },
+        { icon: <Handshake className="w-5 h-5" />, text: "Expert farm deal negotiation & closure support" },
+        { icon: <FileText className="w-5 h-5" />, text: "Complete agricultural legal & documentation assistance" },
+        { icon: <Eye className="w-5 h-5" />, text: "Agricultural market analysis & soil assessment" }
       ]
     ]
   };
@@ -229,7 +313,7 @@ const CommercialSellerPlans = () => {
             {Object.entries(tabPlans).map(([tabKey, plans]) => (
               <TabsContent key={tabKey} value={tabKey} className="space-y-8">
                 {/* Plan Cards */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   {plans.map((plan, index) => (
                     <Card 
                       key={index} 
