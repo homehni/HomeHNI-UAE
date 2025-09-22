@@ -80,7 +80,7 @@ export const LandPlotPreviewStep: React.FC<LandPlotPreviewStepProps> = ({
 
         {/* No Brokerage Message */}
         <div className="text-center py-4">
-          <h2 className="text-lg sm:text-xl font-bold text-gray-800 px-4">
+          <h2 className="text-lg sm:text-xl font-semibold text-gray-800 px-4">
             You just said No to Brokerage, now say No to Unwanted Calls
           </h2>
         </div>
@@ -192,7 +192,7 @@ export const LandPlotPreviewStep: React.FC<LandPlotPreviewStepProps> = ({
     <div className="w-full px-4 sm:px-6 lg:px-8 space-y-4 sm:space-y-6">
       {/* Property Preview Section - Hidden */}
       <div className="hidden bg-white border border-gray-200 rounded-lg p-4 sm:p-6 mb-4 sm:mb-6 shadow-sm">
-        <h2 className="text-xl font-bold text-gray-800 mb-4">Land/Plot Preview</h2>
+        <h2 className="text-xl font-semibold text-gray-800 mb-4">Land/Plot Preview</h2>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Property Details */}
@@ -230,7 +230,7 @@ export const LandPlotPreviewStep: React.FC<LandPlotPreviewStepProps> = ({
             </div>
           </div>
           <div className="text-center sm:text-left">
-            <h2 className="text-lg sm:text-xl font-bold text-red-800 mb-1">Congratulations!</h2>
+            <h2 className="text-lg sm:text-xl font-semibold text-red-800 mb-1">Congratulations!</h2>
             <p className="text-sm sm:text-base text-red-700 font-medium">Your property is submitted successfully!</p>
           </div>
         </div>

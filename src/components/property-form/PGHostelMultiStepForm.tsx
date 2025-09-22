@@ -343,7 +343,7 @@ const [propertyInfo, setPropertyInfo] = useState({
                         </div>
                       </div>
                       <div className="text-center sm:text-left">
-                        <h2 className="text-lg sm:text-xl font-bold text-red-800 mb-1">Congratulations!</h2>
+                        <h2 className="text-lg sm:text-xl font-semibold text-red-800 mb-1">Congratulations!</h2>
                         <p className="text-sm sm:text-base text-red-700 font-medium">Your PG/Hostel is submitted successfully!</p>
                       </div>
                     </div>
@@ -574,7 +574,7 @@ const [propertyInfo, setPropertyInfo] = useState({
                       </div>
                     </div>
                     <div className="text-center sm:text-left">
-                      <h2 className="text-lg sm:text-xl font-bold text-red-800 mb-1">Congratulations!</h2>
+                      <h2 className="text-lg sm:text-xl font-semibold text-red-800 mb-1">Congratulations!</h2>
                       <p className="text-sm sm:text-base text-red-700 font-medium">Your PG/Hostel is submitted successfully!</p>
                     </div>
                   </div>

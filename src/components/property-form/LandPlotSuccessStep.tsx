@@ -69,7 +69,7 @@ export const LandPlotSuccessStep = ({
           <CheckCircle className="w-8 h-8 text-green-600" />
         </div>
         <div>
-          <h2 className="text-2xl font-bold text-green-800 mb-2">
+          <h2 className="text-2xl font-semibold text-green-800 mb-2">
             Congratulations! Your Land listing has been posted.
           </h2>
           <p className="text-green-700">

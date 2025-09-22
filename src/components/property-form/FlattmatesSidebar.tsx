@@ -19,7 +19,7 @@ export function FlattmatesSidebar({ currentStep, completedSteps }: FlattmatesSid
   return (
     <div className="hidden lg:block w-80 bg-card border-r p-6 space-y-4">
       <div className="mb-8">
-        <h2 className="text-xl font-bold text-foreground mb-2">Flatmates Listing</h2>
+        <h2 className="text-xl font-semibold text-foreground mb-2">Flatmates Listing</h2>
         <p className="text-sm text-muted-foreground">Complete all steps to list your property</p>
       </div>
 

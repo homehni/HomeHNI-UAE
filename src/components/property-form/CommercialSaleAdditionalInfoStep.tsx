@@ -48,7 +48,7 @@ export const CommercialSaleAdditionalInfoStep = ({
   return (
     <div className="max-w-4xl mx-auto p-6">
       <div className="mb-8">
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">Additional Information</h2>
+        <h2 className="text-2xl font-semibold text-gray-900 mb-2">Additional Information</h2>
         <p className="text-gray-600">Provide additional details about your commercial property</p>
         <div className="mt-4 text-sm text-gray-500">
           Step {currentStep} of {totalSteps}

@@ -69,7 +69,7 @@ export function FlattmatesRentalDetailsStep({
   return (
     <div className="max-w-2xl mx-auto">
       <div className="text-left mb-8">
-        <h2 className="text-2xl font-bold text-red-600 mb-2">Rental Details</h2>
+        <h2 className="text-2xl font-semibold text-red-600 mb-2">Rental Details</h2>
       </div>
 
           <div className="">

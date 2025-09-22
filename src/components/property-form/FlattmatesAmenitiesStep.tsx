@@ -124,7 +124,7 @@ export const FlattmatesAmenitiesStep: React.FC<FlattmatesAmenitiesStepProps> = (
   return (
     <div className="bg-background p-6">
       <div className="text-left mb-8">
-        <h2 className="text-2xl font-bold text-primary mb-2">Provide additional details about your property to get maximum visibility</h2>
+        <h2 className="text-2xl font-semibold text-primary mb-2">Provide additional details about your property to get maximum visibility</h2>
       </div>
 
       <Form {...form}>
