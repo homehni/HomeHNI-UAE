@@ -180,6 +180,9 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
     console.log('FlattmatesMultiStepForm - Schedule data received:', data);
     setScheduleInfo(data);
     setCompletedSteps(prev => prev.includes(6) ? prev : [...prev, 6]);
+    const formData = getFormData();
+    console.log('FlattmatesMultiStepForm - Submitting at Schedule step with data:', formData);
+    onSubmit(formData);
     setCurrentStep(7);
     scrollToTop();
   };
@@ -765,26 +768,28 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
               />
             )}
 
-            {currentStep === 2 && (
-              <FlattmatesLocationDetailsStep
-                initialData={locationDetails}
-                onNext={handleLocationDetailsNext}
-                onBack={prevStep}
-                currentStep={currentStep}
-                totalSteps={6}
-              />
-            )}
+              {currentStep === 2 && (
+                <FlattmatesLocationDetailsStep
+                  initialData={locationDetails}
+                  onNext={handleLocationDetailsNext}
+                  onBack={prevStep}
+                  currentStep={currentStep}
+                  totalSteps={6}
+                  formId={currentFormId}
+                />
+              )}
 
-            {currentStep === 3 && (
-              <FlattmatesRentalDetailsStep
-                initialData={rentalDetails}
-                onNext={handleRentalDetailsNext}
-                onBack={prevStep}
-                currentStep={currentStep}
-                totalSteps={6}
-                completedSteps={completedSteps}
-              />
-            )}
+              {currentStep === 3 && (
+                <FlattmatesRentalDetailsStep
+                  initialData={rentalDetails}
+                  onNext={handleRentalDetailsNext}
+                  onBack={prevStep}
+                  currentStep={currentStep}
+                  totalSteps={6}
+                  completedSteps={completedSteps}
+                  formId={currentFormId}
+                />
+              )}
 
             {currentStep === 4 && (
               <FlattmatesAmenitiesStep
@@ -925,6 +930,7 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
                   currentStep={currentStep}
                   totalSteps={7}
                   completedSteps={completedSteps}
+                  formId={currentFormId}
                 />
               )}
 
@@ -1045,22 +1051,8 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
                     return; // Stop here, handler will be executed by the form
                   }
 
-                  console.warn('Form element not found, falling back to direct handlers');
-                  if (currentStep === 1) {
-                    handlePropertyDetailsNext(propertyDetails);
-                  } else if (currentStep === 2) {
-                    handleLocationDetailsNext(locationDetails);
-                  } else if (currentStep === 3) {
-                    handleRentalDetailsNext(rentalDetails);
-                  } else if (currentStep === 4) {
-                    handleAmenitiesNext(amenities);
-                  } else if (currentStep === 5) {
-                    handleGalleryNext(gallery);
-                  } else if (currentStep === 6) {
-                    handleScheduleNext(scheduleInfo);
-                  } else if (currentStep === 7) {
-                    handleSubmit();
-                  }
+                  console.warn('Form element not found. Please ensure the step form has the correct id.');
+                  return;
                 }}
                 className="h-12 sm:h-10 px-6 sm:px-6 bg-red-600 hover:bg-red-700 text-white w-full sm:w-auto order-1 sm:order-2 font-semibold"
               >
