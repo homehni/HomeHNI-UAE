@@ -740,28 +740,34 @@ export const Dashboard: React.FC = () => {
 
     setIsUpdatingName(true);
     try {
-      // Update the user profile in Supabase
-      const { error } = await supabase
+      console.log('Updating profile name for user:', user.id, 'to:', profileName.trim());
+      
+      // Update the existing profile record
+      const { data, error } = await supabase
         .from('profiles')
-        .upsert({
-          user_id: user.id,
+        .update({
           full_name: profileName.trim()
-        });
+        })
+        .eq('user_id', user.id)
+        .select();
 
-      if (error) throw error;
+      if (error) {
+        console.error('Supabase error:', error);
+        throw error;
+      }
+
+      console.log('Profile update successful:', data);
 
       toast({
         title: "Profile updated",
         description: "Your name has been updated successfully.",
       });
 
-      // Refresh the user data if needed
-      // Note: The user metadata might need to be updated separately depending on your auth setup
     } catch (error) {
       console.error('Error updating profile:', error);
       toast({
         title: "Error",
-        description: "Failed to update your name. Please try again.",
+        description: `Failed to update your name: ${error.message || 'Please try again.'}`,
         variant: "destructive",
       });
     } finally {
