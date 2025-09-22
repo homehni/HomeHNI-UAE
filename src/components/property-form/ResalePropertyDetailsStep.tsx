@@ -101,7 +101,7 @@ export const ResalePropertyDetailsStep: React.FC<ResalePropertyDetailsStepProps>
   return (
     <div className="space-y-6">
       <div className="text-left">
-        <h2 className="text-2xl font-bold text-red-600 mb-2">Property Details</h2>
+        <h2 className="text-2xl text-primary mb-6 font-semibold">Property Details</h2>
       </div>
 
       <Form {...form}>

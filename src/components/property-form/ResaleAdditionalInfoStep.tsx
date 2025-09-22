@@ -47,7 +47,7 @@ export const ResaleAdditionalInfoStep: React.FC<ResaleAdditionalInfoStepProps> =
     <div className="max-w-4xl">
       <div className="bg-background rounded-lg border p-8">
         <div className="text-center mb-8">
-          <h2 className="text-2xl font-bold text-foreground mb-2">Additional Information</h2>
+          <h2 className="text-2xl text-primary mb-6 font-semibold">Additional Information</h2>
           <p className="text-muted-foreground">Help buyers learn more about your property</p>
         </div>
 
