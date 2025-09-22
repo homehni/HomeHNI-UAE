@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Marquee from '@/components/Marquee';
@@ -6,12 +6,31 @@ import BlogSection from '@/components/blog/BlogSection';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Badge } from '@/components/ui/badge';
+import { ChevronLeft, ChevronRight, X } from 'lucide-react';
 import { featuredArticles, categoryTiles, blogSections } from '@/data/blogData';
 
 const Blog = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [email, setEmail] = useState('');
+  const [modalEmail, setModalEmail] = useState('');
+  const [showSubscriptionModal, setShowSubscriptionModal] = useState(false);
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+
+  const categories = [
+    'Real Estate', 'Home Services', 'Finance', 'Interiors', 'Legal',
+    'Packers & Movers', 'NRI', 'Payments', 'News'
+  ];
+
+  // Auto-scroll functionality for hero carousel
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % featuredArticles.length);
+    }, 4000); // Change slide every 4 seconds
+
+    return () => clearInterval(interval);
+  }, []);
 
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % featuredArticles.length);
@@ -25,6 +44,26 @@ const Blog = () => {
     e.preventDefault();
     console.log('Newsletter subscription:', email);
     setEmail('');
+  };
+
+  const handleModalSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (selectedCategories.length < 3) {
+      alert('Please select at least 3 categories');
+      return;
+    }
+    console.log('Modal subscription:', { email: modalEmail, categories: selectedCategories });
+    setModalEmail('');
+    setSelectedCategories([]);
+    setShowSubscriptionModal(false);
+  };
+
+  const toggleCategory = (category: string) => {
+    setSelectedCategories(prev => 
+      prev.includes(category) 
+        ? prev.filter(c => c !== category)
+        : [...prev, category]
+    );
   };
 
   return (
@@ -44,7 +83,10 @@ const Blog = () => {
               <p className="text-xl text-gray-600 mb-6">
                 Real Estate, Services & Inspiration Unbounded
               </p>
-              <Button className="bg-red-500 hover:bg-red-600 text-white px-8 py-3 text-lg">
+              <Button 
+                className="bg-red-500 hover:bg-red-600 text-white px-8 py-3 text-lg"
+                onClick={() => setShowSubscriptionModal(true)}
+              >
                 Subscribe to our blogs
               </Button>
             </div>
@@ -216,6 +258,69 @@ const Blog = () => {
           backgroundColor={index % 2 === 1 ? "bg-gray-50" : "bg-white"}
         />
       ))}
+
+      {/* Subscription Modal */}
+      <Dialog open={showSubscriptionModal} onOpenChange={setShowSubscriptionModal}>
+        <DialogContent className="sm:max-w-[600px] bg-white p-0">
+          <div className="relative bg-gradient-to-br from-blue-50 to-purple-50 p-8 rounded-lg">
+            <button
+              onClick={() => setShowSubscriptionModal(false)}
+              className="absolute top-4 right-4 p-2 hover:bg-white/20 rounded-full transition-colors"
+            >
+              <X className="h-5 w-5 text-gray-600" />
+            </button>
+            
+            <DialogHeader className="text-center mb-6">
+              <DialogTitle className="text-2xl font-bold text-gray-900 mb-2">
+                Subscribe to our newsletter
+              </DialogTitle>
+              <p className="text-gray-600">Get latest news delivered straight to you inbox</p>
+            </DialogHeader>
+
+            <form onSubmit={handleModalSubmit} className="space-y-6">
+              <Input
+                type="email"
+                placeholder="Enter your email address"
+                value={modalEmail}
+                onChange={(e) => setModalEmail(e.target.value)}
+                className="w-full h-12 bg-white border-gray-200"
+                required
+              />
+
+              <div>
+                <p className="text-sm text-gray-600 mb-4 text-center">
+                  Select at least 3 categories
+                </p>
+                <div className="flex flex-wrap gap-2 justify-center">
+                  {categories.map((category) => (
+                    <Badge
+                      key={category}
+                      variant={selectedCategories.includes(category) ? "default" : "outline"}
+                      className={`cursor-pointer px-4 py-2 text-sm transition-colors ${
+                        selectedCategories.includes(category)
+                          ? "bg-red-500 text-white hover:bg-red-600"
+                          : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
+                      }`}
+                      onClick={() => toggleCategory(category)}
+                    >
+                      {category}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+
+              <div className="text-center">
+                <Button
+                  type="submit"
+                  className="bg-red-500 hover:bg-red-600 text-white px-8 py-3 text-lg font-semibold"
+                >
+                  Subscribe Now
+                </Button>
+              </div>
+            </form>
+          </div>
+        </DialogContent>
+      </Dialog>
 
       <Footer />
     </div>
