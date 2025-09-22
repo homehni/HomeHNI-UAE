@@ -196,131 +196,167 @@ const CorporateEnquiry = () => {
 
       {/* Trusted By Section */}
       <section className="py-16 bg-gray-50">
-        <div className="container mx-auto px-4 text-center xl:pr-96">
-          <h2 className="text-2xl font-semibold text-foreground mb-8">Trusted by Leading Companies</h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {[1, 2, 3, 4].map(i => (
-              <div key={i} className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
-                <div className="h-12 bg-gray-100 rounded flex items-center justify-center">
-                  <Building className="h-6 w-6 text-gray-400" />
-                </div>
+        <div className="container mx-auto">
+          <div className="grid lg:grid-cols-2 gap-16 items-start">
+            <div className="max-w-3xl text-center">
+              <h2 className="text-2xl font-semibold text-foreground mb-8">Trusted by Leading Companies</h2>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+                {[1, 2, 3, 4].map(i => (
+                  <div key={i} className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
+                    <div className="h-12 bg-gray-100 rounded flex items-center justify-center">
+                      <Building className="h-6 w-6 text-gray-400" />
+                    </div>
+                  </div>
+                ))}
               </div>
-            ))}
+            </div>
+            {/* Right side spacing for sticky form */}
+            <div className="hidden lg:block"></div>
           </div>
         </div>
       </section>
 
       {/* Solutions Section */}
       <section className="py-16 px-4" id="services">
-        <div className="container mx-auto xl:pr-96">
-          <h2 className="text-3xl font-bold text-center text-foreground mb-12">
-            Explore Our Solutions for Your:
-          </h2>
-          
-          <div className="grid md:grid-cols-2 gap-12 mb-16">
-            {/* Employees */}
-            <div className="bg-white p-8 rounded-lg border border-gray-200 shadow-sm">
-              <div className="flex items-center mb-6">
-                <Users className="h-8 w-8 text-brand-red mr-3" />
-                <h3 className="text-2xl font-bold text-foreground">Employees</h3>
-              </div>
-              <ul className="space-y-3">
-                <li className="flex items-center text-gray-600">
-                  <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
-                  House Search Support
-                </li>
-                <li className="flex items-center text-gray-600">
-                  <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
-                  Rental Agreements
-                </li>
-                <li className="flex items-center text-gray-600">
-                  <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
-                  Packers and Movers
-                </li>
-                <li className="flex items-center text-gray-600">
-                  <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
-                  Home Painting
-                </li>
-                <li className="flex items-center text-gray-600">
-                  <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
-                  Home Cleaning
-                </li>
-                <li className="flex items-center text-gray-600">
-                  <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
-                  AC Servicing
-                </li>
-              </ul>
-            </div>
+        <div className="container mx-auto">
+          <div className="grid lg:grid-cols-2 gap-16 items-start">
+            <div className="max-w-3xl">
+              <h2 className="text-3xl font-bold text-center text-foreground mb-12">
+                Explore Our Solutions for Your:
+              </h2>
+              
+              <div className="grid md:grid-cols-2 gap-12 mb-16">
+                {/* Employees */}
+                <div className="bg-white p-8 rounded-lg border border-gray-200 shadow-sm">
+                  <div className="flex items-center mb-6">
+                    <Users className="h-8 w-8 text-brand-red mr-3" />
+                    <h3 className="text-2xl font-bold text-foreground">Employees</h3>
+                  </div>
+                  <ul className="space-y-3">
+                    <li className="flex items-center text-gray-600">
+                      <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
+                      House Search Support
+                    </li>
+                    <li className="flex items-center text-gray-600">
+                      <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
+                      Rental Agreements
+                    </li>
+                    <li className="flex items-center text-gray-600">
+                      <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
+                      Packers and Movers
+                    </li>
+                    <li className="flex items-center text-gray-600">
+                      <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
+                      Home Painting
+                    </li>
+                    <li className="flex items-center text-gray-600">
+                      <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
+                      Home Cleaning
+                    </li>
+                    <li className="flex items-center text-gray-600">
+                      <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
+                      AC Servicing
+                    </li>
+                  </ul>
+                </div>
 
-            {/* Office Space */}
-            <div className="bg-white p-8 rounded-lg border border-gray-200 shadow-sm">
-              <div className="flex items-center mb-6">
-                <Building className="h-8 w-8 text-brand-red mr-3" />
-                <h3 className="text-2xl font-bold text-foreground">Office Space</h3>
+                {/* Office Space */}
+                <div className="bg-white p-8 rounded-lg border border-gray-200 shadow-sm">
+                  <div className="flex items-center mb-6">
+                    <Building className="h-8 w-8 text-brand-red mr-3" />
+                    <h3 className="text-2xl font-bold text-foreground">Office Space</h3>
+                  </div>
+                  <ul className="space-y-3">
+                    <li className="flex items-center text-gray-600">
+                      <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
+                      Assistance with leasing
+                    </li>
+                    <li className="flex items-center text-gray-600">
+                      <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
+                      Customized relocation plans
+                    </li>
+                    <li className="flex items-center text-gray-600">
+                      <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
+                      Office shifting & setup
+                    </li>
+                  </ul>
+                </div>
               </div>
-              <ul className="space-y-3">
-                <li className="flex items-center text-gray-600">
-                  <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
-                  Assistance with leasing
-                </li>
-                <li className="flex items-center text-gray-600">
-                  <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
-                  Customized relocation plans
-                </li>
-                <li className="flex items-center text-gray-600">
-                  <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
-                  Office shifting & setup
-                </li>
-              </ul>
             </div>
+            {/* Right side spacing for sticky form */}
+            <div className="hidden lg:block"></div>
           </div>
         </div>
       </section>
 
       {/* Services Grid */}
-      <section className="py-16 bg-muted/30">
-        <div className="max-w-6xl mx-auto px-4 xl:pr-96">
-          <h2 className="text-3xl font-bold text-center text-foreground mb-12">
-            Services We Offer to Your Employees
-          </h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            {services.map((service, index) => <div key={index} className="bg-card p-6 rounded-lg border border-primary text-center">
-                <service.icon className="h-12 w-12 text-brand-red mx-auto mb-4" />
-                <h3 className="text-lg font-semibold text-foreground mb-2">{service.title}</h3>
-                <p className="text-muted-foreground">{service.description}</p>
-              </div>)}
+      <section className="py-16 bg-gray-50">
+        <div className="container mx-auto">
+          <div className="grid lg:grid-cols-2 gap-16 items-start">
+            <div className="max-w-3xl">
+              <h2 className="text-3xl font-bold text-center text-foreground mb-12">
+                Services We Offer to Your Employees
+              </h2>
+              <div className="grid md:grid-cols-3 gap-8">
+                {services.map((service, index) => (
+                  <div key={index} className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm text-center">
+                    <service.icon className="h-12 w-12 text-brand-red mx-auto mb-4" />
+                    <h3 className="text-lg font-semibold text-foreground mb-2">{service.title}</h3>
+                    <p className="text-gray-600">{service.description}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+            {/* Right side spacing for sticky form */}
+            <div className="hidden lg:block"></div>
           </div>
         </div>
       </section>
 
       {/* How It Works */}
       <section className="py-16 px-4">
-        <div className="max-w-6xl mx-auto xl:pr-96">
-          <h2 className="text-3xl font-bold text-center text-foreground mb-12">How It Works</h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            {workingSteps.map((step, index) => <div key={index} className="text-center">
-                <div className="w-16 h-16 bg-brand-red text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">
-                  {step.step}
-                </div>
-                <h3 className="text-xl font-semibold text-foreground mb-3">{step.title}</h3>
-                <p className="text-muted-foreground">{step.description}</p>
-              </div>)}
+        <div className="container mx-auto">
+          <div className="grid lg:grid-cols-2 gap-16 items-start">
+            <div className="max-w-3xl">
+              <h2 className="text-3xl font-bold text-center text-foreground mb-12">How It Works</h2>
+              <div className="grid md:grid-cols-3 gap-8">
+                {workingSteps.map((step, index) => (
+                  <div key={index} className="text-center">
+                    <div className="w-16 h-16 bg-brand-red text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">
+                      {step.step}
+                    </div>
+                    <h3 className="text-xl font-semibold text-foreground mb-3">{step.title}</h3>
+                    <p className="text-gray-600">{step.description}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+            {/* Right side spacing for sticky form */}
+            <div className="hidden lg:block"></div>
           </div>
         </div>
       </section>
 
       {/* Why Use Our Corporate Solutions */}
-      <section className="py-16 bg-muted/30">
-        <div className="max-w-6xl mx-auto px-4 xl:pr-96">
-          <h2 className="text-3xl font-bold text-center text-foreground mb-12">
-            Why Use Our Corporate Solutions?
-          </h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            {benefits.map((benefit, index) => <div key={index} className="bg-card p-6 rounded-lg border border-primary">
-                <benefit.icon className="h-10 w-10 text-brand-red mb-4" />
-                <h3 className="text-lg font-semibold text-foreground mb-2">{benefit.title}</h3>
-                <p className="text-muted-foreground">{benefit.description}</p>
-              </div>)}
+      <section className="py-16 bg-gray-50">
+        <div className="container mx-auto">
+          <div className="grid lg:grid-cols-2 gap-16 items-start">
+            <div className="max-w-3xl">
+              <h2 className="text-3xl font-bold text-center text-foreground mb-12">
+                Why Use Our Corporate Solutions?
+              </h2>
+              <div className="grid md:grid-cols-3 gap-8">
+                {benefits.map((benefit, index) => (
+                  <div key={index} className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
+                    <benefit.icon className="h-10 w-10 text-brand-red mb-4" />
+                    <h3 className="text-lg font-semibold text-foreground mb-2">{benefit.title}</h3>
+                    <p className="text-gray-600">{benefit.description}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+            {/* Right side spacing for sticky form */}
+            <div className="hidden lg:block"></div>
           </div>
         </div>
       </section>
