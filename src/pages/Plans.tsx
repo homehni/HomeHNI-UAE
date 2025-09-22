@@ -16,7 +16,7 @@ import AgentPlans from './AgentPlans';
 const sections = [
   { id: 'buyer', label: 'Buyer Plans' },
   { id: 'seller', label: 'Seller Plans' },
-  { id: 'owner', label: 'Tenant Plans' },
+  { id: 'owner', label: 'Owner Plans' },
   { id: 'commercial-buyer', label: 'Commercial Buyer Plans' },
   { id: 'commercial-seller', label: 'Commercial Seller Plans' },
   { id: 'commercial-owner', label: 'Commercial Owner Plans' },
