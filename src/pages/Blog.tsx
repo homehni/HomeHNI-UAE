@@ -68,10 +68,10 @@ const Blog = () => {
     // Show success modal
     setShowSuccessModal(true);
     
-    // Auto-hide success modal after 3 seconds
+    // Auto-hide success modal after 3.5 seconds
     setTimeout(() => {
       setShowSuccessModal(false);
-    }, 3000);
+    }, 3500);
   };
 
   const toggleCategory = (category: string) => {
@@ -277,36 +277,36 @@ const Blog = () => {
 
       {/* Subscription Modal */}
       <Dialog open={showSubscriptionModal} onOpenChange={setShowSubscriptionModal}>
-        <DialogContent className="sm:max-w-[600px] bg-transparent border-none shadow-none p-0">
-          <div className="relative bg-gradient-to-br from-blue-50 to-purple-50 p-8 rounded-lg">
+        <DialogContent className="w-[95vw] max-w-[600px] bg-transparent border-none shadow-none p-2 sm:p-0">
+          <div className="relative bg-gradient-to-br from-blue-50 to-purple-50 p-4 sm:p-8 rounded-lg">
             
-            <DialogHeader className="text-center mb-6">
-              <DialogTitle className="text-2xl font-bold text-gray-900 mb-2">
+            <DialogHeader className="text-center mb-4 sm:mb-6">
+              <DialogTitle className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">
                 Subscribe to our newsletter
               </DialogTitle>
-              <p className="text-gray-600">Get latest news delivered straight to you inbox</p>
+              <p className="text-sm sm:text-base text-gray-600">Get latest news delivered straight to you inbox</p>
             </DialogHeader>
 
-            <form onSubmit={handleModalSubmit} className="space-y-6">
+            <form onSubmit={handleModalSubmit} className="space-y-4 sm:space-y-6">
               <Input
                 type="email"
                 placeholder="Enter your email address"
                 value={modalEmail}
                 onChange={(e) => setModalEmail(e.target.value)}
-                className="w-full h-12 bg-white border-gray-200"
+                className="w-full h-10 sm:h-12 bg-white border-gray-200 text-sm sm:text-base"
                 required
               />
 
               <div>
-                <p className="text-sm text-gray-600 mb-4 text-center">
+                <p className="text-xs sm:text-sm text-gray-600 mb-3 sm:mb-4 text-center">
                   Select at least 3 categories
                 </p>
-                <div className="flex flex-wrap gap-2 justify-center">
+                <div className="flex flex-wrap gap-1.5 sm:gap-2 justify-center">
                   {categories.map((category) => (
                     <Badge
                       key={category}
                       variant={selectedCategories.includes(category) ? "default" : "outline"}
-                      className={`cursor-pointer px-4 py-2 text-sm transition-colors ${
+                      className={`cursor-pointer px-2 py-1 sm:px-4 sm:py-2 text-xs sm:text-sm transition-colors ${
                         selectedCategories.includes(category)
                           ? "bg-red-500 text-white hover:bg-red-600"
                           : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
@@ -322,7 +322,7 @@ const Blog = () => {
               <div className="text-center">
                 <Button
                   type="submit"
-                  className="bg-red-500 hover:bg-red-600 text-white px-8 py-3 text-lg font-semibold"
+                  className="bg-red-500 hover:bg-red-600 text-white px-6 py-2 sm:px-8 sm:py-3 text-base sm:text-lg font-semibold"
                 >
                   Subscribe Now
                 </Button>
@@ -334,16 +334,16 @@ const Blog = () => {
 
       {/* Success Modal */}
       <Dialog open={showSuccessModal} onOpenChange={() => {}}>
-        <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center">
-          <div className="bg-red-500 text-white p-8 rounded-lg text-center">
+        <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
+          <div className="bg-red-500 text-white p-6 sm:p-8 rounded-lg text-center max-w-sm w-full">
             <div className="mb-4">
-              <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="w-12 h-12 sm:w-16 sm:h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
+                <svg className="w-6 h-6 sm:w-8 sm:h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                 </svg>
               </div>
-              <h2 className="text-2xl font-bold mb-2">You&apos;re all set!</h2>
-              <p className="text-white/90">
+              <h2 className="text-xl sm:text-2xl font-bold mb-2">You&apos;re all set!</h2>
+              <p className="text-white/90 text-sm sm:text-base">
                 Get ready for regular updates and more.
               </p>
             </div>
