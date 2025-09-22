@@ -80,7 +80,7 @@ const RealEstateSlider = () => {
     const autoScroll = () => {
       if (scrollContainerRef.current) {
         const container = scrollContainerRef.current;
-        const slideWidth = 256; // 240px width + 16px gap
+        const slideWidth = 264; // 240px width + 24px gap
         const totalOriginalWidth = companies.length * slideWidth;
 
         // Smooth continuous scroll
@@ -111,7 +111,7 @@ const RealEstateSlider = () => {
           </button>
 
           {/* Slides Container */}
-          <div ref={scrollContainerRef} className="flex gap-4 overflow-x-auto scrollbar-hide px-4 py-2" style={{
+          <div ref={scrollContainerRef} className="flex gap-6 overflow-x-auto scrollbar-hide px-4 py-2" style={{
           scrollbarWidth: 'none',
           msOverflowStyle: 'none'
         }} onMouseEnter={() => setIsPaused(true)} onMouseLeave={() => setIsPaused(false)}>
