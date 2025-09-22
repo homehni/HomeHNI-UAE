@@ -827,19 +827,25 @@ export const Dashboard: React.FC = () => {
 
       console.log('Phone update successful:', data);
       
-      // Update auth user's phone field (this will show in Auth > Users table)
-      const { error: authPhoneError } = await supabase.auth.updateUser({
-        phone: newPhone
-      });
-      
-      if (authPhoneError) {
-        console.warn('Auth phone update failed:', authPhoneError);
-        // Still continue since profile was updated successfully
-      } else {
-        console.log('Auth phone updated successfully');
+      // Call admin edge function to update auth.users phone field
+      try {
+        const { data: authUpdateData, error: authUpdateError } = await supabase.functions.invoke('update-auth-phone', {
+          body: { 
+            userId: user.id,
+            phoneNumber: newPhone 
+          }
+        });
+
+        if (authUpdateError) {
+          console.warn('Auth phone update via edge function failed:', authUpdateError);
+        } else {
+          console.log('Auth phone updated successfully via edge function:', authUpdateData);
+        }
+      } catch (edgeFunctionError) {
+        console.warn('Edge function call failed:', edgeFunctionError);
       }
 
-      // Also sync into auth user metadata
+      // Also sync into auth user metadata for additional reference
       const { error: authError } = await supabase.auth.updateUser({
         data: { profile_phone: newPhone },
       });
