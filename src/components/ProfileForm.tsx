@@ -10,7 +10,7 @@ import { Switch } from '@/components/ui/switch';
 import { Badge } from '@/components/ui/badge';
 import { useAuth } from '@/contexts/AuthContext';
 import { useProfile } from '@/hooks/useProfile';
-import { Shield, MapPin, Bell, MessageCircle } from 'lucide-react';
+import { Shield, MapPin, Bell, MessageCircle, Check } from 'lucide-react';
 import { PasswordChangeCard } from '@/components/PasswordChangeCard';
 
 interface ProfileFormData {
@@ -76,34 +76,6 @@ export const ProfileForm: React.FC = () => {
 
   return (
     <div className="max-w-2xl mx-auto space-y-6">
-      {/* Profile Header */}
-      <Card>
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <div>
-              <CardTitle className="flex items-center gap-2">
-                {profile.full_name || user?.email}
-                {profile.verification_status === 'verified' && (
-                  <Badge variant="secondary" className="text-green-600">
-                    <Shield className="h-3 w-3 mr-1" />
-                    Verified
-                  </Badge>
-                )}
-              </CardTitle>
-              <CardDescription>{user?.email}</CardDescription>
-            </div>
-            <div className="text-right">
-              <Badge variant="outline" className="mb-2">
-                {profile.role?.charAt(0).toUpperCase() + profile.role?.slice(1)}
-              </Badge>
-              <div className="text-sm text-muted-foreground">
-                Member since {new Date(profile.created_at).toLocaleDateString()}
-              </div>
-            </div>
-          </div>
-        </CardHeader>
-      </Card>
-
       {/* Role Selection */}
       <Card>
         <CardHeader>
@@ -141,126 +113,79 @@ export const ProfileForm: React.FC = () => {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            <div className="grid md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="full_name">Full Name</Label>
-                <Input
-                  id="full_name"
-                  {...register('full_name', { required: 'Full name is required' })}
-                />
-                {errors.full_name && (
-                  <p className="text-sm text-red-600">{errors.full_name.message}</p>
-                )}
-              </div>
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+            {/* Name Field */}
+            <div className="space-y-2">
+              <Label htmlFor="full_name" className="text-sm font-medium">Name</Label>
+              <Input
+                id="full_name"
+                {...register('full_name', { required: 'Full name is required' })}
+                className="w-full"
+              />
+              {errors.full_name && (
+                <p className="text-sm text-red-600">{errors.full_name.message}</p>
+              )}
+            </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="phone">Phone Number</Label>
+            {/* Email Address Field (Readonly with checkmark) */}
+            <div className="space-y-2">
+              <Label className="text-sm font-medium">Email Address</Label>
+              <div className="relative">
+                <Input
+                  value={user?.email || ''}
+                  readOnly
+                  className="w-full bg-gray-50 cursor-not-allowed pr-10"
+                />
+                <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                  <Check className="h-5 w-5 text-green-600" />
+                </div>
+              </div>
+            </div>
+
+            {/* Mobile Phone Field (with checkmark) */}
+            <div className="space-y-2">
+              <Label htmlFor="phone" className="text-sm font-medium">Mobile Phone</Label>
+              <div className="relative">
                 <Input
                   id="phone"
                   type="tel"
                   {...register('phone')}
-                  placeholder="+91 98765 43210"
+                  placeholder="Enter your phone number"
+                  className="w-full pr-10"
                 />
+                {watchedValues.phone && (
+                  <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                    <Check className="h-5 w-5 text-green-600" />
+                  </div>
+                )}
               </div>
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="bio">Bio</Label>
-              <Textarea
-                id="bio"
-                {...register('bio')}
-                placeholder="Tell us about yourself..."
-                rows={3}
+            {/* WhatsApp Toggle */}
+            <div className="flex items-center justify-between py-4">
+              <div className="flex items-center gap-3">
+                <MessageCircle className="h-5 w-5 text-green-600" />
+                <Label htmlFor="whatsapp_opted_in" className="text-sm font-medium">
+                  Get Updates on WhatsApp
+                </Label>
+              </div>
+              <Switch
+                id="whatsapp_opted_in"
+                checked={watchedValues.whatsapp_opted_in}
+                onCheckedChange={(checked) => setValue('whatsapp_opted_in', checked)}
               />
             </div>
 
-            <div className="space-y-4">
-              <div className="flex items-center gap-2">
-                <MapPin className="h-4 w-4" />
-                <Label>Location</Label>
-              </div>
-              <div className="grid md:grid-cols-3 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="city">City</Label>
-                  <Input
-                    id="city"
-                    {...register('city')}
-                    placeholder="Mumbai"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="state">State</Label>
-                  <Input
-                    id="state"
-                    {...register('state')}
-                    placeholder="Maharashtra"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="country">Country</Label>
-                  <Select
-                    value={watchedValues.country}
-                    onValueChange={(value) => setValue('country', value)}
-                  >
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="India">India</SelectItem>
-                      <SelectItem value="UAE">UAE</SelectItem>
-                      <SelectItem value="USA">USA</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
+            {/* Save Profile Button */}
+            <div className="flex justify-end pt-4">
+              <Button 
+                type="submit" 
+                disabled={updating}
+                className="bg-red-500 hover:bg-red-600 text-white px-8"
+              >
+                {updating ? 'Saving...' : 'Save Profile'}
+              </Button>
             </div>
-
-            <div className="space-y-4">
-              <Label className="flex items-center gap-2">
-                <Bell className="h-4 w-4" />
-                Communication Preferences
-              </Label>
-              
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <div className="space-y-1">
-                    <Label htmlFor="email_notifications">Email Notifications</Label>
-                    <div className="text-sm text-muted-foreground">
-                      Receive property alerts and updates via email
-                    </div>
-                  </div>
-                  <Switch
-                    id="email_notifications"
-                    checked={watchedValues.email_notifications}
-                    onCheckedChange={(checked) => setValue('email_notifications', checked)}
-                  />
-                </div>
-
-                <div className="flex items-center justify-between">
-                  <div className="space-y-1">
-                    <Label htmlFor="whatsapp_opted_in" className="flex items-center gap-2">
-                      <MessageCircle className="h-4 w-4 text-green-600" />
-                      WhatsApp Updates
-                    </Label>
-                    <div className="text-sm text-muted-foreground">
-                      Get instant property notifications on WhatsApp
-                    </div>
-                  </div>
-                  <Switch
-                    id="whatsapp_opted_in"
-                    checked={watchedValues.whatsapp_opted_in}
-                    onCheckedChange={(checked) => setValue('whatsapp_opted_in', checked)}
-                  />
-                </div>
-              </div>
-            </div>
-
-            <Button type="submit" disabled={updating} className="w-full">
-              {updating ? 'Updating...' : 'Save Changes'}
-            </Button>
           </form>
         </CardContent>
       </Card>
