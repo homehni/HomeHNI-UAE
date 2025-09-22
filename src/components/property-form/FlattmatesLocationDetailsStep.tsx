@@ -45,9 +45,11 @@ export const FlattmatesLocationDetailsStep: React.FC<FlattmatesLocationDetailsSt
   const form = useForm<FlattmatesLocationData>({
     resolver: zodResolver(flattmatesLocationSchema),
     defaultValues: {
-      city: initialData.city || '',
+      city: initialData.city || 'Bangalore', // Set default to Bangalore if none provided
       locality: initialData.locality || '',
       landmark: initialData.landmark || '',
+      state: initialData.state || '',
+      pincode: initialData.pincode || '',
     },
   });
 
@@ -181,6 +183,12 @@ export const FlattmatesLocationDetailsStep: React.FC<FlattmatesLocationDetailsSt
     console.log('Form errors:', form.formState.errors);
     console.log('Form isValid:', form.formState.isValid);
     console.log('Form isDirty:', form.formState.isDirty);
+    
+    // Check if form is valid before proceeding
+    if (!form.formState.isValid) {
+      console.log('Form is not valid, not proceeding');
+      return;
+    }
     
     // Convert to LocationDetails format and include parsed city, state, pincode
     const locationData: LocationDetails = {
