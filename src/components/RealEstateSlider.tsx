@@ -80,7 +80,7 @@ const RealEstateSlider = () => {
     const autoScroll = () => {
       if (scrollContainerRef.current) {
         const container = scrollContainerRef.current;
-        const slideWidth = 312; // 288px width + 24px gap
+        const slideWidth = 264; // 240px width + 24px gap
         const totalOriginalWidth = companies.length * slideWidth;
 
         // Smooth continuous scroll
@@ -118,7 +118,7 @@ const RealEstateSlider = () => {
             {infiniteCompanies.map((company, index) => 
               <div 
                 key={index} 
-                className="flex-none w-72 bg-card rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer transform hover:scale-105 h-48"
+                className="flex-none w-60 bg-card rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer transform hover:scale-105 h-48"
                 onClick={() => handleCompanyClick(company.id)}
               >
                 <div className="h-32 overflow-hidden bg-white flex items-center justify-center p-4">
