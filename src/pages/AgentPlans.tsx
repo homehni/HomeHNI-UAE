@@ -192,9 +192,9 @@ const AgentPlans = () => {
           <p className="text-sm text-muted-foreground text-center mb-8">Select between flexible basic plans or lifetime access</p>
 
           <Tabs defaultValue="basic" className="w-full">
-            <TabsList className="grid w-full grid-cols-2 mb-6 p-1 gap-1 bg-muted rounded-lg">
-              <TabsTrigger value="basic" className="text-sm md:text-base py-3 px-4 data-[state=active]:bg-background data-[state=active]:text-foreground">Basic Plan</TabsTrigger>
-              <TabsTrigger value="lifetime" className="text-sm md:text-base py-3 px-4 data-[state=active]:bg-background data-[state=active]:text-foreground">Lifetime</TabsTrigger>
+            <TabsList className="grid w-full grid-cols-2 mb-6 p-1 gap-1 bg-muted rounded-lg h-auto">
+              <TabsTrigger value="basic" className="text-xs sm:text-sm md:text-base py-2 sm:py-3 px-2 sm:px-4 data-[state=active]:bg-background data-[state=active]:text-foreground whitespace-nowrap">Basic Plan</TabsTrigger>
+              <TabsTrigger value="lifetime" className="text-xs sm:text-sm md:text-base py-2 sm:py-3 px-2 sm:px-4 data-[state=active]:bg-background data-[state=active]:text-foreground whitespace-nowrap">Lifetime</TabsTrigger>
             </TabsList>
 
             {Object.entries(tabPlans).map(([tabKey, plans]) => (

@@ -328,11 +328,11 @@ const OwnerPlans = ({ embedded }: OwnerPlansProps) => {
           </div>
 
           <Tabs defaultValue="residential" className="w-full">
-            <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 mb-8 p-1 gap-1 bg-muted rounded-lg">
-              <TabsTrigger value="residential" className="text-sm md:text-base py-3 px-4 data-[state=active]:bg-background data-[state=active]:text-foreground">Residential</TabsTrigger>
-              <TabsTrigger value="commercial" className="text-sm md:text-base py-3 px-4 data-[state=active]:bg-background data-[state=active]:text-foreground">Commercial</TabsTrigger>
-              <TabsTrigger value="industrial" className="text-sm md:text-base py-3 px-4 data-[state=active]:bg-background data-[state=active]:text-foreground">Industrial</TabsTrigger>
-              <TabsTrigger value="agricultural" className="text-sm md:text-base py-3 px-4 data-[state=active]:bg-background data-[state=active]:text-foreground">Agricultural</TabsTrigger>
+            <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 mb-8 p-1 gap-1 bg-muted rounded-lg h-auto">
+              <TabsTrigger value="residential" className="text-xs sm:text-sm md:text-base py-2 sm:py-3 px-2 sm:px-4 data-[state=active]:bg-background data-[state=active]:text-foreground whitespace-nowrap">Residential</TabsTrigger>
+              <TabsTrigger value="commercial" className="text-xs sm:text-sm md:text-base py-2 sm:py-3 px-2 sm:px-4 data-[state=active]:bg-background data-[state=active]:text-foreground whitespace-nowrap">Commercial</TabsTrigger>
+              <TabsTrigger value="industrial" className="text-xs sm:text-sm md:text-base py-2 sm:py-3 px-2 sm:px-4 data-[state=active]:bg-background data-[state=active]:text-foreground whitespace-nowrap">Industrial</TabsTrigger>
+              <TabsTrigger value="agricultural" className="text-xs sm:text-sm md:text-base py-2 sm:py-3 px-2 sm:px-4 data-[state=active]:bg-background data-[state=active]:text-foreground whitespace-nowrap">Agricultural</TabsTrigger>
             </TabsList>
 
             {Object.entries(tabPlans).map(([tabKey, plans]) => (
