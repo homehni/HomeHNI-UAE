@@ -164,6 +164,10 @@ export const Dashboard: React.FC = () => {
   // Filter states
   const [selectedFilter, setSelectedFilter] = useState('All');
   const [showOnlyActive, setShowOnlyActive] = useState(false);
+  
+  // Profile states
+  const [profileName, setProfileName] = useState(user?.user_metadata?.full_name || '');
+  const [isUpdatingName, setIsUpdatingName] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -722,6 +726,40 @@ export const Dashboard: React.FC = () => {
     }
     
     navigate(`/plans?tab=${planTab}`);
+  };
+
+  const handleUpdateName = async () => {
+    if (!user || !profileName.trim()) return;
+
+    setIsUpdatingName(true);
+    try {
+      // Update the user profile in Supabase
+      const { error } = await supabase
+        .from('profiles')
+        .upsert({
+          user_id: user.id,
+          full_name: profileName.trim()
+        });
+
+      if (error) throw error;
+
+      toast({
+        title: "Profile updated",
+        description: "Your name has been updated successfully.",
+      });
+
+      // Refresh the user data if needed
+      // Note: The user metadata might need to be updated separately depending on your auth setup
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      toast({
+        title: "Error",
+        description: "Failed to update your name. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsUpdatingName(false);
+    }
   };
 
   // Filter properties based on selected filter and active toggle
@@ -1401,7 +1439,21 @@ export const Dashboard: React.FC = () => {
               <CardContent className="space-y-4">
                 <div>
                   <label className="text-sm font-medium text-gray-700">Name</label>
-                  <p className="text-gray-900">{user.user_metadata?.full_name || 'Not provided'}</p>
+                  <div className="flex items-center gap-2 mt-1">
+                    <Input
+                      value={profileName}
+                      onChange={(e) => setProfileName(e.target.value)}
+                      placeholder="Enter your name"
+                      className="flex-1"
+                    />
+                    <Button
+                      onClick={handleUpdateName}
+                      disabled={isUpdatingName || profileName === (user.user_metadata?.full_name || '')}
+                      size="sm"
+                    >
+                      {isUpdatingName ? 'Saving...' : 'Save'}
+                    </Button>
+                  </div>
                 </div>
                 <div>
                   <label className="text-sm font-medium text-gray-700">Email</label>
@@ -1411,12 +1463,6 @@ export const Dashboard: React.FC = () => {
                   <label className="text-sm font-medium text-gray-700">Email Verified</label>
                   <p className={user.email_confirmed_at ? 'text-green-600' : 'text-red-600'}>
                     {user.email_confirmed_at ? 'Yes' : 'No'}
-                  </p>
-                </div>
-                <div>
-                  <label className="text-sm font-medium text-gray-700">Member Since</label>
-                  <p className="text-gray-900">
-                    {new Date(user.created_at).toLocaleDateString()}
                   </p>
                 </div>
               </CardContent>
