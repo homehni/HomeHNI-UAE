@@ -22,7 +22,7 @@ type ScheduleFormData = z.infer<typeof scheduleSchema>;
 
 interface ScheduleStepProps {
   initialData?: Partial<ScheduleFormData>;
-  onNext: (data: ScheduleFormData) => void;
+  onNext?: (data: ScheduleFormData) => void;
   onBack: () => void;
   onSubmit?: (data: ScheduleFormData) => void;
 }
@@ -52,7 +52,7 @@ export const ScheduleStep: React.FC<ScheduleStepProps> = ({
   const onFormSubmit = (data: ScheduleFormData) => {
     if (onSubmit) {
       onSubmit(data);
-    } else {
+    } else if (onNext) {
       onNext(data);
     }
   };
@@ -319,11 +319,27 @@ export const ScheduleStep: React.FC<ScheduleStepProps> = ({
             </div>
           </div>
 
+          {/* Submit Property Button */}
+          <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
+            <Button 
+              type="button" 
+              variant="outline"
+              onClick={onBack}
+              className="order-2 sm:order-1"
+            >
+              Back
+            </Button>
+            <Button 
+              type="submit" 
+              size="lg"
+              className="bg-red-600 hover:bg-red-700 text-white px-8 py-3 text-lg font-semibold order-1 sm:order-2"
+            >
+              Submit Property
+            </Button>
+          </div>
+
         </form>
       </Form>
-      
-      {/* Hidden submit button for sticky bar */}
-      <button type="submit" form="schedule-form" className="hidden" />
     </div>
   );
 };
