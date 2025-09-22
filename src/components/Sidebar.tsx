@@ -274,13 +274,13 @@ const handleAuthClick = () => {
                   {item.hasSubmenu && expandedSections.includes(item.id) && (
                     <div className="ml-4 mt-1">
                       {item.isContactUs ? (
-                        <div className="flex flex-col space-y-4 p-3">
+                        <div className="flex flex-col space-y-2 p-3">
                           {/* Email Section */}
                           <div className="text-left">
-                            <div className="text-sm font-medium text-gray-600 mb-1">Email</div>
+                            <div className="text-xs font-medium text-gray-600 mb-0.5">Email</div>
                             <a 
                               href="mailto:homehni8@gmail.com" 
-                              className="text-sm text-gray-800 hover:text-brand-red transition-colors"
+                              className="text-xs text-gray-800 hover:text-brand-red transition-colors"
                               title="Send Email"
                             >
                               homehni8@gmail.com
@@ -289,10 +289,10 @@ const handleAuthClick = () => {
                           
                           {/* Phone Section */}
                           <div className="text-left">
-                            <div className="text-sm font-medium text-gray-600 mb-1">Phone</div>
+                            <div className="text-xs font-medium text-gray-600 mb-0.5">Phone</div>
                             <a 
                               href="tel:+918074017388" 
-                              className="text-sm text-gray-800 hover:text-brand-red transition-colors"
+                              className="text-xs text-gray-800 hover:text-brand-red transition-colors"
                               title="Call Us"
                             >
                               80740 17388
@@ -301,16 +301,16 @@ const handleAuthClick = () => {
                           
                           {/* WhatsApp Section */}
                           <div className="text-left">
-                            <div className="text-sm font-medium text-gray-600 mb-2">WhatsApp</div>
+                            <div className="text-xs font-medium text-gray-600 mb-1">WhatsApp</div>
                             <a 
                               href="https://wa.me/8074017388?text=Hello%2C%20I%20would%20like%20to%20inquire%20about%20your%20services" 
                               target="_blank" 
                               rel="noopener noreferrer"
-                              className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50 hover:border-green-500 transition-all"
+                              className="w-6 h-6 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50 hover:border-green-500 transition-all"
                               title="WhatsApp"
                             >
                               <svg 
-                                className="w-4 h-4 text-gray-600" 
+                                className="w-3 h-3 text-gray-600" 
                                 fill="currentColor" 
                                 viewBox="0 0 24 24"
                               >
