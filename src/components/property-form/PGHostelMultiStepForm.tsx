@@ -138,7 +138,7 @@ const [propertyInfo, setPropertyInfo] = useState({
 
   // Navigate to target step if provided
   useEffect(() => {
-    if (targetStep && targetStep > 0 && targetStep <= 6) {
+    if (targetStep && targetStep > 0 && targetStep <= 7) {
       console.log('Navigating to target step:', targetStep);
       setCurrentStep(targetStep);
     }
