@@ -148,7 +148,7 @@ const CorporateEnquiry = () => {
               <Input name="city" placeholder="City" value={stickyFormData.city} onChange={handleStickyInputChange} className="text-sm" />
               <Input name="employees" type="number" placeholder="Number of Employees" value={stickyFormData.employees} onChange={handleStickyInputChange} className="text-sm" />
             </div>
-            <Button type="submit" className="w-full bg-red-800 hover:bg-red-900 text-white text-sm">
+            <Button type="submit" className="w-full bg-brand-red hover:bg-brand-red-dark text-white text-sm">
               Submit Enquiry
             </Button>
           </form>
@@ -158,75 +158,94 @@ const CorporateEnquiry = () => {
       <Header />
       
       {/* Hero Section */}
-      <section className="pt-32 pb-24 px-4">
-        <div className="max-w-6xl mx-auto text-center xl:pr-96">
-          <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
-            Comprehensive Corporate Solutions
-          </h1>
-          <p className="text-lg text-muted-foreground mb-8 max-w-3xl mx-auto">
-            Partner with us to receive the best prices on a wide range of professional real estate and home services — exclusively for your employees.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-red-800 hover:bg-red-900 text-white" onClick={() => document.getElementById('form')?.scrollIntoView()}>
-              Sign Up for Your Company
-            </Button>
-            <Button variant="outline" size="lg" onClick={() => document.getElementById('services')?.scrollIntoView()}>
-              Know More
-            </Button>
+      <section className="relative pt-28 md:pt-32 pb-20 md:pb-32 px-4 md:px-8 text-white overflow-hidden bg-cover bg-center bg-no-repeat" style={{
+        backgroundImage: "url('/lovable-uploads/fbb0d72f-782e-49f5-bbe1-8afc1314b5f7.png')"
+      }}>
+        <div className="absolute inset-0 bg-red-900/80 pointer-events-none" />
+
+        <div className="relative z-10 container mx-auto">
+          <div className="grid lg:grid-cols-2 gap-8 items-start">
+            {/* Left: Copy */}
+            <div className="max-w-2xl">
+              <h1 className="text-4xl md:text-5xl font-bold mb-4 leading-tight">
+                Comprehensive Corporate Solutions
+                <br className="hidden md:block" />
+                <span className="block">for Your Business</span>
+              </h1>
+              <p className="text-lg md:text-xl text-white/90 mb-6">
+                Partner with us to receive the best prices on a wide range of professional 
+                real estate and home services — exclusively for your employees.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Button size="lg" className="bg-white text-red-900 hover:bg-gray-100" onClick={() => document.getElementById('form')?.scrollIntoView()}>
+                  Sign Up for Your Company
+                </Button>
+                <Button variant="outline" size="lg" className="border-white text-white hover:bg-white hover:text-red-900" onClick={() => document.getElementById('services')?.scrollIntoView()}>
+                  Know More
+                </Button>
+              </div>
+            </div>
+
+            {/* Right: Placeholder for sticky form on desktop */}
+            <div className="hidden lg:block lg:justify-self-end">
+              <div className="w-full max-w-md h-80"></div>
+            </div>
           </div>
         </div>
       </section>
 
       {/* Trusted By Section */}
-      <section className="py-16 bg-muted/30">
-        <div className="max-w-6xl mx-auto px-4 text-center xl:pr-96">
+      <section className="py-16 bg-gray-50">
+        <div className="container mx-auto px-4 text-center xl:pr-96">
           <h2 className="text-2xl font-semibold text-foreground mb-8">Trusted by Leading Companies</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {[1, 2, 3, 4].map(i => <div key={i} className="bg-card p-6 rounded-lg border border-primary">
-                <div className="h-12 bg-muted rounded flex items-center justify-center">
-                  <Building className="h-6 w-6 text-muted-foreground" />
+            {[1, 2, 3, 4].map(i => (
+              <div key={i} className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
+                <div className="h-12 bg-gray-100 rounded flex items-center justify-center">
+                  <Building className="h-6 w-6 text-gray-400" />
                 </div>
-              </div>)}
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
       {/* Solutions Section */}
       <section className="py-16 px-4" id="services">
-        <div className="max-w-6xl mx-auto xl:pr-96">
+        <div className="container mx-auto xl:pr-96">
           <h2 className="text-3xl font-bold text-center text-foreground mb-12">
             Explore Our Solutions for Your:
           </h2>
           
           <div className="grid md:grid-cols-2 gap-12 mb-16">
             {/* Employees */}
-            <div className="bg-card p-8 rounded-lg border border-primary">
+            <div className="bg-white p-8 rounded-lg border border-gray-200 shadow-sm">
               <div className="flex items-center mb-6">
                 <Users className="h-8 w-8 text-brand-red mr-3" />
                 <h3 className="text-2xl font-bold text-foreground">Employees</h3>
               </div>
               <ul className="space-y-3">
-                <li className="flex items-center text-muted-foreground">
+                <li className="flex items-center text-gray-600">
                   <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
                   House Search Support
                 </li>
-                <li className="flex items-center text-muted-foreground">
+                <li className="flex items-center text-gray-600">
                   <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
                   Rental Agreements
                 </li>
-                <li className="flex items-center text-muted-foreground">
+                <li className="flex items-center text-gray-600">
                   <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
                   Packers and Movers
                 </li>
-                <li className="flex items-center text-muted-foreground">
+                <li className="flex items-center text-gray-600">
                   <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
                   Home Painting
                 </li>
-                <li className="flex items-center text-muted-foreground">
+                <li className="flex items-center text-gray-600">
                   <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
                   Home Cleaning
                 </li>
-                <li className="flex items-center text-muted-foreground">
+                <li className="flex items-center text-gray-600">
                   <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
                   AC Servicing
                 </li>
@@ -234,21 +253,21 @@ const CorporateEnquiry = () => {
             </div>
 
             {/* Office Space */}
-            <div className="bg-card p-8 rounded-lg border border-primary">
+            <div className="bg-white p-8 rounded-lg border border-gray-200 shadow-sm">
               <div className="flex items-center mb-6">
                 <Building className="h-8 w-8 text-brand-red mr-3" />
                 <h3 className="text-2xl font-bold text-foreground">Office Space</h3>
               </div>
               <ul className="space-y-3">
-                <li className="flex items-center text-muted-foreground">
+                <li className="flex items-center text-gray-600">
                   <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
                   Assistance with leasing
                 </li>
-                <li className="flex items-center text-muted-foreground">
+                <li className="flex items-center text-gray-600">
                   <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
                   Customized relocation plans
                 </li>
-                <li className="flex items-center text-muted-foreground">
+                <li className="flex items-center text-gray-600">
                   <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
                   Office shifting & setup
                 </li>
