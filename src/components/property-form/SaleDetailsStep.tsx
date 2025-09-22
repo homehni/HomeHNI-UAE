@@ -22,20 +22,16 @@ import { formatPriceDisplay } from '@/utils/priceFormatter';
 // Helper function to convert number to words
 const numberToWords = (num: number): string => {
   if (num === 0) return 'Zero';
-  
   const ones = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine'];
   const tens = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
   const teens = ['Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'];
-  
   const convertHundreds = (n: number): string => {
     let result = '';
-    
     if (n >= 100) {
       result += ones[Math.floor(n / 100)] + ' Hundred';
       n %= 100;
       if (n > 0) result += ' ';
     }
-    
     if (n >= 20) {
       result += tens[Math.floor(n / 10)];
       n %= 10;
@@ -45,12 +41,10 @@ const numberToWords = (num: number): string => {
     } else if (n > 0) {
       result += ones[n];
     }
-    
     return result;
   };
-  
   let result = '';
-  
+
   // Crores
   if (num >= 10000000) {
     const crores = Math.floor(num / 10000000);
@@ -58,7 +52,7 @@ const numberToWords = (num: number): string => {
     num %= 10000000;
     if (num > 0) result += ' ';
   }
-  
+
   // Lakhs
   if (num >= 100000) {
     const lakhs = Math.floor(num / 100000);
@@ -66,7 +60,7 @@ const numberToWords = (num: number): string => {
     num %= 100000;
     if (num > 0) result += ' ';
   }
-  
+
   // Thousands
   if (num >= 1000) {
     const thousands = Math.floor(num / 1000);
@@ -74,12 +68,11 @@ const numberToWords = (num: number): string => {
     num %= 1000;
     if (num > 0) result += ' ';
   }
-  
+
   // Hundreds and below
   if (num > 0) {
     result += convertHundreds(num);
   }
-  
   return result;
 };
 
@@ -89,7 +82,6 @@ const formatPricePerSqFt = (price: number, area: number): string => {
   const pricePerSqFt = Math.round(price / area);
   return pricePerSqFt.toLocaleString();
 };
-
 const saleDetailsSchema = z.object({
   expectedPrice: z.union([z.number(), z.nan(), z.undefined()]).optional().transform(val => isNaN(val as number) ? undefined : val),
   priceNegotiable: z.boolean().optional(),
@@ -98,11 +90,9 @@ const saleDetailsSchema = z.object({
   homeLoanAvailable: z.boolean().optional(),
   maintenanceCharges: z.union([z.number(), z.nan(), z.undefined()]).optional().transform(val => isNaN(val as number) ? undefined : val),
   pricePerSqFt: z.union([z.number(), z.nan(), z.undefined()]).optional().transform(val => isNaN(val as number) ? undefined : val),
-  bookingAmount: z.union([z.number(), z.nan(), z.undefined()]).optional().transform(val => isNaN(val as number) ? undefined : val),
+  bookingAmount: z.union([z.number(), z.nan(), z.undefined()]).optional().transform(val => isNaN(val as number) ? undefined : val)
 });
-
 type SaleDetailsForm = z.infer<typeof saleDetailsSchema>;
-
 interface SaleDetailsStepProps {
   initialData: Partial<SaleDetails>;
   propertyDetails?: Partial<import('@/types/property').PropertyDetails>;
@@ -110,21 +100,17 @@ interface SaleDetailsStepProps {
   onBack: () => void;
   formId?: string;
 }
-
 export const SaleDetailsStep: React.FC<SaleDetailsStepProps> = ({
   initialData,
   propertyDetails,
   onNext,
   onBack,
-  formId,
+  formId
 }) => {
   const isMobile = useIsMobile();
-  const [selectedDate, setSelectedDate] = React.useState<Date | undefined>(
-    initialData.possessionDate ? new Date(initialData.possessionDate) : undefined
-  );
+  const [selectedDate, setSelectedDate] = React.useState<Date | undefined>(initialData.possessionDate ? new Date(initialData.possessionDate) : undefined);
   const [isCalendarOpen, setIsCalendarOpen] = React.useState(false);
   const [showInterestSuccess, setShowInterestSuccess] = React.useState(false);
-
   const form = useForm<SaleDetailsForm>({
     resolver: zodResolver(saleDetailsSchema),
     defaultValues: {
@@ -134,131 +120,97 @@ export const SaleDetailsStep: React.FC<SaleDetailsStepProps> = ({
       homeLoanAvailable: initialData.homeLoanAvailable ?? true,
       maintenanceCharges: initialData.maintenanceCharges || undefined,
       pricePerSqFt: initialData.pricePerSqFt || undefined,
-      bookingAmount: initialData.bookingAmount || undefined,
+      bookingAmount: initialData.bookingAmount || undefined
     },
     mode: 'onChange'
   });
-
   const watchedValues = form.watch();
-
   const onSubmit = (data: SaleDetailsForm) => {
     const saleData: SaleDetails = {
       listingType: 'Sale',
       expectedPrice: data.expectedPrice || 0,
       priceNegotiable: data.priceNegotiable,
       possessionDate: selectedDate ? selectedDate.toISOString().split('T')[0] : undefined,
-      propertyAge: '', // This will be populated from Step 1 data
+      propertyAge: '',
+      // This will be populated from Step 1 data
       registrationStatus: data.registrationStatus || 'ready_to_move',
       homeLoanAvailable: data.homeLoanAvailable,
       maintenanceCharges: data.maintenanceCharges,
       pricePerSqFt: data.pricePerSqFt,
-      bookingAmount: data.bookingAmount,
+      bookingAmount: data.bookingAmount
     };
     onNext(saleData);
   };
-
-  return (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
+  return <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
       <div className="text-left">
-        <h2 className="text-2xl font-bold text-red-600 mb-6">Sale details</h2>
+        <h2 className="text-2xl text-red-600 mb-6 font-semibold">Sale details</h2>
       </div>
 
       <Form {...form}>
         <form id={formId} onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           {/* Sale Price */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <FormField
-              control={form.control}
-              name="expectedPrice"
-              render={({ field }) => (
-                <FormItem>
+            <FormField control={form.control} name="expectedPrice" render={({
+            field
+          }) => <FormItem>
                   <FormLabel className="text-sm font-medium">
                     Sale Price (₹) <span className="text-muted-foreground">(Optional)</span>
                   </FormLabel>
                   <FormControl>
-                    <PriceInput
-                      placeholder="Enter Amount"
-                      value={field.value}
-                      onChange={field.onChange}
-                      className="h-10"
-                    />
+                    <PriceInput placeholder="Enter Amount" value={field.value} onChange={field.onChange} className="h-10" />
                   </FormControl>
                   {/* Price in words display */}
-                  {field.value && field.value > 0 && (
-                    <div className="mt-2">
+                  {field.value && field.value > 0 && <div className="mt-2">
                       <p className="text-sm text-black">
                         ₹ {numberToWords(field.value)}
-                        {propertyDetails?.superBuiltUpArea && (
-                          <span className="text-gray-600">
+                        {propertyDetails?.superBuiltUpArea && <span className="text-gray-600">
                             {' '}(₹ {formatPricePerSqFt(field.value, propertyDetails.superBuiltUpArea)} per sq.ft)
-                          </span>
-                        )}
+                          </span>}
                       </p>
-                    </div>
-                  )}
+                    </div>}
                   <FormMessage />
-                </FormItem>
-              )}
-            />
+                </FormItem>} />
 
-            <FormField
-              control={form.control}
-              name="pricePerSqFt"
-              render={({ field }) => (
-                <FormItem>
+            <FormField control={form.control} name="pricePerSqFt" render={({
+            field
+          }) => <FormItem>
                   <FormLabel className="text-sm font-medium">
                     Price per Sq.Ft (₹) <span className="text-muted-foreground">(Optional)</span>
                   </FormLabel>
                   <FormControl>
-                    <Input
-                      type="number"
-                      placeholder="e.g. 4500"
-                      min="1"
-                      value={
-                        watchedValues.expectedPrice && propertyDetails?.superBuiltUpArea
-                          ? Math.round(watchedValues.expectedPrice / propertyDetails.superBuiltUpArea)
-                          : field.value || ''
-                      }
-                      onKeyDown={(e) => { if (['-','+','e','E','.'].includes(e.key)) e.preventDefault(); }}
-                      onPaste={(e) => { const text = e.clipboardData.getData('text'); const digits = text.replace(/[^0-9]/g, ''); if (digits !== text) { e.preventDefault(); field.onChange(digits ? Math.max(1, Number(digits)) : undefined); } }}
-                      onChange={(e) => {
-                        const value = e.target.value ? Math.max(1, Number(e.target.value)) : undefined;
-                        field.onChange(value);
-                      }}
-                      className="h-10 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
-                    />
+                    <Input type="number" placeholder="e.g. 4500" min="1" value={watchedValues.expectedPrice && propertyDetails?.superBuiltUpArea ? Math.round(watchedValues.expectedPrice / propertyDetails.superBuiltUpArea) : field.value || ''} onKeyDown={e => {
+                if (['-', '+', 'e', 'E', '.'].includes(e.key)) e.preventDefault();
+              }} onPaste={e => {
+                const text = e.clipboardData.getData('text');
+                const digits = text.replace(/[^0-9]/g, '');
+                if (digits !== text) {
+                  e.preventDefault();
+                  field.onChange(digits ? Math.max(1, Number(digits)) : undefined);
+                }
+              }} onChange={e => {
+                const value = e.target.value ? Math.max(1, Number(e.target.value)) : undefined;
+                field.onChange(value);
+              }} className="h-10 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]" />
                   </FormControl>
                   <FormMessage />
-                </FormItem>
-              )}
-            />
+                </FormItem>} />
           </div>
 
           {/* Price Options */}
-          <FormField
-            control={form.control}
-            name="priceNegotiable"
-            render={({ field }) => (
-              <div className="flex items-center space-x-2">
-                <Checkbox
-                  id="priceNegotiable"
-                  checked={field.value}
-                  onCheckedChange={field.onChange}
-                />
+          <FormField control={form.control} name="priceNegotiable" render={({
+          field
+        }) => <div className="flex items-center space-x-2">
+                <Checkbox id="priceNegotiable" checked={field.value} onCheckedChange={field.onChange} />
                 <Label htmlFor="priceNegotiable" className="text-sm">
                   Price Negotiable
                 </Label>
-              </div>
-            )}
-          />
+              </div>} />
 
           {/* Availability Status and Possession Date */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <FormField
-              control={form.control}
-              name="registrationStatus"
-              render={({ field }) => (
-                <FormItem>
+            <FormField control={form.control} name="registrationStatus" render={({
+            field
+          }) => <FormItem>
                   <FormLabel className="text-sm font-medium">Availability Status</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
@@ -272,42 +224,27 @@ export const SaleDetailsStep: React.FC<SaleDetailsStepProps> = ({
                     </SelectContent>
                   </Select>
                   <FormMessage />
-                </FormItem>
-              )}
-            />
+                </FormItem>} />
 
             <div>
               <Label className="text-sm font-medium">Possession Date</Label>
               <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
                 <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    className={cn(
-                      "w-full justify-start text-left font-normal mt-1 h-10",
-                      !selectedDate && "text-muted-foreground"
-                    )}
-                  >
+                  <Button variant="outline" className={cn("w-full justify-start text-left font-normal mt-1 h-10", !selectedDate && "text-muted-foreground")}>
                     <CalendarIcon className="mr-2 h-4 w-4" />
                     {selectedDate ? format(selectedDate, "PPP") : "Select possession date"}
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0" align="start">
-                  <CalendarComponent
-                    mode="single"
-                    selected={selectedDate}
-                    onSelect={(date) => {
-                      setSelectedDate(date);
-                      setIsCalendarOpen(false);
-                    }}
-                    disabled={(date) => {
-                      const today = new Date();
-                      today.setHours(0, 0, 0, 0);
-                      const maxDate = addMonths(today, 3);
-                      return date < today || date > maxDate;
-                    }}
-                    initialFocus
-                    className={cn("p-3 pointer-events-auto")}
-                  />
+                  <CalendarComponent mode="single" selected={selectedDate} onSelect={date => {
+                  setSelectedDate(date);
+                  setIsCalendarOpen(false);
+                }} disabled={date => {
+                  const today = new Date();
+                  today.setHours(0, 0, 0, 0);
+                  const maxDate = addMonths(today, 3);
+                  return date < today || date > maxDate;
+                }} initialFocus className={cn("p-3 pointer-events-auto")} />
                 </PopoverContent>
               </Popover>
             </div>
@@ -315,117 +252,89 @@ export const SaleDetailsStep: React.FC<SaleDetailsStepProps> = ({
 
           {/* Additional Charges */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <FormField
-              control={form.control}
-              name="maintenanceCharges"
-              render={({ field }) => (
-                <FormItem>
+            <FormField control={form.control} name="maintenanceCharges" render={({
+            field
+          }) => <FormItem>
                   <FormLabel className="text-sm font-medium">
                     Monthly Maintenance (₹) <span className="text-muted-foreground">(Optional)</span>
                   </FormLabel>
                   <FormControl>
-                    <Input
-                      type="number"
-                      placeholder="e.g. 2500"
-                      min="1"
-                      {...field}
-                      onKeyDown={(e) => { if (['-','+','e','E','.'].includes(e.key)) e.preventDefault(); }}
-                      onPaste={(e) => { const text = e.clipboardData.getData('text'); const digits = text.replace(/[^0-9]/g, ''); if (digits !== text) { e.preventDefault(); field.onChange(digits ? Math.max(1, Number(digits)) : undefined); } }}
-                      value={field.value || ''}
-                      onChange={(e) => field.onChange(e.target.value ? Math.max(1, Number(e.target.value)) : undefined)}
-                      className="h-10 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
-                    />
+                    <Input type="number" placeholder="e.g. 2500" min="1" {...field} onKeyDown={e => {
+                if (['-', '+', 'e', 'E', '.'].includes(e.key)) e.preventDefault();
+              }} onPaste={e => {
+                const text = e.clipboardData.getData('text');
+                const digits = text.replace(/[^0-9]/g, '');
+                if (digits !== text) {
+                  e.preventDefault();
+                  field.onChange(digits ? Math.max(1, Number(digits)) : undefined);
+                }
+              }} value={field.value || ''} onChange={e => field.onChange(e.target.value ? Math.max(1, Number(e.target.value)) : undefined)} className="h-10 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]" />
                   </FormControl>
-                  {watchedValues.maintenanceCharges && (
-                    <div className="mt-1">
+                  {watchedValues.maintenanceCharges && <div className="mt-1">
                       <p className="text-sm text-brand-maroon-light font-medium">
                         {formatPriceDisplay(watchedValues.maintenanceCharges)}
                       </p>
-                    </div>
-                  )}
+                    </div>}
                   <FormMessage />
-                </FormItem>
-              )}
-            />
+                </FormItem>} />
 
-            <FormField
-              control={form.control}
-              name="bookingAmount"
-              render={({ field }) => (
-                <FormItem>
+            <FormField control={form.control} name="bookingAmount" render={({
+            field
+          }) => <FormItem>
                   <FormLabel className="text-sm font-medium">
                     Booking Amount (₹) <span className="text-muted-foreground">(Optional)</span>
                   </FormLabel>
                   <FormControl>
-                    <Input
-                      type="number"
-                      placeholder="e.g. 100000"
-                      min="1"
-                      {...field}
-                      onKeyDown={(e) => { if (['-','+','e','E','.'].includes(e.key)) e.preventDefault(); }}
-                      onPaste={(e) => { const text = e.clipboardData.getData('text'); const digits = text.replace(/[^0-9]/g, ''); if (digits !== text) { e.preventDefault(); field.onChange(digits ? Math.max(1, Number(digits)) : undefined); } }}
-                      value={field.value || ''}
-                      onChange={(e) => field.onChange(e.target.value ? Math.max(1, Number(e.target.value)) : undefined)}
-                      className="h-10 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
-                    />
+                    <Input type="number" placeholder="e.g. 100000" min="1" {...field} onKeyDown={e => {
+                if (['-', '+', 'e', 'E', '.'].includes(e.key)) e.preventDefault();
+              }} onPaste={e => {
+                const text = e.clipboardData.getData('text');
+                const digits = text.replace(/[^0-9]/g, '');
+                if (digits !== text) {
+                  e.preventDefault();
+                  field.onChange(digits ? Math.max(1, Number(digits)) : undefined);
+                }
+              }} value={field.value || ''} onChange={e => field.onChange(e.target.value ? Math.max(1, Number(e.target.value)) : undefined)} className="h-10 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]" />
                   </FormControl>
-                  {watchedValues.bookingAmount && (
-                    <div className="mt-1">
+                  {watchedValues.bookingAmount && <div className="mt-1">
                       <p className="text-sm text-brand-maroon-light font-medium">
                         {formatPriceDisplay(watchedValues.bookingAmount)}
                       </p>
-                    </div>
-                  )}
+                    </div>}
                   <FormMessage />
-                </FormItem>
-              )}
-            />
+                </FormItem>} />
           </div>
 
           {/* Loan Availability */}
-          <FormField
-            control={form.control}
-            name="homeLoanAvailable"
-            render={({ field }) => (
-              <div className="flex items-center space-x-2">
-                <Checkbox
-                  id="homeLoanAvailable"
-                  checked={field.value}
-                  onCheckedChange={field.onChange}
-                />
+          <FormField control={form.control} name="homeLoanAvailable" render={({
+          field
+        }) => <div className="flex items-center space-x-2">
+                <Checkbox id="homeLoanAvailable" checked={field.value} onCheckedChange={field.onChange} />
                 <Label htmlFor="homeLoanAvailable" className="text-sm">
                   Home Loan Available
                 </Label>
-              </div>
-            )}
-          />
+              </div>} />
 
           {/* Help Section */}
           <div className="bg-orange-50 border border-orange-200 rounded-lg p-4 flex items-center justify-between">
-            {!showInterestSuccess ? (
-              <>
+            {!showInterestSuccess ? <>
                 <div className="flex items-center space-x-3">
                   <Phone className="h-5 w-5 text-orange-600" />
                   <span className="text-sm text-gray-700">Don't want to fill all the details? Let us help you!</span>
                 </div>
-                <Button 
-                  variant="outline" 
-                  className="border-primary text-primary hover:bg-primary hover:text-white"
-                  onClick={() => setShowInterestSuccess(true)}
-                >
+                <Button variant="outline" className="border-primary text-primary hover:bg-primary hover:text-white" onClick={() => setShowInterestSuccess(true)}>
                   I'm interested
                 </Button>
-              </>
-            ) : (
-              <div className="flex items-center space-x-3 w-full">
+              </> : <div className="flex items-center space-x-3 w-full">
                 <Phone className="h-5 w-5 text-orange-600" />
                 <span className="text-sm text-gray-700">Thank you for the interest. Our agent will give you a call shortly.</span>
-              </div>
-            )}
+              </div>}
           </div>
 
           {/* Navigation Buttons */}
-          <div className="flex justify-between pt-4" style={{ visibility: 'hidden' }}>
+          <div className="flex justify-between pt-4" style={{
+          visibility: 'hidden'
+        }}>
             <Button type="button" variant="outline" onClick={onBack} className="h-10 px-6">
               {!isMobile && <ArrowLeft className="mr-2 h-4 w-4" />}
               Back
@@ -437,6 +346,5 @@ export const SaleDetailsStep: React.FC<SaleDetailsStepProps> = ({
           </div>
         </form>
       </Form>
-    </div>
-  );
+    </div>;
 };
