@@ -24,7 +24,6 @@ type GalleryFormData = {
   };
   video?: File;
 };
-
 const gallerySchema = z.object({
   images: z.object({
     bathroom: z.array(z.any()).default([]),
@@ -35,9 +34,8 @@ const gallerySchema = z.object({
     balcony: z.array(z.any()).default([]),
     others: z.array(z.any()).default([])
   }),
-  video: z.any().optional(),
+  video: z.any().optional()
 });
-
 interface GalleryStepProps {
   initialData?: Partial<PropertyGallery>;
   onNext: (data: PropertyGallery) => void;
@@ -47,7 +45,6 @@ interface GalleryStepProps {
   onSubmit?: () => void;
   isSubmitting?: boolean;
 }
-
 export const GalleryStep: React.FC<GalleryStepProps> = ({
   initialData = {},
   onNext,
@@ -69,114 +66,78 @@ export const GalleryStep: React.FC<GalleryStepProps> = ({
         balcony: [],
         others: Array.isArray(initialData.images) ? initialData.images : []
       },
-      video: initialData.video,
-    },
+      video: initialData.video
+    }
   });
 
   // Check if we're in edit mode by looking for existing property data
   const isEditMode = (window as any).editingPropertyData !== undefined;
-
   const handleFormSubmit = (data: any) => {
     // Convert categorized images to flat array for backward compatibility
-    const allImages = [
-      ...data.images.bathroom,
-      ...data.images.bedroom,
-      ...data.images.hall,
-      ...data.images.kitchen,
-      ...data.images.frontView,
-      ...data.images.balcony,
-      ...data.images.others
-    ];
-    
+    const allImages = [...data.images.bathroom, ...data.images.bedroom, ...data.images.hall, ...data.images.kitchen, ...data.images.frontView, ...data.images.balcony, ...data.images.others];
     const propertyGalleryData: PropertyGallery = {
       images: allImages,
-      categorizedImages: data.images, // Store categorized structure
+      categorizedImages: data.images,
+      // Store categorized structure
       video: data.video
     };
     onNext(propertyGalleryData);
   };
-
   const handleSubmitProperty = () => {
     // First, capture the current form data and update the parent form state
     const currentFormData = form.getValues();
-    
+
     // Convert categorized images to flat array for backward compatibility
-    const allImages = [
-      ...currentFormData.images.bathroom,
-      ...currentFormData.images.bedroom,
-      ...currentFormData.images.hall,
-      ...currentFormData.images.kitchen,
-      ...currentFormData.images.frontView,
-      ...currentFormData.images.balcony,
-      ...currentFormData.images.others
-    ];
-    
+    const allImages = [...currentFormData.images.bathroom, ...currentFormData.images.bedroom, ...currentFormData.images.hall, ...currentFormData.images.kitchen, ...currentFormData.images.frontView, ...currentFormData.images.balcony, ...currentFormData.images.others];
     const propertyGalleryData: PropertyGallery = {
       images: allImages,
-      categorizedImages: currentFormData.images as any, // Store categorized structure
+      categorizedImages: currentFormData.images as any,
+      // Store categorized structure
       video: currentFormData.video
     };
-    
+
     // Update the parent form state with current gallery data
     onNext(propertyGalleryData);
-    
+
     // Then submit the property
     if (onSubmit) {
       onSubmit();
     }
   };
-
-  return (
-    <div className="bg-background p-8 pb-20">
+  return <div className="bg-background p-8 pb-20">
           <Form {...form}>
             <form id="gallery-form" onSubmit={form.handleSubmit(handleFormSubmit)} className="space-y-8">
-              <FormField
-                control={form.control}
-                name="images"
-                render={({ field }) => (
-                  <FormItem>
+              <FormField control={form.control} name="images" render={({
+          field
+        }) => <FormItem>
                     <FormControl>
                       <div className="space-y-6">
                         {/* Upload Images Title */}
                         <div className="text-left">
-                          <h2 className="text-xl font-semibold text-red-600 mb-4">Upload Property Images by Category</h2>
+                          <h2 className="text-xl text-red-600 mb-4 font-bold">Upload Property Images by Category</h2>
                         </div>
                         
                         {/* Categorized Image Upload Component */}
-                        <CategorizedImageUpload
-                          images={field.value as any}
-                          onImagesChange={field.onChange}
-                          maxImagesPerCategory={5}
-                        />
+                        <CategorizedImageUpload images={field.value as any} onImagesChange={field.onChange} maxImagesPerCategory={5} />
                       </div>
                     </FormControl>
                     <FormMessage />
-                  </FormItem>
-                )}
-              />
+                  </FormItem>} />
 
               {/* Video Upload */}
-              <FormField
-                control={form.control}
-                name="video"
-                render={({ field }) => (
-                  <FormItem>
+              <FormField control={form.control} name="video" render={({
+          field
+        }) => <FormItem>
                     <FormControl>
-                      <VideoUpload
-                        video={field.value}
-                        onVideoChange={field.onChange}
-                      />
+                      <VideoUpload video={field.value} onVideoChange={field.onChange} />
                     </FormControl>
                     <FormMessage />
-                  </FormItem>
-                )}
-              />
+                  </FormItem>} />
 
             </form>
           </Form>
           
           {/* Hidden submit button for sticky bar */}
           <button type="submit" form="gallery-form" className="hidden" />
-        </div>
-  );
+        </div>;
 };
