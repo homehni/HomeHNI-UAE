@@ -122,7 +122,7 @@ const Blog = () => {
             <button 
               onClick={() => {
                 const container = document.getElementById('category-scroll');
-                if (container) container.scrollBy({ left: -280, behavior: 'smooth' });
+                if (container) container.scrollBy({ left: -200, behavior: 'smooth' });
               }}
               className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white shadow-lg rounded-full p-3 hover:bg-gray-50 transition-colors"
             >
@@ -133,7 +133,7 @@ const Blog = () => {
             <button 
               onClick={() => {
                 const container = document.getElementById('category-scroll');
-                if (container) container.scrollBy({ left: 280, behavior: 'smooth' });
+                if (container) container.scrollBy({ left: 200, behavior: 'smooth' });
               }}
               className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white shadow-lg rounded-full p-3 hover:bg-gray-50 transition-colors"
             >
@@ -145,17 +145,17 @@ const Blog = () => {
               className="overflow-x-auto scrollbar-hide mx-12"
               style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
             >
-              <div className="flex space-x-4 pb-4" style={{ minWidth: 'max-content' }}>
+              <div className="flex space-x-3 pb-4" style={{ minWidth: 'max-content' }}>
                 {categoryTiles.map((category, index) => (
-                  <Card key={index} className="flex-shrink-0 w-64 group hover:shadow-lg transition-all duration-300 hover-scale cursor-pointer">
+                  <Card key={index} className="flex-shrink-0 w-44 group hover:shadow-lg transition-all duration-300 hover-scale cursor-pointer">
                     <div className="relative overflow-hidden rounded-lg">
                       <img 
                         src={category.image} 
                         alt={category.title}
-                        className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
+                        className="w-full h-28 object-cover group-hover:scale-105 transition-transform duration-300"
                       />
-                      <div className={`absolute inset-0 ${category.color} bg-opacity-70 flex flex-col justify-end p-4`}>
-                        <h3 className="text-white font-bold text-sm mb-1 line-clamp-2">
+                      <div className={`absolute inset-0 ${category.color} bg-opacity-70 flex flex-col justify-end p-3`}>
+                        <h3 className="text-white font-bold text-xs mb-1 line-clamp-2">
                           {category.title}
                         </h3>
                         <p className="text-white/90 text-xs">
