@@ -25,7 +25,7 @@ export const CommercialSaleSuccessStep = ({
   const hasPhotos = gallery?.images && gallery.images.length > 0;
 
   const handleGoPremium = () => {
-    window.open('/plans', '_blank');
+    window.open('/plans?tab=commercial-seller', '_blank');
   };
 
   const handleGoDashboard = () => {
