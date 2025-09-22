@@ -13,7 +13,12 @@ const SellersGuide = () => {
       <Header />
       
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-orange-600 to-red-700 text-white py-20 md:py-32">
+      <section 
+        className="relative bg-cover bg-center bg-no-repeat text-white py-20 md:py-32" 
+        style={{
+          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/lovable-uploads/02fc42a2-c12f-49f1-92b7-9fdee8f3a419.png')`
+        }}
+      >
         <div className="container mx-auto px-4">
           <div className="text-center">
             <h1 className="text-4xl md:text-6xl font-bold mb-6">Property Sellers Guide</h1>
