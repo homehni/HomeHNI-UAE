@@ -876,6 +876,64 @@ export const Dashboard: React.FC = () => {
     }
   };
 
+  const handleSaveProfile = async () => {
+    if (!user) return;
+
+    setIsSavingProfile(true);
+    try {
+      const newName = profileName.trim();
+      const newPhone = profilePhone.trim();
+
+      // Update profile data in profiles table
+      const { error: profileError } = await supabase
+        .from('profiles')
+        .update({
+          full_name: newName,
+          phone: newPhone,
+          whatsapp_opted_in: whatsappOptIn,
+        })
+        .eq('user_id', user.id);
+
+      if (profileError) throw profileError;
+
+      // Update auth metadata
+      const { error: authMetaError } = await supabase.auth.updateUser({
+        data: { full_name: newName, profile_phone: newPhone },
+      });
+      if (authMetaError) {
+        console.warn('Auth metadata update failed (non-blocking):', authMetaError);
+      }
+
+      // If phone changed, update auth.users via edge function
+      if (newPhone !== originalProfilePhone) {
+        try {
+          const { error: authUpdateError } = await supabase.functions.invoke('update-auth-phone', {
+            body: { userId: user.id, phoneNumber: newPhone },
+          });
+          if (authUpdateError) {
+            console.warn('Auth phone update via edge function failed:', authUpdateError);
+          }
+        } catch (e) {
+          console.warn('Edge function call failed:', e);
+        }
+      }
+
+      setOriginalProfileName(newName);
+      setOriginalProfilePhone(newPhone);
+
+      toast({ title: 'Profile saved', description: 'Your profile has been updated.' });
+    } catch (error: any) {
+      console.error('Error saving profile:', error);
+      toast({
+        title: 'Error',
+        description: `Failed to save profile: ${error.message || 'Please try again.'}`,
+        variant: 'destructive',
+      });
+    } finally {
+      setIsSavingProfile(false);
+    }
+  };
+
   // Filter properties based on selected filter and active toggle
   const filteredProperties = properties.filter(property => {
     // Apply "Only Active" filter
