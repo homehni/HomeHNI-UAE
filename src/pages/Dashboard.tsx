@@ -166,7 +166,7 @@ export const Dashboard: React.FC = () => {
   const [showOnlyActive, setShowOnlyActive] = useState(false);
   
   // Profile states
-  const [profileName, setProfileName] = useState(user?.user_metadata?.full_name || '');
+  const [profileName, setProfileName] = useState('');
   const [isUpdatingName, setIsUpdatingName] = useState(false);
 
   useEffect(() => {
@@ -178,6 +178,13 @@ export const Dashboard: React.FC = () => {
       fetchFavorites();
     }
   }, [user]);
+
+  // Update profileName when user data changes
+  useEffect(() => {
+    if (user?.user_metadata?.full_name) {
+      setProfileName(user.user_metadata.full_name);
+    }
+  }, [user?.user_metadata?.full_name]);
 
   // Update active tab when URL changes
   useEffect(() => {
