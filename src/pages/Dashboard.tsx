@@ -187,11 +187,16 @@ export const Dashboard: React.FC = () => {
   useEffect(() => {
     const loadProfileData = async () => {
       if (!user) return;
+      console.log('Loading profile data for user:', user.id);
+      
       const { data, error } = await supabase
         .from('profiles')
         .select('full_name, phone')
         .eq('user_id', user.id)
         .maybeSingle();
+        
+      console.log('Profile data loaded:', data, 'Error:', error);
+      
       if (!error && data) {
         if (data.full_name) {
           setProfileName(data.full_name);
@@ -806,18 +811,21 @@ export const Dashboard: React.FC = () => {
     setIsUpdatingPhone(true);
     try {
       const newPhone = profilePhone.trim();
+      console.log('Updating phone for user:', user.id, 'to:', newPhone);
 
       // Update the existing profile record
-      const { error: profileError } = await supabase
+      const { data, error: profileError } = await supabase
         .from('profiles')
         .update({ phone: newPhone })
-        .eq('user_id', user.id);
+        .eq('user_id', user.id)
+        .select();
 
       if (profileError) {
         console.error('Profiles update error:', profileError);
         throw profileError;
       }
 
+      console.log('Phone update successful:', data);
       setOriginalProfilePhone(newPhone);
 
       toast({
