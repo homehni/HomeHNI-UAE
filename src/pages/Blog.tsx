@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Badge } from '@/components/ui/badge';
-import { ChevronLeft, ChevronRight, X } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { featuredArticles, categoryTiles, blogSections } from '@/data/blogData';
 
@@ -279,12 +279,6 @@ const Blog = () => {
       <Dialog open={showSubscriptionModal} onOpenChange={setShowSubscriptionModal}>
         <DialogContent className="sm:max-w-[600px] bg-transparent border-none shadow-none p-0">
           <div className="relative bg-gradient-to-br from-blue-50 to-purple-50 p-8 rounded-lg">
-            <button
-              onClick={() => setShowSubscriptionModal(false)}
-              className="absolute top-4 right-4 p-2 hover:bg-white/20 rounded-full transition-colors z-10"
-            >
-              <X className="h-5 w-5 text-gray-600" />
-            </button>
             
             <DialogHeader className="text-center mb-6">
               <DialogTitle className="text-2xl font-bold text-gray-900 mb-2">
