@@ -9,6 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Badge } from '@/components/ui/badge';
 import { ChevronLeft, ChevronRight, X } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 import { featuredArticles, categoryTiles, blogSections } from '@/data/blogData';
 
 const Blog = () => {
@@ -17,6 +18,7 @@ const Blog = () => {
   const [modalEmail, setModalEmail] = useState('');
   const [showSubscriptionModal, setShowSubscriptionModal] = useState(false);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const { toast } = useToast();
 
   const categories = [
     'Real Estate', 'Home Services', 'Finance', 'Interiors', 'Legal',
@@ -50,13 +52,24 @@ const Blog = () => {
   const handleModalSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (selectedCategories.length < 3) {
-      alert('Please select at least 3 categories');
+      toast({
+        title: "Selection Required",
+        description: "Please select at least 3 categories",
+        variant: "destructive",
+      });
       return;
     }
     console.log('Modal subscription:', { email: modalEmail, categories: selectedCategories });
     setModalEmail('');
     setSelectedCategories([]);
     setShowSubscriptionModal(false);
+    
+    // Show success toast
+    toast({
+      title: "Successfully subscribed!",
+      description: "You'll receive our latest updates based on your selected categories.",
+      duration: 4000,
+    });
   };
 
   const toggleCategory = (category: string) => {
