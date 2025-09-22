@@ -54,7 +54,7 @@ export const ScheduleStep: React.FC<ScheduleStepProps> = ({
   return <div>
       {/* Main Title */}
       <div className="mb-8 text-left">
-        <h1 className="text-2xl text-primary mb-2 font-semibold">
+        <h1 className="text-2xl text-primary mb-2 font-bold">
           Make house visits hassle-free by providing us your availability
         </h1>
       </div>
