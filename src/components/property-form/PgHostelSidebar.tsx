@@ -7,12 +7,13 @@ interface PgHostelSidebarProps {
 }
 
 const steps = [
-  { id: 1, title: 'Property Details', description: 'Basic property information', icon: Home },
-  { id: 2, title: 'Locality Details', description: 'Location information', icon: MapPin },
-  { id: 3, title: 'Rental Details', description: 'Pricing & availability', icon: DollarSign },
-  { id: 4, title: 'Amenities', description: 'Services & amenities', icon: Star },
-  { id: 5, title: 'Gallery', description: 'Photos & videos', icon: Camera },
-  { id: 6, title: 'Schedule', description: 'Availability & schedule', icon: Calendar },
+  { id: 1, title: 'Room Types', description: 'Select room types available', icon: Home },
+  { id: 2, title: 'Room Details', description: 'Pricing & room amenities', icon: DollarSign },
+  { id: 3, title: 'Locality Details', description: 'Location information', icon: MapPin },
+  { id: 4, title: 'PG Details', description: 'PG rules & preferences', icon: Star },
+  { id: 5, title: 'Amenities', description: 'Services & amenities', icon: Star },
+  { id: 6, title: 'Gallery', description: 'Photos & videos', icon: Camera },
+  { id: 7, title: 'Schedule', description: 'Availability & schedule', icon: Calendar },
 ];
 
 export function PgHostelSidebar({ currentStep, completedSteps }: PgHostelSidebarProps) {

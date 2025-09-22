@@ -805,29 +805,29 @@ const [propertyInfo, setPropertyInfo] = useState({
                   initialData={roomTypes}
                   onNext={handleRoomTypesNext}
                   onBack={prevStep}
-            currentStep={1}
-            totalSteps={6}
-          />
-        )}
+                  currentStep={1}
+                  totalSteps={7}
+                />
+              )}
 
-        {currentStep === 2 && (
+              {currentStep === 2 && (
                 <PgHostelRoomDetailsStep
                   initialData={roomDetails}
                   roomTypes={roomTypes}
                   onNext={handleRoomDetailsNext}
-            onBack={prevStep}
+                  onBack={prevStep}
                   currentStep={2}
-            totalSteps={6}
-          />
-        )}
+                  totalSteps={7}
+                />
+              )}
 
-        {currentStep === 3 && (
+              {currentStep === 3 && (
                 <PgHostelLocalityDetailsStep
                   initialData={localityDetails}
                   onNext={handleLocalityDetailsNext}
                   onBack={prevStep}
                   currentStep={3}
-                  totalSteps={6}
+                  totalSteps={7}
                 />
               )}
 
@@ -837,7 +837,7 @@ const [propertyInfo, setPropertyInfo] = useState({
                   onNext={handlePgDetailsNext}
                   onBack={prevStep}
                   currentStep={4}
-                  totalSteps={6}
+                  totalSteps={7}
                 />
               )}
 
@@ -847,7 +847,7 @@ const [propertyInfo, setPropertyInfo] = useState({
                   onNext={handleAmenitiesNext}
                   onBack={prevStep}
                   currentStep={5}
-                  totalSteps={6}
+                  totalSteps={7}
                 />
               )}
 
@@ -857,7 +857,7 @@ const [propertyInfo, setPropertyInfo] = useState({
                   onNext={handleGalleryNext}
                   onBack={prevStep}
                   currentStep={6}
-                  totalSteps={6}
+                  totalSteps={7}
                 />
               )}
 
@@ -867,14 +867,15 @@ const [propertyInfo, setPropertyInfo] = useState({
                   onNext={handleScheduleNext}
                   onBack={prevStep}
                   currentStep={7}
-                  totalSteps={6}
+                  totalSteps={7}
                 />
               )}
             </div>
           </div>
 
-          {/* Sticky Bottom Navigation Bar */}
-          <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-3 sm:p-4 z-50 shadow-lg">
+          {/* Sticky Bottom Navigation Bar - Hidden on Preview step */}
+          {currentStep !== 7 && (
+            <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-3 sm:p-4 z-50 shadow-lg">
             <div className="max-w-4xl mx-auto flex flex-col sm:flex-row gap-3 sm:gap-4 sm:justify-center">
               <Button 
                 type="button" 
@@ -906,10 +907,11 @@ const [propertyInfo, setPropertyInfo] = useState({
                 }}
                 className="h-12 sm:h-10 px-6 sm:px-6 bg-red-600 hover:bg-red-700 text-white w-full sm:w-auto order-1 sm:order-2 font-semibold"
               >
-                Save & Continue
+                {currentStep === 7 ? 'Submit Property' : 'Save & Continue'}
               </Button>
             </div>
-          </div>
+            </div>
+          )}
         </div>
 
         {/* Right Sidebar - Get Tenants Faster */}
@@ -937,43 +939,43 @@ const [propertyInfo, setPropertyInfo] = useState({
         <div className="p-4">
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
             {currentStep === 1 && (
-          <PgHostelRoomTypeStep
-            initialData={roomTypes}
-            onNext={handleRoomTypesNext}
-            onBack={prevStep}
+              <PgHostelRoomTypeStep
+                initialData={roomTypes}
+                onNext={handleRoomTypesNext}
+                onBack={prevStep}
                 currentStep={1}
-            totalSteps={6}
-          />
-        )}
+                totalSteps={7}
+              />
+            )}
 
             {currentStep === 2 && (
-          <PgHostelRoomDetailsStep
-            initialData={roomDetails}
-            roomTypes={roomTypes}
-            onNext={handleRoomDetailsNext}
-            onBack={prevStep}
+              <PgHostelRoomDetailsStep
+                initialData={roomDetails}
+                roomTypes={roomTypes}
+                onNext={handleRoomDetailsNext}
+                onBack={prevStep}
                 currentStep={2}
-            totalSteps={6}
-          />
-        )}
+                totalSteps={7}
+              />
+            )}
 
             {currentStep === 3 && (
-          <PgHostelLocalityDetailsStep
-            initialData={localityDetails}
-            onNext={handleLocalityDetailsNext}
-            onBack={prevStep}
+              <PgHostelLocalityDetailsStep
+                initialData={localityDetails}
+                onNext={handleLocalityDetailsNext}
+                onBack={prevStep}
                 currentStep={3}
-            totalSteps={6}
-          />
-        )}
+                totalSteps={7}
+              />
+            )}
 
             {currentStep === 4 && (
-          <PgHostelPgDetailsStep
-            initialData={pgDetails}
-            onNext={handlePgDetailsNext}
+              <PgHostelPgDetailsStep
+                initialData={pgDetails}
+                onNext={handlePgDetailsNext}
                 onBack={prevStep}
                 currentStep={4}
-                totalSteps={6}
+                totalSteps={7}
               />
             )}
 
@@ -981,34 +983,34 @@ const [propertyInfo, setPropertyInfo] = useState({
               <PgHostelAmenitiesStep
                 initialData={amenities}
                 onNext={handleAmenitiesNext}
-            onBack={prevStep}
-            currentStep={5}
-            totalSteps={6}
-          />
-        )}
+                onBack={prevStep}
+                currentStep={5}
+                totalSteps={7}
+              />
+            )}
 
             {currentStep === 6 && (
-          <PgHostelGalleryStep
-            initialData={gallery}
-            onNext={handleGalleryNext}
-            onBack={prevStep}
+              <PgHostelGalleryStep
+                initialData={gallery}
+                onNext={handleGalleryNext}
+                onBack={prevStep}
                 currentStep={6}
-            totalSteps={6}
-          />
-        )}
+                totalSteps={7}
+              />
+            )}
 
             {currentStep === 7 && (
-          <PgHostelScheduleStep
-            initialData={scheduleInfo}
-            onNext={handleScheduleNext}
-            onBack={prevStep}
+              <PgHostelScheduleStep
+                initialData={scheduleInfo}
+                onNext={handleScheduleNext}
+                onBack={prevStep}
                 currentStep={7}
-            totalSteps={6}
-          />
-        )}
+                totalSteps={7}
+              />
+            )}
 
           {/* Sticky Bottom Navigation Bar - Hidden on Preview step */}
-          {currentStep !== 10 && (
+          {currentStep !== 8 && (
             <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-3 sm:p-4 z-50 shadow-lg">
             <div className="max-w-4xl mx-auto flex flex-col sm:flex-row gap-3 sm:gap-4 sm:justify-center">
               <Button 
@@ -1055,7 +1057,7 @@ const [propertyInfo, setPropertyInfo] = useState({
                 }}
                 className="h-12 sm:h-10 px-6 sm:px-6 bg-red-600 hover:bg-red-700 text-white w-full sm:w-auto order-1 sm:order-2 font-semibold"
               >
-                Save & Continue
+                {currentStep === 7 ? 'Submit Property' : 'Save & Continue'}
               </Button>
             </div>
             </div>
