@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
-import { Building, MessageSquare, User, LogOut, Plus, Eye, Edit, Trash, FileText, Shield, MapPin, Home, Medal, Heart, Search, Filter, ArrowUpDown, Phone, TrendingUp, Menu, X } from 'lucide-react';
+import { Building, MessageSquare, MessageCircle, User, LogOut, Plus, Eye, Edit, Trash, FileText, Shield, MapPin, Home, Medal, Heart, Search, Filter, ArrowUpDown, Phone, TrendingUp, Menu, X, Check } from 'lucide-react';
 import ChatBot from '@/components/ChatBot';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
@@ -22,6 +22,7 @@ import { calculatePropertyCompletion, calculatePGPropertyCompletion } from '@/ut
 import { useFavorites } from '@/hooks/useFavorites';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Switch } from '@/components/ui/switch';
 
 interface Property {
   id: string;
@@ -170,6 +171,8 @@ export const Dashboard: React.FC = () => {
   const [originalProfileName, setOriginalProfileName] = useState('');
   const [profilePhone, setProfilePhone] = useState('');
   const [originalProfilePhone, setOriginalProfilePhone] = useState('');
+  const [whatsappOptIn, setWhatsappOptIn] = useState(false);
+  const [isSavingProfile, setIsSavingProfile] = useState(false);
   const [isUpdatingName, setIsUpdatingName] = useState(false);
   const [isUpdatingPhone, setIsUpdatingPhone] = useState(false);
 
@@ -191,7 +194,7 @@ export const Dashboard: React.FC = () => {
       
       const { data, error } = await supabase
         .from('profiles')
-        .select('full_name, phone')
+        .select('full_name, phone, whatsapp_opted_in')
         .eq('user_id', user.id)
         .maybeSingle();
         
@@ -206,6 +209,7 @@ export const Dashboard: React.FC = () => {
           setProfilePhone(data.phone);
           setOriginalProfilePhone(data.phone);
         }
+        setWhatsappOptIn(!!data.whatsapp_opted_in);
       }
     };
     loadProfileData();
@@ -1546,53 +1550,60 @@ export const Dashboard: React.FC = () => {
                   Manage your account settings and preferences
                 </CardDescription>
               </CardHeader>
-              <CardContent className="space-y-4">
+              <CardContent className="space-y-5">
+                {/* Name */}
                 <div>
                   <label className="text-sm font-medium text-gray-700">Name</label>
-                  <div className="flex items-center gap-2 mt-1">
+                  <div className="mt-1">
                     <Input
                       value={profileName}
                       onChange={(e) => setProfileName(e.target.value)}
                       placeholder="Enter your name"
-                      className="flex-1"
+                      className="w-full"
                     />
-                    <Button
-                      onClick={handleUpdateName}
-                      disabled={isUpdatingName || profileName.trim() === originalProfileName.trim()}
-                      size="sm"
-                    >
-                      {isUpdatingName ? 'Saving...' : 'Save'}
-                    </Button>
                   </div>
                 </div>
+
+                {/* Email readonly with green check */}
                 <div>
                   <label className="text-sm font-medium text-gray-700">Email</label>
-                  <p className="text-gray-900">{user.email}</p>
+                  <div className="relative mt-1">
+                    <Input value={user.email || ''} readOnly className="w-full bg-gray-50 cursor-not-allowed pr-10" />
+                    <Check className="h-5 w-5 text-green-600 absolute right-3 top-1/2 -translate-y-1/2" />
+                  </div>
                 </div>
-                <div>
-                  <label className="text-sm font-medium text-gray-700">Email Verified</label>
-                  <p className={user.email_confirmed_at ? 'text-green-600' : 'text-red-600'}>
-                    {user.email_confirmed_at ? 'Yes' : 'No'}
-                  </p>
-                </div>
+
+                {/* Phone with green check when present */}
                 <div>
                   <label className="text-sm font-medium text-gray-700">Phone Number</label>
-                  <div className="flex items-center gap-2 mt-1">
+                  <div className="relative mt-1">
                     <Input
                       value={profilePhone}
                       onChange={(e) => setProfilePhone(e.target.value)}
                       placeholder="Enter your phone number"
-                      className="flex-1"
+                      className="w-full pr-10"
                       type="tel"
                     />
-                    <Button
-                      onClick={handleUpdatePhone}
-                      disabled={isUpdatingPhone || profilePhone.trim() === originalProfilePhone.trim()}
-                      size="sm"
-                    >
-                      {isUpdatingPhone ? 'Saving...' : 'Save'}
-                    </Button>
+                    {profilePhone && (
+                      <Check className="h-5 w-5 text-green-600 absolute right-3 top-1/2 -translate-y-1/2" />
+                    )}
                   </div>
+                </div>
+
+                {/* WhatsApp toggle */}
+                <div className="flex items-center justify-between py-2">
+                  <div className="flex items-center gap-2">
+                    <MessageCircle className="h-5 w-5 text-green-600" />
+                    <span className="text-sm font-medium text-gray-700">Get Updates on WhatsApp</span>
+                  </div>
+                  <Switch checked={whatsappOptIn} onCheckedChange={setWhatsappOptIn} />
+                </div>
+
+                {/* Save button */}
+                <div className="flex justify-end pt-2">
+                  <Button onClick={handleSaveProfile} disabled={isSavingProfile} className="bg-red-500 hover:bg-red-600 text-white px-8">
+                    {isSavingProfile ? 'Saving...' : 'Save Profile'}
+                  </Button>
                 </div>
               </CardContent>
             </Card>
