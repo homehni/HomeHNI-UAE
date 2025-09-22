@@ -8,6 +8,13 @@ import Header from '@/components/Header';
 import Marquee from '@/components/Marquee';
 import Footer from '@/components/Footer';
 import { useToast } from '@/hooks/use-toast';
+
+// Import company logos
+import companyLogo1 from '@/assets/company-logo-1.png';
+import companyLogo2 from '@/assets/company-logo-2.png';
+import companyLogo3 from '@/assets/company-logo-3.png';
+import companyLogo4 from '@/assets/company-logo-4.png';
+
 const CorporateEnquiry = () => {
   const [formData, setFormData] = useState({
     name: '',
@@ -25,15 +32,15 @@ const CorporateEnquiry = () => {
     city: '',
     employees: ''
   });
-  const {
-    toast
-  } = useToast();
+  const { toast } = useToast();
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData(prev => ({
       ...prev,
       [e.target.name]: e.target.value
     }));
   };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     toast({
@@ -50,12 +57,14 @@ const CorporateEnquiry = () => {
       employees: ''
     });
   };
+
   const handleStickyInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setStickyFormData(prev => ({
       ...prev,
       [e.target.name]: e.target.value
     }));
   };
+
   const handleStickySubmit = (e: React.FormEvent) => {
     e.preventDefault();
     toast({
@@ -72,58 +81,78 @@ const CorporateEnquiry = () => {
       employees: ''
     });
   };
-  const services = [{
-    icon: Search,
-    title: "House Search",
-    description: "Expert assistance in finding the perfect home"
-  }, {
-    icon: FileText,
-    title: "Rental Agreement",
-    description: "Professional drafting and legal compliance"
-  }, {
-    icon: Truck,
-    title: "Packers & Movers",
-    description: "Hassle-free relocation services"
-  }, {
-    icon: Paintbrush,
-    title: "Home Painting",
-    description: "Professional painting solutions"
-  }, {
-    icon: Sparkles,
-    title: "Home Cleaning",
-    description: "Comprehensive cleaning services"
-  }, {
-    icon: Snowflake,
-    title: "AC Servicing",
-    description: "Professional maintenance and repairs"
-  }];
-  const workingSteps = [{
-    step: "1",
-    title: "Sign Up with Us",
-    description: "Once onboarded, we'll create exclusive, customized offers tailored for your company."
-  }, {
-    step: "2",
-    title: "Employees Choose Their Service",
-    description: "Through our website or app, employees can select and book services with ease."
-  }, {
-    step: "3",
-    title: "Unlock Offers",
-    description: "Employees simply fill in basic details and unlock exclusive discounts."
-  }];
-  const benefits = [{
-    icon: Truck,
-    title: "Packers & Movers",
-    description: "Hassle-free relocation and on-time delivery"
-  }, {
-    icon: Home,
-    title: "House-hunting Assistance",
-    description: "Buy, Sell, or Rent properties with expert help"
-  }, {
-    icon: Sparkles,
-    title: "Home Services",
-    description: "Cleaning, Painting, AC Services and more — on demand"
-  }];
-  return <div className="min-h-screen bg-background">
+
+  const services = [
+    {
+      icon: Search,
+      title: "House Search",
+      description: "Expert assistance in finding the perfect home"
+    },
+    {
+      icon: FileText,
+      title: "Rental Agreement",
+      description: "Professional drafting and legal compliance"
+    },
+    {
+      icon: Truck,
+      title: "Packers & Movers",
+      description: "Hassle-free relocation services"
+    },
+    {
+      icon: Paintbrush,
+      title: "Home Painting",
+      description: "Professional painting solutions"
+    },
+    {
+      icon: Sparkles,
+      title: "Home Cleaning",
+      description: "Comprehensive cleaning services"
+    },
+    {
+      icon: Snowflake,
+      title: "AC Servicing",
+      description: "Professional maintenance and repairs"
+    }
+  ];
+
+  const workingSteps = [
+    {
+      step: "1",
+      title: "Sign Up with Us",
+      description: "Once onboarded, we'll create exclusive, customized offers tailored for your company."
+    },
+    {
+      step: "2",
+      title: "Employees Choose Their Service",
+      description: "Through our website or app, employees can select and book services with ease."
+    },
+    {
+      step: "3",
+      title: "Unlock Offers",
+      description: "Employees simply fill in basic details and unlock exclusive discounts."
+    }
+  ];
+
+  const benefits = [
+    {
+      icon: Truck,
+      title: "Packers & Movers",
+      description: "Hassle-free relocation and on-time delivery"
+    },
+    {
+      icon: Home,
+      title: "House-hunting Assistance",
+      description: "Buy, Sell, or Rent properties with expert help"
+    },
+    {
+      icon: Sparkles,
+      title: "Home Services",
+      description: "Cleaning, Painting, AC Services and more — on demand"
+    }
+  ];
+
+  return (
+    <div className="min-h-screen bg-background">
       {/* Sticky Corporate Enquiry Form - Desktop Only */}
       <div className="hidden xl:block fixed top-32 right-6 z-50 w-96">
         <div className="bg-gradient-to-br from-white to-gray-50 rounded-2xl shadow-2xl border border-primary p-6 backdrop-blur-sm">
@@ -154,6 +183,7 @@ const CorporateEnquiry = () => {
           </form>
         </div>
       </div>
+
       <Marquee />
       <Header />
       
@@ -226,13 +256,18 @@ const CorporateEnquiry = () => {
             <div className="max-w-3xl text-center">
               <h2 className="text-2xl font-semibold text-foreground mb-8">Trusted by Leading Companies</h2>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-                {[1, 2, 3, 4].map(i => (
-                  <div key={i} className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
-                    <div className="h-12 bg-gray-100 rounded flex items-center justify-center">
-                      <Building className="h-6 w-6 text-gray-400" />
-                    </div>
-                  </div>
-                ))}
+                <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
+                  <img src={companyLogo1} alt="TechCorp" className="h-12 w-auto mx-auto object-contain" />
+                </div>
+                <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
+                  <img src={companyLogo2} alt="FinanceMax" className="h-12 w-auto mx-auto object-contain" />
+                </div>
+                <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
+                  <img src={companyLogo3} alt="ConsultPro" className="h-12 w-auto mx-auto object-contain" />
+                </div>
+                <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
+                  <img src={companyLogo4} alt="IndustrialMax" className="h-12 w-auto mx-auto object-contain" />
+                </div>
               </div>
             </div>
             {/* Right side spacing for sticky form */}
@@ -386,66 +421,51 @@ const CorporateEnquiry = () => {
         </div>
       </section>
 
-
       {/* Corporate Services Footer */}
-      <section className="py-16 bg-muted/30 border-t">
-        <div className="max-w-4xl mx-auto px-4">
-          <div className="space-y-12">
-            {/* Employee Services Section */}
-            <div>
-              <h3 className="text-2xl font-bold text-foreground mb-6">Employee Services</h3>
-              <div className="flex flex-wrap gap-3">
-                <span className="px-4 py-2 bg-muted rounded-full text-sm text-foreground hover:bg-muted/80 cursor-pointer transition-colors">House Search in Mumbai</span>
-                <span className="px-4 py-2 bg-muted rounded-full text-sm text-foreground hover:bg-muted/80 cursor-pointer transition-colors">House Search in Delhi</span>
-                <span className="px-4 py-2 bg-muted rounded-full text-sm text-foreground hover:bg-muted/80 cursor-pointer transition-colors">House Search in Bangalore</span>
-                <span className="px-4 py-2 bg-muted rounded-full text-sm text-foreground hover:bg-muted/80 cursor-pointer transition-colors">House Search in Pune</span>
-                <span className="px-4 py-2 bg-muted rounded-full text-sm text-foreground hover:bg-muted/80 cursor-pointer transition-colors">House Search in Hyderabad</span>
-                <span className="px-4 py-2 bg-muted rounded-full text-sm text-foreground hover:bg-muted/80 cursor-pointer transition-colors">House Search in Chennai</span>
-                <span className="px-4 py-2 bg-muted rounded-full text-sm text-foreground hover:bg-muted/80 cursor-pointer transition-colors">Rental Agreements</span>
-                <span className="px-4 py-2 bg-muted rounded-full text-sm text-foreground hover:bg-muted/80 cursor-pointer transition-colors">Packers & Movers</span>
-                <span className="px-4 py-2 bg-muted rounded-full text-sm text-foreground hover:bg-muted/80 cursor-pointer transition-colors">Home Painting Services</span>
-                <span className="px-4 py-2 bg-muted rounded-full text-sm text-foreground hover:bg-muted/80 cursor-pointer transition-colors">Home Cleaning Services</span>
-                <span className="px-4 py-2 bg-muted rounded-full text-sm text-foreground hover:bg-muted/80 cursor-pointer transition-colors">AC Servicing</span>
+      <section className="py-16 bg-gray-50 border-t">
+        <div className="container mx-auto">
+          <div className="grid lg:grid-cols-2 gap-16 items-start">
+            <div className="max-w-3xl space-y-12">
+              {/* Employee Services Section */}
+              <div>
+                <h3 className="text-2xl font-bold text-foreground mb-6">Employee Services</h3>
+                <div className="flex flex-wrap gap-3">
+                  <span className="px-4 py-2 bg-white rounded-full text-sm text-foreground hover:bg-gray-100 cursor-pointer transition-colors border border-gray-200">House Search in Mumbai</span>
+                  <span className="px-4 py-2 bg-white rounded-full text-sm text-foreground hover:bg-gray-100 cursor-pointer transition-colors border border-gray-200">House Search in Delhi</span>
+                  <span className="px-4 py-2 bg-white rounded-full text-sm text-foreground hover:bg-gray-100 cursor-pointer transition-colors border border-gray-200">House Search in Bangalore</span>
+                  <span className="px-4 py-2 bg-white rounded-full text-sm text-foreground hover:bg-gray-100 cursor-pointer transition-colors border border-gray-200">House Search in Pune</span>
+                  <span className="px-4 py-2 bg-white rounded-full text-sm text-foreground hover:bg-gray-100 cursor-pointer transition-colors border border-gray-200">House Search in Hyderabad</span>
+                  <span className="px-4 py-2 bg-white rounded-full text-sm text-foreground hover:bg-gray-100 cursor-pointer transition-colors border border-gray-200">House Search in Chennai</span>
+                  <span className="px-4 py-2 bg-white rounded-full text-sm text-foreground hover:bg-gray-100 cursor-pointer transition-colors border border-gray-200">Rental Agreements</span>
+                  <span className="px-4 py-2 bg-white rounded-full text-sm text-foreground hover:bg-gray-100 cursor-pointer transition-colors border border-gray-200">Packers & Movers</span>
+                  <span className="px-4 py-2 bg-white rounded-full text-sm text-foreground hover:bg-gray-100 cursor-pointer transition-colors border border-gray-200">Home Painting Services</span>
+                  <span className="px-4 py-2 bg-white rounded-full text-sm text-foreground hover:bg-gray-100 cursor-pointer transition-colors border border-gray-200">Home Cleaning Services</span>
+                  <span className="px-4 py-2 bg-white rounded-full text-sm text-foreground hover:bg-gray-100 cursor-pointer transition-colors border border-gray-200">AC Servicing</span>
+                </div>
               </div>
-            </div>
 
-            {/* Corporate Office Solutions Section */}
-            <div>
-              <h3 className="text-2xl font-bold text-foreground mb-6">Corporate Office Solutions</h3>
-              <div className="flex flex-wrap gap-3">
-                <span className="px-4 py-2 bg-muted rounded-full text-sm text-foreground hover:bg-muted/80 cursor-pointer transition-colors">Office Leasing in Mumbai</span>
-                <span className="px-4 py-2 bg-muted rounded-full text-sm text-foreground hover:bg-muted/80 cursor-pointer transition-colors">Corporate Relocation Services</span>
-                <span className="px-4 py-2 bg-muted rounded-full text-sm text-foreground hover:bg-muted/80 cursor-pointer transition-colors">Office Setup & Design</span>
-                <span className="px-4 py-2 bg-muted rounded-full text-sm text-foreground hover:bg-muted/80 cursor-pointer transition-colors">Facility Management</span>
-                <span className="px-4 py-2 bg-muted rounded-full text-sm text-foreground hover:bg-muted/80 cursor-pointer transition-colors">Commercial Property Valuation</span>
+              {/* Corporate Office Solutions Section */}
+              <div>
+                <h3 className="text-2xl font-bold text-foreground mb-6">Corporate Office Solutions</h3>
+                <div className="flex flex-wrap gap-3">
+                  <span className="px-4 py-2 bg-white rounded-full text-sm text-foreground hover:bg-gray-100 cursor-pointer transition-colors border border-gray-200">Office Leasing in Mumbai</span>
+                  <span className="px-4 py-2 bg-white rounded-full text-sm text-foreground hover:bg-gray-100 cursor-pointer transition-colors border border-gray-200">Corporate Relocation Services</span>
+                  <span className="px-4 py-2 bg-white rounded-full text-sm text-foreground hover:bg-gray-100 cursor-pointer transition-colors border border-gray-200">Office Setup & Design</span>
+                  <span className="px-4 py-2 bg-white rounded-full text-sm text-foreground hover:bg-gray-100 cursor-pointer transition-colors border border-gray-200">Office Leasing in Delhi</span>
+                  <span className="px-4 py-2 bg-white rounded-full text-sm text-foreground hover:bg-gray-100 cursor-pointer transition-colors border border-gray-200">Office Leasing in Bangalore</span>
+                  <span className="px-4 py-2 bg-white rounded-full text-sm text-foreground hover:bg-gray-100 cursor-pointer transition-colors border border-gray-200">Employee Relocation Services</span>
+                </div>
               </div>
             </div>
-
-            {/* Corporate Benefits & Support Section */}
-            <div>
-              <h3 className="text-2xl font-bold text-foreground mb-6">Corporate Benefits & Support</h3>
-              <div className="flex flex-wrap gap-3">
-                <span className="px-4 py-2 bg-muted rounded-full text-sm text-foreground hover:bg-muted/80 cursor-pointer transition-colors">Exclusive Corporate Discounts</span>
-                <span className="px-4 py-2 bg-muted rounded-full text-sm text-foreground hover:bg-muted/80 cursor-pointer transition-colors">Priority Customer Support</span>
-                <span className="px-4 py-2 bg-muted rounded-full text-sm text-foreground hover:bg-muted/80 cursor-pointer transition-colors">Custom Service Packages</span>
-                <span className="px-4 py-2 bg-muted rounded-full text-sm text-foreground hover:bg-muted/80 cursor-pointer transition-colors">Bulk Service Orders</span>
-                <span className="px-4 py-2 bg-muted rounded-full text-sm text-foreground hover:bg-muted/80 cursor-pointer transition-colors">Employee Training & Onboarding</span>
-                <span className="px-4 py-2 bg-muted rounded-full text-sm text-foreground hover:bg-muted/80 cursor-pointer transition-colors">Analytics & Reporting</span>
-                <span className="px-4 py-2 bg-muted rounded-full text-sm text-foreground hover:bg-muted/80 cursor-pointer transition-colors">Dedicated Account Manager</span>
-              </div>
-            </div>
-          </div>
-          
-          <div className="mt-12 pt-8 border-t border-border text-center">
-            <p className="text-sm text-muted-foreground">
-              © 2024 Home HNI. All rights reserved. | 
-              <a href="/privacy-policy" className="hover:text-foreground ml-1">Privacy Policy</a> | 
-              <a href="/terms-and-conditions" className="hover:text-foreground ml-1">Terms & Conditions</a>
-            </p>
+            {/* Right side spacing for sticky form */}
+            <div className="hidden lg:block"></div>
           </div>
         </div>
       </section>
 
-    </div>;
+      <Footer />
+    </div>
+  );
 };
+
 export default CorporateEnquiry;
