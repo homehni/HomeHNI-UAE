@@ -88,7 +88,7 @@ export function PgHostelScheduleStep({
                       <div className="w-2 h-2 bg-orange-400 rounded-full animate-pulse"></div>
                     </div>
                     <h3 className="text-lg font-semibold mb-2 text-gray-800">
-                      Freshly painted PGs get rented out{' '}
+                      Freshly painted homes get rented out{' '}
                       <span className="text-orange-600 font-bold">73% faster</span>
                     </h3>
                     <p className="text-gray-600 mb-4 text-sm">
@@ -153,7 +153,7 @@ export function PgHostelScheduleStep({
                       <div className="w-2 h-2 bg-teal-400 rounded-full animate-pulse"></div>
                     </div>
                     <h3 className="text-lg font-semibold mb-2 text-gray-800">
-                      Get your PG tenant-ready with{' '}
+                      Get your house tenant-ready with{' '}
                       <span className="text-teal-600 font-bold">Deep Cleaning</span>
                     </h3>
                     <p className="text-gray-600 mb-4 text-sm">
