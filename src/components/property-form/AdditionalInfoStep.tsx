@@ -46,7 +46,7 @@ export const AdditionalInfoStep: React.FC<AdditionalInfoStepProps> = ({
     <div className="p-6 space-y-8">
       {/* Header */}
       <div className="text-left">
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">Additional Information</h2>
+        <h2 className="text-2xl text-primary mb-6 font-semibold">Additional Information</h2>
         <p className="text-gray-600">Provide additional details about your property</p>
       </div>
 

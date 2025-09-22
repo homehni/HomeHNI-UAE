@@ -278,7 +278,7 @@ export const LocationDetailsStep: React.FC<LocationDetailsStepProps> = ({
 
   return (
     <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
-      <h1 className="text-2xl font-semibold text-primary mb-6">Location Details</h1>
+      <h1 className="text-2xl text-primary mb-6 font-semibold">Location Details</h1>
 
               <Form {...form}>
                 <form id="location-details-form" onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
