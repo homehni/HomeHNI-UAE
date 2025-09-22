@@ -354,52 +354,6 @@ export const MyInterests: React.FC = () => {
             </div>
           </div>
 
-          {/* Search and Filter Controls */}
-          {favorites.length > 0 && (
-            <div className="mb-6 bg-white rounded-lg shadow-sm p-4">
-              <div className="flex flex-col sm:flex-row gap-4">
-                {/* Search */}
-                <div className="flex-1">
-                  <div className="relative">
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-                    <Input
-                      placeholder="Search by title, locality, or city..."
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                      className="pl-10"
-                    />
-                  </div>
-                </div>
-                
-                {/* Filter by Type */}
-                <Select value={filterType} onValueChange={(value: 'all' | 'rent' | 'sale') => setFilterType(value)}>
-                  <SelectTrigger className="w-full sm:w-48">
-                    <Filter className="h-4 w-4 mr-2" />
-                    <SelectValue placeholder="Filter by type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Properties</SelectItem>
-                    <SelectItem value="rent">For Rent</SelectItem>
-                    <SelectItem value="sale">For Sale</SelectItem>
-                  </SelectContent>
-                </Select>
-                
-                {/* Sort */}
-                <Select value={sortBy} onValueChange={(value: 'newest' | 'oldest' | 'price_low' | 'price_high') => setSortBy(value)}>
-                  <SelectTrigger className="w-full sm:w-48">
-                    <ArrowUpDown className="h-4 w-4 mr-2" />
-                    <SelectValue placeholder="Sort by" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="newest">Newest First</SelectItem>
-                    <SelectItem value="oldest">Oldest First</SelectItem>
-                    <SelectItem value="price_low">Price: Low to High</SelectItem>
-                    <SelectItem value="price_high">Price: High to Low</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-          )}
 
           {/* Loading State */}
           {loading && (
