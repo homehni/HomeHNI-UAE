@@ -271,29 +271,6 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                   </TabsList>
 
                   <TabsContent value={activeTab} className="mt-0 px-3 sm:px-6 py-2 bg-white rounded-b-lg">
-                    {/* City Selector - Desktop */}
-                    <div className="mb-4">
-                      <div className="w-48">
-                        <Select value={selectedCity} onValueChange={setSelectedCity}>
-                          <SelectTrigger className="h-12 border border-brand-red rounded-lg focus:ring-2 focus:ring-brand-red/20 bg-white text-sm font-medium">
-                            <SelectValue placeholder="Select City" />
-                          </SelectTrigger>
-                          <SelectContent className="bg-white border border-gray-200 rounded-lg shadow-lg z-50">
-                            <SelectItem value="all" className="text-sm">All Cities</SelectItem>
-                            <SelectItem value="bangalore" className="text-sm">Bangalore</SelectItem>
-                            <SelectItem value="mumbai" className="text-sm">Mumbai</SelectItem>
-                            <SelectItem value="delhi" className="text-sm">Delhi</SelectItem>
-                            <SelectItem value="pune" className="text-sm">Pune</SelectItem>
-                            <SelectItem value="hyderabad" className="text-sm">Hyderabad</SelectItem>
-                            <SelectItem value="chennai" className="text-sm">Chennai</SelectItem>
-                            <SelectItem value="kolkata" className="text-sm">Kolkata</SelectItem>
-                            <SelectItem value="ahmedabad" className="text-sm">Ahmedabad</SelectItem>
-                            <SelectItem value="jaipur" className="text-sm">Jaipur</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                    </div>
-
                     {/* Selected Location Tags */}
                     {selectedLocations.length > 0 && (
                       <div className="flex flex-wrap gap-2 mb-3">
@@ -314,8 +291,30 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                       </div>
                     )}
 
-                    {/* Search Bar */}
+                    {/* Search Bar with City Selector */}
                     <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+                      {/* City Selector */}
+                      <div className="w-full sm:w-48">
+                        <Select value={selectedCity} onValueChange={setSelectedCity}>
+                          <SelectTrigger className="h-10 sm:h-12 border border-brand-red rounded-lg focus:ring-2 focus:ring-brand-red/20 bg-white text-sm font-medium">
+                            <SelectValue placeholder="Select City" />
+                          </SelectTrigger>
+                          <SelectContent className="bg-white border border-gray-200 rounded-lg shadow-lg z-50">
+                            <SelectItem value="all" className="text-sm">All Cities</SelectItem>
+                            <SelectItem value="bangalore" className="text-sm">Bangalore</SelectItem>
+                            <SelectItem value="mumbai" className="text-sm">Mumbai</SelectItem>
+                            <SelectItem value="delhi" className="text-sm">Delhi</SelectItem>
+                            <SelectItem value="pune" className="text-sm">Pune</SelectItem>
+                            <SelectItem value="hyderabad" className="text-sm">Hyderabad</SelectItem>
+                            <SelectItem value="chennai" className="text-sm">Chennai</SelectItem>
+                            <SelectItem value="kolkata" className="text-sm">Kolkata</SelectItem>
+                            <SelectItem value="ahmedabad" className="text-sm">Ahmedabad</SelectItem>
+                            <SelectItem value="jaipur" className="text-sm">Jaipur</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      
+                      {/* Search Input */}
                       <div className="flex-1 relative">
                          <MapPin className="absolute left-3 top-3 text-brand-red" size={16} />
                          <Input 
@@ -329,6 +328,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                          />
                       </div>
                       
+                      {/* Search Button */}
                       <Button 
                         onClick={handleSearch}
                         disabled={selectedLocations.length === 0 && !searchQuery.trim()}
