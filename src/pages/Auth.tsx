@@ -187,8 +187,9 @@ export const Auth: React.FC = () => {
 
       setResetMessage({ type: 'success', text: "Password reset email sent! Please check your email for password reset instructions." });
       
-      setShowForgotPassword(false);
-      setForgotPasswordEmail('');
+      // Don't close the modal - let user see the success message and choose to go back
+      // setShowForgotPassword(false);
+      // setForgotPasswordEmail('');
     } catch (error: any) {
       setResetMessage({ type: 'error', text: error.message || "Error sending reset email. Please try again." });
     } finally {
@@ -706,12 +707,16 @@ export const Auth: React.FC = () => {
                       {isResetLoading ? 'Sending...' : 'Send Reset Link'}
                     </Button>
                     
-                    <Button 
-                      type="button"
-                      variant="outline"
-                      onClick={() => setShowForgotPassword(false)}
-                      className="w-full h-10 rounded-xl border-gray-200 hover:bg-gray-50"
-                    >
+                     <Button 
+                       type="button"
+                       variant="outline"
+                       onClick={() => {
+                         setShowForgotPassword(false);
+                         setResetMessage({ type: null, text: '' });
+                         setForgotPasswordEmail('');
+                       }}
+                       className="w-full h-10 rounded-xl border-gray-200 hover:bg-gray-50"
+                     >
                       Back to Login
                     </Button>
                   </div>
