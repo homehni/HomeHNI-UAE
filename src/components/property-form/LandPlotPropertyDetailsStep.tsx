@@ -61,8 +61,7 @@ export const LandPlotPropertyDetailsStep: React.FC<LandPlotPropertyDetailsStepPr
   };
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
+    <div className="bg-background p-6">
       <div className="text-left mb-8">
         <h2 className="text-2xl font-semibold text-red-600 mb-2">Land/Plot Details</h2>
       </div>
@@ -275,6 +274,6 @@ export const LandPlotPropertyDetailsStep: React.FC<LandPlotPropertyDetailsStepPr
 
         {/* Navigation Buttons - Removed, using sticky buttons instead */}
         </form>
-    </div>
+      </div>
   );
 };
