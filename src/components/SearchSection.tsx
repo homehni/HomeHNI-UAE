@@ -47,7 +47,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
     });
     
     // Add city parameter if selected
-    if (selectedCity && selectedCity !== 'all') {
+    if (selectedCity) {
       params.set('city', selectedCity);
     }
     
@@ -130,7 +130,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
           }
           
           // Validate location is within selected city
-          if (selectedCity && selectedCity !== 'all' && place?.address_components) {
+          if (selectedCity && place?.address_components) {
             const isValidLocation = place.address_components.some((comp: any) => 
               comp.types.includes('administrative_area_level_2') && 
               comp.long_name.toLowerCase().includes(selectedCity.toLowerCase())
@@ -146,7 +146,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
             }
           }
           
-          if (el && value && (selectedCity && selectedCity !== 'all')) {
+          if (el && value && selectedCity) {
             // Auto-add location if under limit
             if (selectedLocations.length < 3 && !selectedLocations.includes(value)) {
               setSelectedLocations(prev => [...prev, value]);
@@ -156,7 +156,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
               el.value = value;
               setSearchQuery(value);
             }
-          } else if (!selectedCity || selectedCity === 'all') {
+          } else if (!selectedCity) {
             // Clear location if no city selected
             if (el) {
               el.value = '';
@@ -196,7 +196,6 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                   <SelectValue placeholder="Select City" />
                 </SelectTrigger>
                 <SelectContent className="bg-white border border-gray-200 rounded-lg shadow-lg z-50">
-                  <SelectItem value="all" className="text-sm">All Cities</SelectItem>
                   <SelectItem value="bangalore" className="text-sm">Bangalore</SelectItem>
                   <SelectItem value="mumbai" className="text-sm">Mumbai</SelectItem>
                   <SelectItem value="delhi" className="text-sm">Delhi</SelectItem>
@@ -237,11 +236,11 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                 <input 
                   ref={mobileInputRef} 
                   type="text" 
-                  placeholder={selectedCity === 'all' || !selectedCity ? "Select a city first..." : selectedLocations.length >= 3 ? "Max 3 locations selected" : selectedLocations.length > 0 ? `Add location ${selectedLocations.length + 1}/3` : "Search locality..."} 
+                  placeholder={!selectedCity ? "Select a city first..." : selectedLocations.length >= 3 ? "Max 3 locations selected" : selectedLocations.length > 0 ? `Add location ${selectedLocations.length + 1}/3` : "Search locality..."} 
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onKeyPress={handleKeyPress}
-                  disabled={selectedLocations.length >= 3 || (!selectedCity || selectedCity === 'all')}
+                  disabled={selectedLocations.length >= 3 || !selectedCity}
                   className="w-full pl-9 pr-3 py-2.5 bg-gray-50 border border-brand-red rounded-lg text-brand-red placeholder-brand-red/60 focus:outline-none focus:ring-2 focus:ring-brand-red focus:border-transparent text-sm disabled:opacity-50" 
                 />
               </div>
@@ -300,7 +299,6 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                             <SelectValue placeholder="Select City" />
                           </SelectTrigger>
                           <SelectContent className="bg-white border border-gray-200 rounded-lg shadow-lg z-50">
-                            <SelectItem value="all" className="text-sm">All Cities</SelectItem>
                             <SelectItem value="bangalore" className="text-sm">Bangalore</SelectItem>
                             <SelectItem value="mumbai" className="text-sm">Mumbai</SelectItem>
                             <SelectItem value="delhi" className="text-sm">Delhi</SelectItem>
@@ -319,11 +317,11 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                          <MapPin className="absolute left-3 top-3 text-brand-red" size={16} />
                          <Input 
                            ref={inputRef} 
-                           placeholder={selectedCity === 'all' || !selectedCity ? "Select a city first..." : selectedLocations.length >= 3 ? "Max 3 locations selected" : selectedLocations.length > 0 ? `Add location ${selectedLocations.length + 1}/3` : "Search locality..."} 
+                           placeholder={!selectedCity ? "Select a city first..." : selectedLocations.length >= 3 ? "Max 3 locations selected" : selectedLocations.length > 0 ? `Add location ${selectedLocations.length + 1}/3` : "Search locality..."} 
                            value={searchQuery}
                            onChange={(e) => setSearchQuery(e.target.value)}
                            onKeyPress={handleKeyPress}
-                           disabled={selectedLocations.length >= 3 || (!selectedCity || selectedCity === 'all')}
+                           disabled={selectedLocations.length >= 3 || !selectedCity}
                            className="pl-9 h-10 sm:h-12 border-brand-red text-brand-red placeholder-brand-red/60 text-sm disabled:opacity-50" 
                          />
                       </div>
