@@ -9,8 +9,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Chrome, Home, UserPlus, LogIn, Eye, EyeOff, X } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
-
 import Index from './Index';
 
 // Auth component with separate password visibility states
@@ -20,7 +18,6 @@ export const Auth: React.FC = () => {
   const { isAdmin, loading: adminLoading } = useAdminAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  const { toast } = useToast();
   const [activeTab, setActiveTab] = useState(() => {
     const urlParams = new URLSearchParams(location.search);
     const mode = urlParams.get('mode');
@@ -55,6 +52,12 @@ export const Auth: React.FC = () => {
     password: '', 
     confirmPassword: '' 
   });
+
+  // Error and success message states
+  const [signInMessage, setSignInMessage] = useState<{ type: 'error' | 'success' | null; text: string }>({ type: null, text: '' });
+  const [signUpMessage, setSignUpMessage] = useState<{ type: 'error' | 'success' | null; text: string }>({ type: null, text: '' });
+  const [resetMessage, setResetMessage] = useState<{ type: 'error' | 'success' | null; text: string }>({ type: null, text: '' });
+  const [passwordUpdateMessage, setPasswordUpdateMessage] = useState<{ type: 'error' | 'success' | null; text: string }>({ type: null, text: '' });
 
   useEffect(() => {
     // Update password reset mode when location (including hash) changes
@@ -98,6 +101,7 @@ export const Auth: React.FC = () => {
 
   const handleEmailSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
+    setSignInMessage({ type: null, text: '' });
     try {
       await signInWithPassword(signInForm.email, signInForm.password);
     } catch (error: any) {
@@ -111,49 +115,34 @@ export const Auth: React.FC = () => {
             email: signInForm.email,
             options: { emailRedirectTo: `${window.location.origin}/` }
           });
-          toast({ title: 'Email not confirmed', description: 'We re-sent the verification link. Please check your inbox.', });
+          setSignInMessage({ type: 'success', text: 'Email not confirmed. We re-sent the verification link. Please check your inbox.' });
         } catch (_) {
-          toast({ title: 'Email not confirmed', description: 'Please verify your email. We could not resend automatically.', variant: 'destructive' });
+          setSignInMessage({ type: 'error', text: 'Email not confirmed. Please verify your email. We could not resend automatically.' });
         }
       } else {
-        toast({
-          title: 'Sign in failed',
-          description: error.message || 'Please check your credentials and try again.',
-          variant: 'destructive',
-        });
+        setSignInMessage({ type: 'error', text: error.message || 'Please check your credentials and try again.' });
       }
     }
   };
 
   const handleEmailSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
+    setSignUpMessage({ type: null, text: '' });
     
     if (signUpForm.password !== signUpForm.confirmPassword) {
-      toast({
-        title: "Passwords don't match",
-        description: "Please make sure both password fields match.",
-        variant: "destructive",
-      });
+      setSignUpMessage({ type: 'error', text: "Passwords don't match. Please make sure both password fields match." });
       return;
     }
 
     if (signUpForm.password.length < 6) {
-      toast({
-        title: "Password too short",
-        description: "Password must be at least 6 characters long.",
-        variant: "destructive",
-      });
+      setSignUpMessage({ type: 'error', text: "Password must be at least 6 characters long." });
       return;
     }
 
     try {
       await signUpWithPassword(signUpForm.email, signUpForm.password, signUpForm.fullName);
       
-      toast({
-        title: "Check your email",
-        description: "We've sent you a verification link. Please check your email and click the link to complete your registration.",
-        variant: "default",
-      });
+      setSignUpMessage({ type: 'success', text: "Check your email! We've sent you a verification link. Please check your email and click the link to complete your registration." });
       
       // Clear signup form
       setSignUpForm({ fullName: '', email: '', password: '', confirmPassword: '' });
@@ -165,39 +154,28 @@ export const Auth: React.FC = () => {
         // Auto-switch to login tab and pre-fill email
         setSignInForm({ email: signUpForm.email, password: '' });
         setActiveTab('signin');
-        
-        toast({
-          title: "Email already registered",
-          description: "This email is already registered. Please login or reset your password.",
-          variant: "destructive",
-        });
+        setSignInMessage({ type: 'error', text: "This email is already registered. Please login or reset your password." });
         return;
       }
       
       // Generic error handling
-      toast({
-        title: "Sign up failed",
-        description: error.message || "Please try again or contact support.",
-        variant: "destructive",
-      });
+      setSignUpMessage({ type: 'error', text: error.message || "Sign up failed. Please try again or contact support." });
     }
   };
 
   const handleGoogleSignIn = async () => {
+    setSignInMessage({ type: null, text: '' });
     try {
       await signInWithGoogle();
     } catch (error) {
-      toast({
-        title: "Sign in failed",
-        description: "Please try again or contact support.",
-        variant: "destructive",
-      });
+      setSignInMessage({ type: 'error', text: "Google sign in failed. Please try again or contact support." });
     }
   };
 
   const handleForgotPassword = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsResetLoading(true);
+    setResetMessage({ type: null, text: '' });
 
     try {
       const { supabase } = await import('@/integrations/supabase/client');
@@ -207,19 +185,12 @@ export const Auth: React.FC = () => {
 
       if (error) throw error;
 
-      toast({
-        title: "Password reset email sent",
-        description: "Please check your email for password reset instructions.",
-      });
+      setResetMessage({ type: 'success', text: "Password reset email sent! Please check your email for password reset instructions." });
       
       setShowForgotPassword(false);
       setForgotPasswordEmail('');
     } catch (error: any) {
-      toast({
-        title: "Error sending reset email",
-        description: error.message || "Please try again.",
-        variant: "destructive",
-      });
+      setResetMessage({ type: 'error', text: error.message || "Error sending reset email. Please try again." });
     } finally {
       setIsResetLoading(false);
     }
@@ -227,22 +198,15 @@ export const Auth: React.FC = () => {
 
   const handlePasswordUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
+    setPasswordUpdateMessage({ type: null, text: '' });
     
     if (newPassword !== confirmNewPassword) {
-      toast({
-        title: "Passwords don't match",
-        description: "Please make sure both password fields match.",
-        variant: "destructive",
-      });
+      setPasswordUpdateMessage({ type: 'error', text: "Passwords don't match. Please make sure both password fields match." });
       return;
     }
 
     if (newPassword.length < 6) {
-      toast({
-        title: "Password too short",
-        description: "Password must be at least 6 characters long.",
-        variant: "destructive",
-      });
+      setPasswordUpdateMessage({ type: 'error', text: "Password must be at least 6 characters long." });
       return;
     }
 
@@ -256,22 +220,17 @@ export const Auth: React.FC = () => {
 
       if (error) throw error;
 
-      toast({
-        title: "Password updated successfully",
-        description: "You can now login with your new password.",
-      });
+      setPasswordUpdateMessage({ type: 'success', text: "Password updated successfully! You can now login with your new password." });
 
-      // Reset form and redirect to login
-      setNewPassword('');
-      setConfirmNewPassword('');
-      setIsPasswordResetMode(false);
-      navigate('/auth', { replace: true });
+      // Reset form and redirect to login after a brief delay
+      setTimeout(() => {
+        setNewPassword('');
+        setConfirmNewPassword('');
+        setIsPasswordResetMode(false);
+        navigate('/auth', { replace: true });
+      }, 2000);
     } catch (error: any) {
-      toast({
-        title: "Error updating password",
-        description: error.message || "Please try again.",
-        variant: "destructive",
-      });
+      setPasswordUpdateMessage({ type: 'error', text: error.message || "Error updating password. Please try again." });
     } finally {
       setIsUpdatingPassword(false);
     }
@@ -377,15 +336,48 @@ export const Auth: React.FC = () => {
                           {showConfirmNewPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                         </Button>
                       </div>
-                    </div>
+                     </div>
 
-                    <Button 
-                      type="submit" 
-                      disabled={isUpdatingPassword}
-                      className="w-full h-10 rounded-xl bg-gradient-to-r from-brand-red to-brand-red-dark hover:shadow-lg transition-all duration-200"
-                    >
-                      {isUpdatingPassword ? "Updating..." : "Update Password"}
-                    </Button>
+                     {/* Sign In Message Display */}
+                     {signInMessage.type && (
+                       <div className={`p-3 rounded-lg text-sm ${
+                         signInMessage.type === 'error' 
+                           ? 'bg-red-50 text-red-700 border border-red-200' 
+                           : 'bg-green-50 text-green-700 border border-green-200'
+                       }`}>
+                         {signInMessage.text}
+                       </div>
+                     )}
+
+                     {/* Password Reset Message Display */}
+                     {resetMessage.type && (
+                       <div className={`p-3 rounded-lg text-sm ${
+                         resetMessage.type === 'error' 
+                           ? 'bg-red-50 text-red-700 border border-red-200' 
+                           : 'bg-green-50 text-green-700 border border-green-200'
+                       }`}>
+                         {resetMessage.text}
+                       </div>
+                     )}
+
+                     {/* Password Update Message Display */}
+                     {passwordUpdateMessage.type && isPasswordResetMode && (
+                       <div className={`p-3 rounded-lg text-sm ${
+                         passwordUpdateMessage.type === 'error' 
+                           ? 'bg-red-50 text-red-700 border border-red-200' 
+                           : 'bg-green-50 text-green-700 border border-green-200'
+                       }`}>
+                         {passwordUpdateMessage.text}
+                       </div>
+                     )}
+
+                     <Button 
+                       type="submit" 
+                       disabled={isUpdatingPassword}
+                       className="w-full h-10 rounded-xl bg-gradient-to-r from-brand-red to-brand-red-dark hover:shadow-lg transition-all duration-200"
+                     >
+                       {isUpdatingPassword ? "Updating..." : "Update Password"}
+                     </Button>
                   </form>
                   
                   <div className="text-center">
@@ -455,9 +447,20 @@ export const Auth: React.FC = () => {
                               {showSignInPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                             </Button>
                           </div>
-                        </div>
+                         </div>
 
-                        <Button type="submit" className="w-full h-10 rounded-xl bg-gradient-to-r from-brand-red to-brand-red-dark hover:shadow-lg transition-all duration-200">
+                         {/* Sign In Message Display */}
+                         {signInMessage.type && (
+                           <div className={`p-3 rounded-lg text-sm ${
+                             signInMessage.type === 'error' 
+                               ? 'bg-red-50 text-red-700 border border-red-200' 
+                               : 'bg-green-50 text-green-700 border border-green-200'
+                           }`}>
+                             {signInMessage.text}
+                           </div>
+                         )}
+
+                         <Button type="submit" className="w-full h-10 rounded-xl bg-gradient-to-r from-brand-red to-brand-red-dark hover:shadow-lg transition-all duration-200">
                           Login
                         </Button>
                       </form>
@@ -576,9 +579,20 @@ export const Auth: React.FC = () => {
                               {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                             </Button>
                           </div>
-                        </div>
+                         </div>
 
-                        <Button type="submit" className="w-full h-9 rounded-xl bg-gradient-to-r from-brand-red to-brand-red-dark hover:shadow-lg transition-all duration-200 mt-3">
+                         {/* Sign Up Message Display */}
+                         {signUpMessage.type && (
+                           <div className={`p-3 rounded-lg text-sm ${
+                             signUpMessage.type === 'error' 
+                               ? 'bg-red-50 text-red-700 border border-red-200' 
+                               : 'bg-green-50 text-green-700 border border-green-200'
+                           }`}>
+                             {signUpMessage.text}
+                           </div>
+                         )}
+
+                         <Button type="submit" className="w-full h-9 rounded-xl bg-gradient-to-r from-brand-red to-brand-red-dark hover:shadow-lg transition-all duration-200 mt-3">
                           Create Account
                         </Button>
                       </form>

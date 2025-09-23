@@ -11,6 +11,7 @@ const AdminAuth = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [message, setMessage] = useState<{ type: 'error' | 'success' | null; text: string }>({ type: null, text: '' });
   
   const { user, isAdmin, signIn } = useAuth();
 
@@ -27,10 +28,14 @@ const AdminAuth = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setMessage({ type: null, text: '' });
 
     const { error } = await signIn(email, password);
     
-    if (!error) {
+    if (error) {
+      setMessage({ type: 'error', text: error.message || 'Authentication failed. Please check your credentials.' });
+    } else {
+      setMessage({ type: 'success', text: 'Signed in successfully! Redirecting...' });
       // Navigation will be handled by the useAuth hook and redirects above
     }
     
@@ -79,7 +84,18 @@ const AdminAuth = () => {
               />
             </div>
             
-            <Button 
+            {/* Message Display */}
+            {message.type && (
+              <div className={`mb-4 p-3 rounded-lg text-sm ${
+                message.type === 'error' 
+                  ? 'bg-red-50 text-red-700 border border-red-200' 
+                  : 'bg-green-50 text-green-700 border border-green-200'
+              }`}>
+                {message.text}
+              </div>
+            )}
+            
+            <Button
               type="submit" 
               className="w-full bg-brand-red hover:bg-brand-maroon-dark"
               disabled={isSubmitting}

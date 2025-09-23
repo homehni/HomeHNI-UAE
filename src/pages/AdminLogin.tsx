@@ -7,12 +7,13 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Loader2, Shield, Eye, EyeOff } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
+
 export default function AdminLogin() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [message, setMessage] = useState<{ type: 'error' | 'success' | null; text: string }>({ type: null, text: '' });
   const {
     signInWithPassword,
     user
@@ -21,9 +22,6 @@ export default function AdminLogin() {
     isAdmin
   } = useAdminAuth();
   const navigate = useNavigate();
-  const {
-    toast
-  } = useToast();
   useEffect(() => {
     if (user && isAdmin) {
       navigate('/admin');
@@ -31,27 +29,17 @@ export default function AdminLogin() {
   }, [user, isAdmin, navigate]);
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setMessage({ type: null, text: '' });
     if (!email || !password) {
-      toast({
-        title: "Error",
-        description: "Please enter both email and password",
-        variant: "destructive"
-      });
+      setMessage({ type: 'error', text: 'Please enter both email and password' });
       return;
     }
     setIsLoading(true);
     try {
       await signInWithPassword(email, password);
-      toast({
-        title: "Success",
-        description: "Signed in successfully"
-      });
+      setMessage({ type: 'success', text: 'Signed in successfully' });
     } catch (error: any) {
-      toast({
-        title: "Authentication Failed",
-        description: error.message || "Invalid email or password",
-        variant: "destructive"
-      });
+      setMessage({ type: 'error', text: error.message || 'Invalid email or password' });
     } finally {
       setIsLoading(false);
     }
@@ -82,6 +70,18 @@ export default function AdminLogin() {
                 </button>
               </div>
             </div>
+            
+            {/* Message Display */}
+            {message.type && (
+              <div className={`p-3 rounded-lg text-sm ${
+                message.type === 'error' 
+                  ? 'bg-red-50 text-red-700 border border-red-200' 
+                  : 'bg-green-50 text-green-700 border border-green-200'
+              }`}>
+                {message.text}
+              </div>
+            )}
+            
             <Button type="submit" className="w-full" disabled={isLoading}>
               {isLoading ? <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
