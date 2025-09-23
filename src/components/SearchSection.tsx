@@ -165,12 +165,12 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                 {selectedLocations.map((location, index) => (
                   <div
                     key={index}
-                    className="inline-flex items-center gap-1 bg-teal-500 text-white px-3 py-1 rounded-full text-sm font-medium"
+                    className="inline-flex items-center gap-1 bg-brand-red text-white px-3 py-1 rounded-full text-sm font-medium"
                   >
                     {location}
                     <button
                       onClick={() => removeLocation(location)}
-                      className="ml-1 hover:bg-teal-600 rounded-full p-0.5"
+                      className="ml-1 hover:bg-brand-red-dark rounded-full p-0.5"
                     >
                       <X size={12} />
                     </button>
@@ -226,12 +226,12 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                         {selectedLocations.map((location, index) => (
                           <div
                             key={index}
-                            className="inline-flex items-center gap-1 bg-teal-500 text-white px-3 py-1.5 rounded-full text-sm font-medium"
+                            className="inline-flex items-center gap-1 bg-brand-red text-white px-3 py-1.5 rounded-full text-sm font-medium"
                           >
                             {location}
                             <button
                               onClick={() => removeLocation(location)}
-                              className="ml-1 hover:bg-teal-600 rounded-full p-0.5"
+                              className="ml-1 hover:bg-brand-red-dark rounded-full p-0.5"
                             >
                               <X size={14} />
                             </button>
