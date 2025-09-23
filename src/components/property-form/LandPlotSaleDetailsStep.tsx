@@ -8,6 +8,7 @@ import { PriceInput } from '@/components/ui/price-input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { LandPlotSaleDetails } from '@/types/landPlotProperty';
 import { CalendarIcon } from 'lucide-react';
 import { format, addMonths } from 'date-fns';
@@ -22,6 +23,8 @@ const saleDetailsSchema = z.object({
   availableFrom: z.date().optional(),
   currentlyUnderLoan: z.boolean().optional(),
   priceNegotiable: z.boolean().optional(),
+  ownershipType: z.enum(['freehold', 'leasehold', 'power_of_attorney']).optional(),
+  approvedBy: z.string().optional(),
   description: z.string().optional(),
 });
 
@@ -153,6 +156,53 @@ export const LandPlotSaleDetailsStep: React.FC<LandPlotSaleDetailsStepProps> = (
                 </Label>
               </div>
             </div>
+          </div>
+
+          {/* Ownership Section */}
+          <div className="space-y-4">
+            <Label className="text-sm font-medium text-gray-700">
+              Ownership
+            </Label>
+            <RadioGroup
+              value={watch('ownershipType')}
+              onValueChange={(value) => setValue('ownershipType', value as any)}
+              className="flex flex-row space-x-6"
+            >
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="freehold" id="freehold" />
+                <Label htmlFor="freehold" className="text-sm text-gray-700 cursor-pointer">
+                  Freehold
+                </Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="leasehold" id="leasehold" />
+                <Label htmlFor="leasehold" className="text-sm text-gray-700 cursor-pointer">
+                  Leasehold
+                </Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="power_of_attorney" id="power_of_attorney" />
+                <Label htmlFor="power_of_attorney" className="text-sm text-gray-700 cursor-pointer">
+                  Power of Attorney
+                </Label>
+              </div>
+            </RadioGroup>
+          </div>
+
+          {/* Authority Approval */}
+          <div className="space-y-2">
+            <Label htmlFor="approvedBy" className="text-sm font-medium text-gray-700">
+              Which authority the property is approved by ?
+            </Label>
+            <Input
+              id="approvedBy"
+              {...register('approvedBy')}
+              placeholder="Enter the name of the authority"
+              className="h-12"
+            />
+            {errors.approvedBy && (
+              <p className="text-red-500 text-sm">{errors.approvedBy.message}</p>
+            )}
           </div>
 
           {/* Description */}
