@@ -51,10 +51,11 @@ export const ScheduleStep: React.FC<ScheduleStepProps> = ({
     }
   };
   const watchAvailableAllDay = form.watch('availableAllDay');
-  return <div>
+  return (
+    <div className="bg-background p-6">
       {/* Main Title */}
-      <div className="mb-8 text-left">
-        <h1 className="text-2xl text-primary mb-2 font-semibold">
+      <div className="text-left mb-8">
+        <h1 className="text-2xl font-semibold text-red-600 mb-2">
           Make house visits hassle-free by providing us your availability
         </h1>
       </div>
@@ -227,5 +228,6 @@ export const ScheduleStep: React.FC<ScheduleStepProps> = ({
 
         </form>
       </Form>
-    </div>;
+    </div>
+  );
 };
