@@ -104,18 +104,19 @@ export const GalleryStep: React.FC<GalleryStepProps> = ({
       onSubmit();
     }
   };
-  return <div className="bg-background p-8 pb-20">
-          <Form {...form}>
-            <form id="gallery-form" onSubmit={form.handleSubmit(handleFormSubmit)} className="space-y-8">
-              <FormField control={form.control} name="images" render={({
-          field
-        }) => <FormItem>
-                    <FormControl>
-                      <div className="space-y-6">
-                        {/* Upload Images Title */}
-                        <div className="text-left">
-                          <h2 className="text-2xl text-primary mb-6 font-semibold">Upload Property Images by Category</h2>
-                        </div>
+  return (
+    <div className="bg-background p-6">
+      <Form {...form}>
+        <form id="gallery-form" onSubmit={form.handleSubmit(handleFormSubmit)} className="space-y-8">
+          <FormField control={form.control} name="images" render={({
+      field
+    }) => <FormItem>
+                <FormControl>
+                  <div className="space-y-6">
+                    {/* Upload Images Title */}
+                    <div className="text-left mb-8">
+                      <h2 className="text-2xl font-semibold text-red-600 mb-2">Upload Property Images by Category</h2>
+                    </div>
                         
                         {/* Categorized Image Upload Component */}
                         <CategorizedImageUpload images={field.value as any} onImagesChange={field.onChange} maxImagesPerCategory={5} />
@@ -139,5 +140,6 @@ export const GalleryStep: React.FC<GalleryStepProps> = ({
           
           {/* Hidden submit button for sticky bar */}
           <button type="submit" form="gallery-form" className="hidden" />
-        </div>;
+        </div>
+  );
 };
