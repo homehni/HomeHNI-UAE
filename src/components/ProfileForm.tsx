@@ -12,6 +12,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useProfile } from '@/hooks/useProfile';
 import { Shield, MapPin, Bell, MessageCircle, Check } from 'lucide-react';
 import { PasswordChangeCard } from '@/components/PasswordChangeCard';
+import { updateUserProfile, updateUserRole, getCurrentUserProfile } from '@/services/profileService';
 
 interface ProfileFormData {
   full_name: string;
@@ -28,6 +29,8 @@ export const ProfileForm: React.FC = () => {
   const { user } = useAuth();
   const { profile, updating, updateProfile, changeRole } = useProfile();
   const [isChangingRole, setIsChangingRole] = useState(false);
+  const [profileMessage, setProfileMessage] = useState<{ type: 'error' | 'success' | null; text: string }>({ type: null, text: '' });
+  const [roleMessage, setRoleMessage] = useState<{ type: 'error' | 'success' | null; text: string }>({ type: null, text: '' });
 
   const { register, handleSubmit, setValue, watch, reset, formState: { errors } } = useForm<ProfileFormData>();
 
@@ -50,24 +53,44 @@ export const ProfileForm: React.FC = () => {
   const watchedValues = watch();
 
   const onSubmit = async (data: ProfileFormData) => {
-    await updateProfile({
-      full_name: data.full_name,
-      phone: data.phone,
-      bio: data.bio,
-      location: {
-        city: data.city,
-        state: data.state,
-        country: data.country,
-      },
-      whatsapp_opted_in: data.whatsapp_opted_in,
-      email_notifications: data.email_notifications,
-    });
+    setProfileMessage({ type: null, text: '' });
+    
+    try {
+      await updateUserProfile({
+        full_name: data.full_name,
+        phone: data.phone,
+        bio: data.bio,
+        location: {
+          city: data.city,
+          state: data.state,
+          country: data.country,
+        },
+        whatsapp_opted_in: data.whatsapp_opted_in,
+        email_notifications: data.email_notifications,
+      });
+      
+      setProfileMessage({ type: 'success', text: 'Profile updated successfully!' });
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      setProfileMessage({ type: 'error', text: 'Failed to update profile. Please try again.' });
+    }
   };
 
   const handleRoleChange = async (newRole: 'buyer' | 'seller') => {
+    if (!user || !profile) return;
+    
     setIsChangingRole(true);
-    await changeRole(newRole);
-    setIsChangingRole(false);
+    setRoleMessage({ type: null, text: '' });
+    
+    try {
+      await updateUserRole(user.id, newRole);
+      setRoleMessage({ type: 'success', text: `Role updated to ${newRole === 'buyer' ? 'Property Seeker' : 'Property Owner'}!` });
+    } catch (error) {
+      console.error('Error updating role:', error);
+      setRoleMessage({ type: 'error', text: 'Failed to update role. Please try again.' });
+    } finally {
+      setIsChangingRole(false);
+    }
   };
 
   if (!profile) {
@@ -101,6 +124,17 @@ export const ProfileForm: React.FC = () => {
               Property Owner
             </Button>
           </div>
+          
+          {/* Role Change Message Display */}
+          {roleMessage.type && (
+            <div className={`mt-4 p-3 rounded-lg text-sm ${
+              roleMessage.type === 'error' 
+                ? 'bg-red-50 text-red-700 border border-red-200' 
+                : 'bg-green-50 text-green-700 border border-green-200'
+            }`}>
+              {roleMessage.text}
+            </div>
+          )}
         </CardContent>
       </Card>
 
@@ -175,6 +209,17 @@ export const ProfileForm: React.FC = () => {
                 onCheckedChange={(checked) => setValue('whatsapp_opted_in', checked)}
               />
             </div>
+
+            {/* Profile Update Message Display */}
+            {profileMessage.type && (
+              <div className={`p-3 rounded-lg text-sm ${
+                profileMessage.type === 'error' 
+                  ? 'bg-red-50 text-red-700 border border-red-200' 
+                  : 'bg-green-50 text-green-700 border border-green-200'
+              }`}>
+                {profileMessage.text}
+              </div>
+            )}
 
             {/* Save Profile Button */}
             <div className="flex justify-end pt-4">
