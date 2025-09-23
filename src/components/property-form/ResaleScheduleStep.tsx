@@ -7,18 +7,15 @@ import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Clock, Calendar, Eye, CheckCircle, PaintBucket, Sparkles } from 'lucide-react';
-
 const resaleScheduleSchema = z.object({
   paintingService: z.enum(['book', 'decline']).optional(),
   cleaningService: z.enum(['book', 'decline']).optional(),
   availability: z.enum(['everyday', 'weekday', 'weekend']).optional(),
   startTime: z.string().optional(),
   endTime: z.string().optional(),
-  availableAllDay: z.boolean().optional(),
+  availableAllDay: z.boolean().optional()
 });
-
 type ResaleScheduleData = z.infer<typeof resaleScheduleSchema>;
-
 interface ResaleScheduleStepProps {
   initialData?: Partial<ResaleScheduleData>;
   onNext: (data: ResaleScheduleData) => void;
@@ -26,7 +23,6 @@ interface ResaleScheduleStepProps {
   onSubmit?: (data: ResaleScheduleData) => void;
   formId?: string;
 }
-
 export const ResaleScheduleStep: React.FC<ResaleScheduleStepProps> = ({
   initialData = {},
   onNext,
@@ -36,7 +32,6 @@ export const ResaleScheduleStep: React.FC<ResaleScheduleStepProps> = ({
 }) => {
   const [paintingResponse, setPaintingResponse] = useState<'book' | 'decline' | null>(null);
   const [cleaningResponse, setCleaningResponse] = useState<'book' | 'decline' | null>(null);
-
   const form = useForm<ResaleScheduleData>({
     resolver: zodResolver(resaleScheduleSchema),
     defaultValues: {
@@ -45,26 +40,22 @@ export const ResaleScheduleStep: React.FC<ResaleScheduleStepProps> = ({
       availability: initialData.availability || 'everyday',
       startTime: initialData.startTime || '09:00',
       endTime: initialData.endTime || '18:00',
-      availableAllDay: initialData.availableAllDay || false,
-    },
+      availableAllDay: initialData.availableAllDay || false
+    }
   });
-
-const handleFormSubmit = (data: ResaleScheduleData) => {
-  console.log('[ResaleScheduleStep] Submit clicked with data:', data);
-  if (onSubmit) {
-    onSubmit(data);
-  } else {
-    onNext(data);
-  }
-};
-
+  const handleFormSubmit = (data: ResaleScheduleData) => {
+    console.log('[ResaleScheduleStep] Submit clicked with data:', data);
+    if (onSubmit) {
+      onSubmit(data);
+    } else {
+      onNext(data);
+    }
+  };
   const watchAvailableAllDay = form.watch('availableAllDay');
-
-  return (
-    <div className="max-w-4xl">
+  return <div className="max-w-4xl">
       <div className="bg-background rounded-lg border p-8">
         <div className="text-left mb-8">
-          <h2 className="text-2xl text-primary mb-6 font-semibold">
+          <h2 className="text-2xl mb-6 font-semibold text-red-600">
             Set your availability for property visits
           </h2>
         </div>
@@ -89,50 +80,30 @@ const handleFormSubmit = (data: ResaleScheduleData) => {
                   <p className="text-gray-600 mb-4 text-sm">
                     Get professional painting services at the best prices
                   </p>
-                  <FormField
-                    control={form.control}
-                    name="paintingService"
-                    render={({ field }) => (
-                      <div className="space-y-3">
-                        {paintingResponse === 'decline' ? (
-                          <div className="flex items-center gap-2 p-3 bg-green-50 border border-green-200 rounded-lg">
+                  <FormField control={form.control} name="paintingService" render={({
+                  field
+                }) => <div className="space-y-3">
+                        {paintingResponse === 'decline' ? <div className="flex items-center gap-2 p-3 bg-green-50 border border-green-200 rounded-lg">
                             <CheckCircle className="w-4 h-4 text-green-600" />
                             <span className="text-sm text-green-700 font-medium">
                               Your response has been captured
                             </span>
-                          </div>
-                        ) : (
-                          <div className="flex gap-3">
-                            <Button
-                              type="button"
-                              size="sm"
-                              className="bg-orange-500 hover:bg-orange-600 text-white"
-                              variant={field.value === 'book' ? 'default' : 'outline'}
-                              onClick={() => {
-                                field.onChange('book');
-                                setPaintingResponse('book');
-                                window.open('/painting-cleaning', '_blank');
-                              }}
-                            >
+                          </div> : <div className="flex gap-3">
+                            <Button type="button" size="sm" className="bg-orange-500 hover:bg-orange-600 text-white" variant={field.value === 'book' ? 'default' : 'outline'} onClick={() => {
+                      field.onChange('book');
+                      setPaintingResponse('book');
+                      window.open('/painting-cleaning', '_blank');
+                    }}>
                               Book Now
                             </Button>
-                            <Button
-                              type="button"
-                              size="sm"
-                              variant="outline"
-                              className="border-gray-300 text-gray-700 hover:bg-gray-50"
-                              onClick={() => {
-                                field.onChange('decline');
-                                setPaintingResponse('decline');
-                              }}
-                            >
+                            <Button type="button" size="sm" variant="outline" className="border-gray-300 text-gray-700 hover:bg-gray-50" onClick={() => {
+                      field.onChange('decline');
+                      setPaintingResponse('decline');
+                    }}>
                               I Don't Want
                             </Button>
-                          </div>
-                        )}
-                      </div>
-                    )}
-                  />
+                          </div>}
+                      </div>} />
                 </div>
                 <div className="absolute right-4 top-4 w-16 h-16 bg-gradient-to-br from-orange-300 to-yellow-400 rounded-full opacity-40"></div>
                 <div className="absolute right-8 bottom-4 w-12 h-12 bg-gradient-to-br from-yellow-300 to-orange-300 rounded-full opacity-60"></div>
@@ -154,50 +125,30 @@ const handleFormSubmit = (data: ResaleScheduleData) => {
                   <p className="text-gray-600 mb-4 text-sm">
                     Trusted by 50,000+ owners
                   </p>
-                  <FormField
-                    control={form.control}
-                    name="cleaningService"
-                    render={({ field }) => (
-                      <div className="space-y-3">
-                        {cleaningResponse === 'decline' ? (
-                          <div className="flex items-center gap-2 p-3 bg-green-50 border border-green-200 rounded-lg">
+                  <FormField control={form.control} name="cleaningService" render={({
+                  field
+                }) => <div className="space-y-3">
+                        {cleaningResponse === 'decline' ? <div className="flex items-center gap-2 p-3 bg-green-50 border border-green-200 rounded-lg">
                             <CheckCircle className="w-4 h-4 text-green-600" />
                             <span className="text-sm text-green-700 font-medium">
                               Your response has been captured
                             </span>
-                          </div>
-                        ) : (
-                          <div className="flex gap-3">
-                            <Button
-                              type="button"
-                              size="sm"
-                              className="bg-teal-500 hover:bg-teal-600 text-white"
-                              variant={field.value === 'book' ? 'default' : 'outline'}
-                              onClick={() => {
-                                field.onChange('book');
-                                setCleaningResponse('book');
-                                window.open('/painting-cleaning', '_blank');
-                              }}
-                            >
+                          </div> : <div className="flex gap-3">
+                            <Button type="button" size="sm" className="bg-teal-500 hover:bg-teal-600 text-white" variant={field.value === 'book' ? 'default' : 'outline'} onClick={() => {
+                      field.onChange('book');
+                      setCleaningResponse('book');
+                      window.open('/painting-cleaning', '_blank');
+                    }}>
                               Book Now
                             </Button>
-                            <Button
-                              type="button"
-                              size="sm"
-                              variant="outline"
-                              className="border-gray-300 text-gray-700 hover:bg-gray-50"
-                              onClick={() => {
-                                field.onChange('decline');
-                                setCleaningResponse('decline');
-                              }}
-                            >
+                            <Button type="button" size="sm" variant="outline" className="border-gray-300 text-gray-700 hover:bg-gray-50" onClick={() => {
+                      field.onChange('decline');
+                      setCleaningResponse('decline');
+                    }}>
                               I Don't Want
                             </Button>
-                          </div>
-                        )}
-                      </div>
-                    )}
-                  />
+                          </div>}
+                      </div>} />
                 </div>
                 <div className="absolute right-4 top-4 w-16 h-16 bg-gradient-to-br from-teal-300 to-cyan-400 rounded-full opacity-40"></div>
                 <div className="absolute right-8 bottom-4 w-12 h-12 bg-gradient-to-br from-cyan-300 to-teal-300 rounded-full opacity-60"></div>
@@ -208,120 +159,76 @@ const handleFormSubmit = (data: ResaleScheduleData) => {
             <div className="space-y-6">
               <div>
                 <h3 className="text-lg font-semibold mb-4">When are you available for property visits?</h3>
-                <FormField
-                  control={form.control}
-                  name="availability"
-                  render={({ field }) => (
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                      <Button
-                        type="button"
-                        variant={field.value === 'everyday' ? 'default' : 'outline'}
-                        className="h-16 flex flex-col"
-                        onClick={() => field.onChange('everyday')}
-                      >
+                <FormField control={form.control} name="availability" render={({
+                field
+              }) => <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <Button type="button" variant={field.value === 'everyday' ? 'default' : 'outline'} className="h-16 flex flex-col" onClick={() => field.onChange('everyday')}>
                         <span className="font-semibold">Everyday</span>
                         <span className="text-xs text-muted-foreground">Mon-Sun</span>
                       </Button>
-                      <Button
-                        type="button"
-                        variant={field.value === 'weekday' ? 'default' : 'outline'}
-                        className="h-16 flex flex-col"
-                        onClick={() => field.onChange('weekday')}
-                      >
+                      <Button type="button" variant={field.value === 'weekday' ? 'default' : 'outline'} className="h-16 flex flex-col" onClick={() => field.onChange('weekday')}>
                         <span className="font-semibold">Weekdays Only</span>
                         <span className="text-xs text-muted-foreground">Mon-Fri</span>
                       </Button>
-                      <Button
-                        type="button"
-                        variant={field.value === 'weekend' ? 'default' : 'outline'}
-                        className="h-16 flex flex-col"
-                        onClick={() => field.onChange('weekend')}
-                      >
+                      <Button type="button" variant={field.value === 'weekend' ? 'default' : 'outline'} className="h-16 flex flex-col" onClick={() => field.onChange('weekend')}>
                         <span className="font-semibold">Weekends Only</span>
                         <span className="text-xs text-muted-foreground">Sat-Sun</span>
                       </Button>
-                    </div>
-                  )}
-                />
+                    </div>} />
               </div>
 
               {/* Time Schedule */}
               <div>
                 <h3 className="text-lg font-semibold mb-4">Preferred time for visits</h3>
                 
-                <FormField
-                  control={form.control}
-                  name="availableAllDay"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-row items-start space-x-3 space-y-0 mb-4">
+                <FormField control={form.control} name="availableAllDay" render={({
+                field
+              }) => <FormItem className="flex flex-row items-start space-x-3 space-y-0 mb-4">
                       <FormControl>
-                        <Checkbox
-                          checked={field.value}
-                          onCheckedChange={(checked) => {
-                            field.onChange(checked);
-                            if (checked) {
-                              form.setValue('startTime', '10:00');
-                              form.setValue('endTime', '19:00');
-                            }
-                          }}
-                        />
+                        <Checkbox checked={field.value} onCheckedChange={checked => {
+                    field.onChange(checked);
+                    if (checked) {
+                      form.setValue('startTime', '10:00');
+                      form.setValue('endTime', '19:00');
+                    }
+                  }} />
                       </FormControl>
                       <FormLabel className="text-sm font-medium cursor-pointer">
                         Available All Day (10 AM to 7 PM)
                       </FormLabel>
-                    </FormItem>
-                  )}
-                />
+                    </FormItem>} />
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <FormField
-                    control={form.control}
-                    name="startTime"
-                    render={({ field }) => (
-                      <FormItem>
+                  <FormField control={form.control} name="startTime" render={({
+                  field
+                }) => <FormItem>
                         <FormLabel className="text-sm font-medium">Start Time</FormLabel>
                         <FormControl>
                           <div className="relative">
                             <Clock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                            <Input
-                              type="time"
-                              className="pl-10 h-11"
-                              disabled={watchAvailableAllDay}
-                              value={watchAvailableAllDay ? '10:00' : field.value}
-                              onChange={!watchAvailableAllDay ? field.onChange : undefined}
-                            />
+                            <Input type="time" className="pl-10 h-11" disabled={watchAvailableAllDay} value={watchAvailableAllDay ? '10:00' : field.value} onChange={!watchAvailableAllDay ? field.onChange : undefined} />
                           </div>
                         </FormControl>
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="endTime"
-                    render={({ field }) => (
-                      <FormItem>
+                      </FormItem>} />
+                  <FormField control={form.control} name="endTime" render={({
+                  field
+                }) => <FormItem>
                         <FormLabel className="text-sm font-medium">End Time</FormLabel>
                         <FormControl>
                           <div className="relative">
                             <Clock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                            <Input
-                              type="time"
-                              className="pl-10 h-11"
-                              disabled={watchAvailableAllDay}
-                              value={watchAvailableAllDay ? '19:00' : field.value}
-                              onChange={!watchAvailableAllDay ? field.onChange : undefined}
-                            />
+                            <Input type="time" className="pl-10 h-11" disabled={watchAvailableAllDay} value={watchAvailableAllDay ? '19:00' : field.value} onChange={!watchAvailableAllDay ? field.onChange : undefined} />
                           </div>
                         </FormControl>
-                      </FormItem>
-                    )}
-                  />
+                      </FormItem>} />
                 </div>
               </div>
             </div>
 
             {/* Action Buttons */}
-            <div className="flex justify-between pt-8" style={{ visibility: 'hidden' }}>
+            <div className="flex justify-between pt-8" style={{
+            visibility: 'hidden'
+          }}>
               <Button type="button" variant="outline" onClick={onBack} className="bg-muted text-muted-foreground">
                 Back
               </Button>
@@ -332,6 +239,5 @@ const handleFormSubmit = (data: ResaleScheduleData) => {
           </form>
         </Form>
       </div>
-    </div>
-  );
+    </div>;
 };
