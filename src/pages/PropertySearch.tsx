@@ -254,7 +254,14 @@ const PropertySearch = () => {
         if (locationValue) {
           // Normalize the location for better search matching
           const normalizedLocation = normalizeLocation(locationValue);
-          updateFilter('location', normalizedLocation);
+          
+          // Auto-add location if under limit
+          if (filters.locations.length < 3 && !filters.locations.includes(normalizedLocation)) {
+            updateFilter('locations', [...filters.locations, normalizedLocation]);
+            updateFilter('location', '');
+          } else {
+            updateFilter('location', normalizedLocation);
+          }
         }
       });
     };
@@ -295,14 +302,14 @@ const PropertySearch = () => {
                 >
                   {/* Location Chips */}
                   {filters.locations.map((location, index) => (
-                    <div key={index} className="flex items-center gap-1 bg-gray-200 text-gray-800 px-2 py-1 rounded-full text-sm">
+                    <div key={index} className="flex items-center gap-1 bg-teal-500 text-white px-3 py-1.5 rounded-full text-sm font-medium">
                       <span className="truncate max-w-32">{location}</span>
                       <button
                         onClick={() => {
                           const newLocations = filters.locations.filter((_, i) => i !== index);
                           updateFilter('locations', newLocations);
                         }}
-                        className="hover:bg-gray-300 rounded-full p-0.5"
+                        className="ml-1 hover:bg-teal-600 rounded-full p-0.5"
                       >
                         <X size={12} />
                       </button>
@@ -340,8 +347,9 @@ const PropertySearch = () => {
                       // Ensure input is always focused and ready for typing
                       e.target.select();
                     }}
-                    placeholder={filters.locations.length === 0 ? "Enter location or area name..." : "Add more..."}
+                    placeholder={filters.locations.length === 0 ? "Enter location or area name..." : filters.locations.length >= 3 ? "Max 3 locations selected" : "Add more..."}
                     className="flex-1 min-w-32 outline-none bg-transparent text-sm"
+                    disabled={filters.locations.length >= 3}
                     autoFocus={filters.locations.length < 3}
                   />
                   

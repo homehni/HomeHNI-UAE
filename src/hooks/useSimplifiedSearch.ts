@@ -54,17 +54,25 @@ export const useSimplifiedSearch = () => {
     }
   };
 
-  const [filters, setFilters] = useState<SearchFilters>({
-    propertyType: searchParams.get('propertyType') ? [searchParams.get('propertyType')!] : [],
-    bhkType: [],
-    budget: getBudgetRange(searchParams.get('type') || 'buy'),
-    locality: [],
-    furnished: [],
-    availability: [],
-    construction: [],
-    location: searchParams.get('location') || '',
-    locations: [], // Initialize empty array for multiple locations
-    sortBy: 'relevance'
+  const [filters, setFilters] = useState<SearchFilters>(() => {
+    // Parse locations from URL parameter (comma-separated)
+    const locationsParam = searchParams.get('locations');
+    const parsedLocations = locationsParam ? 
+      locationsParam.split(',').map(loc => decodeURIComponent(loc.trim())).filter(Boolean) : 
+      [];
+    
+    return {
+      propertyType: searchParams.get('propertyType') ? [searchParams.get('propertyType')!] : [],
+      bhkType: [],
+      budget: getBudgetRange(searchParams.get('type') || 'buy'),
+      locality: [],
+      furnished: [],
+      availability: [],
+      construction: [],
+      location: searchParams.get('location') || '',
+      locations: parsedLocations, // Initialize from URL parameter
+      sortBy: 'relevance'
+    };
   });
 
   const [activeTab, setActiveTab] = useState(searchParams.get('type') || 'buy');
