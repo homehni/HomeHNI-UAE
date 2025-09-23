@@ -173,6 +173,7 @@ export const Dashboard: React.FC = () => {
   const [originalProfilePhone, setOriginalProfilePhone] = useState('');
   const [whatsappOptIn, setWhatsappOptIn] = useState(false);
   const [isSavingProfile, setIsSavingProfile] = useState(false);
+  const [profileSaveMessage, setProfileSaveMessage] = useState<{ type: 'error' | 'success' | null; text: string }>({ type: null, text: '' });
   const [isUpdatingName, setIsUpdatingName] = useState(false);
   const [isUpdatingPhone, setIsUpdatingPhone] = useState(false);
 
@@ -880,6 +881,7 @@ export const Dashboard: React.FC = () => {
     if (!user) return;
 
     setIsSavingProfile(true);
+    setProfileSaveMessage({ type: null, text: '' });
     try {
       const newName = profileName.trim();
       const newPhone = profilePhone.trim();
@@ -921,14 +923,10 @@ export const Dashboard: React.FC = () => {
       setOriginalProfileName(newName);
       setOriginalProfilePhone(newPhone);
 
-      toast({ title: 'Profile saved', description: 'Your profile has been updated.' });
+      setProfileSaveMessage({ type: 'success', text: 'Your profile has been updated.' });
     } catch (error: any) {
       console.error('Error saving profile:', error);
-      toast({
-        title: 'Error',
-        description: `Failed to save profile: ${error.message || 'Please try again.'}`,
-        variant: 'destructive',
-      });
+      setProfileSaveMessage({ type: 'error', text: `Failed to save profile: ${error.message || 'Please try again.'}` });
     } finally {
       setIsSavingProfile(false);
     }
@@ -1651,6 +1649,17 @@ export const Dashboard: React.FC = () => {
                   </div>
                   <Switch checked={whatsappOptIn} onCheckedChange={setWhatsappOptIn} />
                 </div>
+
+                {/* Inline message */}
+                {profileSaveMessage.type && (
+                  <div className={`mt-2 p-3 rounded-lg text-sm ${
+                    profileSaveMessage.type === 'error'
+                      ? 'bg-red-50 text-red-700 border border-red-200'
+                      : 'bg-green-50 text-green-700 border border-green-200'
+                  }`}>
+                    {profileSaveMessage.text}
+                  </div>
+                )}
 
                 {/* Save button */}
                 <div className="flex justify-end pt-2">
