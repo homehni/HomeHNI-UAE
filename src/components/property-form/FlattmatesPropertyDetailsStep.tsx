@@ -92,13 +92,12 @@ export function FlattmatesPropertyDetailsStep({
   };
 
   return (
-    <div className="max-w-2xl mx-auto">
+    <div className="bg-background p-6">
       <div className="text-left mb-8">
         <h2 className="text-2xl font-semibold text-red-600 mb-2">Property Details</h2>
       </div>
 
-          <div className="pl-0">
-            <form id={formId || 'flatmates-step-form'} onSubmit={handleSubmit} className="space-y-6">
+      <form id={formId || 'flatmates-step-form'} onSubmit={handleSubmit} className="space-y-6">
                 {/* Apartment Type and BHK Type */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
@@ -343,7 +342,6 @@ export function FlattmatesPropertyDetailsStep({
                 </div>
 
               </form>
-          </div>
     </div>
   );
 }
