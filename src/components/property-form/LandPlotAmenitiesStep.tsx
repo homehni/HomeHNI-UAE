@@ -13,7 +13,6 @@ import { LandPlotAmenities } from '@/types/landPlotProperty';
 const amenitiesSchema = z.object({
   waterSupply: z.enum(['municipal', 'borewell', 'tank', 'none']).optional(),
   electricityConnection: z.enum(['available', 'nearby', 'none']).optional(),
-  sewageConnection: z.enum(['connected', 'septic_tank', 'none']).optional(),
   roadWidth: z.number().optional().or(z.nan()).transform(val => isNaN(val) ? undefined : val),
   
   gatedSecurity: z.boolean().optional(),
@@ -38,7 +37,6 @@ export const LandPlotAmenitiesStep: React.FC<LandPlotAmenitiesStepProps> = ({
     defaultValues: {
       waterSupply: 'municipal',
       electricityConnection: 'available',
-      sewageConnection: 'connected',
       roadWidth: undefined,
       gatedSecurity: false,
       directionsToProperty: '',
@@ -85,22 +83,8 @@ export const LandPlotAmenitiesStep: React.FC<LandPlotAmenitiesStepProps> = ({
             </div>
           </div>
 
-          {/* Sewage Connection and Road Width */}
+          {/* Road Width */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="space-y-2">
-              <Label className="text-sm font-medium text-gray-700">Sewage Connection</Label>
-              <Select onValueChange={(value) => setValue('sewageConnection', value as any)}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select" />
-                </SelectTrigger>
-                <SelectContent className="bg-white z-50">
-                  <SelectItem value="connected">Connected</SelectItem>
-                  <SelectItem value="septic_tank">Septic Tank</SelectItem>
-                  <SelectItem value="none">None</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            
             <div className="space-y-2">
               <Label htmlFor="roadWidth" className="text-sm font-medium text-gray-700">
                 Width of Facing Road (ft.)
