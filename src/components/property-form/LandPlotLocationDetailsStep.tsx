@@ -190,7 +190,7 @@ export const LandPlotLocationDetailsStep: React.FC<LandPlotLocationDetailsStepPr
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="text-left">
+      <div className="text-left mb-8">
         <h2 className="text-2xl font-semibold text-red-600 mb-2">Location Details</h2>
       </div>
 
