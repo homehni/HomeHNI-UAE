@@ -9,6 +9,7 @@ import { FavoriteButton } from '@/components/FavoriteButton';
 import { ContactOwnerModal } from '@/components/ContactOwnerModal';
 import { supabase } from '@/integrations/supabase/client';
 import propertyPlaceholder from '@/assets/property-placeholder.png';
+import { generatePropertyName } from '@/utils/propertyNameGenerator';
 
 interface PropertyCardProps {
   id: string;
@@ -41,6 +42,19 @@ const PropertyCard = ({
 }: PropertyCardProps) => {
   const navigate = useNavigate();
   const [showContactModal, setShowContactModal] = useState(false);
+
+  // Generate a proper title if the current title is "Untitled"
+  const getDisplayTitle = () => {
+    if (title === "Untitled" || !title.trim()) {
+      const bhkType = bedrooms > 0 ? `${bedrooms}BHK` : undefined;
+      return generatePropertyName({
+        bhkType,
+        propertyType,
+        listingType: listingType || 'sale'
+      });
+    }
+    return title;
+  };
 
   const parsePriceToNumber = (priceStr: string) => {
     const lower = priceStr.toLowerCase();
@@ -257,7 +271,7 @@ const PropertyCard = ({
         <div className="h-24 overflow-hidden">
           <img
             src={getImageUrl()}
-            alt={title}
+            alt={getDisplayTitle()}
             loading="lazy"
             decoding="async"
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
@@ -280,7 +294,7 @@ const PropertyCard = ({
       </div>
       
       <CardContent className="p-3 font-poppins">
-        <h3 className="font-semibold text-xs mb-1 h-4 truncate text-gray-900">{title}</h3>
+        <h3 className="font-semibold text-xs mb-1 h-4 truncate text-gray-900">{getDisplayTitle()}</h3>
         
         <div className="flex items-center text-gray-500 mb-2">
           <MapPin size={10} className="mr-1 flex-shrink-0" />
@@ -312,7 +326,7 @@ const PropertyCard = ({
         isOpen={showContactModal}
         onClose={() => setShowContactModal(false)}
         propertyId={id}
-        propertyTitle={title}
+        propertyTitle={getDisplayTitle()}
       />
     </Card>
   );
