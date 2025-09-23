@@ -302,14 +302,14 @@ const PropertySearch = () => {
                 >
                   {/* Location Chips */}
                   {filters.locations.map((location, index) => (
-                    <div key={index} className="flex items-center gap-1 bg-teal-500 text-white px-3 py-1.5 rounded-full text-sm font-medium">
+                    <div key={index} className="flex items-center gap-1 bg-brand-red text-white px-3 py-1.5 rounded-full text-sm font-medium">
                       <span className="truncate max-w-32">{location}</span>
                       <button
                         onClick={() => {
                           const newLocations = filters.locations.filter((_, i) => i !== index);
                           updateFilter('locations', newLocations);
                         }}
-                        className="ml-1 hover:bg-teal-600 rounded-full p-0.5"
+                        className="ml-1 hover:bg-brand-red-dark rounded-full p-0.5"
                       >
                         <X size={12} />
                       </button>
