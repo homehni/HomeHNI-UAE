@@ -90,10 +90,12 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
       cornerProperty: data.cornerProperty || false
     } as PropertyDetails);
   };
-  return <div className="flex flex-col h-full">
+  return <div className="bg-background p-6">
       {/* Form Content - Scrollable */}
-      <div className="flex-1 overflow-y-auto p-6">
-        <h1 className="text-2xl mb-6 font-semibold text-red-600">Property Details</h1>
+      <div className="flex-1 overflow-y-auto">
+        <div className="text-left mb-8">
+          <h1 className="text-2xl font-semibold text-red-600 mb-2">Property Details</h1>
+        </div>
         
         <Form {...form}>
           <form id="property-details-form" onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -336,6 +338,6 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
         {/* Hidden submit button for sticky bar */}
         <button type="submit" form="property-details-form" className="hidden" />
       </div>
-
-    </div>;
+    </div>
+  );
 };

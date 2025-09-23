@@ -87,10 +87,12 @@ export const RentalDetailsStep: React.FC<RentalDetailsStepProps> = ({
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
-      <h1 className="text-2xl font-semibold text-primary mb-6">
-        Provide rental details about your property
-      </h1>
+    <div className="bg-background p-6">
+      <div className="text-left mb-8">
+        <h1 className="text-2xl font-semibold text-red-600 mb-2">
+          Provide rental details about your property
+        </h1>
+      </div>
       
       <Form {...form}>
         <form id="rental-details-form" onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
