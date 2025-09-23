@@ -54,10 +54,7 @@ export function PgHostelRoomTypeStep({
       const nextSelected = isSelected
         ? prev.selectedTypes.filter(type => type !== roomType)
         : [...prev.selectedTypes, roomType];
-      const nextData = { selectedTypes: nextSelected } as PgHostelRoomType;
-      // Persist to parent so sticky navigation has up-to-date data
-      onNext(nextData);
-      return nextData;
+      return { selectedTypes: nextSelected } as PgHostelRoomType;
     });
   };
 
@@ -129,19 +126,7 @@ export function PgHostelRoomTypeStep({
             })}
           </div>
 
-          {/* Action Buttons */}
-          <div className="flex justify-center pt-8" style={{ visibility: 'hidden' }}>
-            <div className="flex gap-4">
-              {onBack && (
-                <Button type="button" variant="outline" onClick={onBack} className="px-8">
-                  Back
-                </Button>
-              )}
-              <Button type="submit" className="px-8">
-                Save & Continue
-              </Button>
-            </div>
-          </div>
+          {/* Action Buttons - Removed, using only sticky buttons */}
         </form>
       </div>
     </div>

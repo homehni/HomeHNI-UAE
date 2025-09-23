@@ -23,7 +23,7 @@ export const PropertyHeader: React.FC<PropertyHeaderProps> = ({ property }) => {
                property.property_type?.toLowerCase().includes('hostel') ||
                property.property_type?.toLowerCase().includes('coliving');
   
-  const price = isPG ? property.expected_rent : property.expected_price;
+  const price = isPG ? (property.expected_rent || property.expected_price) : property.expected_price;
   const deposit = property.security_deposit;
   const area = property.super_area || property.carpet_area;
 
@@ -59,7 +59,7 @@ export const PropertyHeader: React.FC<PropertyHeaderProps> = ({ property }) => {
             </div>
             
             {/* Price Info Grid - Mobile */}
-            <div className="grid grid-cols-3 gap-0">
+            <div className={`grid gap-0 ${isPG ? 'grid-cols-2' : 'grid-cols-3'}`}>
               {/* Rent Section */}
               <div className="text-center px-2 sm:px-3 py-3 border-r border-gray-200">
                 <div className="text-base sm:text-lg font-bold text-gray-900">
@@ -68,13 +68,15 @@ export const PropertyHeader: React.FC<PropertyHeaderProps> = ({ property }) => {
                 <div className="text-xs text-gray-600">{property.listing_type === 'sale' ? 'Price' : 'Rent'}</div>
               </div>
               
-              {/* Area Section */}
-              <div className="text-center px-2 sm:px-3 py-3 border-r border-gray-200">
-                <div className="text-base sm:text-lg font-bold text-gray-900">
-                  {area ? area.toLocaleString() : 'Not specified'}
+              {/* Area Section - Hidden for PG/Hostel */}
+              {!isPG && (
+                <div className="text-center px-2 sm:px-3 py-3 border-r border-gray-200">
+                  <div className="text-base sm:text-lg font-bold text-gray-900">
+                    {area ? area.toLocaleString() : 'Not specified'}
+                  </div>
+                  <div className="text-xs text-gray-600">Sq.Ft</div>
                 </div>
-                <div className="text-xs text-gray-600">Sq.Ft</div>
-              </div>
+              )}
               
               {/* Deposit Section */}
               <div className="text-center px-2 sm:px-3 py-3">
@@ -128,13 +130,15 @@ export const PropertyHeader: React.FC<PropertyHeaderProps> = ({ property }) => {
               <div className="text-sm text-gray-600">{property.listing_type === 'sale' ? 'Price' : 'Rent'}</div>
             </div>
             
-            {/* Area Section */}
-            <div className="text-center px-6 py-4 border-r border-gray-200">
-              <div className="text-xl font-bold text-gray-900">
-                {area ? area.toLocaleString() : 'Not specified'}
+            {/* Area Section - Hidden for PG/Hostel */}
+            {!isPG && (
+              <div className="text-center px-6 py-4 border-r border-gray-200">
+                <div className="text-xl font-bold text-gray-900">
+                  {area ? area.toLocaleString() : 'Not specified'}
+                </div>
+                <div className="text-sm text-gray-600">Sq.Ft</div>
               </div>
-              <div className="text-sm text-gray-600">Sq.Ft</div>
-            </div>
+            )}
             
             {/* Deposit Section */}
             <div className="text-center px-6 py-4 border-r border-gray-200">

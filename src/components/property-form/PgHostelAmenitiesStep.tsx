@@ -71,11 +71,10 @@ export function PgHostelAmenitiesStep({
   };
 
   const handleAmenityChange = (amenity: string, value: boolean | string) => {
-    setFormData(prev => {
-      const next = { ...prev, [amenity]: value } as PgHostelAmenities;
-      onNext(next);
-      return next;
-    });
+    setFormData(prev => ({
+      ...prev,
+      [amenity]: value
+    }));
   };
 
   const availableAmenities = [
@@ -224,14 +223,7 @@ export function PgHostelAmenitiesStep({
               </Select>
             </div>
 
-        <div className="flex justify-between pt-6" style={{ visibility: 'hidden' }}>
-          <Button type="button" variant="outline" onClick={onBack}>
-            Back
-          </Button>
-          <Button type="submit">
-            Save & Continue
-          </Button>
-        </div>
+        {/* Action Buttons - Removed, using only sticky buttons */}
       </form>
     </div>
   </div>

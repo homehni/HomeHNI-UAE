@@ -54,25 +54,7 @@ export function PgHostelLocalityDetailsStep({
     }
   }, [initialData, form]);
 
-  // Persist changes to parent on any form update
-  useEffect(() => {
-    const subscription = form.watch((values) => {
-      const locationData: LocationDetails = {
-        state: values.state || '',
-        city: values.city || '',
-        locality: values.locality || '',
-        landmark: values.landmark || '',
-        pincode: values.pincode || '',
-        societyName: initialData.societyName || ''
-      };
-      onNext(locationData);
-    });
-    return () => {
-      // react-hook-form v7 returns a subscription with unsubscribe
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (subscription as any)?.unsubscribe?.();
-    };
-  }, [form, onNext, initialData]);
+  // Removed auto-save behavior to prevent auto-advancing to next step
 
   // Google Maps Places Autocomplete
   useEffect(() => {
@@ -252,15 +234,7 @@ export function PgHostelLocalityDetailsStep({
               )}
             />
 
-            {/* Navigation Buttons */}
-            <div className="flex justify-between pt-6" style={{ visibility: 'hidden' }}>
-              <Button type="button" variant="outline" onClick={onBack} className="h-10 md:h-12 px-4 md:px-8">
-                Back
-              </Button>
-              <Button type="submit" className="h-10 md:h-12 px-4 md:px-8">
-                Save & Continue
-              </Button>
-            </div>
+            {/* Action Buttons - Removed, using only sticky buttons */}
           </form>
         </Form>
       </div>

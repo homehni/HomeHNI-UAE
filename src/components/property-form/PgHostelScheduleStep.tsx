@@ -325,15 +325,7 @@ export function PgHostelScheduleStep({
                 </div>
               </div>
 
-              {/* Action Buttons */}
-              <div className="flex justify-between pt-8" style={{ visibility: 'hidden' }}>
-                <Button type="button" variant="white" onClick={onBack} className="px-8">
-                  Back
-                </Button>
-                <Button type="submit" className="px-8">
-                  {onSubmit ? 'Submit' : 'Save & Continue'}
-                </Button>
-              </div>
+              {/* Action Buttons - Removed, using only sticky buttons */}
             </form>
           </Form>
         </div>

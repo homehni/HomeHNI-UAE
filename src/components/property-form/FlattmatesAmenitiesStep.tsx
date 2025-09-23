@@ -2,6 +2,7 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import { useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -115,6 +116,40 @@ export const FlattmatesAmenitiesStep: React.FC<FlattmatesAmenitiesStepProps> = (
       wifi: initialData.wifi || 'Not Available',
     },
   });
+
+  // Sync form with initialData changes
+  useEffect(() => {
+    if (initialData) {
+      console.log('FlattmatesAmenitiesStep syncing with initialData:', initialData);
+      form.reset({
+        // Room Details
+        attachedBathroom: initialData.attachedBathroom || false,
+        acRoom: initialData.acRoom || false,
+        balcony: initialData.balcony || false,
+        
+        // Flatmate Preference
+        nonVegAllowed: initialData.nonVegAllowed || false,
+        smokingAllowed: initialData.smokingAllowed || false,
+        drinkingAllowed: initialData.drinkingAllowed || false,
+        
+        // Additional Details
+        gym: initialData.gym || false,
+        gatedSecurity: initialData.gatedSecurity || false,
+        
+        // Other fields
+        whoWillShow: initialData.whoWillShow || '',
+        currentPropertyCondition: initialData.currentPropertyCondition || '',
+        secondaryNumber: initialData.secondaryNumber || '',
+        moreSimilarUnits: initialData.moreSimilarUnits || false,
+        directionsTip: initialData.directionsTip || '',
+        lift: initialData.lift || 'Not Available',
+        powerBackup: initialData.powerBackup || 'Not Available',
+        waterStorageFacility: initialData.waterStorageFacility || 'Not Available',
+        security: initialData.security || 'Not Available',
+        wifi: initialData.wifi || 'Not Available',
+      });
+    }
+  }, [initialData, form]);
 
   const onSubmit = (data: FlattmatesAmenitiesFormData) => {
     console.log('=== FlattmatesAmenitiesStep onSubmit called ===');

@@ -52,6 +52,17 @@ export function FlattmatesRentalDetailsStep({
     ...initialData,
   });
 
+  // Sync local state with initialData prop changes
+  useEffect(() => {
+    if (initialData) {
+      console.log('FlattmatesRentalDetailsStep syncing with initialData:', initialData);
+      setFormData(prev => ({
+        ...prev,
+        ...initialData
+      }));
+    }
+  }, [initialData]);
+
   // Debug: Log formData changes
   useEffect(() => {
     console.log('FlattmatesRentalDetailsStep formData updated:', formData);

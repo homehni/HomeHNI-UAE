@@ -57,6 +57,8 @@ interface PropertyDetailsCardProps {
     // PG/Hostel specific fields
     expected_rent?: number;
     expected_deposit?: number;
+    expected_price?: number;
+    security_deposit?: number;
     landmark?: string;
     place_available_for?: string;
     preferred_guests?: string;
@@ -138,8 +140,8 @@ export const PropertyDetailsCard: React.FC<PropertyDetailsCardProps> = ({ proper
     { label: 'Home Loan Available', value: property.home_loan_available ? 'Yes' : 'No' },
   ] : isPGHostelProperty ? [
     { label: 'Property Type', value: 'PG/Hostel' },
-    { label: 'Expected Rent', value: formatCurrency(property.expected_rent) },
-    { label: 'Expected Deposit', value: formatCurrency(property.expected_deposit) },
+    { label: 'Expected Rent', value: formatCurrency(property.expected_rent || property.expected_price) },
+    { label: 'Expected Deposit', value: formatCurrency(property.expected_deposit || property.security_deposit) },
     { label: 'Location', value: formatLocation(undefined, undefined, property.locality, property.landmark) },
     { label: 'Available For', value: property.place_available_for || 'Not specified' },
     { label: 'Preferred Guests', value: property.preferred_guests || 'Not specified' },

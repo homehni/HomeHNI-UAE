@@ -50,6 +50,32 @@ export function FlattmatesPropertyDetailsStep({
     ...initialData,
   });
 
+  // Sync local state with initialData prop changes
+  useEffect(() => {
+    console.log('FlattmatesPropertyDetailsStep initialData changed:', initialData);
+    console.log('Current formData:', formData);
+    if (initialData && Object.keys(initialData).length > 0) {
+      // Check if the data is actually different to avoid unnecessary updates
+      const hasChanges = Object.keys(initialData).some(key => 
+        formData[key as keyof typeof formData] !== initialData[key as keyof typeof initialData]
+      );
+      
+      if (hasChanges) {
+        console.log('FlattmatesPropertyDetailsStep syncing with initialData:', initialData);
+        setFormData(prev => {
+          const updated = {
+            ...prev,
+            ...initialData
+          };
+          console.log('Updated formData:', updated);
+          return updated;
+        });
+      } else {
+        console.log('No changes detected, skipping sync');
+      }
+    }
+  }, [initialData]);
+
   // Debug: Log formData changes
   useEffect(() => {
     console.log('FlattmatesPropertyDetailsStep formData updated:', formData);

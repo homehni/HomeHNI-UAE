@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { useToast } from '@/hooks/use-toast';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { ProgressIndicator } from './ProgressIndicator';
@@ -39,6 +40,7 @@ export const PGHostelMultiStepForm: React.FC<PGHostelMultiStepFormProps> = ({
   targetStep = null,
   createdSubmissionId
 }) => {
+  const { toast } = useToast();
   // Skip owner info and property info - start from room details
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -210,10 +212,54 @@ const [propertyInfo, setPropertyInfo] = useState({
     handleSubmit();
   };
 
-  const prevStep = () => setCurrentStep(prev => Math.max(prev - 1, 1));
+  const prevStep = () => {
+    setCurrentStep(prev => Math.max(prev - 1, 1));
+    scrollToTop();
+  };
 
   const goToStep = (step: number) => {
     setCurrentStep(step);
+    scrollToTop();
+  };
+
+  // Validation functions for each step
+  const validateStep = (step: number): boolean => {
+    switch (step) {
+      case 1:
+        return roomTypes.selectedTypes.length > 0;
+      case 2:
+        return roomTypes.selectedTypes.every(roomType => {
+          const details = roomDetails.roomTypeDetails[roomType];
+          return details && details.expectedRent > 0 && details.expectedDeposit > 0;
+        });
+      case 3:
+        return localityDetails.locality.trim() !== '' && localityDetails.city.trim() !== '';
+      case 4:
+        return pgDetails.genderPreference !== '' && pgDetails.availableFrom !== '';
+      case 5:
+      case 6:
+      case 7:
+        return true; // These steps are optional or have no required fields
+      default:
+        return false;
+    }
+  };
+
+  // Handle sticky button click - trigger form submission
+  const handleStickyButtonClick = () => {
+    console.log('PGHostel sticky button clicked, step:', currentStep);
+    
+    // Trigger form submission to get the latest form data with validation
+    const currentForm = document.querySelector('form');
+    if (currentForm) {
+      console.log('Sticky button: Triggering form submission for step', currentStep);
+      // Use requestSubmit to trigger proper form validation and submission
+      currentForm.requestSubmit();
+    } else {
+      console.warn('No form found for step:', currentStep);
+    }
+    
+    // Always scroll to top for better UX
     scrollToTop();
   };
 
@@ -868,43 +914,29 @@ const [propertyInfo, setPropertyInfo] = useState({
                   onBack={prevStep}
                   currentStep={7}
                   totalSteps={7}
+                  onSubmit={handleSubmit}
                 />
               )}
             </div>
           </div>
 
-          {/* Sticky Bottom Navigation Bar - Hidden on final step */}
-          {currentStep !== 7 && (
+          {/* Sticky Bottom Navigation Bar */}
+          {(
             <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-3 sm:p-4 z-50 shadow-lg">
             <div className="max-w-4xl mx-auto flex flex-col sm:flex-row gap-3 sm:gap-4 sm:justify-center">
               <Button 
                 type="button" 
                 variant="outline" 
                 onClick={currentStep === 1 ? () => {} : prevStep}
-                className="h-10 sm:h-10 px-4 sm:px-6 w-full sm:w-auto order-2 sm:order-1"
+                className="h-10 px-4 sm:px-6 w-full sm:w-auto order-2 sm:order-1"
                 disabled={currentStep === 1}
               >
                 Back
               </Button>
               <Button 
                 type="button" 
-                onClick={() => {
-                  console.log('PGHostelMultiStepForm sticky Save & Continue button clicked');
-                  console.log('Current step:', currentStep);
-                  
-                  // Trigger the current step's form submission
-                  const currentStepElement = document.querySelector('form');
-                  console.log('Found form element:', currentStepElement);
-                  
-                  if (currentStepElement) {
-                    console.log('Dispatching submit event to form');
-                    const submitEvent = new Event('submit', { bubbles: true, cancelable: true });
-                    currentStepElement.dispatchEvent(submitEvent);
-                  } else {
-                    console.log('No form element found!');
-                  }
-                }}
-                className="h-12 sm:h-10 px-6 sm:px-6 bg-red-600 hover:bg-red-700 text-white w-full sm:w-auto order-1 sm:order-2 font-semibold"
+                onClick={handleStickyButtonClick}
+                className="h-10 px-6 bg-red-600 hover:bg-red-700 text-white w-full sm:w-auto order-1 sm:order-2 font-semibold"
               >
                 {currentStep === 7 ? 'Submit Property' : 'Save & Continue'}
               </Button>
@@ -1005,41 +1037,27 @@ const [propertyInfo, setPropertyInfo] = useState({
                 onBack={prevStep}
                 currentStep={7}
                 totalSteps={7}
+                onSubmit={handleSubmit}
               />
             )}
 
-          {/* Sticky Bottom Navigation Bar - Hidden on final step */}
-          {currentStep !== 7 && (
+          {/* Sticky Bottom Navigation Bar */}
+          {(
             <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-3 sm:p-4 z-50 shadow-lg">
             <div className="max-w-4xl mx-auto flex flex-col sm:flex-row gap-3 sm:gap-4 sm:justify-center">
               <Button 
                 type="button" 
                 variant="outline" 
                 onClick={currentStep === 1 ? () => {} : prevStep}
-                className="h-10 sm:h-10 px-4 sm:px-6 w-full sm:w-auto order-2 sm:order-1"
+                className="h-10 px-4 sm:px-6 w-full sm:w-auto order-2 sm:order-1"
                 disabled={currentStep === 1}
               >
                 Back
               </Button>
               <Button 
                 type="button" 
-                onClick={() => {
-                  console.log('PGHostelMultiStepForm sticky Save & Continue button clicked');
-                  console.log('Current step:', currentStep);
-                  
-                  // Trigger the current step's form submission
-                  const currentStepElement = document.querySelector('form');
-                  console.log('Found form element:', currentStepElement);
-                  
-                  if (currentStepElement) {
-                    console.log('Dispatching submit event to form');
-                    const submitEvent = new Event('submit', { bubbles: true, cancelable: true });
-                    currentStepElement.dispatchEvent(submitEvent);
-                  } else {
-                    console.log('No form element found!');
-                  }
-                }}
-                className="h-12 sm:h-10 px-6 sm:px-6 bg-red-600 hover:bg-red-700 text-white w-full sm:w-auto order-1 sm:order-2 font-semibold"
+                onClick={handleStickyButtonClick}
+                className="h-10 px-6 bg-red-600 hover:bg-red-700 text-white w-full sm:w-auto order-1 sm:order-2 font-semibold"
               >
                 {currentStep === 7 ? 'Submit Property' : 'Save & Continue'}
               </Button>

@@ -91,21 +91,16 @@ export function PgHostelRoomDetailsStep({
   };
 
   const handleRoomTypePriceChange = (roomType: string, field: 'expectedRent' | 'expectedDeposit', value: number) => {
-    setFormData(prev => {
-      const next = {
-        ...prev,
-        roomTypeDetails: {
-          ...prev.roomTypeDetails,
-          [roomType]: {
-            ...prev.roomTypeDetails[roomType],
-            [field]: value,
-          },
+    setFormData(prev => ({
+      ...prev,
+      roomTypeDetails: {
+        ...prev.roomTypeDetails,
+        [roomType]: {
+          ...prev.roomTypeDetails[roomType],
+          [field]: value,
         },
-      } as PgHostelRoomDetails;
-      // Persist to parent so data survives navigation
-      onNext(next);
-      return next;
-    });
+      },
+    }));
   };
 
   const getRoomTypeLabel = (roomType: string) => {
@@ -113,17 +108,13 @@ export function PgHostelRoomDetailsStep({
   };
 
   const handleAmenityChange = (amenity: keyof typeof formData.roomAmenities, checked: boolean) => {
-    setFormData(prev => {
-      const next = {
-        ...prev,
-        roomAmenities: {
-          ...prev.roomAmenities,
-          [amenity]: checked,
-        },
-      } as PgHostelRoomDetails;
-      onNext(next);
-      return next;
-    });
+    setFormData(prev => ({
+      ...prev,
+      roomAmenities: {
+        ...prev.roomAmenities,
+        [amenity]: checked,
+      },
+    }));
   };
 
   return (
@@ -292,17 +283,7 @@ export function PgHostelRoomDetailsStep({
             </div>
           </div>
 
-          {/* Action Buttons */}
-          <div className="flex justify-center pt-8" style={{ visibility: 'hidden' }}>
-            <div className="flex gap-4">
-              <Button type="button" variant="outline" onClick={onBack} className="px-8">
-                Back
-              </Button>
-              <Button type="submit" className="px-8">
-                Save & Continue
-              </Button>
-            </div>
-          </div>
+          {/* Action Buttons - Removed, using only sticky buttons */}
         </form>
       </div>
     </div>

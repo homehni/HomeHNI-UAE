@@ -290,15 +290,7 @@ export function PgHostelPgDetailsStep({
             />
           </div>
 
-          {/* Action Buttons */}
-          <div className="flex justify-between pt-6">
-            <Button type="button" variant="outline" onClick={onBack} className="px-8">
-              Back
-            </Button>
-            <Button type="submit" className="px-8">
-              Save & Continue
-            </Button>
-          </div>
+          {/* Action Buttons - Removed, using only sticky buttons */}
         </form>
       </div>
     </div>

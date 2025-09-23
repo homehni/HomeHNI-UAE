@@ -116,15 +116,7 @@ export function PgHostelOwnerInfoStep({
               </Label>
             </div>
 
-            <div className="flex justify-end pt-6">
-              <Button 
-                type="submit" 
-                disabled={!isFormValid()}
-                className="px-8"
-              >
-                Save & Continue
-              </Button>
-            </div>
+            {/* Action Buttons - Removed, using only sticky buttons */}
           </form>
         </CardContent>
       </Card>

@@ -92,14 +92,7 @@ const isFormValid = () => {
               </div>
             </div>
 
-            <div className="flex justify-center space-x-4 pt-6" style={{ visibility: 'hidden' }}>
-              <Button type="button" variant="outline" onClick={onBack} className="px-8 py-3">
-                Back
-              </Button>
-              <Button type="submit" disabled={!isFormValid()} className="px-8 py-3 bg-red-500 hover:bg-red-600">
-                Save & Continue
-              </Button>
-            </div>
+            {/* Action Buttons - Removed, using only sticky buttons */}
           </form>
         </CardContent>
       </Card>

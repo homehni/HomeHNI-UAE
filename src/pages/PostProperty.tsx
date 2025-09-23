@@ -584,7 +584,10 @@ export const PostProperty: React.FC = () => {
         status: 'pending',
         is_featured: true, // Mark all submitted properties as featured candidates
         // Extra fields for better details rendering
-        security_deposit: Number(((data.propertyInfo as any)?.flattmatesDetails?.securityDeposit ?? (data.propertyInfo as any)?.rentalDetails?.securityDeposit) ?? 0) || null,
+        security_deposit: Number(((data.propertyInfo as any)?.flattmatesDetails?.securityDeposit ?? (data.propertyInfo as any)?.rentalDetails?.securityDeposit ?? (data.propertyInfo as any)?.pgDetails?.securityDeposit) ?? 0) || null,
+        // PG/Hostel specific fields for better display compatibility
+        expected_rent: ('pgDetails' in data.propertyInfo) ? Number((data.propertyInfo as any).pgDetails.expectedPrice) || null : null,
+        expected_deposit: ('pgDetails' in data.propertyInfo) ? Number((data.propertyInfo as any).pgDetails.securityDeposit) || null : null,
         available_from: ((data.propertyInfo as any)?.flattmatesDetails?.availableFrom) || ((data.propertyInfo as any)?.rentalDetails?.availableFrom) || null,
         parking: ((data.propertyInfo as any)?.amenities?.parking) || null,
         age_of_building: (('propertyDetails' in data.propertyInfo) && (data.propertyInfo as any).propertyDetails?.propertyAge) ? (data.propertyInfo as any).propertyDetails.propertyAge : null,

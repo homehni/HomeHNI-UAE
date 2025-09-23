@@ -15,6 +15,7 @@ import { Home, MapPin, DollarSign, Star, Camera, Calendar, ArrowLeft, CheckCircl
 import { OwnerInfo, PropertyDetails, LocationDetails, PropertyGallery, AdditionalInfo, ScheduleInfo, FlattmatesFormData } from '@/types/property';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
+import { useToast } from '@/components/ui/use-toast';
 
 interface FlattmatesMultiStepFormProps {
   onSubmit: (data: FlattmatesFormData) => void;
@@ -32,6 +33,7 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
   createdSubmissionId = null
 }) => {
   const { user } = useAuth();
+  const { toast } = useToast();
   const [currentStep, setCurrentStep] = useState(1);
   const [completedSteps, setCompletedSteps] = useState<number[]>([]);
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -134,44 +136,60 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // Handle sticky button click - use same logic as regular buttons
-  const handleStickyButtonClick = () => {
-    console.log('=== STICKY BUTTON CLICKED ===');
-    console.log('Current step:', currentStep);
-    
-    // Scroll to top first
-    scrollToTop();
-    
-    // Use the same logic as regular buttons - directly call the appropriate step handler
-    // This matches exactly what the regular "Save & Continue" buttons do
-    switch (currentStep) {
+  // Validation function for each step
+  const validateStep = (step: number): boolean => {
+    switch (step) {
       case 1:
-        console.log('Sticky button: Calling handlePropertyDetailsNext');
-        handlePropertyDetailsNext(propertyDetails);
-        break;
+        if (!propertyDetails.apartmentType || !propertyDetails.bhkType) {
+          toast({
+            title: "Missing Information",
+            description: "Please fill in all required property details.",
+            variant: "destructive",
+          });
+          return false;
+        }
+        return true;
       case 2:
-        console.log('Sticky button: Calling handleLocationDetailsNext');
-        handleLocationDetailsNext(locationDetails);
-        break;
+        if (!locationDetails.city || !locationDetails.locality) {
+          toast({
+            title: "Missing Information", 
+            description: "Please fill in all required location details.",
+            variant: "destructive",
+          });
+          return false;
+        }
+        return true;
       case 3:
-        console.log('Sticky button: Calling handleRentalDetailsNext');
-        handleRentalDetailsNext(rentalDetails);
-        break;
-      case 4:
-        console.log('Sticky button: Calling handleAmenitiesNext');
-        handleAmenitiesNext(amenities);
-        break;
-      case 5:
-        console.log('Sticky button: Calling handleGalleryNext');
-        handleGalleryNext(gallery);
-        break;
-      case 6:
-        console.log('Sticky button: Calling handleScheduleNext');
-        handleScheduleNext(scheduleInfo);
-        break;
+        if (!rentalDetails.expectedRent || rentalDetails.expectedRent <= 0) {
+          toast({
+            title: "Missing Information",
+            description: "Please enter a valid expected rent amount.",
+            variant: "destructive",
+          });
+          return false;
+        }
+        return true;
       default:
-        console.warn('Unknown step for sticky button:', currentStep);
+        return true;
     }
+  };
+
+  // Handle sticky button click - trigger form submission for proper validation
+  const handleStickyButtonClick = () => {
+    console.log('Flatmates sticky button clicked, step:', currentStep);
+    
+    // Trigger form submission to get the latest form data with validation
+    const currentForm = document.querySelector('form');
+    if (currentForm) {
+      console.log('Sticky button: Triggering form submission for step', currentStep);
+      // Use requestSubmit to trigger proper form validation and submission
+      currentForm.requestSubmit();
+    } else {
+      console.warn('No form found for step:', currentStep);
+    }
+    
+    // Always scroll to top for better UX
+    scrollToTop();
   };
 
   useEffect(() => {
@@ -287,6 +305,8 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
     try {
       // Update state first
       console.log('Updating propertyDetails state...');
+      console.log('Previous propertyDetails:', propertyDetails);
+      console.log('New data to set:', data);
       setPropertyDetails(data);
       setCompletedSteps(prev => prev.includes(1) ? prev : [...prev, 1]);
       
@@ -457,7 +477,10 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
     }
   };
 
-  const prevStep = () => setCurrentStep(prev => Math.max(prev - 1, 1));
+  const prevStep = () => {
+    setCurrentStep(prev => Math.max(prev - 1, 1));
+    scrollToTop();
+  };
   const goToStep = (step: number) => setCurrentStep(step);
 
   const getFormData = (): FlattmatesFormData => ({
@@ -1031,7 +1054,11 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
             {currentStep === 1 && (
               <FlattmatesPropertyDetailsStep
-                initialData={propertyDetails}
+                key={`step-1-${JSON.stringify(propertyDetails)}`}
+                initialData={(() => {
+                  console.log('Passing propertyDetails as initialData:', propertyDetails);
+                  return propertyDetails;
+                })()}
                 onNext={handlePropertyDetailsNext}
                 onBack={() => {}}
                 currentStep={currentStep}
@@ -1088,6 +1115,9 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
                   initialData={scheduleInfo}
                   onNext={handleScheduleNext}
                   onBack={prevStep}
+                  currentStep={6}
+                  totalSteps={6}
+                  onSubmit={handleScheduleNext}
                 />
                 
                 {/* Photo Upload Warning Logic for Schedule Step */}
@@ -1197,6 +1227,7 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
             <div className="bg-white max-w-4xl mx-auto">
               {currentStep === 1 && (
                 <FlattmatesPropertyDetailsStep
+                  key={`mobile-step-1-${JSON.stringify(propertyDetails)}`}
                   initialData={propertyDetails}
                   onNext={handlePropertyDetailsNext}
                   onBack={() => {}} // No back on first step
@@ -1252,8 +1283,11 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
               {currentStep === 6 && (
                 <ScheduleStep
                   initialData={scheduleInfo}
-                  onSubmit={handleScheduleNext}
+                  onNext={handleScheduleNext}
                   onBack={prevStep}
+                  currentStep={6}
+                  totalSteps={6}
+                  onSubmit={handleScheduleNext}
                 />
               )}
 
