@@ -16,6 +16,7 @@ const landPlotDetailsSchema = z.object({
   plotLength: z.number().optional().or(z.nan()).transform(val => isNaN(val) ? undefined : val),
   plotWidth: z.number().optional().or(z.nan()).transform(val => isNaN(val) ? undefined : val),
   boundaryWall: z.enum(['yes', 'no', 'partial']).optional(),
+  floorsAllowed: z.number().optional().or(z.nan()).transform(val => isNaN(val) ? undefined : val),
   gatedProject: z.enum(['yes', 'no']).optional(),
   gatedCommunity: z.boolean().optional(),
   surveyNumber: z.string().optional(),
@@ -43,6 +44,7 @@ export const LandPlotPropertyDetailsStep: React.FC<LandPlotPropertyDetailsStepPr
       plotArea: initialData.plotArea || undefined,
       plotLength: initialData.plotLength || undefined,
       plotWidth: initialData.plotWidth || undefined,
+      floorsAllowed: undefined,
       gatedProject: 'no',
       gatedCommunity: initialData.gatedCommunity || false,
     }
@@ -200,8 +202,30 @@ export const LandPlotPropertyDetailsStep: React.FC<LandPlotPropertyDetailsStepPr
             </div>
           </div> */}
 
-          {/* Gated Project */}
+          {/* Floors Allowed and Gated Project */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="floorsAllowed" className="text-sm font-medium text-gray-700">
+                Floors allowed for construction
+              </Label>
+              <Input
+                id="floorsAllowed"
+                type="number"
+                min="1"
+                {...register('floorsAllowed', { 
+                  valueAsNumber: true,
+                  min: { value: 1, message: "Floors allowed must be at least 1" }
+                })}
+                onKeyDown={(e) => { if (['-','+','e','E','.'].includes(e.key)) e.preventDefault(); }}
+                onPaste={(e) => { const text = e.clipboardData.getData('text'); const digits = text.replace(/[^0-9]/g, ''); if (digits !== text) { e.preventDefault(); } }}
+                placeholder="3"
+                className="h-12 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
+              />
+              {errors.floorsAllowed && (
+                <p className="text-red-500 text-sm">{errors.floorsAllowed.message}</p>
+              )}
+            </div>
+            
             <div className="space-y-2">
               <Label className="text-sm font-medium text-gray-700">
                 Is the Land/Plot inside a gated project?
