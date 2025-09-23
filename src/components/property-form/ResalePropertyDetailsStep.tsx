@@ -92,10 +92,8 @@ export const ResalePropertyDetailsStep: React.FC<ResalePropertyDetailsStepProps>
     } as PropertyDetails);
   };
   return (
-    <div className="bg-background p-6">
-      <div className="text-left mb-8">
-        <h2 className="text-2xl font-semibold text-red-600 mb-2">Property Details</h2>
-      </div>
+    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
+      <h1 className="text-2xl mb-6 font-semibold text-red-600">Property Details</h1>
 
       <Form {...form}>
         <form id={formId} onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
