@@ -99,16 +99,8 @@ export const ReportSection: React.FC = () => {
       <Dialog open={showWrongInfoModal} onOpenChange={setShowWrongInfoModal}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle className="flex items-center justify-between">
+            <DialogTitle>
               What's wrong?
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setShowWrongInfoModal(false)}
-                className="h-6 w-6 p-0"
-              >
-                <X size={16} />
-              </Button>
             </DialogTitle>
           </DialogHeader>
           
