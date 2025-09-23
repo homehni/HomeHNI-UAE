@@ -111,6 +111,42 @@ export const LandPlotSidebar: React.FC<LandPlotSidebarProps> = ({
           );
         })}
       </div>
+
+      {/* Circular Progress Indicator */}
+      <div className="mt-6 p-4 bg-gray-50 rounded-lg">
+        <div className="flex items-center justify-center">
+          <div className="relative w-20 h-20">
+            <svg className="w-20 h-20 transform -rotate-90" viewBox="0 0 36 36">
+              <path
+                d="M18 2.0845
+                  a 15.9155 15.9155 0 0 1 0 31.831
+                  a 15.9155 15.9155 0 0 1 0 -31.831"
+                fill="none"
+                stroke="#e5e7eb"
+                strokeWidth="2"
+              />
+              <path
+                d="M18 2.0845
+                  a 15.9155 15.9155 0 0 1 0 31.831
+                  a 15.9155 15.9155 0 0 1 0 -31.831"
+                fill="none"
+                stroke="#14b8a6"
+                strokeWidth="2"
+                strokeDasharray={`${Math.min((completedSteps.length / 7) * 100, 100)}, 100`}
+              />
+            </svg>
+            <div className="absolute inset-0 flex items-center justify-center">
+              <span className="text-lg font-semibold text-gray-700">
+                {Math.min(Math.round((completedSteps.length / 7) * 100), 100)}%
+              </span>
+            </div>
+          </div>
+        </div>
+        <div className="text-center mt-2">
+          <p className="text-xs text-gray-600">Completion Progress</p>
+          <p className="text-xs text-gray-500">Complete all steps to publish your property</p>
+        </div>
+      </div>
     </div>
   );
 };
