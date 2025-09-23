@@ -49,45 +49,41 @@ export function PgHostelGalleryStep({
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="max-w-4xl mx-auto p-8">
-        <div className="bg-background p-8">
-          <div className="text-left mb-8">
-            <h2 className="text-2xl font-semibold text-red-600 mb-2">
-              Upload photos & videos
-            </h2>
-          </div>
-          <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Image Upload */}
-              <div className="space-y-2">
-                <ImageUpload
-                  images={formData.images}
-                  onImagesChange={handleImagesChange}
-                  maxImages={20}
-                />
-              </div>
-
-              {/* Video Upload */}
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Video (Optional)</label>
-                <VideoUpload
-                  video={formData.video}
-                  onVideoChange={handleVideoChange}
-                />
-              </div>
-
-              {/* Action Buttons */}
-              <div className="flex justify-between pt-6" style={{ visibility: 'hidden' }}>
-                <Button type="button" variant="outline" onClick={onBack} className="px-8">
-                  Back
-                </Button>
-                <Button type="submit" className="px-8">
-                  Save & Continue
-                </Button>
-              </div>
-            </form>
-          </div>
-        </div>
+    <div className="bg-background p-6">
+      <div className="text-left mb-8">
+        <h2 className="text-2xl font-semibold text-red-600 mb-2">
+          Upload photos & videos
+        </h2>
       </div>
-    );
-  }
+      <form onSubmit={handleSubmit} className="space-y-6">
+        {/* Image Upload */}
+        <div className="space-y-2">
+          <ImageUpload
+            images={formData.images}
+            onImagesChange={handleImagesChange}
+            maxImages={20}
+          />
+        </div>
+
+        {/* Video Upload */}
+        <div className="space-y-2">
+          <label className="text-sm font-medium">Video (Optional)</label>
+          <VideoUpload
+            video={formData.video}
+            onVideoChange={handleVideoChange}
+          />
+        </div>
+
+        {/* Action Buttons */}
+        <div className="flex justify-between pt-6" style={{ visibility: 'hidden' }}>
+          <Button type="button" variant="outline" onClick={onBack} className="px-8">
+            Back
+          </Button>
+          <Button type="submit" className="px-8">
+            Save & Continue
+          </Button>
+        </div>
+      </form>
+    </div>
+  );
+}
