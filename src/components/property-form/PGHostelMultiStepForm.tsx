@@ -873,7 +873,7 @@ const [propertyInfo, setPropertyInfo] = useState({
             </div>
           </div>
 
-          {/* Sticky Bottom Navigation Bar - Hidden on Preview step */}
+          {/* Sticky Bottom Navigation Bar - Hidden on final step */}
           {currentStep !== 7 && (
             <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-3 sm:p-4 z-50 shadow-lg">
             <div className="max-w-4xl mx-auto flex flex-col sm:flex-row gap-3 sm:gap-4 sm:justify-center">
@@ -889,20 +889,19 @@ const [propertyInfo, setPropertyInfo] = useState({
               <Button 
                 type="button" 
                 onClick={() => {
-                  if (currentStep === 1) {
-                    handleRoomTypesNext(roomTypes);
-                  } else if (currentStep === 2) {
-                    handleRoomDetailsNext(roomDetails);
-                  } else if (currentStep === 3) {
-                    handleLocalityDetailsNext(localityDetails);
-                  } else if (currentStep === 4) {
-                    handlePgDetailsNext(pgDetails);
-                  } else if (currentStep === 5) {
-                    handleAmenitiesNext(amenities);
-                  } else if (currentStep === 6) {
-                    handleGalleryNext(gallery);
-                  } else if (currentStep === 7) {
-                    handleScheduleNext(scheduleInfo);
+                  console.log('PGHostelMultiStepForm sticky Save & Continue button clicked');
+                  console.log('Current step:', currentStep);
+                  
+                  // Trigger the current step's form submission
+                  const currentStepElement = document.querySelector('form');
+                  console.log('Found form element:', currentStepElement);
+                  
+                  if (currentStepElement) {
+                    console.log('Dispatching submit event to form');
+                    const submitEvent = new Event('submit', { bubbles: true, cancelable: true });
+                    currentStepElement.dispatchEvent(submitEvent);
+                  } else {
+                    console.log('No form element found!');
                   }
                 }}
                 className="h-12 sm:h-10 px-6 sm:px-6 bg-red-600 hover:bg-red-700 text-white w-full sm:w-auto order-1 sm:order-2 font-semibold"
@@ -1009,8 +1008,8 @@ const [propertyInfo, setPropertyInfo] = useState({
               />
             )}
 
-          {/* Sticky Bottom Navigation Bar - Hidden on Preview step */}
-          {currentStep !== 8 && (
+          {/* Sticky Bottom Navigation Bar - Hidden on final step */}
+          {currentStep !== 7 && (
             <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-3 sm:p-4 z-50 shadow-lg">
             <div className="max-w-4xl mx-auto flex flex-col sm:flex-row gap-3 sm:gap-4 sm:justify-center">
               <Button 
@@ -1028,31 +1027,16 @@ const [propertyInfo, setPropertyInfo] = useState({
                   console.log('PGHostelMultiStepForm sticky Save & Continue button clicked');
                   console.log('Current step:', currentStep);
                   
-                  // Always scroll to top first
-                  scrollToTop();
+                  // Trigger the current step's form submission
+                  const currentStepElement = document.querySelector('form');
+                  console.log('Found form element:', currentStepElement);
                   
-                  // Directly call the appropriate handler based on current step
-                  if (currentStep === 1) {
-                    console.log('Calling handleRoomTypeNext');
-                    handleRoomTypesNext(roomTypes);
-                  } else if (currentStep === 2) {
-                    console.log('Calling handleRoomDetailsNext');
-                    handleRoomDetailsNext(roomDetails);
-                  } else if (currentStep === 3) {
-                    console.log('Calling handleLocalityDetailsNext');
-                    handleLocalityDetailsNext(localityDetails);
-                  } else if (currentStep === 4) {
-                    console.log('Calling handlePgDetailsNext');
-                    handlePgDetailsNext(pgDetails);
-                  } else if (currentStep === 5) {
-                    console.log('Calling handleAmenitiesNext');
-                    handleAmenitiesNext(amenities);
-                  } else if (currentStep === 6) {
-                    console.log('Calling handleGalleryNext');
-                    handleGalleryNext(gallery);
-                  } else if (currentStep === 7) {
-                    console.log('Calling handleScheduleNext');
-                    handleScheduleNext(scheduleInfo);
+                  if (currentStepElement) {
+                    console.log('Dispatching submit event to form');
+                    const submitEvent = new Event('submit', { bubbles: true, cancelable: true });
+                    currentStepElement.dispatchEvent(submitEvent);
+                  } else {
+                    console.log('No form element found!');
                   }
                 }}
                 className="h-12 sm:h-10 px-6 sm:px-6 bg-red-600 hover:bg-red-700 text-white w-full sm:w-auto order-1 sm:order-2 font-semibold"
