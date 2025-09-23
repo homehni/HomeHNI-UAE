@@ -128,7 +128,7 @@ const PackersMoversEmbedded = () => {
     answer: "In the rare event of damage, we have a quick claim process. Our insurance covers the full value of damaged items, and we ensure prompt settlement of all genuine claims."
   }];
 
-  const { toast } = useToast();
+  const [formMessage, setFormMessage] = useState<{ type: 'success' | 'error' | null; text: string }>({ type: null, text: '' });
 
   return (
     <div className="bg-background">
@@ -174,16 +174,15 @@ const PackersMoversEmbedded = () => {
                 const form = e.currentTarget as HTMLFormElement;
                 if (!form.checkValidity()) {
                   form.reportValidity();
-                  toast({
-                    title: "Required Fields Missing",
-                    description: "Please fill in all required fields before submitting your moving request.",
-                    variant: "destructive"
+                  setFormMessage({
+                    type: "error",
+                    text: "Please fill in all required fields before submitting your moving request."
                   });
                   return;
                 }
-                toast({
-                  title: "Request received",
-                  description: "Our moving expert will contact you shortly."
+                setFormMessage({
+                  type: "success",
+                  text: "Request received! Our moving expert will contact you shortly."
                 });
                 form.reset();
               }}>
@@ -241,6 +240,17 @@ const PackersMoversEmbedded = () => {
                 </div>
 
                 <Button type="submit" className="w-full bg-red-800 hover:bg-red-900 text-white">Get Free Moving Quote</Button>
+                
+                {/* Inline message */}
+                {formMessage.type && (
+                  <div className={`mt-2 p-3 rounded-lg text-sm ${
+                    formMessage.type === 'error'
+                      ? 'bg-red-50 text-red-700 border border-red-200'
+                      : 'bg-green-50 text-green-700 border border-green-200'
+                  }`}>
+                    {formMessage.text}
+                  </div>
+                )}
               </form>
             </CardContent>
           </Card>
@@ -260,16 +270,15 @@ const PackersMoversEmbedded = () => {
                 const form = e.currentTarget as HTMLFormElement;
                 if (!form.checkValidity()) {
                   form.reportValidity();
-                  toast({
-                    title: "Required Fields Missing",
-                    description: "Please fill in all required fields before submitting your moving request.",
-                    variant: "destructive"
+                  setFormMessage({
+                    type: "error",
+                    text: "Please fill in all required fields before submitting your moving request."
                   });
                   return;
                 }
-                toast({
-                  title: "Request received",
-                  description: "Our moving expert will contact you shortly."
+                setFormMessage({
+                  type: "success",
+                  text: "Request received! Our moving expert will contact you shortly."
                 });
                 form.reset();
               }}>
@@ -354,6 +363,17 @@ const PackersMoversEmbedded = () => {
                 <Button type="submit" className="w-full h-12 text-base font-semibold bg-red-800 hover:bg-red-900 text-white mt-6">
                   Get Free Moving Quote
                 </Button>
+                
+                {/* Inline message */}
+                {formMessage.type && (
+                  <div className={`mt-2 p-3 rounded-lg text-sm ${
+                    formMessage.type === 'error'
+                      ? 'bg-red-50 text-red-700 border border-red-200'
+                      : 'bg-green-50 text-green-700 border border-green-200'
+                  }`}>
+                    {formMessage.text}
+                  </div>
+                )}
               </form>
             </CardContent>
           </Card>

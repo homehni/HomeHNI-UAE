@@ -128,7 +128,7 @@ const PaintingCleaningEmbedded = () => {
     answer: "All our staff are professionally trained, background verified, and insured for your peace of mind."
   }];
 
-  const { toast } = useToast();
+  const [formMessage, setFormMessage] = useState<{ type: 'success' | 'error' | null; text: string }>({ type: null, text: '' });
 
   return (
     <div className="bg-background">
@@ -171,9 +171,9 @@ const PaintingCleaningEmbedded = () => {
 
             <form className="space-y-4" onSubmit={e => {
               e.preventDefault();
-              toast({
-                title: "Request received",
-                description: "Our team will contact you shortly with a quote."
+              setFormMessage({
+                type: "success",
+                text: "Request received! Our team will contact you shortly with a quote."
               });
               (e.currentTarget as HTMLFormElement).reset();
             }}>
@@ -233,6 +233,17 @@ const PaintingCleaningEmbedded = () => {
               </div>
 
               <Button type="submit" className="w-full bg-red-800 hover:bg-red-900 text-white">Talk to Us Today!</Button>
+              
+              {/* Inline message */}
+              {formMessage.type && (
+                <div className={`mt-2 p-3 rounded-lg text-sm ${
+                  formMessage.type === 'error'
+                    ? 'bg-red-50 text-red-700 border border-red-200'
+                    : 'bg-green-50 text-green-700 border border-green-200'
+                }`}>
+                  {formMessage.text}
+                </div>
+              )}
             </form>
           </CardContent>
         </Card>
@@ -249,9 +260,9 @@ const PaintingCleaningEmbedded = () => {
 
               <form className="space-y-5" onSubmit={e => {
                 e.preventDefault();
-                toast({
-                  title: "Request received",
-                  description: "Our team will contact you shortly with a quote."
+                setFormMessage({
+                  type: "success",
+                  text: "Request received! Our team will contact you shortly with a quote."
                 });
                 (e.currentTarget as HTMLFormElement).reset();
               }}>
@@ -342,6 +353,17 @@ const PaintingCleaningEmbedded = () => {
                 <Button type="submit" className="w-full h-12 text-base font-semibold bg-red-600 hover:bg-red-700 text-white mt-6">
                   Talk to Us Today!
                 </Button>
+                
+                {/* Inline message */}
+                {formMessage.type && (
+                  <div className={`mt-2 p-3 rounded-lg text-sm ${
+                    formMessage.type === 'error'
+                      ? 'bg-red-50 text-red-700 border border-red-200'
+                      : 'bg-green-50 text-green-700 border border-green-200'
+                  }`}>
+                    {formMessage.text}
+                  </div>
+                )}
               </form>
             </CardContent>
           </Card>

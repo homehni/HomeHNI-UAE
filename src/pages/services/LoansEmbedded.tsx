@@ -128,7 +128,7 @@ const LoansEmbedded = () => {
     answer: "We offer zero processing fees on select loan products. Our team will provide complete transparency on all charges before you proceed."
   }];
 
-  const { toast } = useToast();
+  const [formMessage, setFormMessage] = useState<{ type: 'success' | 'error' | null; text: string }>({ type: null, text: '' });
 
   return (
     <div className="bg-background">
@@ -174,16 +174,15 @@ const LoansEmbedded = () => {
                 const form = e.currentTarget as HTMLFormElement;
                 if (!form.checkValidity()) {
                   form.reportValidity();
-                  toast({
-                    title: "Required Fields Missing",
-                    description: "Please fill in all required fields before submitting the loan application.",
-                    variant: "destructive"
+                  setFormMessage({
+                    type: "error",
+                    text: "Please fill in all required fields before submitting the loan application."
                   });
                   return;
                 }
-                toast({
-                  title: "Application received",
-                  description: "Our loan expert will contact you shortly."
+                setFormMessage({
+                  type: "success",
+                  text: "Application received! Our loan expert will contact you shortly."
                 });
                 form.reset();
               }}>
@@ -244,6 +243,17 @@ const LoansEmbedded = () => {
                 </div>
 
                 <Button type="submit" className="w-full bg-red-800 hover:bg-red-900 text-white">Get Pre-Approved Now!</Button>
+                
+                {/* Inline message */}
+                {formMessage.type && (
+                  <div className={`mt-2 p-3 rounded-lg text-sm ${
+                    formMessage.type === 'error'
+                      ? 'bg-red-50 text-red-700 border border-red-200'
+                      : 'bg-green-50 text-green-700 border border-green-200'
+                  }`}>
+                    {formMessage.text}
+                  </div>
+                )}
               </form>
             </CardContent>
           </Card>
@@ -263,16 +273,15 @@ const LoansEmbedded = () => {
                 const form = e.currentTarget as HTMLFormElement;
                 if (!form.checkValidity()) {
                   form.reportValidity();
-                  toast({
-                    title: "Required Fields Missing",
-                    description: "Please fill in all required fields before submitting the loan application.",
-                    variant: "destructive"
+                  setFormMessage({
+                    type: "error",
+                    text: "Please fill in all required fields before submitting the loan application."
                   });
                   return;
                 }
-                toast({
-                  title: "Application received",
-                  description: "Our loan expert will contact you shortly."
+                setFormMessage({
+                  type: "success",
+                  text: "Application received! Our loan expert will contact you shortly."
                 });
                 form.reset();
               }}>
@@ -367,6 +376,17 @@ const LoansEmbedded = () => {
                 <Button type="submit" className="w-full h-12 text-base font-semibold bg-red-800 hover:bg-red-900 text-white mt-6">
                   Get Pre-Approved Now!
                 </Button>
+                
+                {/* Inline message */}
+                {formMessage.type && (
+                  <div className={`mt-2 p-3 rounded-lg text-sm ${
+                    formMessage.type === 'error'
+                      ? 'bg-red-50 text-red-700 border border-red-200'
+                      : 'bg-green-50 text-green-700 border border-green-200'
+                  }`}>
+                    {formMessage.text}
+                  </div>
+                )}
               </form>
             </CardContent>
           </Card>

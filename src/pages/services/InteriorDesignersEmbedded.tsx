@@ -128,7 +128,7 @@ const InteriorDesignersEmbedded = () => {
     answer: "We focus on creating functional, beautiful spaces that reflect your personality and lifestyle while optimizing space utilization and budget efficiency."
   }];
 
-  const { toast } = useToast();
+  const [formMessage, setFormMessage] = useState<{ type: 'success' | 'error' | null; text: string }>({ type: null, text: '' });
 
   return (
     <div className="bg-background">
@@ -168,9 +168,9 @@ const InteriorDesignersEmbedded = () => {
 
               <form className="space-y-5" onSubmit={e => {
                 e.preventDefault();
-                toast({
-                  title: "Request submitted",
-                  description: "Our interior designers will contact you within 24 hours."
+                setFormMessage({
+                  type: "success",
+                  text: "Request submitted! Our interior designers will contact you within 24 hours."
                 });
                 (e.currentTarget as HTMLFormElement).reset();
               }}>
@@ -238,6 +238,17 @@ const InteriorDesignersEmbedded = () => {
                 <Button type="submit" className="w-full h-10 md:h-12 text-sm md:text-base font-semibold bg-red-800 hover:bg-red-900 text-white mt-4 md:mt-6">
                   Get Free Consultation!
                 </Button>
+                
+                {/* Inline message */}
+                {formMessage.type && (
+                  <div className={`mt-2 p-3 rounded-lg text-sm ${
+                    formMessage.type === 'error'
+                      ? 'bg-red-50 text-red-700 border border-red-200'
+                      : 'bg-green-50 text-green-700 border border-green-200'
+                  }`}>
+                    {formMessage.text}
+                  </div>
+                )}
               </form>
             </CardContent>
           </Card>
@@ -427,9 +438,9 @@ const InteriorDesignersEmbedded = () => {
 
             <form className="space-y-4" onSubmit={e => {
               e.preventDefault();
-              toast({
-                title: "Request submitted",
-                description: "Our interior designers will contact you within 24 hours."
+              setFormMessage({
+                type: "success",
+                text: "Request submitted! Our interior designers will contact you within 24 hours."
               });
               (e.currentTarget as HTMLFormElement).reset();
             }}>
@@ -488,6 +499,17 @@ const InteriorDesignersEmbedded = () => {
                </div>
 
                <Button type="submit" className="w-full bg-red-800 hover:bg-red-900 text-white">Get Free Consultation!</Button>
+               
+               {/* Inline message */}
+               {formMessage.type && (
+                 <div className={`mt-2 p-3 rounded-lg text-sm ${
+                   formMessage.type === 'error'
+                     ? 'bg-red-50 text-red-700 border border-red-200'
+                     : 'bg-green-50 text-green-700 border border-green-200'
+                 }`}>
+                   {formMessage.text}
+                 </div>
+               )}
             </form>
           </CardContent>
         </Card>

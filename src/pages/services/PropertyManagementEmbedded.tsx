@@ -128,7 +128,7 @@ const PropertyManagementEmbedded = () => {
     answer: "Property owners receive detailed monthly reports including rent collection status, maintenance expenses, occupancy rates, market analysis, and financial statements. Everything is available through our online owner portal."
   }];
 
-  const { toast } = useToast();
+  const [formMessage, setFormMessage] = useState<{ type: 'success' | 'error' | null; text: string }>({ type: null, text: '' });
 
   return (
     <div className="bg-background">
@@ -174,16 +174,15 @@ const PropertyManagementEmbedded = () => {
                 const form = e.currentTarget as HTMLFormElement;
                 if (!form.checkValidity()) {
                   form.reportValidity();
-                  toast({
-                    title: "Required Fields Missing",
-                    description: "Please fill in all required fields before submitting your property management request.",
-                    variant: "destructive"
+                  setFormMessage({
+                    type: "error",
+                    text: "Please fill in all required fields before submitting your property management request."
                   });
                   return;
                 }
-                toast({
-                  title: "Request received",
-                  description: "Our property management expert will contact you shortly."
+                setFormMessage({
+                  type: "success",
+                  text: "Request received! Our property management expert will contact you shortly."
                 });
                 form.reset();
               }}>
@@ -238,6 +237,17 @@ const PropertyManagementEmbedded = () => {
                 </Select>
 
                 <Button type="submit" className="w-full bg-red-800 hover:bg-red-900 text-white">Get Property Management Quote</Button>
+                
+                {/* Inline message */}
+                {formMessage.type && (
+                  <div className={`mt-2 p-3 rounded-lg text-sm ${
+                    formMessage.type === 'error'
+                      ? 'bg-red-50 text-red-700 border border-red-200'
+                      : 'bg-green-50 text-green-700 border border-green-200'
+                  }`}>
+                    {formMessage.text}
+                  </div>
+                )}
               </form>
             </CardContent>
           </Card>
@@ -257,16 +267,15 @@ const PropertyManagementEmbedded = () => {
                 const form = e.currentTarget as HTMLFormElement;
                 if (!form.checkValidity()) {
                   form.reportValidity();
-                  toast({
-                    title: "Required Fields Missing",
-                    description: "Please fill in all required fields before submitting your property management request.",
-                    variant: "destructive"
+                  setFormMessage({
+                    type: "error",
+                    text: "Please fill in all required fields before submitting your property management request."
                   });
                   return;
                 }
-                toast({
-                  title: "Request received",
-                  description: "Our property management expert will contact you shortly."
+                setFormMessage({
+                  type: "success",
+                  text: "Request received! Our property management expert will contact you shortly."
                 });
                 form.reset();
               }}>
@@ -350,6 +359,17 @@ const PropertyManagementEmbedded = () => {
                 <Button type="submit" className="w-full h-12 text-base font-semibold bg-red-800 hover:bg-red-900 text-white mt-6">
                   Get Property Management Quote
                 </Button>
+                
+                {/* Inline message */}
+                {formMessage.type && (
+                  <div className={`mt-2 p-3 rounded-lg text-sm ${
+                    formMessage.type === 'error'
+                      ? 'bg-red-50 text-red-700 border border-red-200'
+                      : 'bg-green-50 text-green-700 border border-green-200'
+                  }`}>
+                    {formMessage.text}
+                  </div>
+                )}
               </form>
             </CardContent>
           </Card>

@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -128,7 +128,7 @@ const ArchitectsEmbedded = () => {
     answer: "We focus on sustainable, modern design solutions that optimize space, budget, and functionality while meeting your specific requirements."
   }];
 
-  const { toast } = useToast();
+  const [formMessage, setFormMessage] = useState<{ type: 'success' | 'error' | null; text: string }>({ type: null, text: '' });
 
   return (
     <div className="bg-background">
@@ -168,9 +168,9 @@ const ArchitectsEmbedded = () => {
 
               <form className="space-y-4" onSubmit={e => {
                 e.preventDefault();
-                toast({
-                  title: "Request submitted",
-                  description: "Our architects will contact you within 24 hours."
+                setFormMessage({
+                  type: "success",
+                  text: "Request submitted! Our architects will contact you within 24 hours."
                 });
                 (e.currentTarget as HTMLFormElement).reset();
               }}>
@@ -192,6 +192,17 @@ const ArchitectsEmbedded = () => {
                 <Button type="submit" className="w-full h-10 md:h-12 text-sm md:text-base font-semibold bg-red-800 hover:bg-red-900 text-white mt-4 md:mt-6">
                   Get Free Consultation!
                 </Button>
+                
+                {/* Inline message */}
+                {formMessage.type && (
+                  <div className={`mt-2 p-3 rounded-lg text-sm ${
+                    formMessage.type === 'error'
+                      ? 'bg-red-50 text-red-700 border border-red-200'
+                      : 'bg-green-50 text-green-700 border border-green-200'
+                  }`}>
+                    {formMessage.text}
+                  </div>
+                )}
               </form>
             </CardContent>
           </Card>
@@ -381,9 +392,9 @@ const ArchitectsEmbedded = () => {
 
             <form className="space-y-4" onSubmit={e => {
               e.preventDefault();
-              toast({
-                title: "Request submitted",
-                description: "Our architects will contact you within 24 hours."
+              setFormMessage({
+                type: "success",
+                text: "Request submitted! Our architects will contact you within 24 hours."
               });
               (e.currentTarget as HTMLFormElement).reset();
             }}>
@@ -441,6 +452,17 @@ const ArchitectsEmbedded = () => {
               </div>
 
               <Button type="submit" className="w-full bg-red-800 hover:bg-red-900 text-white">Get Free Consultation!</Button>
+              
+              {/* Inline message */}
+              {formMessage.type && (
+                <div className={`mt-2 p-3 rounded-lg text-sm ${
+                  formMessage.type === 'error'
+                    ? 'bg-red-50 text-red-700 border border-red-200'
+                    : 'bg-green-50 text-green-700 border border-green-200'
+                }`}>
+                  {formMessage.text}
+                </div>
+              )}
             </form>
           </CardContent>
         </Card>
