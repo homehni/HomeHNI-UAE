@@ -233,17 +233,6 @@ const AgentPlans = () => {
                           )}
                         </div>
                         
-                        <div className={`mb-6 text-sm p-3 rounded-lg ${
-                          plan.badgeColor === 'bg-blue-500' ? 'bg-blue-50 text-blue-800' :
-                          plan.badgeColor === 'bg-green-500' ? 'bg-green-50 text-green-800' :
-                          plan.badgeColor === 'bg-purple-500' ? 'bg-purple-50 text-purple-800' :
-                          plan.badgeColor === 'bg-yellow-500' ? 'bg-yellow-50 text-yellow-800' :
-                          plan.badgeColor === 'bg-red-500' ? 'bg-red-50 text-red-800' :
-                          plan.badgeColor === 'bg-indigo-500' ? 'bg-indigo-50 text-indigo-800' :
-                          'bg-gray-50 text-gray-800'
-                        }`}>
-                          <strong>Best For:</strong>
-                        </div>
                         
                         {plan.isFree ? (
                           <Button 

@@ -327,9 +327,6 @@ const BuilderLifetimePlans = () => {
                           <div className="text-sm text-gray-500">{plan.gst}</div>
                         </div>
                         
-                        <div className="mb-4 text-sm text-gray-600">
-                          <strong>Best For:</strong>
-                        </div>
                         
                         <PayButton
                           label="Subscribe"
