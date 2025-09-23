@@ -684,9 +684,20 @@ export const Auth: React.FC = () => {
                       autoComplete="email"
                       className="h-10 rounded-xl border-gray-200 focus:border-brand-red focus:ring-brand-red/20"
                     />
-                  </div>
-                  
-                  <div className="space-y-3">
+                   </div>
+                   
+                   {/* Forgot Password Message Display */}
+                   {resetMessage.type && (
+                     <div className={`p-3 rounded-lg text-sm ${
+                       resetMessage.type === 'error' 
+                         ? 'bg-red-50 text-red-700 border border-red-200' 
+                         : 'bg-green-50 text-green-700 border border-green-200'
+                     }`}>
+                       {resetMessage.text}
+                     </div>
+                   )}
+                   
+                   <div className="space-y-3">
                     <Button 
                       type="submit" 
                       disabled={isResetLoading}
