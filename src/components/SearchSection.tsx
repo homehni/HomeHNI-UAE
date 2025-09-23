@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, forwardRef, useImperativeHandle } from 're
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { MapPin } from 'lucide-react';
+import { MapPin, X } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useCMSContent } from '@/hooks/useCMSContent';
 export interface SearchSectionRef {
@@ -12,13 +12,36 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('buy');
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedLocations, setSelectedLocations] = useState<string[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
   const mobileInputRef = useRef<HTMLInputElement>(null);
   const { content: cmsContent } = useCMSContent('hero-search');
+
+  const addLocation = (location: string) => {
+    if (location.trim() && selectedLocations.length < 3 && !selectedLocations.includes(location.trim())) {
+      setSelectedLocations([...selectedLocations, location.trim()]);
+      setSearchQuery('');
+    }
+  };
+
+  const removeLocation = (location: string) => {
+    setSelectedLocations(selectedLocations.filter(loc => loc !== location));
+  };
+
   const handleSearch = () => {
+    // If there's text in the input and we haven't reached the limit, add it as a location
+    if (searchQuery.trim() && selectedLocations.length < 3 && !selectedLocations.includes(searchQuery.trim())) {
+      const locationsToSearch = [...selectedLocations, searchQuery.trim()];
+      navigateToSearch(locationsToSearch);
+    } else if (selectedLocations.length > 0) {
+      navigateToSearch(selectedLocations);
+    }
+  };
+
+  const navigateToSearch = (locations: string[]) => {
     const params = new URLSearchParams({
       type: activeTab,
-      location: searchQuery.trim()
+      locations: locations.join(',')
     });
     
     // For commercial search, show all property types regardless of sale/rent
@@ -32,7 +55,12 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
-      handleSearch();
+      e.preventDefault();
+      if (searchQuery.trim() && selectedLocations.length < 3) {
+        addLocation(searchQuery);
+      } else {
+        handleSearch();
+      }
     }
   };
   const navigationTabs = [{
@@ -97,6 +125,10 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
           if (el && value) {
             el.value = value;
             setSearchQuery(value);
+            // Auto-add location if under limit
+            if (selectedLocations.length < 3 && !selectedLocations.includes(value)) {
+              addLocation(value);
+            }
           }
         });
       });
@@ -124,6 +156,26 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
         {/* Mobile Search Section - overlapping 50% at bottom of hero */}
         <div className="sm:hidden absolute bottom-4 left-2 right-2 transform translate-y-1/2">
           <div className="bg-white rounded-lg shadow-xl border border-gray-100 p-3">
+            {/* Selected Location Tags */}
+            {selectedLocations.length > 0 && (
+              <div className="flex flex-wrap gap-2 mb-3">
+                {selectedLocations.map((location, index) => (
+                  <div
+                    key={index}
+                    className="inline-flex items-center gap-1 bg-teal-500 text-white px-3 py-1 rounded-full text-sm font-medium"
+                  >
+                    {location}
+                    <button
+                      onClick={() => removeLocation(location)}
+                      className="ml-1 hover:bg-teal-600 rounded-full p-0.5"
+                    >
+                      <X size={12} />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+
             {/* Search Input and Button */}
             <div className="flex gap-2">
               <div className="relative flex-1">
@@ -131,17 +183,19 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                 <input 
                   ref={mobileInputRef} 
                   type="text" 
-                  placeholder="Search 'Sector 150 Noida'" 
+                  placeholder={selectedLocations.length >= 3 ? "Max 3 locations selected" : "Search 'Sector 150 Noida'"} 
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onKeyPress={handleKeyPress}
-                  className="w-full pl-9 pr-3 py-2.5 bg-gray-50 border border-brand-red rounded-lg text-brand-red placeholder-brand-red/60 focus:outline-none focus:ring-2 focus:ring-brand-red focus:border-transparent text-sm" 
+                  disabled={selectedLocations.length >= 3}
+                  className="w-full pl-9 pr-3 py-2.5 bg-gray-50 border border-brand-red rounded-lg text-brand-red placeholder-brand-red/60 focus:outline-none focus:ring-2 focus:ring-brand-red focus:border-transparent text-sm disabled:opacity-50" 
                 />
               </div>
               
               <Button 
                 onClick={handleSearch}
-                className="h-10 px-4 bg-brand-red hover:bg-brand-red-dark text-white font-medium whitespace-nowrap text-sm"
+                disabled={selectedLocations.length === 0 && !searchQuery.trim()}
+                className="h-10 px-4 bg-brand-red hover:bg-brand-red-dark text-white font-medium whitespace-nowrap text-sm disabled:opacity-50"
               >
                 Search
               </Button>
@@ -163,23 +217,45 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                   </TabsList>
 
                   <TabsContent value={activeTab} className="mt-0 px-3 sm:px-6 py-2 bg-white rounded-b-lg">
+                    {/* Selected Location Tags */}
+                    {selectedLocations.length > 0 && (
+                      <div className="flex flex-wrap gap-2 mb-3">
+                        {selectedLocations.map((location, index) => (
+                          <div
+                            key={index}
+                            className="inline-flex items-center gap-1 bg-teal-500 text-white px-3 py-1.5 rounded-full text-sm font-medium"
+                          >
+                            {location}
+                            <button
+                              onClick={() => removeLocation(location)}
+                              className="ml-1 hover:bg-teal-600 rounded-full p-0.5"
+                            >
+                              <X size={14} />
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
                     {/* Search Bar */}
                     <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                       <div className="flex-1 relative">
                          <MapPin className="absolute left-3 top-3 text-brand-red" size={16} />
                          <Input 
                            ref={inputRef} 
-                           placeholder="Search 'Anything'" 
+                           placeholder={selectedLocations.length >= 3 ? "Max 3 locations selected" : "Search 'Anything'"} 
                            value={searchQuery}
                            onChange={(e) => setSearchQuery(e.target.value)}
                            onKeyPress={handleKeyPress}
-                           className="pl-9 h-10 sm:h-12 border-brand-red text-brand-red placeholder-brand-red/60 text-sm" 
+                           disabled={selectedLocations.length >= 3}
+                           className="pl-9 h-10 sm:h-12 border-brand-red text-brand-red placeholder-brand-red/60 text-sm disabled:opacity-50" 
                          />
                       </div>
                       
                       <Button 
                         onClick={handleSearch}
-                        className="h-10 sm:h-12 px-4 sm:px-8 bg-brand-red hover:bg-brand-red-dark text-white font-medium text-sm"
+                        disabled={selectedLocations.length === 0 && !searchQuery.trim()}
+                        className="h-10 sm:h-12 px-4 sm:px-8 bg-brand-red hover:bg-brand-red-dark text-white font-medium text-sm disabled:opacity-50"
                       >
                         Search
                       </Button>

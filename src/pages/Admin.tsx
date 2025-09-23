@@ -49,7 +49,39 @@ const Admin = () => {
     deleted: 0
   });
 
+  const [selectedProperties, setSelectedProperties] = useState<string[]>([]);
+  const [bulkActionLoading, setBulkActionLoading] = useState(false);
+
   const { toast } = useToast();
+
+  const handleBulkDelete = async (selectedIds: string[]) => {
+    setBulkActionLoading(true);
+    try {
+      const { error } = await supabase
+        .from('properties')
+        .delete()
+        .in('id', selectedIds);
+
+      if (error) throw error;
+
+      toast({
+        title: 'Success',
+        description: `${selectedIds.length} properties deleted successfully`,
+      });
+
+      setSelectedProperties([]);
+      fetchProperties();
+    } catch (error) {
+      console.error('Error deleting properties:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to delete properties',
+        variant: 'destructive',
+      });
+    } finally {
+      setBulkActionLoading(false);
+    }
+  };
 
   useEffect(() => {
     fetchProperties();
@@ -297,6 +329,10 @@ const Admin = () => {
           setPropertyToDelete(id);
           setDeleteModalOpen(true);
         }}
+        selectedProperties={selectedProperties}
+        onSelectionChange={setSelectedProperties}
+        onBulkDelete={handleBulkDelete}
+        bulkActionLoading={bulkActionLoading}
         actionLoading={actionLoading}
       />
 

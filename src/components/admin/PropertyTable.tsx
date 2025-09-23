@@ -217,9 +217,7 @@ export const PropertyTable: React.FC<PropertyTableProps> = ({
                   <Checkbox
                     checked={isAllSelected}
                     onCheckedChange={handleSelectAll}
-                    ref={(el) => {
-                      if (el) el.indeterminate = isIndeterminate;
-                    }}
+                    className={isIndeterminate ? 'data-[state=checked]:bg-primary data-[state=indeterminate]:bg-primary' : ''}
                   />
                 </TableHead>
                 <TableHead className="font-semibold w-[300px]">Property</TableHead>
