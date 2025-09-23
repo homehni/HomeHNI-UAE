@@ -166,9 +166,6 @@ const Header = () => {
                           <DropdownMenuItem onClick={() => navigate('/plans?tab=seller')}>
                             <span>Seller Plan</span>
                           </DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => navigate('/plans?tab=owner')}>
-                            <span>Owner Plan</span>
-                          </DropdownMenuItem>
                         </div>
                       )}
 
@@ -195,8 +192,8 @@ const Header = () => {
                           <DropdownMenuItem onClick={() => navigate('/plans?tab=commercial-seller')}>
                             <span>Commercial Seller Plan</span>
                           </DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => navigate('/plans?tab=commercial-owner')}>
-                            <span>Commercial Owner Plan</span>
+                          <DropdownMenuItem onClick={() => navigate('/plans?tab=owner')}>
+                            <span>Owner Plan</span>
                           </DropdownMenuItem>
                         </div>
                       )}
@@ -322,17 +319,14 @@ const Header = () => {
                         <button onClick={() => navigate('/plans?tab=seller')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
                           Seller Plans
                         </button>
-                        <button onClick={() => navigate('/plans?tab=owner')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
-                          Owner Plans
-                        </button>
                         <button onClick={() => navigate('/plans?tab=commercial-buyer')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
                           Commercial Buyer Plans
                         </button>
                         <button onClick={() => navigate('/plans?tab=commercial-seller')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
                           Commercial Seller Plans
                         </button>
-                        <button onClick={() => navigate('/plans?tab=commercial-owner')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
-                          Commercial Owner Plans
+                        <button onClick={() => navigate('/plans?tab=owner')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+                          Owner Plans
                         </button>
                       </div>
                     </div>
@@ -425,9 +419,6 @@ const Header = () => {
                         <DropdownMenuItem onClick={() => navigate('/plans?tab=seller')}>
                           <span>Seller Plan</span>
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => navigate('/plans?tab=owner')}>
-                          <span>Owner Plan</span>
-                        </DropdownMenuItem>
                       </div>
                     )}
 
@@ -454,8 +445,8 @@ const Header = () => {
                         <DropdownMenuItem onClick={() => navigate('/plans?tab=commercial-seller')}>
                           <span>Commercial Seller Plan</span>
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => navigate('/plans?tab=commercial-owner')}>
-                          <span>Commercial Owner Plan</span>
+                        <DropdownMenuItem onClick={() => navigate('/plans?tab=owner')}>
+                          <span>Owner Plan</span>
                         </DropdownMenuItem>
                       </div>
                     )}

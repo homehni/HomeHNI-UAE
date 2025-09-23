@@ -21,7 +21,6 @@ const sections = [
   { id: 'rental', label: 'Rental Plans' },
   { id: 'commercial-buyer', label: 'Commercial Buyer Plans' },
   { id: 'commercial-seller', label: 'Commercial Seller Plans' },
-  { id: 'commercial-owner', label: 'Commercial Owner Plans' },
   { id: 'builder-lifetime', label: 'Builder Lifetime Plans' },
   { id: 'agent', label: 'Agent Plans' },
 ];
@@ -164,7 +163,7 @@ const Plans = () => {
                 {active === 'owner' && (
                   <>
                     
-                    <OwnerPlans embedded />
+                    <CommercialOwnerPlans />
                   </>
                 )}
 
@@ -186,13 +185,6 @@ const Plans = () => {
                   <>
                     
                     <CommercialSellerPlans />
-                  </>
-                )}
-
-                {active === 'commercial-owner' && (
-                  <>
-                    
-                    <CommercialOwnerPlans />
                   </>
                 )}
 
