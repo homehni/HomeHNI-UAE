@@ -12,7 +12,7 @@ import { LandPlotDetails } from '@/types/landPlotProperty';
 
 const landPlotDetailsSchema = z.object({
   plotArea: z.number().optional().or(z.nan()).transform(val => isNaN(val) ? undefined : val),
-  plotAreaUnit: z.enum(['sq-ft', 'sq-yard', 'acre', 'hectare', 'bigha', 'biswa']).optional(),
+  plotAreaUnit: z.enum(['sq-ft', 'sq-yard', 'sq-m', 'acre', 'marla', 'cents', 'bigha', 'kottah', 'kanal', 'grounds', 'ares', 'biswa', 'gunta', 'aankadam', 'hectare', 'chataks', 'perch']).optional(),
   plotLength: z.number().optional().or(z.nan()).transform(val => isNaN(val) ? undefined : val),
   plotWidth: z.number().optional().or(z.nan()).transform(val => isNaN(val) ? undefined : val),
   boundaryWall: z.enum(['yes', 'no', 'partial']).optional(),
@@ -49,6 +49,7 @@ export const LandPlotPropertyDetailsStep: React.FC<LandPlotPropertyDetailsStepPr
       floorsAllowed: undefined,
       gatedProject: 'no',
       gatedCommunity: initialData.gatedCommunity || false,
+      plotAreaUnit: initialData.plotAreaUnit || 'sq-ft',
     }
   });
 
@@ -87,21 +88,47 @@ export const LandPlotPropertyDetailsStep: React.FC<LandPlotPropertyDetailsStepPr
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="plotArea" className="text-sm font-medium text-gray-700">
-                Plot Area (sq.ft)
+                Plot Area
               </Label>
-              <Input
-                id="plotArea"
-                type="number"
-                min="1"
-                {...register('plotArea', { 
-                  valueAsNumber: true,
-                  min: { value: 1, message: "Plot area must be at least 1" }
-                })}
-                onKeyDown={(e) => { if (['-','+','e','E','.'].includes(e.key)) e.preventDefault(); }}
-                onPaste={(e) => { const text = e.clipboardData.getData('text'); const digits = text.replace(/[^0-9]/g, ''); if (digits !== text) { e.preventDefault(); } }}
-                placeholder="e.g., 1200"
-                className="h-12 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
-              />
+              <div className="flex gap-2">
+                <Input
+                  id="plotArea"
+                  type="number"
+                  min="1"
+                  {...register('plotArea', { 
+                    valueAsNumber: true,
+                    min: { value: 1, message: "Plot area must be at least 1" }
+                  })}
+                  onKeyDown={(e) => { if (['-','+','e','E','.'].includes(e.key)) e.preventDefault(); }}
+                  onPaste={(e) => { const text = e.clipboardData.getData('text'); const digits = text.replace(/[^0-9]/g, ''); if (digits !== text) { e.preventDefault(); } }}
+                  placeholder="e.g., 1200"
+                  className="h-12 flex-1 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
+                />
+                <Select onValueChange={(value) => setValue('plotAreaUnit', value as any)} defaultValue="sq-ft">
+                  <SelectTrigger className="h-12 w-32">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="sq-ft">sq.ft.</SelectItem>
+                    <SelectItem value="sq-yard">sq.yard</SelectItem>
+                    <SelectItem value="sq-m">sq.m.</SelectItem>
+                    <SelectItem value="acre">acres</SelectItem>
+                    <SelectItem value="marla">marla</SelectItem>
+                    <SelectItem value="cents">cents</SelectItem>
+                    <SelectItem value="bigha">bigha</SelectItem>
+                    <SelectItem value="kottah">kottah</SelectItem>
+                    <SelectItem value="kanal">kanal</SelectItem>
+                    <SelectItem value="grounds">grounds</SelectItem>
+                    <SelectItem value="ares">ares</SelectItem>
+                    <SelectItem value="biswa">biswa</SelectItem>
+                    <SelectItem value="gunta">gunta</SelectItem>
+                    <SelectItem value="aankadam">aankadam</SelectItem>
+                    <SelectItem value="hectare">hectares</SelectItem>
+                    <SelectItem value="chataks">chataks</SelectItem>
+                    <SelectItem value="perch">perch</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
               {errors.plotArea && (
                 <p className="text-red-500 text-sm">{errors.plotArea.message}</p>
               )}
