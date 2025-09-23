@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Marquee from '@/components/Marquee';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { ArrowRight, Menu, X } from 'lucide-react';
 import BuyerPlans from './BuyerPlans';
 import SellerPlans from './SellerPlans';
@@ -17,10 +17,11 @@ import RentalPlans from './RentalPlans';
 const sections = [
   { id: 'buyer', label: 'Buyer Plans' },
   { id: 'seller', label: 'Seller Plans' },
+  { id: 'owner', label: 'Owner Plans' },
   { id: 'rental', label: 'Rental Plans' },
   { id: 'commercial-buyer', label: 'Commercial Buyer Plans' },
   { id: 'commercial-seller', label: 'Commercial Seller Plans' },
-  { id: 'commercial-owner', label: 'Owner Plans' },
+  { id: 'commercial-owner', label: 'Commercial Owner Plans' },
   { id: 'builder-lifetime', label: 'Builder Lifetime Plans' },
   { id: 'agent', label: 'Agent Plans' },
 ];
@@ -28,10 +29,11 @@ const sections = [
 const Plans = () => {
   const [active, setActive] = useState<string>('buyer');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
     document.title = 'Plans – Buyer, Seller, Owner and Commercial Plans';
-    const params = new URLSearchParams(window.location.search);
+    const params = new URLSearchParams(location.search);
     const tab = params.get('tab');
     console.log('URL tab parameter:', tab); // Debug log
     if (tab && sections.some((s) => s.id === tab)) {
@@ -42,7 +44,7 @@ const Plans = () => {
       setActive('buyer');
     }
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, []);
+  }, [location.search]); // Listen to search parameter changes
 
   const handleTabClick = (id: string) => {
     setActive(id);
@@ -156,6 +158,13 @@ const Plans = () => {
                   <>
                     
                     <SellerPlans embedded />
+                  </>
+                )}
+
+                {active === 'owner' && (
+                  <>
+                    
+                    <OwnerPlans embedded />
                   </>
                 )}
 
