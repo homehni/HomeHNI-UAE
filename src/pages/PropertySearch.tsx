@@ -316,7 +316,7 @@ const PropertySearch = () => {
             {/* Main Search Bar with City Selector and Multi-Location Support */}
             <div className="flex-1 flex gap-2">
               {/* City Selector */}
-              <div className="w-48">
+              <div className="w-36">
                 <Select value={filters.selectedCity} onValueChange={value => updateFilter('selectedCity', value)}>
                   <SelectTrigger className="h-12 border border-brand-red rounded-lg focus:ring-2 focus:ring-brand-red/20 bg-white text-sm font-medium">
                     <SelectValue placeholder="Select City" />
