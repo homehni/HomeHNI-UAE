@@ -259,6 +259,13 @@ const PropertySearch = () => {
           if (filters.locations.length < 3 && !filters.locations.includes(normalizedLocation)) {
             updateFilter('locations', [...filters.locations, normalizedLocation]);
             updateFilter('location', '');
+            // Clear the input field after Google Maps updates it
+            setTimeout(() => {
+              if (locationInputRef.current) {
+                locationInputRef.current.value = '';
+                updateFilter('location', '');
+              }
+            }, 100);
           } else {
             updateFilter('location', normalizedLocation);
           }
