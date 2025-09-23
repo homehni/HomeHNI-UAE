@@ -26,12 +26,14 @@ interface LandPlotAmenitiesStepProps {
   initialData: Partial<LandPlotAmenities>;
   onNext: (data: AmenitiesForm) => void;
   onBack: () => void;
+  listingType?: 'Industrial land' | 'Agricultural Land' | 'Commercial land';
 }
 
 export const LandPlotAmenitiesStep: React.FC<LandPlotAmenitiesStepProps> = ({
   initialData,
   onNext,
   onBack,
+  listingType,
 }) => {
   const { register, handleSubmit, setValue, formState: { errors } } = useForm<AmenitiesForm>({
     resolver: zodResolver(amenitiesSchema),
@@ -86,20 +88,22 @@ export const LandPlotAmenitiesStep: React.FC<LandPlotAmenitiesStepProps> = ({
           </div>
 
           {/* Sewage Connection and Road Width */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="space-y-2">
-              <Label className="text-sm font-medium text-gray-700">Sewage Connection</Label>
-              <Select onValueChange={(value) => setValue('sewageConnection', value as any)}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select" />
-                </SelectTrigger>
-                <SelectContent className="bg-white z-50">
-                  <SelectItem value="connected">Connected</SelectItem>
-                  <SelectItem value="septic_tank">Septic Tank</SelectItem>
-                  <SelectItem value="none">None</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+          <div className={`grid grid-cols-1 ${listingType === 'Agricultural Land' ? 'md:grid-cols-1' : 'md:grid-cols-2'} gap-6`}>
+            {listingType !== 'Agricultural Land' && (
+              <div className="space-y-2">
+                <Label className="text-sm font-medium text-gray-700">Sewage Connection</Label>
+                <Select onValueChange={(value) => setValue('sewageConnection', value as any)}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-white z-50">
+                    <SelectItem value="connected">Connected</SelectItem>
+                    <SelectItem value="septic_tank">Septic Tank</SelectItem>
+                    <SelectItem value="none">None</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
             
             <div className="space-y-2">
               <Label htmlFor="roadWidth" className="text-sm font-medium text-gray-700">
