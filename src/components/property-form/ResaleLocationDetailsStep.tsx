@@ -9,17 +9,14 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { LocationDetails } from '@/types/property';
 import { ArrowLeft, ArrowRight, Home, MapPin } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
-
 const resaleLocationSchema = z.object({
   city: z.string().min(1, "City is required"),
   locality: z.string().optional(),
   landmark: z.string().optional(),
   state: z.string().optional(),
-  pincode: z.string().optional(),
+  pincode: z.string().optional()
 });
-
 type ResaleLocationData = z.infer<typeof resaleLocationSchema>;
-
 interface ResaleLocationDetailsStepProps {
   initialData?: Partial<LocationDetails>;
   onNext: (data: LocationDetails) => void;
@@ -28,7 +25,6 @@ interface ResaleLocationDetailsStepProps {
   totalSteps: number;
   formId?: string;
 }
-
 export const ResaleLocationDetailsStep: React.FC<ResaleLocationDetailsStepProps> = ({
   initialData = {},
   onNext,
@@ -44,7 +40,6 @@ export const ResaleLocationDetailsStep: React.FC<ResaleLocationDetailsStepProps>
   const markerRef = useRef<any>(null);
   const [showMap, setShowMap] = useState(false);
   const [locationMismatchWarning, setLocationMismatchWarning] = useState<string>('');
-
   const form = useForm<ResaleLocationData>({
     resolver: zodResolver(resaleLocationSchema),
     defaultValues: {
@@ -52,8 +47,8 @@ export const ResaleLocationDetailsStep: React.FC<ResaleLocationDetailsStepProps>
       locality: initialData.locality || '',
       landmark: initialData.landmark || '',
       state: initialData.state || '',
-      pincode: initialData.pincode || '',
-    },
+      pincode: initialData.pincode || ''
+    }
   });
 
   // Update form values when initialData changes
@@ -98,67 +93,194 @@ export const ResaleLocationDetailsStep: React.FC<ResaleLocationDetailsStepProps>
       document.head.appendChild(script);
     });
   };
-
   const setMapTo = (lat: number, lng: number, title?: string) => {
     const google = (window as any).google;
     if (!google || !mapContainerRef.current) return;
     if (!mapRef.current) {
       mapRef.current = new google.maps.Map(mapContainerRef.current, {
-        center: { lat, lng },
+        center: {
+          lat,
+          lng
+        },
         zoom: 15,
         mapTypeControl: false,
         streetViewControl: false,
-        fullscreenControl: false,
+        fullscreenControl: false
       });
       markerRef.current = new google.maps.Marker({
-        position: { lat, lng },
+        position: {
+          lat,
+          lng
+        },
         map: mapRef.current,
-        title: title || 'Selected location',
+        title: title || 'Selected location'
       });
     } else {
-      mapRef.current.setCenter({ lat, lng });
+      mapRef.current.setCenter({
+        lat,
+        lng
+      });
       if (markerRef.current) {
-        markerRef.current.setPosition({ lat, lng });
+        markerRef.current.setPosition({
+          lat,
+          lng
+        });
         if (title) markerRef.current.setTitle(title);
       } else {
-        markerRef.current = new google.maps.Marker({ position: { lat, lng }, map: mapRef.current, title });
+        markerRef.current = new google.maps.Marker({
+          position: {
+            lat,
+            lng
+          },
+          map: mapRef.current,
+          title
+        });
       }
     }
     setShowMap(true);
   };
-
   const initAutocomplete = () => {
     const google = (window as any).google;
     if (!google?.maps?.places) return;
-    
     const selectedCity = form.getValues('city');
     const getCityBounds = (city: string) => {
       // Define approximate bounds for major Indian cities
-      const cityBounds: { [key: string]: { northeast: { lat: number; lng: number }; southwest: { lat: number; lng: number } } } = {
-        'Bangalore': { northeast: { lat: 13.173, lng: 77.727 }, southwest: { lat: 12.864, lng: 77.465 } },
-        'Mumbai': { northeast: { lat: 19.270, lng: 72.978 }, southwest: { lat: 18.892, lng: 72.776 } },
-        'Delhi': { northeast: { lat: 28.884, lng: 77.347 }, southwest: { lat: 28.404, lng: 76.838 } },
-        'Pune': { northeast: { lat: 18.640, lng: 73.993 }, southwest: { lat: 18.412, lng: 73.739 } },
-        'Chennai': { northeast: { lat: 13.233, lng: 80.348 }, southwest: { lat: 12.834, lng: 80.117 } },
-        'Hyderabad': { northeast: { lat: 17.567, lng: 78.658 }, southwest: { lat: 17.271, lng: 78.220 } },
-        'Gurgaon': { northeast: { lat: 28.504, lng: 77.113 }, southwest: { lat: 28.402, lng: 76.828 } },
-        'Noida': { northeast: { lat: 28.595, lng: 77.391 }, southwest: { lat: 28.570, lng: 77.359 } },
-        'Faridabad': { northeast: { lat: 28.432, lng: 77.342 }, southwest: { lat: 28.360, lng: 77.299 } },
-        'Ghaziabad': { northeast: { lat: 28.686, lng: 77.449 }, southwest: { lat: 28.654, lng: 77.412 } },
-        'Greater Noida': { northeast: { lat: 28.496, lng: 77.536 }, southwest: { lat: 28.464, lng: 77.504 } }
+      const cityBounds: {
+        [key: string]: {
+          northeast: {
+            lat: number;
+            lng: number;
+          };
+          southwest: {
+            lat: number;
+            lng: number;
+          };
+        };
+      } = {
+        'Bangalore': {
+          northeast: {
+            lat: 13.173,
+            lng: 77.727
+          },
+          southwest: {
+            lat: 12.864,
+            lng: 77.465
+          }
+        },
+        'Mumbai': {
+          northeast: {
+            lat: 19.270,
+            lng: 72.978
+          },
+          southwest: {
+            lat: 18.892,
+            lng: 72.776
+          }
+        },
+        'Delhi': {
+          northeast: {
+            lat: 28.884,
+            lng: 77.347
+          },
+          southwest: {
+            lat: 28.404,
+            lng: 76.838
+          }
+        },
+        'Pune': {
+          northeast: {
+            lat: 18.640,
+            lng: 73.993
+          },
+          southwest: {
+            lat: 18.412,
+            lng: 73.739
+          }
+        },
+        'Chennai': {
+          northeast: {
+            lat: 13.233,
+            lng: 80.348
+          },
+          southwest: {
+            lat: 12.834,
+            lng: 80.117
+          }
+        },
+        'Hyderabad': {
+          northeast: {
+            lat: 17.567,
+            lng: 78.658
+          },
+          southwest: {
+            lat: 17.271,
+            lng: 78.220
+          }
+        },
+        'Gurgaon': {
+          northeast: {
+            lat: 28.504,
+            lng: 77.113
+          },
+          southwest: {
+            lat: 28.402,
+            lng: 76.828
+          }
+        },
+        'Noida': {
+          northeast: {
+            lat: 28.595,
+            lng: 77.391
+          },
+          southwest: {
+            lat: 28.570,
+            lng: 77.359
+          }
+        },
+        'Faridabad': {
+          northeast: {
+            lat: 28.432,
+            lng: 77.342
+          },
+          southwest: {
+            lat: 28.360,
+            lng: 77.299
+          }
+        },
+        'Ghaziabad': {
+          northeast: {
+            lat: 28.686,
+            lng: 77.449
+          },
+          southwest: {
+            lat: 28.654,
+            lng: 77.412
+          }
+        },
+        'Greater Noida': {
+          northeast: {
+            lat: 28.496,
+            lng: 77.536
+          },
+          southwest: {
+            lat: 28.464,
+            lng: 77.504
+          }
+        }
       };
       return cityBounds[city];
     };
-
     const bounds = selectedCity ? getCityBounds(selectedCity) : null;
-    
     const options = {
       fields: ['formatted_address', 'geometry', 'name', 'address_components'],
       types: ['geocode'],
-      componentRestrictions: { country: 'in' as const },
-      ...(bounds && { bounds: new google.maps.LatLngBounds(bounds.southwest, bounds.northeast) })
+      componentRestrictions: {
+        country: 'in' as const
+      },
+      ...(bounds && {
+        bounds: new google.maps.LatLngBounds(bounds.southwest, bounds.northeast)
+      })
     };
-
     const attach = (el: HTMLInputElement | null, onPlace: (place: any, el: HTMLInputElement) => void) => {
       if (!el) return;
       const ac = new google.maps.places.Autocomplete(el, options);
@@ -167,20 +289,20 @@ export const ResaleLocationDetailsStep: React.FC<ResaleLocationDetailsStepProps>
         onPlace(place, el);
       });
     };
-
     attach(localityInputRef.current, (place, el) => {
       const value = place?.formatted_address || place?.name || '';
       if (value) {
         el.value = value;
-        form.setValue('locality', value, { shouldValidate: true });
+        form.setValue('locality', value, {
+          shouldValidate: true
+        });
       }
-      
+
       // Parse address components to extract city, state, and pincode
       if (place?.address_components) {
         let detectedCity = '';
         let state = '';
         let pincode = '';
-        
         place.address_components.forEach((component: any) => {
           const types = component.types;
           if (types.includes('locality') || types.includes('administrative_area_level_2')) {
@@ -191,11 +313,13 @@ export const ResaleLocationDetailsStep: React.FC<ResaleLocationDetailsStepProps>
             pincode = component.long_name;
           }
         });
-        
+
         // Validate if detected city matches selected city
         const selectedCity = form.getValues('city');
         if (selectedCity && detectedCity) {
-          const cityAliases: { [key: string]: string[] } = {
+          const cityAliases: {
+            [key: string]: string[];
+          } = {
             'Bangalore': ['Bengaluru', 'Bangalore'],
             'Mumbai': ['Mumbai', 'Bombay'],
             'Delhi': ['Delhi', 'New Delhi'],
@@ -208,29 +332,29 @@ export const ResaleLocationDetailsStep: React.FC<ResaleLocationDetailsStepProps>
             'Ghaziabad': ['Ghaziabad'],
             'Greater Noida': ['Greater Noida']
           };
-          
           const selectedCityAliases = cityAliases[selectedCity] || [selectedCity];
-          const isValidCity = selectedCityAliases.some(alias => 
-            detectedCity.toLowerCase().includes(alias.toLowerCase()) || 
-            alias.toLowerCase().includes(detectedCity.toLowerCase())
-          );
-          
+          const isValidCity = selectedCityAliases.some(alias => detectedCity.toLowerCase().includes(alias.toLowerCase()) || alias.toLowerCase().includes(detectedCity.toLowerCase()));
           if (!isValidCity) {
             setLocationMismatchWarning(`Please select another locality in ${selectedCity.toLowerCase()}`);
             // Clear the locality field
-            form.setValue('locality', '', { shouldValidate: true });
+            form.setValue('locality', '', {
+              shouldValidate: true
+            });
             el.value = '';
             return;
           } else {
             setLocationMismatchWarning('');
           }
         }
-        
+
         // Update the form fields
-        if (state) form.setValue('state', state, { shouldValidate: true });
-        if (pincode) form.setValue('pincode', pincode, { shouldValidate: true });
+        if (state) form.setValue('state', state, {
+          shouldValidate: true
+        });
+        if (pincode) form.setValue('pincode', pincode, {
+          shouldValidate: true
+        });
       }
-      
       const loc = place?.geometry?.location;
       if (loc) setMapTo(loc.lat(), loc.lng(), place?.name || 'Selected location');
     });
@@ -245,11 +369,15 @@ export const ResaleLocationDetailsStep: React.FC<ResaleLocationDetailsStepProps>
 
   // Watch for city changes and reinitialize autocomplete
   useEffect(() => {
-    const subscription = form.watch((value, { name }) => {
+    const subscription = form.watch((value, {
+      name
+    }) => {
       if (name === 'city') {
         setLocationMismatchWarning('');
         // Clear locality when city changes
-        form.setValue('locality', '', { shouldValidate: false });
+        form.setValue('locality', '', {
+          shouldValidate: false
+        });
         if (localityInputRef.current) {
           localityInputRef.current.value = '';
         }
@@ -267,7 +395,6 @@ export const ResaleLocationDetailsStep: React.FC<ResaleLocationDetailsStepProps>
     });
     return () => subscription.unsubscribe();
   }, [form]);
-
   const onSubmit = (data: ResaleLocationData) => {
     // Convert to LocationDetails format and include parsed city, state, pincode
     const locationData: LocationDetails = {
@@ -281,19 +408,15 @@ export const ResaleLocationDetailsStep: React.FC<ResaleLocationDetailsStepProps>
     console.log('ResaleLocationDetailsStep submitting:', locationData);
     onNext(locationData);
   };
-
-  return (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
-      <h1 className="text-2xl text-primary mb-6 font-semibold">Location Details</h1>
+  return <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
+      <h1 className="text-2xl mb-6 font-semibold text-red-600">Location Details</h1>
 
       <Form {...form}>
         <form id={formId} onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           {/* City Selection */}
-          <FormField
-            control={form.control}
-            name="city"
-            render={({ field }) => (
-              <FormItem>
+          <FormField control={form.control} name="city" render={({
+          field
+        }) => <FormItem>
                 <FormLabel className="text-sm font-medium">City</FormLabel>
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
@@ -316,75 +439,54 @@ export const ResaleLocationDetailsStep: React.FC<ResaleLocationDetailsStepProps>
                   </SelectContent>
                 </Select>
                 <FormMessage />
-              </FormItem>
-            )}
-          />
+              </FormItem>} />
 
           {/* Locality/Area and Landmark */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <FormField
-              control={form.control}
-              name="locality"
-              render={({ field }) => (
-                <FormItem>
+            <FormField control={form.control} name="locality" render={({
+            field
+          }) => <FormItem>
                   <FormLabel className="text-sm font-medium flex items-center gap-2">
                     <MapPin className="h-4 w-4 text-primary" />
                     Locality/Area *
                   </FormLabel>
                   <FormControl>
                     <div className="relative">
-                      <Input
-                        placeholder="Search 'Bellandur, Bengaluru, Karnataka'..."
-                        className="h-12 pl-10"
-                        {...field}
-                        ref={(el) => {
-                          field.ref(el)
-                          localityInputRef.current = el
-                        }}
-                      />
+                      <Input placeholder="Search 'Bellandur, Bengaluru, Karnataka'..." className="h-12 pl-10" {...field} ref={el => {
+                  field.ref(el);
+                  localityInputRef.current = el;
+                }} />
                       <MapPin className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                     </div>
                   </FormControl>
                   <FormMessage />
-                  {locationMismatchWarning && (
-                    <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-lg">
+                  {locationMismatchWarning && <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-lg">
                       <div className="w-6 h-6 bg-red-100 rounded flex items-center justify-center flex-shrink-0">
                         <span className="text-red-600 text-sm font-bold">✕</span>
                       </div>
                       <p className="text-sm text-red-600">{locationMismatchWarning}</p>
-                    </div>
-                  )}
-                </FormItem>
-              )}
-            />
+                    </div>}
+                </FormItem>} />
 
-            <FormField
-              control={form.control}
-              name="landmark"
-              render={({ field }) => (
-                <FormItem>
+            <FormField control={form.control} name="landmark" render={({
+            field
+          }) => <FormItem>
                   <FormLabel className="text-sm font-medium">Landmark (Optional)</FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder="e.g., Near Metro Station"
-                      className="h-12"
-                      {...field}
-                    />
+                    <Input placeholder="e.g., Near Metro Station" className="h-12" {...field} />
                   </FormControl>
                   <FormMessage />
-                </FormItem>
-              )}
-            />
+                </FormItem>} />
           </div>
 
-          {showMap && (
-            <div className="w-full h-64 md:h-80 rounded-lg border overflow-hidden">
+          {showMap && <div className="w-full h-64 md:h-80 rounded-lg border overflow-hidden">
               <div ref={mapContainerRef} className="w-full h-full" />
-            </div>
-          )}
+            </div>}
 
           {/* Navigation Buttons */}
-          <div className="flex justify-between pt-4 md:pt-6" style={{ visibility: 'hidden' }}>
+          <div className="flex justify-between pt-4 md:pt-6" style={{
+          visibility: 'hidden'
+        }}>
             <Button type="button" variant="outline" onClick={onBack} className="h-10 px-4 md:h-12 md:px-8">
               {!isMobile && <ArrowLeft className="h-4 w-4 mr-2" />}
               Back
@@ -396,6 +498,5 @@ export const ResaleLocationDetailsStep: React.FC<ResaleLocationDetailsStepProps>
           </div>
         </form>
       </Form>
-    </div>
-  );
+    </div>;
 };
