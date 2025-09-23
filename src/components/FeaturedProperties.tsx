@@ -104,7 +104,7 @@ const FeaturedProperties = ({
 }: {
   properties?: FeaturedProperty[];
 }) => {
-  const [showAll, setShowAll] = useState(false);
+  const [showAll, setShowAll] = useState(true);
   const [featuredProperties, setFeaturedProperties] = useState<FeaturedProperty[]>([]);
   const [sectionHeader, setSectionHeader] = useState<ContentElement | null>(null);
   
