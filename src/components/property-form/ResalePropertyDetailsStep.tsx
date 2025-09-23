@@ -91,9 +91,10 @@ export const ResalePropertyDetailsStep: React.FC<ResalePropertyDetailsStepProps>
       cornerProperty
     } as PropertyDetails);
   };
-  return <div className="space-y-6">
-      <div className="text-left">
-        <h2 className="text-2xl mb-6 font-semibold text-red-600">Property Details</h2>
+  return (
+    <div className="bg-background p-6">
+      <div className="text-left mb-8">
+        <h2 className="text-2xl font-semibold text-red-600 mb-2">Property Details</h2>
       </div>
 
       <Form {...form}>
@@ -396,5 +397,6 @@ export const ResalePropertyDetailsStep: React.FC<ResalePropertyDetailsStepProps>
           </div>
         </form>
       </Form>
-    </div>;
+    </div>
+  );
 };
