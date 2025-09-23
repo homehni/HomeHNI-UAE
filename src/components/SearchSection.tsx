@@ -117,15 +117,27 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
           const place = ac.getPlace();
           let value = place?.formatted_address || place?.name || '';
           
-          // Extract city name from formatted address for better matching
-          if (value && place?.formatted_address) {
-            // Extract city name from Google Places result
-            const addressComponents = place.address_components || [];
-            const cityComponent = addressComponents.find((comp: any) => 
-              comp.types.includes('locality') || comp.types.includes('administrative_area_level_2')
+          // Extract only locality name from formatted address since city is already selected
+          if (value && place?.address_components) {
+            const addressComponents = place.address_components;
+            
+            // Look for locality, sublocality, or neighborhood components
+            const localityComponent = addressComponents.find((comp: any) => 
+              comp.types.includes('sublocality_level_1') || 
+              comp.types.includes('sublocality') || 
+              comp.types.includes('locality') ||
+              comp.types.includes('neighborhood')
             );
-            if (cityComponent) {
-              value = cityComponent.long_name;
+            
+            // Use the most specific locality name available
+            if (localityComponent) {
+              value = localityComponent.long_name;
+            } else {
+              // Fallback: extract the first part of the formatted address before the first comma
+              const firstPart = value.split(',')[0].trim();
+              if (firstPart) {
+                value = firstPart;
+              }
             }
           }
           

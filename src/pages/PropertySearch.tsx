@@ -226,31 +226,30 @@ const PropertySearch = () => {
         const place = autocomplete.getPlace();
         let locationValue = place?.formatted_address || place?.name || '';
 
-        // Extract location components for better search matching
+        // Extract only locality name from formatted address since city is already selected
         if (place?.address_components) {
           const addressComponents = place.address_components;
 
-          // Extract different levels of location information
-          const localityComponent = addressComponents.find((comp: any) => comp.types.includes('locality') || comp.types.includes('sublocality') || comp.types.includes('sublocality_level_1'));
-          const cityComponent = addressComponents.find((comp: any) => comp.types.includes('administrative_area_level_2'));
-          const stateComponent = addressComponents.find((comp: any) => comp.types.includes('administrative_area_level_1'));
+          // Look for locality, sublocality, or neighborhood components (most specific first)
+          const localityComponent = addressComponents.find((comp: any) => 
+            comp.types.includes('sublocality_level_1') || 
+            comp.types.includes('sublocality') || 
+            comp.types.includes('neighborhood') ||
+            comp.types.includes('locality')
+          );
 
-          // Prioritize locality for more specific property matching
+          // Use the most specific locality name available
           if (localityComponent) {
             locationValue = localityComponent.long_name;
-            // Add city if available for better context
-            if (cityComponent && cityComponent.long_name !== localityComponent.long_name) {
-              locationValue += `, ${cityComponent.long_name}`;
+          } else {
+            // Fallback: extract the first part of the formatted address before the first comma
+            const firstPart = locationValue.split(',')[0].trim();
+            if (firstPart) {
+              locationValue = firstPart;
             }
-          } else if (cityComponent) {
-            locationValue = cityComponent.long_name;
-          }
-
-          // Add state for better disambiguation
-          if (stateComponent && !locationValue.includes(stateComponent.long_name)) {
-            locationValue += `, ${stateComponent.long_name}`;
           }
         }
+        
         if (locationValue && filters.selectedCity) {
           // Validate that the selected location is within the selected city
           const isValidLocation = place?.address_components && place.address_components.some((comp: any) => 
