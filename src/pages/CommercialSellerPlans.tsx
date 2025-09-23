@@ -313,7 +313,7 @@ const CommercialSellerPlans = () => {
             {Object.entries(tabPlans).map(([tabKey, plans]) => (
               <TabsContent key={tabKey} value={tabKey} className="space-y-8">
                 {/* Plan Cards */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                   {plans.map((plan, index) => (
                     <Card 
                       key={index} 
