@@ -93,7 +93,7 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
   return <div className="flex flex-col h-full">
       {/* Form Content - Scrollable */}
       <div className="flex-1 overflow-y-auto p-6">
-        <h1 className="text-2xl text-primary mb-6 font-semibold">Property Details</h1>
+        <h1 className="text-2xl mb-6 font-semibold text-red-600">Property Details</h1>
         
         <Form {...form}>
           <form id="property-details-form" onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
