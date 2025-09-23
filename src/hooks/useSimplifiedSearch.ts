@@ -34,6 +34,7 @@ interface SearchFilters {
   construction: string[];
   location: string; // Keep for backward compatibility
   locations: string[]; // New: array of selected locations (max 3)
+  selectedCity: string; // New: selected city for location restriction
   sortBy: string;
 }
 
@@ -71,6 +72,7 @@ export const useSimplifiedSearch = () => {
       construction: [],
       location: searchParams.get('location') || '',
       locations: parsedLocations, // Initialize from URL parameter
+      selectedCity: searchParams.get('city') || '', // Initialize from URL parameter
       sortBy: 'relevance'
     };
   });
@@ -507,6 +509,7 @@ export const useSimplifiedSearch = () => {
       construction: [],
       location: '',
       locations: [], // Clear multiple locations
+      selectedCity: '', // Clear selected city
       sortBy: 'relevance'
     });
   };

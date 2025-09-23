@@ -251,29 +251,50 @@ const PropertySearch = () => {
             locationValue += `, ${stateComponent.long_name}`;
           }
         }
-        if (locationValue) {
-          // Normalize the location for better search matching
-          const normalizedLocation = normalizeLocation(locationValue);
+        if (locationValue && filters.selectedCity) {
+          // Validate that the selected location is within the selected city
+          const isValidLocation = place?.address_components && place.address_components.some((comp: any) => 
+            comp.types.includes('administrative_area_level_2') && 
+            comp.long_name.toLowerCase().includes(filters.selectedCity.toLowerCase())
+          );
           
-          // Auto-add location if under limit
-          if (filters.locations.length < 3 && !filters.locations.includes(normalizedLocation)) {
-            updateFilter('locations', [...filters.locations, normalizedLocation]);
-            updateFilter('location', '');
-            // Clear the input field after Google Maps updates it
-            setTimeout(() => {
-              if (locationInputRef.current) {
-                locationInputRef.current.value = '';
-                updateFilter('location', '');
-              }
-            }, 100);
+          if (isValidLocation || !place?.address_components) {
+            // Normalize the location for better search matching
+            const normalizedLocation = normalizeLocation(locationValue);
+            
+            // Auto-add location if under limit
+            if (filters.locations.length < 3 && !filters.locations.includes(normalizedLocation)) {
+              updateFilter('locations', [...filters.locations, normalizedLocation]);
+              updateFilter('location', '');
+              // Clear the input field after Google Maps updates it
+              setTimeout(() => {
+                if (locationInputRef.current) {
+                  locationInputRef.current.value = '';
+                  updateFilter('location', '');
+                }
+              }, 100);
+            } else {
+              updateFilter('location', normalizedLocation);
+            }
           } else {
-            updateFilter('location', normalizedLocation);
+            // Clear invalid location and show error
+            updateFilter('location', '');
+            if (locationInputRef.current) {
+              locationInputRef.current.value = '';
+            }
+          }
+        } else if (!filters.selectedCity) {
+          // Clear location if no city selected
+          updateFilter('location', '');
+          if (locationInputRef.current) {
+            locationInputRef.current.value = '';
           }
         }
       });
     };
+    
     loadGoogleMaps().then(initAutocomplete).catch(console.error);
-  }, [updateFilter]);
+  }, [updateFilter, filters.selectedCity]); // Re-initialize when selectedCity changes
   return <div className="min-h-screen bg-background">
       {/* Marquee at the very top */}
       <Marquee />
@@ -292,8 +313,29 @@ const PropertySearch = () => {
               </TabsList>
             </Tabs>
 
-            {/* Main Search Bar with Multi-Location Support */}
+            {/* Main Search Bar with City Selector and Multi-Location Support */}
             <div className="flex-1 flex gap-2">
+              {/* City Selector */}
+              <div className="w-40">
+                <Select value={filters.selectedCity} onValueChange={value => updateFilter('selectedCity', value)}>
+                  <SelectTrigger className="h-12 border-brand-red focus:ring-2 focus:ring-brand-red/20">
+                    <SelectValue placeholder="Select City" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-background border shadow-lg z-50">
+                    <SelectItem value="">All Cities</SelectItem>
+                    <SelectItem value="bangalore">Bangalore</SelectItem>
+                    <SelectItem value="mumbai">Mumbai</SelectItem>
+                    <SelectItem value="delhi">Delhi</SelectItem>
+                    <SelectItem value="pune">Pune</SelectItem>
+                    <SelectItem value="hyderabad">Hyderabad</SelectItem>
+                    <SelectItem value="chennai">Chennai</SelectItem>
+                    <SelectItem value="kolkata">Kolkata</SelectItem>
+                    <SelectItem value="ahmedabad">Ahmedabad</SelectItem>
+                    <SelectItem value="jaipur">Jaipur</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              
               <div className="relative flex-1">
                 <MapPin className="absolute left-3 top-3 text-brand-red" size={20} />
                 
@@ -334,7 +376,7 @@ const PropertySearch = () => {
                     onKeyDown={e => {
                       if (e.key === 'Enter' && filters.location.trim()) {
                         e.preventDefault();
-                        if (filters.locations.length < 3 && !filters.locations.includes(filters.location.trim())) {
+                        if (filters.selectedCity && filters.locations.length < 3 && !filters.locations.includes(filters.location.trim())) {
                           updateFilter('locations', [...filters.locations, filters.location.trim()]);
                           updateFilter('location', '');
                           // Keep focus on input after adding location
@@ -354,10 +396,10 @@ const PropertySearch = () => {
                       // Ensure input is always focused and ready for typing
                       e.target.select();
                     }}
-                    placeholder={filters.locations.length === 0 ? "Enter location or area name..." : filters.locations.length >= 3 ? "Max 3 locations selected" : "Add more..."}
+                    placeholder={!filters.selectedCity ? "Select a city first..." : filters.locations.length === 0 ? "Enter locality or area name..." : filters.locations.length >= 3 ? "Max 3 locations selected" : "Add more..."}
                     className="flex-1 min-w-32 outline-none bg-transparent text-sm"
-                    disabled={filters.locations.length >= 3}
-                    autoFocus={filters.locations.length < 3}
+                    disabled={filters.locations.length >= 3 || !filters.selectedCity}
+                    autoFocus={filters.locations.length < 3 && !!filters.selectedCity}
                   />
                   
                   {/* Location Counter */}
