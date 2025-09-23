@@ -123,11 +123,14 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
           }
           
           if (el && value) {
-            el.value = value;
-            setSearchQuery(value);
             // Auto-add location if under limit
             if (selectedLocations.length < 3 && !selectedLocations.includes(value)) {
-              addLocation(value);
+              setSelectedLocations(prev => [...prev, value]);
+              el.value = '';
+              setSearchQuery('');
+            } else {
+              el.value = value;
+              setSearchQuery(value);
             }
           }
         });
@@ -183,7 +186,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                 <input 
                   ref={mobileInputRef} 
                   type="text" 
-                  placeholder={selectedLocations.length >= 3 ? "Max 3 locations selected" : "Search 'Sector 150 Noida'"} 
+                  placeholder={selectedLocations.length >= 3 ? "Max 3 locations selected" : selectedLocations.length > 0 ? `Add location ${selectedLocations.length + 1}/3` : "Search 'Sector 150 Noida'"} 
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onKeyPress={handleKeyPress}
@@ -243,7 +246,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                          <MapPin className="absolute left-3 top-3 text-brand-red" size={16} />
                          <Input 
                            ref={inputRef} 
-                           placeholder={selectedLocations.length >= 3 ? "Max 3 locations selected" : "Search 'Anything'"} 
+                           placeholder={selectedLocations.length >= 3 ? "Max 3 locations selected" : selectedLocations.length > 0 ? `Add location ${selectedLocations.length + 1}/3` : "Search 'Anything'"} 
                            value={searchQuery}
                            onChange={(e) => setSearchQuery(e.target.value)}
                            onKeyPress={handleKeyPress}
