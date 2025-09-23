@@ -82,8 +82,7 @@ export const fetchFeaturedProperties = async () => {
   
   // Include properties marked is_featured OR curated in featured_properties
   const featuredData = (data || [])
-    .filter((p: any) => Boolean(p.is_featured) || curatedIds.has(p.id))
-    .slice(0, 20);
+    .filter((p: any) => Boolean(p.is_featured) || curatedIds.has(p.id));
   
   return featuredData;
 };
