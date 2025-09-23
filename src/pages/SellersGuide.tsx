@@ -13,16 +13,18 @@ const SellersGuide = () => {
       <Header />
       
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-orange-600 to-red-700 text-white py-20 md:py-32">
+      <section 
+        className="relative bg-cover bg-center bg-no-repeat text-white py-20 md:py-32" 
+        style={{
+          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/lovable-uploads/fbb0d72f-782e-49f5-bbe1-8afc1314b5f7.png')`
+        }}
+      >
         <div className="container mx-auto px-4">
           <div className="text-center">
             <h1 className="text-4xl md:text-6xl font-bold mb-6">Property Sellers Guide</h1>
             <p className="text-xl md:text-2xl mb-8 opacity-90">
               Maximize your property value with our comprehensive selling guide
             </p>
-            <Button className="bg-white text-orange-600 hover:bg-gray-100 px-8 py-3 text-lg">
-              Start Selling
-            </Button>
           </div>
         </div>
       </section>

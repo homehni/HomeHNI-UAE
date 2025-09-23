@@ -17,10 +17,10 @@ const grievanceSchema = z.object({
   name: z.string().min(1, 'Name is required'),
   email: z.string().email('Please enter a valid email address'),
   contactNumber: z.string().min(10, 'Please enter a valid contact number'),
-  platform: z.string().min(1, 'Please select a platform/section'),
-  url: z.string().url('Please enter a valid URL'),
-  complaintNature: z.string().min(1, 'Please select nature of complaint'),
-  description: z.string().min(10, 'Please provide a detailed description'),
+  platform: z.string().optional(),
+  url: z.string().optional(),
+  complaintNature: z.string().optional(),
+  description: z.string().optional(),
   supportingDocument: z.any().optional(),
 });
 
@@ -281,10 +281,10 @@ const GrievanceRedressal = () => {
                   </div>
 
                   {/* Submit Button */}
-                  <div className="pt-4">
+                  <div className="pt-4 flex justify-center">
                     <Button 
                       type="submit" 
-                      className="w-full md:w-auto bg-brand-red hover:bg-brand-red-dark text-white px-8 py-3"
+                      className="bg-brand-red hover:bg-brand-red-dark text-white px-8 py-3"
                       disabled={isSubmitting}
                     >
                       {isSubmitting ? 'Submitting...' : 'Submit Grievance'}
