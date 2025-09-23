@@ -76,9 +76,9 @@ export const CommercialSalePropertyDetailsStep = ({
   const onError = (errors: any) => {
     console.log('Form validation errors:', errors);
   };
-  return <div className="space-y-6">
-      <div className="text-left">
-        <h2 className="text-2xl text-red-600 mb-2 font-semibold">Commercial Property Details</h2>
+  return <div className="bg-background p-6">
+      <div className="text-left mb-8">
+        <h1 className="text-2xl font-semibold text-red-600 mb-2">Commercial Property Details</h1>
       </div>
 
       <Form {...form}>

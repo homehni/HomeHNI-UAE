@@ -35,7 +35,11 @@ export const CommercialSaleGalleryStep = ({
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
+    <div className="bg-background p-6">
+      <div className="text-left mb-8">
+        <h1 className="text-2xl font-semibold text-red-600 mb-2">Upload Photos & Videos</h1>
+      </div>
+      
       <form onSubmit={handleSubmit}>
         <div className="space-y-8">
           <div>

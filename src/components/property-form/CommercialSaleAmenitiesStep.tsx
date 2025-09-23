@@ -51,9 +51,9 @@ export const CommercialSaleAmenitiesStep = ({
   const onSubmit = (data: CommercialSaleAmenitiesForm) => {
     onNext(data);
   };
-  return <div className="max-w-4xl mx-auto p-6">
-      <div className="mb-8 text-left">
-        <h2 className="text-2xl text-red-600 mb-2 font-semibold">Amenities & Features</h2>
+  return <div className="bg-background p-6">
+      <div className="text-left mb-8">
+        <h1 className="text-2xl font-semibold text-red-600 mb-2">Amenities & Features</h1>
       </div>
 
       <Form {...form}>
