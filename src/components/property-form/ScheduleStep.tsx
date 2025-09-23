@@ -224,15 +224,6 @@ export const ScheduleStep: React.FC<ScheduleStepProps> = ({
             </div>
           </div>
 
-          {/* Submit Property Button */}
-          <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
-            <Button type="button" variant="outline" onClick={onBack} className="order-2 sm:order-1">
-              Back
-            </Button>
-            <Button type="submit" size="lg" className="bg-red-600 hover:bg-red-700 text-white px-8 py-3 text-lg font-semibold order-1 sm:order-2">
-              Submit Property
-            </Button>
-          </div>
 
         </form>
       </Form>

@@ -117,8 +117,17 @@ export const FlattmatesAmenitiesStep: React.FC<FlattmatesAmenitiesStepProps> = (
   });
 
   const onSubmit = (data: FlattmatesAmenitiesFormData) => {
-    console.log('FlattmatesAmenitiesStep submitting data:', data);
+    console.log('=== FlattmatesAmenitiesStep onSubmit called ===');
+    console.log('Form data received:', data);
+    console.log('Data type:', typeof data);
+    console.log('Data keys:', Object.keys(data || {}));
+    console.log('Form errors:', form.formState.errors);
+    console.log('Form isValid:', form.formState.isValid);
+    console.log('Form isDirty:', form.formState.isDirty);
+    console.log('About to call onNext...');
     onNext(data);
+    console.log('onNext called successfully');
+    console.log('=== FlattmatesAmenitiesStep onSubmit completed ===');
   };
 
   return (
@@ -699,14 +708,6 @@ export const FlattmatesAmenitiesStep: React.FC<FlattmatesAmenitiesStepProps> = (
             </div>
           </div>
 
-          <div className="flex justify-between pt-6" style={{ visibility: 'hidden' }}>
-            <Button type="button" variant="outline" onClick={onBack} className="bg-muted text-muted-foreground">
-              Back
-            </Button>
-            <Button type="submit" className="bg-primary text-primary-foreground">
-              Save & Continue
-            </Button>
-          </div>
         </form>
       </Form>
     </div>

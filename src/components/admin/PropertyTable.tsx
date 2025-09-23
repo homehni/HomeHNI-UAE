@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Eye, CheckCircle, XCircle, Trash2, Search, MoreHorizontal, EyeOff } from 'lucide-react';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
@@ -64,6 +65,11 @@ interface PropertyTableProps {
   onDelete: (id: string) => void;
   onToggleVisibility?: (id: string, isVisible: boolean) => void;
   actionLoading: boolean;
+  // Multi-select functionality
+  selectedProperties: string[];
+  onSelectionChange: (selectedIds: string[]) => void;
+  onBulkDelete: (selectedIds: string[]) => void;
+  bulkActionLoading: boolean;
 }
 
 export const PropertyTable: React.FC<PropertyTableProps> = ({
@@ -81,7 +87,31 @@ export const PropertyTable: React.FC<PropertyTableProps> = ({
   onDelete,
   onToggleVisibility,
   actionLoading,
+  selectedProperties,
+  onSelectionChange,
+  onBulkDelete,
+  bulkActionLoading,
 }) => {
+  // Multi-select functionality
+  const handleSelectAll = (checked: boolean) => {
+    if (checked) {
+      onSelectionChange(properties.map(p => p.id));
+    } else {
+      onSelectionChange([]);
+    }
+  };
+
+  const handleSelectProperty = (propertyId: string, checked: boolean) => {
+    if (checked) {
+      onSelectionChange([...selectedProperties, propertyId]);
+    } else {
+      onSelectionChange(selectedProperties.filter(id => id !== propertyId));
+    }
+  };
+
+  const isAllSelected = properties.length > 0 && selectedProperties.length === properties.length;
+  const isIndeterminate = selectedProperties.length > 0 && selectedProperties.length < properties.length;
+
   const getStatusBadge = (status: string) => {
     const variants = {
       approved: { variant: 'default' as const, className: 'bg-green-100 text-green-800 hover:bg-green-100' },
@@ -145,11 +175,53 @@ export const PropertyTable: React.FC<PropertyTableProps> = ({
         </div>
       </CardHeader>
       
+      {/* Bulk Actions Toolbar */}
+      {selectedProperties.length > 0 && (
+        <div className="px-6 py-3 bg-blue-50 border-b border-blue-200">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <span className="text-sm font-medium text-blue-900">
+                {selectedProperties.length} propert{selectedProperties.length === 1 ? 'y' : 'ies'} selected
+              </span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <Button
+                size="sm"
+                variant="destructive"
+                onClick={() => onBulkDelete(selectedProperties)}
+                disabled={bulkActionLoading}
+                className="h-8"
+              >
+                <Trash2 className="h-4 w-4 mr-2" />
+                Delete Selected
+              </Button>
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => onSelectionChange([])}
+                className="h-8"
+              >
+                Clear Selection
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+      
       <CardContent className="p-0">
         <div className="rounded-md border border-border overflow-hidden">
           <Table>
             <TableHeader>
               <TableRow className="bg-muted/50">
+                <TableHead className="font-semibold w-[50px]">
+                  <Checkbox
+                    checked={isAllSelected}
+                    onCheckedChange={handleSelectAll}
+                    ref={(el) => {
+                      if (el) el.indeterminate = isIndeterminate;
+                    }}
+                  />
+                </TableHead>
                 <TableHead className="font-semibold w-[300px]">Property</TableHead>
                 <TableHead className="font-semibold w-[200px]">Owner</TableHead>
                 <TableHead className="font-semibold w-[150px]">Location</TableHead>
@@ -164,8 +236,17 @@ export const PropertyTable: React.FC<PropertyTableProps> = ({
               {properties.map((property) => (
                 <TableRow 
                   key={property.id} 
-                  className="hover:bg-muted/30 transition-colors"
+                  className={cn(
+                    "hover:bg-muted/30 transition-colors",
+                    selectedProperties.includes(property.id) && "bg-blue-50"
+                  )}
                 >
+                  <TableCell className="py-4 px-4">
+                    <Checkbox
+                      checked={selectedProperties.includes(property.id)}
+                      onCheckedChange={(checked) => handleSelectProperty(property.id, checked as boolean)}
+                    />
+                  </TableCell>
                   <TableCell className="font-medium py-4 px-4">
                     <div className="space-y-2">
                       <div className="font-medium text-foreground text-sm leading-tight">

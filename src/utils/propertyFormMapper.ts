@@ -57,8 +57,8 @@ interface Property {
 // Helper function to map property type from database to form
 const mapPropertyTypeToForm = (dbType: string): string => {
   const typeMap: { [key: string]: string } = {
-    'apartment': 'Apartment/Flat',
-    'villa': 'Villa',
+    'apartment': 'Apartment',
+    'villa': 'Independent House/Villa', // Map villa to Independent House/Villa for flatmates
     'independent_house': 'Independent House/Villa',
     'builder_floor': 'Builder Floor',
     'studio_apartment': 'Studio Apartment',
@@ -77,7 +77,7 @@ const mapPropertyTypeToForm = (dbType: string): string => {
     'coworking': 'Co-working',
     'hotel': 'Hospitality/Hotel'
   };
-  return typeMap[dbType] || 'Apartment/Flat';
+  return typeMap[dbType] || 'Apartment';
 };
 
 // Helper function to map listing type from database to form

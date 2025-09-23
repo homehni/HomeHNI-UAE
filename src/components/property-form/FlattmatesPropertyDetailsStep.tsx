@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -6,6 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 
 interface FlattmatesPropertyDetails {
   apartmentType: string;
+  apartmentName?: string; // Optional apartment name field
   bhkType: string;
   floorNo: number | string;
   totalFloors: number | string;
@@ -13,6 +14,7 @@ interface FlattmatesPropertyDetails {
   tenantType: string;
   facing: string;
   builtUpArea: number;
+  propertyAge: string;
 }
 
 interface FlattmatesPropertyDetailsStepProps {
@@ -36,6 +38,7 @@ export function FlattmatesPropertyDetailsStep({
 }: FlattmatesPropertyDetailsStepProps) {
   const [formData, setFormData] = useState<FlattmatesPropertyDetails>({
     apartmentType: '',
+    apartmentName: '', // Initialize apartment name field
     bhkType: '',
     floorNo: 0,
     totalFloors: 0,
@@ -43,8 +46,14 @@ export function FlattmatesPropertyDetailsStep({
     tenantType: '',
     facing: '',
     builtUpArea: 0,
+    propertyAge: '',
     ...initialData,
   });
+
+  // Debug: Log formData changes
+  useEffect(() => {
+    console.log('FlattmatesPropertyDetailsStep formData updated:', formData);
+  }, [formData]);
 
   // Get minimum total floors based on selected floor
   const getMinTotalFloors = () => {
@@ -55,14 +64,27 @@ export function FlattmatesPropertyDetailsStep({
   };
 
   const handleSubmit = (e: React.FormEvent) => {
-    console.log('FlattmatesPropertyDetailsStep handleSubmit called');
+    console.log('=== FlattmatesPropertyDetailsStep handleSubmit called ===');
+    console.log('Event:', e);
+    console.log('Event type:', e.type);
+    console.log('Event target:', e.target);
+    console.log('Form data:', formData);
+    console.log('onNext function:', onNext);
+    console.log('onNext function type:', typeof onNext);
     e.preventDefault();
     if (isFormValid()) {
       console.log('Form is valid, calling onNext with data:', formData);
-      onNext(formData);
+      console.log('About to call onNext...');
+      try {
+        onNext(formData);
+        console.log('onNext called successfully');
+      } catch (error) {
+        console.error('Error calling onNext:', error);
+      }
     } else {
       console.log('Form is not valid');
     }
+    console.log('=== FlattmatesPropertyDetailsStep handleSubmit completed ===');
   };
 
   const isFormValid = () => {
@@ -83,16 +105,23 @@ export function FlattmatesPropertyDetailsStep({
                     <Label htmlFor="apartmentType">Type of Property</Label>
                     <Select
                       value={formData.apartmentType}
-                      onValueChange={(value) => setFormData({ ...formData, apartmentType: value })}
+                      onValueChange={(value) => {
+                        console.log('Apartment Type changed to:', value);
+                        setFormData({ 
+                          ...formData, 
+                          apartmentType: value,
+                          // Clear apartment name if not Apartment type
+                          apartmentName: value === 'Apartment' ? formData.apartmentName : ''
+                        });
+                      }}
                     >
                       <SelectTrigger className="h-12">
                         <SelectValue placeholder="Select apartment type" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="Independent House">Independent House</SelectItem>
-                        <SelectItem value="Villa">Villa</SelectItem>
                         <SelectItem value="Apartment">Apartment</SelectItem>
-                        <SelectItem value="Builder Floor">Builder Floor</SelectItem>
+                        <SelectItem value="Independent House/Villa">Independent House/Villa</SelectItem>
+                        <SelectItem value="Gated Community Villa">Gated Community Villa</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -101,7 +130,10 @@ export function FlattmatesPropertyDetailsStep({
                     <Label htmlFor="bhkType">BHK Type</Label>
                     <Select
                       value={formData.bhkType}
-                      onValueChange={(value) => setFormData({ ...formData, bhkType: value })}
+                      onValueChange={(value) => {
+                        console.log('BHK Type changed to:', value);
+                        setFormData({ ...formData, bhkType: value });
+                      }}
                     >
                       <SelectTrigger className="h-12">
                         <SelectValue placeholder="Select BHK configuration" />
@@ -117,6 +149,25 @@ export function FlattmatesPropertyDetailsStep({
                   </div>
                 </div>
 
+                {/* Conditional Apartment Name Field - Half Width */}
+                {formData.apartmentType === 'Apartment' && (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="apartmentName">Apartment Name (Optional)</Label>
+                      <Input
+                        id="apartmentName"
+                        type="text"
+                        placeholder="Enter apartment/society name"
+                        value={formData.apartmentName || ''}
+                        onChange={(e) => setFormData({ ...formData, apartmentName: e.target.value })}
+                        className="h-12"
+                      />
+                    </div>
+                    {/* Empty div to maintain grid structure */}
+                    <div></div>
+                  </div>
+                )}
+
                 {/* Floor and Total Floors */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
@@ -131,7 +182,19 @@ export function FlattmatesPropertyDetailsStep({
                         if (value === 'lower' || value === 'upper' || value === '99+') {
                           setFormData({ ...formData, floorNo: value as any });
                         } else {
-                          setFormData({ ...formData, floorNo: parseInt(value) });
+                          const newFloorNo = parseInt(value);
+                          const currentTotalFloors = formData.totalFloors;
+                          
+                          // If the new floor number is higher than current total floors, update total floors
+                          if (typeof currentTotalFloors === 'number' && newFloorNo > currentTotalFloors) {
+                            setFormData({ 
+                              ...formData, 
+                              floorNo: newFloorNo,
+                              totalFloors: newFloorNo
+                            });
+                          } else {
+                            setFormData({ ...formData, floorNo: newFloorNo });
+                          }
                         }
                       }}
                     >
@@ -174,7 +237,9 @@ export function FlattmatesPropertyDetailsStep({
                         <SelectValue placeholder="Select total floors" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="0">Ground</SelectItem>
+                        {formData.floorNo === 0 && (
+                          <SelectItem value="0">Ground</SelectItem>
+                        )}
                         {[...Array(99)].map((_, i) => {
                           const floor = i + 1;
                           const minFloors = getMinTotalFloors();
@@ -204,10 +269,10 @@ export function FlattmatesPropertyDetailsStep({
                       <SelectTrigger className="h-12">
                         <SelectValue placeholder="Select room sharing type" />
                       </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="Single Room">Single Room</SelectItem>
-                        <SelectItem value="Shared Room">Shared Room</SelectItem>
-                      </SelectContent>
+                <SelectContent>
+                  <SelectItem value="Single Room">Single Room</SelectItem>
+                  <SelectItem value="Shared Room">Shared Room</SelectItem>
+                </SelectContent>
                     </Select>
                   </div>
 
@@ -277,14 +342,6 @@ export function FlattmatesPropertyDetailsStep({
                   </div>
                 </div>
 
-                <div className="flex justify-between pt-6" style={{ visibility: 'hidden' }}>
-                  <Button type="button" variant="outline" onClick={onBack}>
-                    Back
-                  </Button>
-                  <Button type="submit">
-                    Save & Continue
-                  </Button>
-                </div>
               </form>
           </div>
     </div>

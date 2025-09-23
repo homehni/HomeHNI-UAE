@@ -50,6 +50,10 @@ const AdminProperties = () => {
   const [featuredFilter, setFeaturedFilter] = useState(false);
   const [newPropertyCount, setNewPropertyCount] = useState(0);
   const [lastViewedTime, setLastViewedTime] = useState<string>(new Date().toISOString());
+  const [selectedProperties, setSelectedProperties] = useState<string[]>([]);
+  const [bulkActionLoading, setBulkActionLoading] = useState(false);
+  const [bulkDeleteModalOpen, setBulkDeleteModalOpen] = useState(false);
+  const [propertiesToBulkDelete, setPropertiesToBulkDelete] = useState<string[]>([]);
   const [stats, setStats] = useState({
     total: 0,
     pending: 0,
@@ -721,6 +725,104 @@ const AdminProperties = () => {
     }
   };
 
+  const handleBulkDelete = async (selectedIds: string[]) => {
+    if (selectedIds.length === 0) return;
+
+    // Show confirmation modal
+    setPropertiesToBulkDelete(selectedIds);
+    setBulkDeleteModalOpen(true);
+  };
+
+  const confirmBulkDelete = async () => {
+    if (propertiesToBulkDelete.length === 0) return;
+
+    setBulkActionLoading(true);
+    try {
+      // Check if current user has admin role
+      const { data: currentUser } = await supabase.auth.getUser();
+      if (!currentUser.user) {
+        throw new Error('User not authenticated');
+      }
+
+      const { data: userRoles } = await supabase
+        .from('user_roles')
+        .select('role')
+        .eq('user_id', currentUser.user.id);
+      
+      const isAdmin = userRoles?.some(r => r.role === 'admin');
+      
+      if (!isAdmin) {
+        throw new Error('Only administrators can delete properties');
+      }
+
+      // Process each selected property
+      const deletePromises = propertiesToBulkDelete.map(async (propertyId) => {
+        // First, get the submission to find associated property if approved
+        const { data: submission } = await supabase
+          .from('property_submissions')
+          .select('*')
+          .eq('id', propertyId)
+          .single();
+
+        if (submission?.status === 'approved') {
+          // Find and delete from main properties table using title match
+          const { data: properties } = await supabase
+            .from('properties')
+            .select('id')
+            .eq('title', submission.title)
+            .eq('city', submission.city)
+            .eq('state', submission.state);
+
+          if (properties && properties.length > 0) {
+            const propertyId = properties[0].id;
+            
+            // Delete from properties table
+            await supabase
+              .from('properties')
+              .delete()
+              .eq('id', propertyId);
+
+            // Delete from content_elements (featured properties)
+            await supabase
+              .from('content_elements')
+              .delete()
+              .eq('element_type', 'featured_property')
+              .like('content', `%"id":"${propertyId}"%`);
+          }
+        }
+
+        // Delete the submission
+        return supabase
+          .from('property_submissions')
+          .delete()
+          .eq('id', propertyId);
+      });
+
+      // Execute all delete operations
+      await Promise.all(deletePromises);
+
+      toast({
+        title: 'Success',
+        description: `${propertiesToBulkDelete.length} propert${propertiesToBulkDelete.length === 1 ? 'y' : 'ies'} deleted successfully`
+      });
+
+      // Clear selection and refresh data
+      setSelectedProperties([]);
+      setBulkDeleteModalOpen(false);
+      setPropertiesToBulkDelete([]);
+      fetchProperties();
+    } catch (error) {
+      console.error('Error bulk deleting properties:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to delete selected properties',
+        variant: 'destructive'
+      });
+    } finally {
+      setBulkActionLoading(false);
+    }
+  };
+
   const handleRejectWithProperty = (property: PropertySubmission) => {
     setSelectedProperty(property);
     setReviewModalOpen(true);
@@ -845,6 +947,10 @@ const AdminProperties = () => {
         }}
         onToggleVisibility={handleToggleVisibility}
         actionLoading={actionLoading}
+        selectedProperties={selectedProperties}
+        onSelectionChange={setSelectedProperties}
+        onBulkDelete={handleBulkDelete}
+        bulkActionLoading={bulkActionLoading}
       />
 
       <PropertyReviewModal
@@ -869,6 +975,18 @@ const AdminProperties = () => {
         title="Delete Property"
         description="Are you sure you want to delete this property? This action will mark it as deleted."
         isDeleting={actionLoading}
+      />
+
+      <DeleteConfirmationModal
+        isOpen={bulkDeleteModalOpen}
+        onClose={() => {
+          setBulkDeleteModalOpen(false);
+          setPropertiesToBulkDelete([]);
+        }}
+        onConfirm={confirmBulkDelete}
+        title="Delete Selected Properties"
+        description={`Are you sure you want to delete ${propertiesToBulkDelete.length} propert${propertiesToBulkDelete.length === 1 ? 'y' : 'ies'}? This action cannot be undone.`}
+        isDeleting={bulkActionLoading}
       />
     </div>
   );

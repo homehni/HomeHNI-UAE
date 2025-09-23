@@ -33,6 +33,43 @@ const PropertySearch = () => {
     isLoading
   } = useSimplifiedSearch();
 
+  // Get max value for budget slider based on active tab
+  const getBudgetSliderMax = (tab: string): number => {
+    switch (tab) {
+      case 'rent':
+        return 500000; // 5 Lakh for rent
+      case 'buy':
+        return 50000000; // 5 Crore for buy
+      case 'commercial':
+        return 50000000; // 5 Crore for commercial
+      default:
+        return 50000000; // Default to buy range
+    }
+  };
+
+  // Get step size for budget slider based on active tab
+  const getBudgetSliderStep = (tab: string): number => {
+    switch (tab) {
+      case 'rent':
+        return 10000; // 10K steps for rent (more granular)
+      case 'buy':
+        return 500000; // 5L steps for buy
+      case 'commercial':
+        return 500000; // 5L steps for commercial
+      default:
+        return 500000; // Default to buy range
+    }
+  };
+
+  // Ensure budget values are within valid range for current tab
+  const getValidBudgetValue = (budget: [number, number], tab: string): [number, number] => {
+    const maxValue = getBudgetSliderMax(tab);
+    return [
+      Math.min(Math.max(budget[0], 0), maxValue),
+      Math.min(Math.max(budget[1], 0), maxValue)
+    ];
+  };
+
   // Calculate pagination
   const totalProperties = filteredProperties.length;
   const totalPages = Math.ceil(totalProperties / itemsPerPage);
@@ -45,8 +82,33 @@ const PropertySearch = () => {
     setCurrentPage(1);
   }, [filteredProperties]);
 
+  // Keep input focused after adding locations
+  useEffect(() => {
+    if (filters.locations.length < 3 && locationInputRef.current) {
+      // Small delay to ensure state has updated
+      setTimeout(() => {
+        if (locationInputRef.current) {
+          locationInputRef.current.focus();
+        }
+      }, 100);
+    }
+  }, [filters.locations.length]);
+
   // Property types that match the database schema and FeaturedProperties component
-  const propertyTypes = ['ALL', 'DUPLEX', 'PENTHOUSE', 'APARTMENT', 'VILLA', 'PLOT', 'PG HOSTEL', 'INDEPENDENT HOUSE'];
+  const getPropertyTypes = (tab: string): string[] => {
+    switch (tab) {
+      case 'rent':
+        return ['ALL', 'APARTMENT', 'VILLA', 'INDEPENDENT HOUSE', 'PENTHOUSE', 'DUPLEX', 'GATED COMMUNITY VILLA'];
+      case 'buy':
+        return ['ALL', 'APARTMENT', 'CO-LIVING', 'VILLA', 'INDEPENDENT HOUSE', 'BUILDER FLOOR', 'STUDIO APARTMENT', 'CO-WORKING', 'PENTHOUSE', 'DUPLEX'];
+      case 'commercial':
+        return ['ALL', 'OFFICE', 'RETAIL', 'WAREHOUSE', 'SHOWROOM', 'RESTAURANT', 'CO-WORKING', 'INDUSTRIAL'];
+      default:
+        return ['ALL', 'APARTMENT', 'VILLA', 'INDEPENDENT HOUSE', 'PENTHOUSE', 'DUPLEX'];
+    }
+  };
+
+  const propertyTypes = getPropertyTypes(activeTab);
   const bhkTypes = ['1 RK', '1 BHK', '2 BHK', '3 BHK', '4 BHK', '5+ BHK'];
   const furnishedOptions = ['Furnished', 'Semi-Furnished', 'Unfurnished'];
   const availabilityOptions = ['Ready to Move', 'Under Construction'];
@@ -216,21 +278,95 @@ const PropertySearch = () => {
               </TabsList>
             </Tabs>
 
-            {/* Location Search with Google Maps Places Autocomplete */}
+            {/* Main Search Bar with Multi-Location Support */}
             <div className="flex-1 flex gap-2">
               <div className="relative flex-1">
                 <MapPin className="absolute left-3 top-3 text-brand-red" size={20} />
-                <Input ref={locationInputRef} value={filters.location} onChange={e => {
-                const normalizedLocation = normalizeLocation(e.target.value);
-                updateFilter('location', normalizedLocation);
-              }} placeholder="Enter location or area name..." className="pl-10 pr-4 h-12 border-brand-red focus:ring-2 focus:ring-brand-red/20" />
-                {filters.location && <div className="absolute right-3 top-3">
-                    <Button variant="ghost" size="sm" onClick={() => updateFilter('location', '')} className="h-6 w-6 p-0 hover:bg-brand-red/10">
+                
+                {/* Multi-Location Search Bar */}
+                <div 
+                  className="flex flex-wrap items-center gap-2 p-3 pl-10 pr-4 min-h-12 border border-brand-red rounded-lg focus-within:ring-2 focus-within:ring-brand-red/20 bg-white cursor-text"
+                  onClick={() => {
+                    // Focus input when clicking anywhere in the search bar
+                    if (locationInputRef.current && filters.locations.length < 3) {
+                      locationInputRef.current.focus();
+                    }
+                  }}
+                >
+                  {/* Location Chips */}
+                  {filters.locations.map((location, index) => (
+                    <div key={index} className="flex items-center gap-1 bg-gray-200 text-gray-800 px-2 py-1 rounded-full text-sm">
+                      <span className="truncate max-w-32">{location}</span>
+                      <button
+                        onClick={() => {
+                          const newLocations = filters.locations.filter((_, i) => i !== index);
+                          updateFilter('locations', newLocations);
+                        }}
+                        className="hover:bg-gray-300 rounded-full p-0.5"
+                      >
+                        <X size={12} />
+                      </button>
+                    </div>
+                  ))}
+                  
+                  {/* Input Field */}
+                  <input
+                    ref={locationInputRef}
+                    value={filters.location}
+                    onChange={e => {
+                      const normalizedLocation = normalizeLocation(e.target.value);
+                      updateFilter('location', normalizedLocation);
+                    }}
+                    onKeyDown={e => {
+                      if (e.key === 'Enter' && filters.location.trim()) {
+                        e.preventDefault();
+                        if (filters.locations.length < 3 && !filters.locations.includes(filters.location.trim())) {
+                          updateFilter('locations', [...filters.locations, filters.location.trim()]);
+                          updateFilter('location', '');
+                          // Keep focus on input after adding location
+                          setTimeout(() => {
+                            if (locationInputRef.current) {
+                              locationInputRef.current.focus();
+                            }
+                          }, 0);
+                        }
+                      }
+                      if (e.key === 'Backspace' && filters.location === '' && filters.locations.length > 0) {
+                        const newLocations = filters.locations.slice(0, -1);
+                        updateFilter('locations', newLocations);
+                      }
+                    }}
+                    onFocus={e => {
+                      // Ensure input is always focused and ready for typing
+                      e.target.select();
+                    }}
+                    placeholder={filters.locations.length === 0 ? "Enter location or area name..." : "Add more..."}
+                    className="flex-1 min-w-32 outline-none bg-transparent text-sm"
+                    autoFocus={filters.locations.length < 3}
+                  />
+                  
+                  {/* Location Counter */}
+                  {filters.locations.length >= 3 && (
+                    <span className="text-gray-500 text-sm">Max 3 locations</span>
+                  )}
+                </div>
+                
+                {/* Clear All Locations Button */}
+                {filters.locations.length > 0 && (
+                  <div className="absolute right-3 top-3">
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      onClick={() => {
+                        updateFilter('locations', []);
+                        updateFilter('location', '');
+                      }} 
+                      className="h-6 w-6 p-0 hover:bg-brand-red/10"
+                    >
                       <X size={14} />
                     </Button>
-                  </div>}
-                {/* Google Maps attribution */}
-                
+                  </div>
+                )}
               </div>
             </div>
 
@@ -266,11 +402,24 @@ const PropertySearch = () => {
                   <h4 className="font-semibold mb-3">Budget</h4>
                   <div className="space-y-3">
                     <div className="relative">
-                      <Slider value={filters.budget} onValueChange={value => updateFilter('budget', value)} max={100000000} min={0} step={500000} className="w-full" />
+                      <Slider 
+                        value={filters.budget} 
+                        onValueChange={value => updateFilter('budget', value)} 
+                        max={getBudgetSliderMax(activeTab)} 
+                        min={0} 
+                        step={getBudgetSliderStep(activeTab)} 
+                        className="w-full" 
+                      />
                     </div>
                     <div className="flex justify-between text-sm font-medium text-foreground">
-                      <span>₹{filters.budget[0] === 0 ? '0' : filters.budget[0] >= 10000000 ? (filters.budget[0] / 10000000).toFixed(filters.budget[0] % 10000000 === 0 ? 0 : 1) + ' Cr' : (filters.budget[0] / 100000).toFixed(filters.budget[0] % 100000 === 0 ? 0 : 1) + ' L'}</span>
-                      <span>₹{filters.budget[1] >= 100000000 ? '10Cr +' : filters.budget[1] >= 10000000 ? (filters.budget[1] / 10000000).toFixed(filters.budget[1] % 10000000 === 0 ? 0 : 1) + ' Cr' : (filters.budget[1] / 100000).toFixed(filters.budget[1] % 100000 === 0 ? 0 : 1) + ' L'}</span>
+                      <span>₹{(() => {
+                        const validBudget = getValidBudgetValue(filters.budget, activeTab);
+                        return validBudget[0] === 0 ? '0' : validBudget[0] >= 10000000 ? (validBudget[0] / 10000000).toFixed(validBudget[0] % 10000000 === 0 ? 0 : 1) + ' Cr' : (validBudget[0] / 100000).toFixed(validBudget[0] % 100000 === 0 ? 0 : 1) + ' L';
+                      })()}</span>
+                      <span>₹{(() => {
+                        const validBudget = getValidBudgetValue(filters.budget, activeTab);
+                        return validBudget[1] >= getBudgetSliderMax(activeTab) ? (activeTab === 'rent' ? '5L +' : '5Cr +') : validBudget[1] >= 10000000 ? (validBudget[1] / 10000000).toFixed(validBudget[1] % 10000000 === 0 ? 0 : 1) + ' Cr' : (validBudget[1] / 100000).toFixed(validBudget[1] % 100000 === 0 ? 0 : 1) + ' L';
+                      })()}</span>
                     </div>
                     
                     {/* Manual Budget Input Fields */}
@@ -458,10 +607,34 @@ const PropertySearch = () => {
                   {(() => {
                   // Get property type context
                   const hasPropertyTypeFilter = filters.propertyType.length > 0 && !filters.propertyType.includes('ALL');
-                  const propertyTypeText = hasPropertyTypeFilter ? filters.propertyType.length === 1 ? filters.propertyType[0].toLowerCase().replace('plot', 'plots').replace('apartment', 'apartments').replace('villa', 'villas').replace('commercial', 'commercial properties').replace('house', 'houses').replace('penthouse', 'penthouses').replace('independent house', 'independent houses').replace('pg hostel', 'pg hostels').replace('duplex', 'duplexes') : 'properties' : 'properties';
+                  const propertyTypeText = hasPropertyTypeFilter ? filters.propertyType.length === 1 ? filters.propertyType[0].toLowerCase()
+                    .replace('plot', 'plots')
+                    .replace('apartment', 'apartments')
+                    .replace('villa', 'villas')
+                    .replace('commercial', 'commercial properties')
+                    .replace('house', 'houses')
+                    .replace('penthouse', 'penthouses')
+                    .replace('independent house', 'independent houses')
+                    .replace('pg hostel', 'pg hostels')
+                    .replace('duplex', 'duplexes')
+                    .replace('co-living', 'co-living spaces')
+                    .replace('builder floor', 'builder floors')
+                    .replace('studio apartment', 'studio apartments')
+                    .replace('co-working', 'co-working spaces')
+                    .replace('gated community villa', 'gated community villas')
+                    .replace('office', 'offices')
+                    .replace('retail', 'retail spaces')
+                    .replace('warehouse', 'warehouses')
+                    .replace('showroom', 'showrooms')
+                    .replace('restaurant', 'restaurants')
+                    .replace('industrial', 'industrial properties') : 'properties' : 'properties';
 
                   // Get location context
-                  const locationText = filters.location ? ` in ${filters.location}` : '';
+                  const locationText = filters.locations.length > 0 
+                    ? ` in ${filters.locations.join(', ')}` 
+                    : filters.location 
+                    ? ` in ${filters.location}` 
+                    : '';
                   switch (activeTab) {
                     case 'buy':
                       return hasPropertyTypeFilter ? `${propertyTypeText.charAt(0).toUpperCase() + propertyTypeText.slice(1)} for Sale${locationText}` : `Properties for Sale${locationText || ' in All Locations'}`;
@@ -476,8 +649,8 @@ const PropertySearch = () => {
                 </h1>
                 <p className="text-gray-600 mt-1">
                   {isLoading ? 'Searching...' : `${filteredProperties.length} results found`}
-                  {filters.location && <span className="ml-2 text-brand-red">
-                      • Real-time results for "{filters.location}"
+                  {(filters.locations.length > 0 || filters.location) && <span className="ml-2 text-brand-red">
+                      • Real-time results for "{filters.locations.length > 0 ? filters.locations.join(', ') : filters.location}"
                     </span>}
                 </p>
               </div>
@@ -504,7 +677,7 @@ const PropertySearch = () => {
             </div>
 
             {/* Active Filters - Show all active filters */}
-            {(filters.propertyType.length > 0 && !filters.propertyType.includes('ALL') || filters.bhkType.length > 0 || filters.furnished.length > 0 || filters.availability.length > 0 || filters.locality.length > 0 || filters.construction.length > 0 || filters.budget[0] > 0 || filters.budget[1] < 50000000) && <div className="flex flex-wrap gap-2 mb-6">
+            {(filters.propertyType.length > 0 && !filters.propertyType.includes('ALL') || filters.bhkType.length > 0 || filters.furnished.length > 0 || filters.availability.length > 0 || filters.locality.length > 0 || filters.construction.length > 0 || filters.budget[0] > 0 || filters.budget[1] < 50000000 || filters.locations.length > 0) && <div className="flex flex-wrap gap-2 mb-6">
                 <div className="flex items-center text-sm text-gray-600 mr-2">
                   <Filter size={14} className="mr-1" />
                   Active filters:
@@ -518,6 +691,17 @@ const PropertySearch = () => {
                       <X size={12} />
                     </button>
                   </Badge>}
+                
+                {/* Location badges */}
+                {filters.locations.map(location => <Badge key={location} variant="secondary" className="flex items-center gap-1">
+                    {location}
+                    <button onClick={() => {
+                      const newLocations = filters.locations.filter(l => l !== location);
+                      updateFilter('locations', newLocations);
+                    }} className="ml-1 hover:bg-gray-300 rounded-full p-0.5">
+                      <X size={12} />
+                    </button>
+                  </Badge>)}
                 
                 {filters.propertyType.filter(type => type !== 'ALL').map(type => <Badge key={type} variant="secondary" className="flex items-center gap-1">
                     {type}

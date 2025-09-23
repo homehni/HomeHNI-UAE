@@ -32,6 +32,7 @@ export const mapPropertyType = (propertyType: string): string => {
     'House': 'independent_house', // Map "House" to 'independent_house'
     'Independent House': 'independent_house',
     'Independent House/Villa': 'independent_house', // Map form value to DB value
+    'Gated Community Villa': 'villa', // Map Gated Community Villa to villa
     'Builder Floor': 'builder_floor',
     'Studio Apartment': 'studio_apartment', // Map Studio Apartment to studio_apartment
     'Penthouse': 'penthouse', // Map Penthouse to penthouse

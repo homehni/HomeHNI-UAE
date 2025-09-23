@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { PriceInput } from '@/components/ui/price-input';
@@ -6,6 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Calendar as CalendarComponent } from '@/components/ui/calendar';
 import { CalendarIcon } from 'lucide-react';
@@ -51,15 +52,33 @@ export function FlattmatesRentalDetailsStep({
     ...initialData,
   });
 
+  // Debug: Log formData changes
+  useEffect(() => {
+    console.log('FlattmatesRentalDetailsStep formData updated:', formData);
+  }, [formData]);
+
   const handleSubmit = (e: React.FormEvent) => {
-    console.log('FlattmatesRentalDetailsStep handleSubmit called');
+    console.log('=== FlattmatesRentalDetailsStep handleSubmit called ===');
+    console.log('Event:', e);
+    console.log('Event type:', e.type);
+    console.log('Event target:', e.target);
+    console.log('Form data:', formData);
+    console.log('onNext function:', onNext);
+    console.log('onNext function type:', typeof onNext);
     e.preventDefault();
     if (isFormValid()) {
       console.log('Form is valid, calling onNext with data:', formData);
-      onNext(formData);
+      console.log('About to call onNext...');
+      try {
+        onNext(formData);
+        console.log('onNext called successfully');
+      } catch (error) {
+        console.error('Error calling onNext:', error);
+      }
     } else {
       console.log('Form is not valid');
     }
+    console.log('=== FlattmatesRentalDetailsStep handleSubmit completed ===');
   };
 
   const isFormValid = () => {
@@ -76,24 +95,27 @@ export function FlattmatesRentalDetailsStep({
             <form id={formId || 'flatmates-step-form'} onSubmit={handleSubmit} className="space-y-6">
                 {/* Expected Rent and Expected Deposit */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="expectedRent">Expected Rent</Label>
-                    <PriceInput
-                      id="expectedRent"
-                      value={formData.expectedRent}
-                      onChange={(value) => setFormData({ ...formData, expectedRent: value || 0 })}
-                      placeholder="Enter Amount"
-                      className="h-12"
-                    />
-                    {/* Expected rent in words display */}
-                    {formData.expectedRent && formData.expectedRent > 0 && (
-                      <div className="mt-2">
-                        <p className="text-sm text-gray-600">
-                          {formatExactPriceDisplay(formData.expectedRent)}
-                        </p>
+                    <div className="space-y-2">
+                      <Label htmlFor="expectedRent">Expected Rent *</Label>
+                      <PriceInput
+                        id="expectedRent"
+                        value={formData.expectedRent}
+                        onChange={(value) => setFormData({ ...formData, expectedRent: value || 0 })}
+                        placeholder="Enter Amount"
+                        className="h-12"
+                      />
+                      {/* Rent Negotiable Checkbox */}
+                      <div className="flex items-center space-x-2 mt-2">
+                        <Checkbox 
+                          id="rentNegotiable"
+                          checked={formData.rentNegotiable}
+                          onCheckedChange={(checked) => setFormData({ ...formData, rentNegotiable: checked as boolean })}
+                        />
+                        <label htmlFor="rentNegotiable" className="text-sm text-gray-600">
+                          Rent Negotiable
+                        </label>
                       </div>
-                    )}
-                  </div>
+                    </div>
 
                   <div className="space-y-2">
                     <Label htmlFor="expectedDeposit">Expected Deposit</Label>
@@ -104,29 +126,7 @@ export function FlattmatesRentalDetailsStep({
                       placeholder="Enter Amount"
                       className="h-12"
                     />
-                    {/* Expected deposit in words display */}
-                    {formData.expectedDeposit && formData.expectedDeposit > 0 && (
-                      <div className="mt-2">
-                        <p className="text-sm text-gray-600">
-                          {formatExactPriceDisplay(formData.expectedDeposit)}
-                        </p>
-                      </div>
-                    )}
                   </div>
-                </div>
-
-                {/* Rent Negotiable Toggle - Full Width */}
-                <div className="flex items-center justify-between p-4 border rounded-lg">
-                  <div>
-                    <Label htmlFor="rentNegotiable" className="text-base font-medium">
-                      Rent Negotiable
-                    </Label>
-                  </div>
-                  <Switch
-                    id="rentNegotiable"
-                    checked={formData.rentNegotiable}
-                    onCheckedChange={(checked) => setFormData({ ...formData, rentNegotiable: checked })}
-                  />
                 </div>
 
                 {/* Monthly Maintenance and Available From */}
@@ -204,14 +204,6 @@ export function FlattmatesRentalDetailsStep({
                   />
                 </div>
 
-                <div className="flex justify-between pt-6" style={{ visibility: 'hidden' }}>
-                  <Button type="button" variant="white" onClick={onBack}>
-                    Back
-                  </Button>
-                  <Button type="submit" variant="default" className="bg-red-800 hover:bg-red-900 text-white">
-                    Save & Continue
-                  </Button>
-                </div>
               </form>
           </div>
     </div>

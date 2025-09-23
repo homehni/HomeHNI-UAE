@@ -13,6 +13,8 @@ import { FlattmatesPreviewStep } from './FlattmatesPreviewStep';
 import GetTenantsFasterSection from '@/components/GetTenantsFasterSection';
 import { Home, MapPin, DollarSign, Star, Camera, Calendar, ArrowLeft, CheckCircle } from 'lucide-react';
 import { OwnerInfo, PropertyDetails, LocationDetails, PropertyGallery, AdditionalInfo, ScheduleInfo, FlattmatesFormData } from '@/types/property';
+import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface FlattmatesMultiStepFormProps {
   onSubmit: (data: FlattmatesFormData) => void;
@@ -29,10 +31,12 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
   targetStep = null,
   createdSubmissionId = null
 }) => {
+  const { user } = useAuth();
   const [currentStep, setCurrentStep] = useState(1);
   const [completedSteps, setCompletedSteps] = useState<number[]>([]);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [showNoPhotosMessage, setShowNoPhotosMessage] = useState(false);
+  const [submissionId, setSubmissionId] = useState<string | null>(createdSubmissionId);
   const [ownerInfo, setOwnerInfo] = useState<OwnerInfo>({
     fullName: '',
     phoneNumber: '',
@@ -45,6 +49,7 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
 
   const [propertyDetails, setPropertyDetails] = useState({
     apartmentType: '',
+    apartmentName: '', // Add apartment name field
     bhkType: '',
     floorNo: 0,
     totalFloors: 0,
@@ -129,6 +134,46 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  // Handle sticky button click - use same logic as regular buttons
+  const handleStickyButtonClick = () => {
+    console.log('=== STICKY BUTTON CLICKED ===');
+    console.log('Current step:', currentStep);
+    
+    // Scroll to top first
+    scrollToTop();
+    
+    // Use the same logic as regular buttons - directly call the appropriate step handler
+    // This matches exactly what the regular "Save & Continue" buttons do
+    switch (currentStep) {
+      case 1:
+        console.log('Sticky button: Calling handlePropertyDetailsNext');
+        handlePropertyDetailsNext(propertyDetails);
+        break;
+      case 2:
+        console.log('Sticky button: Calling handleLocationDetailsNext');
+        handleLocationDetailsNext(locationDetails);
+        break;
+      case 3:
+        console.log('Sticky button: Calling handleRentalDetailsNext');
+        handleRentalDetailsNext(rentalDetails);
+        break;
+      case 4:
+        console.log('Sticky button: Calling handleAmenitiesNext');
+        handleAmenitiesNext(amenities);
+        break;
+      case 5:
+        console.log('Sticky button: Calling handleGalleryNext');
+        handleGalleryNext(gallery);
+        break;
+      case 6:
+        console.log('Sticky button: Calling handleScheduleNext');
+        handleScheduleNext(scheduleInfo);
+        break;
+      default:
+        console.warn('Unknown step for sticky button:', currentStep);
+    }
+  };
+
   useEffect(() => {
     scrollToTop();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -136,55 +181,280 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
 
   const currentFormId = 'flatmates-step-form';
 
-  const handlePropertyDetailsNext = (data: any) => {
+  // Function to save intermediate data to database
+  const saveIntermediateData = async (stepData: any, stepNumber: number) => {
+    try {
+      console.log(`=== saveIntermediateData CALLED ===`);
+      console.log(`Saving intermediate data for step ${stepNumber}:`, stepData);
+      
+      // Prepare the complete form data with the current step data
+      const completeFormData = {
+        ownerInfo,
+        propertyDetails: stepNumber === 1 ? stepData : propertyDetails,
+        locationDetails: stepNumber === 2 ? stepData : locationDetails,
+        rentalDetails: stepNumber === 3 ? stepData : rentalDetails,
+        amenities: stepNumber === 4 ? stepData : amenities,
+        gallery: stepNumber === 5 ? stepData : gallery,
+        additionalInfo: stepNumber === 6 ? stepData : additionalInfo,
+        scheduleInfo: stepNumber === 7 ? stepData : scheduleInfo,
+        currentStep: stepNumber,
+        completedSteps,
+        formType: 'flatmates'
+      };
+
+      console.log('Complete form data prepared:', completeFormData);
+
+      // Generate title for the submission using the current step data
+      const currentPropertyDetails = stepNumber === 1 ? stepData : propertyDetails;
+      const title = currentPropertyDetails.apartmentName
+        ? `${currentPropertyDetails.bhkType} ${currentPropertyDetails.apartmentType} - ${currentPropertyDetails.apartmentName} for Flatmates`
+        : `${currentPropertyDetails.bhkType} ${currentPropertyDetails.apartmentType} for Flatmates`;
+
+      console.log('Generated title:', title);
+
+      // Get current location details for city/state
+      const currentLocationDetails = stepNumber === 2 ? stepData : locationDetails;
+
+      // For now, let's also save to localStorage as a backup
+      localStorage.setItem('flatmates-form-data', JSON.stringify(completeFormData));
+      console.log('Saved to localStorage as backup:', completeFormData);
+
+      // Test: Just log for now, don't actually save to database
+      console.log('Would save to database:', {
+        title,
+        city: currentLocationDetails.city || '',
+        state: currentLocationDetails.state || '',
+        payload: completeFormData,
+        status: 'draft'
+      });
+
+      console.log(`=== saveIntermediateData COMPLETED ===`);
+      
+      // Comment out database operations for now to test
+      /*
+      if (submissionId) {
+        // Update existing submission
+        const { error } = await supabase
+          .from('property_submissions')
+          .update({
+            title,
+            city: currentLocationDetails.city || '',
+            state: currentLocationDetails.state || '',
+            payload: completeFormData,
+            updated_at: new Date().toISOString()
+          })
+          .eq('id', submissionId);
+
+        if (error) {
+          console.error('Error updating submission:', error);
+        } else {
+          console.log('Successfully updated submission:', submissionId);
+        }
+      } else {
+        // Create new submission
+        const { data, error } = await supabase
+          .from('property_submissions')
+          .insert({
+            user_id: user?.id || null,
+            title,
+            city: currentLocationDetails.city || '',
+            state: currentLocationDetails.state || '',
+            payload: completeFormData,
+            status: 'draft'
+          })
+          .select()
+          .single();
+
+        if (error) {
+          console.error('Error creating submission:', error);
+        } else {
+          console.log('Successfully created submission:', data.id);
+          setSubmissionId(data.id);
+        }
+      }
+      */
+    } catch (error) {
+      console.error('Error saving intermediate data:', error);
+    }
+  };
+
+  const handlePropertyDetailsNext = async (data: any) => {
+    console.log('=== handlePropertyDetailsNext CALLED ===');
     console.log('FlattmatesMultiStepForm - Property Details data received:', data);
-    setPropertyDetails(data);
-    setCompletedSteps(prev => prev.includes(1) ? prev : [...prev, 1]);
-    setCurrentStep(2);
-    scrollToTop();
+    console.log('Data type:', typeof data);
+    console.log('Data keys:', Object.keys(data || {}));
+    
+    try {
+      // Update state first
+      console.log('Updating propertyDetails state...');
+      setPropertyDetails(data);
+      setCompletedSteps(prev => prev.includes(1) ? prev : [...prev, 1]);
+      
+      // Save intermediate data
+      console.log('Calling saveIntermediateData...');
+      await saveIntermediateData(data, 1);
+      
+      // Navigate to next step
+      console.log('Navigating to step 2...');
+      setCurrentStep(2);
+      scrollToTop();
+      console.log('=== handlePropertyDetailsNext COMPLETED ===');
+    } catch (error) {
+      console.error('Error in handlePropertyDetailsNext:', error);
+      // Still navigate even if save fails
+      setCurrentStep(2);
+      scrollToTop();
+    }
   };
 
-  const handleLocationDetailsNext = (data: LocationDetails) => {
+  const handleLocationDetailsNext = async (data: LocationDetails) => {
+    console.log('=== handleLocationDetailsNext CALLED ===');
     console.log('FlattmatesMultiStepForm - Location Details data received:', data);
-    setLocationDetails(data);
-    setCompletedSteps(prev => prev.includes(2) ? prev : [...prev, 2]);
-    setCurrentStep(3);
-    scrollToTop();
+    console.log('Data type:', typeof data);
+    console.log('Data keys:', Object.keys(data || {}));
+    
+    try {
+      // Update state first
+      console.log('Updating locationDetails state...');
+      setLocationDetails(data);
+      setCompletedSteps(prev => prev.includes(2) ? prev : [...prev, 2]);
+      
+      // Save intermediate data
+      console.log('Calling saveIntermediateData...');
+      await saveIntermediateData(data, 2);
+      
+      // Navigate to next step
+      console.log('Navigating to step 3...');
+      setCurrentStep(3);
+      scrollToTop();
+      console.log('=== handleLocationDetailsNext COMPLETED ===');
+    } catch (error) {
+      console.error('Error in handleLocationDetailsNext:', error);
+      // Still navigate even if save fails
+      setCurrentStep(3);
+      scrollToTop();
+    }
   };
 
-  const handleRentalDetailsNext = (data: any) => {
+  const handleRentalDetailsNext = async (data: any) => {
+    console.log('=== handleRentalDetailsNext CALLED ===');
     console.log('FlattmatesMultiStepForm - Rental Details data received:', data);
-    setRentalDetails(data);
-    setCompletedSteps(prev => prev.includes(3) ? prev : [...prev, 3]);
-    setCurrentStep(4);
-    scrollToTop();
+    console.log('Data type:', typeof data);
+    console.log('Data keys:', Object.keys(data || {}));
+    
+    try {
+      // Update state first
+      console.log('Updating rentalDetails state...');
+      setRentalDetails(data);
+      setCompletedSteps(prev => prev.includes(3) ? prev : [...prev, 3]);
+      
+      // Save intermediate data
+      console.log('Calling saveIntermediateData...');
+      await saveIntermediateData(data, 3);
+      
+      // Navigate to next step
+      console.log('Navigating to step 4...');
+      setCurrentStep(4);
+      scrollToTop();
+      console.log('=== handleRentalDetailsNext COMPLETED ===');
+    } catch (error) {
+      console.error('Error in handleRentalDetailsNext:', error);
+      // Still navigate even if save fails
+      setCurrentStep(4);
+      scrollToTop();
+    }
   };
 
-  const handleAmenitiesNext = (data: any) => {
+  const handleAmenitiesNext = async (data: any) => {
+    console.log('=== handleAmenitiesNext CALLED ===');
     console.log('FlattmatesMultiStepForm - Amenities data received:', data);
-    setAmenities(data);
-    setCompletedSteps(prev => prev.includes(4) ? prev : [...prev, 4]);
-    setCurrentStep(5);
-    scrollToTop();
+    console.log('Data type:', typeof data);
+    console.log('Data keys:', Object.keys(data || {}));
+    
+    try {
+      // Update state first
+      console.log('Updating amenities state...');
+      setAmenities(data);
+      setCompletedSteps(prev => prev.includes(4) ? prev : [...prev, 4]);
+      
+      // Save intermediate data
+      console.log('Calling saveIntermediateData...');
+      await saveIntermediateData(data, 4);
+      
+      // Navigate to next step
+      console.log('Navigating to step 5...');
+      setCurrentStep(5);
+      scrollToTop();
+      console.log('=== handleAmenitiesNext COMPLETED ===');
+    } catch (error) {
+      console.error('Error in handleAmenitiesNext:', error);
+      // Still navigate even if save fails
+      setCurrentStep(5);
+      scrollToTop();
+    }
   };
 
-  const handleGalleryNext = (data: PropertyGallery) => {
+  const handleGalleryNext = async (data: PropertyGallery) => {
+    console.log('=== handleGalleryNext CALLED ===');
     console.log('FlattmatesMultiStepForm - Gallery data received:', data);
-    setGallery(data);
-    setCompletedSteps(prev => prev.includes(5) ? prev : [...prev, 5]);
-    setCurrentStep(6);
-    scrollToTop();
+    console.log('Data type:', typeof data);
+    console.log('Data keys:', Object.keys(data || {}));
+    
+    try {
+      // Update state first
+      console.log('Updating gallery state...');
+      setGallery(data);
+      setCompletedSteps(prev => prev.includes(5) ? prev : [...prev, 5]);
+      
+      // Save intermediate data
+      console.log('Calling saveIntermediateData...');
+      await saveIntermediateData(data, 5);
+      
+      // Navigate to next step
+      console.log('Navigating to step 6...');
+      setCurrentStep(6);
+      scrollToTop();
+      console.log('=== handleGalleryNext COMPLETED ===');
+    } catch (error) {
+      console.error('Error in handleGalleryNext:', error);
+      // Still navigate even if save fails
+      setCurrentStep(6);
+      scrollToTop();
+    }
   };
 
-  const handleScheduleNext = (data: ScheduleInfo) => {
+  const handleScheduleNext = async (data: ScheduleInfo) => {
+    console.log('=== handleScheduleNext CALLED ===');
     console.log('FlattmatesMultiStepForm - Schedule data received:', data);
-    setScheduleInfo(data);
-    setCompletedSteps(prev => prev.includes(6) ? prev : [...prev, 6]);
-    const formData = getFormData();
-    console.log('FlattmatesMultiStepForm - Submitting at Schedule step with data:', formData);
-    onSubmit(formData);
-    setCurrentStep(7);
-    scrollToTop();
+    console.log('Data type:', typeof data);
+    console.log('Data keys:', Object.keys(data || {}));
+    
+    try {
+      // Update state first
+      console.log('Updating scheduleInfo state...');
+      setScheduleInfo(data);
+      setCompletedSteps(prev => prev.includes(6) ? prev : [...prev, 6]);
+      
+      // Save intermediate data before final submission
+      console.log('Calling saveIntermediateData...');
+      await saveIntermediateData(data, 6);
+      
+      // Final submission
+      console.log('Preparing final submission...');
+      const formData = getFormData();
+      console.log('FlattmatesMultiStepForm - Submitting at Schedule step with data:', formData);
+      onSubmit(formData);
+      setCurrentStep(7);
+      scrollToTop();
+      console.log('=== handleScheduleNext COMPLETED ===');
+    } catch (error) {
+      console.error('Error in handleScheduleNext:', error);
+      // Still proceed with submission even if save fails
+      const formData = getFormData();
+      onSubmit(formData);
+      setCurrentStep(7);
+      scrollToTop();
+    }
   };
 
   const prevStep = () => setCurrentStep(prev => Math.max(prev - 1, 1));
@@ -194,9 +464,12 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
     ownerInfo,
     propertyInfo: {
       propertyDetails: {
-        title: `${propertyDetails.bhkType} ${propertyDetails.apartmentType} for Flatmates`,
+        title: propertyDetails.apartmentName 
+          ? `${propertyDetails.bhkType} ${propertyDetails.apartmentType} - ${propertyDetails.apartmentName} for Flatmates`
+          : `${propertyDetails.bhkType} ${propertyDetails.apartmentType} for Flatmates`,
         propertyType: 'apartment',
         buildingType: propertyDetails.apartmentType,
+        apartmentName: propertyDetails.apartmentName, // Include apartment name
         bhkType: propertyDetails.bhkType,
         propertyAge: propertyDetails.propertyAge,
         totalFloors: propertyDetails.totalFloors,
@@ -1000,67 +1273,27 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
           {/* Sticky Bottom Navigation Bar - Hidden on Preview step */}
           {currentStep !== 7 && (
             <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-3 sm:p-4 z-50 shadow-lg">
-            <div className="max-w-4xl mx-auto flex flex-col sm:flex-row gap-3 sm:gap-4 sm:justify-center">
-              <Button 
-                type="button" 
-                variant="outline" 
-                onClick={currentStep === 1 ? () => {} : prevStep}
-                className="h-10 sm:h-10 px-4 sm:px-6 w-full sm:w-auto order-2 sm:order-1"
-                disabled={currentStep === 1}
-              >
-                Back
-              </Button>
-              <Button 
-                type="button" 
-                onClick={() => {
-                  console.log('FlattmatesMultiStepForm sticky Save & Continue button clicked');
-                  console.log('Current step:', currentStep);
-                  
-                  // Always scroll to top first
-                  scrollToTop();
-                  
-                  // Prefer submitting the active form so the latest child state is captured
-                  const formIdToUse = currentStep === 5
-                    ? 'gallery-form'
-                    : currentStep === 6
-                      ? 'schedule-form'
-                      : currentFormId;
-
-                  // Try several strategies to find the active form
-                  const candidates: (HTMLFormElement | null)[] = [
-                    document.getElementById(formIdToUse) as HTMLFormElement | null,
-                    document.querySelector(`#${formIdToUse}`) as HTMLFormElement | null,
-                    document.querySelector('form#flatmates-step-form') as HTMLFormElement | null,
-                    document.querySelector('.max-w-4xl form') as HTMLFormElement | null,
-                    document.querySelector('form') as HTMLFormElement | null,
-                  ];
-                  const formEl = candidates.find(Boolean) as HTMLFormElement | null;
-
-                  if (formEl) {
-                    // Ensure focused elements are committed
-                    (document.activeElement as HTMLElement | null)?.blur?.();
-
-                    if (typeof (formEl as any).requestSubmit === 'function') {
-                      console.log('Submitting form via requestSubmit:', formEl.id || '[no id]');
-                      (formEl as any).requestSubmit();
-                    } else {
-                      console.log('Submitting form via dispatchEvent fallback:', formEl.id || '[no id]');
-                      const ev = new Event('submit', { bubbles: true, cancelable: true });
-                      formEl.dispatchEvent(ev);
-                    }
-                    return; // Stop here, handler will be executed by the form
-                  }
-
-                  console.warn('Form element not found. Please ensure the step form has the correct id.');
-                  return;
-                }}
-                className="h-12 sm:h-10 px-6 sm:px-6 bg-red-600 hover:bg-red-700 text-white w-full sm:w-auto order-1 sm:order-2 font-semibold"
-              >
-                {currentStep === 6 ? 'Submit Property' : 'Save & Continue'}
-              </Button>
-            </div>
+              <div className="max-w-4xl mx-auto flex flex-col sm:flex-row gap-3 sm:gap-4 sm:justify-center">
+                <Button 
+                  type="button" 
+                  variant="outline" 
+                  onClick={currentStep === 1 ? () => {} : prevStep}
+                  className="h-10 sm:h-10 px-4 sm:px-6 w-full sm:w-auto order-2 sm:order-1"
+                  disabled={currentStep === 1}
+                >
+                  Back
+                </Button>
+                <Button 
+                  type="button" 
+                  onClick={handleStickyButtonClick}
+                  className="h-12 sm:h-10 px-6 sm:px-6 bg-red-600 hover:bg-red-700 text-white w-full sm:w-auto order-1 sm:order-2 font-semibold"
+                >
+                  {currentStep === 6 ? 'Submit Property' : 'Save & Continue'}
+                </Button>
+              </div>
             </div>
           )}
+
         </div>
 
         {/* Right Sidebar - Get Tenants Faster */}

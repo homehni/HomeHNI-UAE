@@ -32,28 +32,62 @@ interface SearchFilters {
   furnished: string[];
   availability: string[];
   construction: string[];
-  location: string;
+  location: string; // Keep for backward compatibility
+  locations: string[]; // New: array of selected locations (max 3)
   sortBy: string;
 }
 
 export const useSimplifiedSearch = () => {
   const [searchParams] = useSearchParams();
   
+  // Dynamic budget range based on active tab
+  const getBudgetRange = (tab: string): [number, number] => {
+    switch (tab) {
+      case 'rent':
+        return [0, 500000]; // 0 to 5 Lakh for rent (max ₹5L)
+      case 'buy':
+        return [0, 50000000]; // 0 to 5 Crore for buy
+      case 'commercial':
+        return [0, 50000000]; // 0 to 5 Crore for commercial
+      default:
+        return [0, 50000000]; // Default to buy range
+    }
+  };
+
   const [filters, setFilters] = useState<SearchFilters>({
     propertyType: searchParams.get('propertyType') ? [searchParams.get('propertyType')!] : [],
     bhkType: [],
-    budget: [0, 50000000],
+    budget: getBudgetRange(searchParams.get('type') || 'buy'),
     locality: [],
     furnished: [],
     availability: [],
     construction: [],
     location: searchParams.get('location') || '',
+    locations: [], // Initialize empty array for multiple locations
     sortBy: 'relevance'
   });
 
   const [activeTab, setActiveTab] = useState(searchParams.get('type') || 'buy');
   const [allProperties, setAllProperties] = useState<Property[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+
+  // Update budget range when active tab changes
+  useEffect(() => {
+    const newBudgetRange = getBudgetRange(activeTab);
+    setFilters(prev => {
+      // Only reset budget if current budget is outside the valid range for new tab
+      const currentBudget = prev.budget;
+      const maxValue = newBudgetRange[1];
+      
+      // If current budget is within valid range, keep it; otherwise reset to full range
+      const shouldResetBudget = currentBudget[0] > maxValue || currentBudget[1] > maxValue;
+      
+      return {
+        ...prev,
+        budget: shouldResetBudget ? newBudgetRange : currentBudget
+      };
+    });
+  }, [activeTab]);
 
   // Load all properties on mount
   useEffect(() => {
@@ -240,6 +274,39 @@ export const useSimplifiedSearch = () => {
           if (normalizedFilter.includes('pghosted') || normalizedFilter.includes('pg')) {
             return normalizedProperty.includes('pg') || normalizedProperty.includes('hostel');
           }
+          if (normalizedFilter.includes('coliving')) {
+            return normalizedProperty.includes('coliving') || normalizedProperty.includes('co-living');
+          }
+          if (normalizedFilter.includes('builderfloor')) {
+            return normalizedProperty.includes('builderfloor') || normalizedProperty.includes('builder floor');
+          }
+          if (normalizedFilter.includes('studioapartment')) {
+            return normalizedProperty.includes('studioapartment') || normalizedProperty.includes('studio apartment');
+          }
+          if (normalizedFilter.includes('coworking')) {
+            return normalizedProperty.includes('coworking') || normalizedProperty.includes('co-working');
+          }
+          if (normalizedFilter.includes('gatedcommunityvilla')) {
+            return normalizedProperty.includes('gatedcommunityvilla') || normalizedProperty.includes('gated community villa');
+          }
+          if (normalizedFilter.includes('office')) {
+            return normalizedProperty.includes('office');
+          }
+          if (normalizedFilter.includes('retail')) {
+            return normalizedProperty.includes('retail');
+          }
+          if (normalizedFilter.includes('warehouse')) {
+            return normalizedProperty.includes('warehouse');
+          }
+          if (normalizedFilter.includes('showroom')) {
+            return normalizedProperty.includes('showroom');
+          }
+          if (normalizedFilter.includes('restaurant')) {
+            return normalizedProperty.includes('restaurant');
+          }
+          if (normalizedFilter.includes('industrial')) {
+            return normalizedProperty.includes('industrial');
+          }
           if (normalizedFilter.includes('independenthouse') || normalizedFilter.includes('house')) {
             return normalizedProperty.includes('house') || normalizedProperty.includes('independent');
           }
@@ -312,25 +379,72 @@ export const useSimplifiedSearch = () => {
       });
     }
 
-    // Apply location filter
-    if (filters.location.trim()) {
-      const locationKeywords = filters.location.toLowerCase().split(/\s+|,/).filter(Boolean);
-      filtered = filtered.filter(property => {
-        const propertyLocation = `${property.location} ${property.locality} ${property.city}`.toLowerCase();
-        return locationKeywords.some(keyword => 
-          propertyLocation.includes(keyword)
-        );
-      });
+    // Apply location filter (both single location and multiple locations)
+    const hasLocationFilter = filters.location.trim() || filters.locations.length > 0;
+    if (hasLocationFilter) {
+      const locationKeywords: string[] = [];
+      
+      // Add keywords from single location field
+      if (filters.location.trim()) {
+        locationKeywords.push(...filters.location.toLowerCase().split(/\s+|,/).filter(Boolean));
+      }
+      
+      // Add keywords from multiple locations
+      if (filters.locations.length > 0) {
+        filters.locations.forEach(location => {
+          if (location.trim()) {
+            locationKeywords.push(...location.toLowerCase().split(/\s+|,/).filter(Boolean));
+          }
+        });
+      }
+      
+      // Remove duplicates
+      const uniqueKeywords = [...new Set(locationKeywords)];
+      
+      if (uniqueKeywords.length > 0) {
+        filtered = filtered.filter(property => {
+          const propertyLocation = `${property.location} ${property.locality} ${property.city}`.toLowerCase();
+          return uniqueKeywords.some(keyword => 
+            propertyLocation.includes(keyword)
+          );
+        });
+      }
     }
 
-    // Apply locality filter
+    // Apply locality filter (normalized cities and localities)
     if (filters.locality.length > 0) {
-      filtered = filtered.filter(property => {
-        return filters.locality.some(localityFilter => {
-          return property.locality?.toLowerCase().includes(localityFilter.toLowerCase()) ||
-                 property.city?.toLowerCase().includes(localityFilter.toLowerCase());
+      try {
+        filtered = filtered.filter(property => {
+          return filters.locality.some(localityFilter => {
+            try {
+              // Normalize both the filter and property locations for comparison
+              const normalizedFilter = normalizeLocationName(localityFilter);
+              const normalizedCity = normalizeLocationName(property.city || '');
+              const normalizedLocality = normalizeLocationName(property.locality || '');
+              
+              // Check if the filter is a major city (should match city field only)
+              const isMajorCity = ['bangalore', 'hyderabad', 'mumbai', 'delhi', 'chennai', 'pune', 'karnataka'].includes(normalizedFilter.toLowerCase());
+              
+              if (isMajorCity) {
+                // For major cities, only match against city field
+                return normalizedCity === normalizedFilter;
+              } else {
+                // For localities, match against locality field only
+                return normalizedLocality === normalizedFilter;
+              }
+            } catch (error) {
+              console.error('Error in locality filter normalization:', error, { localityFilter, property });
+              // Fallback to simple string matching if normalization fails
+              return property.city?.toLowerCase().includes(localityFilter.toLowerCase()) ||
+                     property.locality?.toLowerCase().includes(localityFilter.toLowerCase());
+            }
+          });
         });
-      });
+      } catch (error) {
+        console.error('Error in locality filtering:', error, { filters: filters.locality });
+        // If filtering fails completely, return all properties
+        filtered = [...allProperties];
+      }
     }
 
     // Apply sorting
@@ -378,24 +492,123 @@ export const useSimplifiedSearch = () => {
     setFilters({
       propertyType: [],
       bhkType: [],
-      budget: [0, 50000000],
+      budget: getBudgetRange(activeTab),
       locality: [],
       furnished: [],
       availability: [],
       construction: [],
       location: '',
+      locations: [], // Clear multiple locations
       sortBy: 'relevance'
     });
   };
 
-  // Get available localities from filtered properties
+  // Normalize location names to consolidate similar entries
+  const normalizeLocationName = (location: string): string => {
+    try {
+      // Handle null/undefined cases
+      if (!location || typeof location !== 'string') {
+        return '';
+      }
+      
+      const normalized = location.toLowerCase().trim();
+      
+      // Bangalore/Bengaluru consolidation
+      if (normalized.includes('bangalore') || normalized.includes('bengaluru') || normalized.includes('bangalore division')) {
+        return 'Bangalore';
+      }
+      
+      // Karnataka consolidation
+      if (normalized.includes('karnataka')) {
+        return 'Karnataka';
+      }
+      
+      // Hyderabad consolidation
+      if (normalized.includes('hyderabad')) {
+        return 'Hyderabad';
+      }
+      
+      // Mumbai consolidation
+      if (normalized.includes('mumbai') || normalized.includes('bombay')) {
+        return 'Mumbai';
+      }
+      
+      // Delhi consolidation
+      if (normalized.includes('delhi') || normalized.includes('new delhi')) {
+        return 'Delhi';
+      }
+      
+      // Chennai consolidation
+      if (normalized.includes('chennai') || normalized.includes('madras')) {
+        return 'Chennai';
+      }
+      
+      // Pune consolidation
+      if (normalized.includes('pune')) {
+        return 'Pune';
+      }
+      
+      // Pune localities consolidation
+      if (normalized.includes('koregaon park') || normalized.includes('koregaon')) {
+        return 'Pune';
+      }
+      
+      // Return original if no normalization needed
+      return location.trim();
+    } catch (error) {
+      console.error('Error normalizing location name:', error, { location });
+      return location || '';
+    }
+  };
+
+  // Get available localities from filtered properties - show normalized cities and localities but exclude full addresses
   const availableLocalities = useMemo(() => {
-    const localities = new Set<string>();
-    allProperties.forEach(property => {
-      if (property.locality) localities.add(property.locality);
-      if (property.city) localities.add(property.city);
-    });
-    return Array.from(localities).sort();
+    try {
+      const localities = new Set<string>();
+      allProperties.forEach(property => {
+        try {
+          // Add normalized city names
+          if (property.city) {
+            const normalizedCity = normalizeLocationName(property.city);
+            if (normalizedCity) {
+              localities.add(normalizedCity);
+            }
+          }
+          
+          // Add normalized locality names but exclude full addresses
+          if (property.locality) {
+            // Check if it's a full address (contains numbers, PIN codes, or very long text)
+            const locality = property.locality.trim();
+            const isFullAddress = 
+              /\d{6}/.test(locality) || // Contains 6-digit PIN code
+              /\d+,\s*Street/.test(locality) || // Contains street numbers
+              locality.length > 50 || // Very long text
+              locality.split(',').length > 3; // Multiple comma-separated parts
+            
+            if (!isFullAddress) {
+              const normalizedLocality = normalizeLocationName(locality);
+              if (normalizedLocality) {
+                // Exclude specific localities that shouldn't appear in the filter
+                const excludedLocalities = ['kokapet'];
+                const shouldExclude = excludedLocalities.some(excluded => 
+                  normalizedLocality.toLowerCase().includes(excluded.toLowerCase())
+                );
+                
+                if (!shouldExclude) {
+                  localities.add(normalizedLocality);
+                }
+              }
+            }
+          }
+        } catch (error) {
+          console.error('Error processing property for localities:', error, { property });
+        }
+      });
+      return Array.from(localities).sort();
+    } catch (error) {
+      console.error('Error generating available localities:', error);
+      return [];
+    }
   }, [allProperties]);
 
   return {

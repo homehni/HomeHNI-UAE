@@ -140,10 +140,21 @@ export const FlattmatesLocationDetailsStep: React.FC<FlattmatesLocationDetailsSt
       };
 
       attach(localityInputRef.current, (place, el) => {
+        console.log('=== Google Places Autocomplete Place Changed ===');
+        console.log('Place:', place);
+        console.log('Element:', el);
+        
         const value = place?.formatted_address || place?.name || '';
+        console.log('Selected value:', value);
+        
         if (value) {
           el.value = value;
+          console.log('Setting locality value:', value);
           form.setValue('locality', value, { shouldValidate: true });
+          
+          // Manually trigger form state update
+          form.trigger('locality');
+          console.log('Form state after setValue:', form.getValues());
         }
         
         // Parse address components to extract city, state, and pincode
@@ -163,10 +174,135 @@ export const FlattmatesLocationDetailsStep: React.FC<FlattmatesLocationDetailsSt
             }
           });
           
+          console.log('Parsed components:', { city, state, pincode });
+          
+          // Normalize city names to match dropdown options
+          const normalizeCityName = (cityName: string): string => {
+            const cityMap: { [key: string]: string } = {
+              'Bangalore Division': 'Bangalore',
+              'Bangalore Urban': 'Bangalore',
+              'Mumbai Suburban': 'Mumbai',
+              'Mumbai City': 'Mumbai',
+              'Delhi': 'Delhi',
+              'New Delhi': 'Delhi',
+              'Chennai': 'Chennai',
+              'Hyderabad': 'Hyderabad',
+              'Pune': 'Pune',
+              'Kolkata': 'Kolkata',
+              'Ahmedabad': 'Ahmedabad',
+              'Jaipur': 'Jaipur',
+              'Lucknow': 'Lucknow',
+              'Kanpur': 'Kanpur',
+              'Nagpur': 'Nagpur',
+              'Indore': 'Indore',
+              'Thane': 'Thane',
+              'Bhopal': 'Bhopal',
+              'Visakhapatnam': 'Visakhapatnam',
+              'Pimpri-Chinchwad': 'Pune',
+              'Patna': 'Patna',
+              'Vadodara': 'Vadodara',
+              'Ludhiana': 'Ludhiana',
+              'Agra': 'Agra',
+              'Nashik': 'Nashik',
+              'Faridabad': 'Faridabad',
+              'Meerut': 'Meerut',
+              'Rajkot': 'Rajkot',
+              'Kalyan-Dombivali': 'Mumbai',
+              'Vasai-Virar': 'Mumbai',
+              'Varanasi': 'Varanasi',
+              'Srinagar': 'Srinagar',
+              'Aurangabad': 'Aurangabad',
+              'Navi Mumbai': 'Mumbai',
+              'Solapur': 'Solapur',
+              'Vijayawada': 'Vijayawada',
+              'Kolhapur': 'Kolhapur',
+              'Amritsar': 'Amritsar',
+              'Noida': 'Noida',
+              'Ranchi': 'Ranchi',
+              'Howrah': 'Kolkata',
+              'Coimbatore': 'Coimbatore',
+              'Raipur': 'Raipur',
+              'Jabalpur': 'Jabalpur',
+              'Gwalior': 'Gwalior',
+              'Chandigarh': 'Chandigarh',
+              'Tiruchirappalli': 'Tiruchirappalli',
+              'Mysore': 'Mysore',
+              'Bhubaneswar': 'Bhubaneswar',
+              'Kochi': 'Kochi',
+              'Bhavnagar': 'Bhavnagar',
+              'Salem': 'Salem',
+              'Warangal': 'Warangal',
+              'Guntur': 'Guntur',
+              'Bhiwandi': 'Mumbai',
+              'Amravati': 'Amravati',
+              'Nanded': 'Nanded',
+              'Kolhapur': 'Kolhapur',
+              'Sangli': 'Sangli',
+              'Malegaon': 'Malegaon',
+              'Ulhasnagar': 'Mumbai',
+              'Jalgaon': 'Jalgaon',
+              'Latur': 'Latur',
+              'Ahmadnagar': 'Ahmadnagar',
+              'Ichalkaranji': 'Ichalkaranji',
+              'Jalna': 'Jalna',
+              'Bhusawal': 'Bhusawal',
+              'Panvel': 'Mumbai',
+              'Akola': 'Akola',
+              'Latur': 'Latur',
+              'Dhule': 'Dhule',
+              'Ahmednagar': 'Ahmednagar',
+              'Chandrapur': 'Chandrapur',
+              'Parbhani': 'Parbhani',
+              'Ichalkaranji': 'Ichalkaranji',
+              'Jalna': 'Jalna',
+              'Bhusawal': 'Bhusawal',
+              'Panvel': 'Mumbai',
+              'Akola': 'Akola',
+              'Latur': 'Latur',
+              'Dhule': 'Dhule',
+              'Ahmednagar': 'Ahmednagar',
+              'Chandrapur': 'Chandrapur',
+              'Parbhani': 'Parbhani'
+            };
+            
+            // Check for exact match first
+            if (cityMap[cityName]) {
+              return cityMap[cityName];
+            }
+            
+            // Check for partial matches
+            for (const [key, value] of Object.entries(cityMap)) {
+              if (cityName.includes(key) || key.includes(cityName)) {
+                return value;
+              }
+            }
+            
+            // Return original if no match found
+            return cityName;
+          };
+          
+          const normalizedCity = normalizeCityName(city);
+          console.log('Normalized city:', normalizedCity);
+          
           // Update the form fields
-          if (city) form.setValue('city', city, { shouldValidate: true });
-          if (state) form.setValue('state', state, { shouldValidate: true });
-          if (pincode) form.setValue('pincode', pincode, { shouldValidate: true });
+          if (normalizedCity) {
+            console.log('Setting city:', normalizedCity);
+            form.setValue('city', normalizedCity, { shouldValidate: true });
+            form.trigger('city');
+          }
+          if (state) {
+            console.log('Setting state:', state);
+            form.setValue('state', state, { shouldValidate: true });
+            form.trigger('state');
+          }
+          if (pincode) {
+            console.log('Setting pincode:', pincode);
+            form.setValue('pincode', pincode, { shouldValidate: true });
+            form.trigger('pincode');
+          }
+          
+          console.log('Final form state:', form.getValues());
+          console.log('=== Google Places Autocomplete Completed ===');
         }
         
         const loc = place?.geometry?.location;
@@ -179,13 +315,15 @@ export const FlattmatesLocationDetailsStep: React.FC<FlattmatesLocationDetailsSt
   }, [form]);
 
   const onSubmit = (data: FlattmatesLocationData) => {
-    console.log('FlattmatesLocationDetailsStep onSubmit called with data:', data);
+    console.log('=== FlattmatesLocationDetailsStep onSubmit called ===');
+    console.log('Form data received:', data);
+    console.log('Data type:', typeof data);
+    console.log('Data keys:', Object.keys(data || {}));
     console.log('Form errors:', form.formState.errors);
     console.log('Form isValid:', form.formState.isValid);
     console.log('Form isDirty:', form.formState.isDirty);
     
     // Let react-hook-form + zod handle validity. If invalid, onSubmit won't be called.
-
     
     // Convert to LocationDetails format and include parsed city, state, pincode
     const locationData: LocationDetails = {
@@ -196,8 +334,11 @@ export const FlattmatesLocationDetailsStep: React.FC<FlattmatesLocationDetailsSt
       pincode: data.pincode || '',
       societyName: initialData.societyName || ''
     };
-    console.log('Calling onNext with locationData:', locationData);
+    console.log('Converted locationData:', locationData);
+    console.log('About to call onNext...');
     onNext(locationData);
+    console.log('onNext called successfully');
+    console.log('=== FlattmatesLocationDetailsStep onSubmit completed ===');
   };
 
   return (
@@ -221,7 +362,11 @@ export const FlattmatesLocationDetailsStep: React.FC<FlattmatesLocationDetailsSt
                   <FormLabel className="text-sm font-medium text-gray-700">
                     City *
                   </FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <Select onValueChange={(value) => {
+                    console.log('City dropdown changed to:', value);
+                    field.onChange(value);
+                    console.log('Form state after city change:', form.getValues());
+                  }} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger className="h-12 bg-white z-50">
                         <SelectValue placeholder="Choose city" />
@@ -284,6 +429,11 @@ export const FlattmatesLocationDetailsStep: React.FC<FlattmatesLocationDetailsSt
                       placeholder="Search 'Bellandur, Bengaluru, Karnataka'..."
                       className="h-12 pl-10"
                       {...field}
+                      onChange={(e) => {
+                        console.log('Locality input changed to:', e.target.value);
+                        field.onChange(e);
+                        console.log('Form state after locality change:', form.getValues());
+                      }}
                       ref={(el) => {
                         field.ref(el)
                         localityInputRef.current = el
@@ -303,17 +453,6 @@ export const FlattmatesLocationDetailsStep: React.FC<FlattmatesLocationDetailsSt
             </div>
           )}
 
-          {/* Navigation Buttons - Hidden, handled by sticky bottom navigation */}
-          <div className="flex justify-between pt-6" style={{ display: 'none' }}>
-            <Button type="button" variant="outline" onClick={onBack} className="h-12 px-8 border-gray-300 text-gray-700 hover:bg-gray-50">
-              Back
-            </Button>
-            <Button type="submit" className="h-12 px-8 bg-red-600 hover:bg-red-700 text-white">
-              Save & Continue
-            </Button>
-          </div>
-          {/* Hidden submit button for sticky bar */}
-          <button type="submit" className="hidden" />
         </form>
       </Form>
     </div>
