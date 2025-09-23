@@ -90,7 +90,8 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
       cornerProperty: data.cornerProperty || false
     } as PropertyDetails);
   };
-  return <div className="bg-background p-6">
+  return (
+    <div className="bg-background p-6">
       {/* Form Content - Scrollable */}
       <div className="flex-1 overflow-y-auto">
         <div className="text-left mb-8">
