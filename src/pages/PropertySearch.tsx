@@ -251,7 +251,7 @@ const PropertySearch = () => {
             locationValue += `, ${stateComponent.long_name}`;
           }
         }
-        if (locationValue && filters.selectedCity) {
+        if (locationValue && filters.selectedCity && filters.selectedCity !== 'all') {
           // Validate that the selected location is within the selected city
           const isValidLocation = place?.address_components && place.address_components.some((comp: any) => 
             comp.types.includes('administrative_area_level_2') && 
@@ -283,7 +283,7 @@ const PropertySearch = () => {
               locationInputRef.current.value = '';
             }
           }
-        } else if (!filters.selectedCity) {
+        } else if (!filters.selectedCity || filters.selectedCity === 'all') {
           // Clear location if no city selected
           updateFilter('location', '');
           if (locationInputRef.current) {
@@ -322,7 +322,7 @@ const PropertySearch = () => {
                     <SelectValue placeholder="Select City" />
                   </SelectTrigger>
                   <SelectContent className="bg-background border shadow-lg z-50">
-                    <SelectItem value="">All Cities</SelectItem>
+                    <SelectItem value="all">All Cities</SelectItem>
                     <SelectItem value="bangalore">Bangalore</SelectItem>
                     <SelectItem value="mumbai">Mumbai</SelectItem>
                     <SelectItem value="delhi">Delhi</SelectItem>
@@ -376,7 +376,7 @@ const PropertySearch = () => {
                     onKeyDown={e => {
                       if (e.key === 'Enter' && filters.location.trim()) {
                         e.preventDefault();
-                        if (filters.selectedCity && filters.locations.length < 3 && !filters.locations.includes(filters.location.trim())) {
+                        if (filters.selectedCity && filters.selectedCity !== 'all' && filters.locations.length < 3 && !filters.locations.includes(filters.location.trim())) {
                           updateFilter('locations', [...filters.locations, filters.location.trim()]);
                           updateFilter('location', '');
                           // Keep focus on input after adding location
@@ -396,10 +396,10 @@ const PropertySearch = () => {
                       // Ensure input is always focused and ready for typing
                       e.target.select();
                     }}
-                    placeholder={!filters.selectedCity ? "Select a city first..." : filters.locations.length === 0 ? "Enter locality or area name..." : filters.locations.length >= 3 ? "Max 3 locations selected" : "Add more..."}
+                    placeholder={filters.selectedCity === 'all' || !filters.selectedCity ? "Select a city first..." : filters.locations.length === 0 ? "Enter locality or area name..." : filters.locations.length >= 3 ? "Max 3 locations selected" : "Add more..."}
                     className="flex-1 min-w-32 outline-none bg-transparent text-sm"
-                    disabled={filters.locations.length >= 3 || !filters.selectedCity}
-                    autoFocus={filters.locations.length < 3 && !!filters.selectedCity}
+                    disabled={filters.locations.length >= 3 || (!filters.selectedCity || filters.selectedCity === 'all')}
+                    autoFocus={filters.locations.length < 3 && !!filters.selectedCity && filters.selectedCity !== 'all'}
                   />
                   
                   {/* Location Counter */}
