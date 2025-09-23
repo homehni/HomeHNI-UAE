@@ -49,13 +49,15 @@ export function PgHostelGalleryStep({
   };
 
   return (
-    <div className="bg-background p-6">
-      <div className="text-left mb-8">
-        <h2 className="text-2xl font-semibold text-red-600 mb-2">
-          Upload photos & videos
-        </h2>
-      </div>
-      <form onSubmit={handleSubmit} className="space-y-6">
+    <div className="min-h-screen bg-background">
+      <div className="max-w-4xl mx-auto p-8">
+        <div className="text-left mb-8">
+          <h1 className="text-2xl font-semibold text-primary mb-2">
+            Upload photos & videos
+          </h1>
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-6">
         {/* Image Upload */}
         <div className="space-y-2">
           <ImageUpload
@@ -85,5 +87,6 @@ export function PgHostelGalleryStep({
         </div>
       </form>
     </div>
+  </div>
   );
 }

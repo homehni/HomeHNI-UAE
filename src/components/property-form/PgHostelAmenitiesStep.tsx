@@ -89,12 +89,15 @@ export function PgHostelAmenitiesStep({
   ];
 
   return (
-    <div className="bg-background p-6">
-      <div className="text-left mb-8">
-        <h2 className="text-2xl font-semibold text-red-600 mb-2">Amenities</h2>
-      </div>
+    <div className="min-h-screen bg-background">
+      <div className="max-w-4xl mx-auto p-8">
+        <div className="text-left mb-8">
+          <h1 className="text-2xl font-semibold text-primary mb-2">
+            Amenities
+          </h1>
+        </div>
 
-      <form onSubmit={handleSubmit} className="space-y-8">
+        <form onSubmit={handleSubmit} className="space-y-8">
             {/* Available Services */}
             <div className="space-y-4">
               <h3 className="text-lg font-medium text-foreground">Available Services</h3>
@@ -231,5 +234,6 @@ export function PgHostelAmenitiesStep({
         </div>
       </form>
     </div>
+  </div>
   );
 }
