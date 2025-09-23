@@ -608,26 +608,6 @@ const PropertySearch = () => {
                   </div>
                 </div>
 
-                <Separator />
-
-                {/* Locality Filter - Dynamic based on available properties */}
-                <div>
-                  <h4 className="font-semibold mb-3">Locality</h4>
-                  <div className="max-h-32 overflow-y-auto space-y-2">
-                    {availableLocalities.slice(0, 8).map(locality => <div key={locality} className="flex items-center space-x-2">
-                        <Checkbox id={locality} checked={filters.locality.includes(locality)} onCheckedChange={checked => {
-                      if (checked) {
-                        updateFilter('locality', [...filters.locality, locality]);
-                      } else {
-                        updateFilter('locality', filters.locality.filter(l => l !== locality));
-                      }
-                    }} />
-                        <label htmlFor={locality} className="text-sm text-gray-700 cursor-pointer">
-                          {locality}
-                        </label>
-                      </div>)}
-                  </div>
-                </div>
 
                 <Separator />
 
