@@ -72,7 +72,7 @@ export const useSimplifiedSearch = () => {
       construction: [],
       location: searchParams.get('location') || '',
       locations: parsedLocations, // Initialize from URL parameter
-      selectedCity: searchParams.get('city') || '', // Initialize from URL parameter
+      selectedCity: searchParams.get('city') || 'all', // Initialize from URL parameter
       sortBy: 'relevance'
     };
   });
@@ -509,7 +509,7 @@ export const useSimplifiedSearch = () => {
       construction: [],
       location: '',
       locations: [], // Clear multiple locations
-      selectedCity: '', // Clear selected city
+      selectedCity: 'all', // Reset to "All Cities"
       sortBy: 'relevance'
     });
   };

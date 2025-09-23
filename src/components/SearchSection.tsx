@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, forwardRef, useImperativeHandle } from 're
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { MapPin, X } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useCMSContent } from '@/hooks/useCMSContent';
@@ -13,6 +14,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
   const [activeTab, setActiveTab] = useState('buy');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedLocations, setSelectedLocations] = useState<string[]>([]);
+  const [selectedCity, setSelectedCity] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
   const mobileInputRef = useRef<HTMLInputElement>(null);
   const { content: cmsContent } = useCMSContent('hero-search');
@@ -43,6 +45,11 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
       type: activeTab,
       locations: locations.join(',')
     });
+    
+    // Add city parameter if selected
+    if (selectedCity && selectedCity !== 'all') {
+      params.set('city', selectedCity);
+    }
     
     // For commercial search, show all property types regardless of sale/rent
     if (activeTab === 'commercial') {
@@ -97,7 +104,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
     const initAutocomplete = () => {
       if (!(window as any).google?.maps?.places) return;
       const options = {
-        fields: ['formatted_address', 'geometry', 'name'],
+        fields: ['formatted_address', 'geometry', 'name', 'address_components'],
         types: ['geocode'],
         componentRestrictions: {
           country: 'in' as const
@@ -122,7 +129,24 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
             }
           }
           
-          if (el && value) {
+          // Validate location is within selected city
+          if (selectedCity && selectedCity !== 'all' && place?.address_components) {
+            const isValidLocation = place.address_components.some((comp: any) => 
+              comp.types.includes('administrative_area_level_2') && 
+              comp.long_name.toLowerCase().includes(selectedCity.toLowerCase())
+            );
+            
+            if (!isValidLocation) {
+              // Clear invalid location
+              if (el) {
+                el.value = '';
+                setSearchQuery('');
+              }
+              return;
+            }
+          }
+          
+          if (el && value && (selectedCity && selectedCity !== 'all')) {
             // Auto-add location if under limit
             if (selectedLocations.length < 3 && !selectedLocations.includes(value)) {
               setSelectedLocations(prev => [...prev, value]);
@@ -132,12 +156,18 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
               el.value = value;
               setSearchQuery(value);
             }
+          } else if (!selectedCity || selectedCity === 'all') {
+            // Clear location if no city selected
+            if (el) {
+              el.value = '';
+              setSearchQuery('');
+            }
           }
         });
       });
     };
     loadGoogleMaps().then(initAutocomplete).catch(console.error);
-  }, []);
+  }, [selectedCity, selectedLocations]);
   useImperativeHandle(ref, () => ({
     focusSearchInput: () => {
       // Detect if mobile view (screen width < 768px)
@@ -159,6 +189,27 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
         {/* Mobile Search Section - overlapping 50% at bottom of hero */}
         <div className="sm:hidden absolute bottom-4 left-2 right-2 transform translate-y-1/2">
           <div className="bg-white rounded-lg shadow-xl border border-gray-100 p-3">
+            {/* City Selector - Mobile */}
+            <div className="mb-3">
+              <Select value={selectedCity} onValueChange={setSelectedCity}>
+                <SelectTrigger className="h-10 border border-brand-red rounded-lg focus:ring-2 focus:ring-brand-red/20 bg-white text-sm">
+                  <SelectValue placeholder="Select City" />
+                </SelectTrigger>
+                <SelectContent className="bg-white border border-gray-200 rounded-lg shadow-lg z-50">
+                  <SelectItem value="all" className="text-sm">All Cities</SelectItem>
+                  <SelectItem value="bangalore" className="text-sm">Bangalore</SelectItem>
+                  <SelectItem value="mumbai" className="text-sm">Mumbai</SelectItem>
+                  <SelectItem value="delhi" className="text-sm">Delhi</SelectItem>
+                  <SelectItem value="pune" className="text-sm">Pune</SelectItem>
+                  <SelectItem value="hyderabad" className="text-sm">Hyderabad</SelectItem>
+                  <SelectItem value="chennai" className="text-sm">Chennai</SelectItem>
+                  <SelectItem value="kolkata" className="text-sm">Kolkata</SelectItem>
+                  <SelectItem value="ahmedabad" className="text-sm">Ahmedabad</SelectItem>
+                  <SelectItem value="jaipur" className="text-sm">Jaipur</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
             {/* Selected Location Tags */}
             {selectedLocations.length > 0 && (
               <div className="flex flex-wrap gap-2 mb-3">
@@ -186,11 +237,11 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                 <input 
                   ref={mobileInputRef} 
                   type="text" 
-                  placeholder={selectedLocations.length >= 3 ? "Max 3 locations selected" : selectedLocations.length > 0 ? `Add location ${selectedLocations.length + 1}/3` : "Search 'Sector 150 Noida'"} 
+                  placeholder={selectedCity === 'all' || !selectedCity ? "Select a city first..." : selectedLocations.length >= 3 ? "Max 3 locations selected" : selectedLocations.length > 0 ? `Add location ${selectedLocations.length + 1}/3` : "Search locality..."} 
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onKeyPress={handleKeyPress}
-                  disabled={selectedLocations.length >= 3}
+                  disabled={selectedLocations.length >= 3 || (!selectedCity || selectedCity === 'all')}
                   className="w-full pl-9 pr-3 py-2.5 bg-gray-50 border border-brand-red rounded-lg text-brand-red placeholder-brand-red/60 focus:outline-none focus:ring-2 focus:ring-brand-red focus:border-transparent text-sm disabled:opacity-50" 
                 />
               </div>
@@ -220,6 +271,29 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                   </TabsList>
 
                   <TabsContent value={activeTab} className="mt-0 px-3 sm:px-6 py-2 bg-white rounded-b-lg">
+                    {/* City Selector - Desktop */}
+                    <div className="mb-4">
+                      <div className="w-48">
+                        <Select value={selectedCity} onValueChange={setSelectedCity}>
+                          <SelectTrigger className="h-12 border border-brand-red rounded-lg focus:ring-2 focus:ring-brand-red/20 bg-white text-sm font-medium">
+                            <SelectValue placeholder="Select City" />
+                          </SelectTrigger>
+                          <SelectContent className="bg-white border border-gray-200 rounded-lg shadow-lg z-50">
+                            <SelectItem value="all" className="text-sm">All Cities</SelectItem>
+                            <SelectItem value="bangalore" className="text-sm">Bangalore</SelectItem>
+                            <SelectItem value="mumbai" className="text-sm">Mumbai</SelectItem>
+                            <SelectItem value="delhi" className="text-sm">Delhi</SelectItem>
+                            <SelectItem value="pune" className="text-sm">Pune</SelectItem>
+                            <SelectItem value="hyderabad" className="text-sm">Hyderabad</SelectItem>
+                            <SelectItem value="chennai" className="text-sm">Chennai</SelectItem>
+                            <SelectItem value="kolkata" className="text-sm">Kolkata</SelectItem>
+                            <SelectItem value="ahmedabad" className="text-sm">Ahmedabad</SelectItem>
+                            <SelectItem value="jaipur" className="text-sm">Jaipur</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+
                     {/* Selected Location Tags */}
                     {selectedLocations.length > 0 && (
                       <div className="flex flex-wrap gap-2 mb-3">
@@ -246,11 +320,11 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                          <MapPin className="absolute left-3 top-3 text-brand-red" size={16} />
                          <Input 
                            ref={inputRef} 
-                           placeholder={selectedLocations.length >= 3 ? "Max 3 locations selected" : selectedLocations.length > 0 ? `Add location ${selectedLocations.length + 1}/3` : "Search 'Anything'"} 
+                           placeholder={selectedCity === 'all' || !selectedCity ? "Select a city first..." : selectedLocations.length >= 3 ? "Max 3 locations selected" : selectedLocations.length > 0 ? `Add location ${selectedLocations.length + 1}/3` : "Search locality..."} 
                            value={searchQuery}
                            onChange={(e) => setSearchQuery(e.target.value)}
                            onKeyPress={handleKeyPress}
-                           disabled={selectedLocations.length >= 3}
+                           disabled={selectedLocations.length >= 3 || (!selectedCity || selectedCity === 'all')}
                            className="pl-9 h-10 sm:h-12 border-brand-red text-brand-red placeholder-brand-red/60 text-sm disabled:opacity-50" 
                          />
                       </div>
