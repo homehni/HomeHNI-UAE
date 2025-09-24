@@ -71,7 +71,9 @@ export const SecureContactForm: React.FC<SecureContactFormProps> = ({
       errors.push('Please enter a valid email address');
     }
     
-    if (formData.phone && formData.phone.length > 0 && formData.phone.length < 10) {
+    if (!formData.phone.trim()) {
+      errors.push('Phone number is required');
+    } else if (formData.phone.length < 10) {
       errors.push('Phone number must be at least 10 digits');
     }
     
@@ -103,7 +105,7 @@ export const SecureContactForm: React.FC<SecureContactFormProps> = ({
         p_property_id: propertyId,
         p_user_name: formData.name.trim(),
         p_user_email: formData.email.trim(),
-        p_user_phone: formData.phone.trim() || undefined,
+        p_user_phone: formData.phone.trim(),
         p_message: formData.message.trim() || undefined
       });
       console.log('SecureContactForm: Lead creation result:', { data, error });
@@ -186,7 +188,7 @@ export const SecureContactForm: React.FC<SecureContactFormProps> = ({
           <div className="space-y-2">
             <Label htmlFor="phone" className="flex items-center gap-2">
               <Phone className="h-4 w-4" />
-              Phone Number (Optional)
+              Phone Number *
             </Label>
             <Input
               id="phone"
@@ -194,6 +196,7 @@ export const SecureContactForm: React.FC<SecureContactFormProps> = ({
               placeholder="+1234567890"
               value={formData.phone}
               onChange={(e) => handleInputChange('phone', e.target.value)}
+              required
               maxLength={20}
             />
           </div>
