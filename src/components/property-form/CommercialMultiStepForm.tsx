@@ -7,7 +7,7 @@ import { CommercialPropertyDetailsStep } from './CommercialPropertyDetailsStep';
 import { CommercialLocationDetailsStep } from './CommercialLocationDetailsStep';
 import { CommercialRentalDetailsStep } from './CommercialRentalDetailsStep';
 import { CommercialAmenitiesStep } from './CommercialAmenitiesStep';
-import { GalleryStep } from './GalleryStep';
+import { CommercialGalleryStep } from './CommercialGalleryStep';
 import GetTenantsFasterSection from '@/components/GetTenantsFasterSection';
 import { ScheduleStep } from './ScheduleStep';
 import { CommercialPreviewStep } from './CommercialPreviewStep';
@@ -207,7 +207,7 @@ const handleScheduleSubmit = (data: Partial<ScheduleInfo>) => {
         );
       case 6:
         return (
-          <GalleryStep
+          <CommercialGalleryStep
             initialData={gallery}
             onNext={handleGalleryNext}
             onBack={prevStep}

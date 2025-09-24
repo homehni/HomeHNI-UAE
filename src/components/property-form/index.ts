@@ -6,6 +6,8 @@ export { LocationDetailsStep } from './LocationDetailsStep';
 export { RentalDetailsStep } from './RentalDetailsStep';
 export { AmenitiesStep } from './AmenitiesStep';
 export { GalleryStep } from './GalleryStep';
+export { CommercialGalleryStep } from './CommercialGalleryStep';
+export { CommercialCategorizedImageUpload } from './CommercialCategorizedImageUpload';
 export { AdditionalInfoStep } from './AdditionalInfoStep';
 export { ScheduleStep } from './ScheduleStep';
 export { PreviewStep } from './PreviewStep';
