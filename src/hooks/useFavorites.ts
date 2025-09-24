@@ -52,7 +52,10 @@ export const useFavorites = () => {
       toast({
         title: "Login Required",
         description: "Please login to save properties to your favorites.",
-        variant: "destructive",
+        className: "bg-white border border-red-200 shadow-lg rounded-lg",
+        style: {
+          borderLeft: "4px solid hsl(var(--primary))",
+        },
       });
       return false;
     }
@@ -88,6 +91,10 @@ export const useFavorites = () => {
             description: newStatus 
               ? "This is a demo property. In the real app, this would be saved to your favorites."
               : "This demo property has been removed from your favorites.",
+            className: "bg-white border border-red-200 shadow-lg rounded-lg",
+            style: {
+              borderLeft: "4px solid hsl(var(--primary))",
+            },
           });
 
           return newStatus;
@@ -107,11 +114,19 @@ export const useFavorites = () => {
         toast({
           title: "Property Saved",
           description: "Property has been added to your favorites.",
+          className: "bg-white border border-red-200 shadow-lg rounded-lg",
+          style: {
+            borderLeft: "4px solid hsl(var(--primary))",
+          },
         });
       } else {
         toast({
           title: "Property Removed",
           description: "Property has been removed from your favorites.",
+          className: "bg-white border border-red-200 shadow-lg rounded-lg",
+          style: {
+            borderLeft: "4px solid hsl(var(--primary))",
+          },
         });
       }
 
@@ -128,7 +143,10 @@ export const useFavorites = () => {
       toast({
         title: "Error",
         description: "Failed to update favorite status. Please try again.",
-        variant: "destructive",
+        className: "bg-white border border-red-200 shadow-lg rounded-lg",
+        style: {
+          borderLeft: "4px solid hsl(var(--primary))",
+        },
       });
 
       return currentlyFavorited;
