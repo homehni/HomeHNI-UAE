@@ -6,12 +6,12 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 
 interface CategorizedImages {
-  bathroom?: File[];
-  bedroom?: File[];
-  hall?: File[];
-  kitchen?: File[];
+  bathroom: File[];
+  bedroom: File[];
+  hall: File[];
+  kitchen: File[];
   frontView: File[];
-  balcony?: File[];
+  balcony: File[];
   others: File[];
 }
 
@@ -40,7 +40,7 @@ export const CategorizedImageUpload: React.FC<CategorizedImageUploadProps> = ({
   const [activeCategory, setActiveCategory] = useState<keyof CategorizedImages | null>(null);
 
   const getTotalImages = () => {
-    return Object.values(images).reduce((total, categoryImages) => total + (categoryImages?.length || 0), 0);
+    return Object.values(images).reduce((total, categoryImages) => total + categoryImages.length, 0);
   };
 
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>, category: keyof CategorizedImages) => {
@@ -51,7 +51,7 @@ export const CategorizedImageUpload: React.FC<CategorizedImageUploadProps> = ({
       return isImage && isValidSize;
     });
 
-    const currentCategoryImages = images[category] || [];
+    const currentCategoryImages = images[category];
     const newCategoryImages = [...currentCategoryImages, ...validFiles].slice(0, maxImagesPerCategory);
     
     onImagesChange({
@@ -61,8 +61,7 @@ export const CategorizedImageUpload: React.FC<CategorizedImageUploadProps> = ({
   };
 
   const removeImage = (category: keyof CategorizedImages, index: number) => {
-    const categoryImages = images[category] || [];
-    const newCategoryImages = categoryImages.filter((_, i) => i !== index);
+    const newCategoryImages = images[category].filter((_, i) => i !== index);
     onImagesChange({
       ...images,
       [category]: newCategoryImages
@@ -83,7 +82,7 @@ export const CategorizedImageUpload: React.FC<CategorizedImageUploadProps> = ({
       {/* Categories Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {categories.map((category) => {
-          const categoryImages = images[category.key] || [];
+          const categoryImages = images[category.key];
           const IconComponent = category.icon;
           
           return (

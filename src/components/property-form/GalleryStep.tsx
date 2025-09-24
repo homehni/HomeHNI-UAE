@@ -14,24 +14,24 @@ import { Home, MapPin, Building, Sparkles, Camera, FileText, Calendar, Phone } f
 // Define a local type for our form data
 type GalleryFormData = {
   images: {
-    bathroom?: File[];
-    bedroom?: File[];
-    hall?: File[];
-    kitchen?: File[];
+    bathroom: File[];
+    bedroom: File[];
+    hall: File[];
+    kitchen: File[];
     frontView: File[];
-    balcony?: File[];
+    balcony: File[];
     others: File[];
   };
   video?: File;
 };
 const gallerySchema = z.object({
   images: z.object({
-    bathroom: z.array(z.any()).default([]).optional(),
-    bedroom: z.array(z.any()).default([]).optional(),
-    hall: z.array(z.any()).default([]).optional(),
-    kitchen: z.array(z.any()).default([]).optional(),
+    bathroom: z.array(z.any()).default([]),
+    bedroom: z.array(z.any()).default([]),
+    hall: z.array(z.any()).default([]),
+    kitchen: z.array(z.any()).default([]),
     frontView: z.array(z.any()).default([]),
-    balcony: z.array(z.any()).default([]).optional(),
+    balcony: z.array(z.any()).default([]),
     others: z.array(z.any()).default([])
   }),
   video: z.any().optional()
@@ -74,15 +74,7 @@ export const GalleryStep: React.FC<GalleryStepProps> = ({
   const isEditMode = (window as any).editingPropertyData !== undefined;
   const handleFormSubmit = (data: any) => {
     // Convert categorized images to flat array for backward compatibility
-    const allImages = [
-      ...(data.images.bathroom || []), 
-      ...(data.images.bedroom || []), 
-      ...(data.images.hall || []), 
-      ...(data.images.kitchen || []), 
-      ...(data.images.frontView || []), 
-      ...(data.images.balcony || []), 
-      ...(data.images.others || [])
-    ];
+    const allImages = [...data.images.bathroom, ...data.images.bedroom, ...data.images.hall, ...data.images.kitchen, ...data.images.frontView, ...data.images.balcony, ...data.images.others];
     const propertyGalleryData: PropertyGallery = {
       images: allImages,
       categorizedImages: data.images,
@@ -96,15 +88,7 @@ export const GalleryStep: React.FC<GalleryStepProps> = ({
     const currentFormData = form.getValues();
 
     // Convert categorized images to flat array for backward compatibility
-    const allImages = [
-      ...(currentFormData.images.bathroom || []), 
-      ...(currentFormData.images.bedroom || []), 
-      ...(currentFormData.images.hall || []), 
-      ...(currentFormData.images.kitchen || []), 
-      ...(currentFormData.images.frontView || []), 
-      ...(currentFormData.images.balcony || []), 
-      ...(currentFormData.images.others || [])
-    ];
+    const allImages = [...currentFormData.images.bathroom, ...currentFormData.images.bedroom, ...currentFormData.images.hall, ...currentFormData.images.kitchen, ...currentFormData.images.frontView, ...currentFormData.images.balcony, ...currentFormData.images.others];
     const propertyGalleryData: PropertyGallery = {
       images: allImages,
       categorizedImages: currentFormData.images as any,

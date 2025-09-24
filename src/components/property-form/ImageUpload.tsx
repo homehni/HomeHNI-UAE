@@ -8,12 +8,12 @@ import { compressImage, shouldCompress } from '@/utils/imageCompression';
 import { ImageCompressionProgress } from '@/components/ui/image-compression-progress';
 
 interface CategorizedImages {
-  bathroom?: File[];
-  bedroom?: File[];
-  hall?: File[];
-  kitchen?: File[];
+  bathroom: File[];
+  bedroom: File[];
+  hall: File[];
+  kitchen: File[];
   frontView: File[];
-  balcony?: File[];
+  balcony: File[];
   others: File[];
 }
 
@@ -145,7 +145,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
         }
 
         const maxPerCategory = 5;
-        const currentCategoryImages = categorizedImages[category] || [];
+        const currentCategoryImages = categorizedImages[category];
         
         if (currentCategoryImages.length >= maxPerCategory) {
           toast({
@@ -165,7 +165,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
         setCategorizedImages(updatedCategorized);
 
         // Convert back to flat array for parent component
-        const allImages = Object.values(updatedCategorized).flat().filter(Boolean);
+        const allImages = Object.values(updatedCategorized).flat();
         onImagesChange(allImages.slice(0, maxImages));
 
         // Clear progress after a delay
@@ -190,8 +190,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
   };
 
   const removeCategorizedImage = (category: keyof CategorizedImages, index: number) => {
-    const categoryImages = categorizedImages[category] || [];
-    const newCategoryImages = categoryImages.filter((_, i) => i !== index);
+    const newCategoryImages = categorizedImages[category].filter((_, i) => i !== index);
     const updatedCategorized = {
       ...categorizedImages,
       [category]: newCategoryImages
@@ -199,7 +198,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
     setCategorizedImages(updatedCategorized);
 
     // Convert back to flat array for parent component
-    const allImages = Object.values(updatedCategorized).flat().filter(Boolean);
+    const allImages = Object.values(updatedCategorized).flat();
     onImagesChange(allImages.slice(0, maxImages));
   };
 
@@ -212,7 +211,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
   };
 
   const getTotalCategorizedImages = () => {
-    return Object.values(categorizedImages).reduce((total, categoryImages) => total + (categoryImages?.length || 0), 0);
+    return Object.values(categorizedImages).reduce((total, categoryImages) => total + categoryImages.length, 0);
   };
 
   return (
@@ -236,7 +235,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
       {/* Categories Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {categories.map((category) => {
-          const categoryImages = categorizedImages[category.key] || [];
+          const categoryImages = categorizedImages[category.key];
           const IconComponent = category.icon;
           const maxPerCategory = 5;
           
