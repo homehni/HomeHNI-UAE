@@ -320,8 +320,8 @@ const OwnerPlans = ({ embedded }: OwnerPlansProps) => {
       )}
 
       {/* Pricing Plans with Tabs */}
-      <section className={embedded ? "py-8 px-4 bg-gray-50" : "py-16 px-4 bg-gray-50"}>
-        <div className="max-w-6xl mx-auto">
+      <section className={embedded ? "p-0 bg-transparent" : "py-16 px-4 bg-gray-50"}>
+        <div className={embedded ? "" : "max-w-6xl mx-auto"}>
 
           <Tabs defaultValue="residential" className="w-full">
             <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 mb-8 p-1 gap-1 bg-muted rounded-lg h-auto">
