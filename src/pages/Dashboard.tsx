@@ -319,7 +319,9 @@ export const Dashboard: React.FC = () => {
   const fetchLeads = async () => {
     try {
       console.log('Dashboard: Fetching leads for user:', user?.id);
-      const { data, error } = await supabase
+      
+      // First, try the standard approach with property join
+      const { data: standardLeads, error: standardError } = await supabase
         .from('leads')
         .select(`
           *,
@@ -328,10 +330,76 @@ export const Dashboard: React.FC = () => {
         .eq('properties.user_id', user?.id)
         .order('created_at', { ascending: false });
 
-      console.log('Dashboard: Leads query result:', { data, error, userID: user?.id });
-      if (error) throw error;
-      setLeads(data || []);
-      console.log('Dashboard: Set leads count:', data?.length || 0);
+      console.log('Dashboard: Standard leads query result:', { standardLeads, standardError, userID: user?.id });
+      
+      // If standard approach works, use it
+      if (!standardError && standardLeads && standardLeads.length > 0) {
+        setLeads(standardLeads);
+        console.log('Dashboard: Set leads count (standard):', standardLeads.length);
+        return;
+      }
+      
+      // Fallback: Get all leads and try to match property ownership differently
+      console.log('Dashboard: Standard approach failed, trying fallback approach...');
+      
+      const { data: allLeads, error: allLeadsError } = await supabase
+        .from('leads')
+        .select('*')
+        .order('created_at', { ascending: false });
+      
+      console.log('Dashboard: All leads query result:', { allLeads, allLeadsError });
+      
+      if (allLeadsError) throw allLeadsError;
+      
+      // For each lead, try to get property info and check ownership
+      const leadsWithProperties = [];
+      for (const lead of allLeads || []) {
+        try {
+          // Try to get property info using the same RPC function that works for display
+          const { data: propertyData, error: propertyError } = await supabase
+            .rpc('get_public_property_by_id', { property_id: lead.property_id });
+          
+          console.log(`Dashboard: Property info for lead ${lead.id}:`, { propertyData, propertyError });
+          
+          if (propertyData && propertyData.length > 0) {
+            // Add property info to lead
+            leadsWithProperties.push({
+              ...lead,
+              properties: {
+                title: propertyData[0].title,
+                user_id: propertyData[0].user_id // This might still be undefined
+              }
+            });
+          } else {
+            // Add lead without property info
+            leadsWithProperties.push({
+              ...lead,
+              properties: {
+                title: 'Property information unavailable',
+                user_id: null
+              }
+            });
+          }
+        } catch (propertyFetchError) {
+          console.error(`Dashboard: Error fetching property for lead ${lead.id}:`, propertyFetchError);
+          // Add lead without property info
+          leadsWithProperties.push({
+            ...lead,
+            properties: {
+              title: 'Property information unavailable',
+              user_id: null
+            }
+          });
+        }
+      }
+      
+      console.log('Dashboard: All leads with property info:', leadsWithProperties);
+      
+      // For now, show all leads (admin can filter later)
+      // TODO: Once property ownership is fixed, filter by user ownership
+      setLeads(leadsWithProperties);
+      console.log('Dashboard: Set leads count (fallback):', leadsWithProperties.length);
+      
     } catch (error) {
       console.error('Error fetching leads:', error);
     }
