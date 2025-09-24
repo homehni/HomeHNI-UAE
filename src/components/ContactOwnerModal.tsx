@@ -36,6 +36,47 @@ export const ContactOwnerModal: React.FC<ContactOwnerModalProps> = ({
     e.preventDefault();
     setIsSubmitting(true);
 
+    // Validate required fields
+    if (!formData.name.trim()) {
+      toast({
+        title: "Validation Error",
+        description: "Name is required",
+        variant: "destructive",
+      });
+      setIsSubmitting(false);
+      return;
+    }
+
+    if (!formData.email.trim()) {
+      toast({
+        title: "Validation Error", 
+        description: "Email is required",
+        variant: "destructive",
+      });
+      setIsSubmitting(false);
+      return;
+    }
+
+    if (!formData.phone.trim()) {
+      toast({
+        title: "Validation Error",
+        description: "Phone number is required",
+        variant: "destructive",
+      });
+      setIsSubmitting(false);
+      return;
+    }
+
+    if (formData.phone.length < 10) {
+      toast({
+        title: "Validation Error",
+        description: "Phone number must be at least 10 digits",
+        variant: "destructive",
+      });
+      setIsSubmitting(false);
+      return;
+    }
+
     // Check if user is authenticated
     if (!user) {
       toast({
@@ -54,7 +95,7 @@ export const ContactOwnerModal: React.FC<ContactOwnerModalProps> = ({
         property_id: propertyId,
         interested_user_name: formData.name,
         interested_user_email: formData.email,
-        interested_user_phone: formData.phone || undefined,
+        interested_user_phone: formData.phone,
         message: formData.message || undefined
       };
 
@@ -175,13 +216,14 @@ export const ContactOwnerModal: React.FC<ContactOwnerModalProps> = ({
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="phone">Phone Number</Label>
+              <Label htmlFor="phone">Phone Number *</Label>
               <Input
                 id="phone"
                 type="tel"
                 value={formData.phone}
                 onChange={(e) => handleChange('phone', e.target.value)}
-                placeholder="Enter your phone number (optional)"
+                placeholder="Enter your phone number"
+                required
               />
             </div>
 
