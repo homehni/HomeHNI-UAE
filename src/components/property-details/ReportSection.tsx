@@ -31,13 +31,18 @@ export const ReportSection: React.FC = () => {
     if (option === 'Wrong Info') {
       setShowWrongInfoModal(true);
     } else {
-      // Show branded toast notification for "Listed by Broker" and "Rented Out"
+      // Show modern branded toast notification
       toast({
         title: "Contact Required",
-        description: "Please take owner contact before reporting this issue",
-        className: "bg-white border border-red-200 shadow-lg rounded-lg",
+        description: "It seems you have not taken the contact of this property. Please Take Owner Contact before reporting the issue",
+        className: "bg-brand-red text-white border-0 rounded-xl shadow-xl font-body",
         style: {
-          borderLeft: "4px solid hsl(var(--primary))",
+          background: "hsl(var(--brand-red))",
+          color: "white",
+          fontFamily: "'Open Sans', sans-serif",
+          fontSize: "14px",
+          fontWeight: "400",
+          lineHeight: "1.5",
         },
       });
     }
@@ -57,9 +62,14 @@ export const ReportSection: React.FC = () => {
       toast({
         title: "Report Submitted",
         description: "Thank you for reporting the issues. We will review them shortly.",
-        className: "bg-white border border-green-200 shadow-lg rounded-lg",
+        className: "bg-brand-red text-white border-0 rounded-xl shadow-xl font-body",
         style: {
-          borderLeft: "4px solid hsl(var(--primary))",
+          background: "hsl(var(--brand-red))",
+          color: "white",
+          fontFamily: "'Open Sans', sans-serif",
+          fontSize: "14px",
+          fontWeight: "400",
+          lineHeight: "1.5",
         },
       });
       setSelectedIssues([]);
