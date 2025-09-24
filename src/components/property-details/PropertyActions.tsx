@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { ShieldCheck, Edit, Info } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { supabase } from '@/integrations/supabase/client';
 
 interface PropertyActionsProps {
   onContact: () => void;
@@ -21,9 +22,66 @@ export const PropertyActions: React.FC<PropertyActionsProps> = ({
 }) => {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const [isOwner, setIsOwner] = useState(false);
+  const [ownershipChecked, setOwnershipChecked] = useState(false);
 
-  // Check if current user is the property owner
-  const isOwner = user && property.user_id && user.id === property.user_id;
+  // Check property ownership by querying the database
+  useEffect(() => {
+    const checkOwnership = async () => {
+      if (!user || !property.id) {
+        setIsOwner(false);
+        setOwnershipChecked(true);
+        return;
+      }
+
+      try {
+        console.log('PropertyActions: Checking ownership for property:', property.id, 'user:', user.id);
+        
+        // Check in properties table first
+        const { data: propertyData, error: propertyError } = await supabase
+          .from('properties')
+          .select('user_id')
+          .eq('id', property.id)
+          .eq('user_id', user.id)
+          .limit(1);
+
+        console.log('PropertyActions: Properties table check:', { propertyData, propertyError });
+
+        if (propertyData && propertyData.length > 0) {
+          console.log('PropertyActions: User owns this property (properties table)');
+          setIsOwner(true);
+          setOwnershipChecked(true);
+          return;
+        }
+
+        // Check in property_submissions table
+        const { data: submissionData, error: submissionError } = await supabase
+          .from('property_submissions')
+          .select('user_id')
+          .eq('id', property.id)
+          .eq('user_id', user.id)
+          .limit(1);
+
+        console.log('PropertyActions: Property submissions check:', { submissionData, submissionError });
+
+        if (submissionData && submissionData.length > 0) {
+          console.log('PropertyActions: User owns this property (property_submissions table)');
+          setIsOwner(true);
+        } else {
+          console.log('PropertyActions: User does not own this property');
+          setIsOwner(false);
+        }
+
+        setOwnershipChecked(true);
+      } catch (error) {
+        console.error('PropertyActions: Error checking ownership:', error);
+        setIsOwner(false);
+        setOwnershipChecked(true);
+      }
+    };
+
+    checkOwnership();
+  }, [user, property.id]);
   
   // Debug logging
   console.log('PropertyActions Debug:', {
@@ -32,6 +90,7 @@ export const PropertyActions: React.FC<PropertyActionsProps> = ({
     property_id: property.id,
     property_status: property.status,
     isOwner: isOwner,
+    ownershipChecked: ownershipChecked,
     userLoggedIn: !!user,
     propertyHasUserId: !!property.user_id,
     idsMatch: user?.id === property.user_id
@@ -40,6 +99,17 @@ export const PropertyActions: React.FC<PropertyActionsProps> = ({
   const handleEditProperty = () => {
     navigate(`/edit-property/${property.id}?tab=basic`);
   };
+
+  // Show loading state while checking ownership
+  if (!ownershipChecked) {
+    return (
+      <div className="space-y-3">
+        <div className="animate-pulse bg-gray-200 h-12 rounded-lg"></div>
+        <div className="animate-pulse bg-gray-200 h-12 rounded-lg"></div>
+      </div>
+    );
+  }
+
   // Show owner-specific UI if user owns the property
   if (isOwner) {
     const isPending = property.status === 'pending' || property.status === 'under_review' || !property.status;
