@@ -9,7 +9,6 @@ export const ReportSection: React.FC = () => {
   const [selectedReports, setSelectedReports] = useState<string[]>([]);
   const [showWrongInfoModal, setShowWrongInfoModal] = useState(false);
   const [selectedIssues, setSelectedIssues] = useState<string[]>([]);
-  const [inlineMessage, setInlineMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
   const { toast } = useToast();
 
   const reportOptions = [
@@ -31,12 +30,12 @@ export const ReportSection: React.FC = () => {
   const handleReportToggle = (option: string) => {
     if (option === 'Wrong Info') {
       setShowWrongInfoModal(true);
-      setInlineMessage(null); // Clear any existing message
     } else {
-      // Show inline message for "Listed by Broker" and "Rented Out"
-      setInlineMessage({
-        type: 'error',
-        text: "It seems you have not taken the contact of this property. Please Take Owner Contact before reporting the issue"
+      // Show branded toast notification for "Listed by Broker" and "Rented Out"
+      toast({
+        title: "Contact Required",
+        description: "It seems you have not taken the contact of this property. Please Take Owner Contact before reporting the issue",
+        className: "border-l-4 border-l-primary bg-primary/5 text-foreground",
       });
     }
   };
@@ -55,6 +54,7 @@ export const ReportSection: React.FC = () => {
       toast({
         title: "Report Submitted",
         description: "Thank you for reporting the issues. We will review them shortly.",
+        className: "border-l-4 border-l-primary bg-primary/5 text-foreground",
       });
       setSelectedIssues([]);
       setShowWrongInfoModal(false);
@@ -81,17 +81,6 @@ export const ReportSection: React.FC = () => {
               </Button>
             ))}
           </div>
-          
-          {/* Inline Message */}
-          {inlineMessage && (
-            <div className={`text-xs p-2 rounded-md ${
-              inlineMessage.type === 'error' 
-                ? 'bg-red-50 text-red-700 border border-red-200' 
-                : 'bg-green-50 text-green-700 border border-green-200'
-            }`}>
-              {inlineMessage.text}
-            </div>
-          )}
         </div>
       </div>
 
