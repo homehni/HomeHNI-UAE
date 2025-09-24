@@ -148,6 +148,29 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     // Success will be logged by onAuthStateChange (SIGNED_IN)
   };
 
+  // Welcome email function
+  const sendWelcomeEmail = async (userEmail: string, userName: string) => {
+    try {
+      const response = await fetch('https://lovable-email-backend.vercel.app/send-welcome-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': 'lov@ble-2025-secret-KEY'
+        },
+        body: JSON.stringify({
+          to: userEmail,
+          userName: userName || 'there'
+        })
+      });
+      
+      const result = await response.json();
+      console.log('Welcome email sent:', result);
+    } catch (error) {
+      console.error('Welcome email failed:', error);
+      // Don't block the signup process
+    }
+  };
+
   const signUpWithPassword = async (email: string, password: string, fullName?: string) => {
     try {
       const { data, error } = await supabase.functions.invoke('create-user', {
@@ -190,6 +213,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         errorObj.code = code;
         throw errorObj;
       }
+
+      // Send welcome email after successful signup
+      await sendWelcomeEmail(email, fullName || email.split('@')[0]);
     } catch (err) {
       const msg = err instanceof Error ? err.message : 'Sign up failed';
       throw new Error(msg);
