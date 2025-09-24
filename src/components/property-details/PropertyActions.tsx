@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { ShieldCheck, Edit, Info } from 'lucide-react';
+import { ShieldCheck, Edit, Info, CheckCircle } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { RentalStatusService } from '@/services/rentalStatusService';
 import { supabase } from '@/integrations/supabase/client';
+import { useToast } from '@/components/ui/use-toast';
 
 interface PropertyActionsProps {
   onContact: () => void;
@@ -12,18 +14,23 @@ interface PropertyActionsProps {
     id: string;
     user_id?: string;
     status?: string;
+    rental_status?: 'available' | 'rented' | 'sold';
   };
+  onPropertyStatusUpdate?: (newStatus: 'available' | 'rented' | 'sold') => void;
 }
 
 export const PropertyActions: React.FC<PropertyActionsProps> = ({ 
   onContact, 
   onScheduleVisit,
-  property
+  property,
+  onPropertyStatusUpdate
 }) => {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const { toast } = useToast();
   const [isOwner, setIsOwner] = useState(false);
   const [ownershipChecked, setOwnershipChecked] = useState(false);
+  const [isUpdatingStatus, setIsUpdatingStatus] = useState(false);
 
   // Check property ownership by querying the database
   useEffect(() => {
@@ -100,6 +107,53 @@ export const PropertyActions: React.FC<PropertyActionsProps> = ({
     navigate(`/edit-property/${property.id}?tab=basic`);
   };
 
+  const handleMarkRentedOut = async () => {
+    if (!user || !property.id) return;
+    
+    setIsUpdatingStatus(true);
+    
+    try {
+      console.log('PropertyActions: Marking property as rented:', property.id);
+      
+      const newStatus = property.rental_status === 'rented' ? 'available' : 'rented';
+      
+      // Use RentalStatusService to update the status
+      const result = await RentalStatusService.updatePropertyRentalStatus(
+        property.id, 
+        newStatus, 
+        user.id
+      );
+
+      if (!result.success) {
+        throw new Error(result.error || 'Failed to update property status');
+      }
+
+      // Call the parent callback to update the UI
+      if (onPropertyStatusUpdate) {
+        onPropertyStatusUpdate(newStatus);
+      }
+
+      toast({
+        title: newStatus === 'rented' ? "Property Marked as Rented" : "Property Marked as Available",
+        description: newStatus === 'rented' 
+          ? "Your property is now marked as rented out and will show a RENTED watermark."
+          : "Your property is now marked as available for rent.",
+      });
+
+      console.log('PropertyActions: Successfully updated property status to:', newStatus);
+      
+    } catch (error) {
+      console.error('PropertyActions: Error updating rental status:', error);
+      toast({
+        title: "Update Failed",
+        description: "Failed to update property status. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsUpdatingStatus(false);
+    }
+  };
+
   // Show loading state while checking ownership
   if (!ownershipChecked) {
     return (
@@ -128,14 +182,36 @@ export const PropertyActions: React.FC<PropertyActionsProps> = ({
           </div>
         )}
         
-        {/* Edit Property Button - Always show for owners */}
-        <Button 
-          onClick={handleEditProperty}
-          className="w-full bg-red-600 hover:bg-red-700 text-white rounded-lg py-3 font-medium flex items-center justify-center gap-2"
-        >
-          <Edit className="w-4 h-4" />
-          Edit Property
-        </Button>
+        {/* Action Buttons for Owners */}
+        <div className="flex flex-col sm:flex-row gap-3">
+          {/* Edit Property Button */}
+          <Button 
+            onClick={handleEditProperty}
+            className="flex-1 bg-teal-600 hover:bg-teal-700 text-white rounded-lg py-3 font-medium flex items-center justify-center gap-2"
+          >
+            <Edit className="w-4 h-4" />
+            Edit Property
+          </Button>
+
+          {/* Mark Rented Out Button */}
+          <Button 
+            onClick={handleMarkRentedOut}
+            disabled={isUpdatingStatus}
+            className={`flex-1 rounded-lg py-3 font-medium flex items-center justify-center gap-2 ${
+              property.rental_status === 'rented'
+                ? 'bg-green-600 hover:bg-green-700 text-white'
+                : 'bg-red-600 hover:bg-red-700 text-white'
+            }`}
+          >
+            <CheckCircle className="w-4 h-4" />
+            {isUpdatingStatus 
+              ? 'Updating...' 
+              : property.rental_status === 'rented' 
+                ? 'Mark Available' 
+                : 'Mark Rented Out'
+            }
+          </Button>
+        </div>
       </div>
     );
   }

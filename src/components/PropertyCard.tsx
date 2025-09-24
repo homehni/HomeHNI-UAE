@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { FavoriteButton } from '@/components/FavoriteButton';
 import { ContactOwnerModal } from '@/components/ContactOwnerModal';
+import { PropertyWatermark } from '@/components/property-details/PropertyWatermark';
 import { supabase } from '@/integrations/supabase/client';
 import propertyPlaceholder from '@/assets/property-placeholder.png';
 import { generatePropertyName } from '@/utils/propertyNameGenerator';
@@ -24,6 +25,7 @@ interface PropertyCardProps {
   listingType?: string;  
   isNew?: boolean;
   size?: 'default' | 'compact' | 'large';
+  rental_status?: 'available' | 'rented' | 'sold';
 }
 
 const PropertyCard = ({
@@ -38,7 +40,8 @@ const PropertyCard = ({
   propertyType,
   listingType,
   isNew = false,
-  size = 'default'
+  size = 'default',
+  rental_status = 'available'
 }: PropertyCardProps) => {
   const navigate = useNavigate();
   const [showContactModal, setShowContactModal] = useState(false);
@@ -268,19 +271,21 @@ const PropertyCard = ({
       window.open(`/property/${id}`, '_blank');
     }}>
       <div className="relative">
-        <div className="h-24 overflow-hidden">
-          <img
-            src={getImageUrl()}
-            alt={getDisplayTitle()}
-            loading="lazy"
-            decoding="async"
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-            onError={(e) => {
-              e.currentTarget.src = propertyPlaceholder;
-              e.currentTarget.alt = 'Image not available';
-            }}
-          />
-        </div>
+        <PropertyWatermark status={rental_status}>
+          <div className="h-24 overflow-hidden">
+            <img
+              src={getImageUrl()}
+              alt={getDisplayTitle()}
+              loading="lazy"
+              decoding="async"
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              onError={(e) => {
+                e.currentTarget.src = propertyPlaceholder;
+                e.currentTarget.alt = 'Image not available';
+              }}
+            />
+          </div>
+        </PropertyWatermark>
         <FavoriteButton 
           propertyId={id}
           size="sm"

@@ -4,7 +4,9 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { PropertyWatermark } from '@/components/property-details/PropertyWatermark';
 import { SecurePropertyService, PublicProperty } from '@/services/securePropertyService';
+import { RentalStatusService } from '@/services/rentalStatusService';
 import { SecureContactForm } from './SecureContactForm';
 import { 
   Search, 
@@ -51,7 +53,26 @@ export const SecurePropertySearch: React.FC = () => {
         throw new Error(error.message);
       }
       
-      setProperties(data || []);
+      const loadedProperties = data || [];
+      console.log('SecurePropertySearch: Loaded properties:', loadedProperties.length);
+      
+      // Fetch rental statuses for all properties
+      if (loadedProperties.length > 0) {
+        console.log('SecurePropertySearch: Fetching rental statuses...');
+        const propertyIds = loadedProperties.map(p => p.id);
+        const rentalStatuses = await RentalStatusService.getMultiplePropertiesRentalStatus(propertyIds);
+        console.log('SecurePropertySearch: Got rental statuses:', rentalStatuses);
+        
+        // Add rental statuses to properties
+        const propertiesWithRentalStatus = loadedProperties.map(property => ({
+          ...property,
+          rental_status: rentalStatuses[property.id] || 'available'
+        }));
+        
+        setProperties(propertiesWithRentalStatus);
+      } else {
+        setProperties(loadedProperties);
+      }
     } catch (error) {
       console.error('Failed to load properties:', error);
       toast({
@@ -82,9 +103,28 @@ export const SecurePropertySearch: React.FC = () => {
         throw new Error(error.message);
       }
       
-      setProperties(data || []);
+      const searchResults = data || [];
+      console.log('SecurePropertySearch: Search results:', searchResults.length);
       
-      if (data && data.length === 0) {
+      // Fetch rental statuses for search results
+      if (searchResults.length > 0) {
+        console.log('SecurePropertySearch: Fetching rental statuses for search results...');
+        const propertyIds = searchResults.map(p => p.id);
+        const rentalStatuses = await RentalStatusService.getMultiplePropertiesRentalStatus(propertyIds);
+        console.log('SecurePropertySearch: Got search rental statuses:', rentalStatuses);
+        
+        // Add rental statuses to search results
+        const resultsWithRentalStatus = searchResults.map(property => ({
+          ...property,
+          rental_status: rentalStatuses[property.id] || 'available'
+        }));
+        
+        setProperties(resultsWithRentalStatus);
+      } else {
+        setProperties(searchResults);
+      }
+      
+      if (searchResults.length === 0) {
         toast({
           title: 'No Properties Found',
           description: 'Try adjusting your search filters to find more properties.'
@@ -260,19 +300,21 @@ export const SecurePropertySearch: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {properties.map((property) => (
             <Card key={property.id} className="overflow-hidden border-2 border-primary">
-              <div className="aspect-video bg-muted">
-                {property.images && property.images.length > 0 ? (
-                  <img 
-                    src={property.images[0]} 
-                    alt={property.title}
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center">
-                    <Home className="h-12 w-12 text-muted-foreground" />
-                  </div>
-                )}
-              </div>
+              <PropertyWatermark status={property.rental_status || 'available'}>
+                <div className="aspect-video bg-muted">
+                  {property.images && property.images.length > 0 ? (
+                    <img 
+                      src={property.images[0]} 
+                      alt={property.title}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center">
+                      <Home className="h-12 w-12 text-muted-foreground" />
+                    </div>
+                  )}
+                </div>
+              </PropertyWatermark>
               
               <CardContent className="p-4">
                 <div className="space-y-3">

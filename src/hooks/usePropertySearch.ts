@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { RentalStatusService } from '@/services/rentalStatusService';
 import { mapPropertyType } from '@/utils/propertyMappings';
 
 export interface PropertySearchQuery {
@@ -24,6 +25,7 @@ export interface PropertyListing {
   image: string;
   badges: string[];
   url: string;
+  rental_status?: 'available' | 'rented' | 'sold';
 }
 
 export interface ServiceProvider {
@@ -337,28 +339,35 @@ export const usePropertySearch = () => {
         }
       });
 
-      // Transform to expected format
-      const transformedProperties = filteredProperties.map(property => ({
-        id: property.id,
-        title: property.title,
-        type: property.property_type,
-        intent: property.listing_type === 'sale' ? 'buy' : property.listing_type,
-        priceInr: property.expected_price,
-        city: property.city,
-        state: property.state,
-        country: 'India', // Assuming India for now
-        image: property.images && property.images.length > 0 
-          ? property.images[0] 
-          : '/placeholder.svg',
-        badges: [
-          property.isRecommended && 'Recommended',
-          property.furnishing && `${property.furnishing}`,
-          property.availability_type && `${property.availability_type}`,
-          property.super_area && `${property.super_area} sq ft`,
-          property.is_featured && 'Featured'
-        ].filter(Boolean),
-        url: `/property/${property.id}`
-      }));
+       // Get rental statuses for all properties
+       const propertyIds = filteredProperties.map(p => p.id);
+       console.log('usePropertySearch: Fetching rental statuses for', propertyIds.length, 'properties');
+       const rentalStatuses = await RentalStatusService.getMultiplePropertiesRentalStatus(propertyIds);
+       console.log('usePropertySearch: Got rental statuses:', rentalStatuses);
+
+       // Transform to expected format
+       const transformedProperties = filteredProperties.map(property => ({
+         id: property.id,
+         title: property.title,
+         type: property.property_type,
+         intent: property.listing_type === 'sale' ? 'buy' : property.listing_type,
+         priceInr: property.expected_price,
+         city: property.city,
+         state: property.state,
+         country: 'India', // Assuming India for now
+         image: property.images && property.images.length > 0 
+           ? property.images[0] 
+           : '/placeholder.svg',
+         badges: [
+           property.isRecommended && 'Recommended',
+           property.furnishing && `${property.furnishing}`,
+           property.availability_type && `${property.availability_type}`,
+           property.super_area && `${property.super_area} sq ft`,
+           property.is_featured && 'Featured'
+         ].filter(Boolean),
+         url: `/property/${property.id}`,
+         rental_status: rentalStatuses[property.id] || 'available'
+       }));
 
       // Apply pagination
       const pageSize = 10;

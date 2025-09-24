@@ -22,6 +22,7 @@ export interface PublicProperty {
   videos: string[];
   created_at: string;
   status: string;
+  rental_status?: 'available' | 'rented' | 'sold';
   price_negotiable: boolean;
   maintenance_charges: number;
   security_deposit: number;

@@ -22,9 +22,11 @@ import { PropertyHeader } from '@/components/property-details/PropertyHeader';
 import { PropertyImageGallery } from '@/components/property-details/PropertyImageGallery';
 import { PropertyInfoCards } from '@/components/property-details/PropertyInfoCards';
 import { PropertyActions } from '@/components/property-details/PropertyActions';
+import { PropertyWatermark } from '@/components/property-details/PropertyWatermark';
 import { ReportSection } from '@/components/property-details/ReportSection';
 import { ServicesCard } from '@/components/property-details/ServicesCard';
 import { DescriptionCard } from '@/components/property-details/DescriptionCard';
+import { RentalStatusService } from '@/services/rentalStatusService';
 import { supabase } from '@/integrations/supabase/client';
 interface Property {
   id: string;
@@ -46,6 +48,7 @@ interface Property {
   images?: string[];
   videos?: string[];
   status: string;
+  rental_status?: 'available' | 'rented' | 'sold';
   created_at: string;
   amenities?: any; // May come as JSONB object
   additional_documents?: Record<string, boolean>;
@@ -94,6 +97,16 @@ const PropertyDetails: React.FC = () => {
   React.useEffect(() => {
     document.title = property ? `${property.title} | Property Details` : 'Property Details';
   }, [property]);
+
+  // Handler for property status updates
+  const handlePropertyStatusUpdate = (newStatus: 'available' | 'rented' | 'sold') => {
+    if (property) {
+      setProperty({
+        ...property,
+        rental_status: newStatus
+      });
+    }
+  };
   
   // Function to fetch latest property data from database
   const fetchLatestPropertyData = async () => {
@@ -136,7 +149,15 @@ const PropertyDetails: React.FC = () => {
           user_id: raw.user_id // Explicitly ensure user_id is included
         } as Property;
         console.log('Setting property from RPC with user_id:', propertyWithUserId.user_id);
-        setProperty(propertyWithUserId);
+        
+        // Fetch rental status for this property
+        const rentalStatus = await RentalStatusService.getPropertyRentalStatus(propertyWithUserId.id);
+        console.log('PropertyDetails: Fetched rental status:', rentalStatus);
+        
+        setProperty({
+          ...propertyWithUserId,
+          rental_status: rentalStatus
+        });
         return;
       }
 
@@ -160,7 +181,15 @@ const PropertyDetails: React.FC = () => {
           user_id: raw.user_id // Explicitly ensure user_id is included
         } as Property;
         console.log('Setting property with user_id:', propertyWithUserId.user_id);
-        setProperty(propertyWithUserId);
+        
+        // Fetch rental status for this property
+        const rentalStatus = await RentalStatusService.getPropertyRentalStatus(propertyWithUserId.id);
+        console.log('PropertyDetails: Fetched rental status from properties table:', rentalStatus);
+        
+        setProperty({
+          ...propertyWithUserId,
+          rental_status: rentalStatus
+        });
         return;
       }
 
@@ -213,7 +242,15 @@ const PropertyDetails: React.FC = () => {
           console.log('Converted submission to property format:', propertyFromSubmission);
           console.log('Images array from submission:', payload.images);
           console.log('Images array length:', payload.images?.length);
-          setProperty(propertyFromSubmission as Property);
+          
+          // Fetch rental status for this property
+          const rentalStatus = await RentalStatusService.getPropertyRentalStatus(propertyFromSubmission.id);
+          console.log('PropertyDetails: Fetched rental status from property_submissions:', rentalStatus);
+          
+          setProperty({
+            ...propertyFromSubmission,
+            rental_status: rentalStatus
+          } as Property);
           return;
         }
       }
@@ -421,7 +458,9 @@ const PropertyDetails: React.FC = () => {
               {/* Left - Image Gallery */}
               <div className="lg:col-span-2 min-w-0">
                 <div className="mt-6 sm:mt-0 overflow-hidden">
-                  <PropertyImageGallery property={mergedProperty as any} />
+                  <PropertyWatermark status={mergedProperty?.rental_status || 'available'}>
+                    <PropertyImageGallery property={mergedProperty as any} />
+                  </PropertyWatermark>
                 </div>
                 
                 {/* Header Section - Mobile Only (Below Images) */}
@@ -439,6 +478,7 @@ const PropertyDetails: React.FC = () => {
                   onContact={() => setShowContactModal(true)}
                   onScheduleVisit={() => setShowScheduleVisitModal(true)}
                   property={mergedProperty as any}
+                  onPropertyStatusUpdate={handlePropertyStatusUpdate}
                 />
                 
                 {/* Report Section */}
