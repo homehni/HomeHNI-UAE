@@ -121,6 +121,8 @@ export const SecureContactForm: React.FC<SecureContactFormProps> = ({
         throw new Error(error.message);
       }
 
+      console.log('SecureContactForm: Success! Listing type:', listingType);
+
       toast({
         title: 'Inquiry Sent Successfully',
         description: 'Your inquiry has been securely sent to the property owner. They will contact you soon!',
@@ -138,14 +140,20 @@ export const SecureContactForm: React.FC<SecureContactFormProps> = ({
         message: ''
       });
 
-      // Redirect to appropriate plans page based on listing type
-      if (listingType === 'sale') {
-        navigate('/plans?tab=buyer');
-      } else if (listingType === 'rent') {
-        navigate('/plans?tab=rental');
-      }
-
+      // Call onSuccess first if it exists
       onSuccess?.();
+
+      // Redirect to appropriate plans page based on listing type with delay
+      setTimeout(() => {
+        console.log('SecureContactForm: Redirecting with listing type:', listingType);
+        if (listingType === 'sale') {
+          console.log('SecureContactForm: Navigating to buyer plans');
+          navigate('/plans?tab=buyer');
+        } else if (listingType === 'rent') {
+          console.log('SecureContactForm: Navigating to rental plans');  
+          navigate('/plans?tab=rental');
+        }
+      }, 1000);
 
     } catch (error) {
       console.error('Failed to send inquiry:', error);
