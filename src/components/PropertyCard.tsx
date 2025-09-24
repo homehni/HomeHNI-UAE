@@ -332,6 +332,7 @@ const PropertyCard = ({
         onClose={() => setShowContactModal(false)}
         propertyId={id}
         propertyTitle={getDisplayTitle()}
+        listingType={listingType}
       />
     </Card>
   );

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -14,13 +15,15 @@ interface ContactOwnerModalProps {
   onClose: () => void;
   propertyId: string;
   propertyTitle: string;
+  listingType?: string;
 }
 
 export const ContactOwnerModal: React.FC<ContactOwnerModalProps> = ({
   isOpen,
   onClose,
   propertyId,
-  propertyTitle
+  propertyTitle,
+  listingType
 }) => {
   const [formData, setFormData] = useState({
     name: '',
@@ -31,6 +34,7 @@ export const ContactOwnerModal: React.FC<ContactOwnerModalProps> = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
   const { user } = useAuth();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -38,52 +42,67 @@ export const ContactOwnerModal: React.FC<ContactOwnerModalProps> = ({
 
     // Validate required fields
     if (!formData.name.trim()) {
-      toast({
-        title: "Validation Error",
-        description: "Name is required",
-        variant: "destructive",
-      });
+        toast({
+          title: "Validation Error",
+          description: "Name is required",
+          className: "bg-white border border-red-200 shadow-lg rounded-lg",
+          style: {
+            borderLeft: "4px solid hsl(var(--primary))",
+          },
+        });
       setIsSubmitting(false);
       return;
     }
 
     if (!formData.email.trim()) {
-      toast({
-        title: "Validation Error", 
-        description: "Email is required",
-        variant: "destructive",
-      });
+        toast({
+          title: "Validation Error", 
+          description: "Email is required",
+          className: "bg-white border border-red-200 shadow-lg rounded-lg",
+          style: {
+            borderLeft: "4px solid hsl(var(--primary))",
+          },
+        });
       setIsSubmitting(false);
       return;
     }
 
     if (!formData.phone.trim()) {
-      toast({
-        title: "Validation Error",
-        description: "Phone number is required",
-        variant: "destructive",
-      });
+        toast({
+          title: "Validation Error",
+          description: "Phone number is required",
+          className: "bg-white border border-red-200 shadow-lg rounded-lg",
+          style: {
+            borderLeft: "4px solid hsl(var(--primary))",
+          },
+        });
       setIsSubmitting(false);
       return;
     }
 
     if (formData.phone.length < 10) {
-      toast({
-        title: "Validation Error",
-        description: "Phone number must be at least 10 digits",
-        variant: "destructive",
-      });
+        toast({
+          title: "Validation Error",
+          description: "Phone number must be at least 10 digits",
+          className: "bg-white border border-red-200 shadow-lg rounded-lg",
+          style: {
+            borderLeft: "4px solid hsl(var(--primary))",
+          },
+        });
       setIsSubmitting(false);
       return;
     }
 
     // Check if user is authenticated
     if (!user) {
-      toast({
-        title: "Authentication Required",
-        description: "Please log in to contact property owners.",
-        variant: "destructive",
-      });
+        toast({
+          title: "Authentication Required",
+          description: "Please log in to contact property owners.",
+          className: "bg-white border border-red-200 shadow-lg rounded-lg",
+          style: {
+            borderLeft: "4px solid hsl(var(--primary))",
+          },
+        });
       setIsSubmitting(false);
       return;
     }
@@ -154,22 +173,44 @@ export const ContactOwnerModal: React.FC<ContactOwnerModalProps> = ({
         }
       }
 
+      console.log('ContactOwnerModal: Success! Listing type:', listingType);
       
       toast({
         title: "Interest Registered Successfully!",
         description: "The property owner will contact you soon through your provided details.",
+        className: "bg-white border border-green-200 shadow-lg rounded-lg",
+        style: {
+          borderLeft: "4px solid hsl(var(--primary))",
+        },
       });
 
       // Reset form
       setFormData({ name: '', email: '', phone: '', message: '' });
+      
+      // Close modal first
       onClose();
+      
+      // Redirect to appropriate plans page based on listing type with delay
+      setTimeout(() => {
+        console.log('ContactOwnerModal: Redirecting with listing type:', listingType);
+        if (listingType === 'sale') {
+          console.log('ContactOwnerModal: Navigating to buyer plans');
+          navigate('/plans?tab=buyer');
+        } else if (listingType === 'rent') {
+          console.log('ContactOwnerModal: Navigating to rental plans');  
+          navigate('/plans?tab=rental');
+        }
+      }, 1000);
     } catch (error) {
       console.error('Error creating lead:', error);
-      toast({
-        title: "Error",
-        description: "Failed to register your interest. Please try again.",
-        variant: "destructive",
-      });
+        toast({
+          title: "Error",
+          description: "Failed to register your interest. Please try again.",
+          className: "bg-white border border-red-200 shadow-lg rounded-lg",
+          style: {
+            borderLeft: "4px solid hsl(var(--primary))",
+          },
+        });
     } finally {
       setIsSubmitting(false);
     }

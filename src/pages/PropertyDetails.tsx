@@ -518,6 +518,7 @@ const PropertyDetails: React.FC = () => {
           onClose={() => setShowContactModal(false)}
           propertyId={property.id}
           propertyTitle={property.title}
+          listingType={property.listing_type}
         />
       )}
       
