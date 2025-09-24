@@ -35,10 +35,10 @@ export const ReportSection: React.FC = () => {
       toast({
         title: "Contact Required",
         description: "Please take owner contact before reporting this issue",
-        className: "bg-red-500 text-white border-red-600 shadow-lg rounded-lg",
-        action: (
-          <X className="h-4 w-4 text-white" />
-        ),
+        className: "bg-white border border-red-200 shadow-lg rounded-lg",
+        style: {
+          borderLeft: "4px solid hsl(var(--primary))",
+        },
       });
     }
   };
