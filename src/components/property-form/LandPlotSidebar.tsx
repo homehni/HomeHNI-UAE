@@ -18,6 +18,15 @@ export const LandPlotSidebar: React.FC<LandPlotSidebarProps> = ({
   currentStep,
   completedSteps
 }) => {
+  // Calculate percentage based on specific progression: 17, 33, 50, 67, 83, 100
+  const getProgressPercentage = (completedCount: number) => {
+    const progressSteps = [17, 33, 50, 67, 83, 100];
+    if (completedCount === 0) return 17;
+    if (completedCount >= 5) return 100;
+    return progressSteps[completedCount];
+  };
+
+  const progressPercentage = getProgressPercentage(completedSteps.length);
   const sidebarSteps: SidebarStep[] = [
     { 
       number: 1, 
@@ -132,12 +141,12 @@ export const LandPlotSidebar: React.FC<LandPlotSidebarProps> = ({
                 fill="none"
                 stroke="#14b8a6"
                 strokeWidth="2"
-                strokeDasharray={`${Math.min(17 + (completedSteps.length / 7) * 83, 100)}, 100`}
+                strokeDasharray={`${progressPercentage}, 100`}
               />
             </svg>
             <div className="absolute inset-0 flex items-center justify-center">
               <span className="text-lg font-semibold text-gray-700">
-                {Math.min(Math.round(17 + (completedSteps.length / 7) * 83), 100)}%
+                {progressPercentage}%
               </span>
             </div>
           </div>
