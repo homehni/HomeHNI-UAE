@@ -318,6 +318,7 @@ export const Dashboard: React.FC = () => {
 
   const fetchLeads = async () => {
     try {
+      console.log('Dashboard: Fetching leads for user:', user?.id);
       const { data, error } = await supabase
         .from('leads')
         .select(`
@@ -327,8 +328,10 @@ export const Dashboard: React.FC = () => {
         .eq('properties.user_id', user?.id)
         .order('created_at', { ascending: false });
 
+      console.log('Dashboard: Leads query result:', { data, error, userID: user?.id });
       if (error) throw error;
       setLeads(data || []);
+      console.log('Dashboard: Set leads count:', data?.length || 0);
     } catch (error) {
       console.error('Error fetching leads:', error);
     }

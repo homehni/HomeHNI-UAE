@@ -131,6 +131,70 @@ export class SecurePropertyService {
    * This is the secure way to connect interested users with property owners
    */
   static async createPropertyLead(leadData: CreateLeadRequest): Promise<{ data: string | null; error: any }> {
+    console.log('SecurePropertyService: Attempting to create lead via RPC');
+    
+    // First, let's check if the property exists and get its owner
+    const { data: propertyCheck, error: propertyError } = await supabase
+      .from('properties')
+      .select('id, user_id, status')
+      .eq('id', leadData.property_id)
+      .limit(1);
+    
+    const property = propertyCheck?.[0] || null;
+    console.log('SecurePropertyService: Property check result:', { 
+      propertyCheck, 
+      propertyError,
+      propertyErrorMessage: propertyError?.message,
+      propertyErrorCode: propertyError?.code,
+      propertyId: leadData.property_id,
+      hasProperty: !!property,
+      propertyUserId: property?.user_id,
+      propertyStatus: property?.status,
+      propertyCount: propertyCheck?.length
+    });
+    
+    if (propertyError) {
+      console.log('SecurePropertyService: Property not found in main properties table, checking property_submissions...');
+      
+      // Check if it's in property_submissions table
+      const { data: submissionCheck, error: submissionError } = await supabase
+        .from('property_submissions')
+        .select('id, user_id, status')
+        .eq('id', leadData.property_id)
+        .limit(1);
+      
+      const submission = submissionCheck?.[0] || null;
+      console.log('SecurePropertyService: Submission check result:', { 
+        submissionCheck, 
+        submissionError,
+        submissionErrorMessage: submissionError?.message,
+        submissionErrorCode: submissionError?.code,
+        hasSubmission: !!submission,
+        submissionUserId: submission?.user_id,
+        submissionStatus: submission?.status,
+        submissionCount: submissionCheck?.length
+      });
+      
+      if (submissionError) {
+        console.log('SecurePropertyService: Property not found in either table. RLS prevents direct insertion.');
+        console.log('SecurePropertyService: Attempting RPC function anyway - it might work with different property lookup...');
+        
+        // The RPC function has its own property lookup logic, let's try it anyway
+        // It might find the property in a way our queries don't
+      }
+      
+      if (submission && !submission.user_id) {
+        console.log('SecurePropertyService: Property found in submissions but no user_id, proceeding with RPC anyway...');
+      } else if (submission) {
+        console.log('SecurePropertyService: Found property in submissions table, proceeding with RPC...');
+      }
+    }
+    
+    if (property && !property.user_id) {
+      console.log('SecurePropertyService: Property found in main table but no user_id, proceeding with RPC anyway...');
+    }
+    
+    // Now try the RPC function
     const { data, error } = await supabase.rpc('create_property_lead', {
       property_id: leadData.property_id,
       interested_user_name: leadData.interested_user_name,
@@ -139,6 +203,7 @@ export class SecurePropertyService {
       message: leadData.message || null
     });
 
+    console.log('SecurePropertyService: RPC result:', { data, error });
     return { data, error };
   }
 

@@ -38,6 +38,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
     } else if (selectedLocations.length > 0) {
       navigateToSearch(selectedLocations);
     }
+    // Do nothing if no locations - button will be disabled
   };
 
   const navigateToSearch = (locations: string[]) => {
@@ -115,7 +116,10 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
         const ac = new (window as any).google.maps.places.Autocomplete(el, options);
         ac.addListener('place_changed', () => {
           const place = ac.getPlace();
+          console.log('🔍 Google Places - Place selected:', place);
+          
           let value = place?.formatted_address || place?.name || '';
+          console.log('🔍 Google Places - Initial value:', value);
           
           // Extract only locality name from formatted address since city is already selected
           if (value && place?.address_components) {
@@ -132,24 +136,40 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
             // Use the most specific locality name available
             if (localityComponent) {
               value = localityComponent.long_name;
+              console.log('🔍 Google Places - Using locality component:', value);
             } else {
               // Fallback: extract the first part of the formatted address before the first comma
               const firstPart = value.split(',')[0].trim();
               if (firstPart) {
                 value = firstPart;
+                console.log('🔍 Google Places - Using first part:', value);
               }
             }
           }
           
           // Validate location is within selected city
           if (selectedCity && place?.address_components) {
-            const isValidLocation = place.address_components.some((comp: any) => 
-              comp.types.includes('administrative_area_level_2') && 
-              comp.long_name.toLowerCase().includes(selectedCity.toLowerCase())
-            );
+            console.log('🔍 Google Places - Address components:', place.address_components);
+            
+            const isValidLocation = place.address_components.some((comp: any) => {
+              const isRelevantType = comp.types.includes('administrative_area_level_2') || 
+                                   comp.types.includes('locality') || 
+                                   comp.types.includes('administrative_area_level_3') ||
+                                   comp.types.includes('sublocality_level_1');
+              
+              const matchesCity = comp.long_name.toLowerCase().includes(selectedCity.toLowerCase()) ||
+                                 selectedCity.toLowerCase().includes(comp.long_name.toLowerCase());
+              
+              console.log('🔍 Component:', comp.long_name, 'Types:', comp.types, 'Relevant:', isRelevantType, 'Matches:', matchesCity);
+              
+              return isRelevantType && matchesCity;
+            });
+            
+            console.log('🔍 Google Places - Is valid location:', isValidLocation, 'for city:', selectedCity);
             
             if (!isValidLocation) {
               // Clear invalid location
+              console.log('🔍 Google Places - Clearing invalid location');
               if (el) {
                 el.value = '';
                 setSearchQuery('');
@@ -159,17 +179,25 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
           }
           
           if (el && value && selectedCity) {
+            console.log('🔍 Google Places - Current selectedLocations:', selectedLocations.length);
             // Auto-add location if under limit
             if (selectedLocations.length < 3 && !selectedLocations.includes(value)) {
-              setSelectedLocations(prev => [...prev, value]);
+              console.log('✅ Google Places - Adding location:', value);
+              setSelectedLocations(prev => {
+                const newList = [...prev, value];
+                console.log('✅ Google Places - New locations list:', newList);
+                return newList;
+              });
               el.value = '';
               setSearchQuery('');
             } else {
+              console.log('⚠️ Google Places - Location exists or limit reached');
               el.value = value;
               setSearchQuery(value);
             }
           } else if (!selectedCity) {
             // Clear location if no city selected
+            console.log('🔍 Google Places - No city selected, clearing');
             if (el) {
               el.value = '';
               setSearchQuery('');
@@ -179,7 +207,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
       });
     };
     loadGoogleMaps().then(initAutocomplete).catch(console.error);
-  }, [selectedCity, selectedLocations]);
+  }, [selectedCity]); // Removed selectedLocations to prevent reinitializing autocomplete
   useImperativeHandle(ref, () => ({
     focusSearchInput: () => {
       // Detect if mobile view (screen width < 768px)
@@ -260,7 +288,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
               <Button 
                 onClick={handleSearch}
                 disabled={selectedLocations.length === 0 && !searchQuery.trim()}
-                className="h-10 px-4 bg-brand-red hover:bg-brand-red-dark text-white font-medium whitespace-nowrap text-sm disabled:opacity-50"
+                className="h-10 px-4 bg-brand-red hover:bg-brand-red-dark text-white font-medium whitespace-nowrap text-sm disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Search
               </Button>
@@ -342,7 +370,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                       <Button 
                         onClick={handleSearch}
                         disabled={selectedLocations.length === 0 && !searchQuery.trim()}
-                        className="h-10 sm:h-12 px-4 sm:px-8 bg-brand-red hover:bg-brand-red-dark text-white font-medium text-sm disabled:opacity-50"
+                        className="h-10 sm:h-12 px-4 sm:px-8 bg-brand-red hover:bg-brand-red-dark text-white font-medium text-sm disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         Search
                       </Button>

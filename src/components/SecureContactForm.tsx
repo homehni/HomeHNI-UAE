@@ -98,13 +98,17 @@ export const SecureContactForm: React.FC<SecureContactFormProps> = ({
     setIsSubmitting(true);
 
     try {
-      const { data, error } = await SecurePropertyService.createPropertyLead({
+      const leadData = {
         property_id: propertyId,
         interested_user_name: formData.name.trim(),
         interested_user_email: formData.email.trim(),
         interested_user_phone: formData.phone.trim() || undefined,
         message: formData.message.trim() || undefined
-      });
+      };
+      
+      console.log('SecureContactForm: Creating lead with data:', leadData);
+      const { data, error } = await SecurePropertyService.createPropertyLead(leadData);
+      console.log('SecureContactForm: Lead creation result:', { data, error });
 
       if (error) {
         throw new Error(error.message);

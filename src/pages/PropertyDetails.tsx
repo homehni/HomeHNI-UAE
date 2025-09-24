@@ -28,6 +28,7 @@ import { DescriptionCard } from '@/components/property-details/DescriptionCard';
 import { supabase } from '@/integrations/supabase/client';
 interface Property {
   id: string;
+  user_id?: string; // Add user_id for ownership check
   title: string;
   property_type: string;
   listing_type: string;
@@ -107,6 +108,8 @@ const PropertyDetails: React.FC = () => {
 
       if (!pubError && pubData && pubData.length > 0) {
         const raw = pubData[0] as any;
+        console.log('Raw data from RPC get_public_property_by_id:', raw);
+        console.log('RPC user_id field:', raw.user_id);
         // Normalize image paths to public URLs
         const normalize = (s: string): string | null => {
           if (!s) return null;
@@ -127,7 +130,13 @@ const PropertyDetails: React.FC = () => {
         const normalizedImages = Array.isArray(raw.images)
           ? (raw.images.map((i: any) => typeof i === 'string' ? normalize(i) : normalize(i?.url)).filter(Boolean))
           : [];
-        setProperty({ ...(raw as Property), images: normalizedImages as string[] } as Property);
+        const propertyWithUserId = { 
+          ...(raw as Property), 
+          images: normalizedImages as string[],
+          user_id: raw.user_id // Explicitly ensure user_id is included
+        } as Property;
+        console.log('Setting property from RPC with user_id:', propertyWithUserId.user_id);
+        setProperty(propertyWithUserId);
         return;
       }
 
@@ -142,8 +151,16 @@ const PropertyDetails: React.FC = () => {
 
       if (propertyData && !propertyError) {
         const raw = propertyData as any;
+        console.log('Raw property data from properties table:', raw);
+        console.log('Property user_id field:', raw.user_id);
         const normalizedImages = Array.isArray(raw.images) ? raw.images : [];
-        setProperty({ ...(raw as Property), images: normalizedImages } as Property);
+        const propertyWithUserId = { 
+          ...(raw as Property), 
+          images: normalizedImages,
+          user_id: raw.user_id // Explicitly ensure user_id is included
+        } as Property;
+        console.log('Setting property with user_id:', propertyWithUserId.user_id);
+        setProperty(propertyWithUserId);
         return;
       }
 
@@ -165,6 +182,7 @@ const PropertyDetails: React.FC = () => {
         if (payload && payload.images) {
           const propertyFromSubmission = {
             id: submissionData.id,
+            user_id: submissionData.user_id, // Add the missing user_id field
             title: submissionData.title || payload.title || 'Untitled Property',
             property_type: payload.property_type || 'apartment',
             listing_type: payload.listing_type || 'rent',
@@ -420,6 +438,7 @@ const PropertyDetails: React.FC = () => {
                 <PropertyActions
                   onContact={() => setShowContactModal(true)}
                   onScheduleVisit={() => setShowScheduleVisitModal(true)}
+                  property={mergedProperty as any}
                 />
                 
                 {/* Report Section */}
