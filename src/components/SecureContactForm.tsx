@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -12,6 +13,7 @@ import { Loader2, Shield, Mail, Phone, User } from 'lucide-react';
 interface SecureContactFormProps {
   propertyId: string;
   propertyTitle: string;
+  listingType?: string;
   onSuccess?: () => void;
 }
 
@@ -22,9 +24,11 @@ interface SecureContactFormProps {
 export const SecureContactForm: React.FC<SecureContactFormProps> = ({
   propertyId,
   propertyTitle,
+  listingType,
   onSuccess
 }) => {
   const { toast } = useToast();
+  const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
@@ -92,7 +96,10 @@ export const SecureContactForm: React.FC<SecureContactFormProps> = ({
       toast({
         title: 'Validation Error',
         description: validationErrors.join(', '),
-        variant: 'destructive'
+        className: "bg-white border border-red-200 shadow-lg rounded-lg",
+        style: {
+          borderLeft: "4px solid hsl(var(--primary))",
+        },
       });
       return;
     }
@@ -116,7 +123,11 @@ export const SecureContactForm: React.FC<SecureContactFormProps> = ({
 
       toast({
         title: 'Inquiry Sent Successfully',
-        description: 'Your inquiry has been securely sent to the property owner. They will contact you soon!'
+        description: 'Your inquiry has been securely sent to the property owner. They will contact you soon!',
+        className: "bg-white border border-green-200 shadow-lg rounded-lg",
+        style: {
+          borderLeft: "4px solid hsl(var(--primary))",
+        },
       });
 
       // Reset form
@@ -127,6 +138,13 @@ export const SecureContactForm: React.FC<SecureContactFormProps> = ({
         message: ''
       });
 
+      // Redirect to appropriate plans page based on listing type
+      if (listingType === 'sale') {
+        navigate('/plans?tab=buyer');
+      } else if (listingType === 'rent') {
+        navigate('/plans?tab=rental');
+      }
+
       onSuccess?.();
 
     } catch (error) {
@@ -134,7 +152,10 @@ export const SecureContactForm: React.FC<SecureContactFormProps> = ({
       toast({
         title: 'Failed to Send Inquiry',
         description: error instanceof Error ? error.message : 'Please try again later',
-        variant: 'destructive'
+        className: "bg-white border border-red-200 shadow-lg rounded-lg",
+        style: {
+          borderLeft: "4px solid hsl(var(--primary))",
+        },
       });
     } finally {
       setIsSubmitting(false);

@@ -380,6 +380,7 @@ export const SecurePropertySearch: React.FC = () => {
             <SecureContactForm
               propertyId={showContactForm}
               propertyTitle={properties.find(p => p.id === showContactForm)?.title || 'Property'}
+              listingType={properties.find(p => p.id === showContactForm)?.listing_type}
               onSuccess={() => {
                 setShowContactForm(null);
                 toast({

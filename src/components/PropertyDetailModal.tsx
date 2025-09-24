@@ -230,6 +230,7 @@ export const PropertyDetailModal: React.FC<PropertyDetailModalProps> = ({
             <SecureContactForm 
               propertyId={property.id}
               propertyTitle={property.title}
+              listingType={property.listing_type}
             />
           </div>
 
