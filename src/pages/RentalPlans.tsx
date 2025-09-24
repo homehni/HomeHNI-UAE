@@ -89,11 +89,6 @@ const RentalPlans = ({ embedded }: RentalPlansProps) => {
             </TabsContent>
 
             <TabsContent value="tenant" className="space-y-8">
-              {/* Header Text */}
-              <div className="text-center mb-8">
-                <h3 className="text-2xl font-bold mb-2">Choose Your Perfect Plan</h3>
-                <p className="text-muted-foreground">Select the plan that best fits your rental property search needs</p>
-              </div>
 
               {/* Plan Cards */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">

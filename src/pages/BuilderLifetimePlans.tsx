@@ -292,6 +292,7 @@ const BuilderLifetimePlans = () => {
             <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-2">
               Builder Lifetime Plans
             </h2>
+            <p className="text-muted-foreground">One-time investment for unlimited project showcasing and lifetime marketing benefits</p>
           </div>
 
           <Tabs defaultValue="residential" className="w-full">
