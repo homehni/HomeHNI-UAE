@@ -132,12 +132,12 @@ export const LandPlotSidebar: React.FC<LandPlotSidebarProps> = ({
                 fill="none"
                 stroke="#14b8a6"
                 strokeWidth="2"
-                strokeDasharray={`${Math.min((completedSteps.length / 7) * 100, 100)}, 100`}
+                strokeDasharray={`${Math.min(17 + (completedSteps.length / 7) * 83, 100)}, 100`}
               />
             </svg>
             <div className="absolute inset-0 flex items-center justify-center">
               <span className="text-lg font-semibold text-gray-700">
-                {Math.min(Math.round((completedSteps.length / 7) * 100), 100)}%
+                {Math.min(Math.round(17 + (completedSteps.length / 7) * 83), 100)}%
               </span>
             </div>
           </div>
