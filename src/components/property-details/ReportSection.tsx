@@ -34,8 +34,11 @@ export const ReportSection: React.FC = () => {
       // Show branded toast notification for "Listed by Broker" and "Rented Out"
       toast({
         title: "Contact Required",
-        description: "It seems you have not taken the contact of this property. Please Take Owner Contact before reporting the issue",
-        className: "border-l-4 border-l-primary bg-primary/5 text-foreground",
+        description: "Please take owner contact before reporting this issue",
+        className: "bg-white border border-red-200 shadow-lg rounded-lg",
+        style: {
+          borderLeft: "4px solid hsl(var(--primary))",
+        },
       });
     }
   };
@@ -54,7 +57,10 @@ export const ReportSection: React.FC = () => {
       toast({
         title: "Report Submitted",
         description: "Thank you for reporting the issues. We will review them shortly.",
-        className: "border-l-4 border-l-primary bg-primary/5 text-foreground",
+        className: "bg-white border border-green-200 shadow-lg rounded-lg",
+        style: {
+          borderLeft: "4px solid hsl(var(--primary))",
+        },
       });
       setSelectedIssues([]);
       setShowWrongInfoModal(false);
