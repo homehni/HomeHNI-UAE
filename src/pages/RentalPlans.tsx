@@ -20,7 +20,7 @@ const RentalPlans = ({ embedded }: RentalPlansProps) => {
     agricultural: 0
   });
 
-  const tenantPlans = {
+  const tenantPlansData = {
     residential: [
       {
         name: "Basic",
@@ -130,7 +130,7 @@ const RentalPlans = ({ embedded }: RentalPlansProps) => {
     ]
   };
 
-  const tenantPlanDetails = {
+  const tenantPlanDetailsData = {
     residential: [
       [
         { icon: <Clock className="w-5 h-5" />, text: "30 Days Plan Validity" },
@@ -253,7 +253,7 @@ const RentalPlans = ({ embedded }: RentalPlansProps) => {
                   <TabsTrigger value="agricultural" className="text-xs sm:text-sm md:text-base py-2 sm:py-3 px-2 sm:px-4 data-[state=active]:bg-background data-[state=active]:text-foreground whitespace-nowrap">Agricultural</TabsTrigger>
                 </TabsList>
 
-                {Object.entries(tenantPlans).map(([category, plans]) => (
+                {Object.entries(tenantPlansData).map(([category, plans]) => (
                   <TabsContent key={category} value={category} className="space-y-6">
                     {/* Plan Cards */}
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
@@ -323,7 +323,7 @@ const RentalPlans = ({ embedded }: RentalPlansProps) => {
                     }}>
                       <h3 className="text-xl font-bold mb-6 text-center">What You Get</h3>
                       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                        {tenantPlanDetails[category as keyof typeof tenantPlanDetails][selectedTenantPlan[category as keyof typeof selectedTenantPlan]].map((detail, index) => (
+                        {tenantPlanDetailsData[category as keyof typeof tenantPlanDetailsData][selectedTenantPlan[category as keyof typeof selectedTenantPlan]].map((detail, index) => (
                           <div key={index} className="flex items-start gap-3">
                             <div className="text-brand-red mt-1">
                               {detail.icon}
