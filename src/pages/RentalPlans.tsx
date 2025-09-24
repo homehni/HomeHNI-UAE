@@ -235,16 +235,16 @@ const RentalPlans = ({ embedded }: RentalPlansProps) => {
           </div>
 
           <Tabs defaultValue="owner" className="w-full">
-            <TabsList className="grid w-full grid-cols-2 mb-8 p-1 gap-1 bg-muted rounded-lg h-auto">
+            <TabsList className="grid w-full grid-cols-2 mb-6 p-1 gap-1 bg-muted rounded-lg h-auto">
               <TabsTrigger value="owner" className="text-xs sm:text-sm md:text-base py-2 sm:py-3 px-2 sm:px-4 data-[state=active]:bg-background data-[state=active]:text-foreground whitespace-nowrap">Owner Plans</TabsTrigger>
               <TabsTrigger value="tenant" className="text-xs sm:text-sm md:text-base py-2 sm:py-3 px-2 sm:px-4 data-[state=active]:bg-background data-[state=active]:text-foreground whitespace-nowrap">Tenant Plans</TabsTrigger>
             </TabsList>
 
-            <TabsContent value="owner" className="space-y-8">
+            <TabsContent value="owner" className="space-y-6">
               <OwnerPlans embedded />
             </TabsContent>
 
-            <TabsContent value="tenant" className="space-y-8">
+            <TabsContent value="tenant" className="space-y-6">
               <Tabs defaultValue="residential" className="w-full">
                 <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 mb-6 p-1 gap-1 bg-muted rounded-lg h-auto">
                   <TabsTrigger value="residential" className="text-xs sm:text-sm md:text-base py-2 sm:py-3 px-2 sm:px-4 data-[state=active]:bg-background data-[state=active]:text-foreground whitespace-nowrap">Residential</TabsTrigger>
