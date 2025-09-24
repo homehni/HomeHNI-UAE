@@ -115,7 +115,7 @@ export const SearchResultsPanel: React.FC<SearchResultsPanelProps> = ({
                   listingType={property.listingType}
                   isNew={property.isNew}
                   size="compact"
-                  rental_status={property.rental_status}
+                  rental_status="available"
                 />
               ))}
             </div>

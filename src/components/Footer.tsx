@@ -370,6 +370,7 @@ const Footer = ({
           <div className="flex flex-wrap justify-center gap-6 mb-6 text-sm">
             <Link to="/about?tab=about" className="text-gray-600 hover:text-brand-red transition-colors">About Us</Link>
             <Link to="/careers" className="text-gray-600 hover:text-brand-red transition-colors">Careers</Link>
+            <Link to="/blog" className="text-gray-600 hover:text-brand-red transition-colors">Blog</Link>
             <Link to="/about?tab=contact" className="text-gray-600 hover:text-brand-red transition-colors">Contact Us</Link>
             <Link to="/terms-and-conditions" className="text-gray-600 hover:text-brand-red transition-colors">Terms & Conditions</Link>
             <Link to="/privacy-policy" className="text-gray-600 hover:text-brand-red transition-colors">Privacy Policy</Link>

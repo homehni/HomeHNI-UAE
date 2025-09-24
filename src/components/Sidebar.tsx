@@ -194,6 +194,14 @@ const Sidebar = ({
       onClose();
     }
   }, {
+    id: 'blog',
+    label: 'Blog',
+    hasSubmenu: false,
+    onClick: () => {
+      navigate('/blog');
+      onClose();
+    }
+  }, {
     id: 'corporate-enquiry',
     label: 'Corporate Enquiry',
     hasSubmenu: false,
