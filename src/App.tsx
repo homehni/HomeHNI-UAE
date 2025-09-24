@@ -123,7 +123,7 @@ const App: React.FC = () => {
         <Sonner />
         <GeolocationRedirect>
           <BrowserRouter>
-            <AuthProvider>
+            <>
               <ScrollToTop />
             <Routes>
             <Route path="/" element={<Index />} />
@@ -315,7 +315,7 @@ const App: React.FC = () => {
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
             </Routes>
-            </AuthProvider>
+            </>
           </BrowserRouter>
         </GeolocationRedirect>
       </TooltipProvider>
