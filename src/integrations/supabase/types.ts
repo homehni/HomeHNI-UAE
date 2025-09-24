@@ -294,6 +294,30 @@ export type Database = {
         }
         Relationships: []
       }
+      email_templates: {
+        Row: {
+          body: string
+          created_at: string | null
+          id: string
+          name: string
+          subject: string
+        }
+        Insert: {
+          body: string
+          created_at?: string | null
+          id?: string
+          name: string
+          subject: string
+        }
+        Update: {
+          body?: string
+          created_at?: string | null
+          id?: string
+          name?: string
+          subject?: string
+        }
+        Relationships: []
+      }
       employee_payouts: {
         Row: {
           amount: number
@@ -1381,6 +1405,16 @@ export type Database = {
           rls_enabled: boolean
           table_name: string
         }[]
+      }
+      create_contact_lead: {
+        Args: {
+          p_message?: string
+          p_property_id: string
+          p_user_email: string
+          p_user_name: string
+          p_user_phone?: string
+        }
+        Returns: string
       }
       create_page_with_sections: {
         Args: {

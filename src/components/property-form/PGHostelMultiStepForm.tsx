@@ -235,7 +235,7 @@ const [propertyInfo, setPropertyInfo] = useState({
       case 3:
         return localityDetails.locality.trim() !== '' && localityDetails.city.trim() !== '';
       case 4:
-        return pgDetails.genderPreference !== '' && pgDetails.availableFrom !== '';
+        return pgDetails.availableFrom !== '';
       case 5:
       case 6:
       case 7:

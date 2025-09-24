@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
-import { SecurePropertyService } from '@/services/securePropertyService';
+import { supabase } from '@/integrations/supabase/client';
 import { sanitizeText, sanitizeEmail, sanitizePhone } from '@/utils/inputSanitization';
 import { Loader2, Shield, Mail, Phone, User } from 'lucide-react';
 
@@ -98,16 +98,14 @@ export const SecureContactForm: React.FC<SecureContactFormProps> = ({
     setIsSubmitting(true);
 
     try {
-      const leadData = {
-        property_id: propertyId,
-        interested_user_name: formData.name.trim(),
-        interested_user_email: formData.email.trim(),
-        interested_user_phone: formData.phone.trim() || undefined,
-        message: formData.message.trim() || undefined
-      };
-      
-      console.log('SecureContactForm: Creating lead with data:', leadData);
-      const { data, error } = await SecurePropertyService.createPropertyLead(leadData);
+      console.log('SecureContactForm: Creating lead with RPC call');
+      const { data, error } = await supabase.rpc('create_contact_lead', {
+        p_property_id: propertyId,
+        p_user_name: formData.name.trim(),
+        p_user_email: formData.email.trim(),
+        p_user_phone: formData.phone.trim() || undefined,
+        p_message: formData.message.trim() || undefined
+      });
       console.log('SecureContactForm: Lead creation result:', { data, error });
 
       if (error) {

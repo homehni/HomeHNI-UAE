@@ -1115,8 +1115,6 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
                   initialData={scheduleInfo}
                   onNext={handleScheduleNext}
                   onBack={prevStep}
-                  currentStep={6}
-                  totalSteps={6}
                   onSubmit={handleScheduleNext}
                 />
                 
@@ -1285,8 +1283,6 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
                   initialData={scheduleInfo}
                   onNext={handleScheduleNext}
                   onBack={prevStep}
-                  currentStep={6}
-                  totalSteps={6}
                   onSubmit={handleScheduleNext}
                 />
               )}

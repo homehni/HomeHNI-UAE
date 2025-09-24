@@ -366,8 +366,7 @@ export const Dashboard: React.FC = () => {
             leadsWithProperties.push({
               ...lead,
               properties: {
-                title: propertyData[0].title,
-                user_id: propertyData[0].user_id // This might still be undefined
+                title: propertyData[0].title
               }
             });
           } else {
