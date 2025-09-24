@@ -90,12 +90,12 @@ export interface PropertyAmenities {
 }
 
 export interface CategorizedImages {
-  bathroom: File[];
-  bedroom: File[];
-  hall: File[];
-  kitchen: File[];
+  bathroom?: File[];
+  bedroom?: File[];
+  hall?: File[];
+  kitchen?: File[];
   frontView: File[];
-  balcony: File[];
+  balcony?: File[];
   others: File[];
 }
 

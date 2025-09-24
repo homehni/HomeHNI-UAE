@@ -1,49 +1,41 @@
 import React, { useRef, useState } from 'react';
-import { Upload, X, Camera, Home, Bath, Bed, ChefHat, Eye, Building2, MoreHorizontal } from 'lucide-react';
+import { Upload, X, Camera, Eye, Building2, MoreHorizontal } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 
-interface CategorizedImages {
-  bathroom?: File[];
-  bedroom?: File[];
-  hall?: File[];
-  kitchen?: File[];
+interface CommercialCategorizedImages {
   frontView: File[];
-  balcony?: File[];
+  interiorView: File[];
   others: File[];
 }
 
-interface CategorizedImageUploadProps {
-  images: CategorizedImages;
-  onImagesChange: (images: CategorizedImages) => void;
+interface CommercialCategorizedImageUploadProps {
+  images: CommercialCategorizedImages;
+  onImagesChange: (images: CommercialCategorizedImages) => void;
   maxImagesPerCategory?: number;
 }
 
-const categories = [
-  { key: 'bathroom' as keyof CategorizedImages, label: 'Bathroom', icon: Bath, color: 'bg-blue-100 text-blue-700' },
-  { key: 'bedroom' as keyof CategorizedImages, label: 'Bedroom', icon: Bed, color: 'bg-purple-100 text-purple-700' },
-  { key: 'hall' as keyof CategorizedImages, label: 'Hall', icon: Home, color: 'bg-green-100 text-green-700' },
-  { key: 'kitchen' as keyof CategorizedImages, label: 'Kitchen', icon: ChefHat, color: 'bg-orange-100 text-orange-700' },
-  { key: 'frontView' as keyof CategorizedImages, label: 'Front View', icon: Eye, color: 'bg-teal-100 text-teal-700' },
-  { key: 'balcony' as keyof CategorizedImages, label: 'Balcony', icon: Building2, color: 'bg-cyan-100 text-cyan-700' },
-  { key: 'others' as keyof CategorizedImages, label: 'Others', icon: MoreHorizontal, color: 'bg-gray-100 text-gray-700' }
+const commercialCategories = [
+  { key: 'frontView' as keyof CommercialCategorizedImages, label: 'Front View', icon: Eye, color: 'bg-teal-100 text-teal-700' },
+  { key: 'interiorView' as keyof CommercialCategorizedImages, label: 'Interior View', icon: Building2, color: 'bg-blue-100 text-blue-700' },
+  { key: 'others' as keyof CommercialCategorizedImages, label: 'Others', icon: MoreHorizontal, color: 'bg-gray-100 text-gray-700' }
 ];
 
-export const CategorizedImageUpload: React.FC<CategorizedImageUploadProps> = ({
+export const CommercialCategorizedImageUpload: React.FC<CommercialCategorizedImageUploadProps> = ({
   images,
   onImagesChange,
   maxImagesPerCategory = 5
 }) => {
   const fileInputRefs = useRef<{ [key: string]: HTMLInputElement | null }>({});
-  const [activeCategory, setActiveCategory] = useState<keyof CategorizedImages | null>(null);
+  const [activeCategory, setActiveCategory] = useState<keyof CommercialCategorizedImages | null>(null);
 
   const getTotalImages = () => {
-    return Object.values(images).reduce((total, categoryImages) => total + (categoryImages?.length || 0), 0);
+    return Object.values(images).reduce((total, categoryImages) => total + categoryImages.length, 0);
   };
 
-  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>, category: keyof CategorizedImages) => {
+  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>, category: keyof CommercialCategorizedImages) => {
     const files = Array.from(event.target.files || []);
     const validFiles = files.filter(file => {
       const isImage = file.type.startsWith('image/');
@@ -51,7 +43,7 @@ export const CategorizedImageUpload: React.FC<CategorizedImageUploadProps> = ({
       return isImage && isValidSize;
     });
 
-    const currentCategoryImages = images[category] || [];
+    const currentCategoryImages = images[category];
     const newCategoryImages = [...currentCategoryImages, ...validFiles].slice(0, maxImagesPerCategory);
     
     onImagesChange({
@@ -60,16 +52,15 @@ export const CategorizedImageUpload: React.FC<CategorizedImageUploadProps> = ({
     });
   };
 
-  const removeImage = (category: keyof CategorizedImages, index: number) => {
-    const categoryImages = images[category] || [];
-    const newCategoryImages = categoryImages.filter((_, i) => i !== index);
+  const removeImage = (category: keyof CommercialCategorizedImages, index: number) => {
+    const newCategoryImages = images[category].filter((_, i) => i !== index);
     onImagesChange({
       ...images,
       [category]: newCategoryImages
     });
   };
 
-  const handleUploadClick = (category: keyof CategorizedImages) => {
+  const handleUploadClick = (category: keyof CommercialCategorizedImages) => {
     fileInputRefs.current[category]?.click();
   };
 
@@ -82,8 +73,8 @@ export const CategorizedImageUpload: React.FC<CategorizedImageUploadProps> = ({
 
       {/* Categories Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {categories.map((category) => {
-          const categoryImages = images[category.key] || [];
+        {commercialCategories.map((category) => {
+          const categoryImages = images[category.key];
           const IconComponent = category.icon;
           
           return (

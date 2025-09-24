@@ -38,6 +38,8 @@ export { LandPlotPropertyDetailsStep } from './LandPlotPropertyDetailsStep';
 export { LandPlotLocationDetailsStep } from './LandPlotLocationDetailsStep';
 export { LandPlotSaleDetailsStep } from './LandPlotSaleDetailsStep';
 export { LandPlotAmenitiesStep } from './LandPlotAmenitiesStep';
+export { CommercialCategorizedImageUpload } from './CommercialCategorizedImageUpload';
+export { CommercialGalleryStep } from './CommercialGalleryStep';
 export { LandPlotGalleryStep } from './LandPlotGalleryStep';
 export { LandPlotAdditionalInfoStep } from './LandPlotAdditionalInfoStep';
 export { LandPlotScheduleStep } from './LandPlotScheduleStep';
