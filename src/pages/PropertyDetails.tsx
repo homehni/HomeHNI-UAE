@@ -220,6 +220,7 @@ const PropertyDetails: React.FC = () => {
             expected_price: payload.expected_price || 0,
             super_area: payload.super_area,
             carpet_area: payload.carpet_area,
+            plot_area_unit: payload.plot_area_unit, // Ensure correct area unit for plots
             bathrooms: payload.bathrooms,
             balconies: payload.balconies,
             city: submissionData.city || payload.city || 'Unknown',
