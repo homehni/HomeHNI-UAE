@@ -54,7 +54,7 @@ export const useFavorites = () => {
         description: "Please login to save properties to your favorites.",
         className: "bg-white border border-red-200 shadow-lg rounded-lg",
         style: {
-          borderLeft: "4px solid hsl(var(--primary))",
+          borderLeft: "8px solid hsl(var(--primary))",
         },
       });
       return false;
@@ -93,7 +93,7 @@ export const useFavorites = () => {
               : "This demo property has been removed from your favorites.",
             className: "bg-white border border-red-200 shadow-lg rounded-lg",
             style: {
-              borderLeft: "4px solid hsl(var(--primary))",
+              borderLeft: "8px solid hsl(var(--primary))",
             },
           });
 
@@ -116,7 +116,7 @@ export const useFavorites = () => {
           description: "Property has been added to your favorites.",
           className: "bg-white border border-red-200 shadow-lg rounded-lg",
           style: {
-            borderLeft: "4px solid hsl(var(--primary))",
+            borderLeft: "8px solid hsl(var(--primary))",
           },
         });
       } else {
@@ -125,7 +125,7 @@ export const useFavorites = () => {
           description: "Property has been removed from your favorites.",
           className: "bg-white border border-red-200 shadow-lg rounded-lg",
           style: {
-            borderLeft: "4px solid hsl(var(--primary))",
+            borderLeft: "8px solid hsl(var(--primary))",
           },
         });
       }
@@ -145,7 +145,7 @@ export const useFavorites = () => {
         description: "Failed to update favorite status. Please try again.",
         className: "bg-white border border-red-200 shadow-lg rounded-lg",
         style: {
-          borderLeft: "4px solid hsl(var(--primary))",
+          borderLeft: "8px solid hsl(var(--primary))",
         },
       });
 
