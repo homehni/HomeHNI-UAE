@@ -538,6 +538,13 @@ const PropertyDetails: React.FC = () => {
             const isPlot = property.property_type?.toLowerCase().includes('plot') || 
                            property.property_type?.toLowerCase().includes('land');
             
+            console.log('PropertyDetails propertyArea calculation:', {
+              area,
+              propertyType: property.property_type,
+              plotAreaUnit: property.plot_area_unit,
+              isPlot
+            });
+            
             if (isPlot && property.plot_area_unit) {
               const unitMap: Record<string, string> = {
                 'sq-ft': 'sq.ft',
@@ -549,12 +556,15 @@ const PropertyDetails: React.FC = () => {
                 'gunta': 'gunta',
                 'cents': 'cents',
                 'marla': 'marla',
-                'kanal': 'kanal'
+                'kanal': 'kanal',
+                'kottah': 'kottah'
               };
               const displayUnit = unitMap[property.plot_area_unit] || property.plot_area_unit;
+              console.log('PropertyDetails: Using plot unit:', displayUnit);
               return `${area} ${displayUnit}`;
             }
             
+            console.log('PropertyDetails: Using default sq.ft');
             return `${area} sq.ft`;
           })()}
           bhkType={property.bhk_type}

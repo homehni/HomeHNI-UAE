@@ -80,6 +80,13 @@ export const OverviewCard: React.FC<OverviewCardProps> = ({ property }) => {
     const isPlot = propertyType?.toLowerCase().includes('plot') || 
                    propertyType?.toLowerCase().includes('land');
     
+    console.log('OverviewCard formatArea:', {
+      area,
+      areaUnit,
+      propertyType,
+      isPlot
+    });
+    
     if (isPlot && areaUnit) {
       const unitMap: Record<string, string> = {
         'sq-ft': 'Sq.Ft',
@@ -91,12 +98,15 @@ export const OverviewCard: React.FC<OverviewCardProps> = ({ property }) => {
         'gunta': 'Gunta',
         'cents': 'Cents',
         'marla': 'Marla',
-        'kanal': 'Kanal'
+        'kanal': 'Kanal',
+        'kottah': 'Kottah'
       };
       const displayUnit = unitMap[areaUnit] || areaUnit;
+      console.log('OverviewCard: Using plot unit:', displayUnit);
       return `${area.toLocaleString()} ${displayUnit}`;
     }
     
+    console.log('OverviewCard: Using default Sq.Ft');
     return `${area.toLocaleString()} Sq.Ft`;
   };
 

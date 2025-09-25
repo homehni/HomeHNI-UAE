@@ -33,6 +33,12 @@ export const PropertyHeader: React.FC<PropertyHeaderProps> = ({ property }) => {
   
   const getAreaUnit = () => {
     if (isPlot && property.plot_area_unit) {
+      console.log('PropertyHeader: Plot area unit detected:', {
+        propertyType: property.property_type,
+        plotAreaUnit: property.plot_area_unit,
+        isPlot,
+        area
+      });
       const unitMap: Record<string, string> = {
         'sq-ft': 'Sq.Ft',
         'sq-yard': 'Sq.Yard',
@@ -43,10 +49,17 @@ export const PropertyHeader: React.FC<PropertyHeaderProps> = ({ property }) => {
         'gunta': 'Gunta',
         'cents': 'Cents',
         'marla': 'Marla',
-        'kanal': 'Kanal'
+        'kanal': 'Kanal',
+        'kottah': 'Kottah'
       };
       return unitMap[property.plot_area_unit] || property.plot_area_unit;
     }
+    console.log('PropertyHeader: Using default Sq.Ft unit:', {
+      propertyType: property.property_type,
+      plotAreaUnit: property.plot_area_unit,
+      isPlot,
+      area
+    });
     return 'Sq.Ft';
   };
 

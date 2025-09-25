@@ -1577,6 +1577,7 @@ export type Database = {
           locality: string
           maintenance_charges: number
           pincode: string
+          plot_area_unit: string
           power_backup: string
           price_negotiable: boolean
           property_age: string
@@ -1625,6 +1626,7 @@ export type Database = {
           locality: string
           maintenance_charges: number
           pincode: string
+          plot_area_unit: string
           power_backup: string
           price_negotiable: boolean
           property_age: string

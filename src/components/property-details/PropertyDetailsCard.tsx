@@ -93,6 +93,13 @@ export const PropertyDetailsCard: React.FC<PropertyDetailsCardProps> = ({ proper
     const isPlot = property.property_type?.toLowerCase().includes('plot') || 
                    property.property_type?.toLowerCase().includes('land');
     
+    console.log('PropertyDetailsCard formatArea:', {
+      area,
+      propertyType: property.property_type,
+      plotAreaUnit: (property as any).plot_area_unit,
+      isPlot
+    });
+    
     if (isPlot && (property as any).plot_area_unit) {
       const unitMap: Record<string, string> = {
         'sq-ft': 'Sq.Ft',
@@ -104,12 +111,15 @@ export const PropertyDetailsCard: React.FC<PropertyDetailsCardProps> = ({ proper
         'gunta': 'Gunta',
         'cents': 'Cents',
         'marla': 'Marla',
-        'kanal': 'Kanal'
+        'kanal': 'Kanal',
+        'kottah': 'Kottah'
       };
       const displayUnit = unitMap[(property as any).plot_area_unit] || (property as any).plot_area_unit;
+      console.log('PropertyDetailsCard: Using plot unit:', displayUnit);
       return `${area.toLocaleString()} ${displayUnit}`;
     }
     
+    console.log('PropertyDetailsCard: Using default Sq.Ft');
     return `${area.toLocaleString()} Sq.Ft`;
   };
 
