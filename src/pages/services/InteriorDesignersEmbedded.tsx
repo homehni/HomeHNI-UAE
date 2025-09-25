@@ -395,7 +395,7 @@ const InteriorDesignersEmbedded = () => {
         <Card className="w-full rounded-xl shadow-2xl bg-background border-2 border-primary">
           <CardContent className="p-6">
             <h3 className="text-xl font-semibold text-foreground mb-2 text-center">Need an interior designer?</h3>
-            <p className="text-sm text-muted-foreground mb-4">Fill the form & get a free consultation</p>
+            <p className="text-sm text-muted-foreground mb-4 text-center">Fill the form & get a free consultation</p>
 
             <form className="space-y-4" onSubmit={e => {
               e.preventDefault();
