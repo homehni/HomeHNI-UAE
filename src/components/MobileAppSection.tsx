@@ -35,7 +35,7 @@ const MobileAppSection = () => {
     return cmsContent?.content?.comingSoon || 'Coming Soon! Get ready for the ultimate property experience!';
   };
   return <section className="py-1 bg-gradient-to-br from-rose-50 to-white">
-      <div className="container px-2 mx-0 my-[25px]">
+      <div className="container px-2 mx-0 my-4">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-center max-w-6xl mx-auto">
           {/* Content */}
           <div className="text-center lg:text-left order-2 lg:order-1">
@@ -93,7 +93,7 @@ const MobileAppSection = () => {
           {/* Image */}
           <div className="hidden lg:flex justify-center lg:justify-end order-1 lg:order-2">
             <div className="relative">
-              <img src={cmsContent?.content?.appImage || '/lovable-uploads/ee843ec7-81c8-4575-aff3-09a145035577.png'} alt="Home HNI mobile app preview" loading="lazy" className="w-full max-w-lg h-auto" />
+              <img src={cmsContent?.content?.appImage || '/lovable-uploads/ee843ec7-81c8-4575-aff3-09a145035577.png'} alt="Home HNI mobile app preview" loading="lazy" className="w-full max-w-sm h-auto" />
               {/* Decorative cherry-red glow */}
               <div className="pointer-events-none absolute -inset-6 -z-10 blur-2xl
                               bg-[radial-gradient(ellipse_at_top_left,rgba(210,20,4,0.18),transparent_60%)]" />
