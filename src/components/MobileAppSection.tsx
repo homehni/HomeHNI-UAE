@@ -93,7 +93,7 @@ const MobileAppSection = () => {
           {/* Image */}
           <div className="hidden lg:flex justify-center lg:justify-end order-1 lg:order-2">
             <div className="relative">
-              <img src={cmsContent?.content?.appImage || '/lovable-uploads/ee843ec7-81c8-4575-aff3-09a145035577.png'} alt="Home HNI mobile app preview" loading="lazy" className="w-full max-w-lg h-[600px]" />
+              <img src="/images/home-hni-mobile-app.png" alt="Home HNI mobile app preview" loading="lazy" className="w-full max-w-lg h-[600px]" />
               {/* Decorative cherry-red glow */}
               <div className="pointer-events-none absolute -inset-6 -z-10 blur-2xl
                               bg-[radial-gradient(ellipse_at_top_left,rgba(210,20,4,0.18),transparent_60%)]" />
