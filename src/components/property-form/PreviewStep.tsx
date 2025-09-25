@@ -83,7 +83,7 @@ export const PreviewStep: React.FC<PreviewStepProps> = ({
   const hasPhotos = propertyInfo?.gallery?.images && propertyInfo.gallery.images.length > 0;
 
   const handleSendPhotos = () => {
-    const whatsappUrl = "https://wa.me/918074017388?text=Upload%20the%20photos";
+    const whatsappUrl = "https://wa.me/918074017388?text=Share%20your%20photos%20with%20us%20through%20WhatsApp%20for%20easy%20uploading!";
     window.open(whatsappUrl, '_blank');
   };
 
