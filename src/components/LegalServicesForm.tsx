@@ -50,7 +50,6 @@ interface FormData {
 const LegalServicesForm = ({ isOpen, onClose }: LegalServicesFormProps) => {
   const [currentStep, setCurrentStep] = useState(1);
   const totalSteps = 5;
-  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const { toast } = useToast();
   
@@ -139,21 +138,48 @@ const LegalServicesForm = ({ isOpen, onClose }: LegalServicesFormProps) => {
     // Handle form submission
     console.log('Form submitted', formData);
     
-    // Set the submitted state to true to change button color
-    setIsSubmitted(true);
-    
     // Show toast notification
     toast({
       title: "Consultation Request Submitted!",
-      description: "Thank you for your request. Our legal team will contact you within 24 hours.",
+      description: "Form has been reset. You can start a new consultation request.",
       variant: "default"
     });
     
-    // Close the dialog after showing the color change briefly
-    setTimeout(() => {
-      onClose();
-      setIsSubmitted(false); // Reset state when dialog closes
-    }, 1000);
+    // Reset form data to initial state
+    setFormData({
+      personalDetails: {
+        fullName: '',
+        email: '',
+        phoneNumber: '',
+        country: '',
+        state: '',
+        city: '',
+      },
+      propertyInformation: {
+        propertyAddress: '',
+        propertyType: '',
+        ownershipStatus: '',
+        surveyNo: '',
+      },
+      legalQuery: {
+        assistanceNeeded: [],
+        otherDescription: '',
+        issueDescription: '',
+      },
+      fileUpload: {
+        salesDeed: [],
+        ror: [],
+        naksha: [],
+      },
+      consultationPreferences: {
+        mode: '',
+        preferredDate: '',
+        preferredTime: '',
+      },
+    });
+    
+    // Reset to first step
+    setCurrentStep(1);
   };
 
   const updateFormData = (step: keyof FormData, data: Partial<FormData[keyof FormData]>) => {
@@ -249,7 +275,7 @@ const LegalServicesForm = ({ isOpen, onClose }: LegalServicesFormProps) => {
                 variant="outline"
                 onClick={prevStep}
                 disabled={currentStep === 1}
-                className="order-2 sm:order-1 w-full sm:w-auto"
+                className={`order-2 sm:order-1 w-full sm:w-auto ${currentStep === 1 ? 'hidden' : ''}`}
               >
                 <ChevronLeft size={16} className="mr-2" />
                 Previous
@@ -267,13 +293,9 @@ const LegalServicesForm = ({ isOpen, onClose }: LegalServicesFormProps) => {
                 ) : (
                   <Button
                     onClick={handleSubmit}
-                    className={`flex-1 sm:flex-none text-white transition-all duration-300 ${
-                      isSubmitted 
-                        ? '!bg-red-600 !hover:bg-red-700' 
-                        : 'bg-green-600 hover:bg-green-700'
-                    }`}
+                    className="flex-1 sm:flex-none bg-red-600 hover:bg-red-700 text-white transition-all duration-300"
                   >
-                    {isSubmitted ? 'Request Submitted!' : 'Submit Consultation Request'}
+                    Submit Consultation Request
                   </Button>
                 )}
               </div>
