@@ -583,6 +583,9 @@ export const PostProperty: React.FC = () => {
         availability_type: 'immediate',
         status: 'pending',
         is_featured: true, // Mark all submitted properties as featured candidates
+        // Plot area unit for Land/Plot properties
+        plot_area_unit: ('plotDetails' in data.propertyInfo) ? 
+          (data.propertyInfo.plotDetails.plotAreaUnit || 'sq-ft') : 'sq-ft',
         // Extra fields for better details rendering
         security_deposit: Number(((data.propertyInfo as any)?.flattmatesDetails?.securityDeposit ?? (data.propertyInfo as any)?.rentalDetails?.securityDeposit ?? (data.propertyInfo as any)?.pgDetails?.securityDeposit) ?? 0) || null,
         // PG/Hostel specific fields for better display compatibility
@@ -634,6 +637,7 @@ export const PostProperty: React.FC = () => {
             owner_email: data.ownerInfo.email || '',
             owner_phone: data.ownerInfo.phoneNumber || '',
             amenities: (window as any).editingPropertyData?.amenities || (data.propertyInfo as any).amenities || null,
+            plot_area_unit: propertyData.plot_area_unit,
             status: 'pending', // Reset to pending for review - CRITICAL: prevents public visibility
             updated_at: new Date().toISOString(),
             // Additional fields - access from the original property data

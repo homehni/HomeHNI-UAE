@@ -37,6 +37,7 @@ interface Property {
   videos?: string[];
   status: string;
   created_at: string;
+  plot_area_unit?: string;
   // Note: owner contact fields removed for security
 }
 

@@ -854,12 +854,14 @@ export type Database = {
           owner_phone: string | null
           owner_role: string | null
           pincode: string
+          plot_area_unit: string | null
           power_backup: string | null
           price_negotiable: boolean | null
           property_age: string | null
           property_type: string
           registration_status: string | null
           rejection_reason: string | null
+          rental_status: string | null
           secondary_phone: string | null
           security_deposit: number | null
           state: string
@@ -910,12 +912,14 @@ export type Database = {
           owner_phone?: string | null
           owner_role?: string | null
           pincode: string
+          plot_area_unit?: string | null
           power_backup?: string | null
           price_negotiable?: boolean | null
           property_age?: string | null
           property_type: string
           registration_status?: string | null
           rejection_reason?: string | null
+          rental_status?: string | null
           secondary_phone?: string | null
           security_deposit?: number | null
           state: string
@@ -966,12 +970,14 @@ export type Database = {
           owner_phone?: string | null
           owner_role?: string | null
           pincode?: string
+          plot_area_unit?: string | null
           power_backup?: string | null
           price_negotiable?: boolean | null
           property_age?: string | null
           property_type?: string
           registration_status?: string | null
           rejection_reason?: string | null
+          rental_status?: string | null
           secondary_phone?: string | null
           security_deposit?: number | null
           state?: string
@@ -1197,6 +1203,7 @@ export type Database = {
           created_at: string
           id: string
           payload: Json
+          rental_status: string | null
           state: string | null
           status: string
           title: string | null
@@ -1208,6 +1215,7 @@ export type Database = {
           created_at?: string
           id?: string
           payload?: Json
+          rental_status?: string | null
           state?: string | null
           status?: string
           title?: string | null
@@ -1219,6 +1227,7 @@ export type Database = {
           created_at?: string
           id?: string
           payload?: Json
+          rental_status?: string | null
           state?: string | null
           status?: string
           title?: string | null
