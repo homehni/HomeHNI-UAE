@@ -275,13 +275,13 @@ const LegalServicesForm = ({ isOpen, onClose }: LegalServicesFormProps) => {
                 variant="outline"
                 onClick={prevStep}
                 disabled={currentStep === 1}
-                className={`order-2 sm:order-1 w-full sm:w-auto ${currentStep === 1 ? 'hidden' : ''}`}
+                className={`w-full sm:w-auto ${currentStep === 1 ? 'hidden' : ''}`}
               >
                 <ChevronLeft size={16} className="mr-2" />
                 Previous
               </Button>
 
-              <div className="flex gap-2 order-1 sm:order-2">
+              <div className="flex gap-2 ml-auto">
                 {currentStep < totalSteps ? (
                   <Button
                     onClick={nextStep}
