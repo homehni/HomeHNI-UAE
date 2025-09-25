@@ -141,45 +141,12 @@ const LegalServicesForm = ({ isOpen, onClose }: LegalServicesFormProps) => {
     // Show toast notification
     toast({
       title: "Consultation Request Submitted!",
-      description: "Form has been reset. You can start a new consultation request.",
+      description: "Thank you for your request. Our legal team will contact you within 24 hours.",
       variant: "default"
     });
     
-    // Reset form data to initial state
-    setFormData({
-      personalDetails: {
-        fullName: '',
-        email: '',
-        phoneNumber: '',
-        country: '',
-        state: '',
-        city: '',
-      },
-      propertyInformation: {
-        propertyAddress: '',
-        propertyType: '',
-        ownershipStatus: '',
-        surveyNo: '',
-      },
-      legalQuery: {
-        assistanceNeeded: [],
-        otherDescription: '',
-        issueDescription: '',
-      },
-      fileUpload: {
-        salesDeed: [],
-        ror: [],
-        naksha: [],
-      },
-      consultationPreferences: {
-        mode: '',
-        preferredDate: '',
-        preferredTime: '',
-      },
-    });
-    
-    // Reset to first step
-    setCurrentStep(1);
+    // Close the form
+    onClose();
   };
 
   const updateFormData = (step: keyof FormData, data: Partial<FormData[keyof FormData]>) => {
