@@ -5,7 +5,33 @@ import Marquee from "@/components/Marquee";
 import Footer from "@/components/Footer";
 
 const Sitemap = () => {
-  console.log("Sitemap component loaded"); // Debug log
+  const handleLinkClick = (linkText: string) => {
+    // Extract location and property type information from the link text
+    const searchParams = new URLSearchParams();
+    
+    // Determine search type based on link content
+    if (linkText.toLowerCase().includes('rent')) {
+      searchParams.set('type', 'rent');
+    } else if (linkText.toLowerCase().includes('sale') || linkText.toLowerCase().includes('buy')) {
+      searchParams.set('type', 'buy');
+    }
+    
+    // Extract location if mentioned
+    const locationKeywords = ['bangalore', 'mumbai', 'delhi', 'pune', 'chennai', 'hyderabad', 'noida', 'gurgaon', 'ghaziabad', 'faridabad', 'greater noida'];
+    const foundLocation = locationKeywords.find(keyword => 
+      linkText.toLowerCase().includes(keyword)
+    );
+    
+    if (foundLocation) {
+      searchParams.set('location', foundLocation);
+    }
+    
+    // Add search query
+    searchParams.set('q', linkText);
+    
+    // Navigate to search with parameters
+    return `/?${searchParams.toString()}&scrollToSearch=true`;
+  };
   
   const sitemapData = {
     "Flats for rent": {
@@ -397,7 +423,8 @@ const Sitemap = () => {
                           {links.map((link, index) => (
                             <li key={index}>
                               <Link 
-                                to={`#`}
+                                to={handleLinkClick(link)}
+                                state={{ scrollToSearch: true }}
                                 className="text-sm text-muted-foreground hover:text-brand-red transition-colors duration-200 block py-1 hover:underline"
                               >
                                 {link}
