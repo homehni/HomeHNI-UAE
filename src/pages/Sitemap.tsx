@@ -26,11 +26,22 @@ const Sitemap = () => {
       searchParams.set('location', foundLocation);
     }
     
+    // Extract property type
+    if (linkText.toLowerCase().includes('flat') || linkText.toLowerCase().includes('apartment')) {
+      searchParams.set('propertyType', 'Flat/Apartment');
+    } else if (linkText.toLowerCase().includes('villa') || linkText.toLowerCase().includes('house')) {
+      searchParams.set('propertyType', 'Villa');
+    } else if (linkText.toLowerCase().includes('plot')) {
+      searchParams.set('propertyType', 'Plots');
+    } else if (linkText.toLowerCase().includes('pg') || linkText.toLowerCase().includes('hostel')) {
+      searchParams.set('propertyType', 'PG/Hostel');
+    }
+    
     // Add search query
     searchParams.set('q', linkText);
     
-    // Navigate to search with parameters
-    return `/?${searchParams.toString()}&scrollToSearch=true`;
+    // Navigate to search page with parameters
+    return `/search?${searchParams.toString()}`;
   };
   
   const sitemapData = {
