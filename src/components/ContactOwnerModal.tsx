@@ -7,7 +7,6 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { SecurePropertyService } from '@/services/securePropertyService';
 import { useToast } from '@/hooks/use-toast';
-import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 
 interface ContactOwnerModalProps {
@@ -33,7 +32,6 @@ export const ContactOwnerModal: React.FC<ContactOwnerModalProps> = ({
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
-  const { user } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -93,21 +91,6 @@ export const ContactOwnerModal: React.FC<ContactOwnerModalProps> = ({
       return;
     }
 
-    // Check if user is authenticated
-    if (!user) {
-        toast({
-          title: "Authentication Required",
-          description: "Please log in to contact property owners.",
-          className: "bg-white border border-red-200 shadow-lg rounded-lg",
-          style: {
-            borderLeft: "4px solid hsl(var(--primary))",
-          },
-        });
-      setIsSubmitting(false);
-      return;
-    }
-
-    console.log('ContactOwnerModal: User authenticated:', user.id);
 
     try {
       const leadData = {
@@ -120,7 +103,6 @@ export const ContactOwnerModal: React.FC<ContactOwnerModalProps> = ({
 
       console.log('ContactOwnerModal: Creating lead with data:', leadData);
       console.log('ContactOwnerModal: Property ID:', propertyId);
-      console.log('ContactOwnerModal: Current user ID:', user.id);
       
       // Try the RPC function first
       const { data, error } = await SecurePropertyService.createPropertyLead(leadData);
