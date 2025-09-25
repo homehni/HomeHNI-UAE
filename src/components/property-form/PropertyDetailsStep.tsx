@@ -93,7 +93,7 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
   return (
     <div className="bg-background p-6">
       {/* Form Content - Scrollable */}
-      <div className="flex-1 overflow-y-auto">
+      <div className="flex-1 overflow-y-auto overflow-x-hidden">
         <div className="text-left mb-8">
           <h1 className="text-2xl font-semibold text-red-600 mb-2">Property Details</h1>
         </div>
@@ -107,7 +107,7 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
             }) => <FormItem className="min-w-0">
                     <FormLabel className="text-sm font-medium">Property Name</FormLabel>
                     <FormControl>
-                      <Input className="h-10 w-full" placeholder="Enter Property Name" {...field} />
+                      <Input className="h-10 w-full max-w-full focus-visible:ring-inset focus-visible:ring-offset-0" placeholder="Enter Property Name" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>} />
@@ -118,7 +118,7 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
                     <FormLabel className="text-sm font-medium">Built Up Area</FormLabel>
                     <div className="relative">
                       <FormControl>
-                        <Input type="number" placeholder="" min="1" className="h-10 w-full pr-12 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]" {...field} onKeyDown={e => {
+                        <Input type="number" placeholder="" min="1" className="h-10 w-full max-w-full pr-12 focus-visible:ring-inset focus-visible:ring-offset-0 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]" {...field} onKeyDown={e => {
                     if (['-', '+', 'e', 'E', '.'].includes(e.key)) e.preventDefault();
                   }} onPaste={e => {
                     const text = e.clipboardData.getData('text');
@@ -141,11 +141,11 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 min-w-0">
               <FormField control={form.control} name="propertyType" render={({
               field
-            }) => <FormItem>
+            }) => <FormItem className="min-w-0">
                     <FormLabel className="text-sm font-medium">Property Type</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
-                        <SelectTrigger className="h-10">
+                          <SelectTrigger className="h-10 w-full">
                           <SelectValue placeholder="Select Property Type" />
                         </SelectTrigger>
                       </FormControl>
@@ -163,11 +163,11 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
 
               <FormField control={form.control} name="bhkType" render={({
               field
-            }) => <FormItem>
+            }) => <FormItem className="min-w-0">
                     <FormLabel className="text-sm font-medium">BHK Type</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
-                        <SelectTrigger className="h-10">
+                          <SelectTrigger className="h-10 w-full">
                           <SelectValue placeholder="Select BHK Type" />
                         </SelectTrigger>
                       </FormControl>
@@ -190,11 +190,11 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 min-w-0">
               <FormField control={form.control} name="propertyAge" render={({
               field
-            }) => <FormItem>
+            }) => <FormItem className="min-w-0">
                     <FormLabel className="text-sm font-medium">Property Age</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
-                        <SelectTrigger className="h-10">
+                        <SelectTrigger className="h-10 w-full">
                           <SelectValue placeholder="Select" />
                         </SelectTrigger>
                       </FormControl>
@@ -213,11 +213,11 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
 
               <FormField control={form.control} name="facing" render={({
               field
-            }) => <FormItem>
+            }) => <FormItem className="min-w-0">
                     <FormLabel className="text-sm font-medium">Facing</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
-                        <SelectTrigger className="h-10">
+                        <SelectTrigger className="h-10 w-full">
                           <div className="flex items-center gap-2">
                             <Compass className="h-4 w-4 text-muted-foreground" />
                             <SelectValue placeholder="Select" />
@@ -243,7 +243,7 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 min-w-0">
               {showFloorDropdown && <FormField control={form.control} name="floorNo" render={({
               field
-            }) => <FormItem>
+            }) => <FormItem className="min-w-0">
                       <FormLabel className="text-sm font-medium">Floor</FormLabel>
                       <Select onValueChange={value => {
                 if (value === 'ground') {
@@ -255,7 +255,7 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
                 }
               }} value={field.value === undefined ? undefined : field.value === 0 ? 'ground' : field.value === 'basement' ? 'basement' : field.value.toString()}>
                         <FormControl>
-                          <SelectTrigger className="h-10">
+                          <SelectTrigger className="h-10 w-full">
                             <SelectValue placeholder="Select Floor" />
                           </SelectTrigger>
                         </FormControl>
@@ -275,11 +275,11 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
 
               {showFloorDropdown ? <FormField control={form.control} name="totalFloors" render={({
               field
-            }) => <FormItem>
+            }) => <FormItem className="min-w-0">
                       <FormLabel className="text-sm font-medium">Total Floor</FormLabel>
                       <Select onValueChange={value => field.onChange(parseInt(value))} defaultValue={field.value?.toString()}>
                         <FormControl>
-                          <SelectTrigger className="h-10">
+                          <SelectTrigger className="h-10 w-full">
                             <SelectValue placeholder="Select Total Floors" />
                           </SelectTrigger>
                         </FormControl>
@@ -299,11 +299,11 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
                       <FormMessage />
                     </FormItem>} /> : showNumberOfFloors ? <FormField control={form.control} name="totalFloors" render={({
               field
-            }) => <FormItem>
+            }) => <FormItem className="min-w-0">
                       <FormLabel className="text-sm font-medium">No. of Floors</FormLabel>
                       <Select onValueChange={value => field.onChange(parseInt(value))} defaultValue={field.value?.toString()}>
                         <FormControl>
-                          <SelectTrigger className="h-10">
+                          <SelectTrigger className="h-10 w-full">
                             <SelectValue placeholder="Select" />
                           </SelectTrigger>
                         </FormControl>
