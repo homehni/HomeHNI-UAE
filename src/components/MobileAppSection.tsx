@@ -45,11 +45,11 @@ const MobileAppSection = () => {
               New features going live every week
              </div> */}
 
-            <h2 className="text-3xl md:text-4xl font-bold text-black mb-4">
+            <h2 className="text-3xl md:text-4xl font-bold text-black mb-8">
               {getHeading()}
             </h2>
 
-            <p className="text-gray-600 text-base md:text-lg mb-8 leading-relaxed">
+            <p className="text-gray-600 text-base md:text-lg mb-12 leading-relaxed">
               {getDescription()}
             </p>
 
@@ -79,7 +79,7 @@ const MobileAppSection = () => {
             </div>
 
             {/* Coming Soon indicator */}
-            <div className="mt-4 text-center lg:text-left">
+            <div className="mt-8 text-center lg:text-left">
               <p className="text-sm font-bold text-[#d21404]">🚀 Coming Soon!</p>
               <p className="text-xs text-gray-600">{getComingSoon()}</p>
             </div>
@@ -93,7 +93,7 @@ const MobileAppSection = () => {
           {/* Image */}
           <div className="hidden lg:flex justify-center lg:justify-end order-1 lg:order-2">
             <div className="relative">
-              <img src={cmsContent?.content?.appImage || '/lovable-uploads/ee843ec7-81c8-4575-aff3-09a145035577.png'} alt="Home HNI mobile app preview" loading="lazy" className="w-full max-w-md h-[500px]" />
+              <img src={cmsContent?.content?.appImage || '/lovable-uploads/ee843ec7-81c8-4575-aff3-09a145035577.png'} alt="Home HNI mobile app preview" loading="lazy" className="w-full max-w-lg h-[600px]" />
               {/* Decorative cherry-red glow */}
               <div className="pointer-events-none absolute -inset-6 -z-10 blur-2xl
                               bg-[radial-gradient(ellipse_at_top_left,rgba(210,20,4,0.18),transparent_60%)]" />
