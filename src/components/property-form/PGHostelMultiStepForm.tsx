@@ -362,6 +362,13 @@ const [propertyInfo, setPropertyInfo] = useState({
     return gallery.images && gallery.images.length > 0;
   }, [gallery.images]);
 
+  const handleSendPhotos = () => {
+    const phoneNumber = '+91 80740 17388';
+    const message = encodeURIComponent('Upload the photos');
+    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`;
+    window.open(whatsappUrl, '_blank');
+  };
+
   if (isSubmitted) {
     return (
       <div className="min-h-screen bg-gray-50">
@@ -505,7 +512,12 @@ const [propertyInfo, setPropertyInfo] = useState({
                           >
                             I Don't Have Photos
                           </Button>
-                          <Button variant="outline" size="sm" className="border-teal-500 text-teal-600 hover:bg-teal-50 w-full sm:w-auto">
+                          <Button 
+                            variant="outline" 
+                            size="sm" 
+                            className="border-teal-500 text-teal-600 hover:bg-teal-50 w-full sm:w-auto"
+                            onClick={handleSendPhotos}
+                          >
                             Send Photos
                           </Button>
                           <Button 
@@ -735,7 +747,12 @@ const [propertyInfo, setPropertyInfo] = useState({
                           >
                             I Don't Have Photos
                           </Button>
-                          <Button variant="outline" size="sm" className="border-teal-500 text-teal-600 hover:bg-teal-50 w-full sm:w-auto">
+                          <Button 
+                            variant="outline" 
+                            size="sm" 
+                            className="border-teal-500 text-teal-600 hover:bg-teal-50 w-full sm:w-auto"
+                            onClick={handleSendPhotos}
+                          >
                             Send Photos
                           </Button>
                           <Button 

@@ -55,10 +55,10 @@ export const LandPlotSuccessStep = ({
   };
 
   const handleSendPhotos = () => {
-    // Open WhatsApp with a pre-filled message
-    const phoneNumber = '9999999999'; // Replace with actual business number
-    const message = encodeURIComponent(`Hi! I want to send photos for my property listing. Submission ID: ${createdSubmissionId || 'N/A'}`);
-    window.open(`https://wa.me/${phoneNumber}?text=${message}`, '_blank');
+    const phoneNumber = '+91 80740 17388';
+    const message = encodeURIComponent('Upload the photos');
+    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`;
+    window.open(whatsappUrl, '_blank');
   };
 
   return (

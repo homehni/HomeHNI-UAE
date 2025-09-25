@@ -56,6 +56,13 @@ export const CommercialPreviewStep: React.FC<CommercialPreviewStepProps> = ({
 
   const hasPhotos = formData?.propertyInfo?.gallery?.images && formData.propertyInfo.gallery.images.length > 0;
 
+  const handleSendPhotos = () => {
+    const phoneNumber = '+91 80740 17388';
+    const message = encodeURIComponent('Upload the photos');
+    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`;
+    window.open(whatsappUrl, '_blank');
+  };
+
   if (showSuccess) {
     return (
       <div className="w-full px-4 sm:px-6 lg:px-8 space-y-6 lg:space-y-8">
@@ -345,7 +352,12 @@ export const CommercialPreviewStep: React.FC<CommercialPreviewStepProps> = ({
               >
                 I Don't Have Photos
               </Button>
-              <Button variant="outline" size="sm" className="border-teal-500 text-teal-600 hover:bg-teal-50 w-full sm:w-auto">
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="border-teal-500 text-teal-600 hover:bg-teal-50 w-full sm:w-auto"
+                onClick={handleSendPhotos}
+              >
                 Send Photos
               </Button>
                <Button 

@@ -27,8 +27,10 @@ export const PhotoUploadReminder: React.FC<PhotoUploadReminderProps> = ({
   };
 
   const handleSendPhotos = () => {
-    // Navigate to contact/support page for photo submission
-    navigate('/contact?type=photo-submission');
+    const phoneNumber = '+91 80740 17388';
+    const message = encodeURIComponent('Upload the photos');
+    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`;
+    window.open(whatsappUrl, '_blank');
   };
 
   const handleNoPhotos = () => {
