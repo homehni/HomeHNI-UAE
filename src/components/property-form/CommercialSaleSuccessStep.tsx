@@ -84,7 +84,7 @@ export const CommercialSaleSuccessStep = ({
           </Button>
         </div>
         
-        <p className="text-green-600 text-sm font-medium text-center mt-4">Your Property will be reviewed and made live in 12 Hours</p>
+        <p className="text-green-600 text-sm font-medium text-left mt-4">Your Property will be reviewed and made live in 12 Hours</p>
       </div>
 
       {/* Premium Plans Section */}
