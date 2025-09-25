@@ -71,6 +71,7 @@ export const FlattmatesPreviewStep: React.FC<FlattmatesPreviewStepProps> = ({
               <p className="text-base sm:text-lg text-red-600 mb-4 sm:mb-6">
                 Your flatmates listing is submitted successfully!
               </p>
+              <p className="text-red-600 text-sm font-medium mb-4 sm:mb-6">Your Property will be reviewed and made live in 12 Hours</p>
               <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                 <Button 
                   variant="outline" 
@@ -251,6 +252,7 @@ export const FlattmatesPreviewStep: React.FC<FlattmatesPreviewStepProps> = ({
             Go to Dashboard
           </Button>
         </div>
+        <p className="text-red-600 text-sm font-medium mt-3 text-center sm:text-left">Your Property will be reviewed and made live in 12 Hours</p>
       </div>
 
       {/* No Brokerage Message */}

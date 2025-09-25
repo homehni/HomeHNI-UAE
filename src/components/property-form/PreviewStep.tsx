@@ -103,6 +103,7 @@ export const PreviewStep: React.FC<PreviewStepProps> = ({
               <p className="text-base sm:text-lg text-red-600 mb-4 sm:mb-6">
                 Your property is submitted successfully!
               </p>
+              <p className="text-red-600 text-sm font-medium mb-4 sm:mb-6">Your Property will be reviewed and made live in 12 Hours</p>
               <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                 <Button 
                   variant="outline" 
@@ -327,7 +328,8 @@ export const PreviewStep: React.FC<PreviewStepProps> = ({
             Go to Dashboard
           </Button>
         </div>
-          </div>
+        <p className="text-red-600 text-sm font-medium mt-3 text-center sm:text-left">Your Property will be reviewed and made live in 12 Hours</p>
+      </div>
 
       {/* No Brokerage Message */}
       <div className="bg-gray-50 border border-gray-200 rounded-lg p-3 sm:p-4 mb-4 sm:mb-6">

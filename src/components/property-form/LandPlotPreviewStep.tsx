@@ -75,6 +75,7 @@ export const LandPlotPreviewStep: React.FC<LandPlotPreviewStepProps> = ({
               <p className="text-base sm:text-lg text-gray-700 mb-4 sm:mb-6">
                 You have successfully posted your land/plot, it will be live within 12 Hrs.
               </p>
+              <p className="text-green-600 text-sm font-medium mb-4 sm:mb-6">Your Property will be reviewed and made live in 12 Hours</p>
               <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                 <Button variant="outline" className="border-green-500 text-green-600 hover:bg-green-50 w-full sm:w-auto">
                   Edit
@@ -267,8 +268,9 @@ export const LandPlotPreviewStep: React.FC<LandPlotPreviewStepProps> = ({
            >
              Go to Dashboard
            </Button>
-         </div>
-      </div>
+          </div>
+          <p className="text-red-600 text-sm font-medium mt-3 text-center sm:text-left">Your Property will be reviewed and made live in 12 Hours</p>
+       </div>
 
       {/* No Brokerage Message */}
       <div className="bg-gray-50 border border-gray-200 rounded-lg p-3 sm:p-4 mb-4 sm:mb-6">
