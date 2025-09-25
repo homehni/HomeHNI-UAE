@@ -114,7 +114,12 @@ export const PropertyActions: React.FC<PropertyActionsProps> = ({
     setIsUpdatingStatus(true);
     
     try {
-      console.log('PropertyActions: Updating property status:', property.id);
+      console.log('PropertyActions: Updating property status:', property.id, 'User ID:', user.id);
+      
+      // Validate user ID
+      if (!user.id || user.id === 'system' || user.id === 'new-property') {
+        throw new Error('Invalid user authentication. Please log in again.');
+      }
       
       // Determine the target status based on listing type and current status
       const isRentalProperty = property.listing_type === 'rent';
@@ -123,12 +128,16 @@ export const PropertyActions: React.FC<PropertyActionsProps> = ({
       
       const newStatus = currentStatus === targetStatus ? 'available' : targetStatus;
       
+      console.log('PropertyActions: Status change:', currentStatus, '->', newStatus);
+      
       // Use RentalStatusService to update the status
       const result = await RentalStatusService.updatePropertyRentalStatus(
         property.id, 
         newStatus, 
         user.id
       );
+
+      console.log('PropertyActions: Update result:', result);
 
       if (!result.success) {
         throw new Error(result.error || 'Failed to update property status');
