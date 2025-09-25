@@ -14,6 +14,7 @@ interface PropertyActionsProps {
     id: string;
     user_id?: string;
     status?: string;
+    listing_type?: string; // Added listing_type to determine rent vs sale
     rental_status?: 'available' | 'rented' | 'sold';
   };
   onPropertyStatusUpdate?: (newStatus: 'available' | 'rented' | 'sold') => void;
@@ -107,15 +108,20 @@ export const PropertyActions: React.FC<PropertyActionsProps> = ({
     navigate(`/edit-property/${property.id}?tab=basic`);
   };
 
-  const handleMarkRentedOut = async () => {
+  const handleMarkPropertyStatus = async () => {
     if (!user || !property.id) return;
     
     setIsUpdatingStatus(true);
     
     try {
-      console.log('PropertyActions: Marking property as rented:', property.id);
+      console.log('PropertyActions: Updating property status:', property.id);
       
-      const newStatus = property.rental_status === 'rented' ? 'available' : 'rented';
+      // Determine the target status based on listing type and current status
+      const isRentalProperty = property.listing_type === 'rent';
+      const targetStatus = isRentalProperty ? 'rented' : 'sold';
+      const currentStatus = property.rental_status;
+      
+      const newStatus = currentStatus === targetStatus ? 'available' : targetStatus;
       
       // Use RentalStatusService to update the status
       const result = await RentalStatusService.updatePropertyRentalStatus(
@@ -133,15 +139,33 @@ export const PropertyActions: React.FC<PropertyActionsProps> = ({
         onPropertyStatusUpdate(newStatus);
       }
 
+      // Dynamic toast messages based on listing type
+      const statusLabels = {
+        rent: { 
+          active: 'Rented', 
+          available: 'Available for Rent',
+          activeAction: 'rented out',
+          availableAction: 'available for rent'
+        },
+        sale: { 
+          active: 'Sold', 
+          available: 'Available for Sale',
+          activeAction: 'sold',
+          availableAction: 'available for sale'
+        }
+      };
+      
+      const labels = statusLabels[isRentalProperty ? 'rent' : 'sale'];
+      
       toast({
-        title: newStatus === 'rented' ? "Property Marked as Rented" : "Property Marked as Available",
-        description: newStatus === 'rented' 
-          ? "Your property is now marked as rented out and will show a RENTED watermark."
-          : "Your property is now marked as available for rent.",
+        title: newStatus === targetStatus ? `Property Marked as ${labels.active}` : `Property Marked as ${labels.available}`,
+        description: newStatus === targetStatus 
+          ? `Your property is now marked as ${labels.activeAction} and will show a ${labels.active.toUpperCase()} watermark.`
+          : `Your property is now marked as ${labels.availableAction}.`,
       });
 
-      // Send deal closed email when property is marked as rented
-      if (newStatus === 'rented' && user.email) {
+      // Send deal closed email when property is marked as rented/sold
+      if (newStatus === targetStatus && user.email) {
         try {
           const { sendDealClosedEmail } = await import('@/services/emailService');
           await sendDealClosedEmail(
@@ -149,7 +173,7 @@ export const PropertyActions: React.FC<PropertyActionsProps> = ({
             user.user_metadata?.full_name || 'Property Owner',
             {
               locality: 'Your property location',
-              dealType: 'rent'
+              dealType: isRentalProperty ? 'rent' : 'sale'
             }
           );
         } catch (error) {
@@ -160,7 +184,7 @@ export const PropertyActions: React.FC<PropertyActionsProps> = ({
       console.log('PropertyActions: Successfully updated property status to:', newStatus);
       
     } catch (error) {
-      console.error('PropertyActions: Error updating rental status:', error);
+      console.error('PropertyActions: Error updating property status:', error);
       toast({
         title: "Update Failed",
         description: "Failed to update property status. Please try again.",
@@ -210,12 +234,13 @@ export const PropertyActions: React.FC<PropertyActionsProps> = ({
             Edit Property
           </Button>
 
-          {/* Mark Rented Out Button */}
+          {/* Mark as Rented/Sold Button */}
           <Button 
-            onClick={handleMarkRentedOut}
+            onClick={handleMarkPropertyStatus}
             disabled={isUpdatingStatus}
             className={`flex-1 rounded-lg py-3 font-medium flex items-center justify-center gap-2 ${
-              property.rental_status === 'rented'
+              (property.listing_type === 'rent' && property.rental_status === 'rented') ||
+              (property.listing_type === 'sale' && property.rental_status === 'sold')
                 ? 'bg-green-600 hover:bg-green-700 text-white'
                 : 'bg-red-600 hover:bg-red-700 text-white'
             }`}
@@ -223,9 +248,17 @@ export const PropertyActions: React.FC<PropertyActionsProps> = ({
             <CheckCircle className="w-4 h-4" />
             {isUpdatingStatus 
               ? 'Updating...' 
-              : property.rental_status === 'rented' 
-                ? 'Mark Available' 
-                : 'Mark Rented Out'
+              : (() => {
+                  const isRentalProperty = property.listing_type === 'rent';
+                  const targetStatus = isRentalProperty ? 'rented' : 'sold';
+                  const isCurrentlyMarked = property.rental_status === targetStatus;
+                  
+                  if (isCurrentlyMarked) {
+                    return 'Mark Available';
+                  } else {
+                    return isRentalProperty ? 'Mark Rented Out' : 'Mark as Sold';
+                  }
+                })()
             }
           </Button>
         </div>
