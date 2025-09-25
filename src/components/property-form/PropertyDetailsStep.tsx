@@ -104,21 +104,21 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 min-w-0">
               <FormField control={form.control} name="title" render={({
               field
-            }) => <FormItem>
+            }) => <FormItem className="min-w-0">
                     <FormLabel className="text-sm font-medium">Property Name</FormLabel>
                     <FormControl>
-                      <Input className="h-10" placeholder="Enter Property Name" {...field} />
+                      <Input className="h-10 w-full" placeholder="Enter Property Name" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>} />
 
               <FormField control={form.control} name="superBuiltUpArea" render={({
               field
-            }) => <FormItem>
+            }) => <FormItem className="min-w-0">
                     <FormLabel className="text-sm font-medium">Built Up Area</FormLabel>
                     <div className="relative">
                       <FormControl>
-                        <Input type="number" placeholder="" min="1" className="h-10 pr-12 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]" {...field} onKeyDown={e => {
+                        <Input type="number" placeholder="" min="1" className="h-10 w-full pr-12 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]" {...field} onKeyDown={e => {
                     if (['-', '+', 'e', 'E', '.'].includes(e.key)) e.preventDefault();
                   }} onPaste={e => {
                     const text = e.clipboardData.getData('text');
