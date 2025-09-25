@@ -82,6 +82,11 @@ export const PreviewStep: React.FC<PreviewStepProps> = ({
 
   const hasPhotos = propertyInfo?.gallery?.images && propertyInfo.gallery.images.length > 0;
 
+  const handleSendPhotos = () => {
+    const whatsappUrl = "https://wa.me/918074017388?text=Upload%20the%20photos";
+    window.open(whatsappUrl, '_blank');
+  };
+
   if (showSuccess) {
     return (
       <div className="w-full px-4 sm:px-6 lg:px-8 space-y-6 lg:space-y-8">
@@ -417,7 +422,12 @@ export const PreviewStep: React.FC<PreviewStepProps> = ({
               >
                 I Don't Have Photos
               </Button>
-              <Button variant="outline" size="sm" className="border-teal-500 text-teal-600 hover:bg-teal-50 w-full sm:w-auto">
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="border-teal-500 text-teal-600 hover:bg-teal-50 w-full sm:w-auto"
+                onClick={handleSendPhotos}
+              >
                 Send Photos
               </Button>
               <Button 
@@ -487,7 +497,11 @@ export const PreviewStep: React.FC<PreviewStepProps> = ({
                 >
                   Close
                 </Button>
-                <Button size="sm" className="bg-teal-600 hover:bg-teal-700 text-white w-full sm:w-auto">
+                <Button 
+                  size="sm" 
+                  className="bg-teal-600 hover:bg-teal-700 text-white w-full sm:w-auto"
+                  onClick={handleSendPhotos}
+                >
                   Send Photos
               </Button>
             </div>
