@@ -253,26 +253,14 @@ const HandoverServices = () => {
                 </Select>
               </div>
 
-              <div className="flex gap-2">
-                <Select defaultValue="india" name="country">
-                  <SelectTrigger id="handover-country" className="flex-1"><SelectValue /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="india">India</SelectItem>
-                    <SelectItem value="usa">United States</SelectItem>
-                    <SelectItem value="uk">United Kingdom</SelectItem>
-                    <SelectItem value="canada">Canada</SelectItem>
-                    <SelectItem value="australia">Australia</SelectItem>
-                  </SelectContent>
-                </Select>
-                <Select name="city">
-                  <SelectTrigger id="handover-city" className="flex-1"><SelectValue placeholder="Select City" /></SelectTrigger>
-                  <SelectContent>
-                    {majorCities.map((city) => (
-                      <SelectItem key={city} value={city.toLowerCase()}>{city}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+              <Select name="city">
+                <SelectTrigger id="handover-city" className="flex-1"><SelectValue placeholder="Select City" /></SelectTrigger>
+                <SelectContent>
+                  {majorCities.map((city) => (
+                    <SelectItem key={city} value={city.toLowerCase()}>{city}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
 
               <Button type="submit" className="w-full bg-red-800 hover:bg-red-900 text-white">Get Expert Assistance!</Button>
             </form>
@@ -356,30 +344,16 @@ const HandoverServices = () => {
                 </div>
 
                 <div className="space-y-4">
-                  <div className="flex gap-4">
-                    <Select defaultValue="india" name="country">
-                      <SelectTrigger id="handover-country-mobile" className="flex-1 h-14 bg-background text-lg">
-                        <SelectValue />
-                      </SelectTrigger>
-                    <SelectContent className="bg-background border shadow-lg">
-                      <SelectItem value="india">India</SelectItem>
-                      <SelectItem value="usa">United States</SelectItem>
-                      <SelectItem value="uk">United Kingdom</SelectItem>
-                      <SelectItem value="canada">Canada</SelectItem>
-                      <SelectItem value="australia">Australia</SelectItem>
-                    </SelectContent>
-                  </Select>
-                    <Select name="city">
-                      <SelectTrigger id="handover-city-mobile" className="flex-1 h-14 bg-background text-lg">
-                        <SelectValue placeholder="Select City" />
-                      </SelectTrigger>
-                    <SelectContent className="bg-background border shadow-lg">
-                      {majorCities.map((city) => (
-                        <SelectItem key={city} value={city.toLowerCase()}>{city}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  </div>
+                <Select name="city">
+                  <SelectTrigger id="handover-city-mobile" className="flex-1 h-14 bg-background text-lg">
+                    <SelectValue placeholder="Select City" />
+                  </SelectTrigger>
+                <SelectContent className="bg-background border shadow-lg">
+                  {majorCities.map((city) => (
+                    <SelectItem key={city} value={city.toLowerCase()}>{city}</SelectItem>
+                  ))}
+                </SelectContent>
+                </Select>
                 </div>
 
                 <Button type="submit" className="w-full h-12 text-base font-semibold bg-red-800 hover:bg-red-900 text-white mt-6">

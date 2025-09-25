@@ -280,28 +280,16 @@ const Loans = () => {
 
               <Input id="loan-email" name="email" type="email" placeholder="Email ID" required />
 
-              <div className="flex gap-2">
-                <Select defaultValue="India" name="country">
-                  <SelectTrigger className="flex-1"><SelectValue placeholder="Country" /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="India">India</SelectItem>
-                    <SelectItem value="USA">USA</SelectItem>
-                    <SelectItem value="UK">UK</SelectItem>
-                    <SelectItem value="Other">Other</SelectItem>
-                  </SelectContent>
-                </Select>
-
-                <Select name="state">
-                  <SelectTrigger className="flex-1"><SelectValue placeholder="City" /></SelectTrigger>
-                  <SelectContent>
-                    {majorCities.map((city) => (
-                      <SelectItem key={city} value={city.toLowerCase()}>
-                        {city}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+              <Select name="state">
+                <SelectTrigger className="flex-1"><SelectValue placeholder="City" /></SelectTrigger>
+                <SelectContent>
+                  {majorCities.map((city) => (
+                    <SelectItem key={city} value={city.toLowerCase()}>
+                      {city}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
 
               <div className="flex gap-2">
                 <Select name="loanType" required>
@@ -403,19 +391,6 @@ const Loans = () => {
                 />
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <Select defaultValue="India" name="country">
-                      <SelectTrigger className="w-full h-14 bg-background text-lg">
-                        <SelectValue placeholder="Country" />
-                      </SelectTrigger>
-                      <SelectContent className="bg-background border shadow-lg">
-                        <SelectItem value="India">India</SelectItem>
-                        <SelectItem value="USA">USA</SelectItem>
-                        <SelectItem value="UK">UK</SelectItem>
-                        <SelectItem value="Other">Other</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
                   <div>
                     <Select name="state">
                       <SelectTrigger className="w-full h-14 bg-background text-lg">
