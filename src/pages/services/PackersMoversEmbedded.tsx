@@ -319,7 +319,6 @@ const PackersMoversEmbedded = () => {
                       ))}
                     </SelectContent>
                   </Select>
-                </div>
 
                 <Select name="serviceType" required>
                   <SelectTrigger className="h-12 bg-background">

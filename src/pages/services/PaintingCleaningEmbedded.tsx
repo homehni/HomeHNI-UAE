@@ -208,7 +208,6 @@ const PaintingCleaningEmbedded = () => {
                   {majorCities.map(city => <SelectItem key={city} value={city.toLowerCase()}>{city}</SelectItem>)}
                 </SelectContent>
               </Select>
-            </div>
 
             <Button type="submit" className="w-full bg-red-800 hover:bg-red-900 text-white">Talk to Us Today!</Button>
               
@@ -286,7 +285,6 @@ const PaintingCleaningEmbedded = () => {
                       {majorCities.map(city => <SelectItem key={city} value={city.toLowerCase()}>{city}</SelectItem>)}
                     </SelectContent>
                   </Select>
-                 </div>
 
                 <Button type="submit" className="w-full h-12 text-base font-semibold bg-red-600 hover:bg-red-700 text-white mt-6">
                   Talk to Us Today!

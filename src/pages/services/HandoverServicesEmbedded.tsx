@@ -212,7 +212,6 @@ const HandoverServicesEmbedded = () => {
                       ))}
                     </SelectContent>
                   </Select>
-                </div>
 
                 <Select name="serviceType" required>
                   <SelectTrigger className="w-full"><SelectValue placeholder="Service Type" /></SelectTrigger>
@@ -317,7 +316,6 @@ const HandoverServicesEmbedded = () => {
                       ))}
                     </SelectContent>
                   </Select>
-                </div>
 
                 <Select name="serviceType" required>
                   <SelectTrigger className="h-12 bg-background">

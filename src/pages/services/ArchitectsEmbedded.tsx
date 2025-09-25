@@ -399,7 +399,6 @@ const ArchitectsEmbedded = () => {
                     {majorCities.map(city => <SelectItem key={city} value={city.toLowerCase()}>{city}</SelectItem>)}
                   </SelectContent>
                 </Select>
-              </div>
 
               <Button type="submit" className="w-full bg-red-800 hover:bg-red-900 text-white">Get Free Consultation!</Button>
               

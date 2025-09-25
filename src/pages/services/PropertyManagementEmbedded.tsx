@@ -212,7 +212,6 @@ const PropertyManagementEmbedded = () => {
                       ))}
                     </SelectContent>
                   </Select>
-                </div>
 
                 <Select name="propertyType" required>
                   <SelectTrigger className="w-full"><SelectValue placeholder="Property Type" /></SelectTrigger>
@@ -317,7 +316,6 @@ const PropertyManagementEmbedded = () => {
                       ))}
                     </SelectContent>
                   </Select>
-                </div>
 
                 <Select name="propertyType" required>
                   <SelectTrigger className="h-12 bg-background">

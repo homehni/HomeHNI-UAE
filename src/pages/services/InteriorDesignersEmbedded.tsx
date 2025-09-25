@@ -209,7 +209,6 @@ const InteriorDesignersEmbedded = () => {
                       {majorCities.map(city => <SelectItem key={city} value={city.toLowerCase()}>{city}</SelectItem>)}
                     </SelectContent>
                   </Select>
-                </div>
 
                 <Button type="submit" className="w-full h-10 md:h-12 text-sm md:text-base font-semibold bg-red-800 hover:bg-red-900 text-white mt-4 md:mt-6">
                   Get Free Consultation!
@@ -431,7 +430,6 @@ const InteriorDesignersEmbedded = () => {
                     {majorCities.map(city => <SelectItem key={city} value={city.toLowerCase()}>{city}</SelectItem>)}
                   </SelectContent>
                  </Select>
-               </div>
 
                <Button type="submit" className="w-full bg-red-800 hover:bg-red-900 text-white">Get Free Consultation!</Button>
                

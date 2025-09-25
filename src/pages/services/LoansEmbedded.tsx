@@ -272,7 +272,6 @@ const LoansEmbedded = () => {
                       ))}
                     </SelectContent>
                   </Select>
-                </div>
 
                 <div className="flex gap-2">
                   <Select name="loanType" required>
