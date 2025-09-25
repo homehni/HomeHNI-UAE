@@ -28,7 +28,7 @@ import HandoverServices from "./pages/HandoverServices";
 import PropertyManagement from "./pages/PropertyManagement";
 import PropManagement from "./pages/PropManagement";
 import RobotsTxt from "./pages/RobotsTxt";
-import SitemapXml from "./pages/SitemapXml";
+import Sitemap from "./pages/Sitemap";
 import OwnerPlans from "./pages/OwnerPlans";
 import BuyerPlans from "./pages/BuyerPlans";
 import SellerPlans from "./pages/SellerPlans";
@@ -303,7 +303,8 @@ const App: React.FC = () => {
             </Route>
             
             <Route path="/robots.txt" element={<RobotsTxt />} />
-            <Route path="/sitemap.xml" element={<SitemapXml />} />
+            <Route path="/sitemap.xml" element={<Sitemap />} />
+            <Route path="/sitemap" element={<Sitemap />} />
             
             {/* Payment Routes */}
             <Route path="/payment/success" element={<PaymentSuccess />} />

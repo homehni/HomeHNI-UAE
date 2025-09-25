@@ -375,7 +375,7 @@ const Footer = ({
             <Link to="/terms-and-conditions" className="text-gray-600 hover:text-brand-red transition-colors">Terms & Conditions</Link>
             <Link to="/privacy-policy" className="text-gray-600 hover:text-brand-red transition-colors">Privacy Policy</Link>
             {/* <Link to="/testimonials" className="text-gray-600 hover:text-brand-red transition-colors">Testimonials</Link> */}
-            <a href="/sitemap.xml" className="text-gray-600 hover:text-brand-red transition-colors">Sitemap</a>
+            <Link to="/sitemap" className="text-gray-600 hover:text-brand-red transition-colors">Sitemap</Link>
             <Link to="/about?tab=faq" className="text-gray-600 hover:text-brand-red transition-colors">FAQs</Link>
           </div>
 
