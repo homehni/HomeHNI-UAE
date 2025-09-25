@@ -149,11 +149,11 @@ const LegalServicesForm = ({ isOpen, onClose }: LegalServicesFormProps) => {
       variant: "default"
     });
     
-    // Close the dialog after a brief delay
+    // Close the dialog after showing the color change briefly
     setTimeout(() => {
       onClose();
       setIsSubmitted(false); // Reset state when dialog closes
-    }, 2000);
+    }, 1000);
   };
 
   const updateFormData = (step: keyof FormData, data: Partial<FormData[keyof FormData]>) => {
@@ -267,12 +267,11 @@ const LegalServicesForm = ({ isOpen, onClose }: LegalServicesFormProps) => {
                 ) : (
                   <Button
                     onClick={handleSubmit}
-                    className={`flex-1 sm:flex-none text-white transition-colors duration-300 ${
+                    className={`flex-1 sm:flex-none text-white transition-all duration-300 ${
                       isSubmitted 
-                        ? 'bg-red-600 hover:bg-red-700' 
+                        ? '!bg-red-600 !hover:bg-red-700' 
                         : 'bg-green-600 hover:bg-green-700'
                     }`}
-                    disabled={isSubmitted}
                   >
                     {isSubmitted ? 'Request Submitted!' : 'Submit Consultation Request'}
                   </Button>
