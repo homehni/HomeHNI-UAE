@@ -399,16 +399,6 @@ export const FlattmatesPreviewStep: React.FC<FlattmatesPreviewStepProps> = ({
         </div>
       )}
 
-      {/* Submit Button */}
-      <div className="flex justify-center pt-4">
-        <Button 
-          onClick={handleSubmit} 
-          disabled={isSubmitting}
-          className="bg-red-600 hover:bg-red-700 text-white px-8 py-3 text-lg font-semibold"
-        >
-          {isSubmitting ? 'Submitting...' : 'Submit Property'}
-        </Button>
-      </div>
     </div>
   );
 };
