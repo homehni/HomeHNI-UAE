@@ -23,6 +23,8 @@ interface ImageUploadProps {
   maxImages: number;
   minImages?: number;
   onUploadClick?: () => void;
+  showCategories?: boolean; // New prop to control categorization
+  excludeCategories?: (keyof CategorizedImages)[]; // Categories to exclude
 }
 
 const categories = [
@@ -38,7 +40,9 @@ const categories = [
 export const ImageUpload: React.FC<ImageUploadProps> = ({
   images,
   onImagesChange,
-  maxImages
+  maxImages,
+  showCategories = true,
+  excludeCategories = []
 }) => {
   const fileInputRefs = useRef<{ [key: string]: HTMLInputElement | null }>({});
   const { toast } = useToast();
@@ -214,6 +218,129 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
     return Object.values(categorizedImages).reduce((total, categoryImages) => total + categoryImages.length, 0);
   };
 
+  // Filter categories based on excludeCategories prop
+  const filteredCategories = categories.filter(category => 
+    !excludeCategories.includes(category.key)
+  );
+
+  // If showCategories is false, show simple upload interface
+  if (!showCategories) {
+    return (
+      <div className="space-y-4">
+        {/* Compression Progress */}
+        {compressionProgress && (
+          <ImageCompressionProgress
+            isCompressing={compressionProgress.isCompressing}
+            isUploading={compressionProgress.isUploading}
+            compressionComplete={compressionProgress.compressionComplete}
+            uploadComplete={compressionProgress.uploadComplete}
+            originalSize={compressionProgress.originalSize}
+            compressedSize={compressionProgress.compressedSize}
+            compressionRatio={compressionProgress.compressionRatio}
+            fileName={compressionProgress.fileName}
+            error={compressionProgress.error}
+          />
+        )}
+
+        {/* Simple Upload Interface */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Camera className="h-5 w-5" />
+              Upload Images
+              <Badge variant="outline" className="ml-auto">
+                {images.length}/{maxImages}
+              </Badge>
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div 
+              className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-8 text-center cursor-pointer hover:border-primary/50 transition-colors"
+              onClick={() => fileInputRefs.current['simple']?.click()}
+            >
+              <div className="flex flex-col items-center gap-3">
+                <div className="bg-muted/50 rounded-full p-3">
+                  <Upload className="h-6 w-6 text-muted-foreground" />
+                </div>
+                <div>
+                  <p className="text-lg font-medium text-foreground">Click to upload images</p>
+                  <p className="text-sm text-muted-foreground">Or drag and drop files here</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Display uploaded images */}
+            {images.length > 0 && (
+              <div className="mt-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
+                {images.map((image, index) => (
+                  <div key={index} className="relative group">
+                    <div className="aspect-square rounded-lg overflow-hidden border">
+                      <img
+                        src={getImagePreview(image)}
+                        alt={`Image ${index + 1}`}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <Button
+                      type="button"
+                      variant="destructive"
+                      size="sm"
+                      className="absolute top-1 right-1 h-5 w-5 p-0 opacity-0 group-hover:opacity-100 transition-opacity"
+                      onClick={() => {
+                        const newImages = images.filter((_, i) => i !== index);
+                        onImagesChange(newImages);
+                      }}
+                    >
+                      <X className="h-3 w-3" />
+                    </Button>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Hidden file input */}
+            <input
+              ref={(el) => fileInputRefs.current['simple'] = el}
+              type="file"
+              accept="image/*"
+              multiple
+              onChange={async (e) => {
+                const files = Array.from(e.target.files || []);
+                const validFiles: File[] = [];
+                
+                for (const file of files) {
+                  if (!file.type.startsWith('image/')) {
+                    toast({
+                      title: "Invalid file type",
+                      description: "Please select image files only",
+                      variant: "destructive"
+                    });
+                    continue;
+                  }
+
+                  if (file.size > 5 * 1024 * 1024) {
+                    toast({
+                      title: "File too large", 
+                      description: `${file.name} must be less than 5MB`,
+                      variant: "destructive"
+                    });
+                    continue;
+                  }
+
+                  validFiles.push(file);
+                }
+
+                const newImages = [...images, ...validFiles].slice(0, maxImages);
+                onImagesChange(newImages);
+              }}
+              className="hidden"
+            />
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-4">
 
@@ -234,7 +361,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
 
       {/* Categories Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {categories.map((category) => {
+        {filteredCategories.map((category) => {
           const categoryImages = categorizedImages[category.key];
           const IconComponent = category.icon;
           const maxPerCategory = 5;

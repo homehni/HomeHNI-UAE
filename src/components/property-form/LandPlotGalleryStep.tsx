@@ -57,6 +57,7 @@ export const LandPlotGalleryStep: React.FC<LandPlotGalleryStepProps> = ({
               images={images}
               onImagesChange={handleImageChange}
               maxImages={20}
+              showCategories={false}
             />
             
             <div className="text-sm text-gray-600">

@@ -47,6 +47,7 @@ export const CommercialSaleGalleryStep = ({
               images={images}
               onImagesChange={setImages}
               maxImages={20}
+              showCategories={false}
             />
           </div>
 
