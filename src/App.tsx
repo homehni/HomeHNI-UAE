@@ -302,6 +302,7 @@ const App: React.FC = () => {
               } />
             </Route>
             
+            {/* Sitemap Routes */}
             <Route path="/robots.txt" element={<RobotsTxt />} />
             <Route path="/sitemap.xml" element={<Sitemap />} />
             <Route path="/sitemap" element={<Sitemap />} />

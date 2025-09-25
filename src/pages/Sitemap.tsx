@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
 
 const Sitemap = () => {
+  console.log("Sitemap component loaded"); // Debug log
   const sitemapData = {
     "Main Pages": [
       { name: "Home", path: "/" },
