@@ -595,7 +595,15 @@ export const AdminWebsiteCMS: React.FC = () => {
       setShowUnifiedCreator(true);
     } catch (err) {
       console.error('Error loading page for editing:', err);
-      toast({ title: 'Error', description: 'Failed to load page for editing', variant: 'destructive' });
+      toast({ 
+        title: 'Error', 
+        description: 'Failed to load page for editing', 
+        variant: 'destructive',
+        className: "bg-white border border-red-200 shadow-lg rounded-lg",
+        style: {
+          borderLeft: "8px solid hsl(0, 84%, 60%)",
+        },
+      });
     }
   };
 
@@ -683,14 +691,29 @@ export const AdminWebsiteCMS: React.FC = () => {
         if (anyErr && anyErr.error) throw anyErr.error;
       }
 
-      toast({ title: 'Saved', description: 'Page updated successfully' });
+      toast({ 
+        title: 'Saved', 
+        description: 'Page updated successfully',
+        className: "bg-white border border-green-200 shadow-lg rounded-lg",
+        style: {
+          borderLeft: "8px solid hsl(120, 100%, 25%)",
+        },
+      });
       setShowUnifiedCreator(false);
       setEditingPage(null);
       setPageSections([]);
       await fetchData();
     } catch (err) {
       console.error('Error updating page:', err);
-      toast({ title: 'Error', description: 'Failed to save changes', variant: 'destructive' });
+      toast({ 
+        title: 'Error', 
+        description: 'Failed to save changes', 
+        variant: 'destructive',
+        className: "bg-white border border-red-200 shadow-lg rounded-lg",
+        style: {
+          borderLeft: "8px solid hsl(0, 84%, 60%)",
+        },
+      });
     }
   };
 
@@ -722,11 +745,26 @@ export const AdminWebsiteCMS: React.FC = () => {
         .eq('id', page.id);
       if (pageDelErr) throw pageDelErr;
 
-      toast({ title: 'Deleted', description: 'Page deleted successfully' });
+      toast({ 
+        title: 'Deleted', 
+        description: 'Page deleted successfully',
+        className: "bg-white border border-green-200 shadow-lg rounded-lg",
+        style: {
+          borderLeft: "8px solid hsl(120, 100%, 25%)",
+        },
+      });
       await fetchData();
     } catch (e) {
       console.error('Error deleting page:', e);
-      toast({ title: 'Error', description: 'Failed to delete page', variant: 'destructive' });
+      toast({ 
+        title: 'Error', 
+        description: 'Failed to delete page', 
+        variant: 'destructive',
+        className: "bg-white border border-red-200 shadow-lg rounded-lg",
+        style: {
+          borderLeft: "8px solid hsl(0, 84%, 60%)",
+        },
+      });
     }
   };
 

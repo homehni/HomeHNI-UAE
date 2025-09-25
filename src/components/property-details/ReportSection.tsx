@@ -37,7 +37,7 @@ export const ReportSection: React.FC = () => {
         description: "Please take owner contact before reporting this issue",
         className: "bg-white border border-red-200 shadow-lg rounded-lg",
         style: {
-          borderLeft: "4px solid hsl(var(--primary))",
+          borderLeft: "8px solid hsl(0, 84%, 60%)",
         },
       });
     }
@@ -59,7 +59,7 @@ export const ReportSection: React.FC = () => {
         description: "Thank you for reporting the issues. We will review them shortly.",
         className: "bg-white border border-green-200 shadow-lg rounded-lg",
         style: {
-          borderLeft: "4px solid hsl(var(--primary))",
+          borderLeft: "8px solid hsl(120, 100%, 25%)",
         },
       });
       setSelectedIssues([]);

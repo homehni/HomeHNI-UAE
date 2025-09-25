@@ -45,7 +45,7 @@ export const ContactOwnerModal: React.FC<ContactOwnerModalProps> = ({
           description: "Name is required",
           className: "bg-white border border-red-200 shadow-lg rounded-lg",
           style: {
-            borderLeft: "4px solid hsl(var(--primary))",
+            borderLeft: "8px solid hsl(0, 84%, 60%)",
           },
         });
       setIsSubmitting(false);
@@ -58,7 +58,7 @@ export const ContactOwnerModal: React.FC<ContactOwnerModalProps> = ({
           description: "Email is required",
           className: "bg-white border border-red-200 shadow-lg rounded-lg",
           style: {
-            borderLeft: "4px solid hsl(var(--primary))",
+            borderLeft: "8px solid hsl(0, 84%, 60%)",
           },
         });
       setIsSubmitting(false);
@@ -71,7 +71,7 @@ export const ContactOwnerModal: React.FC<ContactOwnerModalProps> = ({
           description: "Phone number is required",
           className: "bg-white border border-red-200 shadow-lg rounded-lg",
           style: {
-            borderLeft: "4px solid hsl(var(--primary))",
+            borderLeft: "8px solid hsl(0, 84%, 60%)",
           },
         });
       setIsSubmitting(false);
@@ -84,7 +84,7 @@ export const ContactOwnerModal: React.FC<ContactOwnerModalProps> = ({
           description: "Phone number must be at least 10 digits",
           className: "bg-white border border-red-200 shadow-lg rounded-lg",
           style: {
-            borderLeft: "4px solid hsl(var(--primary))",
+            borderLeft: "8px solid hsl(0, 84%, 60%)",
           },
         });
       setIsSubmitting(false);
@@ -117,7 +117,7 @@ export const ContactOwnerModal: React.FC<ContactOwnerModalProps> = ({
         description: "The property owner will contact you soon through your provided details.",
         className: "bg-white border border-green-200 shadow-lg rounded-lg",
         style: {
-          borderLeft: "4px solid hsl(var(--primary))",
+          borderLeft: "8px solid hsl(120, 100%, 25%)",
         },
       });
 
@@ -145,7 +145,7 @@ export const ContactOwnerModal: React.FC<ContactOwnerModalProps> = ({
           description: "Failed to register your interest. Please try again.",
           className: "bg-white border border-red-200 shadow-lg rounded-lg",
           style: {
-            borderLeft: "4px solid hsl(var(--primary))",
+            borderLeft: "8px solid hsl(0, 84%, 60%)",
           },
         });
     } finally {

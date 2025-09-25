@@ -98,7 +98,7 @@ export const SecureContactForm: React.FC<SecureContactFormProps> = ({
         description: validationErrors.join(', '),
         className: "bg-white border border-red-200 shadow-lg rounded-lg",
         style: {
-          borderLeft: "4px solid hsl(var(--primary))",
+          borderLeft: "8px solid hsl(0, 84%, 60%)",
         },
       });
       return;
@@ -128,7 +128,7 @@ export const SecureContactForm: React.FC<SecureContactFormProps> = ({
         description: 'Your inquiry has been securely sent to the property owner. They will contact you soon!',
         className: "bg-white border border-green-200 shadow-lg rounded-lg",
         style: {
-          borderLeft: "4px solid hsl(var(--primary))",
+          borderLeft: "8px solid hsl(120, 100%, 25%)",
         },
       });
 
@@ -162,7 +162,7 @@ export const SecureContactForm: React.FC<SecureContactFormProps> = ({
         description: error instanceof Error ? error.message : 'Please try again later',
         className: "bg-white border border-red-200 shadow-lg rounded-lg",
         style: {
-          borderLeft: "4px solid hsl(var(--primary))",
+          borderLeft: "8px solid hsl(0, 84%, 60%)",
         },
       });
     } finally {

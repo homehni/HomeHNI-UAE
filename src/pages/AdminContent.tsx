@@ -271,10 +271,24 @@ export const AdminContent: React.FC = () => {
 
       if (editingElement) {
         await contentElementsService.updateContentElement(editingElement.id, elementData);
-        toast({ title: "Success", description: "Element updated successfully" });
+        toast({ 
+          title: "Success", 
+          description: "Element updated successfully",
+          className: "bg-white border border-green-200 shadow-lg rounded-lg",
+          style: {
+            borderLeft: "8px solid hsl(120, 100%, 25%)",
+          },
+        });
       } else {
         await contentElementsService.createContentElement(elementData);
-        toast({ title: "Success", description: "Element created successfully" });
+        toast({ 
+          title: "Success", 
+          description: "Element created successfully",
+          className: "bg-white border border-green-200 shadow-lg rounded-lg",
+          style: {
+            borderLeft: "8px solid hsl(120, 100%, 25%)",
+          },
+        });
       }
 
       setElementDialogOpen(false);
@@ -293,7 +307,14 @@ export const AdminContent: React.FC = () => {
   const handleDeleteElement = async (elementId: string) => {
     try {
       await contentElementsService.deleteContentElement(elementId);
-      toast({ title: "Success", description: "Element deleted successfully" });
+      toast({ 
+        title: "Success", 
+        description: "Element deleted successfully",
+        className: "bg-white border border-green-200 shadow-lg rounded-lg",
+        style: {
+          borderLeft: "8px solid hsl(120, 100%, 25%)",
+        },
+      });
     } catch (error) {
       console.error('Error deleting element:', error);
       toast({
@@ -328,14 +349,28 @@ export const AdminContent: React.FC = () => {
           .eq('id', editingPage.id);
 
         if (error) throw error;
-        toast({ title: "Success", description: "Page updated successfully" });
+        toast({ 
+          title: "Success", 
+          description: "Page updated successfully",
+          className: "bg-white border border-green-200 shadow-lg rounded-lg",
+          style: {
+            borderLeft: "8px solid hsl(120, 100%, 25%)",
+          },
+        });
       } else {
         const { error } = await supabase
           .from('content_pages')
           .insert(pageData);
 
         if (error) throw error;
-        toast({ title: "Success", description: "Page created successfully" });
+        toast({ 
+          title: "Success", 
+          description: "Page created successfully",
+          className: "bg-white border border-green-200 shadow-lg rounded-lg",
+          style: {
+            borderLeft: "8px solid hsl(120, 100%, 25%)",
+          },
+        });
       }
 
       setDialogOpen(false);
@@ -373,14 +408,28 @@ export const AdminContent: React.FC = () => {
           .eq('id', editingSection.id);
 
         if (error) throw error;
-        toast({ title: "Success", description: "Section updated successfully" });
+        toast({ 
+          title: "Success", 
+          description: "Section updated successfully",
+          className: "bg-white border border-green-200 shadow-lg rounded-lg",
+          style: {
+            borderLeft: "8px solid hsl(120, 100%, 25%)",
+          },
+        });
       } else {
         const { error } = await supabase
           .from('page_sections')
           .insert(sectionData);
 
         if (error) throw error;
-        toast({ title: "Success", description: "Section created successfully" });
+        toast({ 
+          title: "Success", 
+          description: "Section created successfully",
+          className: "bg-white border border-green-200 shadow-lg rounded-lg",
+          style: {
+            borderLeft: "8px solid hsl(120, 100%, 25%)",
+          },
+        });
       }
 
       setSheetOpen(false);
@@ -411,7 +460,14 @@ export const AdminContent: React.FC = () => {
         .eq('id', pageId);
 
       if (error) throw error;
-      toast({ title: "Success", description: "Page deleted successfully" });
+      toast({ 
+        title: "Success", 
+        description: "Page deleted successfully",
+        className: "bg-white border border-green-200 shadow-lg rounded-lg",
+        style: {
+          borderLeft: "8px solid hsl(120, 100%, 25%)",
+        },
+      });
     } catch (error) {
       console.error('Error deleting page:', error);
       toast({
@@ -431,7 +487,14 @@ export const AdminContent: React.FC = () => {
         .eq('id', sectionId);
 
       if (error) throw error;
-      toast({ title: "Success", description: "Section deleted successfully" });
+      toast({ 
+        title: "Success", 
+        description: "Section deleted successfully",
+        className: "bg-white border border-green-200 shadow-lg rounded-lg",
+        style: {
+          borderLeft: "8px solid hsl(120, 100%, 25%)",
+        },
+      });
     } catch (error) {
       console.error('Error deleting section:', error);
       toast({
