@@ -6,17 +6,9 @@ import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { useToast } from "@/hooks/use-toast";
 import { PaintBucket, Sparkles, Home, Building2, Clock, CheckCircle, Shield, Star, Users, Crown, Globe, Headphones, Paintbrush, Droplets, X } from "lucide-react";
-
 const PaintingCleaningEmbedded = () => {
   // Major cities in India
-  const majorCities = [
-    "Mumbai", "Delhi", "Bangalore", "Hyderabad", "Ahmedabad", "Chennai", "Kolkata", "Surat", "Pune", "Jaipur",
-    "Lucknow", "Kanpur", "Nagpur", "Indore", "Thane", "Bhopal", "Visakhapatnam", "Pimpri-Chinchwad", "Patna", "Vadodara",
-    "Ghaziabad", "Ludhiana", "Agra", "Nashik", "Faridabad", "Meerut", "Rajkot", "Kalyan-Dombivli", "Vasai-Virar", "Varanasi",
-    "Srinagar", "Aurangabad", "Dhanbad", "Amritsar", "Navi Mumbai", "Allahabad", "Ranchi", "Howrah", "Coimbatore", "Jabalpur",
-    "Gwalior", "Vijayawada", "Jodhpur", "Madurai", "Raipur", "Kota", "Guwahati", "Chandigarh", "Solapur", "Hubli-Dharwad"
-  ];
-
+  const majorCities = ["Mumbai", "Delhi", "Bangalore", "Hyderabad", "Ahmedabad", "Chennai", "Kolkata", "Surat", "Pune", "Jaipur", "Lucknow", "Kanpur", "Nagpur", "Indore", "Thane", "Bhopal", "Visakhapatnam", "Pimpri-Chinchwad", "Patna", "Vadodara", "Ghaziabad", "Ludhiana", "Agra", "Nashik", "Faridabad", "Meerut", "Rajkot", "Kalyan-Dombivli", "Vasai-Virar", "Varanasi", "Srinagar", "Aurangabad", "Dhanbad", "Amritsar", "Navi Mumbai", "Allahabad", "Ranchi", "Howrah", "Coimbatore", "Jabalpur", "Gwalior", "Vijayawada", "Jodhpur", "Madurai", "Raipur", "Kota", "Guwahati", "Chandigarh", "Solapur", "Hubli-Dharwad"];
   const services = [{
     icon: PaintBucket,
     title: "Interior Painting",
@@ -42,7 +34,6 @@ const PaintingCleaningEmbedded = () => {
     title: "Sofa & Upholstery Cleaning",
     description: "Professional fabric and leather furniture cleaning."
   }];
-
   const targetAudience = [{
     icon: Home,
     title: "Homeowners",
@@ -56,7 +47,6 @@ const PaintingCleaningEmbedded = () => {
     title: "Property Managers",
     description: "Require regular maintenance and cleaning services"
   }];
-
   const comparisonData = [{
     feature: "Professional Quality Work",
     homeHNI: true,
@@ -90,7 +80,6 @@ const PaintingCleaningEmbedded = () => {
     homeHNI: true,
     others: false
   }];
-
   const testimonials = [{
     name: "Priya Sharma",
     role: "Homeowner",
@@ -110,7 +99,6 @@ const PaintingCleaningEmbedded = () => {
     rating: 5,
     text: "Best painting and cleaning service in the city. Eco-friendly materials and professional approach."
   }];
-
   const faqs = [{
     question: "What painting and cleaning services do you offer?",
     answer: "We offer interior painting, exterior painting, deep house cleaning, bathroom cleaning, kitchen cleaning, and sofa/upholstery cleaning services."
@@ -127,15 +115,18 @@ const PaintingCleaningEmbedded = () => {
     question: "Are your staff trained and verified?",
     answer: "All our staff are professionally trained, background verified, and insured for your peace of mind."
   }];
-
-  const [formMessage, setFormMessage] = useState<{ type: 'success' | 'error' | null; text: string }>({ type: null, text: '' });
-
-  return (
-    <div className="bg-background">
+  const [formMessage, setFormMessage] = useState<{
+    type: 'success' | 'error' | null;
+    text: string;
+  }>({
+    type: null,
+    text: ''
+  });
+  return <div className="bg-background">
       {/* Hero Section */}
       <section className="relative pt-8 pb-20 md:pb-32 px-4 md:px-8 text-white overflow-hidden bg-cover bg-center bg-no-repeat" style={{
-        backgroundImage: "url('/lovable-uploads/fbb0d72f-782e-49f5-bbe1-8afc1314b5f7.png')"
-      }}>
+      backgroundImage: "url('/lovable-uploads/fbb0d72f-782e-49f5-bbe1-8afc1314b5f7.png')"
+    }}>
         <div className="absolute inset-0 bg-red-900/80 pointer-events-none" />
 
         <div className="relative z-10 container mx-auto">
@@ -166,8 +157,8 @@ const PaintingCleaningEmbedded = () => {
         <div className="w-96 sticky top-8">
         <Card className="w-full rounded-xl shadow-2xl bg-background border-2 border-primary">
           <CardContent className="p-6">
-            <h3 className="text-xl font-semibold text-foreground mb-2">Need painting or cleaning?</h3>
-            <p className="text-sm text-muted-foreground mb-4">Fill the form & get instant quote</p>
+            <h3 className="text-xl font-semibold text-foreground mb-2 text-center">Need painting or cleaning?</h3>
+            <p className="text-sm text-muted-foreground mb-4 text-center">Fill the form & get instant quote</p>
 
             <form className="space-y-4" onSubmit={e => {
               e.preventDefault();
@@ -225,9 +216,7 @@ const PaintingCleaningEmbedded = () => {
                 <Select name="city">
                   <SelectTrigger id="painting-city" className="flex-1"><SelectValue placeholder="Select City" /></SelectTrigger>
                   <SelectContent>
-                    {majorCities.map((city) => (
-                      <SelectItem key={city} value={city.toLowerCase()}>{city}</SelectItem>
-                    ))}
+                    {majorCities.map(city => <SelectItem key={city} value={city.toLowerCase()}>{city}</SelectItem>)}
                   </SelectContent>
                 </Select>
               </div>
@@ -235,15 +224,9 @@ const PaintingCleaningEmbedded = () => {
               <Button type="submit" className="w-full bg-red-800 hover:bg-red-900 text-white">Talk to Us Today!</Button>
               
               {/* Inline message */}
-              {formMessage.type && (
-                <div className={`mt-2 p-3 rounded-lg text-sm ${
-                  formMessage.type === 'error'
-                    ? 'bg-red-50 text-red-700 border border-red-200'
-                    : 'bg-green-50 text-green-700 border border-green-200'
-                }`}>
+              {formMessage.type && <div className={`mt-2 p-3 rounded-lg text-sm ${formMessage.type === 'error' ? 'bg-red-50 text-red-700 border border-red-200' : 'bg-green-50 text-green-700 border border-green-200'}`}>
                   {formMessage.text}
-                </div>
-              )}
+                </div>}
             </form>
           </CardContent>
         </Card>
@@ -259,20 +242,14 @@ const PaintingCleaningEmbedded = () => {
               <p className="text-base text-muted-foreground mb-8">Fill the form & get instant quote</p>
 
               <form className="space-y-5" onSubmit={e => {
-                e.preventDefault();
-                setFormMessage({
-                  type: "success",
-                  text: "Request received! Our team will contact you shortly with a quote."
-                });
-                (e.currentTarget as HTMLFormElement).reset();
-              }}>
-                <Input 
-                  id="painting-name-mobile" 
-                  name="name" 
-                  placeholder="Name" 
-                  className="h-12 text-base bg-background"
-                  required 
-                />
+              e.preventDefault();
+              setFormMessage({
+                type: "success",
+                text: "Request received! Our team will contact you shortly with a quote."
+              });
+              (e.currentTarget as HTMLFormElement).reset();
+            }}>
+                <Input id="painting-name-mobile" name="name" placeholder="Name" className="h-12 text-base bg-background" required />
 
                 <div className="flex gap-3">
                   <Select defaultValue="+91" name="countryCode">
@@ -285,23 +262,10 @@ const PaintingCleaningEmbedded = () => {
                       <SelectItem value="+44">🇬🇧 +44</SelectItem>
                     </SelectContent>
                   </Select>
-                  <Input 
-                    id="painting-phone-mobile" 
-                    name="phone" 
-                    type="tel" 
-                    placeholder="Phone Number" 
-                    className="flex-1 h-12 text-base bg-background" 
-                    required 
-                  />
+                  <Input id="painting-phone-mobile" name="phone" type="tel" placeholder="Phone Number" className="flex-1 h-12 text-base bg-background" required />
                 </div>
 
-                <Input 
-                  id="painting-email-mobile" 
-                  name="email" 
-                  type="email" 
-                  placeholder="Email ID" 
-                  className="h-12 text-base bg-background"
-                />
+                <Input id="painting-email-mobile" name="email" type="email" placeholder="Email ID" className="h-12 text-base bg-background" />
 
                 <div className="flex flex-col md:flex-row gap-3">
                   <Select name="serviceType">
@@ -343,9 +307,7 @@ const PaintingCleaningEmbedded = () => {
                       <SelectValue placeholder="Select City" />
                     </SelectTrigger>
                     <SelectContent className="bg-background border shadow-lg">
-                      {majorCities.map((city) => (
-                        <SelectItem key={city} value={city.toLowerCase()}>{city}</SelectItem>
-                      ))}
+                      {majorCities.map(city => <SelectItem key={city} value={city.toLowerCase()}>{city}</SelectItem>)}
                     </SelectContent>
                   </Select>
                  </div>
@@ -355,15 +317,9 @@ const PaintingCleaningEmbedded = () => {
                 </Button>
                 
                 {/* Inline message */}
-                {formMessage.type && (
-                  <div className={`mt-2 p-3 rounded-lg text-sm ${
-                    formMessage.type === 'error'
-                      ? 'bg-red-50 text-red-700 border border-red-200'
-                      : 'bg-green-50 text-green-700 border border-green-200'
-                  }`}>
+                {formMessage.type && <div className={`mt-2 p-3 rounded-lg text-sm ${formMessage.type === 'error' ? 'bg-red-50 text-red-700 border border-red-200' : 'bg-green-50 text-green-700 border border-green-200'}`}>
                     {formMessage.text}
-                  </div>
-                )}
+                  </div>}
               </form>
             </CardContent>
           </Card>
@@ -504,15 +460,13 @@ const PaintingCleaningEmbedded = () => {
               </h2>
               
               <div className="grid md:grid-cols-2 gap-6">
-                {services.map((service, index) => (
-                  <div key={index} className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+                {services.map((service, index) => <div key={index} className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
                     <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center mb-4">
                       <service.icon className="w-6 h-6 text-red-600" />
                     </div>
                     <h3 className="text-lg font-semibold text-foreground mb-2">{service.title}</h3>
                     <p className="text-sm text-muted-foreground">{service.description}</p>
-                  </div>
-                ))}
+                  </div>)}
               </div>
             </div>
             
@@ -576,25 +530,15 @@ const PaintingCleaningEmbedded = () => {
                   <div className="p-4 text-sm font-medium text-muted-foreground text-center border-l border-gray-200">Others</div>
                 </div>
                 
-                {comparisonData.map((item, index) => (
-                  <div key={index} className="grid grid-cols-3 border-b border-gray-100 last:border-b-0">
+                {comparisonData.map((item, index) => <div key={index} className="grid grid-cols-3 border-b border-gray-100 last:border-b-0">
                     <div className="p-4 text-sm text-foreground">{item.feature}</div>
                     <div className="p-4 text-center border-l border-gray-100">
-                      {item.homeHNI ? (
-                        <CheckCircle className="w-5 h-5 text-green-500 mx-auto" />
-                      ) : (
-                        <span className="text-gray-300">×</span>
-                      )}
+                      {item.homeHNI ? <CheckCircle className="w-5 h-5 text-green-500 mx-auto" /> : <span className="text-gray-300">×</span>}
                     </div>
                     <div className="p-4 text-center border-l border-gray-100">
-                      {item.others ? (
-                        <CheckCircle className="w-5 h-5 text-green-500 mx-auto" />
-                      ) : (
-                        <span className="text-gray-300">×</span>
-                      )}
+                      {item.others ? <CheckCircle className="w-5 h-5 text-green-500 mx-auto" /> : <span className="text-gray-300">×</span>}
                     </div>
-                  </div>
-                ))}
+                  </div>)}
               </div>
             </div>
             
@@ -614,20 +558,13 @@ const PaintingCleaningEmbedded = () => {
               </h2>
               
               <div className="grid gap-6">
-                {testimonials.map((testimonial, index) => (
-                  <div key={index} className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+                {testimonials.map((testimonial, index) => <div key={index} className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
                     <div className="flex items-start gap-4">
-                      <img 
-                        src={testimonial.image} 
-                        alt={testimonial.name}
-                        className="w-12 h-12 rounded-full object-cover"
-                      />
+                      <img src={testimonial.image} alt={testimonial.name} className="w-12 h-12 rounded-full object-cover" />
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-2">
                           <div className="flex">
-                            {[...Array(testimonial.rating)].map((_, i) => (
-                              <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                            ))}
+                            {[...Array(testimonial.rating)].map((_, i) => <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />)}
                           </div>
                         </div>
                         <p className="text-sm text-muted-foreground mb-3">"{testimonial.text}"</p>
@@ -637,8 +574,7 @@ const PaintingCleaningEmbedded = () => {
                         </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  </div>)}
               </div>
             </div>
             
@@ -658,8 +594,7 @@ const PaintingCleaningEmbedded = () => {
               </h2>
               
               <div className="grid gap-6">
-                {targetAudience.map((audience, index) => (
-                  <div key={index} className="flex items-start gap-4 p-6 bg-white rounded-xl border border-gray-100">
+                {targetAudience.map((audience, index) => <div key={index} className="flex items-start gap-4 p-6 bg-white rounded-xl border border-gray-100">
                     <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center flex-shrink-0">
                       <audience.icon className="w-6 h-6 text-red-600" />
                     </div>
@@ -667,8 +602,7 @@ const PaintingCleaningEmbedded = () => {
                       <h3 className="text-lg font-semibold text-foreground mb-2">{audience.title}</h3>
                       <p className="text-sm text-muted-foreground">{audience.description}</p>
                     </div>
-                  </div>
-                ))}
+                  </div>)}
               </div>
             </div>
             
@@ -688,16 +622,14 @@ const PaintingCleaningEmbedded = () => {
               </h2>
               
               <Accordion type="single" collapsible className="w-full">
-                {faqs.map((faq, index) => (
-                  <AccordionItem key={index} value={`item-${index}`} className="border-b border-gray-200">
+                {faqs.map((faq, index) => <AccordionItem key={index} value={`item-${index}`} className="border-b border-gray-200">
                     <AccordionTrigger className="text-left text-sm font-medium text-foreground hover:no-underline py-4">
                       {faq.question}
                     </AccordionTrigger>
                     <AccordionContent className="text-sm text-muted-foreground pb-4">
                       {faq.answer}
                     </AccordionContent>
-                  </AccordionItem>
-                ))}
+                  </AccordionItem>)}
               </Accordion>
             </div>
             
@@ -717,20 +649,9 @@ const PaintingCleaningEmbedded = () => {
               </h2>
               
               <div className="flex flex-wrap gap-2">
-                {[
-                  "Interior Painting", "Exterior Painting", "House Cleaning", "Deep Cleaning",
-                  "Bathroom Cleaning", "Kitchen Cleaning", "Sofa Cleaning", "Wall Painting",
-                  "Professional Painters", "Home Cleaning Service", "Eco-friendly Paint",
-                  "Residential Cleaning", "Commercial Cleaning", "Move-in Cleaning",
-                  "Move-out Cleaning", "Upholstery Cleaning", "Professional Cleaning"
-                ].map((tag, index) => (
-                  <span 
-                    key={index}
-                    className="px-3 py-1 text-xs bg-gray-100 text-gray-700 rounded-full border border-gray-200"
-                  >
+                {["Interior Painting", "Exterior Painting", "House Cleaning", "Deep Cleaning", "Bathroom Cleaning", "Kitchen Cleaning", "Sofa Cleaning", "Wall Painting", "Professional Painters", "Home Cleaning Service", "Eco-friendly Paint", "Residential Cleaning", "Commercial Cleaning", "Move-in Cleaning", "Move-out Cleaning", "Upholstery Cleaning", "Professional Cleaning"].map((tag, index) => <span key={index} className="px-3 py-1 text-xs bg-gray-100 text-gray-700 rounded-full border border-gray-200">
                     {tag}
-                  </span>
-                ))}
+                  </span>)}
               </div>
             </div>
             
@@ -739,8 +660,6 @@ const PaintingCleaningEmbedded = () => {
           </div>
         </div>
       </section>
-    </div>
-  );
+    </div>;
 };
-
 export default PaintingCleaningEmbedded;
