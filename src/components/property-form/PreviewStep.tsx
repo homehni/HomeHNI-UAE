@@ -33,28 +33,39 @@ export const PreviewStep: React.FC<PreviewStepProps> = ({
   const { ownerInfo, propertyInfo } = formData;
 
   const handleSubmit = async () => {
+    console.log('🚀 HandleSubmit called - PreviewStep');
     onSubmit();
     setShowSuccess(true);
     
     // Send property listing live email
     try {
       const { ownerInfo, propertyInfo } = formData;
+      console.log('📧 Attempting to send listing live email');
+      console.log('Owner Info:', { email: ownerInfo?.email, name: ownerInfo?.fullName });
+      
       if (ownerInfo?.email) {
+        console.log('✅ Email found, sending listing live email...');
         const { sendListingLiveEmail } = await import('@/services/emailService');
-        await sendListingLiveEmail(
+        const propertyData = {
+          price: propertyInfo?.rentalDetails?.expectedPrice?.toLocaleString() || 'Contact for price',
+          bhkDetails: propertyInfo?.propertyDetails?.bhkType || 'Property',
+          locality: propertyInfo?.locationDetails?.locality || 'Your location',
+          phone: ownerInfo.phoneNumber || 'Contact number',
+          id: previewPropertyId || 'property-id'
+        };
+        console.log('Property data for email:', propertyData);
+        
+        const result = await sendListingLiveEmail(
           ownerInfo.email,
           ownerInfo.fullName || 'Property Owner',
-          {
-            price: propertyInfo?.rentalDetails?.expectedPrice?.toLocaleString() || 'Contact for price',
-            bhkDetails: propertyInfo?.propertyDetails?.bhkType || 'Property',
-            locality: propertyInfo?.locationDetails?.locality || 'Your location',
-            phone: ownerInfo.phoneNumber || 'Contact number',
-            id: previewPropertyId || 'property-id'
-          }
+          propertyData
         );
+        console.log('📧 Email service result:', result);
+      } else {
+        console.log('❌ No email found in ownerInfo');
       }
     } catch (error) {
-      console.error('Failed to send listing live email:', error);
+      console.error('❌ Failed to send listing live email:', error);
       // Don't block the submission process
     }
   };
