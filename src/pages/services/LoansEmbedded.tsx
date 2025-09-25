@@ -185,7 +185,29 @@ const LoansEmbedded = () => {
                 const email = formData.get('email') as string;
                 const name = formData.get('name') as string;
 
+                console.log('=== LOAN FORM SUBMISSION DEBUG ===');
+                console.log('Form email extracted:', email);
+                console.log('Form name extracted:', name);
+                console.log('Email field value directly:', (form.querySelector('[name="email"]') as HTMLInputElement)?.value);
+
+                if (!email || !email.includes('@')) {
+                  console.error('Invalid email address:', email);
+                  setFormMessage({
+                    type: "error",
+                    text: "Please enter a valid email address."
+                  });
+                  return;
+                }
+
                 try {
+                  const requestBody = {
+                    to: email,
+                    userName: name || 'there',
+                    loanEligibilityUrl: 'https://homehni.com/loan-eligibility'
+                  };
+                  
+                  console.log('Email API request body:', requestBody);
+
                   // Send loan enquiry email
                   const response = await fetch('https://lovable-email-backend.vercel.app/send-loan-enquiry-email', {
                     method: 'POST',
@@ -193,25 +215,33 @@ const LoansEmbedded = () => {
                       'Content-Type': 'application/json',
                       'x-api-key': 'lov@ble-2025-secret-KEY'
                     },
-                    body: JSON.stringify({
-                      to: email,
-                      userName: name || 'there',
-                      loanEligibilityUrl: 'https://homehni.com/loan-eligibility'
-                    })
+                    body: JSON.stringify(requestBody)
                   });
+
+                  console.log('Email API response status:', response.status);
+                  console.log('Email API response ok:', response.ok);
 
                   const result = await response.json();
-                  console.log('Loan enquiry email sent:', result);
-
-                  setFormMessage({
-                    type: "success",
-                    text: "Application received! Loan details sent to your email. Our expert will contact you shortly."
-                  });
+                  console.log('Email API full response:', result);
+                  
+                  if (response.ok && result.success !== false) {
+                    console.log('✅ Email sent successfully to:', email);
+                    setFormMessage({
+                      type: "success",
+                      text: `Application received! Loan details sent to ${email}. Our expert will contact you shortly.`
+                    });
+                  } else {
+                    console.error('❌ Email API returned error:', result);
+                    setFormMessage({
+                      type: "error",
+                      text: "There was an issue processing your request. Please try again."
+                    });
+                  }
                 } catch (error) {
-                  console.error('Failed to send loan enquiry email:', error);
+                  console.error('❌ Failed to send loan enquiry email:', error);
                   setFormMessage({
-                    type: "success",
-                    text: "Application received! Our loan expert will contact you shortly."
+                    type: "error",
+                    text: "Network error occurred. Please check your internet connection and try again."
                   });
                 }
                 form.reset();
@@ -314,7 +344,29 @@ const LoansEmbedded = () => {
                 const email = formData.get('email') as string;
                 const name = formData.get('name') as string;
 
+                console.log('=== MOBILE LOAN FORM SUBMISSION DEBUG ===');
+                console.log('Form email extracted:', email);
+                console.log('Form name extracted:', name);
+                console.log('Email field value directly:', (form.querySelector('[name="email"]') as HTMLInputElement)?.value);
+
+                if (!email || !email.includes('@')) {
+                  console.error('Invalid email address:', email);
+                  setFormMessage({
+                    type: "error",
+                    text: "Please enter a valid email address."
+                  });
+                  return;
+                }
+
                 try {
+                  const requestBody = {
+                    to: email,
+                    userName: name || 'there',
+                    loanEligibilityUrl: 'https://homehni.com/loan-eligibility'
+                  };
+                  
+                  console.log('Email API request body:', requestBody);
+
                   // Send loan enquiry email
                   const response = await fetch('https://lovable-email-backend.vercel.app/send-loan-enquiry-email', {
                     method: 'POST',
@@ -322,25 +374,33 @@ const LoansEmbedded = () => {
                       'Content-Type': 'application/json',
                       'x-api-key': 'lov@ble-2025-secret-KEY'
                     },
-                    body: JSON.stringify({
-                      to: email,
-                      userName: name || 'there',
-                      loanEligibilityUrl: 'https://homehni.com/loan-eligibility'
-                    })
+                    body: JSON.stringify(requestBody)
                   });
+
+                  console.log('Email API response status:', response.status);
+                  console.log('Email API response ok:', response.ok);
 
                   const result = await response.json();
-                  console.log('Loan enquiry email sent:', result);
-
-                  setFormMessage({
-                    type: "success",
-                    text: "Application received! Loan details sent to your email. Our expert will contact you shortly."
-                  });
+                  console.log('Email API full response:', result);
+                  
+                  if (response.ok && result.success !== false) {
+                    console.log('✅ Email sent successfully to:', email);
+                    setFormMessage({
+                      type: "success",
+                      text: `Application received! Loan details sent to ${email}. Our expert will contact you shortly.`
+                    });
+                  } else {
+                    console.error('❌ Email API returned error:', result);
+                    setFormMessage({
+                      type: "error",
+                      text: "There was an issue processing your request. Please try again."
+                    });
+                  }
                 } catch (error) {
-                  console.error('Failed to send loan enquiry email:', error);
+                  console.error('❌ Failed to send loan enquiry email:', error);
                   setFormMessage({
-                    type: "success",
-                    text: "Application received! Our loan expert will contact you shortly."
+                    type: "error",
+                    text: "Network error occurred. Please check your internet connection and try again."
                   });
                 }
                 form.reset();
