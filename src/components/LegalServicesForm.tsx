@@ -50,6 +50,7 @@ interface FormData {
 const LegalServicesForm = ({ isOpen, onClose }: LegalServicesFormProps) => {
   const [currentStep, setCurrentStep] = useState(1);
   const totalSteps = 5;
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const { toast } = useToast();
   
@@ -137,7 +138,22 @@ const LegalServicesForm = ({ isOpen, onClose }: LegalServicesFormProps) => {
   const handleSubmit = () => {
     // Handle form submission
     console.log('Form submitted', formData);
-    onClose();
+    
+    // Set the submitted state to true to change button color
+    setIsSubmitted(true);
+    
+    // Show toast notification
+    toast({
+      title: "Consultation Request Submitted!",
+      description: "Thank you for your request. Our legal team will contact you within 24 hours.",
+      variant: "default"
+    });
+    
+    // Close the dialog after a brief delay
+    setTimeout(() => {
+      onClose();
+      setIsSubmitted(false); // Reset state when dialog closes
+    }, 2000);
   };
 
   const updateFormData = (step: keyof FormData, data: Partial<FormData[keyof FormData]>) => {
@@ -251,9 +267,14 @@ const LegalServicesForm = ({ isOpen, onClose }: LegalServicesFormProps) => {
                 ) : (
                   <Button
                     onClick={handleSubmit}
-                    className="flex-1 sm:flex-none bg-green-600 hover:bg-green-700 text-white"
+                    className={`flex-1 sm:flex-none text-white transition-colors duration-300 ${
+                      isSubmitted 
+                        ? 'bg-red-600 hover:bg-red-700' 
+                        : 'bg-green-600 hover:bg-green-700'
+                    }`}
+                    disabled={isSubmitted}
                   >
-                    Submit Consultation Request
+                    {isSubmitted ? 'Request Submitted!' : 'Submit Consultation Request'}
                   </Button>
                 )}
               </div>
