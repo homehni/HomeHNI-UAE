@@ -29,12 +29,6 @@ const PersonalDetailsStep = ({ data, onChange }: PersonalDetailsStepProps) => {
     "Gwalior", "Vijayawada", "Jodhpur", "Madurai", "Raipur", "Kota", "Guwahati", "Chandigarh", "Solapur", "Hubli-Dharwad"
   ];
 
-  // Set India as default when component mounts
-  useEffect(() => {
-    if (!data.country) {
-      onChange({ country: 'india' });
-    }
-  }, []);
   return (
     <div className="space-y-6">
       <div className="text-center mb-8">
@@ -95,50 +89,27 @@ const PersonalDetailsStep = ({ data, onChange }: PersonalDetailsStepProps) => {
           <p className="text-xs text-gray-500 mt-1">Enter a valid 10-digit Indian mobile number</p>
         </div>
 
-        {/* Location Information in a single row */}
-        <div className="md:col-span-2">
+        {/* City Selection */}
+        <div>
           <Label className="text-sm font-medium text-gray-700 mb-2 flex items-center">
             <MapPin className="h-4 w-4 mr-2" />
-            Location <span className="text-red-500 ml-1">*</span>
+            City <span className="text-red-500 ml-1">*</span>
           </Label>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-1">
-            <div>
-              <Select
-                value={data.country || 'india'}
-                onValueChange={(value) => onChange({ country: value })}
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="india">India</SelectItem>
-                  <SelectItem value="usa">United States</SelectItem>
-                  <SelectItem value="uk">United Kingdom</SelectItem>
-                  <SelectItem value="canada">Canada</SelectItem>
-                  <SelectItem value="australia">Australia</SelectItem>
-                  <SelectItem value="other">Other</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div>
-              <Select
-                value={data.city}
-                onValueChange={(value) => onChange({ city: value })}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select City" />
-                </SelectTrigger>
-                <SelectContent>
-                  {majorCities.map((city) => (
-                    <SelectItem key={city} value={city.toLowerCase()}>
-                      {city}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
+          <Select
+            value={data.city}
+            onValueChange={(value) => onChange({ city: value })}
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Select City" />
+            </SelectTrigger>
+            <SelectContent>
+              {majorCities.map((city) => (
+                <SelectItem key={city} value={city.toLowerCase()}>
+                  {city}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
       </div>
     </div>
