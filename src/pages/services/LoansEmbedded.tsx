@@ -169,7 +169,7 @@ const LoansEmbedded = () => {
               <h3 className="text-xl font-semibold text-foreground mb-2 text-uniform-center">Need a loan?</h3>
               <p className="text-sm text-muted-foreground mb-4 text-uniform-center">Fill the form & get instant pre-approval</p>
 
-              <form className="space-y-4" onSubmit={e => {
+              <form className="space-y-4" onSubmit={async e => {
                 e.preventDefault();
                 const form = e.currentTarget as HTMLFormElement;
                 if (!form.checkValidity()) {
@@ -180,10 +180,40 @@ const LoansEmbedded = () => {
                   });
                   return;
                 }
-                setFormMessage({
-                  type: "success",
-                  text: "Application received! Our loan expert will contact you shortly."
-                });
+
+                const formData = new FormData(form);
+                const email = formData.get('email') as string;
+                const name = formData.get('name') as string;
+
+                try {
+                  // Send loan enquiry email
+                  const response = await fetch('https://lovable-email-backend.vercel.app/send-loan-enquiry-email', {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json',
+                      'x-api-key': 'lov@ble-2025-secret-KEY'
+                    },
+                    body: JSON.stringify({
+                      to: email,
+                      userName: name || 'there',
+                      loanEligibilityUrl: 'https://homehni.com/loan-eligibility'
+                    })
+                  });
+
+                  const result = await response.json();
+                  console.log('Loan enquiry email sent:', result);
+
+                  setFormMessage({
+                    type: "success",
+                    text: "Application received! Loan details sent to your email. Our expert will contact you shortly."
+                  });
+                } catch (error) {
+                  console.error('Failed to send loan enquiry email:', error);
+                  setFormMessage({
+                    type: "success",
+                    text: "Application received! Our loan expert will contact you shortly."
+                  });
+                }
                 form.reset();
               }}>
                 <Input id="loan-name" name="name" placeholder="Name" required />
@@ -268,7 +298,7 @@ const LoansEmbedded = () => {
               <h3 className="text-2xl font-bold text-foreground mb-3 text-uniform-center">Need a loan?</h3>
               <p className="text-base text-muted-foreground mb-8 text-uniform-center">Fill the form & get instant pre-approval</p>
 
-              <form className="space-y-5" onSubmit={e => {
+              <form className="space-y-5" onSubmit={async e => {
                 e.preventDefault();
                 const form = e.currentTarget as HTMLFormElement;
                 if (!form.checkValidity()) {
@@ -279,10 +309,40 @@ const LoansEmbedded = () => {
                   });
                   return;
                 }
-                setFormMessage({
-                  type: "success",
-                  text: "Application received! Our loan expert will contact you shortly."
-                });
+
+                const formData = new FormData(form);
+                const email = formData.get('email') as string;
+                const name = formData.get('name') as string;
+
+                try {
+                  // Send loan enquiry email
+                  const response = await fetch('https://lovable-email-backend.vercel.app/send-loan-enquiry-email', {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json',
+                      'x-api-key': 'lov@ble-2025-secret-KEY'
+                    },
+                    body: JSON.stringify({
+                      to: email,
+                      userName: name || 'there',
+                      loanEligibilityUrl: 'https://homehni.com/loan-eligibility'
+                    })
+                  });
+
+                  const result = await response.json();
+                  console.log('Loan enquiry email sent:', result);
+
+                  setFormMessage({
+                    type: "success",
+                    text: "Application received! Loan details sent to your email. Our expert will contact you shortly."
+                  });
+                } catch (error) {
+                  console.error('Failed to send loan enquiry email:', error);
+                  setFormMessage({
+                    type: "success",
+                    text: "Application received! Our loan expert will contact you shortly."
+                  });
+                }
                 form.reset();
               }}>
                 <Input
