@@ -56,7 +56,7 @@ export default function PayButton({
         notes,
         prefill,
         theme: { color: "#d21404" },
-        handler: function (response: any) {
+        handler: async function (response: any) {
           console.log("Payment successful:", response);
           // Minimal client-only success handling
           // TODO: On real flow, post response to backend for verification.
@@ -64,6 +64,29 @@ export default function PayButton({
             title: "Payment Successful!",
             description: "Redirecting to confirmation page...",
           });
+          
+          // Send plan activated email
+          try {
+            if (prefill?.email) {
+              const { sendPlanActivatedEmail } = await import('@/services/emailService');
+              const expiryDate = new Date();
+              expiryDate.setFullYear(expiryDate.getFullYear() + 1); // 1 year from now
+              await sendPlanActivatedEmail(
+                prefill.email,
+                prefill.name || 'Valued Customer',
+                {
+                  expiryDate: expiryDate.toLocaleDateString('en-IN', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                  })
+                }
+              );
+            }
+          } catch (error) {
+            console.error('Failed to send plan activated email:', error);
+          }
+          
           setTimeout(() => {
             window.location.href = `/payment/success?payment_id=${response.razorpay_payment_id || ""}`;
           }, 1000);

@@ -140,6 +140,23 @@ export const PropertyActions: React.FC<PropertyActionsProps> = ({
           : "Your property is now marked as available for rent.",
       });
 
+      // Send deal closed email when property is marked as rented
+      if (newStatus === 'rented' && user.email) {
+        try {
+          const { sendDealClosedEmail } = await import('@/services/emailService');
+          await sendDealClosedEmail(
+            user.email,
+            user.user_metadata?.full_name || 'Property Owner',
+            {
+              locality: 'Your property location',
+              dealType: 'rent'
+            }
+          );
+        } catch (error) {
+          console.error('Failed to send deal closed email:', error);
+        }
+      }
+
       console.log('PropertyActions: Successfully updated property status to:', newStatus);
       
     } catch (error) {

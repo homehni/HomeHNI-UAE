@@ -21,6 +21,31 @@ const BudgetCalculator = () => {
   const [maxLoanAmount, setMaxLoanAmount] = useState(0);
   const [totalBudget, setTotalBudget] = useState(0);
 
+  // Function to send price suggestions email
+  const sendPriceSuggestionsEmailHandler = async () => {
+    // In a real app, you'd get user email from auth context
+    // For demo purposes, you could show a modal to collect email
+    console.log('Price suggestions calculated - email integration point');
+    // Example implementation:
+    /*
+    try {
+      const { sendPriceSuggestionsEmail } = await import('@/services/emailService');
+      await sendPriceSuggestionsEmail(
+        userEmail, 
+        userName, 
+        {
+          locality: 'Your selected area',
+          rangeMin: Math.floor(totalBudget * 0.8),
+          rangeMax: Math.floor(totalBudget * 1.2),
+          yourPrice: totalBudget
+        }
+      );
+    } catch (error) {
+      console.error('Failed to send price suggestions email:', error);
+    }
+    */
+  };
+
   useEffect(() => {
     const disposableIncome = monthlyIncome - monthlyExpenses - existingEMI;
     const maxAffordableEMI = Math.max(0, disposableIncome * 0.5); // 50% of disposable income
@@ -251,6 +276,15 @@ const BudgetCalculator = () => {
                     <span className="text-sm">Max EMI</span>
                     <span className="font-medium">₹{maxEMI.toLocaleString('en-IN', { maximumFractionDigits: 0 })}</span>
                   </div>
+                </div>
+                
+                <div className="pt-4">
+                  <Button 
+                    onClick={sendPriceSuggestionsEmailHandler}
+                    className="w-full bg-primary hover:bg-primary/90"
+                  >
+                    Get Price Suggestions via Email
+                  </Button>
                 </div>
               </CardContent>
             </Card>

@@ -233,7 +233,7 @@ const Loans = () => {
             <h3 className="text-xl font-semibold text-foreground mb-2 text-uniform-center">Need a loan?</h3>
             <p className="text-sm text-muted-foreground mb-4 text-uniform-center">Fill the form & get instant pre-approval</p>
 
-            <form className="space-y-4" onSubmit={e => {
+            <form className="space-y-4" onSubmit={async (e) => {
               e.preventDefault();
               const form = e.currentTarget as HTMLFormElement;
               if (!form.checkValidity()) {
@@ -249,6 +249,19 @@ const Loans = () => {
                 title: "Application received",
                 description: "Our loan expert will contact you shortly."
               });
+              
+              // Send loan enquiry email
+              const emailField = form.querySelector('input[name="email"]') as HTMLInputElement;
+              const nameField = form.querySelector('input[name="name"]') as HTMLInputElement;
+              if (emailField?.value) {
+                try {
+                  const { sendLoanEnquiryEmail } = await import('@/services/emailService');
+                  await sendLoanEnquiryEmail(emailField.value, nameField?.value);
+                } catch (error) {
+                  console.error('Failed to send loan enquiry email:', error);
+                }
+              }
+              
               form.reset();
             }}>
               <Input id="loan-name" name="name" placeholder="Name" required />
@@ -321,7 +334,7 @@ const Loans = () => {
               <h3 className="text-2xl font-bold text-foreground mb-3 text-uniform-center">Need a loan?</h3>
               <p className="text-base text-muted-foreground mb-8 text-uniform-center">Fill the form & get instant pre-approval</p>
 
-              <form className="space-y-6" onSubmit={e => {
+              <form className="space-y-6" onSubmit={async (e) => {
                 e.preventDefault();
                 const form = e.currentTarget as HTMLFormElement;
                 if (!form.checkValidity()) {
@@ -337,6 +350,19 @@ const Loans = () => {
                   title: "Application received",
                   description: "Our loan expert will contact you shortly."
                 });
+                
+                // Send loan enquiry email for mobile form
+                const emailField = form.querySelector('input[name="email"]') as HTMLInputElement;
+                const nameField = form.querySelector('input[name="name"]') as HTMLInputElement;
+                if (emailField?.value) {
+                  try {
+                    const { sendLoanEnquiryEmail } = await import('@/services/emailService');
+                    await sendLoanEnquiryEmail(emailField.value, nameField?.value);
+                  } catch (error) {
+                    console.error('Failed to send loan enquiry email:', error);
+                  }
+                }
+                
                 form.reset();
               }}>
                 <Input 
