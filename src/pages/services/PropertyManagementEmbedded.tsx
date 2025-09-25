@@ -202,17 +202,6 @@ const PropertyManagementEmbedded = () => {
 
                 <Input id="property-email" name="email" type="email" placeholder="Email ID" required />
 
-                <div className="flex gap-2">
-                  <Select defaultValue="India" name="country">
-                    <SelectTrigger className="flex-1"><SelectValue placeholder="Country" /></SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="India">India</SelectItem>
-                      <SelectItem value="USA">USA</SelectItem>
-                      <SelectItem value="UK">UK</SelectItem>
-                      <SelectItem value="Other">Other</SelectItem>
-                    </SelectContent>
-                  </Select>
-
                   <Select name="city" required>
                     <SelectTrigger className="flex-1"><SelectValue placeholder="City" /></SelectTrigger>
                     <SelectContent>
@@ -315,19 +304,6 @@ const PropertyManagementEmbedded = () => {
                   placeholder="Email ID" 
                   className="h-12 text-base bg-background"
                 />
-
-                <div className="flex flex-col md:flex-row gap-3">
-                  <Select defaultValue="India" name="country">
-                    <SelectTrigger className="flex-1 h-12 bg-background">
-                      <SelectValue placeholder="Country" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-background border shadow-lg">
-                      <SelectItem value="India">India</SelectItem>
-                      <SelectItem value="USA">USA</SelectItem>
-                      <SelectItem value="UK">UK</SelectItem>
-                      <SelectItem value="Other">Other</SelectItem>
-                    </SelectContent>
-                  </Select>
 
                   <Select name="city" required>
                     <SelectTrigger className="flex-1 h-12 bg-background">

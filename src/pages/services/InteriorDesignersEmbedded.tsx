@@ -201,19 +201,6 @@ const InteriorDesignersEmbedded = () => {
                   <Input id="interior-location-mobile" name="location" placeholder="Project Location" className="h-10 md:h-12 text-sm md:text-base bg-background" />
                 </div>
 
-                <div className="flex flex-col sm:flex-row gap-2 md:gap-3">
-                  <Select defaultValue="india" name="country">
-                    <SelectTrigger id="interior-country-mobile" className="h-10 md:h-12 bg-background">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent className="bg-background border shadow-lg">
-                      <SelectItem value="india">India</SelectItem>
-                      <SelectItem value="usa">United States</SelectItem>
-                      <SelectItem value="uk">United Kingdom</SelectItem>
-                      <SelectItem value="canada">Canada</SelectItem>
-                      <SelectItem value="australia">Australia</SelectItem>
-                    </SelectContent>
-                  </Select>
                   <Select name="city">
                     <SelectTrigger id="interior-city-mobile" className="h-10 md:h-12 bg-background">
                       <SelectValue placeholder="Select City" />
@@ -438,17 +425,6 @@ const InteriorDesignersEmbedded = () => {
                 <Input id="interior-location" name="location" placeholder="Project Location" className="flex-1" />
               </div>
 
-              <div className="flex gap-2">
-                <Select defaultValue="india" name="country">
-                  <SelectTrigger id="interior-country" className="flex-1"><SelectValue /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="india">India</SelectItem>
-                    <SelectItem value="usa">United States</SelectItem>
-                    <SelectItem value="uk">United Kingdom</SelectItem>
-                    <SelectItem value="canada">Canada</SelectItem>
-                    <SelectItem value="australia">Australia</SelectItem>
-                  </SelectContent>
-                </Select>
                 <Select name="city">
                   <SelectTrigger id="interior-city" className="flex-1"><SelectValue placeholder="Select City" /></SelectTrigger>
                   <SelectContent>

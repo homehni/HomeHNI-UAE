@@ -202,26 +202,15 @@ const PaintingCleaningEmbedded = () => {
                 </Select>
               </div>
 
-              <div className="flex gap-2">
-                <Select defaultValue="india" name="country">
-                  <SelectTrigger id="painting-country" className="flex-1"><SelectValue /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="india">India</SelectItem>
-                    <SelectItem value="usa">United States</SelectItem>
-                    <SelectItem value="uk">United Kingdom</SelectItem>
-                    <SelectItem value="canada">Canada</SelectItem>
-                    <SelectItem value="australia">Australia</SelectItem>
-                  </SelectContent>
-                </Select>
-                <Select name="city">
-                  <SelectTrigger id="painting-city" className="flex-1"><SelectValue placeholder="Select City" /></SelectTrigger>
-                  <SelectContent>
-                    {majorCities.map(city => <SelectItem key={city} value={city.toLowerCase()}>{city}</SelectItem>)}
-                  </SelectContent>
-                </Select>
-              </div>
+              <Select name="city">
+                <SelectTrigger id="painting-city" className="flex-1"><SelectValue placeholder="Select City" /></SelectTrigger>
+                <SelectContent>
+                  {majorCities.map(city => <SelectItem key={city} value={city.toLowerCase()}>{city}</SelectItem>)}
+                </SelectContent>
+              </Select>
+            </div>
 
-              <Button type="submit" className="w-full bg-red-800 hover:bg-red-900 text-white">Talk to Us Today!</Button>
+            <Button type="submit" className="w-full bg-red-800 hover:bg-red-900 text-white">Talk to Us Today!</Button>
               
               {/* Inline message */}
               {formMessage.type && <div className={`mt-2 p-3 rounded-lg text-sm ${formMessage.type === 'error' ? 'bg-red-50 text-red-700 border border-red-200' : 'bg-green-50 text-green-700 border border-green-200'}`}>
@@ -289,19 +278,6 @@ const PaintingCleaningEmbedded = () => {
                   </Select>
                 </div>
 
-                <div className="flex flex-col md:flex-row gap-3">
-                  <Select defaultValue="india" name="country">
-                    <SelectTrigger id="painting-country-mobile" className="flex-1 h-12 bg-background">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent className="bg-background border shadow-lg">
-                      <SelectItem value="india">India</SelectItem>
-                      <SelectItem value="usa">United States</SelectItem>
-                      <SelectItem value="uk">United Kingdom</SelectItem>
-                      <SelectItem value="canada">Canada</SelectItem>
-                      <SelectItem value="australia">Australia</SelectItem>
-                    </SelectContent>
-                  </Select>
                   <Select name="city">
                     <SelectTrigger id="painting-city-mobile" className="flex-1 h-12 bg-background">
                       <SelectValue placeholder="Select City" />

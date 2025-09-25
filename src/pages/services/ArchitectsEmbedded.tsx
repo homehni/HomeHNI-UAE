@@ -393,17 +393,6 @@ const ArchitectsEmbedded = () => {
                 <Input id="arch-location" name="location" placeholder="Project Location" className="flex-1" />
               </div>
 
-              <div className="flex gap-2">
-                <Select defaultValue="india" name="country">
-                  <SelectTrigger id="arch-country" className="flex-1"><SelectValue /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="india">India</SelectItem>
-                    <SelectItem value="usa">United States</SelectItem>
-                    <SelectItem value="uk">United Kingdom</SelectItem>
-                    <SelectItem value="canada">Canada</SelectItem>
-                    <SelectItem value="australia">Australia</SelectItem>
-                  </SelectContent>
-                </Select>
                 <Select name="city">
                   <SelectTrigger id="arch-city" className="flex-1"><SelectValue placeholder="Select City" /></SelectTrigger>
                   <SelectContent>

@@ -262,17 +262,6 @@ const LoansEmbedded = () => {
 
                 <Input id="loan-email" name="email" type="email" placeholder="Email ID" required />
 
-                <div className="flex gap-2">
-                  <Select defaultValue="india" name="country">
-                    <SelectTrigger className="flex-1"><SelectValue /></SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="india">India</SelectItem>
-                      <SelectItem value="usa">USA</SelectItem>
-                      <SelectItem value="uk">UK</SelectItem>
-                      <SelectItem value="other">Other</SelectItem>
-                    </SelectContent>
-                  </Select>
-
                   <Select name="city" required>
                     <SelectTrigger className="flex-1"><SelectValue placeholder="City" /></SelectTrigger>
                     <SelectContent>
