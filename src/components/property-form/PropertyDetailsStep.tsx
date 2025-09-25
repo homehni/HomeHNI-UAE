@@ -101,7 +101,7 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
         <Form {...form}>
           <form id="property-details-form" onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             {/* Property Name and Built Up Area */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 min-w-0">
               <FormField control={form.control} name="title" render={({
               field
             }) => <FormItem>
@@ -138,7 +138,7 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
             </div>
 
             {/* Property Type and BHK Type */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 min-w-0">
               <FormField control={form.control} name="propertyType" render={({
               field
             }) => <FormItem>
@@ -187,7 +187,7 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
             </div>
 
             {/* Property Age and Facing */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 min-w-0">
               <FormField control={form.control} name="propertyAge" render={({
               field
             }) => <FormItem>
@@ -240,7 +240,7 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
             </div>
 
             {/* Floor, Total Floors / No. of Floors */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 min-w-0">
               {showFloorDropdown && <FormField control={form.control} name="floorNo" render={({
               field
             }) => <FormItem>
