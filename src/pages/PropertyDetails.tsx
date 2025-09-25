@@ -58,6 +58,7 @@ interface Property {
   parking?: string | null;
   age_of_building?: string | null;
   preferred_tenant?: string | null;
+  plot_area_unit?: string;
   // Note: Owner contact info removed for security
 }
 const PropertyDetails: React.FC = () => {
@@ -530,7 +531,32 @@ const PropertyDetails: React.FC = () => {
           propertyId={property.id}
           propertyTitle={property.title}
           propertyType={property.property_type}
-          propertyArea={property.super_area ? `${property.super_area} sq.ft` : property.carpet_area ? `${property.carpet_area} sq.ft` : undefined}
+          propertyArea={(() => {
+            const area = property.super_area || property.carpet_area;
+            if (!area) return undefined;
+            
+            const isPlot = property.property_type?.toLowerCase().includes('plot') || 
+                           property.property_type?.toLowerCase().includes('land');
+            
+            if (isPlot && property.plot_area_unit) {
+              const unitMap: Record<string, string> = {
+                'sq-ft': 'sq.ft',
+                'sq-yard': 'sq.yard',
+                'acre': 'acre',
+                'hectare': 'hectare',
+                'bigha': 'bigha',
+                'biswa': 'biswa',
+                'gunta': 'gunta',
+                'cents': 'cents',
+                'marla': 'marla',
+                'kanal': 'kanal'
+              };
+              const displayUnit = unitMap[property.plot_area_unit] || property.plot_area_unit;
+              return `${area} ${displayUnit}`;
+            }
+            
+            return `${area} sq.ft`;
+          })()}
           bhkType={property.bhk_type}
           city={property.city}
           expectedPrice={(mergedProperty as any)?.expected_rent ?? property.expected_price}

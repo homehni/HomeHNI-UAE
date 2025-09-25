@@ -51,6 +51,7 @@ interface OverviewCardProps {
     expected_price?: number;
     price_negotiable?: boolean;
     security_deposit?: number;
+    plot_area_unit?: string;
   };
 }
 
@@ -72,9 +73,31 @@ export const OverviewCard: React.FC<OverviewCardProps> = ({ property }) => {
     return 'Not specified';
   };
 
-  const formatArea = (superArea?: number, carpetArea?: number) => {
+  const formatArea = (superArea?: number, carpetArea?: number, areaUnit?: string, propertyType?: string) => {
     const area = superArea || carpetArea;
-    return area ? `${area.toLocaleString()} Sq.Ft` : 'Not specified';
+    if (!area) return 'Not specified';
+    
+    const isPlot = propertyType?.toLowerCase().includes('plot') || 
+                   propertyType?.toLowerCase().includes('land');
+    
+    if (isPlot && areaUnit) {
+      const unitMap: Record<string, string> = {
+        'sq-ft': 'Sq.Ft',
+        'sq-yard': 'Sq.Yard',
+        'acre': 'Acre',
+        'hectare': 'Hectare',
+        'bigha': 'Bigha',
+        'biswa': 'Biswa',
+        'gunta': 'Gunta',
+        'cents': 'Cents',
+        'marla': 'Marla',
+        'kanal': 'Kanal'
+      };
+      const displayUnit = unitMap[areaUnit] || areaUnit;
+      return `${area.toLocaleString()} ${displayUnit}`;
+    }
+    
+    return `${area.toLocaleString()} Sq.Ft`;
   };
 
   const formatPrice = (price?: number) => {

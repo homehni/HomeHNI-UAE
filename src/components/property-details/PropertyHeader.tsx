@@ -15,6 +15,7 @@ interface PropertyHeaderProps {
     property_type?: string;
     listing_type?: string;
     security_deposit?: number;
+    plot_area_unit?: string;
   };
 }
 
@@ -23,9 +24,31 @@ export const PropertyHeader: React.FC<PropertyHeaderProps> = ({ property }) => {
                property.property_type?.toLowerCase().includes('hostel') ||
                property.property_type?.toLowerCase().includes('coliving');
   
+  const isPlot = property.property_type?.toLowerCase().includes('plot') || 
+                 property.property_type?.toLowerCase().includes('land');
+  
   const price = isPG ? (property.expected_rent || property.expected_price) : property.expected_price;
   const deposit = property.security_deposit;
   const area = property.super_area || property.carpet_area;
+  
+  const getAreaUnit = () => {
+    if (isPlot && property.plot_area_unit) {
+      const unitMap: Record<string, string> = {
+        'sq-ft': 'Sq.Ft',
+        'sq-yard': 'Sq.Yard',
+        'acre': 'Acre',
+        'hectare': 'Hectare',
+        'bigha': 'Bigha',
+        'biswa': 'Biswa',
+        'gunta': 'Gunta',
+        'cents': 'Cents',
+        'marla': 'Marla',
+        'kanal': 'Kanal'
+      };
+      return unitMap[property.plot_area_unit] || property.plot_area_unit;
+    }
+    return 'Sq.Ft';
+  };
 
   return (
     <div className="bg-white border-b pt-0 sm:pt-24">
@@ -74,7 +97,7 @@ export const PropertyHeader: React.FC<PropertyHeaderProps> = ({ property }) => {
                   <div className="text-base sm:text-lg font-bold text-gray-900">
                     {area ? area.toLocaleString() : 'Not specified'}
                   </div>
-                  <div className="text-xs text-gray-600">Sq.Ft</div>
+                  <div className="text-xs text-gray-600">{getAreaUnit()}</div>
                 </div>
               )}
               
@@ -136,7 +159,7 @@ export const PropertyHeader: React.FC<PropertyHeaderProps> = ({ property }) => {
                 <div className="text-xl font-bold text-gray-900">
                   {area ? area.toLocaleString() : 'Not specified'}
                 </div>
-                <div className="text-sm text-gray-600">Sq.Ft</div>
+                <div className="text-sm text-gray-600">{getAreaUnit()}</div>
               </div>
             )}
             

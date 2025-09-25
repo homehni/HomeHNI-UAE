@@ -48,6 +48,27 @@ export const DescriptionCard: React.FC<DescriptionCardProps> = ({ property }) =>
 
   const formatArea = (area?: number) => {
     if (!area) return null;
+    
+    const isPlot = property?.property_type?.toLowerCase().includes('plot') || 
+                   property?.property_type?.toLowerCase().includes('land');
+    
+    if (isPlot && (property as any)?.plot_area_unit) {
+      const unitMap: Record<string, string> = {
+        'sq-ft': 'sq.ft',
+        'sq-yard': 'sq.yard',
+        'acre': 'acre',
+        'hectare': 'hectare',
+        'bigha': 'bigha',
+        'biswa': 'biswa',
+        'gunta': 'gunta',
+        'cents': 'cents',
+        'marla': 'marla',
+        'kanal': 'kanal'
+      };
+      const displayUnit = unitMap[(property as any).plot_area_unit] || (property as any).plot_area_unit;
+      return `${area} ${displayUnit}`;
+    }
+    
     return `${area} sq.ft`;
   };
 

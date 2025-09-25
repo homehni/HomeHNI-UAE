@@ -71,6 +71,7 @@ interface PropertyDetailsCardProps {
       warden_facility?: boolean;
     };
     parking?: string;
+    plot_area_unit?: string;
   };
 }
 
@@ -87,7 +88,29 @@ export const PropertyDetailsCard: React.FC<PropertyDetailsCardProps> = ({ proper
 
   const formatArea = (superArea?: number, carpetArea?: number) => {
     const area = superArea || carpetArea;
-    return area ? `${area.toLocaleString()} sqft` : 'Not specified';
+    if (!area) return 'Not specified';
+    
+    const isPlot = property.property_type?.toLowerCase().includes('plot') || 
+                   property.property_type?.toLowerCase().includes('land');
+    
+    if (isPlot && (property as any).plot_area_unit) {
+      const unitMap: Record<string, string> = {
+        'sq-ft': 'Sq.Ft',
+        'sq-yard': 'Sq.Yard',
+        'acre': 'Acre',
+        'hectare': 'Hectare',
+        'bigha': 'Bigha',
+        'biswa': 'Biswa',
+        'gunta': 'Gunta',
+        'cents': 'Cents',
+        'marla': 'Marla',
+        'kanal': 'Kanal'
+      };
+      const displayUnit = unitMap[(property as any).plot_area_unit] || (property as any).plot_area_unit;
+      return `${area.toLocaleString()} ${displayUnit}`;
+    }
+    
+    return `${area.toLocaleString()} Sq.Ft`;
   };
 
   const formatFloor = (floorNo?: number, totalFloors?: number) => {
