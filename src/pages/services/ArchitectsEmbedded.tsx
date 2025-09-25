@@ -6,17 +6,9 @@ import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { useToast } from "@/hooks/use-toast";
 import { Building2, Users, Ruler, Palette, Home, FileText, MapPin, Crown, Clock, CheckCircle, Shield, Star, X, Plus, Minus, Globe, Shield as ShieldCheck, Headphones, Smartphone, Download, PenTool, Compass, DraftingCompass } from "lucide-react";
-
 const ArchitectsEmbedded = () => {
   // Major cities in India
-  const majorCities = [
-    "Mumbai", "Delhi", "Bangalore", "Hyderabad", "Ahmedabad", "Chennai", "Kolkata", "Surat", "Pune", "Jaipur",
-    "Lucknow", "Kanpur", "Nagpur", "Indore", "Thane", "Bhopal", "Visakhapatnam", "Pimpri-Chinchwad", "Patna", "Vadodara",
-    "Ghaziabad", "Ludhiana", "Agra", "Nashik", "Faridabad", "Meerut", "Rajkot", "Kalyan-Dombivli", "Vasai-Virar", "Varanasi",
-    "Srinagar", "Aurangabad", "Dhanbad", "Amritsar", "Navi Mumbai", "Allahabad", "Ranchi", "Howrah", "Coimbatore", "Jabalpur",
-    "Gwalior", "Vijayawada", "Jodhpur", "Madurai", "Raipur", "Kota", "Guwahati", "Chandigarh", "Solapur", "Hubli-Dharwad"
-  ];
-
+  const majorCities = ["Mumbai", "Delhi", "Bangalore", "Hyderabad", "Ahmedabad", "Chennai", "Kolkata", "Surat", "Pune", "Jaipur", "Lucknow", "Kanpur", "Nagpur", "Indore", "Thane", "Bhopal", "Visakhapatnam", "Pimpri-Chinchwad", "Patna", "Vadodara", "Ghaziabad", "Ludhiana", "Agra", "Nashik", "Faridabad", "Meerut", "Rajkot", "Kalyan-Dombivli", "Vasai-Virar", "Varanasi", "Srinagar", "Aurangabad", "Dhanbad", "Amritsar", "Navi Mumbai", "Allahabad", "Ranchi", "Howrah", "Coimbatore", "Jabalpur", "Gwalior", "Vijayawada", "Jodhpur", "Madurai", "Raipur", "Kota", "Guwahati", "Chandigarh", "Solapur", "Hubli-Dharwad"];
   const services = [{
     icon: Home,
     title: "Residential Design",
@@ -42,7 +34,6 @@ const ArchitectsEmbedded = () => {
     title: "Project Management",
     description: "End-to-end construction supervision and management."
   }];
-
   const targetAudience = [{
     icon: Home,
     title: "Homeowners",
@@ -56,7 +47,6 @@ const ArchitectsEmbedded = () => {
     title: "Business Owners",
     description: "Designing commercial spaces that inspire productivity"
   }];
-
   const comparisonData = [{
     feature: "Professional Design Team",
     homeHNI: true,
@@ -90,7 +80,6 @@ const ArchitectsEmbedded = () => {
     homeHNI: true,
     others: false
   }];
-
   const testimonials = [{
     name: "Rajesh Kumar",
     role: "Homeowner",
@@ -110,7 +99,6 @@ const ArchitectsEmbedded = () => {
     rating: 5,
     text: "Outstanding project management and design. They delivered our residential project on time and within budget."
   }];
-
   const faqs = [{
     question: "What architectural services do you offer?",
     answer: "We offer residential design, commercial architecture, interior design, renovation & remodeling, 3D visualization, and complete project management services."
@@ -127,15 +115,18 @@ const ArchitectsEmbedded = () => {
     question: "What is your design approach?",
     answer: "We focus on sustainable, modern design solutions that optimize space, budget, and functionality while meeting your specific requirements."
   }];
-
-  const [formMessage, setFormMessage] = useState<{ type: 'success' | 'error' | null; text: string }>({ type: null, text: '' });
-
-  return (
-    <div className="bg-background">
+  const [formMessage, setFormMessage] = useState<{
+    type: 'success' | 'error' | null;
+    text: string;
+  }>({
+    type: null,
+    text: ''
+  });
+  return <div className="bg-background">
       {/* Hero Section */}
       <section className="relative pt-8 pb-20 md:pb-32 px-4 md:px-8 text-white overflow-hidden bg-cover bg-center bg-no-repeat" style={{
-        backgroundImage: "url('/lovable-uploads/fbb0d72f-782e-49f5-bbe1-8afc1314b5f7.png')"
-      }}>
+      backgroundImage: "url('/lovable-uploads/fbb0d72f-782e-49f5-bbe1-8afc1314b5f7.png')"
+    }}>
         <div className="absolute inset-0 bg-red-900/80 pointer-events-none" />
 
         <div className="relative z-10 container mx-auto">
@@ -167,13 +158,13 @@ const ArchitectsEmbedded = () => {
               <p className="text-sm md:text-base text-muted-foreground mb-6 md:mb-8">Fill the form & get a free consultation</p>
 
               <form className="space-y-4" onSubmit={e => {
-                e.preventDefault();
-                setFormMessage({
-                  type: "success",
-                  text: "Request submitted! Our architects will contact you within 24 hours."
-                });
-                (e.currentTarget as HTMLFormElement).reset();
-              }}>
+              e.preventDefault();
+              setFormMessage({
+                type: "success",
+                text: "Request submitted! Our architects will contact you within 24 hours."
+              });
+              (e.currentTarget as HTMLFormElement).reset();
+            }}>
                 <Input id="arch-name-mobile" name="name" placeholder="Name" className="h-10 md:h-12 text-sm md:text-base bg-background" required />
                 <div className="flex gap-2 md:gap-3">
                   <Select defaultValue="+91" name="countryCode">
@@ -194,15 +185,9 @@ const ArchitectsEmbedded = () => {
                 </Button>
                 
                 {/* Inline message */}
-                {formMessage.type && (
-                  <div className={`mt-2 p-3 rounded-lg text-sm ${
-                    formMessage.type === 'error'
-                      ? 'bg-red-50 text-red-700 border border-red-200'
-                      : 'bg-green-50 text-green-700 border border-green-200'
-                  }`}>
+                {formMessage.type && <div className={`mt-2 p-3 rounded-lg text-sm ${formMessage.type === 'error' ? 'bg-red-50 text-red-700 border border-red-200' : 'bg-green-50 text-green-700 border border-green-200'}`}>
                     {formMessage.text}
-                  </div>
-                )}
+                  </div>}
               </form>
             </CardContent>
           </Card>
@@ -219,9 +204,8 @@ const ArchitectsEmbedded = () => {
               </h2>
               <div className="grid gap-6">
                 {services.map((service, index) => {
-                  const IconComponent = service.icon;
-                  return (
-                    <div key={index} className="flex gap-4 p-6 bg-card rounded-lg border">
+                const IconComponent = service.icon;
+                return <div key={index} className="flex gap-4 p-6 bg-card rounded-lg border">
                       <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center flex-shrink-0">
                         <IconComponent className="w-6 h-6 text-red-600" />
                       </div>
@@ -229,9 +213,8 @@ const ArchitectsEmbedded = () => {
                         <h3 className="text-lg font-semibold text-foreground mb-2">{service.title}</h3>
                         <p className="text-muted-foreground text-sm">{service.description}</p>
                       </div>
-                    </div>
-                  );
-                })}
+                    </div>;
+              })}
               </div>
             </div>
             <div className="hidden lg:block"></div>
@@ -285,25 +268,15 @@ const ArchitectsEmbedded = () => {
                   <div className="text-center">Home HNI</div>
                   <div className="text-center">Others</div>
                 </div>
-                {comparisonData.map((item, index) => (
-                  <div key={index} className="grid grid-cols-3 gap-4 p-4 border-t text-sm">
+                {comparisonData.map((item, index) => <div key={index} className="grid grid-cols-3 gap-4 p-4 border-t text-sm">
                     <div className="text-foreground">{item.feature}</div>
                     <div className="text-center">
-                      {item.homeHNI ? (
-                        <CheckCircle className="w-4 h-4 text-red-600 mx-auto" />
-                      ) : (
-                        <X className="w-4 h-4 text-red-500 mx-auto" />
-                      )}
+                      {item.homeHNI ? <CheckCircle className="w-4 h-4 text-red-600 mx-auto" /> : <X className="w-4 h-4 text-red-500 mx-auto" />}
                     </div>
                     <div className="text-center">
-                      {item.others ? (
-                        <CheckCircle className="w-4 h-4 text-red-600 mx-auto" />
-                      ) : (
-                        <X className="w-4 h-4 text-red-500 mx-auto" />
-                      )}
+                      {item.others ? <CheckCircle className="w-4 h-4 text-red-600 mx-auto" /> : <X className="w-4 h-4 text-red-500 mx-auto" />}
                     </div>
-                  </div>
-                ))}
+                  </div>)}
               </div>
             </div>
             <div className="hidden lg:block"></div>
@@ -320,20 +293,13 @@ const ArchitectsEmbedded = () => {
                 What Our Customers Say
               </h2>
               <div className="space-y-6">
-                {testimonials.map((testimonial, index) => (
-                  <Card key={index} className="p-6">
+                {testimonials.map((testimonial, index) => <Card key={index} className="p-6">
                     <CardContent className="p-0">
                       <div className="flex items-start gap-4">
-                        <img 
-                          src={testimonial.image} 
-                          alt={testimonial.name}
-                          className="w-12 h-12 rounded-full object-cover"
-                        />
+                        <img src={testimonial.image} alt={testimonial.name} className="w-12 h-12 rounded-full object-cover" />
                         <div className="flex-1">
                           <div className="flex items-center gap-1 mb-2">
-                            {[...Array(testimonial.rating)].map((_, i) => (
-                              <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                            ))}
+                            {[...Array(testimonial.rating)].map((_, i) => <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />)}
                           </div>
                           <p className="text-muted-foreground text-sm mb-3">"{testimonial.text}"</p>
                           <div>
@@ -343,8 +309,7 @@ const ArchitectsEmbedded = () => {
                         </div>
                       </div>
                     </CardContent>
-                  </Card>
-                ))}
+                  </Card>)}
               </div>
             </div>
             <div className="hidden lg:block"></div>
@@ -362,9 +327,8 @@ const ArchitectsEmbedded = () => {
               </h2>
               <div className="grid gap-6">
                 {targetAudience.map((audience, index) => {
-                  const IconComponent = audience.icon;
-                  return (
-                    <div key={index} className="flex gap-4 p-6 bg-card rounded-lg border">
+                const IconComponent = audience.icon;
+                return <div key={index} className="flex gap-4 p-6 bg-card rounded-lg border">
                       <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center flex-shrink-0">
                         <IconComponent className="w-6 h-6 text-red-600" />
                       </div>
@@ -372,9 +336,8 @@ const ArchitectsEmbedded = () => {
                         <h3 className="text-lg font-semibold text-foreground mb-2">{audience.title}</h3>
                         <p className="text-muted-foreground text-sm">{audience.description}</p>
                       </div>
-                    </div>
-                  );
-                })}
+                    </div>;
+              })}
               </div>
             </div>
             <div className="hidden lg:block"></div>
@@ -387,8 +350,8 @@ const ArchitectsEmbedded = () => {
         <div className="w-96 sticky top-8">
         <Card className="w-full rounded-xl shadow-2xl bg-background border-2 border-primary">
           <CardContent className="p-6">
-            <h3 className="text-xl font-semibold text-foreground mb-2">Need an architect?</h3>
-            <p className="text-sm text-muted-foreground mb-4">Fill the form & get a free consultation</p>
+            <h3 className="text-xl font-semibold text-foreground mb-2 text-center">Need an architect?</h3>
+            <p className="text-sm text-muted-foreground mb-4 text-center">Fill the form & get a free consultation</p>
 
             <form className="space-y-4" onSubmit={e => {
               e.preventDefault();
@@ -444,9 +407,7 @@ const ArchitectsEmbedded = () => {
                 <Select name="city">
                   <SelectTrigger id="arch-city" className="flex-1"><SelectValue placeholder="Select City" /></SelectTrigger>
                   <SelectContent>
-                    {majorCities.map((city) => (
-                      <SelectItem key={city} value={city.toLowerCase()}>{city}</SelectItem>
-                    ))}
+                    {majorCities.map(city => <SelectItem key={city} value={city.toLowerCase()}>{city}</SelectItem>)}
                   </SelectContent>
                 </Select>
               </div>
@@ -454,15 +415,9 @@ const ArchitectsEmbedded = () => {
               <Button type="submit" className="w-full bg-red-800 hover:bg-red-900 text-white">Get Free Consultation!</Button>
               
               {/* Inline message */}
-              {formMessage.type && (
-                <div className={`mt-2 p-3 rounded-lg text-sm ${
-                  formMessage.type === 'error'
-                    ? 'bg-red-50 text-red-700 border border-red-200'
-                    : 'bg-green-50 text-green-700 border border-green-200'
-                }`}>
+              {formMessage.type && <div className={`mt-2 p-3 rounded-lg text-sm ${formMessage.type === 'error' ? 'bg-red-50 text-red-700 border border-red-200' : 'bg-green-50 text-green-700 border border-green-200'}`}>
                   {formMessage.text}
-                </div>
-              )}
+                </div>}
             </form>
           </CardContent>
         </Card>
@@ -478,24 +433,20 @@ const ArchitectsEmbedded = () => {
                 Frequently Asked Questions
               </h2>
               <Accordion type="single" collapsible className="space-y-4">
-                {faqs.map((faq, index) => (
-                  <AccordionItem key={index} value={`item-${index}`} className="bg-card border rounded-lg px-6">
+                {faqs.map((faq, index) => <AccordionItem key={index} value={`item-${index}`} className="bg-card border rounded-lg px-6">
                     <AccordionTrigger className="text-left font-semibold text-sm py-4">
                       {faq.question}
                     </AccordionTrigger>
                     <AccordionContent className="text-muted-foreground text-sm pb-4">
                       {faq.answer}
                     </AccordionContent>
-                  </AccordionItem>
-                ))}
+                  </AccordionItem>)}
               </Accordion>
             </div>
             <div className="hidden lg:block"></div>
           </div>
         </div>
       </section>
-    </div>
-  );
+    </div>;
 };
-
 export default ArchitectsEmbedded;
