@@ -233,6 +233,7 @@ export const ResalePreviewStep: React.FC<ResalePreviewStepProps> = ({
           <div className="text-center sm:text-left">
             <h2 className="text-lg sm:text-xl font-semibold text-red-800 mb-1">Congratulations!</h2>
             <p className="text-sm sm:text-base text-red-700 font-medium">Your property is submitted successfully!</p>
+            <p className="text-red-600 text-xs sm:text-sm font-medium mt-1">Your Property will be reviewed and made live in 12 Hours</p>
           </div>
         </div>
          <div className="flex flex-col sm:flex-row gap-3">
