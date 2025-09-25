@@ -25,7 +25,7 @@ const Services = () => {
     title: 'Expert Consultation',
     description: 'Connect with certified real estate experts for personalized property advice.'
   }];
-  return <section className="py-16 bg-white section-separator">
+  return <section className="py-8 bg-white section-separator">
       <div className="container mx-auto px-4">
         <div className="text-uniform-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">

@@ -105,7 +105,7 @@ const WhyUseSection = () => {
   ];
 
   return (
-    <section className="py-16 bg-white section-separator">
+    <section className="py-8 bg-white section-separator">
       {/* Top promotional banner (mobile-friendly) */}
       <div className="text-white py-3 mb-12" style={{ backgroundColor: '#d21404' }}>
         <div className="container mx-auto px-4 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 text-center sm:text-left">
