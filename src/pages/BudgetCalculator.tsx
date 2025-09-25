@@ -7,8 +7,11 @@ import { Button } from '@/components/ui/button';
 import { Calculator, Home, TrendingUp, AlertCircle } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import { supabase } from '@/integrations/supabase/client';
+import { useToast } from '@/hooks/use-toast';
 
 const BudgetCalculator = () => {
+  const { toast } = useToast();
   const [monthlyIncome, setMonthlyIncome] = useState(50000);
   const [monthlyExpenses, setMonthlyExpenses] = useState(25000);
   const [existingEMI, setExistingEMI] = useState(0);
@@ -23,27 +26,41 @@ const BudgetCalculator = () => {
 
   // Function to send price suggestions email
   const sendPriceSuggestionsEmailHandler = async () => {
-    // In a real app, you'd get user email from auth context
-    // For demo purposes, you could show a modal to collect email
-    console.log('Price suggestions calculated - email integration point');
-    // Example implementation:
-    /*
+    // Get user information from auth context
     try {
-      const { sendPriceSuggestionsEmail } = await import('@/services/emailService');
-      await sendPriceSuggestionsEmail(
-        userEmail, 
-        userName, 
-        {
-          locality: 'Your selected area',
-          rangeMin: Math.floor(totalBudget * 0.8),
-          rangeMax: Math.floor(totalBudget * 1.2),
-          yourPrice: totalBudget
-        }
-      );
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user?.email) {
+        const { sendPriceSuggestionsEmail } = await import('@/services/emailService');
+        await sendPriceSuggestionsEmail(
+          user.email, 
+          user.user_metadata?.name || user.email.split('@')[0], 
+          {
+            locality: 'Your selected area',
+            rangeMin: Math.floor(totalBudget * 0.8),
+            rangeMax: Math.floor(totalBudget * 1.2),
+            yourPrice: totalBudget
+          }
+        );
+        
+        toast({
+          title: "Price Suggestions Sent!",
+          description: "Check your email for personalized price analysis.",
+        });
+      } else {
+        toast({
+          title: "Login Required",
+          description: "Please login to receive price suggestions via email.",
+          variant: "destructive"
+        });
+      }
     } catch (error) {
       console.error('Failed to send price suggestions email:', error);
+      toast({
+        title: "Email Failed",
+        description: "Failed to send price suggestions. Please try again.",
+        variant: "destructive"
+      });
     }
-    */
   };
 
   useEffect(() => {

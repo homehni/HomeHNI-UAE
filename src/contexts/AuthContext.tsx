@@ -215,7 +215,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
 
       // Send welcome email after successful signup
-      await sendWelcomeEmail(email, fullName || email.split('@')[0]);
+      try {
+        await sendWelcomeEmail(email, fullName || email.split('@')[0]);
+        console.log('Welcome email sent successfully');
+      } catch (error) {
+        console.error('Failed to send welcome email:', error);
+        // Don't block signup if email fails
+      }
     } catch (err) {
       const msg = err instanceof Error ? err.message : 'Sign up failed';
       throw new Error(msg);

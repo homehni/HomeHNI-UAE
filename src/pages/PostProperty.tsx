@@ -753,6 +753,47 @@ export const PostProperty: React.FC = () => {
 
       console.log('Property submission created successfully.');
 
+      // Send property listing live email
+      try {
+        const { sendListingLiveEmail } = await import('@/services/emailService');
+        const userEmail = data.ownerInfo.email || user.email;
+        const userName = data.ownerInfo.fullName || user.user_metadata?.name || user.email?.split('@')[0] || 'there';
+        
+        // Get property price for email
+        let propertyPrice = 'N/A';
+        if ('rentalDetails' in data.propertyInfo) {
+          propertyPrice = `₹${Number((data.propertyInfo as any).rentalDetails.expectedPrice).toLocaleString()}`;
+        } else if ('saleDetails' in data.propertyInfo) {
+          propertyPrice = `₹${Number((data.propertyInfo as any).saleDetails.expectedPrice).toLocaleString()}`;
+        } else if ('pgDetails' in data.propertyInfo) {
+          propertyPrice = `₹${Number((data.propertyInfo as any).pgDetails.expectedPrice).toLocaleString()}`;
+        } else if ('flattmatesDetails' in data.propertyInfo) {
+          propertyPrice = `₹${Number((data.propertyInfo as any).flattmatesDetails.expectedPrice).toLocaleString()}`;
+        } else if ('commercialSaleDetails' in data.propertyInfo) {
+          propertyPrice = `₹${Number((data.propertyInfo as any).commercialSaleDetails.expectedPrice).toLocaleString()}`;
+        }
+
+        const bhkDetails = ('propertyDetails' in data.propertyInfo && 'bhkType' in data.propertyInfo.propertyDetails) 
+          ? data.propertyInfo.propertyDetails.bhkType 
+          : 'Property';
+        
+        const locality = data.propertyInfo.locationDetails.locality || 'Location';
+        const phone = data.ownerInfo.phoneNumber || 'Not provided';
+        
+        await sendListingLiveEmail(userEmail, userName, {
+          price: propertyPrice,
+          bhkDetails: bhkDetails,
+          locality: locality,
+          phone: phone,
+          id: lastSubmissionId || 'new-property'
+        });
+        
+        console.log('Property listing live email sent successfully');
+      } catch (error) {
+        console.error('Failed to send property listing live email:', error);
+        // Don't block the main flow if email fails
+      }
+
       // Save owner contact information to property_drafts table
       let priceDetailsDraft: any;
       if ('rentalDetails' in data.propertyInfo) {
