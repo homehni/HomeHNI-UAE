@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { SecurePropertyService } from '@/services/securePropertyService';
+
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -93,66 +93,21 @@ export const ContactOwnerModal: React.FC<ContactOwnerModalProps> = ({
 
 
     try {
-      const leadData = {
-        property_id: propertyId,
-        interested_user_name: formData.name,
-        interested_user_email: formData.email,
-        interested_user_phone: formData.phone,
-        message: formData.message || undefined
-      };
-
-      console.log('ContactOwnerModal: Creating lead with data:', leadData);
-      console.log('ContactOwnerModal: Property ID:', propertyId);
+      console.log('ContactOwnerModal: Creating lead with RPC call');
       
-      // Try the RPC function first
-      const { data, error } = await SecurePropertyService.createPropertyLead(leadData);
+      // Use the same RPC function as SecureContactForm - it doesn't require authentication
+      const { data, error } = await supabase.rpc('create_contact_lead', {
+        p_property_id: propertyId,
+        p_user_name: formData.name.trim(),
+        p_user_email: formData.email.trim(),
+        p_user_phone: formData.phone.trim(),
+        p_message: formData.message.trim() || undefined
+      });
+      
       console.log('ContactOwnerModal: Lead creation result:', { data, error });
       
-      // If RPC function fails due to SQL ambiguity, use the old leadService approach
-      if (error && error.code === '42702') {
-        console.log('ContactOwnerModal: RPC failed due to SQL ambiguity, using leadService fallback...');
-        
-        // Import and use the old leadService as fallback
-        const { createLead } = await import('@/services/leadService');
-        
-        try {
-          const leadResult = await createLead({
-            property_id: propertyId,
-            interested_user_name: leadData.interested_user_name,
-            interested_user_email: leadData.interested_user_email,
-            interested_user_phone: leadData.interested_user_phone,
-            message: leadData.message
-          });
-          
-          console.log('ContactOwnerModal: leadService creation result:', leadResult);
-          console.log('ContactOwnerModal: Lead created successfully via leadService fallback');
-        } catch (leadServiceError) {
-          console.error('ContactOwnerModal: leadService also failed:', leadServiceError);
-          
-          // Final fallback: Just show success message even if we can't create the lead
-          // The admin can manually handle the inquiry
-          console.log('ContactOwnerModal: All methods failed, showing success message anyway for UX');
-        }
-      } else if (error) {
-        // For other errors, still try the leadService fallback
-        console.log('ContactOwnerModal: RPC failed with other error, trying leadService fallback...');
-        
-        try {
-          const { createLead } = await import('@/services/leadService');
-          const leadResult = await createLead({
-            property_id: propertyId,
-            interested_user_name: leadData.interested_user_name,
-            interested_user_email: leadData.interested_user_email,
-            interested_user_phone: leadData.interested_user_phone,
-            message: leadData.message
-          });
-          
-          console.log('ContactOwnerModal: leadService creation result:', leadResult);
-          console.log('ContactOwnerModal: Lead created successfully via leadService fallback');
-        } catch (leadServiceError) {
-          console.error('ContactOwnerModal: leadService also failed:', leadServiceError);
-          throw new Error('Unable to register your interest at this time. Please try again later.');
-        }
+      if (error) {
+        throw new Error(error.message);
       }
 
       console.log('ContactOwnerModal: Success! Listing type:', listingType);
