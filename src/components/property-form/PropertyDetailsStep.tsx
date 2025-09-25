@@ -145,7 +145,7 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
                     <FormLabel className="text-sm font-medium">Property Type</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
-                        <SelectTrigger className="h-10 w-full max-w-full">
+                        <SelectTrigger className="h-10 w-full max-w-full focus:ring-inset focus:ring-offset-0 truncate">
                           <SelectValue placeholder="Select Property Type" />
                         </SelectTrigger>
                       </FormControl>
@@ -167,7 +167,7 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
                     <FormLabel className="text-sm font-medium">BHK Type</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
-                        <SelectTrigger className="h-10 w-full max-w-full">
+                        <SelectTrigger className="h-10 w-full max-w-full focus:ring-inset focus:ring-offset-0 truncate">
                           <SelectValue placeholder="Select BHK Type" />
                         </SelectTrigger>
                       </FormControl>
@@ -194,7 +194,7 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
                     <FormLabel className="text-sm font-medium">Property Age</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
-                        <SelectTrigger className="h-10 w-full max-w-full">
+                        <SelectTrigger className="h-10 w-full max-w-full focus:ring-inset focus:ring-offset-0 truncate">
                           <SelectValue placeholder="Select" />
                         </SelectTrigger>
                       </FormControl>
@@ -217,7 +217,7 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
                     <FormLabel className="text-sm font-medium">Facing</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
-                        <SelectTrigger className="h-10 w-full max-w-full">
+                        <SelectTrigger className="h-10 w-full max-w-full focus:ring-inset focus:ring-offset-0 truncate">
                           <div className="flex items-center gap-2">
                             <Compass className="h-4 w-4 text-muted-foreground" />
                             <SelectValue placeholder="Select" />
@@ -255,7 +255,7 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
                 }
               }} value={field.value === undefined ? undefined : field.value === 0 ? 'ground' : field.value === 'basement' ? 'basement' : field.value.toString()}>
                         <FormControl>
-                          <SelectTrigger className="h-10 w-full max-w-full">
+                          <SelectTrigger className="h-10 w-full max-w-full focus:ring-inset focus:ring-offset-0 truncate">
                             <SelectValue placeholder="Select Floor" />
                           </SelectTrigger>
                         </FormControl>
@@ -279,7 +279,7 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
                       <FormLabel className="text-sm font-medium">Total Floor</FormLabel>
                       <Select onValueChange={value => field.onChange(parseInt(value))} defaultValue={field.value?.toString()}>
                         <FormControl>
-                          <SelectTrigger className="h-10 w-full max-w-full">
+                          <SelectTrigger className="h-10 w-full max-w-full focus:ring-inset focus:ring-offset-0 truncate">
                             <SelectValue placeholder="Select Total Floors" />
                           </SelectTrigger>
                         </FormControl>
@@ -303,7 +303,7 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
                       <FormLabel className="text-sm font-medium">No. of Floors</FormLabel>
                       <Select onValueChange={value => field.onChange(parseInt(value))} defaultValue={field.value?.toString()}>
                         <FormControl>
-                          <SelectTrigger className="h-10 w-full max-w-full">
+                          <SelectTrigger className="h-10 w-full max-w-full focus:ring-inset focus:ring-offset-0 truncate">
                             <SelectValue placeholder="Select" />
                           </SelectTrigger>
                         </FormControl>
