@@ -36,7 +36,7 @@ const MobileAppSection = () => {
   };
   return <section className="py-1 bg-gradient-to-br from-rose-50 to-white">
       <div className="container px-2 mx-0 my-1">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-center max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-center max-w-6xl mx-auto px-6 py-8">
           {/* Content */}
           <div className="text-center lg:text-left order-2 lg:order-1">
             {/* Optional badge */}
