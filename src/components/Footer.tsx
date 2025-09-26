@@ -229,7 +229,7 @@ const Footer = ({
                 <button
                   key={index}
                   onClick={() => setActiveTab(tab)}
-                  className={`px-4 py-3 text-sm font-medium border-b-2 transition-colors ${
+                  className={`font-poppins px-4 py-3 text-sm font-medium border-b-2 transition-colors ${
                     activeTab === tab
                       ? 'border-brand-red text-brand-red bg-brand-red/5'
                       : 'border-transparent text-gray-600 hover:text-gray-900 hover:border-gray-300'
