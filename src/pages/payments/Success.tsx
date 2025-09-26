@@ -35,7 +35,7 @@ const PaymentSuccess = () => {
             </Link>
             <div>
               <Link 
-                to="/dashboard" 
+                to="/dashboard?tab=payments" 
                 className="text-primary hover:text-primary/80 underline text-sm"
               >
                 Go to Dashboard
