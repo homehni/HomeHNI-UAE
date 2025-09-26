@@ -68,8 +68,10 @@ const BlogSection = ({ title, data, tags, viewMoreText, backgroundColor = "bg-wh
                 >
                   <img 
                     src={data.featured[0].image} 
-                    alt={data.featured[0].title}
+                    alt={`${data.featured[0].title} - featured blog image`}
                     className="w-full h-80 object-cover rounded-lg"
+                    loading="lazy"
+                    onError={(e) => { e.currentTarget.src = '/placeholder.svg'; }}
                   />
                   <div className="absolute inset-0 bg-black/40 rounded-lg"></div>
                   <div className="absolute bottom-0 left-0 right-0 p-6">
@@ -98,8 +100,10 @@ const BlogSection = ({ title, data, tags, viewMoreText, backgroundColor = "bg-wh
                   >
                     <img 
                       src={article.image} 
-                      alt={article.title}
+                      alt={`${article.title} - blog image`}
                       className="w-full h-36 object-cover rounded-lg"
+                      loading="lazy"
+                      onError={(e) => { e.currentTarget.src = '/placeholder.svg'; }}
                     />
                     <div className="absolute inset-0 bg-black/40 rounded-lg"></div>
                     <div className="absolute bottom-0 left-0 right-0 p-4">
