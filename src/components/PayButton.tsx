@@ -267,15 +267,7 @@ export default function PayButton({
               }
             }
             
-            toast.error("Payment Cancelled", {
-              description: "You can try again anytime.",
-              duration: 4000,
-              style: {
-                background: '#fef2f2',
-                border: '1px solid #fecaca',
-                color: '#991b1b',
-              },
-            });
+            // No toast for cancelled payments - user initiated action
             setTimeout(() => {
               window.location.href = "/payment/failed";
             }, 1000);
