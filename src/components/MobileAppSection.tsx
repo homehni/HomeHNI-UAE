@@ -91,8 +91,8 @@ const MobileAppSection = () => {
           </div>
 
           {/* Image */}
-          <div className="hidden lg:flex justify-center lg:justify-end order-1 lg:order-2">
-            <div className="relative">
+          <div className="hidden lg:flex justify-end items-center order-1 lg:order-2 pl-8">
+            <div className="relative ml-8">
               <img src="/images/home-hni-mobile-app.png" alt="Home HNI mobile app preview" loading="lazy" className="w-full max-w-md h-[400px]" />
               {/* Decorative cherry-red glow */}
               <div className="pointer-events-none absolute -inset-6 -z-10 blur-2xl
