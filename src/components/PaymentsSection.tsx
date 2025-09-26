@@ -148,9 +148,10 @@ const PaymentsSection: React.FC = () => {
     const pageWidth = pdf.internal.pageSize.width;
     const pageHeight = pdf.internal.pageSize.height;
     
-    // Set colors - Pink theme for Home HNI
-    const primaryColor = [219, 39, 119]; // Pink/Magenta color matching the logo
+    // Set colors - Red theme #DC2626 for Home HNI
+    const primaryColor = [220, 38, 38]; // #DC2626 red color
     const secondaryColor = [128, 128, 128]; // Gray
+    const textColor = [0, 0, 0]; // Black for uniform text
     
     try {
       // Load and add logo
@@ -163,7 +164,7 @@ const PaymentsSection: React.FC = () => {
         logoImg.onerror = reject;
       });
       
-      // Company Header with pink background
+      // Company Header with red background #DC2626
       pdf.setFillColor(primaryColor[0], primaryColor[1], primaryColor[2]);
       pdf.rect(0, 0, pageWidth, 40, 'F');
       
@@ -183,35 +184,38 @@ const PaymentsSection: React.FC = () => {
       pdf.rect(0, 0, pageWidth, 40, 'F');
       
       pdf.setTextColor(255, 255, 255);
-      pdf.setFontSize(26);
+      pdf.setFontSize(24);
       pdf.setFont('helvetica', 'bold');
       pdf.text('HOME HNI', 20, 25);
     }
     
-    // Invoice Title
-    pdf.setTextColor(0, 0, 0);
-    pdf.setFontSize(22);
+    // Reset text color for consistent formatting
+    pdf.setTextColor(textColor[0], textColor[1], textColor[2]);
+    
+    // Invoice Title - Uniform formatting
+    pdf.setFontSize(20);
     pdf.setFont('helvetica', 'bold');
     pdf.text('INVOICE', pageWidth - 20, 60, { align: 'right' });
     
     // Invoice Details Box - Professional styling
-    pdf.setDrawColor(220, 220, 220);
+    pdf.setDrawColor(200, 200, 200);
     pdf.setLineWidth(0.5);
     pdf.rect(pageWidth - 80, 70, 70, 35);
     
-    pdf.setFontSize(10);
+    // Uniform text formatting for invoice details
+    pdf.setFontSize(9);
     pdf.setFont('helvetica', 'normal');
     pdf.text(`Invoice #: ${payment.invoice_number || payment.payment_id.slice(-8)}`, pageWidth - 75, 77);
     pdf.text(`Date: ${format(new Date(payment.payment_date), 'dd/MM/yyyy')}`, pageWidth - 75, 84);
     pdf.text(`Payment ID: ${payment.payment_id.slice(-8)}`, pageWidth - 75, 91);
     pdf.text(`Status: ${payment.status.toUpperCase()}`, pageWidth - 75, 98);
     
-    // Company Details - Updated for Home HNI
-    pdf.setFontSize(12);
+    // Company Details - Uniform formatting
+    pdf.setFontSize(11);
     pdf.setFont('helvetica', 'bold');
     pdf.text('From:', 20, 60);
     
-    pdf.setFontSize(10);
+    pdf.setFontSize(9);
     pdf.setFont('helvetica', 'normal');
     pdf.text('Home HNI Pvt Ltd', 20, 70);
     pdf.text('Plot No: 52 E/P', 20, 77);
@@ -220,12 +224,12 @@ const PaymentsSection: React.FC = () => {
     pdf.text('Phone: +91 8074 017 388', 20, 98);
     pdf.text('GST: 27ABCDE1234F5Z6', 20, 105);
     
-    // Customer Details
-    pdf.setFontSize(12);
+    // Customer Details - Uniform formatting
+    pdf.setFontSize(11);
     pdf.setFont('helvetica', 'bold');
     pdf.text('Bill To:', 20, 125);
     
-    pdf.setFontSize(10);
+    pdf.setFontSize(9);
     pdf.setFont('helvetica', 'normal');
     pdf.text(user?.email || 'Customer', 20, 135);
     pdf.text('Customer ID: ' + (user?.id?.slice(-8) || 'N/A'), 20, 142);
@@ -234,46 +238,48 @@ const PaymentsSection: React.FC = () => {
     const tableY = 160;
     
     // Main table border
-    pdf.setDrawColor(200, 200, 200);
+    pdf.setDrawColor(180, 180, 180);
     pdf.setLineWidth(0.5);
     pdf.rect(20, tableY, pageWidth - 40, 35);
     
-    // Table Header with background
-    pdf.setFillColor(248, 248, 248);
+    // Table Header with light gray background
+    pdf.setFillColor(245, 245, 245);
     pdf.rect(20, tableY, pageWidth - 40, 15, 'F');
     
-    // Header borders
+    // Header borders - consistent with table structure
     pdf.line(20, tableY + 15, pageWidth - 20, tableY + 15);
     pdf.line(80, tableY, 80, tableY + 35);
     pdf.line(130, tableY, 130, tableY + 35);
     pdf.line(160, tableY, 160, tableY + 35);
     
-    pdf.setFontSize(11);
+    // Table headers - uniform formatting
+    pdf.setFontSize(10);
     pdf.setFont('helvetica', 'bold');
+    pdf.setTextColor(textColor[0], textColor[1], textColor[2]);
     pdf.text('Description', 25, tableY + 10);
     pdf.text('Plan Type', 85, tableY + 10);
     pdf.text('Duration', 135, tableY + 10);
     pdf.text('Amount', pageWidth - 25, tableY + 10, { align: 'right' });
     
-    // Table Content Row
+    // Table Content Row - uniform formatting
     pdf.setFont('helvetica', 'normal');
-    pdf.setFontSize(10);
+    pdf.setFontSize(9);
     pdf.text(payment.plan_name, 25, tableY + 25);
     pdf.text(payment.plan_type || 'subscription', 85, tableY + 25);
     pdf.text(payment.plan_duration || '1 month', 135, tableY + 25);
     pdf.text(`₹ ${payment.amount_rupees.toLocaleString()}`, pageWidth - 25, tableY + 25, { align: 'right' });
     
-    // Totals Section - Right aligned like in reference
+    // Totals Section - Right aligned with uniform formatting
     const totalY = tableY + 60;
     const totalX = pageWidth - 80;
     
-    // Subtotal
+    // Subtotal - uniform text
     pdf.setFont('helvetica', 'normal');
-    pdf.setFontSize(10);
+    pdf.setFontSize(9);
     pdf.text('Subtotal:', totalX, totalY);
     pdf.text(`₹ ${payment.amount_rupees.toLocaleString()}`, pageWidth - 25, totalY, { align: 'right' });
     
-    // GST
+    // GST - uniform text
     pdf.text('GST (18%):', totalX, totalY + 12);
     const gstAmount = Math.round(payment.amount_rupees * 0.18);
     pdf.text(`₹ ${gstAmount.toLocaleString()}`, pageWidth - 25, totalY + 12, { align: 'right' });
@@ -282,29 +288,30 @@ const PaymentsSection: React.FC = () => {
     pdf.setLineWidth(0.5);
     pdf.line(totalX, totalY + 20, pageWidth - 20, totalY + 20);
     
-    // Total Amount
-    pdf.setFontSize(12);
+    // Total Amount - uniform bold formatting
+    pdf.setFontSize(11);
     pdf.setFont('helvetica', 'bold');
     pdf.text('Total Amount:', totalX, totalY + 32);
     const totalAmount = payment.amount_rupees + gstAmount;
     pdf.text(`₹ ${totalAmount.toLocaleString()}`, pageWidth - 25, totalY + 32, { align: 'right' });
     
-    // Payment Details Section
+    // Payment Details Section - uniform formatting
     const paymentDetailsY = totalY + 60;
     pdf.setFontSize(11);
     pdf.setFont('helvetica', 'bold');
     pdf.text('Payment Details:', 20, paymentDetailsY);
     
     pdf.setFont('helvetica', 'normal');
-    pdf.setFontSize(10);
+    pdf.setFontSize(9);
     pdf.text(`Payment Method: ${payment.payment_method || 'razorpay'}`, 20, paymentDetailsY + 15);
     pdf.text(`Transaction Date: ${format(new Date(payment.payment_date), 'MMMM do, yyyy')}`, 20, paymentDetailsY + 25);
     pdf.text(`Currency: ${payment.currency}`, 20, paymentDetailsY + 35);
     
-    // Professional Footer with proper spacing
+    // Professional Footer with uniform formatting
     const footerY = pageHeight - 60;
-    pdf.setTextColor(100, 100, 100);
-    pdf.setFontSize(9);
+    pdf.setTextColor(120, 120, 120);
+    pdf.setFontSize(8);
+    pdf.setFont('helvetica', 'normal');
     
     // Thank you message
     pdf.text('Thank you for your business!', 20, footerY);
@@ -315,7 +322,7 @@ const PaymentsSection: React.FC = () => {
     // Generation date
     pdf.text(`Generated on: ${format(new Date(), 'MMMM do, yyyy')}`, 20, footerY + 24);
     
-    // Terms and Conditions
+    // Terms and Conditions - consistent small font
     pdf.setFontSize(8);
     pdf.text('Terms: Payment is due within 30 days. Late payments may incur additional charges.', 20, footerY + 36);
     
