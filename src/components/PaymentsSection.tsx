@@ -153,41 +153,15 @@ const PaymentsSection: React.FC = () => {
     const secondaryColor = [128, 128, 128]; // Gray
     const textColor = [0, 0, 0]; // Black for uniform text
     
-    try {
-      // Load and add logo
-      const logoImg = new Image();
-      logoImg.crossOrigin = 'anonymous';
-      logoImg.src = '/src/assets/home-hni-logo.png';
-      
-      await new Promise((resolve, reject) => {
-        logoImg.onload = resolve;
-        logoImg.onerror = reject;
-      });
-      
-      // Company Header with red background #DC2626
-      pdf.setFillColor(primaryColor[0], primaryColor[1], primaryColor[2]);
-      pdf.rect(0, 0, pageWidth, 40, 'F');
-      
-      // Add logo to PDF
-      const canvas = document.createElement('canvas');
-      const ctx = canvas.getContext('2d');
-      canvas.width = logoImg.width;
-      canvas.height = logoImg.height;
-      ctx?.drawImage(logoImg, 0, 0);
-      
-      const logoDataUrl = canvas.toDataURL('image/png');
-      pdf.addImage(logoDataUrl, 'PNG', 15, 8, 60, 24);
-      
-    } catch (error) {
-      // Fallback if logo fails to load
-      pdf.setFillColor(primaryColor[0], primaryColor[1], primaryColor[2]);
-      pdf.rect(0, 0, pageWidth, 40, 'F');
-      
-      pdf.setTextColor(255, 255, 255);
-      pdf.setFontSize(24);
-      pdf.setFont('helvetica', 'bold');
-      pdf.text('HOME HNI', 20, 25);
-    }
+    // Company Header with red background #DC2626 - no logo, just clean header
+    pdf.setFillColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+    pdf.rect(0, 0, pageWidth, 40, 'F');
+    
+    // White text on red background
+    pdf.setTextColor(255, 255, 255);
+    pdf.setFontSize(24);
+    pdf.setFont('helvetica', 'bold');
+    pdf.text('HOME HNI', 20, 25);
     
     // Reset text color for consistent formatting
     pdf.setTextColor(textColor[0], textColor[1], textColor[2]);
