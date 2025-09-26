@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { format } from 'date-fns';
+import jsPDF from 'jspdf';
 
 interface Payment {
   id: string;
@@ -140,6 +141,133 @@ const PaymentsSection: React.FC = () => {
   const handlePaymentClick = (payment: Payment) => {
     setSelectedPayment(payment);
     setIsModalOpen(true);
+  };
+
+  const generateInvoicePDF = async (payment: Payment) => {
+    const pdf = new jsPDF();
+    const pageWidth = pdf.internal.pageSize.width;
+    const pageHeight = pdf.internal.pageSize.height;
+    
+    // Set colors
+    const primaryColor = [0, 102, 204]; // Blue
+    const secondaryColor = [128, 128, 128]; // Gray
+    
+    // Company Header
+    pdf.setFillColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+    pdf.rect(0, 0, pageWidth, 30, 'F');
+    
+    // Company Name
+    pdf.setTextColor(255, 255, 255);
+    pdf.setFontSize(24);
+    pdf.setFont('helvetica', 'bold');
+    pdf.text('PropertyHub', 20, 20);
+    
+    // Invoice Title
+    pdf.setTextColor(0, 0, 0);
+    pdf.setFontSize(20);
+    pdf.setFont('helvetica', 'bold');
+    pdf.text('INVOICE', pageWidth - 20, 50, { align: 'right' });
+    
+    // Invoice Details Box
+    pdf.setDrawColor(200, 200, 200);
+    pdf.setLineWidth(0.5);
+    pdf.rect(pageWidth - 70, 55, 60, 30);
+    
+    pdf.setFontSize(10);
+    pdf.setFont('helvetica', 'normal');
+    pdf.text(`Invoice #: ${payment.invoice_number || payment.payment_id.slice(-8)}`, pageWidth - 65, 62);
+    pdf.text(`Date: ${format(new Date(payment.payment_date), 'dd/MM/yyyy')}`, pageWidth - 65, 68);
+    pdf.text(`Payment ID: ${payment.payment_id.slice(-8)}`, pageWidth - 65, 74);
+    pdf.text(`Status: ${payment.status.toUpperCase()}`, pageWidth - 65, 80);
+    
+    // Company Details
+    pdf.setFontSize(12);
+    pdf.setFont('helvetica', 'bold');
+    pdf.text('From:', 20, 50);
+    
+    pdf.setFontSize(10);
+    pdf.setFont('helvetica', 'normal');
+    pdf.text('PropertyHub Pvt Ltd', 20, 58);
+    pdf.text('123 Business District', 20, 64);
+    pdf.text('Mumbai, Maharashtra 400001', 20, 70);
+    pdf.text('Email: billing@propertyhub.com', 20, 76);
+    pdf.text('Phone: +91 9876543210', 20, 82);
+    pdf.text('GST: 27ABCDE1234F5Z6', 20, 88);
+    
+    // Customer Details
+    pdf.setFontSize(12);
+    pdf.setFont('helvetica', 'bold');
+    pdf.text('Bill To:', 20, 110);
+    
+    pdf.setFontSize(10);
+    pdf.setFont('helvetica', 'normal');
+    pdf.text(user?.email || 'Customer', 20, 118);
+    pdf.text('Customer ID: ' + (user?.id?.slice(-8) || 'N/A'), 20, 124);
+    
+    // Service Details Table
+    const tableY = 150;
+    
+    // Table Header
+    pdf.setFillColor(240, 240, 240);
+    pdf.rect(20, tableY, pageWidth - 40, 15, 'F');
+    
+    pdf.setFontSize(10);
+    pdf.setFont('helvetica', 'bold');
+    pdf.text('Description', 25, tableY + 10);
+    pdf.text('Plan Type', 100, tableY + 10);
+    pdf.text('Duration', 130, tableY + 10);
+    pdf.text('Amount', pageWidth - 25, tableY + 10, { align: 'right' });
+    
+    // Table Content
+    const rowY = tableY + 20;
+    pdf.setFont('helvetica', 'normal');
+    pdf.text(payment.plan_name, 25, rowY);
+    pdf.text(payment.plan_type || 'Subscription', 100, rowY);
+    pdf.text(payment.plan_duration || 'Monthly', 130, rowY);
+    pdf.text(`₹${payment.amount_rupees.toLocaleString()}`, pageWidth - 25, rowY, { align: 'right' });
+    
+    // Total Section
+    const totalY = rowY + 30;
+    pdf.line(20, totalY - 5, pageWidth - 20, totalY - 5);
+    
+    pdf.setFont('helvetica', 'bold');
+    pdf.text('Subtotal:', pageWidth - 80, totalY);
+    pdf.text(`₹${payment.amount_rupees.toLocaleString()}`, pageWidth - 25, totalY, { align: 'right' });
+    
+    pdf.text('GST (18%):', pageWidth - 80, totalY + 8);
+    const gstAmount = Math.round(payment.amount_rupees * 0.18);
+    pdf.text(`₹${gstAmount.toLocaleString()}`, pageWidth - 25, totalY + 8, { align: 'right' });
+    
+    pdf.setFontSize(12);
+    pdf.text('Total Amount:', pageWidth - 80, totalY + 18);
+    const totalAmount = payment.amount_rupees + gstAmount;
+    pdf.text(`₹${totalAmount.toLocaleString()}`, pageWidth - 25, totalY + 18, { align: 'right' });
+    
+    // Payment Details
+    const paymentDetailsY = totalY + 40;
+    pdf.setFontSize(10);
+    pdf.setFont('helvetica', 'bold');
+    pdf.text('Payment Details:', 20, paymentDetailsY);
+    
+    pdf.setFont('helvetica', 'normal');
+    pdf.text(`Payment Method: ${payment.payment_method || 'Razorpay'}`, 20, paymentDetailsY + 8);
+    pdf.text(`Transaction Date: ${format(new Date(payment.payment_date), 'PPP')}`, 20, paymentDetailsY + 16);
+    pdf.text(`Currency: ${payment.currency}`, 20, paymentDetailsY + 24);
+    
+    // Footer
+    const footerY = pageHeight - 40;
+    pdf.setTextColor(128, 128, 128);
+    pdf.setFontSize(8);
+    pdf.text('Thank you for your business!', 20, footerY);
+    pdf.text('This is a computer-generated invoice and does not require a signature.', 20, footerY + 8);
+    pdf.text(`Generated on: ${format(new Date(), 'PPP')}`, 20, footerY + 16);
+    
+    // Terms and Conditions
+    pdf.text('Terms: Payment is due within 30 days. Late payments may incur additional charges.', 20, footerY + 24);
+    
+    // Save the PDF
+    const fileName = `Invoice_${payment.invoice_number || payment.payment_id.slice(-8)}_${format(new Date(payment.payment_date), 'yyyy-MM-dd')}.pdf`;
+    pdf.save(fileName);
   };
 
   return (
@@ -311,7 +439,11 @@ const PaymentsSection: React.FC = () => {
 
               {selectedPayment.invoice_number && (
                 <div className="flex justify-end pt-4 border-t">
-                  <Button variant="outline" className="flex items-center gap-2">
+                  <Button 
+                    variant="outline" 
+                    className="flex items-center gap-2"
+                    onClick={() => generateInvoicePDF(selectedPayment)}
+                  >
                     <Download className="h-4 w-4" />
                     Download Invoice
                   </Button>
