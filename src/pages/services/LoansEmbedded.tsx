@@ -209,11 +209,11 @@ const LoansEmbedded = () => {
                   console.log('Email API request body:', requestBody);
 
                   // Send loan enquiry email
-                  const response = await fetch('https://lovable-email-backend.vercel.app/send-loan-enquiry-email', {
+                  const response = await fetch('https://email-system-hni.vercel.app/send-loan-enquiry-email', {
                     method: 'POST',
                     headers: {
                       'Content-Type': 'application/json',
-                      'x-api-key': 'lov@ble-2025-secret-KEY'
+                      'x-api-key': 'MyNew$uper$ecretKey2025'
                     },
                     body: JSON.stringify(requestBody)
                   });
@@ -356,11 +356,11 @@ const LoansEmbedded = () => {
                   console.log('Email API request body:', requestBody);
 
                   // Send loan enquiry email
-                  const response = await fetch('https://lovable-email-backend.vercel.app/send-loan-enquiry-email', {
+                  const response = await fetch('https://email-system-hni.vercel.app/send-loan-enquiry-email', {
                     method: 'POST',
                     headers: {
                       'Content-Type': 'application/json',
-                      'x-api-key': 'lov@ble-2025-secret-KEY'
+                      'x-api-key': 'MyNew$uper$ecretKey2025'
                     },
                     body: JSON.stringify(requestBody)
                   });
