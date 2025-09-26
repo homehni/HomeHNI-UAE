@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Building, Calendar, CreditCard, Download, Check, Clock, X } from 'lucide-react';
+import { Building, Calendar, CreditCard, Download, Check, Clock, X, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { format } from 'date-fns';
@@ -26,6 +27,8 @@ interface Payment {
 const PaymentsSection: React.FC = () => {
   const [payments, setPayments] = useState<Payment[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedPayment, setSelectedPayment] = useState<Payment | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const { user } = useAuth();
 
   useEffect(() => {
@@ -107,6 +110,11 @@ const PaymentsSection: React.FC = () => {
     );
   }
 
+  const handlePaymentClick = (payment: Payment) => {
+    setSelectedPayment(payment);
+    setIsModalOpen(true);
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
@@ -114,78 +122,123 @@ const PaymentsSection: React.FC = () => {
         <p className="text-sm text-gray-500">{payments.length} transaction{payments.length !== 1 ? 's' : ''}</p>
       </div>
 
-      <div className="space-y-4">
+      <div className="space-y-2">
         {payments.map((payment) => (
-          <Card key={payment.id} className="hover:shadow-md transition-shadow">
-            <CardHeader className="pb-3">
+          <Card 
+            key={payment.id} 
+            className="hover:shadow-md transition-shadow cursor-pointer border border-gray-200"
+            onClick={() => handlePaymentClick(payment)}
+          >
+            <CardContent className="p-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-2">
+                    {getStatusIcon(payment.status)}
+                    <span className="font-medium text-gray-900">{payment.plan_name}</span>
+                  </div>
+                  <div className="hidden sm:flex items-center gap-1 text-sm text-gray-500">
+                    <Calendar className="h-3 w-3" />
+                    <span>{format(new Date(payment.payment_date), 'MMM dd, yyyy')}</span>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="text-right">
+                    <div className="font-semibold text-gray-900">₹{payment.amount_rupees.toLocaleString()}</div>
+                    <div className="text-xs text-gray-500 sm:hidden">
+                      {format(new Date(payment.payment_date), 'MMM dd, yyyy')}
+                    </div>
+                  </div>
+                  {getStatusBadge(payment.status)}
+                  <ChevronRight className="h-4 w-4 text-gray-400" />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+
+      {/* Payment Details Modal */}
+      <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>Payment Details</DialogTitle>
+          </DialogHeader>
+          
+          {selectedPayment && (
+            <div className="space-y-6">
               <div className="flex justify-between items-start">
                 <div className="space-y-1">
-                  <CardTitle className="text-lg font-medium">
-                    {payment.plan_name}
-                  </CardTitle>
+                  <h3 className="text-xl font-semibold">{selectedPayment.plan_name}</h3>
                   <div className="flex items-center gap-2 text-sm text-gray-500">
                     <Calendar className="h-4 w-4" />
-                    <span>{format(new Date(payment.payment_date), 'PPP')}</span>
+                    <span>{format(new Date(selectedPayment.payment_date), 'PPP')}</span>
                   </div>
                 </div>
                 <div className="text-right space-y-2">
                   <div className="text-2xl font-bold text-gray-900">
-                    ₹{payment.amount_rupees.toLocaleString()}
+                    ₹{selectedPayment.amount_rupees.toLocaleString()}
                   </div>
-                  {getStatusBadge(payment.status)}
-                </div>
-              </div>
-            </CardHeader>
-            
-            <CardContent className="pt-0 space-y-4">
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-                <div>
-                  <p className="text-gray-500 font-medium">Payment ID</p>
-                  <p className="font-mono text-xs bg-gray-50 px-2 py-1 rounded">{payment.payment_id}</p>
-                </div>
-                <div>
-                  <p className="text-gray-500 font-medium">Plan Type</p>
-                  <p className="capitalize">{payment.plan_type || 'Subscription'}</p>
-                </div>
-                <div>
-                  <p className="text-gray-500 font-medium">Duration</p>
-                  <p className="capitalize">{payment.plan_duration || 'N/A'}</p>
-                </div>
-                <div>
-                  <p className="text-gray-500 font-medium">Payment Method</p>
-                  <div className="flex items-center gap-1">
-                    <CreditCard className="h-4 w-4" />
-                    <span className="capitalize">{payment.payment_method || 'Razorpay'}</span>
-                  </div>
+                  {getStatusBadge(selectedPayment.status)}
                 </div>
               </div>
 
-              {payment.expires_at && (
-                <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+              <div className="grid grid-cols-2 gap-6 text-sm">
+                <div>
+                  <p className="text-gray-500 font-medium mb-1">Payment ID</p>
+                  <p className="font-mono text-xs bg-gray-50 px-2 py-1 rounded break-all">
+                    {selectedPayment.payment_id}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-gray-500 font-medium mb-1">Plan Type</p>
+                  <p className="capitalize">{selectedPayment.plan_type || 'Subscription'}</p>
+                </div>
+                <div>
+                  <p className="text-gray-500 font-medium mb-1">Duration</p>
+                  <p className="capitalize">{selectedPayment.plan_duration || 'N/A'}</p>
+                </div>
+                <div>
+                  <p className="text-gray-500 font-medium mb-1">Payment Method</p>
+                  <div className="flex items-center gap-1">
+                    <CreditCard className="h-4 w-4" />
+                    <span className="capitalize">{selectedPayment.payment_method || 'Razorpay'}</span>
+                  </div>
+                </div>
+                <div>
+                  <p className="text-gray-500 font-medium mb-1">Currency</p>
+                  <p className="uppercase">{selectedPayment.currency}</p>
+                </div>
+                {selectedPayment.invoice_number && (
+                  <div>
+                    <p className="text-gray-500 font-medium mb-1">Invoice Number</p>
+                    <p className="font-mono text-sm">{selectedPayment.invoice_number}</p>
+                  </div>
+                )}
+              </div>
+
+              {selectedPayment.expires_at && (
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                   <div className="flex items-center gap-2">
                     <Calendar className="h-4 w-4 text-blue-600" />
                     <span className="text-sm font-medium text-blue-900">
-                      Plan expires on {format(new Date(payment.expires_at), 'PPP')}
+                      Plan expires on {format(new Date(selectedPayment.expires_at), 'PPP')}
                     </span>
                   </div>
                 </div>
               )}
 
-              {payment.invoice_number && (
-                <div className="flex justify-between items-center pt-2 border-t">
-                  <span className="text-sm text-gray-500">
-                    Invoice: {payment.invoice_number}
-                  </span>
-                  <Button variant="outline" size="sm" className="flex items-center gap-1">
-                    <Download className="h-3 w-3" />
-                    Download
+              {selectedPayment.invoice_number && (
+                <div className="flex justify-end pt-4 border-t">
+                  <Button variant="outline" className="flex items-center gap-2">
+                    <Download className="h-4 w-4" />
+                    Download Invoice
                   </Button>
                 </div>
               )}
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
