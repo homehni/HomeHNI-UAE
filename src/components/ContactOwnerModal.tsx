@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -187,15 +187,24 @@ export const ContactOwnerModal: React.FC<ContactOwnerModalProps> = ({
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={(open) => {
-      if (!open) {
-        onClose();
-      }
-    }}>
-      <DialogContent className="sm:max-w-[425px]" onClick={(e) => e.stopPropagation()}>
+    <div
+      onClickCapture={(e) => e.stopPropagation()}
+      onPointerDownCapture={(e) => e.stopPropagation()}
+      onMouseDownCapture={(e) => e.stopPropagation()}
+      onTouchStartCapture={(e) => e.stopPropagation()}
+    >
+      <Dialog open={isOpen} onOpenChange={(open) => {
+        if (!open) {
+          onClose();
+        }
+      }}>
+        <DialogContent className="sm:max-w-[425px]" onClick={(e) => e.stopPropagation()}>
         <DialogHeader>
           <DialogTitle>Contact Property Owner</DialogTitle>
         </DialogHeader>
+        <DialogDescription id="dialog-description" className="sr-only">
+          Contact form to reach the property owner.
+        </DialogDescription>
         <div className="space-y-4">
           <div className="bg-gray-50 p-3 rounded-md">
             <p className="text-sm text-gray-600">Property:</p>
@@ -281,5 +290,6 @@ export const ContactOwnerModal: React.FC<ContactOwnerModalProps> = ({
         </div>
       </DialogContent>
     </Dialog>
+    </div>
   );
 };
