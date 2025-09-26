@@ -294,7 +294,7 @@ const Footer = ({
             <div className="flex justify-between gap-0">
               <button
                 onClick={() => setActiveServicesTab('Buy')}
-                className={`px-4 py-3 text-sm font-medium border-b-2 transition-colors flex-1 ${
+                className={`font-poppins px-4 py-3 text-sm font-medium border-b-2 transition-colors flex-1 ${
                   activeServicesTab === 'Buy'
                     ? 'border-brand-red text-brand-red bg-brand-red/5'
                     : 'border-transparent text-gray-600 hover:text-gray-900 hover:border-gray-300'
@@ -304,7 +304,7 @@ const Footer = ({
               </button>
               <button
                 onClick={() => setActiveServicesTab('Rent')}
-                className={`px-4 py-3 text-sm font-medium border-b-2 transition-colors flex-1 ${
+                className={`font-poppins px-4 py-3 text-sm font-medium border-b-2 transition-colors flex-1 ${
                   activeServicesTab === 'Rent'
                     ? 'border-brand-red text-brand-red bg-brand-red/5'
                     : 'border-transparent text-gray-600 hover:text-gray-900 hover:border-gray-300'
