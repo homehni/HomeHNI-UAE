@@ -99,7 +99,7 @@ export function PgHostelScheduleStep({
                       name="paintingService"
                       render={({ field }) => (
                         <div className="space-y-3">
-                          {paintingResponse === 'decline' ? (
+                          {paintingResponse ? (
                             <div className="flex items-center gap-2 p-3 bg-green-50 border border-green-200 rounded-lg">
                               <CheckCircle className="w-4 h-4 text-green-600" />
                               <span className="text-sm text-green-700 font-medium">
@@ -116,7 +116,6 @@ export function PgHostelScheduleStep({
                                 onClick={() => {
                                   field.onChange('book');
                                   setPaintingResponse('book');
-                                  window.open('/painting-cleaning', '_blank');
                                 }}
                               >
                                 Book Now
@@ -164,7 +163,7 @@ export function PgHostelScheduleStep({
                       name="cleaningService"
                       render={({ field }) => (
                         <div className="space-y-3">
-                          {cleaningResponse === 'decline' ? (
+                          {cleaningResponse ? (
                             <div className="flex items-center gap-2 p-3 bg-green-50 border border-green-200 rounded-lg">
                               <CheckCircle className="w-4 h-4 text-green-600" />
                               <span className="text-sm text-green-700 font-medium">
@@ -181,7 +180,6 @@ export function PgHostelScheduleStep({
                                 onClick={() => {
                                   field.onChange('book');
                                   setCleaningResponse('book');
-                                  window.open('/painting-cleaning', '_blank');
                                 }}
                               >
                                 Book Now
