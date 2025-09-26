@@ -43,7 +43,7 @@ export default function PayButton({
           variant: "destructive",
           title: "Payment Error",
           description: "Payment configuration error. Please try again later.",
-          className: "border-l-4 border-l-red-500 bg-white shadow-lg text-red-900",
+          className: "border-l-4 border-l-red-600 bg-white shadow-lg text-red-900 min-w-[400px] max-w-[500px] w-full",
         });
         return;
       }
@@ -116,7 +116,7 @@ export default function PayButton({
                   variant: "destructive",
                   title: "Payment Error",
                   description: "Payment successful but failed to save record. Please contact support.",
-                  className: "border-l-4 border-l-red-500 bg-white shadow-lg text-red-900",
+                  className: "border-l-4 border-l-red-600 bg-white shadow-lg text-red-900 min-w-[400px] max-w-[500px] w-full",
                 });
                 return;
               }
@@ -175,7 +175,7 @@ export default function PayButton({
             toast({
               title: "Payment Successful!",
               description: "Your payment has been processed and plan activated successfully.",
-              className: "border-l-4 border-l-green-500 bg-white shadow-lg",
+              className: "border-l-4 border-l-green-600 bg-white shadow-lg min-w-[400px] max-w-[500px] w-full",
             });
             
             // Redirect to success page or dashboard
@@ -222,7 +222,7 @@ export default function PayButton({
               variant: "destructive",
               title: "Payment Failed",
               description: error instanceof Error ? error.message : "Please try again or contact support.",
-              className: "border-l-4 border-l-red-500 bg-white shadow-lg text-red-900",
+              className: "border-l-4 border-l-red-600 bg-white shadow-lg text-red-900 min-w-[400px] max-w-[500px] w-full",
             });
             
             setTimeout(() => {
@@ -288,7 +288,7 @@ export default function PayButton({
         variant: "destructive",
         title: "Payment Setup Failed",
         description: `${error instanceof Error ? error.message : "Unknown error"}`,
-        className: "border-l-4 border-l-red-500 bg-white shadow-lg text-red-900",
+        className: "border-l-4 border-l-red-600 bg-white shadow-lg text-red-900 min-w-[400px] max-w-[500px] w-full",
       });
     } finally {
       setLoading(false);
