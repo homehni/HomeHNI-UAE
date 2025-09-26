@@ -5,7 +5,7 @@ export const featuredArticles = [
     title: "What is an Affiant? Definition, Duties, Responsibilities and Legal Importance in 2025",
     date: "September 22, 2025",
     author: "Anda Warner",
-    image: "/lovable-uploads/fbb0d72f-782e-49f5-bbe1-8afc1314b5f7.png",
+    image: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
     category: "Legal Guide & Formats"
   },
   {
@@ -13,7 +13,7 @@ export const featuredArticles = [
     title: "House Number 1 Numerology: Meaning, Benefits, Energy and Calculation 2025",
     date: "September 21, 2025", 
     author: "Vivek Mishra",
-    image: "/lovable-uploads/68165188-72aa-4757-a0fa-fc2b785a86ca.png",
+    image: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1973&q=80",
     category: "Vastu Tips & Guides"
   },
   {
@@ -21,7 +21,7 @@ export const featuredArticles = [
     title: "Top Investment Areas in Mumbai for Real Estate in 2025",
     date: "September 20, 2025",
     author: "Investment Team",
-    image: "/lovable-uploads/76edf36e-5a4c-4707-b169-fb70fe75880c.png",
+    image: "https://images.unsplash.com/photo-1494522855154-9297ac14b55f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
     category: "Real Estate Investment"
   }
 ];
@@ -31,49 +31,49 @@ export const categoryTiles = [
   {
     title: "Interior Design Tips & Ideas",
     count: "651+ Articles",
-    image: "/lovable-uploads/94c2146b-79a1-4541-a959-f1f0c70611e0.png",
+    image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1958&q=80",
     color: "bg-blue-900"
   },
   {
     title: "Real Estate Legal Guide & Laws", 
     count: "366+ Articles",
-    image: "/lovable-uploads/831fcaf0-10e4-4ba4-b3da-c403bbe972bc.png",
+    image: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
     color: "bg-gray-900"
   },
   {
     title: "Home Buying Tips & Guide",
     count: "255+ Articles", 
-    image: "/lovable-uploads/beee2872-8a8a-4331-9d4f-3d88ac1c9948.png",
+    image: "https://images.unsplash.com/photo-1582407947304-fd86f028f716?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1896&q=80",
     color: "bg-orange-900"
   },
   {
     title: "Home Loan Tips",
     count: "229+ Articles",
-    image: "/lovable-uploads/7f59114d-cafc-4e27-8180-d70d5cba530f.png",
+    image: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2026&q=80",
     color: "bg-yellow-800"
   },
   {
     title: "Vastu Tips & Guides",
     count: "189+ Articles",
-    image: "/lovable-uploads/8b28a8cb-02f0-4e86-9ba6-1845c4372e1a.png",
+    image: "https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
     color: "bg-gray-700"
   },
   {
     title: "Real Estate News & Updates",
     count: "147+ Articles",
-    image: "/lovable-uploads/ddda335f-1bbc-402a-befb-f6d3f4d631e6.png",
+    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80",
     color: "bg-gray-800"
   },
   {
     title: "Home HNI Hindi Blogs",
     count: "136+ Articles",
-    image: "/lovable-uploads/e491693e-a750-42b7-bdf6-cdff47be335b.png",
+    image: "https://images.unsplash.com/photo-1570129477492-45c003edd2be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
     color: "bg-gray-600"
   },
   {
     title: "Home HNI Bengali Blogs",
     count: "98+ Articles",
-    image: "/lovable-uploads/f5f1d518-d734-4fa1-abd3-f45e772294cd.png",
+    image: "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
     color: "bg-teal-700"
   }
 ];
@@ -87,21 +87,21 @@ export const realEstateArticles = {
       excerpt: "The Smart Cities Mission in Maharashtra is transforming major cities into sustainable, efficient, and livable urban hubs. By leveraging technology and...",
       date: "September 8, 2025",
       author: "Vivek Mishra",
-      image: "/lovable-uploads/fbb0d72f-782e-49f5-bbe1-8afc1314b5f7.png"
+      image: "https://images.unsplash.com/photo-1464207687429-7505649dae38?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2073&q=80"
     },
     {
       id: 2,
       title: "Top 11 Smart Cities in Tamil Nadu: Connectivity, Growth Opportunities and Property Trends in 2025",
       date: "September 7, 2025",
       author: "Tamil Nadu Team",
-      image: "/lovable-uploads/68165188-72aa-4757-a0fa-fc2b785a86ca.png"
+      image: "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2049&q=80"
     },
     {
       id: 3,
       title: "Best 7 Smart Cities in Karnataka: Connectivity, Growth, and Real Estate Trends in 2025",
       date: "September 6, 2025",
       author: "Karnataka Team", 
-      image: "/lovable-uploads/76edf36e-5a4c-4707-b169-fb70fe75880c.png"
+      image: "https://images.unsplash.com/photo-1519378058457-4c29a0a2efac?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2069&q=80"
     }
   ],
   sideArticles: [
@@ -137,21 +137,21 @@ export const homeServicesArticles = {
       excerpt: "Birla Opus vs Asian Paints is a common comparison for homeowners looking for the best wall finish. Birla Opus is known for its premium wall putty, smooth...",
       date: "September 15, 2025",
       author: "Krishnanunni H M",
-      image: "/lovable-uploads/94c2146b-79a1-4541-a959-f1f0c70611e0.png"
+      image: "https://images.unsplash.com/photo-1562259949-e8e7689d7828?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
     },
     {
       id: 2,
       title: "Royale Luxury Emulsion 20 Litre Price in India: Benefits Coverage and Durability in 2025",
       date: "September 12, 2025",
       author: "Paint Expert",
-      image: "/lovable-uploads/831fcaf0-10e4-4ba4-b3da-c403bbe972bc.png"
+      image: "https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
     },
     {
       id: 3,
       title: "Best Budget-Friendly Wallpaper Prices: Cost per Square Foot in India 2025",
       date: "September 10, 2025",
       author: "Interior Team",
-      image: "/lovable-uploads/beee2872-8a8a-4331-9d4f-3d88ac1c9948.png"
+      image: "https://images.unsplash.com/photo-1541123437800-1bb1317badc2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
     }
   ],
   sideArticles: [
@@ -192,21 +192,21 @@ export const homeInteriorsArticles = {
       excerpt: "Transform your living space with contemporary design elements, smart furniture choices, and trending color palettes that define modern luxury...",
       date: "September 18, 2025",
       author: "Interior Design Team",
-      image: "/lovable-uploads/94c2146b-79a1-4541-a959-f1f0c70611e0.png"
+      image: "https://images.unsplash.com/photo-1556909114-f6e703ae187c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
     },
     {
       id: 2,
       title: "Kitchen Interior Design: Space Optimization and Storage Solutions for Small Homes",
       date: "September 16, 2025",
       author: "Kitchen Expert",
-      image: "/lovable-uploads/831fcaf0-10e4-4ba4-b3da-c403bbe972bc.png"
+      image: "https://images.unsplash.com/photo-1556909114-f6e703ae187c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
     },
     {
       id: 3,
       title: "Bedroom Decor Ideas: Creating Peaceful and Stylish Personal Spaces in 2025",
       date: "September 14, 2025",
       author: "Decor Specialist",
-      image: "/lovable-uploads/beee2872-8a8a-4331-9d4f-3d88ac1c9948.png"
+      image: "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
     }
   ],
   sideArticles: [
@@ -242,21 +242,21 @@ export const financeArticles = {
       excerpt: "Navigate the current home loan landscape with comprehensive insights into interest rates, processing fees, and smart borrowing strategies for homebuyers...",
       date: "September 20, 2025",
       author: "Finance Expert",
-      image: "/lovable-uploads/7f59114d-cafc-4e27-8180-d70d5cba530f.png"
+      image: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2026&q=80"
     },
     {
       id: 2,
       title: "Tax Benefits on Home Loans: Section 80C and 24B Deductions Explained",
       date: "September 19, 2025",
       author: "Tax Advisor",
-      image: "/lovable-uploads/76edf36e-5a4c-4707-b169-fb70fe75880c.png"
+      image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2015&q=80"
     },
     {
       id: 3,
       title: "Real Estate Investment Strategies: ROI Analysis and Market Trends for 2025",
       date: "September 17, 2025",
       author: "Investment Analyst",
-      image: "/lovable-uploads/68165188-72aa-4757-a0fa-fc2b785a86ca.png"
+      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80"
     }
   ],
   sideArticles: [
