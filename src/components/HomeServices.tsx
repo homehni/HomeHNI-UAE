@@ -3,16 +3,16 @@ import { useNavigate } from 'react-router-dom';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useCMSContent } from '@/hooks/useCMSContent';
 
-// Import service images
-import homeSecurityImage from '@/assets/home-security-services.jpg';
-import legalServicesImage from '@/assets/legal-services.jpg';
-import handoverServicesImage from '@/assets/handover-services.jpg';
-import propertyManagementImage from '@/assets/property-management.jpg';
-import architectsImage from '@/assets/architects.jpg';
-import interiorDesignImage from '@/assets/interior-design.jpg';
-import packersMoversImage from '@/assets/packers-movers-hero.jpg';
-import paintingCleaningImage from '@/assets/painting-cleaning.jpg';
-import loansImage from '@/assets/loans.jpg';
+// Use placeholder images since assets don't exist
+const homeSecurityImage = '/placeholder.svg';
+const legalServicesImage = '/placeholder.svg';
+const handoverServicesImage = '/placeholder.svg';
+const propertyManagementImage = '/placeholder.svg';
+const architectsImage = '/placeholder.svg';
+const interiorDesignImage = '/placeholder.svg';
+const packersMoversImage = '/placeholder.svg';
+const paintingCleaningImage = '/placeholder.svg';
+const loansImage = '/placeholder.svg';
 
 const HomeServices = () => {
   const { content: cmsContent } = useCMSContent('home_services_section');
