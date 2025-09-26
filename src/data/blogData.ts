@@ -289,20 +289,20 @@ export const blogSections = [
     data: realEstateArticles,
     tags: [
       { name: "Home Buying Tips & Guide", active: true },
-      { name: "Property Selling Tips & Guides", active: true },
-      { name: "Rental Guide for Renters, Tenant & Landlord", active: true }
+      { name: "Property Selling Tips & Guides", active: false },
+      { name: "Rental Guide for Renters, Tenant & Landlord", active: false }
     ],
     viewMoreText: "View More in Home Buying Tips & Guide"
   },
   {
-    title: "Home Services", 
+    title: "Home Services",
     data: homeServicesArticles,
     tags: [
       { name: "Painting Tips & Color Ideas", active: true },
-      { name: "Easy Cleaning Tips", active: true },
-      { name: "Electrician Tips & Guides", active: true },
-      { name: "Home Garden Ideas & Tips", active: true },
-      { name: "Pest Control Tips & Guides for a Pest-Free Home", active: true }
+      { name: "Easy Cleaning Tips", active: false },
+      { name: "Electrician Tips & Guides", active: false },
+      { name: "Home Garden Ideas & Tips", active: false },
+      { name: "Pest Control Tips & Guides for a Pest-Free Home", active: false }
     ],
     viewMoreText: "View More in Painting Tips & Color Ideas"
   },
@@ -311,9 +311,9 @@ export const blogSections = [
     data: homeInteriorsArticles,
     tags: [
       { name: "Living Room Design Ideas", active: true },
-      { name: "Kitchen Interior Design", active: true },
-      { name: "Bedroom Decor Ideas", active: true },
-      { name: "Home Lighting Solutions", active: true }
+      { name: "Kitchen Interior Design", active: false },
+      { name: "Bedroom Decor Ideas", active: false },
+      { name: "Home Lighting Solutions", active: false }
     ],
     viewMoreText: "View More in Living Room Design Ideas"
   },
@@ -322,9 +322,9 @@ export const blogSections = [
     data: financeArticles,
     tags: [
       { name: "Home Loan Tips & Guides", active: true },
-      { name: "Tax Benefits & Deductions", active: true },
-      { name: "Real Estate Investment", active: true },
-      { name: "Property Legal & Documentation", active: true }
+      { name: "Tax Benefits & Deductions", active: false },
+      { name: "Real Estate Investment", active: false },
+      { name: "Property Legal & Documentation", active: false }
     ],
     viewMoreText: "View More in Home Loan Tips & Guides"
   }
