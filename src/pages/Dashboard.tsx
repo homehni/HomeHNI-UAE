@@ -8,7 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { Building, MessageSquare, MessageCircle, User, LogOut, Plus, Eye, Edit, Trash, FileText, Shield, MapPin, Home, Medal, Heart, Search, Filter, ArrowUpDown, Phone, TrendingUp, Menu, X, Check } from 'lucide-react';
 import PaymentsSection from '@/components/PaymentsSection';
-import ChatBot from '@/components/ChatBot';
+
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
 import { DeleteConfirmationModal } from '@/components/DeleteConfirmationModal';
@@ -1762,8 +1762,6 @@ export const Dashboard: React.FC = () => {
         </div>
       </div>
 
-      {/* ChatBot Component */}
-      <ChatBot />
 
       {/* Delete Confirmation Modal */}
       <DeleteConfirmationModal
