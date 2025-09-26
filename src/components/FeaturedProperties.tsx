@@ -559,7 +559,7 @@ const FeaturedProperties = ({
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
             {sectionHeader?.content?.heading || 'Featured Properties'}
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto text-center whitespace-nowrap">
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto text-center sm:whitespace-nowrap">
             {sectionHeader?.content?.description || "Discover our handpicked selection of premium properties across India's top cities"}
           </p>
         </div>
