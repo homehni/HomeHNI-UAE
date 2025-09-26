@@ -11,6 +11,7 @@ const GetTenantsFasterSection: React.FC = () => {
     toast({
       title: "Your request has been submitted successfully.",
       description: "Our executives will reach out to you soon.",
+      style: { border: "8px solid hsl(120, 100%, 25%)" }
     });
   };
 
