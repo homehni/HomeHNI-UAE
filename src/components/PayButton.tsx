@@ -65,26 +65,58 @@ export default function PayButton({
             description: "Redirecting to confirmation page...",
           });
           
-          // Send plan activated email
+          // Send comprehensive payment emails
           try {
             if (prefill?.email) {
-              const { sendPlanActivatedEmail } = await import('@/services/emailService');
+              const { 
+                sendPlanActivatedEmail, 
+                sendPaymentSuccessEmail, 
+                sendPaymentInvoiceEmail 
+              } = await import('@/services/emailService');
+              
+              const currentDate = new Date().toLocaleDateString('en-IN');
               const expiryDate = new Date();
-              expiryDate.setFullYear(expiryDate.getFullYear() + 1); // 1 year from now
-              await sendPlanActivatedEmail(
-                prefill.email,
-                prefill.name || 'Valued Customer',
-                {
-                  expiryDate: expiryDate.toLocaleDateString('en-IN', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                  })
-                }
-              );
+              expiryDate.setFullYear(expiryDate.getFullYear() + 1);
+              const invoiceNumber = `INV-${Date.now()}`;
+              
+              // Send all three emails simultaneously
+              await Promise.all([
+                sendPlanActivatedEmail(
+                  prefill.email,
+                  prefill.name || 'Valued Customer',
+                  {
+                    expiryDate: expiryDate.toLocaleDateString('en-IN', {
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric'
+                    })
+                  }
+                ),
+                sendPaymentSuccessEmail(
+                  prefill.email,
+                  prefill.name || 'Valued Customer',
+                  {
+                    planName: planName,
+                    amount: amountPaise / 100,
+                    paymentId: response.razorpay_payment_id,
+                    expiryDate: expiryDate.toLocaleDateString('en-IN')
+                  }
+                ),
+                sendPaymentInvoiceEmail(
+                  prefill.email,
+                  prefill.name || 'Valued Customer',
+                  {
+                    invoiceNumber: invoiceNumber,
+                    planName: planName,
+                    amount: amountPaise / 100,
+                    paymentDate: currentDate,
+                    paymentId: response.razorpay_payment_id
+                  }
+                )
+              ]);
             }
           } catch (error) {
-            console.error('Failed to send plan activated email:', error);
+            console.error('Failed to send payment confirmation emails:', error);
           }
           
           setTimeout(() => {

@@ -173,20 +173,33 @@ export const PropertyActions: React.FC<PropertyActionsProps> = ({
           : `Your property is now marked as ${labels.availableAction}.`,
       });
 
-      // Send deal closed email when property is marked as rented/sold
+      // Send deal closed and status update emails when property is marked as rented/sold
       if (newStatus === targetStatus && user.email) {
         try {
-          const { sendDealClosedEmail } = await import('@/services/emailService');
-          await sendDealClosedEmail(
-            user.email,
-            user.user_metadata?.full_name || 'Property Owner',
-            {
-              locality: 'Your property location',
-              dealType: isRentalProperty ? 'rent' : 'sale'
-            }
-          );
+          const { sendDealClosedEmail, sendMarkRentedSoldEmail } = await import('@/services/emailService');
+          
+          // Send both emails
+          await Promise.all([
+            sendDealClosedEmail(
+              user.email,
+              user.user_metadata?.full_name || 'Property Owner',
+              {
+                locality: 'Your property location',
+                dealType: isRentalProperty ? 'rent' : 'sale'
+              }
+            ),
+            sendMarkRentedSoldEmail(
+              user.email,
+              user.user_metadata?.full_name || 'Property Owner',
+              {
+                propertyTitle: 'Your Property',
+                status: newStatus as 'rented' | 'sold',
+                locality: 'Your property location'
+              }
+            )
+          ]);
         } catch (error) {
-          console.error('Failed to send deal closed email:', error);
+          console.error('Failed to send status update emails:', error);
         }
       }
 

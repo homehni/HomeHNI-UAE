@@ -2,12 +2,28 @@ import React, { useState } from 'react';
 import { Shield, Star, Facebook, Tag } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
+import { sendShowInterestEmail } from '@/services/emailService';
 const GetTenantsFasterSection: React.FC = () => {
   const { toast } = useToast();
   const [interestShown, setInterestShown] = useState(false);
   
-  const handleShowInterest = () => {
+  const handleShowInterest = async () => {
     setInterestShown(true);
+    
+    // Send show interest email
+    try {
+      await sendShowInterestEmail(
+        'user@example.com', // In real app, get from auth context
+        'Property Owner', // In real app, get from auth context  
+        {
+          propertyType: 'rent',
+          feature: 'Get Tenants Faster Premium'
+        }
+      );
+    } catch (error) {
+      console.error('Failed to send interest email:', error);
+    }
+    
     toast({
       title: "Your request has been submitted successfully.",
       description: "Our executives will reach out to you soon.",

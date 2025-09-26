@@ -8,6 +8,7 @@ import { Textarea } from '@/components/ui/textarea';
 
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
+import { sendContactOwnerEmail } from '@/services/emailService';
 
 interface ContactOwnerModalProps {
   isOpen: boolean;
@@ -111,6 +112,34 @@ export const ContactOwnerModal: React.FC<ContactOwnerModalProps> = ({
       }
 
       console.log('ContactOwnerModal: Success! Listing type:', listingType);
+      
+      // Send email notification to property owner
+      try {
+        // Get property owner details
+        const { data: propertyData, error: propertyError } = await supabase
+          .from('properties')
+          .select('owner_email, owner_name, title')
+          .eq('id', propertyId)
+          .single();
+
+        if (!propertyError && propertyData?.owner_email) {
+          await sendContactOwnerEmail(
+            propertyData.owner_email,
+            propertyData.owner_name || 'Property Owner',
+            {
+              inquirerName: formData.name.trim(),
+              inquirerEmail: formData.email.trim(), 
+              inquirerPhone: formData.phone.trim(),
+              message: formData.message.trim() || 'No specific message provided',
+              propertyTitle: propertyData.title || propertyTitle,
+              propertyId: propertyId
+            }
+          );
+        }
+      } catch (emailError) {
+        console.error('Error sending email notification:', emailError);
+        // Don't show error to user as the main action was successful
+      }
       
       toast({
         title: "Interest Registered Successfully!",
