@@ -1,4 +1,4 @@
-import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
+import { serve } from 'https://deno.land/std@0.190.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
 const corsHeaders = {
@@ -63,14 +63,17 @@ serve(async (req) => {
     console.log('Search params (from body):', requestBody);
     console.log('Mapped filters will be:', {
         propertyTypes: Array.isArray(requestBody.propertyTypes) && requestBody.propertyTypes.length > 0 ? requestBody.propertyTypes : (propertyType ? [propertyType] : []),
-        bhkType: bhkType && bhkType !== 'All' ? ({ '2 BHK': '2bhk', '3 BHK': '3bhk', '4 BHK': '4bhk' }[bhkType] || bhkType.toLowerCase().replace(/\s+/g, '').replace(/\+/, '')) : 'no filter',
+        bhkType: bhkType && bhkType !== 'All' ? (() => {
+          const bhkMapping = { '2 BHK': '2bhk', '3 BHK': '3bhk', '4 BHK': '4bhk' };
+          return bhkMapping[bhkType as keyof typeof bhkMapping] || bhkType.toLowerCase().replace(/\s+/g, '').replace(/\+/, '');
+        })() : 'no filter',
         landRequested,
         intent,
         budgetMin,
         budgetMax,
         furnished,
         availability,
-        selectedTypes: selectedTypes.length > 0 ? selectedTypes : 'none'
+        selectedTypes: requestBody.propertyTypes && requestBody.propertyTypes.length > 0 ? requestBody.propertyTypes : 'none'
       });
 
     // Initialize Supabase client
@@ -384,14 +387,14 @@ serve(async (req) => {
         propertyType,
         budgetMin,
         budgetMax,
-        selectedTypes: selectedTypes.length > 0 ? selectedTypes : 'none'
+        selectedTypes: requestBody.propertyTypes && requestBody.propertyTypes.length > 0 ? requestBody.propertyTypes : 'none'
       },
       sampleProperties: properties?.slice(0, 3).map(p => ({
         id: p.id,
         title: p.title,
         property_type: p.property_type,
         expected_price: p.expected_price,
-        status: p.status
+        status: (p as any).status || 'approved'
       })) || []
     });
 
@@ -403,7 +406,7 @@ serve(async (req) => {
     // Transform the data to match PropertyCard format
     const items = (properties || []).map(property => {
       // Format price for display
-      const formatPrice = (price) => {
+      const formatPrice = (price: any) => {
         if (!price) return 'Price on Request';
         
         // Special handling for exactly 1 Crore (100 Lakhs)
@@ -454,7 +457,7 @@ serve(async (req) => {
         city: property.city || '',
         bhkType: property.bhk_type || '1bhk',
         isNew: new Date(property.created_at) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
-        status: property.status || 'approved',
+        status: (property as any).status || 'approved',
         is_featured: property.is_featured || false
       };
     });
@@ -489,7 +492,7 @@ serve(async (req) => {
     return new Response(
       JSON.stringify({ 
         error: 'Internal server error',
-        message: error.message 
+        message: (error as Error).message 
       }),
       {
         status: 500,

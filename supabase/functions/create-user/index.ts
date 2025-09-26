@@ -221,6 +221,7 @@ Deno.serve(async (req) => {
     const { data: verifyData, error: verifyError } = await supabaseAdmin.auth.admin.generateLink({
       type: 'signup',
       email: email.trim(),
+      password: password.trim(),
       options: {
         redirectTo: `${req.headers.get('origin') || 'https://homehni.in'}/auth?verified=true`
       }
@@ -278,14 +279,14 @@ Deno.serve(async (req) => {
   } catch (error) {
     console.error('=== UNEXPECTED ERROR ===');
     console.error('Error type:', typeof error);
-    console.error('Error message:', error?.message);
-    console.error('Error stack:', error?.stack);
+    console.error('Error message:', (error as Error)?.message);
+    console.error('Error stack:', (error as Error)?.stack);
     console.error('Full error:', JSON.stringify(error, Object.getOwnPropertyNames(error)));
     
     return new Response(
       JSON.stringify({ 
         success: false, 
-        error: `Unexpected server error: ${error?.message || 'Unknown error'}`
+        error: `Unexpected server error: ${(error as Error)?.message || 'Unknown error'}`
       }),
       {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
