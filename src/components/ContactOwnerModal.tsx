@@ -195,9 +195,17 @@ export const ContactOwnerModal: React.FC<ContactOwnerModalProps> = ({
       <DialogContent
         className="sm:max-w-[425px]"
         onClick={(e) => e.stopPropagation()}
+        onPointerDownOutside={(e) => {
+          // Prevent Radix from closing immediately to avoid click-through
+          e.preventDefault();
+          // Stop the original outside event from bubbling to underlying elements
+          // @ts-ignore - Radix event includes originalEvent
+          e?.detail?.originalEvent?.stopPropagation?.();
+          // Close after the current event loop to avoid triggering underlying onClick
+          setTimeout(() => onClose(), 0);
+        }}
         onInteractOutside={(e) => {
-          // Stop outside clicks from bubbling to underlying elements (e.g., property card)
-          // while allowing the dialog to close normally
+          // Extra safety: stop bubbling on any outside interaction
           // @ts-ignore - Radix event includes originalEvent
           e?.detail?.originalEvent?.stopPropagation?.();
         }}
