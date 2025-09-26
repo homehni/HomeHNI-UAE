@@ -55,9 +55,14 @@ export default function PayButton({
         prefill,
         theme: { color: "#d21404" },
         handler: async function (response: any) {
-          console.log("Payment successful:", response);
+          console.log("Payment response received:", response);
           
           try {
+            // Check if payment actually succeeded
+            if (!response.razorpay_payment_id) {
+              throw new Error("Payment failed - no payment ID received");
+            }
+            
             // Record payment in database
             if (user?.id) {
               const currentDate = new Date();
@@ -102,6 +107,7 @@ export default function PayButton({
               if (paymentError) {
                 console.error('Error recording payment:', paymentError);
                 toast.error("Payment successful but failed to save record. Please contact support.");
+                return;
               }
             }
             
@@ -165,13 +171,92 @@ export default function PayButton({
               window.location.href = `/payment/success?payment_id=${response.razorpay_payment_id || ""}`;
             }, 2000);
           } catch (error) {
-            console.error('Post-payment processing error:', error);
-            toast.error("Payment successful but there was an error processing your request. Please contact support.");
+            console.error('Payment processing error:', error);
+            
+            // Record failed payment in database
+            if (user?.id) {
+              try {
+                const currentDate = new Date();
+                await supabase
+                  .from('payments')
+                  .insert({
+                    user_id: user.id,
+                    payment_id: response.razorpay_payment_id || `failed_${Date.now()}`,
+                    plan_name: planName,
+                    amount_paise: amountPaise,
+                    amount_rupees: amountPaise / 100,
+                    currency: 'INR',
+                    status: 'failed',
+                    payment_method: 'razorpay',
+                    payment_date: currentDate.toISOString(),
+                    invoice_number: null,
+                    plan_type: planName.toLowerCase().includes('lifetime') ? 'lifetime' : 'subscription',
+                    plan_duration: planName.toLowerCase().includes('lifetime') 
+                      ? 'lifetime' 
+                      : planName.toLowerCase().includes('year') ? '1 year' : '1 month',
+                    expires_at: null,
+                    metadata: {
+                      error_message: error instanceof Error ? error.message : 'Unknown error',
+                      failed_at: currentDate.toISOString(),
+                      notes: notes
+                    }
+                  });
+              } catch (dbError) {
+                console.error('Error recording failed payment:', dbError);
+              }
+            }
+            
+            toast.error("Payment failed", {
+              description: error instanceof Error ? error.message : "Please try again or contact support.",
+              duration: 5000,
+            });
+            
+            setTimeout(() => {
+              window.location.href = "/payment/failed";
+            }, 2000);
           }
         },
         modal: {
-          ondismiss: function () {
+          ondismiss: async function () {
             console.log("Payment modal dismissed");
+            
+            // Record cancelled payment in database
+            if (user?.id) {
+              try {
+                const currentDate = new Date();
+                const { error: paymentError } = await supabase
+                  .from('payments')
+                  .insert({
+                    user_id: user.id,
+                    payment_id: `cancelled_${Date.now()}`,
+                    plan_name: planName,
+                    amount_paise: amountPaise,
+                    amount_rupees: amountPaise / 100,
+                    currency: 'INR',
+                    status: 'cancelled',
+                    payment_method: 'razorpay',
+                    payment_date: currentDate.toISOString(),
+                    invoice_number: null,
+                    plan_type: planName.toLowerCase().includes('lifetime') ? 'lifetime' : 'subscription',
+                    plan_duration: planName.toLowerCase().includes('lifetime') 
+                      ? 'lifetime' 
+                      : planName.toLowerCase().includes('year') ? '1 year' : '1 month',
+                    expires_at: null,
+                    metadata: {
+                      cancelled_at: currentDate.toISOString(),
+                      reason: 'user_cancelled',
+                      notes: notes
+                    }
+                  });
+                
+                if (!paymentError) {
+                  console.log('Cancelled payment recorded successfully');
+                }
+              } catch (error) {
+                console.error('Error recording cancelled payment:', error);
+              }
+            }
+            
             toast.error("Payment was cancelled", {
               description: "You can try again anytime.",
               duration: 4000,

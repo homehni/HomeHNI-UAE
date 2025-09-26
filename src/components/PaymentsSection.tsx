@@ -89,6 +89,8 @@ const PaymentsSection: React.FC = () => {
         return <Clock className="h-4 w-4 text-yellow-600" />;
       case 'failed':
         return <X className="h-4 w-4 text-red-600" />;
+      case 'cancelled':
+        return <X className="h-4 w-4 text-gray-600" />;
       default:
         return <Clock className="h-4 w-4 text-gray-600" />;
     }
@@ -102,6 +104,8 @@ const PaymentsSection: React.FC = () => {
         return <Badge variant="secondary" className="bg-yellow-100 text-yellow-800">Pending</Badge>;
       case 'failed':
         return <Badge variant="destructive">Failed</Badge>;
+      case 'cancelled':
+        return <Badge variant="secondary" className="bg-gray-100 text-gray-800">Cancelled</Badge>;
       default:
         return <Badge variant="outline">{status}</Badge>;
     }
@@ -164,6 +168,7 @@ const PaymentsSection: React.FC = () => {
                 <SelectItem value="success">Success</SelectItem>
                 <SelectItem value="pending">Pending</SelectItem>
                 <SelectItem value="failed">Failed</SelectItem>
+                <SelectItem value="cancelled">Cancelled</SelectItem>
               </SelectContent>
             </Select>
           </div>
