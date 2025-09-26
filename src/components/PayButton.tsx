@@ -43,6 +43,7 @@ export default function PayButton({
           variant: "destructive",
           title: "Payment Error",
           description: "Payment configuration error. Please try again later.",
+          className: "border-l-4 border-l-red-500 bg-white shadow-lg text-red-900",
         });
         return;
       }
@@ -115,6 +116,7 @@ export default function PayButton({
                   variant: "destructive",
                   title: "Payment Error",
                   description: "Payment successful but failed to save record. Please contact support.",
+                  className: "border-l-4 border-l-red-500 bg-white shadow-lg text-red-900",
                 });
                 return;
               }
@@ -173,7 +175,7 @@ export default function PayButton({
             toast({
               title: "Payment Successful!",
               description: "Your payment has been processed and plan activated successfully.",
-              className: "bg-green-50 border-green-200 text-green-900",
+              className: "border-l-4 border-l-green-500 bg-white shadow-lg",
             });
             
             // Redirect to success page or dashboard
@@ -220,6 +222,7 @@ export default function PayButton({
               variant: "destructive",
               title: "Payment Failed",
               description: error instanceof Error ? error.message : "Please try again or contact support.",
+              className: "border-l-4 border-l-red-500 bg-white shadow-lg text-red-900",
             });
             
             setTimeout(() => {
@@ -285,6 +288,7 @@ export default function PayButton({
         variant: "destructive",
         title: "Payment Setup Failed",
         description: `${error instanceof Error ? error.message : "Unknown error"}`,
+        className: "border-l-4 border-l-red-500 bg-white shadow-lg text-red-900",
       });
     } finally {
       setLoading(false);
