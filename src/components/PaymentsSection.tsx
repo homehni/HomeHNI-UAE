@@ -281,25 +281,6 @@ const PaymentsSection: React.FC = () => {
     pdf.text(`Transaction Date: ${format(new Date(payment.payment_date), 'MMMM do, yyyy')}`, 20, paymentDetailsY + 25);
     pdf.text(`Currency: ${payment.currency}`, 20, paymentDetailsY + 35);
     
-    // Professional Footer with uniform formatting
-    const footerY = pageHeight - 60;
-    pdf.setTextColor(120, 120, 120);
-    pdf.setFontSize(8);
-    pdf.setFont('helvetica', 'normal');
-    
-    // Thank you message
-    pdf.text('Thank you for your business!', 20, footerY);
-    
-    // Computer generated notice
-    pdf.text('This is a computer-generated invoice and does not require a signature.', 20, footerY + 12);
-    
-    // Generation date
-    pdf.text(`Generated on: ${format(new Date(), 'MMMM do, yyyy')}`, 20, footerY + 24);
-    
-    // Terms and Conditions - consistent small font
-    pdf.setFontSize(8);
-    pdf.text('Terms: Payment is due within 30 days. Late payments may incur additional charges.', 20, footerY + 36);
-    
     // Save the PDF
     const fileName = `HomeHNI_Invoice_${payment.invoice_number || payment.payment_id.slice(-8)}_${format(new Date(payment.payment_date), 'yyyy-MM-dd')}.pdf`;
     pdf.save(fileName);
