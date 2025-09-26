@@ -148,140 +148,176 @@ const PaymentsSection: React.FC = () => {
     const pageWidth = pdf.internal.pageSize.width;
     const pageHeight = pdf.internal.pageSize.height;
     
-    // Set colors - Red theme for Home HNI
-    const primaryColor = [220, 38, 127]; // Red color
+    // Set colors - Pink theme for Home HNI
+    const primaryColor = [219, 39, 119]; // Pink/Magenta color matching the logo
     const secondaryColor = [128, 128, 128]; // Gray
     
-    // Company Header with red background
-    pdf.setFillColor(primaryColor[0], primaryColor[1], primaryColor[2]);
-    pdf.rect(0, 0, pageWidth, 35, 'F');
-    
-    // Company Name - Home HNI
-    pdf.setTextColor(255, 255, 255);
-    pdf.setFontSize(26);
-    pdf.setFont('helvetica', 'bold');
-    pdf.text('HOME HNI', 20, 22);
+    try {
+      // Load and add logo
+      const logoImg = new Image();
+      logoImg.crossOrigin = 'anonymous';
+      logoImg.src = '/src/assets/home-hni-logo.png';
+      
+      await new Promise((resolve, reject) => {
+        logoImg.onload = resolve;
+        logoImg.onerror = reject;
+      });
+      
+      // Company Header with pink background
+      pdf.setFillColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+      pdf.rect(0, 0, pageWidth, 40, 'F');
+      
+      // Add logo to PDF
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = logoImg.width;
+      canvas.height = logoImg.height;
+      ctx?.drawImage(logoImg, 0, 0);
+      
+      const logoDataUrl = canvas.toDataURL('image/png');
+      pdf.addImage(logoDataUrl, 'PNG', 15, 8, 60, 24);
+      
+    } catch (error) {
+      // Fallback if logo fails to load
+      pdf.setFillColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+      pdf.rect(0, 0, pageWidth, 40, 'F');
+      
+      pdf.setTextColor(255, 255, 255);
+      pdf.setFontSize(26);
+      pdf.setFont('helvetica', 'bold');
+      pdf.text('HOME HNI', 20, 25);
+    }
     
     // Invoice Title
     pdf.setTextColor(0, 0, 0);
     pdf.setFontSize(22);
     pdf.setFont('helvetica', 'bold');
-    pdf.text('INVOICE', pageWidth - 20, 55, { align: 'right' });
+    pdf.text('INVOICE', pageWidth - 20, 60, { align: 'right' });
     
     // Invoice Details Box - Professional styling
     pdf.setDrawColor(220, 220, 220);
     pdf.setLineWidth(0.5);
-    pdf.rect(pageWidth - 80, 65, 70, 35);
+    pdf.rect(pageWidth - 80, 70, 70, 35);
     
     pdf.setFontSize(10);
     pdf.setFont('helvetica', 'normal');
-    pdf.text(`Invoice #: ${payment.invoice_number || payment.payment_id.slice(-8)}`, pageWidth - 75, 72);
-    pdf.text(`Date: ${format(new Date(payment.payment_date), 'dd/MM/yyyy')}`, pageWidth - 75, 79);
-    pdf.text(`Payment ID: ${payment.payment_id.slice(-8)}`, pageWidth - 75, 86);
-    pdf.text(`Status: ${payment.status.toUpperCase()}`, pageWidth - 75, 93);
+    pdf.text(`Invoice #: ${payment.invoice_number || payment.payment_id.slice(-8)}`, pageWidth - 75, 77);
+    pdf.text(`Date: ${format(new Date(payment.payment_date), 'dd/MM/yyyy')}`, pageWidth - 75, 84);
+    pdf.text(`Payment ID: ${payment.payment_id.slice(-8)}`, pageWidth - 75, 91);
+    pdf.text(`Status: ${payment.status.toUpperCase()}`, pageWidth - 75, 98);
     
     // Company Details - Updated for Home HNI
     pdf.setFontSize(12);
     pdf.setFont('helvetica', 'bold');
-    pdf.text('From:', 20, 55);
+    pdf.text('From:', 20, 60);
     
     pdf.setFontSize(10);
     pdf.setFont('helvetica', 'normal');
-    pdf.text('Home HNI Pvt Ltd', 20, 65);
-    pdf.text('Plot No: 52 E/P', 20, 72);
-    pdf.text('CBI Colony Sahebnagar Kalan', 20, 79);
-    pdf.text('Email: homehni8@gmail.com', 20, 86);
-    pdf.text('Phone: +91 8074 017 388', 20, 93);
-    pdf.text('GST: 27ABCDE1234F5Z6', 20, 100);
+    pdf.text('Home HNI Pvt Ltd', 20, 70);
+    pdf.text('Plot No: 52 E/P', 20, 77);
+    pdf.text('CBI Colony Sahebnagar Kalan', 20, 84);
+    pdf.text('Email: homehni8@gmail.com', 20, 91);
+    pdf.text('Phone: +91 8074 017 388', 20, 98);
+    pdf.text('GST: 27ABCDE1234F5Z6', 20, 105);
     
     // Customer Details
     pdf.setFontSize(12);
     pdf.setFont('helvetica', 'bold');
-    pdf.text('Bill To:', 20, 120);
+    pdf.text('Bill To:', 20, 125);
     
     pdf.setFontSize(10);
     pdf.setFont('helvetica', 'normal');
-    pdf.text(user?.email || 'Customer', 20, 130);
-    pdf.text('Customer ID: ' + (user?.id?.slice(-8) || 'N/A'), 20, 137);
+    pdf.text(user?.email || 'Customer', 20, 135);
+    pdf.text('Customer ID: ' + (user?.id?.slice(-8) || 'N/A'), 20, 142);
     
-    // Service Details Table - Professional design
+    // Service Details Table - Professional design matching reference
     const tableY = 160;
     
-    // Table Header with subtle background
-    pdf.setFillColor(248, 248, 248);
-    pdf.rect(20, tableY, pageWidth - 40, 18, 'F');
-    
-    // Table border
+    // Main table border
     pdf.setDrawColor(200, 200, 200);
-    pdf.setLineWidth(0.3);
-    pdf.rect(20, tableY, pageWidth - 40, 18);
+    pdf.setLineWidth(0.5);
+    pdf.rect(20, tableY, pageWidth - 40, 35);
+    
+    // Table Header with background
+    pdf.setFillColor(248, 248, 248);
+    pdf.rect(20, tableY, pageWidth - 40, 15, 'F');
+    
+    // Header borders
+    pdf.line(20, tableY + 15, pageWidth - 20, tableY + 15);
+    pdf.line(80, tableY, 80, tableY + 35);
+    pdf.line(130, tableY, 130, tableY + 35);
+    pdf.line(160, tableY, 160, tableY + 35);
     
     pdf.setFontSize(11);
     pdf.setFont('helvetica', 'bold');
-    pdf.text('Description', 25, tableY + 12);
-    pdf.text('Plan Type', 100, tableY + 12);
-    pdf.text('Duration', 135, tableY + 12);
-    pdf.text('Amount', pageWidth - 25, tableY + 12, { align: 'right' });
+    pdf.text('Description', 25, tableY + 10);
+    pdf.text('Plan Type', 85, tableY + 10);
+    pdf.text('Duration', 135, tableY + 10);
+    pdf.text('Amount', pageWidth - 25, tableY + 10, { align: 'right' });
     
     // Table Content Row
-    const rowY = tableY + 25;
-    pdf.rect(20, tableY + 18, pageWidth - 40, 15);
-    
     pdf.setFont('helvetica', 'normal');
     pdf.setFontSize(10);
-    pdf.text(payment.plan_name, 25, rowY + 8);
-    pdf.text(payment.plan_type || 'subscription', 100, rowY + 8);
-    pdf.text(payment.plan_duration || '1 month', 135, rowY + 8);
-    pdf.text(`₹ ${payment.amount_rupees.toLocaleString()}`, pageWidth - 25, rowY + 8, { align: 'right' });
+    pdf.text(payment.plan_name, 25, tableY + 25);
+    pdf.text(payment.plan_type || 'subscription', 85, tableY + 25);
+    pdf.text(payment.plan_duration || '1 month', 135, tableY + 25);
+    pdf.text(`₹ ${payment.amount_rupees.toLocaleString()}`, pageWidth - 25, tableY + 25, { align: 'right' });
     
-    // Totals Section - Clean layout
-    const totalY = rowY + 35;
+    // Totals Section - Right aligned like in reference
+    const totalY = tableY + 60;
+    const totalX = pageWidth - 80;
     
     // Subtotal
     pdf.setFont('helvetica', 'normal');
     pdf.setFontSize(10);
-    pdf.text('Subtotal:', pageWidth - 80, totalY);
+    pdf.text('Subtotal:', totalX, totalY);
     pdf.text(`₹ ${payment.amount_rupees.toLocaleString()}`, pageWidth - 25, totalY, { align: 'right' });
     
     // GST
-    pdf.text('GST (18%):', pageWidth - 80, totalY + 10);
+    pdf.text('GST (18%):', totalX, totalY + 12);
     const gstAmount = Math.round(payment.amount_rupees * 0.18);
-    pdf.text(`₹ ${gstAmount.toLocaleString()}`, pageWidth - 25, totalY + 10, { align: 'right' });
+    pdf.text(`₹ ${gstAmount.toLocaleString()}`, pageWidth - 25, totalY + 12, { align: 'right' });
     
     // Total line separator
     pdf.setLineWidth(0.5);
-    pdf.line(pageWidth - 80, totalY + 18, pageWidth - 20, totalY + 18);
+    pdf.line(totalX, totalY + 20, pageWidth - 20, totalY + 20);
     
     // Total Amount
     pdf.setFontSize(12);
     pdf.setFont('helvetica', 'bold');
-    pdf.text('Total Amount:', pageWidth - 80, totalY + 28);
+    pdf.text('Total Amount:', totalX, totalY + 32);
     const totalAmount = payment.amount_rupees + gstAmount;
-    pdf.text(`₹ ${totalAmount.toLocaleString()}`, pageWidth - 25, totalY + 28, { align: 'right' });
+    pdf.text(`₹ ${totalAmount.toLocaleString()}`, pageWidth - 25, totalY + 32, { align: 'right' });
     
     // Payment Details Section
-    const paymentDetailsY = totalY + 50;
+    const paymentDetailsY = totalY + 60;
     pdf.setFontSize(11);
     pdf.setFont('helvetica', 'bold');
     pdf.text('Payment Details:', 20, paymentDetailsY);
     
     pdf.setFont('helvetica', 'normal');
     pdf.setFontSize(10);
-    pdf.text(`Payment Method: ${payment.payment_method || 'razorpay'}`, 20, paymentDetailsY + 12);
-    pdf.text(`Transaction Date: ${format(new Date(payment.payment_date), 'PPP')}`, 20, paymentDetailsY + 22);
-    pdf.text(`Currency: ${payment.currency}`, 20, paymentDetailsY + 32);
+    pdf.text(`Payment Method: ${payment.payment_method || 'razorpay'}`, 20, paymentDetailsY + 15);
+    pdf.text(`Transaction Date: ${format(new Date(payment.payment_date), 'MMMM do, yyyy')}`, 20, paymentDetailsY + 25);
+    pdf.text(`Currency: ${payment.currency}`, 20, paymentDetailsY + 35);
     
-    // Professional Footer
-    const footerY = pageHeight - 50;
+    // Professional Footer with proper spacing
+    const footerY = pageHeight - 60;
     pdf.setTextColor(100, 100, 100);
     pdf.setFontSize(9);
+    
+    // Thank you message
     pdf.text('Thank you for your business!', 20, footerY);
-    pdf.text('This is a computer-generated invoice and does not require a signature.', 20, footerY + 10);
-    pdf.text(`Generated on: ${format(new Date(), 'PPP')}`, 20, footerY + 20);
+    
+    // Computer generated notice
+    pdf.text('This is a computer-generated invoice and does not require a signature.', 20, footerY + 12);
+    
+    // Generation date
+    pdf.text(`Generated on: ${format(new Date(), 'MMMM do, yyyy')}`, 20, footerY + 24);
     
     // Terms and Conditions
     pdf.setFontSize(8);
-    pdf.text('Terms: Payment is due within 30 days. Late payments may incur additional charges.', 20, footerY + 32);
+    pdf.text('Terms: Payment is due within 30 days. Late payments may incur additional charges.', 20, footerY + 36);
     
     // Save the PDF
     const fileName = `HomeHNI_Invoice_${payment.invoice_number || payment.payment_id.slice(-8)}_${format(new Date(payment.payment_date), 'yyyy-MM-dd')}.pdf`;
