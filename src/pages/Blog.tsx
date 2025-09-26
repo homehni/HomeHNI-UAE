@@ -117,7 +117,10 @@ const Blog = () => {
                   >
                     {featuredArticles.map((article, index) => (
                       <div key={article.id} className="w-full flex-shrink-0">
-                        <div className="relative">
+                        <div 
+                          className="relative cursor-pointer"
+                          onClick={() => window.location.href = `/blog/${article.title.toLowerCase().replace(/[^a-z0-9\s]/g, '').replace(/\s+/g, '-')}`}
+                        >
                           <img 
                             src={article.image} 
                             alt={article.title}
@@ -205,7 +208,14 @@ const Blog = () => {
             >
               <div className="flex space-x-3 pb-4" style={{ minWidth: 'max-content' }}>
                 {categoryTiles.map((category, index) => (
-                  <Card key={index} className="flex-shrink-0 w-44 group hover:shadow-lg transition-all duration-300 hover-scale cursor-pointer">
+                  <Card 
+                    key={index} 
+                    className="flex-shrink-0 w-44 group hover:shadow-lg transition-all duration-300 hover-scale cursor-pointer"
+                    onClick={() => {
+                      // Navigate to blog with appropriate filter - for now just scroll to relevant section
+                      document.getElementById('blog-sections')?.scrollIntoView({ behavior: 'smooth' });
+                    }}
+                  >
                     <div className="relative overflow-hidden rounded-lg">
                       <img 
                         src={category.image} 
@@ -264,16 +274,18 @@ const Blog = () => {
       </section>
 
       {/* Blog Sections */}
-      {blogSections.map((section, index) => (
-        <BlogSection
-          key={section.title}
-          title={section.title}
-          data={section.data}
-          tags={section.tags}
-          viewMoreText={section.viewMoreText}
-          backgroundColor={index % 2 === 1 ? "bg-gray-50" : "bg-white"}
-        />
-      ))}
+      <div id="blog-sections">
+        {blogSections.map((section, index) => (
+          <BlogSection
+            key={section.title}
+            title={section.title}
+            data={section.data}
+            tags={section.tags}
+            viewMoreText={section.viewMoreText}
+            backgroundColor={index % 2 === 1 ? "bg-gray-50" : "bg-white"}
+          />
+        ))}
+      </div>
 
       {/* Subscription Modal */}
       <Dialog open={showSubscriptionModal} onOpenChange={setShowSubscriptionModal}>

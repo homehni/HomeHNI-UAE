@@ -40,6 +40,7 @@ import CommercialOwnerPlans from "./pages/CommercialOwnerPlans";
 import CommercialBuyerPlan from "./pages/CommercialBuyerPlan";
 import CommercialSellerPlans from "./pages/CommercialSellerPlans";
 import Blog from "./pages/Blog";
+import BlogPost from "./pages/BlogPost";
 import { Auth } from "./pages/Auth";
 import { Profile } from "./pages/Profile";
 import { DealRoom } from "./pages/DealRoom";
@@ -161,6 +162,7 @@ const App: React.FC = () => {
           <Route path="/commercial-seller-plans" element={<CommercialSellerPlans />} />
             <Route path="/corporate-enquiry" element={<CorporateEnquiry />} />
             <Route path="/blog" element={<Blog />} />
+            <Route path="/blog/:slug" element={<BlogPost />} />
             
             <Route path="/architects" element={<Architecture />} />
             <Route path="/interior" element={<Interior />} />

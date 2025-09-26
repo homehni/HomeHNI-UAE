@@ -62,7 +62,10 @@ const BlogSection = ({ title, data, tags, viewMoreText, backgroundColor = "bg-wh
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* First featured article - larger */}
               <div className="md:col-span-1">
-                <div className="relative group cursor-pointer">
+                <div 
+                  className="relative group cursor-pointer"
+                  onClick={() => window.location.href = `/blog/${data.featured[0].title.toLowerCase().replace(/[^a-z0-9\s]/g, '').replace(/\s+/g, '-')}`}
+                >
                   <img 
                     src={data.featured[0].image} 
                     alt={data.featured[0].title}
@@ -88,7 +91,11 @@ const BlogSection = ({ title, data, tags, viewMoreText, backgroundColor = "bg-wh
               {/* Second and Third featured articles */}
               <div className="space-y-6">
                 {data.featured.slice(1, 3).map((article, index) => (
-                  <div key={article.id} className="relative group cursor-pointer">
+                  <div 
+                    key={article.id} 
+                    className="relative group cursor-pointer"
+                    onClick={() => window.location.href = `/blog/${article.title.toLowerCase().replace(/[^a-z0-9\s]/g, '').replace(/\s+/g, '-')}`}
+                  >
                     <img 
                       src={article.image} 
                       alt={article.title}
@@ -112,7 +119,11 @@ const BlogSection = ({ title, data, tags, viewMoreText, backgroundColor = "bg-wh
           {/* Right - Article List */}
           <div className="space-y-6">
             {data.sideArticles.map((article, index) => (
-              <div key={index} className="group cursor-pointer">
+              <div 
+                key={index} 
+                className="group cursor-pointer"
+                onClick={() => window.location.href = `/blog/${article.title.toLowerCase().replace(/[^a-z0-9\s]/g, '').replace(/\s+/g, '-')}`}
+              >
                 <h4 className="font-bold text-gray-900 mb-2 hover:text-red-600 transition-colors line-clamp-2 text-sm">
                   {article.title}
                 </h4>
