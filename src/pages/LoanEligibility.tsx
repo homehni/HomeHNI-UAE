@@ -95,7 +95,7 @@ const LoanEligibility = () => {
       
       <main className="container mx-auto px-4 pt-24 pb-16">
         {/* Hero Section */}
-        <div className="text-center mb-12">
+        <div className="text-center mb-12 pt-8">
           <div className="flex items-center justify-center mb-4">
             <div className="bg-primary w-12 h-12 rounded-full flex items-center justify-center mr-4">
               <TrendingUp className="w-6 h-6 text-primary-foreground" />
