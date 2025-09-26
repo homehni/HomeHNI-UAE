@@ -1,6 +1,6 @@
 // Email Service for HomeHNI - Handles all automated email notifications
-export const EMAIL_API_BASE = 'https://lovable-email-backend.vercel.app';
-export const EMAIL_API_KEY = 'lov@ble-2025-secret-KEY';
+export const EMAIL_API_BASE = 'https://email-system-hni.vercel.app';
+export const EMAIL_API_KEY = 'MyNew$uper$ecretKey2025';
 
 const sendEmail = async (endpoint: string, data: any) => {
   try {
