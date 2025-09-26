@@ -45,11 +45,7 @@ const BlogSection = ({ title, data, tags, viewMoreText, backgroundColor = "bg-wh
           {tags.map((tag, index) => (
             <Badge 
               key={index}
-              className={tag.active 
-                ? "bg-green-500 text-white px-4 py-2 rounded-full" 
-                : "px-4 py-2 rounded-full border-gray-300"
-              }
-              variant={tag.active ? "default" : "outline"}
+              className="bg-red-500 text-white px-4 py-2 rounded-full hover:bg-red-600 transition-colors cursor-pointer"
             >
               {tag.name}
             </Badge>

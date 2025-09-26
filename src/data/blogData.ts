@@ -192,14 +192,14 @@ export const homeInteriorsArticles = {
       excerpt: "Transform your living space with contemporary design elements, smart furniture choices, and trending color palettes that define modern luxury...",
       date: "September 18, 2025",
       author: "Interior Design Team",
-      image: "https://images.unsplash.com/photo-1556909114-f6e703ae187c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
+      image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1958&q=80"
     },
     {
       id: 2,
       title: "Kitchen Interior Design: Space Optimization and Storage Solutions for Small Homes",
       date: "September 16, 2025",
       author: "Kitchen Expert",
-      image: "https://images.unsplash.com/photo-1556909114-f6e703ae187c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
+      image: "https://images.unsplash.com/photo-1556909191-8b2e3e10b6b7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
     },
     {
       id: 3,
@@ -289,8 +289,8 @@ export const blogSections = [
     data: realEstateArticles,
     tags: [
       { name: "Home Buying Tips & Guide", active: true },
-      { name: "Property Selling Tips & Guides", active: false },
-      { name: "Rental Guide for Renters, Tenant & Landlord", active: false }
+      { name: "Property Selling Tips & Guides", active: true },
+      { name: "Rental Guide for Renters, Tenant & Landlord", active: true }
     ],
     viewMoreText: "View More in Home Buying Tips & Guide"
   },
@@ -299,10 +299,10 @@ export const blogSections = [
     data: homeServicesArticles,
     tags: [
       { name: "Painting Tips & Color Ideas", active: true },
-      { name: "Easy Cleaning Tips", active: false },
-      { name: "Electrician Tips & Guides", active: false },
-      { name: "Home Garden Ideas & Tips", active: false },
-      { name: "Pest Control Tips & Guides for a Pest-Free Home", active: false }
+      { name: "Easy Cleaning Tips", active: true },
+      { name: "Electrician Tips & Guides", active: true },
+      { name: "Home Garden Ideas & Tips", active: true },
+      { name: "Pest Control Tips & Guides for a Pest-Free Home", active: true }
     ],
     viewMoreText: "View More in Painting Tips & Color Ideas"
   },
@@ -311,9 +311,9 @@ export const blogSections = [
     data: homeInteriorsArticles,
     tags: [
       { name: "Living Room Design Ideas", active: true },
-      { name: "Kitchen Interior Design", active: false },
-      { name: "Bedroom Decor Ideas", active: false },
-      { name: "Home Lighting Solutions", active: false }
+      { name: "Kitchen Interior Design", active: true },
+      { name: "Bedroom Decor Ideas", active: true },
+      { name: "Home Lighting Solutions", active: true }
     ],
     viewMoreText: "View More in Living Room Design Ideas"
   },
@@ -322,9 +322,9 @@ export const blogSections = [
     data: financeArticles,
     tags: [
       { name: "Home Loan Tips & Guides", active: true },
-      { name: "Tax Benefits & Deductions", active: false },
-      { name: "Real Estate Investment", active: false },
-      { name: "Property Legal & Documentation", active: false }
+      { name: "Tax Benefits & Deductions", active: true },
+      { name: "Real Estate Investment", active: true },
+      { name: "Property Legal & Documentation", active: true }
     ],
     viewMoreText: "View More in Home Loan Tips & Guides"
   }
