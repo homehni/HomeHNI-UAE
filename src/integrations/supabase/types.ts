@@ -649,6 +649,72 @@ export type Database = {
           },
         ]
       }
+      payments: {
+        Row: {
+          amount_paise: number
+          amount_rupees: number
+          created_at: string
+          currency: string
+          expires_at: string | null
+          id: string
+          invoice_number: string | null
+          metadata: Json | null
+          payment_date: string
+          payment_id: string
+          payment_method: string | null
+          plan_duration: string | null
+          plan_name: string
+          plan_type: string | null
+          razorpay_order_id: string | null
+          razorpay_signature: string | null
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          amount_paise: number
+          amount_rupees: number
+          created_at?: string
+          currency?: string
+          expires_at?: string | null
+          id?: string
+          invoice_number?: string | null
+          metadata?: Json | null
+          payment_date?: string
+          payment_id: string
+          payment_method?: string | null
+          plan_duration?: string | null
+          plan_name: string
+          plan_type?: string | null
+          razorpay_order_id?: string | null
+          razorpay_signature?: string | null
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          amount_paise?: number
+          amount_rupees?: number
+          created_at?: string
+          currency?: string
+          expires_at?: string | null
+          id?: string
+          invoice_number?: string | null
+          metadata?: Json | null
+          payment_date?: string
+          payment_id?: string
+          payment_method?: string | null
+          plan_duration?: string | null
+          plan_name?: string
+          plan_type?: string | null
+          razorpay_order_id?: string | null
+          razorpay_signature?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       pg_hostel_properties: {
         Row: {
           amenities: Json | null

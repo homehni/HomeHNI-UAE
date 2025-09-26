@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { Building, MessageSquare, MessageCircle, User, LogOut, Plus, Eye, Edit, Trash, FileText, Shield, MapPin, Home, Medal, Heart, Search, Filter, ArrowUpDown, Phone, TrendingUp, Menu, X, Check } from 'lucide-react';
+import PaymentsSection from '@/components/PaymentsSection';
 import ChatBot from '@/components/ChatBot';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
@@ -1744,14 +1745,7 @@ export const Dashboard: React.FC = () => {
 
           {/* Payments Content */}
           {activeSidebarItem === 'payments' && (
-            <div className="space-y-6">
-              <h1 className="text-2xl font-semibold text-gray-900">Your Payments</h1>
-              <div className="text-center py-12 bg-white rounded-lg border border-gray-200">
-                <Building className="h-12 w-12 mx-auto text-gray-400 mb-4" />
-                <h3 className="text-lg font-medium text-gray-900 mb-2">No payment history</h3>
-                <p className="text-gray-500">Your payment history will appear here</p>
-              </div>
-            </div>
+            <PaymentsSection />
           )}
 
           {/* Interested in your Properties Content */}

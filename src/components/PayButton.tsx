@@ -1,7 +1,9 @@
 import { useCallback, useState } from "react";
 import { loadRazorpayScript } from "@/lib/loadRazorpay";
 import { Button } from "@/components/ui/button";
-import { useToast } from "@/hooks/use-toast";
+import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 
 type PayButtonProps = {
   label?: string;
@@ -21,7 +23,7 @@ export default function PayButton({
   className
 }: PayButtonProps) {
   const [loading, setLoading] = useState(false);
-  const { toast } = useToast();
+  const { user } = useAuth();
 
   const onClick = useCallback(async () => {
     try {
@@ -36,11 +38,7 @@ export default function PayButton({
       
       if (!key || key === "YOUR_RAZORPAY_KEY_ID") {
         console.error("Razorpay key not configured properly");
-        toast({
-          title: "Configuration Error",
-          description: "Razorpay key not configured. Please set up your Razorpay key in environment variables.",
-          variant: "destructive",
-        });
+        toast.error("Payment configuration error. Please try again later.");
         return;
       }
 
@@ -58,15 +56,56 @@ export default function PayButton({
         theme: { color: "#d21404" },
         handler: async function (response: any) {
           console.log("Payment successful:", response);
-          // Minimal client-only success handling
-          // TODO: On real flow, post response to backend for verification.
-          toast({
-            title: "Payment Successful!",
-            description: "Redirecting to confirmation page...",
-          });
           
-          // Send comprehensive payment emails
           try {
+            // Record payment in database
+            if (user?.id) {
+              const currentDate = new Date();
+              const expiryDate = new Date();
+              const invoiceNumber = `INV-${Date.now()}`;
+              
+              // Calculate expiry based on plan (you can modify this logic)
+              if (planName.toLowerCase().includes('lifetime')) {
+                expiryDate.setFullYear(expiryDate.getFullYear() + 100); // 100 years for lifetime
+              } else if (planName.toLowerCase().includes('year')) {
+                expiryDate.setFullYear(expiryDate.getFullYear() + 1);
+              } else {
+                expiryDate.setMonth(expiryDate.getMonth() + 1); // Default to 1 month
+              }
+              
+              const { error: paymentError } = await supabase
+                .from('payments')
+                .insert({
+                  user_id: user.id,
+                  payment_id: response.razorpay_payment_id,
+                  plan_name: planName,
+                  amount_paise: amountPaise,
+                  amount_rupees: amountPaise / 100,
+                  currency: 'INR',
+                  status: 'success',
+                  payment_method: 'razorpay',
+                  payment_date: currentDate.toISOString(),
+                  invoice_number: invoiceNumber,
+                  plan_type: planName.toLowerCase().includes('lifetime') ? 'lifetime' : 'subscription',
+                  plan_duration: planName.toLowerCase().includes('lifetime') 
+                    ? 'lifetime' 
+                    : planName.toLowerCase().includes('year') ? '1 year' : '1 month',
+                  expires_at: expiryDate.toISOString(),
+                  metadata: {
+                    razorpay_payment_id: response.razorpay_payment_id,
+                    razorpay_order_id: response.razorpay_order_id || null,
+                    razorpay_signature: response.razorpay_signature || null,
+                    notes: notes
+                  }
+                });
+              
+              if (paymentError) {
+                console.error('Error recording payment:', paymentError);
+                toast.error("Payment successful but failed to save record. Please contact support.");
+              }
+            }
+            
+            // Send comprehensive payment emails
             if (prefill?.email) {
               const { 
                 sendPlanActivatedEmail, 
@@ -115,21 +154,27 @@ export default function PayButton({
                 )
               ]);
             }
+            
+            toast.success("Payment successful! Welcome to premium!", {
+              description: "Your payment has been processed and plan activated.",
+              duration: 5000,
+            });
+            
+            // Redirect to success page or dashboard
+            setTimeout(() => {
+              window.location.href = `/payment/success?payment_id=${response.razorpay_payment_id || ""}`;
+            }, 2000);
           } catch (error) {
-            console.error('Failed to send payment confirmation emails:', error);
+            console.error('Post-payment processing error:', error);
+            toast.error("Payment successful but there was an error processing your request. Please contact support.");
           }
-          
-          setTimeout(() => {
-            window.location.href = `/payment/success?payment_id=${response.razorpay_payment_id || ""}`;
-          }, 1000);
         },
         modal: {
           ondismiss: function () {
             console.log("Payment modal dismissed");
-            toast({
-              title: "Payment Cancelled",
-              description: "Payment was cancelled by user.",
-              variant: "destructive",
+            toast.error("Payment was cancelled", {
+              description: "You can try again anytime.",
+              duration: 4000,
             });
             setTimeout(() => {
               window.location.href = "/payment/failed";
@@ -143,15 +188,14 @@ export default function PayButton({
       rzp.open();
     } catch (error) {
       console.error("Payment error:", error);
-      toast({
-        title: "Payment Error",
-        description: `Payment setup failed: ${error instanceof Error ? error.message : "Unknown error"}`,
-        variant: "destructive",
+      toast.error("Payment setup failed", {
+        description: `${error instanceof Error ? error.message : "Unknown error"}`,
+        duration: 4000,
       });
     } finally {
       setLoading(false);
     }
-  }, [amountPaise, planName, notes, prefill, toast]);
+  }, [amountPaise, planName, notes, prefill, user]);
 
   return (
     <Button disabled={loading} onClick={onClick} className={className}>
