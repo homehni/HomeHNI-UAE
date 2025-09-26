@@ -132,21 +132,11 @@ const PaymentsSection: React.FC = () => {
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
-                  <div className="flex items-center gap-2">
-                    {getStatusIcon(payment.status)}
-                    <span className="font-medium text-gray-900">{payment.plan_name}</span>
-                  </div>
-                  <div className="hidden sm:flex items-center gap-1 text-sm text-gray-500">
-                    <Calendar className="h-3 w-3" />
-                    <span>{format(new Date(payment.payment_date), 'MMM dd, yyyy')}</span>
-                  </div>
+                  <span className="font-medium text-gray-900">{payment.plan_name}</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <div className="text-right">
                     <div className="font-semibold text-gray-900">₹{payment.amount_rupees.toLocaleString()}</div>
-                    <div className="text-xs text-gray-500 sm:hidden">
-                      {format(new Date(payment.payment_date), 'MMM dd, yyyy')}
-                    </div>
                   </div>
                   {getStatusBadge(payment.status)}
                   <ChevronRight className="h-4 w-4 text-gray-400" />
