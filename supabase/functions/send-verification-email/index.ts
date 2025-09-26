@@ -30,7 +30,7 @@ const handler = async (req: Request): Promise<Response> => {
     const emailResponse = await resend.emails.send({
       from: "HomeHNI <noreply@homehni.in>",
       to: [email],
-      subject: "Welcome to HomeHNI - Verify Your Email",
+      subject: "Verify Your Email Address",
       html: `
         <!DOCTYPE html>
         <html>
@@ -40,21 +40,20 @@ const handler = async (req: Request): Promise<Response> => {
           <title>Verify Your Email - HomeHNI</title>
           <style>
             body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; }
-            .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; border-radius: 8px 8px 0 0; }
+            .header { background: #DC2626; color: white; padding: 20px; text-align: center; border-radius: 8px 8px 0 0; }
             .content { background: #f9f9f9; padding: 30px; border-radius: 0 0 8px 8px; }
-            .button { display: inline-block; background: #667eea; color: white; padding: 15px 30px; text-decoration: none; border-radius: 5px; margin: 20px 0; font-weight: bold; }
-            .button:hover { background: #5a67d8; }
+            .button { display: inline-block; background: #DC2626; color: white; padding: 15px 30px; text-decoration: none; border-radius: 5px; margin: 20px 0; font-weight: bold; }
+            .button:hover { background: #B91C1C; }
             .footer { text-align: center; margin-top: 30px; font-size: 12px; color: #666; }
           </style>
         </head>
         <body>
           <div class="header">
-            <h1>Welcome to HomeHNI!</h1>
-            <p>Your trusted real estate platform</p>
+            <h1>Email Verification Required</h1>
           </div>
           <div class="content">
             <h2>Hi ${name}!</h2>
-            <p>Thank you for signing up with HomeHNI. To complete your registration and start exploring properties, please verify your email address.</p>
+            <p>Please verify your email address to complete your account setup.</p>
             
             <div style="text-align: center;">
               <a href="${verificationUrl}" class="button">Verify Email Address</a>
@@ -66,14 +65,6 @@ const handler = async (req: Request): Promise<Response> => {
             </p>
             
             <p><strong>This link will expire in 24 hours for security reasons.</strong></p>
-            
-            <p>Once verified, you'll be able to:</p>
-            <ul>
-              <li>Browse and search properties</li>
-              <li>Save your favorite listings</li>
-              <li>Contact property owners</li>
-              <li>List your own properties</li>
-            </ul>
             
             <p>If you didn't create an account with HomeHNI, you can safely ignore this email.</p>
           </div>
