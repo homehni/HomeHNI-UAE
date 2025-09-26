@@ -1,7 +1,7 @@
 import { useCallback, useState } from "react";
 import { loadRazorpayScript } from "@/lib/loadRazorpay";
 import { Button } from "@/components/ui/button";
-import { toast } from "sonner";
+import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -24,6 +24,7 @@ export default function PayButton({
 }: PayButtonProps) {
   const [loading, setLoading] = useState(false);
   const { user } = useAuth();
+  const { toast } = useToast();
 
   const onClick = useCallback(async () => {
     try {
@@ -38,7 +39,11 @@ export default function PayButton({
       
       if (!key || key === "YOUR_RAZORPAY_KEY_ID") {
         console.error("Razorpay key not configured properly");
-        toast.error("Payment configuration error. Please try again later.");
+        toast({
+          variant: "destructive",
+          title: "Payment Error",
+          description: "Payment configuration error. Please try again later.",
+        });
         return;
       }
 
@@ -106,7 +111,11 @@ export default function PayButton({
               
               if (paymentError) {
                 console.error('Error recording payment:', paymentError);
-                toast.error("Payment successful but failed to save record. Please contact support.");
+                toast({
+                  variant: "destructive",
+                  title: "Payment Error",
+                  description: "Payment successful but failed to save record. Please contact support.",
+                });
                 return;
               }
             }
@@ -161,14 +170,10 @@ export default function PayButton({
               ]);
             }
             
-            toast.success("Payment Successful!", {
+            toast({
+              title: "Payment Successful!",
               description: "Your payment has been processed and plan activated successfully.",
-              duration: 5000,
-              style: {
-                background: '#f0fdf4',
-                border: '1px solid #bbf7d0',
-                color: '#166534',
-              },
+              className: "bg-green-50 border-green-200 text-green-900",
             });
             
             // Redirect to success page or dashboard
@@ -211,14 +216,10 @@ export default function PayButton({
               }
             }
             
-            toast.error("Payment Failed", {
+            toast({
+              variant: "destructive",
+              title: "Payment Failed",
               description: error instanceof Error ? error.message : "Please try again or contact support.",
-              duration: 5000,
-              style: {
-                background: '#fef2f2',
-                border: '1px solid #fecaca',
-                color: '#991b1b',
-              },
             });
             
             setTimeout(() => {
@@ -280,9 +281,10 @@ export default function PayButton({
       rzp.open();
     } catch (error) {
       console.error("Payment error:", error);
-      toast.error("Payment setup failed", {
+      toast({
+        variant: "destructive",
+        title: "Payment Setup Failed",
         description: `${error instanceof Error ? error.message : "Unknown error"}`,
-        duration: 4000,
       });
     } finally {
       setLoading(false);
