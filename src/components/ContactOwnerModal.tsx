@@ -187,8 +187,12 @@ export const ContactOwnerModal: React.FC<ContactOwnerModalProps> = ({
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[425px]">
+    <Dialog open={isOpen} onOpenChange={(open) => {
+      if (!open) {
+        onClose();
+      }
+    }}>
+      <DialogContent className="sm:max-w-[425px]" onClick={(e) => e.stopPropagation()}>
         <DialogHeader>
           <DialogTitle>Contact Property Owner</DialogTitle>
         </DialogHeader>
@@ -250,7 +254,10 @@ export const ContactOwnerModal: React.FC<ContactOwnerModalProps> = ({
                 type="button"
                 variant="outline"
                 className="flex-1"
-                onClick={onClose}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onClose();
+                }}
                 disabled={isSubmitting}
               >
                 Cancel
