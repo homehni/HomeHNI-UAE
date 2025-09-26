@@ -91,7 +91,7 @@ export const LandPlotScheduleStep: React.FC<LandPlotScheduleStepProps> = ({
                   Get professional painting services at the best prices
                 </p>
                 <div className="space-y-3">
-                  {paintingResponse === 'decline' ? (
+                  {paintingResponse ? (
                     <div className="flex items-center gap-2 p-3 bg-green-50 border border-green-200 rounded-lg">
                       <CheckCircle className="w-4 h-4 text-green-600" />
                       <span className="text-sm text-green-700 font-medium">
@@ -149,7 +149,7 @@ export const LandPlotScheduleStep: React.FC<LandPlotScheduleStepProps> = ({
                   Trusted by 50,000+ owners
                 </p>
                 <div className="space-y-3">
-                  {cleaningResponse === 'decline' ? (
+                  {cleaningResponse ? (
                     <div className="flex items-center gap-2 p-3 bg-green-50 border border-green-200 rounded-lg">
                       <CheckCircle className="w-4 h-4 text-green-600" />
                       <span className="text-sm text-green-700 font-medium">
