@@ -83,7 +83,7 @@ export const ResaleScheduleStep: React.FC<ResaleScheduleStepProps> = ({
                   <FormField control={form.control} name="paintingService" render={({
                   field
                 }) => <div className="space-y-3">
-                        {paintingResponse === 'decline' ? <div className="flex items-center gap-2 p-3 bg-green-50 border border-green-200 rounded-lg">
+                        {paintingResponse ? <div className="flex items-center gap-2 p-3 bg-green-50 border border-green-200 rounded-lg">
                             <CheckCircle className="w-4 h-4 text-green-600" />
                             <span className="text-sm text-green-700 font-medium">
                               Your response has been captured
@@ -92,7 +92,6 @@ export const ResaleScheduleStep: React.FC<ResaleScheduleStepProps> = ({
                             <Button type="button" size="sm" className="bg-orange-500 hover:bg-orange-600 text-white" variant={field.value === 'book' ? 'default' : 'outline'} onClick={() => {
                       field.onChange('book');
                       setPaintingResponse('book');
-                      window.open('/painting-cleaning', '_blank');
                     }}>
                               Book Now
                             </Button>
@@ -128,7 +127,7 @@ export const ResaleScheduleStep: React.FC<ResaleScheduleStepProps> = ({
                   <FormField control={form.control} name="cleaningService" render={({
                   field
                 }) => <div className="space-y-3">
-                        {cleaningResponse === 'decline' ? <div className="flex items-center gap-2 p-3 bg-green-50 border border-green-200 rounded-lg">
+                        {cleaningResponse ? <div className="flex items-center gap-2 p-3 bg-green-50 border border-green-200 rounded-lg">
                             <CheckCircle className="w-4 h-4 text-green-600" />
                             <span className="text-sm text-green-700 font-medium">
                               Your response has been captured
@@ -137,7 +136,6 @@ export const ResaleScheduleStep: React.FC<ResaleScheduleStepProps> = ({
                             <Button type="button" size="sm" className="bg-teal-500 hover:bg-teal-600 text-white" variant={field.value === 'book' ? 'default' : 'outline'} onClick={() => {
                       field.onChange('book');
                       setCleaningResponse('book');
-                      window.open('/painting-cleaning', '_blank');
                     }}>
                               Book Now
                             </Button>
