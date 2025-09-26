@@ -199,7 +199,7 @@ export const homeInteriorsArticles = {
       title: "Kitchen Interior Design: Space Optimization and Storage Solutions for Small Homes",
       date: "September 16, 2025",
       author: "Kitchen Expert",
-      image: "https://images.unsplash.com/photo-1556909114-f6e703ae187c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
+      image: "/images/home-interiors/kitchen.jpg"
     },
     {
       id: 3,
