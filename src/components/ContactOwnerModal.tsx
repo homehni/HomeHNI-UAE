@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Dialog, DialogOverlay, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -192,22 +192,21 @@ export const ContactOwnerModal: React.FC<ContactOwnerModalProps> = ({
         onClose();
       }
     }}>
-      <DialogOverlay
-        onPointerDownCapture={(e) => e.stopPropagation()}
-        onMouseDownCapture={(e) => e.stopPropagation()}
-        onClick={(e) => e.stopPropagation()}
-      />
       <DialogContent
         className="sm:max-w-[425px]"
         onClick={(e) => e.stopPropagation()}
         onPointerDownOutside={(e) => {
-          // Stop outside event from bubbling to underlying elements; allow Radix to close
-          // @ts-ignore
+          // Prevent Radix from closing immediately to avoid click-through
+          e.preventDefault();
+          // Stop the original outside event from bubbling to underlying elements
+          // @ts-ignore - Radix event includes originalEvent
           e?.detail?.originalEvent?.stopPropagation?.();
+          // Close after the current event loop to avoid triggering underlying onClick
+          setTimeout(() => onClose(), 0);
         }}
         onInteractOutside={(e) => {
           // Extra safety: stop bubbling on any outside interaction
-          // @ts-ignore
+          // @ts-ignore - Radix event includes originalEvent
           e?.detail?.originalEvent?.stopPropagation?.();
         }}
       >
