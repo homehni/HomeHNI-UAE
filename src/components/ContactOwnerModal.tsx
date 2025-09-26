@@ -187,18 +187,21 @@ export const ContactOwnerModal: React.FC<ContactOwnerModalProps> = ({
   };
 
   return (
-    <div
-      onClickCapture={(e) => e.stopPropagation()}
-      onPointerDownCapture={(e) => e.stopPropagation()}
-      onMouseDownCapture={(e) => e.stopPropagation()}
-      onTouchStartCapture={(e) => e.stopPropagation()}
-    >
-      <Dialog open={isOpen} onOpenChange={(open) => {
-        if (!open) {
-          onClose();
-        }
-      }}>
-        <DialogContent className="sm:max-w-[425px]" onClick={(e) => e.stopPropagation()}>
+    <Dialog open={isOpen} onOpenChange={(open) => {
+      if (!open) {
+        onClose();
+      }
+    }}>
+      <DialogContent
+        className="sm:max-w-[425px]"
+        onClick={(e) => e.stopPropagation()}
+        onInteractOutside={(e) => {
+          // Stop outside clicks from bubbling to underlying elements (e.g., property card)
+          // while allowing the dialog to close normally
+          // @ts-ignore - Radix event includes originalEvent
+          e?.detail?.originalEvent?.stopPropagation?.();
+        }}
+      >
         <DialogHeader>
           <DialogTitle>Contact Property Owner</DialogTitle>
         </DialogHeader>
@@ -290,6 +293,5 @@ export const ContactOwnerModal: React.FC<ContactOwnerModalProps> = ({
         </div>
       </DialogContent>
     </Dialog>
-    </div>
   );
 };
