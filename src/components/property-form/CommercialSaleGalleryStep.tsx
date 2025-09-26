@@ -71,7 +71,7 @@ export const CommercialSaleGalleryStep = ({
   return (
     <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
       <div className="text-left mb-8">
-        <h1 className="text-2xl font-semibold text-red-600 mb-2">Upload Property Images by Category</h1>
+        <h1 className="text-2xl font-semibold text-red-600 mb-2 pt-16 sm:pt-0">Upload Property Images by Category</h1>
       </div>
       
       <Form {...form}>

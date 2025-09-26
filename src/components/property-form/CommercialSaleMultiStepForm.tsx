@@ -234,62 +234,74 @@ export const CommercialSaleMultiStepForm = ({
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="max-w-full mx-auto flex flex-col">
-        <div className="flex flex-col lg:flex-row">
-          <div className="w-80 flex-shrink-0">
-            <CommercialSaleSidebar
-              currentStep={currentStep}
-              completedSteps={completedSteps}
-              onStepClick={goToStep}
-            />
-          </div>
-
-          <div className="flex-1 min-w-0 p-3 bg-white pb-20">
-            <div className="max-w-4xl mx-auto">
-              {renderCurrentStep()}
-            </div>
-          </div>
-
-          {/* Sticky Bottom Navigation Bar - Hidden on success page */}
-          {!isSubmitted && currentStep < 8 && (
-            <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-3 sm:p-4 z-50 shadow-lg">
-            <div className="max-w-4xl mx-auto flex flex-col sm:flex-row gap-3 sm:gap-4 sm:justify-center">
-              <Button 
-                type="button" 
-                variant="outline" 
-                onClick={currentStep === 1 ? () => {} : prevStep}
-                className="h-10 sm:h-10 px-4 sm:px-6 w-full sm:w-auto order-2 sm:order-1"
-                disabled={currentStep === 1}
-              >
-                Back
-              </Button>
-              <Button 
-                type="button" 
-                onClick={() => {
-                  // Trigger the current step's form submission and scroll to top
-                  const currentStepElement = document.querySelector('form');
-                  if (currentStepElement) {
-                    const submitEvent = new Event('submit', { bubbles: true, cancelable: true });
-                    currentStepElement.dispatchEvent(submitEvent);
-                  }
-                  // Always scroll to top when Save & Continue is clicked
-                  setTimeout(scrollToTop, 100);
-                }}
-                className="h-12 sm:h-10 px-6 sm:px-6 bg-red-600 hover:bg-red-700 text-white w-full sm:w-auto order-1 sm:order-2 font-semibold"
-                style={{ display: currentStep === 7 ? 'block' : 'block' }}
-              >
-                {currentStep === 7 ? 'Review & Submit' : 'Save & Continue'}
-              </Button>
-            </div>
-            </div>
-          )}
-
-          {/* Right Sidebar - Get Tenants Faster */}
-          <div className="w-80 flex-shrink-0 h-full">
-            <GetTenantsFasterSection />
+      {/* Mobile Layout */}
+      <div className="lg:hidden">
+        <div className="p-4">
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+            {renderCurrentStep()}
           </div>
         </div>
       </div>
+
+      {/* Desktop Layout */}
+      <div className="hidden lg:flex w-full min-h-screen">
+        <div className="max-w-full mx-auto flex flex-col">
+          <div className="flex flex-col lg:flex-row">
+            <div className="w-80 flex-shrink-0">
+              <CommercialSaleSidebar
+                currentStep={currentStep}
+                completedSteps={completedSteps}
+                onStepClick={goToStep}
+              />
+            </div>
+
+            <div className="flex-1 min-w-0 p-3 bg-white pb-20">
+              <div className="max-w-4xl mx-auto">
+                {renderCurrentStep()}
+              </div>
+            </div>
+
+            {/* Right Sidebar - Get Tenants Faster */}
+            <div className="w-80 flex-shrink-0 h-full">
+              <GetTenantsFasterSection />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Sticky Bottom Navigation Bar - Hidden on success page */}
+      {!isSubmitted && currentStep < 8 && (
+        <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-3 sm:p-4 z-50 shadow-lg">
+          <div className="max-w-4xl mx-auto flex flex-col sm:flex-row gap-3 sm:gap-4 sm:justify-center">
+            <Button 
+              type="button" 
+              variant="outline" 
+              onClick={currentStep === 1 ? () => {} : prevStep}
+              className="h-10 sm:h-10 px-4 sm:px-6 w-full sm:w-auto order-2 sm:order-1"
+              disabled={currentStep === 1}
+            >
+              Back
+            </Button>
+            <Button 
+              type="button" 
+              onClick={() => {
+                // Trigger the current step's form submission and scroll to top
+                const currentStepElement = document.querySelector('form');
+                if (currentStepElement) {
+                  const submitEvent = new Event('submit', { bubbles: true, cancelable: true });
+                  currentStepElement.dispatchEvent(submitEvent);
+                }
+                // Always scroll to top when Save & Continue is clicked
+                setTimeout(scrollToTop, 100);
+              }}
+              className="h-12 sm:h-10 px-6 sm:px-6 bg-red-600 hover:bg-red-700 text-white w-full sm:w-auto order-1 sm:order-2 font-semibold"
+              style={{ display: currentStep === 7 ? 'block' : 'block' }}
+            >
+              {currentStep === 7 ? 'Review & Submit' : 'Save & Continue'}
+            </Button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
