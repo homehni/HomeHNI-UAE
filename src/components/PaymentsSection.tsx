@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Building, Calendar, CreditCard, Download, Check, Clock, X, ChevronRight } from 'lucide-react';
+import { Building, Calendar, CreditCard, Download, Check, Clock, X, ChevronRight, Filter } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { format } from 'date-fns';
@@ -26,9 +27,12 @@ interface Payment {
 
 const PaymentsSection: React.FC = () => {
   const [payments, setPayments] = useState<Payment[]>([]);
+  const [filteredPayments, setFilteredPayments] = useState<Payment[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedPayment, setSelectedPayment] = useState<Payment | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [statusFilter, setStatusFilter] = useState<string>('all');
+  const [planFilter, setPlanFilter] = useState<string>('all');
   const { user } = useAuth();
 
   useEffect(() => {
@@ -48,6 +52,7 @@ const PaymentsSection: React.FC = () => {
         }
 
         setPayments(data || []);
+        setFilteredPayments(data || []);
       } catch (error) {
         console.error('Error loading payments:', error);
       } finally {
@@ -57,6 +62,24 @@ const PaymentsSection: React.FC = () => {
 
     fetchPayments();
   }, [user?.id]);
+
+  // Filter payments based on selected filters
+  useEffect(() => {
+    let filtered = payments;
+
+    if (statusFilter !== 'all') {
+      filtered = filtered.filter(payment => payment.status === statusFilter);
+    }
+
+    if (planFilter !== 'all') {
+      filtered = filtered.filter(payment => payment.plan_name === planFilter);
+    }
+
+    setFilteredPayments(filtered);
+  }, [payments, statusFilter, planFilter]);
+
+  // Get unique plan names for filter
+  const uniquePlanNames = [...new Set(payments.map(payment => payment.plan_name))];
 
   const getStatusIcon = (status: string) => {
     switch (status) {
@@ -119,11 +142,74 @@ const PaymentsSection: React.FC = () => {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-semibold text-gray-900">Your Payments</h1>
-        <p className="text-sm text-gray-500">{payments.length} transaction{payments.length !== 1 ? 's' : ''}</p>
+        <p className="text-sm text-gray-500">{filteredPayments.length} of {payments.length} transaction{payments.length !== 1 ? 's' : ''}</p>
       </div>
 
-      <div className="space-y-2">
-        {payments.map((payment) => (
+      {/* Filters */}
+      <div className="flex flex-col sm:flex-row gap-4 p-4 bg-gray-50 rounded-lg">
+        <div className="flex items-center gap-2">
+          <Filter className="h-4 w-4 text-gray-500" />
+          <span className="text-sm font-medium text-gray-700">Filters:</span>
+        </div>
+        
+        <div className="flex flex-col sm:flex-row gap-4">
+          <div className="flex items-center gap-2">
+            <label className="text-sm text-gray-600">Status:</label>
+            <Select value={statusFilter} onValueChange={setStatusFilter}>
+              <SelectTrigger className="w-32">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All</SelectItem>
+                <SelectItem value="success">Success</SelectItem>
+                <SelectItem value="pending">Pending</SelectItem>
+                <SelectItem value="failed">Failed</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <label className="text-sm text-gray-600">Plan:</label>
+            <Select value={planFilter} onValueChange={setPlanFilter}>
+              <SelectTrigger className="w-40">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Plans</SelectItem>
+                {uniquePlanNames.map((planName) => (
+                  <SelectItem key={planName} value={planName}>
+                    {planName}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          {(statusFilter !== 'all' || planFilter !== 'all') && (
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={() => {
+                setStatusFilter('all');
+                setPlanFilter('all');
+              }}
+              className="text-xs"
+            >
+              Clear Filters
+            </Button>
+          )}
+        </div>
+      </div>
+
+      {filteredPayments.length === 0 ? (
+        <div className="text-center py-8 bg-white rounded-lg border border-gray-200">
+          <Filter className="h-8 w-8 mx-auto text-gray-400 mb-2" />
+          <h3 className="text-lg font-medium text-gray-900 mb-1">No payments found</h3>
+          <p className="text-gray-500">Try adjusting your filters to see more results</p>
+        </div>
+      ) : (
+        <div className="space-y-2">
+          {filteredPayments.map((payment) => (
           <Card 
             key={payment.id} 
             className="hover:shadow-md transition-shadow cursor-pointer border border-gray-200"
@@ -144,8 +230,9 @@ const PaymentsSection: React.FC = () => {
               </div>
             </CardContent>
           </Card>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
 
       {/* Payment Details Modal */}
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
