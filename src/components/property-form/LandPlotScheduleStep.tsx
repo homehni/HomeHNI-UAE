@@ -107,7 +107,6 @@ export const LandPlotScheduleStep: React.FC<LandPlotScheduleStepProps> = ({
                         onClick={() => {
                           setValue('paintingService', 'book');
                           setPaintingResponse('book');
-                          window.open('/painting-cleaning', '_blank');
                         }}
                       >
                         Book Now
@@ -165,7 +164,6 @@ export const LandPlotScheduleStep: React.FC<LandPlotScheduleStepProps> = ({
                         onClick={() => {
                           setValue('cleaningService', 'book');
                           setCleaningResponse('book');
-                          window.open('/painting-cleaning', '_blank');
                         }}
                       >
                         Book Now
