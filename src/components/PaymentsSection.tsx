@@ -148,125 +148,143 @@ const PaymentsSection: React.FC = () => {
     const pageWidth = pdf.internal.pageSize.width;
     const pageHeight = pdf.internal.pageSize.height;
     
-    // Set colors
-    const primaryColor = [0, 102, 204]; // Blue
+    // Set colors - Red theme for Home HNI
+    const primaryColor = [220, 38, 127]; // Red color
     const secondaryColor = [128, 128, 128]; // Gray
     
-    // Company Header
+    // Company Header with red background
     pdf.setFillColor(primaryColor[0], primaryColor[1], primaryColor[2]);
-    pdf.rect(0, 0, pageWidth, 30, 'F');
+    pdf.rect(0, 0, pageWidth, 35, 'F');
     
-    // Company Name
+    // Company Name - Home HNI
     pdf.setTextColor(255, 255, 255);
-    pdf.setFontSize(24);
+    pdf.setFontSize(26);
     pdf.setFont('helvetica', 'bold');
-    pdf.text('PropertyHub', 20, 20);
+    pdf.text('HOME HNI', 20, 22);
     
     // Invoice Title
     pdf.setTextColor(0, 0, 0);
-    pdf.setFontSize(20);
+    pdf.setFontSize(22);
     pdf.setFont('helvetica', 'bold');
-    pdf.text('INVOICE', pageWidth - 20, 50, { align: 'right' });
+    pdf.text('INVOICE', pageWidth - 20, 55, { align: 'right' });
     
-    // Invoice Details Box
-    pdf.setDrawColor(200, 200, 200);
+    // Invoice Details Box - Professional styling
+    pdf.setDrawColor(220, 220, 220);
     pdf.setLineWidth(0.5);
-    pdf.rect(pageWidth - 70, 55, 60, 30);
+    pdf.rect(pageWidth - 80, 65, 70, 35);
     
     pdf.setFontSize(10);
     pdf.setFont('helvetica', 'normal');
-    pdf.text(`Invoice #: ${payment.invoice_number || payment.payment_id.slice(-8)}`, pageWidth - 65, 62);
-    pdf.text(`Date: ${format(new Date(payment.payment_date), 'dd/MM/yyyy')}`, pageWidth - 65, 68);
-    pdf.text(`Payment ID: ${payment.payment_id.slice(-8)}`, pageWidth - 65, 74);
-    pdf.text(`Status: ${payment.status.toUpperCase()}`, pageWidth - 65, 80);
+    pdf.text(`Invoice #: ${payment.invoice_number || payment.payment_id.slice(-8)}`, pageWidth - 75, 72);
+    pdf.text(`Date: ${format(new Date(payment.payment_date), 'dd/MM/yyyy')}`, pageWidth - 75, 79);
+    pdf.text(`Payment ID: ${payment.payment_id.slice(-8)}`, pageWidth - 75, 86);
+    pdf.text(`Status: ${payment.status.toUpperCase()}`, pageWidth - 75, 93);
     
-    // Company Details
+    // Company Details - Updated for Home HNI
     pdf.setFontSize(12);
     pdf.setFont('helvetica', 'bold');
-    pdf.text('From:', 20, 50);
+    pdf.text('From:', 20, 55);
     
     pdf.setFontSize(10);
     pdf.setFont('helvetica', 'normal');
-    pdf.text('PropertyHub Pvt Ltd', 20, 58);
-    pdf.text('123 Business District', 20, 64);
-    pdf.text('Mumbai, Maharashtra 400001', 20, 70);
-    pdf.text('Email: billing@propertyhub.com', 20, 76);
-    pdf.text('Phone: +91 9876543210', 20, 82);
-    pdf.text('GST: 27ABCDE1234F5Z6', 20, 88);
+    pdf.text('Home HNI Pvt Ltd', 20, 65);
+    pdf.text('Plot No: 52 E/P', 20, 72);
+    pdf.text('CBI Colony Sahebnagar Kalan', 20, 79);
+    pdf.text('Email: homehni8@gmail.com', 20, 86);
+    pdf.text('Phone: +91 8074 017 388', 20, 93);
+    pdf.text('GST: 27ABCDE1234F5Z6', 20, 100);
     
     // Customer Details
     pdf.setFontSize(12);
     pdf.setFont('helvetica', 'bold');
-    pdf.text('Bill To:', 20, 110);
+    pdf.text('Bill To:', 20, 120);
     
     pdf.setFontSize(10);
     pdf.setFont('helvetica', 'normal');
-    pdf.text(user?.email || 'Customer', 20, 118);
-    pdf.text('Customer ID: ' + (user?.id?.slice(-8) || 'N/A'), 20, 124);
+    pdf.text(user?.email || 'Customer', 20, 130);
+    pdf.text('Customer ID: ' + (user?.id?.slice(-8) || 'N/A'), 20, 137);
     
-    // Service Details Table
-    const tableY = 150;
+    // Service Details Table - Professional design
+    const tableY = 160;
     
-    // Table Header
-    pdf.setFillColor(240, 240, 240);
-    pdf.rect(20, tableY, pageWidth - 40, 15, 'F');
+    // Table Header with subtle background
+    pdf.setFillColor(248, 248, 248);
+    pdf.rect(20, tableY, pageWidth - 40, 18, 'F');
     
-    pdf.setFontSize(10);
+    // Table border
+    pdf.setDrawColor(200, 200, 200);
+    pdf.setLineWidth(0.3);
+    pdf.rect(20, tableY, pageWidth - 40, 18);
+    
+    pdf.setFontSize(11);
     pdf.setFont('helvetica', 'bold');
-    pdf.text('Description', 25, tableY + 10);
-    pdf.text('Plan Type', 100, tableY + 10);
-    pdf.text('Duration', 130, tableY + 10);
-    pdf.text('Amount', pageWidth - 25, tableY + 10, { align: 'right' });
+    pdf.text('Description', 25, tableY + 12);
+    pdf.text('Plan Type', 100, tableY + 12);
+    pdf.text('Duration', 135, tableY + 12);
+    pdf.text('Amount', pageWidth - 25, tableY + 12, { align: 'right' });
     
-    // Table Content
-    const rowY = tableY + 20;
+    // Table Content Row
+    const rowY = tableY + 25;
+    pdf.rect(20, tableY + 18, pageWidth - 40, 15);
+    
     pdf.setFont('helvetica', 'normal');
-    pdf.text(payment.plan_name, 25, rowY);
-    pdf.text(payment.plan_type || 'Subscription', 100, rowY);
-    pdf.text(payment.plan_duration || 'Monthly', 130, rowY);
-    pdf.text(`₹${payment.amount_rupees.toLocaleString()}`, pageWidth - 25, rowY, { align: 'right' });
+    pdf.setFontSize(10);
+    pdf.text(payment.plan_name, 25, rowY + 8);
+    pdf.text(payment.plan_type || 'subscription', 100, rowY + 8);
+    pdf.text(payment.plan_duration || '1 month', 135, rowY + 8);
+    pdf.text(`₹ ${payment.amount_rupees.toLocaleString()}`, pageWidth - 25, rowY + 8, { align: 'right' });
     
-    // Total Section
-    const totalY = rowY + 30;
-    pdf.line(20, totalY - 5, pageWidth - 20, totalY - 5);
+    // Totals Section - Clean layout
+    const totalY = rowY + 35;
     
-    pdf.setFont('helvetica', 'bold');
+    // Subtotal
+    pdf.setFont('helvetica', 'normal');
+    pdf.setFontSize(10);
     pdf.text('Subtotal:', pageWidth - 80, totalY);
-    pdf.text(`₹${payment.amount_rupees.toLocaleString()}`, pageWidth - 25, totalY, { align: 'right' });
+    pdf.text(`₹ ${payment.amount_rupees.toLocaleString()}`, pageWidth - 25, totalY, { align: 'right' });
     
-    pdf.text('GST (18%):', pageWidth - 80, totalY + 8);
+    // GST
+    pdf.text('GST (18%):', pageWidth - 80, totalY + 10);
     const gstAmount = Math.round(payment.amount_rupees * 0.18);
-    pdf.text(`₹${gstAmount.toLocaleString()}`, pageWidth - 25, totalY + 8, { align: 'right' });
+    pdf.text(`₹ ${gstAmount.toLocaleString()}`, pageWidth - 25, totalY + 10, { align: 'right' });
     
+    // Total line separator
+    pdf.setLineWidth(0.5);
+    pdf.line(pageWidth - 80, totalY + 18, pageWidth - 20, totalY + 18);
+    
+    // Total Amount
     pdf.setFontSize(12);
-    pdf.text('Total Amount:', pageWidth - 80, totalY + 18);
+    pdf.setFont('helvetica', 'bold');
+    pdf.text('Total Amount:', pageWidth - 80, totalY + 28);
     const totalAmount = payment.amount_rupees + gstAmount;
-    pdf.text(`₹${totalAmount.toLocaleString()}`, pageWidth - 25, totalY + 18, { align: 'right' });
+    pdf.text(`₹ ${totalAmount.toLocaleString()}`, pageWidth - 25, totalY + 28, { align: 'right' });
     
-    // Payment Details
-    const paymentDetailsY = totalY + 40;
-    pdf.setFontSize(10);
+    // Payment Details Section
+    const paymentDetailsY = totalY + 50;
+    pdf.setFontSize(11);
     pdf.setFont('helvetica', 'bold');
     pdf.text('Payment Details:', 20, paymentDetailsY);
     
     pdf.setFont('helvetica', 'normal');
-    pdf.text(`Payment Method: ${payment.payment_method || 'Razorpay'}`, 20, paymentDetailsY + 8);
-    pdf.text(`Transaction Date: ${format(new Date(payment.payment_date), 'PPP')}`, 20, paymentDetailsY + 16);
-    pdf.text(`Currency: ${payment.currency}`, 20, paymentDetailsY + 24);
+    pdf.setFontSize(10);
+    pdf.text(`Payment Method: ${payment.payment_method || 'razorpay'}`, 20, paymentDetailsY + 12);
+    pdf.text(`Transaction Date: ${format(new Date(payment.payment_date), 'PPP')}`, 20, paymentDetailsY + 22);
+    pdf.text(`Currency: ${payment.currency}`, 20, paymentDetailsY + 32);
     
-    // Footer
-    const footerY = pageHeight - 40;
-    pdf.setTextColor(128, 128, 128);
-    pdf.setFontSize(8);
+    // Professional Footer
+    const footerY = pageHeight - 50;
+    pdf.setTextColor(100, 100, 100);
+    pdf.setFontSize(9);
     pdf.text('Thank you for your business!', 20, footerY);
-    pdf.text('This is a computer-generated invoice and does not require a signature.', 20, footerY + 8);
-    pdf.text(`Generated on: ${format(new Date(), 'PPP')}`, 20, footerY + 16);
+    pdf.text('This is a computer-generated invoice and does not require a signature.', 20, footerY + 10);
+    pdf.text(`Generated on: ${format(new Date(), 'PPP')}`, 20, footerY + 20);
     
     // Terms and Conditions
-    pdf.text('Terms: Payment is due within 30 days. Late payments may incur additional charges.', 20, footerY + 24);
+    pdf.setFontSize(8);
+    pdf.text('Terms: Payment is due within 30 days. Late payments may incur additional charges.', 20, footerY + 32);
     
     // Save the PDF
-    const fileName = `Invoice_${payment.invoice_number || payment.payment_id.slice(-8)}_${format(new Date(payment.payment_date), 'yyyy-MM-dd')}.pdf`;
+    const fileName = `HomeHNI_Invoice_${payment.invoice_number || payment.payment_id.slice(-8)}_${format(new Date(payment.payment_date), 'yyyy-MM-dd')}.pdf`;
     pdf.save(fileName);
   };
 
