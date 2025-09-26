@@ -102,7 +102,7 @@ const LoanEligibility = () => {
             </div>
             <h1 className="text-4xl font-bold text-foreground">Loan Eligibility Calculator</h1>
           </div>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-xl text-muted-foreground max-w-4xl mx-auto">
             Check your home loan eligibility and discover the maximum loan amount you can get
           </p>
         </div>
