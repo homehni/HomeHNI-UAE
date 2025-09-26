@@ -161,9 +161,14 @@ export default function PayButton({
               ]);
             }
             
-            toast.success("Payment successful! Welcome to premium!", {
-              description: "Your payment has been processed and plan activated.",
+            toast.success("Payment Successful!", {
+              description: "Your payment has been processed and plan activated successfully.",
               duration: 5000,
+              style: {
+                background: '#f0fdf4',
+                border: '1px solid #bbf7d0',
+                color: '#166534',
+              },
             });
             
             // Redirect to success page or dashboard
@@ -206,9 +211,14 @@ export default function PayButton({
               }
             }
             
-            toast.error("Payment failed", {
+            toast.error("Payment Failed", {
               description: error instanceof Error ? error.message : "Please try again or contact support.",
               duration: 5000,
+              style: {
+                background: '#fef2f2',
+                border: '1px solid #fecaca',
+                color: '#991b1b',
+              },
             });
             
             setTimeout(() => {
@@ -257,9 +267,14 @@ export default function PayButton({
               }
             }
             
-            toast.error("Payment was cancelled", {
+            toast.error("Payment Cancelled", {
               description: "You can try again anytime.",
               duration: 4000,
+              style: {
+                background: '#fef2f2',
+                border: '1px solid #fecaca',
+                color: '#991b1b',
+              },
             });
             setTimeout(() => {
               window.location.href = "/payment/failed";
