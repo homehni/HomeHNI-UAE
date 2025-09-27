@@ -255,7 +255,7 @@ export const CommercialSaleMultiStepForm = ({
         </div>
 
         {/* Main Content */}
-        <div className="flex-1 bg-white p-6 md:p-8 pb-32">
+        <div id="commercial-sale-step-content" className="flex-1 bg-white p-6 md:p-8 pb-32">
           {renderCurrentStep()}
         </div>
 
@@ -282,10 +282,15 @@ export const CommercialSaleMultiStepForm = ({
               type="button" 
               onClick={() => {
                 // Trigger the current step's form submission and scroll to top
-                const currentStepElement = document.querySelector('form');
-                if (currentStepElement) {
-                  const submitEvent = new Event('submit', { bubbles: true, cancelable: true });
-                  currentStepElement.dispatchEvent(submitEvent);
+                const container = document.getElementById('commercial-sale-step-content');
+                const currentStepForm = container?.querySelector('form') as HTMLFormElement | null;
+                if (currentStepForm) {
+                  if (typeof currentStepForm.requestSubmit === 'function') {
+                    currentStepForm.requestSubmit();
+                  } else {
+                    const submitEvent = new Event('submit', { bubbles: true, cancelable: true });
+                    currentStepForm.dispatchEvent(submitEvent);
+                  }
                 }
                 // Always scroll to top when Save & Continue is clicked
                 setTimeout(scrollToTop, 100);
