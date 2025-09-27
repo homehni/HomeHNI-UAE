@@ -88,7 +88,7 @@ export const CommercialPropertyDetailsStep: React.FC<CommercialPropertyDetailsSt
 
   return (
     <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
-      <h1 className="text-2xl font-semibold text-primary mb-6">Commercial Property Details</h1>
+      <h1 className="text-2xl font-semibold text-primary mb-6 pt-4 sm:pt-6">Commercial Property Details</h1>
       
       <Form {...form}>
         <form onSubmit={(e) => {

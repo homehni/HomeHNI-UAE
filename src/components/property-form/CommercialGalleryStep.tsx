@@ -129,7 +129,7 @@ export const CommercialGalleryStep: React.FC<CommercialGalleryStepProps> = ({
                   <div className="space-y-6">
                     {/* Upload Images Title */}
                     <div>
-                      <h1 className="text-2xl font-semibold text-primary mb-6">Upload Property Images by Category</h1>
+                      <h1 className="text-2xl font-semibold text-primary mb-6 pt-4 sm:pt-6">Upload Property Images by Category</h1>
                     </div>
                         
                     {/* Commercial Categorized Image Upload Component */}

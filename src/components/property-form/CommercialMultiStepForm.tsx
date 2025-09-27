@@ -255,7 +255,7 @@ const handleScheduleSubmit = (data: Partial<ScheduleInfo>) => {
         </div>
 
         {/* Main Content */}
-        <div id="commercial-step-content" className="flex-1 bg-white p-6 md:p-8 pb-32">
+        <div id="commercial-step-content" className="flex-1 bg-white p-4 sm:p-6 md:p-8 pb-32 overflow-y-auto">
           {renderCurrentStep()}
         </div>
 
