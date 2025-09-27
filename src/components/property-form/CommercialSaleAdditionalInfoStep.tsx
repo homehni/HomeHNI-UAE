@@ -48,7 +48,7 @@ export const CommercialSaleAdditionalInfoStep = ({
   return (
     <div className="bg-background p-6">
       <div className="text-left mb-8">
-        <h1 className="text-2xl font-semibold text-red-600 mb-2 pt-4 sm:pt-6">Additional Information</h1>
+        <h1 className="text-2xl font-semibold text-red-600 mb-2 pt-6 sm:pt-6">Additional Information</h1>
       </div>
 
       <Form {...form}>
