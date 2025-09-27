@@ -244,18 +244,18 @@ export async function sendContactOwnerEmail(
     message: string;
     propertyTitle: string;
     propertyId: string;
+    listingType?: string;
   }
 ) {
   return sendEmail('/send-contact-owner-email', {
     to: ownerEmail,
-    userName: ownerName || 'there',
-    inquirerName: contactData.inquirerName,
-    inquirerEmail: contactData.inquirerEmail,
-    inquirerPhone: contactData.inquirerPhone,
-    message: contactData.message,
-    propertyTitle: contactData.propertyTitle,
-    propertyUrl: `https://homehni.com/property/${contactData.propertyId}`,
-    dashboardUrl: 'https://homehni.com/dashboard'
+    userName: ownerName || 'Property Owner',
+    propertyAddress: contactData.propertyTitle,
+    propertyType: contactData.listingType || 'Property',
+    interestedUserName: contactData.inquirerName,
+    interestedUserEmail: contactData.inquirerEmail,
+    interestedUserPhone: contactData.inquirerPhone,
+    dashboardUrl: `https://homehni.com/dashboard/leads?propertyId=${contactData.propertyId}`
   });
 }
 

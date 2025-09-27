@@ -132,7 +132,8 @@ export const ContactOwnerModal: React.FC<ContactOwnerModalProps> = ({
               inquirerPhone: formData.phone.trim(),
               message: formData.message.trim() || 'No specific message provided',
               propertyTitle: propertyData.title || propertyTitle,
-              propertyId: propertyId
+              propertyId: propertyId,
+              listingType: listingType
             }
           );
         }
