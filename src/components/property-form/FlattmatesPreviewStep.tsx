@@ -4,7 +4,6 @@ import { FlattmatesFormData } from '@/types/property';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { CheckCircle, Edit, Upload, Camera, Shield, Star, ArrowLeft } from 'lucide-react';
-import { handleGoPremiumClick } from '@/services/instantEmailService';
 
 interface FlattmatesPreviewStepProps {
   formData: FlattmatesFormData;
@@ -121,11 +120,7 @@ export const FlattmatesPreviewStep: React.FC<FlattmatesPreviewStepProps> = ({
               </div>
               <Button 
                 className="bg-green-600 hover:bg-green-700 text-white w-full sm:w-auto"
-                onClick={async () => {
-                  // Send instant premium email before redirecting
-                  await handleGoPremiumClick(formData);
-                  window.open('/plans?tab=owner', '_blank');
-                }}
+                onClick={() => window.open('/plans?tab=owner', '_blank')}
               >
                 Go Premium
               </Button>
@@ -309,11 +304,7 @@ export const FlattmatesPreviewStep: React.FC<FlattmatesPreviewStepProps> = ({
           <div className="flex-shrink-0 w-full sm:w-auto">
             <Button 
               className="bg-teal-600 hover:bg-teal-700 text-white px-6 py-2 w-full sm:w-auto"
-              onClick={async () => {
-                // Send instant premium email before redirecting
-                await handleGoPremiumClick(formData);
-                window.open('/plans?tab=owner', '_blank');
-              }}
+              onClick={() => window.open('/plans?tab=owner', '_blank')}
             >
               Go Premium
             </Button>

@@ -1,11 +1,10 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { PropertyFormData } from '@/types/property';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { CheckCircle, Edit, Upload, Camera, Shield, Star, Facebook, Tag, ArrowLeft } from 'lucide-react';
-import { handleGoPremiumClick } from '@/services/instantEmailService';
 
 interface PreviewStepProps {
   formData: any;
@@ -155,9 +154,6 @@ export const PreviewStep: React.FC<PreviewStepProps> = ({
               <Button 
                 className="bg-green-600 hover:bg-green-700 text-white w-full sm:w-auto"
                 onClick={async () => {
-                  // Send instant premium email before redirecting
-                  await handleGoPremiumClick(formData);
-                  
                   // Send plan upgrade email before redirecting
                   try {
                     const { ownerInfo } = formData;
