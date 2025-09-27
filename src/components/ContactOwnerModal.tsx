@@ -8,6 +8,7 @@ import { Textarea } from '@/components/ui/textarea';
 
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
+import { sendContactOwnerEmail } from '@/services/emailService';
 
 interface ContactOwnerModalProps {
   isOpen: boolean;
@@ -117,24 +118,23 @@ export const ContactOwnerModal: React.FC<ContactOwnerModalProps> = ({
         // Get property owner details
         const { data: propertyData, error: propertyError } = await supabase
           .from('properties')
-          .select('owner_email, owner_name, title, listing_type')
+          .select('owner_email, owner_name, title')
           .eq('id', propertyId)
           .single();
 
         if (!propertyError && propertyData?.owner_email) {
-          // Call the Supabase edge function for sending email
-          await supabase.functions.invoke('send-contact-owner-email', {
-            body: {
-              to: propertyData.owner_email,
-              userName: propertyData.owner_name || 'Property Owner',
-              propertyAddress: propertyData.title || propertyTitle,
-              propertyType: propertyData.listing_type || listingType || 'Property',
-              interestedUserName: formData.name.trim(),
-              interestedUserEmail: formData.email.trim(),
-              interestedUserPhone: formData.phone.trim(),
-              dashboardUrl: `https://homehni.com/dashboard/leads?propertyId=${propertyId}`
+          await sendContactOwnerEmail(
+            propertyData.owner_email,
+            propertyData.owner_name || 'Property Owner',
+            {
+              inquirerName: formData.name.trim(),
+              inquirerEmail: formData.email.trim(), 
+              inquirerPhone: formData.phone.trim(),
+              message: formData.message.trim() || 'No specific message provided',
+              propertyTitle: propertyData.title || propertyTitle,
+              propertyId: propertyId
             }
-          });
+          );
         }
       } catch (emailError) {
         console.error('Error sending email notification:', emailError);
