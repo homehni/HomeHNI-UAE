@@ -616,6 +616,10 @@ export const Dashboard: React.FC = () => {
         toast({
           title: isDemo ? "Demo property removed" : "Property removed",
           description: `"${propertyTitle}" has been removed from your saved properties.`,
+          className: "bg-white border border-red-200 shadow-lg rounded-lg",
+          style: {
+            borderLeft: "12px solid hsl(var(--brand-red))",
+          },
         });
       } else {
         // For real properties, delete from database
@@ -634,6 +638,10 @@ export const Dashboard: React.FC = () => {
         toast({
           title: "Property removed",
           description: `"${propertyTitle}" has been removed from your saved properties.`,
+          className: "bg-white border border-red-200 shadow-lg rounded-lg",
+          style: {
+            borderLeft: "12px solid hsl(var(--brand-red))",
+          },
         });
       }
     } catch (error) {

@@ -91,9 +91,9 @@ export const useFavorites = () => {
             description: newStatus 
               ? "This is a demo property. In the real app, this would be saved to your favorites."
               : "This demo property has been removed from your favorites.",
-            className: "bg-white border border-green-200 shadow-lg rounded-lg",
+            className: "bg-white border border-red-200 shadow-lg rounded-lg",
             style: {
-              borderLeft: "8px solid hsl(120, 100%, 25%)",
+              borderLeft: newStatus ? "12px solid hsl(120, 100%, 25%)" : "12px solid hsl(var(--brand-red))",
             },
           });
 
@@ -116,16 +116,16 @@ export const useFavorites = () => {
           description: "Property has been added to your favorites.",
           className: "bg-white border border-green-200 shadow-lg rounded-lg",
           style: {
-            borderLeft: "8px solid hsl(120, 100%, 25%)",
+            borderLeft: "12px solid hsl(120, 100%, 25%)",
           },
         });
       } else {
         toast({
           title: "Property Removed",
           description: "Property has been removed from your favorites.",
-          className: "bg-white border border-green-200 shadow-lg rounded-lg",
+          className: "bg-white border border-red-200 shadow-lg rounded-lg",
           style: {
-            borderLeft: "8px solid hsl(120, 100%, 25%)",
+            borderLeft: "12px solid hsl(var(--brand-red))",
           },
         });
       }
