@@ -142,7 +142,10 @@ const LegalServicesForm = ({ isOpen, onClose }: LegalServicesFormProps) => {
     toast({
       title: "Consultation Request Submitted!",
       description: "Thank you for your request. Our legal team will contact you within 24 hours.",
-      className: "border-l-4 border-l-green-500 border-green-200"
+      className: "bg-white border border-green-200 shadow-lg rounded-lg",
+      style: {
+        borderLeft: "12px solid hsl(120, 100%, 25%)",
+      },
     });
     
     // Close the form
