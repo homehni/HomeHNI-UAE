@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { CheckCircle } from 'lucide-react';
+import { CheckCircle, Loader2 } from 'lucide-react';
+import { emailService } from '@/services/emailService';
+import { toast } from 'sonner';
 
 interface CommercialSaleSuccessStepProps {
   onEditProperty: () => void;
@@ -9,6 +11,14 @@ interface CommercialSaleSuccessStepProps {
   createdSubmissionId?: string | null;
   onEdit?: (step: number) => void;
   gallery?: { images?: any[] };
+  propertyData?: {
+    expected_price?: number;
+    locality?: string;
+    property_type?: string;
+    listing_type?: string;
+  };
+  userEmail?: string;
+  userName?: string;
 }
 
 export const CommercialSaleSuccessStep = ({
@@ -17,15 +27,46 @@ export const CommercialSaleSuccessStep = ({
   onGoToDashboard,
   createdSubmissionId,
   onEdit,
-  gallery
+  gallery,
+  propertyData,
+  userEmail,
+  userName
 }: CommercialSaleSuccessStepProps) => {
   const [showNoPhotosMessage, setShowNoPhotosMessage] = useState(false);
+  const [isLoadingPremium, setIsLoadingPremium] = useState(false);
   
   // Check if there are photos uploaded
   const hasPhotos = gallery?.images && gallery.images.length > 0;
 
-  const handleGoPremium = () => {
-    window.open('/plans?tab=commercial-seller', '_blank');
+  const handleGoPremium = async () => {
+    if (!userEmail) {
+      toast.error('Email address is required');
+      return;
+    }
+
+    setIsLoadingPremium(true);
+    try {
+      await emailService.sendPlanUpgradeEmail({
+        to: userEmail,
+        userName: userName || 'Valued Customer',
+        locality: propertyData?.locality || '',
+        yourPrice: propertyData?.expected_price?.toString() || '',
+        propertyType: 'commercial',
+        listingType: propertyData?.listing_type as 'sell' | 'rent' || 'sell',
+        userType: 'seller'
+      });
+      
+      toast.success('Premium plan information sent to your email!');
+      // Still open the plans page after sending email
+      window.open('/plans?tab=commercial-seller', '_blank');
+    } catch (error) {
+      console.error('Failed to send premium email:', error);
+      toast.error('Failed to send email. Please try again.');
+      // Fallback: still open the plans page
+      window.open('/plans?tab=commercial-seller', '_blank');
+    } finally {
+      setIsLoadingPremium(false);
+    }
   };
 
   const handleGoDashboard = () => {
@@ -108,8 +149,16 @@ export const CommercialSaleSuccessStep = ({
           <Button 
             className="bg-teal-600 hover:bg-teal-700 text-white"
             onClick={handleGoPremium}
+            disabled={isLoadingPremium}
           >
-            Go Premium
+            {isLoadingPremium ? (
+              <>
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                Sending Email...
+              </>
+            ) : (
+              'Go Premium'
+            )}
           </Button>
         </div>
 
