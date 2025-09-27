@@ -9,6 +9,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { format } from 'date-fns';
 import jsPDF from 'jspdf';
+import homeHniLogo from '@/assets/home-hni-logo.png';
 
 interface Payment {
   id: string;
@@ -153,15 +154,25 @@ const PaymentsSection: React.FC = () => {
     const secondaryColor = [128, 128, 128]; // Gray
     const textColor = [0, 0, 0]; // Black for uniform text
     
-    // Company Header with red background #DC2626 - no logo, just clean header
-    pdf.setFillColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+    // Company Header with white background for logo
+    pdf.setFillColor(255, 255, 255);
     pdf.rect(0, 0, pageWidth, 40, 'F');
     
-    // White text on red background
-    pdf.setTextColor(255, 255, 255);
-    pdf.setFontSize(24);
-    pdf.setFont('helvetica', 'bold');
-    pdf.text('HOME HNI', 20, 25);
+    // Add Home HNI logo
+    try {
+      // Convert logo to base64 and add to PDF
+      const logoWidth = 60;
+      const logoHeight = 20;
+      const img = new Image();
+      img.src = homeHniLogo;
+      pdf.addImage(img, 'PNG', 20, 10, logoWidth, logoHeight);
+    } catch (error) {
+      // Fallback to text if logo fails to load
+      pdf.setTextColor(220, 38, 38);
+      pdf.setFontSize(24);
+      pdf.setFont('helvetica', 'bold');
+      pdf.text('HOME HNI', 20, 25);
+    }
     
     // Reset text color for consistent formatting
     pdf.setTextColor(textColor[0], textColor[1], textColor[2]);
