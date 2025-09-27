@@ -397,7 +397,7 @@ const [propertyInfo, setPropertyInfo] = useState({
                       </div>
                       <div className="text-center sm:text-left">
                         <h2 className="text-lg sm:text-xl font-semibold text-red-800 mb-1">Congratulations!</h2>
-                        <p className="text-sm sm:text-base text-red-700 font-medium">Your PG/Hostel is submitted successfully!</p>
+                        <p className="text-sm sm:text-base text-red-700 font-medium">Your PG/Hostel is submitted successfully! It will be reviewed and made live in 12 Hours.</p>
                       </div>
                     </div>
                     <div className="flex flex-col sm:flex-row gap-3">
