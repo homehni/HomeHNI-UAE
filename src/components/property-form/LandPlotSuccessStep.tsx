@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { CheckCircle, Upload, Camera, Shield, Star, Facebook, Tag, ArrowLeft, Crown, Loader2 } from 'lucide-react';
-import { emailService } from '@/services/emailService';
-import { toast } from 'sonner';
+import { CheckCircle, Upload, Camera, Shield, Star, Facebook, Tag, ArrowLeft, Crown } from 'lucide-react';
 
 interface LandPlotSuccessStepProps {
   onPreviewListing: () => void;
@@ -10,14 +8,6 @@ interface LandPlotSuccessStepProps {
   createdSubmissionId?: string | null;
   onEdit?: (step: number) => void;
   gallery?: { images?: any[] };
-  propertyData?: {
-    expected_price?: number;
-    locality?: string;
-    property_type?: string;
-    listing_type?: string;
-  };
-  userEmail?: string;
-  userName?: string;
 }
 
 export const LandPlotSuccessStep = ({
@@ -25,46 +15,15 @@ export const LandPlotSuccessStep = ({
   onGoToDashboard,
   createdSubmissionId,
   onEdit,
-  gallery,
-  propertyData,
-  userEmail,
-  userName
+  gallery
 }: LandPlotSuccessStepProps) => {
   const [showNoPhotosMessage, setShowNoPhotosMessage] = useState(false);
-  const [isLoadingPremium, setIsLoadingPremium] = useState(false);
   
   // Check if there are photos uploaded
   const hasPhotos = gallery?.images && gallery.images.length > 0;
 
-  const handleGoPremium = async () => {
-    if (!userEmail) {
-      toast.error('Email address is required');
-      return;
-    }
-
-    setIsLoadingPremium(true);
-    try {
-      await emailService.sendPlanUpgradeEmail({
-        to: userEmail,
-        userName: userName || 'Valued Customer',
-        locality: propertyData?.locality || '',
-        yourPrice: propertyData?.expected_price?.toString() || '',
-        propertyType: 'residential',
-        listingType: propertyData?.listing_type as 'sell' | 'rent' || 'sell',
-        userType: 'seller'
-      });
-      
-      toast.success('Premium plan information sent to your email!');
-      // Still open the plans page after sending email
-      window.open('/plans', '_blank');
-    } catch (error) {
-      console.error('Failed to send premium email:', error);
-      toast.error('Failed to send email. Please try again.');
-      // Fallback: still open the plans page
-      window.open('/plans', '_blank');
-    } finally {
-      setIsLoadingPremium(false);
-    }
+  const handleGoPremium = () => {
+    window.open('/plans', '_blank');
   };
 
   const handleUploadPhotos = () => {
@@ -124,20 +83,10 @@ export const LandPlotSuccessStep = ({
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <Button
           onClick={handleGoPremium}
-          disabled={isLoadingPremium}
           className="h-12 bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white font-semibold rounded-lg flex items-center gap-2"
         >
-          {isLoadingPremium ? (
-            <>
-              <Loader2 className="w-5 h-5 animate-spin" />
-              Sending Email...
-            </>
-          ) : (
-            <>
-              <Crown className="w-5 h-5" />
-              Go Premium
-            </>
-          )}
+          <Crown className="w-5 h-5" />
+          Go Premium
         </Button>
         
         <Button
