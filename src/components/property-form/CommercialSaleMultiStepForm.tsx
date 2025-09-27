@@ -243,29 +243,25 @@ export const CommercialSaleMultiStepForm = ({
         </div>
       </div>
 
-      {/* Desktop Layout */}
-      <div className="hidden lg:flex w-full min-h-screen">
-        <div className="max-w-full mx-auto flex flex-col">
-          <div className="flex flex-col lg:flex-row">
-            <div className="w-80 flex-shrink-0">
-              <CommercialSaleSidebar
-                currentStep={currentStep}
-                completedSteps={completedSteps}
-                onStepClick={goToStep}
-              />
-            </div>
+      {/* Desktop Layout - Three Column Layout */}
+      <div className="flex flex-col lg:flex-row min-h-screen">
+        {/* Left Sidebar */}
+        <div className="hidden lg:block w-64 bg-white border-r border-gray-200 min-h-screen">
+          <CommercialSaleSidebar
+            currentStep={currentStep}
+            completedSteps={completedSteps}
+            onStepClick={goToStep}
+          />
+        </div>
 
-            <div className="flex-1 min-w-0 p-3 bg-white pb-20">
-              <div className="max-w-4xl mx-auto">
-                {renderCurrentStep()}
-              </div>
-            </div>
+        {/* Main Content */}
+        <div className="flex-1 bg-white p-6 md:p-8 pb-32">
+          {renderCurrentStep()}
+        </div>
 
-            {/* Right Sidebar - Get Tenants Faster */}
-            <div className="w-80 flex-shrink-0 h-full">
-              <GetTenantsFasterSection />
-            </div>
-          </div>
+        {/* Right Sidebar - Get Tenants Faster */}
+        <div className="hidden lg:block w-80 bg-white border-l border-gray-200 min-h-screen">
+          <GetTenantsFasterSection />
         </div>
       </div>
 
