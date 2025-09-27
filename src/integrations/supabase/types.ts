@@ -1556,6 +1556,14 @@ export type Database = {
         Args: { _property_id: string }
         Returns: string
       }
+      get_property_owner_contact: {
+        Args: { property_id: string }
+        Returns: {
+          owner_email: string
+          owner_name: string
+          property_title: string
+        }[]
+      }
       get_public_pg_hostel_properties: {
         Args: Record<PropertyKey, never>
         Returns: {

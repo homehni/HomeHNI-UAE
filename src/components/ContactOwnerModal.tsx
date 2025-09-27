@@ -115,23 +115,23 @@ export const ContactOwnerModal: React.FC<ContactOwnerModalProps> = ({
       
       // Send email notification to property owner
       try {
-        // Get property owner details
-        const { data: propertyData, error: propertyError } = await supabase
-          .from('properties')
-          .select('owner_email, owner_name, title')
-          .eq('id', propertyId)
-          .single();
+        // Get property owner contact details using secure RPC function
+        const { data: ownerData, error: ownerError } = await supabase
+          .rpc('get_property_owner_contact', {
+            property_id: propertyId
+          });
 
-        if (!propertyError && propertyData?.owner_email) {
+        if (!ownerError && ownerData && ownerData.length > 0) {
+          const owner = ownerData[0];
           await sendContactOwnerEmail(
-            propertyData.owner_email,
-            propertyData.owner_name || 'Property Owner',
+            owner.owner_email,
+            owner.owner_name || 'Property Owner',
             {
               inquirerName: formData.name.trim(),
-              inquirerEmail: formData.email.trim(), 
+              inquirerEmail: formData.email.trim(),
               inquirerPhone: formData.phone.trim(),
               message: formData.message.trim() || 'No specific message provided',
-              propertyTitle: propertyData.title || propertyTitle,
+              propertyTitle: owner.property_title || propertyTitle,
               propertyId: propertyId,
               listingType: listingType
             }
