@@ -269,7 +269,7 @@ const PaymentsSection: React.FC = () => {
     pdf.text(payment.plan_name, 25, tableY + 25);
     pdf.text(payment.plan_type || 'subscription', 85, tableY + 25);
     pdf.text(payment.plan_duration || '1 month', 135, tableY + 25);
-    pdf.text(`₹ ${payment.amount_rupees.toLocaleString()}`, pageWidth - 25, tableY + 25, { align: 'right' });
+    pdf.text(`Rs. ${payment.amount_rupees.toLocaleString()}`, pageWidth - 25, tableY + 25, { align: 'right' });
     
     // Totals Section - Right aligned with uniform formatting
     const totalY = tableY + 60;
@@ -279,12 +279,12 @@ const PaymentsSection: React.FC = () => {
     pdf.setFont('helvetica', 'normal');
     pdf.setFontSize(9);
     pdf.text('Subtotal:', totalX, totalY);
-    pdf.text(`₹ ${payment.amount_rupees.toLocaleString()}`, pageWidth - 25, totalY, { align: 'right' });
+    pdf.text(`Rs. ${payment.amount_rupees.toLocaleString()}`, pageWidth - 25, totalY, { align: 'right' });
     
     // GST - uniform text
     pdf.text('GST (18%):', totalX, totalY + 12);
     const gstAmount = Math.round(payment.amount_rupees * 0.18);
-    pdf.text(`₹ ${gstAmount.toLocaleString()}`, pageWidth - 25, totalY + 12, { align: 'right' });
+    pdf.text(`Rs. ${gstAmount.toLocaleString()}`, pageWidth - 25, totalY + 12, { align: 'right' });
     
     // Total line separator
     pdf.setLineWidth(0.5);
@@ -295,7 +295,7 @@ const PaymentsSection: React.FC = () => {
     pdf.setFont('helvetica', 'bold');
     pdf.text('Total Amount:', totalX, totalY + 32);
     const totalAmount = payment.amount_rupees + gstAmount;
-    pdf.text(`₹ ${totalAmount.toLocaleString()}`, pageWidth - 25, totalY + 32, { align: 'right' });
+    pdf.text(`Rs. ${totalAmount.toLocaleString()}`, pageWidth - 25, totalY + 32, { align: 'right' });
     
     // Payment Details Section - uniform formatting
     const paymentDetailsY = totalY + 60;
