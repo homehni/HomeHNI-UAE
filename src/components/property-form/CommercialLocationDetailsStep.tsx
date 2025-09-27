@@ -10,7 +10,7 @@ import { LocationDetails } from '@/types/property';
 import { ArrowLeft, ArrowRight, MapPin } from 'lucide-react';
 
 const commercialLocationDetailsSchema = z.object({
-  city: z.string().min(1, "City is required"),
+  city: z.string().optional(),
   locality: z.string().optional(),
   landmark: z.string().optional(),
   state: z.string().optional(),

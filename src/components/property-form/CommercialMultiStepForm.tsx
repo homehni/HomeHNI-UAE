@@ -264,7 +264,7 @@ const handleScheduleSubmit = (data: Partial<ScheduleInfo>) => {
         </div>
 
         {/* Main Content */}
-        <div className="flex-1 bg-white p-6 md:p-8 pb-32">
+        <div id="commercial-step-content" className="flex-1 bg-white p-6 md:p-8 pb-32">
           {renderCurrentStep()}
         </div>
 
@@ -294,13 +294,18 @@ const handleScheduleSubmit = (data: Partial<ScheduleInfo>) => {
                 console.log('Current step:', currentStep);
                 
                 // Trigger the current step's form submission like Commercial Sale flow
-                const currentStepForm = document.querySelector('form');
+                const container = document.getElementById('commercial-step-content');
+                const currentStepForm = container?.querySelector('form') as HTMLFormElement | null;
                 console.log('Found form element:', currentStepForm);
                 
                 if (currentStepForm) {
-                  console.log('Dispatching submit event to form');
-                  const submitEvent = new Event('submit', { bubbles: true, cancelable: true });
-                  currentStepForm.dispatchEvent(submitEvent);
+                  console.log('Dispatching requestSubmit to form');
+                  if (typeof currentStepForm.requestSubmit === 'function') {
+                    currentStepForm.requestSubmit();
+                  } else {
+                    const submitEvent = new Event('submit', { bubbles: true, cancelable: true });
+                    currentStepForm.dispatchEvent(submitEvent);
+                  }
                 } else {
                   console.log('No form element found - checking for step-specific handlers');
                   
