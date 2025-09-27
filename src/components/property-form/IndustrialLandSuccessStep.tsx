@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { CheckCircle } from 'lucide-react';
+import { sendPlanUpgradeEmail } from '@/services/emailService';
+import { OwnerInfo } from '@/types/property';
 
 interface IndustrialLandSuccessStepProps {
   onPreviewListing: () => void;
@@ -8,6 +10,7 @@ interface IndustrialLandSuccessStepProps {
   createdSubmissionId?: string | null;
   onEdit?: (step: number) => void;
   gallery?: { images?: any[] };
+  ownerInfo?: Partial<OwnerInfo>;
 }
 
 export const IndustrialLandSuccessStep = ({
@@ -15,14 +18,26 @@ export const IndustrialLandSuccessStep = ({
   onGoToDashboard,
   createdSubmissionId,
   onEdit,
-  gallery
+  gallery,
+  ownerInfo
 }: IndustrialLandSuccessStepProps) => {
   const [showNoPhotosMessage, setShowNoPhotosMessage] = useState(false);
+  const [isEmailLoading, setIsEmailLoading] = useState(false);
   
   // Check if there are photos uploaded
   const hasPhotos = gallery?.images && gallery.images.length > 0;
 
-  const handleGoPremium = () => {
+  const handleGoPremium = async () => {
+    if (ownerInfo?.email && ownerInfo?.fullName) {
+      setIsEmailLoading(true);
+      try {
+        await sendPlanUpgradeEmail(ownerInfo.email, ownerInfo.fullName);
+      } catch (error) {
+        console.error('Error sending upgrade email:', error);
+      } finally {
+        setIsEmailLoading(false);
+      }
+    }
     window.open('/plans', '_blank');
   };
 

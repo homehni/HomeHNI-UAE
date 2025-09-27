@@ -189,7 +189,8 @@ export const LandPlotMultiStepForm: React.FC<LandPlotMultiStepFormProps> = ({
       onGoToDashboard: handleGoToDashboard,
       createdSubmissionId,
       onEdit: handleEdit,
-      gallery
+      gallery,
+      ownerInfo
     };
 
     switch (listingType) {

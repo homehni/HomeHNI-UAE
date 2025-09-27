@@ -3,7 +3,13 @@ import { Shield, Star, Facebook, Tag } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { sendShowInterestEmail } from '@/services/emailService';
-const GetTenantsFasterSection: React.FC = () => {
+import { OwnerInfo } from '@/types/property';
+
+interface GetTenantsFasterSectionProps {
+  ownerInfo?: Partial<OwnerInfo>;
+}
+
+const GetTenantsFasterSection: React.FC<GetTenantsFasterSectionProps> = ({ ownerInfo }) => {
   const { toast } = useToast();
   const [interestShown, setInterestShown] = useState(false);
   
@@ -13,11 +19,11 @@ const GetTenantsFasterSection: React.FC = () => {
     // Send show interest email
     try {
       await sendShowInterestEmail(
-        'user@example.com', // In real app, get from auth context
-        'Property Owner', // In real app, get from auth context  
+        ownerInfo?.email || 'user@example.com', // Use actual user email or fallback
+        ownerInfo?.fullName || 'Property Owner', // Use actual user name or fallback
         {
           propertyType: 'rent',
-          phone: '+91 1234567890' // In real app, get from user data
+          phone: ownerInfo?.phoneNumber || '+91 1234567890' // Use actual phone or fallback
         }
       );
     } catch (error) {

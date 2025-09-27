@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { CheckCircle } from 'lucide-react';
+import { sendPlanUpgradeEmail } from '@/services/emailService';
+import { OwnerInfo } from '@/types/property';
 
 interface CommercialSaleSuccessStepProps {
   onEditProperty: () => void;
@@ -9,6 +11,7 @@ interface CommercialSaleSuccessStepProps {
   createdSubmissionId?: string | null;
   onEdit?: (step: number) => void;
   gallery?: { images?: any[] };
+  ownerInfo?: Partial<OwnerInfo>;
 }
 
 export const CommercialSaleSuccessStep = ({
@@ -17,14 +20,26 @@ export const CommercialSaleSuccessStep = ({
   onGoToDashboard,
   createdSubmissionId,
   onEdit,
-  gallery
+  gallery,
+  ownerInfo
 }: CommercialSaleSuccessStepProps) => {
   const [showNoPhotosMessage, setShowNoPhotosMessage] = useState(false);
+  const [isEmailLoading, setIsEmailLoading] = useState(false);
   
   // Check if there are photos uploaded
   const hasPhotos = gallery?.images && gallery.images.length > 0;
 
-  const handleGoPremium = () => {
+  const handleGoPremium = async () => {
+    if (ownerInfo?.email && ownerInfo?.fullName) {
+      setIsEmailLoading(true);
+      try {
+        await sendPlanUpgradeEmail(ownerInfo.email, ownerInfo.fullName);
+      } catch (error) {
+        console.error('Error sending upgrade email:', error);
+      } finally {
+        setIsEmailLoading(false);
+      }
+    }
     window.open('/plans?tab=commercial-seller', '_blank');
   };
 
@@ -108,8 +123,9 @@ export const CommercialSaleSuccessStep = ({
           <Button 
             className="bg-teal-600 hover:bg-teal-700 text-white"
             onClick={handleGoPremium}
+            disabled={isEmailLoading}
           >
-            Go Premium
+            {isEmailLoading ? 'Sending...' : 'Go Premium'}
           </Button>
         </div>
 
