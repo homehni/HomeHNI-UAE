@@ -71,6 +71,12 @@ export const CommercialPropertyDetailsStep: React.FC<CommercialPropertyDetailsSt
   const [loadingFacility, setLoadingFacility] = useState(form.watch('loadingFacility'));
 
   const onSubmit = (data: CommercialPropertyDetailsFormData) => {
+    console.log('=== PROPERTY DETAILS STEP SUBMIT ===');
+    console.log('Form data:', data);
+    console.log('onMainRoad:', onMainRoad);
+    console.log('cornerProperty:', cornerProperty);
+    console.log('loadingFacility:', loadingFacility);
+    
     onNext({
       ...initialData,
       ...data,
@@ -85,7 +91,13 @@ export const CommercialPropertyDetailsStep: React.FC<CommercialPropertyDetailsSt
       <h1 className="text-2xl font-semibold text-primary mb-6">Commercial Property Details</h1>
       
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <form onSubmit={(e) => {
+          console.log('=== PROPERTY DETAILS FORM SUBMIT EVENT ===');
+          console.log('Form submit event triggered');
+          console.log('Form errors:', form.formState.errors);
+          console.log('Form is valid:', form.formState.isValid);
+          form.handleSubmit(onSubmit)(e);
+        }} className="space-y-6">
           {/* Space Type and Building Type */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <FormField

@@ -183,6 +183,11 @@ export const CommercialLocationDetailsStep: React.FC<CommercialLocationDetailsSt
   }, [form]);
 
   const onSubmit = (data: CommercialLocationDetailsForm) => {
+    console.log('=== LOCATION DETAILS STEP SUBMIT ===');
+    console.log('Form data:', data);
+    console.log('Form errors:', form.formState.errors);
+    console.log('Form is valid:', form.formState.isValid);
+    
     // Convert to LocationDetails format and include parsed city, state, pincode
     const locationData: LocationDetails = {
       state: data.state || '',
@@ -192,6 +197,8 @@ export const CommercialLocationDetailsStep: React.FC<CommercialLocationDetailsSt
       pincode: data.pincode || '',
       societyName: initialData.societyName || ''
     };
+    
+    console.log('Location data being passed:', locationData);
     onNext(locationData);
   };
 
@@ -200,7 +207,13 @@ export const CommercialLocationDetailsStep: React.FC<CommercialLocationDetailsSt
       <h1 className="text-2xl font-semibold text-red-600 mb-6 pt-16 sm:pt-0">Location Details</h1>
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <form onSubmit={(e) => {
+          console.log('=== LOCATION DETAILS FORM SUBMIT EVENT ===');
+          console.log('Form submit event triggered');
+          console.log('Form errors:', form.formState.errors);
+          console.log('Form is valid:', form.formState.isValid);
+          form.handleSubmit(onSubmit)(e);
+        }} className="space-y-6">
           {/* City and Landmark */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <FormField

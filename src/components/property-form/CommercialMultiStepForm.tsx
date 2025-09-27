@@ -149,7 +149,12 @@ const handleScheduleSubmit = (data: Partial<ScheduleInfo>) => {
   };
 
   const renderCurrentStep = () => {
+    console.log('=== RENDERING CURRENT STEP ===');
+    console.log('Current step:', currentStep);
+    console.log('Is submitted:', isSubmitted);
+    
     if (isSubmitted) {
+      console.log('Rendering CommercialPreviewStep');
       return (
         <CommercialPreviewStep
           formData={getFormData() as CommercialFormData}
@@ -166,6 +171,7 @@ const handleScheduleSubmit = (data: Partial<ScheduleInfo>) => {
 
     switch (currentStep) {
       case 2:
+        console.log('Rendering CommercialPropertyDetailsStep');
         return (
           <CommercialPropertyDetailsStep
             initialData={propertyDetails}
@@ -176,6 +182,7 @@ const handleScheduleSubmit = (data: Partial<ScheduleInfo>) => {
           />
         );
       case 3:
+        console.log('Rendering CommercialLocationDetailsStep');
         return (
           <CommercialLocationDetailsStep
             initialData={locationDetails}
@@ -186,6 +193,7 @@ const handleScheduleSubmit = (data: Partial<ScheduleInfo>) => {
           />
         );
       case 4:
+        console.log('Rendering CommercialRentalDetailsStep');
         return (
           <CommercialRentalDetailsStep
             initialData={rentalDetails}
@@ -196,6 +204,7 @@ const handleScheduleSubmit = (data: Partial<ScheduleInfo>) => {
           />
         );
       case 5:
+        console.log('Rendering CommercialAmenitiesStep');
         return (
           <CommercialAmenitiesStep
             initialData={amenities}
@@ -206,6 +215,7 @@ const handleScheduleSubmit = (data: Partial<ScheduleInfo>) => {
           />
         );
       case 6:
+        console.log('Rendering CommercialGalleryStep');
         return (
           <CommercialGalleryStep
             initialData={gallery}
@@ -216,6 +226,7 @@ const handleScheduleSubmit = (data: Partial<ScheduleInfo>) => {
           />
         );
       case 7:
+        console.log('Rendering ScheduleStep');
         return (
           <ScheduleStep
             initialData={scheduleInfo}
@@ -225,6 +236,7 @@ const handleScheduleSubmit = (data: Partial<ScheduleInfo>) => {
           />
         );
       default:
+        console.log('Unknown step, returning null');
         return null;
     }
   };
@@ -278,12 +290,45 @@ const handleScheduleSubmit = (data: Partial<ScheduleInfo>) => {
             <Button 
               type="button" 
               onClick={() => {
+                console.log('=== COMMERCIAL SAVE & CONTINUE CLICKED ===');
+                console.log('Current step:', currentStep);
+                
                 // Trigger the current step's form submission like Commercial Sale flow
                 const currentStepForm = document.querySelector('form');
+                console.log('Found form element:', currentStepForm);
+                
                 if (currentStepForm) {
+                  console.log('Dispatching submit event to form');
                   const submitEvent = new Event('submit', { bubbles: true, cancelable: true });
                   currentStepForm.dispatchEvent(submitEvent);
+                } else {
+                  console.log('No form element found - checking for step-specific handlers');
+                  
+                  // If no form found, try to trigger step progression manually
+                  switch (currentStep) {
+                    case 2:
+                      console.log('Manually triggering property details next');
+                      break;
+                    case 3:
+                      console.log('Manually triggering location details next');
+                      break;
+                    case 4:
+                      console.log('Manually triggering rental details next');
+                      break;
+                    case 5:
+                      console.log('Manually triggering amenities next');
+                      break;
+                    case 6:
+                      console.log('Manually triggering gallery next');
+                      break;
+                    case 7:
+                      console.log('Manually triggering schedule submit');
+                      break;
+                    default:
+                      console.log('Unknown step:', currentStep);
+                  }
                 }
+                
                 // Scroll to top after triggering submit
                 setTimeout(scrollToTop, 100);
               }}
