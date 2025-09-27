@@ -240,44 +240,25 @@ const handleScheduleSubmit = (data: Partial<ScheduleInfo>) => {
         </div>
       </div>
 
-      {/* Desktop Layout */}
-      <div className="hidden lg:flex w-full min-h-screen">
-        <div className="max-w-full mx-auto flex flex-col">
-          {/* Header */}
-          <div className="bg-white border-b border-gray-200 px-4 py-2 flex-shrink-0 hidden">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-2">
-                <Badge variant="secondary" className="px-2 py-1 text-xs">Commercial</Badge>
-                <span className="text-base font-semibold text-gray-900">Post Your Commercial Property</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
-                  Step {currentStep} of 7
-                </span>
-              </div>
-            </div>
-          </div>
+      {/* Desktop Layout - Three Column Layout */}
+      <div className="flex flex-col lg:flex-row min-h-screen">
+        {/* Left Sidebar */}
+        <div className="hidden lg:block w-64 bg-white border-r border-gray-200 min-h-screen">
+          <CommercialSidebar
+            currentStep={currentStep}
+            completedSteps={completedSteps}
+            onStepClick={goToStep}
+          />
+        </div>
 
-          <div className="flex flex-col lg:flex-row">
-            <div className="w-80 flex-shrink-0">
-              <CommercialSidebar
-                currentStep={currentStep}
-                completedSteps={completedSteps}
-                onStepClick={goToStep}
-              />
-            </div>
-            
-            <div className="flex-1 min-w-0 p-3 bg-white pb-20">
-              <div className="max-w-4xl mx-auto">
-                {renderCurrentStep()}
-              </div>
-            </div>
+        {/* Main Content */}
+        <div className="flex-1 bg-white p-6 md:p-8 pb-32">
+          {renderCurrentStep()}
+        </div>
 
-            {/* Right Sidebar - Get Tenants Faster */}
-            <div className="w-80 flex-shrink-0 h-full">
-              <GetTenantsFasterSection />
-            </div>
-          </div>
+        {/* Right Sidebar - Get Tenants Faster */}
+        <div className="hidden lg:block w-80 bg-white border-l border-gray-200 min-h-screen">
+          <GetTenantsFasterSection />
         </div>
       </div>
 
