@@ -49,6 +49,7 @@ export const DeveloperContactForm: React.FC<DeveloperContactFormProps> = ({
     toast({
       title: "Message Sent Successfully",
       description: `Your inquiry has been sent to ${developerName}. They will contact you soon.`,
+      variant: "success",
     });
 
     // Reset form and close modal
