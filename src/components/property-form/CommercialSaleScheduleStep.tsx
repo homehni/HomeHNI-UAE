@@ -54,7 +54,7 @@ export const CommercialSaleScheduleStep = ({
     }
   };
   const watchAvailableAllDay = form.watch('availableAllDay');
-  return <div className="max-w-4xl mx-auto p-6">
+  return <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
       <div className="mb-8 text-left">
         <h2 className="text-2xl text-red-600 mb-2 font-semibold pt-6 sm:pt-6">
           Schedule Property Visits
