@@ -17,7 +17,7 @@ const GetTenantsFasterSection: React.FC = () => {
         'Property Owner', // In real app, get from auth context  
         {
           propertyType: 'rent',
-          feature: 'Get Tenants Faster Premium'
+          phone: '+91 1234567890' // In real app, get from user data
         }
       );
     } catch (error) {

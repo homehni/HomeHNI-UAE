@@ -201,16 +201,15 @@ export async function sendShowInterestEmail(
   userEmail: string, 
   userName: string,
   interestData: {
-    propertyType: 'rent' | 'sale';
-    feature: string;
+    propertyType?: string;
+    phone?: string;
   }
 ) {
-  return sendEmail('/send-show-interest-email', {
+  return sendEmail('/send-help-request-email', {
     to: userEmail,
     userName: userName || 'there',
-    propertyType: interestData.propertyType,
-    feature: interestData.feature,
-    upgradePlanUrl: 'https://homehni.com/upgrade'
+    propertyType: interestData.propertyType || 'property',
+    phone: interestData.phone || ''
   });
 }
 
