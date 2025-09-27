@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { CheckCircle } from 'lucide-react';
+import { handleGoPremiumClick } from '@/services/instantEmailService';
 
 interface IndustrialLandSuccessStepProps {
   onPreviewListing: () => void;
@@ -22,7 +23,12 @@ export const IndustrialLandSuccessStep = ({
   // Check if there are photos uploaded
   const hasPhotos = gallery?.images && gallery.images.length > 0;
 
-  const handleGoPremium = () => {
+  const handleGoPremium = async () => {
+    // Send instant premium email before redirecting (with limited data)
+    await handleGoPremiumClick({ 
+      propertyInfo: { property_type: 'industrial', listing_type: 'sale' },
+      ownerInfo: { email: '', fullName: '' }
+    });
     window.open('/plans', '_blank');
   };
 

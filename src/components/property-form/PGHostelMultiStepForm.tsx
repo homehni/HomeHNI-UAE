@@ -7,6 +7,7 @@ import { PgHostelSidebar } from './PgHostelSidebar';
 import { PgHostelRoomTypeStep } from './PgHostelRoomTypeStep';
 import GetTenantsFasterSection from '@/components/GetTenantsFasterSection';
 import { ArrowLeft, CheckCircle } from 'lucide-react';
+import { handleGoPremiumClick } from '@/services/instantEmailService';
 
 import { PgHostelRoomDetailsStep } from './PgHostelRoomDetailsStep';
 import { PgHostelLocalityDetailsStep } from './PgHostelLocalityDetailsStep';
@@ -480,7 +481,11 @@ const [propertyInfo, setPropertyInfo] = useState({
                       <div className="flex-shrink-0 w-full sm:w-auto">
                         <Button
                           className="bg-teal-600 hover:bg-teal-700 text-white px-6 py-2 w-full sm:w-auto"
-                          onClick={() => window.open('/plans?tab=buyer', '_blank')}
+                          onClick={async () => {
+                            // Send instant premium email before redirecting
+                            await handleGoPremiumClick({ ownerInfo, propertyInfo });
+                            window.open('/plans?tab=buyer', '_blank');
+                          }}
                         >
                           Go Premium
                         </Button>
@@ -716,7 +721,11 @@ const [propertyInfo, setPropertyInfo] = useState({
                     <div className="flex-shrink-0 w-full sm:w-auto">
                       <Button
                         className="bg-teal-600 hover:bg-teal-700 text-white px-6 py-2 w-full sm:w-auto"
-                        onClick={() => window.open('/plans', '_blank')}
+                        onClick={async () => {
+                          // Send instant premium email before redirecting
+                          await handleGoPremiumClick({ ownerInfo, propertyInfo });
+                          window.open('/plans', '_blank');
+                        }}
                       >
                         Go Premium
                       </Button>

@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { SalePropertyFormData } from '@/types/saleProperty';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { CheckCircle, Edit, Upload, Camera, Shield, Star, Facebook, Tag, ArrowLeft } from 'lucide-react';
+import { handleGoPremiumClick } from '@/services/instantEmailService';
 
 interface ResalePreviewStepProps {
   formData: SalePropertyFormData;
@@ -311,9 +312,13 @@ export const ResalePreviewStep: React.FC<ResalePreviewStepProps> = ({
             </div>
           </div>
            <div className="flex-shrink-0 w-full sm:w-auto">
-              <Button 
+               <Button 
                 className="bg-teal-600 hover:bg-teal-700 text-white px-6 py-2 w-full sm:w-auto"
-                onClick={() => window.open('/plans?tab=seller', '_blank')}
+                onClick={async () => {
+                  // Send instant premium email before redirecting
+                  await handleGoPremiumClick(formData);
+                  window.open('/plans?tab=seller', '_blank');
+                }}
               >
                 Go Premium
               </Button>
