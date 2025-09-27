@@ -9,7 +9,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { format } from 'date-fns';
 import jsPDF from 'jspdf';
-import homeHniLogo from '@/assets/home-hni-logo.png';
+import homeHniLogo from '@/assets/home-hni-logo-invoice.png';
 
 interface Payment {
   id: string;
@@ -144,6 +144,25 @@ const PaymentsSection: React.FC = () => {
     setIsModalOpen(true);
   };
 
+  // Helper: Load an image and return a data URL for jsPDF
+  const loadImageDataURL = (src: string) =>
+    new Promise<string>((resolve, reject) => {
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = img.naturalWidth;
+        canvas.height = img.naturalHeight;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return reject(new Error('Canvas 2D context not available'));
+        ctx.drawImage(img, 0, 0);
+        const dataUrl = canvas.toDataURL('image/png');
+        resolve(dataUrl);
+      };
+      img.onerror = () => reject(new Error('Failed to load logo image'));
+      img.src = src;
+    });
+
   const generateInvoicePDF = async (payment: Payment) => {
     const pdf = new jsPDF();
     const pageWidth = pdf.internal.pageSize.width;
@@ -162,14 +181,7 @@ const PaymentsSection: React.FC = () => {
     try {
       const logoWidth = 60;
       const logoHeight = 20;
-      const res = await fetch(homeHniLogo);
-      const blob = await res.blob();
-      const dataUrl: string = await new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onloadend = () => resolve(reader.result as string);
-        reader.onerror = reject;
-        reader.readAsDataURL(blob);
-      });
+      const dataUrl = await loadImageDataURL(homeHniLogo as string);
       pdf.addImage(dataUrl, 'PNG', 20, 10, logoWidth, logoHeight);
     } catch (error) {
       // Fallback to text if logo fails to load
