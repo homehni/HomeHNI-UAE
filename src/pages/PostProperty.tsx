@@ -605,10 +605,14 @@ export const PostProperty: React.FC = () => {
 
       console.log('Prepared property data for database:', propertyData);
 
-      toast({
-        title: "Saving Property...",
-        description: "Almost done! Saving your property listing.",
-      });
+      // Show saving toast only for non-land property types
+      const isLandPropertyType = 'propertyInfo' in data && 'plotDetails' in data.propertyInfo;
+      if (!isLandPropertyType) {
+        toast({
+          title: "Saving Property...",
+          description: "Almost done! Saving your property listing.",
+        });
+      }
 
       // Insert or update property in database
       let error;
