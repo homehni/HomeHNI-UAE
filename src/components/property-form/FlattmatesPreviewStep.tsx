@@ -252,7 +252,7 @@ export const FlattmatesPreviewStep: React.FC<FlattmatesPreviewStepProps> = ({
             Go to Dashboard
           </Button>
         </div>
-        <p className="text-red-600 text-sm font-medium mt-3 text-center sm:text-left">Your Property will be reviewed and made live in 12 Hours</p>
+        
       </div>
 
       {/* No Brokerage Message */}
