@@ -244,7 +244,7 @@ export const CommercialSaleMultiStepForm = ({
       </div>
 
       {/* Desktop Layout - Three Column Layout */}
-      <div className="flex flex-col lg:flex-row min-h-screen">
+      <div className="hidden lg:flex lg:flex-row min-h-screen">
         {/* Left Sidebar */}
         <div className="hidden lg:block w-64 bg-white border-r border-gray-200 min-h-screen">
           <CommercialSaleSidebar
