@@ -1,13 +1,38 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
-import { Resend } from "https://esm.sh/resend@2.0.0";
+import { SMTPClient } from "https://deno.land/x/denomailer@1.6.0/mod.ts";
 
-const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
+const client = new SMTPClient({
+  connection: {
+    hostname: "smtp.gmail.com",
+    port: 587,
+    tls: true,
+    auth: {
+      username: Deno.env.get("GMAIL_USER") || "",
+      password: Deno.env.get("GMAIL_APP_PASSWORD") || "",
+    },
+  },
+});
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers":
     "authorization, x-client-info, apikey, content-type",
 };
+
+interface Plan {
+  name: string;
+  price: string;
+  duration: string;
+  features: string[];
+  url: string;
+  badge: string;
+}
+
+interface PricingPlans {
+  [userType: string]: {
+    [propertyType: string]: Plan[];
+  };
+}
 
 interface EmailRequest {
   to: string;
@@ -54,7 +79,7 @@ const handler = async (req: Request): Promise<Response> => {
     const subject = "💰 Market Insights & Premium Plans for " + (locality || 'Your Area');
     
     // Define pricing plans based on user's website structure
-    const pricingPlans = {
+    const pricingPlans: PricingPlans = {
       seller: {
         residential: [
           { name: "Silver Plan", price: "₹999", duration: "90 days", features: ["Relationship Manager", "Sale Agreement Support", "Super Fast Closure"], url: "/plans?tab=seller", badge: "BASIC PROMOTION" },
@@ -106,26 +131,29 @@ const handler = async (req: Request): Promise<Response> => {
     };
 
     // Determine correct plan category
-    let currentPlans = [];
-    let planCategory = userType || 'seller';
-    let propertyCategory = propertyType || 'residential';
+    let currentPlans: Plan[] = [];
+    const planCategory = userType || 'seller';
+    const propertyCategory = propertyType || 'residential';
 
-    if (pricingPlans[planCategory] && pricingPlans[planCategory][propertyCategory]) {
+    if (pricingPlans[planCategory]?.[propertyCategory]) {
       currentPlans = pricingPlans[planCategory][propertyCategory];
     } else if (pricingPlans[planCategory]) {
-      currentPlans = Object.values(pricingPlans[planCategory])[0];
+      const firstCategory = Object.values(pricingPlans[planCategory])[0];
+      if (Array.isArray(firstCategory)) {
+        currentPlans = firstCategory;
+      }
     } else {
       currentPlans = pricingPlans.seller.residential;
     }
 
-    const plansHtml = currentPlans.slice(0, 3).map(plan => `
+    const plansHtml = currentPlans.slice(0, 3).map((plan: Plan) => `
       <div style="border: 2px solid #e0e0e0; border-radius: 12px; padding: 20px; margin: 15px 0; text-align: center; background: #fff; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
         <div style="background: #d32f2f; color: white; padding: 8px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; margin: 0 auto 15px; display: inline-block;">${plan.badge}</div>
         <h3 style="color: #d32f2f; margin: 0 0 10px; font-size: 20px; font-weight: bold;">${plan.name}</h3>
         <div style="font-size: 28px; font-weight: bold; color: #333; margin: 10px 0;">${plan.price}</div>
         <div style="color: #666; margin-bottom: 15px; font-style: italic;">${plan.duration}</div>
         <ul style="list-style: none; padding: 0; margin: 15px 0; text-align: left;">
-          ${plan.features.map(feature => `<li style="padding: 5px 0; color: #555; font-size: 14px;">✓ ${feature}</li>`).join('')}
+          ${plan.features.map((feature: string) => `<li style="padding: 5px 0; color: #555; font-size: 14px;">✓ ${feature}</li>`).join('')}
         </ul>
         <a href="https://homehni.com${plan.url}" style="background: linear-gradient(135deg, #d32f2f 0%, #b71c1c 100%); color: #fff; text-decoration: none; padding: 14px 28px; border-radius: 8px; font-weight: bold; display: inline-block; margin-top: 15px;">Choose ${plan.name}</a>
       </div>
@@ -180,19 +208,18 @@ const handler = async (req: Request): Promise<Response> => {
 
     console.log('📤 Sending premium email to:', to);
 
-    const emailResponse = await resend.emails.send({
-      from: "HomeHNI <noreply@homehni.in>",
+    await client.send({
+      from: "HomeHNI <" + Deno.env.get("GMAIL_USER") + ">",
       to: [to],
       subject,
       html,
     });
 
-    console.log("✅ Premium email sent successfully:", emailResponse);
+    console.log("✅ Premium email sent successfully");
 
     return new Response(JSON.stringify({ 
       status: "success", 
-      message: "Premium email sent successfully",
-      emailResponse 
+      message: "Premium email sent successfully"
     }), {
       status: 200,
       headers: {
