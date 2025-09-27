@@ -63,7 +63,7 @@ export const IndustrialLandSuccessStep = ({
           </div>
           <div>
             <h2 className="text-xl font-semibold text-green-900">Congratulations!</h2>
-            <p className="text-green-700">Your property is submitted successfully!</p>
+            <p className="text-green-700">Your property is submitted successfully! It will be reviewed and made live in 12 Hours.</p>
           </div>
         </div>
         
@@ -89,7 +89,7 @@ export const IndustrialLandSuccessStep = ({
           </Button>
         </div>
         
-        <p className="text-green-600 text-sm font-medium text-left mt-4">Your Property will be reviewed and made live in 12 Hours</p>
+        
       </div>
 
       {/* Premium Plans Section */}
