@@ -160,12 +160,17 @@ const PaymentsSection: React.FC = () => {
     
     // Add Home HNI logo
     try {
-      // Convert logo to base64 and add to PDF
       const logoWidth = 60;
       const logoHeight = 20;
-      const img = new Image();
-      img.src = homeHniLogo;
-      pdf.addImage(img, 'PNG', 20, 10, logoWidth, logoHeight);
+      const res = await fetch(homeHniLogo);
+      const blob = await res.blob();
+      const dataUrl: string = await new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result as string);
+        reader.onerror = reject;
+        reader.readAsDataURL(blob);
+      });
+      pdf.addImage(dataUrl, 'PNG', 20, 10, logoWidth, logoHeight);
     } catch (error) {
       // Fallback to text if logo fails to load
       pdf.setTextColor(220, 38, 38);
