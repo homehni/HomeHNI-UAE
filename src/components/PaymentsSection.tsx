@@ -173,8 +173,8 @@ const PaymentsSection: React.FC = () => {
     const secondaryColor = [128, 128, 128]; // Gray
     const textColor = [0, 0, 0]; // Black for uniform text
     
-    // Company Header with white background for logo
-    pdf.setFillColor(255, 255, 255);
+    // Company Header with red background for logo
+    pdf.setFillColor(220, 38, 38); // #DC2626 red color
     pdf.rect(0, 0, pageWidth, 40, 'F');
     
     // Add Home HNI logo
