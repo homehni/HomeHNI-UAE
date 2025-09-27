@@ -893,6 +893,7 @@ export const PostProperty: React.FC = () => {
           description: isEditMode 
             ? "Your property has been updated successfully and is now live."
             : "Your property has been published successfully and is now live on the platform.",
+          variant: "success",
         });
       }
 
