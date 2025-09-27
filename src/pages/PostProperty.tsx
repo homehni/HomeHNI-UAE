@@ -841,12 +841,16 @@ export const PostProperty: React.FC = () => {
         // Don't fail the entire submission if owner info save fails
       }
 
-      toast({
-        title: isEditMode ? "Property Updated!" : "Success!",
-        description: isEditMode 
-          ? "Your property has been updated successfully and is now live."
-          : "Your property has been published successfully and is now live on the platform.",
-      });
+      // Show success toast only for non-land property types
+      const isLandProperty = 'propertyInfo' in data && 'plotDetails' in data.propertyInfo;
+      if (!isLandProperty) {
+        toast({
+          title: isEditMode ? "Property Updated!" : "Success!",
+          description: isEditMode 
+            ? "Your property has been updated successfully and is now live."
+            : "Your property has been published successfully and is now live on the platform.",
+        });
+      }
 
       // Stay on the Preview step after submission - no redirect
 
