@@ -489,12 +489,21 @@ export const PostProperty: React.FC = () => {
       let videoUrls: string[] = [];
       const videoFile = (data as any)?.propertyInfo?.gallery?.video;
       if (videoFile) {
-        // Show video upload toast only for non-land and non-commercial property types
+        // Show video upload toast only for property types that are not excluded
         const isLandPropertyForVideo = 'propertyInfo' in data && 'plotDetails' in data.propertyInfo;
         const isCommercialPropertyForVideo = 'propertyInfo' in data && 
-          ('saleDetails' in data.propertyInfo || 'rentalDetails' in data.propertyInfo);
+          ('saleDetails' in data.propertyInfo || 'rentalDetails' in data.propertyInfo) &&
+          !('pgDetails' in data.propertyInfo) && !('flattmatesDetails' in data.propertyInfo);
+        const isPGHostelPropertyForVideo = 'propertyInfo' in data && 'pgDetails' in data.propertyInfo;
+        const isFlattmatesPropertyForVideo = 'propertyInfo' in data && 'flattmatesDetails' in data.propertyInfo;
+        const isResidentialPropertyForVideo = 'propertyInfo' in data && 
+          (('saleDetails' in data.propertyInfo) || ('rentalDetails' in data.propertyInfo)) &&
+          !isCommercialPropertyForVideo && !isPGHostelPropertyForVideo && !isFlattmatesPropertyForVideo;
         
-        if (!isLandPropertyForVideo && !isCommercialPropertyForVideo) {
+        const shouldShowVideoToast = !isLandPropertyForVideo && !isCommercialPropertyForVideo && 
+                                   !isPGHostelPropertyForVideo && !isFlattmatesPropertyForVideo && !isResidentialPropertyForVideo;
+        
+        if (shouldShowVideoToast) {
           toast({
             title: "Uploading Video...",
             description: "Please wait while we upload your property video.",
@@ -612,12 +621,21 @@ export const PostProperty: React.FC = () => {
 
       console.log('Prepared property data for database:', propertyData);
 
-      // Show saving toast only for non-land and non-commercial property types
+      // Show saving toast only for property types that are not excluded
       const isLandPropertyType = 'propertyInfo' in data && 'plotDetails' in data.propertyInfo;
       const isCommercialPropertyType = 'propertyInfo' in data && 
-        ('saleDetails' in data.propertyInfo || 'rentalDetails' in data.propertyInfo);
+        ('saleDetails' in data.propertyInfo || 'rentalDetails' in data.propertyInfo) &&
+        !('pgDetails' in data.propertyInfo) && !('flattmatesDetails' in data.propertyInfo);
+      const isPGHostelPropertyType = 'propertyInfo' in data && 'pgDetails' in data.propertyInfo;
+      const isFlattmatesPropertyType = 'propertyInfo' in data && 'flattmatesDetails' in data.propertyInfo;
+      const isResidentialPropertyType = 'propertyInfo' in data && 
+        (('saleDetails' in data.propertyInfo) || ('rentalDetails' in data.propertyInfo)) &&
+        !isCommercialPropertyType && !isPGHostelPropertyType && !isFlattmatesPropertyType;
       
-      if (!isLandPropertyType && !isCommercialPropertyType) {
+      const shouldShowToast = !isLandPropertyType && !isCommercialPropertyType && 
+                             !isPGHostelPropertyType && !isFlattmatesPropertyType && !isResidentialPropertyType;
+      
+      if (shouldShowToast) {
         toast({
           title: "Saving Property...",
           description: "Almost done! Saving your property listing.",
@@ -855,12 +873,21 @@ export const PostProperty: React.FC = () => {
         // Don't fail the entire submission if owner info save fails
       }
 
-      // Show success toast only for non-land and non-commercial property types
+      // Show success toast only for property types that are not excluded
       const isLandProperty = 'propertyInfo' in data && 'plotDetails' in data.propertyInfo;
       const isCommercialProperty = 'propertyInfo' in data && 
-        ('saleDetails' in data.propertyInfo || 'rentalDetails' in data.propertyInfo);
+        ('saleDetails' in data.propertyInfo || 'rentalDetails' in data.propertyInfo) &&
+        !('pgDetails' in data.propertyInfo) && !('flattmatesDetails' in data.propertyInfo);
+      const isPGHostelProperty = 'propertyInfo' in data && 'pgDetails' in data.propertyInfo;
+      const isFlattmatesProperty = 'propertyInfo' in data && 'flattmatesDetails' in data.propertyInfo;
+      const isResidentialProperty = 'propertyInfo' in data && 
+        (('saleDetails' in data.propertyInfo) || ('rentalDetails' in data.propertyInfo)) &&
+        !isCommercialProperty && !isPGHostelProperty && !isFlattmatesProperty;
       
-      if (!isLandProperty && !isCommercialProperty) {
+      const shouldShowSuccessToast = !isLandProperty && !isCommercialProperty && 
+                                   !isPGHostelProperty && !isFlattmatesProperty && !isResidentialProperty;
+      
+      if (shouldShowSuccessToast) {
         toast({
           title: isEditMode ? "Property Updated!" : "Success!",
           description: isEditMode 
