@@ -129,7 +129,7 @@ export const CommercialRentalDetailsStep: React.FC<CommercialRentalDetailsStepPr
 
   return (
     <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
-      <h1 className="text-2xl font-semibold text-red-600 mb-6 pt-16 sm:pt-0">
+      <h1 className="text-2xl font-semibold text-red-600 mb-6">
         Provide rental details about your commercial property
       </h1>
         
