@@ -235,9 +235,10 @@ const PaymentsSection: React.FC = () => {
     pdf.setFont('helvetica', 'normal');
     pdf.text(user?.email || 'Customer', 20, 135);
     pdf.text('Customer ID: ' + (user?.id?.slice(-8) || 'N/A'), 20, 142);
+    pdf.text('GST Number: _____________________', 20, 149);
     
     // Service Details Table - Professional design matching reference
-    const tableY = 160;
+    const tableY = 167;
     
     // Main table border
     pdf.setDrawColor(180, 180, 180);
