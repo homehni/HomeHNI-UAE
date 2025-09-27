@@ -129,6 +129,7 @@ const PackersMoversEmbedded = () => {
   }];
 
   const [formMessage, setFormMessage] = useState<{ type: 'success' | 'error' | null; text: string }>({ type: null, text: '' });
+  const { toast } = useToast();
 
   return (
     <div className="bg-background">
@@ -172,18 +173,20 @@ const PackersMoversEmbedded = () => {
               <form className="space-y-4" onSubmit={e => {
                 e.preventDefault();
                 const form = e.currentTarget as HTMLFormElement;
-                if (!form.checkValidity()) {
-                  form.reportValidity();
-                  setFormMessage({
-                    type: "error",
-                    text: "Please fill in all required fields before submitting your moving request."
-                  });
-                  return;
-                }
-                setFormMessage({
-                  type: "success",
-                  text: "Request received! Our moving expert will contact you shortly."
-                });
+                 if (!form.checkValidity()) {
+                   form.reportValidity();
+                   toast({
+                     title: "Error",
+                     description: "Please fill in all required fields before submitting your moving request.",
+                     variant: "destructive"
+                   });
+                   return;
+                 }
+                 toast({
+                   title: "Request received",
+                   description: "Our moving expert will contact you shortly.",
+                   variant: "success"
+                 });
                 form.reset();
               }}>
                 <Input id="moving-name" name="name" placeholder="Name" required />
@@ -228,17 +231,6 @@ const PackersMoversEmbedded = () => {
                 </div>
 
                 <Button type="submit" className="w-full bg-red-800 hover:bg-red-900 text-white">Get Free Moving Quote</Button>
-                
-                {/* Inline message */}
-                {formMessage.type && (
-                  <div className={`mt-2 p-3 rounded-lg text-sm ${
-                    formMessage.type === 'error'
-                      ? 'bg-red-50 text-red-700 border border-red-200'
-                      : 'bg-green-50 text-green-700 border border-green-200'
-                  }`}>
-                    {formMessage.text}
-                  </div>
-                )}
               </form>
             </CardContent>
           </Card>
@@ -258,15 +250,17 @@ const PackersMoversEmbedded = () => {
                 const form = e.currentTarget as HTMLFormElement;
                 if (!form.checkValidity()) {
                   form.reportValidity();
-                  setFormMessage({
-                    type: "error",
-                    text: "Please fill in all required fields before submitting your moving request."
+                  toast({
+                    title: "Error",
+                    description: "Please fill in all required fields before submitting your moving request.",
+                    variant: "destructive"
                   });
                   return;
                 }
-                setFormMessage({
-                  type: "success",
-                  text: "Request received! Our moving expert will contact you shortly."
+                toast({
+                  title: "Request received",
+                  description: "Our moving expert will contact you shortly.",
+                  variant: "success"
                 });
                 form.reset();
               }}>
@@ -337,17 +331,6 @@ const PackersMoversEmbedded = () => {
                 <Button type="submit" className="w-full h-12 text-base font-semibold bg-red-800 hover:bg-red-900 text-white mt-6">
                   Get Free Moving Quote
                 </Button>
-                
-                {/* Inline message */}
-                {formMessage.type && (
-                  <div className={`mt-2 p-3 rounded-lg text-sm ${
-                    formMessage.type === 'error'
-                      ? 'bg-red-50 text-red-700 border border-red-200'
-                      : 'bg-green-50 text-green-700 border border-green-200'
-                  }`}>
-                    {formMessage.text}
-                  </div>
-                )}
               </form>
             </CardContent>
           </Card>

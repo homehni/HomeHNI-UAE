@@ -129,6 +129,7 @@ const LoansEmbedded = () => {
   }];
 
   const [formMessage, setFormMessage] = useState<{ type: 'success' | 'error' | null; text: string }>({ type: null, text: '' });
+  const { toast } = useToast();
 
   return (
     <div className="bg-background">
@@ -174,9 +175,10 @@ const LoansEmbedded = () => {
                 const form = e.currentTarget as HTMLFormElement;
                 if (!form.checkValidity()) {
                   form.reportValidity();
-                  setFormMessage({
-                    type: "error",
-                    text: "Please fill in all required fields before submitting the loan application."
+                  toast({
+                    title: "Error",
+                    description: "Please fill in all required fields before submitting the loan application.",
+                    variant: "destructive"
                   });
                   return;
                 }
@@ -192,9 +194,10 @@ const LoansEmbedded = () => {
 
                 if (!email || !email.includes('@')) {
                   console.error('Invalid email address:', email);
-                  setFormMessage({
-                    type: "error",
-                    text: "Please enter a valid email address."
+                  toast({
+                    title: "Invalid Email",
+                    description: "Please enter a valid email address.",
+                    variant: "destructive"
                   });
                   return;
                 }
@@ -226,22 +229,25 @@ const LoansEmbedded = () => {
                   
                   if (response.ok && result.success !== false) {
                     console.log('✅ Email sent successfully to:', email);
-                    setFormMessage({
-                      type: "success",
-                      text: `Application received! Loan details sent to ${email}. Our expert will contact you shortly.`
+                    toast({
+                      title: "Application received",
+                      description: "Our loan expert will contact you shortly.",
+                      variant: "success"
                     });
                   } else {
                     console.error('❌ Email API returned error:', result);
-                    setFormMessage({
-                      type: "error",
-                      text: "There was an issue processing your request. Please try again."
+                    toast({
+                      title: "Error",
+                      description: "There was an issue processing your request. Please try again.",
+                      variant: "destructive"
                     });
                   }
                 } catch (error) {
                   console.error('❌ Failed to send loan enquiry email:', error);
-                  setFormMessage({
-                    type: "error",
-                    text: "Network error occurred. Please check your internet connection and try again."
+                  toast({
+                    title: "Network Error",
+                    description: "Please check your internet connection and try again.",
+                    variant: "destructive"
                   });
                 }
                 form.reset();
@@ -291,17 +297,6 @@ const LoansEmbedded = () => {
                 </div>
 
                 <Button type="submit" className="w-full bg-red-800 hover:bg-red-900 text-white">Get Pre-Approved Now!</Button>
-                
-                {/* Inline message */}
-                {formMessage.type && (
-                  <div className={`mt-2 p-3 rounded-lg text-sm ${
-                    formMessage.type === 'error'
-                      ? 'bg-red-50 text-red-700 border border-red-200'
-                      : 'bg-green-50 text-green-700 border border-green-200'
-                  }`}>
-                    {formMessage.text}
-                  </div>
-                )}
               </form>
             </CardContent>
           </Card>
@@ -321,9 +316,10 @@ const LoansEmbedded = () => {
                 const form = e.currentTarget as HTMLFormElement;
                 if (!form.checkValidity()) {
                   form.reportValidity();
-                  setFormMessage({
-                    type: "error",
-                    text: "Please fill in all required fields before submitting the loan application."
+                  toast({
+                    title: "Error",
+                    description: "Please fill in all required fields before submitting the loan application.",
+                    variant: "destructive"
                   });
                   return;
                 }
@@ -339,9 +335,10 @@ const LoansEmbedded = () => {
 
                 if (!email || !email.includes('@')) {
                   console.error('Invalid email address:', email);
-                  setFormMessage({
-                    type: "error",
-                    text: "Please enter a valid email address."
+                  toast({
+                    title: "Invalid Email",
+                    description: "Please enter a valid email address.",
+                    variant: "destructive"
                   });
                   return;
                 }
@@ -373,22 +370,25 @@ const LoansEmbedded = () => {
                   
                   if (response.ok && result.success !== false) {
                     console.log('✅ Email sent successfully to:', email);
-                    setFormMessage({
-                      type: "success",
-                      text: `Application received! Loan details sent to ${email}. Our expert will contact you shortly.`
+                    toast({
+                      title: "Application received",
+                      description: "Our loan expert will contact you shortly.",
+                      variant: "success"
                     });
                   } else {
                     console.error('❌ Email API returned error:', result);
-                    setFormMessage({
-                      type: "error",
-                      text: "There was an issue processing your request. Please try again."
+                    toast({
+                      title: "Error",
+                      description: "There was an issue processing your request. Please try again.",
+                      variant: "destructive"
                     });
                   }
                 } catch (error) {
                   console.error('❌ Failed to send loan enquiry email:', error);
-                  setFormMessage({
-                    type: "error",
-                    text: "Network error occurred. Please check your internet connection and try again."
+                  toast({
+                    title: "Network Error",
+                    description: "Please check your internet connection and try again.",
+                    variant: "destructive"
                   });
                 }
                 form.reset();
@@ -484,17 +484,6 @@ const LoansEmbedded = () => {
                 <Button type="submit" className="w-full h-12 text-base font-semibold bg-red-800 hover:bg-red-900 text-white mt-6">
                   Get Pre-Approved Now!
                 </Button>
-                
-                {/* Inline message */}
-                {formMessage.type && (
-                  <div className={`mt-2 p-3 rounded-lg text-sm ${
-                    formMessage.type === 'error'
-                      ? 'bg-red-50 text-red-700 border border-red-200'
-                      : 'bg-green-50 text-green-700 border border-green-200'
-                  }`}>
-                    {formMessage.text}
-                  </div>
-                )}
               </form>
             </CardContent>
           </Card>

@@ -129,6 +129,7 @@ const PropertyManagementEmbedded = () => {
   }];
 
   const [formMessage, setFormMessage] = useState<{ type: 'success' | 'error' | null; text: string }>({ type: null, text: '' });
+  const { toast } = useToast();
 
   return (
     <div className="bg-background">

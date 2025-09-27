@@ -122,6 +122,7 @@ const PaintingCleaningEmbedded = () => {
     type: null,
     text: ''
   });
+  const { toast } = useToast();
   return <div className="bg-background">
       {/* Hero Section */}
       <section className="relative pt-8 pb-20 md:pb-32 px-4 md:px-8 text-white overflow-hidden bg-cover bg-center bg-no-repeat" style={{

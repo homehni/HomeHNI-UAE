@@ -129,6 +129,7 @@ const HandoverServicesEmbedded = () => {
   }];
 
   const [formMessage, setFormMessage] = useState<{ type: 'success' | 'error' | null; text: string }>({ type: null, text: '' });
+  const { toast } = useToast();
 
   return (
     <div className="bg-background">
@@ -174,15 +175,17 @@ const HandoverServicesEmbedded = () => {
                 const form = e.currentTarget as HTMLFormElement;
                 if (!form.checkValidity()) {
                   form.reportValidity();
-                  setFormMessage({
-                    type: "error",
-                    text: "Please fill in all required fields before submitting your handover service request."
+                  toast({
+                    title: "Error",
+                    description: "Please fill in all required fields before submitting your handover service request.",
+                    variant: "destructive"
                   });
                   return;
                 }
-                setFormMessage({
-                  type: "success",
-                  text: "Request received! Our handover expert will contact you shortly."
+                toast({
+                  title: "Request received",
+                  description: "Our handover expert will contact you shortly.",
+                  variant: "success"
                 });
                 form.reset();
               }}>
@@ -225,17 +228,6 @@ const HandoverServicesEmbedded = () => {
                 </Select>
 
                 <Button type="submit" className="w-full bg-red-800 hover:bg-red-900 text-white">Get Professional Support</Button>
-                
-                {/* Inline message */}
-                {formMessage.type && (
-                  <div className={`mt-2 p-3 rounded-lg text-sm ${
-                    formMessage.type === 'error'
-                      ? 'bg-red-50 text-red-700 border border-red-200'
-                      : 'bg-green-50 text-green-700 border border-green-200'
-                  }`}>
-                    {formMessage.text}
-                  </div>
-                )}
               </form>
             </CardContent>
           </Card>
@@ -255,15 +247,17 @@ const HandoverServicesEmbedded = () => {
                 const form = e.currentTarget as HTMLFormElement;
                 if (!form.checkValidity()) {
                   form.reportValidity();
-                  setFormMessage({
-                    type: "error",
-                    text: "Please fill in all required fields before submitting your handover service request."
+                  toast({
+                    title: "Error",
+                    description: "Please fill in all required fields before submitting your handover service request.",
+                    variant: "destructive"
                   });
                   return;
                 }
-                setFormMessage({
-                  type: "success",
-                  text: "Request received! Our handover expert will contact you shortly."
+                toast({
+                  title: "Request received",
+                  description: "Our handover expert will contact you shortly.",
+                  variant: "success"
                 });
                 form.reset();
               }}>
@@ -333,17 +327,6 @@ const HandoverServicesEmbedded = () => {
                 <Button type="submit" className="w-full h-12 text-base font-semibold bg-red-800 hover:bg-red-900 text-white mt-6">
                   Get Professional Support
                 </Button>
-                
-                {/* Inline message */}
-                {formMessage.type && (
-                  <div className={`mt-2 p-3 rounded-lg text-sm ${
-                    formMessage.type === 'error'
-                      ? 'bg-red-50 text-red-700 border border-red-200'
-                      : 'bg-green-50 text-green-700 border border-green-200'
-                  }`}>
-                    {formMessage.text}
-                  </div>
-                )}
               </form>
             </CardContent>
           </Card>
