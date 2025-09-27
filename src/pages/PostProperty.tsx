@@ -489,10 +489,17 @@ export const PostProperty: React.FC = () => {
       let videoUrls: string[] = [];
       const videoFile = (data as any)?.propertyInfo?.gallery?.video;
       if (videoFile) {
-        toast({
-          title: "Uploading Video...",
-          description: "Please wait while we upload your property video.",
-        });
+        // Show video upload toast only for non-land and non-commercial property types
+        const isLandPropertyForVideo = 'propertyInfo' in data && 'plotDetails' in data.propertyInfo;
+        const isCommercialPropertyForVideo = 'propertyInfo' in data && 
+          ('saleDetails' in data.propertyInfo || 'rentalDetails' in data.propertyInfo);
+        
+        if (!isLandPropertyForVideo && !isCommercialPropertyForVideo) {
+          toast({
+            title: "Uploading Video...",
+            description: "Please wait while we upload your property video.",
+          });
+        }
 
         const videoResult = await uploadSingleFile(
           videoFile,
@@ -605,9 +612,12 @@ export const PostProperty: React.FC = () => {
 
       console.log('Prepared property data for database:', propertyData);
 
-      // Show saving toast only for non-land property types
+      // Show saving toast only for non-land and non-commercial property types
       const isLandPropertyType = 'propertyInfo' in data && 'plotDetails' in data.propertyInfo;
-      if (!isLandPropertyType) {
+      const isCommercialPropertyType = 'propertyInfo' in data && 
+        ('saleDetails' in data.propertyInfo || 'rentalDetails' in data.propertyInfo);
+      
+      if (!isLandPropertyType && !isCommercialPropertyType) {
         toast({
           title: "Saving Property...",
           description: "Almost done! Saving your property listing.",
@@ -845,9 +855,12 @@ export const PostProperty: React.FC = () => {
         // Don't fail the entire submission if owner info save fails
       }
 
-      // Show success toast only for non-land property types
+      // Show success toast only for non-land and non-commercial property types
       const isLandProperty = 'propertyInfo' in data && 'plotDetails' in data.propertyInfo;
-      if (!isLandProperty) {
+      const isCommercialProperty = 'propertyInfo' in data && 
+        ('saleDetails' in data.propertyInfo || 'rentalDetails' in data.propertyInfo);
+      
+      if (!isLandProperty && !isCommercialProperty) {
         toast({
           title: isEditMode ? "Property Updated!" : "Success!",
           description: isEditMode 
