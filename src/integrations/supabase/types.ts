@@ -715,87 +715,6 @@ export type Database = {
         }
         Relationships: []
       }
-      pg_hostel_properties: {
-        Row: {
-          amenities: Json | null
-          available_from: string | null
-          available_services: Json | null
-          city: string
-          created_at: string
-          description: string | null
-          expected_deposit: number
-          expected_rent: number
-          food_included: boolean
-          gate_closing_time: string | null
-          id: string
-          images: string[] | null
-          landmark: string | null
-          locality: string
-          parking: string | null
-          place_available_for: string
-          preferred_guests: string
-          property_type: string
-          state: string
-          status: string | null
-          title: string
-          updated_at: string
-          user_id: string
-          videos: string[] | null
-        }
-        Insert: {
-          amenities?: Json | null
-          available_from?: string | null
-          available_services?: Json | null
-          city: string
-          created_at?: string
-          description?: string | null
-          expected_deposit: number
-          expected_rent: number
-          food_included?: boolean
-          gate_closing_time?: string | null
-          id?: string
-          images?: string[] | null
-          landmark?: string | null
-          locality: string
-          parking?: string | null
-          place_available_for: string
-          preferred_guests: string
-          property_type?: string
-          state: string
-          status?: string | null
-          title: string
-          updated_at?: string
-          user_id: string
-          videos?: string[] | null
-        }
-        Update: {
-          amenities?: Json | null
-          available_from?: string | null
-          available_services?: Json | null
-          city?: string
-          created_at?: string
-          description?: string | null
-          expected_deposit?: number
-          expected_rent?: number
-          food_included?: boolean
-          gate_closing_time?: string | null
-          id?: string
-          images?: string[] | null
-          landmark?: string | null
-          locality?: string
-          parking?: string | null
-          place_available_for?: string
-          preferred_guests?: string
-          property_type?: string
-          state?: string
-          status?: string | null
-          title?: string
-          updated_at?: string
-          user_id?: string
-          videos?: string[] | null
-        }
-        Relationships: []
-      }
       platform_settings: {
         Row: {
           created_at: string
@@ -1221,45 +1140,6 @@ export type Database = {
           updated_at?: string | null
           user_id?: string
           videos?: string[] | null
-        }
-        Relationships: []
-      }
-      property_real: {
-        Row: {
-          content: Json | null
-          element_key: string | null
-          element_type: string | null
-          id: string | null
-          images: string | null
-          is_active: boolean | null
-          location: string | null
-          property_type: string | null
-          title: string | null
-          updated_at: string | null
-        }
-        Insert: {
-          content?: Json | null
-          element_key?: string | null
-          element_type?: string | null
-          id?: string | null
-          images?: string | null
-          is_active?: boolean | null
-          location?: string | null
-          property_type?: string | null
-          title?: string | null
-          updated_at?: string | null
-        }
-        Update: {
-          content?: Json | null
-          element_key?: string | null
-          element_type?: string | null
-          id?: string | null
-          images?: string | null
-          is_active?: boolean | null
-          location?: string | null
-          property_type?: string | null
-          title?: string | null
-          updated_at?: string | null
         }
         Relationships: []
       }
