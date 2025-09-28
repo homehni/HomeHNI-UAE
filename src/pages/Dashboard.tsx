@@ -1057,16 +1057,18 @@ export const Dashboard: React.FC = () => {
       <Marquee />
       
       {/* Mobile Menu Button */}
-      <div className="lg:hidden fixed top-24 right-4 z-50">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          className="bg-white shadow-md"
-        >
-          <Menu className="h-4 w-4" />
-        </Button>
-          </div>
+      <div className="lg:hidden px-4 py-2">
+        <div className="flex justify-end">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className="bg-white shadow-md"
+          >
+            <Menu className="h-4 w-4" />
+          </Button>
+        </div>
+      </div>
 
       <div className="flex pt-20 lg:pt-20">
         {/* Sidebar Navigation - Hidden on mobile, visible on desktop */}
