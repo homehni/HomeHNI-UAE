@@ -7,6 +7,8 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import PayButton from '@/components/PayButton';
+import GSTDisplay from '@/components/GSTDisplay';
+import { calculateTotalWithGST } from '@/utils/gstCalculator';
 
 const BuilderLifetimePlans = () => {
   const [selectedPlans, setSelectedPlans] = useState({
@@ -325,14 +327,14 @@ const BuilderLifetimePlans = () => {
                         <h3 className="text-xl font-bold text-gray-900 mb-3">{plan.name}</h3>
                         <div className="mb-4">
                           <span className="text-2xl font-bold text-gray-900">{plan.price}</span>
-                          <div className="text-sm text-gray-500">{plan.gst}</div>
+                          <GSTDisplay basePriceInPaise={plan.amountPaise} />
                         </div>
                         
                         
                         <PayButton
                           label="Subscribe"
                           planName={`Builder — ${plan.name}`}
-                          amountPaise={plan.amountPaise}
+                          amountPaise={calculateTotalWithGST(plan.amountPaise)}
                           notes={{ plan: plan.name, category: "builder", type: category }}
                           className={`w-full ${
                             selectedPlans[category as keyof typeof selectedPlans] === index 

@@ -11,6 +11,8 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Marquee from "@/components/Marquee";
 import { Link } from "react-router-dom";
+import GSTDisplay from '@/components/GSTDisplay';
+import { calculateTotalWithGST } from '@/utils/gstCalculator';
 
 interface SellerPlansProps { embedded?: boolean }
 const SellerPlans: React.FC<SellerPlansProps> = ({ embedded }) => {
@@ -378,7 +380,7 @@ const SellerPlans: React.FC<SellerPlansProps> = ({ embedded }) => {
                           ) : (
                             <>
                               <span className="text-2xl font-bold text-gray-900">{plan.price}</span>
-                              <div className="text-sm text-gray-500">{plan.gst}</div>
+                              <GSTDisplay basePriceInPaise={plan.amountPaise} />
                             </>
                           )}
                         </div>
@@ -397,7 +399,7 @@ const SellerPlans: React.FC<SellerPlansProps> = ({ embedded }) => {
                           <PayButton
                             label="Subscribe"
                             planName={`Seller — ${plan.name}`}
-                            amountPaise={plan.amountPaise || 0}
+                            amountPaise={calculateTotalWithGST(plan.amountPaise || 0)}
                             notes={{ plan: plan.name, category: "seller", type: tabKey }}
                             className={`w-full ${
                               selectedPlans[tabKey as keyof typeof selectedPlans] === index 

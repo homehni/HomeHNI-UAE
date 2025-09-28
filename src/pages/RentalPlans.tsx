@@ -7,6 +7,8 @@ import { Badge } from '@/components/ui/badge';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Star, Clock, UserCheck, FileText, TrendingUp, Globe, Camera, Shield, Users } from 'lucide-react';
 import PayButton from '@/components/PayButton';
+import GSTDisplay from '@/components/GSTDisplay';
+import { calculateTotalWithGST } from '@/utils/gstCalculator';
 
 interface RentalPlansProps { 
   embedded?: boolean 
@@ -284,7 +286,7 @@ const RentalPlans = ({ embedded }: RentalPlansProps) => {
                               ) : (
                                 <>
                                   <span className="text-2xl font-bold text-gray-900">{plan.price}</span>
-                                  <div className="text-sm text-gray-500">{plan.gst}</div>
+                                  <GSTDisplay basePriceInPaise={plan.amountPaise} />
                                 </>
                               )}
                             </div>
@@ -303,7 +305,7 @@ const RentalPlans = ({ embedded }: RentalPlansProps) => {
                               <PayButton
                                 label="Subscribe"  
                                 planName={`Tenant — ${plan.name}`}
-                                amountPaise={plan.amountPaise}
+                                amountPaise={calculateTotalWithGST(plan.amountPaise)}
                                 className={`w-full ${
                                   selectedTenantPlan[category as keyof typeof selectedTenantPlan] === index 
                                     ? 'bg-brand-red hover:bg-brand-maroon-dark text-white' 

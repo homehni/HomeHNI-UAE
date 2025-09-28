@@ -7,6 +7,8 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import GSTDisplay from '@/components/GSTDisplay';
+import { calculateTotalWithGST } from '@/utils/gstCalculator';
 
 const CommercialSellerPlans = () => {
   const [selectedPlans, setSelectedPlans] = useState({
@@ -332,12 +334,12 @@ const CommercialSellerPlans = () => {
                         <h3 className="text-xl font-bold text-gray-900 mb-3">{plan.name}</h3>
                         <div className="mb-6">
                           <span className="text-2xl font-bold text-gray-900">{plan.price}</span>
-                          <div className="text-sm text-gray-500">{plan.gst}</div>
+                          <GSTDisplay basePriceInPaise={plan.amountPaise} />
                         </div>
                         
                         <PayButton
                           label="Subscribe"
-                          amountPaise={plan.amountPaise}
+                          amountPaise={calculateTotalWithGST(plan.amountPaise)}
                           planName={`Commercial Seller - ${plan.name}`}
                           className={`w-full ${
                             selectedPlans[tabKey as keyof typeof selectedPlans] === index 

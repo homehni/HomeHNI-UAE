@@ -7,6 +7,8 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import PayButton from '@/components/PayButton';
+import GSTDisplay from '@/components/GSTDisplay';
+import { calculateTotalWithGST } from '@/utils/gstCalculator';
 
 const AgentPlans = () => {
   const [selectedPlans, setSelectedPlans] = useState({
@@ -228,7 +230,7 @@ const AgentPlans = () => {
                           ) : (
                             <>
                               <span className="text-2xl font-bold text-gray-900">{plan.price}</span>
-                              <div className="text-sm text-gray-500">{plan.gst}</div>
+                              <GSTDisplay basePriceInPaise={plan.amountPaise} />
                             </>
                           )}
                         </div>
@@ -248,7 +250,7 @@ const AgentPlans = () => {
                           <PayButton
                             label="Subscribe"
                             planName={`Agent — ${plan.name}`}
-                            amountPaise={plan.amountPaise}
+                            amountPaise={calculateTotalWithGST(plan.amountPaise)}
                             notes={{ plan: plan.name, category: "agent", type: tabKey }}
                             className={`w-full ${
                               selectedPlans[tabKey as keyof typeof selectedPlans] === index 
