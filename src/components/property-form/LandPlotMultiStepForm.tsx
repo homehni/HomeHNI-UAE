@@ -11,6 +11,7 @@ import GetTenantsFasterSection from '@/components/GetTenantsFasterSection';
 import { LandPlotSidebar } from './LandPlotSidebar';
 
 import { LandPlotScheduleStep } from './LandPlotScheduleStep';
+import { LandPlotSuccessStep } from './LandPlotSuccessStep';
 import { IndustrialLandSuccessStep } from './IndustrialLandSuccessStep';
 import { AgriculturalLandSuccessStep } from './AgriculturalLandSuccessStep';
 import { CommercialLandSuccessStep } from './CommercialLandSuccessStep';
@@ -201,7 +202,7 @@ export const LandPlotMultiStepForm: React.FC<LandPlotMultiStepFormProps> = ({
       case 'Commercial land':
         return <CommercialLandSuccessStep {...successProps} />;
       default:
-        return <IndustrialLandSuccessStep {...successProps} />;
+        return <LandPlotSuccessStep {...successProps} />;
     }
   };
 

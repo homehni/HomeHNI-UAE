@@ -10,7 +10,7 @@ interface LandPlotSuccessStepProps {
   createdSubmissionId?: string | null;
   onEdit?: (step: number) => void;
   gallery?: { images?: any[] };
-  ownerInfo?: OwnerInfo;
+  ownerInfo?: Partial<OwnerInfo>;
 }
 
 export const LandPlotSuccessStep = ({
