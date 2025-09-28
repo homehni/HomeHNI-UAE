@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import GSTDisplay from '@/components/GSTDisplay';
-import { calculateTotalWithGST } from '@/utils/gstCalculator';
+import { calculateTotalWithGST, formatCurrency } from '@/utils/gstCalculator';
 
 const CommercialOwnerPlans = () => {
   const [selectedPlans, setSelectedPlans] = useState({
@@ -454,8 +454,8 @@ const CommercialOwnerPlans = () => {
                             </div>
                           ) : (
                             <div className="space-y-1">
-                              <div className="text-2xl font-bold text-gray-900">{plan.price}</div>
-                              <GSTDisplay basePriceInPaise={plan.amountPaise || 0} />
+                              <div className="text-2xl font-bold text-gray-900">{formatCurrency(calculateTotalWithGST(plan.amountPaise || 0))}</div>
+                              <GSTDisplay totalPriceInPaise={calculateTotalWithGST(plan.amountPaise || 0)} />
                             </div>
                           )}
                         </div>
@@ -473,7 +473,7 @@ const CommercialOwnerPlans = () => {
                         ) : (
                           <PayButton
                             label="Subscribe"
-                            amountPaise={calculateTotalWithGST(plan.amountPaise || 0)}
+                            amountPaise={plan.amountPaise || 0}
                             planName={`Commercial Owner - ${plan.name}`}
                             className={`w-full ${
                               selectedPlans[tabKey as keyof typeof selectedPlans] === index 

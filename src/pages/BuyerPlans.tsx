@@ -12,7 +12,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Marquee from '@/components/Marquee';
 import GSTDisplay from '@/components/GSTDisplay';
-import { calculateTotalWithGST } from '@/utils/gstCalculator';
+import { calculateTotalWithGST, formatCurrency } from '@/utils/gstCalculator';
 
 interface BuyerPlansProps { embedded?: boolean }
 const BuyerPlans = ({ embedded }: BuyerPlansProps) => {
@@ -347,8 +347,8 @@ const BuyerPlans = ({ embedded }: BuyerPlansProps) => {
                             </div>
                           ) : (
                             <div className="space-y-1">
-                              <div className="text-2xl font-bold text-gray-900">{plan.price}</div>
-                              <GSTDisplay basePriceInPaise={plan.amountPaise} />
+                              <div className="text-2xl font-bold text-gray-900">{formatCurrency(calculateTotalWithGST(plan.amountPaise))}</div>
+                              <GSTDisplay totalPriceInPaise={calculateTotalWithGST(plan.amountPaise)} />
                             </div>
                           )}
                         </div>
@@ -367,7 +367,7 @@ const BuyerPlans = ({ embedded }: BuyerPlansProps) => {
                           <PayButton
                             label="Subscribe"
                             planName={`Buyer — ${plan.name}`}
-                            amountPaise={calculateTotalWithGST(plan.amountPaise)}
+                            amountPaise={plan.amountPaise}
                             notes={{ plan: plan.name, category: "buyer", type: tabKey }}
                             className={`w-full ${
                               selectedPlans[tabKey as keyof typeof selectedPlans] === index 

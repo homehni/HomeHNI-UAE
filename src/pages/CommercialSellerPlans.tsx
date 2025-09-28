@@ -8,7 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import GSTDisplay from '@/components/GSTDisplay';
-import { calculateTotalWithGST } from '@/utils/gstCalculator';
+import { calculateTotalWithGST, formatCurrency } from '@/utils/gstCalculator';
 
 const CommercialSellerPlans = () => {
   const [selectedPlans, setSelectedPlans] = useState({
@@ -333,13 +333,13 @@ const CommercialSellerPlans = () => {
                       <CardContent className="pt-16 pb-6 px-6">
                         <h3 className="text-xl font-bold text-gray-900 mb-3">{plan.name}</h3>
                         <div className="mb-6 space-y-1">
-                          <div className="text-2xl font-bold text-gray-900">{plan.price}</div>
-                          <GSTDisplay basePriceInPaise={plan.amountPaise} />
+                          <div className="text-2xl font-bold text-gray-900">{formatCurrency(calculateTotalWithGST(plan.amountPaise))}</div>
+                          <GSTDisplay totalPriceInPaise={calculateTotalWithGST(plan.amountPaise)} />
                         </div>
                         
                         <PayButton
                           label="Subscribe"
-                          amountPaise={calculateTotalWithGST(plan.amountPaise)}
+                          amountPaise={plan.amountPaise}
                           planName={`Commercial Seller - ${plan.name}`}
                           className={`w-full ${
                             selectedPlans[tabKey as keyof typeof selectedPlans] === index 
