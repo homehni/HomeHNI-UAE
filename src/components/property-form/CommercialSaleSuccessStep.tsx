@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { CheckCircle } from 'lucide-react';
+import { CheckCircle, Check } from 'lucide-react';
 import { sendPlanUpgradeEmail } from '@/services/emailService';
 import { OwnerInfo } from '@/types/property';
 
@@ -66,14 +66,14 @@ export const CommercialSaleSuccessStep = ({
   return (
     <div className="max-w-4xl mx-auto p-6">
       {/* Success Message */}
-      <div className="bg-green-50 border border-green-200 rounded-lg p-6 mb-6">
+      <div className="bg-red-50 border border-red-200 rounded-lg p-6 mb-6">
         <div className="flex items-center gap-3 mb-4">
-          <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-            <CheckCircle className="w-6 h-6 text-green-600" />
+          <div className="w-12 h-12 bg-red-500 rounded-full flex items-center justify-center">
+            <Check className="w-6 h-6 text-white" strokeWidth={3} />
           </div>
           <div>
-            <h2 className="text-xl font-semibold text-green-900">Congratulations!</h2>
-            <p className="text-green-700">Your property is submitted successfully! It will be reviewed and made live in 12 Hours.</p>
+            <h2 className="text-xl font-semibold text-red-900">Congratulations!</h2>
+            <p className="text-red-700">Your property is submitted successfully! It will be reviewed and made live in 12 Hours.</p>
           </div>
         </div>
         
