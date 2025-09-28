@@ -321,7 +321,7 @@ export const LandPlotMultiStepForm: React.FC<LandPlotMultiStepFormProps> = ({
                 }}
                 className="h-12 sm:h-10 px-6 sm:px-6 bg-red-600 hover:bg-red-700 text-white w-full sm:w-auto order-1 sm:order-2 font-semibold"
               >
-                Submit Property
+                {currentStep === 6 ? 'Submit Property' : 'Save & Continue'}
               </Button>
             </div>
             </div>
