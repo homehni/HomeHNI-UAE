@@ -1057,7 +1057,7 @@ export const Dashboard: React.FC = () => {
       <Marquee />
       
       {/* Mobile Menu Button */}
-      <div className="lg:hidden p-4">
+      <div className="lg:hidden fixed top-24 right-4 z-50">
         <Button
           variant="outline"
           size="sm"
