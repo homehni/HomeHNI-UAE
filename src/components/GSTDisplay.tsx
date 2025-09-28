@@ -1,6 +1,5 @@
-import React from 'react';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { calculateGSTAmount, formatCurrency } from '@/utils/gstCalculator';
+import React, { useState } from 'react';
+import { calculateGSTAmount, calculateTotalWithGST, formatCurrencyDetailed } from '@/utils/gstCalculator';
 
 interface GSTDisplayProps {
   basePriceInPaise: number;
@@ -8,21 +7,43 @@ interface GSTDisplayProps {
 }
 
 const GSTDisplay: React.FC<GSTDisplayProps> = ({ basePriceInPaise, className = "" }) => {
+  const [isHovered, setIsHovered] = useState(false);
   const gstAmount = calculateGSTAmount(basePriceInPaise);
+  const totalAmount = calculateTotalWithGST(basePriceInPaise);
 
   return (
-    <TooltipProvider>
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <div className={`text-sm text-gray-500 cursor-help hover:text-gray-700 transition-colors ${className}`}>
-            +18% GST
+    <div className="relative inline-block">
+      <div 
+        className={`text-sm text-muted-foreground cursor-help hover:text-foreground transition-colors ${className}`}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
+        +18% GST
+      </div>
+      
+      {isHovered && (
+        <div className="absolute top-full left-0 mt-2 bg-background border border-border rounded-lg p-4 shadow-lg z-50 min-w-[240px]">
+          <div className="space-y-2">
+            <div className="flex justify-between items-center">
+              <span className="text-sm text-muted-foreground">Plan Price</span>
+              <span className="font-medium">{formatCurrencyDetailed(basePriceInPaise)}</span>
+            </div>
+            
+            <div className="flex justify-between items-center">
+              <span className="text-sm text-muted-foreground">GST @ 18%</span>
+              <span className="font-medium">{formatCurrencyDetailed(gstAmount)}</span>
+            </div>
+            
+            <hr className="border-border" />
+            
+            <div className="flex justify-between items-center">
+              <span className="font-semibold">Amount Payable</span>
+              <span className="font-bold text-primary">{formatCurrencyDetailed(totalAmount)}</span>
+            </div>
           </div>
-        </TooltipTrigger>
-        <TooltipContent>
-          <p className="font-medium">GST Amount: {formatCurrency(gstAmount)}</p>
-        </TooltipContent>
-      </Tooltip>
-    </TooltipProvider>
+        </div>
+      )}
+    </div>
   );
 };
 
