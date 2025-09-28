@@ -74,7 +74,7 @@ export const IndustrialLandSuccessStep = ({
       <div className="bg-red-50 border border-red-200 rounded-lg p-6 mb-6">
         <div className="flex items-center gap-3 mb-4">
           <div className="w-12 h-12 bg-red-500 rounded-full flex items-center justify-center">
-            <CheckCircle className="w-6 h-6 text-white" fill="currentColor" />
+            <CheckCircle className="w-6 h-6 text-white" strokeWidth={2} fill="white" />
           </div>
           <div>
             <h2 className="text-xl font-semibold text-red-900">Congratulations!</h2>
