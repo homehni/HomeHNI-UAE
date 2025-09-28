@@ -8,7 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import PayButton from '@/components/PayButton';
 import GSTDisplay from '@/components/GSTDisplay';
-import { calculateTotalWithGST, formatCurrency } from '@/utils/gstCalculator';
+import { calculateTotalWithGST } from '@/utils/gstCalculator';
 
 const BuilderLifetimePlans = () => {
   const [selectedPlans, setSelectedPlans] = useState({
@@ -326,15 +326,15 @@ const BuilderLifetimePlans = () => {
                       <CardContent className="pt-16 pb-6 px-6">
                         <h3 className="text-xl font-bold text-gray-900 mb-3">{plan.name}</h3>
                         <div className="mb-4 space-y-1">
-                          <div className="text-2xl font-bold text-gray-900">{formatCurrency(calculateTotalWithGST(plan.amountPaise))}</div>
-                          <GSTDisplay totalPriceInPaise={calculateTotalWithGST(plan.amountPaise)} />
+                          <div className="text-2xl font-bold text-gray-900">{plan.price}</div>
+                          <GSTDisplay basePriceInPaise={plan.amountPaise} />
                         </div>
                         
                         
                         <PayButton
                           label="Subscribe"
                           planName={`Builder — ${plan.name}`}
-                          amountPaise={plan.amountPaise}
+                          amountPaise={calculateTotalWithGST(plan.amountPaise)}
                           notes={{ plan: plan.name, category: "builder", type: category }}
                           className={`w-full ${
                             selectedPlans[category as keyof typeof selectedPlans] === index 

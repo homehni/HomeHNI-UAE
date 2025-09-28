@@ -23,26 +23,6 @@ export const calculateTotalWithGST = (basePriceInPaise: number): number => {
 };
 
 /**
- * Calculate base price from total price including GST
- * @param totalPriceInPaise - Total price including GST in paise
- * @returns Base price in paise
- */
-export const calculateBasePriceFromTotal = (totalPriceInPaise: number): number => {
-  // If total = base + (base * 0.18), then base = total / 1.18
-  return Math.round(totalPriceInPaise / (1 + GST_RATE));
-};
-
-/**
- * Calculate GST amount from total price
- * @param totalPriceInPaise - Total price including GST in paise
- * @returns GST amount in paise
- */
-export const calculateGSTFromTotal = (totalPriceInPaise: number): number => {
-  const basePriceInPaise = calculateBasePriceFromTotal(totalPriceInPaise);
-  return totalPriceInPaise - basePriceInPaise;
-};
-
-/**
  * Format amount in paise to readable currency string
  * @param amountInPaise - Amount in paise
  * @returns Formatted currency string (e.g., "₹1,180")

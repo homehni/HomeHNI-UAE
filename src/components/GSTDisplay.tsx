@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
-import { calculateBasePriceFromTotal, calculateGSTFromTotal, formatCurrencyDetailed } from '@/utils/gstCalculator';
+import { calculateGSTAmount, calculateTotalWithGST, formatCurrencyDetailed } from '@/utils/gstCalculator';
 
 interface GSTDisplayProps {
-  totalPriceInPaise: number; // Now accepts total price including GST
+  basePriceInPaise: number;
   className?: string;
 }
 
-const GSTDisplay: React.FC<GSTDisplayProps> = ({ totalPriceInPaise, className = "" }) => {
+const GSTDisplay: React.FC<GSTDisplayProps> = ({ basePriceInPaise, className = "" }) => {
   const [isHovered, setIsHovered] = useState(false);
-  const basePriceInPaise = calculateBasePriceFromTotal(totalPriceInPaise);
-  const gstAmount = calculateGSTFromTotal(totalPriceInPaise);
+  const gstAmount = calculateGSTAmount(basePriceInPaise);
+  const totalAmount = calculateTotalWithGST(basePriceInPaise);
 
   return (
     <div className="relative inline-block">
@@ -38,7 +38,7 @@ const GSTDisplay: React.FC<GSTDisplayProps> = ({ totalPriceInPaise, className = 
             
             <div className="flex justify-between items-center">
               <span className="font-semibold">Amount Payable</span>
-              <span className="font-bold text-primary">{formatCurrencyDetailed(totalPriceInPaise)}</span>
+              <span className="font-bold text-primary">{formatCurrencyDetailed(totalAmount)}</span>
             </div>
           </div>
         </div>
