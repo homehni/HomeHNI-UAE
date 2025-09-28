@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { CheckCircle, Edit, Upload, Camera, Shield, Star, Facebook, Tag, ArrowLeft } from 'lucide-react';
+import { CheckCircle, Edit, Upload, Camera, Shield, Star, Facebook, Tag, ArrowLeft, Check } from 'lucide-react';
 import { CommercialFormData } from '@/types/property';
 
 interface CommercialPreviewStepProps {
@@ -234,9 +234,7 @@ export const CommercialPreviewStep: React.FC<CommercialPreviewStepProps> = ({
       <div className="bg-red-50 border border-red-200 rounded-xl p-4 sm:p-6 mb-4 sm:mb-6 shadow-lg">
         <div className="flex flex-col sm:flex-row items-center gap-4 mb-4">
           <div className="w-12 h-12 sm:w-14 sm:h-14 bg-red-500 rounded-full flex items-center justify-center flex-shrink-0 shadow-md">
-            <div className="w-8 h-8 sm:w-9 sm:h-9 bg-white rounded-full flex items-center justify-center">
-              <span className="text-red-600 text-sm sm:text-base font-bold">✓</span>
-            </div>
+            <Check className="w-6 h-6 text-white" strokeWidth={3} />
           </div>
           <div className="text-center sm:text-left">
             <h2 className="text-lg sm:text-xl font-semibold text-red-800 mb-1">Congratulations!</h2>
