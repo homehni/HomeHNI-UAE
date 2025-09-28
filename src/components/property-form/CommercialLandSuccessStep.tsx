@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { CheckCircle } from 'lucide-react';
+import { CheckCircle, Check } from 'lucide-react';
 import { sendPlanUpgradeEmail } from '@/services/emailService';
 import { OwnerInfo } from '@/types/property';
 
@@ -74,7 +74,7 @@ export const CommercialLandSuccessStep = ({
       <div className="bg-red-50 border border-red-200 rounded-lg p-6 mb-6">
         <div className="flex items-center gap-3 mb-4">
           <div className="w-12 h-12 bg-red-500 rounded-full flex items-center justify-center">
-            <CheckCircle className="w-6 h-6 text-white" fill="currentColor" />
+            <Check className="w-6 h-6 text-white" strokeWidth={3} />
           </div>
           <div>
             <h2 className="text-xl font-semibold text-red-900">Congratulations!</h2>
