@@ -76,6 +76,22 @@ export const LandPlotSuccessStep = ({
     window.open(whatsappUrl, '_blank');
   };
 
+  const handleGoDashboard = () => {
+    window.open('/dashboard', '_blank');
+  };
+
+  const handleEditProperty = () => {
+    if (onEdit) {
+      onEdit(1); // Go back to first step
+    }
+  };
+
+  const handleUploadNow = () => {
+    if (onEdit) {
+      onEdit(5); // Navigate to gallery step
+    }
+  };
+
   return (
     <div className="max-w-4xl mx-auto p-6">
       {/* Success Message */}
@@ -93,7 +109,7 @@ export const LandPlotSuccessStep = ({
         <div className="flex flex-wrap gap-3">
           <Button
             variant="outline"
-            onClick={() => onEdit?.(1)}
+            onClick={handleEditProperty}
             className="border-green-300 text-green-700 hover:bg-green-50"
           >
             Edit Property
@@ -105,7 +121,7 @@ export const LandPlotSuccessStep = ({
             Preview Listing
           </Button>
           <Button
-            onClick={onGoToDashboard}
+            onClick={handleGoDashboard}
             className="bg-blue-600 hover:bg-blue-700 text-white"
           >
             Go to Dashboard
@@ -222,7 +238,7 @@ export const LandPlotSuccessStep = ({
                 <Button 
                   size="sm" 
                   className="bg-teal-600 hover:bg-teal-700 text-white"
-                  onClick={handleUploadPhotos}
+                  onClick={handleUploadNow}
                 >
                   Upload Now
                 </Button>
