@@ -346,10 +346,10 @@ const BuyerPlans = ({ embedded }: BuyerPlansProps) => {
                               </div>
                             </div>
                           ) : (
-                            <>
-                              <span className="text-2xl font-bold text-gray-900">{plan.price}</span>
+                            <div className="space-y-1">
+                              <div className="text-2xl font-bold text-gray-900">{plan.price}</div>
                               <GSTDisplay basePriceInPaise={plan.amountPaise} />
-                            </>
+                            </div>
                           )}
                         </div>
                         

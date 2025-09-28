@@ -325,8 +325,8 @@ const BuilderLifetimePlans = () => {
                       
                       <CardContent className="pt-16 pb-6 px-6">
                         <h3 className="text-xl font-bold text-gray-900 mb-3">{plan.name}</h3>
-                        <div className="mb-4">
-                          <span className="text-2xl font-bold text-gray-900">{plan.price}</span>
+                        <div className="mb-4 space-y-1">
+                          <div className="text-2xl font-bold text-gray-900">{plan.price}</div>
                           <GSTDisplay basePriceInPaise={plan.amountPaise} />
                         </div>
                         
