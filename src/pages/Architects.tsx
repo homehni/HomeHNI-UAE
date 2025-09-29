@@ -14,16 +14,14 @@ const Architects = () => {
   const [formData, setFormData] = useState({
     countryCode: "+91",
     projectType: "",
-    state: "",
-    city: ""
+    state: ""
   });
 
   // Mobile form state
   const [mobileFormData, setMobileFormData] = useState({
     countryCode: "+91", 
     projectType: "",
-    state: "",
-    city: ""
+    state: ""
   });
   const majorCities = [
     "Mumbai", "Delhi", "Bangalore", "Hyderabad", "Ahmedabad", "Chennai", "Kolkata", "Surat", "Pune", "Jaipur",
@@ -220,8 +218,7 @@ const Architects = () => {
             setFormData({
               countryCode: "+91",
               projectType: "",
-              state: "",
-              city: ""
+              state: ""
             });
           }}>
               <Input id="arch-name" name="name" placeholder="Name" required />
@@ -256,31 +253,21 @@ const Architects = () => {
                 <Input id="arch-location" name="location" placeholder="Project Location" className="flex-1" />
               </div>
 
-              <div className="flex gap-2">
-                <Select value={formData.state} onValueChange={(value) => setFormData(prev => ({ ...prev, state: value }))}>
-                  <SelectTrigger id="arch-state" className="flex-1"><SelectValue placeholder="State" /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="andhra-pradesh">Andhra Pradesh</SelectItem>
-                    <SelectItem value="karnataka">Karnataka</SelectItem>
-                    <SelectItem value="tamil-nadu">Tamil Nadu</SelectItem>
-                    <SelectItem value="telangana">Telangana</SelectItem>
-                    <SelectItem value="maharashtra">Maharashtra</SelectItem>
-                    <SelectItem value="gujarat">Gujarat</SelectItem>
-                    <SelectItem value="rajasthan">Rajasthan</SelectItem>
-                    <SelectItem value="delhi">Delhi</SelectItem>
-                    <SelectItem value="west-bengal">West Bengal</SelectItem>
-                    <SelectItem value="uttar-pradesh">Uttar Pradesh</SelectItem>
-                  </SelectContent>
-                </Select>
-                <Select value={formData.city} onValueChange={(value) => setFormData(prev => ({ ...prev, city: value }))}>
-                  <SelectTrigger id="arch-city" className="flex-1"><SelectValue placeholder="City" /></SelectTrigger>
-                  <SelectContent>
-                    {majorCities.map((city) => (
-                      <SelectItem key={city} value={city.toLowerCase()}>{city}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+              <Select value={formData.state} onValueChange={(value) => setFormData(prev => ({ ...prev, state: value }))}>
+                <SelectTrigger id="arch-state" className="w-full"><SelectValue placeholder="State" /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="andhra-pradesh">Andhra Pradesh</SelectItem>
+                  <SelectItem value="karnataka">Karnataka</SelectItem>
+                  <SelectItem value="tamil-nadu">Tamil Nadu</SelectItem>
+                  <SelectItem value="telangana">Telangana</SelectItem>
+                  <SelectItem value="maharashtra">Maharashtra</SelectItem>
+                  <SelectItem value="gujarat">Gujarat</SelectItem>
+                  <SelectItem value="rajasthan">Rajasthan</SelectItem>
+                  <SelectItem value="delhi">Delhi</SelectItem>
+                  <SelectItem value="west-bengal">West Bengal</SelectItem>
+                  <SelectItem value="uttar-pradesh">Uttar Pradesh</SelectItem>
+                </SelectContent>
+              </Select>
 
               <Button type="submit" className="w-full bg-red-800 hover:bg-red-900 text-white">Get Free Consultation!</Button>
             </form>
@@ -315,8 +302,7 @@ const Architects = () => {
               setMobileFormData({
                 countryCode: "+91",
                 projectType: "",
-                state: "",
-                city: ""
+                state: ""
               });
             }}>
                 <Input id="arch-name-mobile" name="name" placeholder="Name" className="h-12 text-base bg-background" required />
@@ -354,35 +340,23 @@ const Architects = () => {
                   <Input id="arch-location-mobile" name="location" placeholder="Project Location" className="flex-1 h-12 text-base bg-background" />
                 </div>
 
-                <div className="flex gap-3">
-                  <Select value={mobileFormData.state} onValueChange={(value) => setMobileFormData(prev => ({ ...prev, state: value }))}>
-                    <SelectTrigger id="arch-state-mobile" className="flex-1 h-12 bg-background">
-                      <SelectValue placeholder="State" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-background border shadow-lg">
-                      <SelectItem value="andhra-pradesh">Andhra Pradesh</SelectItem>
-                      <SelectItem value="karnataka">Karnataka</SelectItem>
-                      <SelectItem value="tamil-nadu">Tamil Nadu</SelectItem>
-                      <SelectItem value="telangana">Telangana</SelectItem>
-                      <SelectItem value="maharashtra">Maharashtra</SelectItem>
-                      <SelectItem value="gujarat">Gujarat</SelectItem>
-                      <SelectItem value="rajasthan">Rajasthan</SelectItem>
-                      <SelectItem value="delhi">Delhi</SelectItem>
-                      <SelectItem value="west-bengal">West Bengal</SelectItem>
-                      <SelectItem value="uttar-pradesh">Uttar Pradesh</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <Select value={mobileFormData.city} onValueChange={(value) => setMobileFormData(prev => ({ ...prev, city: value }))}>
-                    <SelectTrigger id="arch-city-mobile" className="flex-1 h-12 bg-background">
-                      <SelectValue placeholder="City" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-background border shadow-lg">
-                      {majorCities.map((city) => (
-                        <SelectItem key={city} value={city.toLowerCase()}>{city}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
+                <Select value={mobileFormData.state} onValueChange={(value) => setMobileFormData(prev => ({ ...prev, state: value }))}>
+                  <SelectTrigger id="arch-state-mobile" className="w-full h-12 bg-background">
+                    <SelectValue placeholder="State" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-background border shadow-lg">
+                    <SelectItem value="andhra-pradesh">Andhra Pradesh</SelectItem>
+                    <SelectItem value="karnataka">Karnataka</SelectItem>
+                    <SelectItem value="tamil-nadu">Tamil Nadu</SelectItem>
+                    <SelectItem value="telangana">Telangana</SelectItem>
+                    <SelectItem value="maharashtra">Maharashtra</SelectItem>
+                    <SelectItem value="gujarat">Gujarat</SelectItem>
+                    <SelectItem value="rajasthan">Rajasthan</SelectItem>
+                    <SelectItem value="delhi">Delhi</SelectItem>
+                    <SelectItem value="west-bengal">West Bengal</SelectItem>
+                    <SelectItem value="uttar-pradesh">Uttar Pradesh</SelectItem>
+                  </SelectContent>
+                </Select>
 
                 <Button type="submit" className="w-full h-12 text-base font-semibold bg-red-800 hover:bg-red-900 text-white mt-6">
                   Get Free Consultation!
