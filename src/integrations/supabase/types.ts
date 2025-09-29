@@ -754,12 +754,15 @@ export type Database = {
           bio: string | null
           created_at: string
           email_notifications: boolean | null
+          free_contact_uses: number | null
           full_name: string | null
           id: string
+          last_contact_use_at: string | null
           location: Json | null
           phone: string | null
           preferences: Json | null
           role: string | null
+          total_contact_uses: number | null
           updated_at: string
           user_id: string
           verification_documents: Json | null
@@ -771,12 +774,15 @@ export type Database = {
           bio?: string | null
           created_at?: string
           email_notifications?: boolean | null
+          free_contact_uses?: number | null
           full_name?: string | null
           id?: string
+          last_contact_use_at?: string | null
           location?: Json | null
           phone?: string | null
           preferences?: Json | null
           role?: string | null
+          total_contact_uses?: number | null
           updated_at?: string
           user_id: string
           verification_documents?: Json | null
@@ -788,12 +794,15 @@ export type Database = {
           bio?: string | null
           created_at?: string
           email_notifications?: boolean | null
+          free_contact_uses?: number | null
           full_name?: string | null
           id?: string
+          last_contact_use_at?: string | null
           location?: Json | null
           phone?: string | null
           preferences?: Json | null
           role?: string | null
+          total_contact_uses?: number | null
           updated_at?: string
           user_id?: string
           verification_documents?: Json | null
@@ -1353,6 +1362,10 @@ export type Database = {
         Args: { _email: string }
         Returns: undefined
       }
+      can_contact_owner: {
+        Args: { user_uuid: string }
+        Returns: boolean
+      }
       check_security_status: {
         Args: Record<PropertyKey, never>
         Returns: {
@@ -1738,6 +1751,13 @@ export type Database = {
       upload_file_to_storage: {
         Args: { content_type?: string; file_content: string; file_name: string }
         Returns: string
+      }
+      use_contact_attempt: {
+        Args: { user_uuid: string }
+        Returns: {
+          remaining_uses: number
+          success: boolean
+        }[]
       }
       validate_sensitive_access: {
         Args: {
