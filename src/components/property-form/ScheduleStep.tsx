@@ -7,6 +7,9 @@ import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
+import { useToast } from '@/hooks/use-toast';
+import { sendFreshlyPaintedEmail } from '@/services/emailService';
+import { OwnerInfo, PropertyInfo } from '@/types/property';
 import { Home, MapPin, Building, Sparkles, Camera, FileText, Calendar, Clock, PaintBucket, CheckCircle } from 'lucide-react';
 const scheduleSchema = z.object({
   paintingService: z.enum(['book', 'decline']).optional(),
@@ -22,14 +25,19 @@ interface ScheduleStepProps {
   onNext?: (data: ScheduleFormData) => void;
   onBack: () => void;
   onSubmit?: (data: ScheduleFormData) => void;
+  ownerInfo?: Partial<OwnerInfo>;
+  propertyInfo?: any;
 }
 export const ScheduleStep: React.FC<ScheduleStepProps> = ({
   initialData = {},
   onNext,
   onBack,
-  onSubmit
+  onSubmit,
+  ownerInfo,
+  propertyInfo
 }) => {
   const navigate = useNavigate();
+  const { toast } = useToast();
   const [paintingResponse, setPaintingResponse] = useState<'book' | 'decline' | null>(null);
   const [cleaningResponse, setCleaningResponse] = useState<'book' | 'decline' | null>(null);
   const form = useForm<ScheduleFormData>({
@@ -43,6 +51,49 @@ export const ScheduleStep: React.FC<ScheduleStepProps> = ({
       availableAllDay: initialData.availableAllDay || false
     }
   });
+  const handlePaintingBookNow = async () => {
+    if (!ownerInfo?.email || !ownerInfo?.fullName) {
+      toast({
+        title: "Error",
+        description: "Unable to send request. Please ensure your email and name are properly entered.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    try {
+      // Handle different property data structures from different forms
+      const locality = propertyInfo?.locationDetails?.locality || '';
+      const expectedPrice = propertyInfo?.rentalDetails?.expectedPrice || 
+                           propertyInfo?.rentalDetails?.expectedRent || 
+                           '';
+
+      await sendFreshlyPaintedEmail(
+        ownerInfo.email,
+        ownerInfo.fullName,
+        ownerInfo.propertyType || '',
+        locality,
+        expectedPrice.toString()
+      );
+
+      toast({
+        title: "Your painting service request has been submitted successfully.",
+        description: "Our painting specialists will contact you within 6 hours.",
+        variant: "success"
+      });
+
+      form.setValue('paintingService', 'book');
+      setPaintingResponse('book');
+    } catch (error) {
+      console.error('Failed to send painting service email:', error);
+      toast({
+        title: "Error",
+        description: "Failed to send request. Please try again.",
+        variant: "destructive"
+      });
+    }
+  };
+
   const onFormSubmit = (data: ScheduleFormData) => {
     if (onSubmit) {
       onSubmit(data);
@@ -86,10 +137,13 @@ export const ScheduleStep: React.FC<ScheduleStepProps> = ({
                             Your response has been captured
                           </span>
                         </div> : <div className="flex gap-3">
-                          <Button type="button" size="sm" className="bg-orange-500 hover:bg-orange-600 text-white" variant={field.value === 'book' ? 'default' : 'outline'} onClick={() => {
-                    field.onChange('book');
-                    setPaintingResponse('book');
-                  }}>
+                          <Button 
+                            type="button" 
+                            size="sm" 
+                            className="bg-orange-500 hover:bg-orange-600 text-white" 
+                            variant={field.value === 'book' ? 'default' : 'outline'} 
+                            onClick={handlePaintingBookNow}
+                          >
                             Book Now
                           </Button>
                           <Button type="button" size="sm" variant="outline" className="border-gray-300 text-gray-700 hover:bg-gray-50" onClick={() => {

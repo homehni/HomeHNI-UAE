@@ -252,6 +252,8 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
                   onNext={handleScheduleSubmit}
                   onBack={prevStep}
                   onSubmit={handleScheduleSubmit}
+                  ownerInfo={ownerInfo}
+                  propertyInfo={getFormData().propertyInfo as any}
                 />
               )}
 

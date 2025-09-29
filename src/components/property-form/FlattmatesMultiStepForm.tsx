@@ -1136,12 +1136,22 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
 
             {currentStep === 6 && (
               <>
-                <ScheduleStep
-                  initialData={scheduleInfo}
-                  onNext={handleScheduleNext}
-                  onBack={prevStep}
-                  onSubmit={handleScheduleNext}
-                />
+            <ScheduleStep
+              initialData={scheduleInfo}
+              onNext={handleScheduleNext}
+              onBack={prevStep}
+              onSubmit={handleScheduleNext}
+              ownerInfo={ownerInfo}
+              propertyInfo={{
+                propertyDetails,
+                locationDetails,
+                rentalDetails,
+                amenities,
+                gallery,
+                additionalInfo,
+                scheduleInfo
+              }}
+            />
                 
                 {/* Photo Upload Warning Logic for Schedule Step */}
                 <div className="mt-6 space-y-4">
@@ -1314,6 +1324,16 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
                   onNext={handleScheduleNext}
                   onBack={prevStep}
                   onSubmit={handleScheduleNext}
+                  ownerInfo={ownerInfo}
+                  propertyInfo={{
+                    propertyDetails,
+                    locationDetails,
+                    rentalDetails,
+                    amenities,
+                    gallery,
+                    additionalInfo,
+                    scheduleInfo
+                  }}
                 />
               )}
 

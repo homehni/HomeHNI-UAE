@@ -233,6 +233,8 @@ const handleScheduleSubmit = (data: Partial<ScheduleInfo>) => {
             onNext={handleScheduleNext}
             onBack={prevStep}
             onSubmit={handleScheduleSubmit}
+            ownerInfo={ownerInfo}
+            propertyInfo={getFormData().propertyInfo as any}
           />
         );
       default:
