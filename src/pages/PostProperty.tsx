@@ -34,6 +34,7 @@ type FormStep = 'property-selection' | 'owner-info' | 'rental-form' | 'resale-fo
 
 export const PostProperty: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isAlreadySubmitted, setIsAlreadySubmitted] = useState(false);
   const [currentStep, setCurrentStep] = useState<FormStep>('property-selection');
   
   // Debug logging for currentStep changes
@@ -897,6 +898,11 @@ export const PostProperty: React.FC = () => {
         });
       }
 
+      // For residential properties, set the submitted state to show success page
+      if (isResidentialProperty) {
+        setIsAlreadySubmitted(true);
+      }
+
       // Stay on the Preview step after submission - no redirect
 
 
@@ -972,6 +978,7 @@ export const PostProperty: React.FC = () => {
             initialOwnerInfo={ownerInfo || {}}
             targetStep={targetStep}
             createdSubmissionId={lastSubmissionId}
+            isAlreadySubmitted={isAlreadySubmitted}
           />
         );
       case 'resale-form':
