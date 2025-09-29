@@ -78,6 +78,14 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
     }
   }, [targetStep, goToStep]);
 
+  // Navigate to congratulations page if submission is complete
+  React.useEffect(() => {
+    if (createdSubmissionId && currentStep !== 8) {
+      console.log('Submission complete, navigating to congratulations page');
+      goToStep(8);
+    }
+  }, [createdSubmissionId, currentStep, goToStep]);
+
   const completedSteps = React.useMemo(() => {
     const completed: number[] = [];
     for (let i = 1; i < currentStep; i++) {
