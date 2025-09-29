@@ -111,14 +111,11 @@ export const ResalePropertyDetailsStep: React.FC<ResalePropertyDetailsStepProps>
                     </FormControl>
                     <SelectContent className="bg-white border shadow-lg z-50">
                       <SelectItem value="Apartment">Apartment</SelectItem>
-                      <SelectItem value="Co-Living">Co-Living</SelectItem>
                       <SelectItem value="Villa">Villa</SelectItem>
                       <SelectItem value="Independent House">Independent House</SelectItem>
-                      <SelectItem value="Builder Floor">Builder Floor</SelectItem>
-                      <SelectItem value="Studio Apartment">Studio Apartment</SelectItem>
-                      <SelectItem value="Co-Working">Co-Working</SelectItem>
                       <SelectItem value="Penthouse">Penthouse</SelectItem>
                       <SelectItem value="Duplex">Duplex</SelectItem>
+                      <SelectItem value="Gated Community Villa">Gated Community Villa</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />
