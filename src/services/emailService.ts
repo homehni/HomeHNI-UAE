@@ -163,6 +163,24 @@ export async function sendFreshlyPaintedEmail(
   });
 }
 
+// 9b. Deep Cleaning Service Email - Send when user selects deep cleaning option  
+export async function sendDeepCleaningEmail(
+  userEmail: string,
+  userName: string,
+  propertyType?: string,
+  locality?: string,
+  budget?: string
+) {
+  return sendEmail('/send-deep-cleaning-email', {
+    to: userEmail,
+    userName: userName || 'there',
+    propertyType: propertyType || '',
+    locality: locality || '',
+    budget: budget || '',
+    servicesUrl: 'https://homehni.com/services'
+  });
+}
+
 // 10. Property Submitted Email - Send when property is submitted for review
 export async function sendPropertySubmittedEmail(
   userEmail: string, 

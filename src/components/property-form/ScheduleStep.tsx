@@ -8,7 +8,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useToast } from '@/hooks/use-toast';
-import { sendFreshlyPaintedEmail } from '@/services/emailService';
+import { sendFreshlyPaintedEmail, sendDeepCleaningEmail } from '@/services/emailService';
 import { OwnerInfo, PropertyInfo } from '@/types/property';
 import { Home, MapPin, Building, Sparkles, Camera, FileText, Calendar, Clock, PaintBucket, CheckCircle } from 'lucide-react';
 const scheduleSchema = z.object({
@@ -86,6 +86,49 @@ export const ScheduleStep: React.FC<ScheduleStepProps> = ({
       setPaintingResponse('book');
     } catch (error) {
       console.error('Failed to send painting service email:', error);
+      toast({
+        title: "Error",
+        description: "Failed to send request. Please try again.",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const handleCleaningBookNow = async () => {
+    if (!ownerInfo?.email || !ownerInfo?.fullName) {
+      toast({
+        title: "Error",
+        description: "Unable to send request. Please ensure your email and name are properly entered.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    try {
+      // Handle different property data structures from different forms
+      const locality = propertyInfo?.locationDetails?.locality || '';
+      const expectedPrice = propertyInfo?.rentalDetails?.expectedPrice || 
+                           propertyInfo?.rentalDetails?.expectedRent || 
+                           '';
+
+      await sendDeepCleaningEmail(
+        ownerInfo.email,
+        ownerInfo.fullName,
+        ownerInfo.propertyType || '',
+        locality,
+        expectedPrice.toString()
+      );
+
+      toast({
+        title: "Your deep cleaning service request has been submitted successfully.",
+        description: "Our cleaning specialists will contact you within 6 hours.",
+        variant: "success"
+      });
+
+      form.setValue('cleaningService', 'book');
+      setCleaningResponse('book');
+    } catch (error) {
+      console.error('Failed to send cleaning service email:', error);
       toast({
         title: "Error",
         description: "Failed to send request. Please try again.",
@@ -184,10 +227,7 @@ export const ScheduleStep: React.FC<ScheduleStepProps> = ({
                             Your response has been captured
                           </span>
                         </div> : <div className="flex gap-3">
-                          <Button type="button" size="sm" className="bg-teal-500 hover:bg-teal-600 text-white" variant={field.value === 'book' ? 'default' : 'outline'} onClick={() => {
-                    field.onChange('book');
-                    setCleaningResponse('book');
-                  }}>
+                          <Button type="button" size="sm" className="bg-teal-500 hover:bg-teal-600 text-white" variant={field.value === 'book' ? 'default' : 'outline'} onClick={handleCleaningBookNow}>
                             Book Now
                           </Button>
                           <Button type="button" size="sm" variant="outline" className="border-gray-300 text-gray-700 hover:bg-gray-50" onClick={() => {
