@@ -175,7 +175,7 @@ export default function PayButton({
             toast({
               title: "Payment Successful!",
               description: "Your payment has been processed and plan activated successfully.",
-              className: "border-l-4 border-l-green-600 bg-white shadow-lg min-w-[400px] max-w-[500px] w-full",
+              variant: "success",
             });
             
             // Redirect to success page or dashboard
