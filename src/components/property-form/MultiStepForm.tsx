@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { usePropertyForm } from '@/hooks/usePropertyForm';
+import { OwnerInfoStep } from './OwnerInfoStep';
 import { PropertyDetailsStep } from './PropertyDetailsStep';
 import { LocationDetailsStep } from './LocationDetailsStep';
 import { RentalDetailsStep } from './RentalDetailsStep';
@@ -10,7 +11,7 @@ import GetTenantsFasterSection from '@/components/GetTenantsFasterSection';
 import { PropertyFormSidebar } from './PropertyFormSidebar';
 import { ScheduleStep } from './ScheduleStep';
 import { PreviewStep } from './PreviewStep';
-import { Home, MapPin, DollarSign, Sparkles, Camera, Calendar, CheckCircle } from 'lucide-react';
+import { User, Home, MapPin, DollarSign, Sparkles, Camera, Calendar, CheckCircle } from 'lucide-react';
 import { OwnerInfo, PropertyInfo } from '@/types/property';
 
 interface MultiStepFormProps {
@@ -71,7 +72,7 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
 
   // Navigate to target step if provided
   React.useEffect(() => {
-    if (targetStep && targetStep > 0 && targetStep <= 7) {
+    if (targetStep && targetStep > 0 && targetStep <= 8) {
       console.log('Navigating to target step:', targetStep);
       goToStep(targetStep);
     }
@@ -96,6 +97,12 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
   React.useEffect(() => {
     scrollToTop();
   }, [currentStep]);
+
+  const handleOwnerInfoNext = (data: any) => {
+    updateOwnerInfo(data);
+    nextStep();
+    scrollToTop();
+  };
 
   const handlePropertyDetailsNext = (data: any) => {
     updatePropertyDetails(data);
@@ -140,7 +147,7 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
       ownerInfo: formData.ownerInfo as OwnerInfo,
       propertyInfo: formData.propertyInfo as PropertyInfo
     });
-    goToStep(7);
+    goToStep(8);
     scrollToTop();
   };
 
@@ -155,6 +162,7 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
   };
 
   const sidebarSteps = [
+    { title: "Owner Details", icon: <User className="w-4 h-4" /> },
     { title: "Property Details", icon: <Home className="w-4 h-4" /> },
     { title: "Locality Details", icon: <MapPin className="w-4 h-4" /> },
     { title: "Rental Details", icon: <DollarSign className="w-4 h-4" /> },
@@ -180,56 +188,63 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
         {/* Main Content */}
         <div className="flex-1 bg-white p-6 md:p-8 pb-32">
               {currentStep === 1 && (
-                <PropertyDetailsStep
-                  initialData={propertyDetails}
-                  onNext={handlePropertyDetailsNext}
-                  onBack={() => {}} // No back on first step
-                  currentStep={1}
-                  totalSteps={7}
+                <OwnerInfoStep
+                  initialData={ownerInfo}
+                  onNext={handleOwnerInfoNext}
                 />
               )}
 
               {currentStep === 2 && (
-                <LocationDetailsStep
-                  initialData={locationDetails}
-                  onNext={handleLocationDetailsNext}
+                <PropertyDetailsStep
+                  initialData={propertyDetails}
+                  onNext={handlePropertyDetailsNext}
                   onBack={prevStep}
                   currentStep={2}
-                  totalSteps={7}
+                  totalSteps={8}
                 />
               )}
 
               {currentStep === 3 && (
-                <RentalDetailsStep
-                  initialData={rentalDetails}
-                  onNext={handleRentalDetailsNext}
+                <LocationDetailsStep
+                  initialData={locationDetails}
+                  onNext={handleLocationDetailsNext}
                   onBack={prevStep}
                   currentStep={3}
-                  totalSteps={7}
+                  totalSteps={8}
                 />
               )}
 
               {currentStep === 4 && (
-                <AmenitiesStep
-                  initialData={amenities}
-                  onNext={handleAmenitiesNext}
+                <RentalDetailsStep
+                  initialData={rentalDetails}
+                  onNext={handleRentalDetailsNext}
                   onBack={prevStep}
                   currentStep={4}
-                  totalSteps={7}
+                  totalSteps={8}
                 />
               )}
 
               {currentStep === 5 && (
-                <GalleryStep
-                  initialData={gallery}
-                  onNext={handleGalleryNext}
+                <AmenitiesStep
+                  initialData={amenities}
+                  onNext={handleAmenitiesNext}
                   onBack={prevStep}
                   currentStep={5}
-                  totalSteps={7}
+                  totalSteps={8}
                 />
               )}
 
               {currentStep === 6 && (
+                <GalleryStep
+                  initialData={gallery}
+                  onNext={handleGalleryNext}
+                  onBack={prevStep}
+                  currentStep={6}
+                  totalSteps={8}
+                />
+              )}
+
+              {currentStep === 7 && (
                 <ScheduleStep
                   initialData={scheduleInfo}
                   onNext={handleScheduleSubmit}
@@ -238,7 +253,7 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
                 />
               )}
 
-              {currentStep === 7 && (
+              {currentStep === 8 && (
                 <PreviewStep
                   formData={getFormData()}
                   onBack={prevStep}
@@ -250,7 +265,7 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
               )}
 
           {/* Sticky Bottom Navigation Bar - Hidden on Preview step */}
-          {currentStep !== 7 && (
+          {currentStep !== 8 && (
             <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-3 sm:p-4 z-50 shadow-lg">
             <div className="max-w-4xl mx-auto flex flex-col sm:flex-row gap-3 sm:gap-4 sm:justify-center">
               <Button 
@@ -285,7 +300,7 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
                 }}
                 className="h-12 sm:h-10 px-6 sm:px-6 bg-red-600 hover:bg-red-700 text-white w-full sm:w-auto order-1 sm:order-2 font-semibold"
               >
-                {currentStep === 6 ? 'Submit Property' : 'Save & Continue'}
+                {currentStep === 7 ? 'Submit Property' : 'Save & Continue'}
               </Button>
             </div>
             </div>
@@ -294,7 +309,7 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
 
         {/* Right Sidebar - Get Tenants Faster */}
         <div className="hidden lg:block w-80 bg-white border-l border-gray-200 min-h-screen">
-          <GetTenantsFasterSection />
+          <GetTenantsFasterSection ownerInfo={ownerInfo} />
         </div>
       </div>
     </div>
