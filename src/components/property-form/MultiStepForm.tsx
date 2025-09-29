@@ -80,9 +80,9 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
 
   // Navigate to congratulations page if submission is complete
   React.useEffect(() => {
-    if (createdSubmissionId && currentStep !== 8) {
+    if (createdSubmissionId && currentStep !== 7) {
       console.log('Submission complete, navigating to congratulations page');
-      goToStep(8);
+      goToStep(7);
     }
   }, [createdSubmissionId, currentStep, goToStep]);
 
@@ -155,7 +155,7 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
       ownerInfo: formData.ownerInfo as OwnerInfo,
       propertyInfo: formData.propertyInfo as PropertyInfo
     });
-    goToStep(8);
+    goToStep(7);
     scrollToTop();
   };
 
@@ -220,41 +220,31 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
                   onNext={handleRentalDetailsNext}
                   onBack={prevStep}
                   currentStep={3}
-                  totalSteps={8}
+                  totalSteps={7}
                 />
               )}
 
               {currentStep === 4 && (
-                <RentalDetailsStep
-                  initialData={rentalDetails}
-                  onNext={handleRentalDetailsNext}
-                  onBack={prevStep}
-                  currentStep={4}
-                  totalSteps={8}
-                />
-              )}
-
-              {currentStep === 5 && (
                 <AmenitiesStep
                   initialData={amenities}
                   onNext={handleAmenitiesNext}
                   onBack={prevStep}
-                  currentStep={5}
-                  totalSteps={8}
+                  currentStep={4}
+                  totalSteps={7}
                 />
               )}
 
-              {currentStep === 6 && (
+              {currentStep === 5 && (
                 <GalleryStep
                   initialData={gallery}
                   onNext={handleGalleryNext}
                   onBack={prevStep}
-                  currentStep={6}
-                  totalSteps={8}
+                  currentStep={5}
+                  totalSteps={7}
                 />
               )}
 
-              {currentStep === 7 && (
+              {currentStep === 6 && (
                 <ScheduleStep
                   initialData={scheduleInfo}
                   onNext={handleScheduleSubmit}
@@ -265,7 +255,7 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
                 />
               )}
 
-              {currentStep === 8 && (
+              {currentStep === 7 && (
                 <PreviewStep
                   formData={getFormData()}
                   onBack={prevStep}
@@ -277,7 +267,7 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
               )}
 
           {/* Sticky Bottom Navigation Bar - Hidden on Preview step */}
-          {currentStep !== 8 && (
+          {currentStep !== 7 && (
             <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-3 sm:p-4 z-50 shadow-lg">
             <div className="max-w-4xl mx-auto flex flex-col sm:flex-row gap-3 sm:gap-4 sm:justify-center">
               <Button 
@@ -312,7 +302,7 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
                 }}
                 className="h-12 sm:h-10 px-6 sm:px-6 bg-red-600 hover:bg-red-700 text-white w-full sm:w-auto order-1 sm:order-2 font-semibold"
               >
-                {currentStep === 7 ? 'Submit Property' : 'Save & Continue'}
+                {currentStep === 6 ? 'Submit Property' : 'Save & Continue'}
               </Button>
             </div>
             </div>
