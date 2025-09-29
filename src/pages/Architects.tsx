@@ -275,16 +275,9 @@ const Architects = () => {
                 <Select value={formData.city} onValueChange={(value) => setFormData(prev => ({ ...prev, city: value }))}>
                   <SelectTrigger id="arch-city" className="flex-1"><SelectValue placeholder="City" /></SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="bangalore">Bangalore</SelectItem>
-                    <SelectItem value="hyderabad">Hyderabad</SelectItem>
-                    <SelectItem value="chennai">Chennai</SelectItem>
-                    <SelectItem value="mumbai">Mumbai</SelectItem>
-                    <SelectItem value="pune">Pune</SelectItem>
-                    <SelectItem value="delhi">Delhi</SelectItem>
-                    <SelectItem value="kolkata">Kolkata</SelectItem>
-                    <SelectItem value="ahmedabad">Ahmedabad</SelectItem>
-                    <SelectItem value="jaipur">Jaipur</SelectItem>
-                    <SelectItem value="lucknow">Lucknow</SelectItem>
+                    {majorCities.map((city) => (
+                      <SelectItem key={city} value={city.toLowerCase()}>{city}</SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </div>
@@ -384,16 +377,9 @@ const Architects = () => {
                       <SelectValue placeholder="City" />
                     </SelectTrigger>
                     <SelectContent className="bg-background border shadow-lg">
-                      <SelectItem value="bangalore">Bangalore</SelectItem>
-                      <SelectItem value="hyderabad">Hyderabad</SelectItem>
-                      <SelectItem value="chennai">Chennai</SelectItem>
-                      <SelectItem value="mumbai">Mumbai</SelectItem>
-                      <SelectItem value="pune">Pune</SelectItem>
-                      <SelectItem value="delhi">Delhi</SelectItem>
-                      <SelectItem value="kolkata">Kolkata</SelectItem>
-                      <SelectItem value="ahmedabad">Ahmedabad</SelectItem>
-                      <SelectItem value="jaipur">Jaipur</SelectItem>
-                      <SelectItem value="lucknow">Lucknow</SelectItem>
+                      {majorCities.map((city) => (
+                        <SelectItem key={city} value={city.toLowerCase()}>{city}</SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 </div>
