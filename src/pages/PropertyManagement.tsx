@@ -10,6 +10,22 @@ import Marquee from "@/components/Marquee";
 import Header from "@/components/Header";
 
 const PropertyManagement = () => {
+  // Form state for proper reset functionality
+  const [formData, setFormData] = useState({
+    countryCode: "+91",
+    propertyType: "",
+    managementType: "",
+    city: ""
+  });
+
+  // Mobile form state
+  const [mobileFormData, setMobileFormData] = useState({
+    countryCode: "+91",
+    propertyType: "",
+    managementType: "",
+    city: ""
+  });
+
   // Major cities in India
   const majorCities = [
     "Mumbai", "Delhi", "Bangalore", "Hyderabad", "Ahmedabad", "Chennai", "Kolkata", "Surat", "Pune", "Jaipur",
@@ -209,12 +225,22 @@ const PropertyManagement = () => {
                 borderLeft: "12px solid hsl(120, 100%, 25%)",
               },
             });
+            
+            // Reset form fields
             form.reset();
+            
+            // Reset controlled select components
+            setFormData({
+              countryCode: "+91",
+              propertyType: "",
+              managementType: "",
+              city: ""
+            });
           }}>
               <Input id="pm-name" name="name" placeholder="Name" required />
 
               <div className="flex gap-2">
-                <Select defaultValue="+91" name="countryCode">
+                <Select value={formData.countryCode} onValueChange={(value) => setFormData(prev => ({ ...prev, countryCode: value }))}>
                   <SelectTrigger className="w-20"><SelectValue /></SelectTrigger>
                   <SelectContent>
                     <SelectItem value="+91">IN +91</SelectItem>
@@ -227,7 +253,7 @@ const PropertyManagement = () => {
 
               <Input id="pm-email" name="email" type="email" placeholder="Email ID" required />
 
-              <Select name="propertyType" required>
+              <Select value={formData.propertyType} onValueChange={(value) => setFormData(prev => ({ ...prev, propertyType: value }))} required>
                 <SelectTrigger id="property-type"><SelectValue placeholder="Property Type" /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="residential">All Residential</SelectItem>
@@ -245,7 +271,7 @@ const PropertyManagement = () => {
 
               <div className="flex gap-2">
                 <Input id="pm-location" name="location" placeholder="Property Location" className="flex-1" />
-                <Select name="managementType" required>
+                <Select value={formData.managementType} onValueChange={(value) => setFormData(prev => ({ ...prev, managementType: value }))} required>
                   <SelectTrigger id="management-type" className="w-40"><SelectValue placeholder="Management Type" /></SelectTrigger>
                   <SelectContent>
                     <SelectItem value="full-management">Full Management</SelectItem>
@@ -257,7 +283,7 @@ const PropertyManagement = () => {
                 </Select>
               </div>
 
-              <Select name="city">
+              <Select value={formData.city} onValueChange={(value) => setFormData(prev => ({ ...prev, city: value }))}>
                 <SelectTrigger id="pm-city" className="w-full"><SelectValue placeholder="Select City" /></SelectTrigger>
                 <SelectContent>
                   {majorCities.map((city) => (
@@ -303,12 +329,22 @@ const PropertyManagement = () => {
                   borderLeft: "12px solid hsl(120, 100%, 25%)",
                 },
               });
+              
+              // Reset form fields
               form.reset();
+              
+              // Reset controlled select components
+              setMobileFormData({
+                countryCode: "+91",
+                propertyType: "",
+                managementType: "",
+                city: ""
+              });
             }}>
                 <Input id="pm-name-mobile" name="name" placeholder="Name" className="h-12 text-base bg-background" required />
 
                 <div className="flex gap-3">
-                  <Select defaultValue="+91" name="countryCode">
+                  <Select value={mobileFormData.countryCode} onValueChange={(value) => setMobileFormData(prev => ({ ...prev, countryCode: value }))}>
                     <SelectTrigger className="w-32 h-12 bg-background">
                       <SelectValue />
                     </SelectTrigger>
@@ -323,7 +359,7 @@ const PropertyManagement = () => {
 
                 <Input id="pm-email-mobile" name="email" type="email" placeholder="Email ID" className="h-12 text-base bg-background" required />
 
-                <Select name="propertyType" required>
+                <Select value={mobileFormData.propertyType} onValueChange={(value) => setMobileFormData(prev => ({ ...prev, propertyType: value }))} required>
                   <SelectTrigger id="property-type-mobile" className="h-12 bg-background">
                     <SelectValue placeholder="Property Type" />
                   </SelectTrigger>
@@ -343,7 +379,7 @@ const PropertyManagement = () => {
 
                 <div className="flex gap-3">
                   <Input id="pm-location-mobile" name="location" placeholder="Property Location" className="flex-1 h-12 text-base bg-background" />
-                  <Select name="managementType" required>
+                  <Select value={mobileFormData.managementType} onValueChange={(value) => setMobileFormData(prev => ({ ...prev, managementType: value }))} required>
                     <SelectTrigger id="management-type-mobile" className="w-40 h-12 bg-background">
                       <SelectValue placeholder="Management Type" />
                     </SelectTrigger>
@@ -357,7 +393,7 @@ const PropertyManagement = () => {
                   </Select>
                 </div>
 
-                <Select name="city">
+                <Select value={mobileFormData.city} onValueChange={(value) => setMobileFormData(prev => ({ ...prev, city: value }))}>
                   <SelectTrigger id="pm-city-mobile" className="w-full h-12 bg-background">
                     <SelectValue placeholder="Select City" />
                   </SelectTrigger>
