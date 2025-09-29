@@ -19,7 +19,7 @@ const ServiceSuite = () => {
     gstCopy: [] as File[],
     servicePortfolio: [] as File[]
   });
-  const [showThankYouModal, setShowThankYouModal] = useState(false);
+  
   const services = [{
     icon: Scale,
     title: "Legal Services",
@@ -196,7 +196,12 @@ const ServiceSuite = () => {
       });
       return;
     }
-    setShowThankYouModal(true);
+    // Show success toast
+    toast({
+      title: "Requirements Submitted Successfully!",
+      description: "Our team will review your requirements and get back to you soon.",
+      variant: "success"
+    });
 
     // Reset form and images
     (e.currentTarget as HTMLFormElement).reset();
@@ -747,18 +752,6 @@ const ServiceSuite = () => {
         </div>
       </section>
 
-      {/* Thank You Modal */}
-      {showThankYouModal && <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-8 max-w-md w-full mx-4 text-center">
-            <h3 className="text-2xl font-semibold text-gray-900 mb-4">Thank You!</h3>
-            <p className="text-gray-600 mb-6">
-              Your service request has been submitted successfully. Our team will review your requirements and get back to you soon.
-            </p>
-            <Button onClick={() => setShowThankYouModal(false)} className="bg-red-800 hover:bg-red-900 text-white font-semibold px-8 py-2">
-              OK
-            </Button>
-          </div>
-        </div>}
     </div>;
 };
 export default ServiceSuite;
