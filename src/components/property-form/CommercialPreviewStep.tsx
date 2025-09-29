@@ -371,6 +371,23 @@ export const CommercialPreviewStep: React.FC<CommercialPreviewStepProps> = ({
         </div>
       )}
 
+      {/* No Photos Confirmation Message */}
+      {!hasPhotos && showNoPhotosMessage && (
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 sm:p-4 mb-4 sm:mb-6">
+          <div className="flex items-center gap-3">
+            <div className="w-5 h-5 sm:w-6 sm:h-6 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+              <CheckCircle className="w-3 h-3 sm:w-4 sm:h-4 text-blue-600" />
+            </div>
+            <div className="flex-1">
+              <h3 className="text-sm sm:text-base font-semibold text-gray-800 mb-1">No problem! Your property will still be listed</h3>
+              <p className="text-xs sm:text-sm text-gray-600">
+                Your commercial property will be live within 12 hours. You can always add photos later to get more responses.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Photos Success Message */}
       {hasPhotos && !showNoPhotosMessage && (
         <div className="bg-green-50 border border-green-200 rounded-lg p-3 sm:p-4 mb-4 sm:mb-6">
