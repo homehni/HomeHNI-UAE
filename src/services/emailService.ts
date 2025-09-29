@@ -147,12 +147,18 @@ export async function sendHelpRequestEmail(
 
 // 9. Freshly Painted Homes Email - Send when user selects freshly painted option
 export async function sendFreshlyPaintedEmail(
-  userEmail: string, 
-  userName: string
+  userEmail: string,
+  userName: string,
+  propertyType?: string,
+  locality?: string,
+  budget?: string
 ) {
   return sendEmail('/send-freshly-painted-email', {
     to: userEmail,
     userName: userName || 'there',
+    propertyType: propertyType || '',
+    locality: locality || '',
+    budget: budget || '',
     servicesUrl: 'https://homehni.com/services'
   });
 }
