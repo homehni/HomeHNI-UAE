@@ -20,7 +20,6 @@ interface MultiStepFormProps {
   initialOwnerInfo?: Partial<OwnerInfo>;
   targetStep?: number | null;
   createdSubmissionId?: string | null;
-  isAlreadySubmitted?: boolean;
 }
 
 export const MultiStepForm: React.FC<MultiStepFormProps> = ({
@@ -28,8 +27,7 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
   isSubmitting = false,
   initialOwnerInfo = {},
   targetStep = null,
-  createdSubmissionId = null,
-  isAlreadySubmitted = false
+  createdSubmissionId = null
 }) => {
   console.log('MultiStepForm rendering with props:', {
     isSubmitting,
@@ -266,7 +264,6 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
                   onEdit={goToStep}
                   onSubmit={handleSubmit}
                   isSubmitting={isSubmitting}
-                  isAlreadySubmitted={isAlreadySubmitted}
                   previewPropertyId={createdSubmissionId || undefined}
                 />
               )}
