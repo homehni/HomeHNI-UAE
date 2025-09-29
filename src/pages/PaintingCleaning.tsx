@@ -10,6 +10,23 @@ import Marquee from "@/components/Marquee";
 import Header from "@/components/Header";
 
 const PaintingCleaning = () => {
+  // Form state for controlled components
+  const [formData, setFormData] = useState({
+    countryCode: "+91",
+    serviceType: "",
+    propertyType: "",
+    state: ""
+  });
+
+  const resetForm = (form: HTMLFormElement) => {
+    form.reset();
+    setFormData({
+      countryCode: "+91",
+      serviceType: "",
+      propertyType: "",
+      state: ""
+    });
+  };
   const majorCities = [
     "Mumbai", "Delhi", "Bangalore", "Hyderabad", "Ahmedabad", "Chennai", "Kolkata", "Surat", "Pune", "Jaipur",
     "Lucknow", "Kanpur", "Nagpur", "Indore", "Thane", "Bhopal", "Visakhapatnam", "Pimpri-Chinchwad", "Patna", "Vadodara",
@@ -212,12 +229,12 @@ const PaintingCleaning = () => {
                   borderLeft: "12px solid hsl(120, 100%, 25%)",
                 },
               });
-              form.reset();
+              resetForm(form);
             }}>
               <Input id="painting-name" name="name" placeholder="Name" required />
 
               <div className="flex gap-2">
-                <Select defaultValue="+91" name="countryCode">
+                <Select value={formData.countryCode} onValueChange={(value) => setFormData(prev => ({ ...prev, countryCode: value }))} name="countryCode">
                   <SelectTrigger className="w-28"><SelectValue /></SelectTrigger>
                   <SelectContent>
                     <SelectItem value="+91">🇮🇳 +91</SelectItem>
@@ -231,7 +248,7 @@ const PaintingCleaning = () => {
               <Input id="painting-email" name="email" type="email" placeholder="Email ID" />
 
               <div className="flex gap-2">
-                <Select name="serviceType">
+                <Select value={formData.serviceType} onValueChange={(value) => setFormData(prev => ({ ...prev, serviceType: value }))} name="serviceType">
                   <SelectTrigger id="service-type" className="flex-1"><SelectValue placeholder="Service Type" /></SelectTrigger>
                   <SelectContent>
                     <SelectItem value="painting">Painting Services</SelectItem>
@@ -239,7 +256,7 @@ const PaintingCleaning = () => {
                     <SelectItem value="both">Both Painting & Cleaning</SelectItem>
                   </SelectContent>
                 </Select>
-                <Select name="propertyType">
+                <Select value={formData.propertyType} onValueChange={(value) => setFormData(prev => ({ ...prev, propertyType: value }))} name="propertyType">
                   <SelectTrigger id="property-type" className="flex-1"><SelectValue placeholder="Property Type" /></SelectTrigger>
                   <SelectContent>
                     <SelectItem value="residential">Residential</SelectItem>
@@ -248,7 +265,7 @@ const PaintingCleaning = () => {
                 </Select>
               </div>
 
-              <Select name="state">
+              <Select value={formData.state} onValueChange={(value) => setFormData(prev => ({ ...prev, state: value }))} name="state">
                 <SelectTrigger id="painting-state" className="w-full"><SelectValue placeholder="State" /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="andhra-pradesh">Andhra Pradesh</SelectItem>
@@ -298,7 +315,7 @@ const PaintingCleaning = () => {
                     borderLeft: "12px solid hsl(120, 100%, 25%)",
                   },
                 });
-                form.reset();
+                resetForm(form);
               }}>
                 <Input 
                   id="painting-name-mobile" 
@@ -309,7 +326,7 @@ const PaintingCleaning = () => {
                 />
 
                 <div className="flex gap-4">
-                  <Select defaultValue="+91" name="countryCode">
+                  <Select value={formData.countryCode} onValueChange={(value) => setFormData(prev => ({ ...prev, countryCode: value }))} name="countryCode">
                     <SelectTrigger className="w-36 h-14 bg-background text-lg">
                       <SelectValue />
                     </SelectTrigger>
@@ -339,7 +356,7 @@ const PaintingCleaning = () => {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <Select name="serviceType">
+                    <Select value={formData.serviceType} onValueChange={(value) => setFormData(prev => ({ ...prev, serviceType: value }))} name="serviceType">
                       <SelectTrigger id="service-type-mobile" className="w-full h-14 bg-background text-lg">
                         <SelectValue placeholder="Service Type" />
                       </SelectTrigger>
@@ -351,7 +368,7 @@ const PaintingCleaning = () => {
                     </Select>
                   </div>
                   <div>
-                    <Select name="propertyType">
+                    <Select value={formData.propertyType} onValueChange={(value) => setFormData(prev => ({ ...prev, propertyType: value }))} name="propertyType">
                       <SelectTrigger id="property-type-mobile" className="w-full h-14 bg-background text-lg">
                         <SelectValue placeholder="Property Type" />
                       </SelectTrigger>
@@ -363,7 +380,7 @@ const PaintingCleaning = () => {
                   </div>
                 </div>
 
-                <Select name="state">
+                <Select value={formData.state} onValueChange={(value) => setFormData(prev => ({ ...prev, state: value }))} name="state">
                   <SelectTrigger id="painting-state-mobile" className="w-full h-14 bg-background text-lg">
                     <SelectValue placeholder="State" />
                   </SelectTrigger>
