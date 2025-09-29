@@ -49,12 +49,17 @@ const Careers = () => {
       } else {
         setResumeFile(file);
       }
-      
-      toast({
-        title: "Resume uploaded",
-        description: `${file.name} has been selected.`
-      });
     }
+  };
+
+  const resetForm = () => {
+    // Reset all state variables
+    setSelectedState("");
+    setSelectedStateDesktop("");
+    setCities([]);
+    setCitiesDesktop([]);
+    setResumeFile(null);
+    setResumeFileMobile(null);
   };
 
   const removeResume = (isMobile: boolean = false) => {
@@ -152,10 +157,12 @@ const Careers = () => {
               <form className="space-y-3" onSubmit={e => {
               e.preventDefault();
               toast({
-                title: "Application submitted",
-                description: "We will review your application and get back to you soon."
+                title: "Application submitted successfully!",
+                description: "We will review your application and get back to you soon.",
+                variant: "success"
               });
               (e.currentTarget as HTMLFormElement).reset();
+              resetForm();
             }}>
                 <Input id="career-name" name="name" placeholder="Full Name" required />
 
@@ -281,10 +288,12 @@ const Careers = () => {
                 <form className="space-y-4" onSubmit={e => {
                 e.preventDefault();
                 toast({
-                  title: "Application submitted",
-                  description: "We will review your application and get back to you soon."
+                  title: "Application submitted successfully!",
+                  description: "We will review your application and get back to you soon.",
+                  variant: "success"
                 });
                 (e.currentTarget as HTMLFormElement).reset();
+                resetForm();
               }}>
                   <Input id="career-name-mobile" name="name" placeholder="Full Name" className="h-12 text-base bg-background" required />
 
