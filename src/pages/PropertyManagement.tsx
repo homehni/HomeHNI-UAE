@@ -257,26 +257,14 @@ const PropertyManagement = () => {
                 </Select>
               </div>
 
-              <div className="flex gap-2">
-                <Select defaultValue="india" name="country">
-                  <SelectTrigger id="pm-country" className="flex-1"><SelectValue /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="india">India</SelectItem>
-                    <SelectItem value="usa">United States</SelectItem>
-                    <SelectItem value="uk">United Kingdom</SelectItem>
-                    <SelectItem value="canada">Canada</SelectItem>
-                    <SelectItem value="australia">Australia</SelectItem>
-                  </SelectContent>
-                </Select>
-                <Select name="city">
-                  <SelectTrigger id="pm-city" className="flex-1"><SelectValue placeholder="Select City" /></SelectTrigger>
-                  <SelectContent>
-                    {majorCities.map((city) => (
-                      <SelectItem key={city} value={city.toLowerCase()}>{city}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+              <Select name="city">
+                <SelectTrigger id="pm-city" className="w-full"><SelectValue placeholder="Select City" /></SelectTrigger>
+                <SelectContent>
+                  {majorCities.map((city) => (
+                    <SelectItem key={city} value={city.toLowerCase()}>{city}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
 
               <Button type="submit" className="w-full bg-red-600 hover:bg-red-700 text-white">Talk to Us Today!</Button>
             </form>
@@ -369,30 +357,16 @@ const PropertyManagement = () => {
                   </Select>
                 </div>
 
-                <div className="flex gap-3">
-                  <Select defaultValue="india" name="country">
-                    <SelectTrigger id="pm-country-mobile" className="flex-1 h-12 bg-background">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent className="bg-background border shadow-lg">
-                      <SelectItem value="india">India</SelectItem>
-                      <SelectItem value="usa">United States</SelectItem>
-                      <SelectItem value="uk">United Kingdom</SelectItem>
-                      <SelectItem value="canada">Canada</SelectItem>
-                      <SelectItem value="australia">Australia</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <Select name="city">
-                    <SelectTrigger id="pm-city-mobile" className="flex-1 h-12 bg-background">
-                      <SelectValue placeholder="Select City" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-background border shadow-lg">
-                      {majorCities.map((city) => (
-                        <SelectItem key={city} value={city.toLowerCase()}>{city}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
+                <Select name="city">
+                  <SelectTrigger id="pm-city-mobile" className="w-full h-12 bg-background">
+                    <SelectValue placeholder="Select City" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-background border shadow-lg">
+                    {majorCities.map((city) => (
+                      <SelectItem key={city} value={city.toLowerCase()}>{city}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
 
                 <Button type="submit" className="w-full h-12 text-base font-semibold bg-red-600 hover:bg-red-700 text-white mt-6">
                   Talk to Us Today!
