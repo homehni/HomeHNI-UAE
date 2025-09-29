@@ -43,8 +43,13 @@ export const usePropertyForm = () => {
   };
 
   const goToStep = (step: number) => {
+    console.log('🎯 goToStep called with step:', step);
+    console.log('Current step before change:', currentStep);
     if (step >= 1 && step <= 7) {
+      console.log('✅ Valid step, updating currentStep to:', step);
       setCurrentStep(step);
+    } else {
+      console.log('❌ Invalid step:', step, 'Valid range: 1-7');
     }
   };
 

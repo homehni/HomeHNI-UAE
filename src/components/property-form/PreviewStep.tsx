@@ -108,7 +108,12 @@ export const PreviewStep: React.FC<PreviewStepProps> = ({
                 <Button 
                   variant="outline" 
                   className="border-red-500 text-red-600 hover:bg-red-50 w-full sm:w-auto"
-                  onClick={() => onEdit && onEdit(2)}
+                  onClick={() => {
+                    console.log('🔧 Edit Property button clicked in success view');
+                    console.log('onEdit function available:', typeof onEdit);
+                    console.log('Calling onEdit(2) to go to step 2');
+                    onEdit && onEdit(2);
+                  }}
                 >
                   <ArrowLeft className="h-4 w-4 mr-2" />
                   Edit Property
@@ -304,7 +309,12 @@ export const PreviewStep: React.FC<PreviewStepProps> = ({
           <Button 
             type="button" 
             variant="outline" 
-            onClick={() => onEdit(1)} 
+            onClick={() => {
+              console.log('🔧 Edit Property button clicked in PreviewStep');
+              console.log('onEdit function available:', typeof onEdit);
+              console.log('Calling onEdit(1) to go to step 1');
+              onEdit(1);
+            }}
             className="border-gray-500 text-gray-600 hover:bg-gray-50 w-full sm:w-auto"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
