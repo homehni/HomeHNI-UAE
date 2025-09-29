@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -8,7 +8,23 @@ import { useToast } from "@/hooks/use-toast";
 import { Building2, Users, Ruler, Palette, Home, FileText, MapPin, Crown, Clock, CheckCircle, Shield, Star, X, Plus, Minus, Globe, Shield as ShieldCheck, Headphones, Smartphone, Download, PenTool, Compass, DraftingCompass } from "lucide-react";
 import Marquee from "@/components/Marquee";
 import Header from "@/components/Header";
+
 const Architects = () => {
+  // Form state for proper reset functionality
+  const [formData, setFormData] = useState({
+    countryCode: "+91",
+    projectType: "",
+    state: "",
+    city: ""
+  });
+
+  // Mobile form state
+  const [mobileFormData, setMobileFormData] = useState({
+    countryCode: "+91", 
+    projectType: "",
+    state: "",
+    city: ""
+  });
   const majorCities = [
     "Mumbai", "Delhi", "Bangalore", "Hyderabad", "Ahmedabad", "Chennai", "Kolkata", "Surat", "Pune", "Jaipur",
     "Lucknow", "Kanpur", "Nagpur", "Indore", "Thane", "Bhopal", "Visakhapatnam", "Pimpri-Chinchwad", "Patna", "Vadodara",
@@ -187,6 +203,7 @@ const Architects = () => {
 
             <form className="space-y-4" onSubmit={e => {
             e.preventDefault();
+            const form = e.currentTarget as HTMLFormElement;
             toast({
               title: "Request submitted",
               description: "Our architects will contact you within 24 hours.",
@@ -195,12 +212,22 @@ const Architects = () => {
                 borderLeft: "12px solid hsl(120, 100%, 25%)",
               },
             });
-            (e.currentTarget as HTMLFormElement).reset();
+            
+            // Reset form fields
+            form.reset();
+            
+            // Reset controlled select components
+            setFormData({
+              countryCode: "+91",
+              projectType: "",
+              state: "",
+              city: ""
+            });
           }}>
               <Input id="arch-name" name="name" placeholder="Name" required />
 
               <div className="flex gap-2">
-                <Select defaultValue="+91" name="countryCode">
+                <Select value={formData.countryCode} onValueChange={(value) => setFormData(prev => ({ ...prev, countryCode: value }))}>
                   <SelectTrigger className="w-28"><SelectValue /></SelectTrigger>
                   <SelectContent>
                     <SelectItem value="+91">🇮🇳 +91</SelectItem>
@@ -214,7 +241,7 @@ const Architects = () => {
               <Input id="arch-email" name="email" type="email" placeholder="Email ID" required />
 
               <div className="flex gap-2">
-                <Select name="projectType" required>
+                <Select value={formData.projectType} onValueChange={(value) => setFormData(prev => ({ ...prev, projectType: value }))} required>
                   <SelectTrigger id="arch-project-type" className="flex-1"><SelectValue placeholder="Project Type" /></SelectTrigger>
                   <SelectContent>
                     <SelectItem value="residential">Residential Design</SelectItem>
@@ -230,17 +257,7 @@ const Architects = () => {
               </div>
 
               <div className="flex gap-2">
-                <Select defaultValue="india" name="country">
-                  <SelectTrigger id="arch-country" className="flex-1"><SelectValue placeholder="Country" /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="india">India</SelectItem>
-                    <SelectItem value="usa">United States</SelectItem>
-                    <SelectItem value="uk">United Kingdom</SelectItem>
-                    <SelectItem value="canada">Canada</SelectItem>
-                    <SelectItem value="australia">Australia</SelectItem>
-                  </SelectContent>
-                </Select>
-                <Select name="state">
+                <Select value={formData.state} onValueChange={(value) => setFormData(prev => ({ ...prev, state: value }))}>
                   <SelectTrigger id="arch-state" className="flex-1"><SelectValue placeholder="State" /></SelectTrigger>
                   <SelectContent>
                     <SelectItem value="andhra-pradesh">Andhra Pradesh</SelectItem>
@@ -255,7 +272,7 @@ const Architects = () => {
                     <SelectItem value="uttar-pradesh">Uttar Pradesh</SelectItem>
                   </SelectContent>
                 </Select>
-                <Select name="city">
+                <Select value={formData.city} onValueChange={(value) => setFormData(prev => ({ ...prev, city: value }))}>
                   <SelectTrigger id="arch-city" className="flex-1"><SelectValue placeholder="City" /></SelectTrigger>
                   <SelectContent>
                     <SelectItem value="bangalore">Bangalore</SelectItem>
@@ -288,6 +305,7 @@ const Architects = () => {
 
               <form className="space-y-5" onSubmit={e => {
               e.preventDefault();
+              const form = e.currentTarget as HTMLFormElement;
               toast({
                 title: "Request submitted",
                 description: "Our architects will contact you within 24 hours.",
@@ -296,12 +314,22 @@ const Architects = () => {
                   borderLeft: "12px solid hsl(120, 100%, 25%)",
                 },
               });
-              (e.currentTarget as HTMLFormElement).reset();
+              
+              // Reset form fields
+              form.reset();
+              
+              // Reset controlled select components
+              setMobileFormData({
+                countryCode: "+91",
+                projectType: "",
+                state: "",
+                city: ""
+              });
             }}>
                 <Input id="arch-name-mobile" name="name" placeholder="Name" className="h-12 text-base bg-background" required />
 
                 <div className="flex gap-3">
-                  <Select defaultValue="+91" name="countryCode">
+                  <Select value={mobileFormData.countryCode} onValueChange={(value) => setMobileFormData(prev => ({ ...prev, countryCode: value }))}>
                     <SelectTrigger className="w-32 h-12 bg-background">
                       <SelectValue />
                     </SelectTrigger>
@@ -317,7 +345,7 @@ const Architects = () => {
                 <Input id="arch-email-mobile" name="email" type="email" placeholder="Email ID" className="h-12 text-base bg-background" required />
 
                 <div className="flex gap-3">
-                  <Select name="projectType" required>
+                  <Select value={mobileFormData.projectType} onValueChange={(value) => setMobileFormData(prev => ({ ...prev, projectType: value }))} required>
                     <SelectTrigger id="arch-project-type-mobile" className="flex-1 h-12 bg-background">
                       <SelectValue placeholder="Project Type" />
                     </SelectTrigger>
@@ -334,19 +362,7 @@ const Architects = () => {
                 </div>
 
                 <div className="flex gap-3">
-                  <Select defaultValue="india" name="country">
-                    <SelectTrigger id="arch-country-mobile" className="flex-1 h-12 bg-background">
-                      <SelectValue placeholder="Country" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-background border shadow-lg">
-                      <SelectItem value="india">India</SelectItem>
-                      <SelectItem value="usa">United States</SelectItem>
-                      <SelectItem value="uk">United Kingdom</SelectItem>
-                      <SelectItem value="canada">Canada</SelectItem>
-                      <SelectItem value="australia">Australia</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <Select name="state">
+                  <Select value={mobileFormData.state} onValueChange={(value) => setMobileFormData(prev => ({ ...prev, state: value }))}>
                     <SelectTrigger id="arch-state-mobile" className="flex-1 h-12 bg-background">
                       <SelectValue placeholder="State" />
                     </SelectTrigger>
@@ -363,7 +379,7 @@ const Architects = () => {
                       <SelectItem value="uttar-pradesh">Uttar Pradesh</SelectItem>
                     </SelectContent>
                   </Select>
-                  <Select name="city">
+                  <Select value={mobileFormData.city} onValueChange={(value) => setMobileFormData(prev => ({ ...prev, city: value }))}>
                     <SelectTrigger id="arch-city-mobile" className="flex-1 h-12 bg-background">
                       <SelectValue placeholder="City" />
                     </SelectTrigger>
