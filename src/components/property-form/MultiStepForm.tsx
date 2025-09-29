@@ -72,7 +72,7 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
 
   // Navigate to target step if provided
   React.useEffect(() => {
-    if (targetStep && targetStep > 0 && targetStep <= 8) {
+    if (targetStep && targetStep > 0 && targetStep <= 7) {
       console.log('Navigating to target step:', targetStep);
       goToStep(targetStep);
     }
@@ -162,7 +162,6 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
   };
 
   const sidebarSteps = [
-    { title: "Owner Details", icon: <User className="w-4 h-4" /> },
     { title: "Property Details", icon: <Home className="w-4 h-4" /> },
     { title: "Locality Details", icon: <MapPin className="w-4 h-4" /> },
     { title: "Rental Details", icon: <DollarSign className="w-4 h-4" /> },
@@ -188,19 +187,22 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
         {/* Main Content */}
         <div className="flex-1 bg-white p-6 md:p-8 pb-32">
               {currentStep === 1 && (
-                <OwnerInfoStep
-                  initialData={ownerInfo}
-                  onNext={handleOwnerInfoNext}
-                />
-              )}
-
-              {currentStep === 2 && (
                 <PropertyDetailsStep
                   initialData={propertyDetails}
                   onNext={handlePropertyDetailsNext}
                   onBack={prevStep}
+                  currentStep={1}
+                  totalSteps={7}
+                />
+              )}
+
+              {currentStep === 2 && (
+                <LocationDetailsStep
+                  initialData={locationDetails}
+                  onNext={handleLocationDetailsNext}
+                  onBack={prevStep}
                   currentStep={2}
-                  totalSteps={8}
+                  totalSteps={7}
                 />
               )}
 

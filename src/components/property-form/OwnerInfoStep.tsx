@@ -100,19 +100,14 @@ export const OwnerInfoStep: React.FC<OwnerInfoStepProps> = ({
   };
 
   return (
-    <div className="relative w-full max-w-4xl mx-auto mb-8">
-      {/* Top Left Corner Decoration */}
-      <div className="absolute top-0 left-0 w-16 h-16 z-10">
-        <div className="w-full h-full border-l-8 border-t-8 border-brand-red"></div>
-      </div>
-      
-      {/* Bottom Right Corner Decoration */}
-      <div className="absolute bottom-0 right-0 w-16 h-16 z-10">
-        <div className="w-full h-full border-r-8 border-b-8 border-brand-red"></div>
-      </div>
-
+    <div className="max-w-4xl mx-auto mb-8">
       <Card className="w-full border border-muted rounded-2xl shadow-lg bg-card/80 backdrop-blur-sm">
       <CardContent className="pt-6">
+        {/* Header */}
+        <div className="mb-6">
+          <h2 className="text-2xl font-bold text-primary mb-2">Residential Property Details</h2>
+        </div>
+        
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
           {/* Personal Information Section */}
           <div className="space-y-6">

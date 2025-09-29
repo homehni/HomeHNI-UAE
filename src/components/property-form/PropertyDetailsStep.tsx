@@ -10,6 +10,7 @@ import { Badge } from '@/components/ui/badge';
 import { PropertyDetails } from '@/types/property';
 import { Phone, Compass } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+
 const propertyDetailsSchema = z.object({
   title: z.string().optional(),
   // Made optional - will be auto-generated
