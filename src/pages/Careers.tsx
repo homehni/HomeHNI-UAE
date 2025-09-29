@@ -52,10 +52,15 @@ const Careers = () => {
     }
   };
 
+  const [selectedPosition, setSelectedPosition] = useState("");
+  const [selectedPositionDesktop, setSelectedPositionDesktop] = useState("");
+
   const resetForm = () => {
     // Reset all state variables
     setSelectedState("");
     setSelectedStateDesktop("");
+    setSelectedPosition("");
+    setSelectedPositionDesktop("");
     setCities([]);
     setCitiesDesktop([]);
     setResumeFile(null);
@@ -181,17 +186,7 @@ const Careers = () => {
                 <Input id="career-email" name="email" type="email" placeholder="Email ID" required />
 
                 <div className="flex gap-2">
-                  <Select name="country">
-                    <SelectTrigger className="flex-1"><SelectValue placeholder="Country" /></SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="India">India</SelectItem>
-                      <SelectItem value="USA">USA</SelectItem>
-                      <SelectItem value="UK">UK</SelectItem>
-                      <SelectItem value="Other">Other</SelectItem>
-                    </SelectContent>
-                  </Select>
-
-                  <Select name="state" onValueChange={setSelectedStateDesktop}>
+                  <Select name="state" value={selectedStateDesktop} onValueChange={setSelectedStateDesktop}>
                     <SelectTrigger className="flex-1"><SelectValue placeholder="State" /></SelectTrigger>
                     <SelectContent>
                       {statesData && Object.keys(statesData).map((state: string) => (
@@ -214,7 +209,7 @@ const Careers = () => {
                   </Select>
                 </div>
 
-                <Select name="position">
+                <Select name="position" value={selectedPositionDesktop} onValueChange={setSelectedPositionDesktop}>
                   <SelectTrigger id="position"><SelectValue placeholder="Position of Interest" /></SelectTrigger>
                   <SelectContent>
                     <SelectItem value="sales-consultant">Real Estate Sales Consultant</SelectItem>
@@ -314,19 +309,7 @@ const Careers = () => {
                   <Input id="career-email-mobile" name="email" type="email" placeholder="Email ID" className="h-12 text-base bg-background" required />
 
                   <div className="flex gap-3">
-                    <Select name="country">
-                      <SelectTrigger className="flex-1 h-12 bg-background">
-                        <SelectValue placeholder="Country" />
-                      </SelectTrigger>
-                      <SelectContent className="bg-background border shadow-lg">
-                        <SelectItem value="India">India</SelectItem>
-                        <SelectItem value="USA">USA</SelectItem>
-                        <SelectItem value="UK">UK</SelectItem>
-                        <SelectItem value="Other">Other</SelectItem>
-                      </SelectContent>
-                    </Select>
-
-                    <Select name="state" onValueChange={setSelectedState}>
+                    <Select name="state" value={selectedState} onValueChange={setSelectedState}>
                       <SelectTrigger className="flex-1 h-12 bg-background">
                         <SelectValue placeholder="State" />
                       </SelectTrigger>
@@ -353,7 +336,7 @@ const Careers = () => {
                     </Select>
                   </div>
 
-                  <Select name="position">
+                  <Select name="position" value={selectedPosition} onValueChange={setSelectedPosition}>
                     <SelectTrigger id="position-mobile" className="h-12 bg-background">
                       <SelectValue placeholder="Position of Interest" />
                     </SelectTrigger>
