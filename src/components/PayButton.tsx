@@ -193,65 +193,88 @@ export default function PayButton({
                 const displayName = prefill?.name || (currentUser as any)?.user_metadata?.full_name || 'Valued Customer';
                 
                 // 1) Send payment success email first
-                await sendPaymentSuccessEmail(
-                  recipientEmail,
-                  displayName,
-                  {
-                    planName: planName,
-                    planType: planType,
-                    planDuration: planDuration,
-                    baseAmount: baseAmount / 100,
-                    gstAmount: gstAmount / 100,
-                    totalAmount: totalAmount / 100,
-                    amount: baseAmount / 100,
-                    paymentId: response.razorpay_payment_id,
-                    transactionId: response.razorpay_payment_id,
-                    paymentDate: paymentDate,
-                    expiryDate: expiryDate.toLocaleDateString('en-IN', {
-                      year: 'numeric',
-                      month: 'long',
-                      day: 'numeric'
-                    }),
-                    nextBillingDate: nextBillingDate,
-                    dashboardUrl: 'https://homehni.com/dashboard'
-                  }
-                );
+                try {
+                  console.log('Sending payment success email to:', recipientEmail);
+                  await sendPaymentSuccessEmail(
+                    recipientEmail,
+                    displayName,
+                    {
+                      planName: planName,
+                      planType: planType,
+                      planDuration: planDuration,
+                      baseAmount: baseAmount / 100,
+                      gstAmount: gstAmount / 100,
+                      totalAmount: totalAmount / 100,
+                      amount: baseAmount / 100,
+                      paymentId: response.razorpay_payment_id,
+                      transactionId: response.razorpay_payment_id,
+                      paymentDate: paymentDate,
+                      expiryDate: expiryDate.toLocaleDateString('en-IN', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                      }),
+                      nextBillingDate: nextBillingDate,
+                      dashboardUrl: 'https://homehni.com/dashboard'
+                    }
+                  );
+                  console.log('Payment success email sent successfully');
+                } catch (successEmailError) {
+                  console.error('Error sending payment success email:', successEmailError);
+                }
                 
                 // Small delay to ensure sequence
                 await new Promise(resolve => setTimeout(resolve, 800));
                 
                 // 2) Send invoice email right after
-                await sendPaymentInvoiceEmail(
-                  recipientEmail,
-                  displayName,
-                  {
+                try {
+                  console.log('Sending payment invoice email to:', recipientEmail);
+                  console.log('Invoice data:', {
                     invoiceNumber: invoiceNumber,
                     planName: planName,
                     planType: planType,
                     planDuration: planDuration,
                     baseAmount: baseAmount / 100,
                     gstAmount: gstAmount / 100,
-                    gstRate: '18%',
                     totalAmount: totalAmount / 100,
-                    amount: baseAmount / 100,
-                    paymentDate: paymentDate,
-                    paymentId: response.razorpay_payment_id,
-                    paymentMethod: 'Razorpay',
-                    currency: 'INR',
-                    customerName: displayName,
-                    customerEmail: recipientEmail,
-                    customerPhone: prefill?.contact || '',
-                    billingAddress: {
-                      name: displayName,
-                      email: recipientEmail,
-                      phone: prefill?.contact || ''
-                    },
-                    invoiceDownloadUrl: `https://homehni.com/invoices/${invoiceNumber}`,
-                    dashboardUrl: 'https://homehni.com/dashboard'
-                  }
-                );
+                    amount: baseAmount / 100
+                  });
+                  
+                  await sendPaymentInvoiceEmail(
+                    recipientEmail,
+                    displayName,
+                    {
+                      invoiceNumber: invoiceNumber,
+                      planName: planName,
+                      planType: planType,
+                      planDuration: planDuration,
+                      baseAmount: baseAmount / 100,
+                      gstAmount: gstAmount / 100,
+                      gstRate: '18%',
+                      totalAmount: totalAmount / 100,
+                      amount: baseAmount / 100,
+                      paymentDate: paymentDate,
+                      paymentId: response.razorpay_payment_id,
+                      paymentMethod: 'Razorpay',
+                      currency: 'INR',
+                      customerName: displayName,
+                      customerEmail: recipientEmail,
+                      customerPhone: prefill?.contact || '',
+                      billingAddress: {
+                        name: displayName,
+                        email: recipientEmail,
+                        phone: prefill?.contact || ''
+                      },
+                      invoiceDownloadUrl: `https://homehni.com/invoices/${invoiceNumber}`,
+                      dashboardUrl: 'https://homehni.com/dashboard'
+                    }
+                  );
+                  console.log('Payment invoice email sent successfully');
+                } catch (invoiceEmailError) {
+                  console.error('Error sending payment invoice email:', invoiceEmailError);
+                }
                 
-                console.log('Payment emails queued successfully');
+                console.log('Payment email sending process completed');
               } catch (emailError) {
                 console.error('Error sending payment emails:', emailError);
               }
