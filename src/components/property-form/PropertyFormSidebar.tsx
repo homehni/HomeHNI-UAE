@@ -28,8 +28,9 @@ export const PropertyFormSidebar: React.FC<PropertyFormSidebarProps> = ({
     active: currentStep === index + 1
   }));
 
-  const totalSteps = steps.length || 1;
-  const progress = Math.min((currentStep / totalSteps) * 100, 100);
+  // Custom progress percentages for each step
+  const progressPercentages = [17, 33, 50, 67, 83, 100];
+  const progress = progressPercentages[currentStep - 1] || 0;
 
   return (
     <div className="w-80 bg-white border-r border-gray-200 h-full p-3 flex-shrink-0">
