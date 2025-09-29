@@ -36,6 +36,9 @@ export default function PayButton({
       await loadRazorpayScript();
       console.log("Razorpay script loaded successfully");
 
+      // Always fetch the freshest authenticated user to avoid stale state after login
+      const { data: { user: currentUser } } = await supabase.auth.getUser();
+
       const key = import.meta.env.VITE_RAZORPAY_KEY_ID as string;
       console.log("Razorpay key from env:", key);
       
@@ -72,7 +75,7 @@ export default function PayButton({
             }
             
             // Record payment in database
-            if (user?.id) {
+            if (currentUser?.id) {
               const currentDate = new Date();
               const expiryDate = new Date();
               const invoiceNumber = `INV-${Date.now()}`;
@@ -89,7 +92,7 @@ export default function PayButton({
               const { error: paymentError } = await supabase
                 .from('payments')
                 .insert({
-                  user_id: user.id,
+                  user_id: currentUser.id,
                   payment_id: response.razorpay_payment_id,
                   plan_name: planName,
                   amount_paise: amountPaise,
@@ -134,7 +137,7 @@ export default function PayButton({
             // Trigger payment emails in background to the logged-in user's email (fallback to prefill)
             (async () => {
               try {
-                const recipientEmail = user?.email || prefill?.email;
+                const recipientEmail = currentUser?.email || prefill?.email;
                 if (!recipientEmail) {
                   console.warn('No recipient email available for payment emails');
                   return;
@@ -187,7 +190,7 @@ export default function PayButton({
                       day: 'numeric'
                     });
                 
-                const displayName = prefill?.name || (user as any)?.user_metadata?.full_name || 'Valued Customer';
+                const displayName = prefill?.name || (currentUser as any)?.user_metadata?.full_name || 'Valued Customer';
                 
                 // 1) Send payment success email first
                 await sendPaymentSuccessEmail(
@@ -262,13 +265,13 @@ export default function PayButton({
             console.error('Payment processing error:', error);
             
             // Record failed payment in database
-            if (user?.id) {
+            if (currentUser?.id) {
               try {
                 const currentDate = new Date();
                 await supabase
                   .from('payments')
                   .insert({
-                    user_id: user.id,
+                    user_id: currentUser.id,
                     payment_id: response.razorpay_payment_id || `failed_${Date.now()}`,
                     plan_name: planName,
                     amount_paise: amountPaise,
@@ -311,13 +314,13 @@ export default function PayButton({
             console.log("Payment modal dismissed");
             
             // Record cancelled payment in database
-            if (user?.id) {
+            if (currentUser?.id) {
               try {
                 const currentDate = new Date();
                 const { error: paymentError } = await supabase
                   .from('payments')
                   .insert({
-                    user_id: user.id,
+                    user_id: currentUser.id,
                     payment_id: `cancelled_${Date.now()}`,
                     plan_name: planName,
                     amount_paise: amountPaise,
@@ -369,7 +372,7 @@ export default function PayButton({
     } finally {
       setLoading(false);
     }
-  }, [amountPaise, planName, notes, prefill, user]);
+  }, [amountPaise, planName, notes, prefill]);
 
   const onClick = useCallback(() => {
     // Check if user is authenticated
