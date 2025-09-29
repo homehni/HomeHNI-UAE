@@ -112,15 +112,7 @@ export const OwnerInfoStep: React.FC<OwnerInfoStepProps> = ({
       </div>
 
       <Card className="w-full border border-muted rounded-2xl shadow-lg bg-card/80 backdrop-blur-sm">
-        <CardHeader>
-          <CardTitle className="text-center text-primary text-2xl font-bold">
-            {selectedListingType === 'Rent' || !selectedListingType ? 
-              'Start Posting Your Property Today – 100% Free' : 
-              'Start Posting Your Property For FREE'
-            }
-          </CardTitle>
-        </CardHeader>
-      <CardContent>
+      <CardContent className="pt-6">
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
           {/* Personal Information Section */}
           <div className="space-y-6">
