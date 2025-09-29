@@ -28,6 +28,9 @@ export const PropertyFormSidebar: React.FC<PropertyFormSidebarProps> = ({
     active: currentStep === index + 1
   }));
 
+  const totalSteps = steps.length || 1;
+  const progress = Math.min((currentStep / totalSteps) * 100, 100);
+
   return (
     <div className="w-80 bg-white border-r border-gray-200 h-full p-3 flex-shrink-0">
       {/* Logo/Header */}
@@ -98,12 +101,12 @@ export const PropertyFormSidebar: React.FC<PropertyFormSidebarProps> = ({
                   fill="none"
                   stroke="#10b981"
                   strokeWidth="2"
-                  strokeDasharray={`${Math.min((currentStep / 6) * 100, 100)}, 100`}
+                  strokeDasharray={`${progress}, 100`}
                 />
               </svg>
               <div className="absolute inset-0 flex items-center justify-center">
                 <span className="text-lg font-semibold text-gray-700">
-                  {Math.min(Math.round((currentStep / 6) * 100), 100)}%
+                  {Math.round(progress)}%
                 </span>
               </div>
             </div>

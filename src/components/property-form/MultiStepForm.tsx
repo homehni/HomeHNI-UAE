@@ -215,9 +215,9 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
               )}
 
               {currentStep === 3 && (
-                <LocationDetailsStep
-                  initialData={locationDetails}
-                  onNext={handleLocationDetailsNext}
+                <RentalDetailsStep
+                  initialData={rentalDetails}
+                  onNext={handleRentalDetailsNext}
                   onBack={prevStep}
                   currentStep={3}
                   totalSteps={8}
