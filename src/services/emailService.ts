@@ -393,6 +393,7 @@ export async function sendPaymentInvoiceEmail(
     amount: invoiceData.amount,
     paymentDate: invoiceData.paymentDate,
     paymentId: invoiceData.paymentId,
+    transactionId: invoiceData.paymentId,
     paymentMethod: invoiceData.paymentMethod || 'Online Payment',
     currency: invoiceData.currency || 'INR',
     customerName: invoiceData.customerName || userName,

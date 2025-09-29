@@ -122,61 +122,75 @@ export default function PayButton({
               }
             }
             
-            // Send payment emails in proper sequence with GST calculations
-            if (prefill?.email) {
-              const { 
-                sendPaymentSuccessEmail, 
-                sendPaymentInvoiceEmail 
-              } = await import('@/services/emailService');
-              
-              const { 
-                calculateGSTAmount, 
-                calculateTotalWithGST, 
-                formatCurrency 
-              } = await import('@/utils/gstCalculator');
-              
-              const currentDate = new Date();
-              const paymentDate = currentDate.toLocaleDateString('en-IN');
-              
-              // Calculate expiry date based on plan
-              const expiryDate = new Date();
-              if (planName.toLowerCase().includes('lifetime')) {
-                expiryDate.setFullYear(expiryDate.getFullYear() + 100);
-              } else if (planName.toLowerCase().includes('year')) {
-                expiryDate.setFullYear(expiryDate.getFullYear() + 1);
-              } else {
-                expiryDate.setMonth(expiryDate.getMonth() + 1);
-              }
-              
-              // Generate proper invoice number with timestamp
-              const invoiceTimestamp = Date.now();
-              const invoiceNumber = `HHNI-INV-${invoiceTimestamp}`;
-              
-              // Calculate GST breakdown
-              const baseAmount = Math.round(amountPaise / 1.18); // Remove GST to get base
-              const gstAmount = calculateGSTAmount(baseAmount);
-              const totalAmount = calculateTotalWithGST(baseAmount);
-              
-              // Determine plan duration and type
-              const planType = planName.toLowerCase().includes('lifetime') ? 'lifetime' : 'subscription';
-              const planDuration = planName.toLowerCase().includes('lifetime') 
-                ? 'Lifetime Access' 
-                : planName.toLowerCase().includes('year') ? '1 Year' : '1 Month';
-              
-              // Get next billing date (null for lifetime plans)
-              const nextBillingDate = planType === 'lifetime' 
-                ? null 
-                : expiryDate.toLocaleDateString('en-IN', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                  });
-              
+            // Show success toast immediately
+            toast({
+              title: "Payment Successful!",
+              description: "Your payment has been processed and plan activated successfully.",
+              variant: "success",
+            });
+            
+            // Trigger payment emails in background to the logged-in user's email (fallback to prefill)
+            (async () => {
               try {
-                // 1. Send payment success email first
+                const recipientEmail = user?.email || prefill?.email;
+                if (!recipientEmail) {
+                  console.warn('No recipient email available for payment emails');
+                  return;
+                }
+
+                const { 
+                  sendPaymentSuccessEmail, 
+                  sendPaymentInvoiceEmail 
+                } = await import('@/services/emailService');
+                
+                const { 
+                  calculateGSTAmount, 
+                  calculateTotalWithGST 
+                } = await import('@/utils/gstCalculator');
+                
+                const currentDate = new Date();
+                const paymentDate = currentDate.toLocaleDateString('en-IN');
+                
+                // Calculate expiry date based on plan
+                const expiryDate = new Date();
+                if (planName.toLowerCase().includes('lifetime')) {
+                  expiryDate.setFullYear(expiryDate.getFullYear() + 100);
+                } else if (planName.toLowerCase().includes('year')) {
+                  expiryDate.setFullYear(expiryDate.getFullYear() + 1);
+                } else {
+                  expiryDate.setMonth(expiryDate.getMonth() + 1);
+                }
+                
+                // Generate proper invoice number with timestamp
+                const invoiceTimestamp = Date.now();
+                const invoiceNumber = `HHNI-INV-${invoiceTimestamp}`;
+                
+                // Calculate GST breakdown using amount including GST (amountPaise)
+                const baseAmount = Math.round(amountPaise / 1.18); // Remove GST to get base in paise
+                const gstAmount = calculateGSTAmount(baseAmount);
+                const totalAmount = calculateTotalWithGST(baseAmount);
+                
+                // Determine plan details
+                const planType = planName.toLowerCase().includes('lifetime') ? 'lifetime' : 'subscription';
+                const planDuration = planName.toLowerCase().includes('lifetime') 
+                  ? 'Lifetime Access' 
+                  : planName.toLowerCase().includes('year') ? '1 Year' : '1 Month';
+                
+                // Get next billing date (null for lifetime plans)
+                const nextBillingDate = planType === 'lifetime' 
+                  ? null 
+                  : expiryDate.toLocaleDateString('en-IN', {
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric'
+                    });
+                
+                const displayName = prefill?.name || (user as any)?.user_metadata?.full_name || 'Valued Customer';
+                
+                // 1) Send payment success email first
                 await sendPaymentSuccessEmail(
-                  prefill.email,
-                  prefill.name || 'Valued Customer',
+                  recipientEmail,
+                  displayName,
                   {
                     planName: planName,
                     planType: planType,
@@ -184,7 +198,7 @@ export default function PayButton({
                     baseAmount: baseAmount / 100,
                     gstAmount: gstAmount / 100,
                     totalAmount: totalAmount / 100,
-                    amount: amountPaise / 100, // Keep for backward compatibility
+                    amount: baseAmount / 100,
                     paymentId: response.razorpay_payment_id,
                     transactionId: response.razorpay_payment_id,
                     paymentDate: paymentDate,
@@ -198,13 +212,13 @@ export default function PayButton({
                   }
                 );
                 
-                // Small delay to ensure proper email sequence
-                await new Promise(resolve => setTimeout(resolve, 1000));
+                // Small delay to ensure sequence
+                await new Promise(resolve => setTimeout(resolve, 800));
                 
-                // 2. Send invoice email with detailed breakdown
+                // 2) Send invoice email right after
                 await sendPaymentInvoiceEmail(
-                  prefill.email,
-                  prefill.name || 'Valued Customer',
+                  recipientEmail,
+                  displayName,
                   {
                     invoiceNumber: invoiceNumber,
                     planName: planName,
@@ -214,38 +228,29 @@ export default function PayButton({
                     gstAmount: gstAmount / 100,
                     gstRate: '18%',
                     totalAmount: totalAmount / 100,
-                    amount: amountPaise / 100, // Keep for backward compatibility
+                    amount: baseAmount / 100,
                     paymentDate: paymentDate,
                     paymentId: response.razorpay_payment_id,
                     paymentMethod: 'Razorpay',
                     currency: 'INR',
-                    customerName: prefill.name || 'Valued Customer',
-                    customerEmail: prefill.email,
-                    customerPhone: prefill.contact || '',
+                    customerName: displayName,
+                    customerEmail: recipientEmail,
+                    customerPhone: prefill?.contact || '',
                     billingAddress: {
-                      // These should ideally come from a billing form
-                      // For now, using basic info - can be enhanced later
-                      name: prefill.name || 'Valued Customer',
-                      email: prefill.email,
-                      phone: prefill.contact || ''
+                      name: displayName,
+                      email: recipientEmail,
+                      phone: prefill?.contact || ''
                     },
                     invoiceDownloadUrl: `https://homehni.com/invoices/${invoiceNumber}`,
                     dashboardUrl: 'https://homehni.com/dashboard'
                   }
                 );
                 
-                console.log('Payment emails sent successfully');
+                console.log('Payment emails queued successfully');
               } catch (emailError) {
                 console.error('Error sending payment emails:', emailError);
-                // Don't fail the payment for email errors, just log them
               }
-            }
-            
-            toast({
-              title: "Payment Successful!",
-              description: "Your payment has been processed and plan activated successfully.",
-              variant: "success",
-            });
+            })();
             
             // Redirect to success page or dashboard
             setTimeout(() => {
