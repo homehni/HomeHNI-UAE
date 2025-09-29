@@ -10,6 +10,20 @@ import Marquee from "@/components/Marquee";
 import Header from "@/components/Header";
 
 const Interior = () => {
+  // Form state for proper reset functionality
+  const [formData, setFormData] = useState({
+    countryCode: "+91",
+    spaceType: "",
+    state: ""
+  });
+
+  // Mobile form state
+  const [mobileFormData, setMobileFormData] = useState({
+    countryCode: "+91",
+    spaceType: "",
+    state: ""
+  });
+
   const majorCities = [
     "Mumbai", "Delhi", "Bangalore", "Hyderabad", "Ahmedabad", "Chennai", "Kolkata", "Surat", "Pune", "Jaipur",
     "Lucknow", "Kanpur", "Nagpur", "Indore", "Thane", "Bhopal", "Visakhapatnam", "Pimpri-Chinchwad", "Patna", "Vadodara",
@@ -194,6 +208,7 @@ const Interior = () => {
 
             <form className="space-y-4" onSubmit={e => {
               e.preventDefault();
+              const form = e.currentTarget as HTMLFormElement;
               toast({
                 title: "Request received",
                 description: "Our design expert will contact you shortly.",
@@ -202,12 +217,21 @@ const Interior = () => {
                   borderLeft: "12px solid hsl(120, 100%, 25%)",
                 },
               });
-              (e.currentTarget as HTMLFormElement).reset();
+              
+              // Reset form fields
+              form.reset();
+              
+              // Reset controlled select components
+              setFormData({
+                countryCode: "+91",
+                spaceType: "",
+                state: ""
+              });
             }}>
               <Input id="design-name" name="name" placeholder="Name" required />
 
               <div className="flex gap-2">
-                <Select defaultValue="+91" name="countryCode">
+                <Select value={formData.countryCode} onValueChange={(value) => setFormData(prev => ({ ...prev, countryCode: value }))}>
                   <SelectTrigger className="w-28"><SelectValue /></SelectTrigger>
                   <SelectContent>
                     <SelectItem value="+91">🇮🇳 +91</SelectItem>
@@ -221,7 +245,7 @@ const Interior = () => {
               <Input id="design-email" name="email" type="email" placeholder="Email ID" required />
 
               <div className="flex gap-2">
-                <Select name="spaceType" required>
+                <Select value={formData.spaceType} onValueChange={(value) => setFormData(prev => ({ ...prev, spaceType: value }))} required>
                   <SelectTrigger id="space-type" className="flex-1"><SelectValue placeholder="Space Type" /></SelectTrigger>
                   <SelectContent>
                     <SelectItem value="home">Home Interior</SelectItem>
@@ -236,48 +260,21 @@ const Interior = () => {
                 <Input id="design-budget" name="budget" placeholder="Budget Range (₹)" className="flex-1" required />
               </div>
 
-              <div className="flex gap-2">
-                <Select defaultValue="india" name="country">
-                  <SelectTrigger id="design-country" className="flex-1"><SelectValue placeholder="Country" /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="india">India</SelectItem>
-                    <SelectItem value="usa">United States</SelectItem>
-                    <SelectItem value="uk">United Kingdom</SelectItem>
-                    <SelectItem value="canada">Canada</SelectItem>
-                    <SelectItem value="australia">Australia</SelectItem>
-                  </SelectContent>
-                </Select>
-                <Select name="state">
-                  <SelectTrigger id="design-state" className="flex-1"><SelectValue placeholder="State" /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="andhra-pradesh">Andhra Pradesh</SelectItem>
-                    <SelectItem value="karnataka">Karnataka</SelectItem>
-                    <SelectItem value="tamil-nadu">Tamil Nadu</SelectItem>
-                    <SelectItem value="telangana">Telangana</SelectItem>
-                    <SelectItem value="maharashtra">Maharashtra</SelectItem>
-                    <SelectItem value="gujarat">Gujarat</SelectItem>
-                    <SelectItem value="rajasthan">Rajasthan</SelectItem>
-                    <SelectItem value="delhi">Delhi</SelectItem>
-                    <SelectItem value="west-bengal">West Bengal</SelectItem>
-                    <SelectItem value="uttar-pradesh">Uttar Pradesh</SelectItem>
-                  </SelectContent>
-                </Select>
-                <Select name="city">
-                  <SelectTrigger id="design-city" className="flex-1"><SelectValue placeholder="City" /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="bangalore">Bangalore</SelectItem>
-                    <SelectItem value="hyderabad">Hyderabad</SelectItem>
-                    <SelectItem value="chennai">Chennai</SelectItem>
-                    <SelectItem value="mumbai">Mumbai</SelectItem>
-                    <SelectItem value="pune">Pune</SelectItem>
-                    <SelectItem value="delhi">Delhi</SelectItem>
-                    <SelectItem value="kolkata">Kolkata</SelectItem>
-                    <SelectItem value="ahmedabad">Ahmedabad</SelectItem>
-                    <SelectItem value="jaipur">Jaipur</SelectItem>
-                    <SelectItem value="lucknow">Lucknow</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
+              <Select value={formData.state} onValueChange={(value) => setFormData(prev => ({ ...prev, state: value }))}>
+                <SelectTrigger id="design-state" className="w-full"><SelectValue placeholder="State" /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="andhra-pradesh">Andhra Pradesh</SelectItem>
+                  <SelectItem value="karnataka">Karnataka</SelectItem>
+                  <SelectItem value="tamil-nadu">Tamil Nadu</SelectItem>
+                  <SelectItem value="telangana">Telangana</SelectItem>
+                  <SelectItem value="maharashtra">Maharashtra</SelectItem>
+                  <SelectItem value="gujarat">Gujarat</SelectItem>
+                  <SelectItem value="rajasthan">Rajasthan</SelectItem>
+                  <SelectItem value="delhi">Delhi</SelectItem>
+                  <SelectItem value="west-bengal">West Bengal</SelectItem>
+                  <SelectItem value="uttar-pradesh">Uttar Pradesh</SelectItem>
+                </SelectContent>
+              </Select>
 
               <Button type="submit" className="w-full bg-red-800 hover:bg-red-900 text-white">Get Free Consultation!</Button>
             </form>
@@ -295,6 +292,7 @@ const Interior = () => {
 
               <form className="space-y-5" onSubmit={e => {
                 e.preventDefault();
+                const form = e.currentTarget as HTMLFormElement;
                 toast({
                   title: "Request received",
                   description: "Our design expert will contact you shortly.",
@@ -303,7 +301,16 @@ const Interior = () => {
                     borderLeft: "12px solid hsl(120, 100%, 25%)",
                   },
                 });
-                (e.currentTarget as HTMLFormElement).reset();
+                
+                // Reset form fields
+                form.reset();
+                
+                // Reset controlled select components
+                setMobileFormData({
+                  countryCode: "+91",
+                  spaceType: "",
+                  state: ""
+                });
               }}>
                 <Input 
                   id="design-name-mobile" 
@@ -314,7 +321,7 @@ const Interior = () => {
                 />
 
                 <div className="flex gap-3">
-                  <Select defaultValue="+91" name="countryCode">
+                  <Select value={mobileFormData.countryCode} onValueChange={(value) => setMobileFormData(prev => ({ ...prev, countryCode: value }))}>
                     <SelectTrigger className="w-32 h-12 bg-background">
                       <SelectValue />
                     </SelectTrigger>
@@ -344,7 +351,7 @@ const Interior = () => {
                 />
 
                 <div className="flex gap-3">
-                  <Select name="spaceType" required>
+                  <Select value={mobileFormData.spaceType} onValueChange={(value) => setMobileFormData(prev => ({ ...prev, spaceType: value }))} required>
                     <SelectTrigger id="space-type-mobile" className="flex-1 h-12 bg-background">
                       <SelectValue placeholder="Space Type" />
                     </SelectTrigger>
@@ -366,54 +373,23 @@ const Interior = () => {
                   />
                 </div>
 
-                <div className="flex gap-3">
-                  <Select defaultValue="india" name="country">
-                    <SelectTrigger id="design-country-mobile" className="flex-1 h-12 bg-background">
-                      <SelectValue placeholder="Country" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-background border shadow-lg">
-                      <SelectItem value="india">India</SelectItem>
-                      <SelectItem value="usa">United States</SelectItem>
-                      <SelectItem value="uk">United Kingdom</SelectItem>
-                      <SelectItem value="canada">Canada</SelectItem>
-                      <SelectItem value="australia">Australia</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <Select name="state">
-                    <SelectTrigger id="design-state-mobile" className="flex-1 h-12 bg-background">
-                      <SelectValue placeholder="State" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-background border shadow-lg">
-                      <SelectItem value="andhra-pradesh">Andhra Pradesh</SelectItem>
-                      <SelectItem value="karnataka">Karnataka</SelectItem>
-                      <SelectItem value="tamil-nadu">Tamil Nadu</SelectItem>
-                      <SelectItem value="telangana">Telangana</SelectItem>
-                      <SelectItem value="maharashtra">Maharashtra</SelectItem>
-                      <SelectItem value="gujarat">Gujarat</SelectItem>
-                      <SelectItem value="rajasthan">Rajasthan</SelectItem>
-                      <SelectItem value="delhi">Delhi</SelectItem>
-                      <SelectItem value="west-bengal">West Bengal</SelectItem>
-                      <SelectItem value="uttar-pradesh">Uttar Pradesh</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <Select name="city">
-                    <SelectTrigger id="design-city-mobile" className="flex-1 h-12 bg-background">
-                      <SelectValue placeholder="City" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-background border shadow-lg">
-                      <SelectItem value="bangalore">Bangalore</SelectItem>
-                      <SelectItem value="hyderabad">Hyderabad</SelectItem>
-                      <SelectItem value="chennai">Chennai</SelectItem>
-                      <SelectItem value="mumbai">Mumbai</SelectItem>
-                      <SelectItem value="pune">Pune</SelectItem>
-                      <SelectItem value="delhi">Delhi</SelectItem>
-                      <SelectItem value="kolkata">Kolkata</SelectItem>
-                      <SelectItem value="ahmedabad">Ahmedabad</SelectItem>
-                      <SelectItem value="jaipur">Jaipur</SelectItem>
-                      <SelectItem value="lucknow">Lucknow</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
+                <Select value={mobileFormData.state} onValueChange={(value) => setMobileFormData(prev => ({ ...prev, state: value }))}>
+                  <SelectTrigger id="design-state-mobile" className="w-full h-12 bg-background">
+                    <SelectValue placeholder="State" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-background border shadow-lg">
+                    <SelectItem value="andhra-pradesh">Andhra Pradesh</SelectItem>
+                    <SelectItem value="karnataka">Karnataka</SelectItem>
+                    <SelectItem value="tamil-nadu">Tamil Nadu</SelectItem>
+                    <SelectItem value="telangana">Telangana</SelectItem>
+                    <SelectItem value="maharashtra">Maharashtra</SelectItem>
+                    <SelectItem value="gujarat">Gujarat</SelectItem>
+                    <SelectItem value="rajasthan">Rajasthan</SelectItem>
+                    <SelectItem value="delhi">Delhi</SelectItem>
+                    <SelectItem value="west-bengal">West Bengal</SelectItem>
+                    <SelectItem value="uttar-pradesh">Uttar Pradesh</SelectItem>
+                  </SelectContent>
+                </Select>
 
                 <Button type="submit" className="w-full h-12 text-base font-semibold bg-red-800 hover:bg-red-900 text-white mt-6">
                   Get Free Consultation!
