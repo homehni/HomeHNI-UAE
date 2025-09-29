@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import { AuthDialog } from "@/components/AuthDialog";
 
 type PayButtonProps = {
   label?: string;
@@ -23,10 +24,11 @@ export default function PayButton({
   className
 }: PayButtonProps) {
   const [loading, setLoading] = useState(false);
+  const [showAuthDialog, setShowAuthDialog] = useState(false);
   const { user } = useAuth();
   const { toast } = useToast();
 
-  const onClick = useCallback(async () => {
+  const handlePayment = useCallback(async () => {
     try {
       setLoading(true);
       console.log("PayButton clicked, starting payment process...");
@@ -369,9 +371,39 @@ export default function PayButton({
     }
   }, [amountPaise, planName, notes, prefill, user]);
 
+  const onClick = useCallback(() => {
+    // Check if user is authenticated
+    if (!user) {
+      setShowAuthDialog(true);
+      return;
+    }
+    
+    // User is authenticated, proceed with payment
+    handlePayment();
+  }, [user, handlePayment]);
+
+  const handleAuthSuccess = useCallback(() => {
+    // After successful authentication, proceed with payment
+    setShowAuthDialog(false);
+    // Use a small delay to ensure the auth dialog closes properly
+    setTimeout(() => {
+      handlePayment();
+    }, 300);
+  }, [handlePayment]);
+
   return (
-    <Button disabled={loading} onClick={onClick} className={className}>
-      {loading ? "Opening…" : label}
-    </Button>
+    <>
+      <Button disabled={loading} onClick={onClick} className={className}>
+        {loading ? "Opening…" : label}
+      </Button>
+      
+      <AuthDialog
+        open={showAuthDialog}
+        onOpenChange={setShowAuthDialog}
+        onSuccess={handleAuthSuccess}
+        title="Sign in to Subscribe"
+        description="Please sign in or create an account to proceed with your subscription."
+      />
+    </>
   );
 }
