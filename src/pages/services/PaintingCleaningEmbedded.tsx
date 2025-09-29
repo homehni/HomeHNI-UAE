@@ -163,9 +163,13 @@ const PaintingCleaningEmbedded = () => {
 
             <form className="space-y-4" onSubmit={e => {
               e.preventDefault();
-              setFormMessage({
-                type: "success",
-                text: "Request received! Our team will contact you shortly with a quote."
+              toast({
+                title: "Request received",
+                description: "Our team will contact you shortly with a quote.",
+                className: "bg-white border border-green-200 shadow-lg rounded-lg",
+                style: {
+                  borderLeft: "12px solid hsl(120, 100%, 25%)",
+                },
               });
               (e.currentTarget as HTMLFormElement).reset();
             }}>
@@ -232,9 +236,13 @@ const PaintingCleaningEmbedded = () => {
 
               <form className="space-y-5" onSubmit={e => {
               e.preventDefault();
-              setFormMessage({
-                type: "success",
-                text: "Request received! Our team will contact you shortly with a quote."
+              toast({
+                title: "Request received",
+                description: "Our team will contact you shortly with a quote.",
+                className: "bg-white border border-green-200 shadow-lg rounded-lg",
+                style: {
+                  borderLeft: "12px solid hsl(120, 100%, 25%)",
+                },
               });
               (e.currentTarget as HTMLFormElement).reset();
             }}>

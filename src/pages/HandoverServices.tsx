@@ -203,7 +203,11 @@ const HandoverServices = () => {
 
             toast({
               title: "Request received",
-              description: "Our handover expert will contact you shortly."
+              description: "Our handover expert will contact you shortly.",
+              className: "bg-white border border-green-200 shadow-lg rounded-lg",
+              style: {
+                borderLeft: "12px solid hsl(120, 100%, 25%)",
+              },
             });
             form.reset();
           }}>
@@ -293,7 +297,11 @@ const HandoverServices = () => {
 
               toast({
                 title: "Request received",
-                description: "Our handover expert will contact you shortly."
+                description: "Our handover expert will contact you shortly.",
+                className: "bg-white border border-green-200 shadow-lg rounded-lg",
+                style: {
+                  borderLeft: "12px solid hsl(120, 100%, 25%)",
+                },
               });
               form.reset();
             }}>

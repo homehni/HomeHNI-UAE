@@ -229,11 +229,14 @@ const LoansEmbedded = () => {
                   
                   if (response.ok && result.success !== false) {
                     console.log('✅ Email sent successfully to:', email);
-                    toast({
-                      title: "Application received",
-                      description: "Our loan expert will contact you shortly.",
-                      variant: "success"
-                    });
+                  toast({
+                    title: "Application received",
+                    description: "Our loan expert will contact you shortly.",
+                    className: "bg-white border border-green-200 shadow-lg rounded-lg",
+                    style: {
+                      borderLeft: "12px solid hsl(120, 100%, 25%)",
+                    },
+                  });
                   } else {
                     console.error('❌ Email API returned error:', result);
                     toast({
@@ -370,11 +373,14 @@ const LoansEmbedded = () => {
                   
                   if (response.ok && result.success !== false) {
                     console.log('✅ Email sent successfully to:', email);
-                    toast({
-                      title: "Application received",
-                      description: "Our loan expert will contact you shortly.",
-                      variant: "success"
-                    });
+                  toast({
+                    title: "Application received",
+                    description: "Our loan expert will contact you shortly.",
+                    className: "bg-white border border-green-200 shadow-lg rounded-lg",
+                    style: {
+                      borderLeft: "12px solid hsl(120, 100%, 25%)",
+                    },
+                  });
                   } else {
                     console.error('❌ Email API returned error:', result);
                     toast({

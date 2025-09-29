@@ -160,9 +160,13 @@ const InteriorDesignersEmbedded = () => {
 
               <form className="space-y-5" onSubmit={e => {
               e.preventDefault();
-              setFormMessage({
-                type: "success",
-                text: "Request submitted! Our interior designers will contact you within 24 hours."
+              toast({
+                title: "Request submitted",
+                description: "Our interior designers will contact you within 24 hours.",
+                className: "bg-white border border-green-200 shadow-lg rounded-lg",
+                style: {
+                  borderLeft: "12px solid hsl(120, 100%, 25%)",
+                },
               });
               (e.currentTarget as HTMLFormElement).reset();
             }}>
