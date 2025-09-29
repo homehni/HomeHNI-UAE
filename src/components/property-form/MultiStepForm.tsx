@@ -78,13 +78,17 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
     }
   }, [targetStep, goToStep]);
 
-  // Navigate to congratulations page if submission is complete
+  // Track one-time auto-navigation to preview
+  const hasNavigatedToPreview = React.useRef(false);
+
+  // Navigate to congratulations page once if submission is complete
   React.useEffect(() => {
-    if (createdSubmissionId && currentStep !== 7) {
+    if (createdSubmissionId && !hasNavigatedToPreview.current) {
       console.log('Submission complete, navigating to congratulations page');
+      hasNavigatedToPreview.current = true;
       goToStep(7);
     }
-  }, [createdSubmissionId, currentStep, goToStep]);
+  }, [createdSubmissionId, goToStep]);
 
   const completedSteps = React.useMemo(() => {
     const completed: number[] = [];
