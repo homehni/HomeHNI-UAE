@@ -189,7 +189,11 @@ const Architects = () => {
             e.preventDefault();
             toast({
               title: "Request submitted",
-              description: "Our architects will contact you within 24 hours."
+              description: "Our architects will contact you within 24 hours.",
+              className: "bg-white border border-green-200 shadow-lg rounded-lg",
+              style: {
+                borderLeft: "12px solid hsl(120, 100%, 25%)",
+              },
             });
             (e.currentTarget as HTMLFormElement).reset();
           }}>
@@ -286,7 +290,11 @@ const Architects = () => {
               e.preventDefault();
               toast({
                 title: "Request submitted",
-                description: "Our architects will contact you within 24 hours."
+                description: "Our architects will contact you within 24 hours.",
+                className: "bg-white border border-green-200 shadow-lg rounded-lg",
+                style: {
+                  borderLeft: "12px solid hsl(120, 100%, 25%)",
+                },
               });
               (e.currentTarget as HTMLFormElement).reset();
             }}>
