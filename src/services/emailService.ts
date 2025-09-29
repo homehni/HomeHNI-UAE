@@ -316,19 +316,36 @@ export async function sendPaymentSuccessEmail(
   userName: string,
   paymentData: {
     planName: string;
+    planType?: string;
+    planDuration?: string;
+    baseAmount?: number;
+    gstAmount?: number;
+    totalAmount?: number;
     amount: number;
     paymentId: string;
+    transactionId?: string;
+    paymentDate?: string;
     expiryDate: string;
+    nextBillingDate?: string | null;
+    dashboardUrl?: string;
   }
 ) {
   return sendEmail('/send-payment-success-email', {
     to: userEmail,
-    userName: userName || 'there',
+    userName: userName || 'Valued Customer',
     planName: paymentData.planName,
+    planType: paymentData.planType || 'subscription',
+    planDuration: paymentData.planDuration || '1 Month',
+    baseAmount: paymentData.baseAmount || paymentData.amount,
+    gstAmount: paymentData.gstAmount || 0,
+    totalAmount: paymentData.totalAmount || paymentData.amount,
     amount: paymentData.amount,
     paymentId: paymentData.paymentId,
+    transactionId: paymentData.transactionId || paymentData.paymentId,
+    paymentDate: paymentData.paymentDate || new Date().toLocaleDateString('en-IN'),
     expiryDate: paymentData.expiryDate,
-    dashboardUrl: 'https://homehni.com/dashboard'
+    nextBillingDate: paymentData.nextBillingDate,
+    dashboardUrl: paymentData.dashboardUrl || 'https://homehni.com/dashboard'
   });
 }
 
@@ -339,20 +356,55 @@ export async function sendPaymentInvoiceEmail(
   invoiceData: {
     invoiceNumber: string;
     planName: string;
+    planType?: string;
+    planDuration?: string;
+    baseAmount?: number;
+    gstAmount?: number;
+    gstRate?: string;
+    totalAmount?: number;
     amount: number;
     paymentDate: string;
     paymentId: string;
+    paymentMethod?: string;
+    currency?: string;
+    customerName?: string;
+    customerEmail?: string;
+    customerPhone?: string;
+    billingAddress?: {
+      name: string;
+      email: string;
+      phone: string;
+    };
+    invoiceDownloadUrl?: string;
+    dashboardUrl?: string;
   }
 ) {
   return sendEmail('/send-payment-invoice-email', {
     to: userEmail,
-    userName: userName || 'there',
+    userName: userName || 'Valued Customer',
     invoiceNumber: invoiceData.invoiceNumber,
     planName: invoiceData.planName,
+    planType: invoiceData.planType || 'subscription',
+    planDuration: invoiceData.planDuration || '1 Month',
+    baseAmount: invoiceData.baseAmount || invoiceData.amount,
+    gstAmount: invoiceData.gstAmount || 0,
+    gstRate: invoiceData.gstRate || '18%',
+    totalAmount: invoiceData.totalAmount || invoiceData.amount,
     amount: invoiceData.amount,
     paymentDate: invoiceData.paymentDate,
     paymentId: invoiceData.paymentId,
-    dashboardUrl: 'https://homehni.com/dashboard'
+    paymentMethod: invoiceData.paymentMethod || 'Online Payment',
+    currency: invoiceData.currency || 'INR',
+    customerName: invoiceData.customerName || userName,
+    customerEmail: invoiceData.customerEmail || userEmail,
+    customerPhone: invoiceData.customerPhone || '',
+    billingAddress: invoiceData.billingAddress || {
+      name: userName || 'Valued Customer',
+      email: userEmail,
+      phone: ''
+    },
+    invoiceDownloadUrl: invoiceData.invoiceDownloadUrl || '',
+    dashboardUrl: invoiceData.dashboardUrl || 'https://homehni.com/dashboard'
   });
 }
 
