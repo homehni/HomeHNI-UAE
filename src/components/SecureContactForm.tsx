@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -9,6 +9,7 @@ import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { sanitizeText, sanitizeEmail, sanitizePhone } from '@/utils/inputSanitization';
 import { Loader2, Shield, Mail, Phone, User } from 'lucide-react';
+import { checkContactUsage, useContactAttempt } from '@/services/contactUsageService';
 
 interface SecureContactFormProps {
   propertyId: string;
@@ -30,12 +31,22 @@ export const SecureContactForm: React.FC<SecureContactFormProps> = ({
   const { toast } = useToast();
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [canContact, setCanContact] = useState(true);
+  const [remainingUses, setRemainingUses] = useState(3);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     phone: '',
     message: ''
   });
+
+  // Check contact usage when component mounts
+  useEffect(() => {
+    checkContactUsage().then((status) => {
+      setCanContact(status.canContact);
+      setRemainingUses(status.remainingUses);
+    });
+  }, []);
 
   const handleInputChange = (field: string, value: string) => {
     let sanitizedValue = value;
@@ -91,6 +102,20 @@ export const SecureContactForm: React.FC<SecureContactFormProps> = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    // Check if user can still contact
+    if (!canContact) {
+      toast({
+        title: 'Contact Limit Reached',
+        description: 'You\'ve used all your free contacts. Subscribe to continue contacting property owners.',
+        className: "bg-white border border-orange-200 shadow-lg rounded-lg",
+        style: {
+          borderLeft: "8px solid hsl(38, 92%, 50%)",
+        },
+      });
+      navigate('/plans');
+      return;
+    }
+    
     const validationErrors = validateForm();
     if (validationErrors.length > 0) {
       toast({
@@ -123,9 +148,22 @@ export const SecureContactForm: React.FC<SecureContactFormProps> = ({
 
       console.log('SecureContactForm: Success! Listing type:', listingType);
 
+      // Use a contact attempt (decrement free uses)
+      const contactResult = await useContactAttempt();
+      if (contactResult.success) {
+        setRemainingUses(contactResult.remainingUses);
+        setCanContact(contactResult.remainingUses > 0);
+        console.log('SecureContactForm: Contact attempt used, remaining:', contactResult.remainingUses);
+      }
+
+      // Show success message with remaining uses info
+      const successMessage = contactResult.remainingUses > 0 
+        ? `Inquiry sent! You have ${contactResult.remainingUses} free contacts remaining.`
+        : "Inquiry sent! You've used all free contacts. Subscribe to continue contacting more properties.";
+
       toast({
         title: 'Inquiry Sent Successfully',
-        description: 'Your inquiry has been securely sent to the property owner. They will contact you soon!',
+        description: successMessage,
         className: "bg-white border border-green-200 shadow-lg rounded-lg",
         style: {
           borderLeft: "8px solid hsl(120, 100%, 25%)",
@@ -143,15 +181,22 @@ export const SecureContactForm: React.FC<SecureContactFormProps> = ({
       // Call onSuccess first if it exists
       onSuccess?.();
 
-      // Redirect to appropriate plans page based on listing type with delay
+      // Redirect logic based on remaining uses
       setTimeout(() => {
-        console.log('SecureContactForm: Redirecting with listing type:', listingType);
-        if (listingType === 'sale') {
-          console.log('SecureContactForm: Navigating to buyer plans');
-          navigate('/plans?tab=buyer');
-        } else if (listingType === 'rent') {
-          console.log('SecureContactForm: Navigating to rental plans');  
-          navigate('/plans?tab=rental');
+        if (contactResult.remainingUses === 0) {
+          // No more free uses - redirect to payment plans
+          console.log('SecureContactForm: No free uses left, redirecting to plans');
+          navigate('/plans');
+        } else {
+          // Still have free uses - redirect to appropriate plans page
+          console.log('SecureContactForm: Redirecting with listing type:', listingType);
+          if (listingType === 'sale') {
+            console.log('SecureContactForm: Navigating to buyer plans');
+            navigate('/plans?tab=buyer');
+          } else if (listingType === 'rent') {
+            console.log('SecureContactForm: Navigating to rental plans');  
+            navigate('/plans?tab=rental');
+          }
         }
       }, 1000);
 
@@ -180,6 +225,20 @@ export const SecureContactForm: React.FC<SecureContactFormProps> = ({
         <CardDescription>
           Send a secure inquiry for "{propertyTitle}". Your message will be forwarded to the owner.
         </CardDescription>
+        {canContact && (
+          <div className="bg-blue-50 p-3 rounded-md">
+            <p className="text-sm text-blue-700">
+              Free contacts remaining: <span className="font-semibold">{remainingUses}</span>
+            </p>
+          </div>
+        )}
+        {!canContact && (
+          <div className="bg-orange-50 p-3 rounded-md">
+            <p className="text-sm text-orange-700">
+              You've used all your free contacts. <span className="font-semibold">Subscribe to continue contacting properties.</span>
+            </p>
+          </div>
+        )}
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -248,9 +307,14 @@ export const SecureContactForm: React.FC<SecureContactFormProps> = ({
           <Button 
             type="submit" 
             className="w-full" 
-            disabled={isSubmitting}
+            disabled={isSubmitting || !canContact}
           >
-            {isSubmitting ? (
+            {!canContact ? (
+              <>
+                <Shield className="h-4 w-4 mr-2" />
+                Subscribe to Contact Properties
+              </>
+            ) : isSubmitting ? (
               <>
                 <Loader2 className="h-4 w-4 animate-spin mr-2" />
                 Sending Secure Inquiry...

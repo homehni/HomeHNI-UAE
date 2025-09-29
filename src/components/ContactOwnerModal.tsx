@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
@@ -9,6 +9,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { sendContactOwnerEmail } from '@/services/emailService';
+import { checkContactUsage, useContactAttempt } from '@/services/contactUsageService';
 
 interface ContactOwnerModalProps {
   isOpen: boolean;
@@ -32,8 +33,37 @@ export const ContactOwnerModal: React.FC<ContactOwnerModalProps> = ({
     message: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [canContact, setCanContact] = useState(true);
+  const [remainingUses, setRemainingUses] = useState(3);
   const { toast } = useToast();
   const navigate = useNavigate();
+
+  // Check contact usage when modal opens
+  useEffect(() => {
+    if (isOpen) {
+      checkContactUsage().then((status) => {
+        setCanContact(status.canContact);
+        setRemainingUses(status.remainingUses);
+        
+        // If user can't contact, redirect to payment immediately
+        if (!status.canContact) {
+          onClose();
+          toast({
+            title: "Contact Limit Reached",
+            description: "You've used all your free contacts. Subscribe to continue contacting property owners.",
+            className: "bg-white border border-orange-200 shadow-lg rounded-lg",
+            style: {
+              borderLeft: "8px solid hsl(38, 92%, 50%)",
+            },
+          });
+          // Redirect to plans page after a short delay
+          setTimeout(() => {
+            navigate('/plans');
+          }, 1500);
+        }
+      });
+    }
+  }, [isOpen, onClose, navigate, toast]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -113,6 +143,13 @@ export const ContactOwnerModal: React.FC<ContactOwnerModalProps> = ({
 
       console.log('ContactOwnerModal: Success! Listing type:', listingType);
       
+      // Use a contact attempt (decrement free uses)
+      const contactResult = await useContactAttempt();
+      if (contactResult.success) {
+        setRemainingUses(contactResult.remainingUses);
+        console.log('ContactOwnerModal: Contact attempt used, remaining:', contactResult.remainingUses);
+      }
+      
       // Send email notification to property owner
       try {
         // Get property owner contact details using secure RPC function
@@ -142,9 +179,14 @@ export const ContactOwnerModal: React.FC<ContactOwnerModalProps> = ({
         // Don't show error to user as the main action was successful
       }
       
+      // Show success message with remaining uses info
+      const successMessage = contactResult.remainingUses > 0 
+        ? `Contact sent! You have ${contactResult.remainingUses} free contacts remaining.`
+        : "Contact sent! You've used all free contacts. Subscribe to continue contacting more properties.";
+      
       toast({
         title: "Interest Registered Successfully!",
-        description: "The property owner will contact you soon through your provided details.",
+        description: successMessage,
         className: "bg-white border border-green-200 shadow-lg rounded-lg",
         style: {
           borderLeft: "8px solid hsl(120, 100%, 25%)",
@@ -157,15 +199,22 @@ export const ContactOwnerModal: React.FC<ContactOwnerModalProps> = ({
       // Close modal first
       onClose();
       
-      // Redirect to appropriate plans page based on listing type with delay
+      // Redirect logic based on remaining uses
       setTimeout(() => {
-        console.log('ContactOwnerModal: Redirecting with listing type:', listingType);
-        if (listingType === 'sale') {
-          console.log('ContactOwnerModal: Navigating to buyer plans');
-          navigate('/plans?tab=buyer');
-        } else if (listingType === 'rent') {
-          console.log('ContactOwnerModal: Navigating to rental plans');  
-          navigate('/plans?tab=rental');
+        if (contactResult.remainingUses === 0) {
+          // No more free uses - redirect to payment plans
+          console.log('ContactOwnerModal: No free uses left, redirecting to plans');
+          navigate('/plans');
+        } else {
+          // Still have free uses - redirect to appropriate plans page
+          console.log('ContactOwnerModal: Redirecting with listing type:', listingType);
+          if (listingType === 'sale') {
+            console.log('ContactOwnerModal: Navigating to buyer plans');
+            navigate('/plans?tab=buyer');
+          } else if (listingType === 'rent') {
+            console.log('ContactOwnerModal: Navigating to rental plans');  
+            navigate('/plans?tab=rental');
+          }
         }
       }, 1000);
     } catch (error) {
@@ -222,6 +271,14 @@ export const ContactOwnerModal: React.FC<ContactOwnerModalProps> = ({
             <p className="text-sm text-gray-600">Property:</p>
             <p className="font-medium">{propertyTitle}</p>
           </div>
+          
+          {canContact && (
+            <div className="bg-blue-50 p-3 rounded-md">
+              <p className="text-sm text-blue-700">
+                Free contacts remaining: <span className="font-semibold">{remainingUses}</span>
+              </p>
+            </div>
+          )}
           
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
