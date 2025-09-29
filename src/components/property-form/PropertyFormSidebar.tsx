@@ -98,12 +98,12 @@ export const PropertyFormSidebar: React.FC<PropertyFormSidebarProps> = ({
                   fill="none"
                   stroke="#10b981"
                   strokeWidth="2"
-                  strokeDasharray={`${Math.min((currentStep / 6) * 100, 100)}, 100`}
+                  strokeDasharray={`${Math.min((completedSteps.length / 7) * 100, 100)}, 100`}
                 />
               </svg>
               <div className="absolute inset-0 flex items-center justify-center">
                 <span className="text-lg font-semibold text-gray-700">
-                  {Math.min(Math.round((currentStep / 6) * 100), 100)}%
+                  {Math.min(Math.round((completedSteps.length / 7) * 100), 100)}%
                 </span>
               </div>
             </div>
