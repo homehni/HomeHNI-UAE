@@ -28,9 +28,23 @@ export const PropertyFormSidebar: React.FC<PropertyFormSidebarProps> = ({
     active: currentStep === index + 1
   }));
 
-  // Custom progress percentages for each step
-  const progressPercentages = [17, 33, 50, 67, 83, 100];
-  const progress = progressPercentages[currentStep - 1] || 0;
+  // Compute progress based on steps
+  const totalSteps = steps.length || 1;
+  let progress: number;
+  if (totalSteps === 7) {
+    // Residential Rent flow (7 steps). Preview should also show 100%.
+    const progressMap = [17, 33, 50, 67, 83, 100, 100];
+    const idx = Math.min(Math.max(currentStep, 1), 7) - 1;
+    progress = progressMap[idx];
+  } else if (totalSteps === 6) {
+    // 6-step flows if any
+    const progressMap = [17, 33, 50, 67, 83, 100];
+    const idx = Math.min(Math.max(currentStep, 1), 6) - 1;
+    progress = progressMap[idx];
+  } else {
+    // Fallback: proportional progress
+    progress = Math.min((currentStep / totalSteps) * 100, 100);
+  }
 
   return (
     <div className="w-80 bg-white border-r border-gray-200 h-full p-3 flex-shrink-0">
