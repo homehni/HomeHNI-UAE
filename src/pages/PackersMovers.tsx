@@ -194,11 +194,25 @@ const PackersMovers = () => {
 
             <form className="space-y-4" onSubmit={e => {
               e.preventDefault();
+              const form = e.currentTarget as HTMLFormElement;
+              if (!form.checkValidity()) {
+                form.reportValidity();
+                toast({
+                  title: "Error",
+                  description: "Please fill in all required fields before submitting your moving request.",
+                  variant: "destructive"
+                });
+                return;
+              }
               toast({
-                title: "Quote request received",
-                description: "Our moving expert will contact you shortly."
+                title: "Request received",
+                description: "Our moving expert will contact you shortly.",
+                className: "bg-white border border-green-200 shadow-lg rounded-lg",
+                style: {
+                  borderLeft: "12px solid hsl(120, 100%, 25%)",
+                },
               });
-              (e.currentTarget as HTMLFormElement).reset();
+              form.reset();
             }}>
               <Input id="moving-name" name="name" placeholder="Name" required />
 
