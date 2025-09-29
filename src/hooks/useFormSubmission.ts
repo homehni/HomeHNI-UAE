@@ -33,7 +33,7 @@ export const useFormSubmission = () => {
   };
 
   const showSuccessToast = (title: string, description: string) => {
-    toast({ title, description });
+    toast({ title, description, variant: "success" });
   };
 
   const showErrorToast = (title: string, description: string) => {
