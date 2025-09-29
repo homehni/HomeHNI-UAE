@@ -7,6 +7,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useToast } from '@/hooks/use-toast';
+import { useAuth } from '@/hooks/useAuth';
 import { sendFreshlyPaintedEmail, sendDeepCleaningEmail } from '@/services/emailService';
 import { OwnerInfo, PropertyInfo } from '@/types/property';
 import { Clock, Calendar, Eye, CheckCircle, PaintBucket, Sparkles } from 'lucide-react';
@@ -38,6 +39,8 @@ export const ResaleScheduleStep: React.FC<ResaleScheduleStepProps> = ({
   propertyInfo
 }) => {
   const { toast } = useToast();
+  const { user } = useAuth();
+
   const [paintingResponse, setPaintingResponse] = useState<'book' | 'decline' | null>(null);
   const [cleaningResponse, setCleaningResponse] = useState<'book' | 'decline' | null>(null);
   const form = useForm<ResaleScheduleData>({
@@ -51,13 +54,37 @@ export const ResaleScheduleStep: React.FC<ResaleScheduleStepProps> = ({
       availableAllDay: initialData.availableAllDay || false
     }
   });
+  
+  // Resolve contact details from multiple sources
+  const getResolvedContact = () => {
+    const emailCandidates = [
+      ownerInfo?.email,
+      user?.email,
+      propertyInfo?.ownerInfo?.email,
+      propertyInfo?.contactDetails?.email,
+    ] as (string | undefined)[];
+    const fullNameCandidates = [
+      ownerInfo?.fullName,
+      (user as any)?.user_metadata?.full_name,
+      (user as any)?.user_metadata?.name,
+      propertyInfo?.ownerInfo?.fullName,
+      propertyInfo?.ownerInfo?.name,
+      propertyInfo?.contactDetails?.name,
+    ] as (string | undefined)[];
+    const email = emailCandidates.find(Boolean);
+    const fullName = fullNameCandidates.find(Boolean);
+    return { email, fullName } as { email?: string; fullName?: string };
+  };
+
   const handlePaintingBookNow = async () => {
-    if (!ownerInfo?.email || !ownerInfo?.fullName) {
+    const { email, fullName } = getResolvedContact();
+    if (!email || !fullName) {
       toast({
         title: "Error",
         description: "Unable to send request. Please ensure your email and name are properly entered.",
         variant: "destructive"
       });
+      console.warn('[ResaleScheduleStep] Missing contact details for Painting', { email, fullName, ownerInfo, user });
       return;
     }
 
@@ -70,9 +97,9 @@ export const ResaleScheduleStep: React.FC<ResaleScheduleStepProps> = ({
                            '';
 
       await sendFreshlyPaintedEmail(
-        ownerInfo.email,
-        ownerInfo.fullName,
-        ownerInfo.propertyType || '',
+        email,
+        fullName,
+        ownerInfo?.propertyType || propertyInfo?.propertyDetails?.propertyType || propertyInfo?.basicDetails?.propertyType || '',
         locality,
         expectedPrice.toString()
       );
@@ -96,12 +123,14 @@ export const ResaleScheduleStep: React.FC<ResaleScheduleStepProps> = ({
   };
 
   const handleCleaningBookNow = async () => {
-    if (!ownerInfo?.email || !ownerInfo?.fullName) {
+    const { email, fullName } = getResolvedContact();
+    if (!email || !fullName) {
       toast({
         title: "Error",
         description: "Unable to send request. Please ensure your email and name are properly entered.",
         variant: "destructive"
       });
+      console.warn('[ResaleScheduleStep] Missing contact details for Cleaning', { email, fullName, ownerInfo, user });
       return;
     }
 
@@ -114,9 +143,9 @@ export const ResaleScheduleStep: React.FC<ResaleScheduleStepProps> = ({
                            '';
 
       await sendDeepCleaningEmail(
-        ownerInfo.email,
-        ownerInfo.fullName,
-        ownerInfo.propertyType || '',
+        email,
+        fullName,
+        ownerInfo?.propertyType || propertyInfo?.propertyDetails?.propertyType || propertyInfo?.basicDetails?.propertyType || '',
         locality,
         expectedPrice.toString()
       );
