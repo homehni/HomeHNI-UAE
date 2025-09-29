@@ -194,11 +194,25 @@ const PaintingCleaning = () => {
 
             <form className="space-y-4" onSubmit={e => {
               e.preventDefault();
+              const form = e.currentTarget as HTMLFormElement;
+              if (!form.checkValidity()) {
+                form.reportValidity();
+                toast({
+                  title: "Error",
+                  description: "Please fill in all required fields before submitting your request.",
+                  variant: "destructive"
+                });
+                return;
+              }
               toast({
                 title: "Request received",
-                description: "Our team will contact you shortly with a quote."
+                description: "Our team will contact you shortly with a quote.",
+                className: "bg-white border border-green-200 shadow-lg rounded-lg",
+                style: {
+                  borderLeft: "12px solid hsl(120, 100%, 25%)",
+                },
               });
-              (e.currentTarget as HTMLFormElement).reset();
+              form.reset();
             }}>
               <Input id="painting-name" name="name" placeholder="Name" required />
 
@@ -234,48 +248,21 @@ const PaintingCleaning = () => {
                 </Select>
               </div>
 
-              <div className="flex gap-2">
-                <Select defaultValue="india" name="country">
-                  <SelectTrigger id="painting-country" className="flex-1"><SelectValue placeholder="Country" /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="india">India</SelectItem>
-                    <SelectItem value="usa">United States</SelectItem>
-                    <SelectItem value="uk">United Kingdom</SelectItem>
-                    <SelectItem value="canada">Canada</SelectItem>
-                    <SelectItem value="australia">Australia</SelectItem>
-                  </SelectContent>
-                </Select>
-                <Select name="state">
-                  <SelectTrigger id="painting-state" className="flex-1"><SelectValue placeholder="State" /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="andhra-pradesh">Andhra Pradesh</SelectItem>
-                    <SelectItem value="karnataka">Karnataka</SelectItem>
-                    <SelectItem value="tamil-nadu">Tamil Nadu</SelectItem>
-                    <SelectItem value="telangana">Telangana</SelectItem>
-                    <SelectItem value="maharashtra">Maharashtra</SelectItem>
-                    <SelectItem value="gujarat">Gujarat</SelectItem>
-                    <SelectItem value="rajasthan">Rajasthan</SelectItem>
-                    <SelectItem value="delhi">Delhi</SelectItem>
-                    <SelectItem value="west-bengal">West Bengal</SelectItem>
-                    <SelectItem value="uttar-pradesh">Uttar Pradesh</SelectItem>
-                  </SelectContent>
-                </Select>
-                <Select name="city">
-                  <SelectTrigger id="painting-city" className="flex-1"><SelectValue placeholder="City" /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="bangalore">Bangalore</SelectItem>
-                    <SelectItem value="hyderabad">Hyderabad</SelectItem>
-                    <SelectItem value="chennai">Chennai</SelectItem>
-                    <SelectItem value="mumbai">Mumbai</SelectItem>
-                    <SelectItem value="pune">Pune</SelectItem>
-                    <SelectItem value="delhi">Delhi</SelectItem>
-                    <SelectItem value="kolkata">Kolkata</SelectItem>
-                    <SelectItem value="ahmedabad">Ahmedabad</SelectItem>
-                    <SelectItem value="jaipur">Jaipur</SelectItem>
-                    <SelectItem value="lucknow">Lucknow</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
+              <Select name="state">
+                <SelectTrigger id="painting-state" className="w-full"><SelectValue placeholder="State" /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="andhra-pradesh">Andhra Pradesh</SelectItem>
+                  <SelectItem value="karnataka">Karnataka</SelectItem>
+                  <SelectItem value="tamil-nadu">Tamil Nadu</SelectItem>
+                  <SelectItem value="telangana">Telangana</SelectItem>
+                  <SelectItem value="maharashtra">Maharashtra</SelectItem>
+                  <SelectItem value="gujarat">Gujarat</SelectItem>
+                  <SelectItem value="rajasthan">Rajasthan</SelectItem>
+                  <SelectItem value="delhi">Delhi</SelectItem>
+                  <SelectItem value="west-bengal">West Bengal</SelectItem>
+                  <SelectItem value="uttar-pradesh">Uttar Pradesh</SelectItem>
+                </SelectContent>
+              </Select>
 
               <Button type="submit" className="w-full bg-red-800 hover:bg-red-900 text-white">Talk to Us Today!</Button>
             </form>
@@ -293,11 +280,25 @@ const PaintingCleaning = () => {
 
               <form className="space-y-6" onSubmit={e => {
                 e.preventDefault();
+                const form = e.currentTarget as HTMLFormElement;
+                if (!form.checkValidity()) {
+                  form.reportValidity();
+                  toast({
+                    title: "Error",
+                    description: "Please fill in all required fields before submitting your request.",
+                    variant: "destructive"
+                  });
+                  return;
+                }
                 toast({
                   title: "Request received",
-                  description: "Our team will contact you shortly with a quote."
+                  description: "Our team will contact you shortly with a quote.",
+                  className: "bg-white border border-green-200 shadow-lg rounded-lg",
+                  style: {
+                    borderLeft: "12px solid hsl(120, 100%, 25%)",
+                  },
                 });
-                (e.currentTarget as HTMLFormElement).reset();
+                form.reset();
               }}>
                 <Input 
                   id="painting-name-mobile" 
@@ -362,34 +363,23 @@ const PaintingCleaning = () => {
                   </div>
                 </div>
 
-                <div className="space-y-4">
-                  <div className="flex gap-4">
-                    <Select defaultValue="india" name="country">
-                      <SelectTrigger id="painting-country-mobile" className="flex-1 h-14 bg-background text-lg">
-                        <SelectValue placeholder="Country" />
-                      </SelectTrigger>
-                      <SelectContent className="bg-background border shadow-lg">
-                        <SelectItem value="india">India</SelectItem>
-                        <SelectItem value="usa">United States</SelectItem>
-                        <SelectItem value="uk">United Kingdom</SelectItem>
-                        <SelectItem value="canada">Canada</SelectItem>
-                        <SelectItem value="australia">Australia</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <Select name="state">
-                      <SelectTrigger id="painting-state-mobile" className="flex-1 h-14 bg-background text-lg">
-                        <SelectValue placeholder="City" />
-                      </SelectTrigger>
-                      <SelectContent className="bg-background border shadow-lg">
-                        {majorCities.map((city) => (
-                          <SelectItem key={city} value={city.toLowerCase()}>
-                            {city}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
+                <Select name="state">
+                  <SelectTrigger id="painting-state-mobile" className="w-full h-14 bg-background text-lg">
+                    <SelectValue placeholder="State" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-background border shadow-lg">
+                    <SelectItem value="andhra-pradesh">Andhra Pradesh</SelectItem>
+                    <SelectItem value="karnataka">Karnataka</SelectItem>
+                    <SelectItem value="tamil-nadu">Tamil Nadu</SelectItem>
+                    <SelectItem value="telangana">Telangana</SelectItem>
+                    <SelectItem value="maharashtra">Maharashtra</SelectItem>
+                    <SelectItem value="gujarat">Gujarat</SelectItem>
+                    <SelectItem value="rajasthan">Rajasthan</SelectItem>
+                    <SelectItem value="delhi">Delhi</SelectItem>
+                    <SelectItem value="west-bengal">West Bengal</SelectItem>
+                    <SelectItem value="uttar-pradesh">Uttar Pradesh</SelectItem>
+                  </SelectContent>
+                </Select>
 
                 <Button type="submit" className="w-full h-14 text-lg font-semibold bg-red-800 hover:bg-red-900 text-white mt-8">
                   Talk to Us Today!
