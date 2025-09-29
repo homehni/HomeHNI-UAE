@@ -822,7 +822,7 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
 
           {/* Right Sidebar - Get Tenants Faster */}
           <div className="w-80 flex-shrink-0 min-h-screen">
-            <GetTenantsFasterSection />
+            <GetTenantsFasterSection ownerInfo={ownerInfo} />
           </div>
         </div>
 
@@ -1358,7 +1358,7 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
 
         {/* Right Sidebar - Get Tenants Faster */}
         <div className="w-80 flex-shrink-0 min-h-screen">
-          <GetTenantsFasterSection />
+          <GetTenantsFasterSection ownerInfo={ownerInfo} />
         </div>
       </div>
     </div>

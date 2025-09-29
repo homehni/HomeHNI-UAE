@@ -606,8 +606,8 @@ const [propertyInfo, setPropertyInfo] = useState({
             </div>
 
             {/* Right Sidebar - Get Tenants Faster */}
-            <div className="w-80 flex-shrink-0 min-h-screen">
-              <GetTenantsFasterSection />
+             <div className="w-80 flex-shrink-0 min-h-screen">
+              <GetTenantsFasterSection ownerInfo={ownerInfo} />
             </div>
           </div>
 
@@ -962,7 +962,7 @@ const [propertyInfo, setPropertyInfo] = useState({
 
         {/* Right Sidebar - Get Tenants Faster */}
         <div className="w-80 flex-shrink-0 min-h-screen">
-          <GetTenantsFasterSection />
+          <GetTenantsFasterSection ownerInfo={ownerInfo} />
         </div>
       </div>
 

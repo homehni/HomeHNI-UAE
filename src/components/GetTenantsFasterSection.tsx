@@ -18,23 +18,44 @@ const GetTenantsFasterSection: React.FC<GetTenantsFasterSectionProps> = ({ owner
     
     // Send show interest email
     try {
+      // Ensure we have a valid email before sending
+      const userEmail = ownerInfo?.email;
+      const userName = ownerInfo?.fullName || 'Property Owner';
+      
+      if (!userEmail) {
+        console.error('No valid email address found for help request');
+        toast({
+          title: "Error",
+          description: "Unable to send request. Please ensure your email is properly entered in the form.",
+          variant: "destructive"
+        });
+        setInterestShown(false);
+        return;
+      }
+      
       await sendShowInterestEmail(
-        ownerInfo?.email || 'user@example.com', // Use actual user email or fallback
-        ownerInfo?.fullName || 'Property Owner', // Use actual user name or fallback
+        userEmail,
+        userName,
         {
           propertyType: 'rent',
-          phone: ownerInfo?.phoneNumber || '+91 1234567890' // Use actual phone or fallback
+          phone: ownerInfo?.phoneNumber || ''
         }
       );
+      
+      toast({
+        title: "Your request has been submitted successfully.",
+        description: "Our executives will reach out to you soon.",
+        style: { borderLeft: "8px solid hsl(120, 100%, 25%)" }
+      });
     } catch (error) {
       console.error('Failed to send interest email:', error);
+      toast({
+        title: "Error",
+        description: "Failed to send request. Please try again.",
+        variant: "destructive"
+      });
+      setInterestShown(false);
     }
-    
-    toast({
-      title: "Your request has been submitted successfully.",
-      description: "Our executives will reach out to you soon.",
-      style: { borderLeft: "8px solid hsl(120, 100%, 25%)" }
-    });
   };
 
   const features = [{

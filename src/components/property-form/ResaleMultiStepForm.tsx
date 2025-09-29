@@ -385,7 +385,7 @@ const handleScheduleSubmit = (data: any) => {
 
         {/* Right Sidebar - Get Tenants Faster */}
         <div className="w-80 flex-shrink-0 h-full">
-          <GetTenantsFasterSection />
+          <GetTenantsFasterSection ownerInfo={ownerInfo} />
         </div>
       </div>
     </div>

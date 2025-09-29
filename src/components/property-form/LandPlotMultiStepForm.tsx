@@ -331,7 +331,7 @@ export const LandPlotMultiStepForm: React.FC<LandPlotMultiStepFormProps> = ({
 
         {/* Right Sidebar - Get Tenants Faster */}
         <div className="hidden lg:block w-80 bg-white border-l border-gray-200 min-h-screen">
-          <GetTenantsFasterSection />
+          <GetTenantsFasterSection ownerInfo={ownerInfo} />
         </div>
       </div>
     </div>
