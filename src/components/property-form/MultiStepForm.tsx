@@ -80,22 +80,17 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
 
   // Navigate to congratulations page if submission is complete
   React.useEffect(() => {
-    console.log('Checking submission state:', { createdSubmissionId, currentStep });
     if (createdSubmissionId && currentStep !== 8) {
       console.log('Submission complete, navigating to congratulations page');
-      setTimeout(() => {
-        goToStep(8);
-      }, 100);
+      goToStep(8);
     }
   }, [createdSubmissionId, currentStep, goToStep]);
 
   const completedSteps = React.useMemo(() => {
     const completed: number[] = [];
-    // Only count steps as completed if we're past them, except for step 8 (preview)
-    for (let i = 1; i < Math.min(currentStep, 8); i++) {
+    for (let i = 1; i < currentStep; i++) {
       if (isStepValid(i)) completed.push(i);
     }
-    console.log('Completed steps:', completed, 'Current step:', currentStep);
     return completed;
   }, [isStepValid, currentStep]);
 
@@ -300,13 +295,6 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
                   console.log('MultiStepForm sticky Save & Continue button clicked');
                   console.log('Current step:', currentStep);
                   
-                  // Disable button temporarily to prevent double clicks
-                  const button = document.querySelector('.sticky-submit-btn') as HTMLButtonElement;
-                  if (button) {
-                    button.disabled = true;
-                    setTimeout(() => { button.disabled = false; }, 2000);
-                  }
-                  
                   // Trigger the current step's form submission
                   const currentStepElement = document.querySelector('form');
                   console.log('Found form element:', currentStepElement);
@@ -322,8 +310,7 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
                   // Always scroll to top when Save & Continue is clicked
                   setTimeout(scrollToTop, 100);
                 }}
-                className="h-12 sm:h-10 px-6 sm:px-6 bg-red-600 hover:bg-red-700 text-white w-full sm:w-auto order-1 sm:order-2 font-semibold sticky-submit-btn"
-                disabled={isSubmitting}
+                className="h-12 sm:h-10 px-6 sm:px-6 bg-red-600 hover:bg-red-700 text-white w-full sm:w-auto order-1 sm:order-2 font-semibold"
               >
                 {currentStep === 7 ? 'Submit Property' : 'Save & Continue'}
               </Button>
