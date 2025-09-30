@@ -59,9 +59,11 @@ export const ResaleMultiStepForm: React.FC<ResaleMultiStepFormProps> = ({
   } = useSalePropertyForm();
 
   // Initialize with owner info if provided
+  const ownerInfoInitRef = React.useRef(false);
   React.useEffect(() => {
-    if (initialOwnerInfo && Object.keys(initialOwnerInfo).length > 0) {
+    if (!ownerInfoInitRef.current && initialOwnerInfo && Object.keys(initialOwnerInfo).length > 0) {
       updateOwnerInfo(initialOwnerInfo);
+      ownerInfoInitRef.current = true;
     }
   }, [initialOwnerInfo, updateOwnerInfo]);
 
@@ -363,8 +365,11 @@ const handleScheduleSubmit = (data: any) => {
                 console.log('Current step:', currentStep);
                 console.log('Form ID we are looking for:', currentFormId);
                 
-                const formEl = document.getElementById(currentFormId) as HTMLFormElement | null;
-                console.log('Form element found:', formEl);
+                    let formEl = document.getElementById(currentFormId) as HTMLFormElement | null;
+                    if (!formEl) {
+                      formEl = document.getElementById(`${currentFormId}-m`) as HTMLFormElement | null;
+                    }
+                    console.log('Form element found:', formEl);
                 
                 if (formEl) {
                   console.log('Calling requestSubmit on form element');
