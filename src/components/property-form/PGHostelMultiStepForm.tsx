@@ -250,13 +250,26 @@ const [propertyInfo, setPropertyInfo] = useState({
     console.log('PGHostel sticky button clicked, step:', currentStep);
     
     // Trigger form submission to get the latest form data with validation
-    const currentForm = document.querySelector('form');
-    if (currentForm) {
-      console.log('Sticky button: Triggering form submission for step', currentStep);
+    const allForms = Array.from(document.querySelectorAll('form')) as HTMLFormElement[];
+    const visibleForm = allForms.find(f => {
+      // Prefer forms that are actually visible (not in hidden lg:flex containers)
+      const rects = f.getClientRects();
+      const isVisible = rects.length > 0 && (f as any).offsetParent !== null;
+      const style = window.getComputedStyle(f);
+      return isVisible && style.display !== 'none' && style.visibility !== 'hidden' && style.opacity !== '0';
+    }) || allForms[0] || null;
+
+    if (visibleForm) {
+      console.log('Sticky button: Triggering requestSubmit on visible form for step', currentStep, visibleForm);
       // Use requestSubmit to trigger proper form validation and submission
-      currentForm.requestSubmit();
+      if (typeof visibleForm.requestSubmit === 'function') {
+        visibleForm.requestSubmit();
+      } else {
+        const submitEvent = new Event('submit', { bubbles: true, cancelable: true });
+        visibleForm.dispatchEvent(submitEvent);
+      }
     } else {
-      console.warn('No form found for step:', currentStep);
+      console.warn('No visible form found for step:', currentStep);
     }
     
     // Always scroll to top for better UX
