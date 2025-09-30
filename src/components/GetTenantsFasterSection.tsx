@@ -79,9 +79,9 @@ const GetTenantsFasterSection: React.FC<GetTenantsFasterSectionProps> = ({ owner
       <div className="p-4 space-y-4 flex flex-col">
         {/* Header */}
         <div className="text-center">
-          <h2 className="text-lg font-medium text-gray-700 mb-2">Get Tenants Faster</h2>
+          <h2 className="text-lg font-medium text-gray-700 mb-2">Get Results Faster</h2>
           <p className="text-xs text-gray-600 leading-relaxed px-1">
-            Subscribe to our owner plans and find Tenants quickly and with ease
+            Subscribe to our Owner Plans and connect with quality tenants, buyers, flatmates or lessees—quickly and easily.
           </p>
         </div>
 
