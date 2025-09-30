@@ -256,7 +256,7 @@ export const CommercialPreviewStep: React.FC<CommercialPreviewStepProps> = ({
   }
 
   return (
-    <div className="w-full px-4 sm:px-6 lg:px-8 space-y-4 sm:space-y-6">
+    <div className="pt-20 sm:pt-0 w-full px-4 sm:px-6 lg:px-8 space-y-4 sm:space-y-6">
       {/* Property Preview Section - Hidden */}
       <div className="hidden bg-white border border-gray-200 rounded-lg p-4 sm:p-6 mb-4 sm:mb-6 shadow-sm">
         <h2 className="text-xl font-semibold text-gray-800 mb-4">Commercial Property Preview</h2>
@@ -289,7 +289,7 @@ export const CommercialPreviewStep: React.FC<CommercialPreviewStepProps> = ({
       </div>
 
       {/* Congratulations Section */}
-      <div className="mt-28 sm:mt-0 bg-red-50 border border-red-200 rounded-xl p-4 sm:p-6 mb-4 sm:mb-6 shadow-lg">
+      <div className="bg-red-50 border border-red-200 rounded-xl p-4 sm:p-6 mb-4 sm:mb-6 shadow-lg">
         <div className="flex flex-col sm:flex-row items-center gap-4 mb-4">
           <div className="w-12 h-12 sm:w-14 sm:h-14 bg-red-500 rounded-full flex items-center justify-center flex-shrink-0 shadow-md">
             <Check className="w-6 h-6 text-white" strokeWidth={3} />
