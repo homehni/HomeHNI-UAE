@@ -365,16 +365,16 @@ const handleScheduleSubmit = (data: any) => {
                 console.log('Current step:', currentStep);
                 console.log('Form ID we are looking for:', currentFormId);
                 
-                    let formEl = document.getElementById(currentFormId) as HTMLFormElement | null;
+                    let formEl = document.getElementById(`${currentFormId}-m`) as HTMLFormElement | null;
                     if (!formEl) {
-                      formEl = document.getElementById(`${currentFormId}-m`) as HTMLFormElement | null;
+                      formEl = document.getElementById(currentFormId) as HTMLFormElement | null;
                     }
                     console.log('Form element found:', formEl);
-                
-                if (formEl) {
-                  console.log('Calling requestSubmit on form element');
-                  formEl.requestSubmit();
-                } else {
+                    
+                    if (formEl) {
+                      console.log('Calling requestSubmit on form element');
+                      formEl.requestSubmit();
+                    } else {
                   console.warn('Form element not found for current step');
                   // Try to find any form on the page as fallback
                   const anyForm = document.querySelector('form');
