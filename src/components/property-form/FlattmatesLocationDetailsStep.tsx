@@ -41,11 +41,13 @@ export const FlattmatesLocationDetailsStep: React.FC<FlattmatesLocationDetailsSt
   const mapRef = useRef<any>(null);
   const markerRef = useRef<any>(null);
   const [showMap, setShowMap] = useState(false);
+  const [locationMismatchWarning, setLocationMismatchWarning] = useState('');
+  const [selectedCity, setSelectedCity] = useState(initialData.city || 'Bangalore');
 
   const form = useForm<FlattmatesLocationData>({
     resolver: zodResolver(flattmatesLocationSchema),
     defaultValues: {
-      city: initialData.city || 'Bangalore', // Set default to Bangalore if none provided
+      city: initialData.city || 'Bangalore',
       locality: initialData.locality || '',
       landmark: initialData.landmark || '',
       state: initialData.state || '',
@@ -57,6 +59,7 @@ export const FlattmatesLocationDetailsStep: React.FC<FlattmatesLocationDetailsSt
   useEffect(() => {
     if (initialData.city) {
       form.setValue('city', initialData.city);
+      setSelectedCity(initialData.city);
     }
     if (initialData.locality) {
       form.setValue('locality', initialData.locality);
@@ -65,6 +68,24 @@ export const FlattmatesLocationDetailsStep: React.FC<FlattmatesLocationDetailsSt
       form.setValue('landmark', initialData.landmark);
     }
   }, [initialData, form]);
+
+  // Watch for city changes and clear locality
+  useEffect(() => {
+    const subscription = form.watch((value, { name }) => {
+      if (name === 'city' && value.city !== selectedCity) {
+        form.setValue('locality', '');
+        form.setValue('state', '');
+        form.setValue('pincode', '');
+        setSelectedCity(value.city || '');
+        setLocationMismatchWarning('');
+        setShowMap(false);
+        if (localityInputRef.current) {
+          localityInputRef.current.value = '';
+        }
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, [form, selectedCity]);
 
   // Google Maps Places Autocomplete and Map preview
   useEffect(() => {
@@ -124,10 +145,63 @@ export const FlattmatesLocationDetailsStep: React.FC<FlattmatesLocationDetailsSt
     const initAutocomplete = () => {
       const google = (window as any).google;
       if (!google?.maps?.places) return;
+
+      const currentCity = form.getValues('city');
+      
+      // City bounds for restricting search
+      const cityBounds: { [key: string]: any } = {
+        'Bangalore': new google.maps.LatLngBounds(
+          new google.maps.LatLng(12.7342, 77.3795),
+          new google.maps.LatLng(13.1737, 77.8565)
+        ),
+        'Mumbai': new google.maps.LatLngBounds(
+          new google.maps.LatLng(18.8920, 72.7767),
+          new google.maps.LatLng(19.2695, 72.9810)
+        ),
+        'Delhi': new google.maps.LatLngBounds(
+          new google.maps.LatLng(28.4041, 76.8388),
+          new google.maps.LatLng(28.8833, 77.3465)
+        ),
+        'Chennai': new google.maps.LatLngBounds(
+          new google.maps.LatLng(12.8345, 80.0532),
+          new google.maps.LatLng(13.2345, 80.2955)
+        ),
+        'Hyderabad': new google.maps.LatLngBounds(
+          new google.maps.LatLng(17.2145, 78.2578),
+          new google.maps.LatLng(17.5645, 78.6378)
+        ),
+        'Pune': new google.maps.LatLngBounds(
+          new google.maps.LatLng(18.4088, 73.7389),
+          new google.maps.LatLng(18.6298, 73.9897)
+        ),
+        'Gurgaon': new google.maps.LatLngBounds(
+          new google.maps.LatLng(28.3645, 76.9345),
+          new google.maps.LatLng(28.5345, 77.1145)
+        ),
+        'Faridabad': new google.maps.LatLngBounds(
+          new google.maps.LatLng(28.3045, 77.2345),
+          new google.maps.LatLng(28.4845, 77.3645)
+        ),
+        'Ghaziabad': new google.maps.LatLngBounds(
+          new google.maps.LatLng(28.5845, 77.3345),
+          new google.maps.LatLng(28.7245, 77.5145)
+        ),
+        'Noida': new google.maps.LatLngBounds(
+          new google.maps.LatLng(28.4645, 77.2945),
+          new google.maps.LatLng(28.6245, 77.4345)
+        ),
+        'Greater Noida': new google.maps.LatLngBounds(
+          new google.maps.LatLng(28.4045, 77.4045),
+          new google.maps.LatLng(28.5445, 77.5945)
+        ),
+      };
+
       const options = {
         fields: ['formatted_address', 'geometry', 'name', 'address_components'],
         types: ['geocode'],
         componentRestrictions: { country: 'in' as const },
+        bounds: currentCity ? cityBounds[currentCity] : undefined,
+        strictBounds: currentCity ? true : false,
       };
 
       const attach = (el: HTMLInputElement | null, onPlace: (place: any, el: HTMLInputElement) => void) => {
@@ -139,158 +213,70 @@ export const FlattmatesLocationDetailsStep: React.FC<FlattmatesLocationDetailsSt
         });
       };
 
+      // City aliases for validation
+      const cityAliases: { [key: string]: string[] } = {
+        'Bangalore': ['Bangalore', 'Bengaluru', 'Bangalore Urban', 'Bengaluru Urban'],
+        'Mumbai': ['Mumbai', 'Mumbai City', 'Mumbai Suburban', 'Bombay', 'Thane', 'Navi Mumbai'],
+        'Delhi': ['Delhi', 'New Delhi', 'South Delhi', 'North Delhi', 'East Delhi', 'West Delhi', 'Central Delhi'],
+        'Chennai': ['Chennai', 'Madras'],
+        'Hyderabad': ['Hyderabad', 'Secunderabad'],
+        'Pune': ['Pune', 'Pimpri-Chinchwad', 'Pimpri Chinchwad'],
+        'Gurgaon': ['Gurgaon', 'Gurugram'],
+        'Faridabad': ['Faridabad'],
+        'Ghaziabad': ['Ghaziabad'],
+        'Noida': ['Noida'],
+        'Greater Noida': ['Greater Noida', 'Noida Extension'],
+      };
+
       attach(localityInputRef.current, (place, el) => {
-        console.log('=== Google Places Autocomplete Place Changed ===');
-        console.log('Place:', place);
-        console.log('Element:', el);
-        
         const value = place?.formatted_address || place?.name || '';
-        console.log('Selected value:', value);
         
-        if (value) {
-          el.value = value;
-          console.log('Setting locality value:', value);
-          form.setValue('locality', value, { shouldValidate: true });
-          
-          // Manually trigger form state update
-          form.trigger('locality');
-          console.log('Form state after setValue:', form.getValues());
-        }
+        // Parse address components first
+        let detectedCity = '';
+        let state = '';
+        let pincode = '';
         
-        // Parse address components to extract city, state, and pincode
         if (place?.address_components) {
-          let city = '';
-          let state = '';
-          let pincode = '';
-          
           place.address_components.forEach((component: any) => {
             const types = component.types;
             if (types.includes('locality') || types.includes('administrative_area_level_2')) {
-              city = component.long_name;
+              detectedCity = component.long_name;
             } else if (types.includes('administrative_area_level_1')) {
               state = component.long_name;
             } else if (types.includes('postal_code')) {
               pincode = component.long_name;
             }
           });
-          
-          console.log('Parsed components:', { city, state, pincode });
-          
-          // Normalize city names to match dropdown options
-          const normalizeCityName = (cityName: string): string => {
-            const cityMap: { [key: string]: string } = {
-              'Bangalore Division': 'Bangalore',
-              'Bangalore Urban': 'Bangalore',
-              'Mumbai Suburban': 'Mumbai',
-              'Mumbai City': 'Mumbai',
-              'Delhi': 'Delhi',
-              'New Delhi': 'Delhi',
-              'Chennai': 'Chennai',
-              'Hyderabad': 'Hyderabad',
-              'Pune': 'Pune',
-              'Kolkata': 'Kolkata',
-              'Ahmedabad': 'Ahmedabad',
-              'Jaipur': 'Jaipur',
-              'Lucknow': 'Lucknow',
-              'Kanpur': 'Kanpur',
-              'Nagpur': 'Nagpur',
-              'Indore': 'Indore',
-              'Thane': 'Thane',
-              'Bhopal': 'Bhopal',
-              'Visakhapatnam': 'Visakhapatnam',
-              'Pimpri-Chinchwad': 'Pune',
-              'Patna': 'Patna',
-              'Vadodara': 'Vadodara',
-              'Ludhiana': 'Ludhiana',
-              'Agra': 'Agra',
-              'Nashik': 'Nashik',
-              'Faridabad': 'Faridabad',
-              'Meerut': 'Meerut',
-              'Rajkot': 'Rajkot',
-              'Kalyan-Dombivali': 'Mumbai',
-              'Vasai-Virar': 'Mumbai',
-              'Varanasi': 'Varanasi',
-              'Srinagar': 'Srinagar',
-              'Aurangabad': 'Aurangabad',
-              'Navi Mumbai': 'Mumbai',
-              'Solapur': 'Solapur',
-              'Vijayawada': 'Vijayawada',
-              'Kolhapur': 'Kolhapur',
-              'Amritsar': 'Amritsar',
-              'Noida': 'Noida',
-              'Ranchi': 'Ranchi',
-              'Howrah': 'Kolkata',
-              'Coimbatore': 'Coimbatore',
-              'Raipur': 'Raipur',
-              'Jabalpur': 'Jabalpur',
-              'Gwalior': 'Gwalior',
-              'Chandigarh': 'Chandigarh',
-              'Tiruchirappalli': 'Tiruchirappalli',
-              'Mysore': 'Mysore',
-              'Bhubaneswar': 'Bhubaneswar',
-              'Kochi': 'Kochi',
-              'Bhavnagar': 'Bhavnagar',
-              'Salem': 'Salem',
-              'Warangal': 'Warangal',
-              'Guntur': 'Guntur',
-              'Bhiwandi': 'Mumbai',
-              'Amravati': 'Amravati',
-              'Nanded': 'Nanded',
-              'Sangli': 'Sangli',
-              'Malegaon': 'Malegaon',
-              'Ulhasnagar': 'Mumbai',
-              'Jalgaon': 'Jalgaon',
-              'Ahmadnagar': 'Ahmadnagar',
-              'Ichalkaranji': 'Ichalkaranji',
-              'Jalna': 'Jalna',
-              'Bhusawal': 'Bhusawal',
-              'Panvel': 'Mumbai',
-              'Akola': 'Akola',
-              'Latur': 'Latur',
-              'Dhule': 'Dhule',
-              'Chandrapur': 'Chandrapur',
-              'Parbhani': 'Parbhani'
-            };
-            
-            // Check for exact match first
-            if (cityMap[cityName]) {
-              return cityMap[cityName];
-            }
-            
-            // Check for partial matches
-            for (const [key, value] of Object.entries(cityMap)) {
-              if (cityName.includes(key) || key.includes(cityName)) {
-                return value;
-              }
-            }
-            
-            // Return original if no match found
-            return cityName;
-          };
-          
-          const normalizedCity = normalizeCityName(city);
-          console.log('Normalized city:', normalizedCity);
-          
-          // Update the form fields
-          if (normalizedCity) {
-            console.log('Setting city:', normalizedCity);
-            form.setValue('city', normalizedCity, { shouldValidate: true });
-            form.trigger('city');
-          }
-          if (state) {
-            console.log('Setting state:', state);
-            form.setValue('state', state, { shouldValidate: true });
-            form.trigger('state');
-          }
-          if (pincode) {
-            console.log('Setting pincode:', pincode);
-            form.setValue('pincode', pincode, { shouldValidate: true });
-            form.trigger('pincode');
-          }
-          
-          console.log('Final form state:', form.getValues());
-          console.log('=== Google Places Autocomplete Completed ===');
         }
+
+        // Validate city match
+        const selectedCityValue = form.getValues('city');
+        const aliases = selectedCityValue ? cityAliases[selectedCityValue] || [selectedCityValue] : [];
+        const isCityMatch = aliases.some(alias => 
+          detectedCity.toLowerCase().includes(alias.toLowerCase()) ||
+          alias.toLowerCase().includes(detectedCity.toLowerCase())
+        );
+
+        if (selectedCityValue && detectedCity && !isCityMatch) {
+          setLocationMismatchWarning(
+            `The selected location appears to be in ${detectedCity}, but you've selected ${selectedCityValue}. Please select a location within ${selectedCityValue}.`
+          );
+          el.value = '';
+          form.setValue('locality', '', { shouldValidate: true });
+          setShowMap(false);
+          return;
+        }
+
+        setLocationMismatchWarning('');
+        
+        if (value) {
+          el.value = value;
+          form.setValue('locality', value, { shouldValidate: true });
+        }
+        
+        // Update other fields
+        if (state) form.setValue('state', state, { shouldValidate: true });
+        if (pincode) form.setValue('pincode', pincode, { shouldValidate: true });
         
         const loc = place?.geometry?.location;
         if (loc) setMapTo(loc.lat(), loc.lng(), place?.name || 'Selected location');
@@ -418,11 +404,6 @@ export const FlattmatesLocationDetailsStep: React.FC<FlattmatesLocationDetailsSt
                       placeholder="Search 'Bellandur, Bengaluru, Karnataka'..."
                       className="h-12 pl-10"
                       {...field}
-                      onChange={(e) => {
-                        console.log('Locality input changed to:', e.target.value);
-                        field.onChange(e);
-                        console.log('Form state after locality change:', form.getValues());
-                      }}
                       ref={(el) => {
                         field.ref(el)
                         localityInputRef.current = el
@@ -431,6 +412,9 @@ export const FlattmatesLocationDetailsStep: React.FC<FlattmatesLocationDetailsSt
                     <MapPin className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                   </div>
                 </FormControl>
+                {locationMismatchWarning && (
+                  <p className="text-sm text-red-500 mt-1">{locationMismatchWarning}</p>
+                )}
                 <FormMessage />
               </FormItem>
             )}
