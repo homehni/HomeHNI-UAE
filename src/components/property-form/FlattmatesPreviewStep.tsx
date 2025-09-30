@@ -4,6 +4,8 @@ import { FlattmatesFormData } from '@/types/property';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { CheckCircle, Edit, Upload, Camera, Shield, Star, ArrowLeft, Check } from 'lucide-react';
+import { sendPriceSuggestionsEmail } from '@/services/emailService';
+import { useToast } from '@/hooks/use-toast';
 
 interface FlattmatesPreviewStepProps {
   formData: FlattmatesFormData;

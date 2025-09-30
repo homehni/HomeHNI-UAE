@@ -5,6 +5,8 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { CheckCircle, Edit, Upload, Camera, Shield, Star, Facebook, Tag, ArrowLeft, Check } from 'lucide-react';
+import { sendPriceSuggestionsEmail } from '@/services/emailService';
+import { useToast } from '@/hooks/use-toast';
 
 interface PreviewStepProps {
   formData: any;
@@ -29,7 +31,9 @@ export const PreviewStep: React.FC<PreviewStepProps> = ({
 }) => {
   const [showSuccess, setShowSuccess] = useState(isAlreadySubmitted);
   const [showNoPhotosMessage, setShowNoPhotosMessage] = useState(false);
+  const [isEmailLoading, setIsEmailLoading] = useState(false);
   const navigate = useNavigate();
+  const { toast } = useToast();
   const { ownerInfo, propertyInfo } = formData;
 
   const handleSubmit = async () => {
@@ -81,6 +85,56 @@ export const PreviewStep: React.FC<PreviewStepProps> = ({
   };
 
   const hasPhotos = propertyInfo?.gallery?.images && propertyInfo.gallery.images.length > 0;
+
+  const handleGoPremium = async () => {
+    if (!ownerInfo?.email) {
+      toast({
+        title: "Email Required",
+        description: "Please provide your email address to receive premium plan details.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    setIsEmailLoading(true);
+    try {
+      const result = await sendPriceSuggestionsEmail(
+        ownerInfo.email,
+        ownerInfo.fullName || 'there',
+        {
+          locality: propertyInfo?.locationDetails?.locality || 'your area',
+          rangeMin: Math.round((propertyInfo?.rentDetails?.expectedPrice || 0) * 0.8),
+          rangeMax: Math.round((propertyInfo?.rentDetails?.expectedPrice || 0) * 1.2),
+          yourPrice: propertyInfo?.rentDetails?.expectedPrice || 0,
+          propertyType: propertyInfo?.propertyDetails?.propertyType || 'residential',
+          listingType: 'rent',
+          userType: 'owner'
+        }
+      );
+
+      if (result.success) {
+        toast({
+          title: "Premium Plans Sent!",
+          description: "Check your email for personalized premium plan recommendations.",
+        });
+        // Still open the plans page
+        window.open('/plans?tab=owner', '_blank');
+      } else {
+        throw new Error('Failed to send email');
+      }
+    } catch (error) {
+      console.error('Error sending premium plan email:', error);
+      toast({
+        title: "Email Failed",
+        description: "We'll still show you our premium plans. Check your email later for personalized recommendations.",
+        variant: "destructive"
+      });
+      // Still open the plans page even if email fails
+      window.open('/plans?tab=owner', '_blank');
+    } finally {
+      setIsEmailLoading(false);
+    }
+  };
 
   const handleSendPhotos = () => {
     const whatsappUrl = "https://wa.me/918074017388?text=Share%20your%20photos%20with%20us%20through%20WhatsApp%20for%20easy%20uploading!";
@@ -158,21 +212,10 @@ export const PreviewStep: React.FC<PreviewStepProps> = ({
               </div>
               <Button 
                 className="bg-green-600 hover:bg-green-700 text-white w-full sm:w-auto"
-                onClick={async () => {
-                  // Send plan upgrade email before redirecting
-                  try {
-                    const { ownerInfo } = formData;
-                    if (ownerInfo?.email) {
-                      const { sendPlanUpgradeEmail } = await import('@/services/emailService');
-                      await sendPlanUpgradeEmail(ownerInfo.email, ownerInfo.fullName);
-                    }
-                  } catch (error) {
-                    console.error('Failed to send plan upgrade email:', error);
-                  }
-                  window.open('/plans?tab=owner', '_blank');
-                }}
+                onClick={handleGoPremium}
+                disabled={isEmailLoading}
               >
-                Go Premium
+                {isEmailLoading ? 'Sending...' : 'Go Premium'}
               </Button>
             </div>
             
@@ -388,21 +431,10 @@ export const PreviewStep: React.FC<PreviewStepProps> = ({
           <div className="flex-shrink-0 w-full sm:w-auto">
             <Button 
               className="bg-teal-600 hover:bg-teal-700 text-white px-6 py-2 w-full sm:w-auto"
-              onClick={async () => {
-                // Send plan upgrade email before redirecting
-                try {
-                  const { ownerInfo } = formData;
-                  if (ownerInfo?.email) {
-                    const { sendPlanUpgradeEmail } = await import('@/services/emailService');
-                    await sendPlanUpgradeEmail(ownerInfo.email, ownerInfo.fullName);
-                  }
-                } catch (error) {
-                  console.error('Failed to send plan upgrade email:', error);
-                }
-                window.open('/plans?tab=owner', '_blank');
-              }}
+              onClick={handleGoPremium}
+              disabled={isEmailLoading}
             >
-              Go Premium
+              {isEmailLoading ? 'Sending...' : 'Go Premium'}
             </Button>
             </div>
               </div>

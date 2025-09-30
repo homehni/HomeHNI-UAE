@@ -62,6 +62,9 @@ export async function sendPriceSuggestionsEmail(
     rangeMin: number;
     rangeMax: number;
     yourPrice: number;
+    propertyType?: string;
+    listingType?: string;
+    userType?: string;
   }
 ) {
   return sendEmail('/send-price-suggestions-email', {
@@ -71,6 +74,9 @@ export async function sendPriceSuggestionsEmail(
     rangeMin: priceData.rangeMin,
     rangeMax: priceData.rangeMax,
     yourPrice: priceData.yourPrice,
+    propertyType: priceData.propertyType || 'residential',
+    listingType: priceData.listingType || 'sell',
+    userType: priceData.userType || 'seller',
     updatePriceUrl: 'https://homehni.com/dashboard'
   });
 }

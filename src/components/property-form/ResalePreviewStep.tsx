@@ -5,6 +5,8 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { CheckCircle, Edit, Upload, Camera, Shield, Star, Facebook, Tag, ArrowLeft, Check } from 'lucide-react';
+import { sendPriceSuggestionsEmail } from '@/services/emailService';
+import { useToast } from '@/hooks/use-toast';
 
 interface ResalePreviewStepProps {
   formData: SalePropertyFormData;
@@ -25,7 +27,9 @@ export const ResalePreviewStep: React.FC<ResalePreviewStepProps> = ({
 }) => {
   const [showSuccess, setShowSuccess] = useState(false);
   const [showNoPhotosMessage, setShowNoPhotosMessage] = useState(false);
+  const [isEmailLoading, setIsEmailLoading] = useState(false);
   const navigate = useNavigate();
+  const { toast } = useToast();
   const { ownerInfo, propertyInfo } = formData;
 
   const handleSubmit = () => {
@@ -44,6 +48,56 @@ export const ResalePreviewStep: React.FC<ResalePreviewStepProps> = ({
   };
 
   const hasPhotos = propertyInfo?.gallery?.images && propertyInfo.gallery.images.length > 0;
+
+  const handleGoPremium = async () => {
+    if (!ownerInfo?.email) {
+      toast({
+        title: "Email Required",
+        description: "Please provide your email address to receive premium plan details.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    setIsEmailLoading(true);
+    try {
+      const result = await sendPriceSuggestionsEmail(
+        ownerInfo.email,
+        ownerInfo.fullName || 'there',
+        {
+          locality: propertyInfo?.locationDetails?.locality || 'your area',
+          rangeMin: Math.round((propertyInfo?.saleDetails?.expectedPrice || 0) * 0.8),
+          rangeMax: Math.round((propertyInfo?.saleDetails?.expectedPrice || 0) * 1.2),
+          yourPrice: propertyInfo?.saleDetails?.expectedPrice || 0,
+          propertyType: propertyInfo?.propertyDetails?.propertyType || 'residential',
+          listingType: 'sell',
+          userType: 'seller'
+        }
+      );
+
+      if (result.success) {
+        toast({
+          title: "Premium Plans Sent!",
+          description: "Check your email for personalized premium plan recommendations.",
+        });
+        // Still open the plans page
+        window.open('/plans?tab=seller', '_blank');
+      } else {
+        throw new Error('Failed to send email');
+      }
+    } catch (error) {
+      console.error('Error sending premium plan email:', error);
+      toast({
+        title: "Email Failed",
+        description: "We'll still show you our premium plans. Check your email later for personalized recommendations.",
+        variant: "destructive"
+      });
+      // Still open the plans page even if email fails
+      window.open('/plans?tab=seller', '_blank');
+    } finally {
+      setIsEmailLoading(false);
+    }
+  };
 
   const handleSendPhotos = () => {
     const phoneNumber = '+91 80740 17388';
@@ -98,9 +152,10 @@ export const ResalePreviewStep: React.FC<ResalePreviewStepProps> = ({
               </div>
               <Button 
                 className="bg-green-600 hover:bg-green-700 text-white w-full sm:w-auto"
-                onClick={() => window.open('/plans?tab=seller', '_blank')}
+                onClick={handleGoPremium}
+                disabled={isEmailLoading}
               >
-                Go Premium
+                {isEmailLoading ? 'Sending...' : 'Go Premium'}
               </Button>
             </div>
             
@@ -311,9 +366,10 @@ export const ResalePreviewStep: React.FC<ResalePreviewStepProps> = ({
            <div className="flex-shrink-0 w-full sm:w-auto">
               <Button 
                 className="bg-teal-600 hover:bg-teal-700 text-white px-6 py-2 w-full sm:w-auto"
-                onClick={() => window.open('/plans?tab=seller', '_blank')}
+                onClick={handleGoPremium}
+                disabled={isEmailLoading}
               >
-                Go Premium
+                {isEmailLoading ? 'Sending...' : 'Go Premium'}
               </Button>
            </div>
         </div>

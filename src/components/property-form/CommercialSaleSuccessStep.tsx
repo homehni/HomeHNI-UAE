@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { CheckCircle, Check } from 'lucide-react';
-import { sendPlanUpgradeEmail } from '@/services/emailService';
+import { sendPriceSuggestionsEmail } from '@/services/emailService';
 import { OwnerInfo } from '@/types/property';
+import { useToast } from '@/hooks/use-toast';
 
 interface CommercialSaleSuccessStepProps {
   onEditProperty: () => void;

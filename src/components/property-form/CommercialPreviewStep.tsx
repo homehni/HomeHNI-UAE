@@ -5,6 +5,8 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { CheckCircle, Edit, Upload, Camera, Shield, Star, Facebook, Tag, ArrowLeft, Check } from 'lucide-react';
 import { CommercialFormData } from '@/types/property';
+import { sendPriceSuggestionsEmail } from '@/services/emailService';
+import { useToast } from '@/hooks/use-toast';
 
 interface CommercialPreviewStepProps {
   formData: CommercialFormData;
@@ -29,7 +31,9 @@ export const CommercialPreviewStep: React.FC<CommercialPreviewStepProps> = ({
 }) => {
   const [showSuccess, setShowSuccess] = useState(false);
   const [showNoPhotosMessage, setShowNoPhotosMessage] = useState(false);
+  const [isEmailLoading, setIsEmailLoading] = useState(false);
   const navigate = useNavigate();
+  const { toast } = useToast();
   
   console.log('CommercialPreviewStep - Received formData:', formData);
 
@@ -51,6 +55,56 @@ export const CommercialPreviewStep: React.FC<CommercialPreviewStepProps> = ({
       console.log('Property submitted but not yet live. Navigating to property search.');
       // Navigate to property search page since property is not yet live
       window.open('/property-search?tab=commercial', '_blank');
+    }
+  };
+
+  const handleGoPremium = async () => {
+    if (!formData?.ownerInfo?.email) {
+      toast({
+        title: "Email Required",
+        description: "Please provide your email address to receive premium plan details.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    setIsEmailLoading(true);
+    try {
+      const result = await sendPriceSuggestionsEmail(
+        formData.ownerInfo.email,
+        formData.ownerInfo.fullName || 'there',
+        {
+          locality: formData?.propertyInfo?.locationDetails?.locality || 'your area',
+          rangeMin: Math.round((formData?.propertyInfo?.rentalDetails?.expectedPrice || 0) * 0.8),
+          rangeMax: Math.round((formData?.propertyInfo?.rentalDetails?.expectedPrice || 0) * 1.2),
+          yourPrice: formData?.propertyInfo?.rentalDetails?.expectedPrice || 0,
+          propertyType: 'commercial',
+          listingType: 'rent',
+          userType: 'owner'
+        }
+      );
+
+      if (result.success) {
+        toast({
+          title: "Premium Plans Sent!",
+          description: "Check your email for personalized commercial property plan recommendations.",
+        });
+        // Still open the plans page
+        window.open('/plans?tab=owner', '_blank');
+      } else {
+        throw new Error('Failed to send email');
+      }
+    } catch (error) {
+      console.error('Error sending premium plan email:', error);
+      toast({
+        title: "Email Failed",
+        description: "We'll still show you our premium plans. Check your email later for personalized recommendations.",
+        variant: "destructive"
+      });
+      // Still open the plans page even if email fails
+      window.open('/plans?tab=owner', '_blank');
+    } finally {
+      setIsEmailLoading(false);
     }
   };
 
@@ -107,8 +161,12 @@ export const CommercialPreviewStep: React.FC<CommercialPreviewStepProps> = ({
                   <p className="text-sm sm:text-base text-gray-600">Unlock access to 100% tenants and enjoy a super-fast closure.</p>
                 </div>
               </div>
-              <Button className="bg-green-600 hover:bg-green-700 text-white w-full sm:w-auto">
-                Go Premium
+              <Button 
+                className="bg-green-600 hover:bg-green-700 text-white w-full sm:w-auto"
+                onClick={handleGoPremium}
+                disabled={isEmailLoading}
+              >
+                {isEmailLoading ? 'Sending...' : 'Go Premium'}
               </Button>
             </div>
             
@@ -319,9 +377,10 @@ export const CommercialPreviewStep: React.FC<CommercialPreviewStepProps> = ({
            <div className="flex-shrink-0 w-full sm:w-auto">
               <Button 
                 className="bg-teal-600 hover:bg-teal-700 text-white px-6 py-2 w-full sm:w-auto"
-                onClick={() => window.open('/plans?tab=commercial-owner', '_blank')}
+                onClick={handleGoPremium}
+                disabled={isEmailLoading}
               >
-                Go Premium
+                {isEmailLoading ? 'Sending...' : 'Go Premium'}
               </Button>
            </div>
         </div>
