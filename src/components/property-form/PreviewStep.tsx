@@ -295,7 +295,7 @@ export const PreviewStep: React.FC<PreviewStepProps> = ({
       </div>
 
       {/* Congratulations Section */}
-      <div className="bg-gradient-to-r from-red-50 to-red-100 border-2 border-red-200 rounded-xl p-4 sm:p-6 mb-4 sm:mb-6 shadow-lg">
+      <div className="pt-4 md:pt-0 bg-gradient-to-r from-red-50 to-red-100 border-2 border-red-200 rounded-xl p-4 sm:p-6 mb-4 sm:mb-6 shadow-lg">
         <div className="flex flex-col sm:flex-row items-center gap-4 mb-4">
           <div className="w-12 h-12 sm:w-14 sm:h-14 bg-red-500 rounded-full flex items-center justify-center flex-shrink-0 shadow-md">
             <Check className="w-6 h-6 text-white" strokeWidth={3} />
