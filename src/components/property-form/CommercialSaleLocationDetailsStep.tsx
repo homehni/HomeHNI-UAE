@@ -7,7 +7,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { LocationDetails } from '@/types/property';
-import { ArrowLeft, ArrowRight, MapPin } from 'lucide-react';
+import { ArrowLeft, ArrowRight, MapPin, X } from 'lucide-react';
 
 const commercialSaleLocationDetailsSchema = z.object({
   city: z.string().min(1, "City is required"),
@@ -39,6 +39,8 @@ export const CommercialSaleLocationDetailsStep: React.FC<CommercialSaleLocationD
   const mapRef = useRef<any>(null);
   const markerRef = useRef<any>(null);
   const [showMap, setShowMap] = useState(false);
+  const [locationMismatchWarning, setLocationMismatchWarning] = useState('');
+  const [selectedCity, setSelectedCity] = useState(initialData.city || '');
 
   const form = useForm<CommercialSaleLocationDetailsForm>({
     resolver: zodResolver(commercialSaleLocationDetailsSchema),
@@ -55,6 +57,7 @@ export const CommercialSaleLocationDetailsStep: React.FC<CommercialSaleLocationD
   useEffect(() => {
     if (initialData.city) {
       form.setValue('city', initialData.city);
+      setSelectedCity(initialData.city);
     }
     if (initialData.locality) {
       form.setValue('locality', initialData.locality);
@@ -69,6 +72,24 @@ export const CommercialSaleLocationDetailsStep: React.FC<CommercialSaleLocationD
       form.setValue('pincode', initialData.pincode);
     }
   }, [initialData, form]);
+
+  // Watch for city changes and clear locality
+  useEffect(() => {
+    const subscription = form.watch((value, { name }) => {
+      if (name === 'city' && value.city !== selectedCity) {
+        form.setValue('locality', '');
+        form.setValue('state', '');
+        form.setValue('pincode', '');
+        setSelectedCity(value.city || '');
+        setLocationMismatchWarning('');
+        setShowMap(false);
+        if (localityInputRef.current) {
+          localityInputRef.current.value = '';
+        }
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, [form, selectedCity]);
 
   // Google Maps Places Autocomplete and Map preview
   useEffect(() => {
@@ -128,10 +149,63 @@ export const CommercialSaleLocationDetailsStep: React.FC<CommercialSaleLocationD
     const initAutocomplete = () => {
       const google = (window as any).google;
       if (!google?.maps?.places) return;
+
+      const currentCity = form.getValues('city');
+      
+      // City bounds for restricting search
+      const cityBounds: { [key: string]: any } = {
+        'Bangalore': new google.maps.LatLngBounds(
+          new google.maps.LatLng(12.7342, 77.3795),
+          new google.maps.LatLng(13.1737, 77.8565)
+        ),
+        'Mumbai': new google.maps.LatLngBounds(
+          new google.maps.LatLng(18.8920, 72.7767),
+          new google.maps.LatLng(19.2695, 72.9810)
+        ),
+        'Delhi': new google.maps.LatLngBounds(
+          new google.maps.LatLng(28.4041, 76.8388),
+          new google.maps.LatLng(28.8833, 77.3465)
+        ),
+        'Chennai': new google.maps.LatLngBounds(
+          new google.maps.LatLng(12.8345, 80.0532),
+          new google.maps.LatLng(13.2345, 80.2955)
+        ),
+        'Hyderabad': new google.maps.LatLngBounds(
+          new google.maps.LatLng(17.2145, 78.2578),
+          new google.maps.LatLng(17.5645, 78.6378)
+        ),
+        'Pune': new google.maps.LatLngBounds(
+          new google.maps.LatLng(18.4088, 73.7389),
+          new google.maps.LatLng(18.6298, 73.9897)
+        ),
+        'Gurgaon': new google.maps.LatLngBounds(
+          new google.maps.LatLng(28.3645, 76.9345),
+          new google.maps.LatLng(28.5345, 77.1145)
+        ),
+        'Faridabad': new google.maps.LatLngBounds(
+          new google.maps.LatLng(28.3045, 77.2345),
+          new google.maps.LatLng(28.4845, 77.3645)
+        ),
+        'Ghaziabad': new google.maps.LatLngBounds(
+          new google.maps.LatLng(28.5845, 77.3345),
+          new google.maps.LatLng(28.7245, 77.5145)
+        ),
+        'Noida': new google.maps.LatLngBounds(
+          new google.maps.LatLng(28.4645, 77.2945),
+          new google.maps.LatLng(28.6245, 77.4345)
+        ),
+        'Greater Noida': new google.maps.LatLngBounds(
+          new google.maps.LatLng(28.4045, 77.4045),
+          new google.maps.LatLng(28.5445, 77.5945)
+        ),
+      };
+
       const options = {
         fields: ['formatted_address', 'geometry', 'name', 'address_components'],
         types: ['geocode'],
         componentRestrictions: { country: 'in' as const },
+        bounds: currentCity ? cityBounds[currentCity] : undefined,
+        strictBounds: currentCity ? true : false,
       };
 
       const attach = (el: HTMLInputElement | null, onPlace: (place: any, el: HTMLInputElement) => void) => {
@@ -143,35 +217,68 @@ export const CommercialSaleLocationDetailsStep: React.FC<CommercialSaleLocationD
         });
       };
 
+      // City aliases for validation
+      const cityAliases: { [key: string]: string[] } = {
+        'Bangalore': ['Bangalore', 'Bengaluru', 'Bangalore Urban', 'Bengaluru Urban'],
+        'Mumbai': ['Mumbai', 'Mumbai City', 'Mumbai Suburban', 'Bombay', 'Thane', 'Navi Mumbai'],
+        'Delhi': ['Delhi', 'New Delhi', 'South Delhi', 'North Delhi', 'East Delhi', 'West Delhi', 'Central Delhi'],
+        'Chennai': ['Chennai', 'Madras'],
+        'Hyderabad': ['Hyderabad', 'Secunderabad'],
+        'Pune': ['Pune', 'Pimpri-Chinchwad', 'Pimpri Chinchwad'],
+        'Gurgaon': ['Gurgaon', 'Gurugram'],
+        'Faridabad': ['Faridabad'],
+        'Ghaziabad': ['Ghaziabad'],
+        'Noida': ['Noida'],
+        'Greater Noida': ['Greater Noida', 'Noida Extension'],
+      };
+
       attach(localityInputRef.current, (place, el) => {
         const value = place?.formatted_address || place?.name || '';
-        if (value) {
-          el.value = value;
-          form.setValue('locality', value, { shouldValidate: true });
-        }
         
-        // Parse address components to extract city, state, and pincode
+        // Parse address components first
+        let detectedCity = '';
+        let state = '';
+        let pincode = '';
+        
         if (place?.address_components) {
-          let city = '';
-          let state = '';
-          let pincode = '';
-          
           place.address_components.forEach((component: any) => {
             const types = component.types;
             if (types.includes('locality') || types.includes('administrative_area_level_2')) {
-              city = component.long_name;
+              detectedCity = component.long_name;
             } else if (types.includes('administrative_area_level_1')) {
               state = component.long_name;
             } else if (types.includes('postal_code')) {
               pincode = component.long_name;
             }
           });
-          
-          // Update the form fields
-          if (city) form.setValue('city', city, { shouldValidate: true });
-          if (state) form.setValue('state', state, { shouldValidate: true });
-          if (pincode) form.setValue('pincode', pincode, { shouldValidate: true });
         }
+
+        // Validate city match
+        const selectedCityValue = form.getValues('city');
+        const aliases = selectedCityValue ? cityAliases[selectedCityValue] || [selectedCityValue] : [];
+        const isCityMatch = aliases.some(alias => 
+          detectedCity.toLowerCase().includes(alias.toLowerCase()) ||
+          alias.toLowerCase().includes(detectedCity.toLowerCase())
+        );
+
+        if (selectedCityValue && detectedCity && !isCityMatch) {
+          setLocationMismatchWarning(selectedCityValue.toLowerCase());
+          el.value = '';
+          form.setValue('locality', '', { shouldValidate: true });
+          setShowMap(false);
+          return;
+        }
+
+        setLocationMismatchWarning('');
+        
+        if (value) {
+          el.value = value;
+          form.setValue('locality', value, { shouldValidate: true });
+        }
+        
+        // Update other fields
+        if (state) form.setValue('state', state, { shouldValidate: true });
+        if (pincode) form.setValue('pincode', pincode, { shouldValidate: true });
         
         const loc = place?.geometry?.location;
         if (loc) setMapTo(loc.lat(), loc.lng(), place?.name || 'Selected location');
@@ -279,6 +386,14 @@ export const CommercialSaleLocationDetailsStep: React.FC<CommercialSaleLocationD
                     <MapPin className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                   </div>
                 </FormControl>
+                {locationMismatchWarning && (
+                  <div className="flex items-start gap-2 p-3 bg-red-50 border border-red-200 rounded-lg mt-2">
+                    <X className="h-4 w-4 text-red-500 flex-shrink-0 mt-0.5" />
+                    <p className="text-sm text-red-600">
+                      Please select another locality in {locationMismatchWarning}
+                    </p>
+                  </div>
+                )}
                 <FormMessage />
               </FormItem>
             )}
