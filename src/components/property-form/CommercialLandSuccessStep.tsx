@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { CheckCircle, Check } from 'lucide-react';
-import { sendPlanUpgradeEmail } from '@/services/emailService';
+import { sendPriceSuggestionsEmail } from '@/services/emailService';
+import { useToast } from '@/hooks/use-toast';
 import { OwnerInfo } from '@/types/property';
 
 interface CommercialLandSuccessStepProps {
@@ -23,22 +24,57 @@ export const CommercialLandSuccessStep = ({
 }: CommercialLandSuccessStepProps) => {
   const [showNoPhotosMessage, setShowNoPhotosMessage] = useState(false);
   const [isEmailLoading, setIsEmailLoading] = useState(false);
+  const { toast } = useToast();
   
   // Check if there are photos uploaded
   const hasPhotos = gallery?.images && gallery.images.length > 0;
 
   const handleGoPremium = async () => {
-    if (ownerInfo?.email && ownerInfo?.fullName) {
-      setIsEmailLoading(true);
-      try {
-        await sendPlanUpgradeEmail(ownerInfo.email, ownerInfo.fullName);
-      } catch (error) {
-        console.error('Error sending upgrade email:', error);
-      } finally {
-        setIsEmailLoading(false);
-      }
+    if (!ownerInfo?.email) {
+      toast({
+        title: "Email Required",
+        description: "Please provide your email address to receive premium plan details.",
+        variant: "destructive"
+      });
+      return;
     }
-    window.open('/plans', '_blank');
+
+    setIsEmailLoading(true);
+    try {
+      const result = await sendPriceSuggestionsEmail(
+        ownerInfo.email,
+        ownerInfo.fullName || 'there',
+        {
+          locality: 'your area',
+          rangeMin: 0,
+          rangeMax: 0,
+          yourPrice: 0,
+          propertyType: 'commercial land',
+          listingType: 'sell',
+          userType: 'seller'
+        }
+      );
+
+      if (result.success) {
+        toast({
+          title: "Premium Plans Sent!",
+          description: "Check your email for personalized commercial land premium plan recommendations.",
+        });
+        window.open('/plans?tab=seller', '_blank');
+      } else {
+        throw new Error('Failed to send email');
+      }
+    } catch (error) {
+      console.error('Error sending premium plan email:', error);
+      toast({
+        title: "Email Failed",
+        description: "Unable to send premium plan details. Please try again later.",
+        variant: "destructive"
+      });
+      window.open('/plans?tab=seller', '_blank');
+    } finally {
+      setIsEmailLoading(false);
+    }
   };
 
   const handleGoDashboard = () => {
@@ -126,8 +162,9 @@ export const CommercialLandSuccessStep = ({
           <Button 
             className="bg-teal-600 hover:bg-teal-700 text-white"
             onClick={handleGoPremium}
+            disabled={isEmailLoading}
           >
-            Go Premium
+            {isEmailLoading ? 'Sending...' : 'Go Premium'}
           </Button>
         </div>
 

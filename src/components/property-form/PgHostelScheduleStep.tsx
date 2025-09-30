@@ -8,6 +8,9 @@ import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
 import { PaintBucket, Sparkles, CheckCircle, Clock } from 'lucide-react';
+import { sendFreshlyPaintedEmail, sendDeepCleaningEmail } from '@/services/emailService';
+import { useToast } from '@/hooks/use-toast';
+import { useAuth } from '@/hooks/useAuth';
 
 const scheduleSchema = z.object({
   paintingService: z.enum(['book', 'decline']).optional(),
@@ -27,6 +30,8 @@ interface PgHostelScheduleStepProps {
   currentStep: number;
   totalSteps: number;
   onSubmit?: (data: ScheduleFormData) => void;
+  ownerInfo?: any;
+  propertyInfo?: any;
 }
 
 export function PgHostelScheduleStep({
@@ -35,11 +40,15 @@ export function PgHostelScheduleStep({
   onBack,
   currentStep,
   totalSteps,
-  onSubmit
+  onSubmit,
+  ownerInfo,
+  propertyInfo
 }: PgHostelScheduleStepProps) {
   const navigate = useNavigate();
   const [paintingResponse, setPaintingResponse] = useState<'book' | 'decline' | null>(null);
   const [cleaningResponse, setCleaningResponse] = useState<'book' | 'decline' | null>(null);
+  const { toast } = useToast();
+  const { user } = useAuth();
   
   const form = useForm<ScheduleFormData>({
     resolver: zodResolver(scheduleSchema),
@@ -58,6 +67,101 @@ export function PgHostelScheduleStep({
       onSubmit(data);
     } else {
       onNext(data);
+    }
+  };
+
+  const getResolvedContact = () => {
+    const email = ownerInfo?.email || user?.email;
+    const fullNameCandidates = [ownerInfo?.fullName, user?.user_metadata?.full_name, user?.user_metadata?.name];
+    const fullName = fullNameCandidates.find(Boolean);
+    return { email, fullName } as { email?: string; fullName?: string };
+  };
+
+  const handlePaintingBookNow = async () => {
+    const { email, fullName } = getResolvedContact();
+    if (!email || !fullName) {
+      toast({
+        title: "Error",
+        description: "Unable to send request. Please ensure your email and name are properly entered.",
+        variant: "destructive"
+      });
+      console.warn('[PgHostelScheduleStep] Missing contact details for Painting', { email, fullName, ownerInfo, user });
+      return;
+    }
+
+    try {
+      const locality = propertyInfo?.locationDetails?.locality || '';
+      const expectedPrice = propertyInfo?.rentalDetails?.expectedPrice || 
+                           propertyInfo?.propertyDetails?.expectedRent || 
+                           '';
+
+      await sendFreshlyPaintedEmail(
+        email,
+        fullName,
+        'PG/Hostel',
+        locality,
+        expectedPrice.toString()
+      );
+
+      toast({
+        title: "Your painting service request has been submitted successfully.",
+        description: "Our painting specialists will contact you within 6 hours.",
+        variant: "success"
+      });
+
+      form.setValue('paintingService', 'book');
+      setPaintingResponse('book');
+    } catch (error) {
+      console.error('Failed to send painting service email:', error);
+      toast({
+        title: "Error",
+        description: "Failed to send request. Please try again.",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const handleCleaningBookNow = async () => {
+    const { email, fullName } = getResolvedContact();
+    if (!email || !fullName) {
+      toast({
+        title: "Error",
+        description: "Unable to send request. Please ensure your email and name are properly entered.",
+        variant: "destructive"
+      });
+      console.warn('[PgHostelScheduleStep] Missing contact details for Cleaning', { email, fullName, ownerInfo, user });
+      return;
+    }
+
+    try {
+      const locality = propertyInfo?.locationDetails?.locality || '';
+      const expectedPrice = propertyInfo?.rentalDetails?.expectedPrice || 
+                           propertyInfo?.propertyDetails?.expectedRent || 
+                           '';
+
+      await sendDeepCleaningEmail(
+        email,
+        fullName,
+        'PG/Hostel',
+        locality,
+        expectedPrice.toString()
+      );
+
+      toast({
+        title: "Your cleaning service request has been submitted successfully.",
+        description: "Our cleaning specialists will contact you within 6 hours.",
+        variant: "success"
+      });
+
+      form.setValue('cleaningService', 'book');
+      setCleaningResponse('book');
+    } catch (error) {
+      console.error('Failed to send cleaning service email:', error);
+      toast({
+        title: "Error",
+        description: "Failed to send request. Please try again.",
+        variant: "destructive"
+      });
     }
   };
 
@@ -113,10 +217,7 @@ export function PgHostelScheduleStep({
                                 size="sm"
                                 className="bg-orange-500 hover:bg-orange-600 text-white"
                                 variant={field.value === 'book' ? 'default' : 'outline'}
-                                onClick={() => {
-                                  field.onChange('book');
-                                  setPaintingResponse('book');
-                                }}
+                                onClick={handlePaintingBookNow}
                               >
                                 Book Now
                               </Button>
@@ -177,10 +278,7 @@ export function PgHostelScheduleStep({
                                 size="sm"
                                 className="bg-teal-500 hover:bg-teal-600 text-white"
                                 variant={field.value === 'book' ? 'default' : 'outline'}
-                                onClick={() => {
-                                  field.onChange('book');
-                                  setCleaningResponse('book');
-                                }}
+                                onClick={handleCleaningBookNow}
                               >
                                 Book Now
                               </Button>

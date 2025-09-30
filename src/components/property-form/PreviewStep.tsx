@@ -103,9 +103,9 @@ export const PreviewStep: React.FC<PreviewStepProps> = ({
         ownerInfo.fullName || 'there',
         {
           locality: propertyInfo?.locationDetails?.locality || 'your area',
-          rangeMin: Math.round((propertyInfo?.rentDetails?.expectedPrice || 0) * 0.8),
-          rangeMax: Math.round((propertyInfo?.rentDetails?.expectedPrice || 0) * 1.2),
-          yourPrice: propertyInfo?.rentDetails?.expectedPrice || 0,
+          rangeMin: Math.round((propertyInfo?.rentalDetails?.expectedPrice || 0) * 0.8),
+          rangeMax: Math.round((propertyInfo?.rentalDetails?.expectedPrice || 0) * 1.2),
+          yourPrice: propertyInfo?.rentalDetails?.expectedPrice || 0,
           propertyType: propertyInfo?.propertyDetails?.propertyType || 'residential',
           listingType: 'rent',
           userType: 'owner'

@@ -7,6 +7,7 @@ import { PgHostelSidebar } from './PgHostelSidebar';
 import { PgHostelRoomTypeStep } from './PgHostelRoomTypeStep';
 import GetTenantsFasterSection from '@/components/GetTenantsFasterSection';
 import { ArrowLeft, CheckCircle, Check } from 'lucide-react';
+import { sendPriceSuggestionsEmail } from '@/services/emailService';
 
 import { PgHostelRoomDetailsStep } from './PgHostelRoomDetailsStep';
 import { PgHostelLocalityDetailsStep } from './PgHostelLocalityDetailsStep';
@@ -132,6 +133,8 @@ const [propertyInfo, setPropertyInfo] = useState({
     availableAllDay: true
   });
 
+  const [isEmailLoading, setIsEmailLoading] = useState(false);
+
   useEffect(() => {
     if (initialOwnerInfo) {
       setOwnerInfo(prev => ({ ...prev, ...initialOwnerInfo }));
@@ -220,6 +223,62 @@ const [propertyInfo, setPropertyInfo] = useState({
   const goToStep = (step: number) => {
     setCurrentStep(step);
     scrollToTop();
+  };
+
+  const handleGoPremium = async () => {
+    if (!ownerInfo?.email) {
+      toast({
+        title: "Email Required",
+        description: "Please provide your email address to receive premium plan details.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    setIsEmailLoading(true);
+    try {
+      // Calculate expected price from room types
+      const prices = roomTypes.selectedTypes
+        .map(type => roomDetails.roomTypeDetails[type]?.expectedRent || 0)
+        .filter(price => price > 0);
+      const expectedPrice = prices.length > 0 ? Math.min(...prices) : 0;
+
+      const result = await sendPriceSuggestionsEmail(
+        ownerInfo.email,
+        ownerInfo.fullName || 'there',
+        {
+          locality: localityDetails?.locality || 'your area',
+          rangeMin: Math.round(expectedPrice * 0.8),
+          rangeMax: Math.round(expectedPrice * 1.2),
+          yourPrice: expectedPrice,
+          propertyType: 'PG/Hostel',
+          listingType: 'rent',
+          userType: 'owner'
+        }
+      );
+
+      if (result.success) {
+        toast({
+          title: "Premium Plans Sent!",
+          description: "Check your email for personalized PG/Hostel premium plan recommendations.",
+        });
+        // Still open the plans page
+        window.open('/plans?tab=owner', '_blank');
+      } else {
+        throw new Error('Failed to send email');
+      }
+    } catch (error) {
+      console.error('Error sending premium plan email:', error);
+      toast({
+        title: "Email Failed",
+        description: "Unable to send premium plan details. Please try again later.",
+        variant: "destructive"
+      });
+      // Still open the plans page as fallback
+      window.open('/plans?tab=owner', '_blank');
+    } finally {
+      setIsEmailLoading(false);
+    }
   };
 
   // Validation functions for each step
@@ -478,9 +537,10 @@ const [propertyInfo, setPropertyInfo] = useState({
                       <div className="flex-shrink-0 w-full sm:w-auto">
                         <Button
                           className="bg-teal-600 hover:bg-teal-700 text-white px-6 py-2 w-full sm:w-auto"
-                          onClick={() => window.open('/plans?tab=buyer', '_blank')}
+                          onClick={handleGoPremium}
+                          disabled={isEmailLoading}
                         >
-                          Go Premium
+                          {isEmailLoading ? 'Sending...' : 'Go Premium'}
                         </Button>
                       </div>
                     </div>
@@ -714,9 +774,10 @@ const [propertyInfo, setPropertyInfo] = useState({
                     <div className="flex-shrink-0 w-full sm:w-auto">
                       <Button
                         className="bg-teal-600 hover:bg-teal-700 text-white px-6 py-2 w-full sm:w-auto"
-                        onClick={() => window.open('/plans', '_blank')}
+                        onClick={handleGoPremium}
+                        disabled={isEmailLoading}
                       >
-                        Go Premium
+                        {isEmailLoading ? 'Sending...' : 'Go Premium'}
                       </Button>
                     </div>
                   </div>
@@ -930,6 +991,14 @@ const [propertyInfo, setPropertyInfo] = useState({
                   currentStep={7}
                   totalSteps={7}
                   onSubmit={handleSubmit}
+                  ownerInfo={ownerInfo}
+                  propertyInfo={{
+                    propertyInfo,
+                    roomDetails,
+                    amenities,
+                    localityDetails,
+                    rentalDetails: { expectedPrice: roomDetails.roomTypeDetails }
+                  }}
                 />
               )}
             </div>
@@ -1053,6 +1122,8 @@ const [propertyInfo, setPropertyInfo] = useState({
                 currentStep={7}
                 totalSteps={7}
                 onSubmit={handleSubmit}
+                ownerInfo={ownerInfo}
+                propertyInfo={propertyInfo}
               />
             )}
 

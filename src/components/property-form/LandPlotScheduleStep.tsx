@@ -9,6 +9,9 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
 import { ScheduleInfo } from '@/types/property';
 import { Eye, Calendar, Clock, PaintBucket, Sparkles, CheckCircle } from 'lucide-react';
+import { sendFreshlyPaintedEmail, sendDeepCleaningEmail } from '@/services/emailService';
+import { useToast } from '@/hooks/use-toast';
+import { useAuth } from '@/hooks/useAuth';
 
 const scheduleSchema = z.object({
   paintingService: z.enum(['book', 'decline']).optional(),
@@ -26,16 +29,22 @@ interface LandPlotScheduleStepProps {
   onNext: (data: ScheduleForm) => void;
   onBack: () => void;
   onSubmit?: (data: ScheduleForm) => void;
+  ownerInfo?: any;
+  propertyInfo?: any;
 }
 
 export const LandPlotScheduleStep: React.FC<LandPlotScheduleStepProps> = ({
   initialData,
   onNext,
   onBack,
-  onSubmit
+  onSubmit,
+  ownerInfo,
+  propertyInfo
 }) => {
   const [paintingResponse, setPaintingResponse] = useState<'book' | 'decline' | null>(null);
   const [cleaningResponse, setCleaningResponse] = useState<'book' | 'decline' | null>(null);
+  const { toast } = useToast();
+  const { user } = useAuth();
 
   const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm<ScheduleForm>({
     resolver: zodResolver(scheduleSchema),
@@ -61,6 +70,101 @@ export const LandPlotScheduleStep: React.FC<LandPlotScheduleStepProps> = ({
       onSubmit(data);
     } else {
       onNext(data);
+    }
+  };
+
+  const getResolvedContact = () => {
+    const email = ownerInfo?.email || user?.email;
+    const fullNameCandidates = [ownerInfo?.fullName, user?.user_metadata?.full_name, user?.user_metadata?.name];
+    const fullName = fullNameCandidates.find(Boolean);
+    return { email, fullName } as { email?: string; fullName?: string };
+  };
+
+  const handlePaintingBookNow = async () => {
+    const { email, fullName } = getResolvedContact();
+    if (!email || !fullName) {
+      toast({
+        title: "Error",
+        description: "Unable to send request. Please ensure your email and name are properly entered.",
+        variant: "destructive"
+      });
+      console.warn('[LandPlotScheduleStep] Missing contact details for Painting', { email, fullName, ownerInfo, user });
+      return;
+    }
+
+    try {
+      const locality = propertyInfo?.locationDetails?.locality || '';
+      const expectedPrice = propertyInfo?.saleDetails?.expectedPrice || 
+                           propertyInfo?.plotDetails?.expectedPrice || 
+                           '';
+
+      await sendFreshlyPaintedEmail(
+        email,
+        fullName,
+        propertyInfo?.plotDetails?.landType || 'land',
+        locality,
+        expectedPrice.toString()
+      );
+
+      toast({
+        title: "Your painting service request has been submitted successfully.",
+        description: "Our painting specialists will contact you within 6 hours.",
+        variant: "success"
+      });
+
+      setValue('paintingService', 'book');
+      setPaintingResponse('book');
+    } catch (error) {
+      console.error('Failed to send painting service email:', error);
+      toast({
+        title: "Error",
+        description: "Failed to send request. Please try again.",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const handleCleaningBookNow = async () => {
+    const { email, fullName } = getResolvedContact();
+    if (!email || !fullName) {
+      toast({
+        title: "Error",
+        description: "Unable to send request. Please ensure your email and name are properly entered.",
+        variant: "destructive"
+      });
+      console.warn('[LandPlotScheduleStep] Missing contact details for Cleaning', { email, fullName, ownerInfo, user });
+      return;
+    }
+
+    try {
+      const locality = propertyInfo?.locationDetails?.locality || '';
+      const expectedPrice = propertyInfo?.saleDetails?.expectedPrice || 
+                           propertyInfo?.plotDetails?.expectedPrice || 
+                           '';
+
+      await sendDeepCleaningEmail(
+        email,
+        fullName,
+        propertyInfo?.plotDetails?.landType || 'land',
+        locality,
+        expectedPrice.toString()
+      );
+
+      toast({
+        title: "Your cleaning service request has been submitted successfully.",
+        description: "Our cleaning specialists will contact you within 6 hours.",
+        variant: "success"
+      });
+
+      setValue('cleaningService', 'book');
+      setCleaningResponse('book');
+    } catch (error) {
+      console.error('Failed to send cleaning service email:', error);
+      toast({
+        title: "Error",
+        description: "Failed to send request. Please try again.",
+        variant: "destructive"
+      });
     }
   };
 
@@ -104,10 +208,7 @@ export const LandPlotScheduleStep: React.FC<LandPlotScheduleStepProps> = ({
                         type="button"
                         size="sm"
                         className="bg-orange-500 hover:bg-orange-600 text-white"
-                        onClick={() => {
-                          setValue('paintingService', 'book');
-                          setPaintingResponse('book');
-                        }}
+                        onClick={handlePaintingBookNow}
                       >
                         Book Now
                       </Button>
@@ -161,10 +262,7 @@ export const LandPlotScheduleStep: React.FC<LandPlotScheduleStepProps> = ({
                         type="button"
                         size="sm"
                         className="bg-teal-500 hover:bg-teal-600 text-white"
-                        onClick={() => {
-                          setValue('cleaningService', 'book');
-                          setCleaningResponse('book');
-                        }}
+                        onClick={handleCleaningBookNow}
                       >
                         Book Now
                       </Button>

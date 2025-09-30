@@ -30,7 +30,9 @@ export const FlattmatesPreviewStep: React.FC<FlattmatesPreviewStepProps> = ({
 }) => {
   const [showSuccess, setShowSuccess] = useState(isAlreadySubmitted);
   const [showNoPhotosMessage, setShowNoPhotosMessage] = useState(false);
+  const [isEmailLoading, setIsEmailLoading] = useState(false);
   const navigate = useNavigate();
+  const { toast } = useToast();
   const { ownerInfo, propertyInfo } = formData;
 
   const handleSubmit = () => {
@@ -55,6 +57,56 @@ export const FlattmatesPreviewStep: React.FC<FlattmatesPreviewStepProps> = ({
     const message = encodeURIComponent('Upload the photos');
     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`;
     window.open(whatsappUrl, '_blank');
+  };
+
+  const handleGoPremium = async () => {
+    if (!ownerInfo?.email) {
+      toast({
+        title: "Email Required",
+        description: "Please provide your email address to receive premium plan details.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    setIsEmailLoading(true);
+    try {
+      const result = await sendPriceSuggestionsEmail(
+        ownerInfo.email,
+        ownerInfo.fullName || 'there',
+        {
+          locality: propertyInfo?.locationDetails?.locality || 'your area',
+          rangeMin: Math.round((propertyInfo?.flattmatesDetails?.expectedPrice || 0) * 0.8),
+          rangeMax: Math.round((propertyInfo?.flattmatesDetails?.expectedPrice || 0) * 1.2),
+          yourPrice: propertyInfo?.flattmatesDetails?.expectedPrice || 0,
+          propertyType: 'flatmates',
+          listingType: 'rent',
+          userType: 'owner'
+        }
+      );
+
+      if (result.success) {
+        toast({
+          title: "Premium Plans Sent!",
+          description: "Check your email for personalized flatmates premium plan recommendations.",
+        });
+        // Still open the plans page
+        window.open('/plans?tab=owner', '_blank');
+      } else {
+        throw new Error('Failed to send email');
+      }
+    } catch (error) {
+      console.error('Error sending premium plan email:', error);
+      toast({
+        title: "Email Failed",
+        description: "Unable to send premium plan details. Please try again later.",
+        variant: "destructive"
+      });
+      // Still open the plans page as fallback
+      window.open('/plans?tab=owner', '_blank');
+    } finally {
+      setIsEmailLoading(false);
+    }
   };
 
   if (showSuccess) {
@@ -122,9 +174,10 @@ export const FlattmatesPreviewStep: React.FC<FlattmatesPreviewStepProps> = ({
               </div>
               <Button 
                 className="bg-green-600 hover:bg-green-700 text-white w-full sm:w-auto"
-                onClick={() => window.open('/plans?tab=owner', '_blank')}
+                onClick={handleGoPremium}
+                disabled={isEmailLoading}
               >
-                Go Premium
+                {isEmailLoading ? 'Sending...' : 'Go Premium'}
               </Button>
             </div>
             
@@ -304,9 +357,10 @@ export const FlattmatesPreviewStep: React.FC<FlattmatesPreviewStepProps> = ({
           <div className="flex-shrink-0 w-full sm:w-auto">
             <Button 
               className="bg-teal-600 hover:bg-teal-700 text-white px-6 py-2 w-full sm:w-auto"
-              onClick={() => window.open('/plans?tab=owner', '_blank')}
+              onClick={handleGoPremium}
+              disabled={isEmailLoading}
             >
-              Go Premium
+              {isEmailLoading ? 'Sending...' : 'Go Premium'}
             </Button>
           </div>
         </div>

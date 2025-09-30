@@ -280,6 +280,15 @@ export const LandPlotMultiStepForm: React.FC<LandPlotMultiStepFormProps> = ({
                   onNext={handleScheduleNext}
                   onBack={prevStep}
                   onSubmit={handleScheduleSubmit}
+                  ownerInfo={ownerInfo}
+                  propertyInfo={{
+                    plotDetails,
+                    locationDetails,
+                    saleDetails,
+                    amenities,
+                    gallery,
+                    additionalInfo
+                  }}
                 />
               )}
 

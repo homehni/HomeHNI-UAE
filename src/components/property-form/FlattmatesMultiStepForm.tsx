@@ -12,6 +12,7 @@ import { ScheduleStep } from './ScheduleStep';
 import { FlattmatesPreviewStep } from './FlattmatesPreviewStep';
 import GetTenantsFasterSection from '@/components/GetTenantsFasterSection';
 import { Home, MapPin, DollarSign, Star, Camera, Calendar, ArrowLeft, CheckCircle } from 'lucide-react';
+import { sendPriceSuggestionsEmail } from '@/services/emailService';
 import { OwnerInfo, PropertyDetails, LocationDetails, PropertyGallery, AdditionalInfo, ScheduleInfo, FlattmatesFormData } from '@/types/property';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
@@ -111,6 +112,8 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
     endTime: '',
     availableAllDay: true
   });
+
+  const [isEmailLoading, setIsEmailLoading] = useState(false);
 
   useEffect(() => {
     if (initialOwnerInfo) {
@@ -483,6 +486,54 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
   };
   const goToStep = (step: number) => setCurrentStep(step);
 
+  const handleGoPremium = async () => {
+    if (!ownerInfo?.email) {
+      toast({
+        title: "Email Required",
+        description: "Please provide your email address to receive premium plan details.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    setIsEmailLoading(true);
+    try {
+      const result = await sendPriceSuggestionsEmail(
+        ownerInfo.email,
+        ownerInfo.fullName || 'there',
+        {
+          locality: locationDetails?.locality || 'your area',
+          rangeMin: Math.round((rentalDetails?.expectedRent || 0) * 0.8),
+          rangeMax: Math.round((rentalDetails?.expectedRent || 0) * 1.2),
+          yourPrice: rentalDetails?.expectedRent || 0,
+          propertyType: 'flatmates',
+          listingType: 'rent',
+          userType: 'owner'
+        }
+      );
+
+      if (result.success) {
+        toast({
+          title: "Premium Plans Sent!",
+          description: "Check your email for personalized flatmates premium plan recommendations.",
+        });
+        window.open('/plans?tab=owner', '_blank');
+      } else {
+        throw new Error('Failed to send email');
+      }
+    } catch (error) {
+      console.error('Error sending premium plan email:', error);
+      toast({
+        title: "Email Failed",
+        description: "Unable to send premium plan details. Please try again later.",
+        variant: "destructive"
+      });
+      window.open('/plans?tab=owner', '_blank');
+    } finally {
+      setIsEmailLoading(false);
+    }
+  };
+
   const getFormData = (): FlattmatesFormData => ({
     ownerInfo,
     propertyInfo: {
@@ -694,9 +745,10 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
                     <div className="flex-shrink-0 w-full sm:w-auto">
                       <Button
                         className="bg-teal-600 hover:bg-teal-700 text-white px-6 py-2 w-full sm:w-auto"
-                        onClick={() => window.open('/plans', '_blank')}
+                        onClick={handleGoPremium}
+                        disabled={isEmailLoading}
                       >
-                        Go Premium
+                        {isEmailLoading ? 'Sending...' : 'Go Premium'}
                       </Button>
                     </div>
                   </div>
@@ -929,9 +981,10 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
                   <div className="flex-shrink-0 w-full sm:w-auto">
                     <Button
                       className="bg-teal-600 hover:bg-teal-700 text-white px-6 py-2 w-full sm:w-auto"
-                      onClick={() => window.open('/plans', '_blank')}
+                      onClick={handleGoPremium}
+                      disabled={isEmailLoading}
                     >
-                      Go Premium
+                      {isEmailLoading ? 'Sending...' : 'Go Premium'}
                     </Button>
                   </div>
                 </div>
