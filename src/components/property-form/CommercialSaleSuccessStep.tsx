@@ -4,6 +4,7 @@ import { CheckCircle, Check } from 'lucide-react';
 import { sendPlanUpgradeEmail } from '@/services/emailService';
 import { OwnerInfo } from '@/types/property';
 import { useToast } from '@/hooks/use-toast';
+import { useAuth } from '@/hooks/useAuth';
 
 interface CommercialSaleSuccessStepProps {
   onEditProperty: () => void;
@@ -24,23 +25,67 @@ export const CommercialSaleSuccessStep = ({
   gallery,
   ownerInfo
 }: CommercialSaleSuccessStepProps) => {
+  const { toast } = useToast();
+  const { user } = useAuth();
   const [showNoPhotosMessage, setShowNoPhotosMessage] = useState(false);
   const [isEmailLoading, setIsEmailLoading] = useState(false);
   
   // Check if there are photos uploaded
   const hasPhotos = gallery?.images && gallery.images.length > 0;
 
+  // Resolve contact details from multiple sources
+  const getResolvedContact = () => {
+    const emailCandidates = [
+      ownerInfo?.email,
+      user?.email,
+    ] as (string | undefined)[];
+
+    const fullNameCandidates = [
+      ownerInfo?.fullName,
+      (user as any)?.user_metadata?.full_name,
+      (user as any)?.user_metadata?.name,
+    ] as (string | undefined)[];
+
+    const email = emailCandidates.find(Boolean);
+    const fullName = fullNameCandidates.find(Boolean);
+
+    return { email, fullName } as { email?: string; fullName?: string };
+  };
+
   const handleGoPremium = async () => {
-    if (ownerInfo?.email && ownerInfo?.fullName) {
-      setIsEmailLoading(true);
-      try {
-        await sendPlanUpgradeEmail(ownerInfo.email, ownerInfo.fullName);
-      } catch (error) {
-        console.error('Error sending upgrade email:', error);
-      } finally {
-        setIsEmailLoading(false);
-      }
+    const { email, fullName } = getResolvedContact();
+    
+    if (!email || !fullName) {
+      toast({
+        title: "Error",
+        description: "Unable to send request. Please ensure your email and name are properly entered.",
+        variant: "destructive"
+      });
+      console.warn('[CommercialSaleSuccessStep] Missing contact details for Premium upgrade', { email, fullName, ownerInfo, user });
+      window.open('/plans?tab=commercial-seller', '_blank');
+      return;
     }
+
+    setIsEmailLoading(true);
+    try {
+      await sendPlanUpgradeEmail(email, fullName);
+      
+      toast({
+        title: "Request submitted successfully!",
+        description: "We'll contact you shortly with premium plan details.",
+        variant: "success"
+      });
+    } catch (error) {
+      console.error('Error sending upgrade email:', error);
+      toast({
+        title: "Error",
+        description: "Failed to send request. Please try again.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsEmailLoading(false);
+    }
+    
     window.open('/plans?tab=commercial-seller', '_blank');
   };
 
