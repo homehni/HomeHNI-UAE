@@ -7,7 +7,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { LocationDetails } from '@/types/property';
-import { MapPin } from 'lucide-react';
+import { MapPin, X } from 'lucide-react';
 
 const pgHostelLocationSchema = z.object({
   locality: z.string().optional(),
@@ -202,9 +202,7 @@ export function PgHostelLocalityDetailsStep({
         );
 
         if (selectedCity && detectedCity && !isCityMatch) {
-          setLocationMismatchWarning(
-            `The selected location appears to be in ${detectedCity}, but you've selected ${selectedCity}. Please select a location within ${selectedCity}.`
-          );
+          setLocationMismatchWarning(selectedCity.toLowerCase());
           el.value = '';
           form.setValue('locality', '', { shouldValidate: true });
           return;
@@ -303,7 +301,12 @@ export function PgHostelLocalityDetailsStep({
                       </div>
                     </FormControl>
                     {locationMismatchWarning && (
-                      <p className="text-sm text-red-500 mt-1">{locationMismatchWarning}</p>
+                      <div className="flex items-start gap-2 p-3 bg-red-50 border border-red-200 rounded-lg mt-2">
+                        <X className="h-4 w-4 text-red-500 flex-shrink-0 mt-0.5" />
+                        <p className="text-sm text-red-600">
+                          Please select another locality in {locationMismatchWarning}
+                        </p>
+                      </div>
                     )}
                     <FormMessage />
                   </FormItem>

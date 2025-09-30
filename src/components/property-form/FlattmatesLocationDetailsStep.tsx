@@ -7,7 +7,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { LocationDetails } from '@/types/property';
-import { ArrowLeft, ArrowRight, MapPin } from 'lucide-react';
+import { ArrowLeft, ArrowRight, MapPin, X } from 'lucide-react';
 
 const flattmatesLocationSchema = z.object({
   city: z.string().min(1, 'City is required'),
@@ -258,9 +258,7 @@ export const FlattmatesLocationDetailsStep: React.FC<FlattmatesLocationDetailsSt
         );
 
         if (selectedCityValue && detectedCity && !isCityMatch) {
-          setLocationMismatchWarning(
-            `The selected location appears to be in ${detectedCity}, but you've selected ${selectedCityValue}. Please select a location within ${selectedCityValue}.`
-          );
+          setLocationMismatchWarning(selectedCityValue.toLowerCase());
           el.value = '';
           form.setValue('locality', '', { shouldValidate: true });
           setShowMap(false);
@@ -413,7 +411,12 @@ export const FlattmatesLocationDetailsStep: React.FC<FlattmatesLocationDetailsSt
                   </div>
                 </FormControl>
                 {locationMismatchWarning && (
-                  <p className="text-sm text-red-500 mt-1">{locationMismatchWarning}</p>
+                  <div className="flex items-start gap-2 p-3 bg-red-50 border border-red-200 rounded-lg mt-2">
+                    <X className="h-4 w-4 text-red-500 flex-shrink-0 mt-0.5" />
+                    <p className="text-sm text-red-600">
+                      Please select another locality in {locationMismatchWarning}
+                    </p>
+                  </div>
                 )}
                 <FormMessage />
               </FormItem>
