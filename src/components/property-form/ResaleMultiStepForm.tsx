@@ -98,32 +98,61 @@ export const ResaleMultiStepForm: React.FC<ResaleMultiStepFormProps> = ({
 
   const currentFormId = 'resale-step-form';
 
+  // Save intermediate data after each successful step (backup like other forms)
+  const saveIntermediateData = (stepData: any, stepNumber: number) => {
+    try {
+      const completeFormData = {
+        ownerInfo,
+        propertyDetails: stepNumber === 1 ? stepData : propertyDetails,
+        locationDetails: stepNumber === 2 ? stepData : locationDetails,
+        saleDetails: stepNumber === 3 ? stepData : saleDetails,
+        amenities: stepNumber === 4 ? stepData : amenities,
+        gallery: stepNumber === 5 ? stepData : gallery,
+        additionalInfo,
+        scheduleInfo: stepNumber === 6 ? stepData : scheduleInfo,
+        currentStep: stepNumber,
+        completedSteps,
+        formType: 'resale'
+      };
+      localStorage.setItem('resale-form-data', JSON.stringify(completeFormData));
+      console.log('Saved resale draft to localStorage:', completeFormData);
+    } catch (error) {
+      console.error('Error saving resale draft:', error);
+    }
+  };
+
+
   const handlePropertyDetailsNext = (data: any) => {
     updatePropertyDetails(data);
+    saveIntermediateData(data, 1);
     nextStep();
     scrollToTop();
   };
 
   const handleLocationDetailsNext = (data: any) => {
     updateLocationDetails(data);
+    saveIntermediateData(data, 2);
     nextStep();
     scrollToTop();
   };
 
   const handleSaleDetailsNext = (data: any) => {
     updateSaleDetails(data);
+    saveIntermediateData(data, 3);
     nextStep();
     scrollToTop();
   };
 
   const handleAmenitiesNext = (data: any) => {
     updateAmenities(data);
+    saveIntermediateData(data, 4);
     nextStep();
     scrollToTop();
   };
 
   const handleGalleryNext = (data: any) => {
     updateGallery(data);
+    saveIntermediateData(data, 5);
     nextStep();
     scrollToTop();
   };
@@ -131,6 +160,7 @@ export const ResaleMultiStepForm: React.FC<ResaleMultiStepFormProps> = ({
 
   const handleScheduleNext = (data: any) => {
     updateScheduleInfo(data);
+    saveIntermediateData(data, 6);
     nextStep();
     scrollToTop();
   };
@@ -138,6 +168,7 @@ export const ResaleMultiStepForm: React.FC<ResaleMultiStepFormProps> = ({
 const handleScheduleSubmit = (data: any) => {
   console.log('[ResaleMultiStepForm] Schedule submit: received data', data);
   updateScheduleInfo(data);
+  saveIntermediateData(data, 6);
   const formData = getFormData();
   console.log('[ResaleMultiStepForm] Submitting resale form data:', formData);
   onSubmit(formData as SalePropertyFormData);
