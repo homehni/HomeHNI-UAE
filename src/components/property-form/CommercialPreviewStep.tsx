@@ -289,7 +289,7 @@ export const CommercialPreviewStep: React.FC<CommercialPreviewStepProps> = ({
       </div>
 
       {/* Congratulations Section */}
-      <div className="bg-red-50 border border-red-200 rounded-xl p-4 sm:p-6 mb-4 sm:mb-6 shadow-lg">
+      <div className="mt-16 sm:mt-0 bg-red-50 border border-red-200 rounded-xl p-4 sm:p-6 mb-4 sm:mb-6 shadow-lg">
         <div className="flex flex-col sm:flex-row items-center gap-4 mb-4">
           <div className="w-12 h-12 sm:w-14 sm:h-14 bg-red-500 rounded-full flex items-center justify-center flex-shrink-0 shadow-md">
             <Check className="w-6 h-6 text-white" strokeWidth={3} />

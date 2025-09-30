@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { CheckCircle, Check } from 'lucide-react';
-import { sendPriceSuggestionsEmail } from '@/services/emailService';
+import { sendPlanUpgradeEmail } from '@/services/emailService';
 import { OwnerInfo } from '@/types/property';
 import { useToast } from '@/hooks/use-toast';
 
