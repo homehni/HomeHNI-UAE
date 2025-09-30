@@ -45,8 +45,13 @@ export const SecureContactForm: React.FC<SecureContactFormProps> = ({
     checkContactUsage().then((status) => {
       setCanContact(status.canContact);
       setRemainingUses(status.remainingUses);
+      
+      // If somehow the form was shown without contacts, redirect immediately
+      if (!status.canContact) {
+        navigate('/plans');
+      }
     });
-  }, []);
+  }, [navigate]);
 
   const handleInputChange = (field: string, value: string) => {
     let sanitizedValue = value;

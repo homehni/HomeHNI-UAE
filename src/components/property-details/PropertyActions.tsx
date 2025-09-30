@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { RentalStatusService } from '@/services/rentalStatusService';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/components/ui/use-toast';
+import { checkContactUsage } from '@/services/contactUsageService';
 
 interface PropertyActionsProps {
   onContact: () => void;
@@ -288,12 +289,32 @@ export const PropertyActions: React.FC<PropertyActionsProps> = ({
     );
   }
 
+  // Handler to check contact limits before opening contact modal
+  const handleContactClick = async () => {
+    const status = await checkContactUsage();
+    
+    if (!status.canContact) {
+      toast({
+        title: "Contact Limit Reached",
+        description: "You've used all your free contacts. Subscribe to continue contacting property owners.",
+        className: "bg-white border border-orange-200 shadow-lg rounded-lg",
+        style: {
+          borderLeft: "8px solid hsl(38, 92%, 50%)",
+        },
+      });
+      navigate('/plans');
+      return;
+    }
+    
+    onContact();
+  };
+
   // Show regular visitor UI for non-owners
   return (
     <div className="space-y-3">
       <div className="flex flex-col sm:flex-row gap-3">
         <Button 
-          onClick={onContact}
+          onClick={handleContactClick}
           className="flex-1 bg-red-500 hover:bg-red-600 text-white rounded-lg py-3 font-medium"
         >
           Contact

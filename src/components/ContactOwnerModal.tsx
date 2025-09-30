@@ -44,26 +44,9 @@ export const ContactOwnerModal: React.FC<ContactOwnerModalProps> = ({
       checkContactUsage().then((status) => {
         setCanContact(status.canContact);
         setRemainingUses(status.remainingUses);
-        
-        // If user can't contact, redirect to payment immediately
-        if (!status.canContact) {
-          onClose();
-          toast({
-            title: "Contact Limit Reached",
-            description: "You've used all your free contacts. Subscribe to continue contacting property owners.",
-            className: "bg-white border border-orange-200 shadow-lg rounded-lg",
-            style: {
-              borderLeft: "8px solid hsl(38, 92%, 50%)",
-            },
-          });
-          // Redirect to plans page after a short delay
-          setTimeout(() => {
-            navigate('/plans');
-          }, 1500);
-        }
       });
     }
-  }, [isOpen, onClose, navigate, toast]);
+  }, [isOpen]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

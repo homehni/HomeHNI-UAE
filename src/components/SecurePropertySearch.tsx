@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -8,6 +9,7 @@ import { PropertyWatermark } from '@/components/property-details/PropertyWaterma
 import { SecurePropertyService, PublicProperty } from '@/services/securePropertyService';
 import { RentalStatusService } from '@/services/rentalStatusService';
 import { SecureContactForm } from './SecureContactForm';
+import { checkContactUsage } from '@/services/contactUsageService';
 import { 
   Search, 
   MapPin, 
@@ -27,6 +29,7 @@ import { useToast } from '@/hooks/use-toast';
  */
 export const SecurePropertySearch: React.FC = () => {
   const { toast } = useToast();
+  const navigate = useNavigate();
   const [properties, setProperties] = useState<PublicProperty[]>([]);
   const [loading, setLoading] = useState(false);
   const [searchFilters, setSearchFilters] = useState({
@@ -142,7 +145,22 @@ export const SecurePropertySearch: React.FC = () => {
     }
   };
 
-  const handleContactOwner = (propertyId: string) => {
+  const handleContactOwner = async (propertyId: string) => {
+    const status = await checkContactUsage();
+    
+    if (!status.canContact) {
+      toast({
+        title: "Contact Limit Reached",
+        description: "You've used all your free contacts. Subscribe to continue contacting property owners.",
+        className: "bg-white border border-orange-200 shadow-lg rounded-lg",
+        style: {
+          borderLeft: "8px solid hsl(38, 92%, 50%)",
+        },
+      });
+      navigate('/plans');
+      return;
+    }
+    
     setShowContactForm(propertyId);
   };
 
