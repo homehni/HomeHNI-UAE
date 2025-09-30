@@ -327,25 +327,25 @@ export const FlattmatesPreviewStep: React.FC<FlattmatesPreviewStepProps> = ({
               <p className="text-sm sm:text-base text-gray-600 mb-4">Unlock access to 100% verified flatmates and enjoy a super-fast closure.</p>
               
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm">
-                <div className="flex items-center gap-2 justify-center sm:justify-start">
+                <div className="flex items-center gap-2 justify-start">
                   <div className="w-4 h-4 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
                     <span className="text-white text-xs">✓</span>
                   </div>
                   <span className="text-gray-700">Dedicated personal assistant</span>
                 </div>
-                <div className="flex items-center gap-2 justify-center sm:justify-start">
+                <div className="flex items-center gap-2 justify-start">
                   <div className="w-4 h-4 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
                     <span className="text-white text-xs">✓</span>
                   </div>
                   <span className="text-gray-700">Property promotion on site</span>
                 </div>
-                <div className="flex items-center gap-2 justify-center sm:justify-start">
+                <div className="flex items-center gap-2 justify-start">
                   <div className="w-4 h-4 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
                     <span className="text-white text-xs">✓</span>
                   </div>
                   <span className="text-gray-700">5X more responses from flatmates</span>
                 </div>
-                <div className="flex items-center gap-2 justify-center sm:justify-start">
+                <div className="flex items-center gap-2 justify-start">
                   <div className="w-4 h-4 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
                     <span className="text-white text-xs">✓</span>
                   </div>

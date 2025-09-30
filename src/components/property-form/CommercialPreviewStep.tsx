@@ -256,7 +256,7 @@ export const CommercialPreviewStep: React.FC<CommercialPreviewStepProps> = ({
   }
 
   return (
-    <div className="w-full px-4 sm:px-6 lg:px-8 space-y-4 sm:space-y-6">
+    <div className="pt-20 sm:pt-0 w-full px-4 sm:px-6 lg:px-8 space-y-4 sm:space-y-6">
       {/* Property Preview Section - Hidden */}
       <div className="hidden bg-white border border-gray-200 rounded-lg p-4 sm:p-6 mb-4 sm:mb-6 shadow-sm">
         <h2 className="text-xl font-semibold text-gray-800 mb-4">Commercial Property Preview</h2>
@@ -347,25 +347,25 @@ export const CommercialPreviewStep: React.FC<CommercialPreviewStepProps> = ({
               <p className="text-sm sm:text-base text-gray-600 mb-4">Unlock access to 100% tenants and enjoy a super-fast closure.</p>
               
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm">
-                <div className="flex items-center gap-2 justify-center sm:justify-start">
+                <div className="flex items-center gap-2 justify-start">
                   <div className="w-4 h-4 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
                     <span className="text-white text-xs">✓</span>
                   </div>
                   <span className="text-gray-700">Dedicated personal assistant</span>
                 </div>
-                <div className="flex items-center gap-2 justify-center sm:justify-start">
+                <div className="flex items-center gap-2 justify-start">
                   <div className="w-4 h-4 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
                     <span className="text-white text-xs">✓</span>
                   </div>
                   <span className="text-gray-700">Property promotion on site</span>
                 </div>
-                <div className="flex items-center gap-2 justify-center sm:justify-start">
+                <div className="flex items-center gap-2 justify-start">
                   <div className="w-4 h-4 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
                     <span className="text-white text-xs">✓</span>
                   </div>
                   <span className="text-gray-700">5X more responses from tenants</span>
                 </div>
-                <div className="flex items-center gap-2 justify-center sm:justify-start">
+                <div className="flex items-center gap-2 justify-start">
                   <div className="w-4 h-4 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
                     <span className="text-white text-xs">✓</span>
                   </div>

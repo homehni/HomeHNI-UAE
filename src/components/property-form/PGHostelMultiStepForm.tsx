@@ -309,13 +309,26 @@ const [propertyInfo, setPropertyInfo] = useState({
     console.log('PGHostel sticky button clicked, step:', currentStep);
     
     // Trigger form submission to get the latest form data with validation
-    const currentForm = document.querySelector('form');
-    if (currentForm) {
-      console.log('Sticky button: Triggering form submission for step', currentStep);
+    const allForms = Array.from(document.querySelectorAll('form')) as HTMLFormElement[];
+    const visibleForm = allForms.find(f => {
+      // Prefer forms that are actually visible (not in hidden lg:flex containers)
+      const rects = f.getClientRects();
+      const isVisible = rects.length > 0 && (f as any).offsetParent !== null;
+      const style = window.getComputedStyle(f);
+      return isVisible && style.display !== 'none' && style.visibility !== 'hidden' && style.opacity !== '0';
+    }) || allForms[0] || null;
+
+    if (visibleForm) {
+      console.log('Sticky button: Triggering requestSubmit on visible form for step', currentStep, visibleForm);
       // Use requestSubmit to trigger proper form validation and submission
-      currentForm.requestSubmit();
+      if (typeof visibleForm.requestSubmit === 'function') {
+        visibleForm.requestSubmit();
+      } else {
+        const submitEvent = new Event('submit', { bubbles: true, cancelable: true });
+        visibleForm.dispatchEvent(submitEvent);
+      }
     } else {
-      console.warn('No form found for step:', currentStep);
+      console.warn('No visible form found for step:', currentStep);
     }
     
     // Always scroll to top for better UX
@@ -744,25 +757,25 @@ const [propertyInfo, setPropertyInfo] = useState({
                         <p className="text-sm sm:text-base text-gray-600 mb-4">Unlock access to 100% tenants and enjoy a super-fast booking.</p>
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm">
-                          <div className="flex items-center gap-2 justify-center sm:justify-start">
+                          <div className="flex items-center gap-2 justify-start">
                             <div className="w-4 h-4 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
                               <span className="text-white text-xs">✓</span>
                             </div>
                             <span className="text-gray-700">Dedicated personal assistant</span>
                           </div>
-                          <div className="flex items-center gap-2 justify-center sm:justify-start">
+                          <div className="flex items-center gap-2 justify-start">
                             <div className="w-4 h-4 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
                               <span className="text-white text-xs">✓</span>
                             </div>
                             <span className="text-gray-700">Property promotion on site</span>
                           </div>
-                          <div className="flex items-center gap-2 justify-center sm:justify-start">
+                          <div className="flex items-center gap-2 justify-start">
                             <div className="w-4 h-4 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
                               <span className="text-white text-xs">✓</span>
                             </div>
                             <span className="text-gray-700">5X more responses from tenants</span>
                           </div>
-                          <div className="flex items-center gap-2 justify-center sm:justify-start">
+                          <div className="flex items-center gap-2 justify-start">
                             <div className="w-4 h-4 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
                               <span className="text-white text-xs">✓</span>
                             </div>
@@ -784,7 +797,7 @@ const [propertyInfo, setPropertyInfo] = useState({
 
                   {/* Missing Photos Warning */}
                   {!hasPhotos && !showNoPhotosMessage && (
-                    <div className="bg-orange-50 border border-orange-200 rounded-lg p-3 sm:p-4 mb-4 sm:mb-6">
+                    <div className="bg-orange-50 border border-orange-200 rounded-lg p-3 sm:p-4 mb-4 sm:mb-6 mt-6 sm:mt-0">
                       <div className="flex flex-col sm:flex-row items-start justify-between gap-4">
                         <div className="flex items-start gap-3 flex-1 w-full sm:w-auto">
                           <div className="w-5 h-5 sm:w-6 sm:h-6 bg-orange-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">

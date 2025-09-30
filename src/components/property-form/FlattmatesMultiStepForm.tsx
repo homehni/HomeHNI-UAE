@@ -182,13 +182,24 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
     console.log('Flatmates sticky button clicked, step:', currentStep);
     
     // Trigger form submission to get the latest form data with validation
-    const currentForm = document.querySelector('form');
-    if (currentForm) {
-      console.log('Sticky button: Triggering form submission for step', currentStep);
-      // Use requestSubmit to trigger proper form validation and submission
-      currentForm.requestSubmit();
+    const allForms = Array.from(document.querySelectorAll('form')) as HTMLFormElement[];
+    const visibleForm = allForms.find(f => {
+      const rects = f.getClientRects();
+      const isVisible = rects.length > 0 && (f as any).offsetParent !== null;
+      const style = window.getComputedStyle(f);
+      return isVisible && style.display !== 'none' && style.visibility !== 'hidden' && style.opacity !== '0';
+    }) || allForms[0] || null;
+
+    if (visibleForm) {
+      console.log('Sticky button: Triggering requestSubmit on visible form for step', currentStep, visibleForm);
+      if (typeof visibleForm.requestSubmit === 'function') {
+        visibleForm.requestSubmit();
+      } else {
+        const submitEvent = new Event('submit', { bubbles: true, cancelable: true });
+        visibleForm.dispatchEvent(submitEvent);
+      }
     } else {
-      console.warn('No form found for step:', currentStep);
+      console.warn('No visible form found for step:', currentStep);
     }
     
     // Always scroll to top for better UX
@@ -1128,7 +1139,7 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
           </div>
         </div>
 
-        <div className="p-4">
+        <div className="p-4 pb-28 sm:pb-32">
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
             {currentStep === 1 && (
               <FlattmatesPropertyDetailsStep
@@ -1205,96 +1216,18 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
                 scheduleInfo
               }}
             />
-                
-                {/* Photo Upload Warning Logic for Schedule Step */}
-                <div className="mt-6 space-y-4">
-                  {/* Missing Photos Warning */}
-                  {!hasPhotos && !showNoPhotosMessage && (
-                    <div className="bg-orange-50 border border-orange-200 rounded-lg p-4">
-                      <div className="flex items-start gap-3">
-                        <div className="w-6 h-6 bg-orange-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                          <span className="text-orange-600 font-bold text-sm">!</span>
-                        </div>
-                        <div className="flex-1">
-                          <h3 className="text-base font-semibold text-gray-800 mb-1">Your property doesn't have any photos</h3>
-                          <p className="text-sm text-gray-600 mb-3">
-                            Your property will be live but to get the right flatmate faster, we suggest uploading property photos ASAP
-                          </p>
-                          <div className="flex flex-col sm:flex-row gap-2">
-                            <Button 
-                              variant="outline" 
-                              size="sm"
-                              className="border-teal-500 text-teal-600 hover:bg-teal-50"
-                              onClick={() => setShowNoPhotosMessage(true)}
-                            >
-                              I Don't Have Photos
-                            </Button>
-                            <Button 
-                              variant="outline" 
-                              size="sm" 
-                              className="border-teal-500 text-teal-600 hover:bg-teal-50"
-                              onClick={handleSendPhotos}
-                            >
-                              Send Photos
-                            </Button>
-                            <Button 
-                              size="sm" 
-                              className="bg-teal-600 hover:bg-teal-700 text-white"
-                              onClick={() => setCurrentStep(5)}
-                            >
-                              Upload Now
-                            </Button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Success Message for Photos */}
-                  {hasPhotos && (
-                    <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-                      <div className="flex items-start gap-3">
-                        <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
-                          <CheckCircle className="w-4 h-4 text-green-600" />
-                        </div>
-                        <div className="flex-1">
-                          <h3 className="text-base font-semibold text-gray-800 mb-1">Great! Your property has photos</h3>
-                          <p className="text-sm text-gray-600">
-                            Properties with photos get 5X more responses. You're all set!
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* No Photos Message */}
-                  {showNoPhotosMessage && (
-                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                      <div className="flex items-start gap-3">
-                        <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-                          <CheckCircle className="w-4 h-4 text-blue-600" />
-                        </div>
-                        <div className="flex-1">
-                          <p className="font-medium text-blue-800 mb-1">Thanks for letting us know!</p>
-                          <p className="text-blue-700 text-sm">
-                            No worries! Your property listing will still be active. You can always add photos later to get better responses.
-                          </p>
-                          <div className="mt-3">
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              className="border-blue-300 text-blue-600 hover:bg-blue-50"
-                              onClick={() => setShowNoPhotosMessage(false)}
-                            >
-                              Close
-                            </Button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
               </>
+            )}
+
+            {currentStep === 7 && (
+              <FlattmatesPreviewStep
+                formData={getFormData()}
+                onBack={prevStep}
+                onEdit={goToStep}
+                onSubmit={handleSubmit}
+                isSubmitting={isSubmitting}
+                previewPropertyId={createdSubmissionId || undefined}
+              />
             )}
           </div>
         </div>
@@ -1403,29 +1336,6 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
             </div>
           </div>
 
-          {/* Sticky Bottom Navigation Bar - Hidden on Preview step */}
-          {currentStep !== 7 && (
-            <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-3 sm:p-4 z-50 shadow-lg">
-              <div className="max-w-4xl mx-auto flex flex-col sm:flex-row gap-3 sm:gap-4 sm:justify-center">
-                <Button 
-                  type="button" 
-                  variant="outline" 
-                  onClick={currentStep === 1 ? () => {} : prevStep}
-                  className="h-10 sm:h-10 px-4 sm:px-6 w-full sm:w-auto order-2 sm:order-1"
-                  disabled={currentStep === 1}
-                >
-                  Back
-                </Button>
-                <Button 
-                  type="button" 
-                  onClick={handleStickyButtonClick}
-                  className="h-12 sm:h-10 px-6 sm:px-6 bg-red-600 hover:bg-red-700 text-white w-full sm:w-auto order-1 sm:order-2 font-semibold"
-                >
-                  {currentStep === 6 ? 'Submit Property' : 'Save & Continue'}
-                </Button>
-              </div>
-            </div>
-          )}
 
         </div>
 
@@ -1434,6 +1344,30 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
           <GetTenantsFasterSection ownerInfo={ownerInfo} />
         </div>
       </div>
+
+      {/* Sticky Bottom Navigation Bar - Visible on all screens */}
+      {currentStep !== 7 && (
+        <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-3 sm:p-4 z-50 shadow-lg">
+          <div className="max-w-4xl mx-auto flex flex-col sm:flex-row gap-3 sm:gap-4 sm:justify-center">
+            <Button 
+              type="button" 
+              variant="outline" 
+              onClick={currentStep === 1 ? () => {} : prevStep}
+              className="h-10 sm:h-10 px-4 sm:px-6 w-full sm:w-auto order-2 sm:order-1"
+              disabled={currentStep === 1}
+            >
+              Back
+            </Button>
+            <Button 
+              type="button" 
+              onClick={handleStickyButtonClick}
+              className="h-12 sm:h-10 px-6 sm:px-6 bg-red-600 hover:bg-red-700 text-white w-full sm:w-auto order-1 sm:order-2 font-semibold"
+            >
+              {currentStep === 6 ? 'Submit Property' : 'Save & Continue'}
+            </Button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

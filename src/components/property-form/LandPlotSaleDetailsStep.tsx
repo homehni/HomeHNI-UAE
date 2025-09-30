@@ -159,14 +159,14 @@ export const LandPlotSaleDetailsStep: React.FC<LandPlotSaleDetailsStepProps> = (
           </div>
 
           {/* Ownership Section */}
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             <Label className="text-sm font-medium text-gray-700">
               Ownership
             </Label>
             <RadioGroup
               value={watch('ownershipType')}
               onValueChange={(value) => setValue('ownershipType', value as any)}
-              className="flex flex-row space-x-6"
+              className="flex flex-col sm:flex-row gap-3 sm:gap-6"
             >
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="freehold" id="freehold" />
