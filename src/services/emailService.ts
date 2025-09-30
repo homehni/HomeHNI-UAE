@@ -409,22 +409,42 @@ export async function sendPaymentInvoiceEmail(
   });
 }
 
-// 18. Services Application Email - Send when user applies for services
+// 18. Services Application Email - Send when user applies for any service
 export async function sendServicesApplicationEmail(
   userEmail: string, 
   userName: string,
-  serviceData: {
-    serviceType: string;
-    phone: string;
-    location: string;
-  }
+  serviceType: string
 ) {
+  // Map service IDs to display names
+  const serviceNames: { [key: string]: string } = {
+    'loans': 'Loans Service',
+    'home-security': 'Home Security Service',
+    'packers-movers': 'Packers & Movers Service',
+    'legal-services': 'Legal Service',
+    'handover-services': 'Handover Service',
+    'property-management': 'Property Management Service',
+    'architects': 'Architects Service',
+    'painting-cleaning': 'Painting & Cleaning Service',
+    'interior-design': 'Interior Design Service'
+  };
+
+  const serviceName = serviceNames[serviceType] || serviceType || 'Premium Service';
+
   return sendEmail('/send-services-application-email', {
     to: userEmail,
     userName: userName || 'there',
-    serviceType: serviceData.serviceType,
-    phone: serviceData.phone,
-    location: serviceData.location,
-    servicesUrl: 'https://homehni.com/services'
+    serviceType: serviceType,
+    serviceName: serviceName,
+    subject: `🎯 Thank You for Booking ${serviceName} - Home HNI`,
+    // Template data for the email service
+    templateData: {
+      serviceName,
+      contactWithin: '12 hours',
+      propertiesUrl: 'https://homehni.com/properties',
+      plansUrl: 'https://homehni.com/plans',
+      whatsapp: '+91-9876543210',
+      email: 'services@homehni.com',
+      hours: '8 AM - 8 PM (Mon-Sun)'
+    }
   });
 }
