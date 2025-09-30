@@ -1086,7 +1086,7 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
           </div>
         </div>
 
-        <div className="p-4">
+        <div className="p-4 pb-28 sm:pb-32">
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
             {currentStep === 1 && (
               <FlattmatesPropertyDetailsStep
