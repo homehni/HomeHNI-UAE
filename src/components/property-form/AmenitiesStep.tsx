@@ -101,7 +101,7 @@ export const AmenitiesStep: React.FC<AmenitiesStepProps> = ({
     onNext(data);
   };
   return <div className="bg-background rounded-lg border p-6">
-      <div className="text-left mb-8">
+      <div className="text-left mb-8 pt-4 md:pt-0">
         <h2 className="text-2xl text-primary mb-6 font-semibold">Provide additional details about your property to get maximum visibility</h2>
       </div>
 

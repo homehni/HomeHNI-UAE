@@ -62,7 +62,7 @@ export const LandPlotPropertyDetailsStep: React.FC<LandPlotPropertyDetailsStepPr
 
   return (
     <div className="bg-background p-6">
-      <div className="text-left mb-8">
+      <div className="text-left mb-8 pt-4 md:pt-0">
         <h2 className="text-2xl font-semibold text-red-600 mb-2">Land/Plot Details</h2>
       </div>
 

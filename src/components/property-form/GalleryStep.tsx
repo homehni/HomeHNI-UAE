@@ -114,7 +114,7 @@ export const GalleryStep: React.FC<GalleryStepProps> = ({
                   <FormControl>
                     <div className="space-y-6">
                       {/* Upload Images Title */}
-                      <div>
+                      <div className="pt-4 md:pt-0">
                         <h1 className="text-2xl font-semibold text-primary mb-6">Upload Property Images by Category</h1>
                       </div>
                           

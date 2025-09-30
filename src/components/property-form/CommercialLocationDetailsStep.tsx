@@ -311,7 +311,7 @@ export const CommercialLocationDetailsStep: React.FC<CommercialLocationDetailsSt
 
   return (
     <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
-      <h1 className="text-2xl font-semibold text-red-600 mb-6 pt-4 sm:pt-6">Location Details</h1>
+      <h1 className="text-2xl font-semibold text-red-600 mb-6 pt-4 md:pt-0">Location Details</h1>
 
       <Form {...form}>
         <form onSubmit={(e) => {

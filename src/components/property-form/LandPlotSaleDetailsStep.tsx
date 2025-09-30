@@ -57,7 +57,7 @@ export const LandPlotSaleDetailsStep: React.FC<LandPlotSaleDetailsStepProps> = (
 
   return (
     <div className="bg-background p-6">
-        <div className="text-left mb-8">
+        <div className="text-left mb-8 pt-4 md:pt-0">
           <h2 className="text-2xl font-semibold text-red-600 mb-2">
             Sale Details
           </h2>

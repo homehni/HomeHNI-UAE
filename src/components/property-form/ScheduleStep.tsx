@@ -147,7 +147,7 @@ export const ScheduleStep: React.FC<ScheduleStepProps> = ({
   const watchAvailableAllDay = form.watch('availableAllDay');
   return (
     <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
-      <h1 className="text-2xl font-semibold text-primary mb-6 pt-6 sm:pt-6">
+      <h1 className="text-2xl font-semibold text-primary mb-6 pt-4 md:pt-0">
         Make house visits hassle-free by providing us your availability
       </h1>
 
