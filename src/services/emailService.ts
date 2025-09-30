@@ -3,6 +3,9 @@ export const EMAIL_API_BASE = 'https://email-system-hni.vercel.app';
 export const EMAIL_API_KEY = 'MyNew$uper$ecretKey2025';
 
 const sendEmail = async (endpoint: string, data: any) => {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 12000); // 12s timeout to avoid hanging UI
+
   try {
     const response = await fetch(`${EMAIL_API_BASE}${endpoint}`, {
       method: 'POST',
@@ -10,15 +13,25 @@ const sendEmail = async (endpoint: string, data: any) => {
         'Content-Type': 'application/json',
         'x-api-key': EMAIL_API_KEY
       },
-      body: JSON.stringify(data)
+      body: JSON.stringify(data),
+      signal: controller.signal,
     });
-    
-    const result = await response.json();
+
+    let result: any = null;
+    try {
+      result = await response.json();
+    } catch {
+      // In case of empty or non-JSON response
+      result = { ok: response.ok, status: response.status };
+    }
+
     console.log(`Email sent successfully via ${endpoint}:`, result);
     return { success: true, result };
   } catch (error) {
     console.error(`Email failed for ${endpoint}:`, error);
     return { success: false, error };
+  } finally {
+    clearTimeout(timeoutId);
   }
 };
 
