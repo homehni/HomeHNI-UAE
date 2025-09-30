@@ -335,52 +335,6 @@ const handleScheduleSubmit = (data: any) => {
             </div>
           </div>
 
-          {/* Sticky Bottom Navigation Bar */}
-          {currentStep !== 7 && (
-            <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-3 sm:p-4 z-50 shadow-lg">
-              <div className="max-w-4xl mx-auto flex flex-col sm:flex-row gap-3 sm:gap-4 sm:justify-center">
-                <Button 
-                  type="button" 
-                  variant="outline" 
-                  onClick={currentStep === 1 ? () => {} : prevStep}
-                  className="h-10 sm:h-10 px-4 sm:px-6 w-full sm:w-auto order-2 sm:order-1"
-                  disabled={currentStep === 1}
-                >
-                  Back
-                </Button>
-                <Button 
-                  type="button" 
-                  onClick={() => {
-                    console.log('ResaleMultiStepForm sticky Save & Continue button clicked');
-                    console.log('Current step:', currentStep);
-                    console.log('Form ID we are looking for:', currentFormId);
-                    
-                    const formEl = document.getElementById(currentFormId) as HTMLFormElement | null;
-                    console.log('Form element found:', formEl);
-                    
-                    if (formEl) {
-                      console.log('Calling requestSubmit on form element');
-                      formEl.requestSubmit();
-                    } else {
-                      console.warn('Form element not found for current step');
-                      // Try to find any form on the page as fallback
-                      const anyForm = document.querySelector('form');
-                      console.log('Any form found on page:', anyForm);
-                      if (anyForm) {
-                        console.log('Trying to submit any form found');
-                        anyForm.requestSubmit();
-                      }
-                    }
-                    
-                    scrollToTop();
-                  }}
-                  className="h-12 sm:h-10 px-6 sm:px-6 bg-red-600 hover:bg-red-700 text-white w-full sm:w-auto order-1 sm:order-2 font-semibold"
-                >
-                  {currentStep === 6 ? 'Submit Property' : 'Save & Continue'}
-                </Button>
-              </div>
-            </div>
-          )}
         </div>
 
         {/* Right Sidebar - Get Tenants Faster */}
@@ -388,6 +342,53 @@ const handleScheduleSubmit = (data: any) => {
           <GetTenantsFasterSection ownerInfo={ownerInfo} />
         </div>
       </div>
+
+      {/* Sticky Bottom Navigation Bar - Visible on all screens */}
+      {currentStep !== 7 && (
+        <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-3 sm:p-4 z-50 shadow-lg">
+          <div className="max-w-4xl mx-auto flex flex-col sm:flex-row gap-3 sm:gap-4 sm:justify-center">
+            <Button 
+              type="button" 
+              variant="outline" 
+              onClick={currentStep === 1 ? () => {} : prevStep}
+              className="h-10 sm:h-10 px-4 sm:px-6 w-full sm:w-auto order-2 sm:order-1"
+              disabled={currentStep === 1}
+            >
+              Back
+            </Button>
+            <Button 
+              type="button" 
+              onClick={() => {
+                console.log('ResaleMultiStepForm sticky Save & Continue button clicked');
+                console.log('Current step:', currentStep);
+                console.log('Form ID we are looking for:', currentFormId);
+                
+                const formEl = document.getElementById(currentFormId) as HTMLFormElement | null;
+                console.log('Form element found:', formEl);
+                
+                if (formEl) {
+                  console.log('Calling requestSubmit on form element');
+                  formEl.requestSubmit();
+                } else {
+                  console.warn('Form element not found for current step');
+                  // Try to find any form on the page as fallback
+                  const anyForm = document.querySelector('form');
+                  console.log('Any form found on page:', anyForm);
+                  if (anyForm) {
+                    console.log('Trying to submit any form found');
+                    anyForm.requestSubmit();
+                  }
+                }
+                
+                scrollToTop();
+              }}
+              className="h-12 sm:h-10 px-6 sm:px-6 bg-red-600 hover:bg-red-700 text-white w-full sm:w-auto order-1 sm:order-2 font-semibold"
+            >
+              {currentStep === 6 ? 'Submit Property' : 'Save & Continue'}
+            </Button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
