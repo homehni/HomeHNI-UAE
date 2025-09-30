@@ -220,6 +220,14 @@ const HomeSecurityEmbedded = () => {
               }}>
                 <Input id="security-name" name="name" placeholder="Name" required />
 
+                <Input 
+                  id="security-email" 
+                  name="email" 
+                  type="email" 
+                  placeholder="Email" 
+                  required 
+                />
+
                 <div className="flex flex-col sm:flex-row gap-2">
                   <Select defaultValue="+91" name="countryCode">
                     <SelectTrigger className="w-28"><SelectValue /></SelectTrigger>
@@ -302,6 +310,15 @@ const HomeSecurityEmbedded = () => {
                   id="security-name-mobile" 
                   name="name" 
                   placeholder="Name" 
+                  className="h-12 text-base bg-background"
+                  required 
+                />
+
+                <Input 
+                  id="security-email-mobile" 
+                  name="email" 
+                  type="email" 
+                  placeholder="Email" 
                   className="h-12 text-base bg-background"
                   required 
                 />
