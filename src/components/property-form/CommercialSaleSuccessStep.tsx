@@ -183,21 +183,21 @@ export const CommercialSaleSuccessStep = ({
         </div>
       ) : (
         /* Photo Upload Notice */
-        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3 sm:p-4">
           <div className="flex items-start gap-3">
-            <div className="w-6 h-6 bg-yellow-100 rounded-full flex items-center justify-center mt-0.5">
-              <span className="text-yellow-600 text-sm font-semibold">!</span>
+            <div className="w-5 h-5 sm:w-6 sm:h-6 bg-yellow-100 rounded-full flex items-center justify-center mt-0.5 flex-shrink-0">
+              <span className="text-yellow-600 text-xs sm:text-sm font-semibold">!</span>
             </div>
             <div className="flex-1">
-              <p className="font-medium text-yellow-800 mb-1">Your commercial property don't have any photos</p>
-              <p className="text-yellow-700 text-sm mb-3">
+              <p className="text-sm sm:text-base font-medium text-yellow-800 mb-1">Your commercial property don't have any photos</p>
+              <p className="text-yellow-700 text-xs sm:text-sm mb-3">
                 Your property will be live but in order to get the right tenant faster, we suggest to upload your property photos ASAP
               </p>
-              <div className="flex gap-2">
+              <div className="flex flex-col sm:flex-row gap-2">
                 <Button 
                   variant="outline" 
                   size="sm" 
-                  className="text-blue-600 border-blue-300"
+                  className="text-blue-600 border-blue-300 w-full sm:w-auto"
                   onClick={handleIDontHavePhotos}
                 >
                   I Don't Have Photos
@@ -205,14 +205,14 @@ export const CommercialSaleSuccessStep = ({
                 <Button 
                   variant="outline" 
                   size="sm" 
-                  className="text-blue-600 border-blue-300"
+                  className="text-blue-600 border-blue-300 w-full sm:w-auto"
                   onClick={handleSendPhotos}
                 >
                   Send Photos
                 </Button>
                 <Button 
                   size="sm" 
-                  className="bg-teal-600 hover:bg-teal-700 text-white"
+                  className="bg-teal-600 hover:bg-teal-700 text-white w-full sm:w-auto"
                   onClick={handleUploadNow}
                 >
                   Upload Now
