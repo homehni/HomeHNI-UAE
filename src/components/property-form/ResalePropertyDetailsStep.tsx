@@ -12,7 +12,7 @@ import { ArrowLeft, ArrowRight, Compass } from 'lucide-react';
 const resalePropertyDetailsSchema = z.object({
   title: z.string().optional(),
   // Made optional - will be auto-generated
-  propertyType: z.string().min(1, "Property type is required"),
+  propertyType: z.string().optional(),
   bhkType: z.string().optional(),
   ownershipType: z.string().optional(),
   builtUpArea: z.number().optional(),
