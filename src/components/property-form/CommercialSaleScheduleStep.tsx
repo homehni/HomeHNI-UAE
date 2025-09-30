@@ -8,6 +8,10 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Checkbox } from '@/components/ui/checkbox';
 import { Clock, Eye, Calendar, PaintBucket, Sparkles, CheckCircle } from 'lucide-react';
 import { ScheduleInfo } from '@/types/property';
+import { useToast } from '@/hooks/use-toast';
+import { useAuth } from '@/hooks/useAuth';
+import { sendFreshlyPaintedEmail, sendDeepCleaningEmail } from '@/services/emailService';
+import { OwnerInfo } from '@/types/property';
 const commercialSaleScheduleSchema = z.object({
   paintingService: z.enum(['book', 'decline']).optional(),
   cleaningService: z.enum(['book', 'decline']).optional(),
@@ -24,6 +28,8 @@ interface CommercialSaleScheduleStepProps {
   currentStep: number;
   totalSteps: number;
   onSubmit?: (data: Partial<ScheduleInfo>) => void;
+  ownerInfo?: Partial<OwnerInfo>;
+  propertyInfo?: any;
 }
 export const CommercialSaleScheduleStep = ({
   initialData,
@@ -31,8 +37,12 @@ export const CommercialSaleScheduleStep = ({
   onBack,
   currentStep,
   totalSteps,
-  onSubmit
+  onSubmit,
+  ownerInfo,
+  propertyInfo
 }: CommercialSaleScheduleStepProps) => {
+  const { toast } = useToast();
+  const { user } = useAuth();
   const [paintingResponse, setPaintingResponse] = useState<'book' | 'decline' | null>(null);
   const [cleaningResponse, setCleaningResponse] = useState<'book' | 'decline' | null>(null);
   const form = useForm<CommercialSaleScheduleForm>({
@@ -46,6 +56,111 @@ export const CommercialSaleScheduleStep = ({
       availableAllDay: initialData?.availableAllDay ?? true
     }
   });
+  // Resolve contact details from multiple sources
+  const getResolvedContact = () => {
+    const emailCandidates = [
+      ownerInfo?.email,
+      user?.email,
+      propertyInfo?.ownerInfo?.email,
+      propertyInfo?.contactDetails?.email,
+    ] as (string | undefined)[];
+    const fullNameCandidates = [
+      ownerInfo?.fullName,
+      (user as any)?.user_metadata?.full_name,
+      (user as any)?.user_metadata?.name,
+      propertyInfo?.ownerInfo?.fullName,
+      propertyInfo?.ownerInfo?.name,
+      propertyInfo?.contactDetails?.name,
+    ] as (string | undefined)[];
+    const email = emailCandidates.find(Boolean);
+    const fullName = fullNameCandidates.find(Boolean);
+    return { email, fullName } as { email?: string; fullName?: string };
+  };
+
+  const handlePaintingBookNow = async () => {
+    const { email, fullName } = getResolvedContact();
+    if (!email || !fullName) {
+      toast({
+        title: "Error",
+        description: "Unable to send request. Please ensure your email and name are properly entered.",
+        variant: "destructive"
+      });
+      console.warn('[CommercialSaleScheduleStep] Missing contact details for Painting', { email, fullName, ownerInfo, user });
+      return;
+    }
+
+    try {
+      const locality = propertyInfo?.locationDetails?.locality || '';
+      const expectedPrice = propertyInfo?.saleDetails?.expectedPrice || '';
+
+      await sendFreshlyPaintedEmail(
+        email,
+        fullName,
+        ownerInfo?.propertyType || propertyInfo?.propertyDetails?.propertyType || 'commercial',
+        locality,
+        expectedPrice.toString()
+      );
+
+      toast({
+        title: "Your painting service request has been submitted successfully.",
+        description: "Our painting specialists will contact you within 6 hours.",
+        variant: "success"
+      });
+
+      form.setValue('paintingService', 'book');
+      setPaintingResponse('book');
+    } catch (error) {
+      console.error('Failed to send painting service email:', error);
+      toast({
+        title: "Error",
+        description: "Failed to send request. Please try again.",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const handleCleaningBookNow = async () => {
+    const { email, fullName } = getResolvedContact();
+    if (!email || !fullName) {
+      toast({
+        title: "Error",
+        description: "Unable to send request. Please ensure your email and name are properly entered.",
+        variant: "destructive"
+      });
+      console.warn('[CommercialSaleScheduleStep] Missing contact details for Cleaning', { email, fullName, ownerInfo, user });
+      return;
+    }
+
+    try {
+      const locality = propertyInfo?.locationDetails?.locality || '';
+      const expectedPrice = propertyInfo?.saleDetails?.expectedPrice || '';
+
+      await sendDeepCleaningEmail(
+        email,
+        fullName,
+        ownerInfo?.propertyType || propertyInfo?.propertyDetails?.propertyType || 'commercial',
+        locality,
+        expectedPrice.toString()
+      );
+
+      toast({
+        title: "Your cleaning service request has been submitted successfully.",
+        description: "Our cleaning specialists will contact you within 6 hours.",
+        variant: "success"
+      });
+
+      form.setValue('cleaningService', 'book');
+      setCleaningResponse('book');
+    } catch (error) {
+      console.error('Failed to send cleaning service email:', error);
+      toast({
+        title: "Error",
+        description: "Failed to send request. Please try again.",
+        variant: "destructive"
+      });
+    }
+  };
+
   const handleFormSubmit = (data: CommercialSaleScheduleForm) => {
     if (onSubmit) {
       onSubmit(data);
@@ -90,10 +205,7 @@ export const CommercialSaleScheduleStep = ({
                             Your response has been captured
                           </span>
                         </div> : <div className="flex gap-3">
-                          <Button type="button" size="sm" className="bg-orange-500 hover:bg-orange-600 text-white" variant={field.value === 'book' ? 'default' : 'outline'} onClick={() => {
-                    field.onChange('book');
-                    setPaintingResponse('book');
-                  }}>
+                          <Button type="button" size="sm" className="bg-orange-500 hover:bg-orange-600 text-white" variant={field.value === 'book' ? 'default' : 'outline'} onClick={handlePaintingBookNow}>
                             Book Now
                           </Button>
                           <Button type="button" size="sm" variant="outline" className="border-gray-300 text-gray-700 hover:bg-gray-50" onClick={() => {
@@ -134,10 +246,7 @@ export const CommercialSaleScheduleStep = ({
                             Your response has been captured
                           </span>
                         </div> : <div className="flex gap-3">
-                          <Button type="button" size="sm" className="bg-teal-500 hover:bg-teal-600 text-white" variant={field.value === 'book' ? 'default' : 'outline'} onClick={() => {
-                    field.onChange('book');
-                    setCleaningResponse('book');
-                  }}>
+                          <Button type="button" size="sm" className="bg-teal-500 hover:bg-teal-600 text-white" variant={field.value === 'book' ? 'default' : 'outline'} onClick={handleCleaningBookNow}>
                             Book Now
                           </Button>
                           <Button type="button" size="sm" variant="outline" className="border-gray-300 text-gray-700 hover:bg-gray-50" onClick={() => {

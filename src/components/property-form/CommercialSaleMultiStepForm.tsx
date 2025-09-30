@@ -223,6 +223,12 @@ export const CommercialSaleMultiStepForm = ({
             currentStep={currentStep}
             totalSteps={8}
             onSubmit={handleScheduleSubmit}
+            ownerInfo={ownerInfo}
+            propertyInfo={{
+              propertyDetails,
+              locationDetails,
+              saleDetails
+            }}
           />
         );
       case 8:
