@@ -53,7 +53,11 @@ const Sidebar = ({
       await signOut();
       toast({
         title: "Signed out successfully",
-        description: "You have been logged out of your account."
+        description: "You have been logged out of your account.",
+        className: "bg-white border border-red-200 shadow-lg rounded-lg",
+        style: {
+          borderLeft: "12px solid hsl(var(--brand-red))",
+        },
       });
       onClose();
     } catch (error) {

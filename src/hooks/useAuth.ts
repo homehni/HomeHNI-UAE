@@ -163,8 +163,12 @@ export const useAuth = () => {
       }
 
       toast({
-        title: "Signed Out",
-        description: "You have been successfully signed out.",
+        title: "Signed out successfully",
+        description: "You have been logged out of your account.",
+        className: "bg-white border border-red-200 shadow-lg rounded-lg",
+        style: {
+          borderLeft: "12px solid hsl(var(--brand-red))",
+        },
       });
       return { error: null };
     } catch (error) {

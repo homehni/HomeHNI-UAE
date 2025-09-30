@@ -77,6 +77,10 @@ export const AuthDialog: React.FC<AuthDialogProps> = ({
       toast({
         title: "Welcome Back!",
         description: "Successfully signed in.",
+        className: "bg-white border border-red-200 shadow-lg rounded-lg",
+        style: {
+          borderLeft: "12px solid hsl(var(--brand-red))",
+        },
       });
       onOpenChange(false);
       onSuccess?.();
