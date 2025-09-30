@@ -361,7 +361,7 @@ const handleScheduleSubmit = (data: any) => {
             <Button 
               type="button" 
               onClick={() => {
-                console.log('ResaleMultiStepForm sticky Save & Continue button clicked');
+                console.log('🔵 ResaleMultiStepForm sticky Save & Continue button clicked');
                 console.log('Current step:', currentStep);
                 console.log('Form ID we are looking for:', currentFormId);
                 
@@ -370,15 +370,18 @@ const handleScheduleSubmit = (data: any) => {
                       formEl = document.getElementById(currentFormId) as HTMLFormElement | null;
                     }
                     console.log('Form element found:', formEl);
+                    console.log('Form ID attribute:', formEl?.id);
+                    console.log('Form name:', formEl?.name);
                     
                     if (formEl) {
-                      console.log('Calling requestSubmit on form element');
+                      console.log('✅ Calling requestSubmit on form element');
                       formEl.requestSubmit();
                     } else {
-                  console.warn('Form element not found for current step');
+                  console.warn('❌ Form element not found for current step');
                   // Try to find any form on the page as fallback
                   const anyForm = document.querySelector('form');
                   console.log('Any form found on page:', anyForm);
+                  console.log('Any form ID:', (anyForm as HTMLFormElement)?.id);
                   if (anyForm) {
                     console.log('Trying to submit any form found');
                     anyForm.requestSubmit();
