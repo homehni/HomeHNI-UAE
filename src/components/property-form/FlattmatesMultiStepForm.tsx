@@ -1165,6 +1165,17 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
             />
               </>
             )}
+
+            {currentStep === 7 && (
+              <FlattmatesPreviewStep
+                formData={getFormData()}
+                onBack={prevStep}
+                onEdit={goToStep}
+                onSubmit={handleSubmit}
+                isSubmitting={isSubmitting}
+                previewPropertyId={createdSubmissionId || undefined}
+              />
+            )}
           </div>
         </div>
       </div>
