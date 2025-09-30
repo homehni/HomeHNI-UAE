@@ -42,12 +42,12 @@ export const FlattmatesLocationDetailsStep: React.FC<FlattmatesLocationDetailsSt
   const markerRef = useRef<any>(null);
   const [showMap, setShowMap] = useState(false);
   const [locationMismatchWarning, setLocationMismatchWarning] = useState('');
-  const [selectedCity, setSelectedCity] = useState(initialData.city || 'Bangalore');
+  const [selectedCity, setSelectedCity] = useState(initialData.city || '');
 
   const form = useForm<FlattmatesLocationData>({
     resolver: zodResolver(flattmatesLocationSchema),
     defaultValues: {
-      city: initialData.city || 'Bangalore',
+      city: initialData.city || '',
       locality: initialData.locality || '',
       landmark: initialData.landmark || '',
       state: initialData.state || '',
@@ -325,7 +325,7 @@ export const FlattmatesLocationDetailsStep: React.FC<FlattmatesLocationDetailsSt
           className="space-y-6"
         >
           {/* City and Landmark Fields - Side by side */}
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* City Field */}
             <FormField
               control={form.control}
