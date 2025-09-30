@@ -179,13 +179,24 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
     console.log('Flatmates sticky button clicked, step:', currentStep);
     
     // Trigger form submission to get the latest form data with validation
-    const currentForm = document.querySelector('form');
-    if (currentForm) {
-      console.log('Sticky button: Triggering form submission for step', currentStep);
-      // Use requestSubmit to trigger proper form validation and submission
-      currentForm.requestSubmit();
+    const allForms = Array.from(document.querySelectorAll('form')) as HTMLFormElement[];
+    const visibleForm = allForms.find(f => {
+      const rects = f.getClientRects();
+      const isVisible = rects.length > 0 && (f as any).offsetParent !== null;
+      const style = window.getComputedStyle(f);
+      return isVisible && style.display !== 'none' && style.visibility !== 'hidden' && style.opacity !== '0';
+    }) || allForms[0] || null;
+
+    if (visibleForm) {
+      console.log('Sticky button: Triggering requestSubmit on visible form for step', currentStep, visibleForm);
+      if (typeof visibleForm.requestSubmit === 'function') {
+        visibleForm.requestSubmit();
+      } else {
+        const submitEvent = new Event('submit', { bubbles: true, cancelable: true });
+        visibleForm.dispatchEvent(submitEvent);
+      }
     } else {
-      console.warn('No form found for step:', currentStep);
+      console.warn('No visible form found for step:', currentStep);
     }
     
     // Always scroll to top for better UX
@@ -1350,29 +1361,6 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
             </div>
           </div>
 
-          {/* Sticky Bottom Navigation Bar - Hidden on Preview step */}
-          {currentStep !== 7 && (
-            <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-3 sm:p-4 z-50 shadow-lg">
-              <div className="max-w-4xl mx-auto flex flex-col sm:flex-row gap-3 sm:gap-4 sm:justify-center">
-                <Button 
-                  type="button" 
-                  variant="outline" 
-                  onClick={currentStep === 1 ? () => {} : prevStep}
-                  className="h-10 sm:h-10 px-4 sm:px-6 w-full sm:w-auto order-2 sm:order-1"
-                  disabled={currentStep === 1}
-                >
-                  Back
-                </Button>
-                <Button 
-                  type="button" 
-                  onClick={handleStickyButtonClick}
-                  className="h-12 sm:h-10 px-6 sm:px-6 bg-red-600 hover:bg-red-700 text-white w-full sm:w-auto order-1 sm:order-2 font-semibold"
-                >
-                  {currentStep === 6 ? 'Submit Property' : 'Save & Continue'}
-                </Button>
-              </div>
-            </div>
-          )}
 
         </div>
 
@@ -1381,6 +1369,30 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
           <GetTenantsFasterSection ownerInfo={ownerInfo} />
         </div>
       </div>
+
+      {/* Sticky Bottom Navigation Bar - Visible on all screens */}
+      {currentStep !== 7 && (
+        <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-3 sm:p-4 z-50 shadow-lg">
+          <div className="max-w-4xl mx-auto flex flex-col sm:flex-row gap-3 sm:gap-4 sm:justify-center">
+            <Button 
+              type="button" 
+              variant="outline" 
+              onClick={currentStep === 1 ? () => {} : prevStep}
+              className="h-10 sm:h-10 px-4 sm:px-6 w-full sm:w-auto order-2 sm:order-1"
+              disabled={currentStep === 1}
+            >
+              Back
+            </Button>
+            <Button 
+              type="button" 
+              onClick={handleStickyButtonClick}
+              className="h-12 sm:h-10 px-6 sm:px-6 bg-red-600 hover:bg-red-700 text-white w-full sm:w-auto order-1 sm:order-2 font-semibold"
+            >
+              {currentStep === 6 ? 'Submit Property' : 'Save & Continue'}
+            </Button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
