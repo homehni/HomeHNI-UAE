@@ -65,36 +65,36 @@ export const CommercialSaleSuccessStep = ({
     setShowNoPhotosMessage(true);
   };
   return (
-    <div className="max-w-4xl mx-auto p-6">
+    <div className="max-w-4xl mx-auto p-4 sm:p-6">
       {/* Success Message */}
-      <div className="bg-red-50 border border-red-200 rounded-lg p-6 mb-6">
-        <div className="flex items-center gap-3 mb-4">
-          <div className="w-12 h-12 bg-red-500 rounded-full flex items-center justify-center">
+      <div className="bg-red-50 border border-red-200 rounded-lg p-4 sm:p-6 mb-4 sm:mb-6">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 mb-4">
+          <div className="w-12 h-12 bg-red-500 rounded-full flex items-center justify-center flex-shrink-0">
             <Check className="w-6 h-6 text-white" strokeWidth={3} />
           </div>
           <div>
-            <h2 className="text-xl font-semibold text-red-900">Congratulations!</h2>
-            <p className="text-red-700">Your property is submitted successfully! It will be reviewed and made live in 12 Hours.</p>
+            <h2 className="text-lg sm:text-xl font-semibold text-red-900">Congratulations!</h2>
+            <p className="text-sm sm:text-base text-red-700">Your property is submitted successfully! It will be reviewed and made live in 12 Hours.</p>
           </div>
         </div>
         
-        <div className="flex flex-wrap gap-3">
+        <div className="flex flex-col sm:flex-row gap-3">
           <Button
             variant="outline"
             onClick={onEditProperty}
-            className="border-green-300 text-green-700 hover:bg-green-50"
+            className="border-green-300 text-green-700 hover:bg-green-50 w-full sm:w-auto"
           >
             Edit Property
           </Button>
           <Button
             onClick={onPreviewListing}
-            className="bg-red-600 hover:bg-red-700 text-white"
+            className="bg-red-600 hover:bg-red-700 text-white w-full sm:w-auto"
           >
             Preview Listing
           </Button>
           <Button
             onClick={handleGoDashboard}
-            className="bg-blue-600 hover:bg-blue-700 text-white"
+            className="bg-blue-600 hover:bg-blue-700 text-white w-full sm:w-auto"
           >
             Go to Dashboard
           </Button>
@@ -104,25 +104,25 @@ export const CommercialSaleSuccessStep = ({
       </div>
 
       {/* Premium Plans Section */}
-      <div className="text-center mb-6">
-        <h3 className="text-lg font-medium text-gray-900 mb-4">
+      <div className="text-center mb-4 sm:mb-6">
+        <h3 className="text-base sm:text-lg font-medium text-gray-900 mb-4 px-4">
           You just said No to Brokerage, now say No to Unwanted Calls
         </h3>
       </div>
 
-      <div className="bg-white border border-gray-200 rounded-lg p-6 mb-6">
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 bg-green-100 rounded flex items-center justify-center">
+      <div className="bg-white border border-gray-200 rounded-lg p-4 sm:p-6 mb-4 sm:mb-6">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 gap-4">
+          <div className="flex items-start sm:items-center gap-3 flex-1">
+            <div className="w-8 h-8 bg-green-100 rounded flex items-center justify-center flex-shrink-0">
               <CheckCircle className="w-5 h-5 text-green-600" />
             </div>
             <div>
-              <h4 className="font-semibold text-gray-900">Get tenants faster with our premium plans!</h4>
-              <p className="text-gray-600 text-sm">Unlock access to 100% tenants and enjoy a super-fast closure.</p>
+              <h4 className="text-sm sm:text-base font-semibold text-gray-900">Get tenants faster with our premium plans!</h4>
+              <p className="text-gray-600 text-xs sm:text-sm">Unlock access to 100% tenants and enjoy a super-fast closure.</p>
             </div>
           </div>
           <Button 
-            className="bg-teal-600 hover:bg-teal-700 text-white"
+            className="bg-teal-600 hover:bg-teal-700 text-white w-full sm:w-auto"
             onClick={handleGoPremium}
             disabled={isEmailLoading}
           >
@@ -130,21 +130,21 @@ export const CommercialSaleSuccessStep = ({
           </Button>
         </div>
 
-        <div className="grid grid-cols-2 gap-4 text-sm">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 text-sm">
           <div className="flex items-center gap-2">
-            <CheckCircle className="w-4 h-4 text-green-600" />
+            <CheckCircle className="w-4 h-4 text-green-600 flex-shrink-0" />
             <span className="text-gray-700">Dedicated personal assistant</span>
           </div>
           <div className="flex items-center gap-2">
-            <CheckCircle className="w-4 h-4 text-green-600" />
+            <CheckCircle className="w-4 h-4 text-green-600 flex-shrink-0" />
             <span className="text-gray-700">Property promotion on site</span>
           </div>
           <div className="flex items-center gap-2">
-            <CheckCircle className="w-4 h-4 text-green-600" />
+            <CheckCircle className="w-4 h-4 text-green-600 flex-shrink-0" />
             <span className="text-gray-700">5X more responses from tenants</span>
           </div>
           <div className="flex items-center gap-2">
-            <CheckCircle className="w-4 h-4 text-green-600" />
+            <CheckCircle className="w-4 h-4 text-green-600 flex-shrink-0" />
             <span className="text-gray-700">No direct calls from tenants</span>
           </div>
         </div>
