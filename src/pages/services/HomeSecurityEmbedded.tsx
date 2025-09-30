@@ -6,6 +6,7 @@ import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { useToast } from "@/hooks/use-toast";
 import { Shield, Camera, Lock, Bell, Smartphone, Home, Clock, CheckCircle, Star, X, Users, Building2, Zap, Headphones, Award, TrendingUp } from "lucide-react";
+import { sendServicesApplicationEmail } from "@/services/emailService";
 
 const HomeSecurityEmbedded = () => {
   // Major cities in India
@@ -196,7 +197,7 @@ const HomeSecurityEmbedded = () => {
               <h3 className="text-xl font-semibold text-foreground mb-2 text-uniform-center">Need Security Solutions?</h3>
               <p className="text-sm text-muted-foreground mb-4 text-uniform-center">Get free consultation & quote</p>
 
-              <form className="space-y-4" onSubmit={e => {
+              <form className="space-y-4" onSubmit={async (e) => {
                 e.preventDefault();
                 const form = e.currentTarget as HTMLFormElement;
                 if (!form.checkValidity()) {
@@ -208,15 +209,30 @@ const HomeSecurityEmbedded = () => {
                   });
                   return;
                 }
-                toast({
-                  title: "Request received",
-                  description: "Our security expert will contact you shortly.",
-                  className: "bg-white border border-green-200 shadow-lg rounded-lg",
-                  style: {
-                    borderLeft: "12px solid hsl(120, 100%, 25%)",
-                  },
-                });
-                form.reset();
+                
+                const formData = new FormData(form);
+                const name = formData.get('name') as string;
+                const email = formData.get('email') as string;
+                
+                try {
+                  await sendServicesApplicationEmail(email, name, 'home-security');
+                  toast({
+                    title: "Request received",
+                    description: "Our security expert will contact you shortly.",
+                    className: "bg-white border border-green-200 shadow-lg rounded-lg",
+                    style: {
+                      borderLeft: "12px solid hsl(120, 100%, 25%)",
+                    },
+                  });
+                  form.reset();
+                } catch (error) {
+                  console.error('Error sending email:', error);
+                  toast({
+                    title: "Error",
+                    description: "Failed to submit your request. Please try again.",
+                    variant: "destructive"
+                  });
+                }
               }}>
                 <Input id="security-name" name="name" placeholder="Name" required />
 
@@ -284,7 +300,7 @@ const HomeSecurityEmbedded = () => {
               <h3 className="text-2xl font-bold text-foreground mb-3 text-uniform-center">Need Security Solutions?</h3>
               <p className="text-base text-muted-foreground mb-8 text-uniform-center">Get free consultation & quote</p>
 
-              <form className="space-y-5" onSubmit={e => {
+              <form className="space-y-5" onSubmit={async (e) => {
                 e.preventDefault();
                 const form = e.currentTarget as HTMLFormElement;
                 if (!form.checkValidity()) {
@@ -296,15 +312,30 @@ const HomeSecurityEmbedded = () => {
                   });
                   return;
                 }
-                toast({
-                  title: "Request received",
-                  description: "Our security expert will contact you shortly.",
-                  className: "bg-white border border-green-200 shadow-lg rounded-lg",
-                  style: {
-                    borderLeft: "12px solid hsl(120, 100%, 25%)",
-                  },
-                });
-                form.reset();
+                
+                const formData = new FormData(form);
+                const name = formData.get('name') as string;
+                const email = formData.get('email') as string;
+                
+                try {
+                  await sendServicesApplicationEmail(email, name, 'home-security');
+                  toast({
+                    title: "Request received",
+                    description: "Our security expert will contact you shortly.",
+                    className: "bg-white border border-green-200 shadow-lg rounded-lg",
+                    style: {
+                      borderLeft: "12px solid hsl(120, 100%, 25%)",
+                    },
+                  });
+                  form.reset();
+                } catch (error) {
+                  console.error('Error sending email:', error);
+                  toast({
+                    title: "Error",
+                    description: "Failed to submit your request. Please try again.",
+                    variant: "destructive"
+                  });
+                }
               }}>
                 <Input 
                   id="security-name-mobile" 

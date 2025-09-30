@@ -6,6 +6,7 @@ import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { useToast } from "@/hooks/use-toast";
 import { Building2, Users, Ruler, Palette, Home, FileText, MapPin, Crown, Clock, CheckCircle, Shield, Star, X, Plus, Minus, Globe, Shield as ShieldCheck, Headphones, Smartphone, Download, PenTool, Compass, DraftingCompass } from "lucide-react";
+import { sendServicesApplicationEmail } from "@/services/emailService";
 const ArchitectsEmbedded = () => {
   // Major cities in India
   const majorCities = ["Mumbai", "Delhi", "Bangalore", "Hyderabad", "Ahmedabad", "Chennai", "Kolkata", "Surat", "Pune", "Jaipur", "Lucknow", "Kanpur", "Nagpur", "Indore", "Thane", "Bhopal", "Visakhapatnam", "Pimpri-Chinchwad", "Patna", "Vadodara", "Ghaziabad", "Ludhiana", "Agra", "Nashik", "Faridabad", "Meerut", "Rajkot", "Kalyan-Dombivli", "Vasai-Virar", "Varanasi", "Srinagar", "Aurangabad", "Dhanbad", "Amritsar", "Navi Mumbai", "Allahabad", "Ranchi", "Howrah", "Coimbatore", "Jabalpur", "Gwalior", "Vijayawada", "Jodhpur", "Madurai", "Raipur", "Kota", "Guwahati", "Chandigarh", "Solapur", "Hubli-Dharwad"];
@@ -158,13 +159,27 @@ const ArchitectsEmbedded = () => {
               <h3 className="text-xl md:text-2xl font-bold text-foreground mb-3">Need an architect?</h3>
               <p className="text-sm md:text-base text-muted-foreground mb-6 md:mb-8">Fill the form & get a free consultation</p>
 
-              <form className="space-y-4" onSubmit={e => {
+              <form className="space-y-4" onSubmit={async (e) => {
               e.preventDefault();
-              setFormMessage({
-                type: "success",
-                text: "Request submitted! Our architects will contact you within 24 hours."
-              });
-              (e.currentTarget as HTMLFormElement).reset();
+              const form = e.currentTarget as HTMLFormElement;
+              const formData = new FormData(form);
+              const name = formData.get('name') as string;
+              const email = formData.get('email') as string;
+              
+              try {
+                await sendServicesApplicationEmail(email, name, 'architects');
+                setFormMessage({
+                  type: "success",
+                  text: "Request submitted! Our architects will contact you within 24 hours."
+                });
+                form.reset();
+              } catch (error) {
+                console.error('Error sending email:', error);
+                setFormMessage({
+                  type: "error",
+                  text: "Failed to submit your request. Please try again."
+                });
+              }
             }}>
                 <Input id="arch-name-mobile" name="name" placeholder="Name" className="h-10 md:h-12 text-sm md:text-base bg-background" required />
                 <div className="flex gap-2 md:gap-3">
@@ -354,13 +369,27 @@ const ArchitectsEmbedded = () => {
             <h3 className="text-xl font-semibold text-foreground mb-2 text-center">Need an architect?</h3>
             <p className="text-sm text-muted-foreground mb-4 text-center">Fill the form & get a free consultation</p>
 
-            <form className="space-y-4" onSubmit={e => {
+            <form className="space-y-4" onSubmit={async (e) => {
               e.preventDefault();
-              setFormMessage({
-                type: "success",
-                text: "Request submitted! Our architects will contact you within 24 hours."
-              });
-              (e.currentTarget as HTMLFormElement).reset();
+              const form = e.currentTarget as HTMLFormElement;
+              const formData = new FormData(form);
+              const name = formData.get('name') as string;
+              const email = formData.get('email') as string;
+              
+              try {
+                await sendServicesApplicationEmail(email, name, 'architects');
+                setFormMessage({
+                  type: "success",
+                  text: "Request submitted! Our architects will contact you within 24 hours."
+                });
+                form.reset();
+              } catch (error) {
+                console.error('Error sending email:', error);
+                setFormMessage({
+                  type: "error",
+                  text: "Failed to submit your request. Please try again."
+                });
+              }
             }}>
               <Input id="arch-name" name="name" placeholder="Name" required />
 

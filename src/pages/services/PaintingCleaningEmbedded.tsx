@@ -6,6 +6,7 @@ import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { useToast } from "@/hooks/use-toast";
 import { PaintBucket, Sparkles, Home, Building2, Clock, CheckCircle, Shield, Star, Users, Crown, Globe, Headphones, Paintbrush, Droplets, X } from "lucide-react";
+import { sendServicesApplicationEmail } from "@/services/emailService";
 const PaintingCleaningEmbedded = () => {
   // Major cities in India
   const majorCities = ["Mumbai", "Delhi", "Bangalore", "Hyderabad", "Ahmedabad", "Chennai", "Kolkata", "Surat", "Pune", "Jaipur", "Lucknow", "Kanpur", "Nagpur", "Indore", "Thane", "Bhopal", "Visakhapatnam", "Pimpri-Chinchwad", "Patna", "Vadodara", "Ghaziabad", "Ludhiana", "Agra", "Nashik", "Faridabad", "Meerut", "Rajkot", "Kalyan-Dombivli", "Vasai-Virar", "Varanasi", "Srinagar", "Aurangabad", "Dhanbad", "Amritsar", "Navi Mumbai", "Allahabad", "Ranchi", "Howrah", "Coimbatore", "Jabalpur", "Gwalior", "Vijayawada", "Jodhpur", "Madurai", "Raipur", "Kota", "Guwahati", "Chandigarh", "Solapur", "Hubli-Dharwad"];
@@ -161,16 +162,32 @@ const PaintingCleaningEmbedded = () => {
             <h3 className="text-xl font-semibold text-foreground mb-2 text-center">Need painting or cleaning?</h3>
             <p className="text-sm text-muted-foreground mb-4 text-center">Fill the form & get instant quote</p>
 
-            <form className="space-y-4" onSubmit={e => {
+            <form className="space-y-4" onSubmit={async (e) => {
               e.preventDefault();
-              toast({
-                title: "Request received",
-                description: "Our team will contact you shortly with a quote.",
-                className: "bg-white border border-green-200 shadow-lg rounded-lg",
-                style: {
-                  borderLeft: "12px solid hsl(120, 100%, 25%)",
-                },
-              });
+              const form = e.currentTarget as HTMLFormElement;
+              const formData = new FormData(form);
+              const name = formData.get('name') as string;
+              const email = formData.get('email') as string;
+              
+              try {
+                await sendServicesApplicationEmail(email || '', name, 'painting-cleaning');
+                toast({
+                  title: "Request received",
+                  description: "Our team will contact you shortly with a quote.",
+                  className: "bg-white border border-green-200 shadow-lg rounded-lg",
+                  style: {
+                    borderLeft: "12px solid hsl(120, 100%, 25%)",
+                  },
+                });
+                form.reset();
+              } catch (error) {
+                console.error('Error sending email:', error);
+                toast({
+                  title: "Error",
+                  description: "Failed to submit your request. Please try again.",
+                  variant: "destructive"
+                });
+              }
               (e.currentTarget as HTMLFormElement).reset();
             }}>
               <Input id="painting-name" name="name" placeholder="Name" required />
@@ -234,16 +251,32 @@ const PaintingCleaningEmbedded = () => {
               <h3 className="text-2xl font-bold text-foreground mb-3">Need painting or cleaning?</h3>
               <p className="text-base text-muted-foreground mb-8">Fill the form & get instant quote</p>
 
-              <form className="space-y-5" onSubmit={e => {
+              <form className="space-y-5" onSubmit={async (e) => {
               e.preventDefault();
-              toast({
-                title: "Request received",
-                description: "Our team will contact you shortly with a quote.",
-                className: "bg-white border border-green-200 shadow-lg rounded-lg",
-                style: {
-                  borderLeft: "12px solid hsl(120, 100%, 25%)",
-                },
-              });
+              const form = e.currentTarget as HTMLFormElement;
+              const formData = new FormData(form);
+              const name = formData.get('name') as string;
+              const email = formData.get('email') as string;
+              
+              try {
+                await sendServicesApplicationEmail(email || '', name, 'painting-cleaning');
+                toast({
+                  title: "Request received",
+                  description: "Our team will contact you shortly with a quote.",
+                  className: "bg-white border border-green-200 shadow-lg rounded-lg",
+                  style: {
+                    borderLeft: "12px solid hsl(120, 100%, 25%)",
+                  },
+                });
+                form.reset();
+              } catch (error) {
+                console.error('Error sending email:', error);
+                toast({
+                  title: "Error",
+                  description: "Failed to submit your request. Please try again.",
+                  variant: "destructive"
+                });
+              }
               (e.currentTarget as HTMLFormElement).reset();
             }}>
                 <Input id="painting-name-mobile" name="name" placeholder="Name" className="h-12 text-base bg-background" required />

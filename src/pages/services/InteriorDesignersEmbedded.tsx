@@ -6,6 +6,7 @@ import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { useToast } from "@/hooks/use-toast";
 import { Palette, Lightbulb, Eye, Sofa, Wrench, Target, Users, Clock, CheckCircle, Shield, Star, X, Plus, Minus, Crown, FileText, MapPin, DollarSign, PaintBucket, Home, Sparkles, Layers, Hammer } from "lucide-react";
+import { sendServicesApplicationEmail } from "@/services/emailService";
 const InteriorDesignersEmbedded = () => {
   // Major cities in India
   const majorCities = ["Mumbai", "Delhi", "Bangalore", "Hyderabad", "Ahmedabad", "Chennai", "Kolkata", "Surat", "Pune", "Jaipur", "Lucknow", "Kanpur", "Nagpur", "Indore", "Thane", "Bhopal", "Visakhapatnam", "Pimpri-Chinchwad", "Patna", "Vadodara", "Ghaziabad", "Ludhiana", "Agra", "Nashik", "Faridabad", "Meerut", "Rajkot", "Kalyan-Dombivli", "Vasai-Virar", "Varanasi", "Srinagar", "Aurangabad", "Dhanbad", "Amritsar", "Navi Mumbai", "Allahabad", "Ranchi", "Howrah", "Coimbatore", "Jabalpur", "Gwalior", "Vijayawada", "Jodhpur", "Madurai", "Raipur", "Kota", "Guwahati", "Chandigarh", "Solapur", "Hubli-Dharwad"];
@@ -158,16 +159,32 @@ const InteriorDesignersEmbedded = () => {
               <h3 className="text-xl md:text-2xl font-bold text-foreground mb-3">Need an interior designer?</h3>
               <p className="text-sm md:text-base text-muted-foreground mb-6 md:mb-8">Fill the form & get a free consultation</p>
 
-              <form className="space-y-5" onSubmit={e => {
+              <form className="space-y-5" onSubmit={async (e) => {
               e.preventDefault();
-              toast({
-                title: "Request submitted",
-                description: "Our interior designers will contact you within 24 hours.",
-                className: "bg-white border border-green-200 shadow-lg rounded-lg",
-                style: {
-                  borderLeft: "12px solid hsl(120, 100%, 25%)",
-                },
-              });
+              const form = e.currentTarget as HTMLFormElement;
+              const formData = new FormData(form);
+              const name = formData.get('name') as string;
+              const email = formData.get('email') as string;
+              
+              try {
+                await sendServicesApplicationEmail(email, name, 'interior-design');
+                toast({
+                  title: "Request submitted",
+                  description: "Our interior designers will contact you within 24 hours.",
+                  className: "bg-white border border-green-200 shadow-lg rounded-lg",
+                  style: {
+                    borderLeft: "12px solid hsl(120, 100%, 25%)",
+                  },
+                });
+                form.reset();
+              } catch (error) {
+                console.error('Error sending email:', error);
+                toast({
+                  title: "Error",
+                  description: "Failed to submit your request. Please try again.",
+                  variant: "destructive"
+                });
+              }
               (e.currentTarget as HTMLFormElement).reset();
             }}>
                 <Input id="interior-name-mobile" name="name" placeholder="Name" className="h-10 md:h-12 text-sm md:text-base bg-background" required />
@@ -388,13 +405,27 @@ const InteriorDesignersEmbedded = () => {
             <h3 className="text-xl font-semibold text-foreground mb-2 text-center">Need an interior designer?</h3>
             <p className="text-sm text-muted-foreground mb-4 text-center">Fill the form & get a free consultation</p>
 
-            <form className="space-y-4" onSubmit={e => {
+            <form className="space-y-4" onSubmit={async (e) => {
               e.preventDefault();
-              setFormMessage({
-                type: "success",
-                text: "Request submitted! Our interior designers will contact you within 24 hours."
-              });
-              (e.currentTarget as HTMLFormElement).reset();
+              const form = e.currentTarget as HTMLFormElement;
+              const formData = new FormData(form);
+              const name = formData.get('name') as string;
+              const email = formData.get('email') as string;
+              
+              try {
+                await sendServicesApplicationEmail(email, name, 'interior-design');
+                setFormMessage({
+                  type: "success",
+                  text: "Request submitted! Our interior designers will contact you within 24 hours."
+                });
+                form.reset();
+              } catch (error) {
+                console.error('Error sending email:', error);
+                setFormMessage({
+                  type: "error",
+                  text: "Failed to submit your request. Please try again."
+                });
+              }
             }}>
               <Input id="interior-name" name="name" placeholder="Name" required />
 
