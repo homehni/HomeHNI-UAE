@@ -10,7 +10,7 @@ import { LocationDetails } from '@/types/property';
 import { ArrowLeft, ArrowRight, Home, MapPin } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 const resaleLocationSchema = z.object({
-  city: z.string().min(1, "City is required"),
+  city: z.string().optional(),
   locality: z.string().optional(),
   landmark: z.string().optional(),
   state: z.string().optional(),
