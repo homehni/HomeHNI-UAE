@@ -273,9 +273,9 @@ const ServiceSuite = () => {
             <h3 className="text-lg font-semibold text-foreground mb-1 text-uniform-center">Are you Service Provider?</h3>
             <p className="text-xs text-muted-foreground mb-3 text-uniform-center">Submit your requirements & get matched</p>
 
-            <form className="space-y-3" onSubmit={e => handleFormSubmit(e, false)}>
-              <Input name="email" type="email" placeholder="Email ID" required />
+            <form className="space-y-3" onSubmit={e => handleFormSubmit(e, false)} id="desktop-service-form">
               <Input name="companyName" type="text" placeholder="Company Name" required />
+              <Input name="email" type="email" placeholder="Email ID" required />
 
               <div className="flex gap-2">
                 <Select defaultValue="+91" name="countryCode">
@@ -322,9 +322,9 @@ const ServiceSuite = () => {
               <h3 className="text-xl font-bold text-foreground mb-2 text-uniform-center">Need Service Providers?</h3>
               <p className="text-sm text-muted-foreground mb-6 text-uniform-center">Submit your requirements & get matched</p>
 
-              <form className="space-y-4" onSubmit={e => handleFormSubmit(e, true)}>
-                <Input name="email" type="email" placeholder="Email ID" className="h-12 text-base bg-background" required />
+              <form className="space-y-4" onSubmit={e => handleFormSubmit(e, true)} id="mobile-service-form">
                 <Input name="companyName" type="text" placeholder="Company Name" className="h-12 text-base bg-background" required />
+                <Input name="email" type="email" placeholder="Email ID" className="h-12 text-base bg-background" required />
 
                 <div className="flex gap-3">
                   <Select defaultValue="+91" name="countryCode">
