@@ -245,48 +245,8 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
 
             {/* Search Content */}
             <div className="p-3">
-              {/* City Selector - Mobile (shown after input focus) */}
-              {showMobileCitySelector && (
-                <div className="mb-3">
-                  <Select value={selectedCity} onValueChange={setSelectedCity}>
-                    <SelectTrigger className="h-10 border border-brand-red rounded-lg focus:ring-2 focus:ring-brand-red/20 bg-white text-sm">
-                      <SelectValue placeholder="Select City" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-white border border-gray-200 rounded-lg shadow-lg z-50">
-                      <SelectItem value="bangalore" className="text-sm">Bangalore</SelectItem>
-                      <SelectItem value="mumbai" className="text-sm">Mumbai</SelectItem>
-                      <SelectItem value="delhi" className="text-sm">Delhi</SelectItem>
-                      <SelectItem value="pune" className="text-sm">Pune</SelectItem>
-                      <SelectItem value="hyderabad" className="text-sm">Hyderabad</SelectItem>
-                      <SelectItem value="chennai" className="text-sm">Chennai</SelectItem>
-                      <SelectItem value="kolkata" className="text-sm">Kolkata</SelectItem>
-                      <SelectItem value="ahmedabad" className="text-sm">Ahmedabad</SelectItem>
-                      <SelectItem value="jaipur" className="text-sm">Jaipur</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              )}
-
               {/* Selected Location Tags */}
-              {selectedLocations.length > 0 && (
-                <div className="flex flex-wrap gap-2 mb-3">
-                  {selectedLocations.map((location, index) => (
-                    <div
-                      key={index}
-                      className="inline-flex items-center gap-1 bg-brand-red text-white px-3 py-1 rounded-full text-sm font-medium"
-                    >
-                      {location}
-                      <button
-                        onClick={() => removeLocation(location)}
-                        className="ml-1 hover:bg-brand-red-dark rounded-full p-0.5"
-                      >
-                        <X size={12} />
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              )}
-
+...
               {/* Search Input and Button */}
               <div className="flex gap-2">
                 <div className="relative flex-1">
@@ -313,6 +273,28 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                   </svg>
                 </Button>
               </div>
+
+              {/* City Selector - Mobile (shown after input focus) */}
+              {showMobileCitySelector && (
+                <div className="mt-3">
+                  <Select value={selectedCity} onValueChange={setSelectedCity}>
+                    <SelectTrigger className="h-10 border border-brand-red rounded-lg focus:ring-2 focus:ring-brand-red/20 bg-white text-sm">
+                      <SelectValue placeholder="Select City (Optional)" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-white border border-gray-200 rounded-lg shadow-lg z-50">
+                      <SelectItem value="bangalore" className="text-sm">Bangalore</SelectItem>
+                      <SelectItem value="mumbai" className="text-sm">Mumbai</SelectItem>
+                      <SelectItem value="delhi" className="text-sm">Delhi</SelectItem>
+                      <SelectItem value="pune" className="text-sm">Pune</SelectItem>
+                      <SelectItem value="hyderabad" className="text-sm">Hyderabad</SelectItem>
+                      <SelectItem value="chennai" className="text-sm">Chennai</SelectItem>
+                      <SelectItem value="kolkata" className="text-sm">Kolkata</SelectItem>
+                      <SelectItem value="ahmedabad" className="text-sm">Ahmedabad</SelectItem>
+                      <SelectItem value="jaipur" className="text-sm">Jaipur</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              )}
             </div>
           </div>
         </div>
