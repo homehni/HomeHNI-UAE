@@ -62,6 +62,23 @@ export const CommercialSalePropertyDetailsStep = ({
     }
   });
 
+  // Persist furnishingStatus immediately when it changes to avoid losing state on navigation
+  useEffect(() => {
+    const subscription = form.watch((value, info) => {
+      if (info?.name === 'furnishingStatus') {
+        try {
+          const savedRaw = typeof window !== 'undefined' ? sessionStorage.getItem(STORAGE_KEY) : null;
+          const saved = savedRaw ? JSON.parse(savedRaw) : {};
+          const next = { ...saved, furnishingStatus: (value as any)?.furnishingStatus ?? '' };
+          if (typeof window !== 'undefined') {
+            sessionStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+          }
+        } catch {}
+      }
+    });
+    return () => subscription?.unsubscribe?.();
+  }, [form]);
+
   useEffect(() => {
     const savedRaw = typeof window !== 'undefined' ? sessionStorage.getItem(STORAGE_KEY) : null;
     const saved = savedRaw ? JSON.parse(savedRaw) : null;
