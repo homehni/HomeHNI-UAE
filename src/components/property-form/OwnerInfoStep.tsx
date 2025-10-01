@@ -55,8 +55,6 @@ export const OwnerInfoStep: React.FC<OwnerInfoStepProps> = ({
     if (profile && !initialData.fullName) {
       if (profile.full_name) setValue('fullName', profile.full_name);
       if (user?.email) setValue('email', user.email);
-      if (profile.phone) setValue('phoneNumber', profile.phone);
-      if (profile.whatsapp_opted_in !== undefined) setValue('whatsappUpdates', profile.whatsapp_opted_in);
     }
   }, [profile, user, initialData.fullName, setValue]);
 

@@ -45,9 +45,6 @@ export const PropertySelectionStep: React.FC<PropertySelectionStepProps> = ({
     if (profile) {
       if (profile.full_name) setName(profile.full_name);
       if (user?.email) setEmail(user.email);
-      if (profile.phone) setPhoneNumber(profile.phone);
-      if (profile.location?.city) setCity(profile.location.city);
-      if (profile.whatsapp_opted_in !== undefined) setWhatsappUpdates(profile.whatsapp_opted_in);
     }
   }, [profile, user]);
 

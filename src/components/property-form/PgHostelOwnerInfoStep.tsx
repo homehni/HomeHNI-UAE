@@ -48,9 +48,6 @@ export function PgHostelOwnerInfoStep({
         ...prev,
         fullName: profile.full_name || prev.fullName,
         email: user?.email || prev.email,
-        phoneNumber: profile.phone || prev.phoneNumber,
-        city: profile.location?.city || prev.city,
-        whatsappUpdates: profile.whatsapp_opted_in ?? prev.whatsappUpdates,
       }));
     }
   }, [profile, user, initialData]);
