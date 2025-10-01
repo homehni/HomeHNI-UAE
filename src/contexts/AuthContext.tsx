@@ -186,32 +186,75 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (error) {
         console.log('Supabase function error:', error);
         let message = 'Sign up failed';
-        
-        // Try to extract the actual error message from the response
+        let code: string | undefined;
+        let status: number | undefined;
+
         try {
           const resp = (error as any)?.context?.response;
           if (resp) {
-            const json = await resp.json();
-            message = json?.error || json?.message || message;
+            status = resp.status;
+            const json = await resp.json().catch(() => null);
+            if (json) {
+              message = json?.error || json?.message || message;
+              code = json?.code || code;
+            }
           }
         } catch {
-          // If we can't parse the response, use the error message directly
-          message = error.message || message;
+          message = (error as any)?.message || message;
+          code = (error as any)?.code || code;
         }
-        
-        // Also log for auditing; ignore failures
+
+        const msgLc = (message || '').toLowerCase();
+        const isEmailExists =
+          code === 'email_exists' ||
+          status === 409 ||
+          status === 422 ||
+          msgLc.includes('duplicate key') ||
+          (msgLc.includes('email') && (msgLc.includes('already') || msgLc.includes('exists') || msgLc.includes('registered')));
+
+        if (isEmailExists) {
+          message = 'This email is already registered. Please log in or reset your password.';
+          code = 'email_exists';
+          status = status ?? 409;
+        }
+
         try { await AuditService.logAuthEvent('User Signup Failed', email, false, message); } catch {}
-        
-        throw new Error(message);
+
+        const errObj: any = new Error(message);
+        if (code) errObj.code = code;
+        if (status) errObj.status = status;
+        throw errObj;
       }
 
       if (!data?.success) {
-        const msg = data?.error || 'Failed to create user';
-        console.log('Signup failed with message:', msg);
+        let message = data?.error || 'Failed to create user';
+        const code = (data as any)?.code as string | undefined;
+        const status = (data as any)?.status as number | undefined;
+        console.log('Signup failed with message:', message, 'code:', code, 'status:', status);
         
-        try { await AuditService.logAuthEvent('User Signup Failed', email, false, msg); } catch {}
+        const msgLc = (message || '').toLowerCase();
+        const isEmailExists =
+          code === 'email_exists' ||
+          status === 409 ||
+          status === 422 ||
+          msgLc.includes('duplicate key') ||
+          (msgLc.includes('email') && (msgLc.includes('already') || msgLc.includes('exists') || msgLc.includes('registered')));
+
+        if (isEmailExists) {
+          message = 'This email is already registered. Please log in or reset your password.';
+        }
         
-        throw new Error(msg);
+        try { await AuditService.logAuthEvent('User Signup Failed', email, false, message); } catch {}
+        
+        const errObj: any = new Error(message);
+        if (isEmailExists) {
+          errObj.code = 'email_exists';
+          errObj.status = status ?? 409;
+        } else {
+          if (code) errObj.code = code;
+          if (status) errObj.status = status;
+        }
+        throw errObj;
       }
 
       // Send welcome email after successful signup
@@ -222,9 +265,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         console.error('Failed to send welcome email:', error);
         // Don't block signup if email fails
       }
-    } catch (err) {
-      const msg = err instanceof Error ? err.message : 'Sign up failed';
-      throw new Error(msg);
+    } catch (err: any) {
+      const fallback = 'Sign up failed';
+      const message = err?.message || fallback;
+      const e: any = new Error(message);
+      if (err?.code) e.code = err.code;
+      if (err?.status) e.status = err.status;
+      throw e;
     }
   };
 

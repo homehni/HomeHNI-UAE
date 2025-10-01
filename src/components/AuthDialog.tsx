@@ -124,7 +124,20 @@ export const AuthDialog: React.FC<AuthDialogProps> = ({
       setSignUpForm({ fullName: '', email: '', password: '', confirmPassword: '' });
       setActiveTab('signin');
     } catch (error: any) {
-      setSignUpMessage({ type: 'error', text: error.message || "Please try again or contact support." });
+      const msgLc = (error?.message || '').toLowerCase();
+      const emailExists =
+        error?.code === 'email_exists' ||
+        error?.status === 409 ||
+        error?.status === 422 ||
+        msgLc.includes('duplicate key') ||
+        (msgLc.includes('email') && (msgLc.includes('already') || msgLc.includes('exists') || msgLc.includes('registered')));
+      if (emailExists) {
+        setSignInForm({ email: signUpForm.email, password: '' });
+        setActiveTab('signin');
+        setSignInMessage({ type: 'error', text: "This email is already registered. Please login or reset your password." });
+      } else {
+        setSignUpMessage({ type: 'error', text: error.message || "Please try again or contact support." });
+      }
     }
   };
 

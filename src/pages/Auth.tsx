@@ -150,7 +150,14 @@ export const Auth: React.FC = () => {
       console.log('Auth error caught:', error);
       
       // Handle specific error codes
-      if (error.code === 'email_exists' || error.message?.includes('already registered')) {
+      const msgLc = (error?.message || '').toLowerCase();
+      const emailExists =
+        error?.code === 'email_exists' ||
+        error?.status === 409 ||
+        error?.status === 422 ||
+        msgLc.includes('duplicate key') ||
+        (msgLc.includes('email') && (msgLc.includes('already') || msgLc.includes('exists') || msgLc.includes('registered')));
+      if (emailExists) {
         // Auto-switch to login tab and pre-fill email
         setSignInForm({ email: signUpForm.email, password: '' });
         setActiveTab('signin');
