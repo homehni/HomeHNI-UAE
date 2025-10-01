@@ -3,6 +3,7 @@ import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
 import { getCurrentUserProfile, type UserProfile } from '@/services/profileService';
 import { AuditService } from '@/services/auditService';
+import { sendWelcomeEmail } from '@/services/emailService';
 
 interface AuthContextType {
   user: User | null;
@@ -148,29 +149,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     // Success will be logged by onAuthStateChange (SIGNED_IN)
   };
 
-  // Welcome email function
-  const sendWelcomeEmail = async (userEmail: string, userName: string) => {
-    try {
-      const response = await fetch('https://lovable-email-backend.vercel.app/send-welcome-email', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-api-key': 'lov@ble-2025-secret-KEY'
-        },
-        body: JSON.stringify({
-          to: userEmail,
-          userName: userName || 'there'
-        })
-      });
-      
-      const result = await response.json();
-      console.log('Welcome email sent:', result);
-    } catch (error) {
-      console.error('Welcome email failed:', error);
-      // Don't block the signup process
-    }
-  };
-
   const signUpWithPassword = async (email: string, password: string, fullName?: string) => {
     try {
       const { data, error } = await supabase.functions.invoke('create-user', {
@@ -259,8 +237,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       // Send welcome email after successful signup
       try {
-        await sendWelcomeEmail(email, fullName || email.split('@')[0]);
-        console.log('Welcome email sent successfully');
+        const emailResult = await sendWelcomeEmail(email, fullName || email.split('@')[0]);
+        if (emailResult.success) {
+          console.log('Welcome email sent successfully');
+        } else {
+          console.error('Welcome email failed:', emailResult.error);
+        }
       } catch (error) {
         console.error('Failed to send welcome email:', error);
         // Don't block signup if email fails
