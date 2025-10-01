@@ -106,7 +106,7 @@ export const CommercialPropertyDetailsStep: React.FC<CommercialPropertyDetailsSt
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-sm font-medium">Space Type</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
                       <SelectTrigger className="h-12">
                         <SelectValue placeholder="Select Space Type" />
@@ -133,7 +133,7 @@ export const CommercialPropertyDetailsStep: React.FC<CommercialPropertyDetailsSt
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-sm font-medium">Building Type</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
                       <SelectTrigger className="h-12">
                         <SelectValue placeholder="Select Building Type" />
@@ -162,7 +162,7 @@ export const CommercialPropertyDetailsStep: React.FC<CommercialPropertyDetailsSt
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-sm font-medium">Age of Property</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
                       <SelectTrigger className="h-12">
                         <SelectValue placeholder="Select Age" />
@@ -187,7 +187,7 @@ export const CommercialPropertyDetailsStep: React.FC<CommercialPropertyDetailsSt
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-sm font-medium">Facing</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
                       <SelectTrigger className="h-12">
                         <div className="flex items-center gap-2">
@@ -227,7 +227,7 @@ export const CommercialPropertyDetailsStep: React.FC<CommercialPropertyDetailsSt
                         ? field.onChange(value)
                         : field.onChange(parseInt(value))
                     }
-                    defaultValue={field.value?.toString()}
+                    value={field.value?.toString()}
                   >
                     <FormControl>
                       <SelectTrigger className="h-12">
@@ -265,7 +265,7 @@ export const CommercialPropertyDetailsStep: React.FC<CommercialPropertyDetailsSt
                     onValueChange={(value) =>
                       value === '99+' ? field.onChange(value) : field.onChange(parseInt(value))
                     }
-                    defaultValue={field.value?.toString()}
+                    value={field.value?.toString()}
                   >
                     <FormControl>
                       <SelectTrigger className="h-12">
@@ -328,7 +328,7 @@ export const CommercialPropertyDetailsStep: React.FC<CommercialPropertyDetailsSt
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-sm font-medium">Furnishing</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
                       <SelectTrigger className="h-12">
                         <SelectValue placeholder="Select Furnishing" />
