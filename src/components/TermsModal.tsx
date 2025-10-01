@@ -1,5 +1,6 @@
 import React from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { useNavigate } from 'react-router-dom';
 
 interface TermsModalProps {
   open: boolean;
@@ -10,6 +11,8 @@ export const TermsModal: React.FC<TermsModalProps> = ({
   open,
   onOpenChange
 }) => {
+  const navigate = useNavigate();
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-2xl max-h-[80vh] overflow-y-auto">
@@ -92,11 +95,11 @@ export const TermsModal: React.FC<TermsModalProps> = ({
             <p>
               For issues, contact{' '}
               <a 
-                href="mailto:support@homehni.com" 
+                href="mailto:homehni8@gmail.com" 
                 className="underline"
                 style={{ color: '#a30d05' }}
               >
-                support@homehni.com
+                homehni8@gmail.com
               </a>
               {' '}or call the customer support number.
             </p>
@@ -109,7 +112,8 @@ export const TermsModal: React.FC<TermsModalProps> = ({
               href="#" 
               onClick={(e) => {
                 e.preventDefault();
-                // You can add navigation to a detailed terms page here if needed
+                onOpenChange(false);
+                navigate('/terms-and-conditions');
               }}
               className="underline text-sm font-medium"
               style={{ color: '#a30d05' }}
