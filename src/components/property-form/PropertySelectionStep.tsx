@@ -7,6 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
 import { MessageCircle } from 'lucide-react';
+import { TermsModal } from '@/components/TermsModal';
 
 interface PropertySelectionData {
   name: string;
@@ -32,6 +33,7 @@ export const PropertySelectionStep: React.FC<PropertySelectionStepProps> = ({
   const [whatsappUpdates, setWhatsappUpdates] = useState(true);
   const [selectedPropertyType, setSelectedPropertyType] = useState<'Residential' | 'Commercial' | 'Land/Plot'>('Residential');
   const [selectedListingType, setSelectedListingType] = useState<string>('');
+  const [showTermsModal, setShowTermsModal] = useState(false);
 
   const getListingTypes = () => {
     switch (selectedPropertyType) {
@@ -275,11 +277,18 @@ export const PropertySelectionStep: React.FC<PropertySelectionStepProps> = ({
           <div className="pt-2 hidden sm:block">
             <p className="text-xs text-gray-500 text-center leading-relaxed">
               By clicking 'Start Posting Your Ad' you acknowledge that you have agreed to the{' '}
-              <span className="text-red-600 underline cursor-pointer">Terms & Conditions</span>.
+              <span 
+                className="text-red-600 underline cursor-pointer"
+                onClick={() => setShowTermsModal(true)}
+              >
+                Terms & Conditions
+              </span>.
             </p>
           </div>
         </div>
       </div>
+
+      <TermsModal open={showTermsModal} onOpenChange={setShowTermsModal} />
     </div>
   );
 };
