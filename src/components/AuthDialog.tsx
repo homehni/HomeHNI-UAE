@@ -115,6 +115,18 @@ export const AuthDialog: React.FC<AuthDialogProps> = ({
       return;
     }
 
+    // Pre-check: does auth user exist
+    try {
+      const { supabase } = await import('@/integrations/supabase/client');
+      const { data: exists } = await supabase.rpc('does_auth_user_exist', { _email: signUpForm.email.trim().toLowerCase() });
+      if (exists === true) {
+        setSignInForm({ email: signUpForm.email, password: '' });
+        setActiveTab('signin');
+        setSignInMessage({ type: 'error', text: "This email is already registered. Please login or reset your password." });
+        return;
+      }
+    } catch (_) { /* ignore check errors and continue */ }
+
     try {
       await signUpWithPassword(signUpForm.email, signUpForm.password, signUpForm.fullName);
       

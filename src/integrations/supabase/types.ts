@@ -1414,6 +1414,10 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: undefined
       }
+      does_auth_user_exist: {
+        Args: { _email: string }
+        Returns: boolean
+      }
       ensure_unique_slug: {
         Args: { base_slug: string }
         Returns: string
