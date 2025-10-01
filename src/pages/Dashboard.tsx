@@ -1057,10 +1057,10 @@ export const Dashboard: React.FC = () => {
     }
   };
 
-  // Filter properties based on selected filter and inactive toggle
+  // Filter properties based on selected filter and active toggle
   const filteredProperties = properties.filter(property => {
-    // Apply "Only Inactive" filter
-    if (showOnlyActive && property.rental_status !== 'inactive') {
+    // Apply "Only Active" filter
+    if (showOnlyActive && property.rental_status !== 'available') {
       return false;
     }
     
@@ -1254,7 +1254,7 @@ export const Dashboard: React.FC = () => {
                     ))}
                   </div>
                   <div className="flex items-center space-x-2">
-                  <span className="text-sm text-gray-600">Only Inactive</span>
+                  <span className="text-sm text-gray-600">Only Active</span>
                   <label className="relative inline-flex items-center cursor-pointer">
                     <input 
                       type="checkbox" 
