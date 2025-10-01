@@ -60,6 +60,8 @@ export function PgHostelPgDetailsStep({
     ...initialData,
   });
 
+  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (isFormValid()) {
@@ -157,7 +159,7 @@ export function PgHostelPgDetailsStep({
 
             <div className="space-y-2">
               <Label htmlFor="availableFrom" className="text-base font-medium">Available From</Label>
-              <Popover>
+              <Popover open={isDatePickerOpen} onOpenChange={setIsDatePickerOpen}>
                 <PopoverTrigger asChild>
                   <Button
                     variant="outline"
@@ -183,6 +185,7 @@ export function PgHostelPgDetailsStep({
                         ...formData, 
                         availableFrom: date ? format(date, "yyyy-MM-dd") : "" 
                       });
+                      setIsDatePickerOpen(false);
                     }}
                     disabled={(date) => {
                       const today = new Date();
