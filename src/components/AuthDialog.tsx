@@ -87,23 +87,11 @@ export const AuthDialog: React.FC<AuthDialogProps> = ({
     } catch (error: any) {
       const msg = (error?.message || '').toLowerCase();
       if (msg.includes('email not confirmed') || msg.includes('email_not_confirmed')) {
-        try {
-          setSignInMessage({ type: 'success', text: 'Confirming your account, please wait...' });
-          const res = await fetch('https://geenmplkdgmlovvgwzai.supabase.co/functions/v1/confirm-user', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email: signInForm.email.trim().toLowerCase() })
-          });
-          if (!res.ok) throw new Error('Auto-confirm failed');
-          await signInWithPassword(signInForm.email, signInForm.password);
-          return;
-        } catch (_) {
-          setSignInMessage({ type: 'error', text: 'Could not auto-confirm this account. Please try again or sign up once more.' });
-        }
+        setSignInMessage({ type: 'error', text: "Please check your email and click the verification link before signing in." });
       } else if (msg.includes('invalid') || msg.includes('wrong') || msg.includes('incorrect')) {
-        setSignInMessage({ type: 'error', text: 'Invalid email or password. Please try again.' });
+        setSignInMessage({ type: 'error', text: "Invalid email or password. Please try again." });
       } else {
-        setSignInMessage({ type: 'error', text: error.message || 'Please try again or contact support.' });
+        setSignInMessage({ type: 'error', text: error.message || "Please try again or contact support." });
       }
     }
   };
@@ -138,39 +126,10 @@ export const AuthDialog: React.FC<AuthDialogProps> = ({
     } catch (_) { /* ignore check errors and continue */ }
 
     try {
-      const signupEmail = signUpForm.email.trim().toLowerCase();
-      const signupPassword = signUpForm.password;
-      await signUpWithPassword(signupEmail, signupPassword, signUpForm.fullName);
-
-      // Try immediate login (works when email confirmations are disabled)
-      try {
-        await signInWithPassword(signupEmail, signupPassword);
-        setSignUpMessage({ type: 'success', text: 'Account created! Signing you in...' });
-      } catch (err: any) {
-        const lc = (err?.message || '').toLowerCase();
-        if (lc.includes('email not confirmed') || lc.includes('email_not_confirmed')) {
-          try {
-            setSignUpMessage({ type: 'success', text: 'Finalizing your account. Please wait...' });
-            const res = await fetch('https://geenmplkdgmlovvgwzai.supabase.co/functions/v1/confirm-user', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ email: signupEmail })
-            });
-            if (!res.ok) throw new Error('Auto-confirm failed');
-            await signInWithPassword(signupEmail, signupPassword);
-            setSignUpMessage({ type: 'success', text: 'Account confirmed! Signing you in...' });
-          } catch (_) {
-            setSignUpMessage({ type: 'success', text: 'Account created! Please try logging in now.' });
-            setActiveTab('signin');
-            setSignInForm(prev => ({ ...prev, email: signupEmail }));
-          }
-        } else {
-          setSignUpMessage({ type: 'error', text: err?.message || 'Account created, but auto-login failed. Please sign in.' });
-          setActiveTab('signin');
-          setSignInForm(prev => ({ ...prev, email: signupEmail }));
-        }
-      }
-
+      await signUpWithPassword(signUpForm.email, signUpForm.password, signUpForm.fullName);
+      
+      setSignUpMessage({ type: 'success', text: "Check your email! We've sent you a verification link. Please check your email and click the link to complete your registration." });
+      
       // Clear signup form
       setSignUpForm({ fullName: '', email: '', password: '', confirmPassword: '' });
       setActiveTab('signin');

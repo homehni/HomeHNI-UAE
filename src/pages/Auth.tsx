@@ -107,19 +107,17 @@ export const Auth: React.FC = () => {
     } catch (error: any) {
       const msg = (error?.message || '').toLowerCase();
       if (msg.includes('email not confirmed') || msg.includes('email_not_confirmed')) {
+        // Offer verification path and resend the link automatically
         try {
-          setSignInMessage({ type: 'success', text: 'Confirming your account, please wait...' });
-          const res = await fetch('https://geenmplkdgmlovvgwzai.supabase.co/functions/v1/confirm-user', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email: signInForm.email.trim().toLowerCase() })
+          const { supabase } = await import('@/integrations/supabase/client');
+          await supabase.auth.resend({
+            type: 'signup',
+            email: signInForm.email,
+            options: { emailRedirectTo: `${window.location.origin}/` }
           });
-          if (!res.ok) throw new Error('Auto-confirm failed');
-          // Retry sign in after confirmation
-          await signInWithPassword(signInForm.email, signInForm.password);
-          return;
+          setSignInMessage({ type: 'success', text: 'Email not confirmed. We re-sent the verification link. Please check your inbox.' });
         } catch (_) {
-          setSignInMessage({ type: 'error', text: 'Could not auto-confirm this account. Please try signing in again or sign up once more.' });
+          setSignInMessage({ type: 'error', text: 'Email not confirmed. Please verify your email. We could not resend automatically.' });
         }
       } else {
         setSignInMessage({ type: 'error', text: error.message || 'Please check your credentials and try again.' });
@@ -152,41 +150,19 @@ export const Auth: React.FC = () => {
     } catch (_) { /* ignore check errors and continue */ }
 
     try {
-      const signupEmail = signUpForm.email.trim().toLowerCase();
-      const signupPassword = signUpForm.password;
-      await signUpWithPassword(signupEmail, signupPassword, signUpForm.fullName);
-
-      // Try immediate login (works when email confirmations are disabled)
-      try {
-        await signInWithPassword(signupEmail, signupPassword);
-        setSignUpMessage({ type: 'success', text: 'Account created! Signing you in...' });
-      } catch (err: any) {
-        const lc = (err?.message || '').toLowerCase();
-        if (lc.includes('email not confirmed') || lc.includes('email_not_confirmed')) {
-          try {
-            setSignUpMessage({ type: 'success', text: 'Finalizing your account. Please wait...' });
-            const res = await fetch('https://geenmplkdgmlovvgwzai.supabase.co/functions/v1/confirm-user', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ email: signupEmail })
-            });
-            if (!res.ok) throw new Error('Auto-confirm failed');
-            await signInWithPassword(signupEmail, signupPassword);
-            setSignUpMessage({ type: 'success', text: 'Account confirmed! Signing you in...' });
-          } catch (_) {
-            setSignUpMessage({ type: 'success', text: 'Account created! Please try logging in now.' });
-            setActiveTab('signin');
-            setSignInForm(prev => ({ ...prev, email: signupEmail }));
-          }
-        } else {
-          setSignUpMessage({ type: 'error', text: err?.message || 'Account created, but auto-login failed. Please sign in.' });
-          setActiveTab('signin');
-          setSignInForm(prev => ({ ...prev, email: signupEmail }));
-        }
-      }
-
+      const signupEmail = signUpForm.email;
+      await signUpWithPassword(signUpForm.email, signUpForm.password, signUpForm.fullName);
+      
+      setSignUpMessage({ type: 'success', text: "Check your email! We've sent you a verification link. Please check your email and click the link to complete your registration." });
+      
       // Clear signup form
       setSignUpForm({ fullName: '', email: '', password: '', confirmPassword: '' });
+      
+      // Switch to login tab and pre-fill email
+      setTimeout(() => {
+        setActiveTab('signin');
+        setSignInForm(prev => ({ ...prev, email: signupEmail }));
+      }, 1500);
     } catch (error: any) {
       console.debug('Signup error caught', {
         raw: error,
