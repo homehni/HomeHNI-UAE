@@ -477,7 +477,6 @@ export async function sendServiceProviderEmail(
     serviceType: string;
     phoneNumber: string;
     emailId: string;
-    state: string;
     city: string;
   }
 ) {
@@ -488,7 +487,6 @@ export async function sendServiceProviderEmail(
     serviceType: providerData.serviceType,
     phoneNumber: providerData.phoneNumber,
     emailId: providerData.emailId,
-    state: providerData.state,
     city: providerData.city
   });
 }

@@ -201,9 +201,8 @@ const ServiceSuite = () => {
     const data = {
       phoneNumber: formData.get('phone') as string,
       emailId: formData.get('email') as string,
-      companyName: formData.get('text') as string,
+      companyName: formData.get('companyName') as string,
       serviceType: formData.get('serviceType') as string,
-      state: formData.get('state') as string,
       city: formData.get('city') as string,
     };
     
@@ -213,7 +212,6 @@ const ServiceSuite = () => {
       serviceType: data.serviceType,
       phoneNumber: data.phoneNumber,
       emailId: data.emailId,
-      state: data.state,
       city: data.city
     });
     
@@ -230,6 +228,10 @@ const ServiceSuite = () => {
       gstCopy: [],
       servicePortfolio: []
     });
+    setSelectedState("");
+    setSelectedStateDesktop("");
+    setCities([]);
+    setCitiesDesktop([]);
   };
   return <div className="min-h-screen">
       <Marquee />
@@ -272,6 +274,9 @@ const ServiceSuite = () => {
             <p className="text-xs text-muted-foreground mb-3 text-uniform-center">Submit your requirements & get matched</p>
 
             <form className="space-y-3" onSubmit={e => handleFormSubmit(e, false)}>
+              <Input name="email" type="email" placeholder="Email ID" required />
+              <Input name="companyName" type="text" placeholder="Company Name" required />
+
               <div className="flex gap-2">
                 <Select defaultValue="+91" name="countryCode">
                   <SelectTrigger className="w-28"><SelectValue /></SelectTrigger>
@@ -283,9 +288,6 @@ const ServiceSuite = () => {
                 </Select>
                 <Input name="phone" type="tel" placeholder="Phone Number" className="flex-1" required />
               </div>
-
-              <Input name="email" type="email" placeholder="Email ID" required />
-              <Input name="text" type="CompanyName" placeholder="Company Name" required />
 
               <Select name="serviceType" required>
                 <SelectTrigger><SelectValue placeholder="Select Service Type" /></SelectTrigger>
@@ -302,25 +304,7 @@ const ServiceSuite = () => {
                 </SelectContent>
               </Select>
 
-              <div className="flex gap-2">
-                <Select name="state" onValueChange={setSelectedStateDesktop}>
-                  <SelectTrigger className="flex-1"><SelectValue placeholder="State" /></SelectTrigger>
-                  <SelectContent>
-                    {statesData && Object.keys(statesData).map((state: string) => <SelectItem key={state} value={state}>
-                        {state}
-                      </SelectItem>)}
-                  </SelectContent>
-                </Select>
-
-                <Select name="city">
-                  <SelectTrigger className="flex-1"><SelectValue placeholder="City" /></SelectTrigger>
-                  <SelectContent>
-                    {citiesDesktop.map((city: string) => <SelectItem key={city} value={city}>
-                        {city}
-                      </SelectItem>)}
-                  </SelectContent>
-                </Select>
-              </div>
+              <Input name="city" type="text" placeholder="City" required />
 
               <CategorizedImageUpload images={serviceImages} onImagesChange={setServiceImages} className="mt-2" />
 
@@ -339,6 +323,9 @@ const ServiceSuite = () => {
               <p className="text-sm text-muted-foreground mb-6 text-uniform-center">Submit your requirements & get matched</p>
 
               <form className="space-y-4" onSubmit={e => handleFormSubmit(e, true)}>
+                <Input name="email" type="email" placeholder="Email ID" className="h-12 text-base bg-background" required />
+                <Input name="companyName" type="text" placeholder="Company Name" className="h-12 text-base bg-background" required />
+
                 <div className="flex gap-3">
                   <Select defaultValue="+91" name="countryCode">
                     <SelectTrigger className="w-32 h-12 bg-background">
@@ -352,8 +339,6 @@ const ServiceSuite = () => {
                   </Select>
                   <Input name="phone" type="tel" placeholder="Phone Number" className="flex-1 h-12 text-base bg-background" required />
                 </div>
-
-                <Input name="email" type="email" placeholder="Email ID" className="h-12 text-base bg-background" required />
 
                 <Select name="serviceType" required>
                   <SelectTrigger className="h-12 bg-background">
@@ -372,29 +357,7 @@ const ServiceSuite = () => {
                   </SelectContent>
                 </Select>
 
-                <div className="flex gap-3">
-                  <Select name="state" onValueChange={setSelectedState}>
-                    <SelectTrigger className="flex-1 h-12 bg-background">
-                      <SelectValue placeholder="State" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-background border shadow-lg">
-                      {statesData && Object.keys(statesData).map((state: string) => <SelectItem key={state} value={state}>
-                          {state}
-                        </SelectItem>)}
-                    </SelectContent>
-                  </Select>
-
-                  <Select name="city">
-                    <SelectTrigger className="flex-1 h-12 bg-background">
-                      <SelectValue placeholder="City" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-background border shadow-lg">
-                      {cities.map((city: string) => <SelectItem key={city} value={city}>
-                          {city}
-                        </SelectItem>)}
-                    </SelectContent>
-                  </Select>
-                </div>
+                <Input name="city" type="text" placeholder="City" className="h-12 text-base bg-background" required />
 
                 <CategorizedImageUpload images={serviceImages} onImagesChange={setServiceImages} className="mt-3" />
 
