@@ -67,9 +67,19 @@ export const CommercialSalePropertyDetailsStep = ({
     const saved = savedRaw ? JSON.parse(savedRaw) : null;
 
     const hasInitial = initialData && Object.values(initialData).some((v) => v !== undefined && v !== '');
-    const src: any = hasInitial ? { ...(saved || {}), ...(initialData as any) } : saved;
+    
+    // Merge saved data with initialData, but only overwrite with initialData if values are actually present
+    let src: any = saved || {};
+    if (hasInitial && initialData) {
+      Object.keys(initialData).forEach((key) => {
+        const value = (initialData as any)[key];
+        if (value !== undefined && value !== null && value !== '') {
+          src[key] = value;
+        }
+      });
+    }
 
-    if (src) {
+    if (src && Object.keys(src).length > 0) {
       form.reset({
         title: src.title || '',
         propertyType: src.propertyType || 'Commercial',
