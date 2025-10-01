@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Badge } from '@/components/ui/badge';
 import { CommercialPropertyDetails } from '@/types/property';
+const STORAGE_KEY = 'commercialSalePropertyDetails';
 const commercialSalePropertyDetailsSchema = z.object({
   title: z.string().optional(),
   // Made optional - will be auto-generated
@@ -61,28 +62,37 @@ export const CommercialSalePropertyDetailsStep = ({
   });
 
   useEffect(() => {
-    form.reset({
-      title: initialData?.title || '',
-      propertyType: initialData?.propertyType || 'Commercial',
-      spaceType: (initialData?.spaceType as any) || 'office',
-      buildingType: initialData?.buildingType || '',
-      propertyAge: (initialData as any)?.propertyAge || '',
-      facing: (initialData as any)?.facing || '',
-      floorNo: initialData?.floorNo !== undefined ? initialData.floorNo.toString() : '0',
-      totalFloors: initialData?.totalFloors !== undefined ? initialData.totalFloors.toString() : '1',
-      superBuiltUpArea: initialData?.superBuiltUpArea || undefined,
-      powerLoad: initialData?.powerLoad || '',
-      ceilingHeight: initialData?.ceilingHeight || '',
-      entranceWidth: initialData?.entranceWidth || ''
-    });
-    setOnMainRoad(initialData?.onMainRoad || false);
-    setCornerProperty(initialData?.cornerProperty || false);
-    setLoadingFacility(initialData?.loadingFacility || false);
+    const savedRaw = typeof window !== 'undefined' ? sessionStorage.getItem(STORAGE_KEY) : null;
+    const saved = savedRaw ? JSON.parse(savedRaw) : null;
+
+    const hasInitial = initialData && Object.values(initialData).some((v) => v !== undefined && v !== '');
+    const src: any = hasInitial ? initialData : saved;
+
+    if (src) {
+      form.reset({
+        title: src.title || '',
+        propertyType: src.propertyType || 'Commercial',
+        spaceType: (src.spaceType as any) || 'office',
+        buildingType: src.buildingType || '',
+        propertyAge: (src as any)?.propertyAge || '',
+        facing: (src as any)?.facing || '',
+        floorNo: src.floorNo !== undefined ? String(src.floorNo) : '0',
+        totalFloors: src.totalFloors !== undefined ? String(src.totalFloors) : '1',
+        superBuiltUpArea: src.superBuiltUpArea || undefined,
+        powerLoad: src.powerLoad || '',
+        ceilingHeight: src.ceilingHeight || '',
+        entranceWidth: src.entranceWidth || ''
+      });
+      setOnMainRoad(Boolean(src.onMainRoad));
+      setCornerProperty(Boolean(src.cornerProperty));
+      setLoadingFacility(Boolean(src.loadingFacility));
+    }
   }, [initialData]);
 
   const onSubmit = (data: CommercialSalePropertyDetailsFormData) => {
     console.log('Form submission data:', data);
-    const completeData = {
+    const completeData: Partial<CommercialPropertyDetails> = {
+      ...initialData,
       ...data,
       floorNo: parseInt(data.floorNo),
       totalFloors: parseInt(data.totalFloors),
@@ -91,6 +101,11 @@ export const CommercialSalePropertyDetailsStep = ({
       cornerProperty,
       loadingFacility
     };
+    try {
+      if (typeof window !== 'undefined') {
+        sessionStorage.setItem(STORAGE_KEY, JSON.stringify(completeData));
+      }
+    } catch {}
     console.log('Complete data to submit:', completeData);
     onNext(completeData);
   };
