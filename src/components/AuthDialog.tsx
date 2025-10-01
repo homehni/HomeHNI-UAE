@@ -124,11 +124,18 @@ export const AuthDialog: React.FC<AuthDialogProps> = ({
       setSignUpForm({ fullName: '', email: '', password: '', confirmPassword: '' });
       setActiveTab('signin');
     } catch (error: any) {
+      console.debug('Signup (dialog) error caught', {
+        raw: error,
+        code: (error as any)?.code,
+        status: Number((error as any)?.status),
+        message: (error as any)?.message,
+      });
       const msgLc = (error?.message || '').toLowerCase();
+      const statusNum = Number((error as any)?.status);
       const emailExists =
-        error?.code === 'email_exists' ||
-        error?.status === 409 ||
-        error?.status === 422 ||
+        (error as any)?.code === 'email_exists' ||
+        statusNum === 409 ||
+        statusNum === 422 ||
         msgLc.includes('duplicate key') ||
         (msgLc.includes('email') && (msgLc.includes('already') || msgLc.includes('exists') || msgLc.includes('registered')));
       if (emailExists) {
@@ -136,7 +143,11 @@ export const AuthDialog: React.FC<AuthDialogProps> = ({
         setActiveTab('signin');
         setSignInMessage({ type: 'error', text: "This email is already registered. Please login or reset your password." });
       } else {
-        setSignUpMessage({ type: 'error', text: error.message || "Please try again or contact support." });
+        const isGeneric = msgLc === 'sign up failed' || msgLc === 'signup failed';
+        const friendly = isGeneric
+          ? 'We couldn’t create your account right now. Please try again later or contact support.'
+          : (error?.message || 'We couldn’t create your account. Please try again.');
+        setSignUpMessage({ type: 'error', text: friendly });
       }
     }
   };
