@@ -195,6 +195,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             errorCode = json?.code || '';
           }
         } catch {}
+        
+        // Provide user-friendly messages for common errors
+        if (message.toLowerCase().includes('email') && (message.toLowerCase().includes('already') || message.toLowerCase().includes('exists') || message.toLowerCase().includes('registered'))) {
+          message = 'This email is already registered. Please try logging in instead.';
+        } else if (message.toLowerCase().includes('duplicate key')) {
+          message = 'This email is already registered. Please try logging in instead.';
+        }
+        
         // Also log for auditing; ignore failures
         try { await AuditService.logAuthEvent('User Signup Failed', email, false, message); } catch {}
         
@@ -204,9 +212,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
 
       if (!data?.success) {
-        const msg = data?.error || 'Failed to create user';
+        let msg = data?.error || 'Failed to create user';
         const code = data?.code || '';
         console.log('Signup failed with message:', msg);
+        
+        // Provide user-friendly messages for common errors
+        if (msg.toLowerCase().includes('email') && (msg.toLowerCase().includes('already') || msg.toLowerCase().includes('exists') || msg.toLowerCase().includes('registered'))) {
+          msg = 'This email is already registered. Please try logging in instead.';
+        } else if (msg.toLowerCase().includes('duplicate key')) {
+          msg = 'This email is already registered. Please try logging in instead.';
+        }
+        
         try { await AuditService.logAuthEvent('User Signup Failed', email, false, msg); } catch {}
         
         const errorObj = new Error(msg) as any;
