@@ -121,7 +121,7 @@ const RealEstateSlider = () => {
                 className="flex-none w-60 bg-card rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer transform hover:scale-105 h-48"
                 onClick={() => handleCompanyClick(company.id)}
               >
-                <div className="h-32 overflow-hidden bg-white flex items-center justify-center p-4">
+                <div className="h-32 overflow-hidden bg-white flex items-center justify-center p-4 mt-2 md:mt-0">
                   <img src={company.logo} alt={`${company.name} logo`} loading="lazy" className="w-full h-full object-contain" />
                 </div>
                 <div className="px-4 pt-2 pb-4 h-16 flex flex-col justify-center">
