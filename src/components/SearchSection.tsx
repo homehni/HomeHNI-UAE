@@ -405,7 +405,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
       </div>
       
       {/* White background section - mobile responsive */}
-      <div className="bg-white pt-2 sm:pt-4 md:pt-16 pb-4 sm:pb-8 mx-0 px-0 mb-2 sm:mb-4 py-[6px]">
+      <div className="bg-white pt-2 sm:pt-4 md:pt-10 pb-4 sm:pb-8 mx-0 px-0 mb-2 sm:mb-4 py-[6px]">
         <div className="container mx-auto px-2 sm:px-4">
           {/* This space allows the search section to overlap properly */}
         </div>
