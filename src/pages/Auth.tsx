@@ -8,7 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Chrome, Home, UserPlus, LogIn, Eye, EyeOff, X, Mail } from 'lucide-react';
+import { Chrome, Home, UserPlus, LogIn, Eye, EyeOff, X } from 'lucide-react';
 import Index from './Index';
 
 // Auth component with separate password visibility states
@@ -224,22 +224,6 @@ export const Auth: React.FC = () => {
       await signInWithGoogle();
     } catch (error) {
       setSignInMessage({ type: 'error', text: "Google sign in failed. Please try again or contact support." });
-    }
-  };
-
-  const handleMicrosoftSignIn = async () => {
-    setSignInMessage({ type: null, text: '' });
-    try {
-      const { supabase } = await import('@/integrations/supabase/client');
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'azure',
-        options: {
-          redirectTo: `${window.location.origin}/auth`
-        }
-      });
-      if (error) throw error;
-    } catch (error) {
-      setSignInMessage({ type: 'error', text: "Microsoft sign in failed. Please try again or contact support." });
     }
   };
 
@@ -556,25 +540,14 @@ export const Auth: React.FC = () => {
                         </div>
                       </div>
                       
-                      <div className="space-y-2">
-                        <Button 
-                          onClick={handleGoogleSignIn}
-                          className="w-full h-10 rounded-xl border-2 hover:bg-gray-50 transition-all duration-200"
-                          variant="outline"
-                        >
-                          <Chrome className="h-4 w-4 mr-2 text-red-500" />
-                          Continue with Google
-                        </Button>
-                        
-                        <Button 
-                          onClick={handleMicrosoftSignIn}
-                          className="w-full h-10 rounded-xl border-2 hover:bg-gray-50 transition-all duration-200"
-                          variant="outline"
-                        >
-                          <Mail className="h-4 w-4 mr-2 text-blue-500" />
-                          Continue with Microsoft
-                        </Button>
-                      </div>
+                      <Button 
+                        onClick={handleGoogleSignIn}
+                        className="w-full h-10 rounded-xl border-2 hover:bg-gray-50 transition-all duration-200"
+                        variant="outline"
+                      >
+                        <Chrome className="h-4 w-4 mr-2 text-red-500" />
+                        Continue with Google
+                      </Button>
                     </TabsContent>
                     
                     <TabsContent value="signup" className="space-y-3">
@@ -689,25 +662,14 @@ export const Auth: React.FC = () => {
                         </div>
                       </div>
                       
-                      <div className="space-y-2">
-                        <Button 
-                          onClick={handleGoogleSignIn}
-                          className="w-full h-9 rounded-xl border-2 hover:bg-gray-50 transition-all duration-200"
-                          variant="outline"
-                        >
-                          <Chrome className="h-4 w-4 mr-2 text-red-500" />
-                          Sign up with Google
-                        </Button>
-                        
-                        <Button 
-                          onClick={handleMicrosoftSignIn}
-                          className="w-full h-9 rounded-xl border-2 hover:bg-gray-50 transition-all duration-200"
-                          variant="outline"
-                        >
-                          <Mail className="h-4 w-4 mr-2 text-blue-500" />
-                          Sign up with Microsoft
-                        </Button>
-                      </div>
+                      <Button 
+                        onClick={handleGoogleSignIn}
+                        className="w-full h-9 rounded-xl border-2 hover:bg-gray-50 transition-all duration-200"
+                        variant="outline"
+                      >
+                        <Chrome className="h-4 w-4 mr-2 text-red-500" />
+                        Sign up with Google
+                      </Button>
                     </TabsContent>
                   </Tabs>
                   
