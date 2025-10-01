@@ -147,14 +147,20 @@ export const Auth: React.FC = () => {
       // Clear signup form
       setSignUpForm({ fullName: '', email: '', password: '', confirmPassword: '' });
     } catch (error: any) {
-      console.log('Auth error caught:', error);
+      console.debug('Signup error caught', {
+        raw: error,
+        code: (error as any)?.code,
+        status: Number((error as any)?.status),
+        message: (error as any)?.message,
+      });
       
-      // Handle specific error codes
+      // Handle specific error codes (coerce status to number)
       const msgLc = (error?.message || '').toLowerCase();
+      const statusNum = Number((error as any)?.status);
       const emailExists =
-        error?.code === 'email_exists' ||
-        error?.status === 409 ||
-        error?.status === 422 ||
+        (error as any)?.code === 'email_exists' ||
+        statusNum === 409 ||
+        statusNum === 422 ||
         msgLc.includes('duplicate key') ||
         (msgLc.includes('email') && (msgLc.includes('already') || msgLc.includes('exists') || msgLc.includes('registered')));
       if (emailExists) {
@@ -165,8 +171,12 @@ export const Auth: React.FC = () => {
         return;
       }
       
-      // Generic error handling
-      setSignUpMessage({ type: 'error', text: error.message || "Sign up failed. Please try again or contact support." });
+      // Generic friendly fallback when backend returns a generic message
+      const isGeneric = msgLc === 'sign up failed' || msgLc === 'signup failed';
+      const friendly = isGeneric
+        ? 'We couldn’t create your account right now. Please try again later or contact support.'
+        : (error?.message || 'We couldn’t create your account. Please try again.');
+      setSignUpMessage({ type: 'error', text: friendly });
     }
   };
 
