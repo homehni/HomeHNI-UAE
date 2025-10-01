@@ -18,6 +18,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
   const [showMobileCitySelector, setShowMobileCitySelector] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const mobileInputRef = useRef<HTMLInputElement>(null);
+  const mobileSearchContainerRef = useRef<HTMLDivElement>(null);
   const { content: cmsContent } = useCMSContent('hero-search');
 
   const addLocation = (location: string) => {
@@ -202,6 +203,24 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
     };
     loadGoogleMaps().then(initAutocomplete).catch(console.error);
   }, [selectedCity]); // Removed selectedLocations to prevent reinitializing autocomplete
+
+  // Handle click outside to hide mobile city selector
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (mobileSearchContainerRef.current && !mobileSearchContainerRef.current.contains(event.target as Node)) {
+        setShowMobileCitySelector(false);
+      }
+    };
+
+    if (showMobileCitySelector) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showMobileCitySelector]);
+
   useImperativeHandle(ref, () => ({
     focusSearchInput: () => {
       // Detect if mobile view (screen width < 768px)
@@ -221,7 +240,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
       backgroundPosition: 'center calc(50% - 2%)'
     }}>
         {/* Mobile Search Section - overlapping 50% at bottom of hero */}
-        <div className="sm:hidden absolute bottom-4 left-2 right-2 transform translate-y-1/2">
+        <div className="sm:hidden absolute bottom-4 left-2 right-2 transform translate-y-1/2" ref={mobileSearchContainerRef}>
           <div className="bg-white rounded-lg shadow-xl border border-gray-100 overflow-hidden">
             {/* Tabs - Mobile */}
             <div className="flex border-b border-gray-200">
