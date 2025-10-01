@@ -1,7 +1,7 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -59,6 +59,27 @@ export const CommercialSalePropertyDetailsStep = ({
       entranceWidth: initialData?.entranceWidth || ''
     }
   });
+
+  useEffect(() => {
+    form.reset({
+      title: initialData?.title || '',
+      propertyType: initialData?.propertyType || 'Commercial',
+      spaceType: (initialData?.spaceType as any) || 'office',
+      buildingType: initialData?.buildingType || '',
+      propertyAge: (initialData as any)?.propertyAge || '',
+      facing: (initialData as any)?.facing || '',
+      floorNo: initialData?.floorNo !== undefined ? initialData.floorNo.toString() : '0',
+      totalFloors: initialData?.totalFloors !== undefined ? initialData.totalFloors.toString() : '1',
+      superBuiltUpArea: initialData?.superBuiltUpArea || undefined,
+      powerLoad: initialData?.powerLoad || '',
+      ceilingHeight: initialData?.ceilingHeight || '',
+      entranceWidth: initialData?.entranceWidth || ''
+    });
+    setOnMainRoad(initialData?.onMainRoad || false);
+    setCornerProperty(initialData?.cornerProperty || false);
+    setLoadingFacility(initialData?.loadingFacility || false);
+  }, [initialData]);
+
   const onSubmit = (data: CommercialSalePropertyDetailsFormData) => {
     console.log('Form submission data:', data);
     const completeData = {
