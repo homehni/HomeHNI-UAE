@@ -52,6 +52,8 @@ export function FlattmatesRentalDetailsStep({
     ...initialData,
   });
 
+  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
+
   // Sync local state with initialData prop changes
   useEffect(() => {
     if (initialData) {
@@ -160,7 +162,7 @@ export function FlattmatesRentalDetailsStep({
 
                   <div className="space-y-2">
                     <Label htmlFor="availableFrom">Available From</Label>
-                    <Popover>
+                    <Popover open={isDatePickerOpen} onOpenChange={setIsDatePickerOpen}>
                       <PopoverTrigger asChild>
                         <Button
                           variant="outline"
@@ -186,6 +188,7 @@ export function FlattmatesRentalDetailsStep({
                               ...formData, 
                               availableFrom: date ? format(date, "yyyy-MM-dd") : "" 
                             });
+                            setIsDatePickerOpen(false);
                           }}
                           disabled={(date) => {
                             const today = new Date();
