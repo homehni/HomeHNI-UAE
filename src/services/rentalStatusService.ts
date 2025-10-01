@@ -1,6 +1,6 @@
 import { supabase } from '@/integrations/supabase/client';
 
-export type RentalStatus = 'available' | 'rented' | 'sold';
+export type RentalStatus = 'available' | 'inactive' | 'rented' | 'sold';
 
 export class RentalStatusService {
   /**

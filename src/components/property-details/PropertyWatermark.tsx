@@ -1,7 +1,7 @@
 import React from 'react';
 
 interface PropertyWatermarkProps {
-  status: 'available' | 'rented' | 'sold';
+  status: 'available' | 'inactive' | 'rented' | 'sold';
   children: React.ReactNode;
 }
 

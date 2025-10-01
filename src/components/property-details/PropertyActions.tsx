@@ -16,9 +16,9 @@ interface PropertyActionsProps {
     user_id?: string;
     status?: string;
     listing_type?: string; // Added listing_type to determine rent vs sale
-    rental_status?: 'available' | 'rented' | 'sold';
+    rental_status?: 'available' | 'inactive' | 'rented' | 'sold';
   };
-  onPropertyStatusUpdate?: (newStatus: 'available' | 'rented' | 'sold') => void;
+  onPropertyStatusUpdate?: (newStatus: 'available' | 'inactive' | 'rented' | 'sold') => void;
 }
 
 export const PropertyActions: React.FC<PropertyActionsProps> = ({ 

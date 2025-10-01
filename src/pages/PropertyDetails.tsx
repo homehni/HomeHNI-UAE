@@ -48,7 +48,7 @@ interface Property {
   images?: string[];
   videos?: string[];
   status: string;
-  rental_status?: 'available' | 'rented' | 'sold';
+  rental_status?: 'available' | 'inactive' | 'rented' | 'sold';
   created_at: string;
   amenities?: any; // May come as JSONB object
   additional_documents?: Record<string, boolean>;
@@ -100,7 +100,7 @@ const PropertyDetails: React.FC = () => {
   }, [property]);
 
   // Handler for property status updates
-  const handlePropertyStatusUpdate = (newStatus: 'available' | 'rented' | 'sold') => {
+  const handlePropertyStatusUpdate = (newStatus: 'available' | 'inactive' | 'rented' | 'sold') => {
     if (property) {
       setProperty({
         ...property,

@@ -25,7 +25,7 @@ interface PropertyCardProps {
   listingType?: string;  
   isNew?: boolean;
   size?: 'default' | 'compact' | 'large';
-  rental_status?: 'available' | 'rented' | 'sold';
+  rental_status?: 'available' | 'inactive' | 'rented' | 'sold';
 }
 
 const PropertyCard = ({

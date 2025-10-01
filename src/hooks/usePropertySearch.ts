@@ -25,7 +25,7 @@ export interface PropertyListing {
   image: string;
   badges: string[];
   url: string;
-  rental_status?: 'available' | 'rented' | 'sold';
+  rental_status?: 'available' | 'inactive' | 'rented' | 'sold';
 }
 
 export interface ServiceProvider {
