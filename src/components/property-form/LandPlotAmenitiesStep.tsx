@@ -35,15 +35,15 @@ export const LandPlotAmenitiesStep: React.FC<LandPlotAmenitiesStepProps> = ({
   onBack,
   listingType,
 }) => {
-  const { register, handleSubmit, setValue, formState: { errors } } = useForm<AmenitiesForm>({
+  const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm<AmenitiesForm>({
     resolver: zodResolver(amenitiesSchema),
     defaultValues: {
-      waterSupply: 'municipal',
-      electricityConnection: 'available',
-      sewageConnection: 'connected',
-      roadWidth: undefined,
-      gatedSecurity: false,
-      directionsToProperty: '',
+      waterSupply: (initialData as any)?.waterSupply ?? 'municipal',
+      electricityConnection: (initialData as any)?.electricityConnection ?? 'available',
+      sewageConnection: (initialData as any)?.sewageConnection ?? 'connected',
+      roadWidth: (initialData as any)?.roadWidth,
+      gatedSecurity: (initialData as any)?.gatedSecurity ?? false,
+      directionsToProperty: (initialData as any)?.directionsToProperty ?? '',
     }
   });
 
@@ -59,7 +59,7 @@ export const LandPlotAmenitiesStep: React.FC<LandPlotAmenitiesStepProps> = ({
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
               <Label className="text-sm font-medium text-gray-700">Water Supply</Label>
-              <Select onValueChange={(value) => setValue('waterSupply', value as any)}>
+              <Select value={watch('waterSupply') || undefined} onValueChange={(value) => setValue('waterSupply', value as any)}>
                 <SelectTrigger>
                   <SelectValue placeholder="Select" />
                 </SelectTrigger>
@@ -74,7 +74,7 @@ export const LandPlotAmenitiesStep: React.FC<LandPlotAmenitiesStepProps> = ({
             
             <div className="space-y-2">
               <Label className="text-sm font-medium text-gray-700">Electricity Connection</Label>
-              <Select onValueChange={(value) => setValue('electricityConnection', value as any)}>
+              <Select value={watch('electricityConnection') || undefined} onValueChange={(value) => setValue('electricityConnection', value as any)}>
                 <SelectTrigger>
                   <SelectValue placeholder="Select" />
                 </SelectTrigger>
@@ -92,7 +92,7 @@ export const LandPlotAmenitiesStep: React.FC<LandPlotAmenitiesStepProps> = ({
             {listingType !== 'Agricultural Land' && (
               <div className="space-y-2">
                 <Label className="text-sm font-medium text-gray-700">Sewage Connection</Label>
-                <Select onValueChange={(value) => setValue('sewageConnection', value as any)}>
+                <Select value={watch('sewageConnection') || undefined} onValueChange={(value) => setValue('sewageConnection', value as any)}>
                   <SelectTrigger>
                     <SelectValue placeholder="Select" />
                   </SelectTrigger>
@@ -141,6 +141,7 @@ export const LandPlotAmenitiesStep: React.FC<LandPlotAmenitiesStepProps> = ({
                   id="gatedSecurity-no"
                   name="gatedSecurity"
                   value="false"
+                  checked={!watch('gatedSecurity')}
                   onChange={() => setValue('gatedSecurity', false)}
                   className="w-4 h-4 text-red-600"
                 />
@@ -154,6 +155,7 @@ export const LandPlotAmenitiesStep: React.FC<LandPlotAmenitiesStepProps> = ({
                   id="gatedSecurity-yes"
                   name="gatedSecurity"
                   value="true"
+                  checked={!!watch('gatedSecurity')}
                   onChange={() => setValue('gatedSecurity', true)}
                   className="w-4 h-4 text-red-600"
                 />
