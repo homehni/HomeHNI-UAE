@@ -25,8 +25,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // Load profile when user changes
-  const loadUserProfile = async (user: User | null) => {
+  // Load profile when user changes with retry logic for Google OAuth
+  const loadUserProfile = async (user: User | null, retryCount = 0) => {
     if (!user) {
       setProfile(null);
       return;
@@ -34,10 +34,27 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     try {
       const userProfile = await getCurrentUserProfile();
-      setProfile(userProfile);
+      if (userProfile) {
+        setProfile(userProfile);
+      } else if (retryCount < 3) {
+        // Profile might not be created yet (especially for Google OAuth)
+        // Retry after a short delay
+        setTimeout(() => {
+          loadUserProfile(user, retryCount + 1);
+        }, 500 * (retryCount + 1)); // Exponential backoff: 500ms, 1s, 1.5s
+      } else {
+        setProfile(null);
+      }
     } catch (error) {
       console.error('Error loading user profile:', error);
-      setProfile(null);
+      if (retryCount < 3) {
+        // Retry on error as well
+        setTimeout(() => {
+          loadUserProfile(user, retryCount + 1);
+        }, 500 * (retryCount + 1));
+      } else {
+        setProfile(null);
+      }
     }
   };
 
