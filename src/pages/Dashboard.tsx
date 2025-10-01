@@ -1309,7 +1309,7 @@ export const Dashboard: React.FC = () => {
                   return (
                     <Card key={property.id} className="relative bg-white border border-gray-200 shadow-sm hover:shadow-md transition-shadow overflow-hidden">
                       {/* Status Badge - Top Left */}
-                      {(property.rental_status === 'inactive') && (
+                      {(property.rental_status !== 'available') && (
                         <div className="absolute top-2 left-2 z-20 px-2 py-1 text-xs font-medium rounded bg-gray-500 text-white">
                           Inactive
                         </div>
