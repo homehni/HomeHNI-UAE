@@ -55,6 +55,7 @@ export const CommercialSalePropertyDetailsStep = ({
       floorNo: initialData?.floorNo?.toString() || '0',
       totalFloors: initialData?.totalFloors?.toString() || '1',
       superBuiltUpArea: initialData?.superBuiltUpArea || undefined,
+      furnishingStatus: (initialData as any)?.furnishingStatus || '',
       powerLoad: initialData?.powerLoad || '',
       ceilingHeight: initialData?.ceilingHeight || '',
       entranceWidth: initialData?.entranceWidth || ''
@@ -66,7 +67,7 @@ export const CommercialSalePropertyDetailsStep = ({
     const saved = savedRaw ? JSON.parse(savedRaw) : null;
 
     const hasInitial = initialData && Object.values(initialData).some((v) => v !== undefined && v !== '');
-    const src: any = hasInitial ? initialData : saved;
+    const src: any = hasInitial ? { ...(saved || {}), ...(initialData as any) } : saved;
 
     if (src) {
       form.reset({
@@ -79,6 +80,7 @@ export const CommercialSalePropertyDetailsStep = ({
         floorNo: src.floorNo !== undefined ? String(src.floorNo) : '0',
         totalFloors: src.totalFloors !== undefined ? String(src.totalFloors) : '1',
         superBuiltUpArea: src.superBuiltUpArea || undefined,
+        furnishingStatus: src.furnishingStatus || '',
         powerLoad: src.powerLoad || '',
         ceilingHeight: src.ceilingHeight || '',
         entranceWidth: src.entranceWidth || ''
