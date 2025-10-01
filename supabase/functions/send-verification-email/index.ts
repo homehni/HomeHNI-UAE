@@ -12,7 +12,7 @@ const corsHeaders = {
 interface EmailRequest {
   email: string;
   name: string;
-  verificationUrl: string;
+  verificationToken: string;
 }
 
 const handler = async (req: Request): Promise<Response> => {
@@ -22,7 +22,16 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
-    const { email, name, verificationUrl }: EmailRequest = await req.json();
+    const { email, name, verificationToken }: EmailRequest = await req.json();
+
+    if (!verificationToken) {
+      return new Response(
+        JSON.stringify({ success: false, error: "Verification token is required" }),
+        { status: 400, headers: { "Content-Type": "application/json", ...corsHeaders } }
+      );
+    }
+
+    const verificationUrl = `https://homehni.in/verify-email?token=${verificationToken}`;
 
     console.log('Sending verification email to:', email);
     console.log('Verification URL:', verificationUrl);
