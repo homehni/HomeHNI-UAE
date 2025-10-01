@@ -16,6 +16,8 @@ export interface LandPlotDetails {
   landType: 'residential' | 'commercial' | 'agricultural' | 'industrial' | 'institutional';
   plotShape: 'regular' | 'irregular';
   gatedCommunity: boolean;
+  gatedProject?: 'yes' | 'no';
+  floorsAllowed?: number;
   surveyNumber?: string;
   subDivision?: string;
   villageName?: string;

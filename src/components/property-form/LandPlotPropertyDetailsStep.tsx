@@ -42,14 +42,17 @@ export const LandPlotPropertyDetailsStep: React.FC<LandPlotPropertyDetailsStepPr
   const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm<LandPlotDetailsForm>({
     resolver: zodResolver(landPlotDetailsSchema),
     defaultValues: {
-      ...initialData,
       plotArea: initialData.plotArea || undefined,
+      plotAreaUnit: initialData.plotAreaUnit || 'sq-ft',
       plotLength: initialData.plotLength || undefined,
       plotWidth: initialData.plotWidth || undefined,
-      floorsAllowed: undefined,
-      gatedProject: 'no',
+      boundaryWall: initialData.boundaryWall,
+      floorsAllowed: initialData.floorsAllowed || undefined,
+      gatedProject: initialData.gatedProject,
       gatedCommunity: initialData.gatedCommunity || false,
-      plotAreaUnit: initialData.plotAreaUnit || 'sq-ft',
+      surveyNumber: initialData.surveyNumber || '',
+      subDivision: initialData.subDivision || '',
+      villageName: initialData.villageName || '',
     }
   });
 
@@ -103,7 +106,7 @@ export const LandPlotPropertyDetailsStep: React.FC<LandPlotPropertyDetailsStepPr
                   placeholder="e.g., 1200"
                   className="h-12 flex-1 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
                 />
-                <Select onValueChange={(value) => setValue('plotAreaUnit', value as any)} defaultValue="sq-ft">
+                <Select value={watch('plotAreaUnit') || 'sq-ft'} onValueChange={(value) => setValue('plotAreaUnit', value as any)}>
                   <SelectTrigger className="h-12 w-32">
                     <SelectValue />
                   </SelectTrigger>
@@ -136,7 +139,7 @@ export const LandPlotPropertyDetailsStep: React.FC<LandPlotPropertyDetailsStepPr
               <Label htmlFor="boundaryWall" className="text-sm font-medium text-gray-700">
                 Boundary Wall
               </Label>
-              <Select onValueChange={(value) => setValue('boundaryWall', value as any)}>
+              <Select value={watch('boundaryWall') || undefined} onValueChange={(value) => setValue('boundaryWall', value as any)}>
                 <SelectTrigger className="h-12">
                   <SelectValue placeholder="Select boundary wall status" />
                 </SelectTrigger>
@@ -260,7 +263,7 @@ export const LandPlotPropertyDetailsStep: React.FC<LandPlotPropertyDetailsStepPr
               <Label className="text-sm font-medium text-gray-700">
                 Is the Land/Plot inside a gated project?
               </Label>
-              <Select onValueChange={(value) => setValue('gatedProject', value as any)}>
+              <Select value={watch('gatedProject') || undefined} onValueChange={(value) => setValue('gatedProject', value as any)}>
                 <SelectTrigger className="h-12">
                   <SelectValue placeholder="Select" />
                 </SelectTrigger>
