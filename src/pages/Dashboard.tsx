@@ -45,6 +45,7 @@ interface Property {
   images?: string[];
   videos?: string[];
   status: string;
+  rental_status?: string;
   created_at: string;
   updated_at?: string;
   owner_name?: string;
@@ -293,6 +294,7 @@ export const Dashboard: React.FC = () => {
           images: Array.isArray(payload.images) ? payload.images : [],
           videos: Array.isArray(payload.videos) ? payload.videos : [],
           status: 'pending',
+          rental_status: sub.rental_status || 'available',
           created_at: sub.created_at,
           updated_at: sub.updated_at,
           owner_name: undefined,
@@ -762,6 +764,41 @@ export const Dashboard: React.FC = () => {
       });
     } finally {
       setIsDeleting(false);
+    }
+  };
+
+  const handleTogglePropertyStatus = async (propertyId: string, currentStatus: string) => {
+    try {
+      const newStatus = currentStatus === 'available' ? 'inactive' : 'available';
+      
+      // Try updating in properties table first
+      const { error: propertiesError } = await supabase
+        .from('properties')
+        .update({ rental_status: newStatus })
+        .eq('id', propertyId);
+
+      if (propertiesError) {
+        // If not found in properties, try property_submissions
+        const { error: submissionsError } = await supabase
+          .from('property_submissions')
+          .update({ rental_status: newStatus })
+          .eq('id', propertyId);
+
+        if (submissionsError) throw submissionsError;
+      }
+
+      toast({
+        title: newStatus === 'available' ? "Property Activated" : "Property Deactivated",
+        description: `Your property is now ${newStatus === 'available' ? 'active' : 'inactive'}.`,
+      });
+      
+      fetchProperties();
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to update property status. Please try again.",
+        variant: "destructive",
+      });
     }
   };
 
@@ -1325,11 +1362,29 @@ export const Dashboard: React.FC = () => {
                               <Button
                                 variant="outline"
                                 size="sm"
-                                onClick={() => openDeleteModal('property', property.id, property.title)}
-                                className="text-xs px-3 py-1 h-7 font-normal text-red-600 hover:text-red-700"
+                                onClick={() => handleTogglePropertyStatus(property.id, property.rental_status || 'available')}
+                                className={`text-xs px-3 py-1 h-7 font-normal ${
+                                  (property.rental_status || 'available') === 'available' 
+                                    ? 'text-orange-600 hover:text-orange-700' 
+                                    : 'text-green-600 hover:text-green-700'
+                                }`}
                               >
-                                Delete
+                                {(property.rental_status || 'available') === 'available' ? 'Mark Inactive' : 'Mark Active'}
                               </Button>
+                            </div>
+
+                            {/* Status Badge */}
+                            <div className="mb-3">
+                              <Badge 
+                                variant={(property.rental_status || 'available') === 'available' ? 'default' : 'secondary'}
+                                className={`text-xs ${
+                                  (property.rental_status || 'available') === 'available'
+                                    ? 'bg-green-100 text-green-700 hover:bg-green-100'
+                                    : 'bg-gray-100 text-gray-600 hover:bg-gray-100'
+                                }`}
+                              >
+                                {(property.rental_status || 'available') === 'available' ? 'Active' : 'Inactive'}
+                              </Badge>
                             </div>
 
                             {/* Go Premium Button */}
