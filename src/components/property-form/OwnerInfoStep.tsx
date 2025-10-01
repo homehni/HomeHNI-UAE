@@ -6,6 +6,8 @@ import { OwnerInfo } from '@/types/property';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { useProfile } from '@/hooks/useProfile';
+import { useAuth } from '@/contexts/AuthContext';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -25,6 +27,8 @@ export const OwnerInfoStep: React.FC<OwnerInfoStepProps> = ({
   initialData,
   onNext
 }) => {
+  const { user } = useAuth();
+  const { profile } = useProfile();
   const [isTermsModalOpen, setIsTermsModalOpen] = useState(false);
   const [agreedToTerms, setAgreedToTerms] = useState(false);
   
@@ -45,6 +49,16 @@ export const OwnerInfoStep: React.FC<OwnerInfoStepProps> = ({
     },
     mode: 'onTouched' // Only show errors after user interaction
   });
+
+  // Auto-fill form with user profile data
+  useEffect(() => {
+    if (profile && !initialData.fullName) {
+      if (profile.full_name) setValue('fullName', profile.full_name);
+      if (user?.email) setValue('email', user.email);
+      if (profile.phone) setValue('phoneNumber', profile.phone);
+      if (profile.whatsapp_opted_in !== undefined) setValue('whatsappUpdates', profile.whatsapp_opted_in);
+    }
+  }, [profile, user, initialData.fullName, setValue]);
 
   
   const selectedPropertyType = watch('propertyType');

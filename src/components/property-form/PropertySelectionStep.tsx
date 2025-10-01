@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -8,6 +8,8 @@ import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
 import { MessageCircle } from 'lucide-react';
 import { TermsModal } from '@/components/TermsModal';
+import { useProfile } from '@/hooks/useProfile';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface PropertySelectionData {
   name: string;
@@ -26,6 +28,9 @@ interface PropertySelectionStepProps {
 export const PropertySelectionStep: React.FC<PropertySelectionStepProps> = ({
   onNext
 }) => {
+  const { user } = useAuth();
+  const { profile } = useProfile();
+  
   const [name, setName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [phoneNumber, setPhoneNumber] = useState<string>('');
@@ -34,6 +39,17 @@ export const PropertySelectionStep: React.FC<PropertySelectionStepProps> = ({
   const [selectedPropertyType, setSelectedPropertyType] = useState<'Residential' | 'Commercial' | 'Land/Plot'>('Residential');
   const [selectedListingType, setSelectedListingType] = useState<string>('');
   const [showTermsModal, setShowTermsModal] = useState(false);
+
+  // Auto-fill form with user profile data
+  useEffect(() => {
+    if (profile) {
+      if (profile.full_name) setName(profile.full_name);
+      if (user?.email) setEmail(user.email);
+      if (profile.phone) setPhoneNumber(profile.phone);
+      if (profile.location?.city) setCity(profile.location.city);
+      if (profile.whatsapp_opted_in !== undefined) setWhatsappUpdates(profile.whatsapp_opted_in);
+    }
+  }, [profile, user]);
 
   const getListingTypes = () => {
     switch (selectedPropertyType) {

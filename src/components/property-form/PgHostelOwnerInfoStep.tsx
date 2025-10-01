@@ -5,6 +5,8 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { useProfile } from '@/hooks/useProfile';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface PgHostelOwnerInfo {
   fullName: string;
@@ -27,6 +29,9 @@ export function PgHostelOwnerInfoStep({
   currentStep, 
   totalSteps 
 }: PgHostelOwnerInfoStepProps) {
+  const { user } = useAuth();
+  const { profile } = useProfile();
+  
   const [formData, setFormData] = useState<PgHostelOwnerInfo>({
     fullName: '',
     phoneNumber: '',
@@ -35,6 +40,20 @@ export function PgHostelOwnerInfoStep({
     whatsappUpdates: true,
     ...initialData,
   });
+
+  // Auto-fill form with user profile data
+  useEffect(() => {
+    if (profile && !initialData) {
+      setFormData(prev => ({
+        ...prev,
+        fullName: profile.full_name || prev.fullName,
+        email: user?.email || prev.email,
+        phoneNumber: profile.phone || prev.phoneNumber,
+        city: profile.location?.city || prev.city,
+        whatsappUpdates: profile.whatsapp_opted_in ?? prev.whatsappUpdates,
+      }));
+    }
+  }, [profile, user, initialData]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
