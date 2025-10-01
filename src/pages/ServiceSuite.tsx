@@ -20,6 +20,7 @@ const ServiceSuite = () => {
     gstCopy: [] as File[],
     servicePortfolio: [] as File[]
   });
+  const [formResetKey, setFormResetKey] = useState(0);
   
   const services = [{
     icon: Scale,
@@ -232,6 +233,7 @@ const ServiceSuite = () => {
     setSelectedStateDesktop("");
     setCities([]);
     setCitiesDesktop([]);
+    setFormResetKey((k) => k + 1); // force remount to reset Selects and custom inputs
   };
   return <div className="min-h-screen">
       <Marquee />
@@ -273,7 +275,7 @@ const ServiceSuite = () => {
             <h3 className="text-lg font-semibold text-foreground mb-1 text-uniform-center">Are you Service Provider?</h3>
             <p className="text-xs text-muted-foreground mb-3 text-uniform-center">Submit your requirements & get matched</p>
 
-            <form className="space-y-3" onSubmit={e => handleFormSubmit(e, false)} id="desktop-service-form">
+            <form className="space-y-3" onSubmit={e => handleFormSubmit(e, false)} id="desktop-service-form" key={formResetKey}>
               <Input name="companyName" type="text" placeholder="Company Name" required />
               <Input name="email" type="email" placeholder="Email ID" required />
 
@@ -322,7 +324,7 @@ const ServiceSuite = () => {
               <h3 className="text-xl font-bold text-foreground mb-2 text-uniform-center">Need Service Providers?</h3>
               <p className="text-sm text-muted-foreground mb-6 text-uniform-center">Submit your requirements & get matched</p>
 
-              <form className="space-y-4" onSubmit={e => handleFormSubmit(e, true)} id="mobile-service-form">
+              <form className="space-y-4" onSubmit={e => handleFormSubmit(e, true)} id="mobile-service-form" key={formResetKey}>
                 <Input name="companyName" type="text" placeholder="Company Name" className="h-12 text-base bg-background" required />
                 <Input name="email" type="email" placeholder="Email ID" className="h-12 text-base bg-background" required />
 
