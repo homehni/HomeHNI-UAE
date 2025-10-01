@@ -107,18 +107,7 @@ export const Auth: React.FC = () => {
     } catch (error: any) {
       const msg = (error?.message || '').toLowerCase();
       if (msg.includes('email not confirmed') || msg.includes('email_not_confirmed')) {
-        // Offer verification path and resend the link automatically
-        try {
-          const { supabase } = await import('@/integrations/supabase/client');
-          await supabase.auth.resend({
-            type: 'signup',
-            email: signInForm.email,
-            options: { emailRedirectTo: `${window.location.origin}/` }
-          });
-          setSignInMessage({ type: 'success', text: 'Email not confirmed. We re-sent the verification link. Please check your inbox.' });
-        } catch (_) {
-          setSignInMessage({ type: 'error', text: 'Email not confirmed. Please verify your email. We could not resend automatically.' });
-        }
+        setSignInMessage({ type: 'error', text: 'This account is unconfirmed. If you just disabled confirmations, confirm this user in Supabase or sign up again.' });
       } else {
         setSignInMessage({ type: 'error', text: error.message || 'Please check your credentials and try again.' });
       }
@@ -150,19 +139,29 @@ export const Auth: React.FC = () => {
     } catch (_) { /* ignore check errors and continue */ }
 
     try {
-      const signupEmail = signUpForm.email;
-      await signUpWithPassword(signUpForm.email, signUpForm.password, signUpForm.fullName);
-      
-      setSignUpMessage({ type: 'success', text: "Check your email! We've sent you a verification link. Please check your email and click the link to complete your registration." });
-      
+      const signupEmail = signUpForm.email.trim().toLowerCase();
+      const signupPassword = signUpForm.password;
+      await signUpWithPassword(signupEmail, signupPassword, signUpForm.fullName);
+
+      // Try immediate login (works when email confirmations are disabled)
+      try {
+        await signInWithPassword(signupEmail, signupPassword);
+        setSignUpMessage({ type: 'success', text: 'Account created! Signing you in...' });
+      } catch (err: any) {
+        const lc = (err?.message || '').toLowerCase();
+        if (lc.includes('email not confirmed') || lc.includes('email_not_confirmed')) {
+          setSignUpMessage({ type: 'success', text: 'Account created! You can now log in.' });
+          setActiveTab('signin');
+          setSignInForm(prev => ({ ...prev, email: signupEmail }));
+        } else {
+          setSignUpMessage({ type: 'error', text: err?.message || 'Account created, but auto-login failed. Please sign in.' });
+          setActiveTab('signin');
+          setSignInForm(prev => ({ ...prev, email: signupEmail }));
+        }
+      }
+
       // Clear signup form
       setSignUpForm({ fullName: '', email: '', password: '', confirmPassword: '' });
-      
-      // Switch to login tab and pre-fill email
-      setTimeout(() => {
-        setActiveTab('signin');
-        setSignInForm(prev => ({ ...prev, email: signupEmail }));
-      }, 1500);
     } catch (error: any) {
       console.debug('Signup error caught', {
         raw: error,
