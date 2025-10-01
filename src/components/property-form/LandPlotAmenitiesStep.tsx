@@ -61,7 +61,7 @@ export const LandPlotAmenitiesStep: React.FC<LandPlotAmenitiesStepProps> = ({
               <Label className="text-sm font-medium text-gray-700">Water Supply</Label>
               <Select value={watch('waterSupply') || undefined} onValueChange={(value) => setValue('waterSupply', value as any)}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Select" />
+                  <SelectValue placeholder="Select water supply" />
                 </SelectTrigger>
                 <SelectContent className="bg-white z-50">
                   <SelectItem value="municipal">Municipal Supply</SelectItem>
@@ -76,7 +76,7 @@ export const LandPlotAmenitiesStep: React.FC<LandPlotAmenitiesStepProps> = ({
               <Label className="text-sm font-medium text-gray-700">Electricity Connection</Label>
               <Select value={watch('electricityConnection') || undefined} onValueChange={(value) => setValue('electricityConnection', value as any)}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Select" />
+                  <SelectValue placeholder="Select electricity connection" />
                 </SelectTrigger>
                 <SelectContent className="bg-white z-50">
                   <SelectItem value="available">Available</SelectItem>
@@ -94,7 +94,7 @@ export const LandPlotAmenitiesStep: React.FC<LandPlotAmenitiesStepProps> = ({
                 <Label className="text-sm font-medium text-gray-700">Sewage Connection</Label>
                 <Select value={watch('sewageConnection') || undefined} onValueChange={(value) => setValue('sewageConnection', value as any)}>
                   <SelectTrigger>
-                    <SelectValue placeholder="Select" />
+                    <SelectValue placeholder="Select sewage connection" />
                   </SelectTrigger>
                   <SelectContent className="bg-white z-50">
                     <SelectItem value="connected">Connected</SelectItem>
