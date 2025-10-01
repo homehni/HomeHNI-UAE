@@ -25,12 +25,13 @@ const saleDetailsSchema = z.object({
   ownershipType: z.enum(['freehold', 'leasehold', 'cooperative_society', 'power_of_attorney']).optional(),
   approvedBy: z.string().optional(),
   clearTitles: z.boolean().optional(),
+  description: z.string().optional(),
 });
 
 type SaleDetailsForm = z.infer<typeof saleDetailsSchema>;
 
 interface LandPlotSaleDetailsStepProps {
-  initialData: Partial<LandPlotSaleDetails>;
+  initialData: Partial<LandPlotSaleDetails> & { description?: string };
   onNext: (data: SaleDetailsForm) => void;
   onBack: () => void;
 }
@@ -49,6 +50,7 @@ export const LandPlotSaleDetailsStep: React.FC<LandPlotSaleDetailsStepProps> = (
       ownershipType: initialData.ownershipType,
       approvedBy: initialData.approvedBy?.join(', ') || '',
       clearTitles: initialData.clearTitles ?? true,
+      description: initialData.description || '',
     }
   });
 
@@ -222,6 +224,19 @@ export const LandPlotSaleDetailsStep: React.FC<LandPlotSaleDetailsStepProps> = (
             {errors.approvedBy && (
               <p className="text-red-500 text-sm">{errors.approvedBy.message}</p>
             )}
+          </div>
+
+          {/* Description */}
+          <div className="space-y-2">
+            <Label htmlFor="description" className="text-sm font-medium text-gray-700">
+              Description
+            </Label>
+            <Textarea
+              id="description"
+              {...register('description')}
+              placeholder="Write a few lines about your property something which is special and makes your property stand out. Please do not mention your contact details in any format."
+              className="min-h-[100px] resize-none"
+            />
           </div>
 
           {/* Navigation Buttons - Removed, using sticky buttons instead */}
