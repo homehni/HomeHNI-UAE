@@ -767,36 +767,34 @@ export const Dashboard: React.FC = () => {
     }
   };
 
-  const handleTogglePropertyStatus = async (propertyId: string, currentStatus: string) => {
+  const handleTogglePropertyStatus = async (property: CombinedProperty) => {
+    const propertyId = property.id;
+    const currentStatus = property.rental_status || 'available';
     const newStatus = currentStatus === 'available' ? 'inactive' : 'available';
 
-    // Optimistic update so UI reflects immediately
-    setProperties((prev) =>
-      prev.map((p) => (p.id === propertyId ? { ...p, rental_status: newStatus } : p))
-    );
+    // Optimistic UI
+    setProperties((prev) => prev.map((p) => (p.id === propertyId ? { ...p, rental_status: newStatus } : p)));
 
     try {
-      // Try updating in properties table and check affected rows
-      const { data: propsUpdated, error: propertiesError } = await supabase
+      // Try properties table first
+      const { data: propsUpdated, error: propsErr } = await supabase
         .from('properties')
         .update({ rental_status: newStatus })
         .eq('id', propertyId)
         .select('id');
 
-      if (propertiesError) throw propertiesError;
+      if (propsErr) throw propsErr;
 
-      // If no row was updated in properties, try property_submissions
       if (!propsUpdated || propsUpdated.length === 0) {
-        const { data: subsUpdated, error: submissionsError } = await supabase
+        // Fallback to submissions table
+        const { data: subsUpdated, error: subsErr } = await supabase
           .from('property_submissions')
           .update({ rental_status: newStatus })
           .eq('id', propertyId)
           .select('id');
 
-        if (submissionsError) throw submissionsError;
-        if (!subsUpdated || subsUpdated.length === 0) {
-          throw new Error('No matching property found to update');
-        }
+        if (subsErr) throw subsErr;
+        if (!subsUpdated || subsUpdated.length === 0) throw new Error('No matching property found to update');
       }
 
       toast({
@@ -804,19 +802,12 @@ export const Dashboard: React.FC = () => {
         description: `Your property is now ${newStatus === 'available' ? 'active' : 'inactive'}.`,
       });
 
-      // Refresh from server to keep in sync
       fetchProperties();
     } catch (error) {
-      // Revert optimistic update on failure
-      setProperties((prev) =>
-        prev.map((p) => (p.id === propertyId ? { ...p, rental_status: currentStatus } : p))
-      );
-
-      toast({
-        title: 'Error',
-        description: 'Failed to update property status. Please try again.',
-        variant: 'destructive',
-      });
+      console.error('Toggle property status failed', error);
+      // Revert optimistic UI
+      setProperties((prev) => prev.map((p) => (p.id === propertyId ? { ...p, rental_status: currentStatus } : p)));
+      toast({ title: 'Error', description: 'Failed to update property status. Please try again.', variant: 'destructive' });
     }
   };
 
@@ -1384,7 +1375,7 @@ export const Dashboard: React.FC = () => {
                               <Button
                                 variant="outline"
                                 size="sm"
-                                onClick={() => handleTogglePropertyStatus(property.id, property.rental_status || 'available')}
+                                onClick={() => handleTogglePropertyStatus(property)}
                                 className={`text-xs px-3 py-1 h-7 font-normal ${
                                   (property.rental_status || 'available') === 'available' 
                                     ? 'text-orange-600 hover:text-orange-700' 
