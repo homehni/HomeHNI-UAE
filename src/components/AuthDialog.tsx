@@ -87,7 +87,19 @@ export const AuthDialog: React.FC<AuthDialogProps> = ({
     } catch (error: any) {
       const msg = (error?.message || '').toLowerCase();
       if (msg.includes('email not confirmed') || msg.includes('email_not_confirmed')) {
-        setSignInMessage({ type: 'error', text: 'This account is unconfirmed. If you turned off confirmations, confirm this user in Supabase or sign up again.' });
+        try {
+          setSignInMessage({ type: 'success', text: 'Confirming your account, please wait...' });
+          const res = await fetch('https://geenmplkdgmlovvgwzai.supabase.co/functions/v1/confirm-user', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: signInForm.email.trim().toLowerCase() })
+          });
+          if (!res.ok) throw new Error('Auto-confirm failed');
+          await signInWithPassword(signInForm.email, signInForm.password);
+          return;
+        } catch (_) {
+          setSignInMessage({ type: 'error', text: 'Could not auto-confirm this account. Please try again or sign up once more.' });
+        }
       } else if (msg.includes('invalid') || msg.includes('wrong') || msg.includes('incorrect')) {
         setSignInMessage({ type: 'error', text: 'Invalid email or password. Please try again.' });
       } else {
@@ -137,9 +149,21 @@ export const AuthDialog: React.FC<AuthDialogProps> = ({
       } catch (err: any) {
         const lc = (err?.message || '').toLowerCase();
         if (lc.includes('email not confirmed') || lc.includes('email_not_confirmed')) {
-          setSignUpMessage({ type: 'success', text: 'Account created! You can now log in.' });
-          setActiveTab('signin');
-          setSignInForm(prev => ({ ...prev, email: signupEmail }));
+          try {
+            setSignUpMessage({ type: 'success', text: 'Finalizing your account. Please wait...' });
+            const res = await fetch('https://geenmplkdgmlovvgwzai.supabase.co/functions/v1/confirm-user', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ email: signupEmail })
+            });
+            if (!res.ok) throw new Error('Auto-confirm failed');
+            await signInWithPassword(signupEmail, signupPassword);
+            setSignUpMessage({ type: 'success', text: 'Account confirmed! Signing you in...' });
+          } catch (_) {
+            setSignUpMessage({ type: 'success', text: 'Account created! Please try logging in now.' });
+            setActiveTab('signin');
+            setSignInForm(prev => ({ ...prev, email: signupEmail }));
+          }
         } else {
           setSignUpMessage({ type: 'error', text: err?.message || 'Account created, but auto-login failed. Please sign in.' });
           setActiveTab('signin');
