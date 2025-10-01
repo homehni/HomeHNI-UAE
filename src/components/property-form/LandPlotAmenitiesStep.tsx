@@ -38,9 +38,9 @@ export const LandPlotAmenitiesStep: React.FC<LandPlotAmenitiesStepProps> = ({
   const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm<AmenitiesForm>({
     resolver: zodResolver(amenitiesSchema),
     defaultValues: {
-      waterSupply: (initialData as any)?.waterSupply ?? 'municipal',
-      electricityConnection: (initialData as any)?.electricityConnection ?? 'available',
-      sewageConnection: (initialData as any)?.sewageConnection ?? 'connected',
+      waterSupply: (initialData as any)?.waterSupply ?? undefined,
+      electricityConnection: (initialData as any)?.electricityConnection ?? undefined,
+      sewageConnection: (initialData as any)?.sewageConnection ?? undefined,
       roadWidth: (initialData as any)?.roadWidth,
       gatedSecurity: (initialData as any)?.gatedSecurity ?? false,
       directionsToProperty: (initialData as any)?.directionsToProperty ?? '',
