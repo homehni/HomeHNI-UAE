@@ -361,12 +361,7 @@ const Header = () => {
                 </div>
               )}
 
-              {/* Desktop: Post Requirement Button */}
-              <div>
-                <Button variant="outline" size="sm" onClick={() => navigate('/post-service')} className={`font-medium px-3 py-1.5 text-sm transition-all duration-500 ${isScrolled ? 'bg-white text-brand-red border-gray-300 hover:bg-gray-50' : 'bg-white text-brand-red border-white/50 hover:bg-white/90'}`}>
-                  <span>Post Requirement</span>
-                </Button>
-              </div>
+              {/* Desktop: Post Requirement Button - Hidden */}
 
               {/* Login/Sign Up button for unauthenticated users - Desktop only */}
               {!user && (
