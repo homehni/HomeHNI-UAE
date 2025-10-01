@@ -228,70 +228,94 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
     }}>
         {/* Mobile Search Section - overlapping 50% at bottom of hero */}
         <div className="sm:hidden absolute bottom-4 left-2 right-2 transform translate-y-1/2">
-          <div className="bg-white rounded-lg shadow-xl border border-gray-100 p-3">
-            {/* City Selector - Mobile */}
-            <div className="mb-3">
-              <Select value={selectedCity} onValueChange={setSelectedCity}>
-                <SelectTrigger className="h-10 border border-brand-red rounded-lg focus:ring-2 focus:ring-brand-red/20 bg-white text-sm">
-                  <SelectValue placeholder="Select City" />
-                </SelectTrigger>
-                <SelectContent className="bg-white border border-gray-200 rounded-lg shadow-lg z-50">
-                  <SelectItem value="bangalore" className="text-sm">Bangalore</SelectItem>
-                  <SelectItem value="mumbai" className="text-sm">Mumbai</SelectItem>
-                  <SelectItem value="delhi" className="text-sm">Delhi</SelectItem>
-                  <SelectItem value="pune" className="text-sm">Pune</SelectItem>
-                  <SelectItem value="hyderabad" className="text-sm">Hyderabad</SelectItem>
-                  <SelectItem value="chennai" className="text-sm">Chennai</SelectItem>
-                  <SelectItem value="kolkata" className="text-sm">Kolkata</SelectItem>
-                  <SelectItem value="ahmedabad" className="text-sm">Ahmedabad</SelectItem>
-                  <SelectItem value="jaipur" className="text-sm">Jaipur</SelectItem>
-                </SelectContent>
-              </Select>
+          <div className="bg-white rounded-lg shadow-xl border border-gray-100 overflow-hidden">
+            {/* Tabs - Mobile */}
+            <div className="flex border-b border-gray-200">
+              {navigationTabs.map(tab => (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`flex-1 py-3 text-sm font-medium transition-all relative ${
+                    activeTab === tab.id
+                      ? 'text-brand-red'
+                      : 'text-gray-500'
+                  }`}
+                >
+                  {tab.label}
+                  {activeTab === tab.id && (
+                    <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-brand-red" />
+                  )}
+                </button>
+              ))}
             </div>
 
-            {/* Selected Location Tags */}
-            {selectedLocations.length > 0 && (
-              <div className="flex flex-wrap gap-2 mb-3">
-                {selectedLocations.map((location, index) => (
-                  <div
-                    key={index}
-                    className="inline-flex items-center gap-1 bg-brand-red text-white px-3 py-1 rounded-full text-sm font-medium"
-                  >
-                    {location}
-                    <button
-                      onClick={() => removeLocation(location)}
-                      className="ml-1 hover:bg-brand-red-dark rounded-full p-0.5"
-                    >
-                      <X size={12} />
-                    </button>
-                  </div>
-                ))}
+            {/* Search Content */}
+            <div className="p-3">
+              {/* City Selector - Mobile */}
+              <div className="mb-3">
+                <Select value={selectedCity} onValueChange={setSelectedCity}>
+                  <SelectTrigger className="h-10 border border-brand-red rounded-lg focus:ring-2 focus:ring-brand-red/20 bg-white text-sm">
+                    <SelectValue placeholder="Select City" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-white border border-gray-200 rounded-lg shadow-lg z-50">
+                    <SelectItem value="bangalore" className="text-sm">Bangalore</SelectItem>
+                    <SelectItem value="mumbai" className="text-sm">Mumbai</SelectItem>
+                    <SelectItem value="delhi" className="text-sm">Delhi</SelectItem>
+                    <SelectItem value="pune" className="text-sm">Pune</SelectItem>
+                    <SelectItem value="hyderabad" className="text-sm">Hyderabad</SelectItem>
+                    <SelectItem value="chennai" className="text-sm">Chennai</SelectItem>
+                    <SelectItem value="kolkata" className="text-sm">Kolkata</SelectItem>
+                    <SelectItem value="ahmedabad" className="text-sm">Ahmedabad</SelectItem>
+                    <SelectItem value="jaipur" className="text-sm">Jaipur</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
-            )}
 
-            {/* Search Input and Button */}
-            <div className="flex gap-2">
-              <div className="relative flex-1">
-                <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-brand-red" />
-                <input 
-                  ref={mobileInputRef} 
-                  type="text" 
-                  placeholder={!selectedCity ? "Select a city first..." : selectedLocations.length >= 3 ? "Max 3 locations selected" : selectedLocations.length > 0 ? `Add location ${selectedLocations.length + 1}/3` : "Search locality..."} 
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  onKeyPress={handleKeyPress}
-                  disabled={selectedLocations.length >= 3 || !selectedCity}
-                  className="w-full pl-9 pr-3 py-2.5 bg-gray-50 border border-brand-red rounded-lg text-brand-red placeholder-brand-red/60 focus:outline-none focus:ring-2 focus:ring-brand-red focus:border-transparent text-sm disabled:opacity-50" 
-                />
+              {/* Selected Location Tags */}
+              {selectedLocations.length > 0 && (
+                <div className="flex flex-wrap gap-2 mb-3">
+                  {selectedLocations.map((location, index) => (
+                    <div
+                      key={index}
+                      className="inline-flex items-center gap-1 bg-brand-red text-white px-3 py-1 rounded-full text-sm font-medium"
+                    >
+                      {location}
+                      <button
+                        onClick={() => removeLocation(location)}
+                        className="ml-1 hover:bg-brand-red-dark rounded-full p-0.5"
+                      >
+                        <X size={12} />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* Search Input and Button */}
+              <div className="flex gap-2">
+                <div className="relative flex-1">
+                  <input 
+                    ref={mobileInputRef} 
+                    type="text" 
+                    placeholder={!selectedCity ? "Select city first" : selectedLocations.length >= 3 ? "Max 3 locations" : "Search by locality or landmark"} 
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onKeyPress={handleKeyPress}
+                    disabled={selectedLocations.length >= 3 || !selectedCity}
+                    className="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-lg text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-red/20 focus:border-brand-red text-sm disabled:opacity-50 disabled:bg-gray-50" 
+                  />
+                </div>
+                
+                <Button 
+                  onClick={handleSearch}
+                  disabled={selectedLocations.length === 0 && !searchQuery.trim()}
+                  className="h-10 w-10 p-0 bg-brand-red hover:bg-brand-red-dark text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                  </svg>
+                </Button>
               </div>
-              
-              <Button 
-                onClick={handleSearch}
-                disabled={selectedLocations.length === 0 && !searchQuery.trim()}
-                className="h-10 px-4 bg-brand-red hover:bg-brand-red-dark text-white font-medium whitespace-nowrap text-sm disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                Search
-              </Button>
             </div>
           </div>
         </div>
