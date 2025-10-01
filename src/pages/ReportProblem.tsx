@@ -7,6 +7,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Marquee from '@/components/Marquee';
 import { CheckCircle, AlertCircle } from 'lucide-react';
+import { sendReportProblemEmail } from '@/services/emailService';
 
 const ReportProblem = () => {
   const [formData, setFormData] = useState({
@@ -20,7 +21,7 @@ const ReportProblem = () => {
     type: 'success' | 'error';
   } | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!formData.name || !formData.email || !formData.feedbackType || !formData.feedback) {
@@ -31,19 +32,32 @@ const ReportProblem = () => {
       return;
     }
 
-    // Here you would typically send the data to your backend
-    setMessage({
-      text: "Thank you for your feedback. We'll get back to you soon!",
-      type: "success"
-    });
+    try {
+      // Send email
+      await sendReportProblemEmail(formData.email, formData.name, {
+        emailId: formData.email,
+        feedbackType: formData.feedbackType,
+        feedbackDetails: formData.feedback
+      });
+      
+      setMessage({
+        text: "Thank you for your feedback. We'll get back to you soon!",
+        type: "success"
+      });
 
-    // Reset form
-    setFormData({
-      name: '',
-      email: '',
-      feedbackType: '',
-      feedback: ''
-    });
+      // Reset form
+      setFormData({
+        name: '',
+        email: '',
+        feedbackType: '',
+        feedback: ''
+      });
+    } catch (error) {
+      setMessage({
+        text: "Failed to submit feedback. Please try again.",
+        type: "error"
+      });
+    }
   };
 
   return (

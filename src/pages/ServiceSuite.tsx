@@ -9,6 +9,7 @@ import { Building2, Users, FileText, Wrench, PaintBucket, Truck, Clock, CheckCir
 import Marquee from "@/components/Marquee";
 import Header from "@/components/Header";
 import { CategorizedImageUpload } from "@/components/CategorizedImageUpload";
+import { sendServiceProviderEmail } from "@/services/emailService";
 const ServiceSuite = () => {
   const [statesData, setStatesData] = useState<any>(null);
   const [selectedState, setSelectedState] = useState("");
@@ -182,7 +183,7 @@ const ServiceSuite = () => {
     }
     canonical.setAttribute('href', window.location.origin + '/service-suite');
   }, []);
-  const handleFormSubmit = (e: React.FormEvent, isMobile = false) => {
+  const handleFormSubmit = async (e: React.FormEvent, isMobile = false) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget as HTMLFormElement);
 
@@ -196,6 +197,26 @@ const ServiceSuite = () => {
       });
       return;
     }
+    
+    const data = {
+      phoneNumber: formData.get('phone') as string,
+      emailId: formData.get('email') as string,
+      companyName: formData.get('text') as string,
+      serviceType: formData.get('serviceType') as string,
+      state: formData.get('state') as string,
+      city: formData.get('city') as string,
+    };
+    
+    // Send email
+    await sendServiceProviderEmail(data.emailId, data.companyName, {
+      companyName: data.companyName,
+      serviceType: data.serviceType,
+      phoneNumber: data.phoneNumber,
+      emailId: data.emailId,
+      state: data.state,
+      city: data.city
+    });
+    
     // Show success toast
     toast({
       title: "Requirements Submitted Successfully!",

@@ -9,6 +9,7 @@ import { Upload, FileText, X } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Marquee from '@/components/Marquee';
+import { sendCareerApplicationEmail } from '@/services/emailService';
 const Careers = () => {
   // Career page component
   const [statesData, setStatesData] = useState<any>(null);
@@ -159,8 +160,27 @@ const Careers = () => {
             <CardContent className="p-4">
               <h3 className="text-xl font-semibold text-foreground mb-1 text-uniform-center">Apply for a Position</h3>
 
-              <form className="space-y-3" onSubmit={e => {
+              <form className="space-y-3" onSubmit={async e => {
               e.preventDefault();
+              const formData = new FormData(e.currentTarget as HTMLFormElement);
+              const data = {
+                userName: formData.get('name') as string,
+                phoneNumber: formData.get('phone') as string,
+                emailId: formData.get('email') as string,
+                state: formData.get('state') as string,
+                city: formData.get('city') as string,
+                positionOfInterest: formData.get('position') as string,
+              };
+              
+              // Send email
+              await sendCareerApplicationEmail(data.emailId, data.userName, {
+                phoneNumber: data.phoneNumber,
+                emailId: data.emailId,
+                state: data.state,
+                city: data.city,
+                positionOfInterest: data.positionOfInterest
+              });
+              
               toast({
                 title: "Application submitted successfully!",
                 description: "We will review your application and get back to you soon.",
@@ -280,8 +300,27 @@ const Careers = () => {
             <CardContent className="p-6">
               <h3 className="text-2xl font-bold text-foreground mb-2 text-uniform-center">Apply for a Position</h3>
 
-                <form className="space-y-4" onSubmit={e => {
+                <form className="space-y-4" onSubmit={async e => {
                 e.preventDefault();
+                const formData = new FormData(e.currentTarget as HTMLFormElement);
+                const data = {
+                  userName: formData.get('name') as string,
+                  phoneNumber: formData.get('phone') as string,
+                  emailId: formData.get('email') as string,
+                  state: formData.get('state') as string,
+                  city: formData.get('city') as string,
+                  positionOfInterest: formData.get('position') as string,
+                };
+                
+                // Send email
+                await sendCareerApplicationEmail(data.emailId, data.userName, {
+                  phoneNumber: data.phoneNumber,
+                  emailId: data.emailId,
+                  state: data.state,
+                  city: data.city,
+                  positionOfInterest: data.positionOfInterest
+                });
+                
                 toast({
                   title: "Application submitted successfully!",
                   description: "We will review your application and get back to you soon.",

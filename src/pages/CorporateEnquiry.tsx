@@ -7,6 +7,7 @@ import { Search, FileText, Truck, Paintbrush, Sparkles, Snowflake, Building, Use
 import Header from '@/components/Header';
 import Marquee from '@/components/Marquee';
 import { useToast } from '@/hooks/use-toast';
+import { sendCorporateEnquiryEmail } from '@/services/emailService';
 
 // Import company logos
 import companyLogo1 from '@/assets/company-logo-1.png';
@@ -40,8 +41,18 @@ const CorporateEnquiry = () => {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Send email
+    await sendCorporateEnquiryEmail(formData.email, formData.name, {
+      companyName: formData.company,
+      phoneNumber: formData.phone,
+      officialEmail: formData.email,
+      city: formData.city,
+      numberOfEmployees: formData.employees
+    });
+    
     toast({
       title: "Enquiry Submitted Successfully",
       description: "Our team will reach out with a custom offer plan for your company."
@@ -64,8 +75,18 @@ const CorporateEnquiry = () => {
     }));
   };
 
-  const handleStickySubmit = (e: React.FormEvent) => {
+  const handleStickySubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Send email
+    await sendCorporateEnquiryEmail(stickyFormData.email, stickyFormData.name, {
+      companyName: stickyFormData.company,
+      phoneNumber: stickyFormData.phone,
+      officialEmail: stickyFormData.email,
+      city: stickyFormData.city,
+      numberOfEmployees: stickyFormData.employees
+    });
+    
     toast({
       title: "Enquiry Submitted Successfully",
       description: "Our team will reach out with a custom offer plan for your company."

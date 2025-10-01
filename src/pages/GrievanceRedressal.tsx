@@ -12,6 +12,7 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { useToast } from '@/components/ui/use-toast';
+import { sendGrievanceRedressalEmail } from '@/services/emailService';
 
 const grievanceSchema = z.object({
   name: z.string().min(1, 'Name is required'),
@@ -70,10 +71,16 @@ const GrievanceRedressal = () => {
   const onSubmit = async (data: GrievanceFormData) => {
     setIsSubmitting(true);
     
-    // Simulate form submission
     try {
-      // In a real implementation, you would send this data to your backend
-      console.log('Grievance form submitted:', data);
+      // Send email
+      await sendGrievanceRedressalEmail(data.email, data.name, {
+        emailId: data.email,
+        contactNumber: data.contactNumber,
+        urlOfPage: data.url,
+        platformSection: data.platform || '',
+        natureOfComplaint: data.complaintNature || '',
+        complaintDetails: data.description
+      });
       
       // Show success message
       toast({

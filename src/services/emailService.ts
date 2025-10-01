@@ -467,3 +467,118 @@ export async function sendServicesApplicationEmail(
     }
   });
 }
+
+// 19. Service Provider Email - Send when service provider applies
+export async function sendServiceProviderEmail(
+  userEmail: string,
+  userName: string,
+  providerData: {
+    companyName: string;
+    serviceType: string;
+    phoneNumber: string;
+    emailId: string;
+    state: string;
+    city: string;
+  }
+) {
+  return sendEmail('/send-service-provider-email', {
+    to: userEmail,
+    userName: userName || 'Service Provider',
+    companyName: providerData.companyName,
+    serviceType: providerData.serviceType,
+    phoneNumber: providerData.phoneNumber,
+    emailId: providerData.emailId,
+    state: providerData.state,
+    city: providerData.city
+  });
+}
+
+// 20. Career Application Email - Send when candidate applies
+export async function sendCareerApplicationEmail(
+  userEmail: string,
+  userName: string,
+  careerData: {
+    phoneNumber: string;
+    emailId: string;
+    state: string;
+    city: string;
+    positionOfInterest: string;
+  }
+) {
+  return sendEmail('/send-career-application-email', {
+    to: userEmail,
+    userName: userName || 'Candidate',
+    phoneNumber: careerData.phoneNumber,
+    emailId: careerData.emailId,
+    state: careerData.state,
+    city: careerData.city,
+    positionOfInterest: careerData.positionOfInterest
+  });
+}
+
+// 21. Corporate Enquiry Email - Send when corporate enquiry is submitted
+export async function sendCorporateEnquiryEmail(
+  userEmail: string,
+  userName: string,
+  corporateData: {
+    companyName: string;
+    phoneNumber: string;
+    officialEmail: string;
+    city: string;
+    numberOfEmployees: string;
+  }
+) {
+  return sendEmail('/send-corporate-enquiry-email', {
+    to: userEmail,
+    userName: userName || 'Corporate Partner',
+    companyName: corporateData.companyName,
+    phoneNumber: corporateData.phoneNumber,
+    officialEmail: corporateData.officialEmail,
+    city: corporateData.city,
+    numberOfEmployees: corporateData.numberOfEmployees
+  });
+}
+
+// 22. Grievance Redressal Email - Send when grievance is submitted
+export async function sendGrievanceRedressalEmail(
+  userEmail: string,
+  userName: string,
+  grievanceData: {
+    emailId: string;
+    contactNumber: string;
+    urlOfPage?: string;
+    platformSection: string;
+    natureOfComplaint: string;
+    complaintDetails?: string;
+  }
+) {
+  return sendEmail('/send-grievance-redressal-email', {
+    to: userEmail,
+    userName: userName || 'Valued Customer',
+    emailId: grievanceData.emailId,
+    contactNumber: grievanceData.contactNumber,
+    urlOfPage: grievanceData.urlOfPage,
+    platformSection: grievanceData.platformSection,
+    natureOfComplaint: grievanceData.natureOfComplaint,
+    complaintDetails: grievanceData.complaintDetails
+  });
+}
+
+// 23. Report Problem Email - Send when problem is reported
+export async function sendReportProblemEmail(
+  userEmail: string,
+  userName: string,
+  problemData: {
+    emailId: string;
+    feedbackType: string;
+    feedbackDetails?: string;
+  }
+) {
+  return sendEmail('/send-report-problem-email', {
+    to: userEmail,
+    userName: userName || 'User',
+    emailId: problemData.emailId,
+    feedbackType: problemData.feedbackType,
+    feedbackDetails: problemData.feedbackDetails
+  });
+}
