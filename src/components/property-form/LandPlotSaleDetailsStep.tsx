@@ -20,12 +20,11 @@ import { formatPriceDisplay } from '@/utils/priceFormatter';
 
 const saleDetailsSchema = z.object({
   expectedPrice: z.number().optional().or(z.nan()).transform(val => isNaN(val) ? undefined : val),
-  availableFrom: z.date().optional(),
-  currentlyUnderLoan: z.boolean().optional(),
+  possessionDate: z.date().optional(),
   priceNegotiable: z.boolean().optional(),
-  ownershipType: z.enum(['freehold', 'leasehold', 'power_of_attorney']).optional(),
+  ownershipType: z.enum(['freehold', 'leasehold', 'cooperative_society', 'power_of_attorney']).optional(),
   approvedBy: z.string().optional(),
-  description: z.string().optional(),
+  clearTitles: z.boolean().optional(),
 });
 
 type SaleDetailsForm = z.infer<typeof saleDetailsSchema>;
@@ -45,14 +44,26 @@ export const LandPlotSaleDetailsStep: React.FC<LandPlotSaleDetailsStepProps> = (
     resolver: zodResolver(saleDetailsSchema),
     defaultValues: {
       expectedPrice: initialData.expectedPrice,
-      currentlyUnderLoan: false,
-      priceNegotiable: false,
-      description: '',
+      possessionDate: initialData.possessionDate ? new Date(initialData.possessionDate) : undefined,
+      priceNegotiable: initialData.priceNegotiable ?? false,
+      ownershipType: initialData.ownershipType,
+      approvedBy: initialData.approvedBy?.join(', ') || '',
+      clearTitles: initialData.clearTitles ?? true,
     }
   });
 
-  const selectedDate = watch('availableFrom');
+  const selectedDate = watch('possessionDate');
   const [isDatePickerOpen, setIsDatePickerOpen] = React.useState(false);
+
+  const handleFormSubmit = (data: SaleDetailsForm) => {
+    // Transform the data to match LandPlotSaleDetails type
+    const transformedData = {
+      ...data,
+      possessionDate: data.possessionDate ? format(data.possessionDate, 'yyyy-MM-dd') : undefined,
+      approvedBy: data.approvedBy ? data.approvedBy.split(',').map(s => s.trim()).filter(Boolean) : undefined,
+    };
+    onNext(transformedData as any);
+  };
 
 
   return (
@@ -62,7 +73,7 @@ export const LandPlotSaleDetailsStep: React.FC<LandPlotSaleDetailsStepProps> = (
             Sale Details
           </h2>
         </div>
-        <form onSubmit={handleSubmit(onNext)} className="space-y-6">
+        <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-6">
           {/* Expected Price and Available From in same row */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Expected Price Column */}
@@ -94,6 +105,7 @@ export const LandPlotSaleDetailsStep: React.FC<LandPlotSaleDetailsStepProps> = (
               <div className="flex items-center space-x-2">
                 <Checkbox
                   id="priceNegotiable"
+                  checked={watch('priceNegotiable')}
                   onCheckedChange={(checked) => setValue('priceNegotiable', !!checked)}
                 />
                 <Label htmlFor="priceNegotiable" className="text-sm text-gray-700">
@@ -102,11 +114,11 @@ export const LandPlotSaleDetailsStep: React.FC<LandPlotSaleDetailsStepProps> = (
               </div>
             </div>
 
-            {/* Available From Column */}
+            {/* Possession Date Column */}
             <div className="space-y-4">
               <div className="space-y-2">
                 <Label className="text-sm font-medium text-gray-700">
-                  Available From
+                  Possession Date
                 </Label>
                 <Popover open={isDatePickerOpen} onOpenChange={setIsDatePickerOpen}>
                   <PopoverTrigger asChild>
@@ -126,13 +138,13 @@ export const LandPlotSaleDetailsStep: React.FC<LandPlotSaleDetailsStepProps> = (
                       mode="single"
                       selected={selectedDate}
                       onSelect={(date) => {
-                        setValue('availableFrom', date!);
+                        setValue('possessionDate', date!);
                         setIsDatePickerOpen(false);
                       }}
                       disabled={(date) => {
                         const today = new Date();
                         today.setHours(0, 0, 0, 0);
-                        const maxDate = addMonths(today, 6); // 6 months for plot sale
+                        const maxDate = addMonths(today, 6);
                         return date < today || date > maxDate;
                       }}
                       initialFocus
@@ -140,19 +152,20 @@ export const LandPlotSaleDetailsStep: React.FC<LandPlotSaleDetailsStepProps> = (
                     />
                   </PopoverContent>
                 </Popover>
-                {errors.availableFrom && (
-                  <p className="text-red-500 text-sm">{errors.availableFrom.message}</p>
+                {errors.possessionDate && (
+                  <p className="text-red-500 text-sm">{errors.possessionDate.message}</p>
                 )}
               </div>
               
-              {/* Currently Under Loan under Available From */}
+              {/* Clear Titles checkbox */}
               <div className="flex items-center space-x-2">
                 <Checkbox
-                  id="currentlyUnderLoan"
-                  onCheckedChange={(checked) => setValue('currentlyUnderLoan', !!checked)}
+                  id="clearTitles"
+                  checked={watch('clearTitles')}
+                  onCheckedChange={(checked) => setValue('clearTitles', !!checked)}
                 />
-                <Label htmlFor="currentlyUnderLoan" className="text-sm text-gray-700">
-                  Currently Under Loan
+                <Label htmlFor="clearTitles" className="text-sm text-gray-700">
+                  Clear Titles
                 </Label>
               </div>
             </div>
@@ -186,36 +199,29 @@ export const LandPlotSaleDetailsStep: React.FC<LandPlotSaleDetailsStepProps> = (
                   Power of Attorney
                 </Label>
               </div>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="cooperative_society" id="cooperative_society" />
+                <Label htmlFor="cooperative_society" className="text-sm text-gray-700 cursor-pointer">
+                  Cooperative Society
+                </Label>
+              </div>
             </RadioGroup>
           </div>
 
           {/* Authority Approval */}
           <div className="space-y-2">
             <Label htmlFor="approvedBy" className="text-sm font-medium text-gray-700">
-              Which authority the property is approved by ?
+              Which authority the property is approved by?
             </Label>
             <Input
               id="approvedBy"
               {...register('approvedBy')}
-              placeholder="Enter the name of the authority"
+              placeholder="Enter authority names (comma separated)"
               className="h-12"
             />
             {errors.approvedBy && (
               <p className="text-red-500 text-sm">{errors.approvedBy.message}</p>
             )}
-          </div>
-
-          {/* Description */}
-          <div className="space-y-2">
-            <Label htmlFor="description" className="text-sm font-medium text-gray-700">
-              Description
-            </Label>
-            <Textarea
-              id="description"
-              {...register('description')}
-              placeholder="Write a few lines about your property something which is special and makes your property stand out. Please do not mention your contact details in any format."
-              className="min-h-[100px] resize-none"
-            />
           </div>
 
           {/* Navigation Buttons - Removed, using sticky buttons instead */}
