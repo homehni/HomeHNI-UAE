@@ -49,7 +49,7 @@ export const LandPlotSaleDetailsStep: React.FC<LandPlotSaleDetailsStepProps> = (
       priceNegotiable: initialData.priceNegotiable ?? false,
       ownershipType: initialData.ownershipType,
       approvedBy: initialData.approvedBy?.join(', ') || '',
-      clearTitles: initialData.clearTitles ?? true,
+      clearTitles: initialData.clearTitles ?? false,
       description: initialData.description || '',
     }
   });
