@@ -184,50 +184,34 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       });
 
       if (error) {
-        let message = 'Sign up failed';
-        let errorCode = '';
         console.log('Supabase function error:', error);
+        let message = 'Sign up failed';
+        
+        // Try to extract the actual error message from the response
         try {
           const resp = (error as any)?.context?.response;
           if (resp) {
             const json = await resp.json();
-            message = json?.error || message;
-            errorCode = json?.code || '';
+            message = json?.error || json?.message || message;
           }
-        } catch {}
-        
-        // Provide user-friendly messages for common errors
-        if (message.toLowerCase().includes('email') && (message.toLowerCase().includes('already') || message.toLowerCase().includes('exists') || message.toLowerCase().includes('registered'))) {
-          message = 'This email is already registered. Please try logging in instead.';
-        } else if (message.toLowerCase().includes('duplicate key')) {
-          message = 'This email is already registered. Please try logging in instead.';
+        } catch {
+          // If we can't parse the response, use the error message directly
+          message = error.message || message;
         }
         
         // Also log for auditing; ignore failures
         try { await AuditService.logAuthEvent('User Signup Failed', email, false, message); } catch {}
         
-        const errorObj = new Error(message) as any;
-        errorObj.code = errorCode;
-        throw errorObj;
+        throw new Error(message);
       }
 
       if (!data?.success) {
-        let msg = data?.error || 'Failed to create user';
-        const code = data?.code || '';
+        const msg = data?.error || 'Failed to create user';
         console.log('Signup failed with message:', msg);
-        
-        // Provide user-friendly messages for common errors
-        if (msg.toLowerCase().includes('email') && (msg.toLowerCase().includes('already') || msg.toLowerCase().includes('exists') || msg.toLowerCase().includes('registered'))) {
-          msg = 'This email is already registered. Please try logging in instead.';
-        } else if (msg.toLowerCase().includes('duplicate key')) {
-          msg = 'This email is already registered. Please try logging in instead.';
-        }
         
         try { await AuditService.logAuthEvent('User Signup Failed', email, false, msg); } catch {}
         
-        const errorObj = new Error(msg) as any;
-        errorObj.code = code;
-        throw errorObj;
+        throw new Error(msg);
       }
 
       // Send welcome email after successful signup
