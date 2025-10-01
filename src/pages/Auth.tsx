@@ -150,12 +150,19 @@ export const Auth: React.FC = () => {
     } catch (_) { /* ignore check errors and continue */ }
 
     try {
+      const signupEmail = signUpForm.email;
       await signUpWithPassword(signUpForm.email, signUpForm.password, signUpForm.fullName);
       
       setSignUpMessage({ type: 'success', text: "Check your email! We've sent you a verification link. Please check your email and click the link to complete your registration." });
       
       // Clear signup form
       setSignUpForm({ fullName: '', email: '', password: '', confirmPassword: '' });
+      
+      // Switch to login tab and pre-fill email
+      setTimeout(() => {
+        setActiveTab('signin');
+        setSignInForm(prev => ({ ...prev, email: signupEmail }));
+      }, 1500);
     } catch (error: any) {
       console.debug('Signup error caught', {
         raw: error,
