@@ -1308,10 +1308,12 @@ export const Dashboard: React.FC = () => {
 
                   return (
                     <Card key={property.id} className="relative bg-white border border-gray-200 shadow-sm hover:shadow-md transition-shadow overflow-hidden">
-                      {/* Inactive Status Badge - Top Left */}
-                      <div className="absolute top-2 left-2 z-20 px-2 py-1 text-xs font-medium rounded bg-gray-500 text-white">
-                        Inactive
-                      </div>
+                      {/* Status Badge - Top Left */}
+                      {(property.rental_status === 'inactive') && (
+                        <div className="absolute top-2 left-2 z-20 px-2 py-1 text-xs font-medium rounded bg-gray-500 text-white">
+                          Inactive
+                        </div>
+                      )}
 
                       {/* Diagonal Ribbon - Top Right Corner */}
                       <div className="absolute top-0 right-0 z-10">
@@ -1371,20 +1373,6 @@ export const Dashboard: React.FC = () => {
                               >
                                 {(property.rental_status || 'available') === 'available' ? 'Mark Inactive' : 'Mark Active'}
                               </Button>
-                            </div>
-
-                            {/* Status Badge */}
-                            <div className="mb-3">
-                              <Badge 
-                                variant={(property.rental_status || 'available') === 'available' ? 'default' : 'secondary'}
-                                className={`text-xs ${
-                                  (property.rental_status || 'available') === 'available'
-                                    ? 'bg-green-100 text-green-700 hover:bg-green-100'
-                                    : 'bg-gray-100 text-gray-600 hover:bg-gray-100'
-                                }`}
-                              >
-                                {(property.rental_status || 'available') === 'available' ? 'Active' : 'Inactive'}
-                              </Badge>
                             </div>
 
                             {/* Go Premium Button */}
