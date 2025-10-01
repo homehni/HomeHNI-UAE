@@ -144,9 +144,7 @@ export const Auth: React.FC = () => {
       const { supabase } = await import('@/integrations/supabase/client');
       const { data: exists } = await supabase.rpc('does_auth_user_exist', { _email: signUpForm.email.trim().toLowerCase() });
       if (exists === true) {
-        setSignInForm({ email: signUpForm.email, password: '' });
-        setActiveTab('signin');
-        setSignInMessage({ type: 'error', text: "This email is already registered. Please login or reset your password." });
+        setSignUpMessage({ type: 'error', text: "This email is already registered. Please login or reset your password." });
         return;
       }
     } catch (_) { /* ignore check errors and continue */ }
@@ -176,10 +174,7 @@ export const Auth: React.FC = () => {
         msgLc.includes('duplicate key') ||
         (msgLc.includes('email') && (msgLc.includes('already') || msgLc.includes('exists') || msgLc.includes('registered')));
       if (emailExists) {
-        // Auto-switch to login tab and pre-fill email
-        setSignInForm({ email: signUpForm.email, password: '' });
-        setActiveTab('signin');
-        setSignInMessage({ type: 'error', text: "This email is already registered. Please login or reset your password." });
+        setSignUpMessage({ type: 'error', text: "This email is already registered. Please login or reset your password." });
         return;
       }
       

@@ -120,9 +120,7 @@ export const AuthDialog: React.FC<AuthDialogProps> = ({
       const { supabase } = await import('@/integrations/supabase/client');
       const { data: exists } = await supabase.rpc('does_auth_user_exist', { _email: signUpForm.email.trim().toLowerCase() });
       if (exists === true) {
-        setSignInForm({ email: signUpForm.email, password: '' });
-        setActiveTab('signin');
-        setSignInMessage({ type: 'error', text: "This email is already registered. Please login or reset your password." });
+        setSignUpMessage({ type: 'error', text: "This email is already registered. Please login or reset your password." });
         return;
       }
     } catch (_) { /* ignore check errors and continue */ }
@@ -151,9 +149,7 @@ export const AuthDialog: React.FC<AuthDialogProps> = ({
         msgLc.includes('duplicate key') ||
         (msgLc.includes('email') && (msgLc.includes('already') || msgLc.includes('exists') || msgLc.includes('registered')));
       if (emailExists) {
-        setSignInForm({ email: signUpForm.email, password: '' });
-        setActiveTab('signin');
-        setSignInMessage({ type: 'error', text: "This email is already registered. Please login or reset your password." });
+        setSignUpMessage({ type: 'error', text: "This email is already registered. Please login or reset your password." });
       } else {
         const isGeneric = msgLc === 'sign up failed' || msgLc === 'signup failed';
         const friendly = isGeneric
