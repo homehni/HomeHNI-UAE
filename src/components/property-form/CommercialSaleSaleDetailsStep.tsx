@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -47,6 +48,8 @@ export const CommercialSaleSaleDetailsStep = ({
   currentStep,
   totalSteps
 }: CommercialSaleSaleDetailsStepProps) => {
+  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
+  
   const form = useForm<CommercialSaleSaleDetailsForm>({
     resolver: zodResolver(commercialSaleSaleDetailsSchema),
     defaultValues: {
@@ -164,7 +167,7 @@ export const CommercialSaleSaleDetailsStep = ({
             render={({ field }) => (
               <FormItem className="w-1/2 flex flex-col">
                 <FormLabel className="text-sm font-medium text-gray-900">Possession Date</FormLabel>
-                <Popover>
+                <Popover open={isDatePickerOpen} onOpenChange={setIsDatePickerOpen}>
                   <PopoverTrigger asChild>
                     <FormControl>
                       <Button
@@ -189,6 +192,7 @@ export const CommercialSaleSaleDetailsStep = ({
                       selected={field.value ? new Date(field.value) : undefined}
                       onSelect={(date) => {
                         field.onChange(date ? format(date, "yyyy-MM-dd") : "");
+                        setIsDatePickerOpen(false);
                       }}
                       disabled={(date) => {
                         const today = new Date();
