@@ -26,12 +26,12 @@ export const TermsModal: React.FC<TermsModalProps> = ({
 
           <div className="space-y-3">
             <div>
-              <h3 className="font-semibold text-base mb-1 text-red-600">1. Eligibility</h3>
+              <h3 className="font-semibold text-base mb-1" style={{ color: '#a30d05' }}>1. Eligibility</h3>
               <p>You must be 18 years or older and legally authorized to list the property (as owner, agent, or representative).</p>
             </div>
 
             <div>
-              <h3 className="font-semibold text-base mb-1 text-red-600">2. Accuracy & Content</h3>
+              <h3 className="font-semibold text-base mb-1" style={{ color: '#a30d05' }}>2. Accuracy & Content</h3>
               <ul className="list-disc pl-5 space-y-1">
                 <li>All details provided must be true and accurate.</li>
                 <li>Ads with false, misleading, offensive, or unlawful content will be removed.</li>
@@ -40,7 +40,7 @@ export const TermsModal: React.FC<TermsModalProps> = ({
             </div>
 
             <div>
-              <h3 className="font-semibold text-base mb-1 text-red-600">3. Compliance</h3>
+              <h3 className="font-semibold text-base mb-1" style={{ color: '#a30d05' }}>3. Compliance</h3>
               <ul className="list-disc pl-5 space-y-1">
                 <li>Listings must follow Indian laws, including RERA (where applicable), the IT Act, 2000, and local regulations.</li>
                 <li>Disputed, illegal, or non-compliant properties cannot be listed.</li>
@@ -48,12 +48,12 @@ export const TermsModal: React.FC<TermsModalProps> = ({
             </div>
 
             <div>
-              <h3 className="font-semibold text-base mb-1 text-red-600">4. Use of Content</h3>
+              <h3 className="font-semibold text-base mb-1" style={{ color: '#a30d05' }}>4. Use of Content</h3>
               <p>By posting, you grant Home HNI the right to display and promote your ad across its platform and partner channels.</p>
             </div>
 
             <div>
-              <h3 className="font-semibold text-base mb-1 text-red-600">5. Payments (if applicable)</h3>
+              <h3 className="font-semibold text-base mb-1" style={{ color: '#a30d05' }}>5. Payments (if applicable)</h3>
               <ul className="list-disc pl-5 space-y-1">
                 <li>Fees for premium listings are non-refundable.</li>
                 <li>GST or other taxes may apply.</li>
@@ -61,7 +61,7 @@ export const TermsModal: React.FC<TermsModalProps> = ({
             </div>
 
             <div>
-              <h3 className="font-semibold text-base mb-1 text-red-600">6. Moderation & Liability</h3>
+              <h3 className="font-semibold text-base mb-1" style={{ color: '#a30d05' }}>6. Moderation & Liability</h3>
               <ul className="list-disc pl-5 space-y-1">
                 <li>Home HNI may edit, suspend, or remove ads at its discretion.</li>
                 <li>Home HNI is a listing platform only and is not responsible for property transactions, disputes, or losses.</li>
@@ -69,7 +69,7 @@ export const TermsModal: React.FC<TermsModalProps> = ({
             </div>
 
             <div>
-              <h3 className="font-semibold text-base mb-1 text-red-600">7. Privacy</h3>
+              <h3 className="font-semibold text-base mb-1" style={{ color: '#a30d05' }}>7. Privacy</h3>
               <ul className="list-disc pl-5 space-y-1">
                 <li>Your contact details may be shared with interested buyers/tenants.</li>
                 <li>Data will be handled per our Privacy Policy.</li>
@@ -77,7 +77,7 @@ export const TermsModal: React.FC<TermsModalProps> = ({
             </div>
 
             <div>
-              <h3 className="font-semibold text-base mb-1 text-red-600">8. Governing Law</h3>
+              <h3 className="font-semibold text-base mb-1" style={{ color: '#a30d05' }}>8. Governing Law</h3>
               <ul className="list-disc pl-5 space-y-1">
                 <li>These Terms are governed by the laws of India.</li>
                 <li>Disputes will fall under the exclusive jurisdiction of the courts in Hyderabad, Telangana.</li>
@@ -85,14 +85,34 @@ export const TermsModal: React.FC<TermsModalProps> = ({
             </div>
           </div>
 
-          <div className="pt-4 text-center">
+          <hr className="my-6 border-t border-gray-300" />
+
+          <div className="space-y-3">
+            <h3 className="font-semibold text-base" style={{ color: '#a30d05' }}>Customer Support:</h3>
+            <p>
+              For issues, contact{' '}
+              <a 
+                href="mailto:support@homehni.com" 
+                className="underline"
+                style={{ color: '#a30d05' }}
+              >
+                support@homehni.com
+              </a>
+              {' '}or call the customer support number.
+            </p>
+          </div>
+
+          <hr className="my-6 border-t border-gray-300" />
+
+          <div className="text-center">
             <a 
               href="#" 
               onClick={(e) => {
                 e.preventDefault();
                 // You can add navigation to a detailed terms page here if needed
               }}
-              className="text-red-600 underline text-sm font-medium"
+              className="underline text-sm font-medium"
+              style={{ color: '#a30d05' }}
             >
               Click here for detailed Terms & Conditions
             </a>
