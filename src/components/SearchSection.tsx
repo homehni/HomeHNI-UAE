@@ -147,7 +147,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
             }
           }
           
-          // Validate location is within selected city
+            // Validate location is within selected city (only if city is selected)
           if (selectedCity && place?.address_components) {
             console.log('🔍 Google Places - Address components:', place.address_components);
             
@@ -178,7 +178,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
             }
           }
           
-          if (el && value && selectedCity) {
+          if (el && value) {
             console.log('🔍 Google Places - Current selectedLocations:', selectedLocations.length);
             // Auto-add location if under limit
             if (selectedLocations.length < 3 && !selectedLocations.includes(value)) {
@@ -194,13 +194,6 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
               console.log('⚠️ Google Places - Location exists or limit reached');
               el.value = value;
               setSearchQuery(value);
-            }
-          } else if (!selectedCity) {
-            // Clear location if no city selected
-            console.log('🔍 Google Places - No city selected, clearing');
-            if (el) {
-              el.value = '';
-              setSearchQuery('');
             }
           }
         });
@@ -297,11 +290,11 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                   <input 
                     ref={mobileInputRef} 
                     type="text" 
-                    placeholder={!selectedCity ? "Select city first" : selectedLocations.length >= 3 ? "Max 3 locations" : "Search by locality or landmark"} 
+                    placeholder={selectedLocations.length >= 3 ? "Max 3 locations" : "Search by locality or landmark"} 
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     onKeyPress={handleKeyPress}
-                    disabled={selectedLocations.length >= 3 || !selectedCity}
+                    disabled={selectedLocations.length >= 3}
                     className="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-lg text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-red/20 focus:border-brand-red text-sm disabled:opacity-50 disabled:bg-gray-50" 
                   />
                 </div>
@@ -381,11 +374,11 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                          <MapPin className="absolute left-3 top-3 text-brand-red" size={16} />
                          <Input 
                            ref={inputRef} 
-                           placeholder={!selectedCity ? "Select a city first..." : selectedLocations.length >= 3 ? "Max 3 locations selected" : selectedLocations.length > 0 ? `Add location ${selectedLocations.length + 1}/3` : "Search locality..."} 
+                           placeholder={selectedLocations.length >= 3 ? "Max 3 locations selected" : selectedLocations.length > 0 ? `Add location ${selectedLocations.length + 1}/3` : "Search locality..."} 
                            value={searchQuery}
                            onChange={(e) => setSearchQuery(e.target.value)}
                            onKeyPress={handleKeyPress}
-                           disabled={selectedLocations.length >= 3 || !selectedCity}
+                           disabled={selectedLocations.length >= 3}
                            className="pl-9 h-10 sm:h-12 border-brand-red text-brand-red placeholder-brand-red/60 text-sm disabled:opacity-50" 
                          />
                       </div>
