@@ -15,6 +15,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedLocations, setSelectedLocations] = useState<string[]>([]);
   const [selectedCity, setSelectedCity] = useState('');
+  const [showMobileCitySelector, setShowMobileCitySelector] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const mobileInputRef = useRef<HTMLInputElement>(null);
   const { content: cmsContent } = useCMSContent('hero-search');
@@ -244,25 +245,27 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
 
             {/* Search Content */}
             <div className="p-3">
-              {/* City Selector - Mobile */}
-              <div className="mb-3">
-                <Select value={selectedCity} onValueChange={setSelectedCity}>
-                  <SelectTrigger className="h-10 border border-brand-red rounded-lg focus:ring-2 focus:ring-brand-red/20 bg-white text-sm">
-                    <SelectValue placeholder="Select City" />
-                  </SelectTrigger>
-                  <SelectContent className="bg-white border border-gray-200 rounded-lg shadow-lg z-50">
-                    <SelectItem value="bangalore" className="text-sm">Bangalore</SelectItem>
-                    <SelectItem value="mumbai" className="text-sm">Mumbai</SelectItem>
-                    <SelectItem value="delhi" className="text-sm">Delhi</SelectItem>
-                    <SelectItem value="pune" className="text-sm">Pune</SelectItem>
-                    <SelectItem value="hyderabad" className="text-sm">Hyderabad</SelectItem>
-                    <SelectItem value="chennai" className="text-sm">Chennai</SelectItem>
-                    <SelectItem value="kolkata" className="text-sm">Kolkata</SelectItem>
-                    <SelectItem value="ahmedabad" className="text-sm">Ahmedabad</SelectItem>
-                    <SelectItem value="jaipur" className="text-sm">Jaipur</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
+              {/* City Selector - Mobile (shown after input focus) */}
+              {showMobileCitySelector && (
+                <div className="mb-3">
+                  <Select value={selectedCity} onValueChange={setSelectedCity}>
+                    <SelectTrigger className="h-10 border border-brand-red rounded-lg focus:ring-2 focus:ring-brand-red/20 bg-white text-sm">
+                      <SelectValue placeholder="Select City" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-white border border-gray-200 rounded-lg shadow-lg z-50">
+                      <SelectItem value="bangalore" className="text-sm">Bangalore</SelectItem>
+                      <SelectItem value="mumbai" className="text-sm">Mumbai</SelectItem>
+                      <SelectItem value="delhi" className="text-sm">Delhi</SelectItem>
+                      <SelectItem value="pune" className="text-sm">Pune</SelectItem>
+                      <SelectItem value="hyderabad" className="text-sm">Hyderabad</SelectItem>
+                      <SelectItem value="chennai" className="text-sm">Chennai</SelectItem>
+                      <SelectItem value="kolkata" className="text-sm">Kolkata</SelectItem>
+                      <SelectItem value="ahmedabad" className="text-sm">Ahmedabad</SelectItem>
+                      <SelectItem value="jaipur" className="text-sm">Jaipur</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              )}
 
               {/* Selected Location Tags */}
               {selectedLocations.length > 0 && (
@@ -294,6 +297,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     onKeyPress={handleKeyPress}
+                    onFocus={() => setShowMobileCitySelector(true)}
                     disabled={selectedLocations.length >= 3}
                     className="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-lg text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-red/20 focus:border-brand-red text-sm disabled:opacity-50 disabled:bg-gray-50" 
                   />
