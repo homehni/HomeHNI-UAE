@@ -99,7 +99,7 @@ export const CommercialSalePropertyDetailsStep = ({
             field
           }) => <FormItem>
                   <FormLabel className="text-sm font-medium">Space Type</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
                       <SelectTrigger className="h-12">
                         <SelectValue placeholder="Select" />
@@ -125,7 +125,7 @@ export const CommercialSalePropertyDetailsStep = ({
             field
           }) => <FormItem>
                   <FormLabel className="text-sm font-medium">Building Type</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
                       <SelectTrigger className="h-12">
                         <SelectValue placeholder="Select" />
@@ -147,7 +147,7 @@ export const CommercialSalePropertyDetailsStep = ({
             field
           }) => <FormItem>
                   <FormLabel className="text-sm font-medium">Floor</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
                       <SelectTrigger className="h-12">
                         <SelectValue placeholder="Select" />
@@ -175,7 +175,7 @@ export const CommercialSalePropertyDetailsStep = ({
           field
         }) => <FormItem className="w-1/2">
                 <FormLabel className="text-sm font-medium">Total Floor</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <Select onValueChange={field.onChange} value={field.value}>
                   <FormControl>
                     <SelectTrigger className="h-12">
                       <SelectValue placeholder="Select" />
@@ -235,7 +235,7 @@ export const CommercialSalePropertyDetailsStep = ({
             field
           }) => <FormItem>
                   <FormLabel className="text-sm font-medium">Furnishing Status</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
                       <SelectTrigger className="h-12">
                         <SelectValue placeholder="Select" />
