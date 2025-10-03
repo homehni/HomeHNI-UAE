@@ -28,7 +28,7 @@ const handler = async (req: Request): Promise<Response> => {
     console.log('Reset URL:', resetUrl);
 
     const emailResponse = await resend.emails.send({
-      from: "HomeHNI <noreply@homehni.in>",
+      from: "HomeHNI <onboarding@resend.dev>",
       to: [email],
       subject: "Reset Your HomeHNI Password",
       html: `
