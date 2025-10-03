@@ -10,12 +10,13 @@ import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import PropertyCard from '@/components/PropertyCard';
-import { MapPin, Filter, Grid3X3, List, Bookmark, Share2, X, ChevronLeft, ChevronRight } from 'lucide-react';
+import { MapPin, Filter, Grid3X3, List, Bookmark, Share2, X, ChevronLeft, ChevronRight, Loader2 } from 'lucide-react';
 import Header from '@/components/Header';
 import Marquee from '@/components/Marquee';
 import Footer from '@/components/Footer';
 import PropertyTools from '@/components/PropertyTools';
 import { useSimplifiedSearch } from '@/hooks/useSimplifiedSearch';
+import { useDebounce } from '@/hooks/useDebounce';
 const PropertySearch = () => {
   const navigate = useNavigate();
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
@@ -30,8 +31,14 @@ const PropertySearch = () => {
     updateFilter,
     clearAllFilters,
     availableLocalities,
-    isLoading
+    isLoading,
+    loadMoreProperties,
+    hasMore,
+    propertyCount
   } = useSimplifiedSearch();
+
+  // Debounce the location input for better performance
+  const debouncedLocation = useDebounce(filters.location, 300);
 
   // Get max value for budget slider based on active tab
   const getBudgetSliderMax = (tab: string): number => {
@@ -295,6 +302,14 @@ const PropertySearch = () => {
     loadGoogleMaps().then(initAutocomplete).catch(console.error);
   }, [updateFilter, filters.selectedCity]); // Re-initialize when selectedCity changes
   return <div className="min-h-screen bg-background">
+      {/* Skip to main content link for keyboard users */}
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-brand-red focus:text-white focus:rounded focus:outline-none focus:ring-2 focus:ring-white"
+      >
+        Skip to main content
+      </a>
+      
       {/* Marquee at the very top */}
       <Marquee />
       <Header />
@@ -305,10 +320,10 @@ const PropertySearch = () => {
           <div className="flex flex-col lg:flex-row gap-4 items-center pt-4">
             {/* Search Tabs */}
             <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full lg:w-auto">
-              <TabsList className="grid w-full lg:w-auto grid-cols-3 bg-gray-100">
-                <TabsTrigger value="buy" className="text-xs lg:text-sm">Buy</TabsTrigger>
-                <TabsTrigger value="rent" className="text-xs lg:text-sm">Rent</TabsTrigger>
-                <TabsTrigger value="commercial" className="text-xs lg:text-sm">Commercial</TabsTrigger>
+              <TabsList className="grid w-full lg:w-auto grid-cols-3 bg-gray-100" role="tablist" aria-label="Property listing type">
+                <TabsTrigger value="buy" className="text-xs lg:text-sm" role="tab" aria-selected={activeTab === 'buy'}>Buy</TabsTrigger>
+                <TabsTrigger value="rent" className="text-xs lg:text-sm" role="tab" aria-selected={activeTab === 'rent'}>Rent</TabsTrigger>
+                <TabsTrigger value="commercial" className="text-xs lg:text-sm" role="tab" aria-selected={activeTab === 'commercial'}>Commercial</TabsTrigger>
               </TabsList>
             </Tabs>
 
@@ -406,27 +421,46 @@ const PropertySearch = () => {
             </div>
 
             {/* View Controls */}
-            <div className="flex gap-2">
-              <Button variant={viewMode === 'grid' ? 'default' : 'outline'} size="sm" onClick={() => setViewMode('grid')}>
-                <Grid3X3 size={16} />
+            <div className="flex gap-2" role="group" aria-label="View mode">
+              <Button 
+                variant={viewMode === 'grid' ? 'default' : 'outline'} 
+                size="sm" 
+                onClick={() => setViewMode('grid')}
+                aria-label="Switch to grid view"
+                aria-pressed={viewMode === 'grid'}
+              >
+                <Grid3X3 size={16} aria-hidden="true" />
+                <span className="sr-only">Grid view</span>
               </Button>
-              <Button variant={viewMode === 'list' ? 'default' : 'outline'} size="sm" onClick={() => setViewMode('list')}>
-                <List size={16} />
+              <Button 
+                variant={viewMode === 'list' ? 'default' : 'outline'} 
+                size="sm" 
+                onClick={() => setViewMode('list')}
+                aria-label="Switch to list view"
+                aria-pressed={viewMode === 'list'}
+              >
+                <List size={16} aria-hidden="true" />
+                <span className="sr-only">List view</span>
               </Button>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-6">
+      <main id="main-content" className="container mx-auto px-4 py-6">
         <div className="flex gap-6">
           {/* Filters Sidebar */}
           <div className="hidden lg:block w-80 space-y-6">
             <Card>
               <CardHeader className="pb-3">
                 <div className="flex items-center justify-between">
-                  <CardTitle className="text-lg">Filters</CardTitle>
-                  <Button variant="ghost" size="sm" onClick={clearAllFilters}>
+                  <CardTitle className="text-lg" id="filters-heading">Filters</CardTitle>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    onClick={clearAllFilters}
+                    aria-label="Clear all filters"
+                  >
                     Clear All
                   </Button>
                 </div>
@@ -434,7 +468,7 @@ const PropertySearch = () => {
               <CardContent className="space-y-6">
                  {/* Budget Filter */}
                 <div>
-                  <h4 className="font-semibold mb-3">Budget</h4>
+                  <h4 className="font-semibold mb-3" id="budget-label">Budget Range</h4>
                   <div className="space-y-3">
                     <div className="relative">
                       <Slider 
@@ -443,7 +477,11 @@ const PropertySearch = () => {
                         max={getBudgetSliderMax(activeTab)} 
                         min={0} 
                         step={getBudgetSliderStep(activeTab)} 
-                        className="w-full" 
+                        className="w-full"
+                        aria-labelledby="budget-label"
+                        aria-valuemin={0}
+                        aria-valuemax={getBudgetSliderMax(activeTab)}
+                        aria-valuenow={filters.budget[1]}
                       />
                     </div>
                     <div className="flex justify-between text-sm font-medium text-foreground">
@@ -462,22 +500,38 @@ const PropertySearch = () => {
                       <div className="text-sm font-medium text-gray-700">Enter Budget Range</div>
                       <div className="grid grid-cols-2 gap-2">
                         <div>
-                          <label className="text-xs text-gray-500 mb-1 block">Min Budget</label>
-                          <Input type="number" placeholder="Enter min budget" value={filters.budget[0].toString()} onChange={e => {
-                          const value = parseInt(e.target.value) || 0;
-                          if (value <= filters.budget[1]) {
-                            updateFilter('budget', [value, filters.budget[1]]);
-                          }
-                        }} className="h-8 text-sm" />
+                          <label htmlFor="min-budget" className="text-xs text-gray-500 mb-1 block">Min Budget</label>
+                          <Input 
+                            id="min-budget"
+                            type="number" 
+                            placeholder="Enter min budget" 
+                            value={filters.budget[0].toString()} 
+                            onChange={e => {
+                              const value = parseInt(e.target.value) || 0;
+                              if (value <= filters.budget[1]) {
+                                updateFilter('budget', [value, filters.budget[1]]);
+                              }
+                            }} 
+                            className="h-8 text-sm"
+                            aria-label="Minimum budget amount"
+                          />
                         </div>
                         <div>
-                          <label className="text-xs text-gray-500 mb-1 block">Max Budget</label>
-                          <Input type="number" placeholder="Enter max budget" value={filters.budget[1].toString()} onChange={e => {
-                          const value = parseInt(e.target.value) || 0;
-                          if (value >= filters.budget[0]) {
-                            updateFilter('budget', [filters.budget[0], Math.min(value, 100000000)]);
-                          }
-                        }} className="h-8 text-sm" />
+                          <label htmlFor="max-budget" className="text-xs text-gray-500 mb-1 block">Max Budget</label>
+                          <Input 
+                            id="max-budget"
+                            type="number" 
+                            placeholder="Enter max budget" 
+                            value={filters.budget[1].toString()} 
+                            onChange={e => {
+                              const value = parseInt(e.target.value) || 0;
+                              if (value >= filters.budget[0]) {
+                                updateFilter('budget', [filters.budget[0], Math.min(value, 100000000)]);
+                              }
+                            }} 
+                            className="h-8 text-sm"
+                            aria-label="Maximum budget amount"
+                          />
                         </div>
                       </div>
                     </div>
@@ -503,6 +557,102 @@ const PropertySearch = () => {
                       </Button>
                       <Button variant={filters.budget[0] === 50000000 && filters.budget[1] === 100000000 ? "default" : "outline"} size="sm" onClick={() => updateFilter('budget', [50000000, 100000000])} className="text-xs h-8">
                         5Cr+
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+
+                <Separator />
+
+                {/* Area (Sq. Ft.) Filter */}
+                <div>
+                  <h4 className="font-semibold mb-3" id="area-label">Area (Sq. Ft.)</h4>
+                  <div className="space-y-3">
+                    <div className="relative">
+                      <Slider 
+                        value={filters.area} 
+                        onValueChange={value => updateFilter('area', value)} 
+                        max={10000} 
+                        min={0} 
+                        step={100} 
+                        className="w-full"
+                        aria-labelledby="area-label"
+                        aria-valuemin={0}
+                        aria-valuemax={10000}
+                        aria-valuenow={filters.area[1]}
+                      />
+                    </div>
+                    <div className="flex justify-between text-sm font-medium text-foreground">
+                      <span>{filters.area[0] === 0 ? '0' : filters.area[0].toLocaleString()} sq ft</span>
+                      <span>{filters.area[1] >= 10000 ? '10,000+ sq ft' : filters.area[1].toLocaleString() + ' sq ft'}</span>
+                    </div>
+                    
+                    {/* Manual Area Input Fields */}
+                    <div className="space-y-2 mb-3">
+                      <div className="text-sm font-medium text-gray-700">Enter Area Range</div>
+                      <div className="grid grid-cols-2 gap-2">
+                        <div>
+                          <label htmlFor="min-area" className="text-xs text-gray-500 mb-1 block">Min Area (sq ft)</label>
+                          <Input 
+                            id="min-area"
+                            type="number" 
+                            placeholder="Min area" 
+                            value={filters.area[0].toString()} 
+                            onChange={e => {
+                              const value = parseInt(e.target.value) || 0;
+                              if (value <= filters.area[1]) {
+                                updateFilter('area', [value, filters.area[1]]);
+                              }
+                            }} 
+                            className="h-8 text-sm"
+                            aria-label="Minimum area in square feet"
+                          />
+                        </div>
+                        <div>
+                          <label htmlFor="max-area" className="text-xs text-gray-500 mb-1 block">Max Area (sq ft)</label>
+                          <Input 
+                            id="max-area"
+                            type="number" 
+                            placeholder="Max area" 
+                            value={filters.area[1].toString()} 
+                            onChange={e => {
+                              const value = parseInt(e.target.value) || 0;
+                              if (value >= filters.area[0]) {
+                                updateFilter('area', [filters.area[0], Math.min(value, 20000)]);
+                              }
+                            }} 
+                            className="h-8 text-sm"
+                            aria-label="Maximum area in square feet"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    
+                    {/* Quick Area Range Buttons */}
+                    <div className="grid grid-cols-3 gap-2 mt-3">
+                      <Button variant={filters.area[0] === 0 && filters.area[1] === 500 ? "default" : "outline"} size="sm" onClick={() => updateFilter('area', [0, 500])} className="text-xs h-8">
+                        Under 500
+                      </Button>
+                      <Button variant={filters.area[0] === 0 && filters.area[1] === 1000 ? "default" : "outline"} size="sm" onClick={() => updateFilter('area', [0, 1000])} className="text-xs h-8">
+                        Under 1K
+                      </Button>
+                      <Button variant={filters.area[0] === 0 && filters.area[1] === 2000 ? "default" : "outline"} size="sm" onClick={() => updateFilter('area', [0, 2000])} className="text-xs h-8">
+                        Under 2K
+                      </Button>
+                      <Button variant={filters.area[0] === 1000 && filters.area[1] === 2000 ? "default" : "outline"} size="sm" onClick={() => updateFilter('area', [1000, 2000])} className="text-xs h-8">
+                        1K-2K
+                      </Button>
+                      <Button variant={filters.area[0] === 2000 && filters.area[1] === 3000 ? "default" : "outline"} size="sm" onClick={() => updateFilter('area', [2000, 3000])} className="text-xs h-8">
+                        2K-3K
+                      </Button>
+                      <Button variant={filters.area[0] === 3000 && filters.area[1] === 5000 ? "default" : "outline"} size="sm" onClick={() => updateFilter('area', [3000, 5000])} className="text-xs h-8">
+                        3K-5K
+                      </Button>
+                      <Button variant={filters.area[0] === 5000 && filters.area[1] === 10000 ? "default" : "outline"} size="sm" onClick={() => updateFilter('area', [5000, 10000])} className="text-xs h-8">
+                        5K-10K
+                      </Button>
+                      <Button variant={filters.area[0] === 10000 && filters.area[1] === 20000 ? "default" : "outline"} size="sm" onClick={() => updateFilter('area', [10000, 20000])} className="text-xs h-8">
+                        10K+
                       </Button>
                     </div>
                   </div>
@@ -597,6 +747,13 @@ const PropertySearch = () => {
             {/* Results Header */}
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
               <div>
+                {/* Screen reader announcement for search results */}
+                <div role="status" aria-live="polite" aria-atomic="true" className="sr-only">
+                  {isLoading 
+                    ? 'Searching for properties...' 
+                    : `Found ${filteredProperties.length} ${filteredProperties.length === 1 ? 'property' : 'properties'}`}
+                </div>
+                
                 <h1 className="text-2xl font-bold text-gray-900">
                   {(() => {
                   // Get property type context
@@ -643,15 +800,15 @@ const PropertySearch = () => {
                 </h1>
                 <p className="text-gray-600 mt-1">
                   {isLoading ? 'Searching...' : `${filteredProperties.length} results found`}
-                  {(filters.locations.length > 0 || filters.location) && <span className="ml-2 text-brand-red">
-                      • Real-time results for "{filters.locations.length > 0 ? filters.locations.join(', ') : filters.location}"
+                  {(filters.locations.length > 0 || debouncedLocation) && <span className="ml-2 text-brand-red">
+                      • Real-time results for "{filters.locations.length > 0 ? filters.locations.join(', ') : debouncedLocation}"
                     </span>}
                 </p>
               </div>
               
               <div className="flex items-center gap-4">
                 <Select value={filters.sortBy} onValueChange={value => updateFilter('sortBy', value)}>
-                  <SelectTrigger className="w-48">
+                  <SelectTrigger className="w-48" aria-label="Sort properties by">
                     <SelectValue placeholder="Sort by" />
                   </SelectTrigger>
                   <SelectContent>
@@ -663,8 +820,8 @@ const PropertySearch = () => {
                   </SelectContent>
                 </Select>
                 
-                <Button variant="ghost" size="sm">
-                  <Bookmark size={16} className="mr-1" />
+                <Button variant="ghost" size="sm" aria-label="Save current search criteria">
+                  <Bookmark size={16} className="mr-1" aria-hidden="true" />
                   Save Search
                 </Button>
               </div>
@@ -728,11 +885,34 @@ const PropertySearch = () => {
               </div>}
 
             {/* Properties Grid/List - Real-time results */}
-            {isLoading ? <div className="grid gap-4 sm:gap-6 grid-cols-2 md:grid-cols-2 lg:grid-cols-3">
+            {isLoading && filteredProperties.length === 0 ? <div className="grid gap-4 sm:gap-6 grid-cols-2 md:grid-cols-2 lg:grid-cols-3">
                 {[1, 2, 3, 4, 5, 6].map(i => <div key={i} className="bg-gray-100 animate-pulse rounded-lg h-80"></div>)}
-              </div> : filteredProperties.length > 0 ? <div className={`grid gap-4 sm:gap-6 ${viewMode === 'grid' ? 'grid-cols-2 md:grid-cols-3 lg:grid-cols-3' : 'grid-cols-1'}`}>
-                {currentProperties.map(property => <PropertyCard key={property.id} id={property.id} title={property.title} location={property.location} price={property.price} area={property.area} bedrooms={property.bedrooms} bathrooms={property.bathrooms} image={property.image} propertyType={property.propertyType} listingType={property.listingType} size={viewMode === 'list' ? 'large' : 'default'} rental_status="available" />)}
-              </div> : <div className="text-center py-16">
+              </div> : filteredProperties.length > 0 ? <>
+                <div className={`grid gap-4 sm:gap-6 ${viewMode === 'grid' ? 'grid-cols-2 md:grid-cols-3 lg:grid-cols-3' : 'grid-cols-1'}`}>
+                  {currentProperties.map(property => <PropertyCard key={property.id} id={property.id} title={property.title} location={property.location} price={property.price} area={property.area} bedrooms={property.bedrooms} bathrooms={property.bathrooms} image={property.image} propertyType={property.propertyType} listingType={property.listingType} size={viewMode === 'list' ? 'large' : 'default'} rental_status="available" />)}
+                </div>
+                
+                {/* Load More Button - Better performance than pagination for large datasets */}
+                {hasMore && (
+                  <div className="flex justify-center mt-8">
+                    <Button 
+                      onClick={loadMoreProperties}
+                      disabled={isLoading}
+                      size="lg"
+                      className="min-w-48"
+                    >
+                      {isLoading ? (
+                        <>
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                          Loading...
+                        </>
+                      ) : (
+                        <>Load More Properties ({propertyCount - filteredProperties.length} remaining)</>
+                      )}
+                    </Button>
+                  </div>
+                )}
+              </> : <div className="text-center py-16">
                 <div className="text-6xl mb-4">🏠</div>
                 <h3 className="text-xl font-semibold text-gray-600 mb-2">No properties found</h3>
                 <p className="text-gray-500 mb-4">
@@ -792,7 +972,7 @@ const PropertySearch = () => {
             )}
           </div>
         </div>
-      </div>
+      </main>
 
       {/* Property Tools Section */}
       <PropertyTools />

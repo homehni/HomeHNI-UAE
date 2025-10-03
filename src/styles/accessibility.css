@@ -1,0 +1,275 @@
+/**
+ * Accessibility Utilities CSS
+ * 
+ * This file contains essential CSS utilities for accessibility features
+ * including screen reader support, focus management, and reduced motion preferences.
+ */
+
+/* Screen Reader Only Content */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Make sr-only visible when focused - for skip links */
+.sr-only.focus\:not-sr-only:focus,
+.sr-only.focus\:not-sr-only:active {
+  position: static;
+  width: auto;
+  height: auto;
+  padding: inherit;
+  margin: inherit;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+}
+
+/* Enhanced Focus Indicators */
+*:focus {
+  outline: none;
+}
+
+*:focus-visible {
+  outline: 2px solid var(--brand-red, #ff0000);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Ensure focus is visible on interactive elements */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[role="button"]:focus-visible,
+[role="tab"]:focus-visible,
+[role="checkbox"]:focus-visible {
+  outline: 2px solid var(--brand-red, #ff0000);
+  outline-offset: 2px;
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+  button,
+  input,
+  select,
+  textarea {
+    border-width: 2px;
+    border-style: solid;
+  }
+
+  a {
+    text-decoration: underline;
+  }
+  
+  *:focus-visible {
+    outline-width: 3px;
+    outline-offset: 3px;
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Ensure text is resizable */
+html {
+  font-size: 100%;
+}
+
+/* Minimum touch target size for mobile */
+@media (pointer: coarse) {
+  button,
+  a,
+  input[type="button"],
+  input[type="submit"],
+  input[type="reset"],
+  [role="button"],
+  [role="tab"],
+  [role="checkbox"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
+/* Improve readability with proper line height */
+body {
+  line-height: 1.5;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  line-height: 1.2;
+}
+
+/* Ensure adequate color contrast */
+:root {
+  --text-primary: #1a1a1a;
+  --text-secondary: #4a4a4a;
+  --text-muted: #6b6b6b;
+  --background: #ffffff;
+  --brand-red: #dc2626;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text-primary: #f5f5f5;
+    --text-secondary: #d4d4d4;
+    --text-muted: #a3a3a3;
+    --background: #1a1a1a;
+  }
+}
+
+/* Skip link positioning */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: var(--brand-red);
+  color: white;
+  padding: 8px 16px;
+  text-decoration: none;
+  border-radius: 0 0 4px 0;
+  z-index: 9999;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+/* Improve button and link visibility */
+button:disabled,
+a[aria-disabled="true"] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Ensure form errors are visible */
+[aria-invalid="true"] {
+  border-color: #dc2626;
+}
+
+[aria-invalid="true"]:focus {
+  outline-color: #dc2626;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+}
+
+/* Loading states */
+[aria-busy="true"] {
+  cursor: wait;
+}
+
+/* Live region visibility */
+[aria-live] {
+  position: relative;
+}
+
+/* Ensure proper spacing for keyboard navigation */
+:focus-visible {
+  scroll-margin: 2rem;
+}
+
+/* Improve checkbox and radio button visibility */
+input[type="checkbox"],
+input[type="radio"] {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+/* Ensure proper heading hierarchy is visually distinct */
+h1 {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+h4 {
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+/* Ensure selected state is visible */
+[aria-selected="true"],
+[aria-pressed="true"] {
+  background-color: var(--brand-red);
+  color: white;
+}
+
+/* Loading spinner accessibility */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loading-spinner {
+  animation: spin 1s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loading-spinner {
+    animation: none;
+  }
+}
+
+/* Ensure tooltips are keyboard accessible */
+[role="tooltip"] {
+  position: absolute;
+  z-index: 1000;
+  padding: 0.5rem;
+  background-color: #1a1a1a;
+  color: #ffffff;
+  border-radius: 4px;
+  font-size: 0.875rem;
+}
+
+/* Modal accessibility */
+[role="dialog"] {
+  position: fixed;
+  z-index: 1000;
+}
+
+[aria-modal="true"] {
+  position: fixed;
+  inset: 0;
+}
+
+/* Ensure landmark regions are distinguishable in dev mode */
+@media (min-width: 1024px) {
+  body.debug-mode main,
+  body.debug-mode nav,
+  body.debug-mode header,
+  body.debug-mode footer,
+  body.debug-mode aside {
+    outline: 2px dashed blue;
+  }
+}

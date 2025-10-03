@@ -4,7 +4,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 import { RECOMMENDED_CARD_WIDTH, RECOMMENDED_IMAGE_HEIGHT } from '@/constants/ui';
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, memo } from 'react';
 import { FavoriteButton } from '@/components/FavoriteButton';
 import { ContactOwnerModal } from '@/components/ContactOwnerModal';
 import { PropertyWatermark } from '@/components/property-details/PropertyWatermark';
@@ -338,4 +338,13 @@ const PropertyCard = ({
   );
 };
 
-export default PropertyCard;
+// Memoize PropertyCard to prevent unnecessary re-renders
+export default memo(PropertyCard, (prevProps, nextProps) => {
+  // Only re-render if essential props change
+  return (
+    prevProps.id === nextProps.id &&
+    prevProps.price === nextProps.price &&
+    prevProps.rental_status === nextProps.rental_status &&
+    prevProps.size === nextProps.size
+  );
+});

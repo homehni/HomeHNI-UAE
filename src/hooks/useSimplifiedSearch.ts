@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -28,6 +28,7 @@ interface SearchFilters {
   propertyType: string[];
   bhkType: string[];
   budget: [number, number];
+  area: [number, number]; // Area range in square feet
   locality: string[];
   furnished: string[];
   availability: string[];
@@ -66,6 +67,7 @@ export const useSimplifiedSearch = () => {
       propertyType: searchParams.get('propertyType') ? [searchParams.get('propertyType')!] : [],
       bhkType: [],
       budget: getBudgetRange(searchParams.get('type') || 'buy'),
+      area: [0, 10000], // Default area range: 0 to 10,000 sq ft
       locality: [],
       furnished: [],
       availability: [],
@@ -80,6 +82,11 @@ export const useSimplifiedSearch = () => {
   const [activeTab, setActiveTab] = useState(searchParams.get('type') || 'buy');
   const [allProperties, setAllProperties] = useState<Property[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+  const [propertyCount, setPropertyCount] = useState(0);
+
+  // Batch size for loading properties - load in chunks for better performance
+  const BATCH_SIZE = 50;
 
   // Update budget range when active tab changes
   useEffect(() => {
@@ -99,8 +106,8 @@ export const useSimplifiedSearch = () => {
     });
   }, [activeTab]);
 
-  // Transform property data helper
-  const transformProperty = (property: any) => {
+  // Transform property data helper - Memoized with useCallback for performance
+  const transformProperty = useCallback((property: any) => {
     const displayPropertyType = property.property_type?.replace(/_/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase()) || 'Property';
     
     return {
@@ -139,27 +146,39 @@ export const useSimplifiedSearch = () => {
       listingType: property.listing_type || 'sale',
       isNew: new Date(property.created_at) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
     };
-  };
+  }, []);
 
-  // Load properties with real-time updates
+  // Load properties with real-time updates - Optimized with batching
   useEffect(() => {
     const loadProperties = async () => {
       setIsLoading(true);
       try {
-        // Fetch approved and visible properties only
+        // First, get the total count for pagination purposes
+        const { count } = await supabase
+          .from('properties')
+          .select('*', { count: 'exact', head: true })
+          .eq('status', 'approved')
+          .eq('is_visible', true);
+
+        setPropertyCount(count || 0);
+
+        // Fetch only essential fields initially for better performance
+        // Load in batches to avoid overwhelming the browser
         const { data: properties, error } = await supabase
           .from('properties')
-          .select('*')
+          .select('id, title, locality, city, expected_price, super_area, bhk_type, bathrooms, images, property_type, furnishing, availability_type, property_age, listing_type, created_at')
           .eq('status', 'approved')
           .eq('is_visible', true)
-          .order('created_at', { ascending: false });
+          .order('created_at', { ascending: false })
+          .limit(BATCH_SIZE); // Load first batch only
 
         if (error) throw error;
 
         const transformedProperties = (properties || []).map(transformProperty);
-        console.log('📊 Total properties loaded:', transformedProperties.length);
+        console.log('📊 Initial properties loaded:', transformedProperties.length, 'of', count);
         
         setAllProperties(transformedProperties);
+        setHasMore((count || 0) > BATCH_SIZE);
       } catch (error) {
         console.error('Error loading properties:', error);
       } finally {
@@ -207,6 +226,92 @@ export const useSimplifiedSearch = () => {
     return () => {
       supabase.removeChannel(channel);
     };
+  }, [transformProperty]);
+
+  // Load more properties function - for infinite scroll or "load more" button
+  const loadMoreProperties = useCallback(async () => {
+    if (!hasMore || isLoading) return;
+
+    setIsLoading(true);
+    try {
+      const { data: properties, error } = await supabase
+        .from('properties')
+        .select('id, title, locality, city, expected_price, super_area, bhk_type, bathrooms, images, property_type, furnishing, availability_type, property_age, listing_type, created_at')
+        .eq('status', 'approved')
+        .eq('is_visible', true)
+        .order('created_at', { ascending: false })
+        .range(allProperties.length, allProperties.length + BATCH_SIZE - 1);
+
+      if (error) throw error;
+
+      const transformedProperties = (properties || []).map(transformProperty);
+      console.log('📊 Loaded more properties:', transformedProperties.length);
+      
+      setAllProperties(prev => [...prev, ...transformedProperties]);
+      setHasMore(allProperties.length + transformedProperties.length < propertyCount);
+    } catch (error) {
+      console.error('Error loading more properties:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [hasMore, isLoading, allProperties.length, propertyCount, transformProperty]);
+
+  // Normalize location names to consolidate similar entries - Memoized constant
+  const normalizeLocationName = useCallback((location: string): string => {
+    try {
+      // Handle null/undefined cases
+      if (!location || typeof location !== 'string') {
+        return '';
+      }
+      
+      const normalized = location.toLowerCase().trim();
+      
+      // Bangalore/Bengaluru consolidation
+      if (normalized.includes('bangalore') || normalized.includes('bengaluru') || normalized.includes('bangalore division')) {
+        return 'Bangalore';
+      }
+      
+      // Karnataka consolidation
+      if (normalized.includes('karnataka')) {
+        return 'Karnataka';
+      }
+      
+      // Hyderabad consolidation
+      if (normalized.includes('hyderabad')) {
+        return 'Hyderabad';
+      }
+      
+      // Mumbai consolidation
+      if (normalized.includes('mumbai') || normalized.includes('bombay')) {
+        return 'Mumbai';
+      }
+      
+      // Delhi consolidation
+      if (normalized.includes('delhi') || normalized.includes('new delhi')) {
+        return 'Delhi';
+      }
+      
+      // Chennai consolidation
+      if (normalized.includes('chennai') || normalized.includes('madras')) {
+        return 'Chennai';
+      }
+      
+      // Pune consolidation
+      if (normalized.includes('pune')) {
+        return 'Pune';
+      }
+      
+      // Pune localities consolidation
+      if (normalized.includes('koregaon park') || normalized.includes('koregaon')) {
+        return 'Pune';
+      }
+      
+      // Return original if no normalization needed
+      return location.trim();
+    } catch (error) {
+      console.error('Error normalizing location name:', error, { location });
+      return location || '';
+    }
   }, []);
 
   // Filter properties based on current filters
@@ -250,8 +355,13 @@ export const useSimplifiedSearch = () => {
                propertyType.includes('commercial') ||
                propertyType.includes('office') ||
                propertyType.includes('shop') ||
+               propertyType.includes('retail') ||
                propertyType.includes('warehouse') ||
-               propertyType.includes('showroom');
+               propertyType.includes('showroom') ||
+               propertyType.includes('restaurant') ||
+               propertyType.includes('coworking') ||
+               propertyType.includes('co-working') ||
+               propertyType.includes('industrial');
         if (!isMatch) {
           console.log('❌ Filtered out for commercial:', property.title, 'listing_type:', listingType, 'property_type:', propertyType);
         }
@@ -351,6 +461,14 @@ export const useSimplifiedSearch = () => {
       filtered = filtered.filter(property => {
         const price = property.priceNumber || 0;
         return price >= filters.budget[0] && price <= filters.budget[1];
+      });
+    }
+
+    // Apply area filter
+    if (filters.area[0] > 0 || filters.area[1] < 10000) {
+      filtered = filtered.filter(property => {
+        const area = property.areaNumber || 0;
+        return area >= filters.area[0] && area <= filters.area[1];
       });
     }
 
@@ -509,7 +627,7 @@ export const useSimplifiedSearch = () => {
     });
 
     return filtered;
-  }, [allProperties, filters, activeTab]);
+  }, [allProperties, filters, activeTab, normalizeLocationName]);
 
   const updateFilter = (key: keyof SearchFilters, value: any) => {
     setFilters(prev => ({
@@ -523,6 +641,7 @@ export const useSimplifiedSearch = () => {
       propertyType: [],
       bhkType: [],
       budget: getBudgetRange(activeTab),
+      area: [0, 10000], // Reset area range to default
       locality: [],
       furnished: [],
       availability: [],
@@ -532,64 +651,6 @@ export const useSimplifiedSearch = () => {
       selectedCity: '', // Reset to empty (no city selected)
       sortBy: 'relevance'
     });
-  };
-
-  // Normalize location names to consolidate similar entries
-  const normalizeLocationName = (location: string): string => {
-    try {
-      // Handle null/undefined cases
-      if (!location || typeof location !== 'string') {
-        return '';
-      }
-      
-      const normalized = location.toLowerCase().trim();
-      
-      // Bangalore/Bengaluru consolidation
-      if (normalized.includes('bangalore') || normalized.includes('bengaluru') || normalized.includes('bangalore division')) {
-        return 'Bangalore';
-      }
-      
-      // Karnataka consolidation
-      if (normalized.includes('karnataka')) {
-        return 'Karnataka';
-      }
-      
-      // Hyderabad consolidation
-      if (normalized.includes('hyderabad')) {
-        return 'Hyderabad';
-      }
-      
-      // Mumbai consolidation
-      if (normalized.includes('mumbai') || normalized.includes('bombay')) {
-        return 'Mumbai';
-      }
-      
-      // Delhi consolidation
-      if (normalized.includes('delhi') || normalized.includes('new delhi')) {
-        return 'Delhi';
-      }
-      
-      // Chennai consolidation
-      if (normalized.includes('chennai') || normalized.includes('madras')) {
-        return 'Chennai';
-      }
-      
-      // Pune consolidation
-      if (normalized.includes('pune')) {
-        return 'Pune';
-      }
-      
-      // Pune localities consolidation
-      if (normalized.includes('koregaon park') || normalized.includes('koregaon')) {
-        return 'Pune';
-      }
-      
-      // Return original if no normalization needed
-      return location.trim();
-    } catch (error) {
-      console.error('Error normalizing location name:', error, { location });
-      return location || '';
-    }
   };
 
   // Get available localities from filtered properties - show normalized cities and localities but exclude full addresses
@@ -640,7 +701,7 @@ export const useSimplifiedSearch = () => {
       console.error('Error generating available localities:', error);
       return [];
     }
-  }, [allProperties]);
+  }, [allProperties, normalizeLocationName]);
 
   return {
     filters,
@@ -650,6 +711,9 @@ export const useSimplifiedSearch = () => {
     updateFilter,
     clearAllFilters,
     availableLocalities,
-    isLoading
+    isLoading,
+    loadMoreProperties,
+    hasMore,
+    propertyCount
   };
 };
