@@ -44,7 +44,6 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
   const {
     toast
   } = useToast();
-  const [isInterested, setIsInterested] = useState(false);
   const form = useForm<PropertyDetailsFormData>({
     resolver: zodResolver(propertyDetailsSchema),
     defaultValues: {
@@ -319,20 +318,6 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
                       </Select>
                       <FormMessage />
                     </FormItem>} /> : null}
-            </div>
-
-
-            {/* Help Section */}
-            <div className="bg-orange-50 border border-orange-200 rounded-lg p-4 flex items-center justify-between">
-              <div className="flex items-center space-x-3">
-                <Phone className="h-5 w-5 text-orange-600" />
-                <span className="text-sm text-gray-700">
-                  {isInterested ? "Thank you for the interest. Our agent will give you a call shortly." : "Don't want to fill all the details? Let us help you!"}
-                </span>
-              </div>
-              {!isInterested && <Button type="button" variant="outline" className="border-primary text-primary hover:bg-primary hover:text-white" onClick={() => setIsInterested(true)}>
-                  I'm interested
-                </Button>}
             </div>
           </form>
         </Form>
