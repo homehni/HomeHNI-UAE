@@ -169,7 +169,7 @@ export function PgHostelScheduleStep({
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="flex-1 p-8">
+      <div className="flex-1 p-4 sm:p-6 md:p-8">
         <div className="max-w-4xl mx-auto">
           {/* Main Title */}
           <div className="mb-8">
