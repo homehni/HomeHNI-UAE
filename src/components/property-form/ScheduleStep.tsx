@@ -174,7 +174,7 @@ export const ScheduleStep: React.FC<ScheduleStepProps> = ({
                 <FormField control={form.control} name="paintingService" render={({
                 field
               }) => <div className="space-y-3">
-                      {paintingResponse ? <div className="flex items-center gap-2 p-3 bg-green-50 border border-green-200 rounded-lg">
+                        {paintingResponse ? <div className="flex items-center gap-2 p-3 bg-green-50 border border-green-200 rounded-lg">
                           <CheckCircle className="w-4 h-4 text-green-600" />
                           <span className="text-sm text-green-700 font-medium">
                             Your response has been captured
@@ -189,10 +189,16 @@ export const ScheduleStep: React.FC<ScheduleStepProps> = ({
                           >
                             Book Now
                           </Button>
-                          <Button type="button" size="sm" variant="ghost" className="text-gray-600 hover:text-gray-900 hover:bg-gray-100" onClick={() => {
-                    field.onChange('decline');
-                    setPaintingResponse('decline');
-                  }}>
+                          <Button 
+                            type="button" 
+                            size="sm" 
+                            variant="outline" 
+                            className="bg-white border-gray-300 text-gray-700 hover:bg-gray-50" 
+                            onClick={() => {
+                              field.onChange('decline');
+                              setPaintingResponse('decline');
+                            }}
+                          >
                             I Don't Want
                           </Button>
                         </div>}
@@ -221,19 +227,31 @@ export const ScheduleStep: React.FC<ScheduleStepProps> = ({
                 <FormField control={form.control} name="cleaningService" render={({
                 field
               }) => <div className="space-y-3">
-                      {cleaningResponse ? <div className="flex items-center gap-2 p-3 bg-green-50 border border-green-200 rounded-lg">
+                        {cleaningResponse ? <div className="flex items-center gap-2 p-3 bg-green-50 border border-green-200 rounded-lg">
                           <CheckCircle className="w-4 h-4 text-green-600" />
                           <span className="text-sm text-green-700 font-medium">
                             Your response has been captured
                           </span>
                         </div> : <div className="flex gap-3">
-                          <Button type="button" size="sm" className="bg-teal-500 hover:bg-teal-600 text-white" variant={field.value === 'book' ? 'default' : 'outline'} onClick={handleCleaningBookNow}>
+                          <Button 
+                            type="button" 
+                            size="sm" 
+                            className="bg-teal-500 hover:bg-teal-600 text-white" 
+                            variant={field.value === 'book' ? 'default' : 'outline'} 
+                            onClick={handleCleaningBookNow}
+                          >
                             Book Now
                           </Button>
-                          <Button type="button" size="sm" variant="ghost" className="text-gray-600 hover:text-gray-900 hover:bg-gray-100" onClick={() => {
-                    field.onChange('decline');
-                    setCleaningResponse('decline');
-                  }}>
+                          <Button 
+                            type="button" 
+                            size="sm" 
+                            variant="outline" 
+                            className="bg-white border-gray-300 text-gray-700 hover:bg-gray-50" 
+                            onClick={() => {
+                              field.onChange('decline');
+                              setCleaningResponse('decline');
+                            }}
+                          >
                             I Don't Want
                           </Button>
                         </div>}
