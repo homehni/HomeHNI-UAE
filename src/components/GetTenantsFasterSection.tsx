@@ -79,6 +79,7 @@ const GetTenantsFasterSection: React.FC<GetTenantsFasterSectionProps> = ({ owner
       <div className="p-4 space-y-4 flex flex-col">
         {/* Header */}
         <div className="text-center">
+          <h2 className="text-lg font-semibold text-gray-800 mb-2">Need Help? Let Us Assist You</h2>
           <p className="text-sm font-medium text-gray-700 mb-2 leading-relaxed">
             dont want to fill all ur details? let us help u contact us by clicking the get assistance below
           </p>
