@@ -99,109 +99,67 @@ export const useSimplifiedSearch = () => {
     });
   }, [activeTab]);
 
-  // Load all properties on mount
+  // Transform property data helper
+  const transformProperty = (property: any) => {
+    const displayPropertyType = property.property_type?.replace(/_/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase()) || 'Property';
+    
+    return {
+      id: property.id,
+      title: property.title,
+      location: `${property.locality || ''}, ${property.city || ''}`.replace(/^,\s*|,\s*$/g, ''),
+      price: (() => {
+        const price = property.expected_price;
+        if (price === 10000000) {
+          return '₹1 Cr';
+        } else if (price >= 10000000) {
+          return `₹${(price / 10000000).toFixed(1)} Cr`;
+        } else if (price >= 100000) {
+          return `₹${(price / 100000).toFixed(1)} L`;
+        } else if (price >= 1000) {
+          return `₹${(price / 1000).toFixed(0)} K`;
+        } else {
+          return `₹${price?.toLocaleString() || '0'}`;
+        }
+      })(),
+      priceNumber: property.expected_price || 0,
+      area: `${property.super_area || 0} sq ft`,
+      areaNumber: property.super_area || 0,
+      bedrooms: parseInt(property.bhk_type?.replace(/[^\d]/g, '') || '0'),
+      bathrooms: property.bathrooms || 0,
+      image: property.images && property.images.length > 0 
+        ? property.images[0] 
+        : '/placeholder.svg',
+      propertyType: displayPropertyType,
+      furnished: property.furnishing?.replace(/_/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase()),
+      availability: property.availability_type?.replace(/_/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase()),
+      ageOfProperty: property.property_age?.replace(/_/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase()),
+      locality: property.locality || '',
+      city: property.city || '',
+      bhkType: property.bhk_type || '1bhk',
+      listingType: property.listing_type || 'sale',
+      isNew: new Date(property.created_at) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
+    };
+  };
+
+  // Load properties with real-time updates
   useEffect(() => {
     const loadProperties = async () => {
       setIsLoading(true);
       try {
-        // Load both regular properties and PG/Hostel properties
-        const [propertiesResult, pgResult] = await Promise.all([
-          supabase.rpc('get_public_properties'),
-          supabase.rpc('get_public_pg_hostel_properties')
-        ]);
+        // Fetch approved and visible properties only
+        const { data: properties, error } = await supabase
+          .from('properties')
+          .select('*')
+          .eq('status', 'approved')
+          .eq('is_visible', true)
+          .order('created_at', { ascending: false });
 
-        if (propertiesResult.error) throw propertiesResult.error;
-        if (pgResult.error) throw pgResult.error;
+        if (error) throw error;
 
-        // Transform regular properties
-        const transformedProperties = (propertiesResult.data || []).map((property: any) => {
-          console.log('🏠 Regular Property:', {
-            id: property.id,
-            title: property.title,
-            listing_type: property.listing_type,
-            property_type: property.property_type
-          });
-          
-          let displayPropertyType = property.property_type?.replace(/_/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase()) || 'Property';
-          
-          return {
-            id: property.id,
-            title: property.title,
-            location: `${property.locality || ''}, ${property.city || ''}`.replace(/^,\s*|,\s*$/g, ''),
-            price: (() => {
-              const price = property.expected_price;
-              if (price === 10000000) {
-                return '₹1 Cr';
-              } else if (price >= 10000000) {
-                return `₹${(price / 10000000).toFixed(1)} Cr`;
-              } else if (price >= 100000) {
-                return `₹${(price / 100000).toFixed(1)} L`;
-              } else if (price >= 1000) {
-                return `₹${(price / 1000).toFixed(0)} K`;
-              } else {
-                return `₹${price?.toLocaleString() || '0'}`;
-              }
-            })(),
-            priceNumber: property.expected_price || 0,
-            area: `${property.super_area || 0} sq ft`,
-            areaNumber: property.super_area || 0,
-            bedrooms: parseInt(property.bhk_type?.replace(/[^\d]/g, '') || '0'),
-            bathrooms: property.bathrooms || 0,
-            image: property.images && property.images.length > 0 
-              ? property.images[0] 
-              : '/placeholder.svg',
-            propertyType: displayPropertyType,
-            furnished: property.furnishing?.replace(/_/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase()),
-            availability: property.availability_type?.replace(/_/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase()),
-            ageOfProperty: property.property_age?.replace(/_/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase()),
-            locality: property.locality || '',
-            city: property.city || '',
-            bhkType: property.bhk_type || '1bhk',
-            listingType: property.listing_type || 'sale',
-            isNew: new Date(property.created_at) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
-          };
-        });
-
-        // Transform PG/Hostel properties
-        const transformedPGProperties = (pgResult.data || []).map((property: any) => {
-          console.log('🏠 PG Property:', {
-            id: property.id,
-            title: property.title,
-            property_type: property.property_type,
-            expected_rent: property.expected_rent
-          });
-          
-          return {
-            id: property.id,
-            title: property.title,
-            location: `${property.locality || ''}, ${property.city || ''}`.replace(/^,\s*|,\s*$/g, ''),
-            price: `₹${property.expected_rent?.toLocaleString() || '0'}/month`,
-            priceNumber: property.expected_rent || 0,
-            area: `PG/Hostel`,
-            areaNumber: 1,
-            bedrooms: 1,
-            bathrooms: 1,
-            image: property.images && property.images.length > 0 
-              ? property.images[0] 
-              : '/placeholder.svg',
-            propertyType: 'PG Hostel',
-            furnished: 'Furnished',
-            availability: 'Available',
-            ageOfProperty: 'New',
-            locality: property.locality || '',
-            city: property.city || '',
-            bhkType: '1rk',
-            listingType: 'rent', // PG/Hostels are always rentals
-            isNew: new Date(property.created_at) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
-          };
-        });
-
-        // Combine both types
-        const allTransformedProperties = [...transformedProperties, ...transformedPGProperties];
-        console.log('📊 Total properties loaded:', allTransformedProperties.length);
-        console.log('📊 Listing types:', [...new Set(allTransformedProperties.map(p => p.listingType))]);
+        const transformedProperties = (properties || []).map(transformProperty);
+        console.log('📊 Total properties loaded:', transformedProperties.length);
         
-        setAllProperties(allTransformedProperties);
+        setAllProperties(transformedProperties);
       } catch (error) {
         console.error('Error loading properties:', error);
       } finally {
@@ -210,6 +168,45 @@ export const useSimplifiedSearch = () => {
     };
 
     loadProperties();
+
+    // Set up real-time subscription
+    const channel = supabase
+      .channel('properties-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'properties',
+          filter: 'status=eq.approved'
+        },
+        (payload) => {
+          console.log('🔄 Real-time property change:', payload);
+          
+          if (payload.eventType === 'INSERT') {
+            const newProperty = payload.new as any;
+            if (newProperty.is_visible) {
+              setAllProperties(prev => [transformProperty(newProperty), ...prev]);
+            }
+          } else if (payload.eventType === 'UPDATE') {
+            const updatedProperty = payload.new as any;
+            setAllProperties(prev => 
+              prev.map(p => p.id === updatedProperty.id 
+                ? transformProperty(updatedProperty) 
+                : p
+              )
+            );
+          } else if (payload.eventType === 'DELETE') {
+            const deletedProperty = payload.old as any;
+            setAllProperties(prev => prev.filter(p => p.id !== deletedProperty.id));
+          }
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, []);
 
   // Filter properties based on current filters
