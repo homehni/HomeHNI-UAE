@@ -10,6 +10,7 @@ import { MessageCircle } from 'lucide-react';
 import { TermsModal } from '@/components/TermsModal';
 import { useProfile } from '@/hooks/useProfile';
 import { useAuth } from '@/contexts/AuthContext';
+import { indianCities } from '@/data/indianCities';
 
 interface PropertySelectionData {
   name: string;
@@ -74,10 +75,10 @@ export const PropertySelectionStep: React.FC<PropertySelectionStepProps> = ({
       email,
       city,
       selectedPropertyType,
-      isFormValid: selectedListingType && phoneNumber && name && email && city
+      isFormValid: selectedListingType && phoneNumber && name && email
     });
     
-    if (selectedListingType && phoneNumber && name && email && city) {
+    if (selectedListingType && phoneNumber && name && email) {
       console.log('Form is valid, calling onNext with data:', {
         name,
         email,
@@ -102,7 +103,7 @@ export const PropertySelectionStep: React.FC<PropertySelectionStepProps> = ({
     }
   };
 
-  const isFormValid = selectedListingType && phoneNumber && name && email && city;
+  const isFormValid = selectedListingType && phoneNumber && name && email;
   
   // Debug logging for form state
   console.log('PropertySelectionStep render - form state:', {
@@ -171,41 +172,17 @@ export const PropertySelectionStep: React.FC<PropertySelectionStepProps> = ({
 
             {/* City */}
             <div className="space-y-1">
-              <Label htmlFor="city" className="text-sm font-medium text-gray-700">City *</Label>
+              <Label htmlFor="city" className="text-sm font-medium text-gray-700">City</Label>
               <Select value={city} onValueChange={setCity}>
                 <SelectTrigger className="w-full bg-white h-9 text-sm border border-gray-300 rounded-md">
-                  <SelectValue placeholder="Select city" />
+                  <SelectValue placeholder="Select city (optional)" />
                 </SelectTrigger>
                 <SelectContent className="bg-white border border-gray-200 shadow-lg z-50 max-h-60 overflow-y-auto">
-                  <SelectItem value="Bangalore">Bangalore</SelectItem>
-                  <SelectItem value="Mumbai">Mumbai</SelectItem>
-                  <SelectItem value="Pune">Pune</SelectItem>
-                  <SelectItem value="Chennai">Chennai</SelectItem>
-                  <SelectItem value="Gurgaon">Gurgaon</SelectItem>
-                  <SelectItem value="Hyderabad">Hyderabad</SelectItem>
-                  <SelectItem value="Delhi">Delhi</SelectItem>
-                  <SelectItem value="Faridabad">Faridabad</SelectItem>
-                  <SelectItem value="Ghaziabad">Ghaziabad</SelectItem>
-                  <SelectItem value="Noida">Noida</SelectItem>
-                  <SelectItem value="Greater Noida">Greater Noida</SelectItem>
-                  <SelectItem value="Kolkata">Kolkata</SelectItem>
-                  <SelectItem value="Ahmedabad">Ahmedabad</SelectItem>
-                  <SelectItem value="Jaipur">Jaipur</SelectItem>
-                  <SelectItem value="Lucknow">Lucknow</SelectItem>
-                  <SelectItem value="Kanpur">Kanpur</SelectItem>
-                  <SelectItem value="Nagpur">Nagpur</SelectItem>
-                  <SelectItem value="Indore">Indore</SelectItem>
-                  <SelectItem value="Thane">Thane</SelectItem>
-                  <SelectItem value="Bhopal">Bhopal</SelectItem>
-                  <SelectItem value="Visakhapatnam">Visakhapatnam</SelectItem>
-                  <SelectItem value="Pimpri-Chinchwad">Pimpri-Chinchwad</SelectItem>
-                  <SelectItem value="Patna">Patna</SelectItem>
-                  <SelectItem value="Vadodara">Vadodara</SelectItem>
-                  <SelectItem value="Agra">Agra</SelectItem>
-                  <SelectItem value="Ludhiana">Ludhiana</SelectItem>
-                  <SelectItem value="Nashik">Nashik</SelectItem>
-                  <SelectItem value="Meerut">Meerut</SelectItem>
-                  <SelectItem value="Rajkot">Rajkot</SelectItem>
+                  {indianCities.map((cityName) => (
+                    <SelectItem key={cityName} value={cityName}>
+                      {cityName}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
