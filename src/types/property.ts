@@ -39,6 +39,7 @@ export interface RentalDetails {
   expectedPrice: number;
   rentNegotiable?: boolean;
   maintenanceExtra?: boolean;
+  maintenanceIncluded?: boolean;
   maintenanceCharges?: number;
   securityDeposit?: number;
   depositNegotiable?: boolean;
