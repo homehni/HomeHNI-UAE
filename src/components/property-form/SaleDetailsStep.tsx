@@ -110,7 +110,6 @@ export const SaleDetailsStep: React.FC<SaleDetailsStepProps> = ({
   const isMobile = useIsMobile();
   const [selectedDate, setSelectedDate] = React.useState<Date | undefined>(initialData.possessionDate ? new Date(initialData.possessionDate) : undefined);
   const [isCalendarOpen, setIsCalendarOpen] = React.useState(false);
-  const [showInterestSuccess, setShowInterestSuccess] = React.useState(false);
   const form = useForm<SaleDetailsForm>({
     resolver: zodResolver(saleDetailsSchema),
     defaultValues: {
@@ -314,22 +313,6 @@ export const SaleDetailsStep: React.FC<SaleDetailsStepProps> = ({
                   Home Loan Available
                 </Label>
               </div>} />
-
-          {/* Help Section */}
-          <div className="bg-orange-50 border border-orange-200 rounded-lg p-4 flex items-center justify-between">
-            {!showInterestSuccess ? <>
-                <div className="flex items-center space-x-3">
-                  <Phone className="h-5 w-5 text-orange-600" />
-                  <span className="text-sm text-gray-700">Don't want to fill all the details? Let us help you!</span>
-                </div>
-                <Button variant="outline" className="border-primary text-primary hover:bg-primary hover:text-white" onClick={() => setShowInterestSuccess(true)}>
-                  I'm interested
-                </Button>
-              </> : <div className="flex items-center space-x-3 w-full">
-                <Phone className="h-5 w-5 text-orange-600" />
-                <span className="text-sm text-gray-700">Thank you for the interest. Our agent will give you a call shortly.</span>
-              </div>}
-          </div>
 
           {/* Navigation Buttons */}
           <div className="flex justify-between pt-4" style={{
