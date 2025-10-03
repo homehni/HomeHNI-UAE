@@ -9,10 +9,10 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type",
 };
 
-interface EmailRequest {
+interface PasswordResetRequest {
   email: string;
-  name: string;
-  verificationUrl: string;
+  name?: string;
+  resetUrl: string;
 }
 
 const handler = async (req: Request): Promise<Response> => {
@@ -22,22 +22,22 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
-    const { email, name, verificationUrl }: EmailRequest = await req.json();
+    const { email, name, resetUrl }: PasswordResetRequest = await req.json();
 
-    console.log('Sending verification email to:', email);
-    console.log('Verification URL:', verificationUrl);
+    console.log('Sending password reset email to:', email);
+    console.log('Reset URL:', resetUrl);
 
     const emailResponse = await resend.emails.send({
       from: "HomeHNI <noreply@homehni.in>",
       to: [email],
-      subject: "Verify Your Email Address",
+      subject: "Reset Your HomeHNI Password",
       html: `
         <!DOCTYPE html>
         <html lang="en">
         <head>
           <meta charset="UTF-8">
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <title>Verify Your Email - HomeHNI</title>
+          <title>Reset Your Password - HomeHNI</title>
           <style>
             * {
               margin: 0;
@@ -124,47 +124,11 @@ const handler = async (req: Request): Promise<Response> => {
               margin-bottom: 20px;
             }
             
-            .welcome-message {
+            .message {
               font-size: 16px;
               line-height: 1.7;
-              margin-bottom: 25px;
+              margin-bottom: 30px;
               color: #555555;
-            }
-            
-            .benefits {
-              background: #f8f9fa;
-              border-radius: 8px;
-              padding: 20px;
-              margin: 25px 0;
-              border-left: 4px solid #DC2626;
-            }
-            
-            .benefits h3 {
-              color: #DC2626;
-              font-size: 16px;
-              margin-bottom: 12px;
-              font-weight: 600;
-            }
-            
-            .benefits ul {
-              list-style: none;
-              padding: 0;
-            }
-            
-            .benefits li {
-              font-size: 14px;
-              color: #555555;
-              margin-bottom: 8px;
-              padding-left: 20px;
-              position: relative;
-            }
-            
-            .benefits li::before {
-              content: '✓';
-              color: #DC2626;
-              font-weight: bold;
-              position: absolute;
-              left: 0;
             }
             
             .button-container {
@@ -172,7 +136,7 @@ const handler = async (req: Request): Promise<Response> => {
               margin: 35px 0;
             }
             
-            .verify-button {
+            .reset-button {
               display: inline-block;
               background: linear-gradient(135deg, #DC2626 0%, #B91C1C 100%);
               color: white;
@@ -187,7 +151,7 @@ const handler = async (req: Request): Promise<Response> => {
               transition: all 0.3s ease;
             }
             
-            .verify-button:hover {
+            .reset-button:hover {
               transform: translateY(-2px);
               box-shadow: 0 8px 25px rgba(220, 38, 38, 0.4);
             }
@@ -238,6 +202,26 @@ const handler = async (req: Request): Promise<Response> => {
               color: #8b6f00;
               font-size: 14px;
               line-height: 1.5;
+            }
+            
+            .help-section {
+              background: #f1f5f9;
+              border-radius: 8px;
+              padding: 20px;
+              margin: 25px 0;
+            }
+            
+            .help-section h3 {
+              color: #DC2626;
+              font-size: 16px;
+              margin-bottom: 12px;
+              font-weight: 600;
+            }
+            
+            .help-section p {
+              font-size: 14px;
+              color: #555555;
+              line-height: 1.6;
             }
             
             .footer {
@@ -294,7 +278,7 @@ const handler = async (req: Request): Promise<Response> => {
                 font-size: 20px;
               }
               
-              .verify-button {
+              .reset-button {
                 padding: 14px 28px;
                 font-size: 15px;
               }
@@ -306,45 +290,39 @@ const handler = async (req: Request): Promise<Response> => {
             <div class="header">
               <div class="header-content">
                 <div class="logo">HomeHNI</div>
-                <h1>Welcome to HomeHNI!</h1>
-                <p>Let's verify your email address</p>
+                <h1>Password Reset Request</h1>
+                <p>Secure account access restoration</p>
               </div>
             </div>
             
             <div class="content">
-              <div class="greeting">Hello ${name}!</div>
+              <div class="greeting">Hello ${name || 'there'}!</div>
               
-              <div class="welcome-message">
-                Thank you for joining HomeHNI! We're excited to have you as part of our community. To complete your account setup and start exploring our services, please verify your email address.
-              </div>
-              
-              <div class="benefits">
-                <h3>🎉 What's next after verification?</h3>
-                <ul>
-                  <li>Access premium home and property services</li>
-                  <li>Connect with verified professionals</li>
-                  <li>Get personalized recommendations</li>
-                  <li>Save your favorite properties and services</li>
-                  <li>Receive exclusive offers and updates</li>
-                </ul>
+              <div class="message">
+                We received a request to reset your password for your HomeHNI account. If you made this request, click the button below to set a new password:
               </div>
               
               <div class="button-container">
-                <a href="${verificationUrl}" class="verify-button">Verify Email Address</a>
+                <a href="${resetUrl}" class="reset-button">Reset My Password</a>
               </div>
               
               <div class="url-section">
                 <div class="url-label">Or copy and paste this link in your browser:</div>
-                <div class="url-text">${verificationUrl}</div>
+                <div class="url-text">${resetUrl}</div>
               </div>
               
               <div class="security-notice">
                 <h3>🔒 Security Notice</h3>
-                <p>This verification link will expire in 24 hours for your security. If you need a new verification link, you can request one from our login page.</p>
+                <p>This password reset link will expire in 1 hour for your security. If you need a new link, you can request another password reset from our login page.</p>
               </div>
               
-              <div class="welcome-message">
-                <strong>Didn't create an account?</strong> If you didn't sign up for HomeHNI, you can safely ignore this email. No account will be created without email verification.
+              <div class="help-section">
+                <h3>Didn't request this?</h3>
+                <p>If you didn't request a password reset, you can safely ignore this email. Your password will remain unchanged, and no action is required on your part.</p>
+              </div>
+              
+              <div class="message">
+                <strong>Need help?</strong> Contact our support team if you're having trouble accessing your account or if you have any questions about this password reset.
               </div>
             </div>
             
@@ -367,7 +345,7 @@ const handler = async (req: Request): Promise<Response> => {
       `,
     });
 
-    console.log("Email sent successfully:", emailResponse);
+    console.log("Password reset email sent successfully:", emailResponse);
 
     return new Response(JSON.stringify({ success: true, emailResponse }), {
       status: 200,
@@ -377,7 +355,7 @@ const handler = async (req: Request): Promise<Response> => {
       },
     });
   } catch (error: any) {
-    console.error("Error in send-verification-email function:", error);
+    console.error("Error in send-password-reset-email function:", error);
     return new Response(
       JSON.stringify({ 
         success: false, 

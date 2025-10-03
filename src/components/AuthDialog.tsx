@@ -25,7 +25,7 @@ export const AuthDialog: React.FC<AuthDialogProps> = ({
   title = "Sign in to continue",
   description = "Please sign in or create an account to proceed with your subscription."
 }) => {
-  const { signInWithGoogle, signInWithPassword, signUpWithPassword } = useAuth();
+  const { signInWithGoogle, signInWithPassword, signUpWithPassword, resetPassword } = useAuth();
   const { toast } = useToast();
   
   const [activeTab, setActiveTab] = useState('signin');
@@ -206,12 +206,14 @@ export const AuthDialog: React.FC<AuthDialogProps> = ({
     setIsResetLoading(true);
     setResetMessage({ type: null, text: '' });
 
-    // This would need to be implemented with your Supabase auth
-    // For now, just show a success message
-    setTimeout(() => {
+    try {
+      await resetPassword(forgotPasswordEmail);
       setResetMessage({ type: 'success', text: 'If an account with that email exists, we have sent a password reset link.' });
+    } catch (error: any) {
+      setResetMessage({ type: 'error', text: error.message || 'Error sending reset email. Please try again.' });
+    } finally {
       setIsResetLoading(false);
-    }, 1000);
+    }
   };
 
   return (

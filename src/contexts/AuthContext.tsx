@@ -3,7 +3,7 @@ import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
 import { getCurrentUserProfile, type UserProfile } from '@/services/profileService';
 import { AuditService } from '@/services/auditService';
-import { sendWelcomeEmail } from '@/services/emailService';
+import { sendWelcomeEmail, sendPasswordResetEmail, sendEmailVerificationEmail } from '@/services/emailService';
 
 interface AuthContextType {
   user: User | null;
@@ -13,6 +13,7 @@ interface AuthContextType {
   signInWithGoogle: () => Promise<void>;
   signInWithPassword: (email: string, password: string) => Promise<void>;
   signUpWithPassword: (email: string, password: string, fullName?: string) => Promise<void>;
+  resetPassword: (email: string) => Promise<void>;
   signOut: () => Promise<void>;
   refreshProfile: () => Promise<void>;
 }
@@ -264,6 +265,28 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         console.error('Failed to send welcome email:', error);
         // Don't block signup if email fails
       }
+
+      // Also send custom verification email if needed
+      try {
+        const verificationUrl = `${window.location.origin}/auth?mode=verify&email=${encodeURIComponent(email)}`;
+        
+        const verificationResult = await supabase.functions.invoke('send-verification-email', {
+          body: {
+            email: email,
+            name: fullName || email.split('@')[0],
+            verificationUrl: verificationUrl
+          }
+        });
+
+        if (verificationResult.error) {
+          console.error('Custom verification email failed:', verificationResult.error);
+        } else {
+          console.log('Custom verification email sent successfully');
+        }
+      } catch (error) {
+        console.error('Failed to send custom verification email:', error);
+        // Don't block signup if email fails
+      }
     } catch (err: any) {
       const fallback = 'Sign up failed';
       const message = err?.message || fallback;
@@ -271,6 +294,75 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (err?.code) e.code = err.code;
       if (err?.status) e.status = err.status;
       throw e;
+    }
+  };
+
+  const resetPassword = async (email: string) => {
+    try {
+      // Get user profile to include name in email
+      let userName = email.split('@')[0]; // Fallback to email prefix
+      
+      try {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('full_name')
+          .eq('email', email.toLowerCase())
+          .single();
+        
+        if (profile?.full_name) {
+          userName = profile.full_name;
+        }
+      } catch (profileError) {
+        console.log('Could not fetch user profile for password reset:', profileError);
+        // Continue with fallback name
+      }
+
+      // Generate password reset with Supabase
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/auth?mode=reset-password`,
+      });
+
+      if (error) {
+        throw error;
+      }
+
+      // Send custom password reset email using our service
+      try {
+        const resetUrl = `${window.location.origin}/auth?mode=reset-password&email=${encodeURIComponent(email)}`;
+        
+        const emailResult = await sendPasswordResetEmail(email, userName, resetUrl);
+        
+        if (emailResult.success) {
+          console.log('Custom password reset email sent successfully');
+        } else {
+          console.error('Custom password reset email failed:', emailResult.error);
+          // Don't throw error here - the Supabase reset email will still be sent
+        }
+      } catch (emailError) {
+        console.error('Failed to send custom password reset email:', emailError);
+        // Don't throw error here - the Supabase reset email will still be sent
+      }
+
+      // Log audit event
+      try {
+        await AuditService.logAuthEvent('Password Reset Requested', email, true, 'Password reset email sent');
+      } catch (auditError) {
+        console.error('Failed to log password reset audit event:', auditError);
+      }
+
+    } catch (error: unknown) {
+      console.error('Password reset error:', error);
+      
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      
+      // Log failed audit event
+      try {
+        await AuditService.logAuthEvent('Password Reset Failed', email, false, errorMessage);
+      } catch (auditError) {
+        console.error('Failed to log password reset audit event:', auditError);
+      }
+      
+      throw error;
     }
   };
 
@@ -317,6 +409,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       signInWithGoogle,
       signInWithPassword,
       signUpWithPassword,
+      resetPassword,
       signOut,
       refreshProfile
     }}>
@@ -338,6 +431,7 @@ export const useAuth = () => {
       signInWithGoogle: async () => {},
       signInWithPassword: async () => {},
       signUpWithPassword: async () => {},
+      resetPassword: async () => {},
       signOut: async () => {},
       refreshProfile: async () => {}
     };

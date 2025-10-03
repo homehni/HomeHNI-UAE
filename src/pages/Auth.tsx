@@ -13,7 +13,7 @@ import Index from './Index';
 
 // Auth component with separate password visibility states
 export const Auth: React.FC = () => {
-  const { user, profile, signInWithGoogle, signInWithPassword, signUpWithPassword } = useAuth();
+  const { user, profile, signInWithGoogle, signInWithPassword, signUpWithPassword, resetPassword } = useAuth();
   const { isFinanceAdmin, isHRAdmin, isEmployee, loading: employeeLoading } = useEmployeeRole();
   const { isAdmin, loading: adminLoading } = useAdminAuth();
   const navigate = useNavigate();
@@ -233,13 +233,7 @@ export const Auth: React.FC = () => {
     setResetMessage({ type: null, text: '' });
 
     try {
-      const { supabase } = await import('@/integrations/supabase/client');
-      const { error } = await supabase.auth.resetPasswordForEmail(forgotPasswordEmail, {
-        redirectTo: `${window.location.origin}/auth?mode=reset-password`,
-      });
-
-      if (error) throw error;
-
+      await resetPassword(forgotPasswordEmail);
       setResetMessage({ type: 'success', text: "Password reset email sent! Please check your email for password reset instructions." });
       
       // Don't close the modal - let user see the success message and choose to go back

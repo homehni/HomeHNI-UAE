@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HomeHNI Email Templates Preview</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .preview-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .template-section {
+            margin-bottom: 40px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .template-header {
+            background: #DC2626;
+            color: white;
+            padding: 15px 20px;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        .template-content {
+            padding: 20px;
+        }
+        iframe {
+            width: 100%;
+            height: 600px;
+            border: none;
+            border-radius: 4px;
+        }
+        .note {
+            background: #f0f9ff;
+            border: 1px solid #0ea5e9;
+            border-radius: 4px;
+            padding: 15px;
+            margin: 20px 0;
+            color: #0c4a6e;
+        }
+    </style>
+</head>
+<body>
+    <div class="preview-container">
+        <h1>🏠 HomeHNI Email Templates Preview</h1>
+        <p>This page shows preview of the custom email templates created for HomeHNI authentication system.</p>
+        
+        <div class="note">
+            <strong>📧 Templates Created:</strong><br>
+            • Password Reset Email Template<br>
+            • Email Verification Template (Updated)<br>
+            Both templates feature HomeHNI branding with red theme (#DC2626) and professional styling.
+        </div>
+
+        <div class="template-section">
+            <div class="template-header">
+                🔐 Password Reset Email Template
+            </div>
+            <div class="template-content">
+                <p><strong>Purpose:</strong> Sent when users click "Forgot Password"</p>
+                <p><strong>Features:</strong></p>
+                <ul>
+                    <li>Professional HomeHNI branding with gradient header</li>
+                    <li>Secure reset button with hover effects</li>
+                    <li>Security notice with 1-hour expiration</li>
+                    <li>Responsive design for mobile devices</li>
+                    <li>Alternative text link for accessibility</li>
+                </ul>
+                <p><strong>Location:</strong> <code>/supabase/functions/send-password-reset-email/index.ts</code></p>
+            </div>
+        </div>
+
+        <div class="template-section">
+            <div class="template-header">
+                ✅ Email Verification Template
+            </div>
+            <div class="template-content">
+                <p><strong>Purpose:</strong> Sent when new users sign up to verify their email</p>
+                <p><strong>Features:</strong></p>
+                <ul>
+                    <li>Welcome message with HomeHNI branding</li>
+                    <li>Benefits list showing what users get after verification</li>
+                    <li>Prominent verification button</li>
+                    <li>24-hour expiration notice</li>
+                    <li>Professional footer with links</li>
+                </ul>
+                <p><strong>Location:</strong> <code>/supabase/functions/send-verification-email/index.ts</code></p>
+            </div>
+        </div>
+
+        <div class="template-section">
+            <div class="template-header">
+                ⚙️ Integration Details
+            </div>
+            <div class="template-content">
+                <h3>AuthContext Updates</h3>
+                <p>Added new <code>resetPassword</code> function that:</p>
+                <ul>
+                    <li>Fetches user's name from profile for personalization</li>
+                    <li>Calls Supabase's resetPasswordForEmail function</li>
+                    <li>Sends custom branded email via our function</li>
+                    <li>Logs audit events for security tracking</li>
+                </ul>
+
+                <h3>Component Updates</h3>
+                <p>Updated both <code>AuthDialog.tsx</code> and <code>Auth.tsx</code> to use the new resetPassword function from AuthContext instead of calling Supabase directly.</p>
+
+                <h3>Email Service Integration</h3>
+                <p>The signup process now sends both:</p>
+                <ul>
+                    <li>Welcome email (existing functionality)</li>
+                    <li>Custom verification email (new branded template)</li>
+                </ul>
+
+                <h3>Configuration</h3>
+                <p>Email templates use:</p>
+                <ul>
+                    <li><strong>From:</strong> HomeHNI &lt;noreply@homehni.in&gt;</li>
+                    <li><strong>Branding:</strong> HomeHNI red theme (#DC2626)</li>
+                    <li><strong>Service:</strong> Resend API (configured in Supabase functions)</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="note">
+            <strong>🚀 Next Steps:</strong><br>
+            • Test the email functions in your Supabase dashboard<br>
+            • Configure your Resend API key in Supabase function environment variables<br>
+            • Test signup and password reset flows to ensure emails are sent correctly<br>
+            • The Google OAuth signin will continue to work as before
+        </div>
+    </div>
+</body>
+</html>
