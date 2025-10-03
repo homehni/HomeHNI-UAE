@@ -154,7 +154,7 @@ export const ScheduleStep: React.FC<ScheduleStepProps> = ({
       <Form {...form}>
         <form id="schedule-form" onSubmit={form.handleSubmit(onFormSubmit)} className="space-y-8">
           {/* Service Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
             {/* Painting Service */}
             <div className="bg-gradient-to-br from-orange-50 via-yellow-50 to-amber-100 rounded-xl p-6 relative overflow-hidden border border-orange-200/50 shadow-lg">
               <div className="relative z-10">
