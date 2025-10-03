@@ -312,29 +312,9 @@ const PropertySearch = () => {
               </TabsList>
             </Tabs>
 
-            {/* Main Search Bar with City Selector and Multi-Location Support */}
-            <div className="flex-1 flex gap-2">
-              {/* City Selector */}
-              <div className="w-36">
-                <Select value={filters.selectedCity} onValueChange={value => updateFilter('selectedCity', value)}>
-                  <SelectTrigger className="h-12 border border-brand-red rounded-lg focus:ring-2 focus:ring-brand-red/20 bg-white text-sm font-medium">
-                    <SelectValue placeholder="Select City" />
-                  </SelectTrigger>
-                  <SelectContent className="bg-white border border-gray-200 rounded-lg shadow-lg z-50">
-                    <SelectItem value="bangalore" className="text-sm">Bangalore</SelectItem>
-                    <SelectItem value="mumbai" className="text-sm">Mumbai</SelectItem>
-                    <SelectItem value="delhi" className="text-sm">Delhi</SelectItem>
-                    <SelectItem value="pune" className="text-sm">Pune</SelectItem>
-                    <SelectItem value="hyderabad" className="text-sm">Hyderabad</SelectItem>
-                    <SelectItem value="chennai" className="text-sm">Chennai</SelectItem>
-                    <SelectItem value="kolkata" className="text-sm">Kolkata</SelectItem>
-                    <SelectItem value="ahmedabad" className="text-sm">Ahmedabad</SelectItem>
-                    <SelectItem value="jaipur" className="text-sm">Jaipur</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              
-              <div className="relative flex-1">
+            {/* Main Search Bar with Multi-Location Support */}
+            <div className="flex-1">
+              <div className="relative">
                 <MapPin className="absolute left-3 top-3 text-brand-red" size={20} />
                 
                 {/* Multi-Location Search Bar */}
@@ -394,10 +374,10 @@ const PropertySearch = () => {
                       // Ensure input is always focused and ready for typing
                       e.target.select();
                     }}
-                    placeholder={!filters.selectedCity ? "Select a city first..." : filters.locations.length === 0 ? "Enter locality or area name..." : filters.locations.length >= 3 ? "Max 3 locations selected" : "Add more..."}
+                    placeholder={filters.locations.length === 0 ? "Enter locality or area name..." : filters.locations.length >= 3 ? "Max 3 locations selected" : "Add more..."}
                     className="flex-1 min-w-32 outline-none bg-transparent text-sm"
-                    disabled={filters.locations.length >= 3 || !filters.selectedCity}
-                    autoFocus={filters.locations.length < 3 && !!filters.selectedCity}
+                    disabled={filters.locations.length >= 3}
+                    autoFocus={filters.locations.length < 3}
                   />
                   
                   {/* Location Counter */}
