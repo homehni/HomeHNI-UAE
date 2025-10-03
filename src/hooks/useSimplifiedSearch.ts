@@ -268,15 +268,43 @@ export const useSimplifiedSearch = () => {
           const normalizedFilter = filterType.toLowerCase().replace(/\s+/g, '');
           const normalizedProperty = property.propertyType.toLowerCase().replace(/\s+/g, '');
           
-          // Special mappings
+          // Exact match priority - check for exact property type matches first
+          if (normalizedFilter === 'penthouse') {
+            return normalizedProperty === 'penthouse';
+          }
+          if (normalizedFilter === 'duplex') {
+            return normalizedProperty === 'duplex';
+          }
+          if (normalizedFilter === 'independenthouse') {
+            // Only match if it's specifically "independent house", not just any house
+            return normalizedProperty === 'independenthouse' || 
+                   normalizedProperty === 'independent' ||
+                   (normalizedProperty.includes('independent') && normalizedProperty.includes('house') && !normalizedProperty.includes('penthouse'));
+          }
+          if (normalizedFilter === 'gatedcommunityvilla') {
+            return normalizedProperty === 'gatedcommunityvilla' || 
+                   (normalizedProperty.includes('gated') && normalizedProperty.includes('community') && normalizedProperty.includes('villa'));
+          }
+          
+          // Broader category matches
           if (normalizedFilter.includes('apartment') || normalizedFilter.includes('flat')) {
             return normalizedProperty.includes('apartment') || normalizedProperty.includes('flat');
           }
-          if (normalizedFilter.includes('villa')) {
-            return normalizedProperty.includes('villa');
+          if (normalizedFilter === 'villa') {
+            // Villa should not match gated community villa
+            return normalizedProperty === 'villa' && !normalizedProperty.includes('community');
           }
-          if (normalizedFilter.includes('plot')) {
-            return normalizedProperty.includes('plot');
+          if (normalizedFilter.includes('plot') || normalizedFilter.includes('land')) {
+            return normalizedProperty.includes('plot') || normalizedProperty.includes('land');
+          }
+          if (normalizedFilter === 'agriculturalland') {
+            return normalizedProperty.includes('agricultural') && normalizedProperty.includes('land');
+          }
+          if (normalizedFilter === 'commercialland') {
+            return normalizedProperty.includes('commercial') && normalizedProperty.includes('land');
+          }
+          if (normalizedFilter === 'industrialland') {
+            return normalizedProperty.includes('industrial') && normalizedProperty.includes('land');
           }
           if (normalizedFilter.includes('pghosted') || normalizedFilter.includes('pg')) {
             return normalizedProperty.includes('pg') || normalizedProperty.includes('hostel');
@@ -285,16 +313,13 @@ export const useSimplifiedSearch = () => {
             return normalizedProperty.includes('coliving') || normalizedProperty.includes('co-living');
           }
           if (normalizedFilter.includes('builderfloor')) {
-            return normalizedProperty.includes('builderfloor') || normalizedProperty.includes('builder floor');
+            return normalizedProperty.includes('builderfloor') || normalizedProperty.includes('builder') && normalizedProperty.includes('floor');
           }
           if (normalizedFilter.includes('studioapartment')) {
-            return normalizedProperty.includes('studioapartment') || normalizedProperty.includes('studio apartment');
+            return normalizedProperty.includes('studioapartment') || normalizedProperty.includes('studio');
           }
           if (normalizedFilter.includes('coworking')) {
             return normalizedProperty.includes('coworking') || normalizedProperty.includes('co-working');
-          }
-          if (normalizedFilter.includes('gatedcommunityvilla')) {
-            return normalizedProperty.includes('gatedcommunityvilla') || normalizedProperty.includes('gated community villa');
           }
           if (normalizedFilter.includes('office')) {
             return normalizedProperty.includes('office');
@@ -311,13 +336,11 @@ export const useSimplifiedSearch = () => {
           if (normalizedFilter.includes('restaurant')) {
             return normalizedProperty.includes('restaurant');
           }
-          if (normalizedFilter.includes('industrial')) {
-            return normalizedProperty.includes('industrial');
-          }
-          if (normalizedFilter.includes('independenthouse') || normalizedFilter.includes('house')) {
-            return normalizedProperty.includes('house') || normalizedProperty.includes('independent');
+          if (normalizedFilter === 'industrial') {
+            return normalizedProperty === 'industrial';
           }
           
+          // Fallback to partial match
           return normalizedProperty.includes(normalizedFilter);
         });
       });
