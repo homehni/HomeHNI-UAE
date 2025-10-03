@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { X, ChevronDown, User, UserPlus, LogIn, LogOut, Settings, Shield, Mail, Phone, MessageCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -17,6 +17,7 @@ const Sidebar = ({
 }: SidebarProps) => {
   const [expandedSections, setExpandedSections] = useState<string[]>([]);
   const [isLegalFormOpen, setIsLegalFormOpen] = useState(false);
+  const contactUsRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   const {
     user,
@@ -30,7 +31,19 @@ const Sidebar = ({
     toast
   } = useToast();
   const toggleSection = (section: string) => {
-    setExpandedSections(prev => prev.includes(section) ? prev.filter(s => s !== section) : [...prev, section]);
+    setExpandedSections(prev => {
+      const isExpanding = !prev.includes(section);
+      const newSections = isExpanding ? [...prev, section] : prev.filter(s => s !== section);
+      
+      // Scroll to contact us section after state update
+      if (isExpanding && section === 'contact-us') {
+        setTimeout(() => {
+          contactUsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }, 100);
+      }
+      
+      return newSections;
+    });
   };
   const handleLegalServicesClick = () => {
     setIsLegalFormOpen(true);
@@ -317,7 +330,7 @@ const Sidebar = ({
           {/* Menu Items */}
           <div className="flex-1 overflow-y-auto border-t border-gray-200">
             <nav className="p-2">
-              {menuItems.map(item => <div key={item.id} className="mb-1">
+            {menuItems.map(item => <div key={item.id} className="mb-1" ref={item.id === 'contact-us' ? contactUsRef : null}>
                   <button onClick={item.onClick || (item.hasSubmenu ? () => toggleSection(item.id) : undefined)} className="w-full text-left px-4 py-3 text-gray-600 hover:bg-gray-50 hover:text-gray-800 rounded-lg flex items-center justify-between transition-colors">
                     <span className="text-sm font-medium">{item.label}</span>
                     {item.hasSubmenu && <ChevronDown size={16} className={`transform transition-transform ${expandedSections.includes(item.id) ? 'rotate-180' : ''}`} />}
