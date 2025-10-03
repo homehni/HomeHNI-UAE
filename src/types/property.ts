@@ -63,6 +63,7 @@ export interface PropertyAmenities {
   secondaryNumber?: string;
   moreSimilarUnits?: boolean;
   directionsTip?: string;
+  furnishing?: string;
   
   // Amenities - using strings for consistency
   lift?: string;

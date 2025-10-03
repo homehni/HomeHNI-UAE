@@ -35,7 +35,8 @@ type RentalDetailsForm = z.infer<typeof rentalDetailsSchema>;
 
 interface RentalDetailsStepProps {
   initialData?: Partial<RentalDetails>;
-  onNext: (data: RentalDetails) => void;
+  initialAmenities?: { furnishing?: string; parking?: string };
+  onNext: (data: RentalDetails, amenities?: { furnishing?: string; parking?: string }) => void;
   onBack: () => void;
   currentStep: number;
   totalSteps: number;
@@ -43,6 +44,7 @@ interface RentalDetailsStepProps {
 
 export const RentalDetailsStep: React.FC<RentalDetailsStepProps> = ({
   initialData = {},
+  initialAmenities = {},
   onNext,
   onBack,
   currentStep,
@@ -56,12 +58,12 @@ export const RentalDetailsStep: React.FC<RentalDetailsStepProps> = ({
       expectedLeaseAmount: undefined,
       rentNegotiable: initialData.rentNegotiable || false,
       securityDeposit: initialData.securityDeposit || undefined,
-      monthlyMaintenance: '',
-      maintenanceAmount: undefined,
+      monthlyMaintenance: initialData.maintenanceExtra ? 'extra' : (initialData.maintenanceCharges && initialData.maintenanceCharges > 0 ? 'extra' : ''),
+      maintenanceAmount: initialData.maintenanceCharges || undefined,
       availableFrom: initialData.availableFrom || '',
-      preferredTenants: [],
-      furnishing: '',
-      parking: '',
+      preferredTenants: initialData.idealFor || [],
+      furnishing: initialAmenities.furnishing || '',
+      parking: initialAmenities.parking || '',
     },
   });
 
@@ -83,7 +85,14 @@ export const RentalDetailsStep: React.FC<RentalDetailsStepProps> = ({
       availableFrom: data.availableFrom || '',
       idealFor: data.preferredTenants || [],
     };
-    onNext(rentalData);
+    
+    // Extract amenities-related fields
+    const amenitiesData = {
+      furnishing: data.furnishing,
+      parking: data.parking,
+    };
+    
+    onNext(rentalData, amenitiesData);
   };
 
   return (

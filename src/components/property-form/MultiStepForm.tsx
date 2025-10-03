@@ -128,8 +128,11 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
     scrollToTop();
   };
 
-  const handleRentalDetailsNext = (data: any) => {
+  const handleRentalDetailsNext = (data: any, amenitiesData?: any) => {
     updateRentalDetails(data);
+    if (amenitiesData) {
+      updateAmenities(amenitiesData);
+    }
     nextStep();
     scrollToTop();
   };
@@ -221,6 +224,7 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
               {currentStep === 3 && (
                 <RentalDetailsStep
                   initialData={rentalDetails}
+                  initialAmenities={{ furnishing: amenities.furnishing, parking: amenities.parking }}
                   onNext={handleRentalDetailsNext}
                   onBack={prevStep}
                   currentStep={3}
