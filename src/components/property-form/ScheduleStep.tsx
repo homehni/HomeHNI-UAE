@@ -189,7 +189,7 @@ export const ScheduleStep: React.FC<ScheduleStepProps> = ({
                           >
                             Book Now
                           </Button>
-                          <Button type="button" size="sm" variant="outline" className="border-gray-300 text-gray-700 hover:bg-gray-50" onClick={() => {
+                          <Button type="button" size="sm" variant="ghost" className="text-gray-600 hover:text-gray-900 hover:bg-gray-100" onClick={() => {
                     field.onChange('decline');
                     setPaintingResponse('decline');
                   }}>
@@ -230,7 +230,7 @@ export const ScheduleStep: React.FC<ScheduleStepProps> = ({
                           <Button type="button" size="sm" className="bg-teal-500 hover:bg-teal-600 text-white" variant={field.value === 'book' ? 'default' : 'outline'} onClick={handleCleaningBookNow}>
                             Book Now
                           </Button>
-                          <Button type="button" size="sm" variant="outline" className="border-gray-300 text-gray-700 hover:bg-gray-50" onClick={() => {
+                          <Button type="button" size="sm" variant="ghost" className="text-gray-600 hover:text-gray-900 hover:bg-gray-100" onClick={() => {
                     field.onChange('decline');
                     setCleaningResponse('decline');
                   }}>
