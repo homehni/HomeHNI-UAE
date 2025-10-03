@@ -326,22 +326,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         throw error;
       }
 
-      // Send custom password reset email using edge function
+      // Send custom password reset email using our service
       try {
-        const resetUrl = `${window.location.origin}/auth?mode=reset-password`;
+        const resetUrl = `${window.location.origin}/auth?mode=reset-password&email=${encodeURIComponent(email)}`;
         
-        const emailResult = await supabase.functions.invoke('send-password-reset-email', {
-          body: {
-            email: email,
-            name: userName,
-            resetUrl: resetUrl
-          }
-        });
+        const emailResult = await sendPasswordResetEmail(email, userName, resetUrl);
         
-        if (emailResult.error) {
-          console.error('Custom password reset email failed:', emailResult.error);
-        } else {
+        if (emailResult.success) {
           console.log('Custom password reset email sent successfully');
+        } else {
+          console.error('Custom password reset email failed:', emailResult.error);
+          // Don't throw error here - the Supabase reset email will still be sent
         }
       } catch (emailError) {
         console.error('Failed to send custom password reset email:', emailError);
