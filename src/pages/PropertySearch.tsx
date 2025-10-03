@@ -102,7 +102,7 @@ const PropertySearch = () => {
       case 'buy':
         return ['ALL', 'APARTMENT', 'CO-LIVING', 'VILLA', 'INDEPENDENT HOUSE', 'BUILDER FLOOR', 'STUDIO APARTMENT', 'CO-WORKING', 'PENTHOUSE', 'DUPLEX'];
       case 'commercial':
-        return ['ALL', 'OFFICE', 'RETAIL', 'WAREHOUSE', 'SHOWROOM', 'RESTAURANT', 'CO-WORKING', 'INDUSTRIAL'];
+        return ['ALL', 'OFFICE', 'RETAIL', 'WAREHOUSE', 'SHOWROOM', 'RESTAURANT', 'CO-WORKING', 'INDUSTRIAL', 'AGRICULTURAL LAND', 'COMMERCIAL LAND', 'INDUSTRIAL LAND'];
       default:
         return ['ALL', 'APARTMENT', 'VILLA', 'INDEPENDENT HOUSE', 'PENTHOUSE', 'DUPLEX'];
     }
