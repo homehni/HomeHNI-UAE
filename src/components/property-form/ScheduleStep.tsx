@@ -179,21 +179,18 @@ export const ScheduleStep: React.FC<ScheduleStepProps> = ({
                           <span className="text-sm text-green-700 font-medium">
                             Your response has been captured
                           </span>
-                        </div> : <div className="flex gap-3">
+                        </div> : <div className="flex gap-3 flex-wrap">
                           <Button 
                             type="button" 
-                            size="sm" 
-                            className="bg-orange-500 hover:bg-orange-600 text-white" 
-                            variant={field.value === 'book' ? 'default' : 'outline'} 
+                            className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 h-auto rounded-md font-medium" 
                             onClick={handlePaintingBookNow}
                           >
                             Book Now
                           </Button>
                           <Button 
                             type="button" 
-                            size="sm" 
                             variant="outline" 
-                            className="bg-white border-gray-300 text-gray-700 hover:bg-gray-50" 
+                            className="bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 px-6 py-2 h-auto rounded-md font-medium" 
                             onClick={() => {
                               field.onChange('decline');
                               setPaintingResponse('decline');
@@ -232,21 +229,18 @@ export const ScheduleStep: React.FC<ScheduleStepProps> = ({
                           <span className="text-sm text-green-700 font-medium">
                             Your response has been captured
                           </span>
-                        </div> : <div className="flex gap-3">
+                        </div> : <div className="flex gap-3 flex-wrap">
                           <Button 
                             type="button" 
-                            size="sm" 
-                            className="bg-teal-500 hover:bg-teal-600 text-white" 
-                            variant={field.value === 'book' ? 'default' : 'outline'} 
+                            className="bg-teal-500 hover:bg-teal-600 text-white px-6 py-2 h-auto rounded-md font-medium" 
                             onClick={handleCleaningBookNow}
                           >
                             Book Now
                           </Button>
                           <Button 
                             type="button" 
-                            size="sm" 
                             variant="outline" 
-                            className="bg-white border-gray-300 text-gray-700 hover:bg-gray-50" 
+                            className="bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 px-6 py-2 h-auto rounded-md font-medium" 
                             onClick={() => {
                               field.onChange('decline');
                               setCleaningResponse('decline');
