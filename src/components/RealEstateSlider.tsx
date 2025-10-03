@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import prestigeGroupLogo from '@/assets/prestige-group-logo.jpg';
@@ -136,4 +136,5 @@ const RealEstateSlider = () => {
       </div>
     </section>;
 };
+export { RealEstateSlider };
 export default RealEstateSlider;

@@ -10,11 +10,11 @@ import WhyUseSection from '@/components/WhyUseSection';
 import Stats from '@/components/Stats';
 import Footer from '@/components/Footer';
 import ChatBot from '@/components/ChatBot';
+import RealEstateSlider from '@/components/RealEstateSlider';
 
 // Lazy load heavy components
 import { 
   LazyFeaturedProperties, 
-  LazyRealEstateSlider, 
   LazyHomeServices,
   LazyCustomerTestimonials,
   LazyMobileAppSection 
@@ -23,7 +23,6 @@ import {
 // Import loading skeletons
 import {
   FeaturedPropertiesSkeleton,
-  RealEstateSliderSkeleton,
   HomeServicesSkeleton,
   CustomerTestimonialsSkeleton,
   MobileAppSectionSkeleton
@@ -61,9 +60,7 @@ const Index = () => {
           <DirectorySection />
         </div>
         
-        <Suspense fallback={<RealEstateSliderSkeleton />}>
-          <LazyRealEstateSlider />
-        </Suspense>
+        <RealEstateSlider />
         
         <Suspense fallback={<HomeServicesSkeleton />}>
           <LazyHomeServices />
