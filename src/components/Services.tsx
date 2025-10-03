@@ -43,7 +43,7 @@ const Services = () => {
                   <service.icon className="w-8 h-8 text-white" />
                 </div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-3">{service.title}</h3>
-                <p className="text-gray-600 text-uniform text-center">{service.description}</p>
+                <p className="text-gray-600 text-uniform-center">{service.description}</p>
               </div>
             </div>)}
         </div>
