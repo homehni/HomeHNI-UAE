@@ -318,6 +318,36 @@ export type Database = {
         }
         Relationships: []
       }
+      email_verification_tokens: {
+        Row: {
+          created_at: string | null
+          email: string
+          expires_at: string
+          id: string
+          token: string
+          user_id: string
+          verified_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          email: string
+          expires_at: string
+          id?: string
+          token: string
+          user_id: string
+          verified_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          email?: string
+          expires_at?: string
+          id?: string
+          token?: string
+          user_id?: string
+          verified_at?: string | null
+        }
+        Relationships: []
+      }
       employee_payouts: {
         Row: {
           amount: number
@@ -1422,6 +1452,10 @@ export type Database = {
         Args: { base_slug: string }
         Returns: string
       }
+      generate_verification_token: {
+        Args: { p_email: string; p_user_id: string }
+        Returns: string
+      }
       get_available_roles: {
         Args: Record<PropertyKey, never>
         Returns: {
@@ -1770,6 +1804,10 @@ export type Database = {
           user_id: string
         }
         Returns: boolean
+      }
+      verify_email_token: {
+        Args: { p_token: string }
+        Returns: Json
       }
     }
     Enums: {
