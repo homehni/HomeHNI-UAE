@@ -303,7 +303,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       let userName = email.split('@')[0]; // Fallback to email prefix
       
       try {
-        const { data: profile } = await supabase
+        const { data: profile } = await (supabase as any)
           .from('profiles')
           .select('full_name')
           .eq('email', email.toLowerCase())

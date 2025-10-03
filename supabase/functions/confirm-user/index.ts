@@ -8,24 +8,35 @@ import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
 const SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Methods": "POST, OPTIONS"
+};
+
 if (!SUPABASE_URL || !SERVICE_ROLE_KEY) {
   console.error("Missing required env vars SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY");
 }
 
 serve(async (req) => {
   try {
+    // CORS preflight
+    if (req.method === 'OPTIONS') {
+      return new Response(null, { headers: corsHeaders });
+    }
+
     if (req.method !== 'POST') {
-      return new Response(JSON.stringify({ error: 'Method not allowed' }), { status: 405, headers: { 'Content-Type': 'application/json' } });
+      return new Response(JSON.stringify({ error: 'Method not allowed' }), { status: 405, headers: { 'Content-Type': 'application/json', ...corsHeaders } });
     }
 
     const contentType = req.headers.get('content-type') || '';
     if (!contentType.includes('application/json')) {
-      return new Response(JSON.stringify({ error: 'Invalid content type' }), { status: 400, headers: { 'Content-Type': 'application/json' } });
+      return new Response(JSON.stringify({ error: 'Invalid content type' }), { status: 400, headers: { 'Content-Type': 'application/json', ...corsHeaders } });
     }
 
     const { email } = await req.json();
     if (!email || typeof email !== 'string' || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
-      return new Response(JSON.stringify({ error: 'Valid email is required' }), { status: 400, headers: { 'Content-Type': 'application/json' } });
+      return new Response(JSON.stringify({ error: 'Valid email is required' }), { status: 400, headers: { 'Content-Type': 'application/json', ...corsHeaders } });
     }
 
     // 1) Find user by email via GoTrue Admin REST API
@@ -40,14 +51,14 @@ serve(async (req) => {
 
     if (!findRes.ok) {
       const text = await findRes.text();
-      return new Response(JSON.stringify({ error: 'Failed to lookup user', details: text }), { status: 500, headers: { 'Content-Type': 'application/json' } });
+      return new Response(JSON.stringify({ error: 'Failed to lookup user', details: text }), { status: 500, headers: { 'Content-Type': 'application/json', ...corsHeaders } });
     }
 
     const list = await findRes.json();
     const user = Array.isArray(list?.users) ? list.users.find((u: any) => (u?.email || '').toLowerCase() === email.toLowerCase()) : null;
 
     if (!user) {
-      return new Response(JSON.stringify({ error: 'User not found' }), { status: 404, headers: { 'Content-Type': 'application/json' } });
+      return new Response(JSON.stringify({ error: 'User not found' }), { status: 404, headers: { 'Content-Type': 'application/json', ...corsHeaders } });
     }
 
     // 2) Confirm user via PATCH
@@ -63,11 +74,11 @@ serve(async (req) => {
 
     if (!confirmRes.ok) {
       const text = await confirmRes.text();
-      return new Response(JSON.stringify({ error: 'Failed to confirm user', details: text }), { status: 500, headers: { 'Content-Type': 'application/json' } });
+      return new Response(JSON.stringify({ error: 'Failed to confirm user', details: text }), { status: 500, headers: { 'Content-Type': 'application/json', ...corsHeaders } });
     }
 
-    return new Response(JSON.stringify({ success: true }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+    return new Response(JSON.stringify({ success: true }), { status: 200, headers: { 'Content-Type': 'application/json', ...corsHeaders } });
   } catch (e) {
-    return new Response(JSON.stringify({ error: 'Unexpected error', details: String(e) }), { status: 500, headers: { 'Content-Type': 'application/json' } });
+    return new Response(JSON.stringify({ error: 'Unexpected error', details: String(e) }), { status: 500, headers: { 'Content-Type': 'application/json', ...corsHeaders } });
   }
 });
