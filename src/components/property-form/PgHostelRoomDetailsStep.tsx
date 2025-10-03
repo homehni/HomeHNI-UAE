@@ -58,6 +58,13 @@ export function PgHostelRoomDetailsStep({
     },
   });
 
+  const [errors, setErrors] = useState<{
+    [key: string]: {
+      expectedRent?: string;
+      expectedDeposit?: string;
+    };
+  }>({});
+
   // Sync local state when navigating back to this step
   useEffect(() => {
     if (initialData) {
@@ -83,11 +90,27 @@ export function PgHostelRoomDetailsStep({
   };
 
   const isFormValid = () => {
+    const newErrors: typeof errors = {};
+    let isValid = true;
+
     // Check if all selected room types have rent and deposit values
-    return roomTypes.selectedTypes.every(roomType => {
+    roomTypes.selectedTypes.forEach(roomType => {
       const details = formData.roomTypeDetails[roomType];
-      return details && details.expectedRent > 0 && details.expectedDeposit > 0;
+      newErrors[roomType] = {};
+
+      if (!details || !details.expectedRent || details.expectedRent <= 0) {
+        newErrors[roomType].expectedRent = 'Expected rent is required and must be greater than zero';
+        isValid = false;
+      }
+
+      if (!details || !details.expectedDeposit || details.expectedDeposit <= 0) {
+        newErrors[roomType].expectedDeposit = 'Expected deposit is required and must be greater than zero';
+        isValid = false;
+      }
     });
+
+    setErrors(newErrors);
+    return isValid;
   };
 
   const handleRoomTypePriceChange = (roomType: string, field: 'expectedRent' | 'expectedDeposit', value: number) => {
@@ -101,6 +124,17 @@ export function PgHostelRoomDetailsStep({
         },
       },
     }));
+
+    // Clear error for this field when user starts typing
+    if (errors[roomType]?.[field]) {
+      setErrors(prev => ({
+        ...prev,
+        [roomType]: {
+          ...prev[roomType],
+          [field]: undefined,
+        },
+      }));
+    }
   };
 
   const getRoomTypeLabel = (roomType: string) => {
@@ -151,10 +185,13 @@ export function PgHostelRoomDetailsStep({
                       value={roomDetails.expectedRent}
                       onChange={(value) => handleRoomTypePriceChange(roomType, 'expectedRent', value)}
                       placeholder="Enter Amount"
-                      className="h-12 text-lg"
+                      className={`h-12 text-lg ${errors[roomType]?.expectedRent ? 'border-red-500' : ''}`}
                     />
+                    {errors[roomType]?.expectedRent && (
+                      <p className="text-sm text-red-500 mt-1">{errors[roomType].expectedRent}</p>
+                    )}
                     {/* Expected rent in words display */}
-                    {roomDetails.expectedRent && roomDetails.expectedRent > 0 && (
+                    {roomDetails.expectedRent && roomDetails.expectedRent > 0 && !errors[roomType]?.expectedRent && (
                       <div className="mt-2">
                         <p className="text-sm text-gray-600">
                           {formatExactPriceDisplay(roomDetails.expectedRent)}
@@ -171,10 +208,13 @@ export function PgHostelRoomDetailsStep({
                       value={roomDetails.expectedDeposit}
                       onChange={(value) => handleRoomTypePriceChange(roomType, 'expectedDeposit', value)}
                       placeholder="Enter Amount"
-                      className="h-12 text-lg"
+                      className={`h-12 text-lg ${errors[roomType]?.expectedDeposit ? 'border-red-500' : ''}`}
                     />
+                    {errors[roomType]?.expectedDeposit && (
+                      <p className="text-sm text-red-500 mt-1">{errors[roomType].expectedDeposit}</p>
+                    )}
                     {/* Expected deposit in words display */}
-                    {roomDetails.expectedDeposit && roomDetails.expectedDeposit > 0 && (
+                    {roomDetails.expectedDeposit && roomDetails.expectedDeposit > 0 && !errors[roomType]?.expectedDeposit && (
                       <div className="mt-2">
                         <p className="text-sm text-gray-600">
                           {formatExactPriceDisplay(roomDetails.expectedDeposit)}
