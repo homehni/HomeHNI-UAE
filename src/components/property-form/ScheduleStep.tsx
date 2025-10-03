@@ -183,7 +183,7 @@ export const ScheduleStep: React.FC<ScheduleStepProps> = ({
                           <Button 
                             type="button" 
                             size="sm"
-                            className="bg-orange-500 hover:bg-orange-600 text-white" 
+                            className="bg-orange-500 hover:bg-orange-600 text-white text-xs" 
                             variant={field.value === 'book' ? 'default' : 'outline'}
                             onClick={handlePaintingBookNow}
                           >
@@ -193,7 +193,7 @@ export const ScheduleStep: React.FC<ScheduleStepProps> = ({
                             type="button" 
                             size="sm"
                             variant="outline" 
-                            className="border-gray-300 text-gray-700 hover:bg-gray-50 pl-2 pr-1" 
+                            className="border-gray-300 text-gray-700 hover:bg-gray-50 pl-2 pr-1 text-xs" 
                             onClick={() => {
                               field.onChange('decline');
                               setPaintingResponse('decline');
@@ -236,7 +236,7 @@ export const ScheduleStep: React.FC<ScheduleStepProps> = ({
                           <Button 
                             type="button" 
                             size="sm"
-                            className="bg-teal-500 hover:bg-teal-600 text-white" 
+                            className="bg-teal-500 hover:bg-teal-600 text-white text-xs" 
                             variant={field.value === 'book' ? 'default' : 'outline'}
                             onClick={handleCleaningBookNow}
                           >
@@ -246,7 +246,7 @@ export const ScheduleStep: React.FC<ScheduleStepProps> = ({
                             type="button" 
                             size="sm"
                             variant="outline" 
-                            className="border-gray-300 text-gray-700 hover:bg-gray-50 pl-2 pr-1" 
+                            className="border-gray-300 text-gray-700 hover:bg-gray-50 pl-2 pr-1 text-xs" 
                             onClick={() => {
                               field.onChange('decline');
                               setCleaningResponse('decline');
