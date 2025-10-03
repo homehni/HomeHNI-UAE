@@ -106,7 +106,7 @@ const GetTenantsFasterSection: React.FC<GetTenantsFasterSectionProps> = ({ owner
             }`}
             disabled={interestShown}
           >
-            {interestShown ? "Interest shown" : "Get Assistance"}
+            {interestShown ? "Request Sent" : "Get Assistance"}
           </Button>
         </div>
       </div>
