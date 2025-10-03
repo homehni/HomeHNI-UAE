@@ -179,7 +179,7 @@ export const ScheduleStep: React.FC<ScheduleStepProps> = ({
                           <span className="text-sm text-green-700 font-medium">
                             Your response has been captured
                           </span>
-                        </div> : <div className="flex gap-3 flex-wrap">
+                        </div> : <div className="flex gap-3">
                           <Button 
                             type="button" 
                             className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 h-auto rounded-md font-medium" 
@@ -229,7 +229,7 @@ export const ScheduleStep: React.FC<ScheduleStepProps> = ({
                           <span className="text-sm text-green-700 font-medium">
                             Your response has been captured
                           </span>
-                        </div> : <div className="flex gap-3 flex-wrap">
+                        </div> : <div className="flex gap-3">
                           <Button 
                             type="button" 
                             className="bg-teal-500 hover:bg-teal-600 text-white px-6 py-2 h-auto rounded-md font-medium" 
