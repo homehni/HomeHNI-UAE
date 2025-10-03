@@ -548,27 +548,6 @@ const PropertySearch = () => {
 
                 <Separator />
 
-                {/* Furnished Filter */}
-                <div>
-                  <h4 className="font-semibold mb-3">Furnished Status</h4>
-                  <div className="space-y-2">
-                    {furnishedOptions.map(option => <div key={option} className="flex items-center space-x-2">
-                        <Checkbox id={option} checked={filters.furnished.includes(option)} onCheckedChange={checked => {
-                      if (checked) {
-                        updateFilter('furnished', [...filters.furnished, option]);
-                      } else {
-                        updateFilter('furnished', filters.furnished.filter(f => f !== option));
-                      }
-                    }} />
-                        <label htmlFor={option} className="text-sm text-gray-700 cursor-pointer">
-                          {option}
-                        </label>
-                      </div>)}
-                  </div>
-                </div>
-
-                <Separator />
-
                 {/* Construction Status */}
                 <div>
                   <h4 className="font-semibold mb-3">Construction Status</h4>
