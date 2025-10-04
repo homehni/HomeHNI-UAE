@@ -1315,7 +1315,7 @@ const ChatBot = () => {
       </div>
 
       {/* Input Area */}
-      {!showDetailsForm && planChatStep !== 'complete' && (
+      {planChatStep !== 'complete' && (
         <div className="p-4 border-t border-gray-200 bg-white">
           <div className="flex items-center space-x-2">
             <Input
