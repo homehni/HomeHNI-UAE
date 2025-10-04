@@ -156,12 +156,7 @@ export const CategorizedImageUpload: React.FC<CategorizedImageUploadProps> = ({
       [category]: images[category].filter((_, i) => i !== index)
     };
     onImagesChange(updatedImages);
-    
-    toast({
-      title: "File removed",
-      description: "File has been removed successfully"
-    });
-  }, [images, onImagesChange, toast]);
+  }, [images, onImagesChange]);
 
   const handleUploadClick = useCallback((category: keyof CategorizedImages) => {
     const input = fileInputRefs.current[category];
