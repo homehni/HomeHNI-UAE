@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import { Home, X, Send, MapPin, Calendar, Phone, Mail, User, Bed, Bath, Square, Building2, UserCircle, Search, History, HelpCircle, Globe, Wind, ShoppingBag, Hammer, FileCheck, Zap, Sofa, Sparkles, PaintBucket, Wrench, Scale, BadgeDollarSign, Shield, TruckIcon, Brush, Droplet, FileText, CreditCard, GraduationCap, UserCheck, Ban, UserPlus, Receipt, MoreHorizontal } from 'lucide-react';
+import { Home, X, Send, MapPin, Calendar, Phone, Mail, User, Bed, Bath, Square, Building2, UserCircle, Search, History, HelpCircle, Globe, Wind, ShoppingBag, Hammer, FileCheck, Zap, Sofa, Sparkles, PaintBucket, Wrench, Scale, BadgeDollarSign, Shield, TruckIcon, Brush, Droplet, FileText, CreditCard, GraduationCap, UserCheck, Ban, UserPlus, Receipt, MoreHorizontal, ArrowLeft, MessageSquare } from 'lucide-react';
 
 interface Message {
   id: string;
@@ -617,15 +617,17 @@ const ChatBot = () => {
       <div className="flex flex-col h-full">
         {/* Header */}
         <div className="px-4 pt-4 pb-3 bg-gradient-to-br from-red-50 to-white border-b">
-          <button
-            onClick={handleBackToServices}
-            className="flex items-center text-gray-700 hover:text-brand-red mb-3"
-          >
-            <span className="text-xl mr-2">←</span>
-            <span className="text-sm font-semibold uppercase tracking-wider">
+          <div className="flex items-center mb-3">
+            <button
+              onClick={handleBackToServices}
+              className="text-gray-700 hover:text-brand-red p-1 -ml-1 mr-2"
+            >
+              <ArrowLeft size={20} />
+            </button>
+            <span className="text-sm font-semibold uppercase tracking-wider text-gray-700">
               {service?.label || selectedService.replace(/_/g, ' ').toUpperCase()}
             </span>
-          </button>
+          </div>
         </div>
 
         {/* FAQ List */}
@@ -673,15 +675,17 @@ const ChatBot = () => {
       <div className="flex flex-col h-full">
         {/* Header */}
         <div className="px-4 pt-4 pb-3 bg-gradient-to-br from-red-50 to-white border-b">
-          <button
-            onClick={handleBackToFAQs}
-            className="flex items-center text-gray-700 hover:text-brand-red mb-3"
-          >
-            <span className="text-xl mr-2">←</span>
-            <span className="text-sm font-semibold uppercase tracking-wider">
+          <div className="flex items-center mb-3">
+            <button
+              onClick={handleBackToFAQs}
+              className="text-gray-700 hover:text-brand-red p-1 -ml-1 mr-2"
+            >
+              <ArrowLeft size={20} />
+            </button>
+            <span className="text-sm font-semibold uppercase tracking-wider text-gray-700">
               {service?.label || selectedService.replace(/_/g, ' ').toUpperCase()}
             </span>
-          </button>
+          </div>
         </div>
 
         {/* FAQ Detail */}
@@ -700,7 +704,7 @@ const ChatBot = () => {
             <button className="w-full p-4 bg-white hover:bg-gray-50 rounded-lg border border-gray-200 hover:border-brand-red transition-colors flex items-center justify-between group">
               <div className="flex items-center">
                 <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center mr-3">
-                  <Send className="w-5 h-5 text-brand-red" />
+                  <MessageSquare className="w-5 h-5 text-brand-red" />
                 </div>
                 <div className="text-left">
                   <p className="text-sm font-medium text-gray-900">Message us</p>
