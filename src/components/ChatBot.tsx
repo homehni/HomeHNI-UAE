@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import { Home, X, Send, MapPin, Calendar, Phone, Mail, User, Bed, Bath, Square, Building2, UserCircle, Search, History, HelpCircle, Globe, Wind, ShoppingBag, Hammer, FileCheck, Zap, Sofa, Sparkles, PaintBucket, Wrench, Scale, BadgeDollarSign, Shield, TruckIcon, Brush, Droplet, FileText, CreditCard, GraduationCap, UserCheck, Ban, UserPlus, Receipt, MoreHorizontal, ArrowLeft, MessageSquare } from 'lucide-react';
+import { Home, X, Send, MapPin, Calendar, Phone, Mail, User, Bed, Bath, Square, Building2, UserCircle, Search, History, HelpCircle, Globe, Wind, ShoppingBag, Hammer, FileCheck, Zap, Sofa, Sparkles, PaintBucket, Wrench, Scale, BadgeDollarSign, Shield, TruckIcon, Brush, Droplet, FileText, CreditCard, GraduationCap, UserCheck, Ban, UserPlus, Receipt, MoreHorizontal, ArrowLeft, MessageSquare, Check } from 'lucide-react';
 
 interface Message {
   id: string;
@@ -1092,7 +1092,7 @@ const ChatBot = () => {
         </button>
         <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 mb-2 pr-8">Help Center</h1>
         <p className="text-xs sm:text-sm text-gray-600 flex items-center">
-          <span className="text-brand-red mr-2">✓</span>
+          <Check className="text-brand-red mr-2 w-4 h-4 sm:w-5 sm:h-5" />
           One-Stop Solution for all Real Estate Services
         </p>
       </div>
