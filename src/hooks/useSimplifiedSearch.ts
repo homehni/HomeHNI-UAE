@@ -41,6 +41,26 @@ interface SearchFilters {
 
 export const useSimplifiedSearch = () => {
   const [searchParams] = useSearchParams();
+  // Minimal DB row type to replace 'any' in realtime handlers
+  type PropertyRow = {
+    id: string;
+    title?: string;
+    locality?: string;
+    city?: string;
+    expected_price?: number;
+    super_area?: number;
+    bhk_type?: string;
+    bathrooms?: number;
+    images?: string[];
+    property_type?: string;
+    furnishing?: string;
+    availability_type?: string;
+    property_age?: string;
+    listing_type?: string;
+    created_at?: string;
+    is_visible?: boolean;
+    status?: string;
+  };
   
   // Dynamic budget range based on active tab
   const getBudgetRange = (tab: string): [number, number] => {
@@ -57,25 +77,76 @@ export const useSimplifiedSearch = () => {
   };
 
   const [filters, setFilters] = useState<SearchFilters>(() => {
+    // Tab determines default budget range
+    const initialTab = searchParams.get('type') || 'buy';
+    const defaultBudget = getBudgetRange(initialTab);
+
     // Parse locations from URL parameter (comma-separated)
     const locationsParam = searchParams.get('locations');
-    const parsedLocations = locationsParam ? 
-      locationsParam.split(',').map(loc => decodeURIComponent(loc.trim())).filter(Boolean) : 
-      [];
-    
+    const parsedLocations = locationsParam
+      ? locationsParam.split(',').map((loc) => decodeURIComponent(loc.trim())).filter(Boolean)
+      : [];
+
+    // Property types: support both 'propertyTypes' (comma-separated) and legacy 'propertyType'
+    const propertyTypesParam = searchParams.get('propertyTypes') || '';
+    const propertyTypeLegacy = searchParams.get('propertyType');
+    const propertyType = propertyTypesParam
+      ? propertyTypesParam.split(',').map((v) => decodeURIComponent(v.trim())).filter(Boolean)
+      : propertyTypeLegacy
+      ? [propertyTypeLegacy]
+      : [];
+
+    // BHK selections
+    const bhkParam = searchParams.get('bhk') || '';
+    const bhkType = bhkParam
+      ? bhkParam.split(',').map((v) => decodeURIComponent(v.trim())).filter(Boolean)
+      : [];
+
+    // Availability and construction
+    const availabilityParam = searchParams.get('availability') || '';
+    const availability = availabilityParam
+      ? availabilityParam.split(',').map((v) => decodeURIComponent(v.trim())).filter(Boolean)
+      : [];
+    const constructionParam = searchParams.get('construction') || '';
+    const construction = constructionParam
+      ? constructionParam.split(',').map((v) => decodeURIComponent(v.trim())).filter(Boolean)
+      : [];
+
+    // Furnished
+    const furnishedParam = searchParams.get('furnished') || '';
+    const furnished = furnishedParam
+      ? furnishedParam.split(',').map((v) => decodeURIComponent(v.trim())).filter(Boolean)
+      : [];
+
+    // Budget bounds
+    const budgetMin = Number(searchParams.get('budgetMin'));
+    const budgetMax = Number(searchParams.get('budgetMax'));
+    const budget: [number, number] = [
+      Number.isFinite(budgetMin) ? Math.max(0, budgetMin) : defaultBudget[0],
+      Number.isFinite(budgetMax) ? Math.min(defaultBudget[1], budgetMax) : defaultBudget[1],
+    ];
+
+    // Area bounds
+    const areaMin = Number(searchParams.get('areaMin'));
+    const areaMax = Number(searchParams.get('areaMax'));
+    const area: [number, number] = [
+      Number.isFinite(areaMin) ? Math.max(0, areaMin) : 0,
+      Number.isFinite(areaMax) ? Math.min(10000, areaMax) : 10000,
+    ];
+
     return {
-      propertyType: searchParams.get('propertyType') ? [searchParams.get('propertyType')!] : [],
-      bhkType: [],
-      budget: getBudgetRange(searchParams.get('type') || 'buy'),
-      area: [0, 10000], // Default area range: 0 to 10,000 sq ft
+      propertyType,
+      bhkType,
+      budget,
+      area,
       locality: [],
-      furnished: [],
-      availability: [],
-      construction: [],
+  furnished,
+      availability,
+      construction,
       location: searchParams.get('location') || '',
       locations: parsedLocations, // Initialize from URL parameter
       selectedCity: searchParams.get('city') || '', // Initialize from URL parameter
-      sortBy: 'relevance'
+      sortBy: 'relevance',
     };
   });
 
@@ -107,7 +178,7 @@ export const useSimplifiedSearch = () => {
   }, [activeTab]);
 
   // Transform property data helper - Memoized with useCallback for performance
-  const transformProperty = useCallback((property: any) => {
+  const transformProperty = useCallback((property: PropertyRow) => {
     const displayPropertyType = property.property_type?.replace(/_/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase()) || 'Property';
     
     return {
@@ -203,12 +274,12 @@ export const useSimplifiedSearch = () => {
           console.log('🔄 Real-time property change:', payload);
           
           if (payload.eventType === 'INSERT') {
-            const newProperty = payload.new as any;
+            const newProperty = payload.new as PropertyRow;
             if (newProperty.is_visible) {
               setAllProperties(prev => [transformProperty(newProperty), ...prev]);
             }
           } else if (payload.eventType === 'UPDATE') {
-            const updatedProperty = payload.new as any;
+            const updatedProperty = payload.new as PropertyRow;
             setAllProperties(prev => 
               prev.map(p => p.id === updatedProperty.id 
                 ? transformProperty(updatedProperty) 
@@ -216,7 +287,7 @@ export const useSimplifiedSearch = () => {
               )
             );
           } else if (payload.eventType === 'DELETE') {
-            const deletedProperty = payload.old as any;
+            const deletedProperty = payload.old as PropertyRow;
             setAllProperties(prev => prev.filter(p => p.id !== deletedProperty.id));
           }
         }
@@ -629,7 +700,7 @@ export const useSimplifiedSearch = () => {
     return filtered;
   }, [allProperties, filters, activeTab, normalizeLocationName]);
 
-  const updateFilter = (key: keyof SearchFilters, value: any) => {
+  const updateFilter = (key: keyof SearchFilters, value: SearchFilters[typeof key]) => {
     setFilters(prev => ({
       ...prev,
       [key]: value

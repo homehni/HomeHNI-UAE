@@ -17,12 +17,35 @@ import Footer from '@/components/Footer';
 import PropertyTools from '@/components/PropertyTools';
 import { useSimplifiedSearch } from '@/hooks/useSimplifiedSearch';
 import { useDebounce } from '@/hooks/useDebounce';
+// Minimal Google Places typings to avoid 'any'
+type GPlaceComponent = { long_name: string; short_name: string; types: string[] };
+type PlaceResultMinimal = {
+  formatted_address?: string;
+  name?: string;
+  address_components?: GPlaceComponent[];
+};
+type GAutocomplete = {
+  getPlace: () => PlaceResultMinimal | undefined;
+  addListener: (eventName: string, handler: () => void) => void;
+};
+type PlacesNamespace = { Autocomplete: new (input: HTMLInputElement, opts: unknown) => GAutocomplete };
+type GoogleMaps = { places?: PlacesNamespace };
+type GoogleNS = { maps?: GoogleMaps };
+type WindowWithGoogle = Window & { google?: GoogleNS };
 const PropertySearch = () => {
   const navigate = useNavigate();
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(12); // 12 properties per page
   const locationInputRef = useRef<HTMLInputElement>(null);
+  
+  // State for dropdown filters
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  const [selectedPropertyTypes, setSelectedPropertyTypes] = useState<string[]>([]);
+  const [selectedBedrooms, setSelectedBedrooms] = useState<string[]>([]);
+  const [selectedConstructionStatus, setSelectedConstructionStatus] = useState<string[]>([]);
+  const [selectedPostedBy, setSelectedPostedBy] = useState<string[]>([]);
+
   const {
     filters,
     activeTab,
@@ -66,6 +89,28 @@ const PropertySearch = () => {
       default:
         return 500000; // Default to buy range
     }
+  };
+
+  // Snap budget to friendly steps for smoother control
+  const snapBudget = (tab: string, range: [number, number]): [number, number] => {
+    const roundTo = (val: number, step: number) => Math.round(val / step) * step;
+    const snapOne = (val: number) => {
+      if (tab === 'rent') {
+        if (val <= 50000) return roundTo(val, 5000);
+        if (val <= 200000) return roundTo(val, 10000);
+        return roundTo(val, 50000);
+      }
+      if (val <= 2000000) return roundTo(val, 100000);
+      if (val <= 10000000) return roundTo(val, 500000);
+      return roundTo(val, 1000000);
+    };
+    const [min, max] = range;
+    const snapped: [number, number] = [snapOne(min), snapOne(max)];
+    const maxAllowed = getBudgetSliderMax(activeTab);
+    snapped[0] = Math.max(0, Math.min(snapped[0], maxAllowed));
+    snapped[1] = Math.max(0, Math.min(snapped[1], maxAllowed));
+    if (snapped[0] > snapped[1]) snapped[0] = snapped[1];
+    return snapped;
   };
 
   // Ensure budget values are within valid range for current tab
@@ -206,7 +251,8 @@ const PropertySearch = () => {
     const apiKey = 'AIzaSyD2rlXeHN4cm0CQD-y4YGTsob9a_27YcwY';
     const loadGoogleMaps = () => {
       return new Promise((resolve, reject) => {
-        if ((window as any).google?.maps?.places) {
+  const w = window as WindowWithGoogle;
+  if (w.google?.maps?.places) {
           resolve(true);
           return;
         }
@@ -220,7 +266,8 @@ const PropertySearch = () => {
       });
     };
     const initAutocomplete = () => {
-      if (!(window as any).google?.maps?.places || !locationInputRef.current) return;
+  const w = window as WindowWithGoogle;
+  if (!w.google?.maps?.places || !locationInputRef.current) return;
       const options = {
         fields: ['formatted_address', 'geometry', 'name', 'address_components'],
         types: ['geocode'],
@@ -228,17 +275,17 @@ const PropertySearch = () => {
           country: 'in' as const
         }
       };
-      const autocomplete = new (window as any).google.maps.places.Autocomplete(locationInputRef.current, options);
+  const autocomplete = new w.google!.maps!.places!.Autocomplete(locationInputRef.current, options);
       autocomplete.addListener('place_changed', () => {
         const place = autocomplete.getPlace();
         let locationValue = place?.formatted_address || place?.name || '';
 
         // Extract only locality name from formatted address since city is already selected
         if (place?.address_components) {
-          const addressComponents = place.address_components;
+          const addressComponents = place.address_components as GPlaceComponent[];
 
           // Look for locality, sublocality, or neighborhood components (most specific first)
-          const localityComponent = addressComponents.find((comp: any) => 
+          const localityComponent = addressComponents.find((comp: GPlaceComponent) => 
             comp.types.includes('sublocality_level_1') || 
             comp.types.includes('sublocality') || 
             comp.types.includes('neighborhood') ||
@@ -259,7 +306,7 @@ const PropertySearch = () => {
         
         if (locationValue && filters.selectedCity) {
           // Validate that the selected location is within the selected city
-          const isValidLocation = place?.address_components && place.address_components.some((comp: any) => 
+          const isValidLocation = place?.address_components && place.address_components.some((comp: GPlaceComponent) => 
             comp.types.includes('administrative_area_level_2') && 
             comp.long_name.toLowerCase().includes(filters.selectedCity.toLowerCase())
           );
@@ -300,6 +347,7 @@ const PropertySearch = () => {
     };
     
     loadGoogleMaps().then(initAutocomplete).catch(console.error);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [updateFilter, filters.selectedCity]); // Re-initialize when selectedCity changes
   return <div className="min-h-screen bg-background">
       {/* Skip to main content link for keyboard users */}
@@ -314,10 +362,11 @@ const PropertySearch = () => {
       <Marquee />
       <Header />
       
-      {/* Search Header */}
+      {/* Enhanced Search Header */}
       <div className="bg-white border-b border-gray-200 pt-20">
         <div className="container mx-auto px-4 py-4">
-          <div className="flex flex-col lg:flex-row gap-4 items-center pt-4">
+          {/* Top Row: Tabs and Location Search */}
+          <div className="flex flex-col lg:flex-row gap-4 items-start lg:items-center pt-4">
             {/* Search Tabs */}
             <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full lg:w-auto">
               <TabsList className="grid w-full lg:w-auto grid-cols-3 bg-gray-100" role="tablist" aria-label="Property listing type">
@@ -328,27 +377,27 @@ const PropertySearch = () => {
             </Tabs>
 
             {/* Main Search Bar with Multi-Location Support */}
-            <div className="flex-1">
+            <div className="flex-1 w-full">
               <div className="relative">
-                <MapPin className="absolute left-3 top-3 text-brand-red" size={20} />
+                <MapPin className="absolute left-3 top-3 text-brand-red z-10" size={20} />
                 
                 {/* Multi-Location Search Bar */}
                 <div 
                   className="flex flex-wrap items-center gap-2 p-3 pl-10 pr-4 min-h-12 border border-brand-red rounded-lg focus-within:ring-2 focus-within:ring-brand-red/20 bg-white cursor-text"
                   onClick={() => {
-                    // Focus input when clicking anywhere in the search bar
                     if (locationInputRef.current && filters.locations.length < 3) {
                       locationInputRef.current.focus();
                     }
                   }}
                 >
                   {/* Location Chips */}
-                  {filters.locations.map((location, index) => (
+                  {filters.locations.map((location: string, index: number) => (
                     <div key={index} className="flex items-center gap-1 bg-brand-red text-white px-3 py-1.5 rounded-full text-sm font-medium">
                       <span className="truncate max-w-32">{location}</span>
                       <button
-                        onClick={() => {
-                          const newLocations = filters.locations.filter((_, i) => i !== index);
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          const newLocations = filters.locations.filter((_: string, i: number) => i !== index);
                           updateFilter('locations', newLocations);
                         }}
                         className="ml-1 hover:bg-brand-red-dark rounded-full p-0.5"
@@ -372,7 +421,6 @@ const PropertySearch = () => {
                         if (filters.selectedCity && filters.locations.length < 3 && !filters.locations.includes(filters.location.trim())) {
                           updateFilter('locations', [...filters.locations, filters.location.trim()]);
                           updateFilter('location', '');
-                          // Keep focus on input after adding location
                           setTimeout(() => {
                             if (locationInputRef.current) {
                               locationInputRef.current.focus();
@@ -385,31 +433,29 @@ const PropertySearch = () => {
                         updateFilter('locations', newLocations);
                       }
                     }}
-                    onFocus={e => {
-                      // Ensure input is always focused and ready for typing
-                      e.target.select();
-                    }}
-                    placeholder={filters.locations.length === 0 ? "Enter locality or area name..." : filters.locations.length >= 3 ? "Max 3 locations selected" : "Add more..."}
+                    onFocus={e => e.target.select()}
+                    placeholder={filters.locations.length === 0 ? "Search locality..." : filters.locations.length >= 3 ? "Max 3 locations" : "Add more..."}
                     className="flex-1 min-w-32 outline-none bg-transparent text-sm"
                     disabled={filters.locations.length >= 3}
-                    autoFocus={filters.locations.length < 3}
                   />
                   
                   {/* Location Counter */}
                   {filters.locations.length >= 3 && (
-                    <span className="text-gray-500 text-sm">Max 3 locations</span>
+                    <span className="text-gray-500 text-sm whitespace-nowrap">Max 3</span>
                   )}
                 </div>
                 
                 {/* Clear All Locations Button */}
                 {filters.locations.length > 0 && (
-                  <div className="absolute right-3 top-3">
+                  <div className="absolute right-3 top-3 z-10">
                     <Button 
                       variant="ghost" 
                       size="sm" 
-                      onClick={() => {
+                      onClick={(e) => {
+                        e.stopPropagation();
                         updateFilter('locations', []);
                         updateFilter('location', '');
+                        updateFilter('selectedCity', '');
                       }} 
                       className="h-6 w-6 p-0 hover:bg-brand-red/10"
                     >
@@ -420,32 +466,267 @@ const PropertySearch = () => {
               </div>
             </div>
 
-            {/* View Controls */}
-            <div className="flex gap-2" role="group" aria-label="View mode">
-              <Button 
-                variant={viewMode === 'grid' ? 'default' : 'outline'} 
-                size="sm" 
-                onClick={() => setViewMode('grid')}
-                aria-label="Switch to grid view"
-                aria-pressed={viewMode === 'grid'}
-              >
-                <Grid3X3 size={16} aria-hidden="true" />
-                <span className="sr-only">Grid view</span>
-              </Button>
-              <Button 
-                variant={viewMode === 'list' ? 'default' : 'outline'} 
-                size="sm" 
-                onClick={() => setViewMode('list')}
-                aria-label="Switch to list view"
-                aria-pressed={viewMode === 'list'}
-              >
-                <List size={16} aria-hidden="true" />
-                <span className="sr-only">List view</span>
+            {/* Search Button - Mobile */}
+            <Button className="w-full lg:hidden bg-blue-600 hover:bg-blue-700">
+              Search
+            </Button>
+          </div>
+
+          {/* Second Row: Collapsible Filter Dropdowns */}
+          <div className="mt-4 pb-2">
+            <div className="flex flex-wrap items-center gap-2">
+              {/* Residential Dropdown (Property Type) - Only for Buy/Rent */}
+              {activeTab !== 'commercial' && (
+                <div className="relative">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setOpenDropdown(openDropdown === 'propertyType' ? null : 'propertyType')}
+                    className={`flex items-center gap-1 ${openDropdown === 'propertyType' ? 'bg-blue-50 border-blue-400' : ''}`}
+                  >
+                    <span className="text-sm">Residential</span>
+                    <ChevronRight size={14} className={`transition-transform ${openDropdown === 'propertyType' ? 'rotate-90' : ''}`} />
+                  </Button>
+                  
+                  {/* Property Type Dropdown */}
+                  {openDropdown === 'propertyType' && (
+                    <div className="absolute top-full left-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg p-4 z-50 min-w-[280px] md:min-w-[400px]">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                        {propertyTypes.filter(type => type !== 'ALL').map(type => (
+                          <div key={type} className="flex items-center space-x-2">
+                            <Checkbox
+                              id={`pt-${type}`}
+                              checked={selectedPropertyTypes.includes(type)}
+                              onCheckedChange={(checked) => {
+                                if (checked) {
+                                  setSelectedPropertyTypes([...selectedPropertyTypes, type]);
+                                  updateFilter('propertyType', [...selectedPropertyTypes, type]);
+                                } else {
+                                  const updated = selectedPropertyTypes.filter(t => t !== type);
+                                  setSelectedPropertyTypes(updated);
+                                  updateFilter('propertyType', updated);
+                                }
+                              }}
+                            />
+                            <label htmlFor={`pt-${type}`} className="text-sm cursor-pointer capitalize">
+                              {type.toLowerCase().replace(/_/g, ' ').replace(/-/g, ' ')}
+                            </label>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Bedroom Dropdown */}
+              <div className="relative">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setOpenDropdown(openDropdown === 'bedroom' ? null : 'bedroom')}
+                  className={`flex items-center gap-1 ${openDropdown === 'bedroom' ? 'bg-blue-50 border-blue-400' : ''}`}
+                >
+                  <span className="text-sm">Bedroom</span>
+                  <ChevronRight size={14} className={`transition-transform ${openDropdown === 'bedroom' ? 'rotate-90' : ''}`} />
+                </Button>
+                
+                {/* Bedroom Dropdown */}
+                {openDropdown === 'bedroom' && (
+                  <div className="absolute top-full left-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg p-4 z-50 min-w-[280px] md:min-w-[360px]">
+                    <h4 className="text-sm font-semibold mb-3">Number of Bedrooms</h4>
+                    <div className="flex flex-wrap gap-2">
+                      {['1 RK/1 BHK', '2 BHK', '3 BHK', '4 BHK', '4+ BHK'].map(bhk => (
+                        <Button
+                          key={bhk}
+                          variant={selectedBedrooms.includes(bhk) ? 'default' : 'outline'}
+                          size="sm"
+                          onClick={() => {
+                            if (selectedBedrooms.includes(bhk)) {
+                              const updated = selectedBedrooms.filter(b => b !== bhk);
+                              setSelectedBedrooms(updated);
+                              const filterValues = updated.flatMap(b => {
+                                if (b === '1 RK/1 BHK') return ['1 RK', '1 BHK'];
+                                if (b === '4+ BHK') return ['5+ BHK'];
+                                return [b];
+                              });
+                              updateFilter('bhkType', filterValues);
+                            } else {
+                              const updated = [...selectedBedrooms, bhk];
+                              setSelectedBedrooms(updated);
+                              const filterValues = updated.flatMap(b => {
+                                if (b === '1 RK/1 BHK') return ['1 RK', '1 BHK'];
+                                if (b === '4+ BHK') return ['5+ BHK'];
+                                return [b];
+                              });
+                              updateFilter('bhkType', filterValues);
+                            }
+                          }}
+                          className="text-xs px-3"
+                        >
+                          + {bhk}
+                        </Button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Construction Status Dropdown */}
+              <div className="relative">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setOpenDropdown(openDropdown === 'construction' ? null : 'construction')}
+                  className={`flex items-center gap-1 ${openDropdown === 'construction' ? 'bg-blue-50 border-blue-400' : ''}`}
+                >
+                  <span className="text-sm">Construction Status</span>
+                  <ChevronRight size={14} className={`transition-transform ${openDropdown === 'construction' ? 'rotate-90' : ''}`} />
+                </Button>
+                
+                {/* Construction Status Dropdown */}
+                {openDropdown === 'construction' && (
+                  <div className="absolute top-full left-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg p-4 z-50 min-w-[280px] md:min-w-[360px]">
+                    <h4 className="text-sm font-semibold mb-3">Construction Status</h4>
+                    <div className="flex flex-wrap gap-2">
+                      {['New Launch', 'Under Construction', 'Ready to move'].map(status => (
+                        <Button
+                          key={status}
+                          variant={selectedConstructionStatus.includes(status) ? 'default' : 'outline'}
+                          size="sm"
+                          onClick={() => {
+                            if (selectedConstructionStatus.includes(status)) {
+                              const updated = selectedConstructionStatus.filter(s => s !== status);
+                              setSelectedConstructionStatus(updated);
+                              const filterValues = updated.map(s => s === 'Ready to move' ? 'Ready to Move' : s);
+                              updateFilter('availability', filterValues);
+                            } else {
+                              const updated = [...selectedConstructionStatus, status];
+                              setSelectedConstructionStatus(updated);
+                              const filterValues = updated.map(s => s === 'Ready to move' ? 'Ready to Move' : s);
+                              updateFilter('availability', filterValues);
+                            }
+                          }}
+                          className="text-xs px-3"
+                        >
+                          + {status}
+                        </Button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Posted By Dropdown */}
+              <div className="relative">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setOpenDropdown(openDropdown === 'postedBy' ? null : 'postedBy')}
+                  className={`flex items-center gap-1 ${openDropdown === 'postedBy' ? 'bg-blue-50 border-blue-400' : ''}`}
+                >
+                  <span className="text-sm">Posted By</span>
+                  <ChevronRight size={14} className={`transition-transform ${openDropdown === 'postedBy' ? 'rotate-90' : ''}`} />
+                </Button>
+                
+                {/* Posted By Dropdown */}
+                {openDropdown === 'postedBy' && (
+                  <div className="absolute top-full left-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg p-4 z-50 min-w-[240px]">
+                    <h4 className="text-sm font-semibold mb-3">Posted By</h4>
+                    <div className="flex flex-wrap gap-2">
+                      {['Owner', 'Builder', 'Dealer'].map(poster => (
+                        <Button
+                          key={poster}
+                          variant={selectedPostedBy.includes(poster) ? 'default' : 'outline'}
+                          size="sm"
+                          onClick={() => {
+                            if (selectedPostedBy.includes(poster)) {
+                              const updated = selectedPostedBy.filter(p => p !== poster);
+                              setSelectedPostedBy(updated);
+                            } else {
+                              setSelectedPostedBy([...selectedPostedBy, poster]);
+                            }
+                          }}
+                          className="text-xs px-3"
+                        >
+                          + {poster}
+                        </Button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Budget Dropdown */}
+              <div className="relative">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setOpenDropdown(openDropdown === 'budget' ? null : 'budget')}
+                  className={`flex items-center gap-1 ${openDropdown === 'budget' ? 'bg-blue-50 border-blue-400' : ''}`}
+                >
+                  <span className="text-sm">Budget</span>
+                  <ChevronRight size={14} className={`transition-transform ${openDropdown === 'budget' ? 'rotate-90' : ''}`} />
+                </Button>
+                
+                {/* Budget Dropdown */}
+                {openDropdown === 'budget' && (
+                  <div className="absolute top-full left-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg p-4 z-50 min-w-[320px] md:min-w-[400px]">
+                    <h4 className="text-sm font-semibold mb-3">Select Price Range</h4>
+                    <div className="mb-3">
+                      <div className="text-xs text-gray-500 mb-2">
+                        {(() => {
+                          const validBudget = getValidBudgetValue(filters.budget, activeTab);
+                          return `₹${validBudget[0] === 0 ? '0' : validBudget[0] >= 10000000 ? (validBudget[0] / 10000000).toFixed(validBudget[0] % 10000000 === 0 ? 0 : 1) + ' Cr' : (validBudget[0] / 100000).toFixed(validBudget[0] % 100000 === 0 ? 0 : 1) + ' L'} - ₹${validBudget[1] >= getBudgetSliderMax(activeTab) ? (activeTab === 'rent' ? '5L +' : '100+ Crore') : validBudget[1] >= 10000000 ? (validBudget[1] / 10000000).toFixed(validBudget[1] % 10000000 === 0 ? 0 : 1) + ' Cr' : (validBudget[1] / 100000).toFixed(validBudget[1] % 100000 === 0 ? 0 : 1) + ' L'}`;
+                        })()}
+                      </div>
+                      <Slider 
+                        value={filters.budget} 
+                        onValueChange={(value) => updateFilter('budget', value as [number, number])} 
+                        max={getBudgetSliderMax(activeTab)} 
+                        min={0} 
+                        step={getBudgetSliderStep(activeTab)} 
+                        className="w-full"
+                      />
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Clear Filters */}
+              {(selectedPropertyTypes.length > 0 || selectedBedrooms.length > 0 || selectedConstructionStatus.length > 0 || selectedPostedBy.length > 0) && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => {
+                    setSelectedPropertyTypes([]);
+                    setSelectedBedrooms([]);
+                    setSelectedConstructionStatus([]);
+                    setSelectedPostedBy([]);
+                    clearAllFilters();
+                  }}
+                  className="text-blue-600 hover:text-blue-700 text-sm"
+                >
+                  Clear
+                </Button>
+              )}
+
+              {/* Search Button - Desktop */}
+              <Button className="hidden lg:block ml-auto bg-blue-600 hover:bg-blue-700">
+                Search
               </Button>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Click outside to close dropdowns */}
+      {openDropdown && (
+        <div 
+          className="fixed inset-0 z-40" 
+          onClick={() => setOpenDropdown(null)}
+        />
+      )}
 
       <main id="main-content" className="container mx-auto px-4 py-6">
         <div className="flex gap-6">
@@ -473,7 +754,7 @@ const PropertySearch = () => {
                     <div className="relative">
                       <Slider 
                         value={filters.budget} 
-                        onValueChange={value => updateFilter('budget', value)} 
+                        onValueChange={(value) => updateFilter('budget', snapBudget(activeTab, value as [number, number]))} 
                         max={getBudgetSliderMax(activeTab)} 
                         min={0} 
                         step={getBudgetSliderStep(activeTab)} 
@@ -507,9 +788,9 @@ const PropertySearch = () => {
                             placeholder="Enter min budget" 
                             value={filters.budget[0].toString()} 
                             onChange={e => {
-                              const value = parseInt(e.target.value) || 0;
+              const value = parseInt(e.target.value) || 0;
                               if (value <= filters.budget[1]) {
-                                updateFilter('budget', [value, filters.budget[1]]);
+                updateFilter('budget', snapBudget(activeTab, [value, filters.budget[1]]));
                               }
                             }} 
                             className="h-8 text-sm"
@@ -526,7 +807,7 @@ const PropertySearch = () => {
                             onChange={e => {
                               const value = parseInt(e.target.value) || 0;
                               if (value >= filters.budget[0]) {
-                                updateFilter('budget', [filters.budget[0], Math.min(value, 100000000)]);
+                                updateFilter('budget', snapBudget(activeTab, [filters.budget[0], Math.min(value, 50000000)]));
                               }
                             }} 
                             className="h-8 text-sm"
@@ -552,10 +833,10 @@ const PropertySearch = () => {
                       <Button variant={filters.budget[0] === 10000000 && filters.budget[1] === 20000000 ? "default" : "outline"} size="sm" onClick={() => updateFilter('budget', [10000000, 20000000])} className="text-xs h-8">
                         1-2Cr
                       </Button>
-                      <Button variant={filters.budget[0] === 20000000 && filters.budget[1] === 50000000 ? "default" : "outline"} size="sm" onClick={() => updateFilter('budget', [20000000, 50000000])} className="text-xs h-8">
+                      <Button variant={filters.budget[0] === 20000000 && filters.budget[1] === 50000000 ? "default" : "outline"} size="sm" onClick={() => updateFilter('budget', snapBudget(activeTab, [20000000, 50000000]))} className="text-xs h-8">
                         2-5Cr
                       </Button>
-                      <Button variant={filters.budget[0] === 50000000 && filters.budget[1] === 100000000 ? "default" : "outline"} size="sm" onClick={() => updateFilter('budget', [50000000, 100000000])} className="text-xs h-8">
+                      <Button variant={filters.budget[0] === 50000000 && filters.budget[1] === 50000000 ? "default" : "outline"} size="sm" onClick={() => updateFilter('budget', snapBudget(activeTab, [50000000, 50000000]))} className="text-xs h-8">
                         5Cr+
                       </Button>
                     </div>
@@ -571,7 +852,7 @@ const PropertySearch = () => {
                     <div className="relative">
                       <Slider 
                         value={filters.area} 
-                        onValueChange={value => updateFilter('area', value)} 
+                        onValueChange={(value) => updateFilter('area', value as [number, number])} 
                         max={10000} 
                         min={0} 
                         step={100} 

@@ -130,7 +130,7 @@ const PropertyCard = ({
     if (/^\//.test(raw)) return raw;
 
     // Normalize common prefixes that may be stored in DB
-    let cleaned = raw
+    const cleaned = raw
       .replace(/^\/?storage\/v1\/object\/public\/property-media\//i, '')
       .replace(/^property-media\//i, '')
       .replace(/^public\//i, '');
@@ -174,7 +174,7 @@ const PropertyCard = ({
         return it.startsWith('http') ? it : toUrl(it);
       }
       if (it && typeof it === 'object' && 'url' in it) {
-        return (it as any).url;
+        return (it as { url: string }).url;
       }
       return undefined;
     }).filter(Boolean) as string[];
@@ -182,7 +182,7 @@ const PropertyCard = ({
     const url = image.startsWith('http') ? image : toUrl(image);
     if (url) imagesForPage = [url];
   } else if (image && typeof image === 'object' && 'url' in image) {
-    imagesForPage = [(image as any).url];
+    imagesForPage = [(image as { url: string }).url];
   }
   
   // Only add fallbacks if we have fewer than 3 real images
@@ -254,12 +254,12 @@ const PropertyCard = ({
       if (typeof first === 'string') {
         candidate = first.startsWith('http') ? first : (resolveUrlFromString(first) || undefined);
       } else if (first && typeof first === 'object' && 'url' in first) {
-        candidate = (first as any).url;
+        candidate = (first as { url: string }).url;
       }
     } else if (typeof image === 'string') {
       candidate = image.startsWith('http') ? image : (resolveUrlFromString(image) || undefined);
     } else if (image && typeof image === 'object' && 'url' in image) {
-      candidate = (image as any).url;
+      candidate = (image as { url: string }).url;
     }
 
     return sanitize(candidate);
