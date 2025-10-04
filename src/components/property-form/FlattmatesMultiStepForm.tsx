@@ -1129,7 +1129,7 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
         <div className="bg-white border-b border-gray-200 px-4 pt-8 pb-4 md:pt-12 lg:pt-4">
           <div className="flex items-center justify-between mb-2">
             <h1 className="text-lg font-semibold text-gray-900">Property Details</h1>
-            <span className="text-sm text-gray-500 bg-gray-100 px-2 py-1 rounded-full">{currentStep}/7</span>
+            <span className="hidden lg:inline-block text-sm text-gray-500 bg-gray-100 px-2 py-1 rounded-full">{currentStep}/7</span>
           </div>
           <div className="hidden md:block w-full bg-gray-200 rounded-full h-2">
             <div
