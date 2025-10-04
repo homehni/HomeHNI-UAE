@@ -1131,7 +1131,7 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
             <h1 className="text-lg font-semibold text-gray-900">Property Details</h1>
             <span className="text-sm text-gray-500 bg-gray-100 px-2 py-1 rounded-full">{currentStep}/7</span>
           </div>
-          <div className="w-full bg-gray-200 rounded-full h-2">
+          <div className="hidden md:block w-full bg-gray-200 rounded-full h-2">
             <div
               className="bg-brand-red h-2 rounded-full transition-all duration-300"
               style={{ width: `${(currentStep / 7) * 100}%` }}
