@@ -1092,7 +1092,7 @@ const ChatBot = () => {
         </button>
         <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 mb-2 pr-8">Help Center</h1>
         <p className="text-xs sm:text-sm text-gray-600 flex items-center">
-          <Check className="text-brand-red mr-2 w-4 h-4 sm:w-5 sm:h-5" />
+          <Check className="text-brand-red mr-1 w-4 h-4 sm:w-5 sm:h-5" />
           One-Stop Solution for all Real Estate Services
         </p>
       </div>
