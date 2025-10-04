@@ -44,7 +44,7 @@ export const LandPlotGalleryStep: React.FC<LandPlotGalleryStepProps> = ({
   };
 
   return (
-    <div className="bg-background p-6">
+    <div className="bg-background p-4 md:p-8 lg:p-12">
         <div className="text-left mb-8">
           <h2 className="text-2xl font-semibold text-red-600 mb-2 pt-6 sm:pt-0">
             Photos & Videos

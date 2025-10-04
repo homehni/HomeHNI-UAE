@@ -105,7 +105,7 @@ export const GalleryStep: React.FC<GalleryStepProps> = ({
     }
   };
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
+    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 md:p-8 lg:p-12">
       <Form {...form}>
         <form id="gallery-form" onSubmit={form.handleSubmit(handleFormSubmit)} className="space-y-8">
           <FormField control={form.control} name="images" render={({
