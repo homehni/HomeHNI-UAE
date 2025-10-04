@@ -1249,7 +1249,7 @@ const ChatBot = () => {
   const showInitialView = messages.length === 1 && conversationStep === 'role_selection' && currentView === 'initial';
 
   return (
-    <div className="fixed bottom-4 right-4 z-50 sm:bottom-6 sm:right-6 md:bottom-8 md:right-8">
+    <div className="fixed bottom-4 right-4 z-50 sm:bottom-6 sm:right-6">
       {!isOpen && (
         <Button
           onClick={() => setIsOpen(true)}
@@ -1260,7 +1260,7 @@ const ChatBot = () => {
       )}
 
       {isOpen && (
-        <Card className="fixed bottom-0 right-0 left-0 h-[85vh] w-full shadow-2xl bg-white rounded-t-3xl border-0 overflow-hidden sm:relative sm:w-[400px] sm:h-[600px] sm:max-h-[85vh] sm:rounded-3xl md:w-[420px] md:h-[650px] lg:w-[450px]">
+        <Card className="fixed bottom-0 right-0 left-0 h-[85vh] w-full shadow-2xl bg-white rounded-t-3xl border-0 overflow-hidden sm:relative sm:w-96 sm:h-[600px] sm:rounded-3xl">
           {!showInitialView && currentView === 'initial' && (
             <CardHeader className="bg-brand-red text-white p-4 sm:p-5">
               <div className="flex items-center justify-between">
