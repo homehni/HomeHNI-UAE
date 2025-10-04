@@ -63,33 +63,6 @@ export const ResaleGalleryStep: React.FC<ResaleGalleryStepProps> = ({
 
   // Check if we're in edit mode by looking for existing property data
   const isEditMode = (window as any).editingPropertyData !== undefined;
-
-  // Sync form data to parent state immediately on change to preserve File objects
-  useEffect(() => {
-    const subscription = form.watch((formData) => {
-      if (formData.images) {
-        const allImages = [
-          ...(formData.images.bathroom || []),
-          ...(formData.images.bedroom || []),
-          ...(formData.images.hall || []),
-          ...(formData.images.kitchen || []),
-          ...(formData.images.frontView || []),
-          ...(formData.images.balcony || []),
-          ...(formData.images.others || [])
-        ];
-        
-        const galleryData: PropertyGallery = {
-          images: allImages,
-          categorizedImages: formData.images as any,
-          video: formData.video
-        };
-        
-        onNext(galleryData);
-      }
-    });
-    
-    return () => subscription.unsubscribe();
-  }, [form, onNext]);
   
   const handleFormSubmit = (data: ResaleGalleryFormData) => {
     // Convert categorized images to flat array for backward compatibility
