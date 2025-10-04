@@ -94,6 +94,11 @@ const ChatBot = () => {
   const [currentView, setCurrentView] = useState<'initial' | 'service-faq' | 'faq-detail' | 'plan-support'>('initial');
   const [selectedService, setSelectedService] = useState<string>('');
   const [selectedFAQ, setSelectedFAQ] = useState<{question: string, answer: string} | null>(null);
+  const [planChatMessages, setPlanChatMessages] = useState<Message[]>([]);
+  const [planChatStep, setPlanChatStep] = useState<'budget' | 'details-form' | 'follow-up' | 'complete'>('budget');
+  const [planChatInput, setPlanChatInput] = useState('');
+  const [showDetailsForm, setShowDetailsForm] = useState(false);
+  const [userDetails, setUserDetails] = useState({ name: '', email: '', phone: '' });
 
   const handleSendMessage = async () => {
     if (inputValue.trim() === '') return;
@@ -1090,7 +1095,86 @@ const ChatBot = () => {
   const handleHistoryClick = () => {
     if (location.pathname === '/plans') {
       setCurrentView('plan-support');
+      setPlanChatStep('budget');
+      setPlanChatMessages([
+        {
+          id: '1',
+          text: 'Hi, I can help you with selection of right plan. What is your rent budget?',
+          isBot: true,
+          timestamp: new Date()
+        }
+      ]);
     }
+  };
+
+  const handlePlanChatSend = () => {
+    if (planChatInput.trim() === '') return;
+
+    const userMessage: Message = {
+      id: String(Date.now()),
+      text: planChatInput,
+      isBot: false,
+      timestamp: new Date()
+    };
+
+    setPlanChatMessages(prev => [...prev, userMessage]);
+    setPlanChatInput('');
+
+    // Bot response based on step
+    setTimeout(() => {
+      let botResponse: Message;
+      
+      if (planChatStep === 'budget') {
+        botResponse = {
+          id: String(Date.now() + 1),
+          text: `Got it, your budget is ${planChatInput}. Before moving forward, kindly provide your details below`,
+          isBot: true,
+          timestamp: new Date()
+        };
+        setPlanChatMessages(prev => [...prev, botResponse]);
+        setTimeout(() => {
+          setShowDetailsForm(true);
+        }, 500);
+      } else if (planChatStep === 'follow-up') {
+        botResponse = {
+          id: String(Date.now() + 1),
+          text: 'Thank you for the information! Our executive will make a call or contact you shortly.',
+          isBot: true,
+          timestamp: new Date()
+        };
+        setPlanChatMessages(prev => [...prev, botResponse]);
+        setPlanChatStep('complete');
+      }
+    }, 1000);
+  };
+
+  const handleDetailsSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!userDetails.name || !userDetails.email || !userDetails.phone) {
+      return;
+    }
+
+    const detailsMessage: Message = {
+      id: String(Date.now()),
+      text: `Name: ${userDetails.name}, Email: ${userDetails.email}, Phone: ${userDetails.phone}`,
+      isBot: false,
+      timestamp: new Date()
+    };
+
+    setPlanChatMessages(prev => [...prev, detailsMessage]);
+    setShowDetailsForm(false);
+
+    setTimeout(() => {
+      const botResponse: Message = {
+        id: String(Date.now() + 1),
+        text: 'Thank you for providing your details! Could you also let me know your preferred location and the BHK type you are looking for?',
+        isBot: true,
+        timestamp: new Date()
+      };
+      setPlanChatMessages(prev => [...prev, botResponse]);
+      setPlanChatStep('follow-up');
+    }, 1000);
   };
 
   const renderPlanSupportView = () => (
@@ -1101,21 +1185,20 @@ const ChatBot = () => {
           <div className="w-8 h-8 bg-brand-red rounded-full flex items-center justify-center">
             <Home size={16} className="text-white" />
           </div>
-          <span className="font-semibold text-gray-900">NoBroker Support</span>
+          <span className="font-semibold text-gray-900">Home HNI Support</span>
         </div>
-        <div className="flex items-center space-x-2">
-          <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
-            <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
-            </svg>
-          </button>
-          <button 
-            onClick={() => setIsOpen(false)}
-            className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-          >
-            <X size={20} className="text-gray-600" />
-          </button>
-        </div>
+        <button 
+          onClick={() => {
+            setIsOpen(false);
+            setCurrentView('initial');
+            setPlanChatMessages([]);
+            setShowDetailsForm(false);
+            setUserDetails({ name: '', email: '', phone: '' });
+          }}
+          className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+        >
+          <X size={20} className="text-gray-600" />
+        </button>
       </div>
 
       {/* Chat Messages */}
@@ -1128,140 +1211,112 @@ const ChatBot = () => {
         {/* Warning Message */}
         <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
           <p className="text-xs text-gray-700">
-            Call only NoBroker-registered numbers for better connectivity and avoid unnecessary risks.
+            Call only Home HNI-registered numbers for better connectivity and avoid unnecessary risks.
           </p>
         </div>
 
         {/* Support Joined Message */}
         <div className="flex justify-center">
-          <span className="text-xs text-gray-400">NoBroker Support joined the chat</span>
+          <span className="text-xs text-gray-400">Home HNI Support joined the chat</span>
         </div>
 
-        {/* Message 1 */}
-        <div className="flex items-start space-x-2">
-          <div className="w-8 h-8 bg-brand-red rounded-full flex items-center justify-center flex-shrink-0">
-            <Home size={14} className="text-white" />
-          </div>
-          <div className="flex-1">
-            <div className="flex items-baseline space-x-2 mb-1">
-              <span className="text-sm font-semibold text-brand-red">NoBroker</span>
+        {/* Dynamic Messages */}
+        {planChatMessages.map((msg) => (
+          <div key={msg.id} className="flex items-start space-x-2">
+            {msg.isBot && (
+              <div className="w-8 h-8 bg-brand-red rounded-full flex items-center justify-center flex-shrink-0">
+                <Home size={14} className="text-white" />
+              </div>
+            )}
+            <div className={`flex-1 ${!msg.isBot ? 'flex justify-end' : ''}`}>
+              {msg.isBot && (
+                <div className="flex items-baseline space-x-2 mb-1">
+                  <span className="text-sm font-semibold text-brand-red">Home HNI</span>
+                </div>
+              )}
+              <div className={`rounded-lg p-3 shadow-sm ${
+                msg.isBot 
+                  ? 'bg-white rounded-tl-none' 
+                  : 'bg-brand-red text-white rounded-tr-none max-w-[80%]'
+              }`}>
+                <p className="text-sm">{msg.text}</p>
+              </div>
+              {msg.isBot && (
+                <span className="text-xs text-gray-400 mt-1 block">
+                  {new Date(msg.timestamp).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}
+                </span>
+              )}
             </div>
-            <div className="bg-white rounded-lg rounded-tl-none p-3 shadow-sm">
-              <p className="text-sm text-gray-800">
-                Hi , I can help you with selection of right plan. What is your rent budget ?
-              </p>
-            </div>
-            <span className="text-xs text-gray-400 mt-1 block">2:26 PM</span>
           </div>
-        </div>
+        ))}
 
-        {/* Message 2 */}
-        <div className="flex items-start space-x-2">
-          <div className="w-8 h-8 bg-brand-red rounded-full flex items-center justify-center flex-shrink-0">
-            <Home size={14} className="text-white" />
-          </div>
-          <div className="flex-1">
-            <div className="flex items-baseline space-x-2 mb-1">
-              <span className="text-sm font-semibold text-brand-red">NoBroker</span>
+        {/* Details Form */}
+        {showDetailsForm && (
+          <div className="flex items-start space-x-2">
+            <div className="w-8 h-8 bg-brand-red rounded-full flex items-center justify-center flex-shrink-0">
+              <Home size={14} className="text-white" />
             </div>
-            <div className="bg-white rounded-lg rounded-tl-none p-3 shadow-sm">
-              <p className="text-sm text-gray-800">
-                Hi , I can help you with selection of right plan. What is your rent budget ?
-              </p>
-            </div>
-            <span className="text-xs text-gray-400 mt-1 block">3:03 PM</span>
-          </div>
-        </div>
-
-        {/* Message 3 */}
-        <div className="flex items-start space-x-2">
-          <div className="w-8 h-8 bg-brand-red rounded-full flex items-center justify-center flex-shrink-0">
-            <Home size={14} className="text-white" />
-          </div>
-          <div className="flex-1">
-            <div className="flex items-baseline space-x-2 mb-1">
-              <span className="text-sm font-semibold text-brand-red">NoBroker</span>
-            </div>
-            <div className="bg-white rounded-lg rounded-tl-none p-3 shadow-sm">
-              <p className="text-sm text-gray-800">
-                Hi , I can help you with selection of right plan. What is your rent budget ?
-              </p>
-            </div>
-            <span className="text-xs text-gray-400 mt-1 block">3:19 PM</span>
-          </div>
-        </div>
-
-        {/* Message 4 - Fill Details */}
-        <div className="flex items-start space-x-2">
-          <div className="w-8 h-8 bg-brand-red rounded-full flex items-center justify-center flex-shrink-0">
-            <Home size={14} className="text-white" />
-          </div>
-          <div className="flex-1">
-            <div className="flex items-baseline space-x-2 mb-1">
-              <span className="text-sm font-semibold text-brand-red">NoBroker</span>
-            </div>
-            <div className="bg-white rounded-lg rounded-tl-none p-3 shadow-sm">
-              <p className="text-sm text-gray-800 mb-2">
-                Before moving forward, kindly provide your details below
-              </p>
-              <button className="w-full bg-brand-red text-white py-2 px-4 rounded-lg text-sm font-semibold hover:bg-brand-maroon-dark transition-colors">
-                Fill details
-              </button>
+            <div className="flex-1">
+              <div className="bg-white rounded-lg rounded-tl-none p-4 shadow-sm">
+                <p className="text-sm text-gray-800 mb-3 font-medium">Fill Details</p>
+                <form onSubmit={handleDetailsSubmit} className="space-y-3">
+                  <Input
+                    placeholder="Name"
+                    value={userDetails.name}
+                    onChange={(e) => setUserDetails(prev => ({ ...prev, name: e.target.value }))}
+                    required
+                    className="text-sm"
+                  />
+                  <Input
+                    type="email"
+                    placeholder="Email"
+                    value={userDetails.email}
+                    onChange={(e) => setUserDetails(prev => ({ ...prev, email: e.target.value }))}
+                    required
+                    className="text-sm"
+                  />
+                  <Input
+                    type="tel"
+                    placeholder="Phone Number"
+                    value={userDetails.phone}
+                    onChange={(e) => setUserDetails(prev => ({ ...prev, phone: e.target.value }))}
+                    required
+                    className="text-sm"
+                  />
+                  <Button 
+                    type="submit"
+                    className="w-full bg-brand-red hover:bg-brand-maroon-dark text-white"
+                  >
+                    Submit
+                  </Button>
+                </form>
+              </div>
             </div>
           </div>
-        </div>
-
-        {/* Message 5 - Thank You */}
-        <div className="flex items-start space-x-2">
-          <div className="w-8 h-8 bg-brand-red rounded-full flex items-center justify-center flex-shrink-0">
-            <Home size={14} className="text-white" />
-          </div>
-          <div className="flex-1">
-            <div className="flex items-baseline space-x-2 mb-1">
-              <span className="text-sm font-semibold text-brand-red">NoBroker</span>
-            </div>
-            <div className="bg-white rounded-lg rounded-tl-none p-3 shadow-sm">
-              <p className="text-sm text-gray-800">
-                Thank you for providing your details!
-              </p>
-            </div>
-            <span className="text-xs text-gray-400 mt-1 block">3:20 PM</span>
-          </div>
-        </div>
-
-        {/* Message 6 - Budget Question */}
-        <div className="flex items-start space-x-2">
-          <div className="w-8 h-8 bg-brand-red rounded-full flex items-center justify-center flex-shrink-0">
-            <Home size={14} className="text-white" />
-          </div>
-          <div className="flex-1">
-            <div className="flex items-baseline space-x-2 mb-1">
-              <span className="text-sm font-semibold text-brand-red">NoBroker</span>
-            </div>
-            <div className="bg-white rounded-lg rounded-tl-none p-3 shadow-sm">
-              <p className="text-sm text-gray-800">
-                Got it, your budget is 50k. Could you also let me know your preferred location and the BHK type you're looking for?
-              </p>
-            </div>
-            <span className="text-xs text-gray-400 mt-1 block">3:20 PM</span>
-          </div>
-        </div>
+        )}
       </div>
 
       {/* Input Area */}
-      <div className="p-4 border-t border-gray-200 bg-white">
-        <div className="flex items-center space-x-2">
-          <Input
-            placeholder="Type your message here"
-            className="flex-1 text-sm"
-          />
-          <button className="p-2 text-gray-400">
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
-            </svg>
-          </button>
+      {!showDetailsForm && planChatStep !== 'complete' && (
+        <div className="p-4 border-t border-gray-200 bg-white">
+          <div className="flex items-center space-x-2">
+            <Input
+              placeholder="Type your message here"
+              value={planChatInput}
+              onChange={(e) => setPlanChatInput(e.target.value)}
+              onKeyPress={(e) => e.key === 'Enter' && handlePlanChatSend()}
+              className="flex-1 text-sm"
+            />
+            <Button
+              onClick={handlePlanChatSend}
+              className="bg-brand-red hover:bg-brand-maroon-dark px-4"
+              disabled={planChatInput.trim() === ''}
+            >
+              <Send size={16} />
+            </Button>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 
